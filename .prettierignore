@@ -1,0 +1,10 @@
+.next/
+out/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+next-env.d.ts
+package-lock.json
+CHANGELOG.md
+CODE_OF_CONDUCT.md

@@ -1,9 +1,21 @@
 import { LogoMark } from '@/components/brand/logo-mark';
 
 const REPOSITORIES = [
-  { name: 'pyxis-api', role: 'Ingestion and queries', href: 'https://github.com/samuelcsantana/pyxis-api' },
-  { name: 'pyxis-sdk', role: 'Browser tracker', href: 'https://github.com/samuelcsantana/pyxis-sdk' },
-  { name: 'pyxis-web', role: 'This dashboard', href: 'https://github.com/samuelcsantana/pyxis-web' },
+  {
+    name: 'pyxis-api',
+    role: 'Ingestion and queries',
+    href: 'https://github.com/samuelcsantana/pyxis-api',
+  },
+  {
+    name: 'pyxis-sdk',
+    role: 'Browser tracker',
+    href: 'https://github.com/samuelcsantana/pyxis-sdk',
+  },
+  {
+    name: 'pyxis-web',
+    role: 'This dashboard',
+    href: 'https://github.com/samuelcsantana/pyxis-web',
+  },
 ] as const;
 
 export default function HomePage() {
