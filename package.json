@@ -2,6 +2,7 @@
   "name": "pyxis-web",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "Privacy-first product analytics dashboard: funnels, timelines and request errors.",
   "license": "MIT",
   "author": "Samuel Santana",
@@ -24,7 +25,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:tooling": "node --test \"eslint-rules/**/*.test.mjs\" \"scripts/**/*.test.mts\"",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test:storybook": "vitest run --config vitest.storybook.config.ts"
   },
   "dependencies": {
     "next": "^16.3.8",
@@ -34,6 +38,11 @@
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.63.0",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/addon-themes": "^10.6.1",
+    "@storybook/addon-vitest": "^10.6.1",
+    "@storybook/nextjs-vite": "^10.6.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
@@ -43,6 +52,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
     "axe-core": "^4.14.0",
     "eslint": "^9.39.5",
@@ -50,6 +60,7 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^30.1.2",
     "prettier": "^3.9.9",
+    "storybook": "^10.6.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.1",

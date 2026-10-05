@@ -26,7 +26,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --pyx-bg: #0a1220;
     --pyx-card: #101c2e;
     --pyx-line: #1e2d45;
@@ -50,6 +50,31 @@
     --pyx-warn-soft: #3a2a0b;
     color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --pyx-bg: #0a1220;
+  --pyx-card: #101c2e;
+  --pyx-line: #1e2d45;
+  --pyx-grid: #1a283e;
+  --pyx-ink: #e6edf7;
+  --pyx-muted: #93a3ba;
+  --pyx-soft: #16243a;
+  --pyx-accent: #f5b83d;
+  --pyx-accent-ink: #0e1a2b;
+  --pyx-sky: #38bdf8;
+  --pyx-sky-ink: #7dd3fc;
+  --pyx-violet: #a396fa;
+  --pyx-violet-ink: #b8aefb;
+  --pyx-teal: #2dd4bf;
+  --pyx-slate: #64748b;
+  --pyx-ok: #4ade80;
+  --pyx-ok-soft: #12301f;
+  --pyx-bad: #f87171;
+  --pyx-bad-soft: #3a1518;
+  --pyx-warn: #fbbf24;
+  --pyx-warn-soft: #3a2a0b;
+  color-scheme: dark;
 }
 
 @theme inline {
