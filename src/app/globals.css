@@ -1,53 +1,53 @@
 @import 'tailwindcss';
 
 :root {
-  --pyx-bg: #F4F6FA;
-  --pyx-card: #FFFFFF;
-  --pyx-line: #E3E8F0;
-  --pyx-grid: #E8EDF4;
-  --pyx-ink: #0E1A2B;
-  --pyx-muted: #5B6B82;
-  --pyx-soft: #EEF2F8;
-  --pyx-accent: #F5B83D;
-  --pyx-accent-ink: #0E1A2B;
-  --pyx-sky: #0EA5E9;
-  --pyx-sky-ink: #0369A1;
-  --pyx-violet: #7C6CF2;
-  --pyx-violet-ink: #5B4BD6;
-  --pyx-teal: #14B8A6;
-  --pyx-slate: #94A3B8;
-  --pyx-ok: #15803D;
-  --pyx-ok-soft: #DCFCE7;
-  --pyx-bad: #B91C1C;
-  --pyx-bad-soft: #FEE2E2;
-  --pyx-warn: #B45309;
-  --pyx-warn-soft: #FEF3C7;
+  --pyx-bg: #f4f6fa;
+  --pyx-card: #ffffff;
+  --pyx-line: #e3e8f0;
+  --pyx-grid: #e8edf4;
+  --pyx-ink: #0e1a2b;
+  --pyx-muted: #5b6b82;
+  --pyx-soft: #eef2f8;
+  --pyx-accent: #f5b83d;
+  --pyx-accent-ink: #0e1a2b;
+  --pyx-sky: #0ea5e9;
+  --pyx-sky-ink: #0369a1;
+  --pyx-violet: #7c6cf2;
+  --pyx-violet-ink: #5b4bd6;
+  --pyx-teal: #14b8a6;
+  --pyx-slate: #94a3b8;
+  --pyx-ok: #15803d;
+  --pyx-ok-soft: #dcfce7;
+  --pyx-bad: #b91c1c;
+  --pyx-bad-soft: #fee2e2;
+  --pyx-warn: #b45309;
+  --pyx-warn-soft: #fef3c7;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --pyx-bg: #0A1220;
-    --pyx-card: #101C2E;
-    --pyx-line: #1E2D45;
-    --pyx-grid: #1A283E;
-    --pyx-ink: #E6EDF7;
-    --pyx-muted: #93A3BA;
-    --pyx-soft: #16243A;
-    --pyx-accent: #F5B83D;
-    --pyx-accent-ink: #0E1A2B;
-    --pyx-sky: #38BDF8;
-    --pyx-sky-ink: #7DD3FC;
-    --pyx-violet: #A396FA;
-    --pyx-violet-ink: #B8AEFB;
-    --pyx-teal: #2DD4BF;
-    --pyx-slate: #64748B;
-    --pyx-ok: #4ADE80;
-    --pyx-ok-soft: #12301F;
-    --pyx-bad: #F87171;
-    --pyx-bad-soft: #3A1518;
-    --pyx-warn: #FBBF24;
-    --pyx-warn-soft: #3A2A0B;
+    --pyx-bg: #0a1220;
+    --pyx-card: #101c2e;
+    --pyx-line: #1e2d45;
+    --pyx-grid: #1a283e;
+    --pyx-ink: #e6edf7;
+    --pyx-muted: #93a3ba;
+    --pyx-soft: #16243a;
+    --pyx-accent: #f5b83d;
+    --pyx-accent-ink: #0e1a2b;
+    --pyx-sky: #38bdf8;
+    --pyx-sky-ink: #7dd3fc;
+    --pyx-violet: #a396fa;
+    --pyx-violet-ink: #b8aefb;
+    --pyx-teal: #2dd4bf;
+    --pyx-slate: #64748b;
+    --pyx-ok: #4ade80;
+    --pyx-ok-soft: #12301f;
+    --pyx-bad: #f87171;
+    --pyx-bad-soft: #3a1518;
+    --pyx-warn: #fbbf24;
+    --pyx-warn-soft: #3a2a0b;
     color-scheme: dark;
   }
 }

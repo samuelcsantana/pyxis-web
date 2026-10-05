@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { apiOriginFrom, buildContentSecurityPolicy, buildSecurityHeaders } from './security-headers';
+import {
+  apiOriginFrom,
+  buildContentSecurityPolicy,
+  buildSecurityHeaders,
+} from './security-headers';
 
 describe('apiOriginFrom', () => {
   it('keeps only the origin of the API URL', () => {
