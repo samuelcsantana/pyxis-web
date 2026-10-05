@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+:root {
+  --pyx-bg: #F4F6FA;
+  --pyx-card: #FFFFFF;
+  --pyx-line: #E3E8F0;
+  --pyx-grid: #E8EDF4;
+  --pyx-ink: #0E1A2B;
+  --pyx-muted: #5B6B82;
+  --pyx-soft: #EEF2F8;
+  --pyx-accent: #F5B83D;
+  --pyx-accent-ink: #0E1A2B;
+  --pyx-sky: #0EA5E9;
+  --pyx-sky-ink: #0369A1;
+  --pyx-violet: #7C6CF2;
+  --pyx-violet-ink: #5B4BD6;
+  --pyx-teal: #14B8A6;
+  --pyx-slate: #94A3B8;
+  --pyx-ok: #15803D;
+  --pyx-ok-soft: #DCFCE7;
+  --pyx-bad: #B91C1C;
+  --pyx-bad-soft: #FEE2E2;
+  --pyx-warn: #B45309;
+  --pyx-warn-soft: #FEF3C7;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pyx-bg: #0A1220;
+    --pyx-card: #101C2E;
+    --pyx-line: #1E2D45;
+    --pyx-grid: #1A283E;
+    --pyx-ink: #E6EDF7;
+    --pyx-muted: #93A3BA;
+    --pyx-soft: #16243A;
+    --pyx-accent: #F5B83D;
+    --pyx-accent-ink: #0E1A2B;
+    --pyx-sky: #38BDF8;
+    --pyx-sky-ink: #7DD3FC;
+    --pyx-violet: #A396FA;
+    --pyx-violet-ink: #B8AEFB;
+    --pyx-teal: #2DD4BF;
+    --pyx-slate: #64748B;
+    --pyx-ok: #4ADE80;
+    --pyx-ok-soft: #12301F;
+    --pyx-bad: #F87171;
+    --pyx-bad-soft: #3A1518;
+    --pyx-warn: #FBBF24;
+    --pyx-warn-soft: #3A2A0B;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--pyx-bg);
+  --color-card: var(--pyx-card);
+  --color-line: var(--pyx-line);
+  --color-grid: var(--pyx-grid);
+  --color-ink: var(--pyx-ink);
+  --color-muted: var(--pyx-muted);
+  --color-soft: var(--pyx-soft);
+  --color-accent: var(--pyx-accent);
+  --color-accent-ink: var(--pyx-accent-ink);
+  --color-sky: var(--pyx-sky);
+  --color-sky-ink: var(--pyx-sky-ink);
+  --color-violet: var(--pyx-violet);
+  --color-violet-ink: var(--pyx-violet-ink);
+  --color-teal: var(--pyx-teal);
+  --color-slate: var(--pyx-slate);
+  --color-ok: var(--pyx-ok);
+  --color-ok-soft: var(--pyx-ok-soft);
+  --color-bad: var(--pyx-bad);
+  --color-bad-soft: var(--pyx-bad-soft);
+  --color-warn: var(--pyx-warn);
+  --color-warn-soft: var(--pyx-warn-soft);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --radius-chip: 6px;
+  --radius-control: 8px;
+  --radius-input: 10px;
+  --radius-card: 12px;
+  --radius-panel: 16px;
+  --radius-pill: 999px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
