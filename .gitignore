@@ -16,3 +16,6 @@ test-results/
 .idea/
 .vercel
 next-env.d.ts
+
+AGENTS.md
+CLAUDE.md
