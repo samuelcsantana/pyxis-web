@@ -1,6 +1,6 @@
 import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
-import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from './panel-classes';
+import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];

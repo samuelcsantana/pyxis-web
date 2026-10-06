@@ -1,6 +1,13 @@
 import { barWidth, formatCount, formatPercent, rate } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
-import { BAR_FILL, BAR_TRACK, BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from './panel-classes';
+import {
+  BAR_FILL,
+  BAR_TRACK,
+  BODY_CELL,
+  HEADER_CELL,
+  PANEL,
+  PANEL_TITLE,
+} from '@/components/ui/panel-classes';
 
 export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
