@@ -21,7 +21,7 @@ export const SCREENS = [
     slug: 'requests',
     label: 'Requests',
     icon: 'M4 7h13 M13 3l4 4-4 4 M20 17H7 M11 13l-4 4 4 4',
-    available: false,
+    available: true,
   },
   {
     slug: 'timeline',
