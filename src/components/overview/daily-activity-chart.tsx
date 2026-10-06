@@ -5,7 +5,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } fro
 import { formatCount } from '@/domain/metrics';
 import { activitySummary, activityTotals, type DayActivity } from '@/domain/overview';
 import { formatDay } from '@/domain/period';
-import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from './panel-classes';
+import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 const SERIES = [
   { key: 'pageViews', label: 'Page views', color: 'var(--color-sky)', swatch: 'bg-sky' },
