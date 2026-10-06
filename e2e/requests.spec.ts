@@ -86,3 +86,18 @@ test('shows only the failing routes when asked', async ({ page }) => {
     'page',
   );
 });
+
+test('opens the visit of a recent failure in the timeline', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/requests`);
+  await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+
+  await page
+    .getByRole('dialog', { name: 'POST /orders' })
+    .getByRole('link', { name: 'Open visit 3c07a1b2' })
+    .click();
+
+  await expect(page).toHaveURL(/\/timeline\?visit=3c07a1b2-/);
+  await expect(page.getByRole('region', { name: /^Visit 3c07a1b2 · / })).toContainText(
+    'order_number_in_use',
+  );
+});

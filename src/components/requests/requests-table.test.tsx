@@ -13,7 +13,13 @@ const ROWS = routeRows(
 
 function renderTable() {
   return render(
-    <RequestsTable rows={ROWS} basePath="/p1/requests" query="range=7d" emptyMessage="Nothing" />,
+    <RequestsTable
+      rows={ROWS}
+      basePath="/p1/requests"
+      query="range=7d"
+      timelinePath="/p1/timeline"
+      emptyMessage="Nothing"
+    />,
   );
 }
 
@@ -48,6 +54,10 @@ describe('RequestsTable', () => {
     expect(details.getByRole('heading', { level: 2 })).toHaveTextContent('POST /orders');
     expect(details.getByText('order_number_in_use')).toBeInTheDocument();
     expect(details.getByText('No error code')).toBeInTheDocument();
+    expect(details.getAllByRole('link', { name: /^Open visit / })[0]).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/p1\/timeline\?visit=[0-9a-f-]{36}$/),
+    );
     expect(details.getByRole('link', { name: /\/orders\/new/ })).toHaveAttribute(
       'href',
       '/p1/requests?range=7d&screen=%2Forders%2Fnew',
@@ -109,7 +119,15 @@ describe('RequestsTable', () => {
   });
 
   it('shows the empty message without routes', () => {
-    render(<RequestsTable rows={[]} basePath="/p1/requests" query="" emptyMessage="No writes." />);
+    render(
+      <RequestsTable
+        rows={[]}
+        basePath="/p1/requests"
+        query=""
+        timelinePath="/p1/timeline"
+        emptyMessage="No writes."
+      />,
+    );
 
     expect(screen.getByText('No writes.')).toBeInTheDocument();
   });

@@ -17,6 +17,7 @@ const meta = {
     rows: ROWS,
     basePath: '/demo/requests',
     query: 'range=7d',
+    timelinePath: '/demo/timeline',
     emptyMessage: 'No writes in this period.',
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },

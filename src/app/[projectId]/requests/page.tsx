@@ -117,6 +117,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
           rows={routeRows(visibleRoutes(report.routes, filter.failingOnly), project.timezone)}
           basePath={basePath}
           query={filterQuery(period, { ...filter, screen: null })}
+          timelinePath={screenHref(project.id, 'timeline')}
           emptyMessage={emptyMessage(filter)}
         />
         <p className="text-xs leading-[18px] text-muted">

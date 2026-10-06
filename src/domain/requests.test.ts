@@ -175,6 +175,7 @@ describe('routeRows', () => {
           tone: 'client',
           errorCode: 'order_number_in_use',
           visit: '3c07a1b2',
+          sessionId: '3c07a1b2-0000-4000-8000-000000000001',
         },
       ],
     });
