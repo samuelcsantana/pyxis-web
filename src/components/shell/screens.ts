@@ -33,7 +33,7 @@ export const SCREENS = [
     slug: 'devices',
     label: 'Devices',
     icon: 'M3 5h12v9H3z M7 18h4 M9 14v4 M17 8h4v12h-4z',
-    available: false,
+    available: true,
   },
   {
     slug: 'acquisition',

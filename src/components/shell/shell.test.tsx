@@ -67,14 +67,19 @@ describe('SidebarNav', () => {
 
     expect(overview).toHaveAttribute('href', '/p-store/overview?range=7d');
     expect(overview).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Devices' })).toHaveAttribute(
+      'href',
+      '/p-store/devices?range=7d',
+    );
+    expect(screen.getByRole('link', { name: 'Devices' })).not.toHaveAttribute('aria-current');
   });
 
   it('shows the screens still to come without linking them', () => {
     render(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(1);
+    expect(screen.getAllByRole('link')).toHaveLength(2);
     expect(screen.getByText('Funnel').closest('[aria-disabled="true"]')).not.toBeNull();
-    expect(screen.getAllByText('Soon')).toHaveLength(6);
+    expect(screen.getAllByText('Soon')).toHaveLength(5);
   });
 
   it('marks nothing current on another screen', () => {
