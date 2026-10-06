@@ -67,7 +67,8 @@ Shipping now:
   and the steps kept in the URL so a bookmark is a saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status,
-  and filters for page views, events, requests and errors
+  and filters for page views, events, requests and errors; older visits load on demand, and a
+  failed request in the Requests screen links to its visit
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured
