@@ -314,6 +314,16 @@ describe('PeriodSelector with parameters of the screen', () => {
   });
 });
 
+describe('Topbar without a period', () => {
+  it('shows the title and the theme toggle, and no period controls', () => {
+    render(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /theme/ })).toBeInTheDocument();
+  });
+});
+
 describe('Topbar', () => {
   it('shows the title, the subtitle and the period in words', () => {
     render(
