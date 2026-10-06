@@ -16,11 +16,28 @@ per-person timelines of a product, measured without cookies or personal data.**
 [![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
 [![Playwright + axe](https://img.shields.io/badge/Playwright-axe%20WCAG%202.2-2EAD33?logo=playwright&logoColor=white)](e2e)
+[![Storybook](https://img.shields.io/badge/Storybook-components-FF4785?logo=storybook&logoColor=white)](https://samuelcsantana.github.io/pyxis-web/)
+
+**[Storybook](https://samuelcsantana.github.io/pyxis-web/)** ·
+**[API reference](https://samuelcsantana.github.io/pyxis-api/)** ·
+**[SDK playground](https://samuelcsantana.github.io/pyxis-sdk/)**
 
 </div>
 
-> **Status:** early development. The app skeleton, the design tokens, Storybook and every quality
-> gate are in place; sign-in and the first screens are next (see [Roadmap](#roadmap)).
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshots/overview-dark.png">
+  <img alt="The overview of the demo store: four KPI cards with sparklines, page views and named events per day, the top pages and the top events" src=".github/assets/screenshots/overview-light.png" width="100%">
+</picture>
+
+| Requests, with a route's details                                                                                                                                                                      | Funnel, dark theme                                                                                                                                 | Timeline of one person                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img alt="The routes of the demo store with the details of POST /orders open: status codes, the screens where it failed and its latest failures" src=".github/assets/screenshots/requests-light.png"> | <img alt="A six-step sign-up funnel with the share that continued and the drop-off at each step" src=".github/assets/screenshots/funnel-dark.png"> | <img alt="The timeline of the demo person: a failed order, its retry and the order created" src=".github/assets/screenshots/timeline-light.png"> |
+
+Every screenshot shows invented demo data: the dashboard runs on it when no API is configured.
+
+> **Status:** early development. Every screen works against the API and, with no API configured,
+> against invented demo data; the production deployment and the public live demo are next (see
+> [Roadmap](#roadmap)).
 
 ## Ecosystem
 
