@@ -44,10 +44,15 @@ Shipping now:
 - The approved brand and design tokens (light and dark), exposed to Tailwind CSS 4
 - A strict Content Security Policy and hardening headers on every page
 - Storybook with the design tokens page; every story is also an automated accessibility test
+- Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
+- The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
+  30 days or a custom range, kept in the URL), light and dark themes, sign-out, and a menu button
+  on phones
+- Loading, empty and error states shared by every screen
+- A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Sign-in by email code, project and period selectors, light and dark themes
 - Overview, Devices and Acquisition
 - Features and Requests (success and error rates per route, the screens they come from)
 - Funnels with an editor, saved in the URL
@@ -71,8 +76,10 @@ in and out ([ADR 0002](docs/adr/0002-server-components-and-services.md)).
 ## Tech stack
 
 Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 · Geist through
-`next/font` · Recharts (from the first chart) · Vitest and Testing Library · Playwright with axe-core · Storybook 10 · Vercel
-· GitHub Actions with CodeQL, Dependabot, Codecov and release-please.
+`next/font` · Zod for API answers · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
+with RxJS for the few requests a Client Component starts · Recharts (from the first chart) · Vitest
+and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
+CodeQL, Dependabot, Codecov and release-please.
 
 ## Getting started
 
@@ -89,6 +96,38 @@ npm run storybook    # http://localhost:6006
 | Variable                    | Meaning                                                                  |
 | --------------------------- | ------------------------------------------------------------------------ |
 | `NEXT_PUBLIC_PYXIS_API_URL` | The Pyxis API. Unset: Mock services with invented data and a demo banner |
+
+Without the variable the dashboard runs in demo mode: no session is asked for, and the sign-in
+page accepts the code `000000`.
+
+To sign in against a real API, start the [pyxis-api](https://github.com/samuelcsantana/pyxis-api)
+compose stack (it accepts sign-in calls from `http://localhost:3000`), grant yourself a project
+with its `admin:grant` script, then run the dashboard on port 3000 exactly:
+
+```bash
+NEXT_PUBLIC_PYXIS_API_URL=http://localhost:3040 npx next dev -p 3000
+```
+
+Outside production the API logs the sign-in code instead of emailing it
+(`docker compose logs api`). The session cookie is set by the API for `localhost`, and cookies
+ignore ports, so the dashboard's server receives it and forwards it to the API.
+
+### Routes
+
+| Route                   | What it shows                                                         |
+| ----------------------- | --------------------------------------------------------------------- |
+| `/`                     | Opens the first project the admin may read, or explains there is none |
+| `/sign-in`              | Email, then code; `?expired=1` explains that the session ended        |
+| `/[projectId]/overview` | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`  |
+
+`src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
+whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
+
+### Contract
+
+`contract/openapi.json` is a copy of the API's published contract. `npm run contract:sync`
+refreshes it; a unit test checks that the demo answers and the bodies the sign-in form sends
+match it, and a daily workflow runs that test against the API's `main`.
 
 ## Testing
 
@@ -115,9 +154,13 @@ returns.
 ```text
 src/
 ├── app/            routes, the root layout, design tokens (globals.css), icons
-├── components/     UI components, each with its stories
+├── components/     UI components, each with its stories (shell, sign-in, states, theme)
 ├── design/         the design tokens page
-└── lib/            pure helpers (security headers)
+├── domain/         pure types and rules: the admin and projects, periods, errors
+├── lib/            API configuration, theme, security headers, the current admin
+├── services/       one interface per API area, with Http and Mock implementations
+└── proxy.ts        sends a visitor without a session to sign in
+contract/           the API contract copied from pyxis-api
 e2e/                Playwright specs and the axe helper
 .storybook/         Storybook configuration
 eslint-rules/       the local no-comments ESLint rule
@@ -131,21 +174,26 @@ docs/adr/           architecture decision records
   fonts from this origin only, connections only to this origin and the Pyxis API, no plugins, no
   framing
 - No secret in the browser bundle; data is read on the server
+- The session is an `HttpOnly` cookie set by the API; the dashboard's JavaScript never reads it.
+  The only cookie the dashboard writes is `pyxis_theme`, the light or dark choice, which the root
+  layout reads so the first paint has the right theme (so every page renders on request)
+- The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data
 - Vulnerabilities: see [SECURITY.md](SECURITY.md)
 
 ## Architecture decisions
 
-| ADR                                                     | Decision                                             |
-| ------------------------------------------------------- | ---------------------------------------------------- |
-| [0001](docs/adr/0001-record-architecture-decisions.md)  | Record architecture decisions                        |
-| [0002](docs/adr/0002-server-components-and-services.md) | Server Components reading through service interfaces |
-| [0003](docs/adr/0003-csp-without-nonces.md)             | A Content Security Policy without nonces             |
+| ADR                                                                | Decision                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------- |
+| [0001](docs/adr/0001-record-architecture-decisions.md)             | Record architecture decisions                           |
+| [0002](docs/adr/0002-server-components-and-services.md)            | Server Components reading through service interfaces    |
+| [0003](docs/adr/0003-csp-without-nonces.md)                        | A Content Security Policy without nonces                |
+| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge |
 
 ## Roadmap
 
 - [x] App skeleton, design tokens, Storybook, quality gates
-- [ ] Sign-in, app shell, project and period selectors, loading, empty and error states
+- [x] Sign-in, app shell, project and period selectors, loading, empty and error states
 - [ ] Overview, Devices, Acquisition
 - [ ] Features, Requests
 - [ ] Funnel
