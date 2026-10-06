@@ -27,12 +27,12 @@ test('looks up the demo person and filters the story', async ({ page }) => {
   await page.getByRole('button', { name: 'Show timeline' }).click();
 
   await expect(page).toHaveURL(new RegExp(`user=${DEMO_USER}$`));
-  await expect(page.getByRole('region', { name: /^Visit / })).toHaveCount(3);
-  await expect(page.getByText('2 failed requests')).toBeVisible();
+  await expect(page.getByRole('region', { name: /^Visit .+ · / })).toHaveCount(2);
+  await expect(page.getByText('1 failed request')).toBeVisible();
 
   await page.getByRole('link', { name: 'Errors only' }).click();
   await expect(page).toHaveURL(/show=errors/);
-  await expect(page.getByRole('listitem').filter({ hasText: 'POST /' })).toHaveCount(2);
+  await expect(page.getByRole('listitem').filter({ hasText: 'POST /' })).toHaveCount(1);
 });
 
 test('opens one visit by its id, and says when an id is unknown', async ({ page }) => {

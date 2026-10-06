@@ -59,32 +59,34 @@ describe('MockTimelineService', () => {
     vi.useRealTimers();
   });
 
-  it('tells the board story of the demo person, newest visit first, relative to now', async () => {
+  it('tells the board story of the demo person two visits at a time, relative to now', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(NOW);
+    const service = new MockTimelineService();
+    const person = { kind: 'user', id: DEMO_USER_ID } as const;
 
-    const report = await new MockTimelineService().timeline('demo', {
-      kind: 'user',
-      id: DEMO_USER_ID,
-    });
+    const first = await service.timeline('demo', person, null);
+    const second = await service.timeline('demo', person, first.nextBefore);
 
-    expect(report.visits.map((visit) => visit.startedAt)).toEqual([
+    expect(first.visits.map((visit) => visit.startedAt)).toEqual([
       '2026-10-05T21:40:12.000Z',
       '2026-10-03T12:12:04.000Z',
-      '2026-10-02T17:03:10.000Z',
     ]);
-    expect(report.visits[2]?.events).toHaveLength(11);
-    expect(report.visits[0]?.endedAt).toBe('2026-10-05T21:41:31.000Z');
-    expect(report.nextBefore).toBeNull();
+    expect(first.visits[0]?.endedAt).toBe('2026-10-05T21:41:31.000Z');
+    expect(first.nextBefore).toBe('2026-10-03T12:12:04.000Z');
+    expect(second.visits.map((visit) => visit.startedAt)).toEqual(['2026-10-02T17:03:10.000Z']);
+    expect(second.visits[0]?.events).toHaveLength(11);
+    expect(second.nextBefore).toBeNull();
   });
 
   it('finds one visit by its id, and nothing for anyone else', async () => {
     const service = new MockTimelineService();
+    const visit = await service.timeline('demo', { kind: 'visit', id: VISIT }, null);
+    const nobody = await service.timeline('demo', { kind: 'user', id: 'someone_else' }, null);
 
-    expect((await service.timeline('demo', { kind: 'visit', id: VISIT })).visits).toHaveLength(1);
-    expect((await service.timeline('demo', { kind: 'user', id: 'someone_else' })).visits).toEqual(
-      [],
-    );
+    expect(visit.visits).toHaveLength(1);
+    expect(visit.nextBefore).toBeNull();
+    expect(nobody.visits).toEqual([]);
   });
 });
 
