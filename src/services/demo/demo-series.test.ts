@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { demoCount, demoDays, noise, previousRange, weekdayFactor } from './demo-series';
+import {
+  demoCount,
+  demoDays,
+  demoPageViewsOn,
+  demoVisitsOn,
+  noise,
+  previousRange,
+  weekdayFactor,
+} from './demo-series';
 
 const MONTH = demoDays({ from: '2026-09-01', to: '2026-09-30' });
 
@@ -49,5 +57,13 @@ describe('demoDays and previousRange', () => {
       from: '2026-08-02',
       to: '2026-08-31',
     });
+  });
+});
+
+describe('demoVisitsOn', () => {
+  it('counts fewer visits than page views on the same day', () => {
+    for (const date of MONTH) {
+      expect(demoVisitsOn(date)).toBe(Math.round(demoPageViewsOn(date) * 0.62));
+    }
   });
 });

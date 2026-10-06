@@ -1,7 +1,10 @@
 import { addDays, daysBetween } from '@/domain/period';
-import type { DateRange } from '../overview/overview-service.interface';
+import type { DateRange } from '../date-range';
 
 const WEEKEND_FACTOR = 0.7;
+const PAGE_VIEWS_PER_DAY = 160;
+const PAGE_VIEW_SALT = 1;
+const VISITS_PER_PAGE_VIEW = 0.62;
 const SATURDAY = 6;
 const SUNDAY = 0;
 const FNV_OFFSET_BASIS = 0x811c9dc5;
@@ -46,4 +49,12 @@ export function weekdayFactor(date: string): number {
 
 export function demoCount(date: string, base: number, salt: number): number {
   return Math.round(base * weekdayFactor(date) * (0.8 + 0.4 * noise(date, salt)));
+}
+
+export function demoPageViewsOn(date: string): number {
+  return demoCount(date, PAGE_VIEWS_PER_DAY, PAGE_VIEW_SALT);
+}
+
+export function demoVisitsOn(date: string): number {
+  return Math.round(demoPageViewsOn(date) * VISITS_PER_PAGE_VIEW);
 }
