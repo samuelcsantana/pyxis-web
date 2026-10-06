@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
@@ -126,6 +127,16 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
               person, or a visit id to see one visit. Events, page views and requests show in the
               order they happened, in the project&apos;s time zone.
             </p>
+            {isDemoMode() ? (
+              <p>
+                <Link
+                  href={`${basePath}?${new URLSearchParams({ user: DEMO_USER_ID }).toString()}`}
+                  className="text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                >
+                  Open the timeline of the demo person {DEMO_USER_ID}
+                </Link>
+              </p>
+            ) : null}
           </EmptyState>
         ) : (
           <TimelineView
