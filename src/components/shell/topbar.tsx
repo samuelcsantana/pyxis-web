@@ -1,7 +1,7 @@
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { formatPeriod, type Period } from '@/domain/period';
 import type { Theme } from '@/lib/theme';
-import { PeriodSelector } from './period-selector';
+import { type KeptParameters, PeriodSelector } from './period-selector';
 
 export interface TopbarProps {
   readonly title: string;
@@ -10,11 +10,12 @@ export interface TopbarProps {
   readonly period: Period;
   readonly today: string;
   readonly theme?: Theme;
+  readonly keep?: KeptParameters;
 }
 
 const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
-export function Topbar({ title, subtitle, basePath, period, today, theme }: TopbarProps) {
+export function Topbar({ title, subtitle, basePath, period, today, theme, keep }: TopbarProps) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-card px-4 py-4.5 text-ink sm:px-8">
       <div className="flex min-w-0 flex-col gap-1">
@@ -35,7 +36,7 @@ export function Topbar({ title, subtitle, basePath, period, today, theme }: Topb
           </svg>
           <span className="tabular-nums">{formatPeriod(period)}</span>
         </p>
-        <PeriodSelector basePath={basePath} period={period} today={today} />
+        <PeriodSelector basePath={basePath} period={period} today={today} keep={keep} />
         <ThemeToggle initialTheme={theme} />
       </div>
     </header>
