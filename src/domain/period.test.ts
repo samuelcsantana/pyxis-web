@@ -1,0 +1,116 @@
+import { describe, expect, it } from 'vitest';
+import {
+  addDays,
+  daysBetween,
+  formatPeriod,
+  MAX_PERIOD_DAYS,
+  periodQuery,
+  presetPeriod,
+  resolvePeriod,
+  todayIn,
+} from './period';
+
+const SAO_PAULO = 'America/Sao_Paulo';
+const LATE_EVENING_IN_SAO_PAULO = new Date('2026-10-06T02:30:00.000Z');
+const JUST_AFTER_MIDNIGHT_IN_SAO_PAULO = new Date('2026-10-06T03:30:00.000Z');
+
+describe('todayIn', () => {
+  it('reads the calendar day in the project time zone, not in UTC', () => {
+    expect(todayIn(SAO_PAULO, LATE_EVENING_IN_SAO_PAULO)).toBe('2026-10-05');
+    expect(todayIn('UTC', LATE_EVENING_IN_SAO_PAULO)).toBe('2026-10-06');
+  });
+
+  it('moves to the next day at local midnight', () => {
+    expect(todayIn(SAO_PAULO, JUST_AFTER_MIDNIGHT_IN_SAO_PAULO)).toBe('2026-10-06');
+  });
+});
+
+describe('addDays and daysBetween', () => {
+  it('walk across months and leap days', () => {
+    expect(addDays('2028-02-28', 1)).toBe('2028-02-29');
+    expect(addDays('2026-03-01', -1)).toBe('2026-02-28');
+    expect(daysBetween('2026-09-06', '2026-10-05')).toBe(30);
+    expect(daysBetween('2026-10-05', '2026-10-05')).toBe(1);
+  });
+
+  it.each(['2026-02-30', '2026-13-01', 'yesterday'])('refuse %s', (date) => {
+    expect(() => addDays(date, 1)).toThrow(RangeError);
+    expect(() => daysBetween(date, '2026-10-05')).toThrow(RangeError);
+  });
+});
+
+describe('presetPeriod', () => {
+  it.each([
+    ['today', '2026-10-05'],
+    ['7d', '2026-09-29'],
+    ['30d', '2026-09-06'],
+  ] as const)('%s ends today and starts on %s', (preset, from) => {
+    expect(presetPeriod(preset, '2026-10-05')).toEqual({ preset, from, to: '2026-10-05' });
+  });
+});
+
+describe('resolvePeriod', () => {
+  it('defaults to the last 30 days of the project calendar', () => {
+    expect(resolvePeriod({}, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO)).toEqual({
+      preset: '30d',
+      from: '2026-09-06',
+      to: '2026-10-05',
+    });
+  });
+
+  it('reads a preset from the range parameter', () => {
+    expect(resolvePeriod({ range: 'today' }, SAO_PAULO, JUST_AFTER_MIDNIGHT_IN_SAO_PAULO)).toEqual({
+      preset: 'today',
+      from: '2026-10-06',
+      to: '2026-10-06',
+    });
+  });
+
+  it('reads a custom period from from and to', () => {
+    expect(
+      resolvePeriod({ from: '2026-08-01', to: '2026-08-31' }, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO),
+    ).toEqual({ preset: 'custom', from: '2026-08-01', to: '2026-08-31' });
+  });
+
+  it.each([
+    ['an unknown range and no dates', { range: 'year' }],
+    ['repeated parameters', { range: ['7d', '30d'] }],
+    ['only a start', { from: '2026-08-01' }],
+    ['a date that does not exist', { from: '2026-02-30', to: '2026-03-01' }],
+    ['a start after the end', { from: '2026-09-02', to: '2026-09-01' }],
+    ['an end after today in the project zone', { from: '2026-10-01', to: '2026-10-06' }],
+    ['more than the longest period', { from: '2025-08-31', to: '2026-10-05' }],
+  ])('falls back to the default for %s', (_case, search) => {
+    expect(resolvePeriod(search, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO).preset).toBe('30d');
+  });
+
+  it(`accepts exactly ${String(MAX_PERIOD_DAYS)} days`, () => {
+    const to = '2026-10-05';
+    const from = addDays(to, 1 - MAX_PERIOD_DAYS);
+
+    expect(resolvePeriod({ from, to }, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO).preset).toBe('custom');
+  });
+});
+
+describe('periodQuery', () => {
+  it('writes a preset as range and a custom period as from and to', () => {
+    expect(periodQuery(presetPeriod('7d', '2026-10-05'))).toBe('range=7d');
+    expect(periodQuery({ preset: 'custom', from: '2026-08-01', to: '2026-08-31' })).toBe(
+      'from=2026-08-01&to=2026-08-31',
+    );
+  });
+});
+
+describe('formatPeriod', () => {
+  it('shows a single day once', () => {
+    expect(formatPeriod(presetPeriod('today', '2026-10-05'))).toBe('Oct 5, 2026');
+  });
+
+  it('names the year once when both ends share it', () => {
+    expect(formatPeriod(presetPeriod('30d', '2026-10-05'))).toBe('Sep 6 – Oct 5, 2026');
+  });
+
+  it('names both years across new year', () => {
+    expect(formatPeriod(presetPeriod('7d', '2027-01-02'))).toBe('Dec 27, 2026 – Jan 2, 2027');
+  });
+});
