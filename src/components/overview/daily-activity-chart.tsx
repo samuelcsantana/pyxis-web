@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { formatCount } from '@/domain/metrics';
 import { activitySummary, activityTotals, type DayActivity } from '@/domain/overview';
 import { formatDay } from '@/domain/period';
-import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
+import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
 
 const SERIES = [
   { key: 'pageViews', label: 'Page views', color: 'var(--color-sky)', swatch: 'bg-sky' },
@@ -107,42 +107,21 @@ function ActivityTable({ days, periodLabel }: DailyActivityChartProps) {
 }
 
 export function DailyActivityChart({ days, periodLabel }: DailyActivityChartProps) {
-  const [asTable, setAsTable] = useState(false);
   const totals = activityTotals(days);
   return (
-    <section aria-labelledby="daily-activity-heading" className={`${PANEL} gap-4`}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <h2 id="daily-activity-heading" className={PANEL_TITLE}>
-            Events per day
-          </h2>
-          <p className="text-[13px] text-muted">Page views and named events, {periodLabel}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          {SERIES.map((series) => (
-            <p key={series.key} className="flex items-center gap-2 text-[13px]">
-              <span aria-hidden="true" className={`size-2.5 rounded-[3px] ${series.swatch}`} />
-              {series.label}
-              <strong className="tabular-nums">{formatCount(totals[series.key])}</strong>
-            </p>
-          ))}
-          <button
-            type="button"
-            aria-pressed={asTable}
-            onClick={() => {
-              setAsTable((shown) => !shown);
-            }}
-            className="min-h-11 rounded-control border border-line bg-card px-3 text-[13px] text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink aria-pressed:bg-soft sm:min-h-9"
-          >
-            View as table
-          </button>
-        </div>
-      </div>
-      {asTable ? (
-        <ActivityTable days={days} periodLabel={periodLabel} />
-      ) : (
-        <ActivityChart days={days} />
-      )}
-    </section>
+    <ChartPanel
+      title="Events per day"
+      description={`Page views and named events, ${periodLabel}`}
+      legend={SERIES.map((series) => (
+        <LegendItem
+          key={series.key}
+          swatch={series.swatch}
+          label={series.label}
+          total={formatCount(totals[series.key])}
+        />
+      ))}
+      chart={<ActivityChart days={days} />}
+      table={<ActivityTable days={days} periodLabel={periodLabel} />}
+    />
   );
 }
