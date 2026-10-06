@@ -52,13 +52,15 @@ Shipping now:
   change against the previous period and a sparkline; page views and named events per day as a
   chart or a table; the top pages and events. Every percentage sits next to the totals it comes
   from, and a division by zero shows a dash, never `NaN%`
+- Devices: device type, browser and operating system as donuts whose legend is a table of every
+  value with its visits and share, conversion by device, and the countries by name
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Devices and Acquisition
+- Acquisition
 - Features and Requests (success and error rates per route, the screens they come from)
 - Funnels with an editor, saved in the URL
 - Timelines of a person or a visit
@@ -125,6 +127,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/`                     | Opens the first project the admin may read, or explains there is none |
 | `/sign-in`              | Email, then code; `?expired=1` explains that the session ended        |
 | `/[projectId]/overview` | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`  |
+| `/[projectId]/devices`  | Device types, browsers, systems, conversion by device and countries   |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
@@ -163,7 +166,7 @@ src/
 ├── components/     UI components, each with its stories (overview, shell, sign-in, states, theme)
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
-│                   rates and changes, sparklines, errors
+│                   rates and changes, sparklines, device and country labels, donuts, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -203,7 +206,8 @@ docs/adr/           architecture decision records
 - [x] App skeleton, design tokens, Storybook, quality gates
 - [x] Sign-in, app shell, project and period selectors, loading, empty and error states
 - [x] Overview
-- [ ] Devices, Acquisition
+- [x] Devices
+- [ ] Acquisition
 - [ ] Features, Requests
 - [ ] Funnel
 - [ ] Timeline
