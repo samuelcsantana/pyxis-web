@@ -22,6 +22,14 @@
   --pyx-bad-soft: #fee2e2;
   --pyx-warn: #b45309;
   --pyx-warn-soft: #fef3c7;
+  --pyx-nav: #0e1a2b;
+  --pyx-nav-raised: #13223a;
+  --pyx-nav-active: #1b2b44;
+  --pyx-nav-line: #1e2d45;
+  --pyx-nav-border: #22344f;
+  --pyx-nav-text: #c9d4e3;
+  --pyx-nav-muted: #8796ad;
+  --pyx-nav-strong: #ffffff;
   color-scheme: light;
 }
 
@@ -99,6 +107,14 @@
   --color-bad-soft: var(--pyx-bad-soft);
   --color-warn: var(--pyx-warn);
   --color-warn-soft: var(--pyx-warn-soft);
+  --color-nav: var(--pyx-nav);
+  --color-nav-raised: var(--pyx-nav-raised);
+  --color-nav-active: var(--pyx-nav-active);
+  --color-nav-line: var(--pyx-nav-line);
+  --color-nav-border: var(--pyx-nav-border);
+  --color-nav-text: var(--pyx-nav-text);
+  --color-nav-muted: var(--pyx-nav-muted);
+  --color-nav-strong: var(--pyx-nav-strong);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --radius-chip: 6px;

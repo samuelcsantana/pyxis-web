@@ -1,0 +1,65 @@
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Admin } from '@/domain/admin';
+import { MockAuthService } from '@/services/auth/mock-auth-service';
+import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { MobileMenu } from './mobile-menu';
+import { Sidebar } from './sidebar';
+import { SignOutButton } from './sign-out-button';
+
+const [STORE] = DEMO_ADMIN.projects;
+if (STORE === undefined) {
+  throw new Error('The demo admin has no project.');
+}
+
+const ONE_PROJECT: Admin = { ...DEMO_ADMIN, projects: [STORE] };
+
+const meta = {
+  title: 'Shell/Sidebar',
+  component: Sidebar,
+  tags: ['autodocs'],
+  args: { admin: DEMO_ADMIN, project: STORE },
+  parameters: {
+    layout: 'fullscreen',
+    nextjs: {
+      appDirectory: true,
+      navigation: { pathname: `/${STORE.id}/overview`, query: { range: '7d' } },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div className="h-[900px] w-[248px]">
+        <Story />
+      </div>
+    ),
+  ],
+} satisfies Meta<typeof Sidebar>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const OverviewSelected: Story = {};
+
+export const SingleProject: Story = { args: { admin: ONE_PROJECT } };
+
+export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const SigningOut: Story = {
+  render: () => (
+    <div className="bg-nav p-4">
+      <SignOutButton authService={new MockAuthService()} />
+    </div>
+  ),
+};
+
+export const OnAPhone: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  decorators: [
+    (Story) => (
+      <div className="w-[390px]">
+        <MobileMenu>
+          <Story />
+        </MobileMenu>
+      </div>
+    ),
+  ],
+};
