@@ -1,10 +1,23 @@
 import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 
+export type KeptParameters = Readonly<Record<string, string>>;
+
 export interface PeriodSelectorProps {
   readonly basePath: string;
   readonly period: Period;
   readonly today: string;
+  readonly keep?: KeptParameters;
+}
+
+const NOTHING_KEPT: KeptParameters = {};
+
+export function withKeptParameters(query: string, keep: KeptParameters): string {
+  const parameters = new URLSearchParams(query);
+  for (const [name, value] of Object.entries(keep)) {
+    parameters.set(name, value);
+  }
+  return parameters.toString();
 }
 
 const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
@@ -22,7 +35,12 @@ const IDLE_CLASS = 'text-muted hover:text-ink';
 const DATE_INPUT_CLASS =
   'min-h-9 rounded-control border border-line bg-card px-2 text-[13px] text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
 
-export function PeriodSelector({ basePath, period, today }: PeriodSelectorProps) {
+export function PeriodSelector({
+  basePath,
+  period,
+  today,
+  keep = NOTHING_KEPT,
+}: PeriodSelectorProps) {
   const custom = period.preset === 'custom';
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -35,7 +53,7 @@ export function PeriodSelector({ basePath, period, today }: PeriodSelectorProps)
           return (
             <Link
               key={preset}
-              href={`${basePath}?${periodQuery(presetPeriod(preset, today))}`}
+              href={`${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`}
               aria-current={selected ? 'true' : undefined}
               className={`${OPTION_CLASS} ${selected ? SELECTED_CLASS : IDLE_CLASS}`}
             >
@@ -55,6 +73,9 @@ export function PeriodSelector({ basePath, period, today }: PeriodSelectorProps)
           method="get"
           className="mt-1.5 flex flex-wrap items-end gap-2 rounded-input border border-line bg-card p-3 sm:absolute sm:right-0 sm:z-10 sm:w-max sm:shadow-lg"
         >
+          {Object.entries(keep).map(([name, value]) => (
+            <input key={name} type="hidden" name={name} value={value} />
+          ))}
           <label className="flex flex-col gap-1 text-xs font-medium text-muted">
             From
             <input

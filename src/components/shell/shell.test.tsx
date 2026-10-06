@@ -294,6 +294,26 @@ describe('PeriodSelector', () => {
   });
 });
 
+describe('PeriodSelector with parameters of the screen', () => {
+  it('carries them into every preset and into the custom form', () => {
+    const { container } = render(
+      <PeriodSelector
+        basePath="/p1/features"
+        period={presetPeriod('7d', '2026-10-05')}
+        today="2026-10-05"
+        keep={{ kind: 'screens', q: 'order' }}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Today' })).toHaveAttribute(
+      'href',
+      '/p1/features?range=today&kind=screens&q=order',
+    );
+    expect(container.querySelector('input[type="hidden"][name="kind"]')).toHaveValue('screens');
+    expect(container.querySelector('input[type="hidden"][name="q"]')).toHaveValue('order');
+  });
+});
+
 describe('Topbar', () => {
   it('shows the title, the subtitle and the period in words', () => {
     render(
