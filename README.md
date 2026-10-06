@@ -62,13 +62,15 @@ Shipping now:
 - Requests: every write by route with its success and error shares, status codes and median
   duration; a keyboard-accessible details panel with the screens where the route failed and its
   latest failures with their error code; "failing only" and screen filters kept in the URL
+- Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
+  with the share that continued and the drop-off at each step; a keyboard-operable step editor,
+  and the steps kept in the URL so a bookmark is a saved funnel
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Funnels with an editor, saved in the URL
 - Timelines of a person or a visit
 - A live demo with invented data, no sign-in and no real API
 
@@ -137,6 +139,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion |
 | `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name        |
 | `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them         |
+| `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor       |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
@@ -177,7 +180,7 @@ src/
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, device and country labels, donuts,
 │                   channels and sources, feature ranking and search, routes and
-│                   failures, errors
+│                   failures, funnel steps and counts, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -221,7 +224,7 @@ docs/adr/           architecture decision records
 - [x] Acquisition
 - [x] Features
 - [x] Requests
-- [ ] Funnel
+- [x] Funnel
 - [ ] Timeline
 - [ ] Production domain
 - [ ] Live demo with invented data
