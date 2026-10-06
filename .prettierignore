@@ -1,6 +1,7 @@
 .next/
 out/
 coverage/
+contract/
 storybook-static/
 playwright-report/
 test-results/

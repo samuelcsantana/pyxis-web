@@ -29,6 +29,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:storybook": "vitest run --config vitest.storybook.config.ts",
+    "contract:sync": "node scripts/contract-sync.mts",
     "prepare": "husky"
   },
   "dependencies": {
