@@ -17,7 +17,9 @@ per-person timelines of a product, measured without cookies or personal data.**
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
 [![Playwright + axe](https://img.shields.io/badge/Playwright-axe%20WCAG%202.2-2EAD33?logo=playwright&logoColor=white)](e2e)
 [![Storybook](https://img.shields.io/badge/Storybook-components-FF4785?logo=storybook&logoColor=white)](https://samuelcsantana.github.io/pyxis-web/)
+[![Live demo](https://img.shields.io/badge/Live%20demo-invented%20data-F5B83D?logo=vercel&logoColor=white)](https://demo.pyxis.samuelsantana.dev)
 
+**[Live demo](https://demo.pyxis.samuelsantana.dev)** ·
 **[Storybook](https://samuelcsantana.github.io/pyxis-web/)** ·
 **[API reference](https://samuelcsantana.github.io/pyxis-api/)** ·
 **[SDK playground](https://samuelcsantana.github.io/pyxis-sdk/)**
@@ -35,9 +37,9 @@ per-person timelines of a product, measured without cookies or personal data.**
 
 Every screenshot shows invented demo data: the dashboard runs on it when no API is configured.
 
-> **Status:** early development. Every screen works against the API and, with no API configured,
-> against invented demo data; the production deployment and the public live demo are next (see
-> [Roadmap](#roadmap)).
+> **Status:** early development, in production. Every screen works against the API, deployed at
+> `pyxis.samuelsantana.dev` for the projects' admins, and against invented data in the public
+> [live demo](https://demo.pyxis.samuelsantana.dev).
 
 ## Ecosystem
 
@@ -88,11 +90,8 @@ Shipping now:
   failed request in the Requests screen links to its visit
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
-- A demo mode with invented data and a visible banner when no API is configured
-
-Planned (see [Roadmap](#roadmap)):
-
-- A live demo with invented data, no sign-in and no real API
+- A demo mode with invented data and a visible banner when no API is configured, published as
+  the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API
 
 ## Architecture
 
@@ -171,6 +170,19 @@ whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
 refreshes it; a unit test checks that the demo answers and the bodies the sign-in form sends
 match it, and a daily workflow runs that test against the API's `main`.
 
+### Deployment
+
+Two Vercel projects build this repository, and every merge to `main` deploys both:
+
+| Project      | Address                                                                                       | `NEXT_PUBLIC_PYXIS_API_URL`           |
+| ------------ | --------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `pyxis-web`  | `https://pyxis.samuelsantana.dev`, the dashboard for the projects' admins                     | `https://api.pyxis.samuelsantana.dev` |
+| `pyxis-demo` | [`https://demo.pyxis.samuelsantana.dev`](https://demo.pyxis.samuelsantana.dev), the live demo | unset                                 |
+
+The variable is set for production only, so preview deployments run in demo mode. `vercel.json`
+runs the functions in `gru1` (São Paulo), the city of the API, because every page reads it on
+the server.
+
 ## Testing
 
 ```bash
@@ -247,8 +259,8 @@ docs/adr/           architecture decision records
 - [x] Requests
 - [x] Funnel
 - [x] Timeline
-- [ ] Production domain
-- [ ] Live demo with invented data
+- [x] Production domain
+- [x] Live demo with invented data
 
 ## Contributing and license
 
