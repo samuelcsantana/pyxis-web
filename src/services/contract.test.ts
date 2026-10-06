@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
+import { demoFeaturesWire } from './features/demo-features';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 
@@ -64,6 +65,15 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_ADMIN.projects) {
       const wire = demoAcquisitionWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo features of each kind', () => {
+    const validate = contractSchema('FeaturesReport');
+
+    for (const kind of ['events', 'screens'] as const) {
+      const wire = demoFeaturesWire({ from: '2026-09-06', to: '2026-10-05' }, kind);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
