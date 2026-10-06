@@ -35,6 +35,19 @@ test('looks up the demo person and filters the story', async ({ page }) => {
   await expect(page.getByRole('listitem').filter({ hasText: 'POST /' })).toHaveCount(1);
 });
 
+test('loads the older visits with the keyboard and moves the focus to them', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/timeline?user=${DEMO_USER}`);
+  await expect(page.getByRole('region', { name: /^Visit .+ · / })).toHaveCount(2);
+
+  await page.getByRole('button', { name: 'Load older visits' }).focus();
+  await page.keyboard.press('Enter');
+
+  await expect(page.getByRole('region', { name: /^Visit .+ · / })).toHaveCount(3);
+  await expect(page.getByRole('heading', { name: /^Visit 19c2e5f6 · / })).toBeFocused();
+  await expect(page.getByText('That is every visit.')).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+});
+
 test('opens one visit by its id, and says when an id is unknown', async ({ page }) => {
   await page.goto(`/${STORE_ID}/timeline`);
 

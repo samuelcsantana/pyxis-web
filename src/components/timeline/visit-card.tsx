@@ -25,9 +25,10 @@ function iconOf(item: TimelineItem): { readonly path: string; readonly classes: 
 
 export interface VisitCardProps {
   readonly visit: VisitView;
+  readonly focusable?: boolean;
 }
 
-export function VisitCard({ visit }: VisitCardProps) {
+export function VisitCard({ visit, focusable = false }: VisitCardProps) {
   const headingId = `visit-${visit.key}`;
   return (
     <section
@@ -35,7 +36,11 @@ export function VisitCard({ visit }: VisitCardProps) {
       className="flex flex-col rounded-card border border-line bg-card px-5.5 pt-4.5 pb-2 text-ink"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-3">
-        <h3 id={headingId} className="text-[15px] font-semibold">
+        <h3
+          id={headingId}
+          tabIndex={focusable ? -1 : undefined}
+          className="text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
           {visit.heading}
         </h3>
         <p className="text-xs text-muted">{visit.meta}</p>
