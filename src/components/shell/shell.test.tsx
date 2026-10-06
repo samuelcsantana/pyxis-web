@@ -77,9 +77,9 @@ describe('SidebarNav', () => {
   it('shows the screens still to come without linking them', () => {
     render(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(2);
+    expect(screen.getAllByRole('link')).toHaveLength(3);
     expect(screen.getByText('Funnel').closest('[aria-disabled="true"]')).not.toBeNull();
-    expect(screen.getAllByText('Soon')).toHaveLength(5);
+    expect(screen.getAllByText('Soon')).toHaveLength(4);
   });
 
   it('marks nothing current on another screen', () => {
