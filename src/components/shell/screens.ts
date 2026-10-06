@@ -9,7 +9,7 @@ export const SCREENS = [
     slug: 'funnel',
     label: 'Funnel',
     icon: 'M3 4h18l-7 8v6l-4 2v-8L3 4z',
-    available: false,
+    available: true,
   },
   {
     slug: 'features',
