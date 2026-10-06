@@ -1,7 +1,14 @@
 import { type OverviewReport, overviewResponseSchema, type OverviewWire } from '@/domain/overview';
 import { DEMO_ADMIN } from '../projects/mock-projects-service';
-import { demoCount, demoDays, noise, previousRange } from '../demo/demo-series';
-import type { DateRange } from './overview-service.interface';
+import {
+  demoCount,
+  demoDays,
+  demoPageViewsOn,
+  demoVisitsOn,
+  noise,
+  previousRange,
+} from '../demo/demo-series';
+import type { DateRange } from '../date-range';
 
 const TOP_PAGES = [
   { path: '/', share: 0.31 },
@@ -33,8 +40,8 @@ interface DemoDay {
 }
 
 function demoDay(date: string): DemoDay {
-  const pageViews = demoCount(date, 160, 1);
-  const visits = Math.round(pageViews * 0.62);
+  const pageViews = demoPageViewsOn(date);
+  const visits = demoVisitsOn(date);
   const writes = demoCount(date, 84, 3);
   return {
     date,
