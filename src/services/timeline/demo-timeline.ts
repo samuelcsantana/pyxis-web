@@ -6,6 +6,7 @@ import {
 } from '@/domain/timeline';
 
 export const DEMO_USER_ID = 'u_7f3a';
+const DEMO_PAGE_SIZE = 2;
 
 type Properties = Readonly<Record<string, string | number | boolean>>;
 
@@ -215,4 +216,16 @@ export function demoTimelineWire(lookup: Lookup, now: Date): TimelineWire {
 
 export function demoTimelineReport(lookup: Lookup, now: Date): TimelineReport {
   return timelineResponseSchema.parse(demoTimelineWire(lookup, now));
+}
+
+export function demoTimelinePage(lookup: Lookup, now: Date, before: string | null): TimelineReport {
+  const older = demoTimelineWire(lookup, now).visits.filter(
+    (visit) => before === null || visit.started_at < before,
+  );
+  const page = older.slice(0, DEMO_PAGE_SIZE);
+  const last = page.at(-1);
+  return timelineResponseSchema.parse({
+    visits: page,
+    next_before: older.length > DEMO_PAGE_SIZE && last !== undefined ? last.started_at : null,
+  });
 }

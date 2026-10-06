@@ -55,7 +55,8 @@ function renderTimeline(search: Record<string, string>) {
 
 beforeEach(() => {
   state.admin = ADMIN;
-  state.timeline = (projectId, lookup) => new MockTimelineService().timeline(projectId, lookup);
+  state.timeline = (projectId, lookup, before) =>
+    new MockTimelineService().timeline(projectId, lookup, before);
 });
 
 describe('TimelinePage', () => {
@@ -75,8 +76,8 @@ describe('TimelinePage', () => {
   });
 
   it('tells the story of a person with filters that keep the lookup', async () => {
-    const timeline = vi.fn<ITimelineService['timeline']>((projectId, lookup) =>
-      new MockTimelineService().timeline(projectId, lookup),
+    const timeline = vi.fn<ITimelineService['timeline']>((projectId, lookup, before) =>
+      new MockTimelineService().timeline(projectId, lookup, before),
     );
     state.timeline = timeline;
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
@@ -85,7 +86,7 @@ describe('TimelinePage', () => {
 
     expect(timeline).toHaveBeenCalledWith('p-store', { kind: 'user', id: DEMO_USER_ID }, null);
     expect(screen.getByRole('heading', { name: `User ${DEMO_USER_ID}` })).toBeInTheDocument();
-    expect(screen.getAllByRole('region', { name: /^Visit / })).toHaveLength(3);
+    expect(screen.getAllByRole('region', { name: /^Visit / })).toHaveLength(2);
     expect(screen.getByRole('link', { name: 'Everything' })).toHaveAttribute(
       'href',
       `/p-store/timeline?user=${DEMO_USER_ID}`,
@@ -95,6 +96,12 @@ describe('TimelinePage', () => {
       `/p-store/timeline?user=${DEMO_USER_ID}&show=requests`,
     );
     expect(screen.queryByText(/^Try /)).not.toBeInTheDocument();
+  });
+
+  it('opens one visit, with nothing older to show', async () => {
+    render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
+
+    expect(screen.getAllByRole('region', { name: /^Visit .+ · / })).toHaveLength(1);
     expect(screen.queryByText('Showing the 20 most recent visits.')).not.toBeInTheDocument();
   });
 
@@ -110,12 +117,8 @@ describe('TimelinePage', () => {
     ).toBeInTheDocument();
     unmount();
 
-    const story = await new MockTimelineService().timeline('p', {
-      kind: 'user',
-      id: DEMO_USER_ID,
-    });
-    state.timeline = (): Promise<TimelineReport> =>
-      Promise.resolve({ ...story, nextBefore: '2026-09-01T00:00:00.000Z' });
+    state.timeline = (projectId, lookup, before) =>
+      new MockTimelineService().timeline(projectId, lookup, before);
     render(await renderTimeline({ user: DEMO_USER_ID }));
     expect(screen.getByText('Showing the 20 most recent visits.')).toBeInTheDocument();
   });
