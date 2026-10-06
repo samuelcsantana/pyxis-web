@@ -44,16 +44,16 @@ export function PeriodSelector({ basePath, period, today }: PeriodSelectorProps)
           );
         })}
       </nav>
-      <details className="group relative" open={custom}>
+      <details className="group relative max-sm:open:basis-full">
         <summary
-          className={`${OPTION_CLASS} cursor-pointer list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SELECTED_CLASS : `bg-soft ${IDLE_CLASS}`}`}
+          className={`${OPTION_CLASS} w-fit cursor-pointer list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SELECTED_CLASS : `bg-soft ${IDLE_CLASS}`}`}
         >
           Custom
         </summary>
         <form
           action={basePath}
           method="get"
-          className="absolute right-0 z-10 mt-1.5 flex w-max max-w-[calc(100vw-2rem)] flex-wrap items-end gap-2 rounded-input border border-line bg-card p-3 shadow-lg"
+          className="mt-1.5 flex flex-wrap items-end gap-2 rounded-input border border-line bg-card p-3 sm:absolute sm:right-0 sm:z-10 sm:w-max sm:shadow-lg"
         >
           <label className="flex flex-col gap-1 text-xs font-medium text-muted">
             From

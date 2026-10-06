@@ -58,6 +58,26 @@ test('applies a custom period through a plain form', async ({ page }) => {
   await expect(page.getByText('Page views and named events, Aug 1 – Aug 31, 2026')).toBeVisible();
 });
 
+test('keeps a custom period form closed until asked for', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
+
+  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('From', { exact: true })).toBeHidden();
+});
+
+test('keeps the custom period form inside the screen', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+
+  await page.getByText('Custom', { exact: true }).click();
+
+  const form = page.locator('form', { has: page.getByLabel('From', { exact: true }) });
+  await expect(form).toBeVisible();
+  const box = await form.boundingBox();
+  const screenWidth = page.viewportSize()?.width ?? 0;
+  expect(box?.x ?? -1).toBeGreaterThanOrEqual(0);
+  expect((box?.x ?? 0) + (box?.width ?? screenWidth + 1)).toBeLessThanOrEqual(screenWidth);
+});
+
 test('switches project and keeps the period', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await openNavigation(page, isMobile);
