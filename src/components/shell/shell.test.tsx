@@ -60,7 +60,7 @@ describe('screens helpers', () => {
 });
 
 describe('SidebarNav', () => {
-  it('links the available screen with the period and marks it current', () => {
+  it('links each screen with the period and marks the current one', () => {
     render(<SidebarNav projectId="p-store" />);
 
     const overview = screen.getByRole('link', { name: 'Overview' });
@@ -74,12 +74,11 @@ describe('SidebarNav', () => {
     expect(screen.getByRole('link', { name: 'Devices' })).not.toHaveAttribute('aria-current');
   });
 
-  it('shows the screens still to come without linking them', () => {
+  it('links every screen', () => {
     render(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(6);
-    expect(screen.getByText('Timeline').closest('[aria-disabled="true"]')).not.toBeNull();
-    expect(screen.getAllByText('Soon')).toHaveLength(1);
+    expect(screen.getAllByRole('link')).toHaveLength(7);
+    expect(screen.queryByText('Soon')).not.toBeInTheDocument();
   });
 
   it('marks nothing current on another screen', () => {
