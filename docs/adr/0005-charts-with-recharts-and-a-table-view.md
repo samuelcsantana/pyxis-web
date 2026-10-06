@@ -30,6 +30,9 @@ on its own, unreadable to a screen reader and hard to check with axe.
 - Small decorative charts that need no axes or interaction, such as the sparklines of the KPI
   cards, are plain SVG polylines computed by a pure function in `src/domain/` and rendered on the
   server.
+- A chart without axes whose legend lists every value with its count and share, such as the
+  donuts of the Devices screen, needs no separate table view: its legend **is** a table
+  (value, visits, share) beside an `aria-hidden` SVG, also drawn on the server without Recharts.
 
 ## Consequences
 
