@@ -3,7 +3,8 @@ import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { HttpAuthService } from './auth/http-auth-service';
-import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
+import { demoOverviewWire } from './overview/demo-overview';
+import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 
@@ -36,6 +37,15 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('Me');
 
     expect(validate(DEMO_ME_RESPONSE), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('accepts the demo overview of each demo project', () => {
+    const validate = contractSchema('OverviewReport');
+
+    for (const project of DEMO_ADMIN.projects) {
+      const wire = demoOverviewWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
   });
 
   it('accepts the bodies the sign-in form sends', async () => {
