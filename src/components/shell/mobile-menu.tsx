@@ -1,0 +1,64 @@
+'use client';
+
+import Link from 'next/link';
+import { type MouseEvent, type ReactNode, useState } from 'react';
+import { LogoMark } from '@/components/brand/logo-mark';
+
+export interface MobileMenuProps {
+  readonly children: ReactNode;
+}
+
+const MENU_ID = 'main-navigation';
+const OPEN_ICON = 'M4 7h16 M4 12h16 M4 17h16';
+const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
+
+export function MobileMenu({ children }: MobileMenuProps) {
+  const [open, setOpen] = useState(false);
+
+  const closeAfterNavigation = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest('a') !== null) {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div className="lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
+      <div className="flex items-center justify-between bg-nav px-4 py-3 text-nav-strong lg:hidden">
+        <Link
+          href="/"
+          className="flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <LogoMark size={24} />
+          <span className="text-lg font-bold tracking-tight">Pyxis</span>
+        </Link>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={MENU_ID}
+          onClick={() => {
+            setOpen((wasOpen) => !wasOpen);
+          }}
+          className="flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
+          <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d={open ? CLOSE_ICON : OPEN_ICON}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        id={MENU_ID}
+        onClick={closeAfterNavigation}
+        className={`${open ? 'block' : 'hidden'} lg:block lg:min-h-full`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}

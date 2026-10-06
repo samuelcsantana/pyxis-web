@@ -20,6 +20,11 @@ export const COLOR_TOKENS = [
   { name: 'bad-soft', use: 'Error background' },
   { name: 'warn', use: 'Client errors (4xx)' },
   { name: 'warn-soft', use: 'Warning background' },
+  { name: 'nav', use: 'Sidebar background, both themes' },
+  { name: 'nav-raised', use: 'Sidebar cards and the project switcher' },
+  { name: 'nav-active', use: 'Current sidebar item' },
+  { name: 'nav-text', use: 'Sidebar text' },
+  { name: 'nav-muted', use: 'Sidebar captions and icons' },
 ] as const;
 
 export const RADIUS_TOKENS = ['chip', 'control', 'input', 'card', 'panel', 'pill'] as const;
