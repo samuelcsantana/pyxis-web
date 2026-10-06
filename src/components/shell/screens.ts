@@ -39,7 +39,7 @@ export const SCREENS = [
     slug: 'acquisition',
     label: 'Acquisition',
     icon: 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M15.5 8.5l-2 5-5 2 2-5 5-2z',
-    available: false,
+    available: true,
   },
 ] as const;
 
