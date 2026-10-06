@@ -1,4 +1,4 @@
-import { EmptyState } from '@/components/states/empty-state';
+import { EmptyState } from './empty-state';
 
 export const PLACEHOLDER_ENDPOINT = 'https://api.pyxis.example.com';
 const SDK_README_URL = 'https://github.com/samuelcsantana/pyxis-sdk#readme';

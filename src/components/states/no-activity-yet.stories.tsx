@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NoActivityYet } from './no-activity-yet';
 
 const meta = {
-  title: 'Overview/No activity yet',
+  title: 'States/No activity yet',
   component: NoActivityYet,
   tags: ['autodocs'],
   args: { endpoint: 'https://api.pyxis.example.com' },
