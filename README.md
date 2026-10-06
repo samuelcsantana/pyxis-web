@@ -65,13 +65,15 @@ Shipping now:
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
   with the share that continued and the drop-off at each step; a keyboard-operable step editor,
   and the steps kept in the URL so a bookmark is a saved funnel
+- Timeline: everything one person (by user id) or one visit did, in order, with each visit's
+  device, channel and length, every page view, event and request with its properties and status,
+  and filters for page views, events, requests and errors
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Timelines of a person or a visit
 - A live demo with invented data, no sign-in and no real API
 
 ## Architecture
@@ -140,6 +142,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name        |
 | `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them         |
 | `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor       |
+| `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, and `?show=` to filter the items        |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
@@ -180,7 +183,7 @@ src/
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, device and country labels, donuts,
 │                   channels and sources, feature ranking and search, routes and
-│                   failures, funnel steps and counts, errors
+│                   failures, funnel steps and counts, timeline items, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -225,7 +228,7 @@ docs/adr/           architecture decision records
 - [x] Features
 - [x] Requests
 - [x] Funnel
-- [ ] Timeline
+- [x] Timeline
 - [ ] Production domain
 - [ ] Live demo with invented data
 
