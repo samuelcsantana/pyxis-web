@@ -5,6 +5,7 @@ import { EmptyState } from '@/components/states/empty-state';
 import { TimelineFilters } from '@/components/timeline/timeline-filters';
 import { TimelineSearch } from '@/components/timeline/timeline-search';
 import { TimelineSummary } from '@/components/timeline/timeline-summary';
+import { OlderVisits } from '@/components/timeline/older-visits';
 import { VisitCard } from '@/components/timeline/visit-card';
 import {
   type Lookup,
@@ -23,6 +24,7 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_USER_ID } from '@/services/timeline/demo-timeline';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
+import { loadOlderVisits } from './actions';
 
 export const metadata: Metadata = { title: 'Timeline · Pyxis' };
 
@@ -40,6 +42,7 @@ function lookupQuery(lookup: Lookup, filter: TimelineFilter): string {
 }
 
 interface TimelineViewProps {
+  readonly projectId: string;
   readonly lookup: Lookup;
   readonly report: TimelineReport;
   readonly filter: TimelineFilter;
@@ -47,7 +50,14 @@ interface TimelineViewProps {
   readonly timeZone: string;
 }
 
-function TimelineView({ lookup, report, filter, basePath, timeZone }: TimelineViewProps) {
+function TimelineView({
+  projectId,
+  lookup,
+  report,
+  filter,
+  basePath,
+  timeZone,
+}: TimelineViewProps) {
   if (report.visits.length === 0) {
     return (
       <EmptyState title={`No visits found for ${lookupTitle(lookup)}`}>
@@ -72,7 +82,14 @@ function TimelineView({ lookup, report, filter, basePath, timeZone }: TimelineVi
         <VisitCard key={visit.key} visit={visit} />
       ))}
       {report.nextBefore === null ? null : (
-        <p className="text-[13px] text-muted">Showing the 20 most recent visits.</p>
+        <OlderVisits
+          initialBefore={report.nextBefore}
+          loadOlder={loadOlderVisits.bind(
+            null,
+            projectId,
+            Object.fromEntries(new URLSearchParams(lookupQuery(lookup, filter))),
+          )}
+        />
       )}
     </>
   );
@@ -112,6 +129,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           </EmptyState>
         ) : (
           <TimelineView
+            projectId={project.id}
             lookup={lookup}
             report={report}
             filter={filter}

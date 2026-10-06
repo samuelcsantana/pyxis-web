@@ -102,7 +102,7 @@ describe('TimelinePage', () => {
     render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
 
     expect(screen.getAllByRole('region', { name: /^Visit .+ · / })).toHaveLength(1);
-    expect(screen.queryByText('Showing the 20 most recent visits.')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Load older visits' })).not.toBeInTheDocument();
   });
 
   it('says when nothing was found, and when there are older visits', async () => {
@@ -120,7 +120,7 @@ describe('TimelinePage', () => {
     state.timeline = (projectId, lookup, before) =>
       new MockTimelineService().timeline(projectId, lookup, before);
     render(await renderTimeline({ user: DEMO_USER_ID }));
-    expect(screen.getByText('Showing the 20 most recent visits.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Load older visits' })).toBeInTheDocument();
   });
 
   it('sends an expired session back to the sign-in page', async () => {
