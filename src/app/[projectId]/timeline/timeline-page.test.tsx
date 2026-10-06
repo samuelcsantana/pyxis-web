@@ -73,6 +73,17 @@ describe('TimelinePage', () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
     expect(screen.getByText(`Try ${DEMO_USER_ID}`)).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: `Open the timeline of the demo person ${DEMO_USER_ID}` }),
+    ).toHaveAttribute('href', `/p-store/timeline?user=${DEMO_USER_ID}`);
+  });
+
+  it('offers no demo person outside the demo', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    render(await renderTimeline({}));
+
+    expect(screen.queryByRole('link', { name: /demo person/ })).not.toBeInTheDocument();
   });
 
   it('tells the story of a person with filters that keep the lookup', async () => {
