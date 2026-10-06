@@ -6,6 +6,7 @@ import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
+import { demoRequestsWire } from './requests/demo-requests';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 
@@ -74,6 +75,15 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const kind of ['events', 'screens'] as const) {
       const wire = demoFeaturesWire({ from: '2026-09-06', to: '2026-10-05' }, kind);
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo requests, with and without a screen filter', () => {
+    const validate = contractSchema('RequestsReport');
+
+    for (const screen of [null, '/orders']) {
+      const wire = demoRequestsWire({ from: '2026-09-06', to: '2026-10-05' }, screen);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
