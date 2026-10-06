@@ -1,0 +1,164 @@
+import { describe, expect, it } from 'vitest';
+import {
+  biggestDropOff,
+  countedSteps,
+  EVENT_NAME_PATTERN,
+  type FunnelStep,
+  funnelModeOf,
+  funnelRows,
+  funnelStepsOf,
+  funnelStepsSchema,
+  MAX_FUNNEL_STEPS,
+  MAX_PATH_LENGTH,
+  MIN_FUNNEL_STEPS,
+  overallConversion,
+  serializeSteps,
+  stepLabel,
+  stepProblem,
+  stepTarget,
+} from './funnel';
+
+const CALCULATOR: FunnelStep = { type: 'page', path: '/calculator' };
+const RESULT: FunnelStep = { type: 'event', name: 'calculator_result_shown' };
+const SIGN_UP: FunnelStep = { type: 'page', path: '/sign-up' };
+
+describe('the limits copied from the API', () => {
+  it('match pyxis-api: event names, path length and the number of steps', () => {
+    expect(EVENT_NAME_PATTERN.source).toBe('^[a-z][a-z0-9_]{0,63}$');
+    expect(MAX_PATH_LENGTH).toBe(256);
+    expect(MIN_FUNNEL_STEPS).toBe(2);
+    expect(MAX_FUNNEL_STEPS).toBe(8);
+  });
+});
+
+describe('funnelStepsOf', () => {
+  it('reads the steps a URL carries as JSON', () => {
+    expect(funnelStepsOf({ steps: serializeSteps([CALCULATOR, RESULT]) })).toEqual([
+      CALCULATOR,
+      RESULT,
+    ]);
+  });
+
+  it('ignores anything the API would refuse', () => {
+    const one = serializeSteps([CALCULATOR]);
+    const nine = serializeSteps(Array.from({ length: 9 }, () => RESULT));
+    expect(funnelStepsOf({ steps: '{not json' })).toBeNull();
+    expect(funnelStepsOf({ steps: one })).toBeNull();
+    expect(funnelStepsOf({ steps: nine })).toBeNull();
+    expect(
+      funnelStepsOf({ steps: '[{"type":"page","path":"calculator"},{"type":"page","path":"/"}]' }),
+    ).toBeNull();
+    expect(
+      funnelStepsOf({ steps: '[{"type":"event","name":"Signed Up"},{"type":"page","path":"/"}]' }),
+    ).toBeNull();
+    expect(funnelStepsOf({ steps: ['[]', '[]'] })).toBeNull();
+    expect(funnelStepsOf({})).toBeNull();
+  });
+});
+
+describe('funnelModeOf', () => {
+  it('counts per visit unless per person is asked for', () => {
+    expect(funnelModeOf({ mode: 'user' })).toBe('user');
+    expect(funnelModeOf({ mode: 'session' })).toBe('visit');
+    expect(funnelModeOf({})).toBe('visit');
+  });
+});
+
+describe('step labels and problems', () => {
+  it('names a page step by its path and an event step in words', () => {
+    expect(stepLabel(CALCULATOR)).toBe('Opened /calculator');
+    expect(stepLabel(RESULT)).toBe('Calculator result shown');
+    expect(stepTarget(CALCULATOR)).toBe('/calculator');
+    expect(stepTarget(RESULT)).toBe('calculator_result_shown');
+  });
+
+  it('finds the problems the API schema would find, and nothing more', () => {
+    const steps: FunnelStep[] = [
+      CALCULATOR,
+      RESULT,
+      { type: 'page', path: 'calculator' },
+      { type: 'page', path: `/${'x'.repeat(256)}` },
+      { type: 'event', name: 'Signed_up' },
+      { type: 'event', name: '' },
+      { type: 'page', path: '/blog/*' },
+    ];
+    for (const step of steps) {
+      const accepted = funnelStepsSchema.safeParse([step, CALCULATOR]).success;
+      expect(stepProblem(step) === null, JSON.stringify(step)).toBe(accepted);
+    }
+    expect(stepProblem({ type: 'page', path: 'x' })).toBe('A page path starts with "/".');
+    expect(stepProblem({ type: 'page', path: `/${'x'.repeat(256)}` })).toBe(
+      'A page path has at most 256 characters.',
+    );
+  });
+});
+
+describe('funnelRows', () => {
+  it('shows each step with its count, the share that continued and the drop-off', () => {
+    const rows = funnelRows(
+      countedSteps([CALCULATOR, RESULT, SIGN_UP], {
+        steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }],
+      }),
+    );
+
+    expect(rows[0]).toEqual({
+      key: '0-page-/calculator',
+      position: 1,
+      label: 'Opened /calculator',
+      target: '/calculator',
+      count: '1,940',
+      barWidth: '100.0%',
+      continued: 'Start',
+      tone: 'start',
+      dropped: '',
+    });
+    expect(rows[1]).toMatchObject({
+      continued: '62.5% continued',
+      tone: 'good',
+      dropped: '728 dropped',
+    });
+    expect(rows[2]).toMatchObject({ continued: '41.1% continued', tone: 'bad', barWidth: '25.7%' });
+  });
+
+  it('shows dashes when a step had nobody, and zero for a step the API did not count', () => {
+    const rows = funnelRows(
+      countedSteps([CALCULATOR, RESULT, SIGN_UP], { steps: [{ count: 0 }, { count: 0 }] }),
+    );
+
+    expect(rows[1]).toMatchObject({ continued: '— continued', tone: 'neutral' });
+    expect(rows[2]?.count).toBe('0');
+    expect(funnelRows([])).toEqual([]);
+  });
+});
+
+describe('figures', () => {
+  const counted = countedSteps([CALCULATOR, RESULT, SIGN_UP], {
+    steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }],
+  });
+
+  it('give the share of the first step that reached the last one, with the totals', () => {
+    expect(overallConversion(counted, 'visit')).toEqual({
+      value: '25.7%',
+      note: '498 of 1,940 visits reached the last step',
+    });
+    expect(overallConversion(counted, 'user').note).toBe(
+      '498 of 1,940 people reached the last step',
+    );
+    expect(overallConversion([], 'visit').value).toBe('—');
+  });
+
+  it('name the transition where the fewest continued', () => {
+    expect(biggestDropOff(counted)).toEqual({
+      value: 'Calculator result shown → Opened /sign-up',
+      note: '41.1% continued',
+    });
+    expect(
+      biggestDropOff(
+        countedSteps([CALCULATOR, RESULT, SIGN_UP], {
+          steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
+        }),
+      ).note,
+    ).toBe('— continued');
+    expect(biggestDropOff([])).toEqual({ value: '—', note: 'No step to compare' });
+  });
+});
