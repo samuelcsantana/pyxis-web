@@ -1,0 +1,166 @@
+import { describe, expect, it } from 'vitest';
+import {
+  activitySummary,
+  activityTotals,
+  hasActivity,
+  type OverviewReport,
+  overviewKpis,
+  overviewResponseSchema,
+  type OverviewWire,
+  previousPeriodNote,
+} from './overview';
+
+const WIRE: OverviewWire = {
+  kpis: {
+    visits: { current: 4758, previous: 4233, daily: [2400, 2358] },
+    identified_users: { current: 438, previous: 405, daily: [220, 218] },
+    conversions: { current: 212, previous: 202, daily: [100, 112] },
+    write_errors: {
+      current: { failed: 61, total: 2524 },
+      previous: { failed: 68, total: 2518 },
+      daily: [
+        { failed: 30, total: 1200 },
+        { failed: 31, total: 1324 },
+      ],
+    },
+  },
+  days: [
+    { date: '2026-10-04', page_views: 180, events: 96 },
+    { date: '2026-10-05', page_views: 174, events: 82 },
+  ],
+  top_pages: [{ path: '/', views: 1486, visits: 1120 }],
+  top_events: [{ name: 'cta_clicked', count: 864, visits: 700 }],
+};
+
+function report(wire: OverviewWire = WIRE): OverviewReport {
+  return overviewResponseSchema.parse(wire);
+}
+
+describe('overviewResponseSchema', () => {
+  it('maps the wire names to the dashboard ones', () => {
+    const parsed = report();
+
+    expect(parsed.kpis.identifiedUsers.current).toBe(438);
+    expect(parsed.kpis.writeErrors.current).toEqual({ failed: 61, total: 2524 });
+    expect(parsed.days[0]).toEqual({ date: '2026-10-04', pageViews: 180, events: 96 });
+    expect(parsed.topPages[0]?.path).toBe('/');
+    expect(parsed.topEvents[0]?.name).toBe('cta_clicked');
+  });
+});
+
+describe('hasActivity', () => {
+  it('is true when a day has a page view or an event', () => {
+    expect(hasActivity(report())).toBe(true);
+    expect(
+      hasActivity(report({ ...WIRE, days: [{ date: '2026-10-05', page_views: 0, events: 3 }] })),
+    ).toBe(true);
+  });
+
+  it('is false when every day is empty', () => {
+    expect(
+      hasActivity(report({ ...WIRE, days: [{ date: '2026-10-05', page_views: 0, events: 0 }] })),
+    ).toBe(false);
+  });
+});
+
+describe('activityTotals and activitySummary', () => {
+  it('add the days up', () => {
+    expect(activityTotals(report().days)).toEqual({ pageViews: 354, events: 178 });
+  });
+
+  it('describe the chart in words for screen readers', () => {
+    expect(activitySummary(report().days)).toBe(
+      'Area chart of 2 days. Page views: 354 in total, between 174 and 180 a day. ' +
+        'Named events: 178 in total, between 82 and 96 a day.',
+    );
+  });
+});
+
+describe('previousPeriodNote', () => {
+  it('names the period the change is measured against', () => {
+    expect(previousPeriodNote(30)).toBe('vs. previous 30 days');
+    expect(previousPeriodNote(1)).toBe('vs. the day before');
+  });
+});
+
+describe('overviewKpis', () => {
+  it('gives the four figures with their change, tone and totals', () => {
+    const [visits, users, conversions, errors] = overviewKpis(report(), 30);
+
+    expect(visits).toEqual({
+      id: 'visits',
+      label: 'Visits',
+      value: '4,758',
+      change: '+12.4%',
+      tone: 'good',
+      note: 'vs. previous 30 days',
+      series: [2400, 2358],
+    });
+    expect(users?.note).toBe('signed in at least once');
+    expect(conversions?.value).toBe('212');
+    expect(conversions?.note).toBe('4.5% of 4,758 visits');
+    expect(errors).toEqual({
+      id: 'write-errors',
+      label: 'Write error rate',
+      value: '2.4%',
+      change: '−0.3 pt',
+      tone: 'good',
+      note: '61 of 2,524 writes failed',
+      series: [0.025, 31 / 1324],
+    });
+  });
+
+  it('leaves out conversions when the project has no conversion event', () => {
+    const kpis = overviewKpis(report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }), 7);
+
+    expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
+  });
+
+  it('marks a rise of the error rate as bad and a fall of visits as bad', () => {
+    const [visits, , , errors] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          visits: { current: 90, previous: 100, daily: [90] },
+          write_errors: {
+            current: { failed: 10, total: 100 },
+            previous: { failed: 1, total: 100 },
+            daily: [{ failed: 10, total: 100 }],
+          },
+        },
+      }),
+      1,
+    );
+
+    expect(visits?.tone).toBe('bad');
+    expect(errors?.tone).toBe('bad');
+    expect(errors?.change).toBe('+9 pt');
+  });
+
+  it('shows dashes and a neutral tone when there is nothing to compare with', () => {
+    const [visits, , , errors] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          visits: { current: 5, previous: 0, daily: [5] },
+          write_errors: {
+            current: { failed: 0, total: 0 },
+            previous: { failed: 0, total: 0 },
+            daily: [{ failed: 0, total: 0 }],
+          },
+        },
+      }),
+      1,
+    );
+
+    expect(visits?.change).toBe('—');
+    expect(visits?.tone).toBe('neutral');
+    expect(errors?.value).toBe('—');
+    expect(errors?.change).toBe('—');
+    expect(errors?.tone).toBe('neutral');
+    expect(errors?.note).toBe('0 of 0 writes failed');
+    expect(errors?.series).toEqual([0]);
+  });
+});

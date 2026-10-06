@@ -113,6 +113,20 @@ const MONTH_DAY_YEAR = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 });
 
+export function formatDay(isoDate: string): string {
+  return MONTH_DAY.format(calendarDate(isoDate));
+}
+
+const PRESET_DESCRIPTIONS: Readonly<Record<PeriodPreset, string>> = {
+  today: 'today',
+  '7d': 'last 7 days',
+  '30d': 'last 30 days',
+};
+
+export function describePeriod(period: Period): string {
+  return period.preset === 'custom' ? formatPeriod(period) : PRESET_DESCRIPTIONS[period.preset];
+}
+
 export function formatPeriod(period: Period): string {
   const from = calendarDate(period.from);
   const to = calendarDate(period.to);
