@@ -1,0 +1,115 @@
+import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Admin } from '@/domain/admin';
+import { UnauthenticatedError } from '@/domain/errors';
+import type { IFeaturesService } from '@/services/features/features-service.interface';
+import { MockFeaturesService } from '@/services/features/mock-features-service';
+import FeaturesPage from './page';
+
+const state = vi.hoisted<{ admin: unknown; features: IFeaturesService['features'] }>(() => ({
+  admin: undefined,
+  features: () => Promise.reject(new Error('features not set')),
+}));
+
+vi.mock('next/headers', () => ({
+  cookies: () => Promise.resolve({ get: () => undefined }),
+}));
+
+vi.mock('next/navigation', () => ({
+  redirect: (path: string) => {
+    throw new Error(`redirect:${path}`);
+  },
+  notFound: () => {
+    throw new Error('not-found');
+  },
+  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  usePathname: () => '/p-store/features',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+vi.mock('@/services/projects/projects-service.factory', () => ({
+  createProjectsService: () => ({ currentAdmin: () => Promise.resolve(state.admin) }),
+}));
+
+vi.mock('@/services/features/features-service.factory', () => ({
+  createFeaturesService: (): IFeaturesService => ({
+    features: (projectId, range, kind) => state.features(projectId, range, kind),
+  }),
+}));
+
+const ADMIN: Admin = {
+  email: 'owner@demo-store.example',
+  projects: [
+    {
+      id: 'p-store',
+      name: 'Demo Store',
+      timezone: 'America/Sao_Paulo',
+      conversionEvent: 'signup_completed',
+    },
+  ],
+};
+
+function renderFeatures(search: Record<string, string> = { range: '7d' }) {
+  return FeaturesPage({
+    params: Promise.resolve({ projectId: 'p-store' }),
+    searchParams: Promise.resolve(search),
+  });
+}
+
+beforeEach(() => {
+  state.admin = ADMIN;
+  state.features = (projectId, range, kind) =>
+    new MockFeaturesService().features(projectId, range, kind);
+  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
+});
+
+describe('FeaturesPage', () => {
+  it('ranks the events of the period by default', async () => {
+    const features = vi.fn<IFeaturesService['features']>((projectId, range, kind) =>
+      new MockFeaturesService().features(projectId, range, kind),
+    );
+    state.features = features;
+
+    render(await renderFeatures());
+
+    expect(features).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-29', to: '2026-10-05' },
+      'events',
+    );
+    expect(screen.getByRole('heading', { level: 1, name: 'Features' })).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Most used events' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Screens' })).toHaveAttribute(
+      'href',
+      '/p-store/features?range=7d&kind=screens',
+    );
+    expect(screen.getByRole('link', { name: 'Today' })).toHaveAttribute(
+      'href',
+      '/p-store/features?range=today&kind=events',
+    );
+  });
+
+  it('ranks the screens when asked, and keeps the search across periods', async () => {
+    render(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
+
+    expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
+    expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.getByRole('searchbox', { name: 'Search screens' })).toHaveValue('orders');
+    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
+      'href',
+      '/p-store/features?range=7d&kind=screens&q=orders',
+    );
+    expect(screen.getByRole('link', { name: 'Clear' })).toHaveAttribute(
+      'href',
+      '/p-store/features?range=30d&kind=screens',
+    );
+  });
+
+  it('sends an expired session back to the sign-in page', async () => {
+    state.features = () => Promise.reject(new UnauthenticatedError());
+
+    await expect(renderFeatures()).rejects.toThrow('redirect:/sign-in?expired=1');
+  });
+});
