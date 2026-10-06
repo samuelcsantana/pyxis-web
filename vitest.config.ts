@@ -11,6 +11,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     restoreMocks: true,
     unstubGlobals: true,
+    unstubEnvs: true,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
