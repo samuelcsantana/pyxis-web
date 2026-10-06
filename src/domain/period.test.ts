@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   addDays,
   daysBetween,
+  describePeriod,
+  formatDay,
   formatPeriod,
   MAX_PERIOD_DAYS,
   periodQuery,
@@ -112,5 +114,20 @@ describe('formatPeriod', () => {
 
   it('names both years across new year', () => {
     expect(formatPeriod(presetPeriod('7d', '2027-01-02'))).toBe('Dec 27, 2026 – Jan 2, 2027');
+  });
+});
+
+describe('formatDay and describePeriod', () => {
+  it('shows a day as month and day', () => {
+    expect(formatDay('2026-09-06')).toBe('Sep 6');
+  });
+
+  it('names a preset in words and a custom period by its dates', () => {
+    expect(describePeriod(presetPeriod('today', '2026-10-05'))).toBe('today');
+    expect(describePeriod(presetPeriod('7d', '2026-10-05'))).toBe('last 7 days');
+    expect(describePeriod(presetPeriod('30d', '2026-10-05'))).toBe('last 30 days');
+    expect(describePeriod({ preset: 'custom', from: '2026-09-01', to: '2026-09-10' })).toBe(
+      'Sep 1 – Sep 10, 2026',
+    );
   });
 });
