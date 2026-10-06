@@ -3,6 +3,7 @@ import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { HttpAuthService } from './auth/http-auth-service';
+import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
@@ -54,6 +55,15 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_ADMIN.projects) {
       const wire = demoDevicesWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo acquisition of each demo project', () => {
+    const validate = contractSchema('AcquisitionReport');
+
+    for (const project of DEMO_ADMIN.projects) {
+      const wire = demoAcquisitionWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
