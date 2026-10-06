@@ -19,6 +19,13 @@ export class RateLimitedError extends Error {
   }
 }
 
+export class ApiNotFoundError extends Error {
+  constructor(readonly path: string) {
+    super(`The Pyxis API knows nothing at ${path}.`);
+    this.name = 'ApiNotFoundError';
+  }
+}
+
 export class ApiRequestError extends Error {
   constructor(
     readonly path: string,
