@@ -270,7 +270,7 @@ describe('PeriodSelector', () => {
     expect(presets.getByRole('link', { name: '30 days' })).not.toHaveAttribute('aria-current');
   });
 
-  it('offers a plain form for a custom period, open when one is shown', () => {
+  it('offers a plain form for a custom period, closed until asked for', () => {
     const { container } = render(
       <PeriodSelector
         basePath="/p1/overview"
@@ -281,7 +281,7 @@ describe('PeriodSelector', () => {
 
     const form = container.querySelector('form');
 
-    expect(container.querySelector('details')).toHaveAttribute('open');
+    expect(container.querySelector('details')).not.toHaveAttribute('open');
     expect(form).toHaveAttribute('action', '/p1/overview');
     expect(form).toHaveAttribute('method', 'get');
     expect(screen.getByLabelText('From')).toHaveValue('2026-08-01');
