@@ -5,7 +5,6 @@ import { overviewKpis, overviewResponseSchema } from '@/domain/overview';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DailyActivityChart } from './daily-activity-chart';
 import { KpiGrid } from './kpi-grid';
-import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
 
@@ -120,25 +119,5 @@ describe('TopEventsList', () => {
     render(<TopEventsList events={[]} />);
 
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
-  });
-});
-
-describe('NoActivityYet', () => {
-  it('shows the install snippet for the API the dashboard talks to', () => {
-    render(<NoActivityYet endpoint="https://api.pyxis.example.org" />);
-
-    expect(screen.getByText(/endpoint: 'https:\/\/api\.pyxis\.example\.org'/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: "SDK's README" })).toHaveAttribute(
-      'href',
-      'https://github.com/samuelcsantana/pyxis-sdk#readme',
-    );
-  });
-
-  it('shows a placeholder endpoint in demo mode', () => {
-    render(<NoActivityYet endpoint={undefined} />);
-
-    expect(screen.getByText(/npm install pyxis-analytics/).textContent).toBe(
-      installSnippet(PLACEHOLDER_ENDPOINT),
-    );
   });
 });

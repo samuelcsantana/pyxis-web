@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { DailyActivityChart } from '@/components/overview/daily-activity-chart';
 import { KpiGrid } from '@/components/overview/kpi-grid';
-import { NoActivityYet } from '@/components/overview/no-activity-yet';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
+import { NoActivityYet } from '@/components/states/no-activity-yet';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
 import {
   daysBetween,

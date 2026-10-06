@@ -5,6 +5,7 @@ import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
 import { LoadingPanel } from './loading-panel';
+import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 
 describe('EmptyState', () => {
   it('shows its title and explanation', () => {
@@ -56,5 +57,25 @@ describe('DemoBanner', () => {
     render(<DemoBanner />);
 
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
+  });
+});
+
+describe('NoActivityYet', () => {
+  it('shows the install snippet for the API the dashboard talks to', () => {
+    render(<NoActivityYet endpoint="https://api.pyxis.example.org" />);
+
+    expect(screen.getByText(/endpoint: 'https:\/\/api\.pyxis\.example\.org'/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: "SDK's README" })).toHaveAttribute(
+      'href',
+      'https://github.com/samuelcsantana/pyxis-sdk#readme',
+    );
+  });
+
+  it('shows a placeholder endpoint in demo mode', () => {
+    render(<NoActivityYet endpoint={undefined} />);
+
+    expect(screen.getByText(/npm install pyxis-analytics/).textContent).toBe(
+      installSnippet(PLACEHOLDER_ENDPOINT),
+    );
   });
 });
