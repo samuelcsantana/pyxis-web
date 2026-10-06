@@ -1,0 +1,26 @@
+import type { ReactNode } from 'react';
+import { MobileMenu } from '@/components/shell/mobile-menu';
+import { Sidebar } from '@/components/shell/sidebar';
+import { DemoBanner } from '@/components/states/demo-banner';
+import { isDemoMode } from '@/lib/api-config';
+import { projectOrNotFound } from '@/lib/current-admin';
+
+export interface ProjectLayoutProps {
+  readonly children: ReactNode;
+  readonly params: Promise<{ readonly projectId: string }>;
+}
+
+export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
+  const { admin, project } = await projectOrNotFound((await params).projectId);
+  return (
+    <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
+      <MobileMenu>
+        <Sidebar admin={admin} project={project} />
+      </MobileMenu>
+      <div className="flex min-w-0 flex-col">
+        {isDemoMode() ? <DemoBanner /> : null}
+        {children}
+      </div>
+    </div>
+  );
+}

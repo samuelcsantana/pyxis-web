@@ -1,54 +1,25 @@
-import { LogoMark } from '@/components/brand/logo-mark';
+import { redirect } from 'next/navigation';
+import { SignOutButton } from '@/components/shell/sign-out-button';
+import { FIRST_SCREEN, screenHref } from '@/components/shell/screens';
+import { EmptyState } from '@/components/states/empty-state';
+import { currentAdmin } from '@/lib/current-admin';
 
-const REPOSITORIES = [
-  {
-    name: 'pyxis-api',
-    role: 'Ingestion and queries',
-    href: 'https://github.com/samuelcsantana/pyxis-api',
-  },
-  {
-    name: 'pyxis-sdk',
-    role: 'Browser tracker',
-    href: 'https://github.com/samuelcsantana/pyxis-sdk',
-  },
-  {
-    name: 'pyxis-web',
-    role: 'This dashboard',
-    href: 'https://github.com/samuelcsantana/pyxis-web',
-  },
-] as const;
-
-export default function HomePage() {
+export default async function HomePage() {
+  const admin = await currentAdmin();
+  const firstProject = admin.projects[0];
+  if (firstProject !== undefined) {
+    redirect(screenHref(firstProject.id, FIRST_SCREEN));
+  }
   return (
-    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col justify-center gap-10 px-6 py-16">
-      <header className="flex flex-col gap-5">
-        <div className="flex items-center gap-3 text-ink">
-          <LogoMark size={48} />
-          <span className="text-4xl font-bold tracking-tight">Pyxis</span>
-        </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-balance">
-          Privacy-first product analytics
-        </h1>
-        <p className="max-w-prose text-base leading-7 text-muted">
-          See how a product is used without cookies, without personal data and without sending
-          anything to a third party. The dashboard is under construction.
+    <main className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
+      <EmptyState title="No projects yet">
+        <p>
+          <strong className="text-ink">{admin.email}</strong> can sign in, but no project was
+          granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your
+          email.
         </p>
-      </header>
-      <nav aria-label="Project repositories">
-        <ul className="grid gap-3 sm:grid-cols-3">
-          {REPOSITORIES.map((repository) => (
-            <li key={repository.name}>
-              <a
-                href={repository.href}
-                className="flex flex-col gap-1 rounded-card border border-line bg-card p-4 transition-colors hover:border-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <span className="font-mono text-sm font-medium">{repository.name}</span>
-                <span className="text-sm text-muted">{repository.role}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      </EmptyState>
+      <SignOutButton variant="page" />
     </main>
   );
 }
