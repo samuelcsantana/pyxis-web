@@ -59,13 +59,15 @@ Shipping now:
   that came from an ad click
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL
+- Requests: every write by route with its success and error shares, status codes and median
+  duration; a keyboard-accessible details panel with the screens where the route failed and its
+  latest failures with their error code; "failing only" and screen filters kept in the URL
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Requests (success and error rates per route, the screens they come from)
 - Funnels with an editor, saved in the URL
 - Timelines of a person or a visit
 - A live demo with invented data, no sign-in and no real API
@@ -134,6 +136,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries      |
 | `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion |
 | `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name        |
+| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them         |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
@@ -173,7 +176,8 @@ src/
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, device and country labels, donuts,
-│                   channels and sources, feature ranking and search, errors
+│                   channels and sources, feature ranking and search, routes and
+│                   failures, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -216,7 +220,7 @@ docs/adr/           architecture decision records
 - [x] Devices
 - [x] Acquisition
 - [x] Features
-- [ ] Requests
+- [x] Requests
 - [ ] Funnel
 - [ ] Timeline
 - [ ] Production domain
