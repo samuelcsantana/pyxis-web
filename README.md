@@ -48,12 +48,17 @@ Shipping now:
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL), light and dark themes, sign-out, and a menu button
   on phones
-- Loading, empty and error states shared by every screen
+- The overview: visits, identified users, conversions and the write error rate, each with its
+  change against the previous period and a sparkline; page views and named events per day as a
+  chart or a table; the top pages and events. Every percentage sits next to the totals it comes
+  from, and a division by zero shows a dash, never `NaN%`
+- Loading, empty and error states shared by every screen; an empty period shows how to install
+  the SDK
 - A demo mode with invented data and a visible banner when no API is configured
 
 Planned (see [Roadmap](#roadmap)):
 
-- Overview, Devices and Acquisition
+- Devices and Acquisition
 - Features and Requests (success and error rates per route, the screens they come from)
 - Funnels with an editor, saved in the URL
 - Timelines of a person or a visit
@@ -77,7 +82,8 @@ in and out ([ADR 0002](docs/adr/0002-server-components-and-services.md)).
 
 Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 · Geist through
 `next/font` · Zod for API answers · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
-with RxJS for the few requests a Client Component starts · Recharts (from the first chart) · Vitest
+with RxJS for the few requests a Client Component starts · Recharts 3 for the charts, each with a table
+view ([ADR 0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)) · Vitest
 and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
 CodeQL, Dependabot, Codecov and release-please.
 
@@ -154,9 +160,10 @@ returns.
 ```text
 src/
 ├── app/            routes, the root layout, design tokens (globals.css), icons
-├── components/     UI components, each with its stories (shell, sign-in, states, theme)
+├── components/     UI components, each with its stories (overview, shell, sign-in, states, theme)
 ├── design/         the design tokens page
-├── domain/         pure types and rules: the admin and projects, periods, errors
+├── domain/         pure types and rules: the admin and projects, periods, overview figures,
+│                   rates and changes, sparklines, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -189,12 +196,14 @@ docs/adr/           architecture decision records
 | [0002](docs/adr/0002-server-components-and-services.md)            | Server Components reading through service interfaces    |
 | [0003](docs/adr/0003-csp-without-nonces.md)                        | A Content Security Policy without nonces                |
 | [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge |
+| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view            |
 
 ## Roadmap
 
 - [x] App skeleton, design tokens, Storybook, quality gates
 - [x] Sign-in, app shell, project and period selectors, loading, empty and error states
-- [ ] Overview, Devices, Acquisition
+- [x] Overview
+- [ ] Devices, Acquisition
 - [ ] Features, Requests
 - [ ] Funnel
 - [ ] Timeline
