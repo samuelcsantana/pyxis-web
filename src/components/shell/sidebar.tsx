@@ -16,7 +16,7 @@ export function Sidebar({ admin, project }: SidebarProps) {
   return (
     <nav
       aria-label="Main navigation"
-      className="flex min-h-full flex-col gap-5.5 bg-nav px-3.5 pt-5 pb-6 text-nav-text"
+      className="flex min-h-full grow flex-col gap-5.5 bg-nav px-3.5 pt-5 pb-6 text-nav-text"
     >
       <Link
         href="/"

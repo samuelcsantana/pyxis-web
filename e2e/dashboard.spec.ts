@@ -78,6 +78,15 @@ test('keeps the custom period form inside the screen', async ({ page }) => {
   expect((box?.x ?? 0) + (box?.width ?? screenWidth + 1)).toBeLessThanOrEqual(screenWidth);
 });
 
+test('stretches the sidebar down the whole screen on a desktop', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'The sidebar is a menu behind a button on narrow screens.');
+  await page.goto(`/${STORE_ID}/overview`);
+
+  const box = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
+
+  expect(box?.height).toBe(page.viewportSize()?.height);
+});
+
 test('switches project and keeps the period', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await openNavigation(page, isMobile);

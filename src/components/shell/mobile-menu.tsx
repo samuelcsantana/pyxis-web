@@ -55,7 +55,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
       <div
         id={MENU_ID}
         onClick={closeAfterNavigation}
-        className={`${open ? 'block' : 'hidden'} lg:block lg:min-h-full`}
+        className={`${open ? 'block' : 'hidden'} lg:flex lg:min-h-full lg:flex-col`}
       >
         {children}
       </div>
