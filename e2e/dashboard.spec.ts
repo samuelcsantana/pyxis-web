@@ -49,12 +49,13 @@ test('applies a custom period through a plain form', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
   await page.getByText('Custom', { exact: true }).click();
-  await page.getByLabel('From').fill('2026-08-01');
-  await page.getByLabel('To').fill('2026-08-31');
+  await page.getByLabel('From', { exact: true }).fill('2026-08-01');
+  await page.getByLabel('To', { exact: true }).fill('2026-08-31');
   await page.getByRole('button', { name: 'Apply' }).click();
 
   await expect(page).toHaveURL(/from=2026-08-01&to=2026-08-31$/);
-  await expect(page.getByText('Aug 1 – Aug 31, 2026')).toBeVisible();
+  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+  await expect(page.getByText('Page views and named events, Aug 1 – Aug 31, 2026')).toBeVisible();
 });
 
 test('switches project and keeps the period', async ({ page, isMobile }) => {
@@ -65,9 +66,7 @@ test('switches project and keeps the period', async ({ page, isMobile }) => {
   await page.getByRole('link', { name: 'Demo Docs' }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
-  await expect(
-    page.getByRole('region', { name: 'Project settings' }).getByText('Europe/Lisbon'),
-  ).toBeVisible();
+  await expect(page.getByText('How Demo Docs was used in the period')).toBeVisible();
 });
 
 test('answers not found for a project outside the account', async ({ page }) => {
