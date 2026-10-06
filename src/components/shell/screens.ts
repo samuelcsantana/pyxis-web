@@ -15,7 +15,7 @@ export const SCREENS = [
     slug: 'features',
     label: 'Features',
     icon: 'M12 3l2.4 5.6 6 .9-4.4 3.9 1.3 5.8-5.3-2.9-5.3 2.9 1.3-5.8L3.6 9.5l6-.9L12 3z',
-    available: false,
+    available: true,
   },
   {
     slug: 'requests',
