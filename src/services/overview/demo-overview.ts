@@ -1,5 +1,4 @@
 import { type OverviewReport, overviewResponseSchema, type OverviewWire } from '@/domain/overview';
-import { DEMO_ADMIN } from '../projects/mock-projects-service';
 import {
   demoCount,
   demoDays,
@@ -8,6 +7,7 @@ import {
   noise,
   previousRange,
 } from '../demo/demo-series';
+import { demoCountsConversions } from '../demo/demo-projects';
 import type { DateRange } from '../date-range';
 
 const TOP_PAGES = [
@@ -74,14 +74,13 @@ function kpi(
 export function demoOverviewWire(projectId: string, range: DateRange): OverviewWire {
   const current = demoDays(range).map(demoDay);
   const previous = demoDays(previousRange(range)).map(demoDay);
-  const project = DEMO_ADMIN.projects.find((candidate) => candidate.id === projectId);
   const pageViews = total(current, 'pageViews');
   const events = total(current, 'events');
   return {
     kpis: {
       visits: kpi(current, previous, 'visits'),
       identified_users: kpi(current, previous, 'identifiedUsers'),
-      conversions: project?.conversionEvent === null ? null : kpi(current, previous, 'conversions'),
+      conversions: demoCountsConversions(projectId) ? kpi(current, previous, 'conversions') : null,
       write_errors: {
         current: { failed: total(current, 'failedWrites'), total: total(current, 'writes') },
         previous: { failed: total(previous, 'failedWrites'), total: total(previous, 'writes') },
