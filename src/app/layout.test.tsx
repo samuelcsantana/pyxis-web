@@ -2,27 +2,58 @@ import type { ReactElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import RootLayout, { metadata } from './layout';
 
+const cookieStore = vi.hoisted(() => ({ theme: undefined as string | undefined }));
+
 vi.mock('next/font/google', () => ({
   Geist: () => ({ variable: 'geist-sans-variable' }),
   Geist_Mono: () => ({ variable: 'geist-mono-variable' }),
 }));
 
+vi.mock('next/headers', () => ({
+  cookies: () =>
+    Promise.resolve({
+      get: (name: string) =>
+        name === 'pyxis_theme' && cookieStore.theme !== undefined
+          ? { name, value: cookieStore.theme }
+          : undefined,
+    }),
+}));
+
 interface HtmlProps {
   readonly lang: string;
   readonly className: string;
+  readonly 'data-theme'?: string;
   readonly children: ReactElement<{ children: ReactElement }>;
 }
 
 describe('RootLayout', () => {
-  it('renders an English document with both font variables on <html>', () => {
+  it('renders an English document with both font variables on <html>', async () => {
+    cookieStore.theme = undefined;
     const page = <p>content</p>;
-    const html = RootLayout({ children: page }) as ReactElement<HtmlProps>;
+    const html = (await RootLayout({ children: page })) as ReactElement<HtmlProps>;
 
     expect(html.type).toBe('html');
     expect(html.props.lang).toBe('en');
     expect(html.props.className).toContain('geist-sans-variable');
     expect(html.props.className).toContain('geist-mono-variable');
+    expect(html.props['data-theme']).toBeUndefined();
     expect(html.props.children.props.children).toBe(page);
+  });
+
+  it('applies the theme the visitor chose, so the first paint is right', async () => {
+    cookieStore.theme = 'dark';
+
+    const html = (await RootLayout({ children: null })) as ReactElement<HtmlProps>;
+
+    expect(html.props['data-theme']).toBe('dark');
+  });
+
+  it('ignores a theme cookie it does not know', async () => {
+    cookieStore.theme = 'neon';
+
+    const html = (await RootLayout({ children: null })) as ReactElement<HtmlProps>;
+
+    expect(html.props['data-theme']).toBeUndefined();
   });
 
   it('names the app in the metadata', () => {
