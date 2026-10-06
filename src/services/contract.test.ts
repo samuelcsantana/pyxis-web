@@ -6,6 +6,7 @@ import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
+import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './funnel/demo-funnel';
 import { demoRequestsWire } from './requests/demo-requests';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
@@ -84,6 +85,19 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const screen of [null, '/orders']) {
       const wire = demoRequestsWire({ from: '2026-09-06', to: '2026-10-05' }, screen);
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo funnel in both modes', () => {
+    const validate = contractSchema('FunnelReport');
+
+    for (const mode of ['visit', 'user'] as const) {
+      const wire = demoFunnelWire(
+        { from: '2026-09-06', to: '2026-10-05' },
+        mode,
+        DEMO_FUNNEL_STEPS,
+      );
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
