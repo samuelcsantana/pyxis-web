@@ -43,6 +43,13 @@ describe('formatters', () => {
     expect(formatChange(null)).toBe(NO_VALUE);
   });
 
+  it('show a change that rounds to zero as no change, without a sign', () => {
+    expect(formatChange(0.0004)).toBe('0%');
+    expect(formatChange(-0.0004)).toBe('0%');
+    expect(formatPointChange(0.03001, 0.03)).toBe('0 pt');
+    expect(formatPointChange(0.03, 0.03004)).toBe('0 pt');
+  });
+
   it('give a change of rates in percentage points', () => {
     expect(formatPointChange(0.024, 0.027)).toBe('−0.3 pt');
     expect(formatPointChange(0.03, 0.01)).toBe('+2 pt');

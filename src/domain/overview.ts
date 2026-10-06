@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import {
+  displayedChange,
+  displayedPointChange,
   formatChange,
   formatCount,
   formatPercent,
@@ -118,7 +120,7 @@ function countKpi(kpi: Kpi, id: KpiId, label: string, note: string): KpiView {
     label,
     value: formatCount(kpi.current),
     change: formatChange(change),
-    tone: toneOf(trendOf(change), 'up'),
+    tone: toneOf(trendOf(displayedChange(change)), 'up'),
     note,
     series: kpi.daily,
   };
@@ -131,13 +133,12 @@ function failureRate(count: FailureCount): number | null {
 function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): KpiView {
   const current = failureRate(writeErrors.current);
   const previous = failureRate(writeErrors.previous);
-  const pointChange = current === null || previous === null ? null : current - previous;
   return {
     id: 'write-errors',
     label: 'Write error rate',
     value: formatPercent(current),
     change: formatPointChange(current, previous),
-    tone: toneOf(trendOf(pointChange), 'down'),
+    tone: toneOf(trendOf(displayedPointChange(current, previous)), 'down'),
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
     series: writeErrors.daily.map((day) => failureRate(day) ?? 0),
   };

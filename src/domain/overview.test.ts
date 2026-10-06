@@ -138,6 +138,27 @@ describe('overviewKpis', () => {
     expect(errors?.change).toBe('+9 pt');
   });
 
+  it('calls a change that rounds to zero neither good nor bad news', () => {
+    const [visits, , , errors] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          visits: { current: 10001, previous: 10000, daily: [10001] },
+          write_errors: {
+            current: { failed: 30001, total: 1000000 },
+            previous: { failed: 30000, total: 1000000 },
+            daily: [{ failed: 30001, total: 1000000 }],
+          },
+        },
+      }),
+      1,
+    );
+
+    expect(visits).toMatchObject({ change: '0%', tone: 'neutral' });
+    expect(errors).toMatchObject({ change: '0 pt', tone: 'neutral' });
+  });
+
   it('shows dashes and a neutral tone when there is nothing to compare with', () => {
     const [visits, , , errors] = overviewKpis(
       report({

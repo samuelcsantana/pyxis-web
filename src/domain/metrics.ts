@@ -5,6 +5,9 @@ const PERCENT_FORMAT = new Intl.NumberFormat('en-US', {
 });
 const ONE_DECIMAL = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
 const MINUS_SIGN = '−';
+const CHANGE_PRECISION = 1000;
+const POINT_PRECISION = 10;
+const PERCENT_POINTS = 100;
 export const NO_VALUE = '—';
 
 export function rate(part: number, total: number): number | null {
@@ -30,18 +33,37 @@ function signed(value: number, text: string): string {
   return value < 0 ? `${MINUS_SIGN}${text}` : text;
 }
 
+function roundTo(value: number, precision: number): number {
+  return Math.round(value * precision) / precision;
+}
+
+export function displayedChange(change: number | null): number | null {
+  return change === null ? null : roundTo(change, CHANGE_PRECISION);
+}
+
+export function displayedPointChange(
+  current: number | null,
+  previous: number | null,
+): number | null {
+  if (current === null || previous === null) {
+    return null;
+  }
+  return roundTo((current - previous) * PERCENT_POINTS, POINT_PRECISION);
+}
+
 export function formatChange(change: number | null): string {
-  if (change === null) {
+  const shown = displayedChange(change);
+  if (shown === null) {
     return NO_VALUE;
   }
-  return signed(change, PERCENT_FORMAT.format(Math.abs(change)));
+  return signed(shown, PERCENT_FORMAT.format(Math.abs(shown)));
 }
 
 export function formatPointChange(current: number | null, previous: number | null): string {
-  if (current === null || previous === null) {
+  const points = displayedPointChange(current, previous);
+  if (points === null) {
     return NO_VALUE;
   }
-  const points = (current - previous) * 100;
   return `${signed(points, ONE_DECIMAL.format(Math.abs(points)))} pt`;
 }
 
