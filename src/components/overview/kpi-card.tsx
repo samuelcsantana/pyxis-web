@@ -1,6 +1,6 @@
 import type { Tone } from '@/domain/metrics';
 import type { KpiView } from '@/domain/overview';
-import { sparklinePoints } from '@/domain/sparkline';
+import { Sparkline } from '@/components/ui/sparkline';
 
 export type KpiColor = 'sky' | 'violet' | 'accent' | 'bad';
 
@@ -18,7 +18,6 @@ const STROKE_CLASSES: Readonly<Record<KpiColor, string>> = {
 };
 
 const SPARKLINE_BOX = { width: 120, height: 36, inset: 3 } as const;
-const SPARKLINE_VIEW_BOX = [0, 0, SPARKLINE_BOX.width, SPARKLINE_BOX.height].join(' ');
 
 export interface KpiCardProps {
   readonly kpi: KpiView;
@@ -44,24 +43,14 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
         {kpi.change}
         <span className="sr-only"> change</span>
       </p>
-      <svg
-        viewBox={SPARKLINE_VIEW_BOX}
+      <Sparkline
+        values={kpi.series}
+        box={SPARKLINE_BOX}
         width="100%"
-        height={SPARKLINE_BOX.height}
-        preserveAspectRatio="none"
-        aria-hidden="true"
+        strokeClass={STROKE_CLASSES[color]}
+        strokeWidth={2}
         className="hidden sm:col-span-2 sm:block"
-      >
-        <polyline
-          points={sparklinePoints(kpi.series, SPARKLINE_BOX)}
-          fill="none"
-          className={STROKE_CLASSES[color]}
-          strokeWidth={2}
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
+      />
       <p className="text-xs text-muted sm:col-span-2">{kpi.note}</p>
     </section>
   );
