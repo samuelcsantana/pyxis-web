@@ -8,6 +8,7 @@ interface DemoFailure {
   readonly minuteOfDay: number;
   readonly status: number;
   readonly errorCode: string | null;
+  readonly sessionId?: string;
 }
 
 interface DemoRoute {
@@ -35,7 +36,13 @@ const DEMO_ROUTES: readonly DemoRoute[] = [
       ['/orders/new', 0.125],
     ],
     failures: [
-      { daysBeforeEnd: 0, minuteOfDay: 1121, status: 409, errorCode: 'order_number_in_use' },
+      {
+        daysBeforeEnd: 0,
+        minuteOfDay: 1121,
+        status: 409,
+        errorCode: 'order_number_in_use',
+        sessionId: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01',
+      },
       { daysBeforeEnd: 1, minuteOfDay: 662, status: 400, errorCode: 'invalid_quantity' },
       { daysBeforeEnd: 2, minuteOfDay: 960, status: 409, errorCode: null },
     ],
@@ -145,7 +152,8 @@ function demoRoute(route: DemoRoute, range: DateRange, days: number) {
         occurred_at: occurredAt(range, failure),
         status: failure.status,
         error_code: failure.errorCode,
-        session_id: demoSessionId(`${route.route}${String(failure.minuteOfDay)}`),
+        session_id:
+          failure.sessionId ?? demoSessionId(`${route.route}${String(failure.minuteOfDay)}`),
       })),
   };
 }

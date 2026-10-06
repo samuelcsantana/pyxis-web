@@ -171,6 +171,7 @@ export interface FailureRow {
   readonly tone: StatusTone;
   readonly errorCode: string | null;
   readonly visit: string;
+  readonly sessionId: string;
 }
 
 export interface RouteRow {
@@ -231,6 +232,7 @@ export function routeRows(routes: readonly RouteReport[], timeZone: string): rea
         tone: statusTone(failure.status),
         errorCode: failure.errorCode,
         visit: failure.sessionId.slice(0, VISIT_ID_LENGTH),
+        sessionId: failure.sessionId,
       })),
     };
   });

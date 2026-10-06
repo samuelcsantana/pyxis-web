@@ -10,10 +10,11 @@ export const ROUTE_HEADING_ID = 'route-details-heading';
 export interface RouteDetailsProps {
   readonly row: RouteRow;
   readonly screenHref: (path: string) => string;
+  readonly visitHref: (sessionId: string) => string;
   readonly onClose: () => void;
 }
 
-export function RouteDetails({ row, screenHref, onClose }: RouteDetailsProps) {
+export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetailsProps) {
   return (
     <div className="flex min-h-full flex-col gap-5 p-6">
       <div className="flex items-start justify-between gap-3">
@@ -106,7 +107,12 @@ export function RouteDetails({ row, screenHref, onClose }: RouteDetailsProps) {
                   <span className="font-mono wrap-anywhere">
                     {failure.errorCode ?? 'No error code'}
                   </span>
-                  <span className="text-muted">Visit {failure.visit}</span>
+                  <Link
+                    href={visitHref(failure.sessionId)}
+                    className="w-fit text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  >
+                    Open visit {failure.visit}
+                  </Link>
                 </span>
               </li>
             ))}

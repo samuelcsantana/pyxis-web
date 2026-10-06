@@ -12,12 +12,19 @@ export interface RequestsTableProps {
   readonly rows: readonly RouteRow[];
   readonly basePath: string;
   readonly query: string;
+  readonly timelinePath: string;
   readonly emptyMessage: string;
 }
 
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums';
 
-export function RequestsTable({ rows, basePath, query, emptyMessage }: RequestsTableProps) {
+export function RequestsTable({
+  rows,
+  basePath,
+  query,
+  timelinePath,
+  emptyMessage,
+}: RequestsTableProps) {
   const dialogRef = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
   const openerRef = useRef<HTMLButtonElement>(null as unknown as HTMLButtonElement);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -158,6 +165,9 @@ export function RequestsTable({ rows, basePath, query, emptyMessage }: RequestsT
           <RouteDetails
             row={selected}
             screenHref={screenHref}
+            visitHref={(sessionId) =>
+              `${timelinePath}?${new URLSearchParams({ visit: sessionId }).toString()}`
+            }
             onClose={() => {
               dialogRef.current.close();
             }}
