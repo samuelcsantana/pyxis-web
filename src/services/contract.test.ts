@@ -8,6 +8,7 @@ import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
 import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './funnel/demo-funnel';
 import { demoRequestsWire } from './requests/demo-requests';
+import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 
@@ -100,6 +101,16 @@ describe('the API contract copied from pyxis-api', () => {
       );
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
+  });
+
+  it('accepts the demo timeline of the demo person', () => {
+    const validate = contractSchema('TimelineReport');
+    const wire = demoTimelineWire(
+      { kind: 'user', id: DEMO_USER_ID },
+      new Date('2026-10-06T02:30:00Z'),
+    );
+
+    expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it('accepts the bodies the sign-in form sends', async () => {
