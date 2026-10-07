@@ -217,7 +217,7 @@ describe('MobileMenu', () => {
   it('opens and closes the navigation, and closes after a link is followed', () => {
     render(
       <MobileMenu>
-        <a href="/p-store/overview">Overview</a>
+        <a href="#overview">Overview</a>
         <span>Not a link</span>
       </MobileMenu>,
     );

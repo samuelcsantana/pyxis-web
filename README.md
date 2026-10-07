@@ -97,7 +97,7 @@ Shipping now:
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
   of the framework's default; a "Page not found" page, titled as such, for an unknown address or
-  project
+  project, which keeps the project's navigation around an unknown screen of a known project
 - A demo mode with invented data and a visible banner when no API is configured, published as
   the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
   two imaginary products, a store and a documentation site, each drawn from one invented
