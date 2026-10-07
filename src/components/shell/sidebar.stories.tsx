@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
@@ -42,6 +43,14 @@ export const OverviewSelected: Story = {};
 export const SingleProject: Story = { args: { admin: ONE_PROJECT } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const KeyboardFocus: Story = {
+  play: async ({ canvasElement }) => {
+    const funnel = within(canvasElement).getByRole('link', { name: 'Funnel' });
+    funnel.focus();
+    await expect(funnel).toHaveFocus();
+  },
+};
 
 export const SigningOut: Story = {
   render: () => (
