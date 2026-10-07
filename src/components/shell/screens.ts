@@ -67,6 +67,16 @@ export function screenHref(projectId: string, slug: ScreenSlug, query = ''): str
   return query === '' ? path : `${path}?${query}`;
 }
 
+const LINK_BASE = 'http://link.invalid';
+
+export function linkWith(href: string, parameters: Readonly<Record<string, string>>): string {
+  const url = new URL(href, LINK_BASE);
+  for (const [name, value] of Object.entries(parameters)) {
+    url.searchParams.set(name, value);
+  }
+  return `${url.pathname}${url.search}`;
+}
+
 export function screenOf(pathname: string): string | undefined {
   return pathname.split('/')[2];
 }

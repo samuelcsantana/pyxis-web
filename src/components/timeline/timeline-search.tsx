@@ -8,13 +8,16 @@ export interface TimelineSearchProps {
   readonly action: string;
   readonly lookup: Lookup | null;
   readonly hint: string | null;
+  readonly keep?: Readonly<Record<string, string>>;
 }
+
+const NOTHING_KEPT: Readonly<Record<string, string>> = {};
 
 type LookupKind = Lookup['kind'];
 
 const FIELD = `min-h-11 rounded-input border border-line bg-card px-3 text-sm text-ink ${FOCUS_RING}`;
 
-export function TimelineSearch({ action, lookup, hint }: TimelineSearchProps) {
+export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: TimelineSearchProps) {
   const [kind, setKind] = useState<LookupKind>(lookup?.kind ?? 'user');
   return (
     <form
@@ -24,6 +27,9 @@ export function TimelineSearch({ action, lookup, hint }: TimelineSearchProps) {
       className="flex flex-wrap items-end gap-3"
       aria-describedby={hint === null ? undefined : 'timeline-search-hint'}
     >
+      {Object.entries(keep).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
       <label className="flex flex-col gap-1.5 text-[13px] font-medium">
         Look up
         <select

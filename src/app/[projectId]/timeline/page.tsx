@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
 import { TimelineFilters } from '@/components/timeline/timeline-filters';
@@ -19,6 +19,7 @@ import {
   timelineTotals,
   visitViews,
 } from '@/domain/timeline';
+import { type PeriodSearch, periodSearchParameters } from '@/domain/period';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -32,15 +33,13 @@ export const generateMetadata = screenMetadata('Timeline');
 
 export interface TimelinePageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<TimelineSearchParameters>;
+  readonly searchParams: Promise<TimelineSearchParameters & PeriodSearch>;
 }
 
-function lookupQuery(lookup: Lookup, filter: TimelineFilter): string {
-  const query = new URLSearchParams({ [lookup.kind]: lookup.id });
-  if (filter !== 'all') {
-    query.set('show', filter);
-  }
-  return query.toString();
+function lookupParameters(lookup: Lookup, filter: TimelineFilter): Record<string, string> {
+  return filter === 'all'
+    ? { [lookup.kind]: lookup.id }
+    : { [lookup.kind]: lookup.id, show: filter };
 }
 
 interface TimelineViewProps {
@@ -50,6 +49,7 @@ interface TimelineViewProps {
   readonly filter: TimelineFilter;
   readonly basePath: string;
   readonly timeZone: string;
+  readonly keptPeriod: Readonly<Record<string, string>>;
 }
 
 function TimelineView({
@@ -59,6 +59,7 @@ function TimelineView({
   filter,
   basePath,
   timeZone,
+  keptPeriod,
 }: TimelineViewProps) {
   if (report.visits.length === 0) {
     return (
@@ -77,7 +78,7 @@ function TimelineView({
         current={filter}
         links={TIMELINE_FILTERS.map((target) => ({
           filter: target,
-          href: `${basePath}?${lookupQuery(lookup, target)}`,
+          href: linkWith(basePath, { ...keptPeriod, ...lookupParameters(lookup, target) }),
         }))}
       />
       {visitViews(report.visits, timeZone, filter).map((visit) => (
@@ -86,11 +87,7 @@ function TimelineView({
       {report.nextBefore === null ? null : (
         <OlderVisits
           initialBefore={report.nextBefore}
-          loadOlder={loadOlderVisits.bind(
-            null,
-            projectId,
-            Object.fromEntries(new URLSearchParams(lookupQuery(lookup, filter))),
-          )}
+          loadOlder={loadOlderVisits.bind(null, projectId, lookupParameters(lookup, filter))}
         />
       )}
     </>
@@ -104,6 +101,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const filter = timelineFilterOf(search);
   const basePath = screenHref(project.id, 'timeline');
   const demoPerson = isDemoMode() ? demoPersonOf(project.id) : null;
+  const keptPeriod = periodSearchParameters(search);
   const report =
     lookup === null
       ? null
@@ -121,6 +119,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           action={basePath}
           lookup={lookup}
           hint={demoPerson === null ? null : `Try ${demoPerson}`}
+          keep={keptPeriod}
         />
         {lookup === null || report === null ? (
           <EmptyState title="Look up a person or a visit">
@@ -132,7 +131,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
             {demoPerson === null ? null : (
               <p>
                 <Link
-                  href={`${basePath}?${new URLSearchParams({ user: demoPerson }).toString()}`}
+                  href={linkWith(basePath, { ...keptPeriod, user: demoPerson })}
                   className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
                 >
                   Open the timeline of the demo person {demoPerson}
@@ -148,6 +147,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
             filter={filter}
             basePath={basePath}
             timeZone={project.timezone}
+            keptPeriod={keptPeriod}
           />
         )}
       </main>

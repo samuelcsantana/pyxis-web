@@ -22,7 +22,7 @@ function renderTable() {
       rows={ROWS}
       basePath="/p1/requests"
       query="range=7d"
-      timelinePath="/p1/timeline"
+      timelinePath="/p1/timeline?range=7d"
       emptyMessage="Nothing"
     />,
   );
@@ -61,7 +61,7 @@ describe('RequestsTable', () => {
     expect(details.getByText('No error code')).toBeInTheDocument();
     expect(details.getAllByRole('link', { name: /^Open visit / })[0]).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/p1\/timeline\?visit=[0-9a-f-]{36}$/),
+      expect.stringMatching(/^\/p1\/timeline\?range=7d&visit=[0-9a-f-]{36}$/),
     );
     expect(details.getByRole('link', { name: /\/orders\/new/ })).toHaveAttribute(
       'href',

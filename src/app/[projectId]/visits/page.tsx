@@ -67,7 +67,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           key={`visits?${listQuery}`}
           rows={visitRows(report.visits, project.timezone)}
           nextCursor={report.nextCursor}
-          timelinePath={screenHref(project.id, 'timeline')}
+          timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
           emptyMessage={emptyMessage(filtered)}
           loadOlder={loadOlderVisitRows.bind(
             null,

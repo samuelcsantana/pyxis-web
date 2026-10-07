@@ -77,7 +77,7 @@ beforeEach(() => {
 });
 
 describe('VisitsPage', () => {
-  it('lists the visits of the period, newest first, each opening its timeline', async () => {
+  it('lists the visits of the period, newest first, each opening its timeline in the period', async () => {
     const visits = mockVisits();
 
     render(await renderVisits());
@@ -93,7 +93,10 @@ describe('VisitsPage', () => {
     expect(rows).toHaveLength(9);
     expect(
       screen.getByRole('link', { name: 'Mon, Oct 5, 18:40, open visit 3c07a1b2' }),
-    ).toHaveAttribute('href', '/p-store/timeline?visit=3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01');
+    ).toHaveAttribute(
+      'href',
+      '/p-store/timeline?range=30d&visit=3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01',
+    );
     expect(screen.getByRole('button', { name: 'Load older visits' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Clear filters' })).not.toBeInTheDocument();
   });

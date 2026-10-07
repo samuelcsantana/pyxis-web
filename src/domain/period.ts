@@ -24,6 +24,17 @@ function single(value: string | string[] | undefined): string | undefined {
   return typeof value === 'string' ? value : undefined;
 }
 
+const PERIOD_PARAMETERS = ['range', 'from', 'to'] as const;
+
+export function periodSearchParameters(search: PeriodSearch): Readonly<Record<string, string>> {
+  return Object.fromEntries(
+    PERIOD_PARAMETERS.flatMap((name) => {
+      const value = single(search[name]);
+      return value === undefined ? [] : [[name, value]];
+    }),
+  );
+}
+
 function isPreset(value: string | undefined): value is PeriodPreset {
   return PERIOD_PRESETS.some((preset) => preset === value);
 }
