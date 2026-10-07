@@ -85,7 +85,8 @@ Shipping now:
   error rate line, not 0 %
 - Conversions counted as visits: a conversion rate is the share of visits that sent the
   conversion event at least once (Overview, Devices, Acquisition), so it never passes 100 %; the
-  Overview keeps the number of conversion events beside it
+  Overview keeps the number of conversion events beside it; without a conversion event, the
+  Overview and Devices say so in one line and how the operator sets one
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
@@ -115,9 +116,11 @@ Shipping now:
   Timeline
 - Loading, empty and error states shared by every screen; while a screen loads, its top bar
   already shows its title above a skeleton shaped like it; an empty period shows how to install
-  the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
-  of the framework's default; a "Page not found" page, titled as such, for an unknown address or
-  project, which keeps the project's navigation around an unknown screen of a known project
+  the SDK until the project's first event, and afterwards "Nothing in this period" with the time
+  of the latest event and a link to the last 30 days; when the API cannot be reached at all, a
+  branded error page with "Try again" instead of the framework's default; a "Page not found"
+  page, titled as such, for an unknown address or project, which keeps the project's navigation
+  around an unknown screen of a known project
 - A demo mode with invented data and a visible banner when no API is configured, published as
   the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
   two imaginary products, a store and a documentation site, each drawn from one invented
