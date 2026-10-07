@@ -89,7 +89,7 @@ test('draws one point per day of the chosen period', async ({ page }) => {
 
   await expect(page).toHaveURL(/range=today$/);
   await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 1 day\./);
-  await expect(page.getByText('vs. the day before')).toBeVisible();
+  await expect(page.getByText(/^vs\. yesterday until \d{2}:\d{2}$/)).toBeVisible();
 });
 
 test('opens the visits of a top page, in the same period, from the keyboard too', async ({

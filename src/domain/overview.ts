@@ -120,15 +120,50 @@ function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): Kpi
   };
 }
 
-export function previousPeriodNote(periodDays: number): string {
-  return periodDays === 1 ? 'vs. the day before' : `vs. previous ${formatCount(periodDays)} days`;
+export interface ComparedPeriod {
+  readonly days: number;
+  readonly endsToday: boolean;
 }
 
-export function overviewKpis(report: OverviewReport, periodDays: number): readonly KpiView[] {
+function wholeDaysNote(days: number): string {
+  return days === 1 ? 'vs. the day before' : `vs. previous ${formatCount(days)} days`;
+}
+
+function unfinishedTodayNote(days: number): string {
+  return days === 1
+    ? 'so far today vs. all of yesterday'
+    : `vs. previous ${formatCount(days)} full days`;
+}
+
+export function previousPeriodNote(comparison: Comparison, period: ComparedPeriod): string {
+  switch (comparison.kind) {
+    case 'same-time':
+      return period.days === 1
+        ? `vs. yesterday until ${comparison.until}`
+        : `vs. previous ${formatCount(period.days)} days, until ${comparison.until}`;
+    case 'whole-days':
+      return wholeDaysNote(period.days);
+    case 'unknown':
+      return period.endsToday ? unfinishedTodayNote(period.days) : wholeDaysNote(period.days);
+  }
+}
+
+export function comparesUnfinishedDayWithWholeOne(
+  comparison: Comparison,
+  period: ComparedPeriod,
+): boolean {
+  return comparison.kind === 'unknown' && period.endsToday && period.days === 1;
+}
+
+function withoutJudgement(kpi: KpiView): KpiView {
+  return { ...kpi, tone: 'neutral' };
+}
+
+export function overviewKpis(report: OverviewReport, period: ComparedPeriod): readonly KpiView[] {
   const { visits, identifiedUsers, conversions, writeErrors } = report.kpis;
   const conversionRate = conversions === null ? null : rate(conversions.current, visits.current);
-  return [
-    countKpi(visits, 'visits', 'Visits', previousPeriodNote(periodDays)),
+  const kpis = [
+    countKpi(visits, 'visits', 'Visits', previousPeriodNote(report.comparison, period)),
     countKpi(identifiedUsers, 'identified-users', 'Identified users', 'signed in at least once'),
     ...(conversions === null
       ? []
@@ -142,4 +177,7 @@ export function overviewKpis(report: OverviewReport, periodDays: number): readon
         ]),
     writeErrorsKpi(writeErrors),
   ];
+  return comparesUnfinishedDayWithWholeOne(report.comparison, period)
+    ? kpis.map(withoutJudgement)
+    : kpis;
 }

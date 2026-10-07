@@ -32,13 +32,15 @@ export interface OverviewPageProps {
 interface OverviewReportViewProps {
   readonly report: OverviewReport;
   readonly period: Period;
+  readonly today: string;
   readonly visitsHref: (filter: Readonly<Record<string, string>>) => string;
 }
 
-function OverviewReportView({ report, period, visitsHref }: OverviewReportViewProps) {
+function OverviewReportView({ report, period, today, visitsHref }: OverviewReportViewProps) {
+  const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return (
     <>
-      <KpiGrid kpis={overviewKpis(report, daysBetween(period.from, period.to))} />
+      <KpiGrid kpis={overviewKpis(report, compared)} />
       <DailyActivityChart days={report.days} periodLabel={describePeriod(period)} />
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">
         <TopPagesTable
@@ -59,6 +61,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   const { project } = await projectOrNotFound((await params).projectId);
   const now = new Date();
   const period = resolvePeriod(await searchParams, project.timezone, now);
+  const today = todayIn(project.timezone, now);
   const report = await readOrSignIn(() =>
     createOverviewService().overview(project.id, { from: period.from, to: period.to }),
   );
@@ -69,7 +72,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         subtitle={`How ${project.name} was used in the period`}
         basePath={screenHref(project.id, 'overview')}
         period={period}
-        today={todayIn(project.timezone, now)}
+        today={today}
         theme={await chosenTheme()}
       />
       <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
@@ -77,6 +80,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           <OverviewReportView
             report={report}
             period={period}
+            today={today}
             visitsHref={(filter) =>
               screenHref(project.id, 'visits', withKeptParameters(periodQuery(period), filter))
             }
