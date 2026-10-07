@@ -99,17 +99,19 @@ export interface DeviceConversion {
 
 export function deviceConversions(deviceTypes: readonly ValueShare[]): readonly DeviceConversion[] {
   const counted = deviceTypes.flatMap((share) =>
-    share.conversions === null ? [] : [{ ...share, conversions: share.conversions }],
+    share.conversions === null
+      ? []
+      : [{ ...share, converted: share.convertingVisits ?? share.conversions }],
   );
   const rated = counted.map((share) => ({
     ...share,
-    rate: rate(share.conversions, share.visits),
+    rate: rate(share.converted, share.visits),
   }));
   const best = Math.max(0, ...rated.map((share) => share.rate ?? 0));
   return rated.map((share) => ({
     label: deviceTypeLabel(share.value),
     rate: formatPercent(share.rate),
-    detail: `${formatCount(share.conversions)} of ${formatQuantity(share.visits, 'visit', 'visits')}`,
+    detail: `${formatCount(share.converted)} of ${formatQuantity(share.visits, 'visit', 'visits')}`,
     barWidth: barWidth(share.rate ?? 0, best),
   }));
 }
