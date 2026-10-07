@@ -18,8 +18,47 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(page.getByRole('dialog', { name: 'POST /orders' })).toBeVisible();
       expect(await axeViolations(page)).toEqual([]);
     });
+
+    test('has no WCAG 2.2 A or AA violation on the failed reads tab', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/requests?range=30d&kind=reads`);
+      await expect(page.getByRole('table', { name: 'Routes' })).toBeVisible();
+
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
+    });
   });
 }
+
+test('switches to the failed reads, counted without a rate, keeping the period', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/requests?range=30d`);
+  const tabs = page.getByRole('navigation', { name: 'Request kind' });
+
+  await tabs.getByRole('link', { name: 'Failed reads' }).click();
+
+  await expect(page).toHaveURL(/range=30d&kind=reads$/);
+  await expect(tabs.getByRole('link', { name: 'Failed reads' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('region', { name: 'Routes failing' })).toContainText(
+    'GET /orders/:id',
+  );
+  await expect(page.getByRole('columnheader', { name: 'Failed' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Error rate' })).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Show' })).toHaveCount(0);
+
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: '7 days' })
+    .click();
+  await expect(page).toHaveURL(/range=7d&kind=reads$/);
+
+  await tabs.getByRole('link', { name: 'Writes' }).click();
+  await expect(page).toHaveURL(/range=7d$/);
+  await expect(page.getByRole('region', { name: 'Error rate' })).toBeVisible();
+});
 
 test('keeps the focus in the details, closes them with Escape and refocuses the route', async ({
   page,
