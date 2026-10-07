@@ -223,3 +223,8 @@ export function visitRows(visits: readonly VisitSummary[], timeZone: string): re
     account: visitAccount(visit.userId),
   }));
 }
+
+export interface VisitRowsPage {
+  readonly rows: readonly VisitRow[];
+  readonly nextCursor: string | null;
+}
