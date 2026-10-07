@@ -7,9 +7,14 @@ import { MockRequestsService } from '@/services/requests/mock-requests-service';
 import type { IRequestsService } from '@/services/requests/requests-service.interface';
 import RequestsPage from './page';
 
-const state = vi.hoisted<{ admin: unknown; requests: IRequestsService['requests'] }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  requests: IRequestsService['requests'];
+  failedReads: IRequestsService['failedReads'];
+}>(() => ({
   admin: undefined,
   requests: () => Promise.reject(new Error('requests not set')),
+  failedReads: () => Promise.reject(new Error('failed reads not set')),
 }));
 
 vi.mock('next/headers', () => ({
@@ -36,6 +41,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 vi.mock('@/services/requests/requests-service.factory', () => ({
   createRequestsService: (): IRequestsService => ({
     requests: (projectId, range, screenPath) => state.requests(projectId, range, screenPath),
+    failedReads: (projectId, range, screenPath) => state.failedReads(projectId, range, screenPath),
   }),
 }));
 

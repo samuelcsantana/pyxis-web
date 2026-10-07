@@ -1,8 +1,13 @@
 import { type RequestsReport, type RequestsWire } from '@/domain/requests';
 import { requestsResponseSchema } from '@/domain/requests.schema';
 import type { DateRange } from '../date-range';
-import type { DemoProject, DemoRoute } from '../demo/demo-catalog';
-import { type DemoFailure, demoFailures, demoSuccessfulWritesOn } from '../demo/demo-dataset';
+import type { DemoFailedRead, DemoProject, DemoRoute } from '../demo/demo-catalog';
+import {
+  type DemoFailure,
+  demoFailedReadsOn,
+  demoFailures,
+  demoSuccessfulWritesOn,
+} from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
 import { apportion, demoDays } from '../demo/demo-series';
 
@@ -92,6 +97,59 @@ export function demoRequestsWire(
       .filter((route) => route.total > 0)
       .toSorted((first, second) => second.failed - first.failed || second.total - first.total),
   };
+}
+
+function failedReadWire(
+  project: DemoProject,
+  read: DemoFailedRead,
+  range: DateRange,
+  screen: string | null,
+) {
+  const failures = demoDays(range).reduce(
+    (sum, date) => sum + demoFailedReadsOn(project, read, date),
+    0,
+  );
+  const screens = apportion(failures, read.screens, ([, share]) => share)
+    .map(({ item: [path], count }) => ({ path, failed: count }))
+    .filter((entry) => entry.failed > 0 && (screen === null || entry.path === screen))
+    .toSorted((first, second) => second.failed - first.failed);
+  const failed = screens.reduce((sum, entry) => sum + entry.failed, 0);
+  return {
+    method: 'GET',
+    route: read.route,
+    total: failed,
+    failed,
+    statuses: apportion(failed, read.statuses, ([, share]) => share)
+      .map(({ item: [status], count }) => ({ status, count }))
+      .filter((entry) => entry.count > 0)
+      .toSorted((first, second) => first.status - second.status),
+    median_duration_ms: read.medianDurationMs,
+    screens,
+    recent_failures: [],
+  };
+}
+
+export function demoFailedReadsWire(
+  projectId: string,
+  range: DateRange,
+  screen: string | null,
+): RequestsWire {
+  const project = demoProjectOf(projectId);
+  return {
+    kind: 'reads',
+    routes: project.failedReads
+      .map((read) => failedReadWire(project, read, range, screen))
+      .filter((route) => route.failed > 0)
+      .toSorted((first, second) => second.failed - first.failed),
+  };
+}
+
+export function demoFailedReadsReport(
+  projectId: string,
+  range: DateRange,
+  screen: string | null,
+): RequestsReport {
+  return requestsResponseSchema.parse(demoFailedReadsWire(projectId, range, screen));
 }
 
 export function demoRequestsReport(

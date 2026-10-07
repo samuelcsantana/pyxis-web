@@ -9,7 +9,7 @@ import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
 import { demoFunnelWire } from './funnel/demo-funnel';
-import { demoRequestsWire } from './requests/demo-requests';
+import { demoFailedReadsWire, demoRequestsWire } from './requests/demo-requests';
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
@@ -110,6 +110,17 @@ describe('the API contract copied from pyxis-api', () => {
     for (const project of DEMO_PROJECTS) {
       for (const screen of [null, '/orders', '/docs/:slug']) {
         const wire = demoRequestsWire(project.id, RANGE, screen, NOW);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
+    }
+  });
+
+  it('accepts the demo failed reads, with and without a screen filter', () => {
+    const validate = contractSchema('RequestsReport');
+
+    for (const project of DEMO_PROJECTS) {
+      for (const screen of [null, '/products', '/search']) {
+        const wire = demoFailedReadsWire(project.id, RANGE, screen);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }

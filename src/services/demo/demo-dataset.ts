@@ -1,7 +1,14 @@
 import type { FunnelMode, FunnelStep } from '@/domain/funnel';
 import { addDays, todayIn } from '@/domain/period';
 import type { DateRange } from '../date-range';
-import type { DemoEvent, DemoPage, DemoProject, DemoRoute, DemoShare } from './demo-catalog';
+import type {
+  DemoEvent,
+  DemoFailedRead,
+  DemoPage,
+  DemoProject,
+  DemoRoute,
+  DemoShare,
+} from './demo-catalog';
 import { apportion, demoCount, demoDays, noise, textSalt } from './demo-series';
 import { type DemoFailedRequest, demoFailedRequests } from './demo-visits';
 
@@ -67,6 +74,14 @@ export function demoSuccessfulWritesOn(
   date: string,
 ): number {
   return demoCount(date, route.perDay, salt(project, 'route', route.method, route.route));
+}
+
+export function demoFailedReadsOn(
+  project: DemoProject,
+  read: DemoFailedRead,
+  date: string,
+): number {
+  return demoCount(date, read.perDay, salt(project, 'read', read.route));
 }
 
 function pageViewsOn(project: DemoProject, date: string): number {

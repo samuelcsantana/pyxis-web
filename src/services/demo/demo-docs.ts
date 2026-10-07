@@ -192,6 +192,18 @@ export const DEMO_DOCS: DemoProject = {
       ],
     },
   ],
+  failedReads: [
+    {
+      route: '/search',
+      perDay: 0.7,
+      statuses: [
+        [429, 0.6],
+        [500, 0.4],
+      ],
+      medianDurationMs: 520,
+      screens: [['/search', 1]],
+    },
+  ],
   deviceTypes: evenShares([
     ['desktop', 0.71],
     ['mobile', 0.26],

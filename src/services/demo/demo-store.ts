@@ -223,6 +223,32 @@ export const DEMO_STORE: DemoProject = {
       screens: [['/orders/:id', 1]],
     },
   ],
+  failedReads: [
+    {
+      route: '/orders/:id',
+      perDay: 1.4,
+      statuses: [
+        [404, 0.75],
+        [500, 0.15],
+        [0, 0.1],
+      ],
+      medianDurationMs: 310,
+      screens: [['/orders/:id', 1]],
+    },
+    {
+      route: '/products',
+      perDay: 0.6,
+      statuses: [
+        [503, 0.7],
+        [0, 0.3],
+      ],
+      medianDurationMs: 2400,
+      screens: [
+        ['/products', 0.65],
+        ['/orders/new', 0.35],
+      ],
+    },
+  ],
   deviceTypes: [
     { value: 'mobile', share: 0.62, conversionWeight: 0.82 },
     { value: 'desktop', share: 0.34, conversionWeight: 1.31 },
