@@ -15,8 +15,18 @@ describe('EmptyState', () => {
       </EmptyState>,
     );
 
-    expect(screen.getByRole('heading', { name: 'No projects yet' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'No projects yet' })).toBeInTheDocument();
     expect(screen.getByText('Ask the operator to grant you one.')).toBeInTheDocument();
+  });
+
+  it('heads a whole page when asked to', () => {
+    render(
+      <EmptyState headingLevel="h1" title="Page not found">
+        <p>This page does not exist.</p>
+      </EmptyState>,
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeInTheDocument();
   });
 });
 

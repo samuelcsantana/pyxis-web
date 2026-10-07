@@ -55,7 +55,7 @@ describe('HomePage', () => {
 
     render(await HomePage());
 
-    expect(screen.getByRole('heading', { name: 'No projects yet' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'No projects yet' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
   });
 

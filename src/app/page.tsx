@@ -12,7 +12,7 @@ export default async function HomePage() {
   }
   return (
     <main className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
-      <EmptyState title="No projects yet">
+      <EmptyState headingLevel="h1" title="No projects yet">
         <p>
           <strong className="text-ink">{admin.email}</strong> can sign in, but no project was
           granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your
