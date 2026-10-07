@@ -218,6 +218,9 @@ describe('loading and error states', () => {
 
     expect(screen.getByText('error id abc123')).toBeInTheDocument();
     expect(retry).toHaveBeenCalledOnce();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Could not load this data' }),
+    ).toBeInTheDocument();
   });
 
   it('shows no error id when there is none', () => {
