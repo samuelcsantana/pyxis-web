@@ -36,7 +36,7 @@ export function signInErrorMessage(error: unknown): string {
   return 'Could not reach Pyxis. Check your connection and try again.';
 }
 
-const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 text-[15px] placeholder:text-muted ${FIELD}`;
+const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 placeholder:text-muted ${FIELD}`;
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-[15px] ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 
@@ -176,7 +176,7 @@ export function SignInForm({
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              className={INPUT_CLASS}
+              className={`${INPUT_CLASS} text-base sm:text-[15px]`}
             />
           </div>
           {errorText === null ? null : (

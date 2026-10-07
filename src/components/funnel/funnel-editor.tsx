@@ -36,7 +36,7 @@ export interface FunnelEditorProps {
 
 const ADD_STEP_ID = 'funnel-add-step';
 const BUTTON = `min-h-9 rounded-control px-2.5 text-[13px] ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
-const FIELD_CLASS = `min-h-10 rounded-control px-2.5 text-sm ${FIELD}`;
+const FIELD_CLASS = `min-h-10 rounded-control px-2.5 text-base sm:text-sm ${FIELD}`;
 
 function toStep(draft: DraftStep): FunnelStep {
   return draft.type === 'page'

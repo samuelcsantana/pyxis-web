@@ -1,9 +1,12 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import { sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const EXAMPLE_FUNNEL =
   '[{"type":"page","path":"/calculator"},{"type":"event","name":"calculator_result_shown"},{"type":"page","path":"/sign-up"}]';
+
+const MIN_PHONE_FIELD_FONT_PX = 16;
+const DESKTOP_FIELD_FONT_PX = 14;
 
 const PHONE_SIZES = [
   { name: '320×640 portrait', width: 320, height: 640 },
@@ -42,3 +45,49 @@ for (const size of PHONE_SIZES) {
     }
   });
 }
+
+const FORM_SCREENS = [
+  { name: 'Visits', path: `/${STORE_ID}/visits` },
+  { name: 'Timeline', path: `/${STORE_ID}/timeline` },
+  { name: 'Features', path: `/${STORE_ID}/features` },
+  { name: 'Sign in', path: '/sign-in' },
+  { name: 'Funnel', path: `/${STORE_ID}/funnel`, open: 'Edit steps' },
+  { name: 'Overview', path: `/${STORE_ID}/overview`, open: 'Custom' },
+] as const;
+
+async function fieldFontSizes(page: Page): Promise<number[]> {
+  const fields = page.locator('input:visible, select:visible');
+  await expect(fields.first()).toBeVisible();
+  return fields.evaluateAll((visible) =>
+    visible.map((field) => Number.parseFloat(getComputedStyle(field).fontSize)),
+  );
+}
+
+test.describe('at 390×844, below the sm breakpoint', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  for (const screen of FORM_SCREENS) {
+    test(`${screen.name} fields use 16px text, so iOS does not zoom in on focus`, async ({
+      page,
+    }) => {
+      await page.goto(screen.path);
+      if ('open' in screen) {
+        await page.getByText(screen.open, { exact: true }).click();
+      }
+
+      const sizes = await fieldFontSizes(page);
+
+      expect(Math.min(...sizes)).toBeGreaterThanOrEqual(MIN_PHONE_FIELD_FONT_PX);
+    });
+  }
+});
+
+test.describe('at 1440×900', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('visits fields keep their compact 14px text', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/visits`);
+
+    expect(new Set(await fieldFontSizes(page))).toEqual(new Set([DESKTOP_FIELD_FONT_PX]));
+  });
+});

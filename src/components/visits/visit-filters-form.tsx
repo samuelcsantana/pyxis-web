@@ -32,7 +32,7 @@ const IDENTITY_LABELS: Readonly<Record<VisitIdentity, string>> = {
 };
 
 const LABEL = 'flex min-w-0 flex-col gap-1.5 text-[13px] font-medium';
-const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-sm font-normal ${FIELD}`;
+const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-base font-normal sm:text-sm ${FIELD}`;
 const HINT = 'text-xs font-normal text-muted';
 
 export function VisitFiltersForm({
