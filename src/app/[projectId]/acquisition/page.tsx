@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { screenHref } from '@/components/shell/screens';
@@ -21,10 +20,11 @@ import {
 } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createAcquisitionService } from '@/services/acquisition/acquisition-service.factory';
 
-export const metadata: Metadata = { title: 'Acquisition · Pyxis' };
+export const generateMetadata = screenMetadata('Acquisition');
 
 export interface AcquisitionPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
