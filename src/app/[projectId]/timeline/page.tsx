@@ -23,7 +23,7 @@ import {
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
-import { DEMO_USER_ID } from '@/services/timeline/demo-timeline';
+import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { loadOlderVisits } from './actions';
@@ -103,6 +103,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const lookup = lookupOf(search);
   const filter = timelineFilterOf(search);
   const basePath = screenHref(project.id, 'timeline');
+  const demoPerson = isDemoMode() ? demoPersonOf(project.id) : null;
   const report =
     lookup === null
       ? null
@@ -119,7 +120,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           key={lookup === null ? 'none' : `${lookup.kind}:${lookup.id}`}
           action={basePath}
           lookup={lookup}
-          hint={isDemoMode() ? `Try ${DEMO_USER_ID}` : null}
+          hint={demoPerson === null ? null : `Try ${demoPerson}`}
         />
         {lookup === null || report === null ? (
           <EmptyState title="Look up a person or a visit">
@@ -128,16 +129,16 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
               person, or a visit id to see one visit. Events, page views and requests show in the
               order they happened, in the project&apos;s time zone.
             </p>
-            {isDemoMode() ? (
+            {demoPerson === null ? null : (
               <p>
                 <Link
-                  href={`${basePath}?${new URLSearchParams({ user: DEMO_USER_ID }).toString()}`}
+                  href={`${basePath}?${new URLSearchParams({ user: demoPerson }).toString()}`}
                   className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
                 >
-                  Open the timeline of the demo person {DEMO_USER_ID}
+                  Open the timeline of the demo person {demoPerson}
                 </Link>
               </p>
-            ) : null}
+            )}
           </EmptyState>
         ) : (
           <TimelineView
