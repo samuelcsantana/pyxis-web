@@ -16,6 +16,12 @@ interface Representative {
 
 const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' });
 
+async function editFunnelSteps(page: Page): Promise<void> {
+  await page.getByRole('button', { name: 'Edit steps' }).click();
+  await page.getByRole('textbox', { name: 'Step 1 page path' }).fill('/pricing');
+  await page.getByRole('textbox', { name: 'Step 2 event name' }).fill('cta_clicked');
+}
+
 const REPRESENTATIVES: readonly Representative[] = [
   {
     control: 'a period preset',
@@ -69,11 +75,7 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'the funnel Apply button',
     screen: 'funnel',
     target: (page) => page.getByRole('button', { name: 'Apply' }),
-    prepare: async (page) => {
-      await page.getByRole('button', { name: 'Edit steps' }).click();
-      await page.getByRole('textbox', { name: 'Step 1 page path' }).fill('/pricing');
-      await page.getByRole('textbox', { name: 'Step 2 event name' }).fill('cta_clicked');
-    },
+    prepare: editFunnelSteps,
   },
   {
     control: 'a sidebar link',
@@ -165,6 +167,55 @@ test('the menu button changes visibly when pressed on a phone', async ({ page, i
 
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
 });
+
+interface ContentControl {
+  readonly control: string;
+  readonly screen: string;
+  readonly target: (page: Page) => Locator;
+  readonly prepare?: (page: Page) => Promise<void>;
+}
+
+const CONTENT_CONTROLS: readonly ContentControl[] = [
+  {
+    control: 'a primary button',
+    screen: 'visits',
+    target: (page) => page.getByRole('button', { name: 'Apply filters' }),
+  },
+  {
+    control: 'the strong funnel Apply button',
+    screen: 'funnel',
+    target: (page) => page.getByRole('button', { name: 'Apply' }),
+    prepare: editFunnelSteps,
+  },
+];
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`content control states, ${colorScheme} theme`, () => {
+    test.use({ colorScheme });
+
+    for (const { control, screen, target, prepare } of CONTENT_CONTROLS) {
+      test(`${control} on ${screen} changes visibly on hover`, async ({ page, isMobile }) => {
+        test.skip(isMobile, 'Phones have no hover.');
+        await page.goto(`/${STORE_ID}/${screen}`);
+        await prepare?.(page);
+
+        const states = await pointerStates(target(page));
+
+        expect(states.rest.cursor).toBe('pointer');
+        expect(states.hover).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+      });
+
+      test(`${control} on ${screen} changes visibly when pressed`, async ({ page }) => {
+        await page.goto(`/${STORE_ID}/${screen}`);
+        await prepare?.(page);
+
+        const states = await pointerStates(target(page));
+
+        expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+      });
+    }
+  });
+}
 
 test('buttons and disclosure summaries show the pointer cursor', async ({ page }) => {
   await page.goto(`/${STORE_ID}/visits`);
