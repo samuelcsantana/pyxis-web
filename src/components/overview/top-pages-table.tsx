@@ -28,7 +28,10 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTab
         <p className="text-[13px] text-muted">No page views in this period.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-[13px] tabular-nums">
+          <table
+            aria-labelledby="top-pages-heading"
+            className="w-full border-collapse text-[13px] tabular-nums"
+          >
             <thead>
               <tr>
                 <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
