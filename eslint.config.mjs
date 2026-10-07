@@ -41,6 +41,26 @@ export default defineConfig(
     },
   },
   {
+    files: ['src/components/**/*.{ts,tsx}'],
+    ignores: ['src/components/**/*.test.tsx', 'src/components/**/*.stories.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'zod', message: 'Components reach the browser: validate on the server.' },
+          ],
+          patterns: [
+            {
+              group: ['@/domain/*.schema'],
+              message: 'Components reach the browser: import the pure domain module instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.mjs'],
     extends: [tseslint.configs.disableTypeChecked],
   },
