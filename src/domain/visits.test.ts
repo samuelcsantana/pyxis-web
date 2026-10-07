@@ -252,7 +252,7 @@ describe('visitRows', () => {
       pageViews: '3',
       highlights: ['Calculator result shown', 'Cta clicked'],
       failedRequests: 1,
-      device: 'Mobile · Safari · iOS',
+      device: 'Mobile · Safari · iOS · Brazil',
       channel: 'Paid',
       account: { userId: 'u_check_visits', shown: 'u_check_…' },
     });
@@ -261,6 +261,7 @@ describe('visitRows', () => {
       duration: '0 s',
       entryPath: null,
       pageViews: '0',
+      device: 'Desktop · Chrome · Windows',
       channel: null,
       account: null,
     });
