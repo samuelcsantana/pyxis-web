@@ -3,6 +3,7 @@ import { fn } from 'storybook/test';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
+import { NoConversionEvent } from './no-conversion-event';
 
 const meta = {
   title: 'States/Panels',
@@ -39,7 +40,16 @@ export const Demo: Story = {
   render: () => <DemoBanner />,
 };
 
+export const NoConversionEventSet: Story = {
+  render: () => <NoConversionEvent />,
+};
+
 export const DarkTheme: Story = {
-  render: () => <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />,
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />
+      <NoConversionEvent />
+    </div>
+  ),
   globals: { theme: 'dark' },
 };

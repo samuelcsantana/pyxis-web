@@ -4,6 +4,7 @@ import { ShareDonut } from '@/components/devices/share-donut';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
   browserLabel,
@@ -36,6 +37,7 @@ interface DevicesReportViewProps {
 
 function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes);
+  const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
     <>
       <div className="grid gap-3.5 sm:grid-cols-[repeat(auto-fit,minmax(18.75rem,1fr))] sm:gap-4">
@@ -51,10 +53,11 @@ function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) 
           rows={shareRows(report.operatingSystems, operatingSystemLabel)}
         />
       </div>
-      <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">
-        {conversionEvent === null || conversions.length === 0 ? null : (
+      {conversionEvent === null ? <NoConversionEvent /> : null}
+      <div className={`grid gap-3.5 sm:gap-4 ${showsConversions ? 'xl:grid-cols-2' : ''}`}>
+        {showsConversions ? (
           <DeviceConversionList conversions={conversions} conversionEvent={conversionEvent} />
-        )}
+        ) : null}
         <CountriesTable rows={shareRows(report.countries, countryLabel)} />
       </div>
       <p className="text-xs leading-[18px] text-muted">
