@@ -49,6 +49,28 @@ describe('KpiGrid', () => {
     expect(screen.getByText('−10%')).toHaveClass('text-bad');
     expect(screen.getByText('0 pt')).toHaveClass('text-muted');
   });
+
+  it('says in words, not only in colour, whether a change is good news', () => {
+    render(
+      <KpiGrid
+        kpis={[
+          { ...kpi('visits'), change: '+10% (+40)', tone: 'good' },
+          { ...kpi('write-errors'), change: '+2 pt', tone: 'bad' },
+          { ...kpi('identified-users'), change: 'no change', tone: 'neutral' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('region', { name: 'Visits' })).toHaveTextContent(
+      '+10% (+40) change, better than the previous period',
+    );
+    expect(screen.getByRole('region', { name: 'Write error rate' })).toHaveTextContent(
+      '+2 pt change, worse than the previous period',
+    );
+    const users = screen.getByRole('region', { name: 'Identified users' });
+    expect(users).toHaveTextContent('no change');
+    expect(users).not.toHaveTextContent('no change change');
+  });
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {

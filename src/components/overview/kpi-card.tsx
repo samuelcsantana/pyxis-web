@@ -1,5 +1,5 @@
 import type { Tone } from '@/domain/metrics';
-import type { KpiView } from '@/domain/overview';
+import { type KpiView, spokenChange } from '@/domain/overview';
 import { Sparkline } from '@/components/ui/sparkline';
 
 export type KpiColor = 'sky' | 'violet' | 'accent' | 'bad';
@@ -41,7 +41,7 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
         className={`justify-self-start rounded-pill px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:col-start-2 sm:row-start-1 sm:justify-self-end sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
       >
         {kpi.change}
-        <span className="sr-only"> change</span>
+        <span className="sr-only">{spokenChange(kpi.change, kpi.tone)}</span>
       </p>
       <Sparkline
         values={kpi.series}

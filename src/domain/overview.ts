@@ -3,6 +3,7 @@ import {
   formatCount,
   formatPercent,
   formatQuantity,
+  NO_CHANGE,
   pointChange,
   rate,
   type Tone,
@@ -118,6 +119,16 @@ function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): Kpi
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
     series: writeErrors.daily.map((day) => failureRate(day) ?? 0),
   };
+}
+
+const SPOKEN_TONES: Readonly<Record<Tone, string>> = {
+  good: ', better than the previous period',
+  bad: ', worse than the previous period',
+  neutral: '',
+};
+
+export function spokenChange(change: string, tone: Tone): string {
+  return change === NO_CHANGE ? '' : ` change${SPOKEN_TONES[tone]}`;
 }
 
 export interface ComparedPeriod {
