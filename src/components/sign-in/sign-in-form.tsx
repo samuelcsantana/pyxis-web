@@ -15,6 +15,7 @@ export const SIGN_IN_CODE_LENGTH = 6;
 const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
+const HOME_PATH = '/';
 
 type Step = 'email' | 'code';
 
@@ -22,6 +23,7 @@ export interface SignInFormProps {
   readonly authService?: IAuthService;
   readonly sessionExpired?: boolean;
   readonly demoCode?: string;
+  readonly returnPath?: string;
 }
 
 export function signInErrorMessage(error: unknown): string {
@@ -51,7 +53,12 @@ function DemoHint({ code, children }: DemoHintProps) {
   );
 }
 
-export function SignInForm({ authService, sessionExpired = false, demoCode }: SignInFormProps) {
+export function SignInForm({
+  authService,
+  sessionExpired = false,
+  demoCode,
+  returnPath = HOME_PATH,
+}: SignInFormProps) {
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
   const [step, setStep] = useState<Step>('email');
@@ -109,7 +116,7 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
     request.current = defer(() => service.verifyCode(email.trim(), code))
       .pipe(
         tap(() => {
-          router.replace('/');
+          router.replace(returnPath);
           router.refresh();
         }),
         catchToState(setError),

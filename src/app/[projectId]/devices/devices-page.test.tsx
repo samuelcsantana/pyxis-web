@@ -14,6 +14,7 @@ const state = vi.hoisted<{ admin: unknown; devices: IDevicesService['devices'] }
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+  headers: () => Promise.resolve(new Headers()),
 }));
 
 vi.mock('next/navigation', () => ({

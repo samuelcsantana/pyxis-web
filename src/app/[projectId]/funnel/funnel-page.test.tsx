@@ -15,6 +15,7 @@ const state = vi.hoisted<{ admin: unknown; funnel: IFunnelService['funnel'] }>((
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+  headers: () => Promise.resolve(new Headers()),
 }));
 
 vi.mock('next/navigation', () => ({

@@ -7,7 +7,7 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
-import { linkWith, periodParameters, screenHref, screenOf } from './screens';
+import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from './screens';
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
@@ -58,6 +58,30 @@ describe('screens helpers', () => {
     expect(linkWith('/p1/timeline?range=7d', { user: 'u_7f3a' })).toBe(
       '/p1/timeline?range=7d&user=u_7f3a',
     );
+  });
+
+  it('accept as a return path only a screen of this site, with its query', () => {
+    expect(returnPathOf('/p1/requests?show=failing')).toBe('/p1/requests?show=failing');
+    expect(returnPathOf('/p1/overview')).toBe('/p1/overview');
+  });
+
+  it('refuse any other return path', () => {
+    for (const value of [
+      null,
+      undefined,
+      '',
+      'https://evil.example/p1/overview',
+      'javascript:alert(1)',
+      '//evil.example/p1/overview',
+      '/\\evil.example/overview',
+      '/.//overview',
+      '/',
+      '/sign-in',
+      '/p1/unknown',
+      '/p1/overview/extra',
+    ]) {
+      expect(returnPathOf(value)).toBeUndefined();
+    }
   });
 
   it('read the screen of a path', () => {

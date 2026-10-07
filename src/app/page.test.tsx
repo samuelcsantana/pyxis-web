@@ -9,6 +9,10 @@ const state = vi.hoisted<{ admin: unknown; failure: Error | undefined }>(() => (
   failure: undefined,
 }));
 
+vi.mock('next/headers', () => ({
+  headers: () => Promise.resolve(new Headers()),
+}));
+
 vi.mock('next/navigation', () => ({
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
