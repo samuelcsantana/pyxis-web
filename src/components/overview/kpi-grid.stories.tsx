@@ -78,6 +78,30 @@ export const NothingToCompare: Story = {
   },
 };
 
+export const SmallNumbers: Story = {
+  args: {
+    kpis: overviewKpis(
+      {
+        ...STORY_REPORT,
+        kpis: {
+          visits: { current: 5, previous: 4, daily: [2, 3] },
+          identifiedUsers: { current: 1, previous: 2, daily: [0, 1] },
+          conversions: { current: 1, previous: 0, daily: [0, 1] },
+          writeErrors: {
+            current: { failed: 1, total: 6 },
+            previous: { failed: 0, total: 5 },
+            daily: [
+              { failed: 0, total: 2 },
+              { failed: 1, total: 4 },
+            ],
+          },
+        },
+      },
+      { days: 2, endsToday: false },
+    ),
+  },
+};
+
 export const TodayUntilNow: Story = {
   args: { kpis: overviewKpis(demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO), TODAY) },
 };
