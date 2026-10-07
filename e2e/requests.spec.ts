@@ -101,3 +101,23 @@ test('opens the visit of a recent failure in the timeline', async ({ page }) => 
     'order_number_in_use',
   );
 });
+
+test('reopens the details of a route after Back from one of its visits', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/requests?range=7d`);
+  await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+  await expect(page).toHaveURL(/\?range=7d&route=POST\+%2Forders$/);
+
+  await page
+    .getByRole('dialog', { name: 'POST /orders' })
+    .getByRole('link', { name: /^Open visit / })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/timeline\?range=7d&visit=/);
+  await page.goBack();
+
+  const details = page.getByRole('dialog', { name: 'POST /orders' });
+  await expect(details).toBeVisible();
+  await details.getByRole('button', { name: 'Close' }).click();
+  await expect(page.getByRole('button', { name: 'POST /orders, show details' })).toBeFocused();
+  await expect(page).toHaveURL(/\/requests\?range=7d$/);
+});

@@ -1,6 +1,7 @@
 'use client';
 
-import { type KeyboardEvent, type MouseEvent, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
 import type { RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
@@ -19,6 +20,17 @@ export interface RequestsTableProps {
 }
 
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums';
+export const ROUTE_PARAMETER = 'route';
+
+function showRouteInAddress(route: string | null) {
+  const url = new URL(window.location.href);
+  if (route === null) {
+    url.searchParams.delete(ROUTE_PARAMETER);
+  } else {
+    url.searchParams.set(ROUTE_PARAMETER, route);
+  }
+  window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}`);
+}
 
 export function RequestsTable({
   rows,
@@ -28,19 +40,39 @@ export function RequestsTable({
   emptyMessage,
 }: RequestsTableProps) {
   const dialogRef = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
-  const openerRef = useRef<HTMLButtonElement>(null as unknown as HTMLButtonElement);
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const openers = useRef(new Map<string, HTMLButtonElement>());
+  const routeInAddress = useSearchParams().get(ROUTE_PARAMETER);
+  const [selectedKey, setSelectedKey] = useState(routeInAddress);
+  const shownKey = useRef(routeInAddress ?? '');
   const selected = rows.find((row) => row.key === selectedKey);
+  const reopens = useRef(selected !== undefined);
 
-  const open = (key: string, opener: HTMLButtonElement) => {
-    openerRef.current = opener;
+  useEffect(() => {
+    if (reopens.current) {
+      reopens.current = false;
+      dialogRef.current.showModal();
+    }
+  }, []);
+
+  const rememberOpener = (key: string) => (button: HTMLButtonElement | null) => {
+    if (button === null) {
+      openers.current.delete(key);
+    } else {
+      openers.current.set(key, button);
+    }
+  };
+
+  const open = (key: string) => {
+    shownKey.current = key;
     setSelectedKey(key);
+    showRouteInAddress(key);
     dialogRef.current.showModal();
   };
 
   const closed = () => {
     setSelectedKey(null);
-    openerRef.current.focus();
+    showRouteInAddress(null);
+    openers.current.get(shownKey.current)?.focus();
   };
 
   const closeOnBackdrop = (event: MouseEvent<HTMLDialogElement>) => {
@@ -107,10 +139,11 @@ export function RequestsTable({
               <tr key={row.key} className={row.key === selectedKey ? 'bg-soft' : undefined}>
                 <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
                   <button
+                    ref={rememberOpener(row.key)}
                     type="button"
                     aria-label={`${row.key}, show details`}
-                    onClick={(event) => {
-                      open(row.key, event.currentTarget);
+                    onClick={() => {
+                      open(row.key);
                     }}
                     className={`flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} sm:flex-row sm:items-center sm:gap-2.5`}
                   >

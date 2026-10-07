@@ -177,7 +177,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries                              |
 | `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion                         |
 | `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
-| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them                                 |
+| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
 | `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
 | `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
 | `/[projectId]/visits`      | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
