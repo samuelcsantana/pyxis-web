@@ -26,8 +26,7 @@ export function ErrorPanel({ detail, onRetry }: ErrorPanelProps) {
       </span>
       <h2 className="text-lg font-semibold">Could not load this data</h2>
       <p className="text-sm leading-5 text-muted">
-        The request to the Pyxis API failed. Nothing was lost: your events are still being
-        collected.
+        The dashboard could not read this data. Try again in a moment.
       </p>
       {detail === undefined ? null : (
         <p className="rounded-control bg-soft px-2.5 py-2 font-mono text-xs text-muted">{detail}</p>
