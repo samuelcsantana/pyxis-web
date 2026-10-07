@@ -1,9 +1,11 @@
 export type Rgb = readonly [number, number, number];
+export type Rgba = readonly [number, number, number, number];
 
 export const MIN_NON_TEXT_CONTRAST = 3;
 
 const HEX_COLOR = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i;
 const CHANNEL_MAX = 255;
+const WHITE: Rgb = [CHANNEL_MAX, CHANNEL_MAX, CHANNEL_MAX];
 const LINEAR_THRESHOLD = 0.04045;
 const LINEAR_SLOPE = 12.92;
 const GAMMA_OFFSET = 0.055;
@@ -21,6 +23,17 @@ export function hexToRgb(hex: string): Rgb {
   }
   const [, red = '', green = '', blue = ''] = match;
   return [Number.parseInt(red, 16), Number.parseInt(green, 16), Number.parseInt(blue, 16)];
+}
+
+function over(top: Rgba, bottom: Rgb): Rgb {
+  const [red, green, blue, alpha] = top;
+  const opacity = alpha / CHANNEL_MAX;
+  const blend = (front: number, back: number) => front * opacity + back * (1 - opacity);
+  return [blend(red, bottom[0]), blend(green, bottom[1]), blend(blue, bottom[2])];
+}
+
+export function flatten(layersFromTop: readonly Rgba[]): Rgb {
+  return layersFromTop.reduceRight<Rgb>((below, layer) => over(layer, below), WHITE);
 }
 
 function linearChannel(channel: number): number {
