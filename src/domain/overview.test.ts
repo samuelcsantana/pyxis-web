@@ -8,6 +8,7 @@ import {
   type OverviewWire,
   previousPeriodNote,
   comparesUnfinishedDayWithWholeOne,
+  spokenChange,
 } from './overview';
 import { overviewResponseSchema } from './overview.schema';
 
@@ -159,6 +160,18 @@ describe('previousPeriodNote', () => {
   it('keeps the plain note for a range that is over, whatever the API says', () => {
     expect(previousPeriodNote(UNKNOWN, { ...ENDED, days: 7 })).toBe('vs. previous 7 days');
     expect(previousPeriodNote(UNKNOWN, { ...ENDED, days: 1 })).toBe('vs. the day before');
+  });
+});
+
+describe('spokenChange', () => {
+  it('tells a screen reader whether the change is good news, not only the colour', () => {
+    expect(spokenChange('+12.4% (+525)', 'good')).toBe(' change, better than the previous period');
+    expect(spokenChange('+2 pt', 'bad')).toBe(' change, worse than the previous period');
+    expect(spokenChange('+25% (+1)', 'neutral')).toBe(' change');
+  });
+
+  it('adds nothing to "no change"', () => {
+    expect(spokenChange('no change', 'neutral')).toBe('');
   });
 });
 
