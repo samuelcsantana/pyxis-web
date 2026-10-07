@@ -82,6 +82,9 @@ describe('FeaturesPage', () => {
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Features' })).toBeInTheDocument();
     expect(screen.getByRole('table', { name: 'Most used events' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Properties of Calculator result shown' }),
+    ).toHaveAttribute('aria-expanded', 'false');
     expect(screen.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Screens' })).toHaveAttribute(
       'href',
@@ -98,6 +101,7 @@ describe('FeaturesPage', () => {
 
     expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
     expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.queryByRole('button', { name: /^Properties of/ })).toBeNull();
     expect(screen.getByRole('searchbox', { name: 'Search screens' })).toHaveValue('orders');
     expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
       'href',

@@ -17,6 +17,7 @@ import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createFeaturesService } from '@/services/features/features-service.factory';
+import { loadPropertyBreakdown } from './actions';
 
 export const metadata: Metadata = { title: 'Features · Pyxis' };
 
@@ -73,10 +74,20 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
             clearHref={kindHref(kind)}
           />
         </div>
-        <FeatureTable kind={kind} rows={featureRows(report.items, kind, query)} query={query} />
+        <FeatureTable
+          kind={kind}
+          rows={featureRows(report.items, kind, query)}
+          query={query}
+          loadProperties={
+            kind === 'events'
+              ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
+              : undefined
+          }
+        />
         <p className="text-xs leading-[18px] text-muted">
-          Events are sent by the site with the Pyxis SDK. Screens are page views grouped by path
-          template, so /orders/8213 and /orders/8214 count as /orders/:id.
+          Events are sent by the site with the Pyxis SDK; open one to see how its property values
+          break down. Screens are page views grouped by path template, so /orders/8213 and
+          /orders/8214 count as /orders/:id.
         </p>
       </main>
     </>
