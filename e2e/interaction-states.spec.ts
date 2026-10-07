@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
+import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -163,4 +164,13 @@ test('the menu button changes visibly when pressed on a phone', async ({ page, i
   const states = await pointerStates(page.getByRole('button', { name: 'Open menu' }));
 
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+});
+
+test('buttons and disclosure summaries show the pointer cursor', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/visits`);
+  const applyFilters = await readPaint(page.getByRole('button', { name: 'Apply filters' }));
+  const custom = await readPaint(page.locator('summary').filter({ hasText: 'Custom' }));
+
+  expect(applyFilters.cursor).toBe('pointer');
+  expect(custom.cursor).toBe('pointer');
 });

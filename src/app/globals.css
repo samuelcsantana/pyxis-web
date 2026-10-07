@@ -143,6 +143,14 @@
   --radius-pill: 999px;
 }
 
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-ink);

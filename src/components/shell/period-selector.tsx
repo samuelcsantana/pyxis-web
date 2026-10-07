@@ -63,7 +63,7 @@ export function PeriodSelector({
       </nav>
       <details className="group relative max-sm:open:basis-full">
         <summary
-          className={`${OPTION_CLASS} w-fit cursor-pointer list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SELECTED_CLASS : `bg-soft ${IDLE_CLASS}`}`}
+          className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SELECTED_CLASS : `bg-soft ${IDLE_CLASS}`}`}
         >
           Custom
         </summary>

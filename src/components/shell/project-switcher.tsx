@@ -31,7 +31,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
   return (
     <details onClick={closeAfterChoice} className="group relative">
       <summary
-        className={`flex w-full cursor-pointer list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
+        className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
         <span className="sr-only">Switch project. Current project: </span>
         <span
