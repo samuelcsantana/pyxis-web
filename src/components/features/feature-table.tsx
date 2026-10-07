@@ -1,15 +1,7 @@
 import type { FeatureKind, FeatureRow } from '@/domain/features';
-import { Sparkline } from '@/components/ui/sparkline';
-import {
-  BAR_FILL,
-  BAR_TRACK,
-  BODY_CELL,
-  HEADER_CELL,
-  PANEL,
-  PANEL_TITLE,
-} from '@/components/ui/panel-classes';
-
-const TREND_BOX = { width: 96, height: 28, inset: 3 } as const;
+import { HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
+import { FeatureRowCells } from './feature-row-cells';
 
 const TITLES: Readonly<Record<FeatureKind, string>> = {
   events: 'Most used events',
@@ -30,13 +22,33 @@ export interface FeatureTableProps {
   readonly kind: FeatureKind;
   readonly rows: readonly FeatureRow[];
   readonly query: string;
+  readonly loadProperties?: LoadProperties;
 }
 
 function emptyMessage(kind: FeatureKind, query: string): string {
   return query === '' ? NOTHING_YET[kind] : `Nothing matches “${query}”.`;
 }
 
-export function FeatureTable({ kind, rows, query }: FeatureTableProps) {
+function TableRow({
+  kind,
+  row,
+  loadProperties,
+}: {
+  readonly kind: FeatureKind;
+  readonly row: FeatureRow;
+  readonly loadProperties: LoadProperties | undefined;
+}) {
+  if (kind === 'events' && loadProperties !== undefined) {
+    return <ExpandableFeatureRow row={row} loadProperties={loadProperties} />;
+  }
+  return (
+    <tr>
+      <FeatureRowCells kind={kind} row={row} />
+    </tr>
+  );
+}
+
+export function FeatureTable({ kind, rows, query, loadProperties }: FeatureTableProps) {
   return (
     <section aria-labelledby="features-heading" className={PANEL}>
       <h2 id="features-heading" className={PANEL_TITLE}>
@@ -70,41 +82,7 @@ export function FeatureTable({ kind, rows, query }: FeatureTableProps) {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.name}>
-                <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
-                  <span className="flex min-w-0 flex-col">
-                    <span className={kind === 'screens' ? 'font-mono text-xs wrap-anywhere' : ''}>
-                      {row.label}
-                    </span>
-                    {kind === 'events' ? (
-                      <span className="font-mono text-xs font-normal text-muted wrap-anywhere">
-                        {row.name}
-                      </span>
-                    ) : null}
-                  </span>
-                </th>
-                <td className={`${BODY_CELL} text-right font-semibold`}>{row.count}</td>
-                <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>
-                  {row.visits}
-                </td>
-                <td className={`${BODY_CELL} hidden md:table-cell`}>
-                  <Sparkline
-                    values={row.daily}
-                    box={TREND_BOX}
-                    width={TREND_BOX.width}
-                    strokeClass="stroke-violet"
-                    strokeWidth={1.8}
-                  />
-                </td>
-                <td className={`${BODY_CELL} pr-0`}>
-                  <span className="flex items-center justify-end gap-2.5">
-                    <span aria-hidden="true" className={`${BAR_TRACK} hidden grow sm:block`}>
-                      <span className={`${BAR_FILL} bg-violet`} style={{ width: row.barWidth }} />
-                    </span>
-                    <span className="w-11 text-right text-xs text-muted">{row.share}</span>
-                  </span>
-                </td>
-              </tr>
+              <TableRow key={row.name} kind={kind} row={row} loadProperties={loadProperties} />
             ))}
           </tbody>
         </table>
