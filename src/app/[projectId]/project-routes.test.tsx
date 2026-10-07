@@ -147,6 +147,18 @@ describe('OverviewPage', () => {
     expect(screen.getByRole('region', { name: 'Top events' })).toHaveTextContent(
       'Calculator result shown',
     );
+    expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
+  });
+
+  it('says why conversions are missing when the project has no conversion event', async () => {
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
+    };
+
+    render(await renderOverview());
+
+    expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
   });
 
   it('shows the figures of a single day instead of a chart of one point', async () => {

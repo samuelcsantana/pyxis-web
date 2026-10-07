@@ -84,6 +84,9 @@ describe('DevicesPage', () => {
     }
     expect(screen.getByRole('heading', { name: 'Conversion by device' })).toBeInTheDocument();
     expect(screen.getByText('Brazil')).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).toHaveClass(
+      'xl:grid-cols-2',
+    );
   });
 
   it('leaves conversion by device out for a project without a conversion event', async () => {
@@ -91,6 +94,10 @@ describe('DevicesPage', () => {
 
     expect(screen.getByRole('table', { name: 'Device type' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
+    expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).not.toHaveClass(
+      'xl:grid-cols-2',
+    );
   });
 
   it('leaves conversion by device out when the API counted none', async () => {
@@ -107,6 +114,10 @@ describe('DevicesPage', () => {
     render(await renderDevices('p-store'));
 
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).not.toHaveClass(
+      'xl:grid-cols-2',
+    );
   });
 
   it('shows how to install the SDK when nobody visited in the period', async () => {

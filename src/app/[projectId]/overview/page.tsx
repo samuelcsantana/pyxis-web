@@ -7,6 +7,7 @@ import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
 import {
@@ -33,16 +34,24 @@ export interface OverviewPageProps {
 
 interface OverviewReportViewProps {
   readonly report: OverviewReport;
+  readonly conversionEvent: string | null;
   readonly period: Period;
   readonly today: string;
   readonly visitsHref: (filter: Readonly<Record<string, string>>) => string;
 }
 
-function OverviewReportView({ report, period, today, visitsHref }: OverviewReportViewProps) {
+function OverviewReportView({
+  report,
+  conversionEvent,
+  period,
+  today,
+  visitsHref,
+}: OverviewReportViewProps) {
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return (
     <>
       <KpiGrid kpis={overviewKpis(report, compared)} />
+      {conversionEvent === null ? <NoConversionEvent /> : null}
       {report.days.length === 1 ? (
         <DayActivityFigures days={report.days} periodLabel={describePeriod(period)} />
       ) : (
@@ -85,6 +94,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         {hasActivity(report) ? (
           <OverviewReportView
             report={report}
+            conversionEvent={project.conversionEvent}
             period={period}
             today={today}
             visitsHref={(filter) =>
