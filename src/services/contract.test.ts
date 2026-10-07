@@ -19,6 +19,7 @@ import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
+const DURING_THE_LAST_DAY = new Date('2026-10-05T13:03:00.000Z');
 
 function contractSchema(name: string) {
   const ajv = new Ajv2020({ strict: false, allErrors: true });
@@ -55,8 +56,10 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('OverviewReport');
 
     for (const project of DEMO_PROJECTS) {
-      const wire = demoOverviewWire(project.id, RANGE, NOW);
-      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      for (const now of [NOW, DURING_THE_LAST_DAY]) {
+        const wire = demoOverviewWire(project.id, RANGE, now);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
     }
   });
 

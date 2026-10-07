@@ -46,6 +46,55 @@ describe('overviewResponseSchema', () => {
     expect(parsed.topPages[0]?.path).toBe('/');
     expect(parsed.topEvents[0]?.name).toBe('cta_clicked');
   });
+
+  it('knows nothing of the comparison when the API does not say', () => {
+    const parsed = report();
+
+    expect(parsed.comparison).toEqual({ kind: 'unknown' });
+    expect(parsed.previousDays).toBeNull();
+  });
+
+  it('reads whole days from a null cutoff', () => {
+    expect(report({ ...WIRE, comparison_cutoff: null }).comparison).toEqual({
+      kind: 'whole-days',
+    });
+  });
+
+  it('keeps the hours and minutes of the local time the previous period stopped at', () => {
+    expect(report({ ...WIRE, comparison_cutoff: '10:03:27.250' }).comparison).toEqual({
+      kind: 'same-time',
+      until: '10:03',
+    });
+  });
+
+  it('maps the previous days to the dashboard names', () => {
+    const parsed = report({
+      ...WIRE,
+      previous_days: [
+        {
+          date: '2026-10-03',
+          page_views: 170,
+          events: 90,
+          visits: 2100,
+          identified_users: 200,
+          conversions: null,
+          write_errors: { failed: 2, total: 40 },
+        },
+      ],
+    });
+
+    expect(parsed.previousDays).toEqual([
+      {
+        date: '2026-10-03',
+        pageViews: 170,
+        events: 90,
+        visits: 2100,
+        identifiedUsers: 200,
+        conversions: null,
+        writeErrors: { failed: 2, total: 40 },
+      },
+    ]);
+  });
 });
 
 describe('hasActivity', () => {

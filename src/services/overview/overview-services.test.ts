@@ -82,6 +82,41 @@ describe('MockOverviewService', () => {
     expect(day.days[0]).toEqual(week.days.at(-1));
   });
 
+  it('says the local time a range that ends today stops at, in the project zone', () => {
+    const tenInSaoPaulo = new Date('2026-10-05T13:03:27.250Z');
+
+    expect(demoOverviewWire(DEMO_STORE.id, RANGE, tenInSaoPaulo).comparison_cutoff).toBe(
+      '10:03:27.250',
+    );
+    expect(demoOverviewWire(DEMO_DOCS.id, RANGE, tenInSaoPaulo).comparison_cutoff).toBe(
+      '14:03:27.250',
+    );
+    expect(demoOverviewWire(DEMO_STORE.id, RANGE, NOW).comparison_cutoff).toBe('23:30:00.000');
+    expect(
+      demoOverviewWire(DEMO_STORE.id, RANGE, new Date('2026-10-06T15:00:00.000Z'))
+        .comparison_cutoff,
+    ).toBeNull();
+  });
+
+  it('sends the previous period day by day, without conversions when the project has none', () => {
+    const store = demoOverviewWire(DEMO_STORE.id, RANGE, NOW);
+    const docs = demoOverviewWire(DEMO_DOCS.id, RANGE, NOW);
+
+    expect(store.previous_days?.map((day) => day.date)).toEqual([
+      '2026-09-22',
+      '2026-09-23',
+      '2026-09-24',
+      '2026-09-25',
+      '2026-09-26',
+      '2026-09-27',
+      '2026-09-28',
+    ]);
+    expect(store.previous_days?.reduce((sum, day) => sum + day.visits, 0)).toBe(
+      store.kpis.visits.previous,
+    );
+    expect(docs.previous_days?.every((day) => day.conversions === null)).toBe(true);
+  });
+
   it('has no conversions for a project without a conversion event', async () => {
     const report = await new MockOverviewService().overview(DEMO_DOCS.id, RANGE);
 

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { comparisonOf } from './overview';
 
 const kpiSchema = z.object({
   current: z.number(),
@@ -7,6 +8,16 @@ const kpiSchema = z.object({
 });
 
 const failureCountSchema = z.object({ failed: z.number(), total: z.number() });
+
+const previousDaySchema = z.object({
+  date: z.string(),
+  page_views: z.number(),
+  events: z.number(),
+  visits: z.number(),
+  identified_users: z.number(),
+  conversions: z.number().nullable(),
+  write_errors: failureCountSchema,
+});
 
 export const overviewResponseSchema = z
   .object({
@@ -23,6 +34,8 @@ export const overviewResponseSchema = z
     days: z.array(z.object({ date: z.string(), page_views: z.number(), events: z.number() })),
     top_pages: z.array(z.object({ path: z.string(), views: z.number(), visits: z.number() })),
     top_events: z.array(z.object({ name: z.string(), count: z.number(), visits: z.number() })),
+    comparison_cutoff: z.iso.time().nullable().optional(),
+    previous_days: z.array(previousDaySchema).optional(),
   })
   .transform((body) => ({
     kpis: {
@@ -38,6 +51,17 @@ export const overviewResponseSchema = z
     })),
     topPages: body.top_pages,
     topEvents: body.top_events,
+    comparison: comparisonOf(body.comparison_cutoff),
+    previousDays:
+      body.previous_days?.map((day) => ({
+        date: day.date,
+        pageViews: day.page_views,
+        events: day.events,
+        visits: day.visits,
+        identifiedUsers: day.identified_users,
+        conversions: day.conversions,
+        writeErrors: day.write_errors,
+      })) ?? null,
   }));
 
 export type OverviewReport = z.output<typeof overviewResponseSchema>;
