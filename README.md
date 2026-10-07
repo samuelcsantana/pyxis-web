@@ -67,8 +67,8 @@ Shipping now:
   on phones
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change against the previous period and a sparkline; page views and named events per day as a
-  chart or a table; the top pages and events. Every percentage sits next to the totals it comes
-  from, and a division by zero shows a dash, never `NaN%`
+  chart or a table; the top pages and events, each opening its visits. Every percentage sits
+  next to the totals it comes from, and a division by zero shows a dash, never `NaN%`
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
@@ -88,6 +88,11 @@ Shipping now:
   device, channel and length, every page view, event and request with its properties and status,
   and filters for page views, events, requests and errors; older visits load on demand, and a
   failed request in the Requests screen links to its visit
+- Visits: every visit of the period, newest first, with its start, length, entry page, page
+  count, first named events, failed requests, device, channel and account; filters for the pages
+  it viewed (up to three, `*` matching any characters), an event with an optional `key=value`
+  property, the channel, the device and identified or anonymous visitors, all kept in the URL;
+  each row opens its visit, and an identified one its person, in the Timeline
 - Loading, empty and error states shared by every screen; an empty period shows how to install
   the SDK
 - A demo mode with invented data and a visible banner when no API is configured, published as
@@ -149,17 +154,18 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 
 ### Routes
 
-| Route                      | What it shows                                                            |
-| -------------------------- | ------------------------------------------------------------------------ |
-| `/`                        | Opens the first project the admin may read, or explains there is none    |
-| `/sign-in`                 | Email, then code; `?expired=1` explains that the session ended           |
-| `/[projectId]/overview`    | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`     |
-| `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries      |
-| `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion |
-| `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name        |
-| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them         |
-| `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor       |
-| `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, and `?show=` to filter the items        |
+| Route                      | What it shows                                                                           |
+| -------------------------- | --------------------------------------------------------------------------------------- |
+| `/`                        | Opens the first project the admin may read, or explains there is none                   |
+| `/sign-in`                 | Email, then code; `?expired=1` explains that the session ended                          |
+| `/[projectId]/overview`    | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                    |
+| `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries                     |
+| `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion                |
+| `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                       |
+| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them                        |
+| `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                      |
+| `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, and `?show=` to filter the items                       |
+| `/[projectId]/visits`      | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=` |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.
@@ -215,7 +221,8 @@ src/
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, device and country labels, donuts,
 │                   channels and sources, feature ranking, search and property breakdowns,
-│                   routes and failures, funnel steps and counts, timeline items, errors
+│                   routes and failures, funnel steps and counts, timeline items, visit
+│                   filters and rows, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -261,6 +268,7 @@ docs/adr/           architecture decision records
 - [x] Requests
 - [x] Funnel
 - [x] Timeline
+- [x] Visits list, linked from the Overview
 - [x] Production domain
 - [x] Live demo with invented data
 - [x] Property breakdown of each event on Features
