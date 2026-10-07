@@ -1,34 +1,9 @@
-import { z } from 'zod';
 import { barWidth, formatCount, formatPercent, formatQuantity, NO_VALUE, rate } from './metrics';
+import type { PropertyBreakdownReport, PropertyBreakdownWire } from './property-breakdown.schema';
+
+export type { PropertyBreakdownReport, PropertyBreakdownWire };
 
 export const OTHER_VALUES_LABEL = 'Other values';
-
-export const propertyBreakdownResponseSchema = z
-  .object({
-    name: z.string(),
-    events: z.number(),
-    keys: z.array(
-      z.object({
-        key: z.string(),
-        events: z.number(),
-        values: z.array(z.object({ value: z.string(), count: z.number(), visits: z.number() })),
-        other_count: z.number(),
-      }),
-    ),
-  })
-  .transform((body) => ({
-    name: body.name,
-    events: body.events,
-    keys: body.keys.map((key) => ({
-      key: key.key,
-      events: key.events,
-      values: key.values,
-      otherCount: key.other_count,
-    })),
-  }));
-
-export type PropertyBreakdownReport = z.output<typeof propertyBreakdownResponseSchema>;
-export type PropertyBreakdownWire = z.input<typeof propertyBreakdownResponseSchema>;
 
 export interface PropertyValueRow {
   readonly value: string;

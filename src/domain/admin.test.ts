@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { emailInitial, findProject, meResponseSchema, projectInitials } from './admin';
+import { emailInitial, findProject, projectInitials } from './admin';
+import { meResponseSchema } from './admin.schema';
 
 const WIRE = {
   email: 'owner@demo-store.example',

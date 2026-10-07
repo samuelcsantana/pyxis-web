@@ -1,10 +1,10 @@
 import {
   type FunnelMode,
   type FunnelReport,
-  funnelResponseSchema,
   type FunnelStep,
   serializeSteps,
 } from '@/domain/funnel';
+import { funnelResponseSchema } from '@/domain/funnel.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IFunnelService } from './funnel-service.interface';

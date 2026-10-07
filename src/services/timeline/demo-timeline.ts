@@ -1,9 +1,5 @@
-import {
-  type Lookup,
-  type TimelineReport,
-  timelineResponseSchema,
-  type TimelineWire,
-} from '@/domain/timeline';
+import { type Lookup, type TimelineReport, type TimelineWire } from '@/domain/timeline';
+import { timelineResponseSchema } from '@/domain/timeline.schema';
 import { demoProjectOf } from '../demo/demo-projects';
 import { type DemoVisit, demoVisitWire } from '../demo/demo-visits';
 

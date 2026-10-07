@@ -1,4 +1,5 @@
-import { type RequestsReport, requestsResponseSchema } from '@/domain/requests';
+import { type RequestsReport } from '@/domain/requests';
+import { requestsResponseSchema } from '@/domain/requests.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IRequestsService } from './requests-service.interface';

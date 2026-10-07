@@ -1,4 +1,5 @@
-import { type Admin, meResponseSchema } from '@/domain/admin';
+import { type Admin } from '@/domain/admin';
+import { meResponseSchema } from '@/domain/admin.schema';
 import type { ApiReader } from '../api-reader';
 import type { IProjectsService } from './projects-service.interface';
 

@@ -17,10 +17,10 @@ import {
   funnelRows,
   type FunnelSearch,
   type FunnelStep,
-  funnelStepsOf,
   overallConversion,
   serializeSteps,
 } from '@/domain/funnel';
+import { funnelStepsOf } from '@/domain/funnel.schema';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';

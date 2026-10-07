@@ -1,5 +1,7 @@
-import { z } from 'zod';
 import { eventLabel, formatCount, formatPercent, formatQuantity, rate, barWidth } from './metrics';
+import type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire } from './funnel.schema';
+
+export type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire };
 
 export const EVENT_NAME_PATTERN = /^[a-z][a-z0-9_]{0,63}$/;
 export const MAX_PATH_LENGTH = 256;
@@ -9,39 +11,6 @@ export const FUNNEL_MODES = ['visit', 'user'] as const;
 export type FunnelMode = (typeof FUNNEL_MODES)[number];
 export const DEFAULT_FUNNEL_MODE: FunnelMode = 'visit';
 const CONTINUATION_WARNING = 0.5;
-
-export const funnelStepSchema = z.discriminatedUnion('type', [
-  z.strictObject({
-    type: z.literal('page'),
-    path: z.string().startsWith('/').max(MAX_PATH_LENGTH),
-  }),
-  z.strictObject({ type: z.literal('event'), name: z.string().regex(EVENT_NAME_PATTERN) }),
-]);
-export type FunnelStep = z.output<typeof funnelStepSchema>;
-export type FunnelStepType = FunnelStep['type'];
-
-export const funnelStepsSchema = z
-  .array(funnelStepSchema)
-  .min(MIN_FUNNEL_STEPS)
-  .max(MAX_FUNNEL_STEPS);
-
-const stepsParameterSchema = z
-  .string()
-  .transform((text, context) => {
-    try {
-      return JSON.parse(text) as unknown;
-    } catch {
-      context.addIssue({ code: 'custom', message: 'steps must be JSON' });
-      return z.NEVER;
-    }
-  })
-  .pipe(funnelStepsSchema);
-
-export const funnelResponseSchema = z.object({
-  steps: z.array(z.object({ count: z.number() })),
-});
-export type FunnelReport = z.output<typeof funnelResponseSchema>;
-export type FunnelWire = z.input<typeof funnelResponseSchema>;
 
 export interface FunnelSearch {
   readonly mode?: string | string[];
@@ -57,9 +26,8 @@ export function funnelModeOf(search: FunnelSearch): FunnelMode {
   return FUNNEL_MODES.find((candidate) => candidate === mode) ?? DEFAULT_FUNNEL_MODE;
 }
 
-export function funnelStepsOf(search: FunnelSearch): readonly FunnelStep[] | null {
-  const parsed = stepsParameterSchema.safeParse(single(search.steps));
-  return parsed.success ? parsed.data : null;
+export function stepsTextOf(search: FunnelSearch): string | undefined {
+  return single(search.steps);
 }
 
 export function serializeSteps(steps: readonly FunnelStep[]): string {

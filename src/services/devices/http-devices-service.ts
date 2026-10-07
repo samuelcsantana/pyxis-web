@@ -1,4 +1,5 @@
-import { type DevicesReport, devicesResponseSchema } from '@/domain/devices';
+import { type DevicesReport } from '@/domain/devices';
+import { devicesResponseSchema } from '@/domain/devices.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IDevicesService } from './devices-service.interface';

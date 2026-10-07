@@ -1,4 +1,5 @@
-import { type VisitFilters, type VisitsReport, visitsResponseSchema } from '@/domain/visits';
+import { type VisitFilters, type VisitsReport } from '@/domain/visits';
+import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IVisitsService } from './visits-service.interface';

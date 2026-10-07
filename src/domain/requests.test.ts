@@ -4,7 +4,6 @@ import {
   failingOnlyOf,
   failureCounts,
   formatDuration,
-  requestsResponseSchema,
   type RequestsWire,
   type RouteReport,
   routeRows,
@@ -15,6 +14,7 @@ import {
   visibleRoutes,
   writesFigure,
 } from './requests';
+import { requestsResponseSchema } from './requests.schema';
 
 const WIRE: RequestsWire = {
   routes: [

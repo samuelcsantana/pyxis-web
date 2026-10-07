@@ -1,24 +1,13 @@
-import { z } from 'zod';
 import { barWidth, eventLabel, formatCount, formatPercent, rate } from './metrics';
+import type { FeaturesReport, FeaturesWire } from './features.schema';
+
+export type { FeaturesReport, FeaturesWire };
 
 export const FEATURE_KINDS = ['events', 'screens'] as const;
 export type FeatureKind = (typeof FEATURE_KINDS)[number];
 export const DEFAULT_FEATURE_KIND: FeatureKind = 'events';
 export const MAX_SEARCH_LENGTH = 100;
 
-export const featuresResponseSchema = z.object({
-  items: z.array(
-    z.object({
-      name: z.string(),
-      count: z.number(),
-      visits: z.number(),
-      daily: z.array(z.number()),
-    }),
-  ),
-});
-
-export type FeaturesReport = z.output<typeof featuresResponseSchema>;
-export type FeaturesWire = z.input<typeof featuresResponseSchema>;
 export type Feature = FeaturesReport['items'][number];
 
 export interface FeatureSearch {

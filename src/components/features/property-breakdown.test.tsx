@@ -2,11 +2,8 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { featureRows } from '@/domain/features';
-import {
-  propertyBreakdownResponseSchema,
-  type PropertyKeyView,
-  propertyKeyViews,
-} from '@/domain/property-breakdown';
+import { type PropertyKeyView, propertyKeyViews } from '@/domain/property-breakdown';
+import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
 import { ExpandableFeatureRow } from './expandable-feature-row';
 import { FeatureTable } from './feature-table';
 import { PropertyBreakdown } from './property-breakdown';

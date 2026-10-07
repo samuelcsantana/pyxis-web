@@ -1,4 +1,5 @@
-import { type Lookup, type TimelineReport, timelineResponseSchema } from '@/domain/timeline';
+import { type Lookup, type TimelineReport } from '@/domain/timeline';
+import { timelineResponseSchema } from '@/domain/timeline.schema';
 import type { ApiReader } from '../api-reader';
 import type { ITimelineService } from './timeline-service.interface';
 

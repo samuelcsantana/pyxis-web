@@ -1,10 +1,10 @@
 import {
   type FunnelMode,
   type FunnelReport,
-  funnelResponseSchema,
   type FunnelStep,
   type FunnelWire,
 } from '@/domain/funnel';
+import { funnelResponseSchema } from '@/domain/funnel.schema';
 import type { DateRange } from '../date-range';
 import { demoFunnelCounts } from '../demo/demo-dataset';
 import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';

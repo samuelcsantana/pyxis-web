@@ -1,8 +1,7 @@
-import { type FeatureKind, type FeaturesReport, featuresResponseSchema } from '@/domain/features';
-import {
-  type PropertyBreakdownReport,
-  propertyBreakdownResponseSchema,
-} from '@/domain/property-breakdown';
+import { type FeatureKind, type FeaturesReport } from '@/domain/features';
+import { featuresResponseSchema } from '@/domain/features.schema';
+import { type PropertyBreakdownReport } from '@/domain/property-breakdown';
+import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IFeaturesService } from './features-service.interface';

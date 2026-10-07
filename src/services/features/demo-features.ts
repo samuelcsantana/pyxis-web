@@ -1,9 +1,5 @@
-import {
-  type FeatureKind,
-  type FeaturesReport,
-  featuresResponseSchema,
-  type FeaturesWire,
-} from '@/domain/features';
+import { type FeatureKind, type FeaturesReport, type FeaturesWire } from '@/domain/features';
+import { featuresResponseSchema } from '@/domain/features.schema';
 import type { DateRange } from '../date-range';
 import { demoEventTotals, demoPageTotals, type DemoTotal } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';

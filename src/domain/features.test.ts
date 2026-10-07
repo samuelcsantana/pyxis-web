@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-  featureKindOf,
-  featureLabel,
-  featureRows,
-  featuresResponseSchema,
-  searchQueryOf,
-} from './features';
+import { featureKindOf, featureLabel, featureRows, searchQueryOf } from './features';
+import { featuresResponseSchema } from './features.schema';
 
 const ITEMS = featuresResponseSchema.parse({
   items: [
