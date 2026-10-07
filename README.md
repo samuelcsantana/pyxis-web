@@ -97,7 +97,11 @@ Shipping now:
   the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
   of the framework's default
 - A demo mode with invented data and a visible banner when no API is configured, published as
-  the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API
+  the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
+  two imaginary products, a store and a documentation site, each drawn from one invented
+  dataset, so every screen gives the same visits, conversions, events and write errors for the
+  same period; the Funnel opens on an example funnel, and the banner links back to this
+  repository
 
 ## Architecture
 
