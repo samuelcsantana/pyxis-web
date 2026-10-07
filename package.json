@@ -16,6 +16,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "budget": "node scripts/check-bundle-budget.mts",
     "start": "next start",
     "typecheck": "tsc --noEmit && tsc -p scripts/tsconfig.json",
     "test": "vitest run",

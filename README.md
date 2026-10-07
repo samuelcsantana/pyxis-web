@@ -214,7 +214,8 @@ server.
 npm run test:cov        # unit tests in jsdom, 100% coverage required
 npm run test:e2e        # Playwright with axe, light and dark, desktop and phone, no sideways scroll
 npm run test:storybook  # every story in headless Chromium, axe violations fail the run
-npm run test:tooling    # the lint rule and the comment check
+npm run test:tooling    # the lint rule, the comment check and the bundle budget
+npm run budget          # after a build: first-load JavaScript of each route against its budget
 ```
 
 Coverage must stay at **100% of statements, branches, functions and lines** of `src/`; CI fails
@@ -227,6 +228,19 @@ below it. Excluded, and why:
 
 The root layout is covered too: its test calls the server component and checks the document it
 returns.
+
+### Performance budget
+
+The CI `build` job fails when a route's first-load JavaScript (every first-load chunk, gzip
+level 9, from `.next/diagnostics/route-bundle-stats.json`) goes over the budget of its class.
+Each budget is the size measured when it was set plus 5%, and is raised only in a pull request
+that says why:
+
+| Route class                                            | Budget (KiB gzip) |
+| ------------------------------------------------------ | ----------------- |
+| Sign-in, home and not-found pages                      | 152               |
+| Dashboard screens without a chart                      | 161               |
+| Dashboard screens with a chart (Overview, Acquisition) | 266               |
 
 ## Project structure
 
