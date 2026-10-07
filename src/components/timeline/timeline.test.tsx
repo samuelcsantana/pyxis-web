@@ -45,6 +45,38 @@ describe('TimelineSearch', () => {
   });
 });
 
+describe('TimelineSearch with an id it did not use', () => {
+  it('keeps the id, marks it invalid and says what an id looks like', async () => {
+    render(
+      <TimelineSearch
+        action="/p1/timeline"
+        lookup={null}
+        hint={null}
+        rejected={{
+          kind: 'visit',
+          value: 'not-a-visit-id',
+          hint: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+        }}
+      />,
+    );
+    const field = screen.getByRole('textbox', { name: 'Visit id' });
+
+    expect(field).toHaveValue('not-a-visit-id');
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveAccessibleDescription(
+      'Nothing was looked up. A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+    );
+
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Look up' }), 'user');
+
+    expect(screen.getByRole('textbox', { name: 'User id' })).toHaveAttribute(
+      'aria-invalid',
+      'false',
+    );
+    expect(screen.queryByText(/Nothing was looked up/)).not.toBeInTheDocument();
+  });
+});
+
 describe('TimelineFilters', () => {
   it('links every filter and marks the current one', () => {
     render(

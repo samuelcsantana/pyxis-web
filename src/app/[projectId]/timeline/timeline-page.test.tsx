@@ -153,6 +153,19 @@ describe('TimelinePage', () => {
     );
   });
 
+  it('keeps an id it could not use in the form, marked invalid', async () => {
+    render(await renderTimeline({ visit: 'not-a-visit-id' }));
+
+    expect(screen.getByRole('textbox', { name: 'Visit id' })).toHaveValue('not-a-visit-id');
+    expect(screen.getByRole('textbox', { name: 'Visit id' })).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Look up a person or a visit' }),
+    ).toBeInTheDocument();
+  });
+
   it('opens one visit, with nothing older to show', async () => {
     render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
 

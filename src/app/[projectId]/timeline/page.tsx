@@ -9,8 +9,10 @@ import { OlderVisits } from '@/components/timeline/older-visits';
 import { VisitCard } from '@/components/timeline/visit-card';
 import {
   type Lookup,
+  type RejectedLookup,
   lookupOf,
   lookupTitle,
+  rejectedLookupOf,
   TIMELINE_FILTERS,
   type TimelineFilter,
   timelineFilterOf,
@@ -34,6 +36,11 @@ export const generateMetadata = screenMetadata('Timeline');
 export interface TimelinePageProps {
   readonly params: Promise<{ readonly projectId: string }>;
   readonly searchParams: Promise<TimelineSearchParameters & PeriodSearch>;
+}
+
+function searchKey(lookup: Lookup | null, rejected: RejectedLookup | null): string {
+  const shown = lookup === null ? rejected : { kind: lookup.kind, value: lookup.id };
+  return shown === null ? 'none' : `${shown.kind}:${shown.value}`;
 }
 
 function lookupParameters(lookup: Lookup, filter: TimelineFilter): Record<string, string> {
@@ -98,6 +105,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
   const lookup = lookupOf(search);
+  const rejected = rejectedLookupOf(search);
   const filter = timelineFilterOf(search);
   const basePath = screenHref(project.id, 'timeline');
   const demoPerson = isDemoMode() ? demoPersonOf(project.id) : null;
@@ -115,9 +123,10 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
       />
       <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <TimelineSearch
-          key={lookup === null ? 'none' : `${lookup.kind}:${lookup.id}`}
+          key={searchKey(lookup, rejected)}
           action={basePath}
           lookup={lookup}
+          rejected={rejected}
           hint={demoPerson === null ? null : `Try ${demoPerson}`}
           keep={keptPeriod}
         />

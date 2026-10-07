@@ -4,6 +4,7 @@ import {
   isFailedRequest,
   itemKind,
   lookupOf,
+  rejectedLookupOf,
   lookupTitle,
   shortId,
   timelineFilterOf,
@@ -106,6 +107,27 @@ describe('lookupOf', () => {
     expect(lookupOf({ user: 'x'.repeat(65) })).toBeNull();
     expect(lookupOf({ user: ['a', 'b'] })).toBeNull();
     expect(lookupOf({})).toBeNull();
+  });
+});
+
+describe('rejectedLookupOf', () => {
+  it('keeps an id it did not use, with an example of what it expected', () => {
+    expect(rejectedLookupOf({ visit: 'not-a-visit-id' })).toEqual({
+      kind: 'visit',
+      value: 'not-a-visit-id',
+      hint: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+    });
+    expect(rejectedLookupOf({ user: ' ana@example.com ' })).toEqual({
+      kind: 'user',
+      value: 'ana@example.com',
+      hint: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
+    });
+  });
+
+  it('rejects nothing when an id was used or none was given', () => {
+    expect(rejectedLookupOf({ visit: 'v_3c07', user: 'u_7f3a' })).toBeNull();
+    expect(rejectedLookupOf({ user: '  ' })).toBeNull();
+    expect(rejectedLookupOf({})).toBeNull();
   });
 });
 
