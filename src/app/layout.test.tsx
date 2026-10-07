@@ -63,16 +63,24 @@ describe('RootLayout', () => {
     expect(metadata.description).toMatch(/no cookies/);
   });
 
-  it('lets search engines index the live demo', () => {
+  it('lets search engines index the live demo and names it in link previews', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    const metadata = generateMetadata();
 
-    expect(generateMetadata().robots).toBeNull();
+    expect(metadata.robots).toBeNull();
+    expect(metadata.openGraph).toMatchObject({ siteName: 'Pyxis', title: 'Pyxis live demo' });
+    expect(metadata.twitter).toMatchObject({
+      card: 'summary_large_image',
+      title: 'Pyxis live demo',
+    });
   });
 
   it('keeps a dashboard with a real API out of search engines', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    const metadata = generateMetadata();
 
-    expect(generateMetadata().robots).toEqual({ index: false, follow: false });
+    expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.openGraph).toMatchObject({ title: 'Pyxis' });
   });
 
   it('colours the browser bar with the chosen theme, or the system one', async () => {
