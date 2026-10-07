@@ -204,7 +204,7 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
             />
           </div>
           <p role="status" className="min-h-5 text-[13px] text-ok">
-            {codeSent ? 'Code sent.' : ''}
+            {codeSent && errorText === null ? 'Code sent.' : ''}
           </p>
           {errorText === null ? null : (
             <p
