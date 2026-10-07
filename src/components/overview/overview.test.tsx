@@ -143,7 +143,7 @@ describe('TopPagesTable', () => {
       />,
     );
 
-    const rows = screen.getAllByRole('row');
+    const rows = within(screen.getByRole('table', { name: 'Top pages' })).getAllByRole('row');
     expect(rows[1]).toHaveTextContent('/30020030%');
     expect(rows[2]).toHaveTextContent('/pricing1009010%');
   });
