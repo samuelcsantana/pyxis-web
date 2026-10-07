@@ -15,6 +15,7 @@ import type { KeptParameters } from '@/components/shell/period-selector';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
   BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
   BUTTON_STRONG,
   CONTROL_DISABLED,
   FOCUS_RING,
@@ -34,7 +35,7 @@ export interface FunnelEditorProps {
 }
 
 const ADD_STEP_ID = 'funnel-add-step';
-const BUTTON = `min-h-9 rounded-control border border-line bg-card px-2.5 text-[13px] text-ink hover:bg-soft ${FOCUS_RING} disabled:cursor-not-allowed disabled:opacity-50`;
+const BUTTON = `min-h-9 rounded-control px-2.5 text-[13px] ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
 const FIELD = `min-h-10 rounded-control border border-line bg-card px-2.5 text-sm text-ink ${FOCUS_RING} aria-invalid:border-bad`;
 
 function toStep(draft: DraftStep): FunnelStep {

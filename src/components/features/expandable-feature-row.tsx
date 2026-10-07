@@ -5,7 +5,7 @@ import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import type { FeatureRow } from '@/domain/features';
 import type { PropertyKeyView } from '@/domain/property-breakdown';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_ICON } from '@/components/ui/control-classes';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
 
@@ -71,7 +71,7 @@ export function ExpandableFeatureRow({ row, loadProperties }: ExpandableFeatureR
               aria-controls={panelId}
               aria-label={`Properties of ${row.label}`}
               onClick={toggle}
-              className={`grid size-7 shrink-0 place-items-center rounded-input border border-line bg-card text-muted hover:bg-soft hover:text-ink ${FOCUS_RING}`}
+              className={`size-7 shrink-0 rounded-input ${BUTTON_ICON}`}
             >
               <svg
                 aria-hidden="true"

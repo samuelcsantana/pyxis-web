@@ -4,7 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
-import { FOCUS_RING, NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import {
+  BUTTON_SECONDARY,
+  CONTROL_BUSY,
+  NAV_CONTROL,
+  NAV_ITEM_IDLE,
+} from '@/components/ui/control-classes';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 
@@ -23,7 +28,7 @@ const VARIANT_CLASSES = {
     error: 'text-nav-text',
   },
   page: {
-    button: `self-start border border-line bg-card text-ink hover:border-muted ${FOCUS_RING}`,
+    button: `self-start ${BUTTON_SECONDARY}`,
     icon: 'text-muted',
     error: 'text-bad',
   },
@@ -61,7 +66,7 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
         onClick={signOut}
         disabled={busy}
         aria-busy={busy}
-        className={`flex min-h-11 items-center gap-2.5 rounded-input px-3 text-sm disabled:cursor-wait ${classes.button}`}
+        className={`flex min-h-11 items-center gap-2.5 rounded-input px-3 text-sm ${CONTROL_BUSY} ${classes.button}`}
       >
         <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true" className={classes.icon}>
           <path

@@ -64,9 +64,10 @@ export const LoadingOlderVisits: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: 'Load older visits' }));
-    await expect(
-      await canvas.findByRole('button', { name: 'Loading older visits…' }),
-    ).toBeDisabled();
+    const loading = await canvas.findByRole('button', { name: 'Loading older visits…' });
+    await expect(loading).toBeDisabled();
+    await expect(getComputedStyle(loading).cursor).toBe('wait');
+    await expect(getComputedStyle(loading).opacity).toBe('1');
   },
 };
 

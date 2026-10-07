@@ -187,6 +187,16 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     target: (page) => page.getByRole('button', { name: 'Apply' }),
     prepare: editFunnelSteps,
   },
+  {
+    control: 'a secondary button',
+    screen: 'features',
+    target: (page) => page.getByRole('button', { name: 'Search' }),
+  },
+  {
+    control: 'an icon button',
+    screen: 'overview',
+    target: (page) => page.getByRole('button', { name: /theme/ }),
+  },
 ];
 
 for (const colorScheme of ['light', 'dark'] as const) {
@@ -224,4 +234,18 @@ test('buttons and disclosure summaries show the pointer cursor', async ({ page }
 
   expect(applyFilters.cursor).toBe('pointer');
   expect(custom.cursor).toBe('pointer');
+});
+
+test('a button that cannot be used yet is dimmed and shows the not-allowed cursor', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/funnel`);
+  await page.getByRole('button', { name: 'Edit steps' }).click();
+
+  const moveUp = page.getByRole('button', { name: 'Move step 1 up' });
+  await expect(moveUp).toBeDisabled();
+  const paint = await readPaint(moveUp);
+
+  expect(paint.opacity).toBe(0.5);
+  expect(paint.cursor).toBe('not-allowed');
 });
