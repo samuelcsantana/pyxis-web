@@ -109,12 +109,12 @@ Shipping now:
   and filters for page views, events, requests and errors; older visits load on demand, and a
   failed request in the Requests screen links to its visit
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
-  count, first named events, failed requests (reads and writes), device, channel and account;
-  filters for the pages it viewed (up to three, `*` matching any characters), an event with an
-  optional `key=value` property, the channel, the device and identified or anonymous visitors,
-  all kept in the URL; on a phone the filters fold behind a "Filters · 2 active" button, open
-  when some are in use or were left out; each row opens its visit, and an identified one its
-  person, in the Timeline
+  count, first named events, failed requests (reads and writes), device and country, channel and
+  account; filters for the pages it viewed (up to three, `*` matching any characters), an event
+  with an optional `key=value` property, the channel, the device and identified or anonymous
+  visitors, all kept in the URL; on a phone the filters fold behind a "Filters · 2 active"
+  button, open when some are in use or were left out; each row opens its visit, and an
+  identified one its person, in the Timeline
 - Loading, empty and error states shared by every screen; while a screen loads, its top bar
   already shows its title above a skeleton shaped like it; an empty period shows how to install
   the SDK until the project's first event, and afterwards "Nothing in this period" with the time

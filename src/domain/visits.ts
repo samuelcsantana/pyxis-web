@@ -1,5 +1,5 @@
 import { type Channel, CHANNEL_LABELS, CHANNELS } from './acquisition';
-import { browserLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
+import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { stepProblem } from './funnel';
 import { eventLabel, formatCount } from './metrics';
 import { formatVisitDuration, shortId, visitStartFormat } from './timeline';
@@ -166,6 +166,15 @@ function visitAccount(userId: string | null): VisitAccount | null {
   return { userId, shown: short === userId ? userId : `${short}…` };
 }
 
+function deviceLabel(visit: VisitSummary): string {
+  return [
+    deviceTypeLabel(visit.deviceType),
+    browserLabel(visit.browser),
+    operatingSystemLabel(visit.os),
+    ...(visit.country === null ? [] : [countryLabel(visit.country)]),
+  ].join(' · ');
+}
+
 export function visitRows(visits: readonly VisitSummary[], timeZone: string): readonly VisitRow[] {
   const started = visitStartFormat(timeZone);
   return visits.map((visit) => ({
@@ -178,11 +187,7 @@ export function visitRows(visits: readonly VisitSummary[], timeZone: string): re
     pageViews: formatCount(visit.pageViews),
     highlights: visit.highlights.map(eventLabel),
     failedRequests: visit.failedRequests,
-    device: [
-      deviceTypeLabel(visit.deviceType),
-      browserLabel(visit.browser),
-      operatingSystemLabel(visit.os),
-    ].join(' · '),
+    device: deviceLabel(visit),
     channel: visit.channel === null ? null : CHANNEL_LABELS[visit.channel],
     account: visitAccount(visit.userId),
   }));
