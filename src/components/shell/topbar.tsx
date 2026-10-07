@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
-import { formatPeriod, type Period } from '@/domain/period';
+import { formatPeriod, type Period, rejectedRangeNotice } from '@/domain/period';
 import type { Theme } from '@/lib/theme';
-import { type KeptParameters, PeriodSelector } from './period-selector';
+import { type KeptParameters, PeriodSelector, RANGE_NOTICE_ID } from './period-selector';
 
 interface TopbarBase {
   readonly title: string;
@@ -50,17 +50,35 @@ export interface TopbarFrameProps {
   readonly title: string;
   readonly subtitle: ReactNode;
   readonly controls: ReactNode;
+  readonly notice?: ReactNode;
 }
 
-export function TopbarFrame({ title, subtitle, controls }: TopbarFrameProps) {
+export function TopbarFrame({ title, subtitle, controls, notice }: TopbarFrameProps) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-card px-4 py-4.5 text-ink sm:px-8">
       <div className="flex min-w-0 flex-col gap-1">
         <h1 className="text-[22px] leading-7 font-semibold tracking-tight">{title}</h1>
         <p className="text-[13px] text-muted">{subtitle}</p>
+        {notice}
       </div>
       <div className="flex flex-wrap items-center gap-3">{controls}</div>
     </header>
+  );
+}
+
+function RangeNotice({ period }: { period: Period | undefined }) {
+  const rejected = period?.rejected;
+  if (rejected === undefined) {
+    return null;
+  }
+  return (
+    <p
+      id={RANGE_NOTICE_ID}
+      role="status"
+      className="mt-1 rounded-input bg-bad-soft px-3 py-2 text-[13px] text-bad"
+    >
+      {rejectedRangeNotice(rejected)}
+    </p>
   );
 }
 
@@ -69,6 +87,7 @@ export function Topbar(props: TopbarProps) {
     <TopbarFrame
       title={props.title}
       subtitle={props.subtitle}
+      notice={<RangeNotice period={props.period} />}
       controls={
         <>
           {props.period === undefined ? null : <PeriodControls {...props} />}

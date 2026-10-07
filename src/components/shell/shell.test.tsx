@@ -321,6 +321,51 @@ describe('PeriodSelector', () => {
     expect(form).toHaveAttribute('method', 'get');
     expect(screen.getByLabelText('From')).toHaveValue('2026-08-01');
     expect(screen.getByLabelText('To')).toHaveAttribute('max', today);
+    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-08-01');
+    expect(screen.getByLabelText('From')).not.toHaveAttribute('aria-invalid');
+    expect(screen.getByLabelText('To')).not.toHaveAttribute('aria-describedby');
+  });
+
+  it('keeps "To" from going before "From" as the start changes', () => {
+    render(
+      <PeriodSelector
+        basePath="/p1/overview"
+        period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
+        today={today}
+      />,
+    );
+    const from = screen.getByLabelText('From');
+
+    fireEvent.change(from, { target: { value: '2026-08-20' } });
+    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-08-20');
+
+    fireEvent.change(from, { target: { value: '' } });
+    expect(screen.getByLabelText('To')).not.toHaveAttribute('min');
+  });
+
+  it('opens the custom form with a range it could not use, marked as not used', () => {
+    const { container } = render(
+      <PeriodSelector
+        basePath="/p1/overview"
+        period={{
+          ...presetPeriod('30d', today),
+          rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
+        }}
+        today={today}
+      />,
+    );
+
+    expect(container.querySelector('details')).toHaveAttribute('open');
+    for (const [label, value] of [
+      ['From', '2026-10-05'],
+      ['To', '2026-09-20'],
+    ] as const) {
+      const field = screen.getByLabelText(label);
+      expect(field).toHaveValue(value);
+      expect(field).toHaveAttribute('aria-invalid', 'true');
+      expect(field).toHaveAttribute('aria-describedby', 'period-range-notice');
+    }
+    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-10-05');
   });
 });
 
@@ -370,5 +415,28 @@ describe('Topbar', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
     expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('says which custom range it did not use, and what it shows instead', () => {
+    render(
+      <Topbar
+        title="Overview"
+        subtitle="How Demo Store was used in the period"
+        basePath="/p1/overview"
+        period={{
+          ...presetPeriod('30d', '2026-10-05'),
+          rejected: { from: '2025-01-01', to: '2026-10-01', problem: 'too-long' },
+        }}
+        today="2026-10-05"
+      />,
+    );
+
+    const notice = screen.getByRole('status');
+    expect(notice).toHaveTextContent(
+      'That range was not used: it is longer than 400 days. Showing the last 30 days instead.',
+    );
+    expect(notice).toHaveAttribute('id', 'period-range-notice');
+    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
   });
 });

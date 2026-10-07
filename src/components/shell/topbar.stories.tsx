@@ -33,6 +33,37 @@ export const CustomPeriod: Story = {
   args: { ...WITH_PERIOD, period: { preset: 'custom', from: '2026-08-01', to: '2026-08-31' } },
 };
 
+const REJECTED: TopbarWithPeriodProps = {
+  ...WITH_PERIOD,
+  period: {
+    ...presetPeriod('30d', TODAY),
+    rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
+  },
+};
+
+const showsTheRejectedRange: Story['play'] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await expect(canvas.getByRole('status')).toHaveTextContent(
+    'That range was not used: it ends before it starts.',
+  );
+  await expect(canvas.getByLabelText('From')).toBeVisible();
+  await expect(canvas.getByLabelText('To')).toHaveAttribute('aria-invalid', 'true');
+};
+
+export const RejectedRange: Story = { args: REJECTED, play: showsTheRejectedRange };
+
+export const RejectedRangeDark: Story = {
+  args: { ...REJECTED, theme: 'dark' },
+  globals: { theme: 'dark' },
+  play: showsTheRejectedRange,
+};
+
+export const RejectedRangeOnAPhone: Story = {
+  args: REJECTED,
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: showsTheRejectedRange,
+};
+
 export const DarkTheme: Story = {
   args: { ...WITH_PERIOD, theme: 'dark' },
   globals: { theme: 'dark' },
