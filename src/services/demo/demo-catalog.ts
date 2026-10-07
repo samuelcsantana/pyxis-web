@@ -31,6 +31,14 @@ export interface DemoRoute {
   readonly screens: readonly (readonly [path: string, share: number])[];
 }
 
+export interface DemoFailedRead {
+  readonly route: string;
+  readonly perDay: number;
+  readonly statuses: readonly (readonly [status: number, share: number])[];
+  readonly medianDurationMs: number;
+  readonly screens: readonly (readonly [path: string, share: number])[];
+}
+
 export interface DemoShare {
   readonly value: string;
   readonly share: number;
@@ -56,6 +64,7 @@ export interface DemoProject {
   readonly pages: readonly DemoPage[];
   readonly events: readonly DemoEvent[];
   readonly routes: readonly DemoRoute[];
+  readonly failedReads: readonly DemoFailedRead[];
   readonly deviceTypes: readonly DemoShare[];
   readonly browsers: readonly DemoShare[];
   readonly operatingSystems: readonly DemoShare[];

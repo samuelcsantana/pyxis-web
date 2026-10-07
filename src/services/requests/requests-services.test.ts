@@ -3,7 +3,7 @@ import type { RequestsReport } from '@/domain/requests';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
-import { demoRequestsWire } from './demo-requests';
+import { demoFailedReadsWire, demoRequestsWire } from './demo-requests';
 import { HttpRequestsService } from './http-requests-service';
 import { MockRequestsService } from './mock-requests-service';
 import { createRequestsService } from './requests-service.factory';
@@ -53,6 +53,21 @@ describe('HttpRequestsService', () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe(
       `${API}/v1/projects/p1/requests?from=2026-09-22&to=2026-10-05&screen=%2Fsign-up`,
     );
+  });
+
+  it('asks the failed reads with kind=reads, and the writes without a kind', async () => {
+    const fetchMock = answering(demoFailedReadsWire(STORE, RANGE, '/products'));
+
+    const report = await new HttpRequestsService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).failedReads('p1', RANGE, '/products');
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p1/requests?from=2026-09-22&to=2026-10-05&screen=%2Fproducts&kind=reads`,
+    );
+    expect(report.routes.map((route) => `${route.method} ${route.route}`)).toEqual([
+      'GET /products',
+    ]);
   });
 });
 
@@ -182,6 +197,39 @@ describe('MockRequestsService', () => {
     }
   });
 
+  it('lists the failed reads, the most failing first, every read a failure', async () => {
+    const report = await new MockRequestsService().failedReads(STORE, RANGE, null);
+
+    expect(report.routes.map((route) => `${route.method} ${route.route}`)).toEqual([
+      'GET /orders/:id',
+      'GET /products',
+    ]);
+    for (const route of report.routes) {
+      expect(route.failed).toBe(route.total);
+      expect(route.statuses.reduce((sum, entry) => sum + entry.count, 0)).toBe(route.failed);
+      expect(route.statuses.every((entry) => entry.status === 0 || entry.status >= 400)).toBe(true);
+      expect(route.screens.reduce((sum, screen) => sum + screen.failed, 0)).toBe(route.failed);
+      expect(route.recentFailures).toEqual([]);
+    }
+  });
+
+  it('splits the failed reads of a route over its screens, and drops a route left empty', async () => {
+    const service = new MockRequestsService();
+    const productsOf = async (screen: string | null) =>
+      (await service.failedReads(STORE, RANGE, screen)).routes.find(
+        (route) => route.route === '/products',
+      );
+
+    const all = await productsOf(null);
+    const list = await productsOf('/products');
+    const form = await productsOf('/orders/new');
+    const elsewhere = await service.failedReads(STORE, RANGE, '/settings');
+
+    expect((list?.failed ?? 0) + (form?.failed ?? 0)).toBe(all?.failed);
+    expect(form?.screens).toEqual([{ path: '/orders/new', failed: form?.failed }]);
+    expect(elsewhere.routes).toEqual([]);
+  });
+
   it('lists the routes of the project it is asked about', async () => {
     const report = await new MockRequestsService().requests(DEMO_DOCS.id, RANGE, null);
 
@@ -189,6 +237,8 @@ describe('MockRequestsService', () => {
       '/feedback',
       '/newsletter',
     ]);
+    const reads = await new MockRequestsService().failedReads(DEMO_DOCS.id, RANGE, null);
+    expect(reads.routes.map((route) => route.route)).toEqual(['/search']);
   });
 });
 

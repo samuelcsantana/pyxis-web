@@ -1,7 +1,9 @@
 import { barWidth, formatCount, formatPercent, formatQuantity, rate } from './metrics';
-import type { RequestsReport, RequestsWire } from './requests.schema';
+import type { REQUEST_KINDS, RequestsReport, RequestsWire } from './requests.schema';
 
 export type { RequestsReport, RequestsWire };
+
+export type RequestKind = (typeof REQUEST_KINDS)[number];
 
 export type RouteReport = RequestsReport['routes'][number];
 
