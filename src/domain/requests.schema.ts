@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
+export const REQUEST_KINDS = ['writes', 'reads'] as const;
+
 export const requestsResponseSchema = z
   .object({
+    kind: z.enum(REQUEST_KINDS).optional(),
     routes: z.array(
       z.object({
         method: z.string(),
