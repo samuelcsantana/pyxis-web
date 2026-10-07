@@ -14,6 +14,7 @@ export const CODE_SENT_NOTICE_MS = 4_000;
 export const SIGN_IN_CODE_LENGTH = 6;
 const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
+const EMAIL_ERROR_ID = 'sign-in-email-error';
 
 type Step = 'email' | 'code';
 
@@ -150,14 +151,17 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
               maxLength={MAX_EMAIL_LENGTH}
               placeholder="you@company.com"
               value={email}
+              aria-invalid={errorText !== null}
+              aria-describedby={errorText === null ? undefined : EMAIL_ERROR_ID}
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              className={`${INPUT_CLASS} border-line`}
+              className={`${INPUT_CLASS} ${errorText === null ? 'border-line' : 'border-bad'}`}
             />
           </div>
           {errorText === null ? null : (
             <p
+              id={EMAIL_ERROR_ID}
               role="alert"
               className="rounded-input bg-bad-soft px-3 py-2.5 text-[13px] font-medium text-bad"
             >
