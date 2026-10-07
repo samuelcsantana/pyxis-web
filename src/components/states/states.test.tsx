@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
-import { LoadingPanel } from './loading-panel';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 
 describe('EmptyState', () => {
@@ -70,18 +69,6 @@ describe('ErrorPanel', () => {
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     expect(screen.getByRole('alert').querySelectorAll('p')).toHaveLength(1);
-  });
-});
-
-describe('LoadingPanel', () => {
-  it('marks itself busy under the label it is given', () => {
-    render(<LoadingPanel label="Loading the project" />);
-
-    expect(screen.getByRole('region', { name: 'Loading the project' })).toHaveAttribute(
-      'aria-busy',
-      'true',
-    );
-    expect(screen.getByText('Loading the project…')).toBeInTheDocument();
   });
 });
 

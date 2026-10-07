@@ -3,7 +3,6 @@ import { fn } from 'storybook/test';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
-import { LoadingPanel } from './loading-panel';
 
 const meta = {
   title: 'States/Panels',
@@ -19,10 +18,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-export const Loading: Story = {
-  render: () => <LoadingPanel label="Loading the last 30 days" />,
-};
 
 export const Empty: Story = {
   render: () => (
@@ -45,11 +40,6 @@ export const Demo: Story = {
 };
 
 export const DarkTheme: Story = {
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <LoadingPanel label="Loading the last 30 days" />
-      <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />
-    </div>
-  ),
+  render: () => <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />,
   globals: { theme: 'dark' },
 };

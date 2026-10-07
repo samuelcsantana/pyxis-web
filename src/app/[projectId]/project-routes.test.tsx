@@ -7,7 +7,6 @@ import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
 import ProjectError from './error';
 import ProjectLayout from './layout';
-import ProjectLoading from './loading';
 import OverviewPage from './overview/page';
 
 const state = vi.hoisted<{
@@ -212,13 +211,7 @@ describe('OverviewPage', () => {
   });
 });
 
-describe('loading and error states', () => {
-  it('shows a skeleton while the project loads', () => {
-    render(<ProjectLoading />);
-
-    expect(screen.getByRole('region', { name: 'Loading the project' })).toBeInTheDocument();
-  });
-
+describe('error state', () => {
   it('offers a retry and the error id when the screen fails', () => {
     const retry = vi.fn();
     const error = Object.assign(new Error('boom'), { digest: 'abc123' });
