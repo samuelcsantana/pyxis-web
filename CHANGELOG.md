@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.1.0...v0.1.1) (2026-10-07)
+
+
+### Bug Fixes
+
+* **demo:** open a demo visit from every latest failure, at the same time ([d6c3444](https://github.com/samuelcsantana/pyxis-web/commit/d6c3444dabde9fd0729ffa28b197b088f83fef5a))
+
+
+### Refactoring
+
+* **demo:** move the demo visits next to the other demo data ([c6cf913](https://github.com/samuelcsantana/pyxis-web/commit/c6cf91339be031185f5164af0be9de320742f4f6))
+
+
+### Documentation
+
+* **readme:** open with a short tour of the live demo ([4a6daf0](https://github.com/samuelcsantana/pyxis-web/commit/4a6daf01abbaeb038181f1e74ee8e5ee9b04f31a))
+* **readme:** record the tour and the requests screenshot again after the demo fix ([b4c951a](https://github.com/samuelcsantana/pyxis-web/commit/b4c951ae937e731f3e9e2a476e49c6e96bd03d65))
+
 ## 0.1.0 (2026-10-06)
 
 
