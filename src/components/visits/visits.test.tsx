@@ -40,6 +40,27 @@ function bodyRows() {
     .slice(1);
 }
 
+function cards(): HTMLElement[] {
+  return [...screen.getByRole('list', { name: 'Visits' }).children].filter(
+    (child): child is HTMLElement => child instanceof HTMLElement,
+  );
+}
+
+function card(index: number): HTMLElement {
+  const item = cards()[index];
+  if (item === undefined) {
+    throw new Error(`The list has no card ${String(index)}.`);
+  }
+  return item;
+}
+
+function laidOutOnlyInside(selector: string) {
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(function (this: Element) {
+    const rects = this.closest(selector) === null ? [] : [new DOMRect(0, 0, 10, 10)];
+    return Object.assign(rects, { item: (index: number) => rects[index] ?? null });
+  });
+}
+
 describe('VisitsTable', () => {
   it('shows each visit with a link to its timeline and to the timeline of its account', () => {
     renderTable(vi.fn());
@@ -77,7 +98,7 @@ describe('VisitsTable', () => {
       />,
     );
 
-    const account = screen.getByRole('link', {
+    const account = within(screen.getByRole('table', { name: 'Visits' })).getByRole('link', {
       name: 'u_check_visits, open the timeline of this user',
     });
     expect(account).toHaveTextContent('u_check_…');
@@ -109,9 +130,33 @@ describe('VisitsTable', () => {
     const visit = bodyRow(0);
     expect(within(visit).getByText('2')).toHaveClass('text-bad');
     expect(within(visit).getAllByText('—')).toHaveLength(3);
+    const onCard = card(0);
+    expect(within(onCard).getByText('2 failed requests')).toHaveClass('text-bad');
+    expect(within(onCard).getByText('—')).toBeInTheDocument();
+    expect(onCard).toHaveTextContent('Channel: —');
+    expect(within(onCard).queryByRole('list')).not.toBeInTheDocument();
+  });
+
+  it('says on the card when a visit had no failed request', () => {
+    const [row] = visitRows(
+      FIRST.visits.slice(0, 1).map((visit) => ({ ...visit, failedRequests: 0 })),
+      'UTC',
+    );
+    render(
+      <VisitsTable
+        rows={row === undefined ? [] : [row]}
+        nextCursor={null}
+        timelinePath="/p-store/timeline"
+        emptyMessage="No visits in this period."
+        loadOlder={vi.fn()}
+      />,
+    );
+
+    expect(within(card(0)).getByText('No failed request')).toHaveClass('text-muted');
   });
 
   it('appends the older visits, moves the focus to the first of them and says when all are shown', async () => {
+    laidOutOnlyInside('table');
     const loadOlder = vi
       .fn<(cursor: string) => Promise<VisitRowsPage>>()
       .mockResolvedValue({ rows: SECOND_ROWS, nextCursor: null });
@@ -122,10 +167,46 @@ describe('VisitsTable', () => {
     expect(loadOlder).toHaveBeenCalledWith(CURSOR);
     expect(await screen.findByText('That is every visit of this period.')).toBeInTheDocument();
     expect(bodyRows()).toHaveLength(13);
+    expect(cards()).toHaveLength(13);
     await waitFor(() => {
-      expect(screen.getByRole('link', { name: /, open visit 19c2e5f6$/ })).toHaveFocus();
+      expect(
+        within(screen.getByRole('table', { name: 'Visits' })).getByRole('link', {
+          name: /, open visit 19c2e5f6$/,
+        }),
+      ).toHaveFocus();
     });
     expect(screen.queryByRole('button', { name: 'Load older visits' })).not.toBeInTheDocument();
+  });
+
+  it('moves the focus to the first older visit card when the cards are the list on screen', async () => {
+    laidOutOnlyInside('ul');
+    renderTable(() => Promise.resolve({ rows: SECOND_ROWS, nextCursor: null }));
+
+    await userEvent.click(screen.getByRole('button', { name: 'Load older visits' }));
+
+    await waitFor(() => {
+      expect(within(card(8)).getByRole('link', { name: /, open visit 19c2e5f6$/ })).toHaveFocus();
+    });
+  });
+
+  it('shows every column of a visit on its card', () => {
+    renderTable(vi.fn());
+
+    const newest = card(0);
+    expect(cards()).toHaveLength(8);
+    expect(
+      within(newest).getByRole('link', { name: 'Mon, Oct 5, 18:40, open visit 3c07a1b2' }),
+    ).toHaveAttribute('href', '/p-store/timeline?visit=3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01');
+    expect(newest).toHaveTextContent(FIRST_ROWS[0]?.duration ?? '');
+    expect(newest).toHaveTextContent('/orders');
+    expect(newest).toHaveTextContent(FIRST_ROWS[0]?.pagesLabel ?? '');
+    expect(newest).toHaveTextContent('Order created');
+    expect(newest).toHaveTextContent('Desktop · Chrome · Windows');
+    expect(newest).toHaveTextContent('Channel: Direct');
+    expect(
+      within(newest).getByRole('link', { name: 'u_7f3a, open the timeline of this user' }),
+    ).toHaveAttribute('href', '/p-store/timeline?user=u_7f3a');
+    expect(within(card(1)).getByText('anonymous')).toBeInTheDocument();
   });
 
   it('focuses nothing when an older page comes back empty', async () => {

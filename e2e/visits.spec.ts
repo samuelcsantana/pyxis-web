@@ -4,7 +4,10 @@ import { axeViolations, sidewaysOverflow } from './accessibility';
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
 function visitRows(page: Page) {
-  return page.getByRole('table', { name: 'Visits' }).locator('tbody tr');
+  return page
+    .getByRole('table', { name: 'Visits' })
+    .locator('tbody tr')
+    .or(page.getByRole('list', { name: 'Visits' }).locator(':scope > li'));
 }
 
 async function openFiltersOnAPhone(page: Page, isMobile: boolean) {
@@ -141,6 +144,25 @@ test('loads the older visits with the keyboard and moves the focus to them', asy
   await expect(visitRows(page)).toHaveCount(13);
   await expect(page.getByRole('link', { name: /, open visit 19c2e5f6$/ })).toBeFocused();
   await expect(page.getByText('That is every visit of this period.')).toBeVisible();
+});
+
+test('shows every column of a visit on its card on a phone', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'From 640 px up the visits are a table.');
+  await page.goto(`/${STORE_ID}/visits`);
+
+  await expect(page.getByRole('table', { name: 'Visits' })).toBeHidden();
+  const newest = visitRows(page).first();
+  await expect(newest.getByRole('link', { name: /, open visit [0-9a-f]{8}$/ })).toBeVisible();
+  await expect(newest).toContainText(/\d+ (page|pages)/);
+  await expect(newest).toContainText(/failed request/i);
+  await expect(newest).toContainText(/ · /);
+  await expect(newest).toContainText('Channel:');
+  await expect(
+    newest
+      .getByRole('link', { name: /, open the timeline of this user$/ })
+      .or(newest.getByText('anonymous')),
+  ).toBeVisible();
+  expect(await sidewaysOverflow(page)).toBe(0);
 });
 
 test.describe('at 1024×768', () => {
