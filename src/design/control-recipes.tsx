@@ -5,6 +5,7 @@ import {
   BUTTON_STRONG,
   CONTROL_BUSY,
   CONTROL_DISABLED,
+  FIELD,
   PILL,
   PILL_IDLE,
   PILL_SELECTED,
@@ -15,7 +16,9 @@ import {
   TAB,
   TAB_IDLE,
   TAB_SELECTED,
+  TEXT_LINK,
 } from '@/components/ui/control-classes';
+import { ROW_LINK } from '@/components/ui/panel-classes';
 
 export const BUTTON_RECIPES = [
   { name: 'Primary', className: `min-h-11 rounded-input px-4 text-sm ${BUTTON_PRIMARY}` },
@@ -28,6 +31,8 @@ export const BUTTON_RECIPES = [
 
 const PLUS_ICON = 'M12 5v14 M5 12h14';
 const ROW = 'flex flex-wrap items-center gap-3';
+const FIELD_LABEL = 'flex flex-col gap-1.5 text-[13px] font-medium';
+const FIELD_CLASS = `min-h-11 rounded-input px-3 text-base sm:text-sm ${FIELD}`;
 
 export function ControlRecipes() {
   return (
@@ -118,6 +123,36 @@ export function ControlRecipes() {
           >
             Idle pill
           </button>
+        </div>
+      </section>
+      <section aria-labelledby="links-heading" className="flex flex-col gap-4">
+        <h2 id="links-heading" className="text-lg font-semibold">
+          Links and fields
+        </h2>
+        <p className={ROW}>
+          <a href="#links-heading" className={TEXT_LINK}>
+            Text link
+          </a>
+          <a href="#links-heading" aria-label="Row link to the visits of /" className={ROW_LINK}>
+            /
+          </a>
+        </p>
+        <div className={ROW}>
+          <label className={FIELD_LABEL}>
+            Field
+            <input defaultValue="signup_completed" className={FIELD_CLASS} />
+          </label>
+          <label className={FIELD_LABEL}>
+            Select
+            <select defaultValue="paid" className={FIELD_CLASS}>
+              <option value="paid">Paid</option>
+              <option value="organic">Organic</option>
+            </select>
+          </label>
+          <label className={FIELD_LABEL}>
+            Invalid field
+            <input aria-invalid="true" defaultValue="pricing" className={FIELD_CLASS} />
+          </label>
         </div>
       </section>
     </div>

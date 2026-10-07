@@ -77,6 +77,10 @@ export const OpenedFromTheAddress: Story = {
   },
 };
 
+export const RouteHovered: Story = {
+  parameters: { pseudo: { hover: ['tbody tr:first-child button'] } },
+};
+
 export const Empty: Story = { args: { rows: [] } };
 
 export const OnAPhone: Story = {

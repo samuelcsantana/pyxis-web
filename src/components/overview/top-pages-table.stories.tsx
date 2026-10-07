@@ -57,3 +57,9 @@ export const OnAPhone: Story = {
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const RowLinkHovered: Story = {
+  parameters: { pseudo: { hover: ['a[href$="path=%2F"]'] } },
+};
+
+export const RowLinkHoveredDark: Story = { ...RowLinkHovered, globals: { theme: 'dark' } };
