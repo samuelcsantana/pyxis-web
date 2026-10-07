@@ -120,6 +120,28 @@ describe('DevicesPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('calls an empty period quiet once the project has received events', async () => {
+    state.devices = (): Promise<DevicesReport> =>
+      Promise.resolve({ deviceTypes: [], browsers: [], operatingSystems: [], countries: [] });
+    state.admin = {
+      ...ADMIN,
+      projects: [
+        {
+          ...STORE,
+          firstEventAt: '2026-03-02T12:00:00.000Z',
+          lastEventAt: '2026-09-20T01:30:00.000Z',
+        },
+        DOCS,
+      ],
+    };
+
+    render(await renderDevices());
+
+    expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
+    expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'See the last 30 days' })).not.toBeInTheDocument();
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.devices = () => Promise.reject(new UnauthenticatedError());
 

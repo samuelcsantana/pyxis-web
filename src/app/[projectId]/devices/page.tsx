@@ -3,7 +3,8 @@ import { DeviceConversionList } from '@/components/devices/device-conversion-lis
 import { ShareDonut } from '@/components/devices/share-donut';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
-import { NoActivityYet } from '@/components/states/no-activity-yet';
+import { EmptyPeriod } from '@/components/states/empty-period';
+import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
   browserLabel,
   countryLabel,
@@ -86,7 +87,11 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
         {hasVisits(report) ? (
           <DevicesReportView report={report} conversionEvent={project.conversionEvent} />
         ) : (
-          <NoActivityYet endpoint={apiBaseUrl()} />
+          <EmptyPeriod
+            view={emptyPeriodView(project, period)}
+            widerPeriodHref={screenHref(project.id, 'devices', WIDER_PERIOD_QUERY)}
+            endpoint={apiBaseUrl()}
+          />
         )}
       </main>
     </>

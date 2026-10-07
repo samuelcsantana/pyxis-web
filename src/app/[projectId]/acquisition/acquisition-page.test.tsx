@@ -107,6 +107,28 @@ describe('AcquisitionPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('calls an empty period quiet once the project has received events', async () => {
+    const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
+    state.acquisition = (): Promise<AcquisitionReport> =>
+      Promise.resolve({ days: [{ date: '2026-10-05', byChannel: NONE }], sources: [] });
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({
+        ...project,
+        firstEventAt: '2026-03-02T12:00:00.000Z',
+        lastEventAt: '2026-09-20T01:30:00.000Z',
+      })),
+    };
+
+    render(await renderAcquisition());
+
+    expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the last 30 days' })).toHaveAttribute(
+      'href',
+      '/p-store/acquisition?range=30d',
+    );
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.acquisition = () => Promise.reject(new UnauthenticatedError());
 

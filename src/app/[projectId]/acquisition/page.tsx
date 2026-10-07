@@ -2,7 +2,8 @@ import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
-import { NoActivityYet } from '@/components/states/no-activity-yet';
+import { EmptyPeriod } from '@/components/states/empty-period';
+import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { StatCard } from '@/components/ui/stat-card';
 import {
   type AcquisitionReport,
@@ -76,7 +77,11 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
         {visitsTotal(report.days) > 0 ? (
           <AcquisitionReportView report={report} period={period} />
         ) : (
-          <NoActivityYet endpoint={apiBaseUrl()} />
+          <EmptyPeriod
+            view={emptyPeriodView(project, period)}
+            widerPeriodHref={screenHref(project.id, 'acquisition', WIDER_PERIOD_QUERY)}
+            endpoint={apiBaseUrl()}
+          />
         )}
       </main>
     </>
