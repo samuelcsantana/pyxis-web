@@ -182,6 +182,18 @@ describe('SignInForm', () => {
     expect(router.replace).not.toHaveBeenCalled();
   });
 
+  it('drops "Code sent." as soon as an error shows', async () => {
+    await reachCodeStep(new MockAuthService());
+    expect(screen.getByRole('status')).toHaveTextContent('Code sent.');
+
+    fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Invalid or expired code');
+    expect(screen.getByRole('status')).toHaveTextContent('');
+  });
+
   it('sends a new code on demand', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
