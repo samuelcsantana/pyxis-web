@@ -13,6 +13,6 @@ describe('NotFound', () => {
   });
 
   it('names itself in the title', () => {
-    expect(metadata.title).toBe('Page not found · Pyxis');
+    expect(metadata.title).toBe('Page not found');
   });
 });

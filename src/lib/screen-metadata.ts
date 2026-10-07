@@ -7,7 +7,7 @@ export interface ScreenMetadataProps {
 
 export function screenMetadata(screen: string): (props: ScreenMetadataProps) => Promise<Metadata> {
   return async ({ params }) => {
-    await projectOrNotFound((await params).projectId);
-    return { title: `${screen} · Pyxis` };
+    const { project } = await projectOrNotFound((await params).projectId);
+    return { title: `${screen} · ${project.name}` };
   };
 }

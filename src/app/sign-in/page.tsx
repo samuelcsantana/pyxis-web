@@ -7,7 +7,7 @@ import { isDemoMode } from '@/lib/api-config';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
 
-export const metadata: Metadata = { title: 'Sign in · Pyxis' };
+export const metadata: Metadata = { title: 'Sign in' };
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
 

@@ -1,8 +1,21 @@
 import { expect, test } from '@playwright/test';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
+const DOCS_NAME = 'Demo Docs';
 const LIGHT_BACKGROUND = '#f4f6fa';
 const DARK_BACKGROUND = '#0a1220';
+
+test('names the screen and the project in the title of every screen', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await expect(page).toHaveTitle('Overview · Demo Store · Pyxis');
+
+  await page.goto(`/${DOCS_ID}/requests`);
+  await expect(page).toHaveTitle(`Requests · ${DOCS_NAME} · Pyxis`);
+
+  await page.goto('/sign-in');
+  await expect(page).toHaveTitle('Sign in · Pyxis');
+});
 
 for (const [theme, color] of [
   ['dark', DARK_BACKGROUND],

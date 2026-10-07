@@ -9,12 +9,13 @@ import './globals.css';
 
 const NOT_INDEXED: Metadata['robots'] = { index: false, follow: false };
 const DEMO_SHARE_TITLE = `${APP_NAME} live demo`;
+const TITLE_TEMPLATE = `%s · ${APP_NAME}`;
 
 export function generateMetadata(): Metadata {
   const demo = isDemoMode();
   const shareTitle = demo ? DEMO_SHARE_TITLE : APP_NAME;
   return {
-    title: APP_NAME,
+    title: { template: TITLE_TEMPLATE, default: APP_NAME },
     description: APP_DESCRIPTION,
     robots: demo ? null : NOT_INDEXED,
     openGraph: {

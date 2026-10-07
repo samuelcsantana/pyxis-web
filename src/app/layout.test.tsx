@@ -59,7 +59,7 @@ describe('RootLayout', () => {
   it('names the app in the metadata', () => {
     const metadata = generateMetadata();
 
-    expect(metadata.title).toBe('Pyxis');
+    expect(metadata.title).toEqual({ template: '%s · Pyxis', default: 'Pyxis' });
     expect(metadata.description).toMatch(/no cookies/);
   });
 

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { EmptyState } from './empty-state';
 
-export const NOT_FOUND_TITLE = 'Page not found · Pyxis';
+export const NOT_FOUND_TITLE = 'Page not found';
 
 export interface NotFoundPanelProps {
   readonly explanation: string;

@@ -28,12 +28,12 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 }));
 
 describe('screenMetadata', () => {
-  it('titles a screen of a project the admin may read', async () => {
+  it('titles a screen with the name of its project', async () => {
     const metadata = await screenMetadata('Overview')({
       params: Promise.resolve({ projectId: 'p-store' }),
     });
 
-    expect(metadata.title).toBe('Overview · Pyxis');
+    expect(metadata.title).toBe('Overview · Demo Store');
   });
 
   it('answers not found for any other project, so the 404 names itself in the title', async () => {
