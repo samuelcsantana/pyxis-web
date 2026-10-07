@@ -16,6 +16,22 @@ import type { OverviewReport, OverviewWire } from './overview.schema';
 
 export type { OverviewReport, OverviewWire };
 
+const HOURS_AND_MINUTES = 5;
+
+export type Comparison =
+  | { readonly kind: 'whole-days' }
+  | { readonly kind: 'same-time'; readonly until: string }
+  | { readonly kind: 'unknown' };
+
+export function comparisonOf(cutoff: string | null | undefined): Comparison {
+  if (cutoff === undefined) {
+    return { kind: 'unknown' };
+  }
+  return cutoff === null
+    ? { kind: 'whole-days' }
+    : { kind: 'same-time', until: cutoff.slice(0, HOURS_AND_MINUTES) };
+}
+
 export type Kpi = OverviewReport['kpis']['visits'];
 export type DayActivity = OverviewReport['days'][number];
 
