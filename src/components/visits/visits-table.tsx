@@ -7,7 +7,7 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow, VisitRowsPage } from '@/domain/visits';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_SECONDARY, CONTROL_BUSY, FOCUS_RING } from '@/components/ui/control-classes';
 import { linkWith } from '@/components/shell/screens';
 
 const SMOOTH_LOADING_MS = 400;
@@ -235,7 +235,7 @@ export function VisitsTable({
             onClick={() => {
               load(cursor);
             }}
-            className={`min-h-11 rounded-input border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-soft ${FOCUS_RING} disabled:opacity-60`}
+            className={`min-h-11 rounded-input px-4 text-sm font-medium ${BUTTON_SECONDARY} ${CONTROL_BUSY}`}
           >
             {busy ? 'Loading older visits…' : 'Load older visits'}
           </button>

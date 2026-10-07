@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { oppositeTheme, type Theme, themeCookie } from '@/lib/theme';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_ICON } from '@/components/ui/control-classes';
 
 const SUN_ICON =
   'M12 8a4 4 0 1 1 0 8a4 4 0 1 1 0-8 M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4';
@@ -37,7 +37,7 @@ export function ThemeToggle({ initialTheme }: ThemeToggleProps) {
       type="button"
       onClick={toggle}
       aria-label={label}
-      className={`flex size-11 items-center justify-center rounded-input border border-line bg-card text-ink transition-colors hover:border-muted ${FOCUS_RING}`}
+      className={`size-11 rounded-input ${BUTTON_ICON}`}
     >
       <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
         <path

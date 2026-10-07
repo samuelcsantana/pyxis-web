@@ -66,7 +66,10 @@ export const Loading: Story = {
   args: { authService: neverAnswers },
   play: async ({ canvasElement }) => {
     const canvas = await reachCodeStep(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Sending…' })).toBeDisabled();
+    const sending = canvas.getByRole('button', { name: 'Sending…' });
+    await expect(sending).toBeDisabled();
+    await expect(getComputedStyle(sending).cursor).toBe('wait');
+    await expect(getComputedStyle(sending).opacity).toBe('1');
   },
 };
 
