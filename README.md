@@ -60,7 +60,8 @@ Shipping now:
 
 - The approved brand and design tokens (light and dark), exposed to Tailwind CSS 4
 - A strict Content Security Policy and hardening headers on every page
-- Storybook with the design tokens page; every story is also an automated accessibility test
+- Storybook with the design tokens page and stories for hover and keyboard-focus states; every
+  story is also an automated accessibility test
 - Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL), light and dark themes, sign-out, and a menu button
