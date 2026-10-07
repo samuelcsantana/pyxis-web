@@ -70,7 +70,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: timeout 300 npx playwright install --with-deps chromium || timeout 300 npx playwright install --with-deps chromium
       - run: npm run test:e2e
 
   storybook:
@@ -82,7 +82,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: timeout 300 npx playwright install --with-deps chromium || timeout 300 npx playwright install --with-deps chromium
       - run: npm run build-storybook
       - run: npm run test:storybook
 
