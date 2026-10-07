@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { APP_DESCRIPTION, APP_NAME } from '@/lib/site';
 import { themeColorFor } from '@/lib/theme';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DOCUMENT_FONT_CLASSES } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Pyxis',
-  description:
-    'Privacy-first product analytics: no cookies on your visitors, no personal data, no third parties.',
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
 };
 
 export async function generateViewport(): Promise<Viewport> {
