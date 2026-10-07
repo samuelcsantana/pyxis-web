@@ -4,17 +4,25 @@ import { flatten, type Rgb, type Rgba } from './contrast';
 interface RawPaint {
   readonly own: Rgba;
   readonly behindFromTop: readonly Rgba[];
+  readonly text: Rgba;
+  readonly border: Rgba | null;
   readonly outline: Rgba;
   readonly outlineStyle: string;
   readonly outlineWidth: number;
+  readonly cursor: string;
+  readonly opacity: number;
 }
 
 export interface Paint {
   readonly fill: Rgb;
   readonly behind: Rgb;
+  readonly text: Rgb;
+  readonly border: Rgb | null;
   readonly outline: Rgb;
   readonly outlineStyle: string;
   readonly outlineWidth: number;
+  readonly cursor: string;
+  readonly opacity: number;
 }
 
 export async function readPaint(target: Locator): Promise<Paint> {
@@ -46,20 +54,38 @@ export async function readPaint(target: Locator): Promise<Paint> {
       }
     }
     const style = getComputedStyle(element);
+    const sides = ['top', 'right', 'bottom', 'left']
+      .map((side) => ({
+        color: style.getPropertyValue(`border-${side}-color`),
+        style: style.getPropertyValue(`border-${side}-style`),
+        width: Number.parseFloat(style.getPropertyValue(`border-${side}-width`)),
+      }))
+      .filter((side) => side.style !== 'none' && side.width > 0)
+      .toSorted((one, other) => other.width - one.width);
+    const [widest] = sides;
     return {
       own: bytes(style.backgroundColor),
       behindFromTop,
+      text: bytes(style.color),
+      border: widest === undefined ? null : bytes(widest.color),
       outline: bytes(style.outlineColor),
       outlineStyle: style.outlineStyle,
       outlineWidth: Number.parseFloat(style.outlineWidth),
+      cursor: style.cursor,
+      opacity: Number.parseFloat(style.opacity),
     };
   });
   const [red, green, blue] = raw.outline;
+  const fillLayers = [raw.own, ...raw.behindFromTop];
   return {
-    fill: flatten([raw.own, ...raw.behindFromTop]),
+    fill: flatten(fillLayers),
     behind: flatten(raw.behindFromTop),
+    text: flatten([raw.text, ...fillLayers]),
+    border: raw.border === null ? null : flatten([raw.border, ...fillLayers]),
     outline: [red, green, blue],
     outlineStyle: raw.outlineStyle,
     outlineWidth: raw.outlineWidth,
+    cursor: raw.cursor,
+    opacity: raw.opacity,
   };
 }
