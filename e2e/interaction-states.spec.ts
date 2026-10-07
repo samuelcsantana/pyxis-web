@@ -17,6 +17,10 @@ interface Representative {
 const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' });
 
 const UNDERLINE_ON_HOVER = '2px';
+const MIN_TARGET_PX = 24;
+
+const homePageRowLink = (page: Page) =>
+  page.getByRole('link', { name: 'See the visits that opened /', exact: true });
 
 const demoPersonLink = (page: Page) =>
   page.getByRole('link', { name: /^Open the timeline of the demo person/ });
@@ -223,7 +227,49 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     screen: 'timeline',
     target: demoPersonLink,
   },
+  {
+    control: 'a row link',
+    screen: 'overview',
+    target: homePageRowLink,
+  },
+  {
+    control: 'a route in the requests table',
+    screen: 'requests',
+    target: (page) =>
+      page
+        .getByRole('button', { name: /, show details$/ })
+        .first()
+        .locator('.underline'),
+  },
 ];
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`row links, ${colorScheme} theme`, () => {
+    test.use({ colorScheme });
+
+    test('draw their underline at 3:1 or more against the card', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/overview`);
+      const paint = await readPaint(homePageRowLink(page));
+
+      expect(paint.underline).not.toBeNull();
+      expect(contrastRatio(paint.underline ?? paint.fill, paint.fill)).toBeGreaterThanOrEqual(
+        MIN_NON_TEXT_CONTRAST,
+      );
+    });
+  });
+}
+
+test('every row link on the overview is a target of 24 by 24 px or more', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  const rowLinks = page.getByRole('region', { name: /^Top (pages|events)$/ }).getByRole('link');
+  await expect(rowLinks.first()).toBeVisible();
+
+  for (const link of await rowLinks.all()) {
+    const box = await link.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(MIN_TARGET_PX);
+    expect(box?.height).toBeGreaterThanOrEqual(MIN_TARGET_PX);
+  }
+});
 
 test('a text link thickens its underline on hover, not only its colour', async ({
   page,

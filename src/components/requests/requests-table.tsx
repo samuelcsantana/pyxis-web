@@ -5,8 +5,14 @@ import { type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from
 import type { RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
-import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  BODY_CELL,
+  HEADER_CELL,
+  PANEL,
+  PANEL_TITLE,
+  ROW_BUTTON_TEXT,
+} from '@/components/ui/panel-classes';
+import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
 import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
 import { MethodChip, TONE_CLASSES } from './status-styles';
@@ -145,10 +151,10 @@ export function RequestsTable({
                     onClick={() => {
                       open(row.key);
                     }}
-                    className={`flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} sm:flex-row sm:items-center sm:gap-2.5`}
+                    className={`group flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} ${CONTROL_TRANSITION} sm:flex-row sm:items-center sm:gap-2.5`}
                   >
                     <MethodChip method={row.method} />{' '}
-                    <span className="font-mono text-xs underline decoration-line underline-offset-4 wrap-anywhere">
+                    <span className={`font-mono text-xs wrap-anywhere ${ROW_BUTTON_TEXT}`}>
                       {row.route}
                     </span>
                   </button>
