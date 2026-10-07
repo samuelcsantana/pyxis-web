@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { RequestFilters } from '@/components/requests/request-filters';
 import { RequestsTable } from '@/components/requests/requests-table';
 import { screenHref } from '@/components/shell/screens';
@@ -23,10 +22,11 @@ import {
   writesFigure,
 } from '@/domain/requests';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createRequestsService } from '@/services/requests/requests-service.factory';
 
-export const metadata: Metadata = { title: 'Requests · Pyxis' };
+export const generateMetadata = screenMetadata('Requests');
 
 export interface RequestsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

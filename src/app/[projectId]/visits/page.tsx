@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
@@ -13,11 +12,12 @@ import {
   type VisitsSearch,
 } from '@/domain/visits';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createVisitsService } from '@/services/visits/visits-service.factory';
 import { loadOlderVisitRows } from './actions';
 
-export const metadata: Metadata = { title: 'Visits · Pyxis' };
+export const generateMetadata = screenMetadata('Visits');
 
 export interface VisitsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

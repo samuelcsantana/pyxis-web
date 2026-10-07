@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
@@ -22,13 +21,14 @@ import {
 } from '@/domain/timeline';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { loadOlderVisits } from './actions';
 
-export const metadata: Metadata = { title: 'Timeline · Pyxis' };
+export const generateMetadata = screenMetadata('Timeline');
 
 export interface TimelinePageProps {
   readonly params: Promise<{ readonly projectId: string }>;

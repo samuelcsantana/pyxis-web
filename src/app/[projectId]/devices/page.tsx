@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { ShareDonut } from '@/components/devices/share-donut';
@@ -18,10 +17,11 @@ import {
 import { type PeriodSearch, resolvePeriod, todayIn } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createDevicesService } from '@/services/devices/devices-service.factory';
 
-export const metadata: Metadata = { title: 'Devices · Pyxis' };
+export const generateMetadata = screenMetadata('Devices');
 
 export interface DevicesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

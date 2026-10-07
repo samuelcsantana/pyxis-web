@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { FeatureSearch } from '@/components/features/feature-search';
 import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
@@ -15,11 +14,12 @@ import {
 } from '@/domain/features';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createFeaturesService } from '@/services/features/features-service.factory';
 import { loadPropertyBreakdown } from './actions';
 
-export const metadata: Metadata = { title: 'Features · Pyxis' };
+export const generateMetadata = screenMetadata('Features');
 
 export interface FeaturesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

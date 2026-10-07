@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { DailyActivityChart } from '@/components/overview/daily-activity-chart';
 import { KpiGrid } from '@/components/overview/kpi-grid';
 import { TopEventsList } from '@/components/overview/top-events-list';
@@ -19,10 +18,11 @@ import {
 } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 
-export const metadata: Metadata = { title: 'Overview · Pyxis' };
+export const generateMetadata = screenMetadata('Overview');
 
 export interface OverviewPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
