@@ -1,4 +1,4 @@
-import { LogoMark } from '@/components/brand/logo-mark';
+import { BrandedPage } from '@/components/brand/branded-page';
 import { ErrorPanel } from './error-panel';
 
 export interface ErrorBoundaryProps {
@@ -12,12 +12,8 @@ export function errorDetail(error: ErrorBoundaryProps['error']): string | undefi
 
 export function ErrorScreen({ error, retry }: ErrorBoundaryProps) {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-lg flex-col justify-center gap-6 px-4 py-16 text-ink">
-      <p className="flex items-center gap-2.5 text-xl font-bold tracking-tight">
-        <LogoMark size={32} />
-        Pyxis
-      </p>
+    <BrandedPage>
       <ErrorPanel headingLevel="h1" detail={errorDetail(error)} onRetry={retry} />
-    </main>
+    </BrandedPage>
   );
 }
