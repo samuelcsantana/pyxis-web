@@ -15,7 +15,7 @@ const NOTHING_KEPT: Readonly<Record<string, string>> = {};
 
 type LookupKind = Lookup['kind'];
 
-const FIELD_CLASS = `min-h-11 rounded-input px-3 text-sm ${FIELD}`;
+const FIELD_CLASS = `min-h-11 rounded-input px-3 text-base sm:text-sm ${FIELD}`;
 
 export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: TimelineSearchProps) {
   const [kind, setKind] = useState<LookupKind>(lookup?.kind ?? 'user');

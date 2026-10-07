@@ -37,7 +37,7 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
 const OPTION_CLASS = `min-h-8.5 px-3 ${SEGMENTED_OPTION}`;
-const DATE_INPUT_CLASS = `min-h-9 rounded-control px-2 text-[13px] ${FIELD}`;
+const DATE_INPUT_CLASS = `min-h-9 rounded-control px-2 text-base sm:text-[13px] ${FIELD}`;
 
 export function PeriodSelector({
   basePath,

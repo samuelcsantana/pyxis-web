@@ -42,7 +42,7 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
           defaultValue={query}
           maxLength={100}
           placeholder={label}
-          className="min-w-0 grow bg-transparent text-sm text-ink outline-none placeholder:text-muted"
+          className="min-w-0 grow bg-transparent text-base text-ink outline-none placeholder:text-muted sm:text-sm"
         />
       </label>
       <button
