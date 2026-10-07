@@ -8,12 +8,22 @@ import { DOCUMENT_FONT_CLASSES } from './fonts';
 import './globals.css';
 
 const NOT_INDEXED: Metadata['robots'] = { index: false, follow: false };
+const DEMO_SHARE_TITLE = `${APP_NAME} live demo`;
 
 export function generateMetadata(): Metadata {
+  const demo = isDemoMode();
+  const shareTitle = demo ? DEMO_SHARE_TITLE : APP_NAME;
   return {
     title: APP_NAME,
     description: APP_DESCRIPTION,
-    robots: isDemoMode() ? null : NOT_INDEXED,
+    robots: demo ? null : NOT_INDEXED,
+    openGraph: {
+      type: 'website',
+      siteName: APP_NAME,
+      title: shareTitle,
+      description: APP_DESCRIPTION,
+    },
+    twitter: { card: 'summary_large_image', title: shareTitle, description: APP_DESCRIPTION },
   };
 }
 
