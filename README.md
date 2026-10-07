@@ -196,7 +196,7 @@ server.
 
 ```bash
 npm run test:cov        # unit tests in jsdom, 100% coverage required
-npm run test:e2e        # Playwright with axe, light and dark, desktop and phone
+npm run test:e2e        # Playwright with axe, light and dark, desktop and phone, no sideways scroll
 npm run test:storybook  # every story in headless Chromium, axe violations fail the run
 npm run test:tooling    # the lint rule and the comment check
 ```
