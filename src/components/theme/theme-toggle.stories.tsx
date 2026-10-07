@@ -18,3 +18,19 @@ export const DarkTheme: Story = {
   args: { initialTheme: 'dark' },
   globals: { theme: 'dark' },
 };
+
+export const Hovered: Story = {
+  args: { initialTheme: 'light' },
+  parameters: { pseudo: { hover: true } },
+};
+
+export const HoveredDark: Story = {
+  args: { initialTheme: 'dark' },
+  globals: { theme: 'dark' },
+  parameters: { pseudo: { hover: true } },
+};
+
+export const KeyboardFocus: Story = {
+  args: { initialTheme: 'light' },
+  parameters: { pseudo: { focusVisible: true } },
+};
