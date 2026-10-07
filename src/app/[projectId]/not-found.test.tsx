@@ -19,13 +19,13 @@ describe('ProjectNotFound', () => {
       'href',
       '/p-store/overview',
     );
-    expect(metadata.title).toBe('Page not found · Pyxis');
+    expect(metadata.title).toBe('Page not found');
   });
 });
 
 describe('UnknownScreen', () => {
   it('answers not found for any path under a project that is not a screen', () => {
     expect(() => UnknownScreen()).toThrow('not-found');
-    expect(unknownScreenMetadata.title).toBe('Page not found · Pyxis');
+    expect(unknownScreenMetadata.title).toBe('Page not found');
   });
 });
