@@ -100,6 +100,17 @@ describe('MockTimelineService', () => {
     });
   });
 
+  it('finds every visit of another demo person by the user id the visits list shows', async () => {
+    const service = new MockTimelineService();
+
+    const person = await service.timeline('demo', { kind: 'user', id: 'u_93d1' }, null);
+
+    expect(person.visits.map((visit) => visit.sessionId)).toEqual([
+      'a1fa5f88-c22d-4719-8fc0-c7d1fc8cd06f',
+      'd073f2ad-11c2-470a-8097-fb6f6173e8ae',
+    ]);
+  });
+
   it('finds one visit by its id, and nothing for anyone else', async () => {
     const service = new MockTimelineService();
     const visit = await service.timeline('demo', { kind: 'visit', id: VISIT }, null);
