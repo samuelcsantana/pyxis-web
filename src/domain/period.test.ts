@@ -8,6 +8,7 @@ import {
   MAX_PERIOD_DAYS,
   periodQuery,
   periodSearchParameters,
+  rejectedRangeNotice,
   presetPeriod,
   resolvePeriod,
   todayIn,
@@ -87,11 +88,43 @@ describe('resolvePeriod', () => {
     expect(resolvePeriod(search, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO).preset).toBe('30d');
   });
 
+  it.each([
+    ['a date that does not exist', '2026-02-30', '2026-03-01', 'not-a-date'],
+    ['a start after the end', '2026-09-02', '2026-09-01', 'inverted'],
+    ['an end after today in the project zone', '2026-10-01', '2026-10-06', 'future'],
+    ['more than the longest period', '2025-08-31', '2026-10-05', 'too-long'],
+  ] as const)('keeps a range with %s that it did not use, and why', (_case, from, to, problem) => {
+    expect(resolvePeriod({ from, to }, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO).rejected).toEqual({
+      from,
+      to,
+      problem,
+    });
+  });
+
+  it('rejects nothing when no custom period was asked', () => {
+    expect(resolvePeriod({ from: '2026-08-01' }, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO)).toEqual(
+      presetPeriod('30d', '2026-10-05'),
+    );
+  });
+
   it(`accepts exactly ${String(MAX_PERIOD_DAYS)} days`, () => {
     const to = '2026-10-05';
     const from = addDays(to, 1 - MAX_PERIOD_DAYS);
 
     expect(resolvePeriod({ from, to }, SAO_PAULO, LATE_EVENING_IN_SAO_PAULO).preset).toBe('custom');
+  });
+});
+
+describe('rejectedRangeNotice', () => {
+  it.each([
+    ['not-a-date', 'one of its dates is not a calendar date'],
+    ['inverted', 'it ends before it starts'],
+    ['future', 'it ends after today'],
+    ['too-long', 'it is longer than 400 days'],
+  ] as const)('says why a %s range was not used', (problem, reason) => {
+    expect(rejectedRangeNotice({ from: '2026-09-02', to: '2026-09-01', problem })).toBe(
+      `That range was not used: ${reason}. Showing the last 30 days instead.`,
+    );
   });
 });
 
