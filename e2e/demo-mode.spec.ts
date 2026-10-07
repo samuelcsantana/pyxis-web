@@ -10,6 +10,7 @@ const SCREENS = [
   { title: 'Features', path: 'features' },
   { title: 'Requests', path: 'requests' },
   { title: 'Timeline', path: 'timeline?user=u_7f3a' },
+  { title: 'Visits', path: 'visits' },
   { title: 'Devices', path: 'devices' },
   { title: 'Acquisition', path: 'acquisition' },
 ] as const;

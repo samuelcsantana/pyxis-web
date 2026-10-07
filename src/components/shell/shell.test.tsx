@@ -77,7 +77,7 @@ describe('SidebarNav', () => {
   it('links every screen', () => {
     render(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(7);
+    expect(screen.getAllByRole('link')).toHaveLength(8);
     expect(screen.queryByText('Soon')).not.toBeInTheDocument();
   });
 
