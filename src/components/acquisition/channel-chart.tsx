@@ -37,7 +37,11 @@ function ChannelBars({
   readonly channels: readonly Channel[];
 }) {
   return (
-    <figure role="img" aria-label={channelSummary(days)} className="h-50 w-full sm:h-60">
+    <figure
+      role="img"
+      aria-label={channelSummary(days)}
+      className="h-50 w-full overflow-hidden sm:h-60"
+    >
       <ResponsiveContainer width="100%" height="100%" initialDimension={CHART_INITIAL_SIZE}>
         <BarChart
           data={[...channelChartRows(days)]}

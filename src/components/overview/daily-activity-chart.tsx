@@ -27,7 +27,11 @@ export interface DailyActivityChartProps {
 
 function ActivityChart({ days }: { readonly days: readonly DayActivity[] }) {
   return (
-    <figure role="img" aria-label={activitySummary(days)} className="h-30 w-full sm:h-60">
+    <figure
+      role="img"
+      aria-label={activitySummary(days)}
+      className="h-30 w-full overflow-hidden sm:h-60"
+    >
       <ResponsiveContainer width="100%" height="100%" initialDimension={CHART_INITIAL_SIZE}>
         <AreaChart data={[...days]} margin={CHART_MARGIN} accessibilityLayer={false}>
           <CartesianGrid vertical={false} stroke="var(--color-grid)" />
