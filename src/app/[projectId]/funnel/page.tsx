@@ -22,9 +22,10 @@ import {
   serializeSteps,
 } from '@/domain/funnel';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
-import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
+import { DEMO_FUNNEL_STEPS, demoExampleFunnel } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 
@@ -55,7 +56,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const mode = funnelModeOf(search);
-  const steps = funnelStepsOf(search);
+  const steps = funnelStepsOf(search) ?? (isDemoMode() ? demoExampleFunnel(project.id) : null);
   const basePath = screenHref(project.id, 'funnel');
   const linkTo = (parameters: Readonly<Record<string, string>>) =>
     `${basePath}?${withKeptParameters(periodQuery(period), parameters)}`;

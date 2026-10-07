@@ -9,7 +9,6 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
     test('has no WCAG 2.2 A or AA violation, also while editing', async ({ page }) => {
       await page.goto(`/${STORE_ID}/funnel`);
-      await page.getByRole('link', { name: 'Start from an example funnel' }).click();
       await expect(page.getByRole('list', { name: 'Funnel' })).toBeVisible();
 
       expect(await axeViolations(page)).toEqual([]);
@@ -25,7 +24,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 test('round-trips an edited funnel through the URL', async ({ page }) => {
   await page.goto(`/${STORE_ID}/funnel?range=30d`);
-  await expect(page.getByRole('heading', { name: 'Build a funnel' })).toBeVisible();
+  await page.getByRole('button', { name: 'Edit steps' }).click();
+  for (const position of [6, 5, 4, 3]) {
+    await page.getByRole('button', { name: `Remove step ${String(position)}` }).click();
+  }
 
   await page.getByRole('textbox', { name: 'Step 1 page path' }).fill('/pricing');
   await page.getByRole('textbox', { name: 'Step 2 event name' }).fill('cta_clicked');
@@ -53,7 +55,6 @@ test('round-trips an edited funnel through the URL', async ({ page }) => {
 
 test('reorders the steps with the keyboard alone', async ({ page }) => {
   await page.goto(`/${STORE_ID}/funnel`);
-  await page.getByRole('link', { name: 'Start from an example funnel' }).click();
   await expect(page.getByRole('list', { name: 'Funnel' })).toBeVisible();
   await page.getByRole('button', { name: 'Edit steps' }).click();
 
@@ -74,7 +75,6 @@ test('reorders the steps with the keyboard alone', async ({ page }) => {
 
 test('switches between per visit and per person and keeps the steps', async ({ page }) => {
   await page.goto(`/${STORE_ID}/funnel`);
-  await page.getByRole('link', { name: 'Start from an example funnel' }).click();
   await expect(page.getByRole('list', { name: 'Funnel' })).toBeVisible();
 
   await page.getByRole('link', { name: 'Per person' }).click();
