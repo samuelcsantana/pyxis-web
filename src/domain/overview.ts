@@ -1,16 +1,12 @@
 import {
-  displayedChange,
-  displayedPointChange,
-  formatChange,
+  countChange,
   formatCount,
   formatPercent,
-  formatPointChange,
   formatQuantity,
-  percentChange,
+  pointChange,
   rate,
   type Tone,
   toneOf,
-  trendOf,
 } from './metrics';
 import type { OverviewReport, OverviewWire } from './overview.schema';
 
@@ -90,13 +86,13 @@ export interface KpiView {
 }
 
 function countKpi(kpi: Kpi, id: KpiId, label: string, note: string): KpiView {
-  const change = percentChange(kpi.current, kpi.previous);
+  const change = countChange(kpi.current, kpi.previous);
   return {
     id,
     label,
     value: formatCount(kpi.current),
-    change: formatChange(change),
-    tone: toneOf(trendOf(displayedChange(change)), 'up'),
+    change: change.text,
+    tone: toneOf(change.trend, 'up'),
     note,
     series: kpi.daily,
   };
@@ -108,13 +104,17 @@ function failureRate(count: FailureCount): number | null {
 
 function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): KpiView {
   const current = failureRate(writeErrors.current);
-  const previous = failureRate(writeErrors.previous);
+  const change = pointChange(
+    current,
+    failureRate(writeErrors.previous),
+    Math.min(writeErrors.current.total, writeErrors.previous.total),
+  );
   return {
     id: 'write-errors',
     label: 'Write error rate',
     value: formatPercent(current),
-    change: formatPointChange(current, previous),
-    tone: toneOf(trendOf(displayedPointChange(current, previous)), 'down'),
+    change: change.text,
+    tone: toneOf(change.trend, 'down'),
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
     series: writeErrors.daily.map((day) => failureRate(day) ?? 0),
   };

@@ -179,7 +179,7 @@ describe('overviewKpis', () => {
       id: 'visits',
       label: 'Visits',
       value: '4,758',
-      change: '+12.4%',
+      change: '+12.4% (+525)',
       tone: 'good',
       note: 'vs. previous 30 days',
       series: [2400, 2358],
@@ -192,7 +192,7 @@ describe('overviewKpis', () => {
       label: 'Write error rate',
       value: '2.4%',
       change: '−0.3 pt',
-      tone: 'good',
+      tone: 'neutral',
       note: '61 of 2,524 writes failed',
       series: [0.025, 31 / 1324],
     });
@@ -246,11 +246,11 @@ describe('overviewKpis', () => {
       { ...ENDED, days: 1 },
     );
 
-    expect(visits).toMatchObject({ change: '0%', tone: 'neutral' });
-    expect(errors).toMatchObject({ change: '0 pt', tone: 'neutral' });
+    expect(visits).toMatchObject({ change: '0% (+1)', tone: 'neutral' });
+    expect(errors).toMatchObject({ change: 'no change', tone: 'neutral' });
   });
 
-  it('shows dashes and a neutral tone when there is nothing to compare with', () => {
+  it('shows the difference alone, or a dash, and a neutral tone with nothing to compare', () => {
     const [visits, , , errors] = overviewKpis(
       report({
         ...WIRE,
@@ -267,7 +267,7 @@ describe('overviewKpis', () => {
       { ...ENDED, days: 1 },
     );
 
-    expect(visits?.change).toBe('—');
+    expect(visits?.change).toBe('+5');
     expect(visits?.tone).toBe('neutral');
     expect(errors?.value).toBe('—');
     expect(errors?.change).toBe('—');
