@@ -88,14 +88,31 @@ export const Empty: Story = {
   },
 };
 
-export const OnAPhone: Story = {
-  decorators: [
-    (Story) => (
-      <div className="w-[358px]">
-        <Story />
-      </div>
-    ),
-  ],
+export const DarkTheme: Story = { ...OlderVisitsLoaded, globals: { theme: 'dark' } };
+
+const PHONE = { viewport: { value: 'mobile2', isRotated: false } } as const;
+
+export const CardsOnAPhone: Story = {
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('list', { name: 'Visits' })).toBeVisible();
+    await expect(canvas.queryByRole('table', { name: 'Visits' })).toBeNull();
+  },
 };
 
-export const DarkTheme: Story = { ...OlderVisitsLoaded, globals: { theme: 'dark' } };
+export const OlderCardsLoadedOnAPhone: Story = {
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Load older visits' }));
+    await expect(await canvas.findByText('That is every visit of this period.')).toBeVisible();
+    await waitFor(() =>
+      expect(canvas.getByRole('link', { name: /, open visit 19c2e5f6$/ })).toHaveFocus(),
+    );
+  },
+};
+
+export const EmptyOnAPhone: Story = { ...Empty, globals: PHONE };
+
+export const DarkThemeOnAPhone: Story = { globals: { ...PHONE, theme: 'dark' } };

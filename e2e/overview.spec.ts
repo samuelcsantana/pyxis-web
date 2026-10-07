@@ -107,7 +107,10 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
   await expect(page).toHaveURL(/\/visits\?range=7d&path=%2Fcalculator$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Visits' })).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Viewed page' })).toHaveValue('/calculator');
-  const rows = page.getByRole('table', { name: 'Visits' }).locator('tbody tr');
+  const rows = page
+    .getByRole('table', { name: 'Visits' })
+    .locator('tbody tr')
+    .or(page.getByRole('list', { name: 'Visits' }).locator(':scope > li'));
   await expect(rows).toHaveCount(2);
 
   await page.goBack();

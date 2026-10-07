@@ -250,8 +250,10 @@ describe('visitRows', () => {
       duration: '2 min 41 s',
       entryPath: '/calculator',
       pageViews: '3',
+      pagesLabel: '3 pages',
       highlights: ['Calculator result shown', 'Cta clicked'],
       failedRequests: 1,
+      failedRequestsLabel: '1 failed request',
       device: 'Mobile · Safari · iOS · Brazil',
       channel: 'Paid',
       account: { userId: 'u_check_visits', shown: 'u_check_…' },
@@ -261,10 +263,26 @@ describe('visitRows', () => {
       duration: '0 s',
       entryPath: null,
       pageViews: '0',
+      pagesLabel: '0 pages',
+      failedRequestsLabel: 'No failed request',
       device: 'Desktop · Chrome · Windows',
       channel: null,
       account: null,
     });
+  });
+
+  it('says one page and counts several failed requests', () => {
+    const [row] = visitRows(
+      visitsResponseSchema.parse({
+        ...WIRE,
+        visits: WIRE.visits
+          .slice(0, 1)
+          .map((visit) => ({ ...visit, page_views: 1, failed_requests: 2 })),
+      }).visits,
+      'UTC',
+    );
+
+    expect(row).toMatchObject({ pagesLabel: '1 page', failedRequestsLabel: '2 failed requests' });
   });
 
   it('shows a short user id whole', () => {

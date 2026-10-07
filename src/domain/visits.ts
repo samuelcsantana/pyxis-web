@@ -1,7 +1,7 @@
 import { type Channel, CHANNEL_LABELS, CHANNELS } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { stepProblem } from './funnel';
-import { eventLabel, formatCount } from './metrics';
+import { eventLabel, formatCount, formatQuantity } from './metrics';
 import { formatVisitDuration, shortId, visitStartFormat } from './timeline';
 import type { VisitsReport, VisitsWire } from './visits.schema';
 
@@ -151,8 +151,10 @@ export interface VisitRow {
   readonly duration: string;
   readonly entryPath: string | null;
   readonly pageViews: string;
+  readonly pagesLabel: string;
   readonly highlights: readonly string[];
   readonly failedRequests: number;
+  readonly failedRequestsLabel: string;
   readonly device: string;
   readonly channel: string | null;
   readonly account: VisitAccount | null;
@@ -164,6 +166,12 @@ function visitAccount(userId: string | null): VisitAccount | null {
   }
   const short = shortId(userId);
   return { userId, shown: short === userId ? userId : `${short}…` };
+}
+
+function failedRequestsLabel(count: number): string {
+  return count === 0
+    ? 'No failed request'
+    : formatQuantity(count, 'failed request', 'failed requests');
 }
 
 function deviceLabel(visit: VisitSummary): string {
@@ -185,8 +193,10 @@ export function visitRows(visits: readonly VisitSummary[], timeZone: string): re
     duration: formatVisitDuration(visit.startedAt, visit.endedAt),
     entryPath: visit.entryPath,
     pageViews: formatCount(visit.pageViews),
+    pagesLabel: formatQuantity(visit.pageViews, 'page', 'pages'),
     highlights: visit.highlights.map(eventLabel),
     failedRequests: visit.failedRequests,
+    failedRequestsLabel: failedRequestsLabel(visit.failedRequests),
     device: deviceLabel(visit),
     channel: visit.channel === null ? null : CHANNEL_LABELS[visit.channel],
     account: visitAccount(visit.userId),

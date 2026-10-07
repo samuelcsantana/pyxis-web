@@ -1,20 +1,20 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
-import type { VisitAccount, VisitRow, VisitRowsPage } from '@/domain/visits';
+import type { VisitRow, VisitRowsPage } from '@/domain/visits';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { BUTTON_SECONDARY, CONTROL_BUSY, TEXT_LINK } from '@/components/ui/control-classes';
-import { linkWith } from '@/components/shell/screens';
+import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
+import { VisitCards } from './visit-cards';
+import { AccountCell, EntryPath, FAILED_CHIP, Highlights, VisitStartLink } from './visit-cells';
 
 const SMOOTH_LOADING_MS = 400;
-const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-medium whitespace-nowrap';
 const WIDE = 'hidden sm:table-cell';
 const WIDER = 'hidden lg:table-cell';
 const WIDEST = 'hidden xl:table-cell';
+const HEADING_ID = 'visits-heading';
 
 export interface VisitsTableProps {
   readonly rows: readonly VisitRow[];
@@ -22,46 +22,6 @@ export interface VisitsTableProps {
   readonly timelinePath: string;
   readonly emptyMessage: string;
   readonly loadOlder: (cursor: string) => Promise<VisitRowsPage>;
-}
-
-function timelineHref(timelinePath: string, lookup: Record<string, string>): string {
-  return linkWith(timelinePath, lookup);
-}
-
-function AccountCell({
-  account,
-  timelinePath,
-}: {
-  account: VisitAccount | null;
-  timelinePath: string;
-}) {
-  if (account === null) {
-    return <span className="text-muted">anonymous</span>;
-  }
-  return (
-    <Link
-      href={timelineHref(timelinePath, { user: account.userId })}
-      aria-label={`${account.userId}, open the timeline of this user`}
-      className={`${TEXT_LINK} font-mono text-xs`}
-    >
-      {account.shown}
-    </Link>
-  );
-}
-
-function Highlights({ labels }: { labels: readonly string[] }) {
-  if (labels.length === 0) {
-    return <span className="text-muted">{NO_VALUE}</span>;
-  }
-  return (
-    <ul className="flex flex-wrap gap-1">
-      {labels.map((label) => (
-        <li key={label} className={`${CHIP} bg-soft text-ink`}>
-          {label}
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 function VisitTableRow({
@@ -76,17 +36,11 @@ function VisitTableRow({
   return (
     <tr data-first-of-page={firstOfPage}>
       <th scope="row" className={`${BODY_CELL} pl-0 text-left font-normal whitespace-nowrap`}>
-        <Link
-          href={timelineHref(timelinePath, { visit: row.key })}
-          aria-label={`${row.started}, open visit ${row.visit}`}
-          className={TEXT_LINK}
-        >
-          <time dateTime={row.startedAt}>{row.started}</time>
-        </Link>
+        <VisitStartLink row={row} timelinePath={timelinePath} />
       </th>
       <td className={`${BODY_CELL} ${WIDE} whitespace-nowrap text-muted`}>{row.duration}</td>
       <td className={`${BODY_CELL} min-w-28 font-mono text-xs wrap-anywhere`}>
-        {row.entryPath ?? <span className="font-sans text-muted">{NO_VALUE}</span>}
+        <EntryPath path={row.entryPath} />
       </td>
       <td className={`${BODY_CELL} ${WIDE} text-right`}>{row.pageViews}</td>
       <td className={`${BODY_CELL} ${WIDEST}`}>
@@ -96,7 +50,7 @@ function VisitTableRow({
         {row.failedRequests === 0 ? (
           <span className="text-muted">0</span>
         ) : (
-          <span className={`${CHIP} bg-bad-soft font-semibold text-bad`}>{row.failedRequests}</span>
+          <span className={FAILED_CHIP}>{row.failedRequests}</span>
         )}
       </td>
       <td className={`${BODY_CELL} ${WIDER}`}>{row.device}</td>
@@ -108,6 +62,10 @@ function VisitTableRow({
       </td>
     </tr>
   );
+}
+
+function isShown(element: HTMLElement): boolean {
+  return element.getClientRects().length > 0;
 }
 
 export function VisitsTable({
@@ -124,7 +82,7 @@ export function VisitsTable({
   const request = useRef<Subscription | undefined>(undefined);
   const loaded = useRef(0);
   const pageToFocus = useRef<number | null>(null);
-  const table = useRef<HTMLTableElement>(null as unknown as HTMLTableElement);
+  const section = useRef<HTMLElement>(null as unknown as HTMLElement);
 
   useEffect(
     () => () => {
@@ -139,7 +97,8 @@ export function VisitsTable({
     if (page === null) {
       return;
     }
-    [...table.current.querySelectorAll<HTMLElement>(`[data-first-of-page="${String(page)}"] a`)]
+    [...section.current.querySelectorAll<HTMLElement>(`[data-first-of-page="${String(page)}"] a`)]
+      .filter(isShown)
       .slice(0, 1)
       .forEach((link) => {
         link.focus();
@@ -163,65 +122,69 @@ export function VisitsTable({
       .subscribe();
   };
 
+  const allPages = [rows, ...pages];
+
   return (
-    <section aria-labelledby="visits-heading" className={PANEL}>
-      <h2 id="visits-heading" className={PANEL_TITLE}>
+    <section ref={section} aria-labelledby={HEADING_ID} className={PANEL}>
+      <h2 id={HEADING_ID} className={PANEL_TITLE}>
         Visits
       </h2>
       {rows.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted">{emptyMessage}</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table
-            ref={table}
-            aria-labelledby="visits-heading"
-            className="w-full border-collapse text-[13px] tabular-nums"
-          >
-            <thead>
-              <tr>
-                <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                  Started
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDE} text-left`}>
-                  Duration
-                </th>
-                <th scope="col" className={`${HEADER_CELL} text-left`}>
-                  Entry page
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
-                  Pages
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
-                  Highlights
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
-                  Failed requests
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
-                  Device
-                </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
-                  Channel
-                </th>
-                <th scope="col" className={`${HEADER_CELL} pr-0 text-left`}>
-                  Account
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {[rows, ...pages].flatMap((page, index) =>
-                page.map((row, position) => (
-                  <VisitTableRow
-                    key={row.key}
-                    row={row}
-                    timelinePath={timelinePath}
-                    firstOfPage={position === 0 ? index : undefined}
-                  />
-                )),
-              )}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <VisitCards pages={allPages} timelinePath={timelinePath} labelledBy={HEADING_ID} />
+          <div className="hidden overflow-x-auto sm:block">
+            <table
+              aria-labelledby={HEADING_ID}
+              className="w-full border-collapse text-[13px] tabular-nums"
+            >
+              <thead>
+                <tr>
+                  <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
+                    Started
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-left`}>
+                    Duration
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} text-left`}>
+                    Entry page
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
+                    Pages
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
+                    Highlights
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
+                    Failed requests
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
+                    Device
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
+                    Channel
+                  </th>
+                  <th scope="col" className={`${HEADER_CELL} pr-0 text-left`}>
+                    Account
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {allPages.flatMap((page, index) =>
+                  page.map((row, position) => (
+                    <VisitTableRow
+                      key={row.key}
+                      row={row}
+                      timelinePath={timelinePath}
+                      firstOfPage={position === 0 ? index : undefined}
+                    />
+                  )),
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
       {cursor === null && pages.length > 0 ? (
         <p className="text-[13px] text-muted">That is every visit of this period.</p>

@@ -90,10 +90,10 @@ describe('VisitsPage', () => {
       null,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Visits' })).toBeInTheDocument();
-    const rows = within(screen.getByRole('table', { name: 'Visits' })).getAllByRole('row');
-    expect(rows).toHaveLength(9);
+    const table = within(screen.getByRole('table', { name: 'Visits' }));
+    expect(table.getAllByRole('row')).toHaveLength(9);
     expect(
-      screen.getByRole('link', { name: 'Mon, Oct 5, 18:40, open visit 3c07a1b2' }),
+      table.getByRole('link', { name: 'Mon, Oct 5, 18:40, open visit 3c07a1b2' }),
     ).toHaveAttribute(
       'href',
       '/p-store/timeline?range=30d&visit=3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01',
