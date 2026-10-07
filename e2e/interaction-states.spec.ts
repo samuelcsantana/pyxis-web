@@ -31,6 +31,12 @@ async function editFunnelSteps(page: Page): Promise<void> {
   await page.getByRole('textbox', { name: 'Step 2 event name' }).fill('cta_clicked');
 }
 
+async function openVisitFiltersOnAPhone(page: Page, isMobile: boolean) {
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Filters' }).click();
+  }
+}
+
 const REPRESENTATIVES: readonly Representative[] = [
   {
     control: 'a period preset',
@@ -74,11 +80,13 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'a visits filter field',
     screen: 'visits',
     target: (page) => page.getByRole('textbox', { name: 'Had event' }),
+    prepare: openVisitFiltersOnAPhone,
   },
   {
     control: 'a visits filter select',
     screen: 'visits',
     target: (page) => page.getByRole('combobox', { name: 'Channel' }),
+    prepare: openVisitFiltersOnAPhone,
   },
   {
     control: 'the funnel Apply button',
@@ -177,6 +185,18 @@ test('the menu button changes visibly when pressed on a phone', async ({ page, i
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
 });
 
+test('the visits filters toggle changes visibly when pressed on a phone', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'The filters toggle only shows on narrow screens.');
+  await page.goto(`/${STORE_ID}/visits`);
+
+  const states = await pointerStates(page.getByRole('button', { name: 'Filters' }));
+
+  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+});
+
 interface ContentControl {
   readonly control: string;
   readonly screen: string;
@@ -187,7 +207,7 @@ interface ContentControl {
 const CONTENT_CONTROLS: readonly ContentControl[] = [
   {
     control: 'a primary button',
-    screen: 'visits',
+    screen: 'visits?event=signup_completed',
     target: (page) => page.getByRole('button', { name: 'Apply filters' }),
   },
   {
@@ -317,7 +337,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 }
 
 test('buttons and disclosure summaries show the pointer cursor', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/visits`);
+  await page.goto(`/${STORE_ID}/visits?event=signup_completed`);
   const applyFilters = await readPaint(page.getByRole('button', { name: 'Apply filters' }));
   const custom = await readPaint(page.locator('summary').filter({ hasText: 'Custom' }));
 
@@ -348,12 +368,12 @@ interface FormField {
 const FORM_FIELDS: readonly FormField[] = [
   {
     field: 'a visits filter field',
-    path: `/${STORE_ID}/visits`,
+    path: `/${STORE_ID}/visits?event=signup_completed`,
     target: (page) => page.getByRole('textbox', { name: 'Had event' }),
   },
   {
     field: 'a visits filter select',
-    path: `/${STORE_ID}/visits`,
+    path: `/${STORE_ID}/visits?event=signup_completed`,
     target: (page) => page.getByRole('combobox', { name: 'Channel' }),
   },
   {

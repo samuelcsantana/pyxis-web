@@ -230,6 +230,10 @@ describe('VisitFiltersForm', () => {
       '/p-store/visits?from=2026-09-01&to=2026-09-30',
     );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Filters · 7 active' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
   });
 
   it('starts empty, without a clear link, and names the filters it left out', () => {
@@ -250,5 +254,40 @@ describe('VisitFiltersForm', () => {
     expect(
       container.querySelector<HTMLInputElement>('input[type="hidden"][name="range"]')?.value,
     ).toBe('7d');
+    expect(screen.getByRole('button', { name: 'Filters' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+  });
+
+  it('keeps the fields behind a "Filters" button on a phone until it is pressed', async () => {
+    const user = userEvent.setup();
+    render(
+      <VisitFiltersForm
+        action="/p-store/visits"
+        period={{ preset: '30d', from: '2026-09-06', to: '2026-10-05' }}
+        filters={NO_VISIT_FILTERS}
+        problems={[]}
+        clearHref={null}
+      />,
+    );
+    const toggle = screen.getByRole('button', { name: 'Filters' });
+    const fields = document.getElementById(toggle.getAttribute('aria-controls') ?? '');
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveClass('sm:hidden');
+    expect(fields).toHaveClass('hidden', 'sm:flex');
+    expect(fields).toContainElement(screen.getByRole('button', { name: 'Apply filters' }));
+
+    await user.click(toggle);
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(fields).toHaveClass('flex');
+    expect(fields).not.toHaveClass('hidden');
+
+    await user.click(toggle);
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(fields).toHaveClass('hidden');
   });
 });

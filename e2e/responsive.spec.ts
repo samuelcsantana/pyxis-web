@@ -47,7 +47,7 @@ for (const size of PHONE_SIZES) {
 }
 
 const FORM_SCREENS = [
-  { name: 'Visits', path: `/${STORE_ID}/visits` },
+  { name: 'Visits', path: `/${STORE_ID}/visits`, open: 'Filters' },
   { name: 'Timeline', path: `/${STORE_ID}/timeline` },
   { name: 'Features', path: `/${STORE_ID}/features` },
   { name: 'Sign in', path: '/sign-in' },

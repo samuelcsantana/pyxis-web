@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { VisitFiltersForm } from './visit-filters-form';
 
@@ -48,15 +49,51 @@ export const FiltersLeftOut: Story = {
   },
 };
 
-export const OnAPhone: Story = {
-  ...Filtered,
-  decorators: [
-    (Story) => (
-      <div className="w-[358px]">
-        <Story />
-      </div>
-    ),
-  ],
+export const DarkTheme: Story = { ...Filtered, globals: { theme: 'dark' } };
+
+const PHONE = { viewport: { value: 'mobile2', isRotated: false } } as const;
+
+export const CollapsedOnAPhone: Story = {
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('button', { name: 'Filters' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    await expect(canvas.queryByRole('textbox', { name: 'Viewed page' })).toBeNull();
+  },
 };
 
-export const DarkTheme: Story = { ...Filtered, globals: { theme: 'dark' } };
+export const OpenedOnAPhone: Story = {
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('button', { name: 'Filters' });
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getByRole('textbox', { name: 'Viewed page' })).toBeVisible();
+  },
+};
+
+export const FilteredOnAPhone: Story = {
+  ...Filtered,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByRole('button', { name: 'Filters · 7 active' }),
+    ).toHaveAttribute('aria-expanded', 'true');
+  },
+};
+
+export const FiltersLeftOutOnAPhone: Story = {
+  ...FiltersLeftOut,
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('alert')).toBeVisible();
+  },
+};
+
+export const DarkThemeOnAPhone: Story = {
+  globals: { ...PHONE, theme: 'dark' },
+};
