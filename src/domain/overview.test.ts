@@ -286,7 +286,7 @@ describe('overviewKpis', () => {
     expect(errors?.change).toBe('—');
     expect(errors?.tone).toBe('neutral');
     expect(errors?.note).toBe('0 of 0 writes failed');
-    expect(errors?.series).toEqual([0]);
+    expect(errors?.series).toEqual([null]);
   });
 
   it('judges no change while today is compared with all of yesterday', () => {

@@ -50,6 +50,15 @@ describe('KpiGrid', () => {
     expect(screen.getByText('0 pt')).toHaveClass('text-muted');
   });
 
+  it('leaves a gap in the error rate line on a day without writes', () => {
+    render(<KpiGrid kpis={[{ ...kpi('write-errors'), series: [0.02, null, 0.04, 0.01] }]} />);
+
+    const lines = screen
+      .getByRole('region', { name: 'Write error rate' })
+      .querySelectorAll('polyline');
+    expect(lines).toHaveLength(2);
+  });
+
   it('says in words, not only in colour, whether a change is good news', () => {
     render(
       <KpiGrid

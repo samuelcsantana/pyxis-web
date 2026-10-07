@@ -10,6 +10,7 @@ import {
   toneOf,
 } from './metrics';
 import type { OverviewReport, OverviewWire } from './overview.schema';
+import type { SparklineValue } from './sparkline';
 
 export type { OverviewReport, OverviewWire };
 
@@ -83,7 +84,7 @@ export interface KpiView {
   readonly change: string;
   readonly tone: Tone;
   readonly note: string;
-  readonly series: readonly number[];
+  readonly series: readonly SparklineValue[];
 }
 
 function countKpi(kpi: Kpi, id: KpiId, label: string, note: string): KpiView {
@@ -117,7 +118,7 @@ function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): Kpi
     change: change.text,
     tone: toneOf(change.trend, 'down'),
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
-    series: writeErrors.daily.map((day) => failureRate(day) ?? 0),
+    series: writeErrors.daily.map(failureRate),
   };
 }
 

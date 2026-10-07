@@ -23,6 +23,10 @@ export const Flat: Story = { args: { values: [5, 5, 5, 5] } };
 
 export const SingleDay: Story = { args: { values: [9] } };
 
+export const WithGaps: Story = {
+  args: { values: [0.02, 0.05, null, null, 0.03, null, 0.04, 0.01] },
+};
+
 export const DarkTheme: Story = {
   args: { strokeClass: 'stroke-violet' },
   globals: { theme: 'dark' },
