@@ -26,16 +26,14 @@ per-person timelines of a product, measured without cookies or personal data.**
 
 </div>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/screenshots/overview-dark.png">
-  <img alt="The overview of the demo store: four KPI cards with sparklines, page views and named events per day, the top pages and the top events" src=".github/assets/screenshots/overview-light.png" width="100%">
-</picture>
+<img alt="An 18-second tour of the live demo: the overview switches from 30 to 7 days, the Requests screen opens the details of POST /orders, its latest failure opens the visit that hit it (a 409, the retry and the order created), then an example sign-up funnel, which ends in the dark theme" src=".github/assets/demo-tour.gif" width="100%">
 
 | Requests, with a route's details                                                                                                                                                                      | Funnel, dark theme                                                                                                                                 | Timeline of one person                                                                                                                           |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <img alt="The routes of the demo store with the details of POST /orders open: status codes, the screens where it failed and its latest failures" src=".github/assets/screenshots/requests-light.png"> | <img alt="A six-step sign-up funnel with the share that continued and the drop-off at each step" src=".github/assets/screenshots/funnel-dark.png"> | <img alt="The timeline of the demo person: a failed order, its retry and the order created" src=".github/assets/screenshots/timeline-light.png"> |
 
-Every screenshot shows invented demo data: the dashboard runs on it when no API is configured.
+The tour and the screenshots show invented demo data: the dashboard runs on it when no API is
+configured. The tour was recorded from the [live demo](https://demo.pyxis.samuelsantana.dev).
 
 > **Status:** early development, in production. Every screen works against the API, deployed at
 > `pyxis.samuelsantana.dev` for the projects' admins, and against invented data in the public
