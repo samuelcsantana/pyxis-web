@@ -28,6 +28,9 @@ test('every screen runs on invented data, with the banner and no call to any API
     await page.goto(`/${STORE_ID}/${screen.path}`);
     await expect(page.getByRole('heading', { level: 1, name: screen.title })).toBeVisible();
     await expect(page.getByRole('note')).toContainText('Demo data');
+    await expect(
+      page.getByRole('note').getByRole('link', { name: 'Source on GitHub' }),
+    ).toHaveAttribute('href', 'https://github.com/samuelcsantana/pyxis-web');
   }
 
   expect(outside).toEqual([]);
