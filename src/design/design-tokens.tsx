@@ -2,6 +2,7 @@ export const COLOR_TOKENS = [
   { name: 'bg', use: 'Page background' },
   { name: 'card', use: 'Cards, panels, inputs' },
   { name: 'line', use: 'Borders and dividers' },
+  { name: 'field', use: 'Borders of inputs and selects' },
   { name: 'grid', use: 'Chart grid lines' },
   { name: 'ink', use: 'Text, selected controls' },
   { name: 'muted', use: 'Secondary text' },
