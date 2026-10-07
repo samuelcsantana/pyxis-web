@@ -43,14 +43,16 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
         {kpi.change}
         <span className="sr-only">{spokenChange(kpi.change, kpi.tone)}</span>
       </p>
-      <Sparkline
-        values={kpi.series}
-        box={SPARKLINE_BOX}
-        width="100%"
-        strokeClass={STROKE_CLASSES[color]}
-        strokeWidth={2}
-        className="hidden sm:col-span-2 sm:block"
-      />
+      {kpi.series.length > 1 ? (
+        <Sparkline
+          values={kpi.series}
+          box={SPARKLINE_BOX}
+          width="100%"
+          strokeClass={STROKE_CLASSES[color]}
+          strokeWidth={2}
+          className="hidden sm:col-span-2 sm:block"
+        />
+      ) : null}
       <p className="text-xs text-muted sm:col-span-2">{kpi.note}</p>
     </section>
   );
