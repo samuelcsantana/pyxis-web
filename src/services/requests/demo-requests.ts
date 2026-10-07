@@ -78,6 +78,7 @@ export function demoRequestsWire(
     (failure) => screen === null || failure.path === screen,
   );
   return {
+    kind: 'writes',
     routes: project.routes
       .map((route) =>
         routeWire(

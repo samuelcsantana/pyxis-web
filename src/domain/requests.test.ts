@@ -62,6 +62,11 @@ describe('requestsResponseSchema', () => {
     expect(ORDERS.recentFailures[0]?.errorCode).toBe('order_number_in_use');
     expect(ME.screens).toEqual([]);
   });
+
+  it('reads a report that names its kind as well as one from an API that does not', () => {
+    expect(requestsResponseSchema.parse({ ...WIRE, kind: 'reads' }).routes).toEqual(ROUTES);
+    expect(() => requestsResponseSchema.parse({ ...WIRE, kind: 'pages' })).toThrow();
+  });
 });
 
 describe('URL filters', () => {
