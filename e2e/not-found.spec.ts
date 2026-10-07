@@ -41,11 +41,11 @@ test('names a project the admin may not read as not found, not as its screen', a
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toHaveCount(0);
 });
 
-test('keeps the project shell around an unknown screen, kept out of search', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/nope`);
+test('keeps the project shell around an unknown screen, and answers 404', async ({ page }) => {
+  const response = await page.goto(`/${STORE_ID}/nope`);
 
+  expect(response?.status()).toBe(404);
   await expect(page).toHaveTitle(NOT_FOUND_TITLE);
-  await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute('content', 'noindex');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
   await expect(page.getByRole('note')).toContainText('Demo data');
   await expect(

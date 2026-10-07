@@ -101,7 +101,8 @@ Shipping now:
   it viewed (up to three, `*` matching any characters), an event with an optional `key=value`
   property, the channel, the device and identified or anonymous visitors, all kept in the URL;
   each row opens its visit, and an identified one its person, in the Timeline
-- Loading, empty and error states shared by every screen; an empty period shows how to install
+- Loading, empty and error states shared by every screen; while a screen loads, its top bar
+  already shows its title above a skeleton shaped like it; an empty period shows how to install
   the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
   of the framework's default; a "Page not found" page, titled as such, for an unknown address or
   project, which keeps the project's navigation around an unknown screen of a known project
