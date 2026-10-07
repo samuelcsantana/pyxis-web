@@ -9,15 +9,21 @@ export type RouteReport = RequestsReport['routes'][number];
 
 export const MAX_SCREEN_LENGTH = 256;
 export const FAILING_ONLY = 'failing';
+export const FAILED_READS: RequestKind = 'reads';
 const VISIT_ID_LENGTH = 8;
 
 export interface RequestsSearch {
+  readonly kind?: string | string[];
   readonly show?: string | string[];
   readonly screen?: string | string[];
 }
 
 function single(value: string | string[] | undefined): string | undefined {
   return typeof value === 'string' ? value : undefined;
+}
+
+export function requestKindOf(search: RequestsSearch): RequestKind {
+  return single(search.kind) === FAILED_READS ? FAILED_READS : 'writes';
 }
 
 export function failingOnlyOf(search: RequestsSearch): boolean {
@@ -78,9 +84,8 @@ export function writesFigure(routes: readonly RouteReport[]): Figure {
   };
 }
 
-export function errorRateFigure(routes: readonly RouteReport[]): Figure {
-  const counts = failureCounts(routes);
-  const parts = [
+function failureKinds(counts: FailureCounts): string {
+  return [
     counts.client === 0
       ? null
       : formatQuantity(counts.client, 'client error (4xx)', 'client errors (4xx)'),
@@ -88,13 +93,44 @@ export function errorRateFigure(routes: readonly RouteReport[]): Figure {
       ? null
       : formatQuantity(counts.server, 'server error (5xx)', 'server errors (5xx)'),
     counts.noResponse === 0 ? null : `${formatCount(counts.noResponse)} with no response`,
-  ].filter((part) => part !== null);
+  ]
+    .filter((part) => part !== null)
+    .join(', ');
+}
+
+export function errorRateFigure(routes: readonly RouteReport[]): Figure {
+  const counts = failureCounts(routes);
   return {
     value: formatPercent(rate(counts.failed, counts.total)),
     note:
       counts.failed === 0
         ? `No failures in ${formatQuantity(counts.total, 'write', 'writes')}`
-        : `${formatCount(counts.failed)} failed: ${parts.join(', ')}`,
+        : `${formatCount(counts.failed)} failed: ${failureKinds(counts)}`,
+  };
+}
+
+const NO_FAILED_READ = 'No read failed in this period';
+
+export function failedReadsFigure(routes: readonly RouteReport[]): Figure {
+  const counts = failureCounts(routes);
+  return {
+    value: formatCount(counts.failed),
+    note: counts.failed === 0 ? NO_FAILED_READ : failureKinds(counts),
+  };
+}
+
+export function failingRoutesFigure(routes: readonly RouteReport[]): Figure {
+  const failing = routes.filter((route) => route.failed > 0);
+  const most = failing.reduce<RouteReport | undefined>(
+    (best, route) => (best === undefined || route.failed > best.failed ? route : best),
+    undefined,
+  );
+  return {
+    value: formatCount(failing.length),
+    note:
+      most === undefined
+        ? NO_FAILED_READ
+        : `Most: ${most.method} ${most.route}, ${formatQuantity(most.failed, 'failure', 'failures')}`,
   };
 }
 
@@ -114,6 +150,27 @@ export function slowestRouteFigure(routes: readonly RouteReport[]): Figure {
         value: formatDuration(slowest.medianDurationMs),
         note: `median of ${slowest.method} ${slowest.route}`,
       };
+}
+
+export interface RequestFigure extends Figure {
+  readonly id: string;
+  readonly label: string;
+}
+
+export function requestFigures(
+  kind: RequestKind,
+  routes: readonly RouteReport[],
+): readonly RequestFigure[] {
+  return kind === FAILED_READS
+    ? [
+        { id: 'failed-reads', label: 'Failed reads', ...failedReadsFigure(routes) },
+        { id: 'failing-routes', label: 'Routes failing', ...failingRoutesFigure(routes) },
+      ]
+    : [
+        { id: 'writes', label: 'Writes', ...writesFigure(routes) },
+        { id: 'error-rate', label: 'Error rate', ...errorRateFigure(routes) },
+        { id: 'slowest-route', label: 'Slowest route', ...slowestRouteFigure(routes) },
+      ];
 }
 
 export interface StatusChip {
@@ -163,7 +220,17 @@ function failureTime(timeZone: string): Intl.DateTimeFormat {
   });
 }
 
-export function routeRows(routes: readonly RouteReport[], timeZone: string): readonly RouteRow[] {
+function routeSummary(route: RouteReport, kind: RequestKind, errorShare: string, median: string) {
+  return kind === FAILED_READS
+    ? `${formatQuantity(route.failed, 'failed read', 'failed reads')} · median ${median}`
+    : `${formatQuantity(route.total, 'request', 'requests')} · ${errorShare} errors · median ${median}`;
+}
+
+export function routeRows(
+  routes: readonly RouteReport[],
+  timeZone: string,
+  kind: RequestKind,
+): readonly RouteRow[] {
   const time = failureTime(timeZone);
   return routes.map((route) => {
     const errorShare = formatPercent(rate(route.failed, route.total));
@@ -182,7 +249,7 @@ export function routeRows(routes: readonly RouteReport[], timeZone: string): rea
         tone: statusTone(entry.status),
       })),
       median,
-      summary: `${formatQuantity(route.total, 'request', 'requests')} · ${errorShare} errors · median ${median}`,
+      summary: routeSummary(route, kind, errorShare, median),
       screens: route.screens.map((screen) => ({
         path: screen.path,
         failed: `${formatCount(screen.failed)} failed`,

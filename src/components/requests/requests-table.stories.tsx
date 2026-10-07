@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { routeRows } from '@/domain/requests';
-import { demoRequestsReport } from '@/services/requests/demo-requests';
+import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
 
 const ROWS = routeRows(
@@ -12,6 +12,13 @@ const ROWS = routeRows(
     new Date('2026-10-06T02:30:00.000Z'),
   ).routes,
   'America/Sao_Paulo',
+  'writes',
+);
+
+const FAILED_READS = routeRows(
+  demoFailedReadsReport('demo', { from: '2026-09-06', to: '2026-10-05' }, null).routes,
+  'America/Sao_Paulo',
+  'reads',
 );
 
 const meta = {
@@ -19,6 +26,7 @@ const meta = {
   component: RequestsTable,
   tags: ['autodocs'],
   args: {
+    kind: 'writes',
     rows: ROWS,
     basePath: '/demo/requests',
     query: 'range=7d',
@@ -82,6 +90,25 @@ export const RouteHovered: Story = {
 };
 
 export const Empty: Story = { args: { rows: [] } };
+
+export const FailedReads: Story = {
+  args: { kind: 'reads', rows: FAILED_READS, query: 'range=30d&kind=reads' },
+};
+
+export const FailedReadDetails: Story = {
+  args: FailedReads.args,
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByRole('button', { name: 'GET /orders/:id, show details' }));
+    await expect(await page.findByRole('dialog', { name: 'GET /orders/:id' })).toBeVisible();
+  },
+};
+
+export const NoFailedReads: Story = {
+  args: { kind: 'reads', rows: [], emptyMessage: 'No read failed in this period.' },
+};
+
+export const FailedReadsDarkTheme: Story = { ...FailedReads, globals: { theme: 'dark' } };
 
 export const OnAPhone: Story = {
   decorators: [

@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
-import { UnauthenticatedError } from '@/domain/errors';
+import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import type { RequestsReport } from '@/domain/requests';
 import { MockRequestsService } from '@/services/requests/mock-requests-service';
 import type { IRequestsService } from '@/services/requests/requests-service.interface';
@@ -68,6 +68,8 @@ beforeEach(() => {
   state.admin = ADMIN;
   state.requests = (projectId, range, screenPath) =>
     new MockRequestsService().requests(projectId, range, screenPath);
+  state.failedReads = (projectId, range, screenPath) =>
+    new MockRequestsService().failedReads(projectId, range, screenPath);
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
 });
@@ -98,6 +100,92 @@ describe('RequestsPage', () => {
       'href',
       '/p-store/requests?range=7d&show=failing',
     );
+    const tabs = screen.getByRole('navigation', { name: 'Request kind' });
+    expect(within(tabs).getByRole('link', { name: 'Writes' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(within(tabs).getByRole('link', { name: 'Failed reads' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=7d&kind=reads',
+    );
+    expect(screen.getByText(/Failed reads have their own tab/)).toBeInTheDocument();
+  });
+
+  it('shows the failed reads by count, without a rate, and keeps the tab in every link', async () => {
+    const failedReads = vi.fn<IRequestsService['failedReads']>((projectId, range, screenPath) =>
+      new MockRequestsService().failedReads(projectId, range, screenPath),
+    );
+    state.failedReads = failedReads;
+    state.requests = () => Promise.reject(new Error('the writes were asked'));
+
+    render(await renderRequests({ range: '30d', kind: 'reads', show: 'failing' }));
+
+    expect(failedReads).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-06', to: '2026-10-05' },
+      null,
+    );
+    expect(screen.getByText('The reads Demo Store made that failed')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Failed reads' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Routes failing' })).toHaveTextContent(
+      'Most: GET /orders/:id',
+    );
+    expect(screen.queryByRole('region', { name: 'Error rate' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Show' })).not.toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Failed' })).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('navigation', { name: 'Request kind' })).getByRole('link', {
+        name: 'Failed reads',
+      }),
+    ).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=7d&kind=reads',
+    );
+    expect(screen.getByRole('link', { name: 'Writes' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=30d',
+    );
+    expect(screen.getByText(/so reads have no error rate/)).toBeInTheDocument();
+  });
+
+  it('keeps the screen filter when it switches between writes and failed reads', async () => {
+    render(await renderRequests({ range: '30d', kind: 'reads', screen: '/products' }));
+
+    expect(screen.getByRole('link', { name: 'Writes' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=30d&screen=%2Fproducts',
+    );
+    expect(screen.getByRole('link', { name: 'Clear the screen filter' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=30d&kind=reads',
+    );
+  });
+
+  it('says what an API older than the failed reads cannot show', async () => {
+    state.failedReads = () =>
+      Promise.reject(new ApiRequestError('/v1/projects/p-store/requests', 400));
+
+    render(await renderRequests({ kind: 'reads' }));
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Failed reads need a newer Pyxis API' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('table', { name: 'Routes' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Writes' })).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=30d',
+    );
+  });
+
+  it('lets any other failure of the failed reads through', async () => {
+    state.failedReads = () =>
+      Promise.reject(new ApiRequestError('/v1/projects/p-store/requests', 503));
+    await expect(renderRequests({ kind: 'reads' })).rejects.toThrow('answered 503');
+
+    state.failedReads = () => Promise.reject(new UnauthenticatedError());
+    await expect(renderRequests({ kind: 'reads' })).rejects.toThrow('redirect:/sign-in?expired=1');
   });
 
   it('keeps only the failing routes and the screen filter, in every link', async () => {
@@ -144,8 +232,24 @@ describe('RequestsPage', () => {
     expect(screen.getByText('No route failed in this period.')).toBeInTheDocument();
     failing.unmount();
 
-    render(await renderRequests({ screen: '/settings' }));
+    const fromScreen = render(await renderRequests({ screen: '/settings' }));
     expect(screen.getByText('No writes from /settings in this period.')).toBeInTheDocument();
+    fromScreen.unmount();
+
+    state.failedReads = (): Promise<RequestsReport> => Promise.resolve({ routes: [] });
+    const reads = render(await renderRequests({ kind: 'reads' }));
+    expect(
+      screen.getByText(
+        'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Failed reads' })).toHaveTextContent(
+      'No read failed in this period',
+    );
+    reads.unmount();
+
+    render(await renderRequests({ kind: 'reads', screen: '/settings' }));
+    expect(screen.getByText('No failed reads from /settings in this period.')).toBeInTheDocument();
   });
 
   it('sends an expired session back to the sign-in page', async () => {
