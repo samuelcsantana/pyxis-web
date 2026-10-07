@@ -88,6 +88,14 @@ export function stepProblem(step: FunnelStep): string | null {
     : 'An event name starts with a lowercase letter and holds only lowercase letters, digits and _, 64 at most.';
 }
 
+export function isCountableFunnel(steps: readonly FunnelStep[]): boolean {
+  return (
+    steps.length >= MIN_FUNNEL_STEPS &&
+    steps.length <= MAX_FUNNEL_STEPS &&
+    steps.every((step) => stepProblem(step) === null)
+  );
+}
+
 export type FunnelTone = 'start' | 'good' | 'bad' | 'neutral';
 
 export interface FunnelRow {
