@@ -85,7 +85,12 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('RequestsReport');
 
     for (const screen of [null, '/orders']) {
-      const wire = demoRequestsWire({ from: '2026-09-06', to: '2026-10-05' }, screen);
+      const wire = demoRequestsWire(
+        { from: '2026-09-06', to: '2026-10-05' },
+        screen,
+        new Date('2026-10-06T02:30:00.000Z'),
+        'America/Sao_Paulo',
+      );
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });

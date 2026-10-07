@@ -79,6 +79,27 @@ describe('MockTimelineService', () => {
     expect(second.nextBefore).toBeNull();
   });
 
+  it('finds the visit behind a failed request of someone other than the demo person', async () => {
+    const service = new MockTimelineService();
+
+    const visit = await service.timeline(
+      'demo',
+      { kind: 'visit', id: '94810767-edf6-4a05-833f-ca28d9e18bbf' },
+      null,
+    );
+
+    expect(visit.visits.map((found) => found.events.map((event) => event.name))).toEqual([
+      ['page_view', 'api_request'],
+    ]);
+    expect(visit.visits[0]?.events[1]?.properties).toEqual({
+      method: 'POST',
+      route: '/payouts',
+      status: 500,
+      duration_ms: 1840,
+      error_code: 'internal_error',
+    });
+  });
+
   it('finds one visit by its id, and nothing for anyone else', async () => {
     const service = new MockTimelineService();
     const visit = await service.timeline('demo', { kind: 'visit', id: VISIT }, null);

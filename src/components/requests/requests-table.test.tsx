@@ -7,7 +7,12 @@ import { RequestsTable } from './requests-table';
 import { methodClass } from './status-styles';
 
 const ROWS = routeRows(
-  demoRequestsReport({ from: '2026-09-22', to: '2026-10-05' }, null).routes,
+  demoRequestsReport(
+    { from: '2026-09-22', to: '2026-10-05' },
+    null,
+    new Date('2026-10-06T02:30:00.000Z'),
+    'America/Sao_Paulo',
+  ).routes,
   'UTC',
 );
 
