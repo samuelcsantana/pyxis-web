@@ -261,6 +261,9 @@ docs/adr/           architecture decision records
   layout reads so the first paint has the right theme (so every page renders on request)
 - The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data
+- Each read of the API writes one JSON line to the server log, `api_read` with the route template
+  (`/v1/projects/:projectId/overview`), the status and the duration in milliseconds: no project
+  id, no query value, no cookie, nothing about the person signed in
 - Vulnerabilities: see [SECURITY.md](SECURITY.md)
 
 ## Architecture decisions
