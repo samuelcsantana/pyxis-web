@@ -29,6 +29,32 @@ describe('meResponseSchema', () => {
     });
   });
 
+  it('reads when the events of each project began and last arrived, null before the first', () => {
+    const [active, waiting] = meResponseSchema.parse({
+      ...WIRE,
+      projects: [
+        {
+          ...WIRE.projects[0],
+          first_event_at: '2026-03-02T12:00:00.000Z',
+          last_event_at: '2026-10-05T21:41:05.000Z',
+        },
+        { ...WIRE.projects[0], id: 'waiting', first_event_at: null, last_event_at: null },
+      ],
+    }).projects;
+
+    expect(active?.firstEventAt).toBe('2026-03-02T12:00:00.000Z');
+    expect(active?.lastEventAt).toBe('2026-10-05T21:41:05.000Z');
+    expect(waiting?.firstEventAt).toBeNull();
+    expect(waiting?.lastEventAt).toBeNull();
+  });
+
+  it('leaves the event times unknown when an older API does not send them', () => {
+    const [project] = meResponseSchema.parse(WIRE).projects;
+
+    expect(project?.firstEventAt).toBeUndefined();
+    expect(project?.lastEventAt).toBeUndefined();
+  });
+
   it('tolerates fields the API adds later', () => {
     expect(meResponseSchema.safeParse({ ...WIRE, role: 'owner' }).success).toBe(true);
   });

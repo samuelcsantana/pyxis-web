@@ -3,6 +3,8 @@ export interface Project {
   readonly name: string;
   readonly timezone: string;
   readonly conversionEvent: string | null;
+  readonly firstEventAt?: string | null;
+  readonly lastEventAt?: string | null;
 }
 
 export interface Admin {

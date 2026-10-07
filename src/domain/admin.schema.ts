@@ -10,6 +10,8 @@ export const meResponseSchema = z
         name: z.string(),
         timezone: z.string(),
         conversion_event: z.string().nullable(),
+        first_event_at: z.string().nullable().optional(),
+        last_event_at: z.string().nullable().optional(),
       }),
     ),
   })
@@ -20,5 +22,7 @@ export const meResponseSchema = z
       name: project.name,
       timezone: project.timezone,
       conversionEvent: project.conversion_event,
+      firstEventAt: project.first_event_at,
+      lastEventAt: project.last_event_at,
     })),
   }));
