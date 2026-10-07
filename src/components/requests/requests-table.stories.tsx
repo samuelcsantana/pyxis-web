@@ -64,6 +64,19 @@ export const EscapeClosesAndRefocuses: Story = {
   },
 };
 
+export const OpenedFromTheAddress: Story = {
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: { pathname: '/demo/requests', query: { route: 'PATCH /users/me' } },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await expect(await page.findByRole('dialog', { name: 'PATCH /users/me' })).toBeVisible();
+  },
+};
+
 export const Empty: Story = { args: { rows: [] } };
 
 export const OnAPhone: Story = {
