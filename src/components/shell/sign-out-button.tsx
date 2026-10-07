@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
-import { FOCUS_RING, NAV_FOCUS_RING } from '@/components/ui/control-classes';
+import { FOCUS_RING, NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 
@@ -18,7 +18,7 @@ export interface SignOutButtonProps {
 
 const VARIANT_CLASSES = {
   nav: {
-    button: `text-nav-text hover:bg-nav-raised ${NAV_FOCUS_RING}`,
+    button: `${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
     icon: 'text-nav-muted',
     error: 'text-nav-text',
   },
