@@ -70,6 +70,7 @@ beforeEach(() => {
 
 describe('FunnelPage', () => {
   it('opens the editor with an explanation, and asks nothing, without steps', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     const funnel = vi.fn<IFunnelService['funnel']>();
     state.funnel = funnel;
 
@@ -89,6 +90,31 @@ describe('FunnelPage', () => {
       'href',
       '/p-store/funnel?range=7d&mode=user',
     );
+  });
+
+  it('opens the demo on the example funnel of the project', async () => {
+    const funnel = vi.fn<IFunnelService['funnel']>((projectId, range, mode, steps) =>
+      new MockFunnelService().funnel(projectId, range, mode, steps),
+    );
+    state.funnel = funnel;
+
+    render(await renderFunnel({ range: '7d' }));
+
+    expect(funnel).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-29', to: '2026-10-05' },
+      'visit',
+      DEMO_FUNNEL_STEPS,
+    );
+    expect(screen.queryByRole('heading', { name: 'Build a funnel' })).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole('list', { name: 'Funnel' })).getAllByRole('listitem'),
+    ).toHaveLength(6);
+    const sevenDays = new URL(
+      screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
+      'https://x',
+    );
+    expect(sevenDays.searchParams.get('steps')).toBe(STEPS);
   });
 
   it('counts the steps of the URL for the period and the mode', async () => {

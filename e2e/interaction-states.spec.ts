@@ -68,6 +68,7 @@ const REPRESENTATIVES: readonly Representative[] = [
     screen: 'funnel',
     target: (page) => page.getByRole('button', { name: 'Apply' }),
     prepare: async (page) => {
+      await page.getByRole('button', { name: 'Edit steps' }).click();
       await page.getByRole('textbox', { name: 'Step 1 page path' }).fill('/pricing');
       await page.getByRole('textbox', { name: 'Step 2 event name' }).fill('cta_clicked');
     },

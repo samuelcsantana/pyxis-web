@@ -1,12 +1,10 @@
 import { expect, test } from '@playwright/test';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
-const EXAMPLE_FUNNEL =
-  '[{"type":"page","path":"/calculator"},{"type":"event","name":"calculator_result_shown"},{"type":"page","path":"/sign-up"}]';
 
 const SCREENS = [
   { title: 'Overview', path: 'overview' },
-  { title: 'Funnel', path: `funnel?steps=${encodeURIComponent(EXAMPLE_FUNNEL)}` },
+  { title: 'Funnel', path: 'funnel' },
   { title: 'Features', path: 'features' },
   { title: 'Requests', path: 'requests' },
   { title: 'Timeline', path: 'timeline?user=u_7f3a' },
@@ -33,6 +31,15 @@ test('every screen runs on invented data, with the banner and no call to any API
   }
 
   expect(outside).toEqual([]);
+});
+
+test('opens the funnel on the example of the project', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/funnel`);
+
+  await expect(page.getByRole('list', { name: 'Funnel' }).getByRole('listitem')).toHaveCount(6);
+  await expect(
+    page.getByRole('list', { name: 'Funnel' }).getByRole('listitem').first(),
+  ).toContainText('Opened /calculator');
 });
 
 test('shows the same figures on every screen for the same period', async ({ page }) => {

@@ -11,6 +11,10 @@ import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';
 
 export const DEMO_FUNNEL_STEPS: readonly FunnelStep[] = DEMO_STORE.exampleFunnel;
 
+export function demoExampleFunnel(projectId: string): readonly FunnelStep[] {
+  return demoProjectOf(projectId).exampleFunnel;
+}
+
 export function demoFunnelWire(
   projectId: string,
   range: DateRange,
