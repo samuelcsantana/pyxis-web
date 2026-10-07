@@ -1,4 +1,4 @@
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { EmptyState } from './empty-state';
 
 export const PLACEHOLDER_ENDPOINT = 'https://api.pyxis.example.com';
@@ -26,10 +26,7 @@ export function NoActivityYet({ endpoint }: NoActivityYetProps) {
       </pre>
       <p>
         The full setup guide is in the{' '}
-        <a
-          href={SDK_README_URL}
-          className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
-        >
+        <a href={SDK_README_URL} className={TEXT_LINK}>
           SDK&apos;s README
         </a>
         .

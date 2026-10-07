@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { RouteRow } from '@/domain/requests';
-import { BUTTON_ICON, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_ICON, TEXT_LINK } from '@/components/ui/control-classes';
 import { MethodChip, TONE_CLASSES } from './status-styles';
 
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
@@ -75,7 +75,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
               >
                 <Link
                   href={screenHref(screen.path)}
-                  className={`font-mono text-xs text-sky-ink underline underline-offset-2 wrap-anywhere hover:text-ink ${FOCUS_RING}`}
+                  className={`font-mono text-xs wrap-anywhere ${TEXT_LINK}`}
                 >
                   {screen.path}
                   <span className="sr-only">: show only the requests made from this screen</span>
@@ -108,10 +108,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
                   <span className="font-mono wrap-anywhere">
                     {failure.errorCode ?? 'No error code'}
                   </span>
-                  <Link
-                    href={visitHref(failure.sessionId)}
-                    className={`w-fit text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
-                  >
+                  <Link href={visitHref(failure.sessionId)} className={`w-fit ${TEXT_LINK}`}>
                     Open visit {failure.visit}
                   </Link>
                 </span>

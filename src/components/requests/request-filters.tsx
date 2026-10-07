@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import {
-  FOCUS_RING,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
+  TEXT_LINK,
 } from '@/components/ui/control-classes';
 
 export interface RequestFiltersProps {
@@ -50,7 +50,7 @@ export function RequestFilters({
           <Link
             href={clearScreenHref}
             aria-label="Clear the screen filter"
-            className={`rounded-pill px-2.5 py-1 text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
+            className={`rounded-pill px-2.5 py-1 ${TEXT_LINK}`}
           >
             Clear
           </Link>

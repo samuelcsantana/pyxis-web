@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { KeptParameters } from '@/components/shell/period-selector';
-import { BUTTON_SECONDARY, FOCUS_RING, FOCUS_WITHIN_RING } from '@/components/ui/control-classes';
+import { BUTTON_SECONDARY, FOCUS_WITHIN_RING, TEXT_LINK } from '@/components/ui/control-classes';
 
 export interface FeatureSearchProps {
   readonly action: string;
@@ -52,10 +52,7 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
         Search
       </button>
       {query === '' ? null : (
-        <Link
-          href={clearHref}
-          className={`text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
-        >
+        <Link href={clearHref} className={`text-sm ${TEXT_LINK}`}>
           Clear
         </Link>
       )}
