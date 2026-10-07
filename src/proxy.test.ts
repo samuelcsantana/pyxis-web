@@ -71,6 +71,7 @@ describe('proxy', () => {
     expect(matches('/p1/overview')).toBe(true);
     expect(matches('/icon.svg')).toBe(false);
     expect(matches('/apple-icon.png')).toBe(false);
+    expect(matches('/manifest.webmanifest')).toBe(false);
     expect(matches('/_next/static/chunk.js')).toBe(false);
   });
 });
