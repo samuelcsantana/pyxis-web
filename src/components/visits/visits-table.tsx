@@ -13,7 +13,8 @@ import { linkWith } from '@/components/shell/screens';
 const SMOOTH_LOADING_MS = 400;
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-medium whitespace-nowrap';
 const WIDE = 'hidden sm:table-cell';
-const WIDEST = 'hidden lg:table-cell';
+const WIDER = 'hidden lg:table-cell';
+const WIDEST = 'hidden xl:table-cell';
 
 export interface VisitsTableProps {
   readonly rows: readonly VisitRow[];
@@ -84,7 +85,7 @@ function VisitTableRow({
         </Link>
       </th>
       <td className={`${BODY_CELL} ${WIDE} whitespace-nowrap text-muted`}>{row.duration}</td>
-      <td className={`${BODY_CELL} font-mono text-xs wrap-anywhere`}>
+      <td className={`${BODY_CELL} min-w-28 font-mono text-xs wrap-anywhere`}>
         {row.entryPath ?? <span className="font-sans text-muted">{NO_VALUE}</span>}
       </td>
       <td className={`${BODY_CELL} ${WIDE} text-right`}>{row.pageViews}</td>
@@ -98,8 +99,8 @@ function VisitTableRow({
           <span className={`${CHIP} bg-bad-soft font-semibold text-bad`}>{row.failedRequests}</span>
         )}
       </td>
-      <td className={`${BODY_CELL} ${WIDEST}`}>{row.device}</td>
-      <td className={`${BODY_CELL} ${WIDEST}`}>
+      <td className={`${BODY_CELL} ${WIDER}`}>{row.device}</td>
+      <td className={`${BODY_CELL} ${WIDER}`}>
         {row.channel ?? <span className="text-muted">{NO_VALUE}</span>}
       </td>
       <td className={`${BODY_CELL} pr-0`}>
@@ -196,10 +197,10 @@ export function VisitsTable({
                 <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
                   Failed requests
                 </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
+                <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
                   Device
                 </th>
-                <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
+                <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
                   Channel
                 </th>
                 <th scope="col" className={`${HEADER_CELL} pr-0 text-left`}>
