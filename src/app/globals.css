@@ -10,6 +10,7 @@
   --pyx-soft: #eef2f8;
   --pyx-accent: #f5b83d;
   --pyx-accent-ink: #0e1a2b;
+  --pyx-focus: #a16207;
   --pyx-sky: #0ea5e9;
   --pyx-sky-ink: #0369a1;
   --pyx-violet: #7c6cf2;
@@ -44,6 +45,7 @@
     --pyx-soft: #16243a;
     --pyx-accent: #f5b83d;
     --pyx-accent-ink: #0e1a2b;
+    --pyx-focus: #f5b83d;
     --pyx-sky: #38bdf8;
     --pyx-sky-ink: #7dd3fc;
     --pyx-violet: #a396fa;
@@ -70,6 +72,7 @@
   --pyx-soft: #16243a;
   --pyx-accent: #f5b83d;
   --pyx-accent-ink: #0e1a2b;
+  --pyx-focus: #f5b83d;
   --pyx-sky: #38bdf8;
   --pyx-sky-ink: #7dd3fc;
   --pyx-violet: #a396fa;
@@ -95,6 +98,7 @@
   --color-soft: var(--pyx-soft);
   --color-accent: var(--pyx-accent);
   --color-accent-ink: var(--pyx-accent-ink);
+  --color-focus: var(--pyx-focus);
   --color-sky: var(--pyx-sky);
   --color-sky-ink: var(--pyx-sky-ink);
   --color-violet: var(--pyx-violet);
