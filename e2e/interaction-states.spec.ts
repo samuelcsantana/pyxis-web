@@ -197,6 +197,22 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     screen: 'overview',
     target: (page) => page.getByRole('button', { name: /theme/ }),
   },
+  {
+    control: 'a segmented option',
+    screen: 'overview',
+    target: (page) => periods(page).getByRole('link', { name: '7 days' }),
+  },
+  {
+    control: 'a tab',
+    screen: 'features',
+    target: (page) =>
+      page.getByRole('navigation', { name: 'Feature kind' }).getByRole('link', { name: 'Screens' }),
+  },
+  {
+    control: 'a filter pill',
+    screen: 'timeline?user=u_7f3a',
+    target: (page) => page.getByRole('link', { name: 'Errors only' }),
+  },
 ];
 
 for (const colorScheme of ['light', 'dark'] as const) {

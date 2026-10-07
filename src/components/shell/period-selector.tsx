@@ -1,6 +1,13 @@
 import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
-import { BUTTON_PRIMARY, FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  BUTTON_PRIMARY,
+  FOCUS_RING,
+  SEGMENTED_GROUP,
+  SEGMENTED_IDLE,
+  SEGMENTED_OPTION,
+  SEGMENTED_SELECTED,
+} from '@/components/ui/control-classes';
 
 export type KeptParameters = Readonly<Record<string, string>>;
 
@@ -29,9 +36,7 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
-const OPTION_CLASS = `flex min-h-8.5 items-center rounded-control px-3 text-[13px] font-medium ${FOCUS_RING}`;
-const SELECTED_CLASS = 'bg-ink text-card';
-const IDLE_CLASS = 'text-muted hover:text-ink';
+const OPTION_CLASS = `min-h-8.5 px-3 ${SEGMENTED_OPTION}`;
 const DATE_INPUT_CLASS = `min-h-9 rounded-control border border-line bg-card px-2 text-[13px] text-ink ${FOCUS_RING}`;
 
 export function PeriodSelector({
@@ -43,10 +48,7 @@ export function PeriodSelector({
   const custom = period.preset === 'custom';
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <nav
-        aria-label="Period"
-        className="flex gap-0.5 rounded-input border border-line bg-soft p-[3px]"
-      >
+      <nav aria-label="Period" className={SEGMENTED_GROUP}>
         {PRESETS.map((preset) => {
           const selected = period.preset === preset;
           return (
@@ -54,7 +56,7 @@ export function PeriodSelector({
               key={preset}
               href={`${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`}
               aria-current={selected ? 'true' : undefined}
-              className={`${OPTION_CLASS} ${selected ? SELECTED_CLASS : IDLE_CLASS}`}
+              className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
             >
               {PRESET_LABELS[preset]}
             </Link>
@@ -63,7 +65,7 @@ export function PeriodSelector({
       </nav>
       <details className="group relative max-sm:open:basis-full">
         <summary
-          className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SELECTED_CLASS : `bg-soft ${IDLE_CLASS}`}`}
+          className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SEGMENTED_SELECTED : `bg-soft ${SEGMENTED_IDLE}`}`}
         >
           Custom
         </summary>

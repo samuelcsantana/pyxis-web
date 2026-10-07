@@ -1,5 +1,11 @@
 import Link from 'next/link';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  FOCUS_RING,
+  SEGMENTED_GROUP,
+  SEGMENTED_IDLE,
+  SEGMENTED_OPTION,
+  SEGMENTED_SELECTED,
+} from '@/components/ui/control-classes';
 
 export interface RequestFiltersProps {
   readonly allHref: string;
@@ -9,9 +15,7 @@ export interface RequestFiltersProps {
   readonly clearScreenHref: string;
 }
 
-const OPTION_CLASS = `flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium ${FOCUS_RING}`;
-const SELECTED_CLASS = 'bg-ink text-card';
-const IDLE_CLASS = 'text-muted hover:text-ink';
+const OPTION_CLASS = `min-h-9 px-3.5 ${SEGMENTED_OPTION}`;
 
 export function RequestFilters({
   allHref,
@@ -22,21 +26,18 @@ export function RequestFilters({
 }: RequestFiltersProps) {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <nav
-        aria-label="Show"
-        className="flex gap-0.5 rounded-input border border-line bg-soft p-[3px]"
-      >
+      <nav aria-label="Show" className={SEGMENTED_GROUP}>
         <Link
           href={allHref}
           aria-current={failingOnly ? undefined : 'page'}
-          className={`${OPTION_CLASS} ${failingOnly ? IDLE_CLASS : SELECTED_CLASS}`}
+          className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_IDLE : SEGMENTED_SELECTED}`}
         >
           All routes
         </Link>
         <Link
           href={failingHref}
           aria-current={failingOnly ? 'page' : undefined}
-          className={`${OPTION_CLASS} ${failingOnly ? SELECTED_CLASS : IDLE_CLASS}`}
+          className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
         >
           Failing only
         </Link>
