@@ -8,6 +8,7 @@ import {
   funnelRows,
   funnelStepsOf,
   funnelStepsSchema,
+  isCountableFunnel,
   MAX_FUNNEL_STEPS,
   MAX_PATH_LENGTH,
   MIN_FUNNEL_STEPS,
@@ -90,6 +91,21 @@ describe('step labels and problems', () => {
     expect(stepProblem({ type: 'page', path: `/${'x'.repeat(256)}` })).toBe(
       'A page path has at most 256 characters.',
     );
+  });
+});
+
+describe('isCountableFunnel', () => {
+  it.each<[string, readonly FunnelStep[], boolean]>([
+    ['one step', [CALCULATOR], false],
+    ['nine steps', Array.from({ length: 9 }, () => CALCULATOR), false],
+    ['a path without a slash', [CALCULATOR, { type: 'page', path: 'pricing' }], false],
+    ['a path too long', [CALCULATOR, { type: 'page', path: `/${'x'.repeat(256)}` }], false],
+    ['a bad event name', [CALCULATOR, { type: 'event', name: 'Signed_up' }], false],
+    ['two to eight valid steps', [CALCULATOR, RESULT, SIGN_UP], true],
+    ['eight valid steps', Array.from({ length: 8 }, () => RESULT), true],
+  ])('says whether %s can be counted, as the API schema does', (_label, steps, countable) => {
+    expect(isCountableFunnel(steps)).toBe(countable);
+    expect(funnelStepsSchema.safeParse(steps).success).toBe(countable);
   });
 });
 

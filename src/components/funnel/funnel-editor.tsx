@@ -4,7 +4,7 @@ import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   type FunnelStep,
   type FunnelStepType,
-  funnelStepsSchema,
+  isCountableFunnel,
   MAX_FUNNEL_STEPS,
   MIN_FUNNEL_STEPS,
   serializeSteps,
@@ -76,7 +76,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
   });
 
   const steps = drafts.map(toStep);
-  const valid = funnelStepsSchema.safeParse(steps).success;
+  const valid = isCountableFunnel(steps);
 
   const add = () => {
     const id = nextId.current;
