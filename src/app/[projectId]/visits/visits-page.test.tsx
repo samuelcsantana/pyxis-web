@@ -100,6 +100,7 @@ describe('VisitsPage', () => {
     );
     expect(screen.getByRole('button', { name: 'Load older visits' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Clear filters' })).not.toBeInTheDocument();
+    expect(screen.getByText(/A failed request is a read or a write/)).toBeInTheDocument();
   });
 
   it('passes the filters to the API and keeps them in the period links', async () => {
