@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { Lookup } from '@/domain/timeline';
-import { BUTTON_PRIMARY, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, FIELD } from '@/components/ui/control-classes';
 
 export interface TimelineSearchProps {
   readonly action: string;
@@ -15,7 +15,7 @@ const NOTHING_KEPT: Readonly<Record<string, string>> = {};
 
 type LookupKind = Lookup['kind'];
 
-const FIELD = `min-h-11 rounded-input border border-line bg-card px-3 text-sm text-ink ${FOCUS_RING}`;
+const FIELD_CLASS = `min-h-11 rounded-input px-3 text-sm ${FIELD}`;
 
 export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: TimelineSearchProps) {
   const [kind, setKind] = useState<LookupKind>(lookup?.kind ?? 'user');
@@ -37,7 +37,7 @@ export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: Ti
           onChange={(event) => {
             setKind(event.target.value === 'visit' ? 'visit' : 'user');
           }}
-          className={FIELD}
+          className={FIELD_CLASS}
         >
           <option value="user">A person, by user id</option>
           <option value="visit">One visit, by visit id</option>
@@ -51,7 +51,7 @@ export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: Ti
           required
           autoComplete="off"
           spellCheck={false}
-          className={`${FIELD} font-mono`}
+          className={`${FIELD_CLASS} font-mono`}
         />
       </label>
       <button type="submit" className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}>

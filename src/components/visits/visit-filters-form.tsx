@@ -10,7 +10,7 @@ import {
   type VisitIdentity,
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
-import { BUTTON_PRIMARY, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, FIELD, FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface VisitFiltersFormProps {
   readonly action: string;
@@ -32,7 +32,7 @@ const IDENTITY_LABELS: Readonly<Record<VisitIdentity, string>> = {
 };
 
 const LABEL = 'flex min-w-0 flex-col gap-1.5 text-[13px] font-medium';
-const FIELD = `min-h-11 w-full rounded-input border border-line bg-card px-3 text-sm font-normal text-ink ${FOCUS_RING}`;
+const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-sm font-normal ${FIELD}`;
 const HINT = 'text-xs font-normal text-muted';
 
 export function VisitFiltersForm({
@@ -69,7 +69,7 @@ export function VisitFiltersForm({
                 aria-describedby="visit-pages-hint"
                 autoComplete="off"
                 spellCheck={false}
-                className={`${FIELD} font-mono`}
+                className={`${FIELD_CLASS} font-mono`}
               />
             </label>
           ))}
@@ -84,7 +84,7 @@ export function VisitFiltersForm({
             placeholder="signup_completed"
             autoComplete="off"
             spellCheck={false}
-            className={`${FIELD} font-mono`}
+            className={`${FIELD_CLASS} font-mono`}
           />
         </label>
         <label className={LABEL}>
@@ -96,7 +96,7 @@ export function VisitFiltersForm({
             aria-describedby="visit-property-hint"
             autoComplete="off"
             spellCheck={false}
-            className={`${FIELD} font-mono`}
+            className={`${FIELD_CLASS} font-mono`}
           />
           <span id="visit-property-hint" className={HINT}>
             key=value, on the event above
@@ -104,7 +104,7 @@ export function VisitFiltersForm({
         </label>
         <label className={LABEL}>
           Channel
-          <select name="channel" defaultValue={filters.channel ?? ''} className={FIELD}>
+          <select name="channel" defaultValue={filters.channel ?? ''} className={FIELD_CLASS}>
             <option value="">Any channel</option>
             {CHANNELS.map((channel) => (
               <option key={channel} value={channel}>
@@ -115,7 +115,7 @@ export function VisitFiltersForm({
         </label>
         <label className={LABEL}>
           Device
-          <select name="device" defaultValue={filters.device ?? ''} className={FIELD}>
+          <select name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>
             <option value="">Any device</option>
             {VISIT_DEVICE_TYPES.map((device) => (
               <option key={device} value={device}>
@@ -126,7 +126,7 @@ export function VisitFiltersForm({
         </label>
         <label className={LABEL}>
           Account
-          <select name="identity" defaultValue={filters.identity ?? ''} className={FIELD}>
+          <select name="identity" defaultValue={filters.identity ?? ''} className={FIELD_CLASS}>
             <option value="">Anyone</option>
             {VISIT_IDENTITIES.map((identity) => (
               <option key={identity} value={identity}>

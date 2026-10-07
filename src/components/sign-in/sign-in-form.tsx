@@ -7,7 +7,7 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
-import { BUTTON_PRIMARY, CONTROL_BUSY, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, CONTROL_BUSY, FIELD, FOCUS_RING } from '@/components/ui/control-classes';
 
 export const SMOOTH_LOADING_MS = 400;
 export const CODE_SENT_NOTICE_MS = 4_000;
@@ -36,7 +36,7 @@ export function signInErrorMessage(error: unknown): string {
   return 'Could not reach Pyxis. Check your connection and try again.';
 }
 
-const INPUT_CLASS = `min-h-11.5 w-full rounded-input border bg-card px-3.5 text-[15px] text-ink placeholder:text-muted ${FOCUS_RING}`;
+const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 text-[15px] placeholder:text-muted ${FIELD}`;
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-[15px] ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 
@@ -176,7 +176,7 @@ export function SignInForm({
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              className={`${INPUT_CLASS} ${errorText === null ? 'border-line' : 'border-bad'}`}
+              className={INPUT_CLASS}
             />
           </div>
           {errorText === null ? null : (
@@ -225,7 +225,7 @@ export function SignInForm({
               onChange={(event) => {
                 setCode(event.target.value.replace(NOT_A_DIGIT, ''));
               }}
-              className={`${INPUT_CLASS} font-mono text-[22px] tracking-[0.5em] ${errorText === null ? 'border-line' : 'border-bad'}`}
+              className={`${INPUT_CLASS} font-mono text-[22px] tracking-[0.5em]`}
             />
           </div>
           <p role="status" className="min-h-5 text-[13px] text-ok">
