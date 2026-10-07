@@ -235,6 +235,27 @@ describe('overviewKpis', () => {
     });
   });
 
+  it('counts the visits that converted, with the conversion events beside them', () => {
+    const [, , conversions] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          converting_visits: { current: 200, previous: 190, daily: [95, 105] },
+        },
+      }),
+      { ...ENDED, days: 30 },
+    );
+
+    expect(conversions).toMatchObject({
+      label: 'Conversions',
+      value: '200',
+      change: '+5.3% (+10)',
+      note: '4.2% of 4,758 visits · 212 conversion events',
+      series: [95, 105],
+    });
+  });
+
   it('leaves out conversions when the project has no conversion event', () => {
     const kpis = overviewKpis(report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }), {
       ...ENDED,
