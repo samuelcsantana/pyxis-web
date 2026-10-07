@@ -171,22 +171,34 @@ function withoutJudgement(kpi: KpiView): KpiView {
   return { ...kpi, tone: 'neutral' };
 }
 
+function shareOfVisits(converted: number, visits: number): string {
+  return `${formatPercent(rate(converted, visits))} of ${formatQuantity(visits, 'visit', 'visits')}`;
+}
+
+function conversionsKpi(conversions: Kpi, convertingVisits: Kpi | null, visits: Kpi): KpiView {
+  if (convertingVisits === null) {
+    return countKpi(
+      conversions,
+      'conversions',
+      'Conversions',
+      shareOfVisits(conversions.current, visits.current),
+    );
+  }
+  const events = formatQuantity(conversions.current, 'conversion event', 'conversion events');
+  return countKpi(
+    convertingVisits,
+    'conversions',
+    'Conversions',
+    `${shareOfVisits(convertingVisits.current, visits.current)} · ${events}`,
+  );
+}
+
 export function overviewKpis(report: OverviewReport, period: ComparedPeriod): readonly KpiView[] {
-  const { visits, identifiedUsers, conversions, writeErrors } = report.kpis;
-  const conversionRate = conversions === null ? null : rate(conversions.current, visits.current);
+  const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
   const kpis = [
     countKpi(visits, 'visits', 'Visits', previousPeriodNote(report.comparison, period)),
     countKpi(identifiedUsers, 'identified-users', 'Identified users', 'signed in at least once'),
-    ...(conversions === null
-      ? []
-      : [
-          countKpi(
-            conversions,
-            'conversions',
-            'Conversions',
-            `${formatPercent(conversionRate)} of ${formatQuantity(visits.current, 'visit', 'visits')}`,
-          ),
-        ]),
+    ...(conversions === null ? [] : [conversionsKpi(conversions, convertingVisits, visits)]),
     writeErrorsKpi(writeErrors),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)
