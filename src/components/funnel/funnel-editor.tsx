@@ -18,7 +18,7 @@ import {
   BUTTON_SECONDARY,
   BUTTON_STRONG,
   CONTROL_DISABLED,
-  FOCUS_RING,
+  FIELD,
 } from '@/components/ui/control-classes';
 
 interface DraftStep {
@@ -36,7 +36,7 @@ export interface FunnelEditorProps {
 
 const ADD_STEP_ID = 'funnel-add-step';
 const BUTTON = `min-h-9 rounded-control px-2.5 text-[13px] ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
-const FIELD = `min-h-10 rounded-control border border-line bg-card px-2.5 text-sm text-ink ${FOCUS_RING} aria-invalid:border-bad`;
+const FIELD_CLASS = `min-h-10 rounded-control px-2.5 text-sm ${FIELD}`;
 
 function toStep(draft: DraftStep): FunnelStep {
   return draft.type === 'page'
@@ -161,7 +161,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                           type: event.target.value === 'page' ? 'page' : 'event',
                         });
                       }}
-                      className={FIELD}
+                      className={FIELD_CLASS}
                     >
                       <option value="page">Page path</option>
                       <option value="event">Event name</option>
@@ -180,7 +180,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       onChange={(event) => {
                         update(draft.id, { value: event.target.value });
                       }}
-                      className={`${FIELD} font-mono`}
+                      className={`${FIELD_CLASS} font-mono`}
                     />
                   </label>
                   <span className="flex gap-1.5">

@@ -27,3 +27,4 @@ export const PILL = `flex items-center rounded-pill border text-[13px] font-medi
 export const PILL_SELECTED = 'border-ink bg-ink text-card';
 export const PILL_IDLE =
   'border-line bg-card text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line';
+export const FIELD = `border border-field bg-card text-ink aria-invalid:border-bad ${CONTENT_CONTROL}`;

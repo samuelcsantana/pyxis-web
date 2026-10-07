@@ -24,7 +24,7 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
         <input key={name} type="hidden" name={name} value={value} />
       ))}
       <label
-        className={`flex min-h-11 min-w-0 grow items-center gap-2 rounded-input border border-line bg-card px-3 ${FOCUS_WITHIN_RING} sm:w-80 sm:grow-0`}
+        className={`flex min-h-11 min-w-0 grow items-center gap-2 rounded-input border border-field bg-card px-3 ${FOCUS_WITHIN_RING} sm:w-80 sm:grow-0`}
       >
         <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="text-muted">
           <path

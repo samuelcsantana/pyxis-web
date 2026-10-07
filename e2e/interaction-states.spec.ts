@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
+import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
@@ -265,3 +265,55 @@ test('a button that cannot be used yet is dimmed and shows the not-allowed curso
   expect(paint.opacity).toBe(0.5);
   expect(paint.cursor).toBe('not-allowed');
 });
+
+interface FormField {
+  readonly field: string;
+  readonly path: string;
+  readonly target: (page: Page) => Locator;
+}
+
+const FORM_FIELDS: readonly FormField[] = [
+  {
+    field: 'a visits filter field',
+    path: `/${STORE_ID}/visits`,
+    target: (page) => page.getByRole('textbox', { name: 'Had event' }),
+  },
+  {
+    field: 'a visits filter select',
+    path: `/${STORE_ID}/visits`,
+    target: (page) => page.getByRole('combobox', { name: 'Channel' }),
+  },
+  {
+    field: 'the timeline look-up field',
+    path: `/${STORE_ID}/timeline`,
+    target: (page) => page.getByRole('textbox', { name: 'User id' }),
+  },
+  {
+    field: 'the feature search field',
+    path: `/${STORE_ID}/features`,
+    target: (page) => page.locator('label').filter({ has: page.getByRole('searchbox') }),
+  },
+  {
+    field: 'the sign-in email field',
+    path: '/sign-in',
+    target: (page) => page.getByLabel('Email'),
+  },
+];
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`form field borders, ${colorScheme} theme`, () => {
+    test.use({ colorScheme });
+
+    for (const { field, path, target } of FORM_FIELDS) {
+      test(`${field} has a border at 3:1 or more`, async ({ page }) => {
+        await page.goto(path);
+        const paint = await readPaint(target(page));
+
+        expect(paint.border).not.toBeNull();
+        const border = paint.border ?? paint.fill;
+        expect(contrastRatio(border, paint.fill)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+        expect(contrastRatio(border, paint.behind)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+      });
+    }
+  });
+}
