@@ -179,9 +179,11 @@ Two Vercel projects build this repository, and every merge to `main` deploys bot
 | `pyxis-web`  | `https://pyxis.samuelsantana.dev`, the dashboard for the projects' admins                     | `https://api.pyxis.samuelsantana.dev` |
 | `pyxis-demo` | [`https://demo.pyxis.samuelsantana.dev`](https://demo.pyxis.samuelsantana.dev), the live demo | unset                                 |
 
-The variable is set for production only, so preview deployments run in demo mode. `vercel.json`
-runs the functions in `gru1` (São Paulo), the city of the API, because every page reads it on
-the server.
+Only `main` deploys: `vercel.json` turns Git deployments off for every other branch, so pull
+requests get no preview deployment and spend none of the Hobby plan's build quota. Check a change
+locally instead (`npm run dev`, or the e2e suite on a production build). `vercel.json` also runs
+the functions in `gru1` (São Paulo), the city of the API, because every page reads it on the
+server.
 
 ## Testing
 
