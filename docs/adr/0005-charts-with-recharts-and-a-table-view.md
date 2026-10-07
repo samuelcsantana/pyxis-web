@@ -44,3 +44,13 @@ on its own, unreadable to a screen reader and hard to check with axe.
   no-op one, and the container starts from an initial size so tests render the chart.
 - Each new chart ships with its table view and its summary sentence in the same pull request; the
   Playwright suite checks that the table adds up to the totals shown beside the chart.
+
+## Update, 2026-10-07: series colours at 3:1
+
+The table view stays the accessible alternative, but a chart should also be readable without it.
+Every series colour except the brand amber reaches **3:1 against the card** in both themes (WCAG
+1.4.11): in light, sky becomes `#0284c7` (4.10:1), teal `#0d9488` (3.74:1) and slate `#64748b`
+(4.76:1); violet (3.97), ok and warn (5.02) already passed, and every dark value is 3.59:1 or more.
+The amber of "Paid" and of one donut slice keeps the brand colour (1.78:1 on the light card): it
+is never the only series on a chart, its legend and table name it, and the boundaries between
+stacked segments are a separate change. `src/design/token-contrast.test.ts` asserts the rule.
