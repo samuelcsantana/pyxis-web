@@ -186,6 +186,22 @@ describe('SignInForm', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  it('puts the focus on the email field when going back to change the email', async () => {
+    await reachCodeStep(new MockAuthService());
+    expect(screen.getByLabelText('6-digit code')).toHaveFocus();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Use a different email' }));
+
+    expect(screen.getByLabelText('Email')).toHaveFocus();
+  });
+
+  it('leaves the focus alone when the page opens', () => {
+    render(<SignInForm authService={new MockAuthService()} />);
+
+    expect(screen.getByLabelText('Email')).not.toHaveFocus();
+    expect(document.body).toHaveFocus();
+  });
+
   it('cancels a pending verification when it unmounts', async () => {
     const { service, pending } = controlledService();
     const { unmount } = render(<SignInForm authService={service} />);

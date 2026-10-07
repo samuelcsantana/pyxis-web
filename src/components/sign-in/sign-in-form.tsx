@@ -49,6 +49,8 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
   const request = useRef<Subscription | undefined>(undefined);
   const notice = useRef<AbortController | undefined>(undefined);
   const codeInput = useRef<HTMLInputElement>(null);
+  const emailInput = useRef<HTMLInputElement>(null);
+  const shownStep = useRef<Step>(step);
 
   useEffect(
     () => () => {
@@ -59,9 +61,11 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
   );
 
   useEffect(() => {
-    if (step === 'code') {
-      codeInput.current?.focus();
+    if (step === shownStep.current) {
+      return;
     }
+    shownStep.current = step;
+    (step === 'code' ? codeInput : emailInput).current?.focus();
   }, [step]);
 
   const start = () => {
@@ -138,6 +142,7 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
               Email
             </label>
             <input
+              ref={emailInput}
               id="sign-in-email"
               type="email"
               autoComplete="email"
