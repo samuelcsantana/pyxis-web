@@ -6,6 +6,7 @@ import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
+import { demoPropertyBreakdownWire } from './features/demo-properties';
 import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './funnel/demo-funnel';
 import { demoRequestsWire } from './requests/demo-requests';
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
@@ -77,6 +78,16 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const kind of ['events', 'screens'] as const) {
       const wire = demoFeaturesWire({ from: '2026-09-06', to: '2026-10-05' }, kind);
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo property breakdown of every demo event and of an unknown one', () => {
+    const validate = contractSchema('PropertyBreakdownReport');
+    const range = { from: '2026-09-06', to: '2026-10-05' };
+
+    for (const { name } of [...demoFeaturesWire(range, 'events').items, { name: 'never_sent' }]) {
+      const wire = demoPropertyBreakdownWire(range, name);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });

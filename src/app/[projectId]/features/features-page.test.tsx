@@ -34,6 +34,8 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 vi.mock('@/services/features/features-service.factory', () => ({
   createFeaturesService: (): IFeaturesService => ({
     features: (projectId, range, kind) => state.features(projectId, range, kind),
+    properties: (projectId, range, name) =>
+      new MockFeaturesService().properties(projectId, range, name),
   }),
 }));
 
