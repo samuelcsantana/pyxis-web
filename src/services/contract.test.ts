@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
@@ -10,6 +11,7 @@ import { demoPropertyBreakdownWire } from './features/demo-properties';
 import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './funnel/demo-funnel';
 import { demoRequestsWire } from './requests/demo-requests';
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
+import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
 import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 
@@ -127,6 +129,23 @@ describe('the API contract copied from pyxis-api', () => {
     );
 
     expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('accepts the demo visits, filtered or not, on every page', () => {
+    const validate = contractSchema('VisitsReport');
+    const range = { from: '2026-09-06', to: '2026-10-05' };
+    const now = new Date('2026-10-06T02:30:00Z');
+    const first = demoVisitsWire(range, NO_VISIT_FILTERS, null, now, 'America/Sao_Paulo');
+    const filtered = { ...NO_VISIT_FILTERS, paths: ['/orders*'], identity: 'identified' as const };
+
+    for (const wire of [
+      first,
+      demoVisitsWire(range, NO_VISIT_FILTERS, first.next_cursor, now, 'America/Sao_Paulo'),
+      demoVisitsWire(range, filtered, null, now, 'America/Sao_Paulo'),
+    ]) {
+      expect(wire.visits.length).toBeGreaterThan(0);
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    }
   });
 
   it('accepts the bodies the sign-in form sends', async () => {

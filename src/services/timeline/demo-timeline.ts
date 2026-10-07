@@ -4,19 +4,15 @@ import {
   timelineResponseSchema,
   type TimelineWire,
 } from '@/domain/timeline';
-import {
-  DEMO_PERSON_VISITS,
-  DEMO_VISITS,
-  type DemoVisit,
-  demoVisitWire,
-} from '../demo/demo-visits';
+import { DEMO_VISITS, type DemoVisit, demoVisitWire } from '../demo/demo-visits';
 
-export const DEMO_USER_ID = 'u_7f3a';
+export { DEMO_USER_ID } from '../demo/demo-visits';
+
 const DEMO_PAGE_SIZE = 2;
 
 function matchingVisits(lookup: Lookup): readonly DemoVisit[] {
   if (lookup.kind === 'user') {
-    return lookup.id === DEMO_USER_ID ? DEMO_PERSON_VISITS : [];
+    return DEMO_VISITS.filter((visit) => visit.userId === lookup.id);
   }
   return DEMO_VISITS.filter((visit) => visit.sessionId === lookup.id);
 }

@@ -1,3 +1,5 @@
+import type { Channel } from '@/domain/acquisition';
+
 type Properties = Readonly<Record<string, string | number | boolean>>;
 
 interface DemoRequest {
@@ -31,7 +33,8 @@ export interface DemoVisit {
   readonly deviceType: string;
   readonly browser: string;
   readonly os: string;
-  readonly channel: 'paid' | 'direct';
+  readonly channel: Channel;
+  readonly userId?: string;
   readonly events: readonly DemoEvent[];
 }
 
@@ -44,6 +47,7 @@ export interface DemoFailedRequest {
   readonly sessionId: string;
 }
 
+export const DEMO_USER_ID = 'u_7f3a';
 const API_REQUEST_EVENT = 'api_request';
 const NO_RESPONSE_STATUS = 0;
 const FIRST_FAILING_STATUS = 400;
@@ -54,7 +58,7 @@ function request(second: number, path: string, demoRequest: DemoRequest): DemoRe
   return { second, path, request: demoRequest };
 }
 
-export const DEMO_PERSON_VISITS: readonly DemoVisit[] = [
+const DEMO_PERSON_VISITS: readonly DemoVisit[] = [
   {
     sessionId: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01',
     daysAgo: 1,
@@ -64,6 +68,7 @@ export const DEMO_PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     channel: 'direct',
+    userId: DEMO_USER_ID,
     events: [
       { second: 12, name: 'page_view', path: '/orders' },
       request(65, '/orders', {
@@ -86,6 +91,7 @@ export const DEMO_PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     channel: 'direct',
+    userId: DEMO_USER_ID,
     events: [
       { second: 4, name: 'page_view', path: '/dashboard' },
       { second: 100, name: 'page_view', path: '/products' },
@@ -110,6 +116,7 @@ export const DEMO_PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'safari',
     os: 'ios',
     channel: 'paid',
+    userId: DEMO_USER_ID,
     events: [
       { second: 10, name: 'page_view', path: '/calculator' },
       {
@@ -172,6 +179,7 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'firefox',
     os: 'linux',
     channel: 'direct',
+    userId: 'u_93d1',
     events: [
       { second: 3, name: 'page_view', path: '/orders' },
       { second: 24, name: 'page_view', path: '/orders/new' },
@@ -200,6 +208,7 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'edge',
     os: 'windows',
     channel: 'direct',
+    userId: 'u_93d1',
     events: [
       { second: 6, name: 'page_view', path: '/orders' },
       request(52, '/orders', { method: 'POST', route: '/orders', status: 409, durationMs: 152 }),
@@ -216,6 +225,7 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     channel: 'direct',
+    userId: 'u_2b6e',
     events: [
       { second: 2, name: 'page_view', path: '/orders' },
       { second: 19, name: 'page_view', path: '/orders/:id' },
@@ -307,6 +317,7 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     channel: 'direct',
+    userId: 'u_5e0a',
     events: [
       { second: 5, name: 'page_view', path: '/payouts' },
       request(60, '/payouts', {
@@ -327,6 +338,7 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     channel: 'direct',
+    userId: 'u_5e0a',
     events: [
       { second: 4, name: 'page_view', path: '/payouts' },
       request(56, '/payouts', { method: 'POST', route: '/payouts', status: 0, durationMs: 8000 }),
@@ -335,7 +347,81 @@ const DEMO_FAILURE_VISITS: readonly DemoVisit[] = [
   },
 ];
 
-export const DEMO_VISITS: readonly DemoVisit[] = [...DEMO_PERSON_VISITS, ...DEMO_FAILURE_VISITS];
+const DEMO_BROWSING_VISITS: readonly DemoVisit[] = [
+  {
+    sessionId: '7e2b9c14-3f5a-4d68-9b1e-0a2c4e6f8b10',
+    daysAgo: 2,
+    startHour: 14,
+    startMinute: 5,
+    deviceType: 'mobile',
+    browser: 'chrome',
+    os: 'android',
+    channel: 'paid',
+    events: [
+      { second: 2, name: 'page_view', path: '/' },
+      { second: 31, name: 'page_view', path: '/pricing' },
+      { second: 74, name: 'page_view', path: '/calculator' },
+      {
+        second: 118,
+        name: 'calculator_result_shown',
+        path: '/calculator',
+        properties: { calculator: '99food', used_plan_preset: false },
+      },
+      {
+        second: 140,
+        name: 'cta_clicked',
+        path: '/calculator',
+        properties: { cta: 'see_plans', location: 'calculator_result' },
+      },
+      { second: 141, name: 'page_view', path: '/pricing' },
+    ],
+  },
+  {
+    sessionId: '5b8d2e7a-91c4-4f03-8a6d-3e5f7a9b1c22',
+    daysAgo: 5,
+    startHour: 8,
+    startMinute: 47,
+    deviceType: 'desktop',
+    browser: 'safari',
+    os: 'macos',
+    channel: 'organic',
+    events: [
+      { second: 1, name: 'page_view', path: '/blog/:slug' },
+      { second: 96, name: 'page_view', path: '/' },
+      { second: 120, name: 'page_view', path: '/sign-up' },
+      {
+        second: 188,
+        name: 'signup_submitted',
+        path: '/sign-up',
+        properties: { method: 'email_code' },
+      },
+    ],
+  },
+  {
+    sessionId: '8c3f6a1d-2b7e-4c95-9f40-6d8e0b2a4c33',
+    daysAgo: 1,
+    startHour: 7,
+    startMinute: 15,
+    deviceType: 'tablet',
+    browser: 'safari',
+    os: 'ios',
+    channel: 'direct',
+    userId: 'u_c41e',
+    events: [
+      { second: 3, name: 'page_view', path: '/' },
+      { second: 27, name: 'identify', path: '/' },
+      { second: 27, name: 'login_completed', path: '/', properties: { method: 'password' } },
+      { second: 29, name: 'page_view', path: '/dashboard' },
+      { second: 85, name: 'page_view', path: '/orders/:id' },
+    ],
+  },
+];
+
+export const DEMO_VISITS: readonly DemoVisit[] = [
+  ...DEMO_PERSON_VISITS,
+  ...DEMO_FAILURE_VISITS,
+  ...DEMO_BROWSING_VISITS,
+];
 
 function visitStart(visit: DemoVisit, now: Date): number {
   const midnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
@@ -371,7 +457,7 @@ function secondAfter(start: number, second: number): string {
   return new Date(start + second * MILLISECONDS_PER_SECOND).toISOString();
 }
 
-function failed(status: number): boolean {
+export function isFailedStatus(status: number): boolean {
   return status === NO_RESPONSE_STATUS || status >= FIRST_FAILING_STATUS;
 }
 
@@ -379,7 +465,7 @@ export function demoFailedRequests(now: Date): readonly DemoFailedRequest[] {
   return DEMO_VISITS.flatMap((visit) => {
     const start = visitStart(visit, now);
     return visit.events.flatMap((event) =>
-      'request' in event && failed(event.request.status)
+      'request' in event && isFailedStatus(event.request.status)
         ? [
             {
               method: event.request.method,
