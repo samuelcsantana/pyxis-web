@@ -4,7 +4,12 @@ import {
   timelineResponseSchema,
   type TimelineWire,
 } from '@/domain/timeline';
-import { DEMO_PERSON_VISITS, type DemoVisit, demoVisitWire } from '../demo/demo-visits';
+import {
+  DEMO_PERSON_VISITS,
+  DEMO_VISITS,
+  type DemoVisit,
+  demoVisitWire,
+} from '../demo/demo-visits';
 
 export const DEMO_USER_ID = 'u_7f3a';
 const DEMO_PAGE_SIZE = 2;
@@ -13,7 +18,7 @@ function matchingVisits(lookup: Lookup): readonly DemoVisit[] {
   if (lookup.kind === 'user') {
     return lookup.id === DEMO_USER_ID ? DEMO_PERSON_VISITS : [];
   }
-  return DEMO_PERSON_VISITS.filter((visit) => visit.sessionId === lookup.id);
+  return DEMO_VISITS.filter((visit) => visit.sessionId === lookup.id);
 }
 
 export function demoTimelineWire(lookup: Lookup, now: Date): TimelineWire {

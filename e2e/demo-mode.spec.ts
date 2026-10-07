@@ -40,6 +40,37 @@ test('allows connections only to its own origin', async ({ request }) => {
   expect(response.headers()['content-security-policy']).toContain("connect-src 'self';");
 });
 
+test('opens a demo visit from every latest failure of every route', async ({ page }) => {
+  const failingRoutes = [
+    'POST /orders',
+    'POST /auth/sign-up',
+    'POST /payouts',
+    'PATCH /orders/:id',
+  ];
+  const visitLinks: string[] = [];
+
+  for (const route of failingRoutes) {
+    await page.goto(`/${STORE_ID}/requests?range=30d`);
+    await page.getByRole('button', { name: `${route}, show details` }).click();
+    const links = page
+      .getByRole('dialog', { name: route })
+      .getByRole('link', { name: /^Open visit / });
+    await expect(links.first()).toBeVisible();
+    for (const href of await links.evaluateAll((anchors) =>
+      anchors.map((anchor) => anchor.getAttribute('href') ?? ''),
+    )) {
+      visitLinks.push(href);
+    }
+  }
+
+  expect(visitLinks).toHaveLength(8);
+  for (const href of visitLinks) {
+    await page.goto(href);
+    await expect(page.getByRole('heading', { name: /^Visit [0-9a-f]{8}$/ })).toBeVisible();
+    await expect(page.getByText('No visits found')).toBeHidden();
+  }
+});
+
 test('leads a visitor of the demo to the demo person', async ({ page }) => {
   await page.goto(`/${STORE_ID}/timeline`);
 
