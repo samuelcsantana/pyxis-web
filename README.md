@@ -68,8 +68,15 @@ Shipping now:
   on phones
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change against the previous period and a sparkline; page views and named events per day as a
-  chart or a table; the top pages and events, each opening its visits. Every percentage sits
-  next to the totals it comes from, and a division by zero shows a dash, never `NaN%`
+  chart or a table (a single day shows its two totals instead of a one-point chart); the top
+  pages and events, each opening its visits. Every percentage sits next to the totals it comes
+  from, and a division by zero shows a dash, never `NaN%`
+- Honest comparisons: a range that ends today is compared with the previous period up to the same
+  time of day, and the card says so ("vs. yesterday until 10:03"). A change shows its size next
+  to the percentage ("+12.4% (+525)"), reads "no change" when nothing moved, and is coloured as
+  good or bad news only above 20 in the previous period and beyond 1 % (0.5 points for the error
+  rate); the colour is also said in words to screen readers. A day without writes is a gap in the
+  error rate line, not 0 %
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
