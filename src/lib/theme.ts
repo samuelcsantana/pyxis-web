@@ -24,3 +24,23 @@ export function themeFromCookies(cookies: string): Theme | undefined {
     .find((part) => part.startsWith(prefix));
   return parseTheme(entry?.slice(prefix.length));
 }
+
+export const THEME_BACKGROUNDS: Readonly<Record<Theme, string>> = {
+  light: '#f4f6fa',
+  dark: '#0a1220',
+};
+
+export interface ThemeColorForMedia {
+  readonly media: string;
+  readonly color: string;
+}
+
+export function themeColorFor(theme: Theme | undefined): string | ThemeColorForMedia[] {
+  if (theme !== undefined) {
+    return THEME_BACKGROUNDS[theme];
+  }
+  return THEMES.map((each) => ({
+    media: `(prefers-color-scheme: ${each})`,
+    color: THEME_BACKGROUNDS[each],
+  }));
+}

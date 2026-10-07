@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import RootLayout, { metadata } from './layout';
+import RootLayout, { generateViewport, metadata } from './layout';
 
 const cookieStore = vi.hoisted(() => ({ theme: undefined as string | undefined }));
 
@@ -59,5 +59,13 @@ describe('RootLayout', () => {
   it('names the app in the metadata', () => {
     expect(metadata.title).toBe('Pyxis');
     expect(metadata.description).toMatch(/no cookies/);
+  });
+
+  it('colours the browser bar with the chosen theme, or the system one', async () => {
+    cookieStore.theme = 'dark';
+    expect((await generateViewport()).themeColor).toBe('#0a1220');
+
+    cookieStore.theme = undefined;
+    expect((await generateViewport()).themeColor).toHaveLength(2);
   });
 });
