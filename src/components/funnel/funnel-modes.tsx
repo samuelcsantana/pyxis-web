@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import type { FunnelMode } from '@/domain/funnel';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  SEGMENTED_GROUP,
+  SEGMENTED_IDLE,
+  SEGMENTED_OPTION,
+  SEGMENTED_SELECTED,
+} from '@/components/ui/control-classes';
 
 export interface FunnelModeLink {
   readonly mode: FunnelMode;
@@ -13,14 +18,11 @@ export interface FunnelModesProps {
   readonly current: FunnelMode;
 }
 
-const OPTION_CLASS = `flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium ${FOCUS_RING}`;
+const OPTION_CLASS = `min-h-9 px-3.5 ${SEGMENTED_OPTION}`;
 
 export function FunnelModes({ links, current }: FunnelModesProps) {
   return (
-    <nav
-      aria-label="Count by"
-      className="flex w-fit gap-0.5 rounded-input border border-line bg-soft p-[3px]"
-    >
+    <nav aria-label="Count by" className={`w-fit ${SEGMENTED_GROUP}`}>
       {links.map((link) => {
         const selected = link.mode === current;
         return (
@@ -28,7 +30,7 @@ export function FunnelModes({ links, current }: FunnelModesProps) {
             key={link.mode}
             href={link.href}
             aria-current={selected ? 'page' : undefined}
-            className={`${OPTION_CLASS} ${selected ? 'bg-ink text-card' : 'text-muted hover:text-ink'}`}
+            className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
           >
             {link.label}
           </Link>
