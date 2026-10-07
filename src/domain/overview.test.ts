@@ -7,6 +7,7 @@ import {
   overviewKpis,
   type OverviewWire,
   previousPeriodNote,
+  comparesUnfinishedDayWithWholeOne,
 } from './overview';
 import { overviewResponseSchema } from './overview.schema';
 
@@ -125,16 +126,54 @@ describe('activityTotals and activitySummary', () => {
   });
 });
 
+const ENDED = { endsToday: false } as const;
+const ENDS_TODAY = { endsToday: true } as const;
+const SAME_TIME = { kind: 'same-time', until: '10:03' } as const;
+const WHOLE_DAYS = { kind: 'whole-days' } as const;
+const UNKNOWN = { kind: 'unknown' } as const;
+
 describe('previousPeriodNote', () => {
   it('names the period the change is measured against', () => {
-    expect(previousPeriodNote(30)).toBe('vs. previous 30 days');
-    expect(previousPeriodNote(1)).toBe('vs. the day before');
+    expect(previousPeriodNote(WHOLE_DAYS, { ...ENDED, days: 30 })).toBe('vs. previous 30 days');
+    expect(previousPeriodNote(WHOLE_DAYS, { ...ENDED, days: 1 })).toBe('vs. the day before');
+  });
+
+  it('says until when the previous period was counted when today is not over', () => {
+    expect(previousPeriodNote(SAME_TIME, { ...ENDS_TODAY, days: 1 })).toBe(
+      'vs. yesterday until 10:03',
+    );
+    expect(previousPeriodNote(SAME_TIME, { ...ENDS_TODAY, days: 7 })).toBe(
+      'vs. previous 7 days, until 10:03',
+    );
+  });
+
+  it('says the previous period is whole when the API does not cut it and today is not over', () => {
+    expect(previousPeriodNote(UNKNOWN, { ...ENDS_TODAY, days: 1 })).toBe(
+      'so far today vs. all of yesterday',
+    );
+    expect(previousPeriodNote(UNKNOWN, { ...ENDS_TODAY, days: 30 })).toBe(
+      'vs. previous 30 full days',
+    );
+  });
+
+  it('keeps the plain note for a range that is over, whatever the API says', () => {
+    expect(previousPeriodNote(UNKNOWN, { ...ENDED, days: 7 })).toBe('vs. previous 7 days');
+    expect(previousPeriodNote(UNKNOWN, { ...ENDED, days: 1 })).toBe('vs. the day before');
+  });
+});
+
+describe('comparesUnfinishedDayWithWholeOne', () => {
+  it('is true only for today against all of yesterday', () => {
+    expect(comparesUnfinishedDayWithWholeOne(UNKNOWN, { ...ENDS_TODAY, days: 1 })).toBe(true);
+    expect(comparesUnfinishedDayWithWholeOne(UNKNOWN, { ...ENDS_TODAY, days: 7 })).toBe(false);
+    expect(comparesUnfinishedDayWithWholeOne(UNKNOWN, { ...ENDED, days: 1 })).toBe(false);
+    expect(comparesUnfinishedDayWithWholeOne(SAME_TIME, { ...ENDS_TODAY, days: 1 })).toBe(false);
   });
 });
 
 describe('overviewKpis', () => {
   it('gives the four figures with their change, tone and totals', () => {
-    const [visits, users, conversions, errors] = overviewKpis(report(), 30);
+    const [visits, users, conversions, errors] = overviewKpis(report(), { ...ENDED, days: 30 });
 
     expect(visits).toEqual({
       id: 'visits',
@@ -160,7 +199,10 @@ describe('overviewKpis', () => {
   });
 
   it('leaves out conversions when the project has no conversion event', () => {
-    const kpis = overviewKpis(report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }), 7);
+    const kpis = overviewKpis(report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }), {
+      ...ENDED,
+      days: 7,
+    });
 
     expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
   });
@@ -179,7 +221,7 @@ describe('overviewKpis', () => {
           },
         },
       }),
-      1,
+      { ...ENDED, days: 1 },
     );
 
     expect(visits?.tone).toBe('bad');
@@ -201,7 +243,7 @@ describe('overviewKpis', () => {
           },
         },
       }),
-      1,
+      { ...ENDED, days: 1 },
     );
 
     expect(visits).toMatchObject({ change: '0%', tone: 'neutral' });
@@ -222,7 +264,7 @@ describe('overviewKpis', () => {
           },
         },
       }),
-      1,
+      { ...ENDED, days: 1 },
     );
 
     expect(visits?.change).toBe('—');
@@ -232,5 +274,21 @@ describe('overviewKpis', () => {
     expect(errors?.tone).toBe('neutral');
     expect(errors?.note).toBe('0 of 0 writes failed');
     expect(errors?.series).toEqual([0]);
+  });
+
+  it('judges no change while today is compared with all of yesterday', () => {
+    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 });
+
+    expect(kpis.map((kpi) => kpi.tone)).toEqual(['neutral', 'neutral', 'neutral', 'neutral']);
+    expect(kpis[0]?.note).toBe('so far today vs. all of yesterday');
+  });
+
+  it('judges the change when the API compared the same hours', () => {
+    const [visits] = overviewKpis(report({ ...WIRE, comparison_cutoff: '10:03:00.000' }), {
+      ...ENDS_TODAY,
+      days: 1,
+    });
+
+    expect(visits).toMatchObject({ tone: 'good', note: 'vs. yesterday until 10:03' });
   });
 });

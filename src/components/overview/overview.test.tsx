@@ -10,9 +10,9 @@ import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
-const REPORT = overviewResponseSchema.parse(
-  demoOverviewWire('demo', WEEK, new Date('2026-10-06T02:30:00.000Z')),
-);
+const AFTER_THE_WEEK = new Date('2026-10-06T15:00:00.000Z');
+const LAST_WEEK = { days: 7, endsToday: false };
+const REPORT = overviewResponseSchema.parse(demoOverviewWire('demo', WEEK, AFTER_THE_WEEK));
 
 function visitsHref(path: string): string {
   return `/p-store/visits?${new URLSearchParams({ range: '7d', path }).toString()}`;
@@ -24,7 +24,7 @@ function eventVisitsHref(event: string): string {
 
 describe('KpiGrid', () => {
   it('shows each figure with its change, note and sparkline', () => {
-    const { container } = render(<KpiGrid kpis={overviewKpis(REPORT, 7)} />);
+    const { container } = render(<KpiGrid kpis={overviewKpis(REPORT, LAST_WEEK)} />);
 
     const visits = screen.getByRole('region', { name: 'Visits' });
     expect(visits).toHaveTextContent(`${kpi('visits').change} change`);
@@ -52,7 +52,7 @@ describe('KpiGrid', () => {
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
-  const found = overviewKpis(REPORT, 7).find((candidate) => candidate.id === id);
+  const found = overviewKpis(REPORT, LAST_WEEK).find((candidate) => candidate.id === id);
   if (found === undefined) {
     throw new Error(`No ${id} figure in the demo report`);
   }
