@@ -1,7 +1,7 @@
-import { type SparklineBox, sparklinePoints } from '@/domain/sparkline';
+import { type SparklineBox, sparklineSegments, type SparklineValue } from '@/domain/sparkline';
 
 export interface SparklineProps {
-  readonly values: readonly number[];
+  readonly values: readonly SparklineValue[];
   readonly box: SparklineBox;
   readonly width: number | string;
   readonly strokeClass: string;
@@ -26,15 +26,18 @@ export function Sparkline({
       aria-hidden="true"
       className={className}
     >
-      <polyline
-        points={sparklinePoints(values, box)}
-        fill="none"
-        className={strokeClass}
-        strokeWidth={strokeWidth}
-        strokeLinejoin="round"
-        strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
-      />
+      {sparklineSegments(values, box).map((points) => (
+        <polyline
+          key={points}
+          points={points}
+          fill="none"
+          className={strokeClass}
+          strokeWidth={strokeWidth}
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      ))}
     </svg>
   );
 }
