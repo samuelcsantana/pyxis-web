@@ -126,8 +126,12 @@ export function visitFilterParameters(filters: VisitFilters): Readonly<Record<st
   };
 }
 
+export function visitFilterCount(filters: VisitFilters): number {
+  return Object.keys(visitFilterParameters(filters)).length;
+}
+
 export function hasVisitFilters(filters: VisitFilters): boolean {
-  return Object.keys(visitFilterParameters(filters)).length > 0;
+  return visitFilterCount(filters) > 0;
 }
 
 export function isVisitCursor(text: string): boolean {

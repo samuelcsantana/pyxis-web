@@ -3,6 +3,7 @@ import {
   hasVisitFilters,
   isVisitCursor,
   NO_VISIT_FILTERS,
+  visitFilterCount,
   visitFilterParameters,
   visitFiltersOf,
   visitRows,
@@ -201,6 +202,20 @@ describe('visitFilterParameters', () => {
 
   it('writes nothing without filters', () => {
     expect(visitFilterParameters(NO_VISIT_FILTERS)).toEqual({});
+  });
+});
+
+describe('visitFilterCount', () => {
+  it('counts each filter in use once, every page field on its own', () => {
+    expect(visitFilterCount(NO_VISIT_FILTERS)).toBe(0);
+    expect(
+      visitFilterCount({
+        ...NO_VISIT_FILTERS,
+        paths: ['/pricing', '/sign-up'],
+        event: 'signup_completed',
+        device: 'mobile',
+      }),
+    ).toBe(4);
   });
 });
 
