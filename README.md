@@ -94,7 +94,8 @@ Shipping now:
   property, the channel, the device and identified or anonymous visitors, all kept in the URL;
   each row opens its visit, and an identified one its person, in the Timeline
 - Loading, empty and error states shared by every screen; an empty period shows how to install
-  the SDK
+  the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
+  of the framework's default
 - A demo mode with invented data and a visible banner when no API is configured, published as
   the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API
 
