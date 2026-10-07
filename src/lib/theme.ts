@@ -15,3 +15,12 @@ export function oppositeTheme(theme: Theme): Theme {
 export function themeCookie(theme: Theme): string {
   return `${THEME_COOKIE_NAME}=${theme}; Path=/; Max-Age=${String(ONE_YEAR_IN_SECONDS)}; SameSite=Lax`;
 }
+
+export function themeFromCookies(cookies: string): Theme | undefined {
+  const prefix = `${THEME_COOKIE_NAME}=`;
+  const entry = cookies
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(prefix));
+  return parseTheme(entry?.slice(prefix.length));
+}

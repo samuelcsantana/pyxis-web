@@ -1,12 +1,19 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Component, type ReactNode, Suspense, use } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiRequestError } from '@/domain/errors';
 import ProjectLayout from './[projectId]/layout';
 import RootError from './error';
+import GlobalError from './global-error';
 
 const state = vi.hoisted<{ failure: Error }>(() => ({ failure: new Error('not set') }));
+
+vi.mock('next/font/google', () => ({
+  Geist: () => ({ variable: 'geist-sans-variable' }),
+  Geist_Mono: () => ({ variable: 'geist-mono-variable' }),
+}));
 
 vi.mock('next/navigation', () => ({
   redirect: (path: string) => {
@@ -90,5 +97,19 @@ describe('RootError', () => {
     render(<RootError error={new Error('boom')} retry={vi.fn()} />);
 
     expect(screen.queryByText(/error id/)).not.toBeInTheDocument();
+  });
+});
+
+describe('GlobalError', () => {
+  it('draws its own English document with the fonts, a title and the branded panel', () => {
+    const markup = renderToStaticMarkup(<GlobalError error={state.failure} retry={vi.fn()} />);
+    const page = new DOMParser().parseFromString(markup, 'text/html');
+
+    expect(page.documentElement.lang).toBe('en');
+    expect(page.documentElement.className).toContain('geist-sans-variable');
+    expect(page.documentElement.dataset.theme).toBeUndefined();
+    expect(page.title).toBe('Could not load this data · Pyxis');
+    expect(page.querySelector('h1')?.textContent).toBe('Could not load this data');
+    expect(page.querySelector('button')?.textContent).toBe('Try again');
   });
 });
