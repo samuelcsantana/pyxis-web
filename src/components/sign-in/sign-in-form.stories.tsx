@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { InvalidCodeError } from '@/domain/errors';
+import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { DEMO_SIGN_IN_CODE, MockAuthService } from '@/services/auth/mock-auth-service';
 import { SignInForm } from './sign-in-form';
@@ -14,6 +14,12 @@ const neverAnswers: IAuthService = {
 const refusesEveryCode: IAuthService = {
   requestCode: () => Promise.resolve(),
   verifyCode: () => Promise.reject(new InvalidCodeError()),
+  signOut: () => Promise.resolve(),
+};
+
+const refusesEveryEmail: IAuthService = {
+  requestCode: () => Promise.reject(new RateLimitedError()),
+  verifyCode: () => Promise.resolve(),
   signOut: () => Promise.resolve(),
 };
 
@@ -69,6 +75,15 @@ export const WrongCode: Story = {
     await userEvent.type(await canvas.findByLabelText('6-digit code'), '123456');
     await userEvent.click(await canvas.findByRole('button', { name: 'Verify and continue' }));
     await expect(await canvas.findByRole('alert')).toHaveTextContent('Invalid or expired code');
+  },
+};
+
+export const EmailRefused: Story = {
+  args: { authService: refusesEveryEmail },
+  play: async ({ canvasElement }) => {
+    const canvas = await reachCodeStep(canvasElement);
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('Too many attempts');
+    await expect(canvas.getByLabelText('Email')).toHaveAttribute('aria-invalid', 'true');
   },
 };
 

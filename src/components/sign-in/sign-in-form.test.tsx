@@ -129,6 +129,28 @@ describe('SignInForm', () => {
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
   });
 
+  it('ties a refused request to the email field, and unties it when it goes', async () => {
+    const { service, pending } = controlledService();
+    render(<SignInForm authService={service} />);
+    typeEmail('ana@example.com');
+    const field = screen.getByLabelText('Email');
+    expect(field).toHaveAttribute('aria-invalid', 'false');
+    expect(field).not.toHaveAttribute('aria-describedby');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+    pending[0]?.reject(new Error('network down'));
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveAttribute('aria-describedby', 'sign-in-email-error');
+    expect(field).toHaveAccessibleDescription(/Could not reach Pyxis/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+
+    expect(field).toHaveAttribute('aria-invalid', 'false');
+    expect(field).not.toHaveAttribute('aria-describedby');
+  });
+
   it('keeps only digits in the code and signs in with it', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
