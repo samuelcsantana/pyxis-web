@@ -111,6 +111,16 @@ describe.each(Object.entries(THEMES))('focus rings in the %s theme', (_, tokens)
   });
 });
 
+const CHART_SERIES = ['sky', 'violet', 'teal', 'slate', 'ok', 'warn'];
+
+describe.each(Object.entries(THEMES))('chart series in the %s theme', (_, tokens) => {
+  it.each(CHART_SERIES)('draw %s at 3:1 or more against the card', (series) => {
+    expect(contrastRatio(color(tokens, series), color(tokens, 'card'))).toBeGreaterThanOrEqual(
+      MIN_NON_TEXT_CONTRAST,
+    );
+  });
+});
+
 describe.each(Object.entries(THEMES))('form fields in the %s theme', (_, tokens) => {
   it.each(['card', 'bg', 'soft'])('have a border at 3:1 against the %s surface', (surface) => {
     expect(contrastRatio(color(tokens, 'field'), color(tokens, surface))).toBeGreaterThanOrEqual(
