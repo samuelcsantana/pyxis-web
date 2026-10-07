@@ -5,3 +5,5 @@ export const HEADER_CELL = 'border-b border-line px-2.5 py-2 font-medium text-mu
 export const BODY_CELL = 'border-b border-line px-2.5 py-2.5';
 export const BAR_TRACK = 'block h-1.5 rounded-pill bg-soft';
 export const BAR_FILL = 'block h-1.5 rounded-pill';
+export const ROW_LINK =
+  'text-ink underline decoration-line underline-offset-4 hover:text-sky-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';

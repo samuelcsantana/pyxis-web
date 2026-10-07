@@ -3,6 +3,7 @@ import { DailyActivityChart } from '@/components/overview/daily-activity-chart';
 import { KpiGrid } from '@/components/overview/kpi-grid';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
+import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { NoActivityYet } from '@/components/states/no-activity-yet';
@@ -12,6 +13,7 @@ import {
   describePeriod,
   type Period,
   type PeriodSearch,
+  periodQuery,
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
@@ -27,7 +29,13 @@ export interface OverviewPageProps {
   readonly searchParams: Promise<PeriodSearch>;
 }
 
-function OverviewReportView({ report, period }: { report: OverviewReport; period: Period }) {
+interface OverviewReportViewProps {
+  readonly report: OverviewReport;
+  readonly period: Period;
+  readonly visitsHref: (filter: Readonly<Record<string, string>>) => string;
+}
+
+function OverviewReportView({ report, period, visitsHref }: OverviewReportViewProps) {
   return (
     <>
       <KpiGrid kpis={overviewKpis(report, daysBetween(period.from, period.to))} />
@@ -36,8 +44,12 @@ function OverviewReportView({ report, period }: { report: OverviewReport; period
         <TopPagesTable
           pages={report.topPages}
           totalPageViews={activityTotals(report.days).pageViews}
+          visitsHref={(path) => visitsHref({ path })}
         />
-        <TopEventsList events={report.topEvents} />
+        <TopEventsList
+          events={report.topEvents}
+          visitsHref={(name) => visitsHref({ event: name })}
+        />
       </div>
     </>
   );
@@ -62,7 +74,13 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
       />
       <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
         {hasActivity(report) ? (
-          <OverviewReportView report={report} period={period} />
+          <OverviewReportView
+            report={report}
+            period={period}
+            visitsHref={(filter) =>
+              screenHref(project.id, 'visits', withKeptParameters(periodQuery(period), filter))
+            }
+          />
         ) : (
           <NoActivityYet endpoint={apiBaseUrl()} />
         )}

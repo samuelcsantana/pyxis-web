@@ -6,6 +6,10 @@ import { TopPagesTable } from './top-pages-table';
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD);
 
+function visitsHref(path: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '30d', path }).toString()}`;
+}
+
 const meta = {
   title: 'Overview/Top pages',
   component: TopPagesTable,
@@ -13,8 +17,9 @@ const meta = {
   args: {
     pages: STORY_REPORT.topPages,
     totalPageViews: activityTotals(STORY_REPORT.days).pageViews,
+    visitsHref,
   },
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,36rem)]">

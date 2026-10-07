@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { barWidth, formatCount, formatPercent, rate } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
 import {
@@ -7,14 +8,16 @@ import {
   HEADER_CELL,
   PANEL,
   PANEL_TITLE,
+  ROW_LINK,
 } from '@/components/ui/panel-classes';
 
 export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
   readonly totalPageViews: number;
+  readonly visitsHref: (path: string) => string;
 }
 
-export function TopPagesTable({ pages, totalPageViews }: TopPagesTableProps) {
+export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTableProps) {
   const mostViews = Math.max(0, ...pages.map((page) => page.views));
   return (
     <section aria-labelledby="top-pages-heading" className={PANEL}>
@@ -52,7 +55,13 @@ export function TopPagesTable({ pages, totalPageViews }: TopPagesTableProps) {
                     scope="row"
                     className={`${BODY_CELL} pl-0 text-left font-mono text-xs font-normal wrap-anywhere`}
                   >
-                    {page.path}
+                    <Link
+                      href={visitsHref(page.path)}
+                      aria-label={`See the visits that opened ${page.path}`}
+                      className={ROW_LINK}
+                    >
+                      {page.path}
+                    </Link>
                   </th>
                   <td className={`${BODY_CELL} text-right`}>{formatCount(page.views)}</td>
                   <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>
