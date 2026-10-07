@@ -28,7 +28,7 @@ export const ThirtyDays: Story = {};
 export const AsTable: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'View as table' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Table' }));
     await expect(canvas.getAllByRole('row')).toHaveLength(REPORT.days.length + 1);
   },
 };

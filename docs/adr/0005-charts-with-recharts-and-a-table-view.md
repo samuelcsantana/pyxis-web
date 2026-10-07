@@ -54,3 +54,8 @@ Every series colour except the brand amber reaches **3:1 against the card** in b
 The amber of "Paid" and of one donut slice keeps the brand colour (1.78:1 on the light card): it
 is never the only series on a chart, its legend and table name it, and the boundaries between
 stacked segments are a separate change. `src/design/token-contrast.test.ts` asserts the rule.
+
+The "View as table" toggle kept its label whichever view showed, and its pressed state was a
+1.12:1 change of fill. It is now a **Chart / Table switch**: a group of two `aria-pressed`
+buttons in the segmented style of the period selector, where the chosen view is ink on the soft
+group (15:1 light, 13:1 dark).

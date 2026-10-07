@@ -109,11 +109,16 @@ describe('DailyActivityChart', () => {
 
   it('switches to a table of the same days and back', async () => {
     render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
-    const toggle = screen.getByRole('button', { name: 'View as table' });
+    const views = within(screen.getByRole('group', { name: 'Show as' }));
+    const chartOption = views.getByRole('button', { name: 'Chart' });
+    const tableOption = views.getByRole('button', { name: 'Table' });
+    expect(chartOption).toHaveAttribute('aria-pressed', 'true');
+    expect(tableOption).toHaveAttribute('aria-pressed', 'false');
 
-    await userEvent.click(toggle);
+    await userEvent.click(tableOption);
 
-    expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    expect(tableOption).toHaveAttribute('aria-pressed', 'true');
+    expect(chartOption).toHaveAttribute('aria-pressed', 'false');
     const table = screen.getByRole('table', {
       name: 'Page views and named events per day, last 7 days',
     });
@@ -123,9 +128,25 @@ describe('DailyActivityChart', () => {
     expect(rows[1]).toHaveTextContent(`Sep 29${String(first?.pageViews)}${String(first?.events)}`);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
 
-    await userEvent.click(toggle);
+    await userEvent.click(chartOption);
 
-    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    expect(chartOption).toHaveAttribute('aria-pressed', 'true');
+    expect(tableOption).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('img')).toBeInTheDocument();
+  });
+
+  it('switches with the keyboard too', async () => {
+    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+    screen.getByRole('button', { name: 'Table' }).focus();
+
+    await userEvent.keyboard('{Enter}');
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+
+    await userEvent.tab({ shift: true });
+    await userEvent.keyboard(' ');
+
+    expect(screen.getByRole('button', { name: 'Chart' })).toHaveFocus();
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 });
