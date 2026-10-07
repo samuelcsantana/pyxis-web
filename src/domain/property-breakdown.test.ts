@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   OTHER_VALUES_LABEL,
-  propertyBreakdownResponseSchema,
   type PropertyBreakdownWire,
   propertyKeyViews,
 } from './property-breakdown';
+import { propertyBreakdownResponseSchema } from './property-breakdown.schema';
 
 const WIRE: PropertyBreakdownWire = {
   name: 'calculator_result_shown',

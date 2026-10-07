@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  acquisitionResponseSchema,
   type AcquisitionWire,
   activeChannels,
   channelChartRows,
@@ -13,6 +12,7 @@ import {
   topChannel,
   visitsTotal,
 } from './acquisition';
+import { acquisitionResponseSchema } from './acquisition.schema';
 
 const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
 

@@ -1,10 +1,10 @@
 import {
   type AcquisitionReport,
-  acquisitionResponseSchema,
   type AcquisitionWire,
   type Channel,
   CHANNELS,
 } from '@/domain/acquisition';
+import { acquisitionResponseSchema } from '@/domain/acquisition.schema';
 import type { DateRange } from '../date-range';
 import type { DemoProject, DemoSource } from '../demo/demo-catalog';
 import { demoConversionsTotal, demoVisitsOn } from '../demo/demo-dataset';

@@ -1,4 +1,5 @@
-import { type RequestsReport, requestsResponseSchema, type RequestsWire } from '@/domain/requests';
+import { type RequestsReport, type RequestsWire } from '@/domain/requests';
+import { requestsResponseSchema } from '@/domain/requests.schema';
 import type { DateRange } from '../date-range';
 import type { DemoProject, DemoRoute } from '../demo/demo-catalog';
 import { type DemoFailure, demoFailures, demoSuccessfulWritesOn } from '../demo/demo-dataset';

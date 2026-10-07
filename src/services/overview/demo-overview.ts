@@ -1,4 +1,5 @@
-import { type OverviewReport, overviewResponseSchema, type OverviewWire } from '@/domain/overview';
+import { type OverviewReport, type OverviewWire } from '@/domain/overview';
+import { overviewResponseSchema } from '@/domain/overview.schema';
 import type { DateRange } from '../date-range';
 import {
   type DemoDay,

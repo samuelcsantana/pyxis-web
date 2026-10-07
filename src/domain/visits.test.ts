@@ -6,9 +6,9 @@ import {
   visitFilterParameters,
   visitFiltersOf,
   visitRows,
-  visitsResponseSchema,
   type VisitsWire,
 } from './visits';
+import { visitsResponseSchema } from './visits.schema';
 
 const WIRE: VisitsWire = {
   visits: [

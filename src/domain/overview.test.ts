@@ -5,10 +5,10 @@ import {
   hasActivity,
   type OverviewReport,
   overviewKpis,
-  overviewResponseSchema,
   type OverviewWire,
   previousPeriodNote,
 } from './overview';
+import { overviewResponseSchema } from './overview.schema';
 
 const WIRE: OverviewWire = {
   kpis: {

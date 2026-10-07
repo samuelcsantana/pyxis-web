@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { overviewKpis, overviewResponseSchema } from '@/domain/overview';
+import { overviewKpis } from '@/domain/overview';
+import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DailyActivityChart } from './daily-activity-chart';
 import { KpiGrid } from './kpi-grid';

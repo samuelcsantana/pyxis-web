@@ -6,8 +6,6 @@ import {
   type FunnelStep,
   funnelModeOf,
   funnelRows,
-  funnelStepsOf,
-  funnelStepsSchema,
   isCountableFunnel,
   MAX_FUNNEL_STEPS,
   MAX_PATH_LENGTH,
@@ -18,6 +16,7 @@ import {
   stepProblem,
   stepTarget,
 } from './funnel';
+import { funnelStepsOf, funnelStepsSchema } from './funnel.schema';
 
 const CALCULATOR: FunnelStep = { type: 'page', path: '/calculator' };
 const RESULT: FunnelStep = { type: 'event', name: 'calculator_result_shown' };

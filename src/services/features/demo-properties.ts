@@ -1,8 +1,8 @@
 import {
   type PropertyBreakdownReport,
-  propertyBreakdownResponseSchema,
   type PropertyBreakdownWire,
 } from '@/domain/property-breakdown';
+import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
 import type { DateRange } from '../date-range';
 import type { DemoProperty } from '../demo/demo-catalog';
 import { demoEventCountIn } from '../demo/demo-dataset';

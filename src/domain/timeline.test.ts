@@ -7,13 +7,13 @@ import {
   lookupTitle,
   shortId,
   timelineFilterOf,
-  timelineResponseSchema,
   type TimelineEvent,
   timelineTotals,
   type TimelineWire,
   USER_ID_PATTERN,
   visitViews,
 } from './timeline';
+import { timelineResponseSchema } from './timeline.schema';
 
 const VISIT_ID = '3c07a1b2-0000-4000-8000-000000000001';
 

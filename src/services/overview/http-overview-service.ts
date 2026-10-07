@@ -1,4 +1,5 @@
-import { type OverviewReport, overviewResponseSchema } from '@/domain/overview';
+import { type OverviewReport } from '@/domain/overview';
+import { overviewResponseSchema } from '@/domain/overview.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IOverviewService } from './overview-service.interface';

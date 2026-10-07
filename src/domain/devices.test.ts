@@ -4,7 +4,6 @@ import {
   countryCode,
   countryLabel,
   deviceConversions,
-  devicesResponseSchema,
   deviceTypeLabel,
   type DevicesWire,
   hasVisits,
@@ -12,6 +11,7 @@ import {
   shareRows,
   shareSummary,
 } from './devices';
+import { devicesResponseSchema } from './devices.schema';
 
 const WIRE: DevicesWire = {
   device_types: [

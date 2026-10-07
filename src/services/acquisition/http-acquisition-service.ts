@@ -1,4 +1,5 @@
-import { type AcquisitionReport, acquisitionResponseSchema } from '@/domain/acquisition';
+import { type AcquisitionReport } from '@/domain/acquisition';
+import { acquisitionResponseSchema } from '@/domain/acquisition.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IAcquisitionService } from './acquisition-service.interface';

@@ -1,4 +1,5 @@
-import { type DevicesReport, devicesResponseSchema, type DevicesWire } from '@/domain/devices';
+import { type DevicesReport, type DevicesWire } from '@/domain/devices';
+import { devicesResponseSchema } from '@/domain/devices.schema';
 import type { DateRange } from '../date-range';
 import { demoConversionsTotal, demoShareCounts, demoVisitsTotal } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';

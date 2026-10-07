@@ -1,10 +1,6 @@
 import { todayIn } from '@/domain/period';
-import {
-  type VisitFilters,
-  type VisitsReport,
-  visitsResponseSchema,
-  type VisitsWire,
-} from '@/domain/visits';
+import { type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/visits';
+import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
 import { pathPattern } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';

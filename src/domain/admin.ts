@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export interface Project {
   readonly id: string;
   readonly name: string;
@@ -11,28 +9,6 @@ export interface Admin {
   readonly email: string;
   readonly projects: readonly Project[];
 }
-
-export const meResponseSchema = z
-  .object({
-    email: z.string(),
-    projects: z.array(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        timezone: z.string(),
-        conversion_event: z.string().nullable(),
-      }),
-    ),
-  })
-  .transform((body): Admin => ({
-    email: body.email,
-    projects: body.projects.map((project) => ({
-      id: project.id,
-      name: project.name,
-      timezone: project.timezone,
-      conversionEvent: project.conversion_event,
-    })),
-  }));
 
 export function findProject(admin: Admin, projectId: string): Project | undefined {
   return admin.projects.find((project) => project.id === projectId);
