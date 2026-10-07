@@ -96,7 +96,7 @@ test('opens the visit of a recent failure in the timeline', async ({ page }) => 
     .getByRole('link', { name: 'Open visit 3c07a1b2' })
     .click();
 
-  await expect(page).toHaveURL(/\/timeline\?visit=3c07a1b2-/);
+  await expect(page).toHaveURL(/\/timeline\?range=30d&visit=3c07a1b2-/);
   await expect(page.getByRole('region', { name: /^Visit 3c07a1b2 · / })).toContainText(
     'order_number_in_use',
   );

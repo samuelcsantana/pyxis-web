@@ -135,6 +135,23 @@ describe('TimelinePage', () => {
     expect(screen.queryByText(/^Try /)).not.toBeInTheDocument();
   });
 
+  it('carries the period of the screen it came from, for the way back', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    const { unmount } = render(await renderTimeline({ range: '7d' }));
+    expect(
+      screen.getByRole('link', { name: `Open the timeline of the demo person ${DEMO_USER_ID}` }),
+    ).toHaveAttribute('href', `/p-store/timeline?range=7d&user=${DEMO_USER_ID}`);
+    expect(document.querySelector('input[type="hidden"][name="range"]')).toHaveValue('7d');
+    unmount();
+
+    render(await renderTimeline({ user: DEMO_USER_ID, from: '2026-08-01', to: '2026-08-31' }));
+
+    expect(screen.getByRole('link', { name: 'Errors only' })).toHaveAttribute(
+      'href',
+      `/p-store/timeline?from=2026-08-01&to=2026-08-31&user=${DEMO_USER_ID}&show=errors`,
+    );
+  });
+
   it('opens one visit, with nothing older to show', async () => {
     render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
 

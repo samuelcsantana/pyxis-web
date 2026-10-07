@@ -58,7 +58,7 @@ test('filters by two pages through the form and opens the visit in the timeline'
   await expect(visitRows(page)).toHaveCount(1);
 
   await page.getByRole('link', { name: /, open visit 7e2b9c14$/ }).click();
-  await expect(page).toHaveURL(/\/timeline\?visit=7e2b9c14-/);
+  await expect(page).toHaveURL(/\/timeline\?range=7d&visit=7e2b9c14-/);
   await expect(page.getByRole('heading', { name: 'Visit 7e2b9c14', exact: true })).toBeVisible();
 });
 

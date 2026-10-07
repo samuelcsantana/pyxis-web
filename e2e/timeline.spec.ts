@@ -65,3 +65,31 @@ test('opens one visit by its id, and says when an id is unknown', async ({ page 
     page.getByRole('heading', { name: 'No visits found for User nobody_here' }),
   ).toBeVisible();
 });
+
+test('keeps the period through the Timeline, so the way back has it', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=7d`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Timeline' })
+    .click();
+  await page
+    .getByRole('link', { name: `Open the timeline of the demo person ${DEMO_USER}` })
+    .click();
+  await expect(page.getByRole('heading', { name: `User ${DEMO_USER}` })).toBeVisible();
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Overview' })
+    .click();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
+});

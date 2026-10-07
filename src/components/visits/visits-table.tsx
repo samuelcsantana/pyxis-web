@@ -8,6 +8,7 @@ import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow, VisitRowsPage } from '@/domain/visits';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { FOCUS_RING } from '@/components/ui/control-classes';
+import { linkWith } from '@/components/shell/screens';
 
 const SMOOTH_LOADING_MS = 400;
 const LINK = `text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
@@ -24,7 +25,7 @@ export interface VisitsTableProps {
 }
 
 function timelineHref(timelinePath: string, lookup: Record<string, string>): string {
-  return `${timelinePath}?${new URLSearchParams(lookup).toString()}`;
+  return linkWith(timelinePath, lookup);
 }
 
 function AccountCell({

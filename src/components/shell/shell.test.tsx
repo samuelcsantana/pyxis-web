@@ -7,7 +7,7 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
-import { periodParameters, screenHref, screenOf } from './screens';
+import { linkWith, periodParameters, screenHref, screenOf } from './screens';
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
@@ -51,6 +51,13 @@ describe('screens helpers', () => {
   it('build screen links with or without a query', () => {
     expect(screenHref('p 1', 'overview')).toBe('/p%201/overview');
     expect(screenHref('p1', 'funnel', 'range=7d')).toBe('/p1/funnel?range=7d');
+  });
+
+  it('add parameters to a link that may already have a query', () => {
+    expect(linkWith('/p1/timeline', { visit: 'v 1' })).toBe('/p1/timeline?visit=v+1');
+    expect(linkWith('/p1/timeline?range=7d', { user: 'u_7f3a' })).toBe(
+      '/p1/timeline?range=7d&user=u_7f3a',
+    );
   });
 
   it('read the screen of a path', () => {

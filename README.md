@@ -169,18 +169,18 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 
 ### Routes
 
-| Route                      | What it shows                                                                           |
-| -------------------------- | --------------------------------------------------------------------------------------- |
-| `/`                        | Opens the first project the admin may read, or explains there is none                   |
-| `/sign-in`                 | Email, then code; `?expired=1` explains that the session ended                          |
-| `/[projectId]/overview`    | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                    |
-| `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries                     |
-| `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion                |
-| `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                       |
-| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them                        |
-| `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                      |
-| `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, and `?show=` to filter the items                       |
-| `/[projectId]/visits`      | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=` |
+| Route                      | What it shows                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `/`                        | Opens the first project the admin may read, or explains there is none                            |
+| `/sign-in`                 | Email, then code; `?expired=1` explains that the session ended                                   |
+| `/[projectId]/overview`    | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                             |
+| `/[projectId]/devices`     | Device types, browsers, systems, conversion by device and countries                              |
+| `/[projectId]/acquisition` | Visits by channel per day, paid visits, the sources and their conversion                         |
+| `/[projectId]/features`    | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
+| `/[projectId]/requests`    | Writes by route; `?show=failing` and `?screen=/path` filter them                                 |
+| `/[projectId]/funnel`      | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
+| `/[projectId]/timeline`    | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
+| `/[projectId]/visits`      | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`.

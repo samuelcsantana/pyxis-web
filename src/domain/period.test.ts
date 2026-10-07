@@ -7,6 +7,7 @@ import {
   formatPeriod,
   MAX_PERIOD_DAYS,
   periodQuery,
+  periodSearchParameters,
   presetPeriod,
   resolvePeriod,
   todayIn,
@@ -100,6 +101,16 @@ describe('periodQuery', () => {
     expect(periodQuery({ preset: 'custom', from: '2026-08-01', to: '2026-08-31' })).toBe(
       'from=2026-08-01&to=2026-08-31',
     );
+  });
+});
+
+describe('periodSearchParameters', () => {
+  it('keeps the period parameters of a URL as they are, and nothing else', () => {
+    expect(periodSearchParameters({ range: '7d', from: ['a', 'b'], to: '2026-08-31' })).toEqual({
+      range: '7d',
+      to: '2026-08-31',
+    });
+    expect(periodSearchParameters({})).toEqual({});
   });
 });
 

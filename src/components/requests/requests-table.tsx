@@ -3,6 +3,7 @@
 import { type KeyboardEvent, type MouseEvent, useRef, useState } from 'react';
 import type { RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
+import { linkWith } from '@/components/shell/screens';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
@@ -166,9 +167,7 @@ export function RequestsTable({
           <RouteDetails
             row={selected}
             screenHref={screenHref}
-            visitHref={(sessionId) =>
-              `${timelinePath}?${new URLSearchParams({ visit: sessionId }).toString()}`
-            }
+            visitHref={(sessionId) => linkWith(timelinePath, { visit: sessionId })}
             onClose={() => {
               dialogRef.current.close();
             }}
