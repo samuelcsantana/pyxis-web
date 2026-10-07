@@ -81,6 +81,9 @@ Shipping now:
   good or bad news only above 20 in the previous period and beyond 1 % (0.5 points for the error
   rate); the colour is also said in words to screen readers. A day without writes is a gap in the
   error rate line, not 0 %
+- Conversions counted as visits: a conversion rate is the share of visits that sent the
+  conversion event at least once (Overview, Devices, Acquisition), so it never passes 100 %; the
+  Overview keeps the number of conversion events beside it
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
