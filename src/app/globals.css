@@ -10,6 +10,10 @@
   --pyx-soft: #eef2f8;
   --pyx-accent: #f5b83d;
   --pyx-accent-ink: #0e1a2b;
+  --pyx-accent-hover: #d99a1c;
+  --pyx-accent-pressed: #c98a10;
+  --pyx-ink-hover: #2b3f5c;
+  --pyx-ink-pressed: #3d5475;
   --pyx-focus: #a16207;
   --pyx-sky: #0ea5e9;
   --pyx-sky-ink: #0369a1;
@@ -46,6 +50,8 @@
     --pyx-soft: #16243a;
     --pyx-accent: #f5b83d;
     --pyx-accent-ink: #0e1a2b;
+    --pyx-ink-hover: #b8c5d8;
+    --pyx-ink-pressed: #9aabc2;
     --pyx-focus: #f5b83d;
     --pyx-sky: #38bdf8;
     --pyx-sky-ink: #7dd3fc;
@@ -73,6 +79,8 @@
   --pyx-soft: #16243a;
   --pyx-accent: #f5b83d;
   --pyx-accent-ink: #0e1a2b;
+  --pyx-ink-hover: #b8c5d8;
+  --pyx-ink-pressed: #9aabc2;
   --pyx-focus: #f5b83d;
   --pyx-sky: #38bdf8;
   --pyx-sky-ink: #7dd3fc;
@@ -99,6 +107,10 @@
   --color-soft: var(--pyx-soft);
   --color-accent: var(--pyx-accent);
   --color-accent-ink: var(--pyx-accent-ink);
+  --color-accent-hover: var(--pyx-accent-hover);
+  --color-accent-pressed: var(--pyx-accent-pressed);
+  --color-ink-hover: var(--pyx-ink-hover);
+  --color-ink-pressed: var(--pyx-ink-pressed);
   --color-focus: var(--pyx-focus);
   --color-sky: var(--pyx-sky);
   --color-sky-ink: var(--pyx-sky-ink);
