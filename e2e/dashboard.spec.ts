@@ -101,7 +101,7 @@ test('switches project and keeps the period', async ({ page, isMobile }) => {
 test('answers not found for a project outside the account', async ({ page }) => {
   await page.goto('/00000000-0000-4000-8000-000000000000/overview');
 
-  await expect(page.getByRole('heading', { name: 'Nothing here' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
 });
 
 test('signs out to the sign-in page', async ({ page, isMobile }) => {
