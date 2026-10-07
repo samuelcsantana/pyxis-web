@@ -143,6 +143,25 @@ test('loads the older visits with the keyboard and moves the focus to them', asy
   await expect(page.getByText('That is every visit of this period.')).toBeVisible();
 });
 
+test.describe('at 1024×768', () => {
+  test.use({ viewport: { width: 1024, height: 768 } });
+
+  test('fits the visits table in its panel without an inner scroll', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/visits`);
+    const table = page.getByRole('table', { name: 'Visits' });
+    await expect(table).toBeVisible();
+
+    await expect(table.getByRole('columnheader', { name: 'Account' })).toBeInViewport();
+    await expect(table.getByRole('columnheader', { name: 'Highlights' })).toBeHidden();
+    expect(
+      await table.evaluate((element) => {
+        const scroller = element.parentElement;
+        return scroller === null ? -1 : scroller.scrollWidth - scroller.clientWidth;
+      }),
+    ).toBe(0);
+  });
+});
+
 test('opens the timeline of the account of a visit', async ({ page }) => {
   await page.goto(`/${STORE_ID}/visits?identity=identified&device=tablet`);
 
