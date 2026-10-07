@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { type Admin, emailInitial, type Project } from '@/domain/admin';
 import { LogoMark } from '@/components/brand/logo-mark';
+import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { ProjectSwitcher } from './project-switcher';
 import { SidebarNav } from './sidebar-nav';
 import { SignOutButton } from './sign-out-button';
@@ -20,7 +21,7 @@ export function Sidebar({ admin, project }: SidebarProps) {
     >
       <Link
         href="/"
-        className="hidden items-center gap-2.5 px-2 py-1 text-nav-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:flex"
+        className={`hidden items-center gap-2.5 px-2 py-1 text-nav-strong ${NAV_FOCUS_RING} lg:flex`}
       >
         <LogoMark size={28} />
         <span className="text-xl font-bold tracking-tight">Pyxis</span>

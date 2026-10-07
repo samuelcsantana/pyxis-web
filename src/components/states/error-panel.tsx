@@ -1,3 +1,4 @@
+import { FOCUS_RING } from '@/components/ui/control-classes';
 export interface ErrorPanelProps {
   readonly detail?: string;
   readonly onRetry?: () => void;
@@ -36,7 +37,7 @@ export function ErrorPanel({ detail, onRetry, headingLevel: Heading = 'h2' }: Er
         <button
           type="button"
           onClick={onRetry}
-          className="flex min-h-11 items-center gap-2 rounded-input bg-accent px-4 text-sm font-semibold text-accent-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`flex min-h-11 items-center gap-2 rounded-input bg-accent px-4 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
         >
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
             <path

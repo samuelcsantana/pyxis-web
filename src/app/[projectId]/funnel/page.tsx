@@ -26,6 +26,7 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export const metadata: Metadata = { title: 'Funnel · Pyxis' };
 
@@ -101,7 +102,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
               <p>
                 <Link
                   href={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
-                  className="text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
                 >
                   Start from an example funnel
                 </Link>

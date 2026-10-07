@@ -13,6 +13,7 @@ import {
 import { formatCount } from '@/domain/metrics';
 import { formatDay } from '@/domain/period';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
 import { CHANNEL_COLORS } from './channel-colors';
 
@@ -83,7 +84,12 @@ function ChannelTable({
 }: ChannelChartProps & { readonly channels: readonly Channel[] }) {
   const caption = `Visits by channel per day, ${periodLabel}`;
   return (
-    <div className="overflow-x-auto" role="region" aria-label={caption} tabIndex={0}>
+    <div
+      className={`overflow-x-auto ${FOCUS_RING}`}
+      role="region"
+      aria-label={caption}
+      tabIndex={0}
+    >
       <table className="w-full border-collapse text-[13px] tabular-nums">
         <caption className="pb-2 text-left text-muted">{caption}</caption>
         <thead>

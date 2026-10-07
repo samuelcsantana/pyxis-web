@@ -7,10 +7,10 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow, VisitRowsPage } from '@/domain/visits';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 const SMOOTH_LOADING_MS = 400;
-const LINK =
-  'text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink';
+const LINK = `text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-medium whitespace-nowrap';
 const WIDE = 'hidden sm:table-cell';
 const WIDEST = 'hidden lg:table-cell';
@@ -234,7 +234,7 @@ export function VisitsTable({
             onClick={() => {
               load(cursor);
             }}
-            className="min-h-11 rounded-input border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60"
+            className={`min-h-11 rounded-input border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-soft ${FOCUS_RING} disabled:opacity-60`}
           >
             {busy ? 'Loading older visits…' : 'Load older visits'}
           </button>

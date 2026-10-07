@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import { type Project, projectInitials } from '@/domain/admin';
+import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface ProjectSwitcherProps {
@@ -29,7 +30,9 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
 
   return (
     <details onClick={closeAfterChoice} className="group relative">
-      <summary className="flex w-full cursor-pointer list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+      <summary
+        className={`flex w-full cursor-pointer list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong ${NAV_FOCUS_RING} [&::-webkit-details-marker]:hidden`}
+      >
         <span className="sr-only">Switch project. Current project: </span>
         <span
           aria-hidden="true"
@@ -66,7 +69,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
             <Link
               href={screenHref(project.id, screen, query)}
               aria-current={project.id === currentProject.id ? 'page' : undefined}
-              className="flex min-h-11 items-center gap-2.5 rounded-control px-2.5 text-sm text-nav-text hover:bg-nav-active focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent aria-[current=page]:font-semibold aria-[current=page]:text-nav-strong"
+              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 text-sm text-nav-text hover:bg-nav-active ${NAV_FOCUS_RING} aria-[current=page]:font-semibold aria-[current=page]:text-nav-strong`}
             >
               <span
                 aria-hidden="true"

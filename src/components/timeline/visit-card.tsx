@@ -1,5 +1,6 @@
 import type { ItemKind, TimelineItem, VisitView } from '@/domain/timeline';
 import { TONE_CLASSES } from '@/components/requests/status-styles';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 const ICONS: Readonly<Record<ItemKind, string>> = {
   page: 'M6 3h9l3 3v15H6z M14 3v4h4',
@@ -39,7 +40,7 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
         <h3
           id={headingId}
           tabIndex={focusable ? -1 : undefined}
-          className="text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={`text-[15px] font-semibold ${FOCUS_RING}`}
         >
           {visit.heading}
         </h3>

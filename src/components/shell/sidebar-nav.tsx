@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface SidebarNavProps {
@@ -47,7 +48,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
               <Link
                 href={screenHref(projectId, screen.slug, query)}
                 aria-current={active ? 'page' : undefined}
-                className={`flex min-h-11 items-center gap-3 rounded-input px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${active ? 'bg-nav-active font-semibold text-nav-strong' : 'font-medium text-nav-text hover:bg-nav-raised'}`}
+                className={`flex min-h-11 items-center gap-3 rounded-input px-3 text-sm ${NAV_FOCUS_RING} ${active ? 'bg-nav-active font-semibold text-nav-strong' : 'font-medium text-nav-text hover:bg-nav-raised'}`}
               >
                 <ScreenIcon path={screen.icon} active={active} />
                 <span>{screen.label}</span>

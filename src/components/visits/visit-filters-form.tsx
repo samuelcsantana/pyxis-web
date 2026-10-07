@@ -10,6 +10,7 @@ import {
   type VisitIdentity,
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface VisitFiltersFormProps {
   readonly action: string;
@@ -31,8 +32,7 @@ const IDENTITY_LABELS: Readonly<Record<VisitIdentity, string>> = {
 };
 
 const LABEL = 'flex min-w-0 flex-col gap-1.5 text-[13px] font-medium';
-const FIELD =
-  'min-h-11 w-full rounded-input border border-line bg-card px-3 text-sm font-normal text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const FIELD = `min-h-11 w-full rounded-input border border-line bg-card px-3 text-sm font-normal text-ink ${FOCUS_RING}`;
 const HINT = 'text-xs font-normal text-muted';
 
 export function VisitFiltersForm({
@@ -149,14 +149,14 @@ export function VisitFiltersForm({
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="submit"
-          className="min-h-11 rounded-input bg-accent px-4.5 text-sm font-semibold text-accent-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`min-h-11 rounded-input bg-accent px-4.5 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
         >
           Apply filters
         </button>
         {clearHref === null ? null : (
           <Link
             href={clearHref}
-            className="text-[13px] text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className={`text-[13px] text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
           >
             Clear filters
           </Link>

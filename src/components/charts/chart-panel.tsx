@@ -2,6 +2,7 @@
 
 import { type ReactNode, useId, useState } from 'react';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface ChartPanelProps {
   readonly title: string;
@@ -31,7 +32,7 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
             onClick={() => {
               setAsTable((shown) => !shown);
             }}
-            className="min-h-11 rounded-control border border-line bg-card px-3 text-[13px] text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink aria-pressed:bg-soft sm:min-h-9"
+            className={`min-h-11 rounded-control border border-line bg-card px-3 text-[13px] text-ink hover:bg-soft ${FOCUS_RING} aria-pressed:bg-soft sm:min-h-9`}
           >
             View as table
           </button>

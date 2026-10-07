@@ -1,5 +1,6 @@
 import type { PropertyKeyView, PropertyValueRow } from '@/domain/property-breakdown';
 import { BAR_FILL, BAR_TRACK } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export type PropertyBreakdownState =
   | { readonly status: 'loading' }
@@ -86,7 +87,7 @@ export function PropertyBreakdown({ eventLabel, state, onRetry }: PropertyBreakd
         <button
           type="button"
           onClick={onRetry}
-          className="min-h-9 rounded-input border border-line bg-card px-3 text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`min-h-9 rounded-input border border-line bg-card px-3 text-ink hover:bg-soft ${FOCUS_RING}`}
         >
           Try again
         </button>

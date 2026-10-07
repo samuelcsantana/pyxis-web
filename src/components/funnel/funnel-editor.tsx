@@ -13,6 +13,7 @@ import {
 } from '@/domain/funnel';
 import type { KeptParameters } from '@/components/shell/period-selector';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 interface DraftStep {
   readonly id: number;
@@ -28,10 +29,8 @@ export interface FunnelEditorProps {
 }
 
 const ADD_STEP_ID = 'funnel-add-step';
-const BUTTON =
-  'min-h-9 rounded-control border border-line bg-card px-2.5 text-[13px] text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:opacity-50';
-const FIELD =
-  'min-h-10 rounded-control border border-line bg-card px-2.5 text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent aria-invalid:border-bad';
+const BUTTON = `min-h-9 rounded-control border border-line bg-card px-2.5 text-[13px] text-ink hover:bg-soft ${FOCUS_RING} disabled:cursor-not-allowed disabled:opacity-50`;
+const FIELD = `min-h-10 rounded-control border border-line bg-card px-2.5 text-sm text-ink ${FOCUS_RING} aria-invalid:border-bad`;
 
 function toStep(draft: DraftStep): FunnelStep {
   return draft.type === 'page'
@@ -119,7 +118,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
           onClick={() => {
             setOpen((wasOpen) => !wasOpen);
           }}
-          className="min-h-10 rounded-input bg-accent px-4 text-sm font-semibold text-accent-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`min-h-10 rounded-input bg-accent px-4 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
         >
           {open ? 'Close the editor' : 'Edit steps'}
         </button>
@@ -242,7 +241,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
               type="submit"
               disabled={!valid}
               aria-describedby="funnel-editor-status"
-              className="min-h-10 rounded-input bg-ink px-4 text-sm font-semibold text-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50"
+              className={`min-h-10 rounded-input bg-ink px-4 text-sm font-semibold text-card ${FOCUS_RING} disabled:cursor-not-allowed disabled:opacity-50`}
             >
               Apply
             </button>

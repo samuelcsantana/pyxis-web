@@ -25,6 +25,7 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_USER_ID } from '@/services/timeline/demo-timeline';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { loadOlderVisits } from './actions';
 
 export const metadata: Metadata = { title: 'Timeline · Pyxis' };
@@ -131,7 +132,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
               <p>
                 <Link
                   href={`${basePath}?${new URLSearchParams({ user: DEMO_USER_ID }).toString()}`}
-                  className="text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
                 >
                   Open the timeline of the demo person {DEMO_USER_ID}
                 </Link>

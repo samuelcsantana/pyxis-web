@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Lookup } from '@/domain/timeline';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface TimelineSearchProps {
   readonly action: string;
@@ -11,8 +12,7 @@ export interface TimelineSearchProps {
 
 type LookupKind = Lookup['kind'];
 
-const FIELD =
-  'min-h-11 rounded-input border border-line bg-card px-3 text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const FIELD = `min-h-11 rounded-input border border-line bg-card px-3 text-sm text-ink ${FOCUS_RING}`;
 
 export function TimelineSearch({ action, lookup, hint }: TimelineSearchProps) {
   const [kind, setKind] = useState<LookupKind>(lookup?.kind ?? 'user');
@@ -50,7 +50,7 @@ export function TimelineSearch({ action, lookup, hint }: TimelineSearchProps) {
       </label>
       <button
         type="submit"
-        className="min-h-11 rounded-input bg-accent px-4.5 text-sm font-semibold text-accent-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className={`min-h-11 rounded-input bg-accent px-4.5 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
       >
         Show timeline
       </button>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { FeatureKind } from '@/domain/features';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface FeatureTab {
   readonly kind: FeatureKind;
@@ -12,8 +13,7 @@ export interface FeatureTabsProps {
   readonly current: FeatureKind;
 }
 
-const TAB_CLASS =
-  'flex min-h-11 items-center border-b-2 px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+const TAB_CLASS = `flex min-h-11 items-center border-b-2 px-4 text-sm font-semibold ${FOCUS_RING}`;
 
 export function FeatureTabs({ tabs, current }: FeatureTabsProps) {
   return (

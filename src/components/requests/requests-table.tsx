@@ -4,6 +4,7 @@ import { type KeyboardEvent, type MouseEvent, useRef, useState } from 'react';
 import type { RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
 import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
 import { MethodChip, TONE_CLASSES } from './status-styles';
@@ -110,7 +111,7 @@ export function RequestsTable({
                     onClick={(event) => {
                       open(row.key, event.currentTarget);
                     }}
-                    className="flex min-h-9 flex-col items-start gap-1 text-left text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:flex-row sm:items-center sm:gap-2.5"
+                    className={`flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} sm:flex-row sm:items-center sm:gap-2.5`}
                   >
                     <MethodChip method={row.method} />{' '}
                     <span className="font-mono text-xs underline decoration-line underline-offset-4 wrap-anywhere">
