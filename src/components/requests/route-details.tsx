@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { RouteRow } from '@/domain/requests';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { MethodChip, TONE_CLASSES } from './status-styles';
 
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
@@ -31,7 +32,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
           type="button"
           autoFocus
           onClick={onClose}
-          className="flex size-10 shrink-0 items-center justify-center rounded-input border border-line bg-card text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`flex size-10 shrink-0 items-center justify-center rounded-input border border-line bg-card text-ink hover:bg-soft ${FOCUS_RING}`}
         >
           <span className="sr-only">Close</span>
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
@@ -74,7 +75,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
               >
                 <Link
                   href={screenHref(screen.path)}
-                  className="font-mono text-xs text-sky-ink underline underline-offset-2 wrap-anywhere hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  className={`font-mono text-xs text-sky-ink underline underline-offset-2 wrap-anywhere hover:text-ink ${FOCUS_RING}`}
                 >
                   {screen.path}
                   <span className="sr-only">: show only the requests made from this screen</span>
@@ -109,7 +110,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
                   </span>
                   <Link
                     href={visitHref(failure.sessionId)}
-                    className="w-fit text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                    className={`w-fit text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
                   >
                     Open visit {failure.visit}
                   </Link>

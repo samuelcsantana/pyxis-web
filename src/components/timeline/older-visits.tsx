@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import type { VisitView } from '@/domain/timeline';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { VisitCard } from './visit-card';
 
 const SMOOTH_LOADING_MS = 400;
@@ -85,7 +86,7 @@ export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
             onClick={() => {
               load(before);
             }}
-            className="min-h-11 rounded-input border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60"
+            className={`min-h-11 rounded-input border border-line bg-card px-4 text-sm font-medium text-ink hover:bg-soft ${FOCUS_RING} disabled:opacity-60`}
           >
             {busy ? 'Loading older visits…' : 'Load older visits'}
           </button>

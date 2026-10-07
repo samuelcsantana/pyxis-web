@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
+import { FOCUS_RING, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 
@@ -17,12 +18,12 @@ export interface SignOutButtonProps {
 
 const VARIANT_CLASSES = {
   nav: {
-    button: 'text-nav-text hover:bg-nav-raised',
+    button: `text-nav-text hover:bg-nav-raised ${NAV_FOCUS_RING}`,
     icon: 'text-nav-muted',
     error: 'text-nav-text',
   },
   page: {
-    button: 'self-start border border-line bg-card text-ink hover:border-muted',
+    button: `self-start border border-line bg-card text-ink hover:border-muted ${FOCUS_RING}`,
     icon: 'text-muted',
     error: 'text-bad',
   },
@@ -60,7 +61,7 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
         onClick={signOut}
         disabled={busy}
         aria-busy={busy}
-        className={`flex min-h-11 items-center gap-2.5 rounded-input px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait ${classes.button}`}
+        className={`flex min-h-11 items-center gap-2.5 rounded-input px-3 text-sm disabled:cursor-wait ${classes.button}`}
       >
         <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true" className={classes.icon}>
           <path

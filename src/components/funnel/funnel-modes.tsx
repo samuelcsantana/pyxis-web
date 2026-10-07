@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { FunnelMode } from '@/domain/funnel';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface FunnelModeLink {
   readonly mode: FunnelMode;
@@ -12,8 +13,7 @@ export interface FunnelModesProps {
   readonly current: FunnelMode;
 }
 
-const OPTION_CLASS =
-  'flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const OPTION_CLASS = `flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium ${FOCUS_RING}`;
 
 export function FunnelModes({ links, current }: FunnelModesProps) {
   return (

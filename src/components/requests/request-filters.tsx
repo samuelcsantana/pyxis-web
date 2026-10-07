@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface RequestFiltersProps {
   readonly allHref: string;
@@ -8,8 +9,7 @@ export interface RequestFiltersProps {
   readonly clearScreenHref: string;
 }
 
-const OPTION_CLASS =
-  'flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const OPTION_CLASS = `flex min-h-9 items-center rounded-control px-3.5 text-[13px] font-medium ${FOCUS_RING}`;
 const SELECTED_CLASS = 'bg-ink text-card';
 const IDLE_CLASS = 'text-muted hover:text-ink';
 
@@ -49,7 +49,7 @@ export function RequestFilters({
           <Link
             href={clearScreenHref}
             aria-label="Clear the screen filter"
-            className="rounded-pill px-2.5 py-1 text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className={`rounded-pill px-2.5 py-1 text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
           >
             Clear
           </Link>

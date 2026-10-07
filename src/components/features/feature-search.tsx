@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { KeptParameters } from '@/components/shell/period-selector';
+import { FOCUS_RING, FOCUS_WITHIN_RING } from '@/components/ui/control-classes';
 
 export interface FeatureSearchProps {
   readonly action: string;
@@ -22,7 +23,9 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
       {Object.entries(keep).map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
-      <label className="flex min-h-11 min-w-0 grow items-center gap-2 rounded-input border border-line bg-card px-3 focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-accent sm:w-80 sm:grow-0">
+      <label
+        className={`flex min-h-11 min-w-0 grow items-center gap-2 rounded-input border border-line bg-card px-3 ${FOCUS_WITHIN_RING} sm:w-80 sm:grow-0`}
+      >
         <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="text-muted">
           <path
             d={SEARCH_ICON}
@@ -44,14 +47,14 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
       </label>
       <button
         type="submit"
-        className="min-h-11 rounded-input border border-line bg-card px-3.5 text-sm font-medium text-ink hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className={`min-h-11 rounded-input border border-line bg-card px-3.5 text-sm font-medium text-ink hover:bg-soft ${FOCUS_RING}`}
       >
         Search
       </button>
       {query === '' ? null : (
         <Link
           href={clearHref}
-          className="text-sm text-sky-ink underline underline-offset-2 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className={`text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
         >
           Clear
         </Link>

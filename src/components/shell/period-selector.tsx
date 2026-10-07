@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 
 export type KeptParameters = Readonly<Record<string, string>>;
 
@@ -28,12 +29,10 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
-const OPTION_CLASS =
-  'flex min-h-8.5 items-center rounded-control px-3 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const OPTION_CLASS = `flex min-h-8.5 items-center rounded-control px-3 text-[13px] font-medium ${FOCUS_RING}`;
 const SELECTED_CLASS = 'bg-ink text-card';
 const IDLE_CLASS = 'text-muted hover:text-ink';
-const DATE_INPUT_CLASS =
-  'min-h-9 rounded-control border border-line bg-card px-2 text-[13px] text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent';
+const DATE_INPUT_CLASS = `min-h-9 rounded-control border border-line bg-card px-2 text-[13px] text-ink ${FOCUS_RING}`;
 
 export function PeriodSelector({
   basePath,
@@ -100,7 +99,7 @@ export function PeriodSelector({
           </label>
           <button
             type="submit"
-            className="min-h-9 rounded-control bg-accent px-3 text-[13px] font-semibold text-accent-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className={`min-h-9 rounded-control bg-accent px-3 text-[13px] font-semibold text-accent-ink ${FOCUS_RING}`}
           >
             Apply
           </button>
