@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { formatPeriod, type Period } from '@/domain/period';
 import type { Theme } from '@/lib/theme';
@@ -45,17 +46,35 @@ function PeriodControls({ basePath, period, today, keep }: TopbarWithPeriodProps
   );
 }
 
-export function Topbar(props: TopbarProps) {
+export interface TopbarFrameProps {
+  readonly title: string;
+  readonly subtitle: ReactNode;
+  readonly controls: ReactNode;
+}
+
+export function TopbarFrame({ title, subtitle, controls }: TopbarFrameProps) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-card px-4 py-4.5 text-ink sm:px-8">
       <div className="flex min-w-0 flex-col gap-1">
-        <h1 className="text-[22px] leading-7 font-semibold tracking-tight">{props.title}</h1>
-        <p className="text-[13px] text-muted">{props.subtitle}</p>
+        <h1 className="text-[22px] leading-7 font-semibold tracking-tight">{title}</h1>
+        <p className="text-[13px] text-muted">{subtitle}</p>
       </div>
-      <div className="flex flex-wrap items-center gap-3">
-        {props.period === undefined ? null : <PeriodControls {...props} />}
-        <ThemeToggle initialTheme={props.theme} />
-      </div>
+      <div className="flex flex-wrap items-center gap-3">{controls}</div>
     </header>
+  );
+}
+
+export function Topbar(props: TopbarProps) {
+  return (
+    <TopbarFrame
+      title={props.title}
+      subtitle={props.subtitle}
+      controls={
+        <>
+          {props.period === undefined ? null : <PeriodControls {...props} />}
+          <ThemeToggle initialTheme={props.theme} />
+        </>
+      }
+    />
   );
 }
