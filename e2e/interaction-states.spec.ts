@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { MIN_NON_TEXT_CONTRAST } from './contrast';
+import { MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
+import { pointerStates } from './pointer-states';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -106,3 +107,60 @@ for (const colorScheme of ['light', 'dark'] as const) {
     }
   });
 }
+
+interface SidebarControl {
+  readonly control: string;
+  readonly target: (page: Page) => Locator;
+  readonly prepare?: (page: Page) => Promise<void>;
+}
+
+const switcher = (page: Page) => page.locator('details', { hasText: 'Switch project' });
+
+const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
+  {
+    control: 'a sidebar link',
+    target: (page) =>
+      page
+        .getByRole('navigation', { name: 'Main navigation' })
+        .getByRole('link', { name: 'Funnel' }),
+  },
+  {
+    control: 'the sign-out button',
+    target: (page) => page.getByRole('button', { name: 'Sign out' }),
+  },
+  {
+    control: 'the project switcher',
+    target: (page) => switcher(page).locator('summary'),
+  },
+  {
+    control: 'a project in the switcher',
+    target: (page) => switcher(page).locator('a:not([aria-current])').first(),
+    prepare: async (page) => {
+      await switcher(page).locator('summary').click();
+    },
+  },
+];
+
+test.describe('sidebar states on a desktop', () => {
+  for (const { control, target, prepare } of SIDEBAR_CONTROLS) {
+    test(`${control} changes visibly on hover and on press`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'Phones have no hover; the menu button covers pressing on a phone.');
+      await page.goto(`/${STORE_ID}/overview`);
+      await prepare?.(page);
+
+      const states = await pointerStates(target(page));
+
+      expect(states.hover).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+      expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+    });
+  }
+});
+
+test('the menu button changes visibly when pressed on a phone', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The menu button only shows on narrow screens.');
+  await page.goto(`/${STORE_ID}/overview`);
+
+  const states = await pointerStates(page.getByRole('button', { name: 'Open menu' }));
+
+  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+});

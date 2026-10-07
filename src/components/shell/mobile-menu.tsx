@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { type MouseEvent, type ReactNode, useState } from 'react';
 import { LogoMark } from '@/components/brand/logo-mark';
-import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
+import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface MobileMenuProps {
   readonly children: ReactNode;
@@ -36,7 +36,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
           onClick={() => {
             setOpen((wasOpen) => !wasOpen);
           }}
-          className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong ${NAV_FOCUS_RING}`}
+          className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
         >
           <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
           <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">

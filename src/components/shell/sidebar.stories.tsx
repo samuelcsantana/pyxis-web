@@ -52,6 +52,16 @@ export const KeyboardFocus: Story = {
   },
 };
 
+export const Hovered: Story = {
+  parameters: {
+    pseudo: { hover: ['a[href*="/funnel"]', 'summary', 'button'] },
+  },
+};
+
+export const Pressed: Story = {
+  parameters: { pseudo: { active: ['a[href*="/devices"]'] } },
+};
+
 export const SigningOut: Story = {
   render: () => (
     <div className="bg-nav p-4">
@@ -60,15 +70,25 @@ export const SigningOut: Story = {
   ),
 };
 
+const insideTheMobileMenu: NonNullable<Story['decorators']> = [
+  (Story) => (
+    <div className="w-[390px]">
+      <MobileMenu>
+        <Story />
+      </MobileMenu>
+    </div>
+  ),
+];
+
 export const OnAPhone: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
-  decorators: [
-    (Story) => (
-      <div className="w-[390px]">
-        <MobileMenu>
-          <Story />
-        </MobileMenu>
-      </div>
-    ),
-  ],
+  decorators: insideTheMobileMenu,
+};
+
+export const MenuButtonPressed: Story = {
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' },
+    pseudo: { active: ['button[aria-controls="main-navigation"]'] },
+  },
+  decorators: insideTheMobileMenu,
 };
