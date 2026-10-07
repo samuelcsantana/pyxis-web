@@ -32,6 +32,15 @@ describe('ErrorPanel', () => {
     expect(retry).toHaveBeenCalledOnce();
   });
 
+  it('promises nothing it cannot know about the events being collected', () => {
+    render(<ErrorPanel />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The dashboard could not read this data. Try again in a moment.',
+    );
+    expect(screen.getByRole('alert')).not.toHaveTextContent(/still being collected/);
+  });
+
   it('shows neither detail nor retry when it has none', () => {
     render(<ErrorPanel />);
 
