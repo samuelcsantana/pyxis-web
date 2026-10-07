@@ -38,6 +38,19 @@ const INPUT_CLASS = `min-h-11.5 w-full rounded-input border bg-card px-3.5 text-
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input bg-accent px-4 text-[15px] font-semibold text-accent-ink ${FOCUS_RING} disabled:cursor-wait disabled:opacity-80`;
 const LINK_BUTTON_CLASS = `self-start text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 
+interface DemoHintProps {
+  readonly code: string;
+  readonly children: string;
+}
+
+function DemoHint({ code, children }: DemoHintProps) {
+  return (
+    <p className="rounded-input bg-soft px-3 py-2.5 text-[13px] text-muted">
+      {children} <code className="font-mono font-semibold text-ink">{code}</code>.
+    </p>
+  );
+}
+
 export function SignInForm({ authService, sessionExpired = false, demoCode }: SignInFormProps) {
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
@@ -168,6 +181,11 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
               {errorText}
             </p>
           )}
+          {demoCode === undefined ? null : (
+            <DemoHint code={demoCode}>
+              Demo mode: no email is sent. Any email works, then use the code
+            </DemoHint>
+          )}
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? 'Sending…' : 'Send code'}
           </button>
@@ -216,10 +234,7 @@ export function SignInForm({ authService, sessionExpired = false, demoCode }: Si
             </p>
           )}
           {demoCode === undefined ? null : (
-            <p className="rounded-input bg-soft px-3 py-2.5 text-[13px] text-muted">
-              Demo mode: no email is sent. Use the code{' '}
-              <code className="font-mono font-semibold text-ink">{demoCode}</code>.
-            </p>
+            <DemoHint code={demoCode}>Demo mode: no email is sent. Use the code</DemoHint>
           )}
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? 'Verifying…' : 'Verify and continue'}

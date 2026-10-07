@@ -259,13 +259,26 @@ describe('SignInForm', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Your session ended');
   });
 
-  it('shows the demo code in demo mode', async () => {
+  it('shows the demo code in demo mode, on both steps', async () => {
     render(<SignInForm authService={new MockAuthService()} demoCode="000000" />);
+    expect(screen.getByText(/Any email works, then use the code/)).toHaveTextContent(
+      'Demo mode: no email is sent. Any email works, then use the code 000000.',
+    );
+
     typeEmail('ana@example.com');
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
     await settle(SMOOTH_LOADING_MS);
 
     expect(screen.getByText('000000')).toBeInTheDocument();
+    expect(screen.getByText(/Use the code/)).toHaveTextContent(
+      'Demo mode: no email is sent. Use the code 000000.',
+    );
+  });
+
+  it('shows no demo hint outside demo mode', () => {
+    render(<SignInForm authService={new MockAuthService()} />);
+
+    expect(screen.queryByText(/Demo mode/)).not.toBeInTheDocument();
   });
 
   it('builds its own service when none is given', async () => {

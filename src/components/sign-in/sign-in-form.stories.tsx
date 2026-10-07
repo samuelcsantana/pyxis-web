@@ -50,6 +50,8 @@ async function reachCodeStep(canvasElement: HTMLElement) {
 
 export const EmailStep: Story = {};
 
+export const DemoEmailStep: Story = { args: { demoCode: DEMO_SIGN_IN_CODE } };
+
 export const SessionExpired: Story = { args: { sessionExpired: true } };
 
 export const CodeStep: Story = {
