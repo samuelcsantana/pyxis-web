@@ -1,12 +1,13 @@
 export interface ErrorPanelProps {
   readonly detail?: string;
   readonly onRetry?: () => void;
+  readonly headingLevel?: 'h1' | 'h2';
 }
 
 const WARNING_ICON = 'M12 3l9 16H3l9-16z M12 10v4 M12 17h.01';
 const RETRY_ICON = 'M20 11a8 8 0 1 0-2.3 5.7 M20 4v7h-7';
 
-export function ErrorPanel({ detail, onRetry }: ErrorPanelProps) {
+export function ErrorPanel({ detail, onRetry, headingLevel: Heading = 'h2' }: ErrorPanelProps) {
   return (
     <section
       role="alert"
@@ -24,7 +25,7 @@ export function ErrorPanel({ detail, onRetry }: ErrorPanelProps) {
           />
         </svg>
       </span>
-      <h2 className="text-lg font-semibold">Could not load this data</h2>
+      <Heading className="text-lg font-semibold">Could not load this data</Heading>
       <p className="text-sm leading-5 text-muted">
         The dashboard could not read this data. Try again in a moment.
       </p>

@@ -41,6 +41,20 @@ describe('ErrorPanel', () => {
     expect(screen.getByRole('alert')).not.toHaveTextContent(/still being collected/);
   });
 
+  it('heads a section by default and a whole page when asked to', () => {
+    const { unmount } = render(<ErrorPanel />);
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Could not load this data' }),
+    ).toBeInTheDocument();
+    unmount();
+
+    render(<ErrorPanel headingLevel="h1" />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Could not load this data' }),
+    ).toBeInTheDocument();
+  });
+
   it('shows neither detail nor retry when it has none', () => {
     render(<ErrorPanel />);
 
