@@ -25,7 +25,8 @@
   --pyx-warn-soft: #fef3c7;
   --pyx-nav: #0e1a2b;
   --pyx-nav-raised: #13223a;
-  --pyx-nav-active: #1b2b44;
+  --pyx-nav-hover: #243858;
+  --pyx-nav-active: #30476e;
   --pyx-nav-line: #1e2d45;
   --pyx-nav-border: #22344f;
   --pyx-nav-text: #c9d4e3;
@@ -113,6 +114,7 @@
   --color-warn-soft: var(--pyx-warn-soft);
   --color-nav: var(--pyx-nav);
   --color-nav-raised: var(--pyx-nav-raised);
+  --color-nav-hover: var(--pyx-nav-hover);
   --color-nav-active: var(--pyx-nav-active);
   --color-nav-line: var(--pyx-nav-line);
   --color-nav-border: var(--pyx-nav-border);

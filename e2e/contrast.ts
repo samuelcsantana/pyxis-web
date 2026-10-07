@@ -1,7 +1,9 @@
 export type Rgb = readonly [number, number, number];
 export type Rgba = readonly [number, number, number, number];
 
+export const MIN_TEXT_CONTRAST = 4.5;
 export const MIN_NON_TEXT_CONTRAST = 3;
+export const MIN_STATE_CHANGE = 1.3;
 
 const HEX_COLOR = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i;
 const CHANNEL_MAX = 255;

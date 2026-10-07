@@ -23,9 +23,13 @@ export const COLOR_TOKENS = [
   { name: 'warn-soft', use: 'Warning background' },
   { name: 'nav', use: 'Sidebar background, both themes' },
   { name: 'nav-raised', use: 'Sidebar cards and the project switcher' },
-  { name: 'nav-active', use: 'Current sidebar item' },
+  { name: 'nav-hover', use: 'Sidebar item under the pointer' },
+  { name: 'nav-active', use: 'Current or pressed sidebar item' },
+  { name: 'nav-line', use: 'Sidebar dividers' },
+  { name: 'nav-border', use: 'Sidebar borders and avatars' },
   { name: 'nav-text', use: 'Sidebar text' },
   { name: 'nav-muted', use: 'Sidebar captions and icons' },
+  { name: 'nav-strong', use: 'Sidebar headings and the current item' },
 ] as const;
 
 export const RADIUS_TOKENS = ['chip', 'control', 'input', 'card', 'panel', 'pill'] as const;

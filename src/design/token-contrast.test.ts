@@ -6,6 +6,9 @@ import {
   flatten,
   hexToRgb,
   MIN_NON_TEXT_CONTRAST,
+  MIN_STATE_CHANGE,
+  MIN_TEXT_CONTRAST,
+  relativeLuminance,
   type Rgb,
 } from '../../e2e/contrast';
 
@@ -105,5 +108,44 @@ describe.each(Object.entries(THEMES))('focus rings in the %s theme', (_, tokens)
     expect(contrastRatio(color(tokens, 'accent'), color(tokens, surface))).toBeGreaterThanOrEqual(
       MIN_NON_TEXT_CONTRAST,
     );
+  });
+});
+
+describe('sidebar item states, the same in both themes', () => {
+  const nav = (name: string) => color(LIGHT, name);
+
+  it('get brighter from rest to hover to current', () => {
+    const rest = relativeLuminance(nav('nav'));
+    const hover = relativeLuminance(nav('nav-hover'));
+    const current = relativeLuminance(nav('nav-active'));
+
+    expect(rest).toBeLessThan(hover);
+    expect(hover).toBeLessThan(current);
+  });
+
+  it.each([
+    ['nav-hover', 'nav'],
+    ['nav-hover', 'nav-raised'],
+    ['nav-active', 'nav'],
+    ['nav-active', 'nav-raised'],
+  ])('change %s against %s enough to be seen', (state, rest) => {
+    expect(contrastRatio(nav(state), nav(rest))).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+  });
+
+  it.each([
+    ['nav-text', 'nav-hover'],
+    ['nav-text', 'nav-active'],
+    ['nav-strong', 'nav-hover'],
+    ['nav-strong', 'nav-active'],
+  ])('keep %s readable on %s', (text, surface) => {
+    expect(contrastRatio(nav(text), nav(surface))).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
+  });
+
+  it.each([
+    ['nav-muted', 'nav-hover'],
+    ['nav-muted', 'nav-active'],
+    ['accent', 'nav-active'],
+  ])('keep %s icons visible on %s', (icon, surface) => {
+    expect(contrastRatio(nav(icon), nav(surface))).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
   });
 });
