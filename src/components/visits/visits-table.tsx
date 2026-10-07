@@ -7,11 +7,10 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow, VisitRowsPage } from '@/domain/visits';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { BUTTON_SECONDARY, CONTROL_BUSY, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_SECONDARY, CONTROL_BUSY, TEXT_LINK } from '@/components/ui/control-classes';
 import { linkWith } from '@/components/shell/screens';
 
 const SMOOTH_LOADING_MS = 400;
-const LINK = `text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-medium whitespace-nowrap';
 const WIDE = 'hidden sm:table-cell';
 const WIDEST = 'hidden lg:table-cell';
@@ -42,7 +41,7 @@ function AccountCell({
     <Link
       href={timelineHref(timelinePath, { user: account.userId })}
       aria-label={`${account.userId}, open the timeline of this user`}
-      className={`${LINK} font-mono text-xs`}
+      className={`${TEXT_LINK} font-mono text-xs`}
     >
       {account.shown}
     </Link>
@@ -79,7 +78,7 @@ function VisitTableRow({
         <Link
           href={timelineHref(timelinePath, { visit: row.key })}
           aria-label={`${row.started}, open visit ${row.visit}`}
-          className={LINK}
+          className={TEXT_LINK}
         >
           <time dateTime={row.startedAt}>{row.started}</time>
         </Link>

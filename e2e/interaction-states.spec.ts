@@ -16,6 +16,11 @@ interface Representative {
 
 const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' });
 
+const UNDERLINE_ON_HOVER = '2px';
+
+const demoPersonLink = (page: Page) =>
+  page.getByRole('link', { name: /^Open the timeline of the demo person/ });
+
 async function editFunnelSteps(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Edit steps' }).click();
   await page.getByRole('textbox', { name: 'Step 1 page path' }).fill('/pricing');
@@ -213,7 +218,29 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     screen: 'timeline?user=u_7f3a',
     target: (page) => page.getByRole('link', { name: 'Errors only' }),
   },
+  {
+    control: 'a text link',
+    screen: 'timeline',
+    target: demoPersonLink,
+  },
 ];
+
+test('a text link thickens its underline on hover, not only its colour', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'Phones have no hover.');
+  await page.goto(`/${STORE_ID}/timeline`);
+  const link = demoPersonLink(page);
+  const thickness = () =>
+    link.evaluate((element) => getComputedStyle(element).textDecorationThickness);
+
+  const atRest = await thickness();
+  await link.hover();
+
+  expect(atRest).not.toBe(UNDERLINE_ON_HOVER);
+  expect(await thickness()).toBe(UNDERLINE_ON_HOVER);
+});
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`content control states, ${colorScheme} theme`, () => {

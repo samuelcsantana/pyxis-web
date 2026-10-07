@@ -26,7 +26,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { loadOlderVisits } from './actions';
 
 export const generateMetadata = screenMetadata('Timeline');
@@ -132,7 +132,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
               <p>
                 <Link
                   href={linkWith(basePath, { ...keptPeriod, user: demoPerson })}
-                  className={`text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
+                  className={TEXT_LINK}
                 >
                   Open the timeline of the demo person {demoPerson}
                 </Link>

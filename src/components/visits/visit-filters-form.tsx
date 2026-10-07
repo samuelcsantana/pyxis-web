@@ -10,7 +10,7 @@ import {
   type VisitIdentity,
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
-import { BUTTON_PRIMARY, FIELD, FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, FIELD, TEXT_LINK } from '@/components/ui/control-classes';
 
 export interface VisitFiltersFormProps {
   readonly action: string;
@@ -151,10 +151,7 @@ export function VisitFiltersForm({
           Apply filters
         </button>
         {clearHref === null ? null : (
-          <Link
-            href={clearHref}
-            className={`text-[13px] text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`}
-          >
+          <Link href={clearHref} className={`text-[13px] ${TEXT_LINK}`}>
             Clear filters
           </Link>
         )}

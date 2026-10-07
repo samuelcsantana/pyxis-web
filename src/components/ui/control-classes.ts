@@ -28,3 +28,4 @@ export const PILL_SELECTED = 'border-ink bg-ink text-card';
 export const PILL_IDLE =
   'border-line bg-card text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line';
 export const FIELD = `border border-field bg-card text-ink aria-invalid:border-bad ${CONTENT_CONTROL}`;
+export const TEXT_LINK = `text-sky-ink underline underline-offset-2 hover:text-ink hover:decoration-2 active:text-ink active:decoration-2 ${CONTENT_CONTROL}`;
