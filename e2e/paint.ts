@@ -6,6 +6,7 @@ interface RawPaint {
   readonly behindFromTop: readonly Rgba[];
   readonly text: Rgba;
   readonly border: Rgba | null;
+  readonly underline: Rgba | null;
   readonly outline: Rgba;
   readonly outlineStyle: string;
   readonly outlineWidth: number;
@@ -18,6 +19,7 @@ export interface Paint {
   readonly behind: Rgb;
   readonly text: Rgb;
   readonly border: Rgb | null;
+  readonly underline: Rgb | null;
   readonly outline: Rgb;
   readonly outlineStyle: string;
   readonly outlineWidth: number;
@@ -68,6 +70,9 @@ export async function readPaint(target: Locator): Promise<Paint> {
       behindFromTop,
       text: bytes(style.color),
       border: widest === undefined ? null : bytes(widest.color),
+      underline: style.textDecorationLine.includes('underline')
+        ? bytes(style.textDecorationColor)
+        : null,
       outline: bytes(style.outlineColor),
       outlineStyle: style.outlineStyle,
       outlineWidth: Number.parseFloat(style.outlineWidth),
@@ -82,6 +87,7 @@ export async function readPaint(target: Locator): Promise<Paint> {
     behind: flatten(raw.behindFromTop),
     text: flatten([raw.text, ...fillLayers]),
     border: raw.border === null ? null : flatten([raw.border, ...fillLayers]),
+    underline: raw.underline === null ? null : flatten([raw.underline, ...fillLayers]),
     outline: [red, green, blue],
     outlineStyle: raw.outlineStyle,
     outlineWidth: raw.outlineWidth,
