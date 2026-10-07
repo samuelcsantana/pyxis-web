@@ -75,7 +75,9 @@ Shipping now:
   stacked by channel (chart or table), and the sources with their conversion rate and the visits
   that came from an ad click
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
-  and the share of the ranking; a search by name that lives in the URL
+  and the share of the ranking; a search by name that lives in the URL; each event opens its
+  property breakdown: per key, the ten most frequent values with their share, count and visits, and
+  the rest as "Other values"
 - Requests: every write by route with its success and error shares, status codes and median
   duration; a keyboard-accessible details panel with the screens where the route failed and its
   latest failures with their error code; "failing only" and screen filters kept in the URL
@@ -210,8 +212,8 @@ src/
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, device and country labels, donuts,
-│                   channels and sources, feature ranking and search, routes and
-│                   failures, funnel steps and counts, timeline items, errors
+│                   channels and sources, feature ranking, search and property breakdowns,
+│                   routes and failures, funnel steps and counts, timeline items, errors
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
@@ -259,6 +261,7 @@ docs/adr/           architecture decision records
 - [x] Timeline
 - [x] Production domain
 - [x] Live demo with invented data
+- [x] Property breakdown of each event on Features
 
 ## Contributing and license
 
