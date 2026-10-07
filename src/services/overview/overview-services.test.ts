@@ -1,14 +1,14 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
-import { DEMO_ADMIN } from '../projects/mock-projects-service';
+import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoOverviewWire } from './demo-overview';
 import { HttpOverviewService } from './http-overview-service';
 import { MockOverviewService } from './mock-overview-service';
 import { createOverviewService } from './overview-service.factory';
 
 const API = 'https://api.pyxis.example.com';
-const [STORE, DOCS] = DEMO_ADMIN.projects;
 const RANGE = { from: '2026-09-29', to: '2026-10-05' };
+const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
@@ -21,7 +21,7 @@ describe('HttpOverviewService', () => {
 
   it('asks the overview of the project for the range and maps it', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoOverviewWire(STORE?.id ?? '', RANGE)))),
+      Promise.resolve(new Response(JSON.stringify(demoOverviewWire(DEMO_STORE.id, RANGE, NOW)))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -37,11 +37,20 @@ describe('HttpOverviewService', () => {
 });
 
 describe('MockOverviewService', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('gives one day per day of the range, the same numbers every time', async () => {
     const service = new MockOverviewService();
 
-    const first = await service.overview(STORE?.id ?? '', RANGE);
-    const again = await service.overview(STORE?.id ?? '', RANGE);
+    const first = await service.overview(DEMO_STORE.id, RANGE);
+    const again = await service.overview(DEMO_STORE.id, RANGE);
 
     expect(first.days.map((day) => day.date)).toEqual([
       '2026-09-29',
@@ -60,21 +69,21 @@ describe('MockOverviewService', () => {
     expect(first.kpis.writeErrors.current.failed).toBeLessThan(
       first.kpis.writeErrors.current.total,
     );
-    expect(first.topPages).toHaveLength(6);
-    expect(first.topEvents[0]?.name).toBe('calculator_result_shown');
+    expect(first.topPages).toHaveLength(10);
+    expect(first.topEvents.map((event) => event.name)).toContain('calculator_result_shown');
   });
 
   it('keeps a day the same whatever range it is part of', async () => {
     const service = new MockOverviewService();
 
-    const week = await service.overview(STORE?.id ?? '', RANGE);
-    const day = await service.overview(STORE?.id ?? '', { from: '2026-10-05', to: '2026-10-05' });
+    const week = await service.overview(DEMO_STORE.id, RANGE);
+    const day = await service.overview(DEMO_STORE.id, { from: '2026-10-05', to: '2026-10-05' });
 
     expect(day.days[0]).toEqual(week.days.at(-1));
   });
 
   it('has no conversions for a project without a conversion event', async () => {
-    const report = await new MockOverviewService().overview(DOCS?.id ?? '', RANGE);
+    const report = await new MockOverviewService().overview(DEMO_DOCS.id, RANGE);
 
     expect(report.kpis.conversions).toBeNull();
   });

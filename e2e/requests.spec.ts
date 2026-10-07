@@ -71,7 +71,7 @@ test('filters by the screen where a route failed, through reloads and periods', 
 
   await page.getByRole('link', { name: 'Clear the screen filter' }).click();
   await expect(page).toHaveURL(/range=7d$/);
-  await expect(rows).toHaveCount(6);
+  await expect(rows).toHaveCount(8);
 });
 
 test('shows only the failing routes when asked', async ({ page }) => {
@@ -80,7 +80,7 @@ test('shows only the failing routes when asked', async ({ page }) => {
   await page.getByRole('link', { name: 'Failing only' }).click();
 
   await expect(page).toHaveURL(/show=failing/);
-  await expect(page.getByRole('table', { name: 'Routes' }).locator('tbody tr')).toHaveCount(4);
+  await expect(page.getByRole('table', { name: 'Routes' }).locator('tbody tr')).toHaveCount(5);
   await expect(page.getByRole('link', { name: 'Failing only' })).toHaveAttribute(
     'aria-current',
     'page',

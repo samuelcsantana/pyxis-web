@@ -56,7 +56,7 @@ describe('loadPropertyBreakdown', () => {
 
     expect(properties).toHaveBeenCalledWith('p-store', RANGE, 'calculator_result_shown');
     expect(keys.map((key) => key.key)).toEqual(['calculator', 'used_plan_preset']);
-    expect(keys[0]?.rows.map((row) => row.value)).toEqual(['ifood', '99food']);
+    expect(keys[0]?.rows.map((row) => row.value)).toEqual(['shipping', 'margin']);
   });
 
   it.each([

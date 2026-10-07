@@ -108,7 +108,7 @@ describe('VisitsPage', () => {
         path2: '',
         path3: '',
         event: 'calculator_result_shown',
-        property: 'calculator=ifood',
+        property: 'calculator=shipping',
         channel: 'paid',
         device: '',
         identity: 'identified',
@@ -122,7 +122,7 @@ describe('VisitsPage', () => {
         ...NO_VISIT_FILTERS,
         paths: ['/calculator'],
         event: 'calculator_result_shown',
-        property: 'calculator=ifood',
+        property: 'calculator=shipping',
         channel: 'paid',
         identity: 'identified',
       },
@@ -130,7 +130,7 @@ describe('VisitsPage', () => {
     );
     expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
       'href',
-      '/p-store/visits?range=7d&path=%2Fcalculator&event=calculator_result_shown&property=calculator%3Difood&channel=paid&identity=identified',
+      '/p-store/visits?range=7d&path=%2Fcalculator&event=calculator_result_shown&property=calculator%3Dshipping&channel=paid&identity=identified',
     );
     expect(screen.getByRole('link', { name: 'Clear filters' })).toHaveAttribute(
       'href',

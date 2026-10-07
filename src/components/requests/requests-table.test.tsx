@@ -8,10 +8,10 @@ import { methodClass } from './status-styles';
 
 const ROWS = routeRows(
   demoRequestsReport(
+    'demo',
     { from: '2026-09-22', to: '2026-10-05' },
     null,
     new Date('2026-10-06T02:30:00.000Z'),
-    'America/Sao_Paulo',
   ).routes,
   'UTC',
 );
@@ -41,10 +41,10 @@ describe('RequestsTable', () => {
     renderTable();
 
     const rows = within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row');
-    expect(rows).toHaveLength(7);
-    expect(rows[1]).toHaveTextContent('POST /orders602');
-    expect(rows[1]).toHaveTextContent('98% ok · 2% errors');
-    expect(rows[1]).toHaveTextContent('201 × 590409 × 8400 × 4');
+    expect(rows).toHaveLength(9);
+    expect(rows[1]).toHaveTextContent('POST /orders339');
+    expect(rows[1]).toHaveTextContent('98.5% ok · 1.5% errors');
+    expect(rows[1]).toHaveTextContent('201 × 334400 × 3409 × 2');
   });
 
   it('opens the details of a route, and gives the focus back when they close', async () => {

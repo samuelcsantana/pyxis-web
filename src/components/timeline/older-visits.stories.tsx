@@ -5,7 +5,7 @@ import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timel
 import { OlderVisits, type OlderVisitsPage } from './older-visits';
 
 const [, MIDDLE] = visitViews(
-  demoTimelineReport({ kind: 'user', id: DEMO_USER_ID }, new Date()).visits,
+  demoTimelineReport('demo', { kind: 'user', id: DEMO_USER_ID }, new Date()).visits,
   'America/Sao_Paulo',
   'all',
 );

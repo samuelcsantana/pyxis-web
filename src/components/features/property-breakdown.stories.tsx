@@ -7,7 +7,7 @@ import { PropertyBreakdown } from './property-breakdown';
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
 
 function demoKeys(name: string) {
-  return propertyKeyViews(demoPropertyBreakdownReport(PERIOD, name));
+  return propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name));
 }
 
 const meta = {

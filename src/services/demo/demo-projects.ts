@@ -1,13 +1,15 @@
-import { DEMO_ADMIN } from '../projects/mock-projects-service';
+import type { DemoProject } from './demo-catalog';
+import { DEMO_DOCS } from './demo-docs';
+import { DEMO_STORE } from './demo-store';
 
-export function demoCountsConversions(projectId: string): boolean {
-  const project = DEMO_ADMIN.projects.find((candidate) => candidate.id === projectId);
-  return project?.conversionEvent !== null;
+export const DEMO_PROJECTS: readonly DemoProject[] = [DEMO_STORE, DEMO_DOCS];
+
+export function demoProjectOf(projectId: string): DemoProject {
+  return DEMO_PROJECTS.find((project) => project.id === projectId) ?? DEMO_STORE;
 }
 
-const UNKNOWN_PROJECT_TIME_ZONE = 'UTC';
-
-export function demoTimeZone(projectId: string): string {
-  const project = DEMO_ADMIN.projects.find((candidate) => candidate.id === projectId);
-  return project?.timezone ?? UNKNOWN_PROJECT_TIME_ZONE;
+export function demoPersonOf(projectId: string): string | null {
+  return demoProjectOf(projectId).person;
 }
+
+export { DEMO_DOCS, DEMO_STORE };

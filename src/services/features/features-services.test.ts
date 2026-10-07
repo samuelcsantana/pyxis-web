@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
+import { DEMO_DOCS } from '../demo/demo-projects';
 import { demoFeaturesWire } from './demo-features';
 import { demoPropertyBreakdownWire } from './demo-properties';
 import { createFeaturesService } from './features-service.factory';
@@ -20,7 +21,7 @@ describe('HttpFeaturesService', () => {
 
   it('asks the ranking of the kind for the range and parses it', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoFeaturesWire(RANGE, 'screens')))),
+      Promise.resolve(new Response(JSON.stringify(demoFeaturesWire('demo', RANGE, 'screens')))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -37,7 +38,7 @@ describe('HttpFeaturesService', () => {
   it('asks the property breakdown of one event for the range and parses it', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
       Promise.resolve(
-        new Response(JSON.stringify(demoPropertyBreakdownWire(RANGE, 'cta_clicked'))),
+        new Response(JSON.stringify(demoPropertyBreakdownWire('demo', RANGE, 'cta_clicked'))),
       ),
     );
     vi.stubGlobal('fetch', fetchMock);
@@ -70,7 +71,7 @@ describe('MockFeaturesService', () => {
 });
 
 describe('MockFeaturesService properties', () => {
-  const EVENTS = demoFeaturesWire(RANGE, 'events').items;
+  const EVENTS = demoFeaturesWire('demo', RANGE, 'events').items;
 
   function countOf(name: string): number {
     return EVENTS.find((item) => item.name === name)?.count ?? -1;
@@ -93,7 +94,7 @@ describe('MockFeaturesService properties', () => {
     }
   });
 
-  it('splits the calculator results between iFood and 99Food', async () => {
+  it('splits the calculator results between the two invented calculators', async () => {
     const report = await new MockFeaturesService().properties(
       'demo',
       RANGE,
@@ -101,7 +102,7 @@ describe('MockFeaturesService properties', () => {
     );
 
     expect(report.keys.map((key) => key.key)).toEqual(['calculator', 'used_plan_preset']);
-    expect(report.keys[0]?.values.map((value) => value.value)).toEqual(['ifood', '99food']);
+    expect(report.keys[0]?.values.map((value) => value.value)).toEqual(['shipping', 'margin']);
     expect(report.keys[0]?.events).toBe(countOf('calculator_result_shown'));
   });
 
@@ -129,6 +130,12 @@ describe('MockFeaturesService properties', () => {
       events: 0,
       keys: [],
     });
+  });
+
+  it('breaks down the events of the project it is asked about', async () => {
+    const report = await new MockFeaturesService().properties(DEMO_DOCS.id, RANGE, 'code_copied');
+
+    expect(report.keys.map((key) => key.key)).toEqual(['language']);
   });
 });
 

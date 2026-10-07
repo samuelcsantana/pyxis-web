@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { FunnelStep } from '@/domain/funnel';
 import { ApiReader } from '../api-reader';
+import { demoFeaturesWire } from '../features/demo-features';
 import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './demo-funnel';
 import { createFunnelService } from './funnel-service.factory';
 import { HttpFunnelService } from './http-funnel-service';
@@ -24,7 +25,7 @@ describe('HttpFunnelService', () => {
 
   it('asks the funnel of the steps, mode and range', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoFunnelWire(RANGE, 'user', TWO)))),
+      Promise.resolve(new Response(JSON.stringify(demoFunnelWire('demo', RANGE, 'user', TWO)))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -42,18 +43,26 @@ describe('HttpFunnelService', () => {
 });
 
 describe('MockFunnelService', () => {
-  it('reproduces the board: each step a share of the one before', async () => {
+  it('starts the example at the visits of its first screen, each step a share of the one before', async () => {
     const report = await new MockFunnelService().funnel('demo', RANGE, 'visit', DEMO_FUNNEL_STEPS);
+    const calculator = demoFeaturesWire('demo', RANGE, 'screens').items.find(
+      (item) => item.name === '/calculator',
+    );
+    const counts = report.steps.map((step) => step.count);
 
-    expect(report.steps.map((step) => step.count)).toEqual([1950, 1219, 501, 270, 214, 98]);
+    expect(counts[0]).toBe(calculator?.visits);
+    expect(counts).toEqual(counts.toSorted((left, right) => right - left));
+    expect(counts.at(-1)).toBeGreaterThan(0);
   });
 
-  it('counts fewer people than visits, and keeps going past the board', async () => {
+  it('counts fewer people than visits, and keeps going past the example', async () => {
     const eight = [...DEMO_FUNNEL_STEPS, ...TWO];
-    const people = await new MockFunnelService().funnel('demo', RANGE, 'user', eight);
+    const service = new MockFunnelService();
+    const visits = await service.funnel('demo', RANGE, 'visit', eight);
+    const people = await service.funnel('demo', RANGE, 'user', eight);
 
     expect(people.steps).toHaveLength(8);
-    expect(people.steps[0]?.count).toBe(1560);
+    expect(people.steps[0]?.count).toBe(Math.round((visits.steps[0]?.count ?? 0) * 0.8));
     expect(people.steps.at(-1)?.count).toBeLessThan(people.steps.at(-2)?.count ?? 0);
   });
 });

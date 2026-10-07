@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { overviewKpis } from '@/domain/overview';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { DEMO_DOCS } from '@/services/demo/demo-projects';
 import { KpiGrid } from './kpi-grid';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
-const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD);
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD, STORY_NOW);
 
-const WITHOUT_CONVERSIONS = demoOverviewReport(DEMO_ADMIN.projects[1]?.id ?? '', STORY_PERIOD);
+const WITHOUT_CONVERSIONS = demoOverviewReport(DEMO_DOCS.id, STORY_PERIOD, STORY_NOW);
 
 const meta = {
   title: 'Overview/KPI cards',

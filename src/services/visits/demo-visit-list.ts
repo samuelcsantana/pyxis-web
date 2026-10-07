@@ -6,7 +6,9 @@ import {
   type VisitsWire,
 } from '@/domain/visits';
 import type { DateRange } from '../date-range';
-import { DEMO_VISITS, type DemoVisit, demoVisitWire, isFailedStatus } from '../demo/demo-visits';
+import { pathPattern } from '../demo/demo-dataset';
+import { demoProjectOf } from '../demo/demo-projects';
+import { type DemoVisit, demoVisitWire, isFailedStatus } from '../demo/demo-visits';
 
 export const DEMO_VISITS_PAGE_SIZE = 8;
 const MAX_HIGHLIGHTS = 5;
@@ -15,8 +17,6 @@ const API_REQUEST = 'api_request';
 const UNNAMED_EVENTS: ReadonlySet<string> = new Set([PAGE_VIEW, 'identify', API_REQUEST]);
 const CURSOR_SEPARATOR = '~';
 const PROPERTY_SEPARATOR = '=';
-const WILDCARD = '*';
-const REGEX_SPECIAL_CHARACTERS = /[.*+?^${}()|[\]\\]/g;
 
 type VisitSummaryWire = VisitsWire['visits'][number];
 type TimelineVisitWire = ReturnType<typeof demoVisitWire>;
@@ -53,15 +53,8 @@ export function listedDemoVisit(visit: DemoVisit, now: Date): ListedVisit {
   };
 }
 
-function pagePattern(path: string): RegExp {
-  const parts = path
-    .split(WILDCARD)
-    .map((part) => part.replaceAll(REGEX_SPECIAL_CHARACTERS, String.raw`\$&`));
-  return new RegExp(`^${parts.join('.*')}$`);
-}
-
 function viewedPage(visit: ListedVisit, path: string): boolean {
-  const page = pagePattern(path);
+  const page = pathPattern(path);
   return visit.events.some((event) => event.name === PAGE_VIEW && page.test(event.path));
 }
 
@@ -107,14 +100,16 @@ function cursorOf(visit: VisitSummaryWire): string {
 }
 
 export function demoVisitsWire(
+  projectId: string,
   range: DateRange,
   filters: VisitFilters,
   cursor: string | null,
   now: Date,
-  timeZone: string,
 ): VisitsWire {
-  const listed = DEMO_VISITS.map((visit) => listedDemoVisit(visit, now))
-    .filter((visit) => withinRange(visit, range, timeZone) && matches(visit, filters))
+  const project = demoProjectOf(projectId);
+  const listed = project.visits
+    .map((visit) => listedDemoVisit(visit, now))
+    .filter((visit) => withinRange(visit, range, project.timezone) && matches(visit, filters))
     .map((visit) => visit.summary)
     .toSorted((left, right) => cursorOf(right).localeCompare(cursorOf(left)))
     .filter((visit) => cursor === null || cursorOf(visit) < cursor);
@@ -124,11 +119,11 @@ export function demoVisitsWire(
 }
 
 export function demoVisitsReport(
+  projectId: string,
   range: DateRange,
   filters: VisitFilters,
   cursor: string | null,
   now: Date,
-  timeZone: string,
 ): VisitsReport {
-  return visitsResponseSchema.parse(demoVisitsWire(range, filters, cursor, now, timeZone));
+  return visitsResponseSchema.parse(demoVisitsWire(projectId, range, filters, cursor, now));
 }

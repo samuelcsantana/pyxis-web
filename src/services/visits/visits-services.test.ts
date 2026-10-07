@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NO_VISIT_FILTERS, type VisitFilters, type VisitsReport } from '@/domain/visits';
 import { ApiReader } from '../api-reader';
+import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
 import {
   DEMO_VISITS_PAGE_SIZE,
@@ -15,8 +16,7 @@ import { createVisitsService } from './visits-service.factory';
 const API = 'https://api.pyxis.example.com';
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
-const STORE_TIME_ZONE = 'America/Sao_Paulo';
-const STORE = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const STORE = DEMO_STORE.id;
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
@@ -38,9 +38,7 @@ describe('HttpVisitsService', () => {
   });
 
   it('asks the visits of the range', async () => {
-    const fetchMock = answering(
-      demoVisitsWire(RANGE, NO_VISIT_FILTERS, null, NOW, STORE_TIME_ZONE),
-    );
+    const fetchMock = answering(demoVisitsWire(STORE, RANGE, NO_VISIT_FILTERS, null, NOW));
 
     const report = await service().visits('p 1', RANGE, NO_VISIT_FILTERS, null);
 
@@ -57,9 +55,9 @@ describe('HttpVisitsService', () => {
       'p1',
       RANGE,
       {
-        paths: ['/calculadora-taxa-ifood', '/calculadora-taxa-*'],
+        paths: ['/calculator-shipping', '/calculator-*'],
         event: 'calculator_result_shown',
-        property: 'calculator=99food',
+        property: 'calculator=margin',
         channel: 'paid',
         device: 'mobile',
         identity: 'anonymous',
@@ -69,15 +67,12 @@ describe('HttpVisitsService', () => {
 
     const requested = fetchMock.mock.calls[0]?.[0];
     const url = new URL(typeof requested === 'string' ? requested : 'about:blank');
-    expect(url.searchParams.getAll('path')).toEqual([
-      '/calculadora-taxa-ifood',
-      '/calculadora-taxa-*',
-    ]);
+    expect(url.searchParams.getAll('path')).toEqual(['/calculator-shipping', '/calculator-*']);
     expect(Object.fromEntries([...url.searchParams].filter(([name]) => name !== 'path'))).toEqual({
       from: '2026-09-22',
       to: '2026-10-05',
       event: 'calculator_result_shown',
-      property: 'calculator=99food',
+      property: 'calculator=margin',
       channel: 'paid',
       device: 'mobile',
       identity: 'anonymous',
@@ -98,8 +93,8 @@ describe('MockVisitsService', () => {
 
   const ids = (report: VisitsReport) => report.visits.map((visit) => visit.sessionId.slice(0, 8));
 
-  const listed = (filters: Partial<VisitFilters>, timeZone = STORE_TIME_ZONE) =>
-    ids(demoVisitsReport(RANGE, { ...NO_VISIT_FILTERS, ...filters }, null, NOW, timeZone));
+  const listed = (filters: Partial<VisitFilters>) =>
+    ids(demoVisitsReport(STORE, RANGE, { ...NO_VISIT_FILTERS, ...filters }, null, NOW));
 
   it('lists the demo visits newest first, a page at a time', async () => {
     const mock = new MockVisitsService();
@@ -150,8 +145,8 @@ describe('MockVisitsService', () => {
   });
 
   it('counts the failed requests and leaves identify out of the highlights', () => {
-    const report = demoVisitsReport(RANGE, NO_VISIT_FILTERS, null, NOW, STORE_TIME_ZONE);
-    const pageTwo = demoVisitsReport(RANGE, NO_VISIT_FILTERS, report.nextCursor, NOW, 'UTC');
+    const report = demoVisitsReport(STORE, RANGE, NO_VISIT_FILTERS, null, NOW);
+    const pageTwo = demoVisitsReport(STORE, RANGE, NO_VISIT_FILTERS, report.nextCursor, NOW);
     const visit = (prefix: string) =>
       [...report.visits, ...pageTwo.visits].find((found) => found.sessionId.startsWith(prefix));
 
@@ -173,6 +168,7 @@ describe('MockVisitsService', () => {
         deviceType: 'desktop',
         browser: 'chrome',
         os: 'windows',
+        country: 'BR',
         channel: 'direct',
         events: [{ second: 5, name: 'cta_clicked', path: '/' }],
       },
@@ -183,10 +179,14 @@ describe('MockVisitsService', () => {
   });
 
   it('opens every listed visit in the demo timeline, with the same start', () => {
-    const report = demoVisitsReport(RANGE, NO_VISIT_FILTERS, null, NOW, STORE_TIME_ZONE);
+    const report = demoVisitsReport(STORE, RANGE, NO_VISIT_FILTERS, null, NOW);
 
     for (const listedVisit of report.visits) {
-      const { visits } = demoTimelineReport({ kind: 'visit', id: listedVisit.sessionId }, NOW);
+      const { visits } = demoTimelineReport(
+        STORE,
+        { kind: 'visit', id: listedVisit.sessionId },
+        NOW,
+      );
       expect(visits[0]?.startedAt).toBe(listedVisit.startedAt);
     }
   });
@@ -212,7 +212,7 @@ describe('MockVisitsService', () => {
       '19c2e5f6',
       '5b8d2e7a',
     ]);
-    expect(listed({ event: 'calculator_result_shown', property: 'calculator=99food' })).toEqual([
+    expect(listed({ event: 'calculator_result_shown', property: 'calculator=margin' })).toEqual([
       '7e2b9c14',
     ]);
     expect(listed({ event: 'calculator_result_shown', property: 'used_plan_preset=true' })).toEqual(
@@ -246,10 +246,14 @@ describe('MockVisitsService', () => {
     const lastDay = { from: '2026-10-05', to: '2026-10-05' };
 
     const store = await new MockVisitsService().visits(STORE, lastDay, NO_VISIT_FILTERS, null);
-    const tokyo = demoVisitsReport(lastDay, NO_VISIT_FILTERS, null, NOW, 'Asia/Tokyo');
 
     expect(ids(store)).toEqual(['3c07a1b2', '506cf1d6', '8c3f6a1d']);
-    expect(ids(tokyo)).toEqual(['506cf1d6', '8c3f6a1d', '0645362d']);
+  });
+
+  it('lists the visits of the project it is asked about', async () => {
+    const docs = await new MockVisitsService().visits(DEMO_DOCS.id, RANGE, NO_VISIT_FILTERS, null);
+
+    expect(ids(docs)).toEqual(['e5a1c9d2', 'f6b2d0e3', '07c3e1f4']);
   });
 });
 

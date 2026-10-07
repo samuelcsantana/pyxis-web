@@ -1,14 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
-import { demoDays, demoVisitsOn } from '../demo/demo-series';
-import { DEMO_ADMIN } from '../projects/mock-projects-service';
+import { demoVisitsTotal } from '../demo/demo-dataset';
+import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoDevicesWire } from './demo-devices';
 import { createDevicesService } from './devices-service.factory';
 import { HttpDevicesService } from './http-devices-service';
 import { MockDevicesService } from './mock-devices-service';
 
 const API = 'https://api.pyxis.example.com';
-const [STORE, DOCS] = DEMO_ADMIN.projects;
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
 
 vi.mock('next/headers', () => ({
@@ -22,7 +21,7 @@ describe('HttpDevicesService', () => {
 
   it('asks the devices of the project for the range and maps them', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoDevicesWire(STORE?.id ?? '', RANGE)))),
+      Promise.resolve(new Response(JSON.stringify(demoDevicesWire(DEMO_STORE.id, RANGE)))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -39,8 +38,8 @@ describe('HttpDevicesService', () => {
 
 describe('MockDevicesService', () => {
   it('splits the visits of the period over each breakdown without losing any', async () => {
-    const report = await new MockDevicesService().devices(STORE?.id ?? '', RANGE);
-    const visits = demoDays(RANGE).reduce((sum, date) => sum + demoVisitsOn(date), 0);
+    const report = await new MockDevicesService().devices(DEMO_STORE.id, RANGE);
+    const visits = demoVisitsTotal(DEMO_STORE, RANGE);
     const totalOf = (shares: readonly { visits: number }[]) =>
       shares.reduce((sum, share) => sum + share.visits, 0);
 
@@ -54,7 +53,7 @@ describe('MockDevicesService', () => {
   });
 
   it('has no conversions for a project without a conversion event', async () => {
-    const report = await new MockDevicesService().devices(DOCS?.id ?? '', RANGE);
+    const report = await new MockDevicesService().devices(DEMO_DOCS.id, RANGE);
 
     expect(report.deviceTypes.every((share) => share.conversions === null)).toBe(true);
   });
