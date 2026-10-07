@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 import { presetPeriod } from '@/domain/period';
 import { Topbar, type TopbarWithPeriodProps } from './topbar';
 
@@ -35,6 +36,20 @@ export const CustomPeriod: Story = {
 export const DarkTheme: Story = {
   args: { ...WITH_PERIOD, theme: 'dark' },
   globals: { theme: 'dark' },
+};
+
+const focusSevenDays: Story['play'] = async ({ canvasElement }) => {
+  const sevenDays = within(canvasElement).getByRole('link', { name: '7 days' });
+  sevenDays.focus();
+  await expect(sevenDays).toHaveFocus();
+};
+
+export const KeyboardFocus: Story = { play: focusSevenDays };
+
+export const KeyboardFocusDark: Story = {
+  args: { ...WITH_PERIOD, theme: 'dark' },
+  globals: { theme: 'dark' },
+  play: focusSevenDays,
 };
 
 export const WithoutPeriod: Story = {
