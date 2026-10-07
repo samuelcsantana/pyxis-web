@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { sourceRows } from '@/domain/acquisition';
 import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { DEMO_DOCS } from '@/services/demo/demo-projects';
 import { SourcesTable } from './sources-table';
 
 const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
 const REPORT = demoAcquisitionReport('demo', PERIOD);
-const WITHOUT_CONVERSIONS = demoAcquisitionReport(DEMO_ADMIN.projects[1]?.id ?? '', PERIOD);
+const WITHOUT_CONVERSIONS = demoAcquisitionReport(DEMO_DOCS.id, PERIOD);
 
 const meta = {
   title: 'Acquisition/Sources',

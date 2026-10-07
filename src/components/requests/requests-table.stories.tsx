@@ -6,10 +6,10 @@ import { RequestsTable } from './requests-table';
 
 const ROWS = routeRows(
   demoRequestsReport(
+    'demo',
     { from: '2026-09-22', to: '2026-10-05' },
     null,
     new Date('2026-10-06T02:30:00.000Z'),
-    'America/Sao_Paulo',
   ).routes,
   'America/Sao_Paulo',
 );

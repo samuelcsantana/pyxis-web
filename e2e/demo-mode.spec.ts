@@ -35,6 +35,22 @@ test('every screen runs on invented data, with the banner and no call to any API
   expect(outside).toEqual([]);
 });
 
+test('shows the same figures on every screen for the same period', async ({ page }) => {
+  const valueOf = (name: string) =>
+    page.getByRole('region', { name, exact: true }).locator('p').first();
+  await page.goto(`/${STORE_ID}/overview?range=30d`);
+  const visits = (await valueOf('Visits').textContent()) ?? '';
+  const errorRate = (await valueOf('Write error rate').textContent()) ?? '';
+
+  await page.goto(`/${STORE_ID}/acquisition?range=30d`);
+  await expect(page.getByRole('region', { name: 'Paid visits' })).toContainText(
+    `of ${visits} visits`,
+  );
+
+  await page.goto(`/${STORE_ID}/requests?range=30d`);
+  await expect(valueOf('Error rate')).toHaveText(errorRate);
+});
+
 test('allows connections only to its own origin', async ({ request }) => {
   const response = await request.get(`/${STORE_ID}/overview`);
 
@@ -47,6 +63,7 @@ test('opens a demo visit from every latest failure of every route', async ({ pag
     'POST /auth/sign-up',
     'POST /payouts',
     'PATCH /orders/:id',
+    'POST /auth/verify-code',
   ];
   const visitLinks: string[] = [];
 
@@ -64,7 +81,7 @@ test('opens a demo visit from every latest failure of every route', async ({ pag
     }
   }
 
-  expect(visitLinks).toHaveLength(8);
+  expect(visitLinks).toHaveLength(9);
   for (const href of visitLinks) {
     await page.goto(href);
     await expect(page.getByRole('heading', { name: /^Visit [0-9a-f]{8}$/ })).toBeVisible();

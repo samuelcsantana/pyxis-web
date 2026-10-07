@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  apportion,
   demoCount,
   demoDays,
-  demoPageViewsOn,
-  demoVisitsOn,
   noise,
   previousRange,
+  textSalt,
   weekdayFactor,
 } from './demo-series';
 
@@ -60,10 +60,33 @@ describe('demoDays and previousRange', () => {
   });
 });
 
-describe('demoVisitsOn', () => {
-  it('counts fewer visits than page views on the same day', () => {
-    for (const date of MONTH) {
-      expect(demoVisitsOn(date)).toBe(Math.round(demoPageViewsOn(date) * 0.62));
-    }
+describe('textSalt', () => {
+  it('turns the same text into the same salt and different texts into different ones', () => {
+    expect(textSalt('/orders')).toBe(textSalt('/orders'));
+    expect(textSalt('/orders')).not.toBe(textSalt('/orders/new'));
+    expect(textSalt('/orders')).toBeGreaterThanOrEqual(0);
+  });
+});
+
+describe('apportion', () => {
+  const counts = (total: number, weights: readonly number[]) =>
+    apportion(total, weights, (weight) => weight).map(({ count }) => count);
+
+  it('splits a whole number by weight without losing or inventing any unit', () => {
+    expect(counts(10, [0.62, 0.34, 0.04])).toEqual([6, 4, 0]);
+    expect(counts(7, [1, 1, 1])).toEqual([3, 2, 2]);
+    expect(counts(100, [0.5, 0.25, 0.25]).reduce((sum, count) => sum + count, 0)).toBe(100);
+  });
+
+  it('keeps each item next to its count', () => {
+    expect(apportion(3, ['a', 'b'], (item) => (item === 'a' ? 2 : 1))).toEqual([
+      { item: 'a', count: 2 },
+      { item: 'b', count: 1 },
+    ]);
+  });
+
+  it('splits evenly when no item has any weight', () => {
+    expect(counts(4, [0, 0])).toEqual([2, 2]);
+    expect(counts(0, [0, 0])).toEqual([0, 0]);
   });
 });

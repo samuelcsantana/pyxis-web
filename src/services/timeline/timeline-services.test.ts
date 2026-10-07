@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
+import { DEMO_DOCS } from '../demo/demo-projects';
 import { DEMO_USER_ID, demoTimelineWire } from './demo-timeline';
 import { HttpTimelineService } from './http-timeline-service';
 import { MockTimelineService } from './mock-timeline-service';
@@ -16,7 +17,9 @@ vi.mock('next/headers', () => ({
 function answering() {
   const fetchMock = vi.fn<typeof fetch>(() =>
     Promise.resolve(
-      new Response(JSON.stringify(demoTimelineWire({ kind: 'user', id: DEMO_USER_ID }, NOW))),
+      new Response(
+        JSON.stringify(demoTimelineWire('demo', { kind: 'user', id: DEMO_USER_ID }, NOW)),
+      ),
     ),
   );
   vi.stubGlobal('fetch', fetchMock);
@@ -119,6 +122,20 @@ describe('MockTimelineService', () => {
     expect(visit.visits).toHaveLength(1);
     expect(visit.nextBefore).toBeNull();
     expect(nobody.visits).toEqual([]);
+  });
+
+  it('keeps the visits of each demo project to that project', async () => {
+    const service = new MockTimelineService();
+
+    const elsewhere = await service.timeline(DEMO_DOCS.id, { kind: 'visit', id: VISIT }, null);
+    const own = await service.timeline(
+      DEMO_DOCS.id,
+      { kind: 'visit', id: 'f6b2d0e3-8c4a-4f71-9b25-3d0e1a7c8b02' },
+      null,
+    );
+
+    expect(elsewhere.visits).toEqual([]);
+    expect(own.visits[0]?.country).toBe('BR');
   });
 });
 

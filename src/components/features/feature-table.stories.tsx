@@ -7,11 +7,11 @@ import { demoPropertyBreakdownReport } from '@/services/features/demo-properties
 import { FeatureTable } from './feature-table';
 
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
-const EVENTS = demoFeaturesReport(PERIOD, 'events').items;
-const SCREENS = demoFeaturesReport(PERIOD, 'screens').items;
+const EVENTS = demoFeaturesReport('demo', PERIOD, 'events').items;
+const SCREENS = demoFeaturesReport('demo', PERIOD, 'screens').items;
 
 function loadDemoProperties(name: string) {
-  return Promise.resolve(propertyKeyViews(demoPropertyBreakdownReport(PERIOD, name)));
+  return Promise.resolve(propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name)));
 }
 
 function failToLoadProperties() {

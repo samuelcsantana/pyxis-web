@@ -9,6 +9,7 @@ import { TimelineSummary } from './timeline-summary';
 import { VisitCard } from './visit-card';
 
 const REPORT = demoTimelineReport(
+  'demo',
   { kind: 'user', id: DEMO_USER_ID },
   new Date('2026-10-06T02:30:00.000Z'),
 );

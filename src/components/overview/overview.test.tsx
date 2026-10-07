@@ -9,7 +9,9 @@ import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
-const REPORT = overviewResponseSchema.parse(demoOverviewWire('demo', WEEK));
+const REPORT = overviewResponseSchema.parse(
+  demoOverviewWire('demo', WEEK, new Date('2026-10-06T02:30:00.000Z')),
+);
 
 function visitsHref(path: string): string {
   return `/p-store/visits?${new URLSearchParams({ range: '7d', path }).toString()}`;
@@ -110,15 +112,15 @@ describe('TopPagesTable', () => {
   it('links each page to the visits that opened it', () => {
     render(
       <TopPagesTable
-        pages={[{ path: '/calculadora-taxa-ifood', views: 300, visits: 200 }]}
+        pages={[{ path: '/calculator-shipping', views: 300, visits: 200 }]}
         totalPageViews={1000}
         visitsHref={visitsHref}
       />,
     );
 
     expect(
-      screen.getByRole('link', { name: 'See the visits that opened /calculadora-taxa-ifood' }),
-    ).toHaveAttribute('href', '/p-store/visits?range=7d&path=%2Fcalculadora-taxa-ifood');
+      screen.getByRole('link', { name: 'See the visits that opened /calculator-shipping' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=7d&path=%2Fcalculator-shipping');
   });
 
   it('says so when no page was viewed', () => {

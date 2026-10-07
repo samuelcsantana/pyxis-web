@@ -100,7 +100,7 @@ describe('FeaturesPage', () => {
     render(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
 
     expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
-    expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(screen.getAllByRole('row')).toHaveLength(4);
     expect(screen.queryByRole('button', { name: /^Properties of/ })).toBeNull();
     expect(screen.getByRole('searchbox', { name: 'Search screens' })).toHaveValue('orders');
     expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(

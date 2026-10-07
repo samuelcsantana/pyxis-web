@@ -1,26 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { DEMO_ADMIN } from '../projects/mock-projects-service';
-import { demoCountsConversions, demoTimeZone } from './demo-projects';
+import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE, demoPersonOf, demoProjectOf } from './demo-projects';
 
-describe('demoCountsConversions', () => {
-  it('follows the conversion event of the demo project', () => {
-    const [store, docs] = DEMO_ADMIN.projects;
-
-    expect(demoCountsConversions(store?.id ?? '')).toBe(true);
-    expect(demoCountsConversions(docs?.id ?? '')).toBe(false);
+describe('demoProjectOf', () => {
+  it('finds each demo project by its id', () => {
+    for (const project of DEMO_PROJECTS) {
+      expect(demoProjectOf(project.id)).toBe(project);
+    }
   });
 
-  it('counts conversions for a project it does not know', () => {
-    expect(demoCountsConversions('unknown')).toBe(true);
+  it('answers with the store for a project it does not know', () => {
+    expect(demoProjectOf('unknown')).toBe(DEMO_STORE);
   });
 });
 
-describe('demoTimeZone', () => {
-  it('follows the time zone of the demo project, and UTC for one it does not know', () => {
-    const [store, docs] = DEMO_ADMIN.projects;
-
-    expect(demoTimeZone(store?.id ?? '')).toBe('America/Sao_Paulo');
-    expect(demoTimeZone(docs?.id ?? '')).toBe('Europe/Lisbon');
-    expect(demoTimeZone('unknown')).toBe('UTC');
+describe('demoPersonOf', () => {
+  it('names the demo person of the store and nobody for the docs', () => {
+    expect(demoPersonOf(DEMO_STORE.id)).toBe('u_7f3a');
+    expect(demoPersonOf(DEMO_DOCS.id)).toBeNull();
   });
 });

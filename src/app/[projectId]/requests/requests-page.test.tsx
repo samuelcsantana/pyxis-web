@@ -85,7 +85,7 @@ describe('RequestsPage', () => {
       'median of POST /payouts',
     );
     expect(within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row')).toHaveLength(
-      7,
+      9,
     );
     expect(screen.getByRole('link', { name: 'Failing only' })).toHaveAttribute(
       'href',

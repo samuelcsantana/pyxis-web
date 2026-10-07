@@ -2,9 +2,6 @@ import { addDays, daysBetween } from '@/domain/period';
 import type { DateRange } from '../date-range';
 
 const WEEKEND_FACTOR = 0.7;
-const PAGE_VIEWS_PER_DAY = 160;
-const PAGE_VIEW_SALT = 1;
-const VISITS_PER_PAGE_VIEW = 0.62;
 const SATURDAY = 6;
 const SUNDAY = 0;
 const FNV_OFFSET_BASIS = 0x811c9dc5;
@@ -14,6 +11,13 @@ const MIX_SHIFT_MIDDLE = 13;
 const MIX_MULTIPLIER_FIRST = 0x85ebca6b;
 const MIX_MULTIPLIER_SECOND = 0xc2b2ae35;
 const UINT32_RANGE = 2 ** 32;
+const LOWEST_DAY_FACTOR = 0.8;
+const DAY_FACTOR_SPREAD = 0.4;
+
+export interface Apportioned<Item> {
+  readonly item: Item;
+  readonly count: number;
+}
 
 export function demoDays(range: DateRange): readonly string[] {
   return Array.from({ length: daysBetween(range.from, range.to) }, (_, index) =>
@@ -34,12 +38,20 @@ function mixed(hash: number): number {
   return mixing ^ (mixing >>> MIX_SHIFT_HIGH);
 }
 
-export function noise(date: string, salt: number): number {
-  let hash = FNV_OFFSET_BASIS ^ salt;
-  for (const character of date) {
+function fnv(text: string, basis: number): number {
+  let hash = basis;
+  for (const character of text) {
     hash = Math.imul(hash ^ character.charCodeAt(0), FNV_PRIME);
   }
-  return (mixed(hash) >>> 0) / UINT32_RANGE;
+  return hash;
+}
+
+export function textSalt(text: string): number {
+  return fnv(text, FNV_OFFSET_BASIS) >>> 0;
+}
+
+export function noise(date: string, salt: number): number {
+  return (mixed(fnv(date, FNV_OFFSET_BASIS ^ salt)) >>> 0) / UINT32_RANGE;
 }
 
 export function weekdayFactor(date: string): number {
@@ -48,13 +60,32 @@ export function weekdayFactor(date: string): number {
 }
 
 export function demoCount(date: string, base: number, salt: number): number {
-  return Math.round(base * weekdayFactor(date) * (0.8 + 0.4 * noise(date, salt)));
+  return Math.round(
+    base * weekdayFactor(date) * (LOWEST_DAY_FACTOR + DAY_FACTOR_SPREAD * noise(date, salt)),
+  );
 }
 
-export function demoPageViewsOn(date: string): number {
-  return demoCount(date, PAGE_VIEWS_PER_DAY, PAGE_VIEW_SALT);
-}
-
-export function demoVisitsOn(date: string): number {
-  return Math.round(demoPageViewsOn(date) * VISITS_PER_PAGE_VIEW);
+export function apportion<Item>(
+  total: number,
+  items: readonly Item[],
+  weightOf: (item: Item) => number,
+): readonly Apportioned<Item>[] {
+  const weights = items.map((item) => ({ item, weight: weightOf(item) }));
+  const weightSum = weights.reduce((sum, entry) => sum + entry.weight, 0);
+  const exact = weights.map(({ item, weight }) => ({
+    item,
+    exact: weightSum > 0 ? (weight / weightSum) * total : total / items.length,
+  }));
+  const left = total - exact.reduce((sum, entry) => sum + Math.floor(entry.exact), 0);
+  const roundedUp = new Set(
+    exact
+      .map((entry, index) => ({ index, remainder: entry.exact - Math.floor(entry.exact) }))
+      .toSorted((first, second) => second.remainder - first.remainder || first.index - second.index)
+      .slice(0, left)
+      .map(({ index }) => index),
+  );
+  return exact.map((entry, index) => ({
+    item: entry.item,
+    count: Math.floor(entry.exact) + (roundedUp.has(index) ? 1 : 0),
+  }));
 }

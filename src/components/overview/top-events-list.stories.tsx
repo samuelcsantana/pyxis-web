@@ -3,7 +3,8 @@ import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { TopEventsList } from './top-events-list';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
-const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD);
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD, STORY_NOW);
 
 function visitsHref(event: string): string {
   return `/demo/visits?${new URLSearchParams({ range: '30d', event }).toString()}`;

@@ -8,14 +8,8 @@ import { VisitsTable } from './visits-table';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
-const FIRST = demoVisitsReport(RANGE, NO_VISIT_FILTERS, null, NOW, 'America/Sao_Paulo');
-const SECOND = demoVisitsReport(
-  RANGE,
-  NO_VISIT_FILTERS,
-  FIRST.nextCursor,
-  NOW,
-  'America/Sao_Paulo',
-);
+const FIRST = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
+const SECOND = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
 const FIRST_ROWS = visitRows(FIRST.visits, 'America/Sao_Paulo');
 const SECOND_ROWS = visitRows(SECOND.visits, 'America/Sao_Paulo');
 const CURSOR = '2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02';
@@ -197,9 +191,9 @@ describe('VisitFiltersForm', () => {
         action="/p-store/visits"
         period={{ preset: 'custom', from: '2026-09-01', to: '2026-09-30' }}
         filters={{
-          paths: ['/calculadora-taxa-ifood', '/calculadora-taxa-*'],
+          paths: ['/calculator-shipping', '/calculator-*'],
           event: 'calculator_result_shown',
-          property: 'calculator=99food',
+          property: 'calculator=margin',
           channel: 'paid',
           device: 'mobile',
           identity: 'anonymous',
@@ -213,15 +207,15 @@ describe('VisitFiltersForm', () => {
     expect(form).toHaveAttribute('action', '/p-store/visits');
     expect(form).toHaveAttribute('method', 'get');
     expect(screen.getByRole('textbox', { name: 'Viewed page' })).toHaveValue(
-      '/calculadora-taxa-ifood',
+      '/calculator-shipping',
     );
-    expect(screen.getByRole('textbox', { name: 'And page' })).toHaveValue('/calculadora-taxa-*');
+    expect(screen.getByRole('textbox', { name: 'And page' })).toHaveValue('/calculator-*');
     expect(screen.getByRole('textbox', { name: 'And also page' })).toHaveValue('');
     expect(screen.getByRole('textbox', { name: 'Had event' })).toHaveValue(
       'calculator_result_shown',
     );
     expect(screen.getByRole('textbox', { name: /^With property/ })).toHaveValue(
-      'calculator=99food',
+      'calculator=margin',
     );
     expect(screen.getByRole('combobox', { name: 'Channel' })).toHaveValue('paid');
     expect(screen.getByRole('combobox', { name: 'Device' })).toHaveValue('mobile');

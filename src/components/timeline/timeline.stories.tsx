@@ -6,7 +6,7 @@ import { TimelineSearch } from './timeline-search';
 import { TimelineSummary } from './timeline-summary';
 import { VisitCard } from './visit-card';
 
-const REPORT = demoTimelineReport({ kind: 'user', id: DEMO_USER_ID }, new Date());
+const REPORT = demoTimelineReport('demo', { kind: 'user', id: DEMO_USER_ID }, new Date());
 
 function Story({ filter }: { readonly filter: (typeof TIMELINE_FILTERS)[number] }) {
   return (

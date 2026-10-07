@@ -66,7 +66,7 @@ test('filters by an event with a property and by who the visitor was', async ({ 
   await page.goto(`/${STORE_ID}/visits`);
 
   await page.getByRole('textbox', { name: 'Had event' }).fill('calculator_result_shown');
-  await page.getByRole('textbox', { name: /^With property/ }).fill('calculator=ifood');
+  await page.getByRole('textbox', { name: /^With property/ }).fill('calculator=shipping');
   await page.getByRole('combobox', { name: 'Account' }).selectOption('identified');
   await page.getByRole('button', { name: 'Apply filters' }).click();
 

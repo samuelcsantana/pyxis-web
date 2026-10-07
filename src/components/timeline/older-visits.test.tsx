@@ -6,8 +6,11 @@ import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timel
 import { OlderVisits, type OlderVisitsPage } from './older-visits';
 
 const VISITS = visitViews(
-  demoTimelineReport({ kind: 'user', id: DEMO_USER_ID }, new Date('2026-10-06T02:30:00.000Z'))
-    .visits,
+  demoTimelineReport(
+    'demo',
+    { kind: 'user', id: DEMO_USER_ID },
+    new Date('2026-10-06T02:30:00.000Z'),
+  ).visits,
   'UTC',
   'all',
 );

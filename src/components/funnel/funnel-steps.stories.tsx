@@ -6,7 +6,7 @@ import { FunnelSteps } from './funnel-steps';
 
 const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
 const ROWS = funnelRows(
-  countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport(PERIOD, 'visit', DEMO_FUNNEL_STEPS)),
+  countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport('demo', PERIOD, 'visit', DEMO_FUNNEL_STEPS)),
 );
 
 const meta = {
@@ -40,7 +40,7 @@ export const PerPerson: Story = {
   args: {
     mode: 'user',
     rows: funnelRows(
-      countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport(PERIOD, 'user', DEMO_FUNNEL_STEPS)),
+      countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport('demo', PERIOD, 'user', DEMO_FUNNEL_STEPS)),
     ),
   },
 };

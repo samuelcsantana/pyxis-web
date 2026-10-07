@@ -6,11 +6,11 @@ import { demoPropertyBreakdownReport } from './demo-properties';
 import type { IFeaturesService } from './features-service.interface';
 
 export class MockFeaturesService implements IFeaturesService {
-  features(_projectId: string, range: DateRange, kind: FeatureKind): Promise<FeaturesReport> {
-    return Promise.resolve(demoFeaturesReport(range, kind));
+  features(projectId: string, range: DateRange, kind: FeatureKind): Promise<FeaturesReport> {
+    return Promise.resolve(demoFeaturesReport(projectId, range, kind));
   }
 
-  properties(_projectId: string, range: DateRange, name: string): Promise<PropertyBreakdownReport> {
-    return Promise.resolve(demoPropertyBreakdownReport(range, name));
+  properties(projectId: string, range: DateRange, name: string): Promise<PropertyBreakdownReport> {
+    return Promise.resolve(demoPropertyBreakdownReport(projectId, range, name));
   }
 }

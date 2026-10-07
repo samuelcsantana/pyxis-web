@@ -8,14 +8,17 @@ import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
-import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './funnel/demo-funnel';
+import { demoFunnelWire } from './funnel/demo-funnel';
 import { demoRequestsWire } from './requests/demo-requests';
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
-import { DEMO_ADMIN, DEMO_ME_RESPONSE } from './projects/mock-projects-service';
+import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
+import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 
 const CONTRACT_FILE = 'contract/openapi.json';
+const RANGE = { from: '2026-09-06', to: '2026-10-05' };
+const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 function contractSchema(name: string) {
   const ajv = new Ajv2020({ strict: false, allErrors: true });
@@ -51,8 +54,8 @@ describe('the API contract copied from pyxis-api', () => {
   it('accepts the demo overview of each demo project', () => {
     const validate = contractSchema('OverviewReport');
 
-    for (const project of DEMO_ADMIN.projects) {
-      const wire = demoOverviewWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+    for (const project of DEMO_PROJECTS) {
+      const wire = demoOverviewWire(project.id, RANGE, NOW);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
@@ -60,8 +63,8 @@ describe('the API contract copied from pyxis-api', () => {
   it('accepts the demo devices of each demo project', () => {
     const validate = contractSchema('DevicesReport');
 
-    for (const project of DEMO_ADMIN.projects) {
-      const wire = demoDevicesWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+    for (const project of DEMO_PROJECTS) {
+      const wire = demoDevicesWire(project.id, RANGE);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
@@ -69,79 +72,80 @@ describe('the API contract copied from pyxis-api', () => {
   it('accepts the demo acquisition of each demo project', () => {
     const validate = contractSchema('AcquisitionReport');
 
-    for (const project of DEMO_ADMIN.projects) {
-      const wire = demoAcquisitionWire(project.id, { from: '2026-09-06', to: '2026-10-05' });
+    for (const project of DEMO_PROJECTS) {
+      const wire = demoAcquisitionWire(project.id, RANGE);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
 
-  it('accepts the demo features of each kind', () => {
+  it('accepts the demo features of each kind, for each demo project', () => {
     const validate = contractSchema('FeaturesReport');
 
-    for (const kind of ['events', 'screens'] as const) {
-      const wire = demoFeaturesWire({ from: '2026-09-06', to: '2026-10-05' }, kind);
-      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    for (const project of DEMO_PROJECTS) {
+      for (const kind of ['events', 'screens'] as const) {
+        const wire = demoFeaturesWire(project.id, RANGE, kind);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
     }
   });
 
   it('accepts the demo property breakdown of every demo event and of an unknown one', () => {
     const validate = contractSchema('PropertyBreakdownReport');
-    const range = { from: '2026-09-06', to: '2026-10-05' };
 
-    for (const { name } of [...demoFeaturesWire(range, 'events').items, { name: 'never_sent' }]) {
-      const wire = demoPropertyBreakdownWire(range, name);
-      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    for (const project of DEMO_PROJECTS) {
+      const names = [...project.events.map((event) => event.name), 'never_sent'];
+      for (const name of names) {
+        const wire = demoPropertyBreakdownWire(project.id, RANGE, name);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
     }
   });
 
   it('accepts the demo requests, with and without a screen filter', () => {
     const validate = contractSchema('RequestsReport');
 
-    for (const screen of [null, '/orders']) {
-      const wire = demoRequestsWire(
-        { from: '2026-09-06', to: '2026-10-05' },
-        screen,
-        new Date('2026-10-06T02:30:00.000Z'),
-        'America/Sao_Paulo',
-      );
-      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    for (const project of DEMO_PROJECTS) {
+      for (const screen of [null, '/orders', '/docs/:slug']) {
+        const wire = demoRequestsWire(project.id, RANGE, screen, NOW);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
     }
   });
 
-  it('accepts the demo funnel in both modes', () => {
+  it('accepts the demo funnel of each demo project in both modes', () => {
     const validate = contractSchema('FunnelReport');
 
-    for (const mode of ['visit', 'user'] as const) {
-      const wire = demoFunnelWire(
-        { from: '2026-09-06', to: '2026-10-05' },
-        mode,
-        DEMO_FUNNEL_STEPS,
-      );
-      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    for (const project of DEMO_PROJECTS) {
+      for (const mode of ['visit', 'user'] as const) {
+        const wire = demoFunnelWire(project.id, RANGE, mode, project.exampleFunnel);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
     }
   });
 
-  it('accepts the demo timeline of the demo person', () => {
+  it('accepts the demo timeline of every demo visit', () => {
     const validate = contractSchema('TimelineReport');
-    const wire = demoTimelineWire(
-      { kind: 'user', id: DEMO_USER_ID },
-      new Date('2026-10-06T02:30:00Z'),
-    );
 
-    expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+    for (const project of DEMO_PROJECTS) {
+      for (const visit of project.visits) {
+        const wire = demoTimelineWire(project.id, { kind: 'visit', id: visit.sessionId }, NOW);
+        expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
+      }
+    }
+    const person = demoTimelineWire(DEMO_STORE.id, { kind: 'user', id: DEMO_USER_ID }, NOW);
+    expect(validate(person), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it('accepts the demo visits, filtered or not, on every page', () => {
     const validate = contractSchema('VisitsReport');
-    const range = { from: '2026-09-06', to: '2026-10-05' };
-    const now = new Date('2026-10-06T02:30:00Z');
-    const first = demoVisitsWire(range, NO_VISIT_FILTERS, null, now, 'America/Sao_Paulo');
+    const first = demoVisitsWire(DEMO_STORE.id, RANGE, NO_VISIT_FILTERS, null, NOW);
     const filtered = { ...NO_VISIT_FILTERS, paths: ['/orders*'], identity: 'identified' as const };
 
     for (const wire of [
       first,
-      demoVisitsWire(range, NO_VISIT_FILTERS, first.next_cursor, now, 'America/Sao_Paulo'),
-      demoVisitsWire(range, filtered, null, now, 'America/Sao_Paulo'),
+      demoVisitsWire(DEMO_STORE.id, RANGE, NO_VISIT_FILTERS, first.next_cursor, NOW),
+      demoVisitsWire(DEMO_STORE.id, RANGE, filtered, null, NOW),
+      demoVisitsWire(DEMO_DOCS.id, RANGE, NO_VISIT_FILTERS, null, NOW),
     ]) {
       expect(wire.visits.length).toBeGreaterThan(0);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);

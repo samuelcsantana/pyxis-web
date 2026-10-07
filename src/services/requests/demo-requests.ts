@@ -1,111 +1,62 @@
-import { daysBetween, todayIn } from '@/domain/period';
 import { type RequestsReport, requestsResponseSchema, type RequestsWire } from '@/domain/requests';
 import type { DateRange } from '../date-range';
-import { type DemoFailedRequest, demoFailedRequests } from '../demo/demo-visits';
+import type { DemoProject, DemoRoute } from '../demo/demo-catalog';
+import { type DemoFailure, demoFailures, demoSuccessfulWritesOn } from '../demo/demo-dataset';
+import { demoProjectOf } from '../demo/demo-projects';
+import { apportion, demoDays } from '../demo/demo-series';
 
-interface DemoRoute {
-  readonly method: string;
-  readonly route: string;
-  readonly perDay: number;
-  readonly statuses: readonly (readonly [status: number, share: number])[];
-  readonly medianDurationMs: number;
-  readonly screens: readonly (readonly [path: string, share: number])[];
+export const RECENT_FAILURES_PER_ROUTE = 5;
+
+function successfulWrites(
+  project: DemoProject,
+  route: DemoRoute,
+  range: DateRange,
+  screen: string | null,
+): number {
+  const writes = demoDays(range).reduce(
+    (sum, date) => sum + demoSuccessfulWritesOn(project, route, date),
+    0,
+  );
+  if (screen === null) {
+    return writes;
+  }
+  return apportion(writes, route.screens, ([, share]) => share)
+    .filter(({ item: [path] }) => path === screen)
+    .reduce((sum, { count }) => sum + count, 0);
 }
 
-const DEMO_ROUTES: readonly DemoRoute[] = [
-  {
-    method: 'POST',
-    route: '/orders',
-    perDay: 43,
-    statuses: [
-      [409, 0.0125],
-      [400, 0.0062],
-    ],
-    medianDurationMs: 164,
-    screens: [
-      ['/orders', 0.875],
-      ['/orders/new', 0.125],
-    ],
-  },
-  {
-    method: 'PATCH',
-    route: '/orders/:id',
-    perDay: 14,
-    statuses: [[400, 0.005]],
-    medianDurationMs: 141,
-    screens: [['/orders/:id', 1]],
-  },
-  {
-    method: 'POST',
-    route: '/auth/sign-up',
-    perDay: 9,
-    statuses: [
-      [400, 0.041],
-      [429, 0.019],
-    ],
-    medianDurationMs: 233,
-    screens: [['/sign-up', 1]],
-  },
-  {
-    method: 'POST',
-    route: '/payouts',
-    perDay: 2,
-    statuses: [
-      [422, 0.1],
-      [500, 0.025],
-      [0, 0.025],
-    ],
-    medianDurationMs: 412,
-    screens: [['/payouts', 1]],
-  },
-  {
-    method: 'PATCH',
-    route: '/users/me',
-    perDay: 3,
-    statuses: [],
-    medianDurationMs: 120,
-    screens: [],
-  },
-  {
-    method: 'DELETE',
-    route: '/orders/:id',
-    perDay: 2,
-    statuses: [],
-    medianDurationMs: 97,
-    screens: [],
-  },
-];
-
-const SUCCESS_STATUS: Readonly<Record<string, number>> = { POST: 201, DELETE: 204 };
-const DEFAULT_SUCCESS_STATUS = 200;
-
-function withinRange(failure: DemoFailedRequest, range: DateRange, timeZone: string): boolean {
-  const day = todayIn(timeZone, new Date(failure.occurredAt));
-  return range.from <= day && day <= range.to;
+function countsBy<Key extends string | number>(
+  failures: readonly DemoFailure[],
+  keyOf: (failure: DemoFailure) => Key,
+): ReadonlyMap<Key, number> {
+  return failures.reduce(
+    (counts, failure) =>
+      new Map(counts).set(keyOf(failure), (counts.get(keyOf(failure)) ?? 0) + failure.count),
+    new Map<Key, number>(),
+  );
 }
 
-function demoRoute(route: DemoRoute, days: number, failures: readonly DemoFailedRequest[]) {
-  const total = route.perDay * days;
-  const failing = route.statuses.map(([status, share]) => ({
-    status,
-    count: Math.max(1, Math.round(total * share)),
-  }));
-  const failed = failing.reduce((sum, entry) => sum + entry.count, 0);
-  const success = SUCCESS_STATUS[route.method] ?? DEFAULT_SUCCESS_STATUS;
+function routeWire(route: DemoRoute, successes: number, failures: readonly DemoFailure[]) {
+  const failed = failures.reduce((sum, failure) => sum + failure.count, 0);
   return {
     method: route.method,
     route: route.route,
-    total,
+    total: successes + failed,
     failed,
-    statuses: [{ status: success, count: total - failed }, ...failing],
+    statuses: [
+      { status: route.successStatus, count: successes },
+      ...[...countsBy(failures, (failure) => failure.status)]
+        .map(([status, count]) => ({ status, count }))
+        .toSorted((first, second) => first.status - second.status),
+    ],
     median_duration_ms: route.medianDurationMs,
-    screens: route.screens.map(([path, share]) => ({
-      path,
-      failed: Math.max(1, Math.round(failed * share)),
-    })),
+    screens: [...countsBy(failures, (failure) => failure.path)]
+      .map(([path, count]) => ({ path, failed: count }))
+      .toSorted((first, second) => second.failed - first.failed),
     recent_failures: failures
-      .filter((failure) => failure.method === route.method && failure.route === route.route)
+      .flatMap((failure) => (failure.request === null ? [] : [failure.request]))
       .toSorted((newer, older) => older.occurredAt.localeCompare(newer.occurredAt))
+      .slice(0, RECENT_FAILURES_PER_ROUTE)
       .map((failure) => ({
         occurred_at: failure.occurredAt,
         status: failure.status,
@@ -116,29 +67,36 @@ function demoRoute(route: DemoRoute, days: number, failures: readonly DemoFailed
 }
 
 export function demoRequestsWire(
+  projectId: string,
   range: DateRange,
   screen: string | null,
   now: Date,
-  timeZone: string,
 ): RequestsWire {
-  const days = daysBetween(range.from, range.to);
-  const failures = demoFailedRequests(now).filter((failure) =>
-    withinRange(failure, range, timeZone),
+  const project = demoProjectOf(projectId);
+  const failures = demoFailures(project, range, now).filter(
+    (failure) => screen === null || failure.path === screen,
   );
   return {
-    routes: DEMO_ROUTES.filter(
-      (route) => screen === null || route.screens.some(([path]) => path === screen),
-    )
-      .map((route) => demoRoute(route, days, failures))
-      .toSorted((left, right) => right.failed - left.failed),
+    routes: project.routes
+      .map((route) =>
+        routeWire(
+          route,
+          successfulWrites(project, route, range, screen),
+          failures.filter(
+            (failure) => failure.method === route.method && failure.route === route.route,
+          ),
+        ),
+      )
+      .filter((route) => route.total > 0)
+      .toSorted((first, second) => second.failed - first.failed || second.total - first.total),
   };
 }
 
 export function demoRequestsReport(
+  projectId: string,
   range: DateRange,
   screen: string | null,
   now: Date,
-  timeZone: string,
 ): RequestsReport {
-  return requestsResponseSchema.parse(demoRequestsWire(range, screen, now, timeZone));
+  return requestsResponseSchema.parse(demoRequestsWire(projectId, range, screen, now));
 }

@@ -5,6 +5,6 @@ import type { IOverviewService } from './overview-service.interface';
 
 export class MockOverviewService implements IOverviewService {
   overview(projectId: string, range: DateRange): Promise<OverviewReport> {
-    return Promise.resolve(demoOverviewReport(projectId, range));
+    return Promise.resolve(demoOverviewReport(projectId, range, new Date()));
   }
 }
