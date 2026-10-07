@@ -1,5 +1,79 @@
 # Changelog
 
+## [0.3.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.2.0...v0.3.0) (2026-10-07)
+
+
+### Features
+
+* **app:** catch a failed sign-in check with a branded error screen ([dfa38c4](https://github.com/samuelcsantana/pyxis-web/commit/dfa38c4b8c95b813b50b4791b3e224d4e16c59e5))
+* **app:** colour the browser bar with the background of the chosen theme ([1912161](https://github.com/samuelcsantana/pyxis-web/commit/191216195f61d506f36c71be66b08156095643e1))
+* **app:** draw a branded page when the root layout itself fails ([7bc652a](https://github.com/samuelcsantana/pyxis-web/commit/7bc652a8533df1ff3d89daedb0f0e1ed00dc24ce))
+* **app:** keep the project shell around an unknown screen ([7fdf06a](https://github.com/samuelcsantana/pyxis-web/commit/7fdf06ac954daadbf7ed46439cb1ed41f0532bcc))
+* **app:** name the project in the title of every screen ([bbec1d8](https://github.com/samuelcsantana/pyxis-web/commit/bbec1d8707479d6e3d91a4548b27cc7242decedb))
+* **app:** open the demo to search engines and keep the dashboard out ([c9a976d](https://github.com/samuelcsantana/pyxis-web/commit/c9a976dda32ae37c3ea41fc95fd77f6e26b68939))
+* **app:** serve /favicon.ico ([770d837](https://github.com/samuelcsantana/pyxis-web/commit/770d837ad124953d34b95ae68520d04fe41bb60d))
+* **app:** serve a web app manifest ([7563a57](https://github.com/samuelcsantana/pyxis-web/commit/7563a5712eeb8aa80cddd1e7e1c02c01293091b8))
+* **app:** show a link preview card for the demo and the sign-in page ([2033c39](https://github.com/samuelcsantana/pyxis-web/commit/2033c39f38697b53b84c720b5d06df77937042e3))
+* **demo:** derive every demo screen from one invented dataset ([13a6aad](https://github.com/samuelcsantana/pyxis-web/commit/13a6aad1920e19ffb95660f9b7a5263f738b23a6))
+* **design:** add a focus token that keeps 3:1 contrast in both themes ([2004f5e](https://github.com/samuelcsantana/pyxis-web/commit/2004f5e1190133fbac002aede0bc828091231adc))
+* **design:** add a sidebar hover token and raise the current item ([eb3dd6f](https://github.com/samuelcsantana/pyxis-web/commit/eb3dd6fdb67a2dfa8d4931b9c8e5b68b415b5c92))
+* **design:** add hover and pressed tokens for primary and strong buttons ([6964ea4](https://github.com/samuelcsantana/pyxis-web/commit/6964ea427814983f55d8e650875f478a314675d5))
+* **design:** show every control recipe in its states in Storybook ([3cb5ac2](https://github.com/samuelcsantana/pyxis-web/commit/3cb5ac29b087dd12e6f21eb95707b3a4299a577a))
+* **design:** show the pointer cursor on enabled buttons ([0534ef7](https://github.com/samuelcsantana/pyxis-web/commit/0534ef7189009c798b180728951626219844af97))
+* **funnel:** open the demo on the example funnel of the project ([5ba1101](https://github.com/samuelcsantana/pyxis-web/commit/5ba1101dc9e692924ba21ebb9feb0ca6109b1e65))
+* **funnel:** validate the editor's steps without the Zod schema ([b4fe5ff](https://github.com/samuelcsantana/pyxis-web/commit/b4fe5ff81eea50e45d74c81777a5302d5cecbe36))
+* **overview:** leave days without writes out of the error rate line ([30cc8fb](https://github.com/samuelcsantana/pyxis-web/commit/30cc8fb39cd74c18f77901315bb60026a3473572))
+* **overview:** read the comparison cutoff and the previous days ([52b9c4d](https://github.com/samuelcsantana/pyxis-web/commit/52b9c4d410ed9cfa1455967b8f2369fcb7193af3))
+* **overview:** say what today is compared with ([4017c36](https://github.com/samuelcsantana/pyxis-web/commit/4017c361fbb7f21ee1b1ef42d748a0780a80d99d))
+* **overview:** say whether a change is good news, not only in colour ([346d00f](https://github.com/samuelcsantana/pyxis-web/commit/346d00f1b42aeaa187cdd6b3b91e353e76127a07))
+* **overview:** show a single day as figures, not a chart of one point ([2d85367](https://github.com/samuelcsantana/pyxis-web/commit/2d85367bb75f0e0eec8774d1cfaa6601e9f3cf20))
+* **overview:** show the size of a change and judge only real moves ([6358267](https://github.com/samuelcsantana/pyxis-web/commit/63582678bd76dcacee03bee51ea09121fc8bcae1))
+* **requests:** keep the open route in the address ([025dca9](https://github.com/samuelcsantana/pyxis-web/commit/025dca9450c96a1929bc3a0b3c4010f62661f778))
+* **services:** log the route, status and duration of every API read ([c56f527](https://github.com/samuelcsantana/pyxis-web/commit/c56f5275244dc5b002c994e2de3f52be8f208109))
+* **shell:** link the demo banner to the source code ([6ae5704](https://github.com/samuelcsantana/pyxis-web/commit/6ae57046a3ebe47d7fb688707e27e78b3aa5b184))
+* **sign-in:** come back to the screen that sent the visitor to sign in ([d8cf056](https://github.com/samuelcsantana/pyxis-web/commit/d8cf0566cd81281371214c6135753d01c5b14a9b))
+* **sign-in:** tell demo visitors the code before they send an email ([b2010a8](https://github.com/samuelcsantana/pyxis-web/commit/b2010a84e3e42527b4cc9588e90a8a30e17c8217))
+* **states:** give the project error page its h1 ([9cf6b16](https://github.com/samuelcsantana/pyxis-web/commit/9cf6b1640291dc7dcef0d65fa616411bc5892f4b))
+* **states:** keep the top bar and the destination title while a screen loads ([c41774c](https://github.com/samuelcsantana/pyxis-web/commit/c41774c34cb3b93455cbe9ad658896151cc19ac2))
+* **states:** let an empty state head a page ([58923b8](https://github.com/samuelcsantana/pyxis-web/commit/58923b8e9631eb28879c6f2b758755157ad95cf6))
+* **timeline:** keep the period through the Timeline, for the way back ([0f8f286](https://github.com/samuelcsantana/pyxis-web/commit/0f8f286971808d1c9e4917b339979c69a09e3f77))
+* **timeline:** suggest the demo person of each demo project ([2b862b6](https://github.com/samuelcsantana/pyxis-web/commit/2b862b64e33fcecbcc0513ee7291d64463315533))
+
+
+### Bug Fixes
+
+* **a11y:** draw every focus ring from the focus token ([517efe3](https://github.com/samuelcsantana/pyxis-web/commit/517efe3fe495f5938720e34a2bf75d1ad6903e63))
+* **app:** title the 404 page "Page not found" and give it an h1 and the logo ([0f1559e](https://github.com/samuelcsantana/pyxis-web/commit/0f1559e25c7504a3336d0c076548f74de94fbc45))
+* **charts:** keep a phone page as wide as the screen before the charts mount ([cf4d3b2](https://github.com/samuelcsantana/pyxis-web/commit/cf4d3b207f89bba008710d0154a98edd383a3224))
+* **shell:** make sidebar items react visibly to the pointer ([ce57e31](https://github.com/samuelcsantana/pyxis-web/commit/ce57e31368db5058bfd7214e45fa453b9551c897))
+* **sign-in:** drop "Code sent." as soon as an error shows ([81d499f](https://github.com/samuelcsantana/pyxis-web/commit/81d499f119a4b3b42618cfe0d22f66ed7309c47b))
+* **sign-in:** put the focus on the email field after "Use a different email" ([6217f49](https://github.com/samuelcsantana/pyxis-web/commit/6217f4964158c3bf62354835a3fb20f5866d6ebd))
+* **sign-in:** tie an email-step error to the email field ([0b0d5e1](https://github.com/samuelcsantana/pyxis-web/commit/0b0d5e1b1e4d2068403a0cf3ecae086f8a2f1608))
+* **states:** stop promising that events are still being collected ([19092d3](https://github.com/samuelcsantana/pyxis-web/commit/19092d3269b388ba0286bae563243c1a60a9ebba))
+* **ui:** darken the border of secondary and icon buttons on hover and press ([e09abe5](https://github.com/samuelcsantana/pyxis-web/commit/e09abe547d8a40d3df3104db1f595c0fdd0a6a2a))
+* **ui:** give primary and strong buttons hover and pressed fills ([f012d30](https://github.com/samuelcsantana/pyxis-web/commit/f012d30adb518b6d066c23af4da16f10210b57c6))
+* **ui:** give segmented options, tabs and pills a pressed state ([c6ced71](https://github.com/samuelcsantana/pyxis-web/commit/c6ced7102d3cdea41bb2a63fe9d7bc42d0257e23))
+
+
+### Refactoring
+
+* **app:** check the project while resolving each screen's title ([f77cd4e](https://github.com/samuelcsantana/pyxis-web/commit/f77cd4e6e300eee6aabc4be766e37c51d33a535c))
+* **app:** load the document fonts from one module ([7c43f2e](https://github.com/samuelcsantana/pyxis-web/commit/7c43f2e5b8912306dde07d638c38b3df487f6695))
+* **domain:** keep the response schemas in their own modules ([202d625](https://github.com/samuelcsantana/pyxis-web/commit/202d6255c42d3d7698707dba9ec97d693893f5fe))
+* **e2e:** read a control's paint in one place ([9594b83](https://github.com/samuelcsantana/pyxis-web/commit/9594b83d313fb81bb9778589c543860004231f68))
+* **shell:** split the top bar into a frame that takes any controls ([b679719](https://github.com/samuelcsantana/pyxis-web/commit/b679719d97503ae5109270233da741652ec3271d))
+* **states:** draw the error screen inside the branded page frame ([6db4fe1](https://github.com/samuelcsantana/pyxis-web/commit/6db4fe19f880b710a301ee2a66f3496c0c846028))
+
+
+### Documentation
+
+* **readme:** describe the control recipes and their states ([8415213](https://github.com/samuelcsantana/pyxis-web/commit/841521315773fca89c0beff66ca96d4b88715999))
+* **readme:** describe the honest comparisons on the Overview ([b832cc5](https://github.com/samuelcsantana/pyxis-web/commit/b832cc5d33e96225f5888d9709cef8fdaab35c90))
+* **readme:** describe the two demo products and their shared dataset ([20da7a8](https://github.com/samuelcsantana/pyxis-web/commit/20da7a8cce6fc81e7fb23a677177771c61634de7))
+* **readme:** say the response schemas stay on the server ([940d478](https://github.com/samuelcsantana/pyxis-web/commit/940d47818bccaa21667eed0711274ef4b30dd375))
+* **storybook:** show the focus ring in the top bar and the sidebar ([f8dd44c](https://github.com/samuelcsantana/pyxis-web/commit/f8dd44c82570c5e61f5dcdf89ef8e0f312283499))
+* **storybook:** show the theme toggle hovered and keyboard-focused ([e3fcd8e](https://github.com/samuelcsantana/pyxis-web/commit/e3fcd8e6e578d19508e2d930fdcedf4f8ea9059b))
+
 ## [0.2.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.1.1...v0.2.0) (2026-10-07)
 
 
