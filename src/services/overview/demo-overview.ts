@@ -9,7 +9,7 @@ import {
   demoPageTotals,
 } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
-import { previousRange } from '../demo/demo-series';
+import { demoConvertingVisits, previousRange } from '../demo/demo-series';
 
 export const TOP_ITEMS = 10;
 
@@ -24,6 +24,15 @@ function kpi(current: readonly DemoDay[], previous: readonly DemoDay[], key: Cou
     current: total(current, key),
     previous: total(previous, key),
     daily: current.map((day) => day[key]),
+  };
+}
+
+function convertingVisitsKpi(current: readonly DemoDay[], previous: readonly DemoDay[]) {
+  const daily = current.map((day) => demoConvertingVisits(day.conversions));
+  return {
+    current: daily.reduce((sum, value) => sum + value, 0),
+    previous: previous.reduce((sum, day) => sum + demoConvertingVisits(day.conversions), 0),
+    daily,
   };
 }
 
@@ -55,6 +64,7 @@ export function demoOverviewWire(projectId: string, range: DateRange, now: Date)
       visits: kpi(current, previous, 'visits'),
       identified_users: kpi(current, previous, 'identifiedUsers'),
       conversions: countsConversions ? kpi(current, previous, 'conversions') : null,
+      converting_visits: countsConversions ? convertingVisitsKpi(current, previous) : null,
       write_errors: {
         current: failureCount(current),
         previous: failureCount(previous),
@@ -76,6 +86,7 @@ export function demoOverviewWire(projectId: string, range: DateRange, now: Date)
       visits: day.visits,
       identified_users: day.identifiedUsers,
       conversions: countsConversions ? day.conversions : null,
+      converting_visits: countsConversions ? demoConvertingVisits(day.conversions) : null,
       write_errors: { failed: day.failedWrites, total: day.writes },
     })),
   };

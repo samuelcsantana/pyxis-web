@@ -13,9 +13,9 @@ import { DeviceConversionList } from './device-conversion-list';
 import { segmentColor, ShareDonut } from './share-donut';
 
 const DEVICE_TYPES: readonly ValueShare[] = [
-  { value: 'mobile', visits: 620, conversions: 23 },
-  { value: 'desktop', visits: 340, conversions: 20 },
-  { value: 'other', visits: 40, conversions: 1 },
+  { value: 'mobile', visits: 620, conversions: 23, convertingVisits: null },
+  { value: 'desktop', visits: 340, conversions: 20, convertingVisits: null },
+  { value: 'other', visits: 40, conversions: 1, convertingVisits: null },
 ];
 
 describe('ShareDonut', () => {
@@ -42,6 +42,7 @@ describe('ShareDonut', () => {
         value,
         visits: 1,
         conversions: null,
+        convertingVisits: null,
       })),
       browserLabel,
     );
@@ -82,8 +83,8 @@ describe('CountriesTable', () => {
       <CountriesTable
         rows={shareRows(
           [
-            { value: 'BR', visits: 90, conversions: null },
-            { value: 'other', visits: 10, conversions: null },
+            { value: 'BR', visits: 90, conversions: null, convertingVisits: null },
+            { value: 'other', visits: 10, conversions: null, convertingVisits: null },
           ],
           countryLabel,
         )}

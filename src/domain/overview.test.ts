@@ -93,9 +93,33 @@ describe('overviewResponseSchema', () => {
         visits: 2100,
         identifiedUsers: 200,
         conversions: null,
+        convertingVisits: null,
         writeErrors: { failed: 2, total: 40 },
       },
     ]);
+  });
+
+  it('reads the converting visits when the API counts them, and null when it does not', () => {
+    const parsed = report({
+      ...WIRE,
+      kpis: { ...WIRE.kpis, converting_visits: { current: 200, previous: 190, daily: [95, 105] } },
+      previous_days: [
+        {
+          date: '2026-10-03',
+          page_views: 170,
+          events: 90,
+          visits: 2100,
+          identified_users: 200,
+          conversions: 101,
+          converting_visits: 98,
+          write_errors: { failed: 2, total: 40 },
+        },
+      ],
+    });
+
+    expect(parsed.kpis.convertingVisits).toEqual({ current: 200, previous: 190, daily: [95, 105] });
+    expect(parsed.previousDays?.[0]?.convertingVisits).toBe(98);
+    expect(report().kpis.convertingVisits).toBeNull();
   });
 });
 

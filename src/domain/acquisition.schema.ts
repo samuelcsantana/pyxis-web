@@ -21,6 +21,7 @@ export const acquisitionResponseSchema = z
         channel: z.enum(CHANNELS),
         visits: z.number(),
         conversions: z.number().nullable(),
+        converting_visits: z.number().nullable().optional(),
         from_ad_click_visits: z.number(),
       }),
     ),
@@ -33,6 +34,7 @@ export const acquisitionResponseSchema = z
       channel: source.channel,
       visits: source.visits,
       conversions: source.conversions,
+      convertingVisits: source.converting_visits ?? null,
       fromAdClickVisits: source.from_ad_click_visits,
     })),
   }));

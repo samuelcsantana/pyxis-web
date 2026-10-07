@@ -89,3 +89,13 @@ export function apportion<Item>(
     count: Math.floor(entry.exact) + (roundedUp.has(index) ? 1 : 0),
   }));
 }
+
+const REPEATED_CONVERSION_SHARE = 0.06;
+
+export function demoConvertingVisits(conversions: number): number {
+  return Math.round(conversions * (1 - REPEATED_CONVERSION_SHARE));
+}
+
+export function demoConvertingVisitsOrNull(conversions: number | null): number | null {
+  return conversions === null ? null : demoConvertingVisits(conversions);
+}

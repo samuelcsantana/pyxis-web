@@ -66,6 +66,7 @@ export const NothingToCompare: Story = {
           visits: { current: 3, previous: 0, daily: [3] },
           identifiedUsers: { current: 0, previous: 0, daily: [0] },
           conversions: { current: 0, previous: 0, daily: [0] },
+          convertingVisits: null,
           writeErrors: {
             current: { failed: 0, total: 0 },
             previous: { failed: 0, total: 0 },
@@ -87,6 +88,7 @@ export const SmallNumbers: Story = {
           visits: { current: 5, previous: 4, daily: [2, 3] },
           identifiedUsers: { current: 1, previous: 2, daily: [0, 1] },
           conversions: { current: 1, previous: 0, daily: [0, 1] },
+          convertingVisits: null,
           writeErrors: {
             current: { failed: 1, total: 6 },
             previous: { failed: 0, total: 5 },

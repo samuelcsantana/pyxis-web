@@ -16,6 +16,7 @@ const previousDaySchema = z.object({
   visits: z.number(),
   identified_users: z.number(),
   conversions: z.number().nullable(),
+  converting_visits: z.number().nullable().optional(),
   write_errors: failureCountSchema,
 });
 
@@ -25,6 +26,7 @@ export const overviewResponseSchema = z
       visits: kpiSchema,
       identified_users: kpiSchema,
       conversions: kpiSchema.nullable(),
+      converting_visits: kpiSchema.nullable().optional(),
       write_errors: z.object({
         current: failureCountSchema,
         previous: failureCountSchema,
@@ -42,6 +44,7 @@ export const overviewResponseSchema = z
       visits: body.kpis.visits,
       identifiedUsers: body.kpis.identified_users,
       conversions: body.kpis.conversions,
+      convertingVisits: body.kpis.converting_visits ?? null,
       writeErrors: body.kpis.write_errors,
     },
     days: body.days.map((day) => ({
@@ -60,6 +63,7 @@ export const overviewResponseSchema = z
         visits: day.visits,
         identifiedUsers: day.identified_users,
         conversions: day.conversions,
+        convertingVisits: day.converting_visits ?? null,
         writeErrors: day.write_errors,
       })) ?? null,
   }));

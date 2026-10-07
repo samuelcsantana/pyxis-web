@@ -31,8 +31,19 @@ describe('devicesResponseSchema', () => {
   it('maps the wire names to the dashboard ones', () => {
     const report = devicesResponseSchema.parse(WIRE);
 
-    expect(report.deviceTypes[0]).toEqual({ value: 'mobile', visits: 2950, conversions: 108 });
+    expect(report.deviceTypes[0]).toEqual({
+      value: 'mobile',
+      visits: 2950,
+      conversions: 108,
+      convertingVisits: null,
+    });
     expect(report.operatingSystems[0]?.value).toBe('macos');
+    expect(
+      devicesResponseSchema.parse({
+        ...WIRE,
+        browsers: [{ value: 'safari', visits: 10, conversions: 3, converting_visits: 2 }],
+      }).browsers[0]?.convertingVisits,
+    ).toBe(2);
     expect(report.countries).toHaveLength(2);
     expect(report.browsers[0]?.value).toBe('samsung');
   });
@@ -85,7 +96,10 @@ describe('shareRows and shareSummary', () => {
   });
 
   it('show dashes, not NaN, when nobody visited', () => {
-    const [row] = shareRows([{ value: 'mobile', visits: 0, conversions: null }], deviceTypeLabel);
+    const [row] = shareRows(
+      [{ value: 'mobile', visits: 0, conversions: null, convertingVisits: null }],
+      deviceTypeLabel,
+    );
 
     expect(row?.share).toBe('—');
     expect(row?.fraction).toBe(0);
@@ -107,11 +121,17 @@ describe('deviceConversions', () => {
   });
 
   it('is empty when the project has no conversion event', () => {
-    expect(deviceConversions([{ value: 'mobile', visits: 10, conversions: null }])).toEqual([]);
+    expect(
+      deviceConversions([
+        { value: 'mobile', visits: 10, conversions: null, convertingVisits: null },
+      ]),
+    ).toEqual([]);
   });
 
   it('shows a dash for a device type without visits', () => {
-    const [none] = deviceConversions([{ value: 'tablet', visits: 0, conversions: 0 }]);
+    const [none] = deviceConversions([
+      { value: 'tablet', visits: 0, conversions: 0, convertingVisits: null },
+    ]);
 
     expect(none?.rate).toBe('—');
     expect(none?.barWidth).toBe('0.0%');

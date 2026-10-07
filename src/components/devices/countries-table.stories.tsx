@@ -26,7 +26,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const OnlyUnknownCountries: Story = {
-  args: { rows: shareRows([{ value: 'other', visits: 12, conversions: null }], countryLabel) },
+  args: {
+    rows: shareRows(
+      [{ value: 'other', visits: 12, conversions: null, convertingVisits: null }],
+      countryLabel,
+    ),
+  },
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
