@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Lookup } from '@/domain/timeline';
+import type { Lookup, RejectedLookup } from '@/domain/timeline';
 import { BUTTON_PRIMARY, FIELD } from '@/components/ui/control-classes';
 
 export interface TimelineSearchProps {
@@ -9,6 +9,7 @@ export interface TimelineSearchProps {
   readonly lookup: Lookup | null;
   readonly hint: string | null;
   readonly keep?: Readonly<Record<string, string>>;
+  readonly rejected?: RejectedLookup | null;
 }
 
 const NOTHING_KEPT: Readonly<Record<string, string>> = {};
@@ -16,9 +17,17 @@ const NOTHING_KEPT: Readonly<Record<string, string>> = {};
 type LookupKind = Lookup['kind'];
 
 const FIELD_CLASS = `min-h-11 rounded-input px-3 text-base sm:text-sm ${FIELD}`;
+const ERROR_ID = 'timeline-search-error';
 
-export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: TimelineSearchProps) {
-  const [kind, setKind] = useState<LookupKind>(lookup?.kind ?? 'user');
+export function TimelineSearch({
+  action,
+  lookup,
+  hint,
+  keep = NOTHING_KEPT,
+  rejected = null,
+}: TimelineSearchProps) {
+  const [kind, setKind] = useState<LookupKind>(rejected?.kind ?? lookup?.kind ?? 'user');
+  const invalid = rejected !== null && rejected.kind === kind;
   return (
     <form
       role="search"
@@ -47,16 +56,23 @@ export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: Ti
         {kind === 'user' ? 'User id' : 'Visit id'}
         <input
           name={kind}
-          defaultValue={lookup?.id ?? ''}
+          defaultValue={rejected?.value ?? lookup?.id ?? ''}
           required
           autoComplete="off"
           spellCheck={false}
+          aria-invalid={invalid}
+          aria-describedby={invalid ? ERROR_ID : undefined}
           className={`${FIELD_CLASS} font-mono`}
         />
       </label>
       <button type="submit" className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}>
         Show timeline
       </button>
+      {invalid ? (
+        <p id={ERROR_ID} className="basis-full text-[13px] font-medium text-bad">
+          Nothing was looked up. {rejected.hint}
+        </p>
+      ) : null}
       {hint === null ? null : (
         <span id="timeline-search-hint" className="pb-3 text-xs text-muted">
           {hint}

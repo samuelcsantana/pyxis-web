@@ -33,6 +33,28 @@ function single(value: string | string[] | undefined): string | undefined {
   return typeof value === 'string' ? value.trim() : undefined;
 }
 
+export interface RejectedLookup {
+  readonly kind: Lookup['kind'];
+  readonly value: string;
+  readonly hint: string;
+}
+
+const LOOKUP_HINTS: Readonly<Record<Lookup['kind'], string>> = {
+  visit: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+  user: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
+};
+
+function rejected(kind: Lookup['kind'], value: string | undefined): RejectedLookup | null {
+  return value === undefined || value === '' ? null : { kind, value, hint: LOOKUP_HINTS[kind] };
+}
+
+export function rejectedLookupOf(search: TimelineSearch): RejectedLookup | null {
+  if (lookupOf(search) !== null) {
+    return null;
+  }
+  return rejected('visit', single(search.visit)) ?? rejected('user', single(search.user));
+}
+
 export function lookupOf(search: TimelineSearch): Lookup | null {
   const visit = single(search.visit);
   if (visit !== undefined && VISIT_ID_PATTERN.test(visit)) {

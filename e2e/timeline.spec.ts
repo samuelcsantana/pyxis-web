@@ -48,6 +48,20 @@ test('loads the older visits with the keyboard and moves the focus to them', asy
   expect(await axeViolations(page)).toEqual([]);
 });
 
+test('keeps a visit id it could not use, and says what one looks like', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/timeline?visit=not-a-visit-id`);
+
+  await expect(page.getByRole('combobox', { name: 'Look up' })).toHaveValue('visit');
+  const field = page.getByRole('textbox', { name: 'Visit id' });
+  await expect(field).toHaveValue('not-a-visit-id');
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await expect(field).toHaveAccessibleDescription(
+    'Nothing was looked up. A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+  );
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+});
+
 test('opens one visit by its id, and says when an id is unknown', async ({ page }) => {
   await page.goto(`/${STORE_ID}/timeline`);
 

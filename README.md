@@ -108,7 +108,8 @@ Shipping now:
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status,
   and filters for page views, events, requests and errors; older visits load on demand, and a
-  failed request in the Requests screen links to its visit
+  failed request in the Requests screen links to its visit; an id it cannot look up stays in the
+  field, marked invalid, with an example of what that kind of id looks like
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and country, channel and
   account; filters for the pages it viewed (up to three, `*` matching any characters), an event
