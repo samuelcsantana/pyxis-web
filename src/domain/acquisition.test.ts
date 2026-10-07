@@ -137,6 +137,12 @@ describe('sourceRows', () => {
     });
   });
 
+  it('rates the visits that converted when the API counts them', () => {
+    const [row] = sourceRows([{ ...GOOGLE, conversions: 9, convertingVisits: 5 }]);
+
+    expect(row).toMatchObject({ conversions: '5', conversionRate: '3.8%' });
+  });
+
   it('leaves conversions out when the project has no conversion event', () => {
     const [row] = sourceRows([{ ...GOOGLE, conversions: null }]);
 

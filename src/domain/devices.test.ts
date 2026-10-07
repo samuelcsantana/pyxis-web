@@ -120,6 +120,14 @@ describe('deviceConversions', () => {
     expect(mobile?.barWidth).toBe('61.7%');
   });
 
+  it('rates the visits that converted when the API counts them', () => {
+    const [mobile] = deviceConversions([
+      { value: 'mobile', visits: 100, conversions: 9, convertingVisits: 6 },
+    ]);
+
+    expect(mobile).toMatchObject({ rate: '6%', detail: '6 of 100 visits' });
+  });
+
   it('is empty when the project has no conversion event', () => {
     expect(
       deviceConversions([

@@ -126,10 +126,14 @@ export interface SourceRow {
 const NO_MEDIUM = '—';
 
 export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
-  const rated = sources.map((source) => ({
-    ...source,
-    rate: source.conversions === null ? null : rate(source.conversions, source.visits),
-  }));
+  const rated = sources.map((source) => {
+    const converted = source.convertingVisits ?? source.conversions;
+    return {
+      ...source,
+      converted,
+      rate: converted === null ? null : rate(converted, source.visits),
+    };
+  });
   const best = Math.max(0, ...rated.map((source) => source.rate ?? 0));
   return rated.map((source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
@@ -137,8 +141,8 @@ export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
     medium: source.medium ?? NO_MEDIUM,
     channel: source.channel,
     visits: formatCount(source.visits),
-    conversions: source.conversions === null ? null : formatCount(source.conversions),
-    conversionRate: source.conversions === null ? null : formatPercent(source.rate),
+    conversions: source.converted === null ? null : formatCount(source.converted),
+    conversionRate: source.converted === null ? null : formatPercent(source.rate),
     barWidth: barWidth(source.rate ?? 0, best),
     fromAdClicks:
       source.fromAdClickVisits === 0
