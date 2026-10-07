@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import RootLayout, { generateViewport, metadata } from './layout';
+import RootLayout, { generateMetadata, generateViewport } from './layout';
 
 const cookieStore = vi.hoisted(() => ({ theme: undefined as string | undefined }));
 
@@ -57,8 +57,22 @@ describe('RootLayout', () => {
   });
 
   it('names the app in the metadata', () => {
+    const metadata = generateMetadata();
+
     expect(metadata.title).toBe('Pyxis');
     expect(metadata.description).toMatch(/no cookies/);
+  });
+
+  it('lets search engines index the live demo', () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    expect(generateMetadata().robots).toBeNull();
+  });
+
+  it('keeps a dashboard with a real API out of search engines', () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    expect(generateMetadata().robots).toEqual({ index: false, follow: false });
   });
 
   it('colours the browser bar with the chosen theme, or the system one', async () => {

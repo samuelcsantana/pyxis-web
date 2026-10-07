@@ -266,6 +266,8 @@ docs/adr/           architecture decision records
 - Each read of the API writes one JSON line to the server log, `api_read` with the route template
   (`/v1/projects/:projectId/overview`), the status and the duration in milliseconds: no project
   id, no query value, no cookie, nothing about the person signed in
+- Search engines may index the live demo; a dashboard with a real API is kept out of them
+  (`robots.txt` disallows everything and every page says `noindex`)
 - Vulnerabilities: see [SECURITY.md](SECURITY.md)
 
 ## Architecture decisions
