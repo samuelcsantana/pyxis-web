@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.2.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.1.1...v0.2.0) (2026-10-07)
+
+
+### Features
+
+* **domain:** read the visit filters from the URL and describe each visit ([a066fd2](https://github.com/samuelcsantana/pyxis-web/commit/a066fd2d07568fc2d8975282703878d347d1dd44))
+* **domain:** shape the property breakdown of an event for the screen ([fa40199](https://github.com/samuelcsantana/pyxis-web/commit/fa40199f625d3803782710b2bfa3a01d89ecff94))
+* **features:** load an event's property breakdown on the Features page ([50da305](https://github.com/samuelcsantana/pyxis-web/commit/50da305171c28d4e1f102795f57c79b02864e78c))
+* **features:** open an event row into its property breakdown ([031a33f](https://github.com/samuelcsantana/pyxis-web/commit/031a33f1b946af17fec2c8a2bdc7a3d2dbb3ebb7))
+* **overview:** link the top pages and events to their visits ([dac8841](https://github.com/samuelcsantana/pyxis-web/commit/dac884104866febd7fc7e9b301b5ead2cc44dd26))
+* **services:** read the property breakdown of an event, with demo values ([45357af](https://github.com/samuelcsantana/pyxis-web/commit/45357aff0e3a85e13d78edf5043b07d27cbc34b4))
+* **services:** read the visits list from the API, or invent it ([854dd9c](https://github.com/samuelcsantana/pyxis-web/commit/854dd9c013460093ad1cbe06949b8fc1489a4ef0))
+* **visits:** draw the filters, the visits table and the older visits ([147658d](https://github.com/samuelcsantana/pyxis-web/commit/147658ddd7a73bd74dad215fc50e5515580b7547))
+* **visits:** open the Visits screen with its filters in the URL ([563ae77](https://github.com/samuelcsantana/pyxis-web/commit/563ae77bcf75c25f5ed1d70b3bb9af739ef2a920))
+
+
+### Documentation
+
+* **readme:** describe the property breakdown on Features ([465bb8a](https://github.com/samuelcsantana/pyxis-web/commit/465bb8a5377b8437e3c2e884fee760615ebbbd21))
+* **readme:** describe the Visits screen and the Overview links ([17c28a7](https://github.com/samuelcsantana/pyxis-web/commit/17c28a79bc51dd7b0a34cd9a3b24929d5f303926))
+
 ## [0.1.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.1.0...v0.1.1) (2026-10-07)
 
 
