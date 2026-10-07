@@ -8,10 +8,19 @@ const PRESET_DAYS: Readonly<Record<PeriodPreset, number>> = { today: 1, '7d': 7,
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const MILLISECONDS_PER_DAY = 86_400_000;
 
+export type RangeProblem = 'not-a-date' | 'inverted' | 'future' | 'too-long';
+
+export interface RejectedRange {
+  readonly from: string;
+  readonly to: string;
+  readonly problem: RangeProblem;
+}
+
 export interface Period {
   readonly preset: PeriodPreset | 'custom';
   readonly from: string;
   readonly to: string;
+  readonly rejected?: RejectedRange;
 }
 
 export interface PeriodSearch {
@@ -79,17 +88,17 @@ export function presetPeriod(preset: PeriodPreset, today: string): Period {
   return { preset, from: addDays(today, 1 - PRESET_DAYS[preset]), to: today };
 }
 
-function customPeriod(from: string | undefined, to: string | undefined, today: string) {
-  if (from === undefined || to === undefined) {
-    return undefined;
-  }
+function rangeProblem(from: string, to: string, today: string): RangeProblem | undefined {
   if (utcDate(from) === undefined || utcDate(to) === undefined) {
-    return undefined;
+    return 'not-a-date';
   }
-  if (from > to || to > today || daysBetween(from, to) > MAX_PERIOD_DAYS) {
-    return undefined;
+  if (from > to) {
+    return 'inverted';
   }
-  return { preset: 'custom', from, to } satisfies Period;
+  if (to > today) {
+    return 'future';
+  }
+  return daysBetween(from, to) > MAX_PERIOD_DAYS ? 'too-long' : undefined;
 }
 
 export function resolvePeriod(search: PeriodSearch, timeZone: string, now: Date): Period {
@@ -98,10 +107,28 @@ export function resolvePeriod(search: PeriodSearch, timeZone: string, now: Date)
   if (isPreset(range)) {
     return presetPeriod(range, today);
   }
-  return (
-    customPeriod(single(search.from), single(search.to), today) ??
-    presetPeriod(DEFAULT_PERIOD_PRESET, today)
-  );
+  const fallback = presetPeriod(DEFAULT_PERIOD_PRESET, today);
+  const from = single(search.from);
+  const to = single(search.to);
+  if (from === undefined || to === undefined) {
+    return fallback;
+  }
+  const problem = rangeProblem(from, to, today);
+  return problem === undefined
+    ? { preset: 'custom', from, to }
+    : { ...fallback, rejected: { from, to, problem } };
+}
+
+const RANGE_PROBLEMS: Readonly<Record<RangeProblem, string>> = {
+  'not-a-date': 'one of its dates is not a calendar date',
+  inverted: 'it ends before it starts',
+  future: 'it ends after today',
+  'too-long': `it is longer than ${String(MAX_PERIOD_DAYS)} days`,
+};
+
+export function rejectedRangeNotice(rejected: RejectedRange): string {
+  const shownDays = String(PRESET_DAYS[DEFAULT_PERIOD_PRESET]);
+  return `That range was not used: ${RANGE_PROBLEMS[rejected.problem]}. Showing the last ${shownDays} days instead.`;
 }
 
 export function periodQuery(period: Period): string {
