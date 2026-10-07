@@ -7,6 +7,12 @@ function visitRows(page: Page) {
   return page.getByRole('table', { name: 'Visits' }).locator('tbody tr');
 }
 
+async function openFiltersOnAPhone(page: Page, isMobile: boolean) {
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Filters' }).click();
+  }
+}
+
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`visits, ${colorScheme} theme`, () => {
     test.use({ colorScheme });
@@ -36,8 +42,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 test('filters by two pages through the form and opens the visit in the timeline', async ({
   page,
+  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/visits?range=30d`);
+  await openFiltersOnAPhone(page, isMobile);
 
   await page.getByRole('textbox', { name: 'Viewed page' }).fill('/');
   await page.getByRole('textbox', { name: 'And page' }).fill('/pri*');
@@ -62,8 +70,12 @@ test('filters by two pages through the form and opens the visit in the timeline'
   await expect(page.getByRole('heading', { name: 'Visit 7e2b9c14', exact: true })).toBeVisible();
 });
 
-test('filters by an event with a property and by who the visitor was', async ({ page }) => {
+test('filters by an event with a property and by who the visitor was', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/visits`);
+  await openFiltersOnAPhone(page, isMobile);
 
   await page.getByRole('textbox', { name: 'Had event' }).fill('calculator_result_shown');
   await page.getByRole('textbox', { name: /^With property/ }).fill('calculator=shipping');
@@ -78,7 +90,45 @@ test('filters by an event with a property and by who the visitor was', async ({ 
   await page.getByRole('link', { name: 'Clear filters' }).click();
   await expect(page).toHaveURL(/\/visits\?range=30d$/);
   await expect(visitRows(page)).toHaveCount(8);
+  await openFiltersOnAPhone(page, isMobile);
   await expect(page.getByRole('textbox', { name: 'Had event' })).toHaveValue('');
+});
+
+test('keeps the filters behind a toggle on a phone unless some are in use', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'From 640 px up the filters are always open.');
+  const toggle = page.getByRole('button', { name: /^Filters/ });
+
+  await page.goto(`/${STORE_ID}/visits`);
+  await expect(toggle).toHaveText('Filters');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByRole('textbox', { name: 'Had event' })).toBeHidden();
+  await expect(visitRows(page).first()).toBeInViewport({ ratio: 1 });
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByRole('textbox', { name: 'Had event' })).toBeVisible();
+
+  await page.goto(`/${STORE_ID}/visits?event=signup_completed&device=mobile`);
+  await expect(toggle).toHaveText('Filters · 2 active');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+  await page.goto(`/${STORE_ID}/visits?property=plan%3Dpro`);
+  await expect(toggle).toHaveText('Filters');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(
+    page.getByRole('search', { name: 'Filter the visits' }).getByRole('alert'),
+  ).toBeVisible();
+});
+
+test('shows every filter at once from 640 px up', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Below 640 px the filters sit behind a toggle.');
+  await page.goto(`/${STORE_ID}/visits`);
+
+  await expect(page.getByRole('button', { name: /^Filters/ })).toBeHidden();
+  await expect(page.getByRole('textbox', { name: 'Had event' })).toBeVisible();
 });
 
 test('loads the older visits with the keyboard and moves the focus to them', async ({ page }) => {
