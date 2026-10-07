@@ -192,7 +192,7 @@ function clock(timeZone: string): Intl.DateTimeFormat {
   });
 }
 
-function day(timeZone: string): Intl.DateTimeFormat {
+export function visitStartFormat(timeZone: string): Intl.DateTimeFormat {
   return new Intl.DateTimeFormat('en-US', {
     timeZone,
     weekday: 'short',
@@ -236,7 +236,7 @@ export function visitViews(
   filter: TimelineFilter,
 ): readonly VisitView[] {
   const time = clock(timeZone);
-  const started = day(timeZone);
+  const started = visitStartFormat(timeZone);
   return visits.map((visit) => ({
     key: visit.sessionId,
     heading: `Visit ${shortId(visit.sessionId)} · ${started.format(new Date(visit.startedAt))}`,
