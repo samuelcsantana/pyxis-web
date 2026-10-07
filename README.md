@@ -121,7 +121,8 @@ in and out ([ADR 0002](docs/adr/0002-server-components-and-services.md)).
 ## Tech stack
 
 Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 · Geist through
-`next/font` · Zod for API answers · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
+`next/font` · Zod for API answers, on the server only (the schemas live in
+`src/domain/*.schema.ts`, and ESLint keeps Zod and those modules out of `src/components`) · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
 with RxJS for the few requests a Client Component starts · Recharts 3 for the charts, each with a table
 view ([ADR 0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)) · Vitest
 and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
@@ -228,7 +229,8 @@ src/
 │                   rates and changes, sparklines, device and country labels, donuts,
 │                   channels and sources, feature ranking, search and property breakdowns,
 │                   routes and failures, funnel steps and counts, timeline items, visit
-│                   filters and rows, errors
+│                   filters and rows, errors; the Zod schemas of the API answers sit
+│                   apart in *.schema.ts, imported by the server only
 ├── lib/            API configuration, theme, security headers, the current admin
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
