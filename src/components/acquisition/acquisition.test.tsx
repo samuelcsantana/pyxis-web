@@ -16,6 +16,7 @@ const GOOGLE: Source = {
   channel: 'paid',
   visits: 1200,
   conversions: 60,
+  convertingVisits: null,
   fromAdClickVisits: 1100,
 };
 

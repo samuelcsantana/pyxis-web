@@ -31,8 +31,8 @@ export const Default: Story = {};
 export const DeviceWithoutVisits: Story = {
   args: {
     conversions: deviceConversions([
-      { value: 'desktop', visits: 40, conversions: 3 },
-      { value: 'tablet', visits: 0, conversions: 0 },
+      { value: 'desktop', visits: 40, conversions: 3, convertingVisits: null },
+      { value: 'tablet', visits: 0, conversions: 0, convertingVisits: null },
     ]),
   },
 };

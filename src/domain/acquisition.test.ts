@@ -48,6 +48,7 @@ const GOOGLE: Source = {
   channel: 'paid',
   visits: 130,
   conversions: 6,
+  convertingVisits: null,
   fromAdClickVisits: 120,
 };
 
@@ -55,6 +56,12 @@ describe('acquisitionResponseSchema', () => {
   it('maps the wire names to the dashboard ones', () => {
     expect(REPORT.days[0]?.byChannel.paid).toBe(60);
     expect(REPORT.sources[0]?.fromAdClickVisits).toBe(120);
+    expect(REPORT.sources[0]?.convertingVisits).toBeNull();
+    const [counted] = acquisitionResponseSchema.parse({
+      ...WIRE,
+      sources: [{ ...WIRE.sources[0], converting_visits: 5 }],
+    }).sources;
+    expect(counted?.convertingVisits).toBe(5);
   });
 });
 

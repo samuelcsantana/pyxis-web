@@ -9,7 +9,12 @@ import type { DateRange } from '../date-range';
 import type { DemoProject, DemoSource } from '../demo/demo-catalog';
 import { demoConversionsTotal, demoVisitsOn } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
-import { type Apportioned, apportion, demoDays } from '../demo/demo-series';
+import {
+  apportion,
+  demoConvertingVisitsOrNull,
+  demoDays,
+  type Apportioned,
+} from '../demo/demo-series';
 
 type ChannelCounts = Readonly<Record<Channel, number>>;
 
@@ -83,6 +88,7 @@ export function demoAcquisitionWire(projectId: string, range: DateRange): Acquis
         channel: item.channel,
         visits: count,
         conversions: conversions[index] ?? null,
+        converting_visits: demoConvertingVisitsOrNull(conversions[index] ?? null),
         from_ad_click_visits: Math.round(count * item.adClickShare),
       }))
       .filter((source) => source.visits > 0)

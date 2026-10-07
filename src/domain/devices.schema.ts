@@ -1,10 +1,18 @@
 import { z } from 'zod';
 
-const valueShareSchema = z.object({
-  value: z.string(),
-  visits: z.number(),
-  conversions: z.number().nullable(),
-});
+const valueShareSchema = z
+  .object({
+    value: z.string(),
+    visits: z.number(),
+    conversions: z.number().nullable(),
+    converting_visits: z.number().nullable().optional(),
+  })
+  .transform((share) => ({
+    value: share.value,
+    visits: share.visits,
+    conversions: share.conversions,
+    convertingVisits: share.converting_visits ?? null,
+  }));
 
 export const devicesResponseSchema = z
   .object({

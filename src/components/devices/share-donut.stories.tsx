@@ -42,7 +42,12 @@ export const OperatingSystem: Story = {
 };
 
 export const SingleValue: Story = {
-  args: { rows: shareRows([{ value: 'desktop', visits: 3, conversions: null }], deviceTypeLabel) },
+  args: {
+    rows: shareRows(
+      [{ value: 'desktop', visits: 3, conversions: null, convertingVisits: null }],
+      deviceTypeLabel,
+    ),
+  },
 };
 
 export const Empty: Story = { args: { rows: [] } };
