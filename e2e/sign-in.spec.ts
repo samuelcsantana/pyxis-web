@@ -56,4 +56,11 @@ test('goes back to change the email', async ({ page }) => {
   await page.getByRole('button', { name: 'Use a different email' }).click();
 
   await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
+  await expect(page.getByLabel('Email')).toBeFocused();
+});
+
+test('leaves the focus alone when the page opens', async ({ page }) => {
+  await page.goto('/sign-in');
+
+  await expect(page.getByLabel('Email')).not.toBeFocused();
 });
