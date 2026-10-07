@@ -66,7 +66,7 @@ test('shows the chart as a table that adds up to the legend totals', async ({ pa
     .locator('strong')
     .textContent();
 
-  await chart.getByRole('button', { name: 'View as table' }).click();
+  await chart.getByRole('button', { name: 'Table', exact: true }).click();
 
   const rows = chart.getByRole('table').locator('tbody tr');
   await expect(rows).toHaveCount(7);

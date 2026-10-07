@@ -32,7 +32,7 @@ describe('ChannelChart', () => {
   it('switches to a table of every day with its total', async () => {
     render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'View as table' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Table' }));
 
     const table = screen.getByRole('table', { name: 'Visits by channel per day, last 7 days' });
     const [header] = within(table).getAllByRole('row');

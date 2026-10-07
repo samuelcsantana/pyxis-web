@@ -39,7 +39,7 @@ test('shows the channels per day as a table whose totals add up', async ({ page 
   const chart = page.getByRole('region', { name: 'Visits by channel' });
   await expect(chart.getByRole('img', { name: /^Stacked bar chart of 7 days,/ })).toBeVisible();
 
-  await chart.getByRole('button', { name: 'View as table' }).click();
+  await chart.getByRole('button', { name: 'Table', exact: true }).click();
 
   const rows = chart.getByRole('table').locator('tbody tr');
   await expect(rows).toHaveCount(7);

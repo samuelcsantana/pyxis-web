@@ -49,9 +49,23 @@ export const Chart: Story = {};
 export const Table: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'View as table' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Table' }));
     await expect(canvas.getByRole('table')).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Table' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
   },
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const TableDark: Story = { ...Table, globals: { theme: 'dark' } };
+
+export const OptionHovered: Story = {
+  parameters: { pseudo: { hover: ['[aria-pressed="false"]'] } },
+};
+
+export const OptionPressed: Story = {
+  parameters: { pseudo: { active: ['[aria-pressed="false"]'] } },
+};

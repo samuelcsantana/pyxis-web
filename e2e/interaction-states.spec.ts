@@ -19,6 +19,8 @@ const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' })
 const UNDERLINE_ON_HOVER = '2px';
 const MIN_TARGET_PX = 24;
 
+const chartViews = (page: Page) => page.getByRole('group', { name: 'Show as' });
+
 const homePageRowLink = (page: Page) =>
   page.getByRole('link', { name: 'See the visits that opened /', exact: true });
 
@@ -253,6 +255,11 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     target: homePageRowLink,
   },
   {
+    control: 'the chart / table switch',
+    screen: 'overview',
+    target: (page) => chartViews(page).getByRole('button', { name: 'Table', exact: true }),
+  },
+  {
     control: 'a route in the requests table',
     screen: 'requests',
     target: (page) =>
@@ -275,6 +282,23 @@ for (const colorScheme of ['light', 'dark'] as const) {
       expect(contrastRatio(paint.underline ?? paint.fill, paint.fill)).toBeGreaterThanOrEqual(
         MIN_NON_TEXT_CONTRAST,
       );
+    });
+  });
+}
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`chart / table switch, ${colorScheme} theme`, () => {
+    test.use({ colorScheme });
+
+    test('the chosen view stands out from the switch at 3:1 or more', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/overview`);
+      const table = chartViews(page).getByRole('button', { name: 'Table', exact: true });
+
+      await table.click();
+
+      await expect(table).toHaveAttribute('aria-pressed', 'true');
+      const paint = await readPaint(table);
+      expect(contrastRatio(paint.fill, paint.behind)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
     });
   });
 }

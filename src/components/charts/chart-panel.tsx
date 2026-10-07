@@ -2,7 +2,12 @@
 
 import { type ReactNode, useId, useState } from 'react';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  SEGMENTED_GROUP,
+  SEGMENTED_IDLE,
+  SEGMENTED_OPTION,
+  SEGMENTED_SELECTED,
+} from '@/components/ui/control-classes';
 
 export interface ChartPanelProps {
   readonly title: string;
@@ -12,8 +17,17 @@ export interface ChartPanelProps {
   readonly table: ReactNode;
 }
 
+type ChartView = 'chart' | 'table';
+
+const VIEWS: readonly { readonly view: ChartView; readonly label: string }[] = [
+  { view: 'chart', label: 'Chart' },
+  { view: 'table', label: 'Table' },
+];
+
+const VIEW_OPTION = `min-h-11 px-3 sm:min-h-8.5 ${SEGMENTED_OPTION}`;
+
 export function ChartPanel({ title, description, legend, chart, table }: ChartPanelProps) {
-  const [asTable, setAsTable] = useState(false);
+  const [shown, setShown] = useState<ChartView>('chart');
   const headingId = useId();
   return (
     <section aria-labelledby={headingId} className={`${PANEL} gap-4`}>
@@ -26,19 +40,24 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {legend}
-          <button
-            type="button"
-            aria-pressed={asTable}
-            onClick={() => {
-              setAsTable((shown) => !shown);
-            }}
-            className={`min-h-11 rounded-control border border-line bg-card px-3 text-[13px] text-ink hover:bg-soft ${FOCUS_RING} aria-pressed:bg-soft sm:min-h-9`}
-          >
-            View as table
-          </button>
+          <div role="group" aria-label="Show as" className={SEGMENTED_GROUP}>
+            {VIEWS.map(({ view, label }) => (
+              <button
+                key={view}
+                type="button"
+                aria-pressed={shown === view}
+                onClick={() => {
+                  setShown(view);
+                }}
+                className={`${VIEW_OPTION} ${shown === view ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-      {asTable ? table : chart}
+      {shown === 'table' ? table : chart}
     </section>
   );
 }
