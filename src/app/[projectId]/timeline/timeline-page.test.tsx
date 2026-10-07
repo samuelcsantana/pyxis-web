@@ -16,6 +16,7 @@ const state = vi.hoisted<{ admin: unknown; timeline: ITimelineService['timeline'
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+  headers: () => Promise.resolve(new Headers()),
 }));
 
 vi.mock('next/navigation', () => ({

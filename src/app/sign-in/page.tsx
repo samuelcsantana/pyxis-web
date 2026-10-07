@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LogoMark } from '@/components/brand/logo-mark';
+import { returnPathOf } from '@/components/shell/screens';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { isDemoMode } from '@/lib/api-config';
@@ -15,7 +16,7 @@ export interface SignInPageProps {
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const { expired } = await searchParams;
+  const { expired, next } = await searchParams;
   return (
     <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
       <div className="flex w-full max-w-6xl justify-end">
@@ -29,6 +30,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         <SignInForm
           sessionExpired={expired === '1'}
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
+          returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
         />
         <p className="flex items-center gap-2 text-center text-[13px] text-muted">
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">

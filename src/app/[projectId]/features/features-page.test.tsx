@@ -13,6 +13,7 @@ const state = vi.hoisted<{ admin: unknown; features: IFeaturesService['features'
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+  headers: () => Promise.resolve(new Headers()),
 }));
 
 vi.mock('next/navigation', () => ({

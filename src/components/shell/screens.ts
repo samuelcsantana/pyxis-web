@@ -77,6 +77,26 @@ export function linkWith(href: string, parameters: Readonly<Record<string, strin
   return `${url.pathname}${url.search}`;
 }
 
+const SCREEN_PATH_SEGMENTS = 3;
+
+function isScreenSlug(value: string | undefined): boolean {
+  return SCREENS.some((screen) => screen.slug === value);
+}
+
+export function returnPathOf(value: string | null | undefined): string | undefined {
+  if (value === null || value === undefined || !value.startsWith('/') || value.startsWith('//')) {
+    return undefined;
+  }
+  const url = new URL(value, LINK_BASE);
+  const segments = url.pathname.split('/');
+  const isScreen =
+    url.origin === LINK_BASE &&
+    segments.length === SCREEN_PATH_SEGMENTS &&
+    segments[1] !== '' &&
+    isScreenSlug(segments[2]);
+  return isScreen ? `${url.pathname}${url.search}` : undefined;
+}
+
 export function screenOf(pathname: string): string | undefined {
   return pathname.split('/')[2];
 }
