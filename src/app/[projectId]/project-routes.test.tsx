@@ -191,6 +191,36 @@ describe('OverviewPage', () => {
     expect(screen.queryByRole('heading', { name: 'Visits' })).not.toBeInTheDocument();
   });
 
+  it('calls an empty period quiet once the project has received events', async () => {
+    const empty = await new MockOverviewService().overview('p-store', {
+      from: '2026-10-05',
+      to: '2026-10-05',
+    });
+    state.overview = (): Promise<OverviewReport> =>
+      Promise.resolve({
+        ...empty,
+        days: empty.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
+      });
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({
+        ...project,
+        firstEventAt: '2026-03-02T12:00:00.000Z',
+        lastEventAt: '2026-09-20T01:30:00.000Z',
+      })),
+    };
+
+    render(await renderOverview({ range: 'today' }));
+
+    expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
+    expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the last 30 days' })).toHaveAttribute(
+      'href',
+      '/p-store/overview?range=30d',
+    );
+    expect(screen.queryByText(/npm install/)).not.toBeInTheDocument();
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.overview = () => Promise.reject(new UnauthenticatedError());
 

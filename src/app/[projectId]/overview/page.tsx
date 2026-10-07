@@ -6,7 +6,8 @@ import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
-import { NoActivityYet } from '@/components/states/no-activity-yet';
+import { EmptyPeriod } from '@/components/states/empty-period';
+import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
 import {
   daysBetween,
@@ -91,7 +92,11 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
             }
           />
         ) : (
-          <NoActivityYet endpoint={apiBaseUrl()} />
+          <EmptyPeriod
+            view={emptyPeriodView(project, period)}
+            widerPeriodHref={screenHref(project.id, 'overview', WIDER_PERIOD_QUERY)}
+            endpoint={apiBaseUrl()}
+          />
         )}
       </main>
     </>

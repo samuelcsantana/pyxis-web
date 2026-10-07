@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { DemoBanner } from './demo-banner';
+import { EmptyPeriod } from './empty-period';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
@@ -101,5 +102,57 @@ describe('NoActivityYet', () => {
     expect(screen.getByText(/npm install pyxis-analytics/).textContent).toBe(
       installSnippet(PLACEHOLDER_ENDPOINT),
     );
+  });
+});
+
+describe('EmptyPeriod', () => {
+  it('shows how to install the SDK on the first run', () => {
+    render(
+      <EmptyPeriod
+        view={{ kind: 'first-run' }}
+        widerPeriodHref="/p1/overview?range=30d"
+        endpoint={undefined}
+      />,
+    );
+
+    expect(screen.getByText(/npm install pyxis-analytics/)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'See the last 30 days' })).not.toBeInTheDocument();
+  });
+
+  it('calls a quiet period quiet, says when the latest event arrived and offers 30 days', () => {
+    render(
+      <EmptyPeriod
+        view={{ kind: 'quiet', latestEvent: 'Sep 19, 2026, 22:30', offersWiderPeriod: true }}
+        widerPeriodHref="/p1/overview?range=30d"
+        endpoint={undefined}
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Nothing in this period' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'No event arrived in this period. The latest one arrived on Sep 19, 2026, 22:30.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the last 30 days' })).toHaveAttribute(
+      'href',
+      '/p1/overview?range=30d',
+    );
+    expect(screen.queryByText(/npm install/)).not.toBeInTheDocument();
+  });
+
+  it('offers no wider period from the last 30 days, and no time it does not know', () => {
+    render(
+      <EmptyPeriod
+        view={{ kind: 'quiet', latestEvent: null, offersWiderPeriod: false }}
+        widerPeriodHref="/p1/overview?range=30d"
+        endpoint={undefined}
+      />,
+    );
+
+    expect(screen.getByText('No event arrived in this period.')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'See the last 30 days' })).not.toBeInTheDocument();
   });
 });
