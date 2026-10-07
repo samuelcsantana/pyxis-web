@@ -111,6 +111,39 @@ describe.each(Object.entries(THEMES))('focus rings in the %s theme', (_, tokens)
   });
 });
 
+describe.each(Object.entries(THEMES))('button states in the %s theme', (_, tokens) => {
+  const pair = (one: string, other: string) =>
+    contrastRatio(color(tokens, one), color(tokens, other));
+
+  it.each([
+    ['accent-hover', 'accent'],
+    ['accent-pressed', 'accent'],
+    ['ink-hover', 'ink'],
+    ['ink-pressed', 'ink'],
+  ])('change %s against %s enough to be seen', (state, rest) => {
+    expect(pair(state, rest)).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+  });
+
+  it.each([
+    ['accent-ink', 'accent-hover'],
+    ['accent-ink', 'accent-pressed'],
+    ['card', 'ink-hover'],
+    ['card', 'ink-pressed'],
+    ['ink', 'soft'],
+    ['ink', 'line'],
+    ['muted', 'soft'],
+  ])('keep %s text readable on %s', (text, surface) => {
+    expect(pair(text, surface)).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
+  });
+
+  it.each(['card', 'soft', 'line'])(
+    'draw a hovered border in muted at 3:1 against %s',
+    (surface) => {
+      expect(pair('muted', surface)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+    },
+  );
+});
+
 describe('sidebar item states, the same in both themes', () => {
   const nav = (name: string) => color(LIGHT, name);
 
