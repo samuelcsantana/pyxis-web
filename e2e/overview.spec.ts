@@ -78,7 +78,9 @@ test('shows the chart as a table that adds up to the legend totals', async ({ pa
   expect(await sidewaysOverflow(page)).toBe(0);
 });
 
-test('draws one point per day of the chosen period', async ({ page }) => {
+test('draws one point per day, and the figures of a single day without a chart', async ({
+  page,
+}) => {
   await page.goto(`/${STORE_ID}/overview?range=30d`);
   await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 30 days\./);
 
@@ -88,8 +90,11 @@ test('draws one point per day of the chosen period', async ({ page }) => {
     .click();
 
   await expect(page).toHaveURL(/range=today$/);
-  await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 1 day\./);
+  const figures = page.getByRole('region', { name: 'Activity of the day' });
+  await expect(figures).toContainText('Page views and named events, today');
+  await expect(dailyChart(page)).toHaveCount(0);
   await expect(page.getByText(/^vs\. yesterday until \d{2}:\d{2}$/)).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
 });
 
 test('opens the visits of a top page, in the same period, from the keyboard too', async ({

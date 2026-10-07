@@ -149,6 +149,15 @@ describe('OverviewPage', () => {
     );
   });
 
+  it('shows the figures of a single day instead of a chart of one point', async () => {
+    render(await renderOverview({ range: 'today' }));
+
+    expect(screen.getByRole('region', { name: 'Activity of the day' })).toHaveTextContent(
+      'Page views and named events, today',
+    );
+    expect(screen.queryByRole('region', { name: 'Events per day' })).not.toBeInTheDocument();
+  });
+
   it('links the top pages and events to their visits in the same period', async () => {
     render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 

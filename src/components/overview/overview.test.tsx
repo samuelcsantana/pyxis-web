@@ -5,6 +5,7 @@ import { overviewKpis } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DailyActivityChart } from './daily-activity-chart';
+import { DayActivityFigures } from './day-activity-figures';
 import { KpiGrid } from './kpi-grid';
 import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
@@ -57,6 +58,12 @@ describe('KpiGrid', () => {
       .getByRole('region', { name: 'Write error rate' })
       .querySelectorAll('polyline');
     expect(lines).toHaveLength(2);
+  });
+
+  it('draws no sparkline for a single day', () => {
+    const { container } = render(<KpiGrid kpis={[{ ...kpi('visits'), series: [12] }]} />);
+
+    expect(container.querySelector('svg')).not.toBeInTheDocument();
   });
 
   it('says in words, not only in colour, whether a change is good news', () => {
@@ -184,5 +191,22 @@ describe('TopEventsList', () => {
     render(<TopEventsList events={[]} visitsHref={eventVisitsHref} />);
 
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
+  });
+});
+
+describe('DayActivityFigures', () => {
+  it('shows the totals of a single day as figures instead of a chart', () => {
+    render(
+      <DayActivityFigures
+        days={[{ date: '2026-10-05', pageViews: 1234, events: 56 }]}
+        periodLabel="today"
+      />,
+    );
+
+    const panel = screen.getByRole('region', { name: 'Activity of the day' });
+    expect(panel).toHaveTextContent('Page views and named events, today');
+    expect(within(panel).getByText('1,234')).toBeInTheDocument();
+    expect(within(panel).getByText('56')).toBeInTheDocument();
+    expect(within(panel).queryByRole('img')).not.toBeInTheDocument();
   });
 });
