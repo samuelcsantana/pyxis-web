@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { contrastRatio, hexToRgb, MIN_NON_TEXT_CONTRAST, type Rgb } from '../../e2e/contrast';
+import {
+  contrastRatio,
+  flatten,
+  hexToRgb,
+  MIN_NON_TEXT_CONTRAST,
+  type Rgb,
+} from '../../e2e/contrast';
 
 const STYLESHEET = readFileSync(path.resolve(import.meta.dirname, '../app/globals.css'), 'utf8');
 const TOKEN = /--pyx-([a-z-]+):\s*(#[0-9a-f]{6});/gi;
@@ -55,6 +61,30 @@ describe('contrast ratio', () => {
 
   it('rejects a color that is not written as #rrggbb', () => {
     expect(() => hexToRgb('amber')).toThrow(RangeError);
+  });
+});
+
+describe('flattening the layers behind a ring', () => {
+  it('reads white when nothing is painted', () => {
+    expect(flatten([])).toEqual([255, 255, 255]);
+  });
+
+  it('lets an opaque layer hide everything beneath it', () => {
+    expect(
+      flatten([
+        [14, 26, 43, 255],
+        [255, 0, 0, 255],
+      ]),
+    ).toEqual([14, 26, 43]);
+  });
+
+  it('blends a translucent layer over what lies beneath it', () => {
+    expect(
+      flatten([
+        [0, 0, 0, 51],
+        [255, 255, 255, 255],
+      ]),
+    ).toEqual([204, 204, 204]);
   });
 });
 
