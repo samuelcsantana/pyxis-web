@@ -97,7 +97,9 @@ Shipping now:
   the rest as "Other values"
 - Requests: every write by route with its success and error shares, status codes and median
   duration; a keyboard-accessible details panel with the screens where the route failed and its
-  latest failures with their error code; "failing only" and screen filters kept in the URL
+  latest failures with their error code; "failing only" and screen filters kept in the URL. A
+  "Failed reads" tab lists the GET calls that failed by route, as counts only (a site may send
+  its reads only when they fail, so there is no read error rate)
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
   with the share that continued and the drop-off at each step; a keyboard-operable step editor,
   and the steps kept in the URL so a bookmark is a saved funnel
@@ -106,10 +108,11 @@ Shipping now:
   and filters for page views, events, requests and errors; older visits load on demand, and a
   failed request in the Requests screen links to its visit
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
-  count, first named events, failed requests, device, channel and account; filters for the pages
-  it viewed (up to three, `*` matching any characters), an event with an optional `key=value`
-  property, the channel, the device and identified or anonymous visitors, all kept in the URL;
-  each row opens its visit, and an identified one its person, in the Timeline
+  count, first named events, failed requests (reads and writes), device, channel and account;
+  filters for the pages it viewed (up to three, `*` matching any characters), an event with an
+  optional `key=value` property, the channel, the device and identified or anonymous visitors,
+  all kept in the URL; each row opens its visit, and an identified one its person, in the
+  Timeline
 - Loading, empty and error states shared by every screen; while a screen loads, its top bar
   already shows its title above a skeleton shaped like it; an empty period shows how to install
   the SDK; when the API cannot be reached at all, a branded error page with "Try again" instead
