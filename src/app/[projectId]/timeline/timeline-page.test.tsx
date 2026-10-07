@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { TimelineReport } from '@/domain/timeline';
+import { DEMO_DOCS } from '@/services/demo/demo-projects';
 import { DEMO_USER_ID } from '@/services/timeline/demo-timeline';
 import { MockTimelineService } from '@/services/timeline/mock-timeline-service';
 import type { ITimelineService } from '@/services/timeline/timeline-service.interface';
@@ -84,6 +85,31 @@ describe('TimelinePage', () => {
     render(await renderTimeline({}));
 
     expect(screen.queryByRole('link', { name: /demo person/ })).not.toBeInTheDocument();
+  });
+
+  it('offers no demo person in a demo project that has none', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    state.admin = {
+      ...ADMIN,
+      projects: [
+        {
+          id: DEMO_DOCS.id,
+          name: DEMO_DOCS.name,
+          timezone: DEMO_DOCS.timezone,
+          conversionEvent: null,
+        },
+      ],
+    };
+
+    render(
+      await TimelinePage({
+        params: Promise.resolve({ projectId: DEMO_DOCS.id }),
+        searchParams: Promise.resolve({}),
+      }),
+    );
+
+    expect(screen.queryByRole('link', { name: /demo person/ })).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Try /)).not.toBeInTheDocument();
   });
 
   it('tells the story of a person with filters that keep the lookup', async () => {
