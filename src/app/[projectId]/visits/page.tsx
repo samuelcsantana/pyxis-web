@@ -77,8 +77,9 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
         />
         <p className="text-xs leading-[18px] text-muted">
           A visit is one browser tab, from its first event to its last; two tabs are never linked.
-          Highlights are its first five named events, in order. A failed request is a call sent with
-          trackRequest() that answered 400 or above, or never answered.
+          Highlights are its first five named events, in order. A failed request is a read or a
+          write sent with trackRequest() that answered 400 or above, or never answered; Requests
+          lists the writes and the failed reads on separate tabs.
         </p>
       </main>
     </>
