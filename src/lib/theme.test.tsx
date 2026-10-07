@@ -1,7 +1,9 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { renderHook } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it } from 'vitest';
-import { themeFromCookies } from './theme';
+import { THEME_BACKGROUNDS, themeColorFor, themeFromCookies } from './theme';
 import { useChosenTheme } from './use-chosen-theme';
 
 describe('themeFromCookies', () => {
@@ -41,5 +43,29 @@ describe('useChosenTheme', () => {
     }
 
     expect(renderToString(<ThemeProbe />)).toBe('<p>system</p>');
+  });
+});
+
+describe('themeColorFor', () => {
+  it('colours the browser bar with the background of the chosen theme', () => {
+    expect(themeColorFor('dark')).toBe('#0a1220');
+    expect(themeColorFor('light')).toBe('#f4f6fa');
+  });
+
+  it('follows the system preference when no theme was chosen', () => {
+    expect(themeColorFor(undefined)).toEqual([
+      { media: '(prefers-color-scheme: light)', color: '#f4f6fa' },
+      { media: '(prefers-color-scheme: dark)', color: '#0a1220' },
+    ]);
+  });
+
+  it('uses the same backgrounds as the stylesheet', () => {
+    const stylesheet = readFileSync(
+      path.join(import.meta.dirname, '..', 'app', 'globals.css'),
+      'utf8',
+    );
+
+    expect(stylesheet).toContain(`--pyx-bg: ${THEME_BACKGROUNDS.light};`);
+    expect(stylesheet).toContain(`--pyx-bg: ${THEME_BACKGROUNDS.dark};`);
   });
 });
