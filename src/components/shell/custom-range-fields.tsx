@@ -1,0 +1,53 @@
+'use client';
+
+import { useState } from 'react';
+import { FIELD } from '@/components/ui/control-classes';
+
+export interface CustomRangeFieldsProps {
+  readonly from: string;
+  readonly to: string;
+  readonly today: string;
+  readonly problemId?: string;
+}
+
+const LABEL_CLASS = 'flex flex-col gap-1 text-xs font-medium text-muted';
+const DATE_INPUT_CLASS = `min-h-9 rounded-control px-2 text-base sm:text-[13px] ${FIELD}`;
+
+export function CustomRangeFields({ from, to, today, problemId }: CustomRangeFieldsProps) {
+  const [start, setStart] = useState(from);
+  const rejected = problemId !== undefined;
+  return (
+    <>
+      <label className={LABEL_CLASS}>
+        From
+        <input
+          type="date"
+          name="from"
+          required
+          max={today}
+          defaultValue={from}
+          onChange={(event) => {
+            setStart(event.currentTarget.value);
+          }}
+          aria-invalid={rejected ? true : undefined}
+          aria-describedby={problemId}
+          className={DATE_INPUT_CLASS}
+        />
+      </label>
+      <label className={LABEL_CLASS}>
+        To
+        <input
+          type="date"
+          name="to"
+          required
+          min={start === '' ? undefined : start}
+          max={today}
+          defaultValue={to}
+          aria-invalid={rejected ? true : undefined}
+          aria-describedby={problemId}
+          className={DATE_INPUT_CLASS}
+        />
+      </label>
+    </>
+  );
+}

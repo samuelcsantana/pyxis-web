@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 import {
   BUTTON_PRIMARY,
-  FIELD,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
+import { CustomRangeFields } from './custom-range-fields';
 
 export type KeptParameters = Readonly<Record<string, string>>;
 
@@ -19,6 +19,8 @@ export interface PeriodSelectorProps {
 }
 
 const NOTHING_KEPT: KeptParameters = {};
+
+export const RANGE_NOTICE_ID = 'period-range-notice';
 
 export function withKeptParameters(query: string, keep: KeptParameters): string {
   const parameters = new URLSearchParams(query);
@@ -37,7 +39,6 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
 const OPTION_CLASS = `min-h-8.5 px-3 ${SEGMENTED_OPTION}`;
-const DATE_INPUT_CLASS = `min-h-9 rounded-control px-2 text-base sm:text-[13px] ${FIELD}`;
 
 export function PeriodSelector({
   basePath,
@@ -46,6 +47,7 @@ export function PeriodSelector({
   keep = NOTHING_KEPT,
 }: PeriodSelectorProps) {
   const custom = period.preset === 'custom';
+  const shown = period.rejected ?? period;
   return (
     <div className="flex flex-wrap items-center gap-2">
       <nav aria-label="Period" className={SEGMENTED_GROUP}>
@@ -63,7 +65,10 @@ export function PeriodSelector({
           );
         })}
       </nav>
-      <details className="group relative max-sm:open:basis-full">
+      <details
+        open={period.rejected !== undefined}
+        className="group relative max-sm:open:basis-full"
+      >
         <summary
           className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SEGMENTED_SELECTED : `bg-soft ${SEGMENTED_IDLE}`}`}
         >
@@ -77,28 +82,12 @@ export function PeriodSelector({
           {Object.entries(keep).map(([name, value]) => (
             <input key={name} type="hidden" name={name} value={value} />
           ))}
-          <label className="flex flex-col gap-1 text-xs font-medium text-muted">
-            From
-            <input
-              type="date"
-              name="from"
-              required
-              max={today}
-              defaultValue={period.from}
-              className={DATE_INPUT_CLASS}
-            />
-          </label>
-          <label className="flex flex-col gap-1 text-xs font-medium text-muted">
-            To
-            <input
-              type="date"
-              name="to"
-              required
-              max={today}
-              defaultValue={period.to}
-              className={DATE_INPUT_CLASS}
-            />
-          </label>
+          <CustomRangeFields
+            from={shown.from}
+            to={shown.to}
+            today={today}
+            problemId={period.rejected === undefined ? undefined : RANGE_NOTICE_ID}
+          />
           <button
             type="submit"
             className={`min-h-9 rounded-control px-3 text-[13px] ${BUTTON_PRIMARY}`}

@@ -70,8 +70,9 @@ Shipping now:
   whose underline thickens on hover, and row links with a visible underline and a 24px target
 - Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
-  30 days or a custom range, kept in the URL), light and dark themes, sign-out, and a menu button
-  on phones
+  30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
+  reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
+  button on phones
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change against the previous period and a sparkline; page views and named events per day as a
   chart or a table (a single day shows its two totals instead of a one-point chart); the top

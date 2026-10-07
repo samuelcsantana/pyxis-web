@@ -65,6 +65,39 @@ test('keeps a custom period form closed until asked for', async ({ page }) => {
   await expect(page.getByLabel('From', { exact: true })).toBeHidden();
 });
 
+const REJECTED_RANGES = [
+  { from: '2026-10-05', to: '2026-09-20', reason: 'it ends before it starts' },
+  { from: '2025-01-01', to: '2026-10-01', reason: 'it is longer than 400 days' },
+] as const;
+
+for (const { from, to, reason } of REJECTED_RANGES) {
+  test(`says it did not use ${from} to ${to}, and keeps the dates in the form`, async ({
+    page,
+  }) => {
+    await page.goto(`/${STORE_ID}/overview?from=${from}&to=${to}`);
+
+    const notice = page.getByText(/^That range was not used/);
+    await expect(notice).toHaveText(
+      `That range was not used: ${reason}. Showing the last 30 days instead.`,
+    );
+    await expect(notice).toHaveAttribute('role', 'status');
+    await expect(
+      page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '30 days' }),
+    ).toHaveAttribute('aria-current', 'true');
+    for (const [label, value] of [
+      ['From', from],
+      ['To', to],
+    ] as const) {
+      const field = page.getByLabel(label, { exact: true });
+      await expect(field).toBeVisible();
+      await expect(field).toHaveValue(value);
+      await expect(field).toHaveAttribute('aria-invalid', 'true');
+    }
+    expect(await axeViolations(page)).toEqual([]);
+    expect(await sidewaysOverflow(page)).toBe(0);
+  });
+}
+
 test('keeps the custom period form inside the screen', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
