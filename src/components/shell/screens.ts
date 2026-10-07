@@ -25,6 +25,11 @@ export const SCREENS = [
     icon: 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7v5l3 2',
   },
   {
+    slug: 'visits',
+    label: 'Visits',
+    icon: 'M9 6h11 M9 12h11 M9 18h11 M4 5h2v2H4z M4 11h2v2H4z M4 17h2v2H4z',
+  },
+  {
     slug: 'devices',
     label: 'Devices',
     icon: 'M3 5h12v9H3z M7 18h4 M9 14v4 M17 8h4v12h-4z',
