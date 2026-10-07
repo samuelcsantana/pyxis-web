@@ -72,11 +72,11 @@ describe('visitsResponseSchema', () => {
 describe('visitFiltersOf', () => {
   it('reads every filter from the URL', () => {
     const reading = visitFiltersOf({
-      path: '/calculadora-taxa-ifood',
-      path2: ' /calculadora-taxa-* ',
+      path: '/calculator-shipping',
+      path2: ' /calculator-* ',
       path3: '/sign-up',
       event: 'calculator_result_shown',
-      property: 'calculator=99food',
+      property: 'calculator=margin',
       channel: 'paid',
       device: 'mobile',
       identity: 'anonymous',
@@ -84,9 +84,9 @@ describe('visitFiltersOf', () => {
 
     expect(reading).toEqual({
       filters: {
-        paths: ['/calculadora-taxa-ifood', '/calculadora-taxa-*', '/sign-up'],
+        paths: ['/calculator-shipping', '/calculator-*', '/sign-up'],
         event: 'calculator_result_shown',
-        property: 'calculator=99food',
+        property: 'calculator=margin',
         channel: 'paid',
         device: 'mobile',
         identity: 'anonymous',
@@ -135,8 +135,8 @@ describe('visitFiltersOf', () => {
   });
 
   it('leaves out a property without a valid event', () => {
-    const withoutEvent = visitFiltersOf({ property: 'calculator=ifood' });
-    const withBadEvent = visitFiltersOf({ event: 'Bad', property: 'calculator=ifood' });
+    const withoutEvent = visitFiltersOf({ property: 'calculator=shipping' });
+    const withBadEvent = visitFiltersOf({ event: 'Bad', property: 'calculator=shipping' });
 
     expect(withoutEvent.filters.property).toBeNull();
     expect(withoutEvent.problems).toEqual(['A property filter needs an event.']);
@@ -146,8 +146,8 @@ describe('visitFiltersOf', () => {
 
   it.each([
     ['without an equals sign', 'calculator'],
-    ['with an uppercase key', 'Calculator=ifood'],
-    ['with an empty key', '=ifood'],
+    ['with an uppercase key', 'Calculator=shipping'],
+    ['with an empty key', '=shipping'],
     ['with an empty value', 'calculator='],
     ['with a value over 100 characters', `calculator=${'x'.repeat(101)}`],
   ])('leaves out a property %s', (_case, property) => {
@@ -181,18 +181,18 @@ describe('visitFilterParameters', () => {
   it('writes the filters back as URL parameters, one per page field', () => {
     expect(
       visitFilterParameters({
-        paths: ['/calculadora-taxa-ifood', '/calculadora-taxa-99food'],
+        paths: ['/calculator-shipping', '/calculator-margin'],
         event: 'calculator_result_shown',
-        property: 'calculator=99food',
+        property: 'calculator=margin',
         channel: 'paid',
         device: 'mobile',
         identity: 'identified',
       }),
     ).toEqual({
-      path: '/calculadora-taxa-ifood',
-      path2: '/calculadora-taxa-99food',
+      path: '/calculator-shipping',
+      path2: '/calculator-margin',
       event: 'calculator_result_shown',
-      property: 'calculator=99food',
+      property: 'calculator=margin',
       channel: 'paid',
       device: 'mobile',
       identity: 'identified',

@@ -33,7 +33,7 @@ export const Filtered: Story = {
     filters: {
       paths: ['/calculator', '/sign-up'],
       event: 'calculator_result_shown',
-      property: 'calculator=ifood',
+      property: 'calculator=shipping',
       channel: 'paid',
       device: 'mobile',
       identity: 'anonymous',

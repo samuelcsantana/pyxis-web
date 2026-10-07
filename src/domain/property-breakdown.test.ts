@@ -14,8 +14,8 @@ const WIRE: PropertyBreakdownWire = {
       key: 'calculator',
       events: 1250,
       values: [
-        { value: 'ifood', count: 775, visits: 640 },
-        { value: '99food', count: 475, visits: 410 },
+        { value: 'shipping', count: 775, visits: 640 },
+        { value: 'margin', count: 475, visits: 410 },
       ],
       other_count: 0,
     },
@@ -34,7 +34,7 @@ describe('propertyBreakdownResponseSchema', () => {
 
     expect(report.name).toBe('calculator_result_shown');
     expect(report.keys[0]?.otherCount).toBe(0);
-    expect(report.keys[0]?.values[1]).toEqual({ value: '99food', count: 475, visits: 410 });
+    expect(report.keys[0]?.values[1]).toEqual({ value: 'margin', count: 475, visits: 410 });
   });
 });
 
@@ -46,8 +46,8 @@ describe('propertyKeyViews', () => {
       key: 'calculator',
       carriedBy: '1,250 events',
       rows: [
-        { value: 'ifood', count: '775', visits: '640', share: '62%', barWidth: '62.0%' },
-        { value: '99food', count: '475', visits: '410', share: '38%', barWidth: '38.0%' },
+        { value: 'shipping', count: '775', visits: '640', share: '62%', barWidth: '62.0%' },
+        { value: 'margin', count: '475', visits: '410', share: '38%', barWidth: '38.0%' },
       ],
       other: null,
     });

@@ -20,8 +20,8 @@ const KEYS = propertyKeyViews(
         key: 'calculator',
         events: 10,
         values: [
-          { value: 'ifood', count: 6, visits: 5 },
-          { value: '99food', count: 3, visits: 3 },
+          { value: 'shipping', count: 6, visits: 5 },
+          { value: 'margin', count: 3, visits: 3 },
         ],
         other_count: 1,
       },
@@ -101,8 +101,8 @@ describe('PropertyBreakdown', () => {
     const rows = within(table).getAllByRole('row');
     expect(rows.map((row) => row.textContent)).toEqual([
       'ValueShareCountVisits',
-      'ifood60%65',
-      '99food30%33',
+      'shipping60%65',
+      'margin30%33',
       'Other values10%1—',
     ]);
   });
