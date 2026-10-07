@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, FOCUS_RING } from '@/components/ui/control-classes';
 
 export type KeptParameters = Readonly<Record<string, string>>;
 
@@ -99,7 +99,7 @@ export function PeriodSelector({
           </label>
           <button
             type="submit"
-            className={`min-h-9 rounded-control bg-accent px-3 text-[13px] font-semibold text-accent-ink ${FOCUS_RING}`}
+            className={`min-h-9 rounded-control px-3 text-[13px] ${BUTTON_PRIMARY}`}
           >
             Apply
           </button>

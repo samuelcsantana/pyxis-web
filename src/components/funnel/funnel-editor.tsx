@@ -13,7 +13,12 @@ import {
 } from '@/domain/funnel';
 import type { KeptParameters } from '@/components/shell/period-selector';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import {
+  BUTTON_PRIMARY,
+  BUTTON_STRONG,
+  CONTROL_DISABLED,
+  FOCUS_RING,
+} from '@/components/ui/control-classes';
 
 interface DraftStep {
   readonly id: number;
@@ -118,7 +123,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
           onClick={() => {
             setOpen((wasOpen) => !wasOpen);
           }}
-          className={`min-h-10 rounded-input bg-accent px-4 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
+          className={`min-h-10 rounded-input px-4 text-sm ${BUTTON_PRIMARY}`}
         >
           {open ? 'Close the editor' : 'Edit steps'}
         </button>
@@ -241,7 +246,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
               type="submit"
               disabled={!valid}
               aria-describedby="funnel-editor-status"
-              className={`min-h-10 rounded-input bg-ink px-4 text-sm font-semibold text-card ${FOCUS_RING} disabled:cursor-not-allowed disabled:opacity-50`}
+              className={`min-h-10 rounded-input px-4 text-sm ${BUTTON_STRONG} ${CONTROL_DISABLED}`}
             >
               Apply
             </button>

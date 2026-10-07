@@ -7,7 +7,7 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, CONTROL_BUSY, FOCUS_RING } from '@/components/ui/control-classes';
 
 export const SMOOTH_LOADING_MS = 400;
 export const CODE_SENT_NOTICE_MS = 4_000;
@@ -37,7 +37,7 @@ export function signInErrorMessage(error: unknown): string {
 }
 
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input border bg-card px-3.5 text-[15px] text-ink placeholder:text-muted ${FOCUS_RING}`;
-const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input bg-accent px-4 text-[15px] font-semibold text-accent-ink ${FOCUS_RING} disabled:cursor-wait disabled:opacity-80`;
+const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-[15px] ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm text-sky-ink underline underline-offset-2 hover:text-ink ${FOCUS_RING}`;
 
 interface DemoHintProps {

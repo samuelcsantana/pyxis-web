@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { Lookup } from '@/domain/timeline';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { BUTTON_PRIMARY, FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface TimelineSearchProps {
   readonly action: string;
@@ -54,10 +54,7 @@ export function TimelineSearch({ action, lookup, hint, keep = NOTHING_KEPT }: Ti
           className={`${FIELD} font-mono`}
         />
       </label>
-      <button
-        type="submit"
-        className={`min-h-11 rounded-input bg-accent px-4.5 text-sm font-semibold text-accent-ink ${FOCUS_RING}`}
-      >
+      <button type="submit" className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}>
         Show timeline
       </button>
       {hint === null ? null : (
