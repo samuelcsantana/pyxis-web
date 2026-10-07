@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FAILED_READS, type RequestKind } from '@/domain/requests';
 import {
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/control-classes';
 
 export interface RequestFiltersProps {
+  readonly kind: RequestKind;
   readonly allHref: string;
   readonly failingHref: string;
   readonly failingOnly: boolean;
@@ -18,6 +20,7 @@ export interface RequestFiltersProps {
 const OPTION_CLASS = `min-h-9 px-3.5 ${SEGMENTED_OPTION}`;
 
 export function RequestFilters({
+  kind,
   allHref,
   failingHref,
   failingOnly,
@@ -26,22 +29,24 @@ export function RequestFilters({
 }: RequestFiltersProps) {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <nav aria-label="Show" className={SEGMENTED_GROUP}>
-        <Link
-          href={allHref}
-          aria-current={failingOnly ? undefined : 'page'}
-          className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_IDLE : SEGMENTED_SELECTED}`}
-        >
-          All routes
-        </Link>
-        <Link
-          href={failingHref}
-          aria-current={failingOnly ? 'page' : undefined}
-          className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
-        >
-          Failing only
-        </Link>
-      </nav>
+      {kind === FAILED_READS ? null : (
+        <nav aria-label="Show" className={SEGMENTED_GROUP}>
+          <Link
+            href={allHref}
+            aria-current={failingOnly ? undefined : 'page'}
+            className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_IDLE : SEGMENTED_SELECTED}`}
+          >
+            All routes
+          </Link>
+          <Link
+            href={failingHref}
+            aria-current={failingOnly ? 'page' : undefined}
+            className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+          >
+            Failing only
+          </Link>
+        </nav>
+      )}
       {screen === null ? null : (
         <p className="flex items-center gap-2 rounded-pill border border-line bg-card py-1 pr-1 pl-3 text-[13px]">
           <span>

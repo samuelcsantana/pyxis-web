@@ -6,6 +6,7 @@ const meta = {
   component: RequestFilters,
   tags: ['autodocs'],
   args: {
+    kind: 'writes',
     allHref: '/demo/requests?range=7d',
     failingHref: '/demo/requests?range=7d&show=failing',
     failingOnly: false,
@@ -28,6 +29,8 @@ type Story = StoryObj<typeof meta>;
 export const AllRoutes: Story = {};
 
 export const FailingFromAScreen: Story = { args: { failingOnly: true, screen: '/orders/new' } };
+
+export const FailedReadsFromAScreen: Story = { args: { kind: 'reads', screen: '/products' } };
 
 export const OnAPhone: Story = {
   args: { screen: '/orders/new' },

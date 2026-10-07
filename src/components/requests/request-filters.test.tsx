@@ -6,6 +6,7 @@ describe('RequestFilters', () => {
   it('marks every route as shown and offers the failing ones', () => {
     render(
       <RequestFilters
+        kind="writes"
         allHref="/p1/requests?range=7d"
         failingHref="/p1/requests?range=7d&show=failing"
         failingOnly={false}
@@ -28,6 +29,7 @@ describe('RequestFilters', () => {
   it('shows the failing filter and the screen filter with a way to clear it', () => {
     render(
       <RequestFilters
+        kind="writes"
         allHref="/p1/requests?range=7d&screen=%2Forders"
         failingHref="/p1/requests?range=7d&show=failing&screen=%2Forders"
         failingOnly
@@ -45,6 +47,25 @@ describe('RequestFilters', () => {
     expect(screen.getByRole('link', { name: 'Clear the screen filter' })).toHaveAttribute(
       'href',
       '/p1/requests?range=7d&show=failing',
+    );
+  });
+
+  it('offers no "failing only" switch for failed reads, which all failed', () => {
+    render(
+      <RequestFilters
+        kind="reads"
+        allHref="/p1/requests?range=7d&kind=reads"
+        failingHref="/p1/requests?range=7d&kind=reads&show=failing"
+        failingOnly={false}
+        screen="/products"
+        clearScreenHref="/p1/requests?range=7d&kind=reads"
+      />,
+    );
+
+    expect(screen.queryByRole('navigation', { name: 'Show' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Clear the screen filter' })).toHaveAttribute(
+      'href',
+      '/p1/requests?range=7d&kind=reads',
     );
   });
 });

@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { routeRows } from '@/domain/requests';
-import { demoRequestsReport } from '@/services/requests/demo-requests';
+import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
 import { methodClass } from './status-styles';
 
@@ -18,11 +18,13 @@ const ROWS = routeRows(
     new Date('2026-10-06T02:30:00.000Z'),
   ).routes,
   'UTC',
+  'writes',
 );
 
 function renderTable() {
   return render(
     <RequestsTable
+      kind="writes"
       rows={ROWS}
       basePath="/p1/requests"
       query="range=7d"
@@ -164,6 +166,7 @@ describe('RequestsTable', () => {
 
     rerender(
       <RequestsTable
+        kind="writes"
         rows={ROWS.filter((row) => row.key !== 'POST /orders')}
         basePath="/p1/requests"
         query="range=7d"
@@ -188,6 +191,7 @@ describe('RequestsTable', () => {
   it('shows the empty message without routes', () => {
     render(
       <RequestsTable
+        kind="writes"
         rows={[]}
         basePath="/p1/requests"
         query=""
@@ -197,6 +201,39 @@ describe('RequestsTable', () => {
     );
 
     expect(screen.getByText('No writes.')).toBeInTheDocument();
+  });
+
+  it('lists failed reads by count only, without a success share', async () => {
+    const report = demoFailedReadsReport('demo', { from: '2026-09-22', to: '2026-10-05' }, null);
+    const orders = report.routes.find((route) => route.route === '/orders/:id');
+    render(
+      <RequestsTable
+        kind="reads"
+        rows={routeRows(report.routes, 'UTC', 'reads')}
+        basePath="/p1/requests"
+        query="range=7d&kind=reads"
+        timelinePath="/p1/timeline"
+        emptyMessage="Nothing"
+      />,
+    );
+    const table = screen.getByRole('table', { name: 'Routes' });
+
+    expect(within(table).getByRole('columnheader', { name: 'Failed' })).toBeInTheDocument();
+    expect(within(table).queryByRole('columnheader', { name: 'Total' })).not.toBeInTheDocument();
+    expect(
+      within(table).queryByRole('columnheader', { name: 'Success · errors' }),
+    ).not.toBeInTheDocument();
+    expect(table).not.toHaveTextContent('% ok');
+
+    await userEvent.click(screen.getByRole('button', { name: 'GET /orders/:id, show details' }));
+
+    expect(
+      within(dialog()).getByText(`${String(orders?.failed)} failed reads · median 310 ms`),
+    ).toBeInTheDocument();
+    expect(within(dialog()).getByRole('link', { name: /\/orders\/:id/ })).toHaveAttribute(
+      'href',
+      '/p1/requests?range=7d&kind=reads&screen=%2Forders%2F%3Aid',
+    );
   });
 });
 

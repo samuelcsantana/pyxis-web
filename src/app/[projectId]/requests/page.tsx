@@ -2,7 +2,10 @@ import { RequestFilters } from '@/components/requests/request-filters';
 import { RequestsTable } from '@/components/requests/requests-table';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
+import { EmptyState } from '@/components/states/empty-state';
+import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
+import { ApiRequestError } from '@/domain/errors';
 import {
   type Period,
   type PeriodSearch,
@@ -11,19 +14,22 @@ import {
   todayIn,
 } from '@/domain/period';
 import {
-  errorRateFigure,
+  FAILED_READS,
   FAILING_ONLY,
   failingOnlyOf,
+  type RequestKind,
+  type RequestsReport,
   type RequestsSearch,
+  requestFigures,
+  requestKindOf,
   routeRows,
   screenFilterOf,
-  slowestRouteFigure,
   visibleRoutes,
-  writesFigure,
 } from '@/domain/requests';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
+import type { DateRange } from '@/services/date-range';
 import { createRequestsService } from '@/services/requests/requests-service.factory';
 
 export const generateMetadata = screenMetadata('Requests');
@@ -34,12 +40,29 @@ export interface RequestsPageProps {
 }
 
 interface RequestFilter {
+  readonly kind: RequestKind;
   readonly failingOnly: boolean;
   readonly screen: string | null;
 }
 
+const STATUS_BAD_REQUEST = 400;
+
+const KIND_TABS: readonly { readonly kind: RequestKind; readonly label: string }[] = [
+  { kind: 'writes', label: 'Writes' },
+  { kind: FAILED_READS, label: 'Failed reads' },
+];
+
+const SOURCE_NOTE = "Only the route template is kept, never the URL's values or the body.";
+const COUNTED_TOGETHER = 'Visits and the Timeline count failed reads and writes together.';
+
+const NOTES: Readonly<Record<RequestKind, string>> = {
+  writes: `A write is a POST, PUT, PATCH or DELETE sent with trackRequest(). A failure is a status of 400 or above, or no response at all. Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
+  reads: `A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
+};
+
 function filterParameters(filter: RequestFilter): Readonly<Record<string, string>> {
   return {
+    ...(filter.kind === FAILED_READS ? { kind: FAILED_READS } : {}),
     ...(filter.failingOnly ? { show: FAILING_ONLY } : {}),
     ...(filter.screen === null ? {} : { screen: filter.screen }),
   };
@@ -53,7 +76,18 @@ function filterQuery(period: Period, filter: RequestFilter): string {
   return query.toString();
 }
 
+function subtitle(kind: RequestKind, projectName: string): string {
+  return kind === FAILED_READS
+    ? `The reads ${projectName} made that failed`
+    : `Every write ${projectName} made, and how it ended`;
+}
+
 function emptyMessage(filter: RequestFilter): string {
+  if (filter.kind === FAILED_READS) {
+    return filter.screen === null
+      ? 'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.'
+      : `No failed reads from ${filter.screen} in this period.`;
+  }
   if (filter.screen !== null) {
     return `No writes from ${filter.screen} in this period.`;
   }
@@ -62,32 +96,46 @@ function emptyMessage(filter: RequestFilter): string {
     : 'No writes in this period. Calls sent with trackRequest() show up here.';
 }
 
+async function readReport(
+  projectId: string,
+  range: DateRange,
+  filter: RequestFilter,
+): Promise<RequestsReport | null> {
+  const service = createRequestsService();
+  if (filter.kind !== FAILED_READS) {
+    return service.requests(projectId, range, filter.screen);
+  }
+  try {
+    return await service.failedReads(projectId, range, filter.screen);
+  } catch (error) {
+    if (error instanceof ApiRequestError && error.status === STATUS_BAD_REQUEST) {
+      return null;
+    }
+    throw error;
+  }
+}
+
 export default async function RequestsPage({ params, searchParams }: RequestsPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
+  const kind = requestKindOf(search);
   const filter: RequestFilter = {
-    failingOnly: failingOnlyOf(search),
+    kind,
+    failingOnly: kind !== FAILED_READS && failingOnlyOf(search),
     screen: screenFilterOf(search),
   };
   const report = await readOrSignIn(() =>
-    createRequestsService().requests(
-      project.id,
-      { from: period.from, to: period.to },
-      filter.screen,
-    ),
+    readReport(project.id, { from: period.from, to: period.to }, filter),
   );
   const basePath = screenHref(project.id, 'requests');
   const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
-  const writes = writesFigure(report.routes);
-  const errors = errorRateFigure(report.routes);
-  const slowest = slowestRouteFigure(report.routes);
   return (
     <>
       <Topbar
         title="Requests"
-        subtitle={`Every write ${project.name} made, and how it ended`}
+        subtitle={subtitle(kind, project.name)}
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
@@ -95,36 +143,59 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
         keep={filterParameters(filter)}
       />
       <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
-        <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
-          <StatCard id="writes" label="Writes" value={writes.value} note={writes.note} />
-          <StatCard id="error-rate" label="Error rate" value={errors.value} note={errors.note} />
-          <StatCard
-            id="slowest-route"
-            label="Slowest route"
-            value={slowest.value}
-            note={slowest.note}
-          />
-        </div>
-        <RequestFilters
-          allHref={hrefFor({ ...filter, failingOnly: false })}
-          failingHref={hrefFor({ ...filter, failingOnly: true })}
-          failingOnly={filter.failingOnly}
-          screen={filter.screen}
-          clearScreenHref={hrefFor({ ...filter, screen: null })}
+        <LinkTabs
+          label="Request kind"
+          current={kind}
+          tabs={KIND_TABS.map((tab) => ({
+            key: tab.kind,
+            label: tab.label,
+            href: hrefFor({ kind: tab.kind, failingOnly: false, screen: filter.screen }),
+          }))}
         />
-        <RequestsTable
-          key={`${String(filter.failingOnly)}|${filter.screen ?? ''}`}
-          rows={routeRows(visibleRoutes(report.routes, filter.failingOnly), project.timezone)}
-          basePath={basePath}
-          query={filterQuery(period, { ...filter, screen: null })}
-          timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
-          emptyMessage={emptyMessage(filter)}
-        />
-        <p className="text-xs leading-[18px] text-muted">
-          A write is a POST, PUT, PATCH or DELETE sent with trackRequest(). A failure is a status of
-          400 or above, or no response at all. Only the route template is kept, never the URL&apos;s
-          values or the body.
-        </p>
+        {report === null ? (
+          <EmptyState title="Failed reads need a newer Pyxis API">
+            <p>
+              This API reports writes only. Update pyxis-api to list the GET calls that failed; the
+              writes are on the Writes tab.
+            </p>
+          </EmptyState>
+        ) : (
+          <>
+            <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
+              {requestFigures(kind, report.routes).map((figure) => (
+                <StatCard
+                  key={figure.id}
+                  id={figure.id}
+                  label={figure.label}
+                  value={figure.value}
+                  note={figure.note}
+                />
+              ))}
+            </div>
+            <RequestFilters
+              kind={kind}
+              allHref={hrefFor({ ...filter, failingOnly: false })}
+              failingHref={hrefFor({ ...filter, failingOnly: true })}
+              failingOnly={filter.failingOnly}
+              screen={filter.screen}
+              clearScreenHref={hrefFor({ ...filter, screen: null })}
+            />
+            <RequestsTable
+              key={`${kind}|${String(filter.failingOnly)}|${filter.screen ?? ''}`}
+              kind={kind}
+              rows={routeRows(
+                visibleRoutes(report.routes, filter.failingOnly),
+                project.timezone,
+                kind,
+              )}
+              basePath={basePath}
+              query={filterQuery(period, { ...filter, screen: null })}
+              timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
+              emptyMessage={emptyMessage(filter)}
+            />
+            <p className="text-xs leading-[18px] text-muted">{NOTES[kind]}</p>
+          </>
+        )}
       </main>
     </>
   );

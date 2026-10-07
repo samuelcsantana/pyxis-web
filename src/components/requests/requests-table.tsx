@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
-import type { RouteRow } from '@/domain/requests';
+import { FAILED_READS, type RequestKind, type RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
 import {
@@ -18,6 +18,7 @@ import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
 import { MethodChip, TONE_CLASSES } from './status-styles';
 
 export interface RequestsTableProps {
+  readonly kind: RequestKind;
   readonly rows: readonly RouteRow[];
   readonly basePath: string;
   readonly query: string;
@@ -39,6 +40,7 @@ function showRouteInAddress(route: string | null) {
 }
 
 export function RequestsTable({
+  kind,
   rows,
   basePath,
   query,
@@ -108,6 +110,7 @@ export function RequestsTable({
   };
 
   const screenHref = (path: string) => `${basePath}?${withKeptParameters(query, { screen: path })}`;
+  const failuresOnly = kind === FAILED_READS;
 
   return (
     <section aria-labelledby="routes-heading" className={PANEL}>
@@ -127,11 +130,13 @@ export function RequestsTable({
                 Route
               </th>
               <th scope="col" className={`${HEADER_CELL} text-right`}>
-                Total
+                {failuresOnly ? 'Failed' : 'Total'}
               </th>
-              <th scope="col" className={`${HEADER_CELL} text-left sm:w-48`}>
-                Success · errors
-              </th>
+              {failuresOnly ? null : (
+                <th scope="col" className={`${HEADER_CELL} text-left sm:w-48`}>
+                  Success · errors
+                </th>
+              )}
               <th scope="col" className={`${HEADER_CELL} hidden text-left lg:table-cell`}>
                 Status codes
               </th>
@@ -160,23 +165,25 @@ export function RequestsTable({
                   </button>
                 </th>
                 <td className={`${BODY_CELL} text-right font-semibold`}>{row.total}</td>
-                <td className={BODY_CELL}>
-                  <span className="flex flex-col gap-1.5">
-                    <span
-                      aria-hidden="true"
-                      className="flex h-2 overflow-hidden rounded-pill bg-bad"
-                    >
-                      <span className="block bg-ok" style={{ width: row.successWidth }} />
-                    </span>
-                    <span className="text-xs">
-                      <span className="font-semibold text-ok">{row.successShare} ok</span>
-                      <span className="text-muted"> · </span>
-                      <span className={row.hasFailures ? 'font-semibold text-bad' : 'text-muted'}>
-                        {row.errorShare} errors
+                {failuresOnly ? null : (
+                  <td className={BODY_CELL}>
+                    <span className="flex flex-col gap-1.5">
+                      <span
+                        aria-hidden="true"
+                        className="flex h-2 overflow-hidden rounded-pill bg-bad"
+                      >
+                        <span className="block bg-ok" style={{ width: row.successWidth }} />
+                      </span>
+                      <span className="text-xs">
+                        <span className="font-semibold text-ok">{row.successShare} ok</span>
+                        <span className="text-muted"> · </span>
+                        <span className={row.hasFailures ? 'font-semibold text-bad' : 'text-muted'}>
+                          {row.errorShare} errors
+                        </span>
                       </span>
                     </span>
-                  </span>
-                </td>
+                  </td>
+                )}
                 <td className={`${BODY_CELL} hidden lg:table-cell`}>
                   <span className="flex flex-wrap gap-1.5">
                     {row.statuses.map((status) => (
