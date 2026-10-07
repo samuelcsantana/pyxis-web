@@ -5,12 +5,16 @@ import { TopEventsList } from './top-events-list';
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_REPORT = demoOverviewReport('demo', STORY_PERIOD);
 
+function visitsHref(event: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '30d', event }).toString()}`;
+}
+
 const meta = {
   title: 'Overview/Top events',
   component: TopEventsList,
   tags: ['autodocs'],
-  args: { events: STORY_REPORT.topEvents },
-  parameters: { layout: 'padded' },
+  args: { events: STORY_REPORT.topEvents, visitsHref },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,36rem)]">

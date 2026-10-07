@@ -11,6 +11,14 @@ import { TopPagesTable } from './top-pages-table';
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
 const REPORT = overviewResponseSchema.parse(demoOverviewWire('demo', WEEK));
 
+function visitsHref(path: string): string {
+  return `/p-store/visits?${new URLSearchParams({ range: '7d', path }).toString()}`;
+}
+
+function eventVisitsHref(event: string): string {
+  return `/p-store/visits?${new URLSearchParams({ range: '7d', event }).toString()}`;
+}
+
 describe('KpiGrid', () => {
   it('shows each figure with its change, note and sparkline', () => {
     const { container } = render(<KpiGrid kpis={overviewKpis(REPORT, 7)} />);
@@ -90,6 +98,7 @@ describe('TopPagesTable', () => {
           { path: '/pricing', views: 100, visits: 90 },
         ]}
         totalPageViews={1000}
+        visitsHref={visitsHref}
       />,
     );
 
@@ -98,8 +107,22 @@ describe('TopPagesTable', () => {
     expect(rows[2]).toHaveTextContent('/pricing1009010%');
   });
 
+  it('links each page to the visits that opened it', () => {
+    render(
+      <TopPagesTable
+        pages={[{ path: '/calculadora-taxa-ifood', views: 300, visits: 200 }]}
+        totalPageViews={1000}
+        visitsHref={visitsHref}
+      />,
+    );
+
+    expect(
+      screen.getByRole('link', { name: 'See the visits that opened /calculadora-taxa-ifood' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=7d&path=%2Fcalculadora-taxa-ifood');
+  });
+
   it('says so when no page was viewed', () => {
-    render(<TopPagesTable pages={[]} totalPageViews={0} />);
+    render(<TopPagesTable pages={[]} totalPageViews={0} visitsHref={visitsHref} />);
 
     expect(screen.getByText('No page views in this period.')).toBeInTheDocument();
   });
@@ -107,16 +130,24 @@ describe('TopPagesTable', () => {
 
 describe('TopEventsList', () => {
   it('lists the events by label and name with their count', () => {
-    render(<TopEventsList events={[{ name: 'cta_clicked', count: 1200, visits: 900 }]} />);
+    render(
+      <TopEventsList
+        events={[{ name: 'cta_clicked', count: 1200, visits: 900 }]}
+        visitsHref={eventVisitsHref}
+      />,
+    );
 
     const item = screen.getByRole('listitem');
     expect(item).toHaveTextContent('Cta clicked');
     expect(item).toHaveTextContent('cta_clicked');
     expect(item).toHaveTextContent('1,200');
+    expect(
+      screen.getByRole('link', { name: 'See the visits that had Cta clicked' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=7d&event=cta_clicked');
   });
 
   it('says so when no event was tracked', () => {
-    render(<TopEventsList events={[]} />);
+    render(<TopEventsList events={[]} visitsHref={eventVisitsHref} />);
 
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
   });

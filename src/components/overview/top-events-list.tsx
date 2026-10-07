@@ -1,12 +1,14 @@
+import Link from 'next/link';
 import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
-import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE, ROW_LINK } from '@/components/ui/panel-classes';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];
+  readonly visitsHref: (name: string) => string;
 }
 
-export function TopEventsList({ events }: TopEventsListProps) {
+export function TopEventsList({ events, visitsHref }: TopEventsListProps) {
   const mostCounted = Math.max(0, ...events.map((event) => event.count));
   return (
     <section aria-labelledby="top-events-heading" className={PANEL}>
@@ -24,7 +26,13 @@ export function TopEventsList({ events }: TopEventsListProps) {
             <li key={event.name} className="flex flex-col gap-1.5 border-b border-line py-2.5">
               <span className="flex items-baseline justify-between gap-2 text-[13px]">
                 <span className="flex min-w-0 flex-col">
-                  <span>{eventLabel(event.name)}</span>
+                  <Link
+                    href={visitsHref(event.name)}
+                    aria-label={`See the visits that had ${eventLabel(event.name)}`}
+                    className={`w-fit ${ROW_LINK}`}
+                  >
+                    {eventLabel(event.name)}
+                  </Link>
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>
                 <span className="font-semibold tabular-nums">{formatCount(event.count)}</span>

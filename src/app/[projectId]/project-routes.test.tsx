@@ -149,6 +149,20 @@ describe('OverviewPage', () => {
     );
   });
 
+  it('links the top pages and events to their visits in the same period', async () => {
+    render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+
+    expect(
+      screen.getByRole('link', { name: 'See the visits that opened /calculator' }),
+    ).toHaveAttribute('href', '/p-store/visits?from=2026-09-01&to=2026-09-30&path=%2Fcalculator');
+    expect(
+      screen.getByRole('link', { name: 'See the visits that had Calculator result shown' }),
+    ).toHaveAttribute(
+      'href',
+      '/p-store/visits?from=2026-09-01&to=2026-09-30&event=calculator_result_shown',
+    );
+  });
+
   it('shows how to install the SDK when nothing arrived in the period', async () => {
     const empty = await new MockOverviewService().overview('p-store', {
       from: '2026-10-05',

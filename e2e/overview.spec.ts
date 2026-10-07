@@ -91,3 +91,30 @@ test('draws one point per day of the chosen period', async ({ page }) => {
   await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 1 day\./);
   await expect(page.getByText('vs. the day before')).toBeVisible();
 });
+
+test('opens the visits of a top page, in the same period, from the keyboard too', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=7d`);
+
+  await page.getByRole('link', { name: 'See the visits that opened /calculator' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=7d&path=%2Fcalculator$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Visits' })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Viewed page' })).toHaveValue('/calculator');
+  const rows = page.getByRole('table', { name: 'Visits' }).locator('tbody tr');
+  await expect(rows).toHaveCount(2);
+
+  await page.goBack();
+  const eventLink = page.getByRole('link', {
+    name: 'See the visits that had Calculator result shown',
+  });
+  await eventLink.focus();
+  await page.keyboard.press('Enter');
+
+  await expect(page).toHaveURL(/\/visits\?range=7d&event=calculator_result_shown$/);
+  await expect(page.getByRole('textbox', { name: 'Had event' })).toHaveValue(
+    'calculator_result_shown',
+  );
+  await expect(rows).toHaveCount(2);
+});
