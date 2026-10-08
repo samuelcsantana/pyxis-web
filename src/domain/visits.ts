@@ -3,6 +3,11 @@ import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } fro
 import { stepProblem } from './funnel';
 import { eventLabel, formatCount, formatQuantity } from './metrics';
 import { formatVisitDuration, shortId, visitStartFormat } from './timeline';
+import {
+  isFilterableProperty,
+  MAX_PROPERTY_VALUE_LENGTH,
+  PROPERTY_SEPARATOR,
+} from './visit-property';
 import type { VisitsReport, VisitsWire } from './visits.schema';
 
 export type { VisitsReport, VisitsWire };
@@ -15,9 +20,6 @@ export type VisitDeviceType = (typeof VISIT_DEVICE_TYPES)[number];
 export const VISIT_IDENTITIES = ['identified', 'anonymous'] as const;
 export type VisitIdentity = (typeof VISIT_IDENTITIES)[number];
 
-const PROPERTY_SEPARATOR = '=';
-const PROPERTY_KEY_PATTERN = /^[a-z0-9_]{1,40}$/;
-const MAX_PROPERTY_VALUE_LENGTH = 100;
 const VISIT_CURSOR_PATTERN =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z~[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
@@ -63,18 +65,18 @@ function oneOf<Value extends string>(values: readonly Value[], text: string): Va
   return values.find((value) => value === text) ?? null;
 }
 
+export function deviceFilterOf(deviceType: string): VisitDeviceType | null {
+  return oneOf(VISIT_DEVICE_TYPES, deviceType);
+}
+
 function propertyProblem(property: string, event: string | null): string | null {
   if (event === null) {
     return 'A property filter needs an event.';
   }
   const separator = property.indexOf(PROPERTY_SEPARATOR);
-  const key = property.slice(0, separator);
-  const value = property.slice(separator + 1);
   const wellFormed =
     separator >= 0 &&
-    PROPERTY_KEY_PATTERN.test(key) &&
-    value.length > 0 &&
-    value.length <= MAX_PROPERTY_VALUE_LENGTH;
+    isFilterableProperty(property.slice(0, separator), property.slice(separator + 1));
   return wellFormed
     ? null
     : `A property filter is key=value: a key of lowercase letters, digits and _, and a value of 1 to ${String(MAX_PROPERTY_VALUE_LENGTH)} characters.`;

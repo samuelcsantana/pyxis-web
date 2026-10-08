@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  deviceFilterOf,
   hasVisitFilters,
   isVisitCursor,
   NO_VISIT_FILTERS,
@@ -223,6 +224,14 @@ describe('hasVisitFilters', () => {
   it('tells a filtered list from the whole period', () => {
     expect(hasVisitFilters(NO_VISIT_FILTERS)).toBe(false);
     expect(hasVisitFilters({ ...NO_VISIT_FILTERS, identity: 'anonymous' })).toBe(true);
+  });
+});
+
+describe('deviceFilterOf', () => {
+  it('filters by a device type Visits knows and by nothing else', () => {
+    expect(deviceFilterOf('tablet')).toBe('tablet');
+    expect(deviceFilterOf('other')).toBe('other');
+    expect(deviceFilterOf('watch')).toBeNull();
   });
 });
 
