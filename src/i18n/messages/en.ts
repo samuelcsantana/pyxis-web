@@ -45,6 +45,12 @@ export const en = {
     apply: 'Apply',
     applying: 'Applying…',
   },
+  errorPanel: {
+    title: 'Could not load this data',
+    body: 'The dashboard could not read this data. Try again in a moment.',
+    retry: 'Try again',
+    detail: 'error id {digest}',
+  },
   notFound: {
     title: 'Page not found',
     outside: 'This page does not exist, or the project is not one you may read.',

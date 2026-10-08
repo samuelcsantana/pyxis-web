@@ -1,9 +1,10 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Component, type ReactNode, Suspense, use } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiRequestError } from '@/domain/errors';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import ProjectLayout from './[projectId]/layout';
 import RootError from './error';
 import GlobalError from './global-error';
@@ -71,7 +72,7 @@ describe('RootError', () => {
     });
 
     await act(async () => {
-      render(
+      renderWithMessages(
         <RouteBoundary fallback={(error) => <RootError error={error} retry={retry} />}>
           <Suspense fallback={null}>
             <Awaited content={layout} />
@@ -94,7 +95,7 @@ describe('RootError', () => {
   });
 
   it('shows no error id when the failure has none', () => {
-    render(<RootError error={new Error('boom')} retry={vi.fn()} />);
+    renderWithMessages(<RootError error={new Error('boom')} retry={vi.fn()} />);
 
     expect(screen.queryByText(/error id/)).not.toBeInTheDocument();
   });

@@ -5,6 +5,8 @@ import { DemoBanner } from './demo-banner';
 import { EmptyPeriod } from './empty-period';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
+import { ENGLISH_ERROR_TEXTS, englishErrorTexts } from './english-error-texts';
+import { errorTexts } from './error-screen';
 import { english } from '@/test-utils/english';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 import { NoConversionEvent } from './no-conversion-event';
@@ -32,10 +34,12 @@ describe('EmptyState', () => {
   });
 });
 
+const TEXTS = errorTexts(new Error('boom'), english.t);
+
 describe('ErrorPanel', () => {
   it('is announced, shows the request detail and retries on demand', async () => {
     const retry = vi.fn();
-    render(<ErrorPanel detail="GET /v1/me · 503" onRetry={retry} />);
+    render(<ErrorPanel texts={{ ...TEXTS, detail: 'GET /v1/me · 503' }} onRetry={retry} />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
 
@@ -45,7 +49,7 @@ describe('ErrorPanel', () => {
   });
 
   it('promises nothing it cannot know about the events being collected', () => {
-    render(<ErrorPanel />);
+    render(<ErrorPanel texts={TEXTS} />);
 
     expect(screen.getByRole('alert')).toHaveTextContent(
       'The dashboard could not read this data. Try again in a moment.',
@@ -54,13 +58,13 @@ describe('ErrorPanel', () => {
   });
 
   it('heads a section by default and a whole page when asked to', () => {
-    const { unmount } = render(<ErrorPanel />);
+    const { unmount } = render(<ErrorPanel texts={TEXTS} />);
     expect(
       screen.getByRole('heading', { level: 2, name: 'Could not load this data' }),
     ).toBeInTheDocument();
     unmount();
 
-    render(<ErrorPanel headingLevel="h1" />);
+    render(<ErrorPanel headingLevel="h1" texts={TEXTS} />);
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'Could not load this data' }),
@@ -68,10 +72,32 @@ describe('ErrorPanel', () => {
   });
 
   it('shows neither detail nor retry when it has none', () => {
-    render(<ErrorPanel />);
+    render(<ErrorPanel texts={TEXTS} />);
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     expect(screen.getByRole('alert').querySelectorAll('p')).toHaveLength(1);
+  });
+});
+
+describe('error texts', () => {
+  it('names the failure and gives its id only when it has one', () => {
+    expect(errorTexts(new Error('boom'), english.t)).toEqual({
+      title: 'Could not load this data',
+      body: 'The dashboard could not read this data. Try again in a moment.',
+      retry: 'Try again',
+      detail: undefined,
+    });
+    expect(
+      errorTexts(Object.assign(new Error('boom'), { digest: 'd1g35t' }), english.t).detail,
+    ).toBe('error id d1g35t');
+  });
+
+  it('gives the page without a dictionary the same English text as the dictionary', () => {
+    const withId = Object.assign(new Error('boom'), { digest: 'd1g35t' });
+
+    expect(englishErrorTexts(withId)).toEqual(errorTexts(withId, english.t));
+    expect(englishErrorTexts(new Error('boom'))).toEqual(errorTexts(new Error('boom'), english.t));
+    expect(ENGLISH_ERROR_TEXTS.title).toBe(english.t('errorPanel.title'));
   });
 });
 

@@ -1,6 +1,14 @@
 import { BUTTON_PRIMARY } from '@/components/ui/control-classes';
+
+export interface ErrorTexts {
+  readonly title: string;
+  readonly body: string;
+  readonly retry: string;
+  readonly detail: string | undefined;
+}
+
 export interface ErrorPanelProps {
-  readonly detail?: string;
+  readonly texts: ErrorTexts;
   readonly onRetry?: () => void;
   readonly headingLevel?: 'h1' | 'h2';
 }
@@ -8,7 +16,7 @@ export interface ErrorPanelProps {
 const WARNING_ICON = 'M12 3l9 16H3l9-16z M12 10v4 M12 17h.01';
 const RETRY_ICON = 'M20 11a8 8 0 1 0-2.3 5.7 M20 4v7h-7';
 
-export function ErrorPanel({ detail, onRetry, headingLevel: Heading = 'h2' }: ErrorPanelProps) {
+export function ErrorPanel({ texts, onRetry, headingLevel: Heading = 'h2' }: ErrorPanelProps) {
   return (
     <section
       role="alert"
@@ -26,12 +34,12 @@ export function ErrorPanel({ detail, onRetry, headingLevel: Heading = 'h2' }: Er
           />
         </svg>
       </span>
-      <Heading className="text-lg font-semibold">Could not load this data</Heading>
-      <p className="text-sm leading-5 text-muted">
-        The dashboard could not read this data. Try again in a moment.
-      </p>
-      {detail === undefined ? null : (
-        <p className="rounded-control bg-soft px-2.5 py-2 font-mono text-xs text-muted">{detail}</p>
+      <Heading className="text-lg font-semibold">{texts.title}</Heading>
+      <p className="text-sm leading-5 text-muted">{texts.body}</p>
+      {texts.detail === undefined ? null : (
+        <p className="rounded-control bg-soft px-2.5 py-2 font-mono text-xs text-muted">
+          {texts.detail}
+        </p>
       )}
       {onRetry === undefined ? null : (
         <button
@@ -49,7 +57,7 @@ export function ErrorPanel({ detail, onRetry, headingLevel: Heading = 'h2' }: Er
               strokeLinejoin="round"
             />
           </svg>
-          Try again
+          {texts.retry}
         </button>
       )}
     </section>

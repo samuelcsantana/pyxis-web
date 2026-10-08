@@ -4,7 +4,11 @@ import { english } from '@/test-utils/english';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
+import { errorTexts } from './error-screen';
 import { NoConversionEvent } from './no-conversion-event';
+
+const TEXTS = errorTexts(new Error('GET /v1/me failed'), english.t);
+const WITH_DETAIL = { ...TEXTS, detail: 'GET /v1/me · 503' };
 
 const meta = {
   title: 'States/Panels',
@@ -30,11 +34,11 @@ export const Empty: Story = {
 };
 
 export const Failure: Story = {
-  render: () => <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />,
+  render: () => <ErrorPanel texts={WITH_DETAIL} onRetry={fn()} />,
 };
 
 export const FailureWithoutRetry: Story = {
-  render: () => <ErrorPanel />,
+  render: () => <ErrorPanel texts={TEXTS} />,
 };
 
 export const EmptyDarkTheme: Story = { ...Empty, globals: { theme: 'dark' } };
@@ -56,7 +60,7 @@ export const NoConversionEventSet: Story = {
 export const DarkTheme: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
-      <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />
+      <ErrorPanel texts={WITH_DETAIL} onRetry={fn()} />
       <NoConversionEvent i18n={english} />
     </div>
   ),
