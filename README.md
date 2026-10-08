@@ -74,10 +74,16 @@ Shipping now:
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
   button on phones
 - The overview: visits, identified users, conversions and the write error rate, each with its
-  change against the previous period and a sparkline; page views and named events per day as a
-  chart or a table (a single day shows its two totals instead of a one-point chart); the top
-  pages and events, each opening its visits. Every percentage sits next to the totals it comes
-  from, and a division by zero shows a dash, never `NaN%`
+  change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
+  the Conversions card names the conversion event it counts. Page views and named events per day
+  ("Activity per day") as a chart or a table (a single day shows its two totals instead of a
+  one-point chart); the top pages and events, each opening its visits; a footnote defining
+  visit, identified user, conversion, write and failure, and when a change is coloured. Every
+  percentage sits next to the totals it comes from, and a division by zero shows a dash, never
+  `NaN%`
+- One word per idea across screens: "Write error rate" on the Overview and on Requests, "Failing
+  only" for the failed-requests filter of Requests and of the Timeline, "Anonymous" for a visit
+  without a user id; Overview, Visits and Requests define visit and write with the same sentence
 - Honest comparisons: a range that ends today is compared with the previous period up to the same
   time of day, and the card says so ("vs. yesterday until 10:03"). A change shows its size next
   to the percentage ("+12.4% (+525)"), reads "no change" when nothing moved, and is coloured as
@@ -107,9 +113,9 @@ Shipping now:
   and the steps kept in the URL so a bookmark is a saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status,
-  and filters for page views, events, requests and errors; older visits load on demand, and a
-  failed request in the Requests screen links to its visit; an id it cannot look up stays in the
-  field, marked invalid, with an example of what that kind of id looks like
+  and filters for page views, events, requests and failing requests only; older visits load on
+  demand, and a failed request in the Requests screen links to its visit; an id it cannot look up
+  stays in the field, marked invalid, with an example of what that kind of id looks like
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and country, channel and
   account; filters for the pages it viewed (up to three, `*` matching any characters), an event
