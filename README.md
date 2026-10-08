@@ -159,8 +159,10 @@ Shipping now:
   carries the p95 too
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
   with the share that continued and the drop-off at each step, the median time each step took
-  after the one before and the median time to finish; a keyboard-operable step editor, and the
-  steps kept in the URL so a bookmark is a saved funnel
+  after the one before and the median time to finish; each step's figure links to who reached
+  it and each drop-off to who left before it, a list of the visits or people (newest first, 50 at
+  a time) that opens each one in the Timeline; a keyboard-operable step editor, and the steps
+  kept in the URL so a bookmark is a saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status
   (a request reads "164 ms · order_number_in_use", its status shown once, as the chip),
@@ -277,7 +279,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion       |
 | `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
 | `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
-| `/[projectId]/funnel`             | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
+| `/[projectId]/funnel`             | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor              |
 | `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
 | `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
 | `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
