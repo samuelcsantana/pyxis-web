@@ -251,7 +251,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
             >
               Apply
             </button>
-            <p id="funnel-editor-status" className="text-xs text-muted">
+            <p id="funnel-editor-status" role="status" className="text-xs text-muted">
               {statusOf(drafts, valid)}
             </p>
           </div>

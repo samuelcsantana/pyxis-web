@@ -99,13 +99,13 @@ describe('FunnelEditor', () => {
     const path = screen.getByRole('textbox', { name: 'Step 1 page path' });
 
     await userEvent.clear(path);
-    expect(screen.getByText('Fill in every step to apply.')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Fill in every step to apply.');
     await userEvent.type(path, 'pricing');
 
     expect(path).toHaveAttribute('aria-invalid', 'true');
     expect(path).toHaveAccessibleDescription('A page path starts with "/".');
     expect(screen.getByRole('button', { name: 'Apply' })).toBeDisabled();
-    expect(screen.getByText('Fix the highlighted steps to apply.')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Fix the highlighted steps to apply.');
   });
 
   it('turns a step into an event step and back', async () => {
