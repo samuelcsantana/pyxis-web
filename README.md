@@ -212,6 +212,36 @@ Shipping now:
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner links back to this repository
+- The interface in English and in Brazilian Portuguese (see
+  [Internationalization](#internationalization))
+
+## Internationalization
+
+<img alt="The Overview of the demo store in Brazilian Portuguese: Visão geral, its figures written as 2.764 and +3,6%, its dates as 9 de set. – 8 de out. de 2026, and the event names exactly as the site sent them" src=".github/assets/screenshots/overview-pt-br-light.png">
+
+The dashboard speaks English and Brazilian Portuguese. English is the default and the source of
+every text; each other language is a typed translation of it.
+
+- **Which language:** the one chosen in the language menu wins, kept in the functional
+  `pyxis_locale` cookie; without a choice, the browser's `Accept-Language` decides, matching on
+  the language, so `pt-PT` gets Brazilian Portuguese; otherwise English. The address never
+  changes, so links, bookmarks and the demo links work in every language.
+- **The menu:** each language named in itself (English, Português (Brasil)). On the sign-in page
+  it sits in the top bar beside the theme toggle; on desktop, a globe button in the sidebar's
+  brand row opens it; on phones and tablets it is in the sidebar footer, inside the menu. It is a
+  plain form posting to a Server Action, so it ships no client script, and the screen changes
+  language in place, keeping its address and query.
+- **Numbers, dates and lists** go through `Intl` in the reader's language and the project's time
+  zone: `2.789`, `62,3%`, `9 de set.`, and lists joined with the language's own "and"
+  (`a, b e c`). Plurals follow CLDR, with a zero form where the language needs one (Portuguese
+  says "0 visitas").
+- **Customer data is never translated:** event names, paths, routes, status and error codes,
+  property keys and values, project names, browser and system names appear as they were sent,
+  and CSV files keep English column headers.
+- **Checked, not trusted:** a translation that misses or adds a key, or drops or invents a
+  placeholder, fails the typecheck; a test walks every translation for the same keys,
+  placeholders, rich-text tags and plural categories; `e2e/i18n.spec.ts` opens every translated
+  screen in Portuguese with axe, at 1440 and 390px, and checks the language switch round trip.
 
 ## Architecture
 
@@ -341,7 +371,8 @@ returns.
 Tests run in English: the Vitest setup file replaces `currentLocale()`, the only code that reads
 the request's language, so a test never needs request headers to render a page. Domain functions
 and server components that write text take the request's `I18n` value (translator and formats)
-as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`. Client
+as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`, or
+`portuguese` from `src/test-utils/portuguese.ts` to check a Brazilian Portuguese sentence. Client
 Components read their text with `useT()` from the messages provider, so their tests, and the tests
 of any page that contains one, render through `renderWithMessages`, which wraps the tree in the
 provider with the English messages the browser receives. A Client Component that only shows words
@@ -393,7 +424,8 @@ src/
 │                   provider
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
-├── test-utils/     test helpers (rendering inside the messages provider, the English I18n)
+├── test-utils/     test helpers (rendering inside the messages provider, the English and
+│                   Portuguese I18n)
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
@@ -418,8 +450,10 @@ docs/adr/           architecture decision records
   follows the API's cursor, 50 visits a read, so it sets its own `maxDuration` of 60 seconds
   rather than lean on the project's default
 - The session is an `HttpOnly` cookie set by the API; the dashboard's JavaScript never reads it.
-  The only cookie the dashboard writes is `pyxis_theme`, the light or dark choice, which the root
-  layout reads so the first paint has the right theme (so every page renders on request)
+  The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
+  which the root layout reads so the first paint has the right theme (so every page renders on
+  request), and `pyxis_locale`, the language chosen in the language menu, set by a Server Action
+  as `HttpOnly` because only the server reads it. Neither identifies anyone
 - The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data
 - Each read of the API writes one JSON line to the server log, `api_read` with the route template
