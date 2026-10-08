@@ -23,16 +23,33 @@ export interface SignOutButtonProps {
 
 const VARIANT_CLASSES = {
   nav: {
-    button: `${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
-    icon: 'text-nav-muted',
-    error: 'text-nav-text',
+    frame: 'contents',
+    button: `px-2.5 text-[13px] ${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
+    error: 'basis-full px-1 text-nav-text',
+    withIcon: false,
   },
   page: {
-    button: `self-start ${BUTTON_SECONDARY}`,
-    icon: 'text-muted',
-    error: 'text-bad',
+    frame: 'flex flex-col gap-1',
+    button: `gap-2.5 self-start px-3 text-sm ${BUTTON_SECONDARY}`,
+    error: 'px-3 text-bad',
+    withIcon: true,
   },
 } as const;
+
+function SignOutIcon() {
+  return (
+    <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true" className="text-muted">
+      <path
+        d={SIGN_OUT_ICON}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonProps) {
   const classes = VARIANT_CLASSES[variant];
@@ -60,28 +77,19 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={classes.frame}>
       <button
         type="button"
         onClick={signOut}
         disabled={busy}
         aria-busy={busy}
-        className={`flex min-h-11 items-center gap-2.5 rounded-input px-3 text-sm ${CONTROL_BUSY} ${classes.button}`}
+        className={`flex min-h-11 shrink-0 items-center rounded-input ${CONTROL_BUSY} ${classes.button}`}
       >
-        <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true" className={classes.icon}>
-          <path
-            d={SIGN_OUT_ICON}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.8}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        {classes.withIcon ? <SignOutIcon /> : null}
         <span>{busy ? 'Signing out…' : 'Sign out'}</span>
       </button>
       {error === null ? null : (
-        <p role="alert" className={`px-3 text-xs ${classes.error}`}>
+        <p role="alert" className={`text-xs ${classes.error}`}>
           Could not sign out. Try again.
         </p>
       )}
