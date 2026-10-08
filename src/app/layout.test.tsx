@@ -19,11 +19,17 @@ vi.mock('next/headers', () => ({
     }),
 }));
 
+interface ProviderProps {
+  readonly locale: string;
+  readonly messages: object;
+  readonly children: ReactElement;
+}
+
 interface HtmlProps {
   readonly lang: string;
   readonly className: string;
   readonly 'data-theme'?: string;
-  readonly children: ReactElement<{ children: ReactElement }>;
+  readonly children: ReactElement<{ children: ReactElement<ProviderProps> }>;
 }
 
 describe('RootLayout', () => {
@@ -37,7 +43,15 @@ describe('RootLayout', () => {
     expect(html.props.className).toContain('geist-sans-variable');
     expect(html.props.className).toContain('geist-mono-variable');
     expect(html.props['data-theme']).toBeUndefined();
-    expect(html.props.children.props.children).toBe(page);
+    expect(html.props.children.props.children.props.children).toBe(page);
+  });
+
+  it('gives the page the language of the request and only the messages the browser needs', async () => {
+    const html = (await RootLayout({ children: null })) as ReactElement<HtmlProps>;
+    const provider = html.props.children.props.children;
+
+    expect(provider.props.locale).toBe(html.props.lang);
+    expect(provider.props.messages).toEqual({});
   });
 
   it('applies the theme the visitor chose, so the first paint is right', async () => {
@@ -56,16 +70,18 @@ describe('RootLayout', () => {
     expect(html.props['data-theme']).toBeUndefined();
   });
 
-  it('names the app in the metadata', () => {
-    const metadata = generateMetadata();
+  it('names the app in the metadata', async () => {
+    const metadata = await generateMetadata();
 
     expect(metadata.title).toEqual({ template: '%s · Pyxis', default: 'Pyxis' });
     expect(metadata.description).toMatch(/no cookies/);
+    expect(metadata.openGraph).toMatchObject({ description: metadata.description });
+    expect(metadata.twitter).toMatchObject({ description: metadata.description });
   });
 
-  it('lets search engines index the live demo and names it in link previews', () => {
+  it('lets search engines index the live demo and names it in link previews', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-    const metadata = generateMetadata();
+    const metadata = await generateMetadata();
 
     expect(metadata.robots).toBeNull();
     expect(metadata.openGraph).toMatchObject({ siteName: 'Pyxis', title: 'Pyxis live demo' });
@@ -75,9 +91,9 @@ describe('RootLayout', () => {
     });
   });
 
-  it('keeps a dashboard with a real API out of search engines', () => {
+  it('keeps a dashboard with a real API out of search engines', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-    const metadata = generateMetadata();
+    const metadata = await generateMetadata();
 
     expect(metadata.robots).toEqual({ index: false, follow: false });
     expect(metadata.openGraph).toMatchObject({ title: 'Pyxis' });
