@@ -147,12 +147,15 @@ Shipping now:
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
   the rest as "Other values". Every event, screen and value opens the visits that had it, with the
   period kept; a link's name starts with the text it shows ("/pricing: see its visits")
-- Requests: every write by route with its success and error shares, status codes and median
-  duration; a keyboard-accessible details panel with the screens where the route failed and its
+- Requests: the failures of each day stacked by what went wrong (client errors, server errors,
+  no response; chart or table, a pointer over a day lists them), then every write by route with
+  its success and error shares, status codes, median and 95th percentile duration; a
+  keyboard-accessible details panel with the screens where the route failed and its
   latest failures with their error code, and a link to every visit with a failed call to that
   route; "failing only" and screen filters kept in the URL. A
-  "Failed reads" tab lists the GET calls that failed by route, as counts only (a site may send
-  its reads only when they fail, so there is no read error rate)
+  "Failed reads" tab lists the GET calls that failed by route and per day, as counts only (a site
+  may send its reads only when they fail, so there is no read error rate). The CSV of the routes
+  carries the p95 too
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
   with the share that continued and the drop-off at each step; a keyboard-operable step editor,
   and the steps kept in the URL so a bookmark is a saved funnel
