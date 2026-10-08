@@ -31,6 +31,7 @@ describe('ShareDonut', () => {
         id="device-type"
         title="Device type"
         rows={shareRows(DEVICE_TYPES, deviceTypeLabel, english)}
+        i18n={english}
       />,
     );
 
@@ -50,6 +51,7 @@ describe('ShareDonut', () => {
         title="Device type"
         rows={shareRows(DEVICE_TYPES, deviceTypeLabel, english)}
         visitsHref={(value) => (value === 'other' ? null : `/p1/visits?device=${value}`)}
+        i18n={english}
       />,
     );
 
@@ -68,6 +70,7 @@ describe('ShareDonut', () => {
         title="Browser"
         rows={shareRows(BROWSERS, browserLabel, english)}
         withConversionRate
+        i18n={english}
       />,
     );
 
@@ -87,6 +90,7 @@ describe('ShareDonut', () => {
           english,
         )}
         withConversionRate
+        i18n={english}
       />,
     );
 
@@ -135,6 +139,7 @@ describe('DeviceConversionList', () => {
       <DeviceConversionList
         conversions={deviceConversions(DEVICE_TYPES, english)}
         conversionEvent="signup_completed"
+        i18n={english}
       />,
     );
 
@@ -156,6 +161,7 @@ describe('CountriesTable', () => {
           countryLabel,
           english,
         )}
+        i18n={english}
       />,
     );
 
@@ -177,6 +183,7 @@ describe('CountriesTable', () => {
           english,
         )}
         withConversionRate
+        i18n={english}
       />,
     );
 

@@ -1,5 +1,6 @@
 import { countsConversions, OTHER_VALUE, type ShareRow } from '@/domain/devices';
 import { withDonutSegments } from '@/domain/donut';
+import type { I18n } from '@/i18n/i18n';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
@@ -30,12 +31,19 @@ export interface ShareDonutProps {
   readonly rows: readonly ShareRow[];
   readonly withConversionRate?: boolean;
   readonly visitsHref?: (value: string) => string | null;
+  readonly i18n: I18n;
 }
 
 const NO_VISITS_LINK = () => null;
 
-function RowName({ label, href }: { readonly label: string; readonly href: string | null }) {
-  return href === null ? label : <VisitsLink href={href} label={label} />;
+interface RowNameProps {
+  readonly label: string;
+  readonly href: string | null;
+  readonly purpose: string;
+}
+
+function RowName({ label, href, purpose }: RowNameProps) {
+  return href === null ? label : <VisitsLink href={href} label={label} purpose={purpose} />;
 }
 
 export function ShareDonut({
@@ -44,6 +52,7 @@ export function ShareDonut({
   rows,
   withConversionRate = false,
   visitsHref = NO_VISITS_LINK,
+  i18n,
 }: ShareDonutProps) {
   const headingId = `${id}-heading`;
   const showsConversionRate = withConversionRate && countsConversions(rows);
@@ -100,14 +109,14 @@ export function ShareDonut({
                   {title}
                 </th>
                 <th scope="col" className="pb-1.5 text-right text-xs font-medium text-muted">
-                  Visits
+                  {i18n.t('devices.columns.visits')}
                 </th>
                 <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
-                  Share
+                  {i18n.t('devices.columns.share')}
                 </th>
                 {showsConversionRate ? (
                   <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
-                    Conversion rate
+                    {i18n.t('devices.columns.conversionRate')}
                   </th>
                 ) : null}
               </tr>
@@ -121,7 +130,11 @@ export function ShareDonut({
                         aria-hidden="true"
                         className={`size-2.5 shrink-0 rounded-[3px] ${row.color.swatch}`}
                       />
-                      <RowName label={row.label} href={visitsHref(row.value)} />
+                      <RowName
+                        label={row.label}
+                        href={visitsHref(row.value)}
+                        purpose={i18n.t('visitsLink.purpose')}
+                      />
                     </span>
                   </th>
                   <td className="py-1 text-right text-muted">{row.visits}</td>
