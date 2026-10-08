@@ -1,14 +1,16 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
+import { english } from '@/test-utils/english';
 import {
   CODE_SENT_NOTICE_MS,
   SignInForm,
   signInErrorMessage,
   SMOOTH_LOADING_MS,
 } from './sign-in-form';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const router = vi.hoisted(() => ({ replace: vi.fn(), refresh: vi.fn() }));
 
@@ -47,7 +49,7 @@ function typeEmail(value: string) {
 }
 
 async function reachCodeStep(service: IAuthService) {
-  render(<SignInForm authService={service} />);
+  renderWithMessages(<SignInForm authService={service} />);
   typeEmail('ana@example.com');
   fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
   await settle(SMOOTH_LOADING_MS);
@@ -66,7 +68,7 @@ describe('SignInForm', () => {
 
   it('asks for a code for the trimmed email and moves to the code step', async () => {
     const { service, pending, calls } = controlledService();
-    render(<SignInForm authService={service} />);
+    renderWithMessages(<SignInForm authService={service} />);
 
     typeEmail('  ana@example.com ');
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -80,7 +82,7 @@ describe('SignInForm', () => {
   });
 
   it('keeps the busy state for a minimum time even when the API answers at once', async () => {
-    render(<SignInForm authService={new MockAuthService()} />);
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
     typeEmail('ana@example.com');
 
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -97,7 +99,7 @@ describe('SignInForm', () => {
 
   it('shows the sending state while a slow answer is pending', async () => {
     const { service } = controlledService();
-    render(<SignInForm authService={service} />);
+    renderWithMessages(<SignInForm authService={service} />);
     typeEmail('ana@example.com');
 
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -118,7 +120,7 @@ describe('SignInForm', () => {
 
   it('stays on the email step and explains a refused request', async () => {
     const { service, pending } = controlledService();
-    render(<SignInForm authService={service} />);
+    renderWithMessages(<SignInForm authService={service} />);
     typeEmail('ana@example.com');
 
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -131,7 +133,7 @@ describe('SignInForm', () => {
 
   it('ties a refused request to the email field, and unties it when it goes', async () => {
     const { service, pending } = controlledService();
-    render(<SignInForm authService={service} />);
+    renderWithMessages(<SignInForm authService={service} />);
     typeEmail('ana@example.com');
     const field = screen.getByLabelText('Email');
     expect(field).toHaveAttribute('aria-invalid', 'false');
@@ -230,7 +232,7 @@ describe('SignInForm', () => {
   });
 
   it('leaves the focus alone when the page opens', () => {
-    render(<SignInForm authService={new MockAuthService()} />);
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
 
     expect(screen.getByLabelText('Email')).not.toHaveFocus();
     expect(document.body).toHaveFocus();
@@ -238,7 +240,7 @@ describe('SignInForm', () => {
 
   it('cancels a pending verification when it unmounts', async () => {
     const { service, pending } = controlledService();
-    const { unmount } = render(<SignInForm authService={service} />);
+    const { unmount } = renderWithMessages(<SignInForm authService={service} />);
     typeEmail('ana@example.com');
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
     pending[0]?.resolve();
@@ -254,13 +256,13 @@ describe('SignInForm', () => {
   });
 
   it('tells a visitor whose session ended why they are here', () => {
-    render(<SignInForm authService={new MockAuthService()} sessionExpired />);
+    renderWithMessages(<SignInForm authService={new MockAuthService()} sessionExpired />);
 
     expect(screen.getByRole('status')).toHaveTextContent('Your session ended');
   });
 
   it('shows the demo code in demo mode, on both steps', async () => {
-    render(<SignInForm authService={new MockAuthService()} demoCode="000000" />);
+    renderWithMessages(<SignInForm authService={new MockAuthService()} demoCode="000000" />);
     expect(screen.getByText(/Any email works, then use the code/)).toHaveTextContent(
       'Demo mode: no email is sent. Any email works, then use the code 000000.',
     );
@@ -276,14 +278,14 @@ describe('SignInForm', () => {
   });
 
   it('shows no demo hint outside demo mode', () => {
-    render(<SignInForm authService={new MockAuthService()} />);
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
 
     expect(screen.queryByText(/Demo mode/)).not.toBeInTheDocument();
   });
 
   it('builds its own service when none is given', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-    render(<SignInForm />);
+    renderWithMessages(<SignInForm />);
     typeEmail('ana@example.com');
 
     fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -299,6 +301,6 @@ describe('signInErrorMessage', () => {
     [new RateLimitedError(), 'Too many attempts'],
     [new TypeError('Failed to fetch'), 'Could not reach Pyxis'],
   ])('explains %s', (error, text) => {
-    expect(signInErrorMessage(error)).toContain(text);
+    expect(signInErrorMessage(error, english.t)).toContain(text);
   });
 });

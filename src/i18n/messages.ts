@@ -12,6 +12,7 @@ export const CLIENT_NAMESPACES = [
   'periodSelector',
   'notFound',
   'errorPanel',
+  'signIn',
 ] as const satisfies readonly (keyof Messages)[];
 export type ClientNamespace = (typeof CLIENT_NAMESPACES)[number];
 export type ClientSourceMessages = {

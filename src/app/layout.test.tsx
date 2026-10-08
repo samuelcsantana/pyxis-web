@@ -59,6 +59,7 @@ describe('RootLayout', () => {
       'periodSelector',
       'notFound',
       'errorPanel',
+      'signIn',
     ]);
   });
 

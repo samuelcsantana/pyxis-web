@@ -4,11 +4,15 @@ import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
+import { getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
 
-export const metadata: Metadata = { title: 'Sign in' };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslator();
+  return { title: t('signInPage.title') };
+}
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
 
@@ -18,6 +22,7 @@ export interface SignInPageProps {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { expired, next } = await searchParams;
+  const t = await getTranslator();
   return (
     <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
       <header className="flex w-full max-w-6xl justify-end">
@@ -44,7 +49,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               strokeLinejoin="round"
             />
           </svg>
-          Privacy-first product analytics · no cookies on your visitors, no personal data
+          {t('signInPage.privacy')}
         </p>
       </MainContent>
     </div>

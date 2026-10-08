@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import SignInPage from './page';
+import SignInPage, { generateMetadata } from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 vi.mock('next/headers', () => ({
@@ -23,6 +23,10 @@ async function signInWithTheDemoCode() {
 }
 
 describe('SignInPage', () => {
+  it('names itself in the title', async () => {
+    expect((await generateMetadata()).title).toBe('Sign in');
+  });
+
   it('explains an ended session and shows the demo code in demo mode', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
