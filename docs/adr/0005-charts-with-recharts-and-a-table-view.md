@@ -4,7 +4,9 @@ Date: 2026-10-06
 
 ## Status
 
-Accepted
+Superseded by [ADR 0006](0006-server-rendered-svg-charts.md) on 2026-10-08: the charts are drawn as
+SVG on the server, and Recharts is gone. The table view, the summary sentence and the Chart / Table
+switch stay.
 
 ## Context
 
