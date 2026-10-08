@@ -349,6 +349,12 @@ gets them ready from the server instead, as a `…Text` object built by a domain
 Requests, Timeline and Visits tables do this), so those words travel with the page that needs
 them and not with every page; their tests pass the object built with `english`.
 
+A local ESLint rule, `no-literal-jsx-text`, keeps interface text out of the components: words
+written in JSX, or in an `aria-label`, `title`, `alt`, `placeholder`, `label` or `subtitle`, fail
+the lint, so every word on a screen comes from `src/i18n/messages/en.ts` and can be translated.
+Punctuation, symbols and numbers pass, and so does the "Pyxis" wordmark. Tests, stories and the
+Storybook-only design pages in `src/design/` are outside it.
+
 ### Performance budget
 
 The CI `build` job fails when a route's first-load JavaScript (every first-load chunk, gzip
