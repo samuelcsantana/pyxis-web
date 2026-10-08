@@ -160,3 +160,21 @@ test('reopens the details of a route after Back from one of its visits', async (
   await expect(page.getByRole('button', { name: 'POST /orders, show details' })).toBeFocused();
   await expect(page).toHaveURL(/\/requests\?range=7d$/);
 });
+
+test.describe('at 768×1024, with the details of a route open', () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+
+  test('holds the page behind them still until they close', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/requests?range=30d`);
+    const root = page.locator('html');
+    await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+    const details = page.getByRole('dialog', { name: 'POST /orders' });
+    await expect(details).toBeVisible();
+
+    await expect(root).toHaveCSS('overflow-y', 'hidden');
+    await expect(details).toHaveCSS('overscroll-behavior-y', 'contain');
+
+    await details.getByRole('button', { name: 'Close' }).click();
+    await expect(root).toHaveCSS('overflow-y', 'visible');
+  });
+});

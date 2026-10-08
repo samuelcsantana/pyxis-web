@@ -207,7 +207,7 @@ export function RequestsTable({
         onClose={closed}
         onClick={closeOnBackdrop}
         onKeyDown={keepFocusInside}
-        className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-[min(100%,28.75rem)] max-w-full overflow-y-auto border-0 border-l border-line bg-card p-0 text-ink backdrop:bg-nav/60"
+        className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-[min(100%,28.75rem)] max-w-full overflow-y-auto overscroll-contain border-0 border-l border-line bg-card p-0 text-ink backdrop:bg-nav/60"
       >
         {selected === undefined ? null : (
           <RouteDetails
