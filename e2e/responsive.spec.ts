@@ -133,3 +133,34 @@ test.describe('at 1440×900', () => {
     expect(new Set(await fieldFontSizes(page))).toEqual(new Set([DESKTOP_FIELD_FONT_PX]));
   });
 });
+
+const SIDEBAR_BUDGET_PX = 700;
+
+test.describe('sidebar on a 1366×768 laptop', () => {
+  test.use({ viewport: { width: 1366, height: 768 } });
+
+  test('shows Sign out without scrolling the sidebar', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    await page.goto(`/${STORE_ID}/overview`);
+
+    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+
+    await expect(page.getByRole('button', { name: 'Sign out' })).toBeInViewport({ ratio: 1 });
+    expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(768);
+  });
+});
+
+test.describe(`sidebar in ${String(SIDEBAR_BUDGET_PX)}px of height`, () => {
+  test.use({ viewport: { width: 1280, height: SIDEBAR_BUDGET_PX } });
+
+  test('needs no inner scroll', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    await page.goto(`/${STORE_ID}/overview`);
+
+    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+
+    expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(
+      SIDEBAR_BUDGET_PX,
+    );
+  });
+});

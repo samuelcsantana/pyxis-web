@@ -189,6 +189,8 @@ describe('SignOutButton', () => {
   it('signs out and goes to the sign-in page', async () => {
     render(<SignOutButton authService={new MockAuthService()} />);
 
+    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).toBeNull();
+
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
 
     expect(screen.getByRole('button', { name: 'Signing out…' })).toBeDisabled();
@@ -205,6 +207,7 @@ describe('SignOutButton', () => {
     };
     render(<SignOutButton authService={failing} variant="page" />);
 
+    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     await settle(SIGN_OUT_MIN_BUSY_MS);
 
@@ -237,7 +240,7 @@ describe('Sidebar', () => {
   it('holds the project switcher, the screens, the privacy note and the account', () => {
     render(<Sidebar admin={ADMIN} project={store()} />);
 
-    expect(screen.getByText('Privacy-first')).toBeInTheDocument();
+    expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
     expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
