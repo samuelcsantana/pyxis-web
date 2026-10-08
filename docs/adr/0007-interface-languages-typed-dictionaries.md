@@ -81,3 +81,66 @@ Option (a).
   and has to resolve its texts without it.
 - next-intl is worth revisiting if the dashboard grows past three languages or adopts a
   translation tool that works with ICU message files.
+
+## Brazilian Portuguese (shipped with the language menu)
+
+- `translation()` types a dictionary against English (the parity type above), and a runtime test
+  walks every translation for the same keys, placeholders, rich-text tags and plural categories.
+- CLDR puts 0 in the `one` category in Portuguese, while Brazilian usage says "0 visitas": every
+  counted pt-BR message carries a `zero` form, tried first for exactly zero.
+- Lists are joined with `Intl.ListFormat` of the `unit` type, which keeps English exactly as it was
+  ("a, b, c") and gives Portuguese its "e" ("a, b e c").
+- Periods keep their own two-date format instead of `Intl.DateTimeFormat.formatRange`: the latter
+  would change the English output ("Oct 1 – 7, 2026", with thin spaces around the dash) and reads
+  the same in Portuguese for any range that crosses a month.
+- The language menu is a form posting to a Server Action, with no client script. The sidebar must
+  fit in 700px so Sign out stays in view on a 1366×768 laptop, so on desktop the menu opens from a
+  globe button in the brand row instead of taking a row of the footer; on phones and tablets, where
+  the sidebar is a scrolling menu, it sits in the footer.
+
+Glossary, approved by the product owner and followed by every pt-BR text:
+
+| English                            | pt-BR                                   |
+| ---------------------------------- | --------------------------------------- |
+| Overview                           | Visão geral                             |
+| Funnel                             | Funil                                   |
+| Features                           | Funcionalidades                         |
+| Requests                           | Requisições                             |
+| Timeline                           | Linha do tempo                          |
+| Visits / visit                     | Visitas / visita                        |
+| Devices                            | Dispositivos                            |
+| Acquisition                        | Aquisição                               |
+| Identified users                   | Usuários identificados                  |
+| Conversions                        | Conversões                              |
+| Write (POST/PUT/PATCH/DELETE)      | Gravação                                |
+| Write error rate                   | Taxa de erro nas gravações              |
+| Page views                         | Visualizações de página                 |
+| Named events                       | Eventos nomeados                        |
+| Failed request                     | Requisição com falha                    |
+| Failed reads                       | Leituras com falha                      |
+| Screen                             | Tela                                    |
+| Paid / Email / Social              | Pago / E-mail / Social                  |
+| Other campaigns                    | Outras campanhas                        |
+| Organic search / Referral / Direct | Busca orgânica / Referência / Direto    |
+| Mobile / Desktop / Tablet          | Celular / Computador / Tablet           |
+| Today / 7 days / 30 days / Custom  | Hoje / 7 dias / 30 dias / Personalizado |
+| Sign in / Sign out                 | Entrar / Sair                           |
+| Try again                          | Tentar de novo                          |
+| Per visit / Per person             | Por visita / Por pessoa                 |
+| continued / dropped                | seguiram / saíram                       |
+| Reached / Dropped (funnel)         | Chegaram / Saíram                       |
+| Biggest drop-off                   | Maior abandono                          |
+| pt (percentage points)             | p.p.                                    |
+| No response                        | Sem resposta                            |
+| Client error / Server error        | Erro do cliente / Erro do servidor      |
+| Campaigns / Source / Channel       | Campanhas / Origem / Canal              |
+| Matching visits                    | Visitas encontradas                     |
+| Converting visits                  | Visitas com conversão                   |
+| Failures per day                   | Falhas por dia                          |
+| Day by day                         | Dia a dia                               |
+| Median / p95                       | Mediana / p95                           |
+| Median time to finish              | Tempo mediano até concluir              |
+| Chart / Table                      | Gráfico / Tabela                        |
+| Highlights                         | Destaques                               |
+| Download as CSV                    | Baixar CSV                              |
+| Demo data                          | Dados de demonstração                   |
