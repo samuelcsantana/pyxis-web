@@ -46,6 +46,24 @@ for (const size of PHONE_SIZES) {
   });
 }
 
+test.describe('at 320×640, below the sm breakpoint, the period controls', () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+
+  test('sit on one row of 44px targets', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/overview`);
+    const presets = page.getByRole('navigation', { name: 'Period' }).getByRole('link');
+    const custom = page.locator('summary', { hasText: 'Custom' });
+    await expect(presets).toHaveCount(3);
+    await expect(custom).toBeVisible();
+    const controls = [...(await presets.all()), custom];
+
+    const boxes = await Promise.all(controls.map((control) => control.boundingBox()));
+
+    expect(new Set(boxes.map((box) => box?.y))).toHaveProperty('size', 1);
+    expect(Math.min(...boxes.map((box) => box?.height ?? 0))).toBeGreaterThanOrEqual(44);
+  });
+});
+
 test.describe('the theme toggle', () => {
   test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' });
 
