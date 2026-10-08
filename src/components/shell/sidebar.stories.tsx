@@ -14,6 +14,27 @@ if (STORE === undefined) {
 
 const ONE_PROJECT: Admin = { ...DEMO_ADMIN, projects: [STORE] };
 
+const LONG_PROJECT = {
+  ...STORE,
+  name: 'Customer Self-Service Portal (Production)',
+  timezone: 'America/Argentina/Buenos_Aires',
+};
+
+const LONG_VALUES: Admin = {
+  email: 'analytics.operations+dashboards@a-very-long-company-domain.example',
+  projects: [LONG_PROJECT, ...DEMO_ADMIN.projects.slice(1)],
+};
+
+const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  for (const text of [LONG_VALUES.email, LONG_PROJECT.name, LONG_PROJECT.timezone]) {
+    for (const element of canvas.getAllByText(text)) {
+      await expect(element.scrollWidth).toBeLessThanOrEqual(element.clientWidth);
+      await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
+    }
+  }
+};
+
 const meta = {
   title: 'Shell/Sidebar',
   component: Sidebar,
@@ -43,6 +64,17 @@ export const OverviewSelected: Story = {};
 export const SingleProject: Story = { args: { admin: ONE_PROJECT } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const LongValues: Story = {
+  args: { admin: LONG_VALUES, project: LONG_PROJECT },
+  play: nothingIsCut,
+};
+
+export const LongValuesDark: Story = {
+  args: { admin: LONG_VALUES, project: LONG_PROJECT },
+  globals: { theme: 'dark' },
+  play: nothingIsCut,
+};
 
 export const KeyboardFocus: Story = {
   play: async ({ canvasElement }) => {

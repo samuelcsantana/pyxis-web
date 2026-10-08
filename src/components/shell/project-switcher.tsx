@@ -41,8 +41,8 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
           {projectInitials(currentProject.name)}
         </span>
         <span className="flex min-w-0 grow flex-col gap-0.5">
-          <span className="truncate text-sm font-semibold">{currentProject.name}</span>
-          <span className="truncate font-mono text-xs text-nav-muted">
+          <span className="text-sm font-semibold break-words">{currentProject.name}</span>
+          <span className="font-mono text-xs break-words text-nav-muted">
             {currentProject.timezone}
           </span>
         </span>
@@ -69,7 +69,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
             <Link
               href={screenHref(project.id, screen, query)}
               aria-current={project.id === currentProject.id ? 'page' : undefined}
-              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 text-sm ${NAV_ITEM_IDLE} ${NAV_CONTROL} aria-[current=page]:font-semibold aria-[current=page]:text-nav-strong`}
+              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_ITEM_IDLE} ${NAV_CONTROL} aria-[current=page]:font-semibold aria-[current=page]:text-nav-strong`}
             >
               <span
                 aria-hidden="true"
@@ -77,7 +77,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
               >
                 {projectInitials(project.name)}
               </span>
-              <span className="truncate">{project.name}</span>
+              <span className="min-w-0 break-words">{project.name}</span>
             </Link>
           </li>
         ))}
