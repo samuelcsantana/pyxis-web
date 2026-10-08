@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { FIELD } from '@/components/ui/control-classes';
+import { useT } from '@/i18n/messages-provider';
 
 export interface CustomRangeFieldsProps {
   readonly from: string;
@@ -14,12 +15,13 @@ const LABEL_CLASS = 'flex flex-col gap-1 text-xs font-medium text-muted';
 const DATE_INPUT_CLASS = `min-h-11 rounded-control px-2 text-base sm:min-h-9 sm:text-caption ${FIELD}`;
 
 export function CustomRangeFields({ from, to, today, problemId }: CustomRangeFieldsProps) {
+  const t = useT();
   const [start, setStart] = useState(from);
   const rejected = problemId !== undefined;
   return (
     <>
       <label className={LABEL_CLASS}>
-        From
+        {t('periodSelector.from')}
         <input
           type="date"
           name="from"
@@ -35,7 +37,7 @@ export function CustomRangeFields({ from, to, today, problemId }: CustomRangeFie
         />
       </label>
       <label className={LABEL_CLASS}>
-        To
+        {t('periodSelector.to')}
         <input
           type="date"
           name="to"

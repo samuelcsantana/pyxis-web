@@ -56,6 +56,7 @@ describe('RootLayout', () => {
       'screens',
       'nav',
       'theme',
+      'periodSelector',
     ]);
   });
 

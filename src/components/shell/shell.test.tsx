@@ -508,7 +508,12 @@ describe('PeriodSelector', () => {
 
   it('links each preset and marks the current one', () => {
     renderWithMessages(
-      <PeriodSelector basePath="/p1/overview" period={presetPeriod('7d', today)} today={today} />,
+      <PeriodSelector
+        basePath="/p1/overview"
+        period={presetPeriod('7d', today)}
+        today={today}
+        i18n={english}
+      />,
     );
 
     const presets = within(screen.getByRole('navigation', { name: 'Period' }));
@@ -527,6 +532,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
         today={today}
+        i18n={english}
       />,
     );
 
@@ -548,6 +554,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
         today={today}
+        i18n={english}
       />,
     );
     const from = screen.getByLabelText('From');
@@ -568,6 +575,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        i18n={english}
       />,
     );
 
@@ -593,6 +601,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        i18n={english}
       />,
     );
     const from = screen.getByLabelText('From');
@@ -615,6 +624,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        i18n={english}
       />,
     );
 
@@ -634,6 +644,7 @@ describe('PeriodSelector with parameters of the screen', () => {
         period={presetPeriod('7d', '2026-10-05')}
         today="2026-10-05"
         keep={{ kind: 'screens', q: 'order' }}
+        i18n={english}
       />,
     );
 
