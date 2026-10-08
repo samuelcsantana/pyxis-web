@@ -203,18 +203,22 @@ describe('TopPagesTable', () => {
 });
 
 describe('TopEventsList', () => {
-  it('lists the events by label and name with their count', () => {
+  it('lists the events by label and name with their count and the visits that had them', () => {
     render(
       <TopEventsList
-        events={[{ name: 'cta_clicked', count: 1200, visits: 900 }]}
+        events={[
+          { name: 'cta_clicked', count: 1200, visits: 900 },
+          { name: 'report_exported', count: 1, visits: 1 },
+        ]}
         visitsHref={eventVisitsHref}
       />,
     );
 
-    const item = screen.getByRole('listitem');
+    const [item, single] = screen.getAllByRole('listitem');
     expect(item).toHaveTextContent('Cta clicked');
     expect(item).toHaveTextContent('cta_clicked');
-    expect(item).toHaveTextContent('1,200');
+    expect(item).toHaveTextContent('1,200 in 900 visits');
+    expect(single).toHaveTextContent('1 in 1 visit');
     expect(
       screen.getByRole('link', { name: 'See the visits that had Cta clicked' }),
     ).toHaveAttribute('href', '/p-store/visits?range=7d&event=cta_clicked');

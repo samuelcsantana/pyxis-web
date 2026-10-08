@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
+import { barWidth, eventLabel, formatCount, formatQuantity } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE, ROW_LINK } from '@/components/ui/panel-classes';
 
@@ -35,7 +35,12 @@ export function TopEventsList({ events, visitsHref }: TopEventsListProps) {
                   </Link>
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>
-                <span className="font-semibold tabular-nums">{formatCount(event.count)}</span>
+                <span className="shrink-0 text-right font-semibold tabular-nums">
+                  {formatCount(event.count)}{' '}
+                  <span className="font-normal text-muted">
+                    in {formatQuantity(event.visits, 'visit', 'visits')}
+                  </span>
+                </span>
               </span>
               <span aria-hidden="true" className={BAR_TRACK}>
                 <span
