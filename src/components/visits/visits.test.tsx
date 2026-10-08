@@ -80,7 +80,7 @@ describe('VisitsTable', () => {
       within(newest).getByRole('link', { name: 'u_7f3a, open the timeline of this user' }),
     ).toHaveAttribute('href', '/p-store/timeline?user=u_7f3a');
     expect(bodyRow(2)).toHaveTextContent('Login completed');
-    expect(within(bodyRow(1)).getByText('anonymous')).toBeInTheDocument();
+    expect(within(bodyRow(1)).getByText('Anonymous')).toBeInTheDocument();
   });
 
   it('shortens a long user id on screen and keeps it whole in the link name', () => {
@@ -206,7 +206,7 @@ describe('VisitsTable', () => {
     expect(
       within(newest).getByRole('link', { name: 'u_7f3a, open the timeline of this user' }),
     ).toHaveAttribute('href', '/p-store/timeline?user=u_7f3a');
-    expect(within(card(1)).getByText('anonymous')).toBeInTheDocument();
+    expect(within(card(1)).getByText('Anonymous')).toBeInTheDocument();
   });
 
   it('focuses nothing when an older page comes back empty', async () => {

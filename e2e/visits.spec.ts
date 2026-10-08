@@ -160,7 +160,7 @@ test('shows every column of a visit on its card on a phone', async ({ page, isMo
   await expect(
     newest
       .getByRole('link', { name: /, open the timeline of this user$/ })
-      .or(newest.getByText('anonymous')),
+      .or(newest.getByText('Anonymous')),
   ).toBeVisible();
   expect(await sidewaysOverflow(page)).toBe(0);
 });

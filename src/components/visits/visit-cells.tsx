@@ -31,7 +31,7 @@ export function AccountCell({
   timelinePath: string;
 }) {
   if (account === null) {
-    return <span className="text-muted">anonymous</span>;
+    return <span className="text-muted">Anonymous</span>;
   }
   return (
     <Link
