@@ -132,3 +132,81 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
   );
   await expect(rows).toHaveCount(2);
 });
+
+test('plots the figure a card picks, from the keyboard too, and keeps it across periods', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=7d`);
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy', 'true');
+  const visits = page.getByRole('button', { name: 'Visits', exact: true });
+  await expect(visits).toHaveAttribute('aria-pressed', 'false');
+
+  await visits.focus();
+  await page.keyboard.press('Space');
+
+  await expect(page).toHaveURL(/\/overview\?range=7d&metric=visits$/);
+  const chart = page.getByRole('region', { name: 'Visits per day' });
+  await expect(chart.getByRole('img')).toHaveAccessibleName(
+    /^Line chart of 7 days\. Visits: .+ Dashed, the previous period\. Visits: /,
+  );
+  await expect(visits).toHaveAttribute('aria-pressed', 'true');
+  await expect(visits).toBeFocused();
+  expect(await axeViolations(page)).toEqual([]);
+
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: '30 days' })
+    .click();
+
+  await expect(page).toHaveURL(/\/overview\?range=30d&metric=visits$/);
+  await expect(page.getByRole('region', { name: 'Visits per day' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Visits', exact: true }).click();
+
+  await expect(page).toHaveURL(/\/overview\?range=30d$/);
+  await expect(dailyChart(page)).toBeVisible();
+});
+
+test('opens on the figure the address names, its table beside the previous period', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=7d&metric=write-errors`);
+  const chart = page.getByRole('region', { name: 'Write error rate per day' });
+  await expect(page.getByRole('button', { name: 'Write error rate', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(chart.getByRole('img')).toBeVisible();
+  await expect(chart.getByText('0%', { exact: true })).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+
+  await chart.getByRole('button', { name: 'Table', exact: true }).click();
+
+  await expect(chart.getByRole('columnheader')).toHaveText([
+    'Day',
+    'Write error rate',
+    'Compared with',
+    'Write error rate then',
+  ]);
+  await expect(chart.getByRole('table').locator('tbody tr')).toHaveCount(7);
+});
+
+test('shows the values of the day under the pointer', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'Phones have no pointer to hover with.');
+  await page.goto(`/${STORE_ID}/overview?range=7d&metric=visits`);
+  const plot = page.getByRole('region', { name: 'Visits per day' }).locator('[data-layer="hover"]');
+  const box = await plot.boundingBox();
+  if (box === null) {
+    throw new Error('The chart has no plot to hover');
+  }
+
+  await expect(async () => {
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.move(box.x + box.width - 2, box.y + box.height / 2);
+    await expect(plot).toContainText(/^Oct \d+Visits[\d,]+Visits, (Sep|Oct) \d+[\d,]+$/, {
+      timeout: 1_000,
+    });
+  }).toPass();
+  await page.mouse.move(0, 0);
+  await expect(plot).toBeEmpty();
+});
