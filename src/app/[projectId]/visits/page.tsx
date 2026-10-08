@@ -24,7 +24,7 @@ import { chosenTheme } from '@/lib/theme-cookie';
 import { createVisitsService } from '@/services/visits/visits-service.factory';
 import { loadOlderVisitRows } from './actions';
 
-export const generateMetadata = screenMetadata('Visits');
+export const generateMetadata = screenMetadata('visits');
 
 export interface VisitsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

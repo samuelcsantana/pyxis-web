@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { MainContent } from '@/components/shell/main-content';
-import { SCREENS, type ScreenSlug } from '@/components/shell/screens';
+import { type ScreenSlug, screenLabelKey } from '@/components/shell/screens';
 import { TopbarFrame } from '@/components/shell/topbar';
+import type { I18n } from '@/i18n/i18n';
 import {
   SkeletonCards,
   SkeletonChart,
@@ -68,12 +69,6 @@ const SCREEN_SKELETONS: Readonly<Record<ScreenSlug, () => ReactNode>> = {
   ),
 };
 
-function screenLabel(slug: ScreenSlug): string {
-  return SCREENS.filter((screen) => screen.slug === slug)
-    .map((screen) => screen.label)
-    .join('');
-}
-
 function PeriodPlaceholder() {
   return (
     <span
@@ -94,10 +89,11 @@ function ThemeTogglePlaceholder() {
 
 export interface ScreenLoadingProps {
   readonly screen: ScreenSlug;
+  readonly i18n: I18n;
 }
 
-export function ScreenLoading({ screen }: ScreenLoadingProps) {
-  const label = screenLabel(screen);
+export function ScreenLoading({ screen, i18n }: ScreenLoadingProps) {
+  const label = i18n.t(screenLabelKey(screen));
   return (
     <>
       <TopbarFrame
@@ -120,7 +116,7 @@ export function ScreenLoading({ screen }: ScreenLoadingProps) {
         className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
       >
         <p role="status" className="text-sm text-muted">
-          Loading {label}…
+          {i18n.t('screens.loading', { screen: label })}
         </p>
         <div aria-hidden="true" className="flex flex-col gap-3.5 sm:gap-5">
           {SCREEN_SKELETONS[screen]()}

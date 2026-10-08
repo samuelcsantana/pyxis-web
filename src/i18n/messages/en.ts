@@ -3,6 +3,18 @@ import { APP_DESCRIPTION } from '@/lib/site';
 export const en = {
   meta: {
     description: APP_DESCRIPTION,
+    screenTitle: '{screen} · {project}',
+  },
+  screens: {
+    overview: 'Overview',
+    funnel: 'Funnel',
+    features: 'Features',
+    requests: 'Requests',
+    timeline: 'Timeline',
+    visits: 'Visits',
+    devices: 'Devices',
+    acquisition: 'Acquisition',
+    loading: 'Loading {screen}…',
   },
   units: {
     points: '{points} pt',

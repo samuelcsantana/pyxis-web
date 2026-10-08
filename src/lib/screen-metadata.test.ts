@@ -29,7 +29,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 
 describe('screenMetadata', () => {
   it('titles a screen with the name of its project', async () => {
-    const metadata = await screenMetadata('Overview')({
+    const metadata = await screenMetadata('overview')({
       params: Promise.resolve({ projectId: 'p-store' }),
     });
 
@@ -38,7 +38,7 @@ describe('screenMetadata', () => {
 
   it('answers not found for any other project, so the 404 names itself in the title', async () => {
     await expect(
-      screenMetadata('Overview')({ params: Promise.resolve({ projectId: 'p-other' }) }),
+      screenMetadata('overview')({ params: Promise.resolve({ projectId: 'p-other' }) }),
     ).rejects.toThrow('not-found');
   });
 });

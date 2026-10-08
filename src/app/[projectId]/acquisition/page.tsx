@@ -37,7 +37,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createAcquisitionService } from '@/services/acquisition/acquisition-service.factory';
 
-export const generateMetadata = screenMetadata('Acquisition');
+export const generateMetadata = screenMetadata('acquisition');
 
 export interface AcquisitionPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

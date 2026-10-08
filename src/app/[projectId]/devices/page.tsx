@@ -30,7 +30,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createDevicesService } from '@/services/devices/devices-service.factory';
 
-export const generateMetadata = screenMetadata('Devices');
+export const generateMetadata = screenMetadata('devices');
 
 export interface DevicesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
