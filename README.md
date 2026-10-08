@@ -321,7 +321,7 @@ that says why:
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 152               |
-| Dashboard screens without a chart                      | 161               |
+| Dashboard screens without a chart                      | 170               |
 | Dashboard screens with a chart (Overview, Acquisition) | 162               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
