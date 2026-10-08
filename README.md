@@ -107,7 +107,10 @@ Shipping now:
   from, and a division by zero shows a dash, never `NaN%`
 - One word per idea across screens: "Write error rate" on the Overview and on Requests, "Failing
   only" for the failed-requests filter of Requests and of the Timeline, "Anonymous" for a visit
-  without a user id; Overview, Visits and Requests define visit and write with the same sentence
+  without a user id, "items" for everything the Timeline lists; Overview, Visits and Requests
+  define visit and write with the same sentence. Event names read as words with their acronyms
+  in capitals (`cta_clicked` is "CTA clicked"), and every percentage, change and point change
+  has one decimal ("62.0%", "+10.0% (+40)", "+2.0 pt"), so a column never mixes precisions
 - Honest comparisons: a range that ends today is compared with the previous period up to the same
   time of day, and the card says so ("vs. yesterday until 10:03"). A change shows its size next
   to the percentage ("+12.4% (+525)"), reads "no change" when nothing moved, and is coloured as
