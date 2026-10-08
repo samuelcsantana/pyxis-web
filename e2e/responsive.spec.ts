@@ -46,6 +46,48 @@ for (const size of PHONE_SIZES) {
   });
 }
 
+const CHART_PANELS = [
+  { heading: 'Overview', path: `/${STORE_ID}/overview`, panel: 'Activity per day' },
+  { heading: 'Acquisition', path: `/${STORE_ID}/acquisition`, panel: 'Visits by channel' },
+] as const;
+const CHART_RANGES = ['7d', '30d'] as const;
+
+test.describe('at 320×640 portrait, the chart date labels', () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+
+  for (const chart of CHART_PANELS) {
+    for (const range of CHART_RANGES) {
+      test(`of ${chart.heading} over ${range} never overlap nor leave the chart`, async ({
+        page,
+      }) => {
+        await page.goto(`${chart.path}?range=${range}`);
+        const figure = page.getByRole('region', { name: chart.panel }).getByRole('img');
+        await expect(figure).toBeVisible();
+
+        const boxes = await figure.locator('div.absolute > span:visible').evaluateAll((labels) =>
+          labels.map((label) => {
+            const { left, right } = label.getBoundingClientRect();
+            return { left, right };
+          }),
+        );
+        const frame = await figure.boundingBox();
+        const gaps = boxes
+          .slice(1)
+          .map((box, index) => box.left - (boxes[index]?.right ?? Number.POSITIVE_INFINITY));
+
+        expect(boxes.length).toBeGreaterThanOrEqual(2);
+        expect(Math.min(...gaps)).toBeGreaterThan(0);
+        expect(Math.min(...boxes.map((box) => box.left))).toBeGreaterThanOrEqual(
+          frame?.x ?? Number.NaN,
+        );
+        expect(Math.max(...boxes.map((box) => box.right))).toBeLessThanOrEqual(
+          (frame?.x ?? Number.NaN) + (frame?.width ?? Number.NaN),
+        );
+      });
+    }
+  }
+});
+
 const FORM_SCREENS = [
   { name: 'Visits', path: `/${STORE_ID}/visits`, open: 'Filters' },
   { name: 'Timeline', path: `/${STORE_ID}/timeline` },
