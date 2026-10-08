@@ -6,6 +6,10 @@ const EXAMPLE_FUNNEL =
   '[{"type":"page","path":"/calculator"},{"type":"event","name":"calculator_result_shown"},{"type":"page","path":"/sign-up"}]';
 
 const MIN_PHONE_FIELD_FONT_PX = 16;
+const STAT_VALUE_LINE_PX = 28;
+const PHONE_CARD_PADDING_PX = 14;
+const TABLET_WIDTHS = [768, 1024] as const;
+const KPI_COUNT = 4;
 const DESKTOP_FIELD_FONT_PX = 14;
 
 const PHONE_SIZES = [
@@ -267,3 +271,64 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     }
   });
 });
+
+test.describe('at 320×640, below the sm breakpoint, the content', () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+
+  test('keeps every Funnel figure on one line', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/funnel?steps=${encodeURIComponent(EXAMPLE_FUNNEL)}`);
+    await expect(page.getByRole('group', { name: 'Biggest drop-off' })).toBeVisible();
+
+    for (const name of ['Overall conversion', 'Biggest drop-off']) {
+      const value = page.getByRole('group', { name }).locator('p').first();
+      expect((await value.boundingBox())?.height).toBeLessThanOrEqual(STAT_VALUE_LINE_PX);
+    }
+  });
+
+  test('pads the Timeline cards like the panels', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/timeline?user=u_7f3a`);
+    const card = page.getByRole('region', { name: /^Visit / }).first();
+
+    await expect(card).toHaveCSS('padding-left', `${String(PHONE_CARD_PADDING_PX)}px`);
+  });
+
+  test('says how many visits converted under each source rate', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/acquisition?range=30d`);
+    const sources = page.getByRole('table', { name: 'Sources' });
+
+    await expect(sources.getByText(/ converted$/).first()).toBeVisible();
+  });
+});
+
+for (const width of TABLET_WIDTHS) {
+  test.describe(`at ${String(width)}px, the tablet grids`, () => {
+    test.use({ viewport: { width, height: 900 } });
+
+    test('put the KPI cards two by two', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/overview`);
+      const cards = page
+        .getByRole('main')
+        .getByRole('group')
+        .filter({ has: page.getByRole('heading') });
+      await expect(cards).toHaveCount(KPI_COUNT);
+
+      const tops = await Promise.all(
+        (await cards.all()).map(async (card) => (await card.boundingBox())?.y),
+      );
+
+      expect(new Set(tops)).toHaveProperty('size', KPI_COUNT / 2);
+    });
+
+    test('give the last donut the whole row', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/devices`);
+      const first = page.getByRole('region', { name: 'Device type' });
+      const last = page.getByRole('region', { name: 'Operating system' });
+      await expect(last).toBeVisible();
+
+      const [firstBox, lastBox] = await Promise.all([first.boundingBox(), last.boundingBox()]);
+
+      expect(lastBox?.y).toBeGreaterThan(firstBox?.y ?? 0);
+      expect(lastBox?.width).toBeGreaterThan((firstBox?.width ?? 0) * 2);
+    });
+  });
+}
