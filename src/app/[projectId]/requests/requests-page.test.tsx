@@ -89,8 +89,8 @@ describe('RequestsPage', () => {
       null,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Requests' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Write error rate' })).toHaveTextContent(/failed:/);
-    expect(screen.getByRole('region', { name: 'Slowest route' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Write error rate' })).toHaveTextContent(/failed:/);
+    expect(screen.getByRole('group', { name: 'Slowest route' })).toHaveTextContent(
       'median of POST /payouts',
     );
     expect(within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row')).toHaveLength(
@@ -127,8 +127,8 @@ describe('RequestsPage', () => {
       null,
     );
     expect(screen.getByText('The reads Demo Store made that failed')).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Failed reads' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Routes failing' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Failed reads' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Routes failing' })).toHaveTextContent(
       'Most: GET /orders/:id',
     );
     expect(screen.queryByRole('region', { name: 'Write error rate' })).not.toBeInTheDocument();
@@ -243,7 +243,7 @@ describe('RequestsPage', () => {
     expect(
       screen.getByText('No writes in this period. Calls sent with trackRequest() show up here.'),
     ).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Slowest route' })).toHaveTextContent('—');
+    expect(screen.getByRole('group', { name: 'Slowest route' })).toHaveTextContent('—');
     unmount();
 
     const failing = render(await renderRequests({ show: 'failing' }));
@@ -261,7 +261,7 @@ describe('RequestsPage', () => {
         'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Failed reads' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Failed reads' })).toHaveTextContent(
       'No read failed in this period',
     );
     reads.unmount();

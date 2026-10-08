@@ -85,10 +85,10 @@ describe('AcquisitionPage', () => {
   it('shows the paid visits, the top channel, the chart and the sources', async () => {
     render(await renderAcquisition());
 
-    expect(screen.getByRole('region', { name: 'Paid visits' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Paid visits' })).toHaveTextContent(
       /% of [\d,]+ visits/,
     );
-    expect(screen.getByRole('region', { name: 'Top channel' })).toHaveTextContent('Paid');
+    expect(screen.getByRole('group', { name: 'Top channel' })).toHaveTextContent('Paid');
     expect(
       screen.getByText('Every visit by the channel it came from, last 7 days'),
     ).toBeInTheDocument();

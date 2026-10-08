@@ -42,11 +42,11 @@ test('switches to the failed reads, counted without a rate, keeping the period',
     'aria-current',
     'page',
   );
-  await expect(page.getByRole('region', { name: 'Routes failing' })).toContainText(
+  await expect(page.getByRole('group', { name: 'Routes failing' })).toContainText(
     'GET /orders/:id',
   );
   await expect(page.getByRole('columnheader', { name: 'Failed' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Write error rate' })).toHaveCount(0);
+  await expect(page.getByRole('group', { name: 'Write error rate' })).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Show' })).toHaveCount(0);
 
   await page
@@ -57,7 +57,7 @@ test('switches to the failed reads, counted without a rate, keeping the period',
 
   await tabs.getByRole('link', { name: 'Writes' }).click();
   await expect(page).toHaveURL(/range=7d$/);
-  await expect(page.getByRole('region', { name: 'Write error rate' })).toBeVisible();
+  await expect(page.getByRole('group', { name: 'Write error rate' })).toBeVisible();
 });
 
 test('keeps the focus in the details, closes them with Escape and refocuses the route', async ({

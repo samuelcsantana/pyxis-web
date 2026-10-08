@@ -103,7 +103,7 @@ describe('StatCard', () => {
   it('shows a figure with its label and note', () => {
     render(<StatCard id="paid" label="Paid visits" value="829" note="34.7% of 2,390 visits" />);
 
-    expect(screen.getByRole('region', { name: 'Paid visits' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Paid visits' })).toHaveTextContent(
       'Paid visits82934.7% of 2,390 visits',
     );
   });

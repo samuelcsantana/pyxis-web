@@ -135,10 +135,10 @@ describe('FunnelPage', () => {
     expect(
       within(screen.getByRole('list', { name: 'Funnel' })).getAllByRole('listitem'),
     ).toHaveLength(6);
-    expect(screen.getByRole('region', { name: 'Overall conversion' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Overall conversion' })).toHaveTextContent(
       'people reached the last step',
     );
-    expect(screen.getByRole('region', { name: 'Biggest drop-off' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Biggest drop-off' })).toHaveTextContent(
       'Calculator result shown → Opened /sign-up',
     );
     expect(screen.getByRole('button', { name: 'Edit steps' })).toHaveAttribute(
