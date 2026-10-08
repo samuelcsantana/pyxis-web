@@ -38,18 +38,19 @@ describe('KpiGrid', () => {
       />,
     );
 
-    const visits = screen.getByRole('region', { name: 'Visits' });
+    const visits = screen.getByRole('group', { name: 'Visits' });
     expect(visits).toHaveTextContent(`${kpi('visits').change} change vs. previous 7 days`);
-    for (const region of screen.getAllByRole('region')) {
-      expect(within(region).getByText('vs. previous 7 days')).toBeInTheDocument();
+    for (const card of screen.getAllByRole('group')) {
+      expect(within(card).getByText('vs. previous 7 days')).toBeInTheDocument();
     }
     expect(
-      within(screen.getByRole('region', { name: 'Identified users' })).getByText(
+      within(screen.getByRole('group', { name: 'Identified users' })).getByText(
         'signed in at least once',
       ),
     ).toBeInTheDocument();
     expect(visits.querySelectorAll('p')).toHaveLength(2);
-    expect(screen.getAllByRole('region')).toHaveLength(4);
+    expect(screen.getAllByRole('group')).toHaveLength(4);
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
     expect(container.querySelectorAll('polyline')).toHaveLength(4);
     expect(container.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(7);
   });
@@ -80,7 +81,7 @@ describe('KpiGrid', () => {
     );
 
     const lines = screen
-      .getByRole('region', { name: 'Write error rate' })
+      .getByRole('group', { name: 'Write error rate' })
       .querySelectorAll('polyline');
     expect(lines).toHaveLength(2);
   });
@@ -101,8 +102,8 @@ describe('KpiGrid', () => {
       />,
     );
 
-    const linkIn = (region: string) =>
-      within(screen.getByRole('region', { name: region })).getByRole('link');
+    const linkIn = (card: string) =>
+      within(screen.getByRole('group', { name: card })).getByRole('link');
     expect(linkIn('Visits')).toHaveAccessibleName('See the visits');
     expect(linkIn('Visits')).toHaveAttribute('href', '/p-store/visits?range=7d');
     expect(linkIn('Identified users')).toHaveAttribute(
@@ -127,7 +128,7 @@ describe('KpiGrid', () => {
     );
 
     expect(
-      within(screen.getByRole('region', { name: 'Visits' })).queryByRole('link'),
+      within(screen.getByRole('group', { name: 'Visits' })).queryByRole('link'),
     ).not.toBeInTheDocument();
   });
 
@@ -143,13 +144,13 @@ describe('KpiGrid', () => {
       />,
     );
 
-    expect(screen.getByRole('region', { name: 'Visits' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Visits' })).toHaveTextContent(
       '+10% (+40) change vs. previous 7 days, better',
     );
-    expect(screen.getByRole('region', { name: 'Write error rate' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Write error rate' })).toHaveTextContent(
       '+2 pt change vs. previous 7 days, worse',
     );
-    const users = screen.getByRole('region', { name: 'Identified users' });
+    const users = screen.getByRole('group', { name: 'Identified users' });
     expect(users).toHaveTextContent('no change vs. previous 7 days');
     expect(users).not.toHaveTextContent('no change change');
   });

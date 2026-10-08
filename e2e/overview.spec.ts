@@ -18,7 +18,7 @@ function chartFigure(page: Page): Locator {
 }
 
 async function topOf(page: Page, figure: string): Promise<number> {
-  const box = await page.getByRole('region', { name: figure, exact: true }).boundingBox();
+  const box = await page.getByRole('group', { name: figure, exact: true }).boundingBox();
   return box?.y ?? Number.NaN;
 }
 
@@ -96,7 +96,7 @@ test('draws one point per day, and the figures of a single day without a chart',
   for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
     await expect(
       page
-        .getByRole('region', { name, exact: true })
+        .getByRole('group', { name, exact: true })
         .getByText(/^vs\. yesterday until \d{2}:\d{2}(, better|, worse)?$/),
     ).toBeVisible();
   }
