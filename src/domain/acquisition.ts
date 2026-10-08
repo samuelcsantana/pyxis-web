@@ -77,7 +77,7 @@ export function channelSummary(days: readonly ChannelDay[], i18n: I18n): string 
   return [
     i18n.t('acquisition.summary.bars', { days: i18n.t('counts.day', { count: days.length }) }),
     i18n.t('acquisition.summary.range', { lowest, highest }),
-    i18n.t('acquisition.summary.channels', { channels: ranked.join(', ') }),
+    i18n.t('acquisition.summary.channels', { channels: i18n.format.list(ranked) }),
   ].join(' ');
 }
 

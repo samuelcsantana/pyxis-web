@@ -279,7 +279,7 @@ function seriesStatistics(values: readonly ChartValue[], chart: OverviewChart, i
   const gaps = values.length - known.length;
   const lowest = formatChartValue(Math.min(...known), chart.format, i18n);
   const highest = formatChartValue(Math.max(...known), chart.format, i18n);
-  return [
+  return i18n.format.list([
     ...(chart.additive
       ? [i18n.t('overviewChart.statistics.total', { total: formatCount(sum(known), i18n) })]
       : []),
@@ -292,7 +292,7 @@ function seriesStatistics(values: readonly ChartValue[], chart: OverviewChart, i
           }),
         ]
       : []),
-  ].join(', ');
+  ]);
 }
 
 function seriesSentence(

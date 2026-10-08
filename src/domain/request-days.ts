@@ -53,6 +53,6 @@ export function failureDaysSummary(rows: readonly FailureDayRow[], i18n: I18n): 
       lowest: formatCount(Math.min(...daily), i18n),
       highest: formatCount(Math.max(...daily), i18n),
     }),
-    i18n.t('requests.failureDays.summary.classes', { classes: classes.join(', ') }),
+    i18n.t('requests.failureDays.summary.classes', { classes: i18n.format.list(classes) }),
   ].join(' ');
 }
