@@ -42,6 +42,24 @@ describe('ShareDonut', () => {
     expect(within(table).queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
   });
 
+  it('links the values it is given a link for, by their visible name', () => {
+    render(
+      <ShareDonut
+        id="device-type"
+        title="Device type"
+        rows={shareRows(DEVICE_TYPES, deviceTypeLabel)}
+        visitsHref={(value) => (value === 'other' ? null : `/p1/visits?device=${value}`)}
+      />,
+    );
+
+    const table = screen.getByRole('table', { name: 'Device type' });
+    expect(within(table).getByRole('link', { name: 'Desktop: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?device=desktop',
+    );
+    expect(within(table).getAllByRole('link')).toHaveLength(2);
+  });
+
   it('adds the conversion rate of each value when asked and a conversion event is set', () => {
     render(
       <ShareDonut

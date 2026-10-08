@@ -2,7 +2,7 @@ import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { ShareDonut } from '@/components/devices/share-donut';
 import { MainContent } from '@/components/shell/main-content';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
@@ -20,6 +20,7 @@ import {
 } from '@/domain/devices';
 import { DEVICES_TABLE_LABEL } from '@/domain/devices-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { deviceFilterOf } from '@/domain/visits';
 import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -38,9 +39,15 @@ interface DevicesReportViewProps {
   readonly report: DevicesReport;
   readonly conversionEvent: string | null;
   readonly exportPath: string;
+  readonly deviceVisitsHref: (deviceType: string) => string | null;
 }
 
-function DevicesReportView({ report, conversionEvent, exportPath }: DevicesReportViewProps) {
+function DevicesReportView({
+  report,
+  conversionEvent,
+  exportPath,
+  deviceVisitsHref,
+}: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
@@ -50,6 +57,7 @@ function DevicesReportView({ report, conversionEvent, exportPath }: DevicesRepor
           id="device-type"
           title="Device type"
           rows={shareRows(report.deviceTypes, deviceTypeLabel)}
+          visitsHref={deviceVisitsHref}
         />
         <ShareDonut
           id="browser"
@@ -91,6 +99,11 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   const report = await readOrSignIn(() =>
     createDevicesService().devices(project.id, { from: period.from, to: period.to }),
   );
+  const visitsHref = screenHref(project.id, 'visits', periodQuery(period));
+  const deviceVisitsHref = (deviceType: string) => {
+    const device = deviceFilterOf(deviceType);
+    return device === null ? null : linkWith(visitsHref, { device });
+  };
   return (
     <>
       <Topbar
@@ -107,6 +120,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             report={report}
             conversionEvent={project.conversionEvent}
             exportPath={exportHref(project.id, 'devices', periodQuery(period))}
+            deviceVisitsHref={deviceVisitsHref}
           />
         ) : (
           <EmptyPeriod
