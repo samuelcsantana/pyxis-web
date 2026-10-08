@@ -237,7 +237,7 @@ describe('RequestsPage', () => {
   });
 
   it('says what is missing for each filter', async () => {
-    state.requests = (): Promise<RequestsReport> => Promise.resolve({ routes: [] });
+    state.requests = (): Promise<RequestsReport> => Promise.resolve({ routes: [], days: [] });
 
     const { unmount } = render(await renderRequests());
     expect(
@@ -254,7 +254,7 @@ describe('RequestsPage', () => {
     expect(screen.getByText('No writes from /settings in this period.')).toBeInTheDocument();
     fromScreen.unmount();
 
-    state.failedReads = (): Promise<RequestsReport> => Promise.resolve({ routes: [] });
+    state.failedReads = (): Promise<RequestsReport> => Promise.resolve({ routes: [], days: [] });
     const reads = render(await renderRequests({ kind: 'reads' }));
     expect(
       screen.getByText(

@@ -59,6 +59,7 @@ export const requestsResponseSchema = z
       failed: route.failed,
       statuses: route.statuses,
       medianDurationMs: route.median_duration_ms,
+      p95DurationMs: route.p95_duration_ms ?? null,
       screens: route.screens,
       recentFailures: route.recent_failures.map((failure) => ({
         occurredAt: failure.occurred_at,
@@ -66,6 +67,15 @@ export const requestsResponseSchema = z
         errorCode: failure.error_code,
         sessionId: failure.session_id,
       })),
+    })),
+    days: (body.days ?? []).map((day) => ({
+      date: day.date,
+      byStatusClass: {
+        success: day.by_status_class.success,
+        clientError: day.by_status_class.client_error,
+        serverError: day.by_status_class.server_error,
+        noResponse: day.by_status_class.no_response,
+      },
     })),
   }));
 

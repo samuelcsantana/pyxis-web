@@ -187,6 +187,28 @@ export const en = {
       reads: '{failedReads} · median {median}',
       writes: '{requests} · {errorShare} errors · median {median}',
     },
+    failureDays: {
+      title: 'Failures per day',
+      description: {
+        writes: 'Every write that failed, by what went wrong, {period}',
+        reads: 'Every read that failed, by what went wrong, {period}',
+      },
+      classes: {
+        clientError: 'Client errors (4xx)',
+        serverError: 'Server errors (5xx)',
+        noResponse: 'No response',
+      },
+      day: 'Day',
+      total: 'Total',
+      caption: 'Failures per day by what went wrong, {period}',
+      none: 'Nothing failed in this period.',
+      summary: {
+        bars: 'Stacked bar chart of {days},',
+        range: 'between {lowest} and {highest} failures a day.',
+        classes: 'By what went wrong: {classes}.',
+        class: '{label} {count}',
+      },
+    },
   },
   properties: {
     otherValues: 'Other values',

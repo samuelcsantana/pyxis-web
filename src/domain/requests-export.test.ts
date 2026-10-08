@@ -13,6 +13,7 @@ const ROUTE: RouteReport = {
     { status: 0, count: 1 },
   ],
   medianDurationMs: 180,
+  p95DurationMs: 460,
   screens: [{ path: '/checkout', failed: 3 }],
   recentFailures: [],
 };
