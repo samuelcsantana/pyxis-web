@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
+import { english } from '@/test-utils/english';
 import { MainContent } from './main-content';
 import { SkipLink } from './skip-link';
 
 const meta = {
   title: 'Shell/SkipLink',
   component: SkipLink,
+  args: { i18n: english },
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (

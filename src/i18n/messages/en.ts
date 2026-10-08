@@ -16,6 +16,20 @@ export const en = {
     acquisition: 'Acquisition',
     loading: 'Loading {screen}…',
   },
+  nav: {
+    label: 'Main navigation',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    section: 'Analytics',
+    switchProject: 'Switch project. Current project:',
+    signOut: 'Sign out',
+    signingOut: 'Signing out…',
+    signOutFailed: 'Could not sign out. Try again.',
+  },
+  shell: {
+    skipToContent: 'Skip to content',
+    privacy: 'No cookies, no personal data',
+  },
   units: {
     points: '{points} pt',
   },

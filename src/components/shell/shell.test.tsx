@@ -304,7 +304,7 @@ describe('SignOutButton', () => {
 
 describe('Sidebar', () => {
   it('holds the project switcher, the screens, the privacy note and the account', () => {
-    renderWithMessages(<Sidebar admin={ADMIN} project={store()} />);
+    renderWithMessages(<Sidebar admin={ADMIN} project={store()} i18n={english} />);
 
     expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
     expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
@@ -315,7 +315,7 @@ describe('Sidebar', () => {
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
       <MobileMenu>
-        <Sidebar admin={ADMIN} project={store()} />
+        <Sidebar admin={ADMIN} project={store()} i18n={english} />
       </MobileMenu>,
     );
 
@@ -482,7 +482,7 @@ describe('SkipLink and MainContent', () => {
   it('link to the content, which takes the focus and keeps its own classes', () => {
     renderWithMessages(
       <>
-        <SkipLink />
+        <SkipLink i18n={english} />
         <MainContent className="flex gap-4" aria-busy="true">
           <p>content</p>
         </MainContent>

@@ -10,6 +10,7 @@ import {
   NAV_CONTROL,
   NAV_ITEM_IDLE,
 } from '@/components/ui/control-classes';
+import { useT } from '@/i18n/messages-provider';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 
@@ -52,6 +53,7 @@ function SignOutIcon() {
 }
 
 export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonProps) {
+  const t = useT();
   const classes = VARIANT_CLASSES[variant];
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
@@ -86,11 +88,11 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
         className={`flex min-h-11 shrink-0 items-center rounded-input ${CONTROL_BUSY} ${classes.button}`}
       >
         {classes.withIcon ? <SignOutIcon /> : null}
-        <span>{busy ? 'Signing out…' : 'Sign out'}</span>
+        <span>{busy ? t('nav.signingOut') : t('nav.signOut')}</span>
       </button>
       {error === null ? null : (
         <p role="alert" className={`text-xs ${classes.error}`}>
-          Could not sign out. Try again.
+          {t('nav.signOutFailed')}
         </p>
       )}
     </div>

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { type Admin, emailInitial, type Project } from '@/domain/admin';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
+import type { I18n } from '@/i18n/i18n';
 import { ProjectSwitcher } from './project-switcher';
 import { SidebarNav } from './sidebar-nav';
 import { SignOutButton } from './sign-out-button';
@@ -9,11 +10,12 @@ import { SignOutButton } from './sign-out-button';
 export interface SidebarProps {
   readonly admin: Admin;
   readonly project: Project;
+  readonly i18n: I18n;
 }
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
 
-export function Sidebar({ admin, project }: SidebarProps) {
+export function Sidebar({ admin, project, i18n }: SidebarProps) {
   return (
     <div className="flex min-h-full grow flex-col gap-4 bg-nav px-3.5 pt-4 pb-4 text-nav-text">
       <Link
@@ -43,7 +45,7 @@ export function Sidebar({ admin, project }: SidebarProps) {
               strokeLinejoin="round"
             />
           </svg>
-          No cookies, no personal data
+          {i18n.t('shell.privacy')}
         </p>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-1">
           <span

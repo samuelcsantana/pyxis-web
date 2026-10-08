@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import HomePage from './page';
 
 const state = vi.hoisted<{ admin: unknown; failure: Error | undefined }>(() => ({
@@ -57,7 +58,7 @@ describe('HomePage', () => {
   it('explains an account without projects', async () => {
     state.admin = { ...ADMIN, projects: [] };
 
-    render(await HomePage());
+    renderWithMessages(await HomePage());
 
     expect(screen.getByRole('heading', { level: 1, name: 'No projects yet' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
