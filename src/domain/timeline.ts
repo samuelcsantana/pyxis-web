@@ -1,5 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
-import { CHANNEL_LABELS } from './acquisition';
+import { channelLabel } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { eventLabel } from './metrics';
 import { statusLabel, type StatusTone, statusTone } from './requests';
@@ -165,10 +165,10 @@ function itemDetail(event: TimelineEvent): string {
   return parts.filter((part) => part !== '').join(' · ');
 }
 
-function itemTag(event: TimelineEvent): ItemTag | null {
+function itemTag(event: TimelineEvent, i18n: I18n): ItemTag | null {
   const status = requestStatus(event);
   return itemKind(event) === 'request' && status !== null
-    ? { label: statusLabel(status), tone: statusTone(status) }
+    ? { label: statusLabel(status, i18n), tone: statusTone(status) }
     : null;
 }
 
@@ -216,7 +216,7 @@ export function visitViews(
       browserLabel(visit.browser, i18n),
       operatingSystemLabel(visit.os, i18n),
       ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
-      ...(visit.channel === null ? [] : [CHANNEL_LABELS[visit.channel]]),
+      ...(visit.channel === null ? [] : [channelLabel(visit.channel, i18n)]),
       formatVisitDuration(visit.startedAt, visit.endedAt),
     ].join(' · '),
     items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
@@ -225,7 +225,7 @@ export function visitViews(
       kind: itemKind(event),
       title: itemTitle(event),
       detail: itemDetail(event),
-      tag: itemTag(event),
+      tag: itemTag(event, i18n),
     })),
   }));
 }

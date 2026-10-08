@@ -1,5 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
-import { type Channel, CHANNEL_LABELS, CHANNELS } from './acquisition';
+import { type Channel, CHANNELS, channelLabel } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { stepProblem } from './funnel';
 import { eventLabel, formatCount } from './metrics';
@@ -208,7 +208,7 @@ export function visitRows(
     failedRequests: visit.failedRequests,
     failedRequestsLabel: failedRequestsLabel(visit.failedRequests, i18n),
     device: deviceLabel(visit, i18n),
-    channel: visit.channel === null ? null : CHANNEL_LABELS[visit.channel],
+    channel: visit.channel === null ? null : channelLabel(visit.channel, i18n),
     account: visitAccount(visit.userId),
   }));
 }

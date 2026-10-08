@@ -15,18 +15,11 @@ export const CHANNELS = [
 ] as const;
 export type Channel = (typeof CHANNELS)[number];
 
-export const CHANNEL_LABELS: Readonly<Record<Channel, string>> = {
-  paid: 'Paid',
-  email: 'Email',
-  social: 'Social',
-  campaign: 'Other campaigns',
-  organic: 'Organic search',
-  referral: 'Referral',
-  direct: 'Direct',
-};
+export function channelLabel(channel: Channel, i18n: I18n): string {
+  return i18n.t(`acquisition.channels.${channel}`);
+}
 
 const DIRECT_SOURCE = '(direct)';
-const DIRECT_SOURCE_LABEL = 'Direct';
 
 export type ChannelDay = AcquisitionReport['days'][number];
 export type Source = AcquisitionReport['sources'][number];
@@ -73,13 +66,18 @@ export function channelSummary(days: readonly ChannelDay[], i18n: I18n): string 
   const daily = days.map(dayTotal);
   const ranked = activeChannels(days)
     .toSorted((left, right) => totals[right] - totals[left])
-    .map((channel) => `${CHANNEL_LABELS[channel]} ${formatCount(totals[channel], i18n)}`);
+    .map((channel) =>
+      i18n.t('acquisition.summary.channel', {
+        channel: channelLabel(channel, i18n),
+        visits: formatCount(totals[channel], i18n),
+      }),
+    );
   const lowest = formatCount(Math.min(...daily), i18n);
   const highest = formatCount(Math.max(...daily), i18n);
   return [
-    `Stacked bar chart of ${i18n.t('counts.day', { count: days.length })},`,
-    `between ${lowest} and ${highest} visits a day.`,
-    `Visits by channel: ${ranked.join(', ')}.`,
+    i18n.t('acquisition.summary.bars', { days: i18n.t('counts.day', { count: days.length }) }),
+    i18n.t('acquisition.summary.range', { lowest, highest }),
+    i18n.t('acquisition.summary.channels', { channels: ranked.join(', ') }),
   ].join(' ');
 }
 
@@ -89,7 +87,10 @@ export interface PaidVisits {
 }
 
 function shareOfVisits(part: number, total: number, i18n: I18n): string {
-  return `${formatPercent(rate(part, total), i18n)} of ${i18n.t('counts.visit', { count: total })}`;
+  return i18n.t('acquisition.shareOfVisits', {
+    share: formatPercent(rate(part, total), i18n),
+    visits: i18n.t('counts.visit', { count: total }),
+  });
 }
 
 export function paidVisits(days: readonly ChannelDay[], i18n: I18n): PaidVisits {
@@ -116,14 +117,14 @@ export function topChannel(days: readonly ChannelDay[], i18n: I18n): ChannelFigu
   const paidLeads = top === 'paid' && totals.paid > 0;
   const shown = paidLeads ? mostVisited(UNPAID_CHANNELS, totals) : top;
   return {
-    label: paidLeads ? 'Top unpaid channel' : 'Top channel',
-    value: CHANNEL_LABELS[shown],
+    label: i18n.t(paidLeads ? 'acquisition.topUnpaidChannel' : 'acquisition.topChannel'),
+    value: channelLabel(shown, i18n),
     note: shareOfVisits(totals[shown], visitsTotal(days), i18n),
   };
 }
 
-export function sourceLabel(source: string): string {
-  return source === DIRECT_SOURCE ? DIRECT_SOURCE_LABEL : source;
+export function sourceLabel(source: string, i18n: I18n): string {
+  return source === DIRECT_SOURCE ? i18n.t('acquisition.directSource') : source;
 }
 
 export interface SourceRow {
@@ -150,7 +151,7 @@ export function sourceRows(sources: readonly Source[], i18n: I18n): readonly Sou
   const best = Math.max(0, ...rated.map((source) => source.rate ?? 0));
   return rated.map((source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
-    label: sourceLabel(source.source),
+    label: sourceLabel(source.source, i18n),
     medium: source.medium,
     channel: source.channel,
     visits: formatCount(source.visits, i18n),
@@ -160,6 +161,8 @@ export function sourceRows(sources: readonly Source[], i18n: I18n): readonly Sou
     fromAdClicks:
       source.fromAdClickVisits === 0
         ? null
-        : `${formatCount(source.fromAdClickVisits, i18n)} from ad clicks`,
+        : i18n.t('acquisition.fromAdClicks', {
+            visits: formatCount(source.fromAdClickVisits, i18n),
+          }),
   }));
 }

@@ -1,7 +1,10 @@
+import type { I18n } from '@/i18n/i18n';
 import type { CsvTable, CsvValue } from './csv';
 import type { DevicesReport, ValueShare } from './devices';
 
-export const DEVICES_TABLE_LABEL = 'Device types, browsers, systems and countries';
+export function devicesTableLabel(i18n: I18n): string {
+  return i18n.t('exports.devices');
+}
 
 const DIMENSIONS: readonly (readonly [string, keyof DevicesReport])[] = [
   ['device_type', 'deviceTypes'],

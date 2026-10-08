@@ -88,7 +88,11 @@ function channelVisitsHref(channel: string): string {
 describe('SourcesTable', () => {
   it('shows each source with its channel, ad click visits and conversion rate', () => {
     render(
-      <SourcesTable rows={sourceRows([GOOGLE], english)} channelVisitsHref={channelVisitsHref} />,
+      <SourcesTable
+        i18n={english}
+        rows={sourceRows([GOOGLE], english)}
+        channelVisitsHref={channelVisitsHref}
+      />,
     );
 
     const [, row] = screen.getAllByRole('row');
@@ -101,7 +105,11 @@ describe('SourcesTable', () => {
 
   it('keeps the totals beside the rate and the medium beside the channel on phones', () => {
     render(
-      <SourcesTable rows={sourceRows([GOOGLE], english)} channelVisitsHref={channelVisitsHref} />,
+      <SourcesTable
+        i18n={english}
+        rows={sourceRows([GOOGLE], english)}
+        channelVisitsHref={channelVisitsHref}
+      />,
     );
 
     expect(screen.getByText('60 converted')).toHaveClass('sm:hidden');
@@ -111,6 +119,7 @@ describe('SourcesTable', () => {
   it('shows a dash for a source without a medium, and no note for a source not counted', () => {
     render(
       <SourcesTable
+        i18n={english}
         rows={sourceRows(
           [GOOGLE, { ...GOOGLE, source: 'bing', medium: null, conversions: null }],
           english,
@@ -127,6 +136,7 @@ describe('SourcesTable', () => {
   it('leaves the conversion columns out without a conversion event', () => {
     render(
       <SourcesTable
+        i18n={english}
         rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], english)}
         channelVisitsHref={channelVisitsHref}
       />,
@@ -137,7 +147,7 @@ describe('SourcesTable', () => {
   });
 
   it('says so when no visit had a source', () => {
-    render(<SourcesTable rows={[]} channelVisitsHref={channelVisitsHref} />);
+    render(<SourcesTable i18n={english} rows={[]} channelVisitsHref={channelVisitsHref} />);
 
     expect(screen.getByText('No visits with a source in this period.')).toBeInTheDocument();
   });

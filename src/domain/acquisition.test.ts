@@ -183,7 +183,7 @@ describe('sourceRows', () => {
   });
 
   it('names a source as it came, except the direct one', () => {
-    expect(sourceLabel('blog.example.com')).toBe('blog.example.com');
-    expect(sourceLabel('(direct)')).toBe('Direct');
+    expect(sourceLabel('blog.example.com', english)).toBe('blog.example.com');
+    expect(sourceLabel('(direct)', english)).toBe('Direct');
   });
 });

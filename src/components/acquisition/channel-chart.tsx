@@ -1,7 +1,7 @@
 import {
   activeChannels,
   type Channel,
-  CHANNEL_LABELS,
+  channelLabel,
   type ChannelChartRow,
   type ChannelDay,
   channelChartRows,
@@ -38,7 +38,7 @@ function hoverDays(
     label: formatDay(row.date, i18n),
     rows: [
       ...channels.map((channel) => ({
-        label: CHANNEL_LABELS[channel],
+        label: channelLabel(channel, i18n),
         value: formatCount(row[channel], i18n),
         marker: `${MARKER} ${CHANNEL_COLORS[channel].swatch}`,
       })),
@@ -113,7 +113,7 @@ function ChannelTable({
             </th>
             {channels.map((channel) => (
               <th key={channel} scope="col" className={`${HEADER_CELL} text-right`}>
-                {CHANNEL_LABELS[channel]}
+                {channelLabel(channel, i18n)}
               </th>
             ))}
             <th scope="col" className={`${HEADER_CELL} text-right`}>
@@ -154,7 +154,7 @@ export function ChannelChart({ days, periodLabel, i18n }: ChannelChartProps) {
         <LegendItem
           key={channel}
           swatch={CHANNEL_COLORS[channel].swatch}
-          label={CHANNEL_LABELS[channel]}
+          label={channelLabel(channel, i18n)}
           total={formatCount(totals[channel], i18n)}
         />
       ))}

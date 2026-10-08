@@ -26,7 +26,7 @@ import {
   screenFilterOf,
   visibleRoutes,
 } from '@/domain/requests';
-import { REQUESTS_TABLE_LABELS } from '@/domain/requests-export';
+import { requestsTableLabel } from '@/domain/requests-export';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -182,7 +182,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
             <CsvDownloads
               downloads={[
                 {
-                  label: REQUESTS_TABLE_LABELS[kind],
+                  label: requestsTableLabel(kind, i18n),
                   href: exportHref(project.id, 'requests', filterQuery(period, filter)),
                 },
               ]}
