@@ -129,6 +129,7 @@ function FunnelReportView({ counted, mode, editor }: FunnelReportViewProps) {
   const drop = biggestDropOff(counted);
   return (
     <>
+      {editor}
       <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
         <StatCard
           id="overall-conversion"
@@ -144,7 +145,6 @@ function FunnelReportView({ counted, mode, editor }: FunnelReportViewProps) {
         />
       </div>
       <FunnelSteps rows={funnelRows(counted)} mode={mode} />
-      {editor}
     </>
   );
 }
