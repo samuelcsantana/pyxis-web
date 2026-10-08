@@ -631,7 +631,12 @@ describe('Topbar without a period', () => {
 });
 
 describe('Topbar', () => {
+  afterEach(() => {
+    delete document.documentElement.dataset.theme;
+  });
+
   it('shows the title, the subtitle and the period in words', () => {
+    document.documentElement.dataset.theme = 'dark';
     render(
       <Topbar
         title="Overview"
