@@ -10,48 +10,13 @@ import {
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 import { CHANNEL_COLORS } from './channel-colors';
+import { ConversionCells, ConversionColumns } from './conversion-columns';
 
 export interface SourcesTableProps {
   readonly rows: readonly SourceRow[];
   readonly channelVisitsHref: (channel: Channel) => string;
   readonly i18n: I18n;
   readonly sourceVisitsHref: (source: string) => string;
-}
-
-function ConversionColumns() {
-  return (
-    <>
-      <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
-        Conversions
-      </th>
-      <th scope="col" className={`${HEADER_CELL} pr-0 text-right sm:w-52 sm:text-left`}>
-        Conversion rate
-      </th>
-    </>
-  );
-}
-
-function ConversionCells({ row }: { readonly row: SourceRow }) {
-  return (
-    <>
-      <td className={`${BODY_CELL} hidden text-right sm:table-cell`}>{row.conversions}</td>
-      <td className={`${BODY_CELL} pr-0`}>
-        <span className="flex items-center justify-end gap-2.5">
-          <span aria-hidden="true" className="hidden h-1.5 grow rounded-pill bg-soft sm:block">
-            <span className="block h-1.5 rounded-pill bg-ok" style={{ width: row.barWidth }} />
-          </span>
-          <span className="flex flex-col items-end gap-0.5 text-right sm:w-12">
-            <span className="font-semibold">{row.conversionRate}</span>
-            {row.conversions === null ? null : (
-              <span className="text-xs whitespace-nowrap text-muted sm:hidden">
-                {row.conversions} converted
-              </span>
-            )}
-          </span>
-        </span>
-      </td>
-    </>
-  );
 }
 
 export function SourcesTable({
@@ -90,7 +55,7 @@ export function SourcesTable({
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
                   Visits
                 </th>
-                {countsConversions ? <ConversionColumns /> : null}
+                {countsConversions ? <ConversionColumns i18n={i18n} /> : null}
               </tr>
             </thead>
             <tbody>
@@ -125,7 +90,7 @@ export function SourcesTable({
                     {row.medium ?? NO_VALUE}
                   </td>
                   <td className={`${BODY_CELL} text-right font-semibold`}>{row.visits}</td>
-                  {countsConversions ? <ConversionCells row={row} /> : null}
+                  {countsConversions ? <ConversionCells row={row} i18n={i18n} /> : null}
                 </tr>
               ))}
             </tbody>
