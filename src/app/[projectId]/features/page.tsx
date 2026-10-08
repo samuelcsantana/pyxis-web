@@ -109,6 +109,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
               ),
             },
           ]}
+          i18n={i18n}
         />
         <p className="text-xs leading-[18px] text-muted">
           Events are sent by the site with the Pyxis SDK; open one to see how its property values

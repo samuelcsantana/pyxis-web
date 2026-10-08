@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { CsvDownloads } from './csv-downloads';
+import { english } from '@/test-utils/english';
 
 const meta = {
   title: 'UI/CSV downloads',
   component: CsvDownloads,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     downloads: [
       { label: 'Activity per day', href: '/demo/overview/export?range=30d&table=daily' },
       { label: 'Top pages', href: '/demo/overview/export?range=30d&table=pages' },

@@ -97,6 +97,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           downloads={[
             { label: visitsTableLabel(i18n), href: exportHref(project.id, 'visits', listQuery) },
           ]}
+          i18n={i18n}
         />
         <p className="text-xs leading-[18px] text-muted">{footnote(i18n)}</p>
       </MainContent>
