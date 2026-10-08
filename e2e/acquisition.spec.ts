@@ -62,3 +62,18 @@ test('rates the sources only when the project has a conversion event', async ({ 
   await expect(page.getByRole('table', { name: 'Sources' })).toBeVisible();
   await expect(page.getByRole('columnheader', { name: 'Conversion rate' })).toHaveCount(0);
 });
+
+test('lists the campaigns, each opening its visits from the source that carried it', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/acquisition?range=30d`);
+  const campaigns = page.getByRole('table', { name: 'Campaigns' });
+  await expect(campaigns.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
+
+  await campaigns.getByRole('link', { name: 'spring_sale: see its visits from google' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&campaign=spring_sale&source=google$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Visits' })).toBeVisible();
+  await expect(page.getByText(/^\d+ matching visits?$/)).toBeVisible();
+  await expect(page.getByText('0 matching visits')).toHaveCount(0);
+});
