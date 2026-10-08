@@ -321,6 +321,34 @@ export const en = {
         class: '{label} {count}',
       },
     },
+    routeDays: {
+      heading: 'Day by day',
+      loading: 'Loading the days of this route…',
+      failed: 'Could not load the days of this route.',
+      retry: 'Try again',
+      unavailable: 'Day-by-day figures need a newer Pyxis API.',
+      none: {
+        writes: 'No calls to this route in this period.',
+        reads: 'No failed reads of this route in this period.',
+      },
+      quietDays: {
+        writes: {
+          one: '{count} day without a call is not listed.',
+          other: '{count} days without a call are not listed.',
+        },
+        reads: {
+          one: '{count} day without a failed read is not listed.',
+          other: '{count} days without a failed read are not listed.',
+        },
+      },
+      columns: {
+        day: 'Day',
+        total: 'Total',
+        failed: 'Failed',
+        median: 'Median',
+        p95: 'p95',
+      },
+    },
   },
   properties: {
     otherValues: 'Other values',
