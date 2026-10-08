@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { areaShape } from '@/domain/area-chart';
+import { valueAxis } from '@/domain/chart-scale';
 import { overviewKpis } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
@@ -117,6 +119,30 @@ describe('DailyActivityChart', () => {
     expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
     const pageViews = REPORT.days.reduce((sum, day) => sum + day.pageViews, 0);
     expect(screen.getByText(new Intl.NumberFormat('en-US').format(pageViews))).toBeInTheDocument();
+  });
+
+  it('draws both series as an area under a line, on one scale for the two', () => {
+    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+
+    const figure = screen.getByRole('img');
+    const { top } = valueAxis(REPORT.days.flatMap((day) => [day.pageViews, day.events]));
+    const pageViews = areaShape(
+      REPORT.days.map((day) => day.pageViews),
+      top,
+    );
+    const events = areaShape(
+      REPORT.days.map((day) => day.events),
+      top,
+    );
+    const drawn = (color: string) =>
+      [...figure.querySelectorAll(`path[stroke="${color}"], path[fill="${color}"]`)].map((path) =>
+        path.getAttribute('d'),
+      );
+    expect(drawn('var(--color-sky)')).toEqual([pageViews.area, pageViews.line]);
+    expect(drawn('var(--color-violet)')).toEqual([events.area, events.line]);
+    expect(
+      within(figure).getByText(new Intl.NumberFormat('en-US').format(top)),
+    ).toBeInTheDocument();
   });
 
   it('switches to a table of the same days and back', async () => {

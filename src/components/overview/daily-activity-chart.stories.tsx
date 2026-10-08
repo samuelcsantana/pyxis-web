@@ -39,6 +39,12 @@ export const SingleDay: Story = {
   args: { days: STORY_REPORT.days.slice(-1), periodLabel: 'today' },
 };
 
+export const Empty: Story = {
+  args: {
+    days: STORY_REPORT.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
+  },
+};
+
 export const QuietDays: Story = {
   args: {
     days: STORY_REPORT.days.map((day, index) => ({
@@ -60,3 +66,5 @@ export const OnAPhone: Story = {
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const OnAPhoneDark: Story = { ...OnAPhone, globals: { theme: 'dark' } };

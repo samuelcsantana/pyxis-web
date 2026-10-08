@@ -1,9 +1,9 @@
-'use client';
-
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { areaShape } from '@/domain/area-chart';
+import { valueAxis } from '@/domain/chart-scale';
 import { formatCount } from '@/domain/metrics';
 import { activitySummary, activityTotals, type DayActivity } from '@/domain/overview';
 import { formatDay } from '@/domain/period';
+import { ChartFrame } from '@/components/charts/chart-frame';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
 import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
 
@@ -12,11 +12,6 @@ const SERIES = [
   { key: 'events', label: 'Named events', color: 'var(--color-violet)', swatch: 'bg-violet' },
 ] as const;
 
-const CHART_INITIAL_SIZE = { width: 960, height: 240 } as const;
-const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 } as const;
-const AXIS_TICK = { fill: 'var(--color-muted)', fontSize: 11 } as const;
-const Y_AXIS_WIDTH = 40;
-const MIN_TICK_GAP = 24;
 const AREA_FILL_OPACITY = 0.12;
 const LINE_WIDTH = 2.5;
 
@@ -26,49 +21,36 @@ export interface DailyActivityChartProps {
 }
 
 function ActivityChart({ days }: { readonly days: readonly DayActivity[] }) {
+  const axis = valueAxis(days.flatMap((day) => [day.pageViews, day.events]));
   return (
-    <figure
-      role="img"
-      aria-label={activitySummary(days)}
-      className="h-30 w-full overflow-hidden sm:h-60"
+    <ChartFrame
+      summary={activitySummary(days)}
+      heightClassName="h-30 sm:h-60"
+      axis={axis}
+      dates={days.map((day) => day.date)}
+      layout="points"
     >
-      <ResponsiveContainer width="100%" height="100%" initialDimension={CHART_INITIAL_SIZE}>
-        <AreaChart data={[...days]} margin={CHART_MARGIN} accessibilityLayer={false}>
-          <CartesianGrid vertical={false} stroke="var(--color-grid)" />
-          <XAxis
-            dataKey="date"
-            tickFormatter={formatDay}
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={false}
-            minTickGap={MIN_TICK_GAP}
-          />
-          <YAxis
-            width={Y_AXIS_WIDTH}
-            tickFormatter={formatCount}
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={false}
-            allowDecimals={false}
-          />
-          {SERIES.map((series) => (
-            <Area
-              key={series.key}
-              dataKey={series.key}
-              name={series.label}
-              type="linear"
+      {SERIES.map((series) => {
+        const shape = areaShape(
+          days.map((day) => day[series.key]),
+          axis.top,
+        );
+        return (
+          <g key={series.key}>
+            <path d={shape.area} fill={series.color} fillOpacity={AREA_FILL_OPACITY} />
+            <path
+              d={shape.line}
+              fill="none"
               stroke={series.color}
               strokeWidth={LINE_WIDTH}
-              fill={series.color}
-              fillOpacity={AREA_FILL_OPACITY}
-              dot={false}
-              activeDot={false}
-              isAnimationActive={false}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
             />
-          ))}
-        </AreaChart>
-      </ResponsiveContainer>
-    </figure>
+          </g>
+        );
+      })}
+    </ChartFrame>
   );
 }
 
