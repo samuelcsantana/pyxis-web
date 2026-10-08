@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FeatureSearch } from './feature-search';
 import { FeatureTabs } from './feature-tabs';
+import { english } from '@/test-utils/english';
 
 function Controls({ query }: { readonly query: string }) {
   return (
@@ -11,6 +12,7 @@ function Controls({ query }: { readonly query: string }) {
           { kind: 'events', label: 'Events', href: '/demo/features?range=30d&kind=events' },
           { kind: 'screens', label: 'Screens', href: '/demo/features?range=30d&kind=screens' },
         ]}
+        i18n={english}
       />
       <FeatureSearch
         action="/demo/features"
@@ -18,6 +20,7 @@ function Controls({ query }: { readonly query: string }) {
         query={query}
         label="Search events"
         clearHref="/demo/features?range=30d&kind=events"
+        i18n={english}
       />
     </div>
   );

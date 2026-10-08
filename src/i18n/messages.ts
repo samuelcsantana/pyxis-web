@@ -14,6 +14,7 @@ export const CLIENT_NAMESPACES = [
   'errorPanel',
   'signIn',
   'chartPanel',
+  'propertyBreakdown',
 ] as const satisfies readonly (keyof Messages)[];
 export type ClientNamespace = (typeof CLIENT_NAMESPACES)[number];
 export type ClientSourceMessages = {

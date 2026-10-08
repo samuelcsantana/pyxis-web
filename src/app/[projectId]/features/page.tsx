@@ -3,7 +3,7 @@ import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { linkWith, screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import {
@@ -31,12 +31,6 @@ export interface FeaturesPageProps {
   readonly searchParams: Promise<PeriodSearch & FeatureSearchParameters>;
 }
 
-const KIND_LABELS: Readonly<Record<FeatureKind, string>> = { events: 'Events', screens: 'Screens' };
-const SEARCH_LABELS: Readonly<Record<FeatureKind, string>> = {
-  events: 'Search events',
-  screens: 'Search screens',
-};
-
 export default async function FeaturesPage({ params, searchParams }: FeaturesPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
@@ -55,8 +49,8 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   return (
     <>
       <Topbar
-        title="Features"
-        subtitle={`What people use the most in ${project.name}`}
+        title={i18n.t(screenLabelKey('features'))}
+        subtitle={i18n.t('features.subtitle', { project: project.name })}
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
@@ -70,16 +64,18 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
             current={kind}
             tabs={FEATURE_KINDS.map((target) => ({
               kind: target,
-              label: KIND_LABELS[target],
+              label: i18n.t(`features.kinds.${target}`),
               href: kindHref(target),
             }))}
+            i18n={i18n}
           />
           <FeatureSearch
             action={basePath}
             keep={{ ...Object.fromEntries(new URLSearchParams(periodQuery(period))), kind }}
             query={query}
-            label={SEARCH_LABELS[kind]}
+            label={i18n.t(`features.search.${kind}`)}
             clearHref={kindHref(kind)}
+            i18n={i18n}
           />
         </div>
         <FeatureTable
@@ -112,11 +108,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           ]}
           i18n={i18n}
         />
-        <p className="text-xs leading-[18px] text-muted">
-          Events are sent by the site with the Pyxis SDK; open one to see how its property values
-          break down. Screens are page views grouped by path template, so /orders/8213 and
-          /orders/8214 count as /orders/:id.
-        </p>
+        <p className="text-xs leading-[18px] text-muted">{i18n.t('features.footnote')}</p>
       </MainContent>
     </>
   );

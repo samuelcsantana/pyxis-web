@@ -35,6 +35,7 @@ describe('get-messages', () => {
       'errorPanel',
       'signIn',
       'chartPanel',
+      'propertyBreakdown',
     ]);
     expect(messages.funnelEditor.problems.pathStart).toBe('A page path starts with "/".');
   });

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { featureRows } from '@/domain/features';
@@ -8,6 +8,7 @@ import { ExpandableFeatureRow } from './expandable-feature-row';
 import { FeatureTable } from './feature-table';
 import { PropertyBreakdown } from './property-breakdown';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const KEYS = propertyKeyViews(
   propertyBreakdownResponseSchema.parse({
@@ -39,7 +40,7 @@ function renderRow(loadProperties: (name: string) => Promise<readonly PropertyKe
   if (ROW === undefined) {
     throw new Error('The fixture has a row.');
   }
-  return render(
+  return renderWithMessages(
     <table>
       <tbody>
         <ExpandableFeatureRow
@@ -62,7 +63,7 @@ function valueHref(key: string, value: string): string | null {
 
 describe('PropertyBreakdown', () => {
   it('says it is loading', () => {
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="CTA clicked"
         state={{ status: 'loading' }}
@@ -76,7 +77,7 @@ describe('PropertyBreakdown', () => {
 
   it('offers to try again after a failure', async () => {
     const onRetry = vi.fn();
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="CTA clicked"
         state={{ status: 'error' }}
@@ -91,7 +92,7 @@ describe('PropertyBreakdown', () => {
   });
 
   it('says when the event carried no properties', () => {
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="Product created"
         state={{ status: 'ready', keys: [] }}
@@ -106,7 +107,7 @@ describe('PropertyBreakdown', () => {
   });
 
   it('shows one table per key, its values and the other values', () => {
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="Calculator result shown"
         state={{ status: 'ready', keys: KEYS }}
@@ -126,7 +127,7 @@ describe('PropertyBreakdown', () => {
   });
 
   it('links each value it can filter by to the visits whose event carried it', () => {
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="Calculator result shown"
         state={{ status: 'ready', keys: KEYS }}
@@ -163,7 +164,7 @@ describe('PropertyBreakdown', () => {
       }),
       english,
     );
-    render(
+    renderWithMessages(
       <PropertyBreakdown
         eventLabel="Report exported"
         state={{ status: 'ready', keys }}
@@ -332,7 +333,7 @@ describe('FeatureTable with a property loader', () => {
       '',
       english,
     );
-    const { rerender } = render(
+    const { rerender } = renderWithMessages(
       <FeatureTable
         kind="events"
         rows={rows}

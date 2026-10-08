@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { KeptParameters } from '@/components/shell/period-selector';
 import { BUTTON_SECONDARY, FOCUS_WITHIN_RING, TEXT_LINK } from '@/components/ui/control-classes';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
+import type { I18n } from '@/i18n/i18n';
 
 export interface FeatureSearchProps {
   readonly action: string;
@@ -10,11 +11,12 @@ export interface FeatureSearchProps {
   readonly query: string;
   readonly label: string;
   readonly clearHref: string;
+  readonly i18n: I18n;
 }
 
 const SEARCH_ICON = 'M11 4a7 7 0 1 1 0 14a7 7 0 1 1 0-14 M20 20l-4-4';
 
-export function FeatureSearch({ action, keep, query, label, clearHref }: FeatureSearchProps) {
+export function FeatureSearch({ action, keep, query, label, clearHref, i18n }: FeatureSearchProps) {
   return (
     <Form
       role="search"
@@ -47,13 +49,13 @@ export function FeatureSearch({ action, keep, query, label, clearHref }: Feature
         />
       </label>
       <PendingSubmitButton
-        label="Search"
-        pendingLabel="Searching…"
+        label={i18n.t('features.search.submit')}
+        pendingLabel={i18n.t('features.search.submitting')}
         className={`min-h-11 rounded-input px-3.5 text-sm font-medium ${BUTTON_SECONDARY}`}
       />
       {query === '' ? null : (
         <Link href={clearHref} className={`text-sm ${TEXT_LINK}`}>
-          Clear
+          {i18n.t('features.search.clear')}
         </Link>
       )}
     </Form>
