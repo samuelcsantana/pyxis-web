@@ -158,6 +158,11 @@
     }
   }
 
+  html:has(dialog[open]) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   button:not(:disabled),
   [role='button']:not(:disabled),
   summary {
