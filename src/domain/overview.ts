@@ -65,7 +65,7 @@ function seriesSummary(label: string, values: readonly number[]): string {
 
 export function activitySummary(days: readonly DayActivity[]): string {
   return [
-    `Area chart of ${formatQuantity(days.length, 'day', 'days')}.`,
+    `Line chart of ${formatQuantity(days.length, 'day', 'days')}.`,
     seriesSummary(
       'Page views',
       days.map((day) => day.pageViews),

@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { areaShape } from '@/domain/area-chart';
+import { linePath } from '@/domain/line-chart';
 import { valueAxis } from '@/domain/chart-scale';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
@@ -170,31 +170,40 @@ describe('DailyActivityChart', () => {
   it('draws the chart with a summary in words and the totals beside the legend', () => {
     render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
 
-    expect(screen.getByRole('img')).toHaveAccessibleName(/^Area chart of 7 days\. Page views: /);
+    expect(screen.getByRole('img')).toHaveAccessibleName(/^Line chart of 7 days\. Page views: /);
     expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
     const pageViews = REPORT.days.reduce((sum, day) => sum + day.pageViews, 0);
     expect(screen.getByText(new Intl.NumberFormat('en-US').format(pageViews))).toBeInTheDocument();
   });
 
-  it('draws both series as an area under a line, on one scale for the two', () => {
+  it('draws both series as unfilled lines, on one scale for the two', () => {
     render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
 
     const figure = screen.getByRole('img');
     const { top } = valueAxis(REPORT.days.flatMap((day) => [day.pageViews, day.events]));
-    const pageViews = areaShape(
-      REPORT.days.map((day) => day.pageViews),
-      top,
-    );
-    const events = areaShape(
-      REPORT.days.map((day) => day.events),
-      top,
-    );
     const drawn = (color: string) =>
-      [...figure.querySelectorAll(`path[stroke="${color}"], path[fill="${color}"]`)].map((path) =>
-        path.getAttribute('d'),
-      );
-    expect(drawn('var(--color-sky)')).toEqual([pageViews.area, pageViews.line]);
-    expect(drawn('var(--color-violet)')).toEqual([events.area, events.line]);
+      [...figure.querySelectorAll(`path[stroke="${color}"]`)].map((path) => ({
+        d: path.getAttribute('d'),
+        fill: path.getAttribute('fill'),
+      }));
+    expect(drawn('var(--color-sky)')).toEqual([
+      {
+        d: linePath(
+          REPORT.days.map((day) => day.pageViews),
+          top,
+        ),
+        fill: 'none',
+      },
+    ]);
+    expect(drawn('var(--color-violet)')).toEqual([
+      {
+        d: linePath(
+          REPORT.days.map((day) => day.events),
+          top,
+        ),
+        fill: 'none',
+      },
+    ]);
     expect(
       within(figure).getByText(new Intl.NumberFormat('en-US').format(top)),
     ).toBeInTheDocument();

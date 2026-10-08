@@ -14,7 +14,7 @@ function dailyChart(page: Page): Locator {
 }
 
 function chartFigure(page: Page): Locator {
-  return dailyChart(page).getByRole('img', { name: /^Area chart of / });
+  return dailyChart(page).getByRole('img', { name: /^Line chart of / });
 }
 
 async function topOf(page: Page, figure: string): Promise<number> {
@@ -60,7 +60,7 @@ test('lays the figures out four in a row on a desktop and two on a phone', async
 test('shows the chart as a table that adds up to the legend totals', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   const chart = dailyChart(page);
-  await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 7 days\./);
+  await expect(chartFigure(page)).toHaveAccessibleName(/^Line chart of 7 days\./);
   const legendTotal = await chart
     .locator('p:has(strong)', { hasText: 'Page views' })
     .locator('strong')
@@ -82,7 +82,7 @@ test('draws one point per day, and the figures of a single day without a chart',
   page,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=30d`);
-  await expect(chartFigure(page)).toHaveAccessibleName(/^Area chart of 30 days\./);
+  await expect(chartFigure(page)).toHaveAccessibleName(/^Line chart of 30 days\./);
 
   await page
     .getByRole('navigation', { name: 'Period' })

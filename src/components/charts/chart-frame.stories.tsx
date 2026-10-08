@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { areaShape } from '@/domain/area-chart';
 import { valueAxis } from '@/domain/chart-scale';
+import { linePath } from '@/domain/line-chart';
 import { addDays } from '@/domain/period';
 import { stackedBars } from '@/domain/stacked-bars';
 import { ChartFrame } from './chart-frame';
@@ -8,7 +8,7 @@ import { ChartFrame } from './chart-frame';
 const VALUES = [12, 18, 9, 22, 30, 27, 16, 19, 25, 34, 28, 21, 17, 24] as const;
 const DATES = VALUES.map((_, index) => addDays('2026-09-22', index));
 const AXIS = valueAxis(VALUES);
-const LINE = areaShape(VALUES, AXIS.top).line;
+const LINE = linePath(VALUES, AXIS.top);
 const SPLIT = VALUES.map((value) => ({
   first: Math.ceil(value / 3),
   second: Math.floor(value / 3) * 2,
@@ -88,7 +88,7 @@ export const OneDay: Story = {
     axis: valueAxis([24]),
     children: (
       <path
-        d={areaShape([24], valueAxis([24]).top).line}
+        d={linePath([24], valueAxis([24]).top)}
         fill="none"
         stroke="var(--color-sky)"
         strokeWidth={2.5}

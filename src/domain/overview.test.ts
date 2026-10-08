@@ -146,7 +146,7 @@ describe('activityTotals and activitySummary', () => {
 
   it('describe the chart in words for screen readers', () => {
     expect(activitySummary(report().days)).toBe(
-      'Area chart of 2 days. Page views: 354 in total, between 174 and 180 a day. ' +
+      'Line chart of 2 days. Page views: 354 in total, between 174 and 180 a day. ' +
         'Named events: 178 in total, between 82 and 96 a day.',
     );
   });

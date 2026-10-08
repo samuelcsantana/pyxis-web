@@ -6,7 +6,7 @@ const CHART_SCREENS = [
     title: 'Overview',
     path: 'overview',
     panel: 'Activity per day',
-    summary: /^Area chart of /,
+    summary: /^Line chart of /,
     mark: 'path[stroke="var(--color-sky)"]',
   },
   {
