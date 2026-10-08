@@ -5,8 +5,8 @@ import { english } from '@/test-utils/english';
 
 const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
-const WRITES = demoRequestsReport('demo', PERIOD, null, NOW).days;
-const READS = demoFailedReadsReport('demo', PERIOD, null).days;
+const WRITES = demoRequestsReport('demo', PERIOD, null, NOW, null).days;
+const READS = demoFailedReadsReport('demo', PERIOD, null, NOW, null).days;
 
 const meta = {
   title: 'Requests/Failures per day',

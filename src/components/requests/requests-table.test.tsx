@@ -9,6 +9,8 @@ import type { LoadRouteDays } from './use-route-days';
 import { methodClass } from './status-styles';
 import { english } from '@/test-utils/english';
 
+const NOW = new Date('2026-10-06T02:30:00.000Z');
+
 vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),
 }));
@@ -19,6 +21,7 @@ const ROWS = routeRows(
     { from: '2026-09-22', to: '2026-10-05' },
     null,
     new Date('2026-10-06T02:30:00.000Z'),
+    null,
   ).routes,
   'UTC',
   'writes',
@@ -46,11 +49,11 @@ const ROUTE_DAYS = {
   text: requestsTableText(english),
 };
 
-function renderTable(loadRouteDays: LoadRouteDays = ROUTE_DAYS.loadRouteDays) {
+function renderTable(loadRouteDays: LoadRouteDays = ROUTE_DAYS.loadRouteDays, rows = ROWS) {
   return render(
     <RequestsTable
       kind="writes"
-      rows={ROWS}
+      rows={rows}
       basePath="/p1/requests"
       query="range=7d"
       timelinePath="/p1/timeline?range=7d"
@@ -84,10 +87,10 @@ describe('RequestsTable', () => {
 
     const rows = within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row');
     expect(rows).toHaveLength(9);
-    expect(rows[1]).toHaveTextContent('POST /orders339');
-    expect(rows[1]).toHaveTextContent('98.5% ok · 1.5% errors');
-    expect(rows[1]).toHaveTextContent('201 × 334400 × 3409 × 2');
-    expect(rows[1]).toHaveTextContent('164 ms426 ms');
+    expect(rows[1]).toHaveTextContent('POST /orders340');
+    expect(rows[1]).toHaveTextContent('96.5% ok · 3.5% errors');
+    expect(rows[1]).toHaveTextContent('201 × 328400 × 2409 × 10');
+    expect(rows[1]).toHaveTextContent('147 ms367 ms');
   });
 
   it('shows a dash for the p95 of an API that does not report it', () => {
@@ -106,11 +109,23 @@ describe('RequestsTable', () => {
     );
 
     const [, row] = within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row');
-    expect(row).toHaveTextContent('164 ms—');
+    expect(row).toHaveTextContent('147 ms—');
   });
 
   it('opens the details of a route, and gives the focus back when they close', async () => {
-    renderTable();
+    renderTable(
+      ROUTE_DAYS.loadRouteDays,
+      ROWS.map((row) =>
+        row.key === 'POST /orders'
+          ? {
+              ...row,
+              failures: row.failures.map((failure, index) =>
+                index === 0 ? failure : { ...failure, errorCode: null },
+              ),
+            }
+          : row,
+      ),
+    );
     const opener = screen.getByRole('button', { name: 'POST /orders, show details' });
 
     await userEvent.click(opener);
@@ -119,8 +134,8 @@ describe('RequestsTable', () => {
     const details = within(dialog());
     expect(details.getByRole('button', { name: 'Close' })).toHaveFocus();
     expect(details.getByRole('heading', { level: 2 })).toHaveTextContent('POST /orders');
-    expect(details.getByText('order_number_in_use')).toBeInTheDocument();
-    expect(details.getByText('No error code')).toBeInTheDocument();
+    expect(details.getAllByText(/^(order_number_in_use|invalid_quantity)$/)).toHaveLength(1);
+    expect(details.getAllByText('No error code').length).toBeGreaterThan(0);
     expect(details.getAllByRole('link', { name: /^Open visit / })[0]).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/p1\/timeline\?range=7d&visit=[0-9a-f-]{36}$/),
@@ -262,7 +277,13 @@ describe('RequestsTable', () => {
   });
 
   it('lists failed reads by count only, without a success share', async () => {
-    const report = demoFailedReadsReport('demo', { from: '2026-09-22', to: '2026-10-05' }, null);
+    const report = demoFailedReadsReport(
+      'demo',
+      { from: '2026-09-22', to: '2026-10-05' },
+      null,
+      NOW,
+      null,
+    );
     const orders = report.routes.find((route) => route.route === '/orders/:id');
     render(
       <RequestsTable
@@ -288,7 +309,9 @@ describe('RequestsTable', () => {
     await userEvent.click(screen.getByRole('button', { name: 'GET /orders/:id, show details' }));
 
     expect(
-      within(dialog()).getByText(`${String(orders?.failed)} failed reads · median 310 ms`),
+      within(dialog()).getByText(
+        `${String(orders?.failed)} failed reads · median ${String(orders?.medianDurationMs)} ms`,
+      ),
     ).toBeInTheDocument();
     expect(within(dialog()).getByRole('link', { name: /^\/orders\/:id/ })).toHaveAttribute(
       'href',

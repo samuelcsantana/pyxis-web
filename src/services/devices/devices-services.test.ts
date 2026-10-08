@@ -1,11 +1,13 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
-import { demoVisitsTotal } from '../demo/demo-dataset';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoDevicesWire } from './demo-devices';
 import { createDevicesService } from './devices-service.factory';
 import { HttpDevicesService } from './http-devices-service';
 import { MockDevicesService } from './mock-devices-service';
+import { demoOverviewWire } from '../overview/demo-overview';
+
+const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 const API = 'https://api.pyxis.example.com';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -21,7 +23,7 @@ describe('HttpDevicesService', () => {
 
   it('asks the devices of the project for the range and maps them', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoDevicesWire(DEMO_STORE.id, RANGE)))),
+      Promise.resolve(new Response(JSON.stringify(demoDevicesWire(DEMO_STORE.id, RANGE, NOW)))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -37,9 +39,18 @@ describe('HttpDevicesService', () => {
 });
 
 describe('MockDevicesService', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('splits the visits of the period over each breakdown without losing any', async () => {
     const report = await new MockDevicesService().devices(DEMO_STORE.id, RANGE);
-    const visits = demoVisitsTotal(DEMO_STORE, RANGE);
+    const visits = demoOverviewWire(DEMO_STORE.id, RANGE, NOW).kpis.visits.current;
     const totalOf = (shares: readonly { visits: number }[]) =>
       shares.reduce((sum, share) => sum + share.visits, 0);
 

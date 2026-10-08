@@ -5,8 +5,8 @@ import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import { shortId } from '@/domain/timeline';
 import { NO_VISIT_FILTERS, type VisitsReport } from '@/domain/visits';
-import { MockVisitsService } from '@/services/visits/mock-visits-service';
 import type { IVisitsService } from '@/services/visits/visits-service.interface';
+import { showcaseVisitsReport } from '@/test-utils/showcase-visits';
 import { loadOlderVisitRows } from './actions';
 import VisitsPage from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -66,7 +66,7 @@ function renderVisits(search: Record<string, string> = { range: '30d' }) {
 
 function mockVisits() {
   const visits = vi.fn<IVisitsService['visits']>((projectId, range, filters, cursor) =>
-    new MockVisitsService().visits(projectId, range, filters, cursor),
+    Promise.resolve(showcaseVisitsReport(projectId, range, filters, cursor, NOW)),
   );
   state.visits = visits;
   return visits;
@@ -267,11 +267,8 @@ describe('loadOlderVisitRows', () => {
       '930c9810',
       '6d4ebf3d',
       '5b8d2e7a',
-      '5cd5f0e2',
-      'bd0f5992',
-      '22477bd4',
     ]);
-    expect(page.nextCursor).toMatch(/~22477bd4-/);
+    expect(page.nextCursor).toBeNull();
   });
 
   it('refuses a cursor the API would refuse, without asking it', async () => {

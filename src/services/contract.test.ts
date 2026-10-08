@@ -71,7 +71,7 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('DevicesReport');
 
     for (const project of DEMO_PROJECTS) {
-      const wire = demoDevicesWire(project.id, RANGE);
+      const wire = demoDevicesWire(project.id, RANGE, NOW);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
@@ -80,7 +80,7 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('AcquisitionReport');
 
     for (const project of DEMO_PROJECTS) {
-      const wire = demoAcquisitionWire(project.id, RANGE);
+      const wire = demoAcquisitionWire(project.id, RANGE, NOW);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
@@ -90,7 +90,7 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       for (const kind of ['events', 'screens'] as const) {
-        const wire = demoFeaturesWire(project.id, RANGE, kind);
+        const wire = demoFeaturesWire(project.id, RANGE, kind, NOW);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }
@@ -102,7 +102,7 @@ describe('the API contract copied from pyxis-api', () => {
     for (const project of DEMO_PROJECTS) {
       const names = [...project.events.map((event) => event.name), 'never_sent'];
       for (const name of names) {
-        const wire = demoPropertyBreakdownWire(project.id, RANGE, name);
+        const wire = demoPropertyBreakdownWire(project.id, RANGE, name, NOW);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }
@@ -113,7 +113,7 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       for (const screen of [null, '/orders', '/docs/:slug']) {
-        const wire = demoRequestsWire(project.id, RANGE, screen, NOW);
+        const wire = demoRequestsWire(project.id, RANGE, screen, NOW, null);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }
@@ -124,7 +124,7 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       for (const screen of [null, '/products', '/search']) {
-        const wire = demoFailedReadsWire(project.id, RANGE, screen);
+        const wire = demoFailedReadsWire(project.id, RANGE, screen, NOW, null);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }
@@ -150,7 +150,7 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       for (const mode of ['visit', 'user'] as const) {
-        const wire = demoFunnelWire(project.id, RANGE, mode, project.exampleFunnel);
+        const wire = demoFunnelWire(project.id, RANGE, mode, project.exampleFunnel, NOW);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }
@@ -160,8 +160,13 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('TimelineReport');
 
     for (const project of DEMO_PROJECTS) {
-      for (const visit of project.visits) {
-        const wire = demoTimelineWire(project.id, { kind: 'visit', id: visit.sessionId }, NOW);
+      const listed = demoVisitsWire(project.id, RANGE, NO_VISIT_FILTERS, null, NOW).visits;
+      const sessions = [
+        ...project.showcase.map((visit) => visit.sessionId),
+        ...listed.map((visit) => visit.session_id),
+      ];
+      for (const sessionId of sessions) {
+        const wire = demoTimelineWire(project.id, { kind: 'visit', id: sessionId }, NOW);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
     }

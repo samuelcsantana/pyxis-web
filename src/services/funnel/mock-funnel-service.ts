@@ -10,6 +10,6 @@ export class MockFunnelService implements IFunnelService {
     mode: FunnelMode,
     steps: readonly FunnelStep[],
   ): Promise<FunnelReport> {
-    return Promise.resolve(demoFunnelReport(projectId, range, mode, steps));
+    return Promise.resolve(demoFunnelReport(projectId, range, mode, steps, new Date()));
   }
 }

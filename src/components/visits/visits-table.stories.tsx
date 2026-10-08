@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows, visitsTableText } from '@/domain/visits';
-import { demoVisitsReport } from '@/services/visits/demo-visit-list';
+import { showcaseVisitsReport } from '@/test-utils/showcase-visits';
 import { VisitsTable } from './visits-table';
 import { english } from '@/test-utils/english';
 
 const TIME_ZONE = 'America/Sao_Paulo';
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
-const FIRST = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
-const SECOND = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
+const FIRST = showcaseVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
+const SECOND = showcaseVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
 
 function loadOlder(): Promise<VisitRowsPage> {
   return Promise.resolve({ rows: visitRows(SECOND.visits, TIME_ZONE, english), nextCursor: null });

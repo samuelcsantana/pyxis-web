@@ -5,6 +5,6 @@ import type { IDevicesService } from './devices-service.interface';
 
 export class MockDevicesService implements IDevicesService {
   devices(projectId: string, range: DateRange): Promise<DevicesReport> {
-    return Promise.resolve(demoDevicesReport(projectId, range));
+    return Promise.resolve(demoDevicesReport(projectId, range, new Date()));
   }
 }

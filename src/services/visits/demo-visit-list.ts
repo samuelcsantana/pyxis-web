@@ -1,67 +1,66 @@
-import { todayIn } from '@/domain/period';
 import { type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/visits';
 import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
-import { type DemoAttribution, demoAttributedVisits } from '../demo/demo-attribution';
-import { pathPattern } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
-import { type DemoVisit, demoVisitWire, isFailedStatus } from '../demo/demo-visits';
+import { API_REQUEST, type DemoEventRecord, type DemoVisitRecord } from '../demo/demo-records';
+import {
+  countWhere,
+  demoScopeOf,
+  demoVisitsIn,
+  isFailedStatus,
+  isNamedEvent,
+  isPageView,
+  pathPattern,
+} from '../demo/demo-scope';
 
 export const DEMO_VISITS_PAGE_SIZE = 8;
 const MAX_HIGHLIGHTS = 5;
-const PAGE_VIEW = 'page_view';
-const API_REQUEST = 'api_request';
-const UNNAMED_EVENTS: ReadonlySet<string> = new Set([PAGE_VIEW, 'identify', API_REQUEST]);
 const CURSOR_SEPARATOR = '~';
 const PROPERTY_SEPARATOR = '=';
 
 type VisitSummaryWire = VisitsWire['visits'][number];
-type TimelineVisitWire = ReturnType<typeof demoVisitWire>;
-type TimelineEventWire = TimelineVisitWire['events'][number];
 
-export interface ListedVisit {
-  readonly summary: VisitSummaryWire;
-  readonly events: readonly TimelineEventWire[];
+interface Listed {
+  readonly visit: DemoVisitRecord;
+  readonly cursor: string;
 }
 
-export function listedDemoVisit(
-  visit: DemoVisit,
-  now: Date,
-  attribution: DemoAttribution,
-): ListedVisit {
-  const wire = demoVisitWire(visit, now);
-  const pageViews = wire.events.filter((event) => event.name === PAGE_VIEW);
-  const named = wire.events.map((event) => event.name).filter((name) => !UNNAMED_EVENTS.has(name));
+function isFailedCall(event: DemoEventRecord): boolean {
+  return event.name === API_REQUEST && isFailedStatus(Number(event.properties.status));
+}
+
+function isoAt(at: number): string {
+  return new Date(at).toISOString();
+}
+
+function startOf(visit: DemoVisitRecord): number {
+  return Math.min(...visit.events.map((event) => event.at));
+}
+
+export function demoVisitSummary(visit: DemoVisitRecord): VisitSummaryWire {
+  const times = visit.events.map((event) => event.at);
+  const pageViews = visit.events.filter(isPageView);
+  const named = visit.events.filter(isNamedEvent).map((event) => event.name);
   return {
-    summary: {
-      session_id: wire.session_id,
-      started_at: wire.started_at,
-      ended_at: wire.ended_at,
-      entry_path: pageViews[0]?.path ?? null,
-      page_views: pageViews.length,
-      highlights: [...new Set(named)].slice(0, MAX_HIGHLIGHTS),
-      failed_requests: wire.events.filter(
-        (event) => event.name === API_REQUEST && isFailedStatus(Number(event.properties.status)),
-      ).length,
-      device_type: wire.device_type,
-      browser: wire.browser,
-      os: wire.os,
-      country: wire.country,
-      channel: wire.channel,
-      user_id: visit.userId ?? null,
-      source: attribution.source,
-      campaign: attribution.campaign,
-    },
-    events: wire.events,
+    session_id: visit.sessionId,
+    started_at: isoAt(Math.min(...times)),
+    ended_at: isoAt(Math.max(...times)),
+    entry_path: pageViews[0]?.path ?? null,
+    page_views: pageViews.length,
+    highlights: [...new Set(named)].slice(0, MAX_HIGHLIGHTS),
+    failed_requests: countWhere(visit.events, isFailedCall),
+    device_type: visit.deviceType,
+    browser: visit.browser,
+    os: visit.os,
+    country: visit.country,
+    channel: visit.channel,
+    user_id: visit.userId,
+    source: visit.source,
+    campaign: visit.campaign,
   };
 }
 
-function viewedPage(visit: ListedVisit, path: string): boolean {
-  const page = pathPattern(path);
-  return visit.events.some((event) => event.name === PAGE_VIEW && page.test(event.path));
-}
-
-function carriesProperty(event: TimelineEventWire, property: string | null): boolean {
+function carriesProperty(event: DemoEventRecord, property: string | null): boolean {
   if (property === null) {
     return true;
   }
@@ -70,7 +69,7 @@ function carriesProperty(event: TimelineEventWire, property: string | null): boo
   return value !== undefined && String(value) === property.slice(separator + 1);
 }
 
-function sentEvent(visit: ListedVisit, filters: VisitFilters): boolean {
+function sentEvent(visit: DemoVisitRecord, filters: VisitFilters): boolean {
   return (
     filters.event === null ||
     visit.events.some(
@@ -79,7 +78,7 @@ function sentEvent(visit: ListedVisit, filters: VisitFilters): boolean {
   );
 }
 
-function isRequestTo(event: TimelineEventWire, route: string, failed: boolean): boolean {
+function isRequestTo(event: DemoEventRecord, route: string, failed: boolean): boolean {
   return (
     event.name === API_REQUEST &&
     `${String(event.properties.method)} ${String(event.properties.route)}` === route &&
@@ -87,44 +86,56 @@ function isRequestTo(event: TimelineEventWire, route: string, failed: boolean): 
   );
 }
 
-function madeRequest(visit: ListedVisit, route: string | null, failed: boolean): boolean {
+function madeRequest(visit: DemoVisitRecord, route: string | null, failed: boolean): boolean {
   if (route === null) {
-    return !failed || visit.summary.failed_requests > 0;
+    return !failed || visit.events.some(isFailedCall);
   }
   return visit.events.some((event) => isRequestTo(event, route, failed));
 }
 
-function cameFrom(visit: ListedVisit, filters: VisitFilters): boolean {
+function cameFrom(visit: DemoVisitRecord, filters: VisitFilters): boolean {
   return (
-    (filters.country === null || visit.summary.country === filters.country) &&
-    (filters.source === null || visit.summary.source === filters.source) &&
-    (filters.campaign === null || visit.summary.campaign === filters.campaign)
+    (filters.country === null || visit.country === filters.country) &&
+    (filters.source === null || visit.source === filters.source) &&
+    (filters.campaign === null || visit.campaign === filters.campaign)
   );
 }
 
-function isIdentified(visit: ListedVisit): boolean {
-  return visit.summary.user_id !== null;
-}
-
-function matches(visit: ListedVisit, filters: VisitFilters): boolean {
-  return (
-    filters.paths.every((path) => viewedPage(visit, path)) &&
+function matcherOf(filters: VisitFilters): (visit: DemoVisitRecord) => boolean {
+  const pages = filters.paths.map(pathPattern);
+  const viewed = (visit: DemoVisitRecord, page: RegExp) =>
+    visit.events.some((event) => isPageView(event) && page.test(event.path));
+  return (visit) =>
+    pages.every((page) => viewed(visit, page)) &&
     sentEvent(visit, filters) &&
-    (filters.channel === null || visit.summary.channel === filters.channel) &&
-    (filters.device === null || visit.summary.device_type === filters.device) &&
-    (filters.identity === null || isIdentified(visit) === (filters.identity === 'identified')) &&
+    (filters.channel === null || visit.channel === filters.channel) &&
+    (filters.device === null || visit.deviceType === filters.device) &&
+    (filters.identity === null ||
+      (visit.userId !== null) === (filters.identity === 'identified')) &&
     cameFrom(visit, filters) &&
-    madeRequest(visit, filters.route, filters.failed)
-  );
+    madeRequest(visit, filters.route, filters.failed);
 }
 
-function withinRange(visit: ListedVisit, range: DateRange, timeZone: string): boolean {
-  const day = todayIn(timeZone, new Date(visit.summary.started_at));
-  return range.from <= day && day <= range.to;
-}
-
-function cursorOf(visit: VisitSummaryWire): string {
-  return `${visit.started_at}${CURSOR_SEPARATOR}${visit.session_id}`;
+export function demoVisitsPage(
+  visits: readonly DemoVisitRecord[],
+  filters: VisitFilters,
+  cursor: string | null,
+): VisitsWire {
+  const matching = visits
+    .filter(matcherOf(filters))
+    .map((visit): Listed => ({
+      visit,
+      cursor: `${isoAt(startOf(visit))}${CURSOR_SEPARATOR}${visit.sessionId}`,
+    }))
+    .toSorted((left, right) => (left.cursor < right.cursor ? 1 : -1));
+  const listed = matching.filter((visit) => cursor === null || visit.cursor < cursor);
+  const page = listed.slice(0, DEMO_VISITS_PAGE_SIZE);
+  const last = listed.length > DEMO_VISITS_PAGE_SIZE ? page.at(-1) : undefined;
+  return {
+    visits: page.map(({ visit }) => demoVisitSummary(visit)),
+    next_cursor: last === undefined ? null : last.cursor,
+    total: matching.length,
+  };
 }
 
 export function demoVisitsWire(
@@ -134,20 +145,11 @@ export function demoVisitsWire(
   cursor: string | null,
   now: Date,
 ): VisitsWire {
-  const project = demoProjectOf(projectId);
-  const matching = demoAttributedVisits(project)
-    .map(({ visit, attribution }) => listedDemoVisit(visit, now, attribution))
-    .filter((visit) => withinRange(visit, range, project.timezone) && matches(visit, filters))
-    .map((visit) => visit.summary)
-    .toSorted((left, right) => cursorOf(right).localeCompare(cursorOf(left)));
-  const listed = matching.filter((visit) => cursor === null || cursorOf(visit) < cursor);
-  const page = listed.slice(0, DEMO_VISITS_PAGE_SIZE);
-  const last = listed.length > DEMO_VISITS_PAGE_SIZE ? page.at(-1) : undefined;
-  return {
-    visits: page,
-    next_cursor: last === undefined ? null : cursorOf(last),
-    total: matching.length,
-  };
+  return demoVisitsPage(
+    demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now)),
+    filters,
+    cursor,
+  );
 }
 
 export function demoVisitsReport(

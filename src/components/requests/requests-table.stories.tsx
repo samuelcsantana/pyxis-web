@@ -12,12 +12,15 @@ import { RequestsTable } from './requests-table';
 import type { LoadRouteDays } from './use-route-days';
 import { english } from '@/test-utils/english';
 
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const ROWS = routeRows(
   demoRequestsReport(
     'demo',
     { from: '2026-09-22', to: '2026-10-05' },
     null,
     new Date('2026-10-06T02:30:00.000Z'),
+    null,
   ).routes,
   'America/Sao_Paulo',
   'writes',
@@ -45,7 +48,8 @@ function demoRouteDays(kind: RequestKind): LoadRouteDays {
 }
 
 const FAILED_READS = routeRows(
-  demoFailedReadsReport('demo', { from: '2026-09-06', to: '2026-10-05' }, null).routes,
+  demoFailedReadsReport('demo', { from: '2026-09-06', to: '2026-10-05' }, null, STORY_NOW, null)
+    .routes,
   'America/Sao_Paulo',
   'reads',
   english,

@@ -5,6 +5,8 @@ import { demoPropertyBreakdownReport } from '@/services/features/demo-properties
 import { PropertyBreakdown } from './property-breakdown';
 import { english } from '@/test-utils/english';
 
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
 
 function valueHref(key: string, value: string): string {
@@ -12,7 +14,7 @@ function valueHref(key: string, value: string): string {
 }
 
 function demoKeys(name: string) {
-  return propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name), english);
+  return propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name, STORY_NOW), english);
 }
 
 const meta = {
