@@ -64,6 +64,27 @@ export const RejectedRangeOnAPhone: Story = {
   play: showsTheRejectedRange,
 };
 
+const openTheCustomForm: NonNullable<Story['play']> = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByText('Custom'));
+  await expect(canvas.getByLabelText('From')).toBeVisible();
+  await expect(canvas.getByLabelText('To')).toBeVisible();
+  await expect(canvas.getByLabelText('To')).not.toHaveAttribute('aria-invalid', 'true');
+};
+
+export const CustomFormOpen: Story = { play: openTheCustomForm };
+
+export const CustomFormOpenDark: Story = {
+  args: { ...WITH_PERIOD, theme: 'dark' },
+  globals: { theme: 'dark' },
+  play: openTheCustomForm,
+};
+
+export const CustomFormOpenOnAPhone: Story = {
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: openTheCustomForm,
+};
+
 export const CustomFormClosedWithEscape: Story = {
   args: REJECTED,
   play: async ({ canvasElement }) => {
