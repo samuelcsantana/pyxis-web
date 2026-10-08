@@ -59,3 +59,17 @@ export function funnelStepsOf(search: FunnelSearch): readonly FunnelStep[] | nul
   const parsed = stepsParameterSchema.safeParse(stepsTextOf(search));
   return parsed.success ? parsed.data : null;
 }
+
+export const funnelSubjectsResponseSchema = z
+  .object({
+    subjects: z.array(z.object({ id: z.string(), last_step_at: z.iso.datetime() })),
+    next_cursor: z.string().nullable(),
+  })
+  .transform((body) => ({
+    subjects: body.subjects.map((subject) => ({
+      id: subject.id,
+      lastStepAt: subject.last_step_at,
+    })),
+    nextCursor: body.next_cursor,
+  }));
+export type FunnelSubjectsWire = z.input<typeof funnelSubjectsResponseSchema>;

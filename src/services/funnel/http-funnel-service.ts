@@ -4,10 +4,18 @@ import {
   type FunnelStep,
   serializeSteps,
 } from '@/domain/funnel';
-import { funnelResponseSchema } from '@/domain/funnel.schema';
+import type { FunnelDrill, FunnelSubjectsPage } from '@/domain/funnel-subjects';
+import { funnelResponseSchema, funnelSubjectsResponseSchema } from '@/domain/funnel.schema';
 import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IFunnelService } from './funnel-service.interface';
+
+function funnelQuery(range: DateRange, mode: FunnelMode, steps: readonly FunnelStep[]) {
+  const query = new URLSearchParams(rangeQuery(range));
+  query.set('mode', mode);
+  query.set('steps', serializeSteps(steps));
+  return query;
+}
 
 export class HttpFunnelService implements IFunnelService {
   constructor(private readonly api: ApiReader) {}
@@ -18,12 +26,29 @@ export class HttpFunnelService implements IFunnelService {
     mode: FunnelMode,
     steps: readonly FunnelStep[],
   ): Promise<FunnelReport> {
-    const query = new URLSearchParams(rangeQuery(range));
-    query.set('mode', mode);
-    query.set('steps', serializeSteps(steps));
+    const query = funnelQuery(range, mode, steps);
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/funnel?${query.toString()}`,
       funnelResponseSchema,
+    );
+  }
+
+  subjects(
+    projectId: string,
+    range: DateRange,
+    mode: FunnelMode,
+    steps: readonly FunnelStep[],
+    drill: FunnelDrill,
+  ): Promise<FunnelSubjectsPage> {
+    const query = funnelQuery(range, mode, steps);
+    query.set('step', String(drill.step));
+    query.set('outcome', drill.outcome);
+    if (drill.cursor !== null) {
+      query.set('cursor', drill.cursor);
+    }
+    return this.api.get(
+      `/v1/projects/${encodeURIComponent(projectId)}/funnel/subjects?${query.toString()}`,
+      funnelSubjectsResponseSchema,
     );
   }
 }

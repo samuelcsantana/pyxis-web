@@ -12,6 +12,7 @@ import { MockRequestsService } from './requests/mock-requests-service';
 import { MockVisitsService } from './visits/mock-visits-service';
 import { demoScopeOf, demoVisitsIn } from './demo/demo-scope';
 import { previousRange } from './demo/demo-series';
+import type { FunnelOutcome } from '@/domain/funnel-subjects';
 import { NO_VISIT_FILTERS } from '@/domain/visits';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -204,6 +205,31 @@ describe('the demo screens', () => {
             expect(count).toBe(index === 0 ? reach : Math.min(count ?? 0, reach));
             expect(count).toBeLessThanOrEqual(funnel.steps[index - 1]?.count ?? reach);
           });
+        });
+
+        it('list as many visits behind a funnel step as the step counts', async () => {
+          const service = new MockFunnelService();
+          const steps = project.exampleFunnel;
+          const funnel = await service.funnel(project.id, range, 'visit', steps);
+          const listed = async (step: number, outcome: FunnelOutcome) => {
+            let total = 0;
+            let cursor: string | null = null;
+            do {
+              const page = await service.subjects(project.id, range, 'visit', steps, {
+                step,
+                outcome,
+                cursor,
+              });
+              total += page.subjects.length;
+              cursor = page.nextCursor;
+            } while (cursor !== null);
+            return total;
+          };
+          const counts = funnel.steps.map((step) => step.count);
+
+          expect(await listed(1, 'reached')).toBe(counts[0]);
+          expect(await listed(steps.length, 'reached')).toBe(counts.at(-1));
+          expect(await listed(2, 'dropped')).toBe((counts[0] ?? 0) - (counts[1] ?? 0));
         });
       });
     }

@@ -4,12 +4,14 @@ import {
   type FunnelStep,
   type FunnelWire,
 } from '@/domain/funnel';
-import { funnelResponseSchema } from '@/domain/funnel.schema';
+import type { FunnelDrill } from '@/domain/funnel-subjects';
+import { type FunnelSubjectsWire, funnelResponseSchema } from '@/domain/funnel.schema';
 import type { DateRange } from '../date-range';
 import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
 import { itemAt } from '../demo/demo-random';
 import {
+  byKeys,
   demoScopeOf,
   demoVisitsIn,
   groupedBy,
@@ -20,8 +22,10 @@ import {
 
 export const DEMO_FUNNEL_STEPS: readonly FunnelStep[] = DEMO_STORE.exampleFunnel;
 
+export const FUNNEL_SUBJECTS_PER_PAGE = 50;
 const MEDIAN = 0.5;
 const MILLISECONDS_PER_SECOND = 1000;
+const CURSOR_SEPARATOR = '~';
 
 export interface DemoFunnelSubject {
   readonly id: string;
@@ -126,4 +130,60 @@ export function demoFunnelReport(
   now: Date,
 ): FunnelReport {
   return funnelResponseSchema.parse(demoFunnelWire(projectId, range, mode, steps, now));
+}
+
+interface RankedSubject {
+  readonly id: string;
+  readonly at: number;
+}
+
+const newestFirst = byKeys<RankedSubject>((subject) => [-subject.at, subject.id]);
+
+function cursorOf(subject: RankedSubject): string {
+  return `${String(subject.at)}${CURSOR_SEPARATOR}${subject.id}`;
+}
+
+function afterCursor(cursor: string | null): (subject: RankedSubject) => boolean {
+  if (cursor === null) {
+    return () => true;
+  }
+  const separator = cursor.indexOf(CURSOR_SEPARATOR);
+  const last = { at: Number(cursor.slice(0, separator)), id: cursor.slice(separator + 1) };
+  return (subject) => newestFirst(subject, last) > 0;
+}
+
+function isBehind(subject: DemoFunnelSubject, drill: FunnelDrill): boolean {
+  return drill.outcome === 'reached'
+    ? subject.reached.length >= drill.step
+    : subject.reached.length === drill.step - 1;
+}
+
+function lastStepIndex(drill: FunnelDrill): number {
+  return drill.outcome === 'reached' ? drill.step - 1 : drill.step - 2;
+}
+
+export function demoFunnelSubjectsWire(
+  projectId: string,
+  range: DateRange,
+  mode: FunnelMode,
+  steps: readonly FunnelStep[],
+  drill: FunnelDrill,
+  now: Date,
+): FunnelSubjectsWire {
+  const ranked = demoFunnelSubjects(projectId, range, mode, steps, now)
+    .filter((subject) => isBehind(subject, drill))
+    .map((subject) => ({ id: subject.id, at: itemAt(subject.reached, lastStepIndex(drill)) }))
+    .toSorted(newestFirst)
+    .filter(afterCursor(drill.cursor));
+  const page = ranked.slice(0, FUNNEL_SUBJECTS_PER_PAGE);
+  return {
+    subjects: page.map((subject) => ({
+      id: subject.id,
+      last_step_at: new Date(subject.at).toISOString(),
+    })),
+    next_cursor:
+      ranked.length > FUNNEL_SUBJECTS_PER_PAGE
+        ? cursorOf(itemAt(page, FUNNEL_SUBJECTS_PER_PAGE - 1))
+        : null,
+  };
 }

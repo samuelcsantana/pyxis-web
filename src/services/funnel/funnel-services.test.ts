@@ -2,7 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { FunnelStep } from '@/domain/funnel';
 import { ApiReader } from '../api-reader';
 import { demoFeaturesWire } from '../features/demo-features';
-import { DEMO_FUNNEL_STEPS, demoFunnelWire } from './demo-funnel';
+import {
+  DEMO_FUNNEL_STEPS,
+  demoFunnelSubjectsWire,
+  demoFunnelWire,
+  FUNNEL_SUBJECTS_PER_PAGE,
+} from './demo-funnel';
 import { createFunnelService } from './funnel-service.factory';
 import { HttpFunnelService } from './http-funnel-service';
 import { MockFunnelService } from './mock-funnel-service';
@@ -44,6 +49,47 @@ describe('HttpFunnelService', () => {
     expect(JSON.parse(url.searchParams.get('steps') ?? '')).toEqual(TWO);
     expect(report.steps).toHaveLength(2);
   });
+
+  it('asks who is behind one step, with the cursor of an older page only when given', async () => {
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify(
+            demoFunnelSubjectsWire(
+              'demo',
+              RANGE,
+              'visit',
+              TWO,
+              { step: 2, outcome: 'dropped', cursor: null },
+              NOW,
+            ),
+          ),
+        ),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const service = new HttpFunnelService(new ApiReader(API, () => Promise.resolve('token')));
+
+    const page = await service.subjects('p1', RANGE, 'visit', TWO, {
+      step: 2,
+      outcome: 'dropped',
+      cursor: null,
+    });
+    await service.subjects('p1', RANGE, 'user', TWO, { step: 1, outcome: 'reached', cursor: 'c2' });
+
+    const urls = fetchMock.mock.calls.map(
+      ([requested]) => new URL(typeof requested === 'string' ? requested : API),
+    );
+    expect(urls[0]?.pathname).toBe('/v1/projects/p1/funnel/subjects');
+    expect(Object.fromEntries(urls[0]?.searchParams ?? [])).toMatchObject({
+      mode: 'visit',
+      step: '2',
+      outcome: 'dropped',
+    });
+    expect(urls[0]?.searchParams.has('cursor')).toBe(false);
+    expect(urls[1]?.searchParams.get('cursor')).toBe('c2');
+    expect(page.subjects.length).toBeGreaterThan(0);
+  });
 });
 
 describe('MockFunnelService', () => {
@@ -79,6 +125,45 @@ describe('MockFunnelService', () => {
     expect(counts[0]).toBeLessThan(visits.steps[0]?.count ?? 0);
     expect(counts).toEqual(counts.toSorted((left, right) => right - left));
     expect(counts.at(-1)).toBeGreaterThan(0);
+  });
+
+  it('lists as many as each step counts, page by page, newest first and never twice', async () => {
+    const service = new MockFunnelService();
+    const report = await service.funnel('demo', RANGE, 'visit', DEMO_FUNNEL_STEPS);
+    const counts = report.steps.map((step) => step.count);
+    const listed = async (step: number, outcome: 'reached' | 'dropped') => {
+      const ids: string[] = [];
+      const times: string[] = [];
+      let cursor: string | null = null;
+      do {
+        const page = await service.subjects('demo', RANGE, 'visit', DEMO_FUNNEL_STEPS, {
+          step,
+          outcome,
+          cursor,
+        });
+        expect(page.subjects.length).toBeLessThanOrEqual(FUNNEL_SUBJECTS_PER_PAGE);
+        ids.push(...page.subjects.map((subject) => subject.id));
+        times.push(...page.subjects.map((subject) => subject.lastStepAt));
+        cursor = page.nextCursor;
+      } while (cursor !== null);
+      expect(times).toEqual(times.toSorted().toReversed());
+      expect(new Set(ids).size).toBe(ids.length);
+      return ids.length;
+    };
+
+    expect(await listed(1, 'reached')).toBe(counts[0]);
+    expect(await listed(2, 'dropped')).toBe((counts[0] ?? 0) - (counts[1] ?? 0));
+  });
+
+  it('lists the identified people of a step', async () => {
+    const page = await new MockFunnelService().subjects('demo', RANGE, 'user', DEMO_FUNNEL_STEPS, {
+      step: 2,
+      outcome: 'reached',
+      cursor: null,
+    });
+
+    expect(page.subjects.length).toBeGreaterThan(0);
+    expect(page.subjects.every((subject) => !/^[0-9a-f]{8}-/.test(subject.id))).toBe(true);
   });
 });
 

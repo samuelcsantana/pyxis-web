@@ -132,6 +132,8 @@ describe('funnelRows', () => {
       tone: 'start',
       dropped: '',
       time: null,
+      reachedLink: null,
+      droppedLink: null,
     });
     expect(rows[1]).toMatchObject({
       continued: '62.5% continued',

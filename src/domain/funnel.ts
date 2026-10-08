@@ -83,6 +83,12 @@ export function isCountableFunnel(steps: readonly FunnelStep[]): boolean {
 
 export type FunnelTone = 'start' | 'good' | 'bad' | 'neutral';
 
+export interface DrillLink {
+  readonly href: string;
+  readonly label: string;
+  readonly current: boolean;
+}
+
 export interface FunnelRow {
   readonly key: string;
   readonly position: number;
@@ -94,6 +100,8 @@ export interface FunnelRow {
   readonly tone: FunnelTone;
   readonly dropped: string;
   readonly time: string | null;
+  readonly reachedLink: DrillLink | null;
+  readonly droppedLink: DrillLink | null;
 }
 
 interface CountedStep {
@@ -145,6 +153,8 @@ export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonl
       count: formatCount(count, i18n),
       barWidth: barWidth(count, first),
       time: medianTime(secondsFromPrevious, i18n),
+      reachedLink: null,
+      droppedLink: null,
     };
     if (previous === undefined) {
       return { ...base, continued: i18n.t('funnel.start'), tone: 'start', dropped: '' };
