@@ -3,7 +3,7 @@ import type { Locale } from './locales';
 import type { Messages, SourceMessages } from './messages';
 import { createTranslator, type Translator } from './translate';
 
-const DISPLAY_TAGS: Readonly<Record<Locale, string>> = { en: 'en-US' };
+const DISPLAY_TAGS: Readonly<Record<Locale, string>> = { en: 'en-US', 'pt-BR': 'pt-BR' };
 
 export interface I18n {
   readonly locale: Locale;

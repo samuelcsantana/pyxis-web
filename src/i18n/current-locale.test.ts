@@ -42,12 +42,26 @@ describe('currentLocale', () => {
     expect(request.readHeaders.count).toBe(0);
   });
 
-  it('asks the browser when the cookie holds a language the dashboard does not ship', async () => {
+  it('keeps the chosen Brazilian Portuguese even when the browser asks for English', async () => {
     request.cookie = 'pt-BR';
+    request.acceptLanguage = 'en-GB,en;q=0.9';
+
+    await expect(currentLocale()).resolves.toBe('pt-BR');
+    expect(request.readHeaders.count).toBe(0);
+  });
+
+  it('asks the browser when the cookie holds a language the dashboard does not ship', async () => {
+    request.cookie = 'fr';
     request.acceptLanguage = 'en-GB,en;q=0.9';
 
     await expect(currentLocale()).resolves.toBe('en');
     expect(request.readHeaders.count).toBe(1);
+  });
+
+  it('serves Brazilian Portuguese to a browser that asks for any Portuguese', async () => {
+    request.acceptLanguage = 'pt-PT,pt;q=0.9,en;q=0.5';
+
+    await expect(currentLocale()).resolves.toBe('pt-BR');
   });
 
   it('falls back to English without a cookie or a header', async () => {

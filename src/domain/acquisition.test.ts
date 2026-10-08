@@ -16,6 +16,7 @@ import {
 } from './acquisition';
 import { acquisitionResponseSchema } from './acquisition.schema';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 
 const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
 
@@ -162,6 +163,13 @@ describe('channel totals', () => {
     expect(channelSummary(REPORT.days, english)).toBe(
       'Stacked bar chart of 2 days, between 120 and 130 visits a day. ' +
         'Visits by channel: Paid 130, Organic search 90, Direct 30.',
+    );
+  });
+
+  it('describe the chart in Brazilian Portuguese, joining the last channel with "e"', () => {
+    expect(channelSummary(REPORT.days, portuguese)).toBe(
+      'Gráfico de barras empilhadas de 2 dias, entre 120 e 130 visitas por dia. ' +
+        'Visitas por canal: Pago 130, Busca orgânica 90 e Direto 30.',
     );
   });
 });
