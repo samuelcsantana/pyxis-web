@@ -67,6 +67,10 @@ Shipping now:
   empty pages under "Pages/States"; every story is also an automated accessibility test
 - Every control answers the pointer and a tap: hover and pressed states of at least 1.3:1 in both
   themes, the pointer cursor on enabled buttons, colour transitions that respect reduced motion
+  (an e2e check fails on anything that still moves when the system asks for less motion)
+- Landmarks kept for navigation: figures and stat cards are named groups, not regions; the
+  selected period, tab or filter is `aria-current="page"`; the funnel editor's status is a live
+  region; a shortened user id's link name starts with the text it shows
 - Form fields with a 3:1 border and 16px text on phones (so iOS does not zoom on focus); links
   whose underline thickens on hover, and row links with a visible underline and a 24px target
 - Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
