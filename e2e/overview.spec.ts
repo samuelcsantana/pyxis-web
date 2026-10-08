@@ -151,6 +151,8 @@ test('plots the figure a card picks, from the keyboard too, and keeps it across 
   );
   await expect(visits).toHaveAttribute('aria-pressed', 'true');
   await expect(visits).toBeFocused();
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy', 'true');
+  await expect(page).toHaveTitle('Overview · Demo Store · Pyxis');
   expect(await axeViolations(page)).toEqual([]);
 
   await page
