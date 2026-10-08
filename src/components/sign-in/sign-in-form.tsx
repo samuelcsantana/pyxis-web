@@ -5,6 +5,10 @@ import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
+import type { ClientSourceMessages } from '@/i18n/messages';
+import { useT } from '@/i18n/messages-provider';
+import { rich } from '@/i18n/rich';
+import type { Translator } from '@/i18n/translate';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 import {
@@ -32,14 +36,14 @@ export interface SignInFormProps {
   readonly returnPath?: string;
 }
 
-export function signInErrorMessage(error: unknown): string {
+export function signInErrorMessage(error: unknown, t: Translator<ClientSourceMessages>): string {
   if (error instanceof InvalidCodeError) {
-    return 'Invalid or expired code. Check the latest email or send a new code.';
+    return t('signIn.errors.invalidCode');
   }
   if (error instanceof RateLimitedError) {
-    return 'Too many attempts from this network. Wait a few minutes and try again.';
+    return t('signIn.errors.rateLimited');
   }
-  return 'Could not reach Pyxis. Check your connection and try again.';
+  return t('signIn.errors.unreachable');
 }
 
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 placeholder:text-muted ${FIELD}`;
@@ -48,13 +52,15 @@ const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
 
 interface DemoHintProps {
   readonly code: string;
-  readonly children: string;
+  readonly message: string;
 }
 
-function DemoHint({ code, children }: DemoHintProps) {
+function DemoHint({ code, message }: DemoHintProps) {
   return (
     <p className="rounded-input bg-soft px-3 py-2.5 text-caption text-muted">
-      {children} <code className="font-mono font-semibold text-ink">{code}</code>.
+      {rich(message, {
+        code: () => <code className="font-mono font-semibold text-ink">{code}</code>,
+      })}
     </p>
   );
 }
@@ -65,6 +71,7 @@ export function SignInForm({
   demoCode,
   returnPath = HOME_PATH,
 }: SignInFormProps) {
+  const t = useT();
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
   const [step, setStep] = useState<Step>('email');
@@ -147,26 +154,25 @@ export function SignInForm({
     setCode('');
   };
 
-  const errorText = error === null ? null : signInErrorMessage(error);
+  const errorText = error === null ? null : signInErrorMessage(error, t);
+  const digits = String(SIGN_IN_CODE_LENGTH);
 
   return (
     <section className="flex w-full max-w-[420px] flex-col gap-5 rounded-panel border border-line bg-card p-8 text-ink">
       {step === 'email' ? (
         <form onSubmit={submitEmail} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-title font-semibold">Sign in to Pyxis</h1>
-            <p className="text-sm leading-5 text-muted">
-              We will email you a 6-digit code. There is no password to remember.
-            </p>
+            <h1 className="text-title font-semibold">{t('signIn.title')}</h1>
+            <p className="text-sm leading-5 text-muted">{t('signIn.intro', { digits })}</p>
           </div>
           {sessionExpired ? (
             <p role="status" className="rounded-input bg-warn-soft px-3 py-2.5 text-sm text-warn">
-              Your session ended. Sign in again to continue.
+              {t('signIn.sessionEnded')}
             </p>
           ) : null}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="sign-in-email" className="text-caption font-medium">
-              Email
+              {t('signIn.email')}
             </label>
             <input
               ref={emailInput}
@@ -175,7 +181,7 @@ export function SignInForm({
               autoComplete="email"
               required
               maxLength={MAX_EMAIL_LENGTH}
-              placeholder="you@company.com"
+              placeholder={t('signIn.emailPlaceholder')}
               value={email}
               aria-invalid={errorText !== null}
               aria-describedby={errorText === null ? undefined : EMAIL_ERROR_ID}
@@ -195,26 +201,25 @@ export function SignInForm({
             </p>
           )}
           {demoCode === undefined ? null : (
-            <DemoHint code={demoCode}>
-              Demo mode: no email is sent. Any email works, then use the code
-            </DemoHint>
+            <DemoHint code={demoCode} message={t('signIn.demoEmail')} />
           )}
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
-            {busy ? 'Sending…' : 'Send code'}
+            {busy ? t('signIn.sending') : t('signIn.sendCode')}
           </button>
         </form>
       ) : (
         <form onSubmit={submitCode} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-title font-semibold">Check your email</h1>
+            <h1 className="text-title font-semibold">{t('signIn.checkTitle')}</h1>
             <p className="text-sm leading-5 text-muted">
-              If <strong className="font-semibold text-ink">{email.trim()}</strong> can sign in to
-              Pyxis, a code is on its way. It expires in 10 minutes.
+              {rich(t('signIn.checkBody'), {
+                email: () => <strong className="font-semibold text-ink">{email.trim()}</strong>,
+              })}
             </p>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="sign-in-code" className="text-caption font-medium">
-              6-digit code
+              {t('signIn.code', { digits })}
             </label>
             <input
               ref={codeInput}
@@ -235,7 +240,7 @@ export function SignInForm({
             />
           </div>
           <p role="status" className="min-h-5 text-caption text-ok">
-            {codeSent && errorText === null ? 'Code sent.' : ''}
+            {codeSent && errorText === null ? t('signIn.codeSent') : ''}
           </p>
           {errorText === null ? null : (
             <p
@@ -247,17 +252,17 @@ export function SignInForm({
             </p>
           )}
           {demoCode === undefined ? null : (
-            <DemoHint code={demoCode}>Demo mode: no email is sent. Use the code</DemoHint>
+            <DemoHint code={demoCode} message={t('signIn.demoCode')} />
           )}
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
-            {busy ? 'Verifying…' : 'Verify and continue'}
+            {busy ? t('signIn.verifying') : t('signIn.verify')}
           </button>
           <div className="flex flex-wrap justify-between gap-2">
             <button type="button" onClick={sendCode} disabled={busy} className={LINK_BUTTON_CLASS}>
-              Send a new code
+              {t('signIn.resend')}
             </button>
             <button type="button" onClick={useAnotherEmail} className={LINK_BUTTON_CLASS}>
-              Use a different email
+              {t('signIn.otherEmail')}
             </button>
           </div>
         </form>
