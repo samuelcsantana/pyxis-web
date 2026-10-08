@@ -25,7 +25,9 @@ function eventVisitsHref(event: string): string {
 
 describe('KpiGrid', () => {
   it('shows each figure with its change, what it compares with, its note and sparkline', () => {
-    const { container } = render(<KpiGrid kpis={overviewKpis(REPORT, LAST_WEEK)} />);
+    const { container } = render(
+      <KpiGrid kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')} />,
+    );
 
     const visits = screen.getByRole('region', { name: 'Visits' });
     expect(visits).toHaveTextContent(`${kpi('visits').change} change vs. previous 7 days`);
@@ -98,7 +100,9 @@ describe('KpiGrid', () => {
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
-  const found = overviewKpis(REPORT, LAST_WEEK).find((candidate) => candidate.id === id);
+  const found = overviewKpis(REPORT, LAST_WEEK, 'signup_completed').find(
+    (candidate) => candidate.id === id,
+  );
   if (found === undefined) {
     throw new Error(`No ${id} figure in the demo report`);
   }

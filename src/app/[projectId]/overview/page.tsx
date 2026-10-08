@@ -50,7 +50,7 @@ function OverviewReportView({
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return (
     <>
-      <KpiGrid kpis={overviewKpis(report, compared)} />
+      <KpiGrid kpis={overviewKpis(report, compared, conversionEvent)} />
       {conversionEvent === null ? <NoConversionEvent /> : null}
       {report.days.length === 1 ? (
         <DayActivityFigures days={report.days} periodLabel={describePeriod(period)} />
