@@ -68,10 +68,24 @@ const NO_VALUE_GAP = 'no value';
 const NO_WRITES_GAP = 'no writes';
 
 export function chartMetric(
-  value: string | null | undefined,
+  value: string | readonly string[] | null | undefined,
   available: readonly KpiId[],
 ): ChartMetric {
   return available.find((id) => id === value) ?? ACTIVITY;
+}
+
+export function withChartMetric(query: string, metric: ChartMetric): string {
+  const parameters = new URLSearchParams(query);
+  if (metric === ACTIVITY) {
+    parameters.delete(METRIC_PARAMETER);
+  } else {
+    parameters.set(METRIC_PARAMETER, metric);
+  }
+  return parameters.toString();
+}
+
+export function keptMetric(metric: ChartMetric): Readonly<Record<string, string>> {
+  return metric === ACTIVITY ? {} : { [METRIC_PARAMETER]: metric };
 }
 
 export function formatChartValue(value: ChartValue, format: ValueFormat): string {

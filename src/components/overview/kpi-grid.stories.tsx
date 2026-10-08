@@ -3,6 +3,7 @@ import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { KpiGrid } from './kpi-grid';
+import { MetricSelection } from './metric-selection';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -142,3 +143,24 @@ export const OnAPhone: Story = {
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+const STORY_KPIS = overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT);
+
+export const PickingTheChart: Story = {
+  args: { selectable: true },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: { pathname: '/demo/overview', query: { range: '30d', metric: 'visits' } },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <MetricSelection available={STORY_KPIS.map((kpi) => kpi.id)}>
+        <Story />
+      </MetricSelection>
+    ),
+  ],
+};
+
+export const PickingTheChartDark: Story = { ...PickingTheChart, globals: { theme: 'dark' } };

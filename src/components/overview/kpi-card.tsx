@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import type { Tone } from '@/domain/metrics';
 import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
+import type { SeriesColor } from '@/domain/overview-chart';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { Sparkline } from '@/components/ui/sparkline';
+import { MetricToggle } from './metric-selection';
 
-export type KpiColor = 'sky' | 'violet' | 'accent' | 'bad';
+export type KpiColor = SeriesColor;
 
 const TONE_CLASSES: Readonly<Record<Tone, string>> = {
   good: 'bg-ok-soft text-ok',
@@ -30,18 +32,33 @@ export interface KpiCardProps {
   readonly kpi: KpiView;
   readonly color: KpiColor;
   readonly drillDown: KpiDrillDownLink | null;
+  readonly toggleHint: string | null;
 }
 
-export function KpiCard({ kpi, color, drillDown }: KpiCardProps) {
+const CARD =
+  'relative flex flex-col gap-1.5 rounded-card border border-line bg-card p-3.5 text-ink sm:gap-2.5 sm:px-4.5 sm:pt-4.5 sm:pb-3.5';
+
+const TOGGLE_CARD = [
+  'cursor-pointer transition-colors duration-150 motion-reduce:transition-none',
+  'has-[[aria-pressed]:hover]:border-muted has-[[aria-pressed]:active]:bg-soft',
+  'has-[[aria-pressed=true]]:border-ink has-[[aria-pressed=true]]:ring-1 has-[[aria-pressed=true]]:ring-ink',
+  'has-[[aria-pressed]:focus-visible]:outline-2 has-[[aria-pressed]:focus-visible]:outline-offset-2 has-[[aria-pressed]:focus-visible]:outline-focus',
+].join(' ');
+
+export function KpiCard({ kpi, color, drillDown, toggleHint }: KpiCardProps) {
   const labelId = `kpi-${kpi.id}`;
   return (
     <div
       role="group"
       aria-labelledby={labelId}
-      className="flex flex-col gap-1.5 rounded-card border border-line bg-card p-3.5 text-ink sm:gap-2.5 sm:px-4.5 sm:pt-4.5 sm:pb-3.5"
+      className={toggleHint === null ? CARD : `${CARD} ${TOGGLE_CARD}`}
     >
       <h2 id={labelId} className="text-xs font-medium text-muted sm:text-[13px]">
-        {kpi.label}
+        {toggleHint === null ? (
+          kpi.label
+        ) : (
+          <MetricToggle metric={kpi.id} label={kpi.label} describedBy={toggleHint} />
+        )}
       </h2>
       <p className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:text-[30px] sm:leading-9">
         {kpi.value}
@@ -72,7 +89,7 @@ export function KpiCard({ kpi, color, drillDown }: KpiCardProps) {
       {drillDown === null ? null : (
         <Link
           href={drillDown.href}
-          className={`inline-flex min-h-6 w-fit items-center text-xs ${TEXT_LINK}`}
+          className={`relative inline-flex min-h-6 w-fit items-center text-xs ${TEXT_LINK}`}
         >
           {drillDown.label}
         </Link>

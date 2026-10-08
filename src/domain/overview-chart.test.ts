@@ -9,7 +9,9 @@ import {
   chartSummary,
   chartValues,
   formatChartValue,
+  keptMetric,
   overviewChart,
+  withChartMetric,
 } from './overview-chart';
 import { overviewResponseSchema } from './overview.schema';
 
@@ -77,6 +79,26 @@ describe('chartMetric', () => {
     expect(chartMetric(undefined, available)).toBe(ACTIVITY);
     expect(chartMetric('bounces', available)).toBe(ACTIVITY);
     expect(chartMetric('conversions', available)).toBe(ACTIVITY);
+  });
+});
+
+describe('the metric in the address', () => {
+  it('names the plotted figure beside the period, and leaves it out for the activity', () => {
+    expect(withChartMetric('range=7d', 'visits')).toBe('range=7d&metric=visits');
+    expect(withChartMetric('range=7d&metric=visits', 'write-errors')).toBe(
+      'range=7d&metric=write-errors',
+    );
+    expect(withChartMetric('metric=visits&range=7d', ACTIVITY)).toBe('range=7d');
+    expect(withChartMetric('metric=visits', ACTIVITY)).toBe('');
+  });
+
+  it('is kept by the period links only when a figure is plotted', () => {
+    expect(keptMetric('conversions')).toEqual({ metric: 'conversions' });
+    expect(keptMetric(ACTIVITY)).toEqual({});
+  });
+
+  it('ignores a repeated parameter', () => {
+    expect(chartMetric(['visits', 'visits'], ['visits'])).toBe(ACTIVITY);
   });
 });
 
