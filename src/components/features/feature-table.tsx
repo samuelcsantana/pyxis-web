@@ -22,6 +22,7 @@ export interface FeatureTableProps {
   readonly kind: FeatureKind;
   readonly rows: readonly FeatureRow[];
   readonly query: string;
+  readonly visitsHref: (name: string) => string;
   readonly loadProperties?: LoadProperties;
 }
 
@@ -32,23 +33,27 @@ function emptyMessage(kind: FeatureKind, query: string): string {
 function TableRow({
   kind,
   row,
+  visitsHref,
   loadProperties,
 }: {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
+  readonly visitsHref: string;
   readonly loadProperties: LoadProperties | undefined;
 }) {
   if (kind === 'events' && loadProperties !== undefined) {
-    return <ExpandableFeatureRow row={row} loadProperties={loadProperties} />;
+    return (
+      <ExpandableFeatureRow row={row} visitsHref={visitsHref} loadProperties={loadProperties} />
+    );
   }
   return (
     <tr>
-      <FeatureRowCells kind={kind} row={row} />
+      <FeatureRowCells kind={kind} row={row} visitsHref={visitsHref} />
     </tr>
   );
 }
 
-export function FeatureTable({ kind, rows, query, loadProperties }: FeatureTableProps) {
+export function FeatureTable({ kind, rows, query, visitsHref, loadProperties }: FeatureTableProps) {
   return (
     <section aria-labelledby="features-heading" className={PANEL}>
       <h2 id="features-heading" className={PANEL_TITLE}>
@@ -82,7 +87,13 @@ export function FeatureTable({ kind, rows, query, loadProperties }: FeatureTable
           </thead>
           <tbody>
             {rows.map((row) => (
-              <TableRow key={row.name} kind={kind} row={row} loadProperties={loadProperties} />
+              <TableRow
+                key={row.name}
+                kind={kind}
+                row={row}
+                visitsHref={visitsHref(row.name)}
+                loadProperties={loadProperties}
+              />
             ))}
           </tbody>
         </table>

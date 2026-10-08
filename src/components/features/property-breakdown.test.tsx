@@ -39,13 +39,18 @@ function renderRow(loadProperties: (name: string) => Promise<readonly PropertyKe
   return render(
     <table>
       <tbody>
-        <ExpandableFeatureRow row={ROW} loadProperties={loadProperties} />
+        <ExpandableFeatureRow row={ROW} visitsHref={EVENT_VISITS} loadProperties={loadProperties} />
       </tbody>
     </table>,
   );
 }
 
 const toggleName = 'Properties of Calculator result shown';
+const EVENT_VISITS = '/p1/visits?range=7d&event=calculator_result_shown';
+
+function valueHref(key: string, value: string): string | null {
+  return value === 'margin' ? null : `/p1/visits?property=${key}%3D${value}`;
+}
 
 describe('PropertyBreakdown', () => {
   it('says it is loading', () => {
@@ -54,6 +59,7 @@ describe('PropertyBreakdown', () => {
         eventLabel="Cta clicked"
         state={{ status: 'loading' }}
         onRetry={vi.fn()}
+        valueHref={valueHref}
       />,
     );
 
@@ -63,7 +69,12 @@ describe('PropertyBreakdown', () => {
   it('offers to try again after a failure', async () => {
     const onRetry = vi.fn();
     render(
-      <PropertyBreakdown eventLabel="Cta clicked" state={{ status: 'error' }} onRetry={onRetry} />,
+      <PropertyBreakdown
+        eventLabel="Cta clicked"
+        state={{ status: 'error' }}
+        onRetry={onRetry}
+        valueHref={valueHref}
+      />,
     );
 
     expect(screen.getByRole('alert')).toHaveTextContent('Could not load the properties');
@@ -77,6 +88,7 @@ describe('PropertyBreakdown', () => {
         eventLabel="Product created"
         state={{ status: 'ready', keys: [] }}
         onRetry={vi.fn()}
+        valueHref={valueHref}
       />,
     );
 
@@ -91,6 +103,7 @@ describe('PropertyBreakdown', () => {
         eventLabel="Calculator result shown"
         state={{ status: 'ready', keys: KEYS }}
         onRetry={vi.fn()}
+        valueHref={valueHref}
       />,
     );
 
@@ -102,6 +115,25 @@ describe('PropertyBreakdown', () => {
       'margin30%33',
       'Other values10%1—',
     ]);
+  });
+
+  it('links each value it can filter by to the visits whose event carried it', () => {
+    render(
+      <PropertyBreakdown
+        eventLabel="Calculator result shown"
+        state={{ status: 'ready', keys: KEYS }}
+        onRetry={vi.fn()}
+        valueHref={valueHref}
+      />,
+    );
+
+    const table = screen.getByRole('table', { name: 'calculator · carried by 10 events' });
+    expect(within(table).getAllByRole('link')).toHaveLength(1);
+    expect(
+      within(table).getByRole('link', {
+        name: 'shipping: see the visits where calculator is shipping',
+      }),
+    ).toHaveAttribute('href', '/p1/visits?property=calculator%3Dshipping');
   });
 
   it('leaves out the other values when every value is shown', () => {
@@ -127,6 +159,7 @@ describe('PropertyBreakdown', () => {
         eventLabel="Report exported"
         state={{ status: 'ready', keys }}
         onRetry={vi.fn()}
+        valueHref={() => null}
       />,
     );
 
@@ -218,6 +251,46 @@ describe('ExpandableFeatureRow', () => {
     expect(loadProperties).toHaveBeenCalledTimes(2);
   });
 
+  it('links the event and each value to the visits, keeping the period', async () => {
+    renderRow(() => Promise.resolve(KEYS));
+
+    expect(
+      screen.getByRole('link', { name: 'Calculator result shown: see its visits' }),
+    ).toHaveAttribute('href', EVENT_VISITS);
+    await userEvent.click(screen.getByRole('button', { name: toggleName }));
+
+    expect(
+      await screen.findByRole('link', {
+        name: 'margin: see the visits where calculator is margin',
+      }),
+    ).toHaveAttribute('href', `${EVENT_VISITS}&property=calculator%3Dmargin`);
+  });
+
+  it('leaves a value the Visits filter could not read unlinked', async () => {
+    const longValue = 'x'.repeat(101);
+    const keys = propertyKeyViews(
+      propertyBreakdownResponseSchema.parse({
+        name: 'calculator_result_shown',
+        events: 1,
+        keys: [
+          {
+            key: 'note',
+            events: 1,
+            values: [{ value: longValue, count: 1, visits: 1 }],
+            other_count: 0,
+          },
+        ],
+      }),
+    );
+    renderRow(() => Promise.resolve(keys));
+
+    await userEvent.click(screen.getByRole('button', { name: toggleName }));
+
+    const table = await screen.findByRole('table', { name: /^note/ });
+    expect(within(table).getByRole('rowheader')).toHaveTextContent(longValue);
+    expect(within(table).queryByRole('link')).not.toBeInTheDocument();
+  });
+
   it('can go away before it was ever opened', () => {
     const { unmount } = renderRow(() => Promise.resolve(KEYS));
 
@@ -235,7 +308,13 @@ describe('FeatureTable with a property loader', () => {
       '',
     );
     const { rerender } = render(
-      <FeatureTable kind="events" rows={rows} query="" loadProperties={vi.fn()} />,
+      <FeatureTable
+        kind="events"
+        rows={rows}
+        query=""
+        visitsHref={() => EVENT_VISITS}
+        loadProperties={vi.fn()}
+      />,
     );
 
     expect(screen.getByRole('button', { name: 'Properties of Cta clicked' })).toBeInTheDocument();
@@ -245,6 +324,7 @@ describe('FeatureTable with a property loader', () => {
         kind="screens"
         rows={featureRows([{ name: '/orders', count: 3, visits: 2, daily: [1, 2] }], 'screens', '')}
         query=""
+        visitsHref={() => EVENT_VISITS}
         loadProperties={vi.fn()}
       />,
     );
