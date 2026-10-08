@@ -1,4 +1,5 @@
 import { currentLocale } from './current-locale';
+import { createI18n, type I18n } from './i18n';
 import type { Locale } from './locales';
 import {
   CLIENT_NAMESPACES,
@@ -24,4 +25,9 @@ export async function clientMessages(locale: Locale): Promise<ClientMessages> {
 export async function getTranslator(): Promise<Translator<SourceMessages>> {
   const locale = await currentLocale();
   return createTranslator<SourceMessages>(await loadMessages(locale), locale);
+}
+
+export async function getI18n(): Promise<I18n> {
+  const locale = await currentLocale();
+  return createI18n(locale, await loadMessages(locale));
 }
