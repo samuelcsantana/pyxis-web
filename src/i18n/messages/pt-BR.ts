@@ -126,6 +126,10 @@ export const ptBR = translation({
     skipToContent: 'Pular para o conteúdo',
     privacy: 'Sem cookies, sem dados pessoais',
   },
+  language: {
+    label: 'Idioma',
+    current: 'Idioma: {name}',
+  },
   chartPanel: {
     showAs: 'Mostrar como',
     chart: 'Gráfico',

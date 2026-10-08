@@ -35,6 +35,7 @@ describe('SignInPage', () => {
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Your session ended');
     expect(screen.getByRole('button', { name: 'Switch theme' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Language' })).toBeInTheDocument();
   });
 
   it('says nothing about a session when the visitor simply arrives', async () => {

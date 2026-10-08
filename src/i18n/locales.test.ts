@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_LOCALE, LOCALES, parseLocale } from './locales';
+import { DEFAULT_LOCALE, LOCALES, localeName, parseLocale } from './locales';
 
 describe('locales', () => {
   it('ships English as the default, and Brazilian Portuguese', () => {
@@ -13,5 +13,10 @@ describe('locales', () => {
     expect(parseLocale('pt')).toBeUndefined();
     expect(parseLocale('fr')).toBeUndefined();
     expect(parseLocale(undefined)).toBeUndefined();
+  });
+
+  it('names each language in itself, capitalised the way the language does', () => {
+    expect(localeName('en')).toBe('English');
+    expect(localeName('pt-BR')).toBe('Português (Brasil)');
   });
 });

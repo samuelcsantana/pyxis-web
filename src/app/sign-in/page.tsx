@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { LogoMark } from '@/components/brand/logo-mark';
+import { LanguageMenu } from '@/components/language/language-menu';
 import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
-import { getTranslator } from '@/i18n/get-messages';
+import { chooseLocale } from '@/i18n/choose-locale';
+import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
@@ -22,10 +24,11 @@ export interface SignInPageProps {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { expired, next } = await searchParams;
-  const t = await getTranslator();
+  const { t, locale } = await getI18n();
   return (
     <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
-      <header className="flex w-full max-w-6xl justify-end">
+      <header className="flex w-full max-w-6xl flex-wrap items-center justify-end gap-2">
+        <LanguageMenu locale={locale} label={t('language.label')} choose={chooseLocale} />
         <ThemeToggle initialTheme={await chosenTheme()} />
       </header>
       <MainContent className="flex w-full grow flex-col items-center justify-center gap-7 py-8">

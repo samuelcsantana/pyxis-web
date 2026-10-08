@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
@@ -41,7 +41,12 @@ const meta = {
   title: 'Shell/Sidebar',
   component: Sidebar,
   tags: ['autodocs'],
-  args: { admin: DEMO_ADMIN, project: STORE, i18n: english },
+  args: {
+    admin: DEMO_ADMIN,
+    project: STORE,
+    i18n: english,
+    chooseLocale: fn(() => Promise.resolve()),
+  },
   parameters: {
     layout: 'fullscreen',
     nextjs: {

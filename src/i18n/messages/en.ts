@@ -116,6 +116,10 @@ export const en = {
     skipToContent: 'Skip to content',
     privacy: 'No cookies, no personal data',
   },
+  language: {
+    label: 'Language',
+    current: 'Language: {name}',
+  },
   chartPanel: {
     showAs: 'Show as',
     chart: 'Chart',
