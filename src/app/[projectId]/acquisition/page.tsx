@@ -1,5 +1,6 @@
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
+import { MainContent } from '@/components/shell/main-content';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
@@ -73,7 +74,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
       />
-      <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {visitsTotal(report.days) > 0 ? (
           <AcquisitionReportView report={report} period={period} />
         ) : (
@@ -83,7 +84,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             endpoint={apiBaseUrl()}
           />
         )}
-      </main>
+      </MainContent>
     </>
   );
 }

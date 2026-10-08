@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { MainContent } from '@/components/shell/main-content';
 import { SignOutButton } from '@/components/shell/sign-out-button';
 import { FIRST_SCREEN, screenHref } from '@/components/shell/screens';
 import { EmptyState } from '@/components/states/empty-state';
@@ -11,7 +12,7 @@ export default async function HomePage() {
     redirect(screenHref(firstProject.id, FIRST_SCREEN));
   }
   return (
-    <main className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
+    <MainContent className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
       <EmptyState headingLevel="h1" title="No projects yet">
         <p>
           <strong className="text-ink">{admin.email}</strong> can sign in, but no project was
@@ -20,6 +21,6 @@ export default async function HomePage() {
         </p>
       </EmptyState>
       <SignOutButton variant="page" />
-    </main>
+    </MainContent>
   );
 }

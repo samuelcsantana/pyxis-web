@@ -1,5 +1,6 @@
 import { RequestFilters } from '@/components/requests/request-filters';
 import { RequestsTable } from '@/components/requests/requests-table';
+import { MainContent } from '@/components/shell/main-content';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
@@ -143,7 +144,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
         theme={await chosenTheme()}
         keep={filterParameters(filter)}
       />
-      <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <LinkTabs
           label="Request kind"
           current={kind}
@@ -197,7 +198,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
             <p className="text-xs leading-[18px] text-muted">{NOTES[kind]}</p>
           </>
         )}
-      </main>
+      </MainContent>
     </>
   );
 }

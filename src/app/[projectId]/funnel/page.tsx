@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { FunnelEditor } from '@/components/funnel/funnel-editor';
 import { FunnelModes } from '@/components/funnel/funnel-modes';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
+import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
@@ -83,7 +84,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         theme={await chosenTheme()}
         keep={{ mode, ...stepsParameter(steps) }}
       />
-      <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <FunnelModes
           current={mode}
           links={FUNNEL_MODES.map((target) => ({
@@ -126,7 +127,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             }
           />
         )}
-      </main>
+      </MainContent>
     </>
   );
 }

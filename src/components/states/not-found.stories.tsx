@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { BrandedPage } from '@/components/brand/branded-page';
+import { MainContent } from '@/components/shell/main-content';
 import { NotFoundPanel } from './not-found-panel';
 
 const meta = {
@@ -32,8 +33,8 @@ export const InsideAProject: Story = {
     linkLabel: 'Open the Overview',
   },
   render: (args) => (
-    <main className="flex w-full max-w-310 flex-col gap-6 p-4 sm:p-8">
+    <MainContent className="flex w-full max-w-310 flex-col gap-6 p-4 sm:p-8">
       <NotFoundPanel {...args} />
-    </main>
+    </MainContent>
   ),
 };
