@@ -176,8 +176,9 @@ Shipping now:
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
 - Loading, empty and error states shared by every screen; while a screen loads, its top bar
-  already shows its title above a skeleton shaped like it; a change of period, tab, filter or
-  screen marks the clicked link with a bar from the first frame and the content busy
+  already shows its title above a skeleton shaped like it; a change of period, tab, filter,
+  screen or Overview chart figure marks the clicked link or KPI card with a bar from the first
+  frame and the content busy
   (`aria-busy`, a thin bar along its top) until the server answers; the filter and search forms
   submit in place with `next/form` (no new document) and their button says "Applying…" or
   "Searching…" meanwhile, and they still work as plain GET forms without JavaScript; an empty
