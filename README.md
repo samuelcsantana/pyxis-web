@@ -317,7 +317,9 @@ The root layout is covered too: its test calls the server component and checks t
 returns.
 
 Tests run in English: the Vitest setup file replaces `currentLocale()`, the only code that reads
-the request's language, so a test never needs request headers to render a page.
+the request's language, so a test never needs request headers to render a page. Domain functions
+and server components that write text take the request's `I18n` value (translator and formats)
+as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`.
 
 ### Performance budget
 
@@ -352,10 +354,11 @@ src/
 │                   schemas of the API answers sit apart in *.schema.ts, imported by the
 │                   server only
 ├── i18n/           interface languages: Accept-Language negotiation, typed dictionaries with
-│                   CLDR plurals, the request's language and the messages provider
+│                   CLDR plurals, the number and date formats of each language, the request's
+│                   language and the messages provider
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
-├── test-utils/     test helpers (rendering inside the messages provider)
+├── test-utils/     test helpers (rendering inside the messages provider, the English I18n)
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
