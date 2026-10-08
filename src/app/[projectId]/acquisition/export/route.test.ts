@@ -86,11 +86,20 @@ describe('GET /[projectId]/acquisition/export', () => {
     expect(rows).toHaveLength(8);
   });
 
+  it('sends the campaigns of the period with their source', async () => {
+    const rows = lines(await (await download('range=7d&table=campaigns')).text());
+
+    expect(rows[0]).toBe(
+      'campaign,source,medium,channel,visits,conversion_events,converting_visits,ad_click_visits',
+    );
+    expect(rows.slice(1).some((row) => row.startsWith('spring_sale,google,'))).toBe(true);
+  });
+
   it('answers not found for a table the screen does not have, without reading', async () => {
     const acquisition = vi.fn<IAcquisitionService['acquisition']>();
     state.acquisition = acquisition;
 
-    await expect(download('table=campaigns')).rejects.toThrow('not-found');
+    await expect(download('table=countries')).rejects.toThrow('not-found');
     expect(acquisition).not.toHaveBeenCalled();
   });
 });

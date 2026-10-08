@@ -79,13 +79,18 @@ test('downloads the screens the Features search finds', async ({ page }) => {
   expect(csv.lines.slice(1).every((line) => line.startsWith('/orders'))).toBe(true);
 });
 
-test('downloads the Acquisition sources and visits by channel', async ({ page }) => {
+test('downloads the Acquisition sources, campaigns and visits by channel', async ({ page }) => {
   await page.goto(`/${STORE_ID}/acquisition?range=7d`);
   const table = page.getByRole('table', { name: 'Sources' });
   await expect(table).toBeVisible();
   const shownSources = await table.getByRole('row').count();
+  const shownCampaigns = await page
+    .getByRole('table', { name: 'Campaigns' })
+    .getByRole('row')
+    .count();
 
   const sources = await downloadCsv(page, 'Sources as CSV');
+  const campaigns = await downloadCsv(page, 'Campaigns as CSV');
   const channels = await downloadCsv(page, 'Visits by channel as CSV');
 
   expect(sources.fileName).toMatch(
@@ -93,6 +98,8 @@ test('downloads the Acquisition sources and visits by channel', async ({ page })
   );
   expect(sources.lines[0]).toMatch(/^source,medium,channel,visits,/);
   expect(sources.lines).toHaveLength(shownSources);
+  expect(campaigns.lines[0]).toMatch(/^campaign,source,medium,channel,visits,/);
+  expect(campaigns.lines).toHaveLength(shownCampaigns);
   expect(channels.lines[0]).toBe('date,paid,email,social,campaign,organic,referral,direct');
   expect(channels.lines).toHaveLength(8);
 });
@@ -124,7 +131,7 @@ test('downloads the visits that match the Visits filters', async ({ page }) => {
 
 test('answers not found for a table a screen does not have', async ({ request }) => {
   const overview = await request.get(`/${STORE_ID}/overview/export?table=visitors`);
-  const acquisition = await request.get(`/${STORE_ID}/acquisition/export?table=campaigns`);
+  const acquisition = await request.get(`/${STORE_ID}/acquisition/export?table=countries`);
 
   expect(overview.status()).toBe(404);
   expect(acquisition.status()).toBe(404);

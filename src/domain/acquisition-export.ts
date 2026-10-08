@@ -1,43 +1,62 @@
 import type { I18n } from '@/i18n/i18n';
-import { type AcquisitionReport, CHANNELS, type Source } from './acquisition';
+import { type AcquisitionReport, type Campaign, CHANNELS, type Source } from './acquisition';
 import type { CsvTable, CsvValue } from './csv';
 
-export const ACQUISITION_TABLES = ['sources', 'channels'] as const;
+export const ACQUISITION_TABLES = ['sources', 'campaigns', 'channels'] as const;
 export type AcquisitionTable = (typeof ACQUISITION_TABLES)[number];
 
 export function acquisitionTableLabel(table: AcquisitionTable, i18n: I18n): string {
   return i18n.t(`exports.acquisition.${table}`);
 }
 
-interface SourceColumn {
+interface Column<Entry> {
   readonly name: string;
-  readonly value: (source: Source) => CsvValue;
+  readonly value: (entry: Entry) => CsvValue;
 }
 
-function sourceColumns(sources: readonly Source[]): readonly SourceColumn[] {
-  const countsConversions = sources.some((source) => source.conversions !== null);
-  const countsConvertingVisits = sources.some((source) => source.convertingVisits !== null);
+type Attributed = Source | Campaign;
+
+function conversionColumns<Entry extends Attributed>(
+  entries: readonly Entry[],
+): readonly Column<Entry>[] {
+  const countsConversions = entries.some((entry) => entry.conversions !== null);
+  const countsConvertingVisits = entries.some((entry) => entry.convertingVisits !== null);
   return [
-    { name: 'source', value: (source) => source.source },
-    { name: 'medium', value: (source) => source.medium },
-    { name: 'channel', value: (source) => source.channel },
-    { name: 'visits', value: (source) => source.visits },
+    { name: 'visits', value: (entry) => entry.visits },
     ...(countsConversions
-      ? [{ name: 'conversion_events', value: (source: Source) => source.conversions }]
+      ? [{ name: 'conversion_events', value: (entry: Entry) => entry.conversions }]
       : []),
     ...(countsConvertingVisits
-      ? [{ name: 'converting_visits', value: (source: Source) => source.convertingVisits }]
+      ? [{ name: 'converting_visits', value: (entry: Entry) => entry.convertingVisits }]
       : []),
-    { name: 'ad_click_visits', value: (source) => source.fromAdClickVisits },
+    { name: 'ad_click_visits', value: (entry) => entry.fromAdClickVisits },
   ];
 }
 
-function sourcesTable(report: AcquisitionReport): CsvTable {
-  const columns = sourceColumns(report.sources);
+function tableOf<Entry>(entries: readonly Entry[], columns: readonly Column<Entry>[]): CsvTable {
   return {
     columns: columns.map((column) => column.name),
-    rows: report.sources.map((source) => columns.map((column) => column.value(source))),
+    rows: entries.map((entry) => columns.map((column) => column.value(entry))),
   };
+}
+
+function sourcesTable(report: AcquisitionReport): CsvTable {
+  return tableOf(report.sources, [
+    { name: 'source', value: (source) => source.source },
+    { name: 'medium', value: (source) => source.medium },
+    { name: 'channel', value: (source) => source.channel },
+    ...conversionColumns(report.sources),
+  ]);
+}
+
+function campaignsTable(report: AcquisitionReport): CsvTable {
+  return tableOf(report.campaigns, [
+    { name: 'campaign', value: (campaign) => campaign.campaign },
+    { name: 'source', value: (campaign) => campaign.source },
+    { name: 'medium', value: (campaign) => campaign.medium },
+    { name: 'channel', value: (campaign) => campaign.channel },
+    ...conversionColumns(report.campaigns),
+  ]);
 }
 
 function channelsTable(report: AcquisitionReport): CsvTable {
@@ -53,6 +72,7 @@ function channelsTable(report: AcquisitionReport): CsvTable {
 const TABLE_BUILDERS: Readonly<Record<AcquisitionTable, (report: AcquisitionReport) => CsvTable>> =
   {
     sources: sourcesTable,
+    campaigns: campaignsTable,
     channels: channelsTable,
   };
 
