@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { overviewKpis } from '@/domain/overview';
+import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { KpiGrid } from './kpi-grid';
@@ -15,12 +15,16 @@ const TODAY = { days: 1, endsToday: true } as const;
 const WITHOUT_CONVERSIONS = demoOverviewReport(DEMO_DOCS.id, STORY_PERIOD, STORY_NOW);
 const EVENT = DEMO_STORE.conversionEvent;
 
+function drillDownHref({ screen, filter }: KpiDrillDown): string {
+  return `/demo/${screen}?${new URLSearchParams({ range: '30d', ...filter }).toString()}`;
+}
+
 const meta = {
   title: 'Overview/KPI cards',
   component: KpiGrid,
   tags: ['autodocs'],
-  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT) },
-  parameters: { layout: 'padded' },
+  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT), drillDownHref },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,70rem)]">

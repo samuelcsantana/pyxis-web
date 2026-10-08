@@ -235,6 +235,7 @@ describe('overviewKpis', () => {
       comparison: 'vs. previous 30 days',
       note: null,
       series: [2400, 2358],
+      drillDown: { label: 'See the visits', screen: 'visits', filter: {} },
     });
     expect(users).toMatchObject({
       comparison: 'vs. previous 30 days',
@@ -252,7 +253,60 @@ describe('overviewKpis', () => {
       comparison: 'vs. previous 30 days',
       note: '61 of 2,524 writes failed',
       series: [0.025, 31 / 1324],
+      drillDown: { label: 'See failing routes', screen: 'requests', filter: { show: 'failing' } },
     });
+  });
+
+  it('points each figure at the list of what it counts', () => {
+    const [, users, conversions] = overviewKpis(report(), { ...ENDED, days: 30 }, CONVERSION_EVENT);
+    const [, , convertingVisits] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          converting_visits: { current: 200, previous: 190, daily: [95, 105] },
+        },
+      }),
+      { ...ENDED, days: 30 },
+      CONVERSION_EVENT,
+    );
+
+    expect(users?.drillDown).toEqual({
+      label: 'See identified visits',
+      screen: 'visits',
+      filter: { identity: 'identified' },
+    });
+    const converting = {
+      label: 'See converting visits',
+      screen: 'visits',
+      filter: { event: 'signup_completed' },
+    };
+    expect(conversions?.drillDown).toEqual(converting);
+    expect(convertingVisits?.drillDown).toEqual(converting);
+  });
+
+  it('points no figure at a list that would be empty', () => {
+    const none = { current: 0, previous: 3, daily: [0] };
+    const kpis = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          visits: none,
+          identified_users: none,
+          conversions: { current: 4, previous: 3, daily: [4] },
+          converting_visits: none,
+          write_errors: {
+            current: { failed: 0, total: 12 },
+            previous: { failed: 1, total: 9 },
+            daily: [{ failed: 0, total: 12 }],
+          },
+        },
+      }),
+      { ...ENDED, days: 1 },
+      CONVERSION_EVENT,
+    );
+
+    expect(kpis.map((kpi) => kpi.drillDown)).toEqual([null, null, null, null]);
   });
 
   it('counts the visits that converted, with the conversion events beside them', () => {

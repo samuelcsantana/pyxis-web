@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { areaShape } from '@/domain/area-chart';
 import { valueAxis } from '@/domain/chart-scale';
-import { overviewKpis } from '@/domain/overview';
+import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DailyActivityChart } from './daily-activity-chart';
@@ -21,6 +21,10 @@ function visitsHref(path: string): string {
   return `/p-store/visits?${new URLSearchParams({ range: '7d', path }).toString()}`;
 }
 
+function drillDownHref({ screen, filter }: KpiDrillDown): string {
+  return `/p-store/${screen}?${new URLSearchParams({ range: '7d', ...filter }).toString()}`;
+}
+
 function eventVisitsHref(event: string): string {
   return `/p-store/visits?${new URLSearchParams({ range: '7d', event }).toString()}`;
 }
@@ -28,7 +32,10 @@ function eventVisitsHref(event: string): string {
 describe('KpiGrid', () => {
   it('shows each figure with its change, what it compares with, its note and sparkline', () => {
     const { container } = render(
-      <KpiGrid kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')} />,
+      <KpiGrid
+        drillDownHref={drillDownHref}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+      />,
     );
 
     const visits = screen.getByRole('region', { name: 'Visits' });
@@ -50,6 +57,7 @@ describe('KpiGrid', () => {
   it('colors the change by whether it is good news', () => {
     render(
       <KpiGrid
+        drillDownHref={drillDownHref}
         kpis={[
           { ...kpi('visits'), change: '+10%', tone: 'good' },
           { ...kpi('identified-users'), change: '−10%', tone: 'bad' },
@@ -64,7 +72,12 @@ describe('KpiGrid', () => {
   });
 
   it('leaves a gap in the error rate line on a day without writes', () => {
-    render(<KpiGrid kpis={[{ ...kpi('write-errors'), series: [0.02, null, 0.04, 0.01] }]} />);
+    render(
+      <KpiGrid
+        drillDownHref={drillDownHref}
+        kpis={[{ ...kpi('write-errors'), series: [0.02, null, 0.04, 0.01] }]}
+      />,
+    );
 
     const lines = screen
       .getByRole('region', { name: 'Write error rate' })
@@ -73,14 +86,55 @@ describe('KpiGrid', () => {
   });
 
   it('draws no sparkline for a single day', () => {
-    const { container } = render(<KpiGrid kpis={[{ ...kpi('visits'), series: [12] }]} />);
+    const { container } = render(
+      <KpiGrid drillDownHref={drillDownHref} kpis={[{ ...kpi('visits'), series: [12] }]} />,
+    );
 
     expect(container.querySelector('svg')).not.toBeInTheDocument();
+  });
+
+  it('links each figure to the screen that lists what it counts, in the same period', () => {
+    render(
+      <KpiGrid
+        drillDownHref={drillDownHref}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+      />,
+    );
+
+    const linkIn = (region: string) =>
+      within(screen.getByRole('region', { name: region })).getByRole('link');
+    expect(linkIn('Visits')).toHaveAccessibleName('See the visits');
+    expect(linkIn('Visits')).toHaveAttribute('href', '/p-store/visits?range=7d');
+    expect(linkIn('Identified users')).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=7d&identity=identified',
+    );
+    expect(linkIn('Conversions')).toHaveAccessibleName('See converting visits');
+    expect(linkIn('Conversions')).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=7d&event=signup_completed',
+    );
+    expect(linkIn('Write error rate')).toHaveAccessibleName('See failing routes');
+    expect(linkIn('Write error rate')).toHaveAttribute(
+      'href',
+      '/p-store/requests?range=7d&show=failing',
+    );
+  });
+
+  it('offers no link to a list that would be empty', () => {
+    render(
+      <KpiGrid drillDownHref={drillDownHref} kpis={[{ ...kpi('visits'), drillDown: null }]} />,
+    );
+
+    expect(
+      within(screen.getByRole('region', { name: 'Visits' })).queryByRole('link'),
+    ).not.toBeInTheDocument();
   });
 
   it('says in words, not only in colour, whether a change is good news', () => {
     render(
       <KpiGrid
+        drillDownHref={drillDownHref}
         kpis={[
           { ...kpi('visits'), change: '+10% (+40)', tone: 'good' },
           { ...kpi('write-errors'), change: '+2 pt', tone: 'bad' },

@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import type { Tone } from '@/domain/metrics';
 import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { Sparkline } from '@/components/ui/sparkline';
 
 export type KpiColor = 'sky' | 'violet' | 'accent' | 'bad';
@@ -19,12 +21,18 @@ const STROKE_CLASSES: Readonly<Record<KpiColor, string>> = {
 
 const SPARKLINE_BOX = { width: 120, height: 36, inset: 3 } as const;
 
+export interface KpiDrillDownLink {
+  readonly label: string;
+  readonly href: string;
+}
+
 export interface KpiCardProps {
   readonly kpi: KpiView;
   readonly color: KpiColor;
+  readonly drillDown: KpiDrillDownLink | null;
 }
 
-export function KpiCard({ kpi, color }: KpiCardProps) {
+export function KpiCard({ kpi, color, drillDown }: KpiCardProps) {
   const labelId = `kpi-${kpi.id}`;
   return (
     <section
@@ -60,6 +68,14 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
         />
       ) : null}
       {kpi.note === null ? null : <p className="text-xs text-muted">{kpi.note}</p>}
+      {drillDown === null ? null : (
+        <Link
+          href={drillDown.href}
+          className={`inline-flex min-h-6 w-fit items-center text-xs ${TEXT_LINK}`}
+        >
+          {drillDown.label}
+        </Link>
+      )}
     </section>
   );
 }
