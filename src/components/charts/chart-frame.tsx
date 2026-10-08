@@ -24,6 +24,7 @@ export interface ChartFrameProps {
   readonly axis: ValueAxis;
   readonly dates: readonly string[];
   readonly layout: DayLayout;
+  readonly formatTick?: (tick: number) => string;
   readonly children: ReactNode;
 }
 
@@ -55,6 +56,7 @@ export function ChartFrame({
   axis,
   dates,
   layout,
+  formatTick = formatCount,
   children,
 }: ChartFrameProps) {
   const labels = dayLabelSets(dates, layout);
@@ -71,7 +73,7 @@ export function ChartFrame({
             className="absolute right-2 -translate-y-1/2 tabular-nums"
             style={{ top: offsetFromTop(tick, axis.top) }}
           >
-            {formatCount(tick)}
+            {formatTick(tick)}
           </span>
         ))}
       </div>

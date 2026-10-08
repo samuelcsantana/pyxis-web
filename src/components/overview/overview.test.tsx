@@ -4,11 +4,12 @@ import { describe, expect, it } from 'vitest';
 import { linePath } from '@/domain/line-chart';
 import { valueAxis } from '@/domain/chart-scale';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
+import { ACTIVITY, chartRows, chartValues, overviewChart } from '@/domain/overview-chart';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
-import { DailyActivityChart } from './daily-activity-chart';
 import { DayActivityFigures } from './day-activity-figures';
 import { KpiGrid } from './kpi-grid';
+import { OverviewChartPanel } from './overview-chart-panel';
 import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
 
@@ -166,51 +167,76 @@ function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
   return found;
 }
 
-describe('DailyActivityChart', () => {
-  it('draws the chart with a summary in words and the totals beside the legend', () => {
-    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+const ACTIVITY_CHART = overviewChart(REPORT, ACTIVITY);
+const WITHOUT_PREVIOUS = { ...REPORT, previousDays: null };
 
-    expect(screen.getByRole('img')).toHaveAccessibleName(/^Line chart of 7 days\. Page views: /);
+function lines(figure: HTMLElement, color: string, period: 'current' | 'previous') {
+  return [...figure.querySelectorAll(`g[stroke="${color}"] path[data-period="${period}"]`)];
+}
+
+describe('OverviewChartPanel', () => {
+  it('draws the chart with a summary in words and the totals beside the legend', () => {
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+
+    expect(screen.getByRole('img')).toHaveAccessibleName(
+      /^Line chart of 7 days\. Page views: .+ Dashed, the previous period\. Page views: /,
+    );
+    expect(screen.getByRole('heading', { name: 'Activity per day' })).toBeInTheDocument();
     expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
     const pageViews = REPORT.days.reduce((sum, day) => sum + day.pageViews, 0);
     expect(screen.getByText(new Intl.NumberFormat('en-US').format(pageViews))).toBeInTheDocument();
+    expect(screen.getByText('Previous period').querySelector('strong')).toBeNull();
   });
 
-  it('draws both series as unfilled lines, on one scale for the two', () => {
-    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+  it('draws each series as an unfilled line over its dashed previous period, on one scale', () => {
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
 
     const figure = screen.getByRole('img');
-    const { top } = valueAxis(REPORT.days.flatMap((day) => [day.pageViews, day.events]));
-    const drawn = (color: string) =>
-      [...figure.querySelectorAll(`path[stroke="${color}"]`)].map((path) => ({
-        d: path.getAttribute('d'),
-        fill: path.getAttribute('fill'),
-      }));
-    expect(drawn('var(--color-sky)')).toEqual([
-      {
-        d: linePath(
-          REPORT.days.map((day) => day.pageViews),
-          top,
-        ),
-        fill: 'none',
-      },
-    ]);
-    expect(drawn('var(--color-violet)')).toEqual([
-      {
-        d: linePath(
-          REPORT.days.map((day) => day.events),
-          top,
-        ),
-        fill: 'none',
-      },
-    ]);
+    const { top } = valueAxis(chartValues(ACTIVITY_CHART));
+    const [pageViews, events] = ACTIVITY_CHART.series;
+    expect(figure.querySelector('g[stroke="var(--color-sky)"]')).toHaveAttribute('fill', 'none');
+    expect(
+      lines(figure, 'var(--color-sky)', 'current').map((path) => path.getAttribute('d')),
+    ).toEqual([linePath(pageViews?.values ?? [], top)]);
+    const [previousPageViews] = lines(figure, 'var(--color-sky)', 'previous');
+    expect(previousPageViews).toHaveAttribute('d', linePath(pageViews?.previous ?? [], top, 7));
+    expect(previousPageViews).toHaveAttribute('stroke-dasharray', '6 5');
+    expect(lines(figure, 'var(--color-violet)', 'current')[0]).toHaveAttribute(
+      'd',
+      linePath(events?.values ?? [], top),
+    );
     expect(
       within(figure).getByText(new Intl.NumberFormat('en-US').format(top)),
     ).toBeInTheDocument();
   });
 
+  it('draws no dashed line, and no legend for it, without a previous period', () => {
+    render(
+      <OverviewChartPanel
+        chart={overviewChart(WITHOUT_PREVIOUS, ACTIVITY)}
+        periodLabel="last 7 days"
+      />,
+    );
+
+    expect(screen.getByRole('img').querySelector('[data-period="previous"]')).toBeNull();
+    expect(screen.queryByText('Previous period')).not.toBeInTheDocument();
+  });
+
+  it('plots one figure in its card colour and format, with the total of the previous period', () => {
+    const chart = overviewChart(REPORT, 'write-errors');
+    render(<OverviewChartPanel chart={chart} periodLabel="last 7 days" />);
+
+    expect(screen.getByRole('heading', { name: 'Write error rate per day' })).toBeInTheDocument();
+    const figure = screen.getByRole('img');
+    expect(lines(figure, 'var(--color-bad)', 'current')).toHaveLength(1);
+    expect(within(figure).getByText('0%')).toBeInTheDocument();
+    expect(screen.getByText('Previous period')).toHaveTextContent(
+      `Previous period${String(chart.previousTotal)}`,
+    );
+  });
+
   it('switches to a table of the same days and back', async () => {
-    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
     const views = within(screen.getByRole('group', { name: 'Show as' }));
     const chartOption = views.getByRole('button', { name: 'Chart' });
     const tableOption = views.getByRole('button', { name: 'Table' });
@@ -222,12 +248,24 @@ describe('DailyActivityChart', () => {
     expect(tableOption).toHaveAttribute('aria-pressed', 'true');
     expect(chartOption).toHaveAttribute('aria-pressed', 'false');
     const table = screen.getByRole('table', {
-      name: 'Page views and named events per day, last 7 days',
+      name: 'Page views and named events per day, last 7 days, with the previous period',
     });
+    expect(
+      within(table)
+        .getAllByRole('columnheader')
+        .map((cell) => cell.textContent),
+    ).toEqual([
+      'Day',
+      'Page views',
+      'Named events',
+      'Compared with',
+      'Page views then',
+      'Named events then',
+    ]);
     const rows = within(table).getAllByRole('row');
     expect(rows).toHaveLength(8);
-    const [first] = REPORT.days;
-    expect(rows[1]).toHaveTextContent(`Sep 29${String(first?.pageViews)}${String(first?.events)}`);
+    const [first] = chartRows(ACTIVITY_CHART);
+    expect(rows[1]).toHaveTextContent(`Sep 29${first?.cells.join('') ?? ''}`);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
 
     await userEvent.click(chartOption);
@@ -238,7 +276,7 @@ describe('DailyActivityChart', () => {
   });
 
   it('switches with the keyboard too', async () => {
-    render(<DailyActivityChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
     screen.getByRole('button', { name: 'Table' }).focus();
 
     await userEvent.keyboard('{Enter}');

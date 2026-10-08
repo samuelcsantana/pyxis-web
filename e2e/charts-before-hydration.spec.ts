@@ -7,7 +7,7 @@ const CHART_SCREENS = [
     path: 'overview',
     panel: 'Activity per day',
     summary: /^Line chart of /,
-    mark: 'path[stroke="var(--color-sky)"]',
+    mark: 'g[stroke="var(--color-sky)"] path[data-period="current"]',
   },
   {
     title: 'Acquisition',

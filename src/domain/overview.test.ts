@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  activitySummary,
   activityTotals,
   hasActivity,
   type OverviewReport,
@@ -139,16 +138,9 @@ describe('hasActivity', () => {
   });
 });
 
-describe('activityTotals and activitySummary', () => {
-  it('add the days up', () => {
+describe('activityTotals', () => {
+  it('adds the days up', () => {
     expect(activityTotals(report().days)).toEqual({ pageViews: 354, events: 178 });
-  });
-
-  it('describe the chart in words for screen readers', () => {
-    expect(activitySummary(report().days)).toBe(
-      'Line chart of 2 days. Page views: 354 in total, between 174 and 180 a day. ' +
-        'Named events: 178 in total, between 82 and 96 a day.',
-    );
   });
 });
 

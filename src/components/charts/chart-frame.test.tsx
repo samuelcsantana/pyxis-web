@@ -89,6 +89,25 @@ describe('ChartFrame', () => {
     ]);
   });
 
+  it('writes the value ticks the way the chart asks', () => {
+    render(
+      <ChartFrame
+        summary="Line chart of 7 days."
+        heightClassName="h-60"
+        axis={valueAxis([10])}
+        dates={WEEK}
+        layout="points"
+        formatTick={(tick) => `${String(tick)}%`}
+      >
+        <path d="M0,0L1000,1000" />
+      </ChartFrame>,
+    );
+
+    const figure = screen.getByRole('img');
+    expect(within(figure).getByText('10%')).toHaveStyle({ top: '0%' });
+    expect(within(figure).getByText('0%')).toHaveStyle({ top: '100%' });
+  });
+
   it('draws the axes without day labels when there are no days', () => {
     renderFrame([], valueAxis([]));
 

@@ -1,6 +1,6 @@
-import { DailyActivityChart } from '@/components/overview/daily-activity-chart';
 import { DayActivityFigures } from '@/components/overview/day-activity-figures';
 import { KpiGrid } from '@/components/overview/kpi-grid';
+import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { MainContent } from '@/components/shell/main-content';
@@ -20,6 +20,7 @@ import {
   WRITE_DEFINITION,
 } from '@/domain/glossary';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
+import { ACTIVITY, overviewChart } from '@/domain/overview-chart';
 import { OVERVIEW_TABLE_LABELS, OVERVIEW_TABLES } from '@/domain/overview-export';
 import {
   daysBetween,
@@ -93,7 +94,10 @@ function OverviewReportView({
       {report.days.length === 1 ? (
         <DayActivityFigures days={report.days} periodLabel={describePeriod(period)} />
       ) : (
-        <DailyActivityChart days={report.days} periodLabel={describePeriod(period)} />
+        <OverviewChartPanel
+          chart={overviewChart(report, ACTIVITY)}
+          periodLabel={describePeriod(period)}
+        />
       )}
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">
         <TopPagesTable
