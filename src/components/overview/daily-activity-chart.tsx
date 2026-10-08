@@ -1,5 +1,5 @@
-import { areaShape } from '@/domain/area-chart';
 import { valueAxis } from '@/domain/chart-scale';
+import { linePath } from '@/domain/line-chart';
 import { formatCount } from '@/domain/metrics';
 import { activitySummary, activityTotals, type DayActivity } from '@/domain/overview';
 import { formatDay } from '@/domain/period';
@@ -12,7 +12,6 @@ const SERIES = [
   { key: 'events', label: 'Named events', color: 'var(--color-violet)', swatch: 'bg-violet' },
 ] as const;
 
-const AREA_FILL_OPACITY = 0.12;
 const LINE_WIDTH = 2.5;
 
 export interface DailyActivityChartProps {
@@ -30,26 +29,21 @@ function ActivityChart({ days }: { readonly days: readonly DayActivity[] }) {
       dates={days.map((day) => day.date)}
       layout="points"
     >
-      {SERIES.map((series) => {
-        const shape = areaShape(
-          days.map((day) => day[series.key]),
-          axis.top,
-        );
-        return (
-          <g key={series.key}>
-            <path d={shape.area} fill={series.color} fillOpacity={AREA_FILL_OPACITY} />
-            <path
-              d={shape.line}
-              fill="none"
-              stroke={series.color}
-              strokeWidth={LINE_WIDTH}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-          </g>
-        );
-      })}
+      {SERIES.map((series) => (
+        <path
+          key={series.key}
+          d={linePath(
+            days.map((day) => day[series.key]),
+            axis.top,
+          )}
+          fill="none"
+          stroke={series.color}
+          strokeWidth={LINE_WIDTH}
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      ))}
     </ChartFrame>
   );
 }

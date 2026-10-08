@@ -16,7 +16,7 @@ const WEEK = [
 function renderFrame(dates: readonly string[] = WEEK, axis = valueAxis([191])) {
   return render(
     <ChartFrame
-      summary="Area chart of 7 days."
+      summary="Line chart of 7 days."
       heightClassName="h-60"
       axis={axis}
       dates={dates}
@@ -31,7 +31,7 @@ describe('ChartFrame', () => {
   it('names the drawing with its summary and keeps the shapes away from assistive technology', () => {
     renderFrame();
 
-    const figure = screen.getByRole('img', { name: 'Area chart of 7 days.' });
+    const figure = screen.getByRole('img', { name: 'Line chart of 7 days.' });
     const svg = figure.querySelector('svg');
     expect(svg).toHaveAttribute('aria-hidden', 'true');
     expect(svg).toHaveAttribute('viewBox', '0 0 1000 1000');
