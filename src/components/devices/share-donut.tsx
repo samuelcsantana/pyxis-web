@@ -1,4 +1,4 @@
-import { OTHER_VALUE, type ShareRow } from '@/domain/devices';
+import { countsConversions, OTHER_VALUE, type ShareRow } from '@/domain/devices';
 import { withDonutSegments } from '@/domain/donut';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
@@ -27,10 +27,12 @@ export interface ShareDonutProps {
   readonly id: string;
   readonly title: string;
   readonly rows: readonly ShareRow[];
+  readonly withConversionRate?: boolean;
 }
 
-export function ShareDonut({ id, title, rows }: ShareDonutProps) {
+export function ShareDonut({ id, title, rows, withConversionRate = false }: ShareDonutProps) {
   const headingId = `${id}-heading`;
+  const showsConversionRate = withConversionRate && countsConversions(rows);
   const drawn = withDonutSegments(
     rows.map((row, index) => ({ ...row, color: segmentColor(row, index) })),
     CIRCUMFERENCE,
@@ -73,7 +75,7 @@ export function ShareDonut({ id, title, rows }: ShareDonutProps) {
         </svg>
         <table
           aria-labelledby={headingId}
-          className="min-w-0 flex-1 basis-40 border-collapse text-[13px] tabular-nums"
+          className={`min-w-0 flex-1 border-collapse text-[13px] tabular-nums ${showsConversionRate ? 'basis-60' : 'basis-40'}`}
         >
           <thead>
             <tr>
@@ -86,6 +88,11 @@ export function ShareDonut({ id, title, rows }: ShareDonutProps) {
               <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
                 Share
               </th>
+              {showsConversionRate ? (
+                <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
+                  Conversion rate
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -102,6 +109,9 @@ export function ShareDonut({ id, title, rows }: ShareDonutProps) {
                 </th>
                 <td className="py-1 text-right text-muted">{row.visits}</td>
                 <td className="py-1 pl-3 text-right font-semibold">{row.share}</td>
+                {showsConversionRate ? (
+                  <td className="py-1 pl-3 text-right">{row.conversionRate}</td>
+                ) : null}
               </tr>
             ))}
           </tbody>

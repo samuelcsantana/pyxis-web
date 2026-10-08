@@ -18,6 +18,11 @@ const DEVICE_TYPES: readonly ValueShare[] = [
   { value: 'other', visits: 40, conversions: 1, convertingVisits: null },
 ];
 
+const BROWSERS: readonly ValueShare[] = [
+  { value: 'chrome', visits: 600, conversions: 30, convertingVisits: null },
+  { value: 'safari', visits: 400, conversions: 9, convertingVisits: null },
+];
+
 describe('ShareDonut', () => {
   it('lists every value with its visits and share beside the donut', () => {
     const { container } = render(
@@ -34,6 +39,38 @@ describe('ShareDonut', () => {
     expect(rows[1]).toHaveTextContent('Mobile62062%');
     expect(rows[3]).toHaveTextContent('Other404%');
     expect(container.querySelectorAll('svg circle')).toHaveLength(4);
+    expect(within(table).queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
+  });
+
+  it('adds the conversion rate of each value when asked and a conversion event is set', () => {
+    render(
+      <ShareDonut
+        id="browser"
+        title="Browser"
+        rows={shareRows(BROWSERS, browserLabel)}
+        withConversionRate
+      />,
+    );
+
+    const table = screen.getByRole('table', { name: 'Browser' });
+    expect(within(table).getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
+    expect(within(table).getAllByRole('row')[1]).toHaveTextContent('Chrome60060%5%');
+  });
+
+  it('leaves the conversion rate out when the project has no conversion event', () => {
+    render(
+      <ShareDonut
+        id="browser"
+        title="Browser"
+        rows={shareRows(
+          BROWSERS.map((share) => ({ ...share, conversions: null })),
+          browserLabel,
+        )}
+        withConversionRate
+      />,
+    );
+
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
   });
 
   it('paints "other" in the neutral color, and values past the palette too', () => {
@@ -56,8 +93,17 @@ describe('ShareDonut', () => {
       'stroke-slate',
     ]);
     expect(
-      segmentColor({ value: 'other', label: 'Other', visits: '1', share: '50%', fraction: 0.5 }, 0)
-        .stroke,
+      segmentColor(
+        {
+          value: 'other',
+          label: 'Other',
+          visits: '1',
+          share: '50%',
+          fraction: 0.5,
+          conversionRate: null,
+        },
+        0,
+      ).stroke,
     ).toBe('stroke-slate');
   });
 });
@@ -94,5 +140,26 @@ describe('CountriesTable', () => {
     const rows = screen.getAllByRole('row');
     expect(rows[1]).toHaveTextContent('BRBrazil9090%');
     expect(rows[2]).toHaveTextContent('··Other countries1010%');
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
+  });
+
+  it('adds the conversion rate of each country when asked and a conversion event is set', () => {
+    render(
+      <CountriesTable
+        rows={shareRows(
+          [
+            { value: 'BR', visits: 90, conversions: 9, convertingVisits: 6 },
+            { value: 'other', visits: 10, conversions: 0, convertingVisits: 0 },
+          ],
+          countryLabel,
+        )}
+        withConversionRate
+      />,
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
+    const rows = screen.getAllByRole('row');
+    expect(rows[1]).toHaveTextContent('BRBrazil9090%6.7%');
+    expect(rows[2]).toHaveTextContent('··Other countries1010%0%');
   });
 });

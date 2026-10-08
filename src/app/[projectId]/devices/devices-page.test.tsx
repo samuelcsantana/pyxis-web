@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { DevicesReport } from '@/domain/devices';
@@ -89,8 +89,27 @@ describe('DevicesPage', () => {
     );
   });
 
+  it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
+    render(await renderDevices());
+
+    for (const name of ['Browser', 'Operating system', 'Countries']) {
+      expect(
+        within(screen.getByRole('table', { name })).getByRole('columnheader', {
+          name: 'Conversion rate',
+        }),
+      ).toBeInTheDocument();
+    }
+    expect(
+      within(screen.getByRole('table', { name: 'Device type' })).queryByRole('columnheader', {
+        name: 'Conversion rate',
+      }),
+    ).toBeNull();
+  });
+
   it('leaves conversion by device out for a project without a conversion event', async () => {
     render(await renderDevices('p-docs'));
+
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
 
     expect(screen.getByRole('table', { name: 'Device type' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();

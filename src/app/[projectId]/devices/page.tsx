@@ -47,11 +47,17 @@ function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) 
           title="Device type"
           rows={shareRows(report.deviceTypes, deviceTypeLabel)}
         />
-        <ShareDonut id="browser" title="Browser" rows={shareRows(report.browsers, browserLabel)} />
+        <ShareDonut
+          id="browser"
+          title="Browser"
+          rows={shareRows(report.browsers, browserLabel)}
+          withConversionRate={conversionEvent !== null}
+        />
         <ShareDonut
           id="operating-system"
           title="Operating system"
           rows={shareRows(report.operatingSystems, operatingSystemLabel)}
+          withConversionRate={conversionEvent !== null}
         />
       </div>
       {conversionEvent === null ? <NoConversionEvent /> : null}
@@ -59,7 +65,10 @@ function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) 
         {showsConversions ? (
           <DeviceConversionList conversions={conversions} conversionEvent={conversionEvent} />
         ) : null}
-        <CountriesTable rows={shareRows(report.countries, countryLabel)} />
+        <CountriesTable
+          rows={shareRows(report.countries, countryLabel)}
+          withConversionRate={conversionEvent !== null}
+        />
       </div>
       <p className="text-xs leading-[18px] text-muted">
         Device, browser and system are worked out on the server from the browser&apos;s user agent,
