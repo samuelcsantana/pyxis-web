@@ -222,6 +222,9 @@ export const en = {
     noStepToCompare: 'No step to compare',
     transition: 'Step {from} → {to}',
     transitionNote: '{from} → {to} · {share} continued',
+    medianTime: 'median {duration} after the step before',
+    timeToFinish: 'Median time to finish',
+    timeToFinishNote: 'from step 1 to step {last}, for those who reached it',
   },
   visits: {
     problems: {
