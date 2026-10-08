@@ -24,12 +24,20 @@ function eventVisitsHref(event: string): string {
 }
 
 describe('KpiGrid', () => {
-  it('shows each figure with its change, note and sparkline', () => {
+  it('shows each figure with its change, what it compares with, its note and sparkline', () => {
     const { container } = render(<KpiGrid kpis={overviewKpis(REPORT, LAST_WEEK)} />);
 
     const visits = screen.getByRole('region', { name: 'Visits' });
-    expect(visits).toHaveTextContent(`${kpi('visits').change} change`);
-    expect(within(visits).getByText('vs. previous 7 days')).toBeInTheDocument();
+    expect(visits).toHaveTextContent(`${kpi('visits').change} change vs. previous 7 days`);
+    for (const region of screen.getAllByRole('region')) {
+      expect(within(region).getByText('vs. previous 7 days')).toBeInTheDocument();
+    }
+    expect(
+      within(screen.getByRole('region', { name: 'Identified users' })).getByText(
+        'signed in at least once',
+      ),
+    ).toBeInTheDocument();
+    expect(visits.querySelectorAll('p')).toHaveLength(2);
     expect(screen.getAllByRole('region')).toHaveLength(4);
     expect(container.querySelectorAll('polyline')).toHaveLength(4);
     expect(container.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(7);
@@ -78,13 +86,13 @@ describe('KpiGrid', () => {
     );
 
     expect(screen.getByRole('region', { name: 'Visits' })).toHaveTextContent(
-      '+10% (+40) change, better than the previous period',
+      '+10% (+40) change vs. previous 7 days, better',
     );
     expect(screen.getByRole('region', { name: 'Write error rate' })).toHaveTextContent(
-      '+2 pt change, worse than the previous period',
+      '+2 pt change vs. previous 7 days, worse',
     );
     const users = screen.getByRole('region', { name: 'Identified users' });
-    expect(users).toHaveTextContent('no change');
+    expect(users).toHaveTextContent('no change vs. previous 7 days');
     expect(users).not.toHaveTextContent('no change change');
   });
 });

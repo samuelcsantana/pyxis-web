@@ -83,19 +83,25 @@ export interface KpiView {
   readonly value: string;
   readonly change: string;
   readonly tone: Tone;
-  readonly note: string;
+  readonly comparison: string;
+  readonly note: string | null;
   readonly series: readonly SparklineValue[];
 }
 
-function countKpi(kpi: Kpi, id: KpiId, label: string, note: string): KpiView {
+interface KpiText {
+  readonly id: KpiId;
+  readonly label: string;
+  readonly note: string | null;
+}
+
+function countKpi(kpi: Kpi, text: KpiText, comparison: string): KpiView {
   const change = countChange(kpi.current, kpi.previous);
   return {
-    id,
-    label,
+    ...text,
     value: formatCount(kpi.current),
     change: change.text,
     tone: toneOf(change.trend, 'up'),
-    note,
+    comparison,
     series: kpi.daily,
   };
 }
@@ -104,7 +110,10 @@ function failureRate(count: FailureCount): number | null {
   return rate(count.failed, count.total);
 }
 
-function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): KpiView {
+function writeErrorsKpi(
+  writeErrors: OverviewReport['kpis']['writeErrors'],
+  comparison: string,
+): KpiView {
   const current = failureRate(writeErrors.current);
   const change = pointChange(
     current,
@@ -117,19 +126,24 @@ function writeErrorsKpi(writeErrors: OverviewReport['kpis']['writeErrors']): Kpi
     value: formatPercent(current),
     change: change.text,
     tone: toneOf(change.trend, 'down'),
+    comparison,
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
     series: writeErrors.daily.map(failureRate),
   };
 }
 
 const SPOKEN_TONES: Readonly<Record<Tone, string>> = {
-  good: ', better than the previous period',
-  bad: ', worse than the previous period',
+  good: ', better',
+  bad: ', worse',
   neutral: '',
 };
 
-export function spokenChange(change: string, tone: Tone): string {
-  return change === NO_CHANGE ? '' : ` change${SPOKEN_TONES[tone]}`;
+export function spokenChange(change: string): string {
+  return change === NO_CHANGE ? '' : ' change';
+}
+
+export function spokenTone(tone: Tone): string {
+  return SPOKEN_TONES[tone];
 }
 
 export interface ComparedPeriod {
@@ -175,31 +189,50 @@ function shareOfVisits(converted: number, visits: number): string {
   return `${formatPercent(rate(converted, visits))} of ${formatQuantity(visits, 'visit', 'visits')}`;
 }
 
-function conversionsKpi(conversions: Kpi, convertingVisits: Kpi | null, visits: Kpi): KpiView {
+interface ConversionFigures {
+  readonly conversions: Kpi;
+  readonly convertingVisits: Kpi | null;
+  readonly visits: Kpi;
+}
+
+const CONVERSIONS_ID = 'conversions';
+const CONVERSIONS_LABEL = 'Conversions';
+
+function conversionsKpi(
+  { conversions, convertingVisits, visits }: ConversionFigures,
+  comparison: string,
+): KpiView {
   if (convertingVisits === null) {
+    const note = shareOfVisits(conversions.current, visits.current);
     return countKpi(
       conversions,
-      'conversions',
-      'Conversions',
-      shareOfVisits(conversions.current, visits.current),
+      { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
+      comparison,
     );
   }
   const events = formatQuantity(conversions.current, 'conversion event', 'conversion events');
+  const note = `${shareOfVisits(convertingVisits.current, visits.current)} · ${events}`;
   return countKpi(
     convertingVisits,
-    'conversions',
-    'Conversions',
-    `${shareOfVisits(convertingVisits.current, visits.current)} · ${events}`,
+    { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
+    comparison,
   );
 }
 
 export function overviewKpis(report: OverviewReport, period: ComparedPeriod): readonly KpiView[] {
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
+  const comparison = previousPeriodNote(report.comparison, period);
   const kpis = [
-    countKpi(visits, 'visits', 'Visits', previousPeriodNote(report.comparison, period)),
-    countKpi(identifiedUsers, 'identified-users', 'Identified users', 'signed in at least once'),
-    ...(conversions === null ? [] : [conversionsKpi(conversions, convertingVisits, visits)]),
-    writeErrorsKpi(writeErrors),
+    countKpi(visits, { id: 'visits', label: 'Visits', note: null }, comparison),
+    countKpi(
+      identifiedUsers,
+      { id: 'identified-users', label: 'Identified users', note: 'signed in at least once' },
+      comparison,
+    ),
+    ...(conversions === null
+      ? []
+      : [conversionsKpi({ conversions, convertingVisits, visits }, comparison)]),
+    writeErrorsKpi(writeErrors, comparison),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)
     ? kpis.map(withoutJudgement)

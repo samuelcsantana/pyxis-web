@@ -1,5 +1,5 @@
 import type { Tone } from '@/domain/metrics';
-import { type KpiView, spokenChange } from '@/domain/overview';
+import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
 import { Sparkline } from '@/components/ui/sparkline';
 
 export type KpiColor = 'sky' | 'violet' | 'accent' | 'bad';
@@ -29,19 +29,25 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
   return (
     <section
       aria-labelledby={labelId}
-      className="grid grid-cols-1 content-start gap-1.5 rounded-card border border-line bg-card p-3.5 text-ink sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-x-2 sm:gap-y-2.5 sm:px-4.5 sm:pt-4.5 sm:pb-3.5"
+      className="flex flex-col gap-1.5 rounded-card border border-line bg-card p-3.5 text-ink sm:gap-2.5 sm:px-4.5 sm:pt-4.5 sm:pb-3.5"
     >
       <h2 id={labelId} className="text-xs font-medium text-muted sm:text-[13px]">
         {kpi.label}
       </h2>
-      <p className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:col-span-2 sm:text-[30px] sm:leading-9">
+      <p className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:text-[30px] sm:leading-9">
         {kpi.value}
       </p>
-      <p
-        className={`justify-self-start rounded-pill px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:col-start-2 sm:row-start-1 sm:justify-self-end sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
-      >
-        {kpi.change}
-        <span className="sr-only">{spokenChange(kpi.change, kpi.tone)}</span>
+      <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+        <span
+          className={`rounded-pill px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
+        >
+          {kpi.change}
+          <span className="sr-only">{spokenChange(kpi.change)}</span>
+        </span>{' '}
+        <span>
+          {kpi.comparison}
+          <span className="sr-only">{spokenTone(kpi.tone)}</span>
+        </span>
       </p>
       {kpi.series.length > 1 ? (
         <Sparkline
@@ -50,10 +56,10 @@ export function KpiCard({ kpi, color }: KpiCardProps) {
           width="100%"
           strokeClass={STROKE_CLASSES[color]}
           strokeWidth={2}
-          className="hidden sm:col-span-2 sm:block"
+          className="hidden sm:block"
         />
       ) : null}
-      <p className="text-xs text-muted sm:col-span-2">{kpi.note}</p>
+      {kpi.note === null ? null : <p className="text-xs text-muted">{kpi.note}</p>}
     </section>
   );
 }
