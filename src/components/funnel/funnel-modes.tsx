@@ -18,13 +18,14 @@ export interface FunnelModeLink {
 export interface FunnelModesProps {
   readonly links: readonly FunnelModeLink[];
   readonly current: FunnelMode;
+  readonly label: string;
 }
 
 const OPTION_CLASS = `min-h-9 px-3.5 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
-export function FunnelModes({ links, current }: FunnelModesProps) {
+export function FunnelModes({ links, current, label }: FunnelModesProps) {
   return (
-    <nav aria-label="Count by" className={`w-fit ${SEGMENTED_GROUP}`}>
+    <nav aria-label={label} className={`w-fit ${SEGMENTED_GROUP}`}>
       {links.map((link) => {
         const selected = link.mode === current;
         return (

@@ -2,17 +2,13 @@ import Link from 'next/link';
 import type { DrillLink, FunnelMode, FunnelRow, FunnelTone } from '@/domain/funnel';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import type { I18n } from '@/i18n/i18n';
 
 const TONE_CLASSES: Readonly<Record<FunnelTone, string>> = {
   start: 'text-muted',
   good: 'text-ok',
   bad: 'text-bad',
   neutral: 'text-muted',
-};
-
-const MODE_NOTES: Readonly<Record<FunnelMode, string>> = {
-  visit: 'Per visit: a step counts only after the one before it, in the same visit',
-  user: 'Per person: steps can span visits once the person is identified',
 };
 
 function Drillable({ text, link }: { text: string; link: DrillLink | null }) {
@@ -34,16 +30,17 @@ function Drillable({ text, link }: { text: string; link: DrillLink | null }) {
 export interface FunnelStepsProps {
   readonly rows: readonly FunnelRow[];
   readonly mode: FunnelMode;
+  readonly i18n: I18n;
 }
 
-export function FunnelSteps({ rows, mode }: FunnelStepsProps) {
+export function FunnelSteps({ rows, mode, i18n }: FunnelStepsProps) {
   return (
     <section aria-labelledby="funnel-heading" className={PANEL}>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="funnel-heading" className={PANEL_TITLE}>
-          Funnel
+          {i18n.t('funnel.page.stepsHeading')}
         </h2>
-        <p className="text-caption text-muted">{MODE_NOTES[mode]}</p>
+        <p className="text-caption text-muted">{i18n.t(`funnel.page.modeNotes.${mode}`)}</p>
       </div>
       <ol aria-labelledby="funnel-heading" className="flex flex-col">
         {rows.map((row) => (

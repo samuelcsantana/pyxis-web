@@ -34,6 +34,7 @@ describe('FunnelSteps', () => {
     renderWithMessages(
       <FunnelSteps
         mode="visit"
+        i18n={english}
         rows={funnelRows(
           countedSteps(STEPS, { steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }] }),
           english,
@@ -52,6 +53,7 @@ describe('FunnelSteps', () => {
     renderWithMessages(
       <FunnelSteps
         mode="visit"
+        i18n={english}
         rows={funnelRows(
           countedSteps(STEPS.slice(0, 2), {
             steps: [
@@ -72,7 +74,7 @@ describe('FunnelSteps', () => {
   });
 
   it('explains how people are counted per person', () => {
-    renderWithMessages(<FunnelSteps mode="user" rows={[]} />);
+    renderWithMessages(<FunnelSteps mode="user" rows={[]} i18n={english} />);
 
     expect(screen.getByText(/Per person/)).toBeInTheDocument();
   });
@@ -83,6 +85,7 @@ describe('FunnelModes', () => {
     renderWithMessages(
       <FunnelModes
         current="user"
+        label="Count by"
         links={[
           { mode: 'visit', label: 'Per visit', href: '/p1/funnel?mode=visit' },
           { mode: 'user', label: 'Per person', href: '/p1/funnel?mode=user' },
@@ -95,6 +98,12 @@ describe('FunnelModes', () => {
       'page',
     );
     expect(screen.getByRole('link', { name: 'Per visit' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('names its navigation with the label it is given', () => {
+    renderWithMessages(<FunnelModes current="visit" label="Contar por" links={[]} />);
+
+    expect(screen.getByRole('navigation', { name: 'Contar por' })).toBeInTheDocument();
   });
 });
 

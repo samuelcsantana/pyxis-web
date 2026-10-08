@@ -21,13 +21,14 @@ const meta = {
   title: 'Funnel/Steps',
   component: FunnelSteps,
   tags: ['autodocs'],
-  args: { rows: ROWS, mode: 'visit' },
+  args: { rows: ROWS, mode: 'visit', i18n: english },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="flex w-[min(100%,70rem)] flex-col gap-4">
         <FunnelModes
           current="visit"
+          label="Count by"
           links={[
             { mode: 'visit', label: 'Per visit', href: '/demo/funnel?mode=visit' },
             { mode: 'user', label: 'Per person', href: '/demo/funnel?mode=user' },

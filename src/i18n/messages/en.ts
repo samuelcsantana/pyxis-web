@@ -547,6 +547,26 @@ export const en = {
     medianTime: 'median {duration} after the step before',
     timeToFinish: 'Median time to finish',
     timeToFinishNote: 'from step 1 to step {last}, for those who reached it',
+    page: {
+      subtitle: 'Where people continue and where they drop off in {project}',
+      countBy: 'Count by',
+      modes: {
+        visit: 'Per visit',
+        user: 'Per person',
+      },
+      overallConversion: 'Overall conversion',
+      biggestDropOff: 'Biggest drop-off',
+      stepsHeading: 'Funnel',
+      modeNotes: {
+        visit: 'Per visit: a step counts only after the one before it, in the same visit',
+        user: 'Per person: steps can span visits once the person is identified',
+      },
+    },
+    build: {
+      title: 'Build a funnel',
+      body: 'A funnel is 2 to 8 steps, each a page path (<code>*</code> matches any run of characters) or an event name. A step counts only after the step before it. The steps live in the address, so a bookmark keeps the funnel.',
+      example: 'Start from an example funnel',
+    },
     subjects: {
       reachedLink: '{count}, list who reached step {step}',
       droppedLink: '{dropped}, list who left before step {step}',
