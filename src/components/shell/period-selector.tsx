@@ -7,6 +7,7 @@ import {
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
+import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { CustomRangeFields } from './custom-range-fields';
 
 export type KeptParameters = Readonly<Record<string, string>>;
@@ -65,8 +66,8 @@ export function PeriodSelector({
           );
         })}
       </nav>
-      <details
-        open={period.rejected !== undefined}
+      <DismissableDetails
+        defaultOpen={period.rejected !== undefined}
         className="group relative max-sm:open:basis-full"
       >
         <summary
@@ -95,7 +96,7 @@ export function PeriodSelector({
             Apply
           </button>
         </form>
-      </details>
+      </DismissableDetails>
     </div>
   );
 }

@@ -557,6 +557,47 @@ describe('PeriodSelector', () => {
     }
     expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-10-05');
   });
+
+  it('closes the custom form on Escape, with the focus back on "Custom"', () => {
+    const { container } = render(
+      <PeriodSelector
+        basePath="/p1/overview"
+        period={{
+          ...presetPeriod('30d', today),
+          rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
+        }}
+        today={today}
+      />,
+    );
+    const from = screen.getByLabelText('From');
+    from.focus();
+
+    fireEvent.blur(from, { relatedTarget: null });
+    expect(container.querySelector('details')).toHaveAttribute('open');
+
+    fireEvent.keyDown(from, { key: 'Escape' });
+    expect(container.querySelector('details')).not.toHaveAttribute('open');
+    expect(screen.getByText('Custom')).toHaveFocus();
+  });
+
+  it('closes the custom form when the focus moves to a preset', () => {
+    const { container } = render(
+      <PeriodSelector
+        basePath="/p1/overview"
+        period={{
+          ...presetPeriod('30d', today),
+          rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
+        }}
+        today={today}
+      />,
+    );
+
+    fireEvent.blur(screen.getByRole('button', { name: 'Apply' }), {
+      relatedTarget: screen.getByRole('link', { name: '7 days' }),
+    });
+
+    expect(container.querySelector('details')).not.toHaveAttribute('open');
+  });
 });
 
 describe('PeriodSelector with parameters of the screen', () => {

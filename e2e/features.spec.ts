@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { axeViolations, sidewaysOverflow } from './accessibility';
+import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -93,6 +93,30 @@ test('searches, keeps the search on reload and across periods, then clears it', 
   await page.getByRole('link', { name: 'Clear' }).click();
   await expect(page).toHaveURL(/range=7d&kind=events$/);
   await expect(events).toHaveCount(8);
+});
+
+test('closes the custom period form once the focus leaves it, so the search stays in sight', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/features`);
+  const custom = page.locator('details', { hasText: 'Custom' });
+  const search = page.getByRole('searchbox', { name: 'Search events' });
+
+  await custom.locator('summary').click();
+  await page.getByRole('button', { name: 'Apply' }).focus();
+  await page.keyboard.press('Tab');
+  await expect(custom).not.toHaveAttribute('open');
+
+  for (
+    let press = 0;
+    press < 10 && !(await search.evaluate((field) => field === document.activeElement));
+    press += 1
+  ) {
+    await page.keyboard.press('Tab');
+  }
+
+  await expect(search).toBeFocused();
+  expect(await focusedElementIsUncovered(page)).toBe(true);
 });
 
 test('says when nothing matches the search', async ({ page }) => {
