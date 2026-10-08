@@ -48,6 +48,29 @@ describe('FunnelSteps', () => {
     expect(screen.getByText(/Per visit/)).toBeInTheDocument();
   });
 
+  it('shows the median time after the step before, under the drop-off', () => {
+    renderWithMessages(
+      <FunnelSteps
+        mode="visit"
+        rows={funnelRows(
+          countedSteps(STEPS.slice(0, 2), {
+            steps: [
+              { count: 1940, medianSecondsFromPrevious: null },
+              { count: 1212, medianSecondsFromPrevious: 41 },
+            ],
+          }),
+          english,
+        )}
+      />,
+    );
+
+    const [first, second] = within(screen.getByRole('list', { name: 'Funnel' })).getAllByRole(
+      'listitem',
+    );
+    expect(first).not.toHaveTextContent('median');
+    expect(second).toHaveTextContent('728 droppedmedian 41 s after the step before');
+  });
+
   it('explains how people are counted per person', () => {
     renderWithMessages(<FunnelSteps mode="user" rows={[]} />);
 
