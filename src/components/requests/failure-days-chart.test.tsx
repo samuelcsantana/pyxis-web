@@ -1,10 +1,11 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { failureDayRows } from '@/domain/request-days';
 import { demoRequestsReport } from '@/services/requests/demo-requests';
 import { FailureDaysChart } from './failure-days-chart';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
 const DAYS = demoRequestsReport('demo', WEEK, null, new Date('2026-10-06T02:30:00.000Z')).days;
@@ -14,7 +15,7 @@ const QUIET = DAYS.map((day) => ({
 }));
 
 function renderChart(days = DAYS) {
-  return render(
+  return renderWithMessages(
     <FailureDaysChart
       days={days}
       description="Every write that failed, by what went wrong, last 7 days"
