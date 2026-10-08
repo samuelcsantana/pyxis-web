@@ -20,9 +20,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { expired, next } = await searchParams;
   return (
     <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
-      <div className="flex w-full max-w-6xl justify-end">
+      <header className="flex w-full max-w-6xl justify-end">
         <ThemeToggle initialTheme={await chosenTheme()} />
-      </div>
+      </header>
       <MainContent className="flex w-full grow flex-col items-center justify-center gap-7 py-8">
         <div className="flex flex-col items-center gap-3.5">
           <LogoMark size={56} />

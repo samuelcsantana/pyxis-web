@@ -77,6 +77,9 @@ describe('DemoBanner', () => {
   it('says the numbers are invented and links to the source code', () => {
     render(<DemoBanner />);
 
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toContainElement(
+      screen.getByRole('note'),
+    );
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByRole('link', { name: 'Source on GitHub' })).toHaveAttribute(
       'href',
