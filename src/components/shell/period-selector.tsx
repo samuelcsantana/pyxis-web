@@ -39,7 +39,7 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
-const OPTION_CLASS = `min-h-8.5 px-3 ${SEGMENTED_OPTION}`;
+const OPTION_CLASS = `min-h-11 px-2.5 sm:min-h-8.5 sm:px-3 ${SEGMENTED_OPTION}`;
 
 export function PeriodSelector({
   basePath,
@@ -91,7 +91,7 @@ export function PeriodSelector({
           />
           <button
             type="submit"
-            className={`min-h-9 rounded-control px-3 text-[13px] ${BUTTON_PRIMARY}`}
+            className={`min-h-11 rounded-control px-3 text-[13px] sm:min-h-9 ${BUTTON_PRIMARY}`}
           >
             Apply
           </button>
