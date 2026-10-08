@@ -137,7 +137,24 @@ export function toneOf(trend: Trend, betterWhen: Exclude<Trend, 'flat'>): Tone {
   return trend === betterWhen ? 'good' : 'bad';
 }
 
+const LABEL_ACRONYMS: ReadonlySet<string> = new Set([
+  'api',
+  'cta',
+  'csv',
+  'faq',
+  'id',
+  'pdf',
+  'sms',
+  'url',
+]);
+
+function labelWord(word: string, index: number): string {
+  if (LABEL_ACRONYMS.has(word.toLowerCase())) {
+    return word.toUpperCase();
+  }
+  return index === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+}
+
 export function eventLabel(name: string): string {
-  const words = name.replaceAll('_', ' ');
-  return words.charAt(0).toUpperCase() + words.slice(1);
+  return name.split('_').map(labelWord).join(' ');
 }
