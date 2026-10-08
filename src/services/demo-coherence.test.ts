@@ -142,6 +142,20 @@ describe('the demo screens', () => {
           }
         });
 
+        it('count the same failed writes per day on Requests as on its routes and Overview', async () => {
+          const { overview, requests } = await screensOf(project.id, range);
+          const failedPerDay = requests.days.map(
+            ({ byStatusClass }) =>
+              byStatusClass.clientError + byStatusClass.serverError + byStatusClass.noResponse,
+          );
+
+          expect(sum(failedPerDay)).toBe(sum(requests.routes.map((route) => route.failed)));
+          expect(failedPerDay).toEqual(overview.kpis.writeErrors.daily.map((day) => day.failed));
+          expect(sum(requests.days.map(({ byStatusClass }) => byStatusClass.success))).toBe(
+            sum(requests.routes.map((route) => route.total - route.failed)),
+          );
+        });
+
         it('start the example funnel at the visits Features gives its first page', async () => {
           const { pages, events } = await screensOf(project.id, range);
           const funnel = await new MockFunnelService().funnel(
