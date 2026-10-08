@@ -2,6 +2,7 @@ import type { I18n } from '@/i18n/i18n';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import type { Translator } from '@/i18n/translate';
 import { eventLabel, formatCount, formatPercent, rate, barWidth } from './metrics';
+import { formatSeconds } from './timeline';
 import type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire } from './funnel.schema';
 
 export type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire };
@@ -92,18 +93,37 @@ export interface FunnelRow {
   readonly continued: string;
   readonly tone: FunnelTone;
   readonly dropped: string;
+  readonly time: string | null;
 }
 
 interface CountedStep {
   readonly step: FunnelStep;
   readonly count: number;
+  readonly secondsFromPrevious: number | null;
+}
+
+interface StepCounts {
+  readonly steps: readonly {
+    readonly count: number;
+    readonly medianSecondsFromPrevious?: number | null;
+  }[];
 }
 
 export function countedSteps(
   steps: readonly FunnelStep[],
-  report: FunnelReport,
+  report: StepCounts,
 ): readonly CountedStep[] {
-  return steps.map((step, index) => ({ step, count: report.steps[index]?.count ?? 0 }));
+  return steps.map((step, index) => ({
+    step,
+    count: report.steps[index]?.count ?? 0,
+    secondsFromPrevious: report.steps[index]?.medianSecondsFromPrevious ?? null,
+  }));
+}
+
+function medianTime(seconds: number | null, i18n: I18n): string | null {
+  return seconds === null
+    ? null
+    : i18n.t('funnel.medianTime', { duration: formatSeconds(seconds, i18n) });
 }
 
 function continuationTone(continued: number | null): FunnelTone {
@@ -115,7 +135,7 @@ function continuationTone(continued: number | null): FunnelTone {
 
 export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonly FunnelRow[] {
   const first = counted[0]?.count ?? 0;
-  return counted.map(({ step, count }, index) => {
+  return counted.map(({ step, count, secondsFromPrevious }, index) => {
     const previous = counted[index - 1];
     const base = {
       key: `${String(index)}-${step.type}-${stepTarget(step)}`,
@@ -124,6 +144,7 @@ export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonl
       target: stepTarget(step),
       count: formatCount(count, i18n),
       barWidth: barWidth(count, first),
+      time: medianTime(secondsFromPrevious, i18n),
     };
     if (previous === undefined) {
       return { ...base, continued: i18n.t('funnel.start'), tone: 'start', dropped: '' };
@@ -192,4 +213,17 @@ export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): Fun
       share: formatPercent(worst.continued, i18n),
     }),
   };
+}
+
+export function timeToFinish(
+  seconds: number | null,
+  steps: number,
+  i18n: I18n,
+): FunnelFigure | null {
+  return seconds === null
+    ? null
+    : {
+        value: formatSeconds(seconds, i18n),
+        note: i18n.t('funnel.timeToFinishNote', { last: String(steps) }),
+      };
 }

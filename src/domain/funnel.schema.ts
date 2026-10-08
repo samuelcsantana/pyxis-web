@@ -35,15 +35,23 @@ const stepsParameterSchema = z
   })
   .pipe(funnelStepsSchema);
 
-export const funnelResponseSchema = z.object({
-  steps: z.array(
-    z.object({
-      count: z.number(),
-      median_seconds_from_previous: z.number().nullable().optional(),
-    }),
-  ),
-  median_seconds_overall: z.number().nullable().optional(),
-});
+export const funnelResponseSchema = z
+  .object({
+    steps: z.array(
+      z.object({
+        count: z.number(),
+        median_seconds_from_previous: z.number().nullable().optional(),
+      }),
+    ),
+    median_seconds_overall: z.number().nullable().optional(),
+  })
+  .transform((body) => ({
+    steps: body.steps.map((step) => ({
+      count: step.count,
+      medianSecondsFromPrevious: step.median_seconds_from_previous ?? null,
+    })),
+    medianSecondsOverall: body.median_seconds_overall ?? null,
+  }));
 export type FunnelReport = z.output<typeof funnelResponseSchema>;
 export type FunnelWire = z.input<typeof funnelResponseSchema>;
 

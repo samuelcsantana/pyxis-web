@@ -15,8 +15,9 @@ import {
   stepLabel,
   stepProblem,
   stepTarget,
+  timeToFinish,
 } from './funnel';
-import { funnelStepsOf, funnelStepsSchema } from './funnel.schema';
+import { funnelResponseSchema, funnelStepsOf, funnelStepsSchema } from './funnel.schema';
 import { english } from '@/test-utils/english';
 
 const CALCULATOR: FunnelStep = { type: 'page', path: '/calculator' };
@@ -130,6 +131,7 @@ describe('funnelRows', () => {
       continued: 'Start',
       tone: 'start',
       dropped: '',
+      time: null,
     });
     expect(rows[1]).toMatchObject({
       continued: '62.5% continued',
@@ -148,6 +150,52 @@ describe('funnelRows', () => {
     expect(rows[1]).toMatchObject({ continued: '— continued', tone: 'neutral' });
     expect(rows[2]?.count).toBe('0');
     expect(funnelRows([], english)).toEqual([]);
+  });
+});
+
+describe('step times', () => {
+  it('reads the median time of each step and of the whole funnel, or none from an older API', () => {
+    const report = funnelResponseSchema.parse({
+      steps: [
+        { count: 1940, median_seconds_from_previous: null },
+        { count: 1212, median_seconds_from_previous: 79 },
+      ],
+      median_seconds_overall: 79,
+    });
+
+    expect(report).toEqual({
+      steps: [
+        { count: 1940, medianSecondsFromPrevious: null },
+        { count: 1212, medianSecondsFromPrevious: 79 },
+      ],
+      medianSecondsOverall: 79,
+    });
+    expect(funnelResponseSchema.parse({ steps: [{ count: 3 }] })).toEqual({
+      steps: [{ count: 3, medianSecondsFromPrevious: null }],
+      medianSecondsOverall: null,
+    });
+  });
+
+  it('gives each step after the first its median time after the step before', () => {
+    const rows = funnelRows(
+      countedSteps([CALCULATOR, RESULT], {
+        steps: [
+          { count: 1940, medianSecondsFromPrevious: null },
+          { count: 1212, medianSecondsFromPrevious: 79 },
+        ],
+      }),
+      english,
+    );
+
+    expect(rows.map((row) => row.time)).toEqual([null, 'median 1 min 19 s after the step before']);
+  });
+
+  it('gives the median time to finish only when the API measured it', () => {
+    expect(timeToFinish(3725, 3, english)).toEqual({
+      value: '1 h 2 min',
+      note: 'from step 1 to step 3, for those who reached it',
+    });
+    expect(timeToFinish(null, 3, english)).toBeNull();
   });
 });
 
