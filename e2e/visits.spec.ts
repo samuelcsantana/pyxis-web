@@ -97,6 +97,25 @@ test('filters by an event with a property and by who the visitor was', async ({
   await expect(page.getByRole('textbox', { name: 'Had event' })).toHaveValue('');
 });
 
+test('filters by where a visit came from and by a failed request', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/visits`);
+  await openFiltersOnAPhone(page, isMobile);
+
+  await page.getByRole('textbox', { name: /^Source/ }).fill('google');
+  await page.getByRole('checkbox', { name: 'With a failed request' }).check();
+  await page.getByRole('button', { name: 'Apply filters' }).click();
+
+  await expect(page).toHaveURL(/&source=google&campaign=&route=&failed=true$/);
+  await expect(page.getByText(/^\d+ matching visits?$/)).toBeVisible();
+  await expect(visitRows(page).first()).toBeVisible();
+
+  await page.getByRole('textbox', { name: /^Country/ }).fill('1b');
+  await page.getByRole('button', { name: 'Apply filters' }).click();
+  await expect(
+    page.getByRole('search', { name: 'Filter the visits' }).getByRole('alert'),
+  ).toContainText('A country is its two-letter code, as BR.');
+});
+
 test('keeps the filters behind a toggle on a phone unless some are in use', async ({
   page,
   isMobile,
@@ -172,6 +191,7 @@ test.describe('at 1024×768', () => {
     await page.goto(`/${STORE_ID}/visits`);
     const table = page.getByRole('table', { name: 'Visits' });
     await expect(table).toBeVisible();
+    await table.scrollIntoViewIfNeeded();
 
     await expect(table.getByRole('columnheader', { name: 'Account' })).toBeInViewport();
     await expect(table.getByRole('columnheader', { name: 'Highlights' })).toBeHidden();

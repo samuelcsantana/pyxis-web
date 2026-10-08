@@ -4,7 +4,18 @@ import type { ApiReader } from '../api-reader';
 import { type DateRange, rangeQuery } from '../date-range';
 import type { IVisitsService } from './visits-service.interface';
 
-const SINGLE_FILTERS = ['event', 'property', 'channel', 'device', 'identity'] as const;
+const SINGLE_FILTERS = [
+  'event',
+  'property',
+  'channel',
+  'device',
+  'identity',
+  'country',
+  'source',
+  'campaign',
+  'route',
+] as const;
+const FAILED_ONLY = 'true';
 
 function visitsQuery(range: DateRange, filters: VisitFilters, cursor: string | null): string {
   const query = new URLSearchParams(rangeQuery(range));
@@ -16,6 +27,9 @@ function visitsQuery(range: DateRange, filters: VisitFilters, cursor: string | n
     if (value !== null) {
       query.set(name, value);
     }
+  }
+  if (filters.failed) {
+    query.set('failed', FAILED_ONLY);
   }
   if (cursor !== null) {
     query.set('cursor', cursor);

@@ -42,6 +42,7 @@ export const visitsResponseSchema = z
       userId: visit.user_id,
     })),
     nextCursor: body.next_cursor,
+    total: body.total ?? null,
   }));
 
 export type VisitsReport = z.output<typeof visitsResponseSchema>;

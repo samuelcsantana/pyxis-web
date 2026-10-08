@@ -40,6 +40,11 @@ export const Filtered: Story = {
       channel: 'paid',
       device: 'mobile',
       identity: 'anonymous',
+      country: 'BR',
+      source: 'google',
+      campaign: 'spring_sale',
+      route: 'POST /orders',
+      failed: true,
     },
     clearHref: '/demo/visits?range=30d',
   },
@@ -83,7 +88,7 @@ export const FilteredOnAPhone: Story = {
   globals: PHONE,
   play: async ({ canvasElement }) => {
     await expect(
-      within(canvasElement).getByRole('button', { name: 'Filters · 7 active' }),
+      within(canvasElement).getByRole('button', { name: 'Filters · 12 active' }),
     ).toHaveAttribute('aria-expanded', 'true');
   },
 };

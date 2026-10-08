@@ -79,6 +79,29 @@ function sentEvent(visit: ListedVisit, filters: VisitFilters): boolean {
   );
 }
 
+function isRequestTo(event: TimelineEventWire, route: string, failed: boolean): boolean {
+  return (
+    event.name === API_REQUEST &&
+    `${String(event.properties.method)} ${String(event.properties.route)}` === route &&
+    (!failed || isFailedStatus(Number(event.properties.status)))
+  );
+}
+
+function madeRequest(visit: ListedVisit, route: string | null, failed: boolean): boolean {
+  if (route === null) {
+    return !failed || visit.summary.failed_requests > 0;
+  }
+  return visit.events.some((event) => isRequestTo(event, route, failed));
+}
+
+function cameFrom(visit: ListedVisit, filters: VisitFilters): boolean {
+  return (
+    (filters.country === null || visit.summary.country === filters.country) &&
+    (filters.source === null || visit.summary.source === filters.source) &&
+    (filters.campaign === null || visit.summary.campaign === filters.campaign)
+  );
+}
+
 function isIdentified(visit: ListedVisit): boolean {
   return visit.summary.user_id !== null;
 }
@@ -89,7 +112,9 @@ function matches(visit: ListedVisit, filters: VisitFilters): boolean {
     sentEvent(visit, filters) &&
     (filters.channel === null || visit.summary.channel === filters.channel) &&
     (filters.device === null || visit.summary.device_type === filters.device) &&
-    (filters.identity === null || isIdentified(visit) === (filters.identity === 'identified'))
+    (filters.identity === null || isIdentified(visit) === (filters.identity === 'identified')) &&
+    cameFrom(visit, filters) &&
+    madeRequest(visit, filters.route, filters.failed)
   );
 }
 

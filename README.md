@@ -162,8 +162,10 @@ Shipping now:
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and country, channel and
   account; filters for the pages it viewed (up to three, `*` matching any characters), an event
-  with an optional `key=value` property, the channel, the device and identified or anonymous
-  visitors, all kept in the URL; on a phone the filters fold behind a "Filters · 2 active"
+  with an optional `key=value` property, the channel, the device, identified or anonymous
+  visitors, the country, the source and campaign (as Acquisition names them), a request it made
+  (`POST /orders/:id`) and whether it had a failed request, all kept in the URL, with the number
+  of matching visits above the list; on a phone the filters fold behind a "Filters · 2 active"
   button, open when some are in use or were left out, and each visit is a card with every
   column; each row opens its visit, and an identified one its person, in the Timeline
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity

@@ -12,6 +12,7 @@ import {
   visitFiltersOf,
   visitRows,
   type VisitsSearch,
+  visitsTotalLabel,
 } from '@/domain/visits';
 import { visitsTableLabel } from '@/domain/visits-export';
 import { getI18n } from '@/i18n/get-messages';
@@ -54,6 +55,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const kept = visitFilterParameters(filters);
   const filtered = hasVisitFilters(filters);
   const listQuery = withKeptParameters(periodQuery(period), kept);
+  const totalLabel = visitsTotalLabel(report.total, filtered, i18n);
   return (
     <>
       <Topbar
@@ -76,6 +78,9 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           clearHref={filtered ? `${basePath}?${periodQuery(period)}` : null}
           i18n={i18n}
         />
+        {totalLabel === null ? null : (
+          <p className="-mb-1 text-sm font-medium text-muted sm:-mb-2">{totalLabel}</p>
+        )}
         <VisitsTable
           key={`visits?${listQuery}`}
           rows={visitRows(report.visits, project.timezone, i18n)}
