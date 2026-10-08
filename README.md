@@ -150,9 +150,10 @@ Shipping now:
 - Requests: the failures of each day stacked by what went wrong (client errors, server errors,
   no response; chart or table, a pointer over a day lists them), then every write by route with
   its success and error shares, status codes, median and 95th percentile duration; a
-  keyboard-accessible details panel with the screens where the route failed and its
-  latest failures with their error code, and a link to every visit with a failed call to that
-  route; "failing only" and screen filters kept in the URL. A
+  keyboard-accessible details panel with the screens where the route failed, the route day by
+  day (calls, failures, median and p95, read by a Server Action when the panel opens, so the
+  table needs no navigation), its latest failures with their error code, and a link to every
+  visit with a failed call to that route; "failing only" and screen filters kept in the URL. A
   "Failed reads" tab lists the GET calls that failed by route and per day, as counts only (a site
   may send its reads only when they fail, so there is no read error rate). The CSV of the routes
   carries the p95 too
