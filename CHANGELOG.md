@@ -1,5 +1,101 @@
 # Changelog
 
+## [0.5.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.4.0...v0.5.0) (2026-10-08)
+
+
+### Features
+
+* **acquisition:** download the sources and visits by channel as CSV ([3cab7ce](https://github.com/samuelcsantana/pyxis-web/commit/3cab7cea6f52e90ad972dcb0af50b43a49b764f1))
+* **acquisition:** link the channel of each source to its visits ([cc98f68](https://github.com/samuelcsantana/pyxis-web/commit/cc98f68ed4719bbfe1f759f81184df201a2a17bc))
+* **app:** render each page in the language of the request ([558c64e](https://github.com/samuelcsantana/pyxis-web/commit/558c64e11bec93acac45172d9677af54e8ecf101))
+* **charts:** show the values of the day under the pointer ([fc2996f](https://github.com/samuelcsantana/pyxis-web/commit/fc2996f63388d4171462cdee9a6594403a6445a0))
+* **demo:** give every ranked page, event and value a demo visit ([ddd2003](https://github.com/samuelcsantana/pyxis-web/commit/ddd200311b57e0573be23ca935509a4c08b15b4b))
+* **devices:** download every Devices breakdown as one CSV file ([6be4315](https://github.com/samuelcsantana/pyxis-web/commit/6be431593e29d5ed0b6c3d599f8e0ef6c1751708))
+* **devices:** link each device type to its visits ([5901b4e](https://github.com/samuelcsantana/pyxis-web/commit/5901b4e8d900b45a31538f4e6f903e4fb9368af2))
+* **domain:** write tables as CSV files a spreadsheet cannot run ([00c0aef](https://github.com/samuelcsantana/pyxis-web/commit/00c0aef9f5b39928b90430e7ce0db05fbcdb2026))
+* **features:** download the Features ranking as a CSV file ([c1aeb0e](https://github.com/samuelcsantana/pyxis-web/commit/c1aeb0ea70631c3280b18403e22ae27466f2a989))
+* **features:** link every event, screen and property value to its visits ([09886a6](https://github.com/samuelcsantana/pyxis-web/commit/09886a6d192290983df60d8b2be70225ccedd33f))
+* **forms:** submit the filter and search forms in place ([1f58eb7](https://github.com/samuelcsantana/pyxis-web/commit/1f58eb7ab6e0be8783f2423526b98a029c6d4bf3))
+* **i18n:** list the interface languages and negotiate Accept-Language ([40170b0](https://github.com/samuelcsantana/pyxis-web/commit/40170b0cdc47690e64e24e4843dd23c56c6373bd))
+* **i18n:** load the dictionary of the request and provide it to client components ([246a7ca](https://github.com/samuelcsantana/pyxis-web/commit/246a7cae3fecb40d82255ea47ebeecbd7fdfa4da))
+* **i18n:** resolve the interface language of each request ([680a89d](https://github.com/samuelcsantana/pyxis-web/commit/680a89d2cf293f53731c5634343a6e994eacd71a))
+* **i18n:** translate typed dictionary messages with CLDR plurals ([a07c942](https://github.com/samuelcsantana/pyxis-web/commit/a07c942d04811752cb226b03c9e18fa9e40942ce))
+* **navigation:** mark the clicked period, tab, filter and screen link ([4c7ab24](https://github.com/samuelcsantana/pyxis-web/commit/4c7ab24630beb824de7eda2f04d3878dad83f78b))
+* **overview:** download the Overview tables as CSV files ([f85ec0a](https://github.com/samuelcsantana/pyxis-web/commit/f85ec0a2aed11a7dd35b6a8f4d9aabac69be994f))
+* **overview:** draw the daily activity as lines without fill ([4c60fb3](https://github.com/samuelcsantana/pyxis-web/commit/4c60fb31817fc9a010d069e4c5bd094a78306adf))
+* **overview:** draw the previous period as a dashed line ([094f046](https://github.com/samuelcsantana/pyxis-web/commit/094f046cb920eb410077fc93e8107c6c7d8beb1b))
+* **overview:** let a KPI card pick the figure the chart plots ([d1cac07](https://github.com/samuelcsantana/pyxis-web/commit/d1cac07afa71da65ccae2c2eddebdee0d6a8f094))
+* **overview:** link each KPI card to the list behind its figure ([9f3fa67](https://github.com/samuelcsantana/pyxis-web/commit/9f3fa673f006ad4129f00227266eaa9402e63140))
+* **requests:** download the Requests routes as CSV files ([95b4261](https://github.com/samuelcsantana/pyxis-web/commit/95b426130bff329dd1e7aefcc1052a03576b4a4a))
+* **shell:** give the period controls 44px targets on phones ([c409096](https://github.com/samuelcsantana/pyxis-web/commit/c409096bfae123db4c611c7aaae562295afafa91))
+* **shell:** mark the screen busy while a navigation is pending ([f484798](https://github.com/samuelcsantana/pyxis-web/commit/f48479867e8acbd94d4558e5c787d2b0841f39b0))
+* **shell:** put the theme toggle in the phone menu bar ([13c6b5b](https://github.com/samuelcsantana/pyxis-web/commit/13c6b5bb8d7555def1acefeceef6a319a850e072))
+* **shell:** tighten the page header and the demo banner on phones ([dfa2d21](https://github.com/samuelcsantana/pyxis-web/commit/dfa2d21dd15328766368c46abe002936b9126bde))
+* **theme:** keep every theme toggle in step with the page ([9f1aa56](https://github.com/samuelcsantana/pyxis-web/commit/9f1aa560beb60bf6cbbad62be849c782957a8f96))
+* **ui:** add a details popover that closes on Escape, focus-out and outside click ([48671f2](https://github.com/samuelcsantana/pyxis-web/commit/48671f2a332f82fb7b936da5e9d3d2a336267e76))
+* **visits:** build property and device filters from report values ([93085d2](https://github.com/samuelcsantana/pyxis-web/commit/93085d2897bc16b75d60effb62c0de989fee7481))
+* **visits:** download the newest 1,000 matching visits as a CSV file ([528da13](https://github.com/samuelcsantana/pyxis-web/commit/528da139c167e79226ba26cfa0777747232e2f01))
+
+
+### Bug Fixes
+
+* **a11y:** name the Overview's row links by their visible text ([20849c9](https://github.com/samuelcsantana/pyxis-web/commit/20849c9e89daa4d3780dbc98189f00e3ca579c59))
+* **acquisition:** keep the conversions beside the rate and the medium on phones ([abdd27f](https://github.com/samuelcsantana/pyxis-web/commit/abdd27f64b361ae2c71fe3778396ad74e27283c2))
+* **acquisition:** show the top unpaid channel when Paid leads ([498c0be](https://github.com/samuelcsantana/pyxis-web/commit/498c0be56e1b535ee6b85d6731fb932e6e7a04f8))
+* **copy:** write the usual acronyms of an event name in capitals ([ba66243](https://github.com/samuelcsantana/pyxis-web/commit/ba662430da543bc6b6805043491d2d7dde355373))
+* **features:** fill the event row that is open and edge its property panel ([1a15071](https://github.com/samuelcsantana/pyxis-web/commit/1a1507192e28222c22c6f710c5412e37c3f0c4c3))
+* **format:** show every percentage and point change with one decimal ([f2628b0](https://github.com/samuelcsantana/pyxis-web/commit/f2628b0afe3bb0155a88cfdf17dcff872371c725))
+* **funnel:** announce the editor's status as it changes ([02a4716](https://github.com/samuelcsantana/pyxis-web/commit/02a471665f8773f68609932c7b14a6738e1b19bf))
+* **funnel:** fit each editor step in two rows on phones ([ba81d7d](https://github.com/samuelcsantana/pyxis-web/commit/ba81d7d2a45ae249ef386ac415e7b68b0170656c))
+* **funnel:** make closing the step editor a secondary action ([5e9e43b](https://github.com/samuelcsantana/pyxis-web/commit/5e9e43bacf5b639b716d323ef1ac32d6fe868fb3))
+* **funnel:** name the biggest drop-off by its step numbers ([1c87c9e](https://github.com/samuelcsantana/pyxis-web/commit/1c87c9e39c3415a88ae23f86dd1a3affa77e2b70))
+* **funnel:** put the steps above the results ([07b0c60](https://github.com/samuelcsantana/pyxis-web/commit/07b0c608b4f3c158c2966316601a419dd10e5d23))
+* **layout:** lay the KPI cards and the donuts out without an orphan on tablets ([d36919e](https://github.com/samuelcsantana/pyxis-web/commit/d36919e2e88b50b39895758c9e9c20ab8a6a3b8e))
+* **overview:** give the daily chart 176px on phones ([dad5c85](https://github.com/samuelcsantana/pyxis-web/commit/dad5c8515e6a445a079924e36a07cc53bd515225))
+* **overview:** stop the KPI cards from being landmark regions ([62bdd7f](https://github.com/samuelcsantana/pyxis-web/commit/62bdd7feb04340e3ce4cc433874c62a8357a1424))
+* **requests:** keep the page still while the route details scroll ([b5581c5](https://github.com/samuelcsantana/pyxis-web/commit/b5581c518c0e00ab00969bd656b98f44dea15c1c))
+* **search:** keep the search fields beside their buttons on phones ([463b9a2](https://github.com/samuelcsantana/pyxis-web/commit/463b9a29931e5bf7b585570c69737be78526c9ab))
+* **shell:** close the custom period form on Escape, focus-out and outside click ([65473bc](https://github.com/samuelcsantana/pyxis-web/commit/65473bc575ca1f4f3960563066574c2960643a88))
+* **shell:** close the project switcher on Escape, focus-out and outside click ([3bb1215](https://github.com/samuelcsantana/pyxis-web/commit/3bb1215b791dc5a98614ea8f21edd703f1ff7fd7))
+* **shell:** keep the project switcher's chevron still under reduced motion ([42e9d16](https://github.com/samuelcsantana/pyxis-web/commit/42e9d1697394b95611b0f3e2e51afcd1b506d26f))
+* **shell:** mark the current project with a check and the current-item fill ([306f804](https://github.com/samuelcsantana/pyxis-web/commit/306f804c1ff8ac6158816963fbef643d6b73496c))
+* **shell:** mark the selected period with aria-current="page" ([787cbab](https://github.com/samuelcsantana/pyxis-web/commit/787cbab3ec23371b640d9968f1a705c059d1b104))
+* **timeline:** count the summary in items, not events ([11d7b50](https://github.com/samuelcsantana/pyxis-web/commit/11d7b50530e21b2246e6e7eb1d68acc83b25a866))
+* **timeline:** pad the visit and summary cards like the panels on phones ([e7e005c](https://github.com/samuelcsantana/pyxis-web/commit/e7e005c13286f722fceaf227af62348d1fd68639))
+* **timeline:** say a request's duration and error code in words ([f814a97](https://github.com/samuelcsantana/pyxis-web/commit/f814a97a8a7f44350f9a99fb9aa033f30f77104d))
+* **ui:** break identifiers between their tokens on narrow screens ([075f780](https://github.com/samuelcsantana/pyxis-web/commit/075f780006e93dd5f7b25dbcbc08713f23efa685))
+* **ui:** size the stat cards for a phone ([76bc158](https://github.com/samuelcsantana/pyxis-web/commit/76bc15815899c6cf17e9439377efe430a4ddd987))
+* **ui:** stop the stat cards from being landmark regions ([89c6aeb](https://github.com/samuelcsantana/pyxis-web/commit/89c6aeb7426bad8d8cc7e35d9a2b5dbc5ea130d1))
+* **visits:** start a long user id's link name with the text it shows ([db7f50c](https://github.com/samuelcsantana/pyxis-web/commit/db7f50c031da04d40308dc7602773882d58ba52c))
+
+
+### Refactoring
+
+* **app:** extract the home, funnel and timeline empty states ([5374d8e](https://github.com/samuelcsantana/pyxis-web/commit/5374d8ed8192a6f616418bafa2f5472bd595919a))
+* **features:** name the search match of the Features ranking ([dad138e](https://github.com/samuelcsantana/pyxis-web/commit/dad138e471b32bc02964458ffceef5393918eacb))
+* **requests:** read the Requests report in one place ([d7dd457](https://github.com/samuelcsantana/pyxis-web/commit/d7dd457d9dc4f178e2bcebe78c18733fd0ce5325))
+
+
+### Documentation
+
+* **adr:** record how the dashboard will speak more than one language ([8523fc4](https://github.com/samuelcsantana/pyxis-web/commit/8523fc4f738ed0906b016fdeb1f55291c414e8f2))
+* **readme:** describe event labels, Timeline items and the one-decimal rule ([37e4c4d](https://github.com/samuelcsantana/pyxis-web/commit/37e4c4dbd502feec50d3ee78e66ef0b18a3c316f))
+* **readme:** describe the compact phone header ([e074bf4](https://github.com/samuelcsantana/pyxis-web/commit/e074bf4cbf5431dfaf4cf468cc390acc4b4cf6d9))
+* **readme:** describe the CSV export of every table screen ([f96136c](https://github.com/samuelcsantana/pyxis-web/commit/f96136cb6e8c69c630d97d62192eb6a0d2772fea))
+* **readme:** describe the CSV export of the Overview and Requests ([b2d248f](https://github.com/samuelcsantana/pyxis-web/commit/b2d248f824c63288167c1172cb8f6b2b8f227089))
+* **readme:** describe the feedback while a screen changes in place ([bf17bb6](https://github.com/samuelcsantana/pyxis-web/commit/bf17bb669fbe0b1b170b526392babbc3289904cc))
+* **readme:** describe the figure a KPI card plots and the chart hover ([99832c6](https://github.com/samuelcsantana/pyxis-web/commit/99832c64b61f3d7097a919aa0afdf5a1fa50d720))
+* **readme:** describe the landmarks, live status and reduced-motion check ([ff229d0](https://github.com/samuelcsantana/pyxis-web/commit/ff229d06a0ff475fca902dae792cf4e8804ed469))
+* **readme:** describe the links from every screen into Visits ([b900d27](https://github.com/samuelcsantana/pyxis-web/commit/b900d2711285147b038800256e404e5bc2fbf1e3))
+* **readme:** describe the phone and tablet density ([36e9871](https://github.com/samuelcsantana/pyxis-web/commit/36e9871c1f7cf6c05ccff322d74d3972186d001e))
+* **readme:** describe the phone Overview chart and Funnel editor ([2bfac0c](https://github.com/samuelcsantana/pyxis-web/commit/2bfac0cacbc58416ecab6c35f56cd51f14ff6338))
+* **readme:** describe the phone search forms ([61acc1c](https://github.com/samuelcsantana/pyxis-web/commit/61acc1cdaaa5e822726c4f2dfb4388384964ba84))
+* **readme:** list the shell and empty-page states shown in Storybook ([22a0b28](https://github.com/samuelcsantana/pyxis-web/commit/22a0b286b1ac5bb3e5b6b8f6ea67ec10d272268a))
+* **readme:** say the shell popovers close on Escape, focus-out and outside click ([8dc4eb3](https://github.com/samuelcsantana/pyxis-web/commit/8dc4eb321a3804107a7e04958a276a7cb5e8d83b))
+* **storybook:** show the app's empty pages under Pages/States ([06e847f](https://github.com/samuelcsantana/pyxis-web/commit/06e847f9a13a2f8597cfb326ac4545622b104945))
+* **storybook:** show the request, timeline and panel states left out ([70d3f7a](https://github.com/samuelcsantana/pyxis-web/commit/70d3f7afa7053a1939474bb49f1d46922e2e1a98))
+* **storybook:** show the shell's open, busy and failed states ([048bd50](https://github.com/samuelcsantana/pyxis-web/commit/048bd5001efbcf74392c95fb288819fda3a87b42))
+
 ## [0.4.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.3.0...v0.4.0) (2026-10-08)
 
 
