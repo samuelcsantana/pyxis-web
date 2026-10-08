@@ -135,7 +135,8 @@ Shipping now:
   with the share that continued and the drop-off at each step; a keyboard-operable step editor,
   and the steps kept in the URL so a bookmark is a saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
-  device, channel and length, every page view, event and request with its properties and status,
+  device, channel and length, every page view, event and request with its properties and status
+  (a request reads "164 ms · order_number_in_use", its status shown once, as the chip),
   and filters for page views, events, requests and failing requests only; older visits load on
   demand, and a failed request in the Requests screen links to its visit; an id it cannot look up
   stays in the field, marked invalid, with an example of what that kind of id looks like

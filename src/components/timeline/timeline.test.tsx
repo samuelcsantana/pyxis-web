@@ -125,7 +125,8 @@ describe('VisitCard', () => {
     expect(items).toHaveLength(11);
     expect(items[0]).toHaveTextContent('14:03:10Opened /calculator');
     expect(items[6]).toHaveTextContent('POST /auth/verify-code');
-    expect(items[6]).toHaveTextContent('error_code=invalid_code400');
+    expect(items[6]).toHaveTextContent('invalid_code400');
+    expect(items[6]).not.toHaveTextContent('error_code=');
     expect(container.querySelectorAll('path[d^="M12 3l9 16"]')).toHaveLength(1);
   });
 
