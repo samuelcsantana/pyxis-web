@@ -16,6 +16,7 @@ import {
 } from '@/domain/features';
 import { FEATURES_TABLE_LABELS } from '@/domain/features-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -50,6 +51,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const kindHref = (target: FeatureKind) =>
     `${basePath}?${withKeptParameters(periodQuery(period), { kind: target })}`;
   const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -59,6 +61,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         period={period}
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
+        i18n={i18n}
         keep={kept}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
@@ -81,7 +84,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         </div>
         <FeatureTable
           kind={kind}
-          rows={featureRows(report.items, kind, query)}
+          rows={featureRows(report.items, kind, query, i18n)}
           query={query}
           visitsHref={(name) =>
             linkWith(

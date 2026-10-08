@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { deviceConversions } from '@/domain/devices';
 import { demoDevicesReport } from '@/services/devices/demo-devices';
 import { DeviceConversionList } from './device-conversion-list';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoDevicesReport('demo', { from: '2026-09-06', to: '2026-10-05' });
 
@@ -10,7 +11,7 @@ const meta = {
   component: DeviceConversionList,
   tags: ['autodocs'],
   args: {
-    conversions: deviceConversions(REPORT.deviceTypes),
+    conversions: deviceConversions(REPORT.deviceTypes, english),
     conversionEvent: 'signup_completed',
   },
   parameters: { layout: 'padded' },
@@ -30,10 +31,13 @@ export const Default: Story = {};
 
 export const DeviceWithoutVisits: Story = {
   args: {
-    conversions: deviceConversions([
-      { value: 'desktop', visits: 40, conversions: 3, convertingVisits: null },
-      { value: 'tablet', visits: 0, conversions: 0, convertingVisits: null },
-    ]),
+    conversions: deviceConversions(
+      [
+        { value: 'desktop', visits: 40, conversions: 3, convertingVisits: null },
+        { value: 'tablet', visits: 0, conversions: 0, convertingVisits: null },
+      ],
+      english,
+    ),
   },
 };
 

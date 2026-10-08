@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { EVENT_NAME_PATTERN } from '@/domain/funnel';
 import { type PropertyKeyView, propertyKeyViews } from '@/domain/property-breakdown';
+import { getI18n } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createFeaturesService } from '@/services/features/features-service.factory';
 
@@ -26,5 +27,5 @@ export async function loadPropertyBreakdown(
   const report = await readOrSignIn(() =>
     createFeaturesService().properties(project.id, { from, to }, parsed.data.name),
   );
-  return propertyKeyViews(report);
+  return propertyKeyViews(report, await getI18n());
 }

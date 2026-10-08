@@ -21,6 +21,8 @@ import {
 import { DEVICES_TABLE_LABEL } from '@/domain/devices-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { deviceFilterOf } from '@/domain/visits';
+import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -40,6 +42,7 @@ interface DevicesReportViewProps {
   readonly conversionEvent: string | null;
   readonly exportPath: string;
   readonly deviceVisitsHref: (deviceType: string) => string | null;
+  readonly i18n: I18n;
 }
 
 function DevicesReportView({
@@ -47,8 +50,9 @@ function DevicesReportView({
   conversionEvent,
   exportPath,
   deviceVisitsHref,
+  i18n,
 }: DevicesReportViewProps) {
-  const conversions = deviceConversions(report.deviceTypes);
+  const conversions = deviceConversions(report.deviceTypes, i18n);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
     <>
@@ -56,19 +60,19 @@ function DevicesReportView({
         <ShareDonut
           id="device-type"
           title="Device type"
-          rows={shareRows(report.deviceTypes, deviceTypeLabel)}
+          rows={shareRows(report.deviceTypes, deviceTypeLabel, i18n)}
           visitsHref={deviceVisitsHref}
         />
         <ShareDonut
           id="browser"
           title="Browser"
-          rows={shareRows(report.browsers, browserLabel)}
+          rows={shareRows(report.browsers, browserLabel, i18n)}
           withConversionRate={conversionEvent !== null}
         />
         <ShareDonut
           id="operating-system"
           title="Operating system"
-          rows={shareRows(report.operatingSystems, operatingSystemLabel)}
+          rows={shareRows(report.operatingSystems, operatingSystemLabel, i18n)}
           withConversionRate={conversionEvent !== null}
         />
       </div>
@@ -78,7 +82,7 @@ function DevicesReportView({
           <DeviceConversionList conversions={conversions} conversionEvent={conversionEvent} />
         ) : null}
         <CountriesTable
-          rows={shareRows(report.countries, countryLabel)}
+          rows={shareRows(report.countries, countryLabel, i18n)}
           withConversionRate={conversionEvent !== null}
         />
       </div>
@@ -104,6 +108,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
     const device = deviceFilterOf(deviceType);
     return device === null ? null : linkWith(visitsHref, { device });
   };
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -113,6 +118,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
         period={period}
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {hasVisits(report) ? (
@@ -121,10 +127,11 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             conversionEvent={project.conversionEvent}
             exportPath={exportHref(project.id, 'devices', periodQuery(period))}
             deviceVisitsHref={deviceVisitsHref}
+            i18n={i18n}
           />
         ) : (
           <EmptyPeriod
-            view={emptyPeriodView(project, period)}
+            view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'devices', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
           />

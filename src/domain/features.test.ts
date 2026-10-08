@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { featureKindOf, featureLabel, featureRows, searchQueryOf } from './features';
 import { featuresResponseSchema } from './features.schema';
+import { english } from '@/test-utils/english';
 
 const ITEMS = featuresResponseSchema.parse({
   items: [
@@ -35,7 +36,7 @@ describe('featureLabel', () => {
 
 describe('featureRows', () => {
   it('gives every feature its count, visits, share of all counts and trend', () => {
-    expect(featureRows(ITEMS, 'events', '')).toEqual([
+    expect(featureRows(ITEMS, 'events', '', english)).toEqual([
       {
         name: 'calculator_result_shown',
         label: 'Calculator result shown',
@@ -58,19 +59,26 @@ describe('featureRows', () => {
   });
 
   it('keeps the features whose name or label holds the search, in any case', () => {
-    expect(featureRows(ITEMS, 'events', 'CTA').map((row) => row.name)).toEqual(['cta_clicked']);
-    expect(featureRows(ITEMS, 'events', 'result shown').map((row) => row.name)).toEqual([
+    expect(featureRows(ITEMS, 'events', 'CTA', english).map((row) => row.name)).toEqual([
+      'cta_clicked',
+    ]);
+    expect(featureRows(ITEMS, 'events', 'result shown', english).map((row) => row.name)).toEqual([
       'calculator_result_shown',
     ]);
-    expect(featureRows(ITEMS, 'events', 'nothing like it')).toEqual([]);
+    expect(featureRows(ITEMS, 'events', 'nothing like it', english)).toEqual([]);
   });
 
   it('keeps the share of the whole ranking while searching', () => {
-    expect(featureRows(ITEMS, 'events', 'cta')[0]?.share).toBe('25.0%');
+    expect(featureRows(ITEMS, 'events', 'cta', english)[0]?.share).toBe('25.0%');
   });
 
   it('shows dashes, not NaN, for a ranking of zeros', () => {
-    const [row] = featureRows([{ name: '/', count: 0, visits: 0, daily: [0] }], 'screens', '');
+    const [row] = featureRows(
+      [{ name: '/', count: 0, visits: 0, daily: [0] }],
+      'screens',
+      '',
+      english,
+    );
 
     expect(row?.share).toBe('—');
     expect(row?.barWidth).toBe('0.0%');

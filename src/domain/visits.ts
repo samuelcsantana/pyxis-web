@@ -1,8 +1,9 @@
+import type { I18n } from '@/i18n/i18n';
 import { type Channel, CHANNEL_LABELS, CHANNELS } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { stepProblem } from './funnel';
-import { eventLabel, formatCount, formatQuantity } from './metrics';
-import { formatVisitDuration, shortId, visitStartFormat } from './timeline';
+import { eventLabel, formatCount } from './metrics';
+import { formatVisitDuration, shortId } from './timeline';
 import {
   isFilterableProperty,
   MAX_PROPERTY_VALUE_LENGTH,
@@ -175,36 +176,38 @@ function visitAccount(userId: string | null): VisitAccount | null {
   return { userId, shown, linkName: `${shown}, open the timeline of user ${userId}` };
 }
 
-function failedRequestsLabel(count: number): string {
-  return count === 0
-    ? 'No failed request'
-    : formatQuantity(count, 'failed request', 'failed requests');
+function failedRequestsLabel(count: number, i18n: I18n): string {
+  return count === 0 ? 'No failed request' : i18n.t('counts.failedRequest', { count });
 }
 
-function deviceLabel(visit: VisitSummary): string {
+function deviceLabel(visit: VisitSummary, i18n: I18n): string {
   return [
-    deviceTypeLabel(visit.deviceType),
-    browserLabel(visit.browser),
-    operatingSystemLabel(visit.os),
-    ...(visit.country === null ? [] : [countryLabel(visit.country)]),
+    deviceTypeLabel(visit.deviceType, i18n),
+    browserLabel(visit.browser, i18n),
+    operatingSystemLabel(visit.os, i18n),
+    ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
   ].join(' · ');
 }
 
-export function visitRows(visits: readonly VisitSummary[], timeZone: string): readonly VisitRow[] {
-  const started = visitStartFormat(timeZone);
+export function visitRows(
+  visits: readonly VisitSummary[],
+  timeZone: string,
+  i18n: I18n,
+): readonly VisitRow[] {
+  const started = i18n.format.dateTime('visitStart', timeZone);
   return visits.map((visit) => ({
     key: visit.sessionId,
     visit: shortId(visit.sessionId),
-    started: started.format(new Date(visit.startedAt)),
+    started: started(new Date(visit.startedAt)),
     startedAt: visit.startedAt,
     duration: formatVisitDuration(visit.startedAt, visit.endedAt),
     entryPath: visit.entryPath,
-    pageViews: formatCount(visit.pageViews),
-    pagesLabel: formatQuantity(visit.pageViews, 'page', 'pages'),
+    pageViews: formatCount(visit.pageViews, i18n),
+    pagesLabel: i18n.t('counts.page', { count: visit.pageViews }),
     highlights: visit.highlights.map(eventLabel),
     failedRequests: visit.failedRequests,
-    failedRequestsLabel: failedRequestsLabel(visit.failedRequests),
-    device: deviceLabel(visit),
+    failedRequestsLabel: failedRequestsLabel(visit.failedRequests, i18n),
+    device: deviceLabel(visit, i18n),
     channel: visit.channel === null ? null : CHANNEL_LABELS[visit.channel],
     account: visitAccount(visit.userId),
   }));

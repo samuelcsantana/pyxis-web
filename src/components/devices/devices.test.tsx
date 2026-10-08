@@ -11,6 +11,7 @@ import {
 import { CountriesTable } from './countries-table';
 import { DeviceConversionList } from './device-conversion-list';
 import { segmentColor, ShareDonut } from './share-donut';
+import { english } from '@/test-utils/english';
 
 const DEVICE_TYPES: readonly ValueShare[] = [
   { value: 'mobile', visits: 620, conversions: 23, convertingVisits: null },
@@ -29,7 +30,7 @@ describe('ShareDonut', () => {
       <ShareDonut
         id="device-type"
         title="Device type"
-        rows={shareRows(DEVICE_TYPES, deviceTypeLabel)}
+        rows={shareRows(DEVICE_TYPES, deviceTypeLabel, english)}
       />,
     );
 
@@ -47,7 +48,7 @@ describe('ShareDonut', () => {
       <ShareDonut
         id="device-type"
         title="Device type"
-        rows={shareRows(DEVICE_TYPES, deviceTypeLabel)}
+        rows={shareRows(DEVICE_TYPES, deviceTypeLabel, english)}
         visitsHref={(value) => (value === 'other' ? null : `/p1/visits?device=${value}`)}
       />,
     );
@@ -65,7 +66,7 @@ describe('ShareDonut', () => {
       <ShareDonut
         id="browser"
         title="Browser"
-        rows={shareRows(BROWSERS, browserLabel)}
+        rows={shareRows(BROWSERS, browserLabel, english)}
         withConversionRate
       />,
     );
@@ -83,6 +84,7 @@ describe('ShareDonut', () => {
         rows={shareRows(
           BROWSERS.map((share) => ({ ...share, conversions: null })),
           browserLabel,
+          english,
         )}
         withConversionRate
       />,
@@ -100,6 +102,7 @@ describe('ShareDonut', () => {
         convertingVisits: null,
       })),
       browserLabel,
+      english,
     );
 
     expect(rows.map((row, index) => segmentColor(row, index).stroke)).toEqual([
@@ -130,7 +133,7 @@ describe('DeviceConversionList', () => {
   it('shows the conversion rate of each device with its totals', () => {
     render(
       <DeviceConversionList
-        conversions={deviceConversions(DEVICE_TYPES)}
+        conversions={deviceConversions(DEVICE_TYPES, english)}
         conversionEvent="signup_completed"
       />,
     );
@@ -151,6 +154,7 @@ describe('CountriesTable', () => {
             { value: 'other', visits: 10, conversions: null, convertingVisits: null },
           ],
           countryLabel,
+          english,
         )}
       />,
     );
@@ -170,6 +174,7 @@ describe('CountriesTable', () => {
             { value: 'other', visits: 10, conversions: 0, convertingVisits: 0 },
           ],
           countryLabel,
+          english,
         )}
         withConversionRate
       />,

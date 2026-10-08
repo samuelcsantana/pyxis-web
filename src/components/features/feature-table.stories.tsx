@@ -5,13 +5,16 @@ import { propertyKeyViews } from '@/domain/property-breakdown';
 import { demoFeaturesReport } from '@/services/features/demo-features';
 import { demoPropertyBreakdownReport } from '@/services/features/demo-properties';
 import { FeatureTable } from './feature-table';
+import { english } from '@/test-utils/english';
 
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
 const EVENTS = demoFeaturesReport('demo', PERIOD, 'events').items;
 const SCREENS = demoFeaturesReport('demo', PERIOD, 'screens').items;
 
 function loadDemoProperties(name: string) {
-  return Promise.resolve(propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name)));
+  return Promise.resolve(
+    propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name), english),
+  );
 }
 
 function visitsHref(name: string): string {
@@ -26,7 +29,7 @@ const meta = {
   title: 'Features/Ranking',
   component: FeatureTable,
   tags: ['autodocs'],
-  args: { kind: 'events', rows: featureRows(EVENTS, 'events', ''), query: '', visitsHref },
+  args: { kind: 'events', rows: featureRows(EVENTS, 'events', '', english), query: '', visitsHref },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
@@ -74,11 +77,11 @@ export const DarkThemeWithProperties: Story = {
 };
 
 export const Screens: Story = {
-  args: { kind: 'screens', rows: featureRows(SCREENS, 'screens', '') },
+  args: { kind: 'screens', rows: featureRows(SCREENS, 'screens', '', english) },
 };
 
 export const Searched: Story = {
-  args: { rows: featureRows(EVENTS, 'events', 'signup'), query: 'signup' },
+  args: { rows: featureRows(EVENTS, 'events', 'signup', english), query: 'signup' },
 };
 
 export const NothingMatches: Story = { args: { rows: [], query: 'refund' } };

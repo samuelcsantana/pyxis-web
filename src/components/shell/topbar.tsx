@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { formatPeriod, type Period, rejectedRangeNotice } from '@/domain/period';
+import type { I18n } from '@/i18n/i18n';
 import type { Theme } from '@/lib/theme';
 import { type KeptParameters, PeriodSelector, RANGE_NOTICE_ID } from './period-selector';
 
@@ -15,6 +16,7 @@ export interface TopbarWithPeriodProps extends TopbarBase {
   readonly period: Period;
   readonly today: string;
   readonly keep?: KeptParameters;
+  readonly i18n: I18n;
 }
 
 interface WithoutPeriod extends TopbarBase {
@@ -25,7 +27,7 @@ export type TopbarProps = TopbarWithPeriodProps | WithoutPeriod;
 
 const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
-function PeriodControls({ basePath, period, today, keep }: TopbarWithPeriodProps) {
+function PeriodControls({ basePath, period, today, keep, i18n }: TopbarWithPeriodProps) {
   return (
     <>
       <p className="flex items-center gap-2 text-[13px] text-muted">
@@ -39,7 +41,7 @@ function PeriodControls({ basePath, period, today, keep }: TopbarWithPeriodProps
             strokeLinejoin="round"
           />
         </svg>
-        <span className="tabular-nums">{formatPeriod(period)}</span>
+        <span className="tabular-nums">{formatPeriod(period, i18n)}</span>
       </p>
       <PeriodSelector basePath={basePath} period={period} today={today} keep={keep} />
     </>

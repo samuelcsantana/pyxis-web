@@ -4,6 +4,7 @@ import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { KpiGrid } from './kpi-grid';
 import { MetricSelection } from './metric-selection';
+import { english } from '@/test-utils/english';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -24,7 +25,7 @@ const meta = {
   title: 'Overview/KPI cards',
   component: KpiGrid,
   tags: ['autodocs'],
-  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT), drillDownHref },
+  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english), drillDownHref },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
@@ -41,7 +42,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
-  args: { kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, DEMO_DOCS.conversionEvent) },
+  args: {
+    kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, DEMO_DOCS.conversionEvent, english),
+  },
 };
 
 export const BadNews: Story = {
@@ -60,6 +63,7 @@ export const BadNews: Story = {
       },
       LAST_30_DAYS,
       EVENT,
+      english,
     ),
   },
 };
@@ -83,6 +87,7 @@ export const NothingToCompare: Story = {
       },
       { days: 1, endsToday: false },
       EVENT,
+      english,
     ),
   },
 };
@@ -109,13 +114,19 @@ export const SmallNumbers: Story = {
       },
       { days: 2, endsToday: false },
       EVENT,
+      english,
     ),
   },
 };
 
 export const TodayUntilNow: Story = {
   args: {
-    kpis: overviewKpis(demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO), TODAY, EVENT),
+    kpis: overviewKpis(
+      demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO),
+      TODAY,
+      EVENT,
+      english,
+    ),
   },
 };
 
@@ -128,6 +139,7 @@ export const TodayAgainstAllOfYesterday: Story = {
       },
       TODAY,
       EVENT,
+      english,
     ),
   },
 };
@@ -144,7 +156,7 @@ export const OnAPhone: Story = {
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
-const STORY_KPIS = overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT);
+const STORY_KPIS = overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english);
 
 export const PickingTheChart: Story = {
   args: { selectable: true },

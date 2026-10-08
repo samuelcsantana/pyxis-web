@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { browserLabel, deviceTypeLabel, operatingSystemLabel, shareRows } from '@/domain/devices';
 import { demoDevicesReport } from '@/services/devices/demo-devices';
 import { ShareDonut } from './share-donut';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoDevicesReport('demo', { from: '2026-09-06', to: '2026-10-05' });
 
@@ -16,7 +17,7 @@ const meta = {
   args: {
     id: 'device-type',
     title: 'Device type',
-    rows: shareRows(REPORT.deviceTypes, deviceTypeLabel),
+    rows: shareRows(REPORT.deviceTypes, deviceTypeLabel, english),
     visitsHref: deviceVisitsHref,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
@@ -38,7 +39,7 @@ export const Browser: Story = {
   args: {
     id: 'browser',
     title: 'Browser',
-    rows: shareRows(REPORT.browsers, browserLabel),
+    rows: shareRows(REPORT.browsers, browserLabel, english),
     visitsHref: undefined,
   },
 };
@@ -51,7 +52,7 @@ export const OperatingSystem: Story = {
   args: {
     id: 'operating-system',
     title: 'Operating system',
-    rows: shareRows(REPORT.operatingSystems, operatingSystemLabel),
+    rows: shareRows(REPORT.operatingSystems, operatingSystemLabel, english),
     visitsHref: undefined,
   },
 };
@@ -61,6 +62,7 @@ export const SingleValue: Story = {
     rows: shareRows(
       [{ value: 'desktop', visits: 3, conversions: null, convertingVisits: null }],
       deviceTypeLabel,
+      english,
     ),
   },
 };

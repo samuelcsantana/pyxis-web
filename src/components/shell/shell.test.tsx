@@ -14,6 +14,7 @@ import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID, SkipLink } from './skip-link';
 import { Topbar } from './topbar';
+import { english } from '@/test-utils/english';
 
 const navigation = vi.hoisted(() => ({
   pathname: '/p-store/overview',
@@ -669,6 +670,7 @@ describe('Topbar', () => {
         period={presetPeriod('30d', '2026-10-05')}
         today="2026-10-05"
         theme="dark"
+        i18n={english}
       />,
     );
 
@@ -693,6 +695,7 @@ describe('Topbar', () => {
           rejected: { from: '2025-01-01', to: '2026-10-01', problem: 'too-long' },
         }}
         today="2026-10-05"
+        i18n={english}
       />,
     );
 

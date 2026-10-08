@@ -1,4 +1,5 @@
-import { eventLabel, formatCount, formatPercent, formatQuantity, rate, barWidth } from './metrics';
+import type { I18n } from '@/i18n/i18n';
+import { eventLabel, formatCount, formatPercent, rate, barWidth } from './metrics';
 import type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire } from './funnel.schema';
 
 export type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire };
@@ -97,7 +98,7 @@ function continuationTone(continued: number | null): FunnelTone {
   return continued < CONTINUATION_WARNING ? 'bad' : 'good';
 }
 
-export function funnelRows(counted: readonly CountedStep[]): readonly FunnelRow[] {
+export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonly FunnelRow[] {
   const first = counted[0]?.count ?? 0;
   return counted.map(({ step, count }, index) => {
     const previous = counted[index - 1];
@@ -106,7 +107,7 @@ export function funnelRows(counted: readonly CountedStep[]): readonly FunnelRow[
       position: index + 1,
       label: stepLabel(step),
       target: stepTarget(step),
-      count: formatCount(count),
+      count: formatCount(count, i18n),
       barWidth: barWidth(count, first),
     };
     if (previous === undefined) {
@@ -115,9 +116,9 @@ export function funnelRows(counted: readonly CountedStep[]): readonly FunnelRow[
     const continued = rate(count, previous.count);
     return {
       ...base,
-      continued: `${formatPercent(continued)} continued`,
+      continued: `${formatPercent(continued, i18n)} continued`,
       tone: continuationTone(continued),
-      dropped: `${formatCount(previous.count - count)} dropped`,
+      dropped: `${formatCount(previous.count - count, i18n)} dropped`,
     };
   });
 }
@@ -127,22 +128,25 @@ export interface FunnelFigure {
   readonly note: string;
 }
 
-const SUBJECTS: Readonly<Record<FunnelMode, readonly [string, string]>> = {
-  visit: ['visit', 'visits'],
-  user: ['person', 'people'],
-};
+const SUBJECTS = { visit: 'counts.visit', user: 'counts.person' } as const satisfies Readonly<
+  Record<FunnelMode, string>
+>;
 
-export function overallConversion(counted: readonly CountedStep[], mode: FunnelMode): FunnelFigure {
+export function overallConversion(
+  counted: readonly CountedStep[],
+  mode: FunnelMode,
+  i18n: I18n,
+): FunnelFigure {
   const first = counted[0]?.count ?? 0;
   const last = counted.at(-1)?.count ?? 0;
-  const [singular, plural] = SUBJECTS[mode];
+  const subjects = i18n.t(SUBJECTS[mode], { count: first });
   return {
-    value: formatPercent(rate(last, first)),
-    note: `${formatCount(last)} of ${formatQuantity(first, singular, plural)} reached the last step`,
+    value: formatPercent(rate(last, first), i18n),
+    note: `${formatCount(last, i18n)} of ${subjects} reached the last step`,
   };
 }
 
-export function biggestDropOff(counted: readonly CountedStep[]): FunnelFigure {
+export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): FunnelFigure {
   const transitions = counted.flatMap((current, index) => {
     const previous = counted[index - 1];
     return previous === undefined
@@ -164,6 +168,6 @@ export function biggestDropOff(counted: readonly CountedStep[]): FunnelFigure {
   }
   return {
     value: `Step ${String(worst.position - 1)} → ${String(worst.position)}`,
-    note: `${stepLabel(worst.from)} → ${stepLabel(worst.to)} · ${formatPercent(worst.continued)} continued`,
+    note: `${stepLabel(worst.from)} → ${stepLabel(worst.to)} · ${formatPercent(worst.continued, i18n)} continued`,
   };
 }

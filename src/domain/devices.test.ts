@@ -12,6 +12,7 @@ import {
   shareRows,
 } from './devices';
 import { devicesResponseSchema } from './devices.schema';
+import { english } from '@/test-utils/english';
 
 const WIRE: DevicesWire = {
   device_types: [
@@ -51,26 +52,26 @@ describe('devicesResponseSchema', () => {
 
 describe('labels', () => {
   it('name the known devices, browsers and systems, and "other" as Other', () => {
-    expect(deviceTypeLabel('mobile')).toBe('Mobile');
-    expect(browserLabel('samsung')).toBe('Samsung Internet');
-    expect(operatingSystemLabel('ios')).toBe('iOS');
-    expect(operatingSystemLabel('other')).toBe('Other');
+    expect(deviceTypeLabel('mobile', english)).toBe('Mobile');
+    expect(browserLabel('samsung', english)).toBe('Samsung Internet');
+    expect(operatingSystemLabel('ios', english)).toBe('iOS');
+    expect(operatingSystemLabel('other', english)).toBe('Other');
   });
 
   it('show a value they do not know as it came', () => {
-    expect(browserLabel('vivaldi')).toBe('vivaldi');
+    expect(browserLabel('vivaldi', english)).toBe('vivaldi');
   });
 
   it('name a country from its code, and the rest as other countries', () => {
-    expect(countryLabel('BR')).toBe('Brazil');
-    expect(countryLabel('other')).toBe('Other countries');
+    expect(countryLabel('BR', english)).toBe('Brazil');
+    expect(countryLabel('other', english)).toBe('Other countries');
     expect(countryCode('BR')).toBe('BR');
     expect(countryCode('other')).toBe('··');
   });
 
   it('keep a value that is not a region code as it came', () => {
-    expect(countryLabel('Brazil')).toBe('Brazil');
-    expect(countryLabel('XX')).toBe('XX');
+    expect(countryLabel('Brazil', english)).toBe('Brazil');
+    expect(countryLabel('XX', english)).toBe('XX');
   });
 });
 
@@ -86,7 +87,7 @@ describe('hasVisits', () => {
 
 describe('shareRows', () => {
   it('give every value its visits and share of the total', () => {
-    const rows = shareRows(devicesResponseSchema.parse(WIRE).countries, countryLabel);
+    const rows = shareRows(devicesResponseSchema.parse(WIRE).countries, countryLabel, english);
 
     expect(rows).toEqual([
       {
@@ -113,6 +114,7 @@ describe('shareRows', () => {
     const [row] = shareRows(
       [{ value: 'chrome', visits: 100, conversions: 9, convertingVisits: 6 }],
       browserLabel,
+      english,
     );
 
     expect(row?.conversionRate).toBe('6.0%');
@@ -122,6 +124,7 @@ describe('shareRows', () => {
     const rows = shareRows(
       [{ value: 'chrome', visits: 100, conversions: null, convertingVisits: null }],
       browserLabel,
+      english,
     );
 
     expect(rows[0]?.conversionRate).toBeNull();
@@ -132,6 +135,7 @@ describe('shareRows', () => {
     const [row] = shareRows(
       [{ value: 'mobile', visits: 0, conversions: null, convertingVisits: null }],
       deviceTypeLabel,
+      english,
     );
 
     expect(row?.share).toBe('—');
@@ -141,7 +145,10 @@ describe('shareRows', () => {
 
 describe('deviceConversions', () => {
   it('gives the conversion rate of each device type with its totals', () => {
-    const [mobile, desktop] = deviceConversions(devicesResponseSchema.parse(WIRE).deviceTypes);
+    const [mobile, desktop] = deviceConversions(
+      devicesResponseSchema.parse(WIRE).deviceTypes,
+      english,
+    );
 
     expect(desktop).toEqual({
       label: 'Desktop',
@@ -154,25 +161,28 @@ describe('deviceConversions', () => {
   });
 
   it('rates the visits that converted when the API counts them', () => {
-    const [mobile] = deviceConversions([
-      { value: 'mobile', visits: 100, conversions: 9, convertingVisits: 6 },
-    ]);
+    const [mobile] = deviceConversions(
+      [{ value: 'mobile', visits: 100, conversions: 9, convertingVisits: 6 }],
+      english,
+    );
 
     expect(mobile).toMatchObject({ rate: '6.0%', detail: '6 of 100 visits' });
   });
 
   it('is empty when the project has no conversion event', () => {
     expect(
-      deviceConversions([
-        { value: 'mobile', visits: 10, conversions: null, convertingVisits: null },
-      ]),
+      deviceConversions(
+        [{ value: 'mobile', visits: 10, conversions: null, convertingVisits: null }],
+        english,
+      ),
     ).toEqual([]);
   });
 
   it('shows a dash for a device type without visits', () => {
-    const [none] = deviceConversions([
-      { value: 'tablet', visits: 0, conversions: 0, convertingVisits: null },
-    ]);
+    const [none] = deviceConversions(
+      [{ value: 'tablet', visits: 0, conversions: 0, convertingVisits: null }],
+      english,
+    );
 
     expect(none?.rate).toBe('—');
     expect(none?.barWidth).toBe('0.0%');

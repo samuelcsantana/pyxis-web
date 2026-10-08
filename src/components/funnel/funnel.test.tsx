@@ -5,6 +5,7 @@ import { countedSteps, type FunnelStep, funnelRows } from '@/domain/funnel';
 import { FunnelEditor } from './funnel-editor';
 import { FunnelModes } from './funnel-modes';
 import { FunnelSteps } from './funnel-steps';
+import { english } from '@/test-utils/english';
 
 const CALCULATOR: FunnelStep = { type: 'page', path: '/calculator' };
 const RESULT: FunnelStep = { type: 'event', name: 'calculator_result_shown' };
@@ -34,6 +35,7 @@ describe('FunnelSteps', () => {
         mode="visit"
         rows={funnelRows(
           countedSteps(STEPS, { steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }] }),
+          english,
         )}
       />,
     );

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { VisitSummary } from './visits';
-import { VISITS_TABLE_LABEL, visitsCsvTable } from './visits-export';
+import { english } from '@/test-utils/english';
+import { visitsCsvTable, visitsTableLabel } from './visits-export';
 
 const VISIT: VisitSummary = {
   sessionId: '0f1e2d3c-4b5a-4968-8776-655443322110',
@@ -79,6 +80,6 @@ describe('visitsCsvTable', () => {
   });
 
   it('names the link after the most visits a file holds', () => {
-    expect(VISITS_TABLE_LABEL).toBe('Newest 1,000 visits');
+    expect(visitsTableLabel(english)).toBe('Newest 1,000 visits');
   });
 });

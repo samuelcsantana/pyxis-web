@@ -14,7 +14,8 @@ import {
   visitRows,
   type VisitsSearch,
 } from '@/domain/visits';
-import { VISITS_TABLE_LABEL } from '@/domain/visits-export';
+import { visitsTableLabel } from '@/domain/visits-export';
+import { getI18n } from '@/i18n/get-messages';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -50,6 +51,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const kept = visitFilterParameters(filters);
   const filtered = hasVisitFilters(filters);
   const listQuery = withKeptParameters(periodQuery(period), kept);
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -60,6 +62,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
         keep={kept}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <VisitFiltersForm
@@ -69,10 +72,11 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           filters={filters}
           problems={problems}
           clearHref={filtered ? `${basePath}?${periodQuery(period)}` : null}
+          i18n={i18n}
         />
         <VisitsTable
           key={`visits?${listQuery}`}
-          rows={visitRows(report.visits, project.timezone)}
+          rows={visitRows(report.visits, project.timezone, i18n)}
           nextCursor={report.nextCursor}
           timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
           emptyMessage={emptyMessage(filtered)}
@@ -84,7 +88,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
         />
         <CsvDownloads
           downloads={[
-            { label: VISITS_TABLE_LABEL, href: exportHref(project.id, 'visits', listQuery) },
+            { label: visitsTableLabel(i18n), href: exportHref(project.id, 'visits', listQuery) },
           ]}
         />
         <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>

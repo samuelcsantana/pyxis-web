@@ -3,6 +3,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { routeRows } from '@/domain/requests';
 import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
+import { english } from '@/test-utils/english';
 
 const ROWS = routeRows(
   demoRequestsReport(
@@ -13,12 +14,14 @@ const ROWS = routeRows(
   ).routes,
   'America/Sao_Paulo',
   'writes',
+  english,
 );
 
 const FAILED_READS = routeRows(
   demoFailedReadsReport('demo', { from: '2026-09-06', to: '2026-10-05' }, null).routes,
   'America/Sao_Paulo',
   'reads',
+  english,
 );
 
 const meta = {

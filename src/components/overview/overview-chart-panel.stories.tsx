@@ -4,6 +4,7 @@ import { ACTIVITY, overviewChart } from '@/domain/overview-chart';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { expect, userEvent, within } from 'storybook/test';
 import { OverviewChartPanel } from './overview-chart-panel';
+import { english } from '@/test-utils/english';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -14,7 +15,11 @@ const meta = {
   title: 'Overview/Chart panel',
   component: OverviewChartPanel,
   tags: ['autodocs'],
-  args: { chart: overviewChart(STORY_REPORT, ACTIVITY), periodLabel: 'last 30 days' },
+  args: {
+    i18n: english,
+    chart: overviewChart(STORY_REPORT, ACTIVITY, english),
+    periodLabel: 'last 30 days',
+  },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
@@ -31,27 +36,29 @@ type Story = StoryObj<typeof meta>;
 export const Activity: Story = {};
 
 export const WithoutPreviousPeriod: Story = {
-  args: { chart: overviewChart(WITHOUT_PREVIOUS, ACTIVITY) },
+  args: { chart: overviewChart(WITHOUT_PREVIOUS, ACTIVITY, english) },
 };
 
-export const Visits: Story = { args: { chart: overviewChart(STORY_REPORT, 'visits') } };
+export const Visits: Story = { args: { chart: overviewChart(STORY_REPORT, 'visits', english) } };
 
 export const IdentifiedUsers: Story = {
-  args: { chart: overviewChart(STORY_REPORT, 'identified-users') },
+  args: { chart: overviewChart(STORY_REPORT, 'identified-users', english) },
 };
 
-export const Conversions: Story = { args: { chart: overviewChart(STORY_REPORT, 'conversions') } };
+export const Conversions: Story = {
+  args: { chart: overviewChart(STORY_REPORT, 'conversions', english) },
+};
 
 export const WriteErrorRate: Story = {
-  args: { chart: overviewChart(STORY_REPORT, 'write-errors') },
+  args: { chart: overviewChart(STORY_REPORT, 'write-errors', english) },
 };
 
 export const VisitsWithoutPreviousPeriod: Story = {
-  args: { chart: overviewChart(WITHOUT_PREVIOUS, 'visits') },
+  args: { chart: overviewChart(WITHOUT_PREVIOUS, 'visits', english) },
 };
 
 export const AsTable: Story = {
-  args: { chart: overviewChart(STORY_REPORT, 'visits') },
+  args: { chart: overviewChart(STORY_REPORT, 'visits', english) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: 'Table' }));
@@ -69,6 +76,7 @@ export const SingleDay: Story = {
         previousDays: STORY_REPORT.previousDays?.slice(-1) ?? null,
       },
       ACTIVITY,
+      english,
     ),
     periodLabel: 'today',
   },
@@ -82,6 +90,7 @@ export const Empty: Story = {
         days: STORY_REPORT.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
       },
       ACTIVITY,
+      english,
     ),
   },
 };
@@ -98,6 +107,7 @@ export const QuietDays: Story = {
         })),
       },
       ACTIVITY,
+      english,
     ),
   },
 };

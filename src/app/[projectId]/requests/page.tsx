@@ -28,6 +28,7 @@ import {
   visibleRoutes,
 } from '@/domain/requests';
 import { REQUESTS_TABLE_LABELS } from '@/domain/requests-export';
+import { getI18n } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -112,6 +113,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
   );
   const basePath = screenHref(project.id, 'requests');
   const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -122,6 +124,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
         keep={filterParameters(filter)}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <LinkTabs
@@ -143,7 +146,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
         ) : (
           <>
             <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
-              {requestFigures(kind, report.routes).map((figure) => (
+              {requestFigures(kind, report.routes, i18n).map((figure) => (
                 <StatCard
                   key={figure.id}
                   id={figure.id}
@@ -168,6 +171,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 visibleRoutes(report.routes, filter.failingOnly),
                 project.timezone,
                 kind,
+                i18n,
               )}
               basePath={basePath}
               query={filterQuery(period, { ...filter, screen: null })}

@@ -1,5 +1,6 @@
 import { formatCount } from '@/domain/metrics';
 import { activityTotals, type DayActivity } from '@/domain/overview';
+import type { I18n } from '@/i18n/i18n';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 const HEADING_ID = 'day-activity-heading';
@@ -7,9 +8,10 @@ const HEADING_ID = 'day-activity-heading';
 export interface DayActivityFiguresProps {
   readonly days: readonly DayActivity[];
   readonly periodLabel: string;
+  readonly i18n: I18n;
 }
 
-export function DayActivityFigures({ days, periodLabel }: DayActivityFiguresProps) {
+export function DayActivityFigures({ days, periodLabel, i18n }: DayActivityFiguresProps) {
   const totals = activityTotals(days);
   const figures = [
     { label: 'Page views', value: totals.pageViews, swatch: 'bg-sky' },
@@ -31,7 +33,7 @@ export function DayActivityFigures({ days, periodLabel }: DayActivityFiguresProp
               {figure.label}
             </dt>
             <dd className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:text-[28px] sm:leading-8">
-              {formatCount(figure.value)}
+              {formatCount(figure.value, i18n)}
             </dd>
           </div>
         ))}

@@ -11,6 +11,7 @@ import {
   type OverviewChart,
   type SeriesColor,
 } from '@/domain/overview-chart';
+import type { I18n } from '@/i18n/i18n';
 import { ChartFrame } from '@/components/charts/chart-frame';
 import { ChartHover, type HoverDay } from '@/components/charts/chart-hover';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
@@ -49,6 +50,7 @@ const PREVIOUS_OPACITY = 0.6;
 export interface OverviewChartPanelProps {
   readonly chart: OverviewChart;
   readonly periodLabel: string;
+  readonly i18n: I18n;
 }
 
 function SeriesLines({ chart, axis }: { readonly chart: OverviewChart; readonly axis: ValueAxis }) {
@@ -78,8 +80,8 @@ function SeriesLines({ chart, axis }: { readonly chart: OverviewChart; readonly 
   ));
 }
 
-function hoverDays(chart: OverviewChart): readonly HoverDay[] {
-  return chartDays(chart).map(({ day, points }) => ({
+function hoverDays(chart: OverviewChart, i18n: I18n): readonly HoverDay[] {
+  return chartDays(chart, i18n).map(({ day, points }) => ({
     label: day,
     rows: points.map((point) => ({
       label: point.label,
@@ -91,24 +93,25 @@ function hoverDays(chart: OverviewChart): readonly HoverDay[] {
   }));
 }
 
-function Chart({ chart }: { readonly chart: OverviewChart }) {
+function Chart({ chart, i18n }: { readonly chart: OverviewChart; readonly i18n: I18n }) {
   const axis = valueAxis(chartValues(chart));
   return (
     <ChartFrame
-      summary={chartSummary(chart)}
+      summary={chartSummary(chart, i18n)}
       heightClassName="h-44 sm:h-60"
       axis={axis}
       dates={chart.dates}
       layout="points"
-      formatTick={(tick) => formatChartValue(tick, chart.format)}
-      hover={<ChartHover days={hoverDays(chart)} layout="points" />}
+      formatTick={(tick) => formatChartValue(tick, chart.format, i18n)}
+      hover={<ChartHover days={hoverDays(chart, i18n)} layout="points" />}
+      i18n={i18n}
     >
       <SeriesLines chart={chart} axis={axis} />
     </ChartFrame>
   );
 }
 
-function ChartTable({ chart, periodLabel }: OverviewChartPanelProps) {
+function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
   const caption = chartCaption(chart, periodLabel);
   const columns = chartColumns(chart);
   return (
@@ -137,7 +140,7 @@ function ChartTable({ chart, periodLabel }: OverviewChartPanelProps) {
           </tr>
         </thead>
         <tbody>
-          {chartRows(chart).map((row) => (
+          {chartRows(chart, i18n).map((row) => (
             <tr key={row.day}>
               <th scope="row" className={`${BODY_CELL} text-left font-normal`}>
                 {row.day}
@@ -168,7 +171,7 @@ function PreviousPeriodLegend({ total }: { readonly total: string | null }) {
   );
 }
 
-export function OverviewChartPanel({ chart, periodLabel }: OverviewChartPanelProps) {
+export function OverviewChartPanel({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
   return (
     <ChartPanel
       title={chart.title}
@@ -188,8 +191,8 @@ export function OverviewChartPanel({ chart, periodLabel }: OverviewChartPanelPro
           )}
         </>
       }
-      chart={<Chart chart={chart} />}
-      table={<ChartTable chart={chart} periodLabel={periodLabel} />}
+      chart={<Chart chart={chart} i18n={i18n} />}
+      table={<ChartTable chart={chart} periodLabel={periodLabel} i18n={i18n} />}
     />
   );
 }

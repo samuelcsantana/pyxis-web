@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { TopEventsList } from './top-events-list';
+import { english } from '@/test-utils/english';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -14,7 +15,7 @@ const meta = {
   title: 'Overview/Top events',
   component: TopEventsList,
   tags: ['autodocs'],
-  args: { events: STORY_REPORT.topEvents, visitsHref },
+  args: { i18n: english, events: STORY_REPORT.topEvents, visitsHref },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (

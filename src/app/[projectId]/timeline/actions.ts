@@ -8,6 +8,7 @@ import {
   type VisitView,
   visitViews,
 } from '@/domain/timeline';
+import { getI18n } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
 
@@ -32,7 +33,7 @@ export async function loadOlderVisits(
     createTimelineService().timeline(project.id, lookup, before),
   );
   return {
-    visits: visitViews(report.visits, project.timezone, timelineFilterOf(search)),
+    visits: visitViews(report.visits, project.timezone, timelineFilterOf(search), await getI18n()),
     nextBefore: report.nextBefore,
   };
 }

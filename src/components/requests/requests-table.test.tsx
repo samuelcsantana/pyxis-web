@@ -5,6 +5,7 @@ import { routeRows } from '@/domain/requests';
 import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
 import { methodClass } from './status-styles';
+import { english } from '@/test-utils/english';
 
 vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),
@@ -19,6 +20,7 @@ const ROWS = routeRows(
   ).routes,
   'UTC',
   'writes',
+  english,
 );
 
 function renderTable() {
@@ -209,7 +211,7 @@ describe('RequestsTable', () => {
     render(
       <RequestsTable
         kind="reads"
-        rows={routeRows(report.routes, 'UTC', 'reads')}
+        rows={routeRows(report.routes, 'UTC', 'reads', english)}
         basePath="/p1/requests"
         query="range=7d&kind=reads"
         timelinePath="/p1/timeline"

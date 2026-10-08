@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { countryLabel, shareRows } from '@/domain/devices';
 import { demoDevicesReport } from '@/services/devices/demo-devices';
 import { CountriesTable } from './countries-table';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoDevicesReport('demo', { from: '2026-09-06', to: '2026-10-05' });
 
@@ -9,7 +10,7 @@ const meta = {
   title: 'Devices/Countries',
   component: CountriesTable,
   tags: ['autodocs'],
-  args: { rows: shareRows(REPORT.countries, countryLabel) },
+  args: { rows: shareRows(REPORT.countries, countryLabel, english) },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
@@ -32,6 +33,7 @@ export const OnlyUnknownCountries: Story = {
     rows: shareRows(
       [{ value: 'other', visits: 12, conversions: null, convertingVisits: null }],
       countryLabel,
+      english,
     ),
   },
 };

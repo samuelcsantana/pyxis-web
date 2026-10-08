@@ -1,8 +1,8 @@
+import type { I18n } from '@/i18n/i18n';
 import {
   countChange,
   formatCount,
   formatPercent,
-  formatQuantity,
   NO_CHANGE,
   pointChange,
   rate,
@@ -97,11 +97,11 @@ const FAILING_ROUTES: KpiDrillDown = {
   filter: { show: FAILING_ONLY } satisfies RequestsSearch,
 };
 
-function countKpi(kpi: Kpi, text: KpiText, comparison: string): KpiView {
-  const change = countChange(kpi.current, kpi.previous);
+function countKpi(kpi: Kpi, text: KpiText, comparison: string, i18n: I18n): KpiView {
+  const change = countChange(kpi.current, kpi.previous, i18n);
   return {
     ...text,
-    value: formatCount(kpi.current),
+    value: formatCount(kpi.current, i18n),
     change: change.text,
     tone: toneOf(change.trend, 'up'),
     comparison,
@@ -117,21 +117,23 @@ function failureRate(count: FailureCount): number | null {
 function writeErrorsKpi(
   writeErrors: OverviewReport['kpis']['writeErrors'],
   comparison: string,
+  i18n: I18n,
 ): KpiView {
   const current = failureRate(writeErrors.current);
   const change = pointChange(
     current,
     failureRate(writeErrors.previous),
     Math.min(writeErrors.current.total, writeErrors.previous.total),
+    i18n,
   );
   return {
     id: 'write-errors',
     label: 'Write error rate',
-    value: formatPercent(current),
+    value: formatPercent(current, i18n),
     change: change.text,
     tone: toneOf(change.trend, 'down'),
     comparison,
-    note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
+    note: `${formatCount(writeErrors.current.failed, i18n)} of ${i18n.t('counts.write', { count: writeErrors.current.total })} failed`,
     series: writeErrors.daily.map(failureRate),
     drillDown: writeErrors.current.failed > 0 ? FAILING_ROUTES : null,
   };
@@ -156,26 +158,32 @@ export interface ComparedPeriod {
   readonly endsToday: boolean;
 }
 
-function wholeDaysNote(days: number): string {
-  return days === 1 ? 'vs. the day before' : `vs. previous ${formatCount(days)} days`;
+function wholeDaysNote(days: number, i18n: I18n): string {
+  return days === 1 ? 'vs. the day before' : `vs. previous ${formatCount(days, i18n)} days`;
 }
 
-function unfinishedTodayNote(days: number): string {
+function unfinishedTodayNote(days: number, i18n: I18n): string {
   return days === 1
     ? 'so far today vs. all of yesterday'
-    : `vs. previous ${formatCount(days)} full days`;
+    : `vs. previous ${formatCount(days, i18n)} full days`;
 }
 
-export function previousPeriodNote(comparison: Comparison, period: ComparedPeriod): string {
+export function previousPeriodNote(
+  comparison: Comparison,
+  period: ComparedPeriod,
+  i18n: I18n,
+): string {
   switch (comparison.kind) {
     case 'same-time':
       return period.days === 1
         ? `vs. yesterday until ${comparison.until}`
-        : `vs. previous ${formatCount(period.days)} days, until ${comparison.until}`;
+        : `vs. previous ${formatCount(period.days, i18n)} days, until ${comparison.until}`;
     case 'whole-days':
-      return wholeDaysNote(period.days);
+      return wholeDaysNote(period.days, i18n);
     case 'unknown':
-      return period.endsToday ? unfinishedTodayNote(period.days) : wholeDaysNote(period.days);
+      return period.endsToday
+        ? unfinishedTodayNote(period.days, i18n)
+        : wholeDaysNote(period.days, i18n);
   }
 }
 
@@ -190,8 +198,8 @@ function withoutJudgement(kpi: KpiView): KpiView {
   return { ...kpi, tone: 'neutral' };
 }
 
-function shareOfVisits(converted: number, visits: number): string {
-  return `${formatPercent(rate(converted, visits))} of ${formatQuantity(visits, 'visit', 'visits')}`;
+function shareOfVisits(converted: number, visits: number, i18n: I18n): string {
+  return `${formatPercent(rate(converted, visits), i18n)} of ${i18n.t('counts.visit', { count: visits })}`;
 }
 
 interface ConversionFigures {
@@ -207,23 +215,26 @@ const CONVERSIONS_LABEL = 'Conversions';
 function conversionsKpi(
   { event, conversions, convertingVisits, visits }: ConversionFigures,
   comparison: string,
+  i18n: I18n,
 ): KpiView {
   const drillDown = visitsDrillDown('See converting visits', { event });
   if (convertingVisits === null) {
-    const note = `${event} · ${shareOfVisits(conversions.current, visits.current)}`;
+    const note = `${event} · ${shareOfVisits(conversions.current, visits.current, i18n)}`;
     return countKpi(
       conversions,
       { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
       comparison,
+      i18n,
     );
   }
-  const share = shareOfVisits(convertingVisits.current, visits.current);
-  const events = formatQuantity(conversions.current, 'conversion event', 'conversion events');
+  const share = shareOfVisits(convertingVisits.current, visits.current, i18n);
+  const events = i18n.t('counts.conversionEvent', { count: conversions.current });
   const note = `${share} sent ${event} · ${events}`;
   return countKpi(
     convertingVisits,
     { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
     comparison,
+    i18n,
   );
 }
 
@@ -231,9 +242,10 @@ export function overviewKpis(
   report: OverviewReport,
   period: ComparedPeriod,
   conversionEvent: string | null,
+  i18n: I18n,
 ): readonly KpiView[] {
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
-  const comparison = previousPeriodNote(report.comparison, period);
+  const comparison = previousPeriodNote(report.comparison, period, i18n);
   const kpis = [
     countKpi(
       visits,
@@ -244,6 +256,7 @@ export function overviewKpis(
         drillDown: visitsDrillDown('See the visits', {}),
       },
       comparison,
+      i18n,
     ),
     countKpi(
       identifiedUsers,
@@ -254,6 +267,7 @@ export function overviewKpis(
         drillDown: visitsDrillDown('See identified visits', { identity: 'identified' }),
       },
       comparison,
+      i18n,
     ),
     ...(conversions === null || conversionEvent === null
       ? []
@@ -261,9 +275,10 @@ export function overviewKpis(
           conversionsKpi(
             { event: conversionEvent, conversions, convertingVisits, visits },
             comparison,
+            i18n,
           ),
         ]),
-    writeErrorsKpi(writeErrors, comparison),
+    writeErrorsKpi(writeErrors, comparison, i18n),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)
     ? kpis.map(withoutJudgement)

@@ -1,4 +1,5 @@
-import { barWidth, formatCount, formatPercent, formatQuantity, rate } from './metrics';
+import type { I18n } from '@/i18n/i18n';
+import { barWidth, formatCount, formatPercent, rate } from './metrics';
 import type { DevicesReport, DevicesWire } from './devices.schema';
 
 export type { DevicesReport, DevicesWire };
@@ -10,7 +11,6 @@ const OTHER_LABEL = 'Other';
 const OTHER_COUNTRIES_LABEL = 'Other countries';
 const OTHER_COUNTRIES_CODE = '··';
 const REGION_CODE = /^[A-Z]{2}$/;
-const REGION_NAMES = new Intl.DisplayNames(['en'], { type: 'region', fallback: 'code' });
 
 const DEVICE_TYPE_LABELS: Readonly<Record<string, string>> = {
   mobile: 'Mobile',
@@ -36,7 +36,7 @@ const OPERATING_SYSTEM_LABELS: Readonly<Record<string, string>> = {
   chromeos: 'ChromeOS',
 };
 
-export type ValueLabeller = (value: string) => string;
+export type ValueLabeller = (value: string, i18n: I18n) => string;
 
 function labelling(labels: Readonly<Record<string, string>>): ValueLabeller {
   return (value) => (value === OTHER_VALUE ? OTHER_LABEL : (labels[value] ?? value));
@@ -46,11 +46,11 @@ export const deviceTypeLabel = labelling(DEVICE_TYPE_LABELS);
 export const browserLabel = labelling(BROWSER_LABELS);
 export const operatingSystemLabel = labelling(OPERATING_SYSTEM_LABELS);
 
-export function countryLabel(value: string): string {
+export function countryLabel(value: string, i18n: I18n): string {
   if (value === OTHER_VALUE) {
     return OTHER_COUNTRIES_LABEL;
   }
-  return REGION_CODE.test(value) ? String(REGION_NAMES.of(value)) : value;
+  return REGION_CODE.test(value) ? i18n.format.region(value) : value;
 }
 
 export function countryCode(value: string): string {
@@ -74,25 +74,26 @@ function convertedVisits(share: ValueShare): number | null {
   return share.conversions === null ? null : (share.convertingVisits ?? share.conversions);
 }
 
-function conversionRateOf(share: ValueShare): string | null {
+function conversionRateOf(share: ValueShare, i18n: I18n): string | null {
   const converted = convertedVisits(share);
-  return converted === null ? null : formatPercent(rate(converted, share.visits));
+  return converted === null ? null : formatPercent(rate(converted, share.visits), i18n);
 }
 
 export function shareRows(
   values: readonly ValueShare[],
   label: ValueLabeller,
+  i18n: I18n,
 ): readonly ShareRow[] {
   const total = values.reduce((sum, share) => sum + share.visits, 0);
   return values.map((share) => {
     const fraction = rate(share.visits, total);
     return {
       value: share.value,
-      label: label(share.value),
-      visits: formatCount(share.visits),
-      share: formatPercent(fraction),
+      label: label(share.value, i18n),
+      visits: formatCount(share.visits, i18n),
+      share: formatPercent(fraction, i18n),
       fraction: fraction ?? 0,
-      conversionRate: conversionRateOf(share),
+      conversionRate: conversionRateOf(share, i18n),
     };
   });
 }
@@ -108,7 +109,10 @@ export interface DeviceConversion {
   readonly barWidth: string;
 }
 
-export function deviceConversions(deviceTypes: readonly ValueShare[]): readonly DeviceConversion[] {
+export function deviceConversions(
+  deviceTypes: readonly ValueShare[],
+  i18n: I18n,
+): readonly DeviceConversion[] {
   const counted = deviceTypes.flatMap((share) => {
     const converted = convertedVisits(share);
     return converted === null ? [] : [{ ...share, converted }];
@@ -119,9 +123,9 @@ export function deviceConversions(deviceTypes: readonly ValueShare[]): readonly 
   }));
   const best = Math.max(0, ...rated.map((share) => share.rate ?? 0));
   return rated.map((share) => ({
-    label: deviceTypeLabel(share.value),
-    rate: formatPercent(share.rate),
-    detail: `${formatCount(share.converted)} of ${formatQuantity(share.visits, 'visit', 'visits')}`,
+    label: deviceTypeLabel(share.value, i18n),
+    rate: formatPercent(share.rate, i18n),
+    detail: `${formatCount(share.converted, i18n)} of ${i18n.t('counts.visit', { count: share.visits })}`,
     barWidth: barWidth(share.rate ?? 0, best),
   }));
 }

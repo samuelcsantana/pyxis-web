@@ -9,6 +9,7 @@ import {
 } from '@/domain/chart-scale';
 import { formatCount } from '@/domain/metrics';
 import { formatDay } from '@/domain/period';
+import type { I18n } from '@/i18n/i18n';
 
 const VIEW_BOX = `0 0 ${String(PLOT_SIZE)} ${String(PLOT_SIZE)}`;
 
@@ -26,15 +27,18 @@ export interface ChartFrameProps {
   readonly layout: DayLayout;
   readonly formatTick?: (tick: number) => string;
   readonly hover?: ReactNode;
+  readonly i18n: I18n;
   readonly children: ReactNode;
 }
 
 function DayLabelRow({
   labels,
   className,
+  i18n,
 }: {
   readonly labels: readonly DayLabel[];
   readonly className: string;
+  readonly i18n: I18n;
 }) {
   return (
     <div className={`absolute inset-0 ${className}`}>
@@ -44,7 +48,7 @@ function DayLabelRow({
           className={`absolute top-1 whitespace-nowrap ${ANCHOR_CLASSES[label.anchor]}`}
           style={{ left: cssPercent(label.at) }}
         >
-          {formatDay(label.date)}
+          {formatDay(label.date, i18n)}
         </span>
       ))}
     </div>
@@ -57,10 +61,12 @@ export function ChartFrame({
   axis,
   dates,
   layout,
-  formatTick = formatCount,
+  formatTick,
   hover,
+  i18n,
   children,
 }: ChartFrameProps) {
+  const tickLabel = formatTick ?? ((tick: number) => formatCount(tick, i18n));
   const labels = dayLabelSets(dates, layout);
   return (
     <figure
@@ -75,7 +81,7 @@ export function ChartFrame({
             className="absolute right-2 -translate-y-1/2 tabular-nums"
             style={{ top: offsetFromTop(tick, axis.top) }}
           >
-            {formatTick(tick)}
+            {tickLabel(tick)}
           </span>
         ))}
       </div>
@@ -97,8 +103,8 @@ export function ChartFrame({
         {hover}
       </div>
       <div className="@container relative col-start-2">
-        <DayLabelRow labels={labels.narrow} className="@md:hidden" />
-        <DayLabelRow labels={labels.wide} className="hidden @md:block" />
+        <DayLabelRow labels={labels.narrow} className="@md:hidden" i18n={i18n} />
+        <DayLabelRow labels={labels.wide} className="hidden @md:block" i18n={i18n} />
       </div>
     </figure>
   );

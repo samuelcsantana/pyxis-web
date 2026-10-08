@@ -1,4 +1,5 @@
-import { barWidth, formatCount, formatPercent, formatQuantity, rate } from './metrics';
+import type { I18n } from '@/i18n/i18n';
+import { barWidth, formatCount, formatPercent, rate } from './metrics';
 import type { REQUEST_KINDS, RequestsReport, RequestsWire } from './requests.schema';
 
 export type { RequestsReport, RequestsWire };
@@ -77,68 +78,64 @@ export interface Figure {
   readonly note: string;
 }
 
-export function writesFigure(routes: readonly RouteReport[]): Figure {
+export function writesFigure(routes: readonly RouteReport[], i18n: I18n): Figure {
   return {
-    value: formatCount(failureCounts(routes).total),
+    value: formatCount(failureCounts(routes).total, i18n),
     note: 'POST, PUT, PATCH and DELETE calls from the browser',
   };
 }
 
-function failureKinds(counts: FailureCounts): string {
+function failureKinds(counts: FailureCounts, i18n: I18n): string {
   return [
-    counts.client === 0
-      ? null
-      : formatQuantity(counts.client, 'client error (4xx)', 'client errors (4xx)'),
-    counts.server === 0
-      ? null
-      : formatQuantity(counts.server, 'server error (5xx)', 'server errors (5xx)'),
-    counts.noResponse === 0 ? null : `${formatCount(counts.noResponse)} with no response`,
+    counts.client === 0 ? null : i18n.t('counts.clientError', { count: counts.client }),
+    counts.server === 0 ? null : i18n.t('counts.serverError', { count: counts.server }),
+    counts.noResponse === 0 ? null : `${formatCount(counts.noResponse, i18n)} with no response`,
   ]
     .filter((part) => part !== null)
     .join(', ');
 }
 
-export function errorRateFigure(routes: readonly RouteReport[]): Figure {
+export function errorRateFigure(routes: readonly RouteReport[], i18n: I18n): Figure {
   const counts = failureCounts(routes);
   return {
-    value: formatPercent(rate(counts.failed, counts.total)),
+    value: formatPercent(rate(counts.failed, counts.total), i18n),
     note:
       counts.failed === 0
-        ? `No failures in ${formatQuantity(counts.total, 'write', 'writes')}`
-        : `${formatCount(counts.failed)} failed: ${failureKinds(counts)}`,
+        ? `No failures in ${i18n.t('counts.write', { count: counts.total })}`
+        : `${formatCount(counts.failed, i18n)} failed: ${failureKinds(counts, i18n)}`,
   };
 }
 
 const NO_FAILED_READ = 'No read failed in this period';
 
-export function failedReadsFigure(routes: readonly RouteReport[]): Figure {
+export function failedReadsFigure(routes: readonly RouteReport[], i18n: I18n): Figure {
   const counts = failureCounts(routes);
   return {
-    value: formatCount(counts.failed),
-    note: counts.failed === 0 ? NO_FAILED_READ : failureKinds(counts),
+    value: formatCount(counts.failed, i18n),
+    note: counts.failed === 0 ? NO_FAILED_READ : failureKinds(counts, i18n),
   };
 }
 
-export function failingRoutesFigure(routes: readonly RouteReport[]): Figure {
+export function failingRoutesFigure(routes: readonly RouteReport[], i18n: I18n): Figure {
   const failing = routes.filter((route) => route.failed > 0);
   const most = failing.reduce<RouteReport | undefined>(
     (best, route) => (best === undefined || route.failed > best.failed ? route : best),
     undefined,
   );
   return {
-    value: formatCount(failing.length),
+    value: formatCount(failing.length, i18n),
     note:
       most === undefined
         ? NO_FAILED_READ
-        : `Most: ${most.method} ${most.route}, ${formatQuantity(most.failed, 'failure', 'failures')}`,
+        : `Most: ${most.method} ${most.route}, ${i18n.t('counts.failure', { count: most.failed })}`,
   };
 }
 
-export function formatDuration(milliseconds: number): string {
-  return `${formatCount(milliseconds)} ms`;
+export function formatDuration(milliseconds: number, i18n: I18n): string {
+  return `${formatCount(milliseconds, i18n)} ms`;
 }
 
-export function slowestRouteFigure(routes: readonly RouteReport[]): Figure {
+export function slowestRouteFigure(routes: readonly RouteReport[], i18n: I18n): Figure {
   const slowest = routes.reduce<RouteReport | undefined>(
     (best, route) =>
       best === undefined || route.medianDurationMs > best.medianDurationMs ? route : best,
@@ -147,7 +144,7 @@ export function slowestRouteFigure(routes: readonly RouteReport[]): Figure {
   return slowest === undefined
     ? { value: '—', note: 'No writes in this period' }
     : {
-        value: formatDuration(slowest.medianDurationMs),
+        value: formatDuration(slowest.medianDurationMs, i18n),
         note: `median of ${slowest.method} ${slowest.route}`,
       };
 }
@@ -160,16 +157,17 @@ export interface RequestFigure extends Figure {
 export function requestFigures(
   kind: RequestKind,
   routes: readonly RouteReport[],
+  i18n: I18n,
 ): readonly RequestFigure[] {
   return kind === FAILED_READS
     ? [
-        { id: 'failed-reads', label: 'Failed reads', ...failedReadsFigure(routes) },
-        { id: 'failing-routes', label: 'Routes failing', ...failingRoutesFigure(routes) },
+        { id: 'failed-reads', label: 'Failed reads', ...failedReadsFigure(routes, i18n) },
+        { id: 'failing-routes', label: 'Routes failing', ...failingRoutesFigure(routes, i18n) },
       ]
     : [
-        { id: 'writes', label: 'Writes', ...writesFigure(routes) },
-        { id: 'error-rate', label: 'Write error rate', ...errorRateFigure(routes) },
-        { id: 'slowest-route', label: 'Slowest route', ...slowestRouteFigure(routes) },
+        { id: 'writes', label: 'Writes', ...writesFigure(routes, i18n) },
+        { id: 'error-rate', label: 'Write error rate', ...errorRateFigure(routes, i18n) },
+        { id: 'slowest-route', label: 'Slowest route', ...slowestRouteFigure(routes, i18n) },
       ];
 }
 
@@ -209,54 +207,50 @@ export interface RouteRow {
   readonly failures: readonly FailureRow[];
 }
 
-function failureTime(timeZone: string): Intl.DateTimeFormat {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  });
-}
-
-function routeSummary(route: RouteReport, kind: RequestKind, errorShare: string, median: string) {
+function routeSummary(
+  route: RouteReport,
+  kind: RequestKind,
+  shares: { readonly errorShare: string; readonly median: string },
+  i18n: I18n,
+) {
+  const { errorShare, median } = shares;
   return kind === FAILED_READS
-    ? `${formatQuantity(route.failed, 'failed read', 'failed reads')} · median ${median}`
-    : `${formatQuantity(route.total, 'request', 'requests')} · ${errorShare} errors · median ${median}`;
+    ? `${i18n.t('counts.failedRead', { count: route.failed })} · median ${median}`
+    : `${i18n.t('counts.request', { count: route.total })} · ${errorShare} errors · median ${median}`;
 }
 
 export function routeRows(
   routes: readonly RouteReport[],
   timeZone: string,
   kind: RequestKind,
+  i18n: I18n,
 ): readonly RouteRow[] {
-  const time = failureTime(timeZone);
+  const time = i18n.format.dateTime('failureTime', timeZone);
   return routes.map((route) => {
-    const errorShare = formatPercent(rate(route.failed, route.total));
-    const median = formatDuration(route.medianDurationMs);
+    const errorShare = formatPercent(rate(route.failed, route.total), i18n);
+    const median = formatDuration(route.medianDurationMs, i18n);
     return {
       key: `${route.method} ${route.route}`,
       method: route.method,
       route: route.route,
-      total: formatCount(route.total),
-      successShare: formatPercent(rate(route.total - route.failed, route.total)),
+      total: formatCount(route.total, i18n),
+      successShare: formatPercent(rate(route.total - route.failed, route.total), i18n),
       errorShare,
       successWidth: barWidth(route.total - route.failed, route.total),
       hasFailures: route.failed > 0,
       statuses: route.statuses.map((entry) => ({
-        label: `${statusLabel(entry.status)} × ${formatCount(entry.count)}`,
+        label: `${statusLabel(entry.status)} × ${formatCount(entry.count, i18n)}`,
         tone: statusTone(entry.status),
       })),
       median,
-      summary: routeSummary(route, kind, errorShare, median),
+      summary: routeSummary(route, kind, { errorShare, median }, i18n),
       screens: route.screens.map((screen) => ({
         path: screen.path,
-        failed: `${formatCount(screen.failed)} failed`,
+        failed: `${formatCount(screen.failed, i18n)} failed`,
       })),
       failures: route.recentFailures.map((failure, index) => ({
         key: `${failure.occurredAt}-${String(index)}`,
-        when: time.format(new Date(failure.occurredAt)),
+        when: time(new Date(failure.occurredAt)),
         status: statusLabel(failure.status),
         tone: statusTone(failure.status),
         errorCode: failure.errorCode,

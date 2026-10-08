@@ -3,6 +3,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows } from '@/domain/visits';
 import { demoVisitsReport } from '@/services/visits/demo-visit-list';
 import { VisitsTable } from './visits-table';
+import { english } from '@/test-utils/english';
 
 const TIME_ZONE = 'America/Sao_Paulo';
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
@@ -11,7 +12,7 @@ const FIRST = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
 const SECOND = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
 
 function loadOlder(): Promise<VisitRowsPage> {
-  return Promise.resolve({ rows: visitRows(SECOND.visits, TIME_ZONE), nextCursor: null });
+  return Promise.resolve({ rows: visitRows(SECOND.visits, TIME_ZONE, english), nextCursor: null });
 }
 
 function failing(): Promise<VisitRowsPage> {
@@ -27,7 +28,7 @@ const meta = {
   component: VisitsTable,
   tags: ['autodocs'],
   args: {
-    rows: visitRows(FIRST.visits, TIME_ZONE),
+    rows: visitRows(FIRST.visits, TIME_ZONE, english),
     nextCursor: FIRST.nextCursor,
     timelinePath: '/demo/timeline',
     emptyMessage: 'No visits in this period.',

@@ -5,6 +5,7 @@ import { TimelineFilters } from './timeline-filters';
 import { TimelineSearch } from './timeline-search';
 import { TimelineSummary } from './timeline-summary';
 import { VisitCard } from './visit-card';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoTimelineReport('demo', { kind: 'user', id: DEMO_USER_ID }, new Date());
 
@@ -16,7 +17,10 @@ function Story({ filter }: { readonly filter: (typeof TIMELINE_FILTERS)[number] 
         lookup={{ kind: 'user', id: DEMO_USER_ID }}
         hint={`Try ${DEMO_USER_ID}`}
       />
-      <TimelineSummary title={`User ${DEMO_USER_ID}`} totals={timelineTotals(REPORT.visits)} />
+      <TimelineSummary
+        title={`User ${DEMO_USER_ID}`}
+        totals={timelineTotals(REPORT.visits, english)}
+      />
       <TimelineFilters
         current={filter}
         links={TIMELINE_FILTERS.map((target) => ({
@@ -24,7 +28,7 @@ function Story({ filter }: { readonly filter: (typeof TIMELINE_FILTERS)[number] 
           href: `/demo/timeline?user=${DEMO_USER_ID}&show=${target}`,
         }))}
       />
-      {visitViews(REPORT.visits, 'America/Sao_Paulo', filter).map((visit) => (
+      {visitViews(REPORT.visits, 'America/Sao_Paulo', filter, english).map((visit) => (
         <VisitCard key={visit.key} visit={visit} />
       ))}
     </div>

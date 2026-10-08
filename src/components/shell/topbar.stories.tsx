@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { presetPeriod } from '@/domain/period';
+import { english } from '@/test-utils/english';
 import { Topbar, type TopbarWithPeriodProps } from './topbar';
 
 const TODAY = '2026-10-05';
@@ -12,6 +13,7 @@ const WITH_PERIOD: TopbarWithPeriodProps = {
   period: presetPeriod('30d', TODAY),
   today: TODAY,
   theme: 'light',
+  i18n: english,
 };
 
 const meta = {

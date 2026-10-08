@@ -4,6 +4,7 @@ import { featureRows } from '@/domain/features';
 import { FeatureSearch } from './feature-search';
 import { FeatureTable } from './feature-table';
 import { FeatureTabs } from './feature-tabs';
+import { english } from '@/test-utils/english';
 
 function visitsHref(name: string): string {
   return `/p1/visits?${new URLSearchParams({ range: '7d', event: name }).toString()}`;
@@ -76,7 +77,7 @@ describe('FeatureTable', () => {
     const { container } = render(
       <FeatureTable
         kind="events"
-        rows={featureRows(ITEMS, 'events', '')}
+        rows={featureRows(ITEMS, 'events', '', english)}
         query=""
         visitsHref={visitsHref}
       />,
@@ -96,6 +97,7 @@ describe('FeatureTable', () => {
           [{ name: '/orders/:id', count: 5, visits: 4, daily: [5] }],
           'screens',
           '',
+          english,
         )}
         query=""
         visitsHref={(path) => `/p1/visits?range=7d&path=${encodeURIComponent(path)}`}
@@ -114,7 +116,7 @@ describe('FeatureTable', () => {
     render(
       <FeatureTable
         kind="events"
-        rows={featureRows(ITEMS, 'events', '')}
+        rows={featureRows(ITEMS, 'events', '', english)}
         query=""
         visitsHref={visitsHref}
       />,

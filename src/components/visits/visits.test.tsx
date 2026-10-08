@@ -5,13 +5,14 @@ import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows } from '@/domain/visits
 import { demoVisitsReport } from '@/services/visits/demo-visit-list';
 import { VisitFiltersForm } from './visit-filters-form';
 import { VisitsTable } from './visits-table';
+import { english } from '@/test-utils/english';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
 const FIRST = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
 const SECOND = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
-const FIRST_ROWS = visitRows(FIRST.visits, 'America/Sao_Paulo');
-const SECOND_ROWS = visitRows(SECOND.visits, 'America/Sao_Paulo');
+const FIRST_ROWS = visitRows(FIRST.visits, 'America/Sao_Paulo', english);
+const SECOND_ROWS = visitRows(SECOND.visits, 'America/Sao_Paulo', english);
 const CURSOR = '2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02';
 
 function renderTable(loadOlder: (cursor: string) => Promise<VisitRowsPage>, nextCursor = CURSOR) {
@@ -87,6 +88,7 @@ describe('VisitsTable', () => {
     const [row] = visitRows(
       FIRST.visits.slice(0, 1).map((visit) => ({ ...visit, userId: 'u_check_visits' })),
       'UTC',
+      english,
     );
     render(
       <VisitsTable
@@ -116,6 +118,7 @@ describe('VisitsTable', () => {
         failedRequests: 2,
       })),
       'UTC',
+      english,
     );
     render(
       <VisitsTable
@@ -141,6 +144,7 @@ describe('VisitsTable', () => {
     const [row] = visitRows(
       FIRST.visits.slice(0, 1).map((visit) => ({ ...visit, failedRequests: 0 })),
       'UTC',
+      english,
     );
     render(
       <VisitsTable
@@ -281,6 +285,7 @@ describe('VisitFiltersForm', () => {
         }}
         problems={[]}
         clearHref="/p-store/visits?from=2026-09-01&to=2026-09-30"
+        i18n={english}
       />,
     );
 
@@ -325,6 +330,7 @@ describe('VisitFiltersForm', () => {
         filters={NO_VISIT_FILTERS}
         problems={['A property filter needs an event.']}
         clearHref={null}
+        i18n={english}
       />,
     );
 
@@ -350,6 +356,7 @@ describe('VisitFiltersForm', () => {
         filters={NO_VISIT_FILTERS}
         problems={[]}
         clearHref={null}
+        i18n={english}
       />,
     );
     const toggle = screen.getByRole('button', { name: 'Filters' });

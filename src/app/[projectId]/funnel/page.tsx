@@ -21,6 +21,8 @@ import {
 } from '@/domain/funnel';
 import { funnelStepsOf } from '@/domain/funnel.schema';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -71,6 +73,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             steps,
           ),
         );
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -81,6 +84,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
         keep={{ mode, ...stepsParameter(steps) }}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <FunnelModes
@@ -102,6 +106,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
           <FunnelReportView
             counted={countedSteps(steps, report)}
             mode={mode}
+            i18n={i18n}
             editor={
               <FunnelEditor
                 key={serializeSteps(steps)}
@@ -122,11 +127,12 @@ interface FunnelReportViewProps {
   readonly counted: ReturnType<typeof countedSteps>;
   readonly mode: FunnelMode;
   readonly editor: React.ReactNode;
+  readonly i18n: I18n;
 }
 
-function FunnelReportView({ counted, mode, editor }: FunnelReportViewProps) {
-  const overall = overallConversion(counted, mode);
-  const drop = biggestDropOff(counted);
+function FunnelReportView({ counted, mode, editor, i18n }: FunnelReportViewProps) {
+  const overall = overallConversion(counted, mode, i18n);
+  const drop = biggestDropOff(counted, i18n);
   return (
     <>
       {editor}
@@ -144,7 +150,7 @@ function FunnelReportView({ counted, mode, editor }: FunnelReportViewProps) {
           note={drop.note}
         />
       </div>
-      <FunnelSteps rows={funnelRows(counted)} mode={mode} />
+      <FunnelSteps rows={funnelRows(counted, i18n)} mode={mode} />
     </>
   );
 }

@@ -19,6 +19,7 @@ import { MetricSelection } from './metric-selection';
 import { OverviewChartPanel } from './overview-chart-panel';
 import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
+import { english } from '@/test-utils/english';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn() }),
@@ -48,7 +49,7 @@ describe('KpiGrid', () => {
     const { container } = render(
       <KpiGrid
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
     );
 
@@ -112,7 +113,7 @@ describe('KpiGrid', () => {
     render(
       <KpiGrid
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
     );
 
@@ -140,7 +141,7 @@ describe('KpiGrid', () => {
     render(
       <KpiGrid
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
     );
 
@@ -149,7 +150,7 @@ describe('KpiGrid', () => {
   });
 
   it('turns each card into a toggle that plots its figure, its link kept outside the toggle', () => {
-    const kpis = overviewKpis(REPORT, LAST_WEEK, 'signup_completed');
+    const kpis = overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english);
     render(
       <MetricSelection available={kpis.map((figure) => figure.id)}>
         <KpiGrid drillDownHref={drillDownHref} kpis={kpis} selectable />
@@ -209,7 +210,7 @@ describe('KpiGrid', () => {
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
-  const found = overviewKpis(REPORT, LAST_WEEK, 'signup_completed').find(
+  const found = overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english).find(
     (candidate) => candidate.id === id,
   );
   if (found === undefined) {
@@ -218,7 +219,7 @@ function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
   return found;
 }
 
-const ACTIVITY_CHART = overviewChart(REPORT, ACTIVITY);
+const ACTIVITY_CHART = overviewChart(REPORT, ACTIVITY, english);
 const WITHOUT_PREVIOUS = { ...REPORT, previousDays: null };
 
 function lines(figure: HTMLElement, color: string, period: 'current' | 'previous') {
@@ -227,7 +228,7 @@ function lines(figure: HTMLElement, color: string, period: 'current' | 'previous
 
 describe('OverviewChartPanel', () => {
   it('draws the chart with a summary in words and the totals beside the legend', () => {
-    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" i18n={english} />);
 
     expect(screen.getByRole('img')).toHaveAccessibleName(
       /^Line chart of 7 days\. Page views: .+ Dashed, the previous period\. Page views: /,
@@ -240,7 +241,7 @@ describe('OverviewChartPanel', () => {
   });
 
   it('draws each series as an unfilled line over its dashed previous period, on one scale', () => {
-    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" i18n={english} />);
 
     const figure = screen.getByRole('img');
     const { top } = valueAxis(chartValues(ACTIVITY_CHART));
@@ -264,8 +265,9 @@ describe('OverviewChartPanel', () => {
   it('draws no dashed line, and no legend for it, without a previous period', () => {
     render(
       <OverviewChartPanel
-        chart={overviewChart(WITHOUT_PREVIOUS, ACTIVITY)}
+        chart={overviewChart(WITHOUT_PREVIOUS, ACTIVITY, english)}
         periodLabel="last 7 days"
+        i18n={english}
       />,
     );
 
@@ -274,8 +276,8 @@ describe('OverviewChartPanel', () => {
   });
 
   it('plots one figure in its card colour and format, with the total of the previous period', () => {
-    const chart = overviewChart(REPORT, 'write-errors');
-    render(<OverviewChartPanel chart={chart} periodLabel="last 7 days" />);
+    const chart = overviewChart(REPORT, 'write-errors', english);
+    render(<OverviewChartPanel chart={chart} periodLabel="last 7 days" i18n={english} />);
 
     expect(screen.getByRole('heading', { name: 'Write error rate per day' })).toBeInTheDocument();
     const figure = screen.getByRole('img');
@@ -287,7 +289,7 @@ describe('OverviewChartPanel', () => {
   });
 
   it('shows the values of the day under the pointer, the previous period dashed', () => {
-    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" i18n={english} />);
     const layer = screen.getByRole('img').querySelector<HTMLElement>('[data-layer="hover"]');
     if (layer === null) {
       throw new Error('The hover layer was not drawn');
@@ -296,7 +298,7 @@ describe('OverviewChartPanel', () => {
 
     fireEvent.pointerMove(layer, { clientX: 0 });
 
-    const [first] = chartDays(ACTIVITY_CHART);
+    const [first] = chartDays(ACTIVITY_CHART, english);
     expect(layer).toHaveTextContent(
       [first?.day, ...(first?.points ?? []).map((point) => point.label + point.value)].join(''),
     );
@@ -305,7 +307,7 @@ describe('OverviewChartPanel', () => {
   });
 
   it('switches to a table of the same days and back', async () => {
-    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" i18n={english} />);
     const views = within(screen.getByRole('group', { name: 'Show as' }));
     const chartOption = views.getByRole('button', { name: 'Chart' });
     const tableOption = views.getByRole('button', { name: 'Table' });
@@ -333,7 +335,7 @@ describe('OverviewChartPanel', () => {
     ]);
     const rows = within(table).getAllByRole('row');
     expect(rows).toHaveLength(8);
-    const [first] = chartRows(ACTIVITY_CHART);
+    const [first] = chartRows(ACTIVITY_CHART, english);
     expect(rows[1]).toHaveTextContent(`Sep 29${first?.cells.join('') ?? ''}`);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
 
@@ -345,7 +347,7 @@ describe('OverviewChartPanel', () => {
   });
 
   it('switches with the keyboard too', async () => {
-    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" i18n={english} />);
     screen.getByRole('button', { name: 'Table' }).focus();
 
     await userEvent.keyboard('{Enter}');
@@ -370,6 +372,7 @@ describe('TopPagesTable', () => {
         ]}
         totalPageViews={1000}
         visitsHref={visitsHref}
+        i18n={english}
       />,
     );
 
@@ -384,6 +387,7 @@ describe('TopPagesTable', () => {
         pages={[{ path: '/calculator-shipping', views: 300, visits: 200 }]}
         totalPageViews={1000}
         visitsHref={visitsHref}
+        i18n={english}
       />,
     );
 
@@ -393,7 +397,7 @@ describe('TopPagesTable', () => {
   });
 
   it('says so when no page was viewed', () => {
-    render(<TopPagesTable pages={[]} totalPageViews={0} visitsHref={visitsHref} />);
+    render(<TopPagesTable pages={[]} totalPageViews={0} visitsHref={visitsHref} i18n={english} />);
 
     expect(screen.getByText('No page views in this period.')).toBeInTheDocument();
   });
@@ -408,6 +412,7 @@ describe('TopEventsList', () => {
           { name: 'report_exported', count: 1, visits: 1 },
         ]}
         visitsHref={eventVisitsHref}
+        i18n={english}
       />,
     );
 
@@ -423,7 +428,7 @@ describe('TopEventsList', () => {
   });
 
   it('says so when no event was tracked', () => {
-    render(<TopEventsList events={[]} visitsHref={eventVisitsHref} />);
+    render(<TopEventsList events={[]} visitsHref={eventVisitsHref} i18n={english} />);
 
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
   });
@@ -435,6 +440,7 @@ describe('DayActivityFigures', () => {
       <DayActivityFigures
         days={[{ date: '2026-10-05', pageViews: 1234, events: 56 }]}
         periodLabel="today"
+        i18n={english}
       />,
     );
 

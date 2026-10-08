@@ -8,6 +8,7 @@ import {
   type VisitRowsPage,
   type VisitsSearch,
 } from '@/domain/visits';
+import { getI18n } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createVisitsService } from '@/services/visits/visits-service.factory';
 
@@ -25,5 +26,8 @@ export async function loadOlderVisitRows(
   const report = await readOrSignIn(() =>
     createVisitsService().visits(project.id, { from: period.from, to: period.to }, filters, cursor),
   );
-  return { rows: visitRows(report.visits, project.timezone), nextCursor: report.nextCursor };
+  return {
+    rows: visitRows(report.visits, project.timezone, await getI18n()),
+    nextCursor: report.nextCursor,
+  };
 }

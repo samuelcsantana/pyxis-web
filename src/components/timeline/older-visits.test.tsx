@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { visitViews } from '@/domain/timeline';
 import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timeline';
 import { OlderVisits, type OlderVisitsPage } from './older-visits';
+import { english } from '@/test-utils/english';
 
 const VISITS = visitViews(
   demoTimelineReport(
@@ -13,6 +14,7 @@ const VISITS = visitViews(
   ).visits,
   'UTC',
   'all',
+  english,
 );
 const [NEWEST, MIDDLE, OLDEST] = VISITS;
 
