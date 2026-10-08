@@ -139,7 +139,7 @@ describe('FunnelPage', () => {
       'people reached the last step',
     );
     expect(screen.getByRole('group', { name: 'Biggest drop-off' })).toHaveTextContent(
-      'Calculator result shown → Opened /sign-up',
+      /^Biggest drop-offStep \d → \d.+ → .+ · [\d.]+% continued$/,
     );
     expect(screen.getByRole('button', { name: 'Edit steps' })).toHaveAttribute(
       'aria-expanded',

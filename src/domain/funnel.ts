@@ -147,7 +147,14 @@ export function biggestDropOff(counted: readonly CountedStep[]): FunnelFigure {
     const previous = counted[index - 1];
     return previous === undefined
       ? []
-      : [{ from: previous.step, to: current.step, continued: rate(current.count, previous.count) }];
+      : [
+          {
+            position: index + 1,
+            from: previous.step,
+            to: current.step,
+            continued: rate(current.count, previous.count),
+          },
+        ];
   });
   const [worst] = transitions.toSorted(
     (left, right) => (left.continued ?? 1) - (right.continued ?? 1),
@@ -156,7 +163,7 @@ export function biggestDropOff(counted: readonly CountedStep[]): FunnelFigure {
     return { value: '—', note: 'No step to compare' };
   }
   return {
-    value: `${stepLabel(worst.from)} → ${stepLabel(worst.to)}`,
-    note: `${formatPercent(worst.continued)} continued`,
+    value: `Step ${String(worst.position - 1)} → ${String(worst.position)}`,
+    note: `${stepLabel(worst.from)} → ${stepLabel(worst.to)} · ${formatPercent(worst.continued)} continued`,
   };
 }
