@@ -1,8 +1,7 @@
-import Link from 'next/link';
 import { MainContent } from '@/components/shell/main-content';
 import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
-import { EmptyState } from '@/components/states/empty-state';
+import { LookUpPrompt, NoVisitsFound } from '@/components/timeline/timeline-empty-states';
 import { TimelineFilters } from '@/components/timeline/timeline-filters';
 import { TimelineSearch } from '@/components/timeline/timeline-search';
 import { TimelineSummary } from '@/components/timeline/timeline-summary';
@@ -29,7 +28,6 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
-import { TEXT_LINK } from '@/components/ui/control-classes';
 import { loadOlderVisits } from './actions';
 
 export const generateMetadata = screenMetadata('Timeline');
@@ -70,14 +68,7 @@ function TimelineView({
   keptPeriod,
 }: TimelineViewProps) {
   if (report.visits.length === 0) {
-    return (
-      <EmptyState title={`No visits found for ${lookupTitle(lookup)}`}>
-        <p>
-          The id may be mistyped, the visits may be older than the retention period, or the
-          person&apos;s data may have been erased.
-        </p>
-      </EmptyState>
-    );
+    return <NoVisitsFound lookupTitle={lookupTitle(lookup)} />;
   }
   return (
     <>
@@ -111,6 +102,10 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   const basePath = screenHref(project.id, 'timeline');
   const demoPerson = isDemoMode() ? demoPersonOf(project.id) : null;
   const keptPeriod = periodSearchParameters(search);
+  const demoPersonLink =
+    demoPerson === null
+      ? null
+      : { userId: demoPerson, href: linkWith(basePath, { ...keptPeriod, user: demoPerson }) };
   const report =
     lookup === null
       ? null
@@ -132,23 +127,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           keep={keptPeriod}
         />
         {lookup === null || report === null ? (
-          <EmptyState title="Look up a person or a visit">
-            <p>
-              Type a user id, the one your site passes to identify(), to see every visit of that
-              person, or a visit id to see one visit. Events, page views and requests show in the
-              order they happened, in the project&apos;s time zone.
-            </p>
-            {demoPerson === null ? null : (
-              <p>
-                <Link
-                  href={linkWith(basePath, { ...keptPeriod, user: demoPerson })}
-                  className={TEXT_LINK}
-                >
-                  Open the timeline of the demo person {demoPerson}
-                </Link>
-              </p>
-            )}
-          </EmptyState>
+          <LookUpPrompt demoPerson={demoPersonLink} />
         ) : (
           <TimelineView
             projectId={project.id}

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { BuildAFunnel } from '@/components/funnel/build-a-funnel';
 import { FunnelEditor } from '@/components/funnel/funnel-editor';
 import { FunnelModes } from '@/components/funnel/funnel-modes';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
@@ -6,7 +6,6 @@ import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
-import { EmptyState } from '@/components/states/empty-state';
 import { StatCard } from '@/components/ui/stat-card';
 import {
   biggestDropOff,
@@ -28,7 +27,6 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_FUNNEL_STEPS, demoExampleFunnel } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
-import { TEXT_LINK } from '@/components/ui/control-classes';
 
 export const generateMetadata = screenMetadata('Funnel');
 
@@ -95,21 +93,9 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         />
         {steps === null || report === null ? (
           <>
-            <EmptyState title="Build a funnel">
-              <p>
-                A funnel is 2 to 8 steps, each a page path (<code className="font-mono">*</code>{' '}
-                matches any run of characters) or an event name. A step counts only after the step
-                before it. The steps live in the address, so a bookmark keeps the funnel.
-              </p>
-              <p>
-                <Link
-                  href={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
-                  className={TEXT_LINK}
-                >
-                  Start from an example funnel
-                </Link>
-              </p>
-            </EmptyState>
+            <BuildAFunnel
+              exampleHref={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
+            />
             <FunnelEditor initialSteps={NEW_FUNNEL} action={basePath} keep={editorKeep} startOpen />
           </>
         ) : (
