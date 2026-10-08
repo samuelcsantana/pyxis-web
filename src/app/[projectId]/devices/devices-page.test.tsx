@@ -139,6 +139,14 @@ describe('DevicesPage', () => {
     );
   });
 
+  it('offers every breakdown as one CSV file of the period', async () => {
+    render(await renderDevices());
+
+    expect(
+      screen.getByRole('link', { name: 'Device types, browsers, systems and countries as CSV' }),
+    ).toHaveAttribute('href', '/p-store/devices/export?range=30d');
+  });
+
   it('shows how to install the SDK when nobody visited in the period', async () => {
     state.devices = (): Promise<DevicesReport> =>
       Promise.resolve({ deviceTypes: [], browsers: [], operatingSystems: [], countries: [] });

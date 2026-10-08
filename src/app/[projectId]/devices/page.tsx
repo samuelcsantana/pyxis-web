@@ -6,6 +6,7 @@ import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
+import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
   browserLabel,
@@ -17,8 +18,10 @@ import {
   operatingSystemLabel,
   shareRows,
 } from '@/domain/devices';
-import { type PeriodSearch, resolvePeriod, todayIn } from '@/domain/period';
+import { DEVICES_TABLE_LABEL } from '@/domain/devices-export';
+import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
+import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
@@ -34,9 +37,10 @@ export interface DevicesPageProps {
 interface DevicesReportViewProps {
   readonly report: DevicesReport;
   readonly conversionEvent: string | null;
+  readonly exportPath: string;
 }
 
-function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) {
+function DevicesReportView({ report, conversionEvent, exportPath }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
@@ -70,6 +74,7 @@ function DevicesReportView({ report, conversionEvent }: DevicesReportViewProps) 
           withConversionRate={conversionEvent !== null}
         />
       </div>
+      <CsvDownloads downloads={[{ label: DEVICES_TABLE_LABEL, href: exportPath }]} />
       <p className="text-xs leading-[18px] text-muted">
         Device, browser and system are worked out on the server from the browser&apos;s user agent,
         which is then thrown away. The country comes from the edge network, never from a stored IP
@@ -98,7 +103,11 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {hasVisits(report) ? (
-          <DevicesReportView report={report} conversionEvent={project.conversionEvent} />
+          <DevicesReportView
+            report={report}
+            conversionEvent={project.conversionEvent}
+            exportPath={exportHref(project.id, 'devices', periodQuery(period))}
+          />
         ) : (
           <EmptyPeriod
             view={emptyPeriodView(project, period)}
