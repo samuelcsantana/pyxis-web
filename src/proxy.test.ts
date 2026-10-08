@@ -64,14 +64,21 @@ describe('proxy', () => {
     });
   });
 
-  it('never runs on static files or the app icons', () => {
+  describe('matcher', () => {
     const [pattern] = config.matcher;
     const matches = (path: string) => new RegExp(`^${pattern ?? ''}$`).test(path);
 
-    expect(matches('/p1/overview')).toBe(true);
-    expect(matches('/icon.svg')).toBe(false);
-    expect(matches('/apple-icon.png')).toBe(false);
-    expect(matches('/manifest.webmanifest')).toBe(false);
-    expect(matches('/_next/static/chunk.js')).toBe(false);
+    it('never runs on static files or the app icons', () => {
+      expect(matches('/p1/overview')).toBe(true);
+      expect(matches('/icon.svg')).toBe(false);
+      expect(matches('/apple-icon.png')).toBe(false);
+      expect(matches('/manifest.webmanifest')).toBe(false);
+      expect(matches('/_next/static/chunk.js')).toBe(false);
+    });
+
+    it('serves the logo the sign-in email loads without asking for a session', () => {
+      expect(matches('/email/pyxis-logo.png')).toBe(false);
+      expect(matches('/email/pyxis-logo@2x.png')).toBe(false);
+    });
   });
 });
