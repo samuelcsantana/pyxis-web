@@ -1,5 +1,6 @@
 'use client';
 
+import Form from 'next/form';
 import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   type FunnelStep,
@@ -20,6 +21,7 @@ import {
   CONTROL_DISABLED,
   FIELD,
 } from '@/components/ui/control-classes';
+import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 
 interface DraftStep {
   readonly id: number;
@@ -130,13 +132,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
         </button>
       </div>
       {open ? (
-        <form
-          id="funnel-editor"
-          ref={formRef}
-          action={action}
-          method="get"
-          className="flex flex-col gap-3"
-        >
+        <Form id="funnel-editor" ref={formRef} action={action} className="flex flex-col gap-3">
           {Object.entries(keep).map(([name, value]) => (
             <input key={name} type="hidden" name={name} value={value} />
           ))}
@@ -243,19 +239,18 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
             <span className="text-xs text-muted">
               {drafts.length} of {MAX_FUNNEL_STEPS} steps, at least {MIN_FUNNEL_STEPS}
             </span>
-            <button
-              type="submit"
+            <PendingSubmitButton
+              label="Apply"
+              pendingLabel="Applying…"
               disabled={!valid}
               aria-describedby="funnel-editor-status"
               className={`min-h-10 rounded-input px-4 text-sm ${BUTTON_STRONG} ${CONTROL_DISABLED}`}
-            >
-              Apply
-            </button>
+            />
             <p id="funnel-editor-status" role="status" className="text-xs text-muted">
               {statusOf(drafts, valid)}
             </p>
           </div>
-        </form>
+        </Form>
       ) : null}
     </section>
   );

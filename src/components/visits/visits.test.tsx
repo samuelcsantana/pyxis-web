@@ -286,7 +286,7 @@ describe('VisitFiltersForm', () => {
 
     const form = screen.getByRole('search', { name: 'Filter the visits' });
     expect(form).toHaveAttribute('action', '/p-store/visits');
-    expect(form).toHaveAttribute('method', 'get');
+    expect(form).toHaveProperty('method', 'get');
     expect(screen.getByRole('textbox', { name: 'Viewed page' })).toHaveValue(
       '/calculator-shipping',
     );

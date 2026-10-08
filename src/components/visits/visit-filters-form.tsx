@@ -1,3 +1,4 @@
+import Form from 'next/form';
 import Link from 'next/link';
 import { CHANNEL_LABELS, CHANNELS } from '@/domain/acquisition';
 import { deviceTypeLabel } from '@/domain/devices';
@@ -12,6 +13,7 @@ import {
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
 import { BUTTON_PRIMARY, FIELD, TEXT_LINK } from '@/components/ui/control-classes';
+import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { CollapsibleFilters } from './collapsible-filters';
 
 export interface VisitFiltersFormProps {
@@ -46,13 +48,7 @@ export function VisitFiltersForm({
 }: VisitFiltersFormProps) {
   const activeCount = visitFilterCount(filters);
   return (
-    <form
-      role="search"
-      aria-label="Filter the visits"
-      action={action}
-      method="get"
-      className={`${PANEL} gap-4`}
-    >
+    <Form role="search" aria-label="Filter the visits" action={action} className={`${PANEL} gap-4`}>
       {[...new URLSearchParams(periodQuery(period))].map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
@@ -154,12 +150,11 @@ export function VisitFiltersForm({
           </div>
         )}
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="submit"
+          <PendingSubmitButton
+            label="Apply filters"
+            pendingLabel="Applying…"
             className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
-          >
-            Apply filters
-          </button>
+          />
           {clearHref === null ? null : (
             <Link href={clearHref} className={`text-[13px] ${TEXT_LINK}`}>
               Clear filters
@@ -167,6 +162,6 @@ export function VisitFiltersForm({
           )}
         </div>
       </CollapsibleFilters>
-    </form>
+    </Form>
   );
 }
