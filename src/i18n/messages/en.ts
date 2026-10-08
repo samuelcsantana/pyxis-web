@@ -256,6 +256,25 @@ export const en = {
     point: '{series}, {day}',
   },
   acquisition: {
+    subtitle: 'Where visits to {project} come from',
+    paidVisits: 'Paid visits',
+    footnote:
+      'An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that it was there, never the id itself, and keeps just the domain of a referring site.',
+    sources: {
+      title: 'Sources',
+      description: 'The campaign source, else the referring site, of the first page of each visit',
+      empty: 'No visits with a source in this period.',
+      source: 'Source',
+      medium: 'Medium',
+      visits: 'Visits',
+    },
+    channelChart: {
+      title: 'Visits by channel',
+      description: 'Every visit by the channel it came from, {period}',
+      caption: 'Visits by channel per day, {period}',
+      day: 'Day',
+      total: 'Total',
+    },
     channels: {
       paid: 'Paid',
       email: 'Email',

@@ -3,7 +3,7 @@ import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { linkWith, screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
@@ -83,7 +83,12 @@ function AcquisitionReportView({
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
-        <StatCard id="paid-visits" label="Paid visits" value={paid.value} note={paid.note} />
+        <StatCard
+          id="paid-visits"
+          label={i18n.t('acquisition.paidVisits')}
+          value={paid.value}
+          note={paid.note}
+        />
         <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>
       <ChannelChart days={report.days} periodLabel={describePeriod(period, i18n)} i18n={i18n} />
@@ -99,10 +104,7 @@ function AcquisitionReportView({
         i18n={i18n}
       />
       <CsvDownloads downloads={downloads} i18n={i18n} />
-      <p className="text-xs leading-[18px] text-muted">
-        An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
-        it was there, never the id itself, and keeps just the domain of a referring site.
-      </p>
+      <p className="text-xs leading-[18px] text-muted">{i18n.t('acquisition.footnote')}</p>
     </>
   );
 }
@@ -119,8 +121,8 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
   return (
     <>
       <Topbar
-        title="Acquisition"
-        subtitle={`Where visits to ${project.name} come from`}
+        title={i18n.t(screenLabelKey('acquisition'))}
+        subtitle={i18n.t('acquisition.subtitle', { project: project.name })}
         basePath={screenHref(project.id, 'acquisition')}
         period={period}
         today={todayIn(project.timezone, now)}
