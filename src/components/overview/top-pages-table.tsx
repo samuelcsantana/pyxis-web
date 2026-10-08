@@ -24,10 +24,10 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
   return (
     <section aria-labelledby="top-pages-heading" className={PANEL}>
       <h2 id="top-pages-heading" className={PANEL_TITLE}>
-        Top pages
+        {i18n.t('overview.topPages.title')}
       </h2>
       {pages.length === 0 ? (
-        <p className="text-caption text-muted">No page views in this period.</p>
+        <p className="text-caption text-muted">{i18n.t('overview.topPages.empty')}</p>
       ) : (
         <div className={TABLE_SCROLL}>
           <table
@@ -37,19 +37,19 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
             <thead>
               <tr>
                 <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                  Page
+                  {i18n.t('overview.topPages.page')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
-                  Views
+                  {i18n.t('overview.topPages.views')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
-                  Visits
+                  {i18n.t('overview.topPages.visits')}
                 </th>
                 <th
                   scope="col"
                   className={`${HEADER_CELL} hidden w-36 pr-0 text-left sm:table-cell`}
                 >
-                  Share of views
+                  {i18n.t('overview.topPages.shareOfViews')}
                 </th>
               </tr>
             </thead>
@@ -60,7 +60,11 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
                     scope="row"
                     className={`${BODY_CELL} pl-0 text-left font-mono text-xs font-normal wrap-anywhere`}
                   >
-                    <VisitsLink href={visitsHref(page.path)} label={page.path} />
+                    <VisitsLink
+                      href={visitsHref(page.path)}
+                      label={page.path}
+                      purpose={i18n.t('visitsLink.purpose')}
+                    />
                   </th>
                   <td className={`${BODY_CELL} text-right`}>{formatCount(page.views, i18n)}</td>
                   <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>

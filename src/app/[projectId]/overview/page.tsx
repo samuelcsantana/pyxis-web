@@ -6,7 +6,7 @@ import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { linkWith, type ScreenSlug, screenHref } from '@/components/shell/screens';
+import { linkWith, type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
@@ -157,8 +157,8 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   return (
     <>
       <Topbar
-        title="Overview"
-        subtitle={`How ${project.name} was used in the period`}
+        title={i18n.t(screenLabelKey('overview'))}
+        subtitle={i18n.t('overview.subtitle', { project: project.name })}
         basePath={screenHref(project.id, 'overview')}
         period={period}
         today={today}
