@@ -1,5 +1,82 @@
 # Changelog
 
+## [0.4.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.3.0...v0.4.0) (2026-10-08)
+
+
+### Features
+
+* **acquisition:** draw the channel bars on the server, segments apart ([36534b5](https://github.com/samuelcsantana/pyxis-web/commit/36534b5386b3ec84122670a01aec2149835c4956))
+* **charts:** draw a chart's axes, grid and day labels on the server ([f3befeb](https://github.com/samuelcsantana/pyxis-web/commit/f3befeb85d639c0ca64b0df943a4d5d2f0dfd993))
+* **charts:** switch between chart and table with a segmented control ([fcf3cef](https://github.com/samuelcsantana/pyxis-web/commit/fcf3cef0b01f097d9dcca57f52810e5e5bbb0d0c))
+* **contract:** read converting visits from the overview, devices and acquisition ([90cb88c](https://github.com/samuelcsantana/pyxis-web/commit/90cb88ccd32f866033923857df1bd07e689930f8))
+* **contract:** read the kind of request the API reports ([4766d83](https://github.com/samuelcsantana/pyxis-web/commit/4766d8324fb3eeb83835d46d8d2420d4cdee8cbf))
+* **contract:** read when each project's events began and last arrived ([9f50aec](https://github.com/samuelcsantana/pyxis-web/commit/9f50aec007d886ff4f54919610559b6d82f6a872))
+* **design:** add a field border token at 3:1 ([779817b](https://github.com/samuelcsantana/pyxis-web/commit/779817b1e2cc7e6cc6361becc11e2ca7f46f7957))
+* **design:** darken the light chart colours to 3:1 on the card ([99f031e](https://github.com/samuelcsantana/pyxis-web/commit/99f031e610f6be8cbfcc5dcd032e96ca7d491f3d))
+* **design:** show links and fields on the control recipes page ([f3390bd](https://github.com/samuelcsantana/pyxis-web/commit/f3390bdd1c583da3f192416ecefe185eca491288))
+* **devices,acquisition:** rate conversions over the visits that converted ([c001c05](https://github.com/samuelcsantana/pyxis-web/commit/c001c05e7d5bb30b447bdce354affd33fb2b2e68))
+* **devices,overview:** say why conversions are missing, and let Countries fill the row ([613fdf8](https://github.com/samuelcsantana/pyxis-web/commit/613fdf847e715b1a2a060680bf71079517a37bde))
+* **devices:** give the conversion rate of each browser, system and country ([8e95910](https://github.com/samuelcsantana/pyxis-web/commit/8e9591009554a346c3531040386e57ea55139430))
+* **domain:** compute chart scales, day labels, areas and stacked bars ([9db9635](https://github.com/samuelcsantana/pyxis-web/commit/9db96355ad2a3175454c9b52d91854e71272692c))
+* **email:** serve a raster logo for the sign-in email ([7683349](https://github.com/samuelcsantana/pyxis-web/commit/76833496a74ffb617c59d46b15dbe8af4a2273e3))
+* **overview:** count conversions as visits that converted ([6f1ee43](https://github.com/samuelcsantana/pyxis-web/commit/6f1ee43ca964f4728cb0e41bf317edb2c045feae))
+* **overview:** define its words in a footnote ([bda09e9](https://github.com/samuelcsantana/pyxis-web/commit/bda09e945e5043eb8304da13aa0bc73c00375e6e))
+* **overview:** draw the daily activity chart on the server ([7b4e04b](https://github.com/samuelcsantana/pyxis-web/commit/7b4e04bce3dbd8f9a26d438e8dc9114f5c78603e))
+* **overview:** name the conversion event on the Conversions card ([184770a](https://github.com/samuelcsantana/pyxis-web/commit/184770a2de68eb0c2d743c077b7dcf7f1cf2fcfd))
+* **overview:** say what every change is compared with ([73d8ef5](https://github.com/samuelcsantana/pyxis-web/commit/73d8ef5be0fe0f2642123603dd5998d300abe3da))
+* **overview:** show how many visits had each top event ([35ca6e4](https://github.com/samuelcsantana/pyxis-web/commit/35ca6e4306762fa484824a3091771ed3a342ed46))
+* **period:** keep a custom range it could not use, and why ([7c5291f](https://github.com/samuelcsantana/pyxis-web/commit/7c5291f48a1e05c0a9bdd9117342e0397440db88))
+* **requests:** add a "Failed reads" tab next to the writes ([e3d66f0](https://github.com/samuelcsantana/pyxis-web/commit/e3d66f0759a1f913a7cf66062b0ae4b8fbee368b))
+* **services:** ask the API for the routes whose reads failed ([ae6ee43](https://github.com/samuelcsantana/pyxis-web/commit/ae6ee43842cab2efd219dbdf4cf12324de947ec5))
+* **shell:** add a skip link to the content of every project screen ([53a6e9c](https://github.com/samuelcsantana/pyxis-web/commit/53a6e9ca607d4789f19543b8790e4bcfd86c490a))
+* **shell:** keep a slim menu bar at the top of phone screens ([ea24048](https://github.com/samuelcsantana/pyxis-web/commit/ea240488cf45a9b2a7f9525766ee83dbbfd55b8c))
+* **shell:** say when a custom range was not used, and reopen it with its dates ([dc3e601](https://github.com/samuelcsantana/pyxis-web/commit/dc3e601390851a1737c8597209dc3c41286a4c66))
+* **states:** tell a quiet period from a project that never received an event ([943ce16](https://github.com/samuelcsantana/pyxis-web/commit/943ce16cdc1f3c3aa949e029e64377ff316e7925))
+* **visits:** fold the filters behind a toggle on phones ([afab4ea](https://github.com/samuelcsantana/pyxis-web/commit/afab4eaf1e0d50385c8029d0bcdfbfd1f29646cb))
+* **visits:** name the country of each visit beside its device ([e51aaef](https://github.com/samuelcsantana/pyxis-web/commit/e51aaefb47d0eab0befa7680c8523a9adcc8725f))
+* **visits:** show each visit as a card on phones ([79a9f55](https://github.com/samuelcsantana/pyxis-web/commit/79a9f557c533c21a3ad866e4c548db6ba4010b67))
+
+
+### Bug Fixes
+
+* **a11y:** put the demo banner and the sign-in theme toggle in landmarks ([475a584](https://github.com/samuelcsantana/pyxis-web/commit/475a584578f68fd88393b3c054cc97b0d42d5220))
+* **overview:** name the Top pages table after its heading ([f3c1e7b](https://github.com/samuelcsantana/pyxis-web/commit/f3c1e7b90f0dbffe77b7ec058a3af70df1c361da))
+* **overview:** title the daily chart "Activity per day" ([eedacdf](https://github.com/samuelcsantana/pyxis-web/commit/eedacdf94b33adbf3be8c4bfc819dcb610573149))
+* **requests:** call the error rate "Write error rate", as the Overview does ([c61fc01](https://github.com/samuelcsantana/pyxis-web/commit/c61fc01185d3cffa51d8af78e4866fbb72f32be8))
+* **shell:** close the phone menu on Escape and when the address changes ([8dda603](https://github.com/samuelcsantana/pyxis-web/commit/8dda60386fed90447e944d8bb02e0350aae299c8))
+* **shell:** fit the sidebar in 700 px so Sign out shows on a 1366x768 laptop ([cdcd7bb](https://github.com/samuelcsantana/pyxis-web/commit/cdcd7bb1c6b287b10057b80bea3c6337b5f9db8e))
+* **shell:** wrap the project name and time zone instead of cutting them ([0599046](https://github.com/samuelcsantana/pyxis-web/commit/0599046d76cfe958143969d17a88483c2fbce937))
+* **timeline:** call the failed-requests filter "Failing only", as Requests does ([9973fce](https://github.com/samuelcsantana/pyxis-web/commit/9973fce303f0f2f4c0c9748e3e91a54aeacf5217))
+* **timeline:** keep an id it could not use, and say what an id looks like ([82856bb](https://github.com/samuelcsantana/pyxis-web/commit/82856bb9c6f842691bb60051f8e97521c1138581))
+* **ui:** draw inputs and selects with the 3:1 field border ([0cab6fb](https://github.com/samuelcsantana/pyxis-web/commit/0cab6fb619a29e1c700f561d7fca2fe1d60377a0))
+* **ui:** thicken the underline of text links on hover and press ([a5df793](https://github.com/samuelcsantana/pyxis-web/commit/a5df793ffc0c4141bea0470db82ab4f702aeb67a))
+* **ui:** use 16px text in form fields below the sm breakpoint ([12221d9](https://github.com/samuelcsantana/pyxis-web/commit/12221d95350440df3a372fad9107467cddaa92d2))
+* **ui:** visible underline and a 24px target for row links ([6835586](https://github.com/samuelcsantana/pyxis-web/commit/6835586a29544f95979a21dee1cbcbdf6d403bf2))
+* **visits:** keep the visits table inside its panel at 1024 px ([6bf17b4](https://github.com/samuelcsantana/pyxis-web/commit/6bf17b45c310036a0a99c0b5304283f5528b7b02))
+* **visits:** leave room in the 1024 px visits table for wider fonts ([a2ccd43](https://github.com/samuelcsantana/pyxis-web/commit/a2ccd43d0c2f4cc32b008a33994d474f768111b4))
+* **visits:** say that a failed request on Visits is a read or a write ([28740a4](https://github.com/samuelcsantana/pyxis-web/commit/28740a406e281a72a3a0a18bcdd9523b424d25dc))
+* **visits:** write "Anonymous" in sentence case, as the filter does ([43df953](https://github.com/samuelcsantana/pyxis-web/commit/43df95385f410b4d0586a396e2734e842dc0a4da))
+
+
+### Refactoring
+
+* **domain:** count the visit filters in use ([37bb531](https://github.com/samuelcsantana/pyxis-web/commit/37bb531b333891d09dc0bdcb33f631094918eed3))
+* **ui:** draw page tabs with a shared link-tabs component ([afe6fa1](https://github.com/samuelcsantana/pyxis-web/commit/afe6fa18837a54c390dfeeb926a91b34c458a103))
+
+
+### Documentation
+
+* **adr:** record SVG charts drawn on the server, superseding ADR 0005 ([d07edff](https://github.com/samuelcsantana/pyxis-web/commit/d07edff96f2b9c0af0e53a78b7a6d9775c8c6db0))
+* **readme:** describe conversion rates over converting visits ([b720893](https://github.com/samuelcsantana/pyxis-web/commit/b720893f207b2bc2e5e61a746f34078761142952))
+* **readme:** describe the conversion rates on Devices and the visits of top events ([416dd44](https://github.com/samuelcsantana/pyxis-web/commit/416dd44f1925d3e8d48143920b395cfdd9e513a0))
+* **readme:** describe the failed reads tab on Requests ([0f7d13f](https://github.com/samuelcsantana/pyxis-web/commit/0f7d13f0d300e455e145241b202286d5701425a3))
+* **readme:** describe the field borders, link underlines and row link targets ([b9f5b00](https://github.com/samuelcsantana/pyxis-web/commit/b9f5b00c770c456f439c3da788fb802803d5e641))
+* **readme:** describe the overview's comparisons, footnote and shared words ([3498cc6](https://github.com/samuelcsantana/pyxis-web/commit/3498cc6f6bd3cf622face1bc3a1772e7f2498089))
+* **readme:** describe the quiet period and the missing conversion event ([2310817](https://github.com/samuelcsantana/pyxis-web/commit/2310817922f63aa012f2da678e91da84c4cd30e4))
+* **readme:** describe the skip link and the phone menu bar ([9f834a6](https://github.com/samuelcsantana/pyxis-web/commit/9f834a6b3bcb1102ca29eccce03eefb67e30e888))
+* **readme:** say the sidebar fits a laptop screen and wraps long values ([329a815](https://github.com/samuelcsantana/pyxis-web/commit/329a815373934e34f86a2b14d8fb83de3e45d8c8))
+* **readme:** say where the sign-in email's logo lives and why it needs no session ([cb0eeef](https://github.com/samuelcsantana/pyxis-web/commit/cb0eeef3e94d93ad6e24e8ee8f95ddf9055b0772))
+
 ## [0.3.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.2.0...v0.3.0) (2026-10-07)
 
 
