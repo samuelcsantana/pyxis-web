@@ -204,6 +204,20 @@ describe('ExpandableFeatureRow', () => {
     expect(details).toBeVisible();
   });
 
+  it('fills the row it opened and edges its panel, and lets go once closed', async () => {
+    renderRow(() => Promise.resolve(KEYS));
+    const toggle = screen.getByRole('button', { name: toggleName });
+    const row = toggle.closest('tr');
+    const panel = document.getElementById(toggle.getAttribute('aria-controls') ?? '');
+
+    await userEvent.click(toggle);
+    expect(row).toHaveClass('bg-soft');
+    expect(panel?.querySelector('td')).toHaveClass('bg-soft', 'border-l-violet');
+
+    await userEvent.click(toggle);
+    expect(row).not.toHaveClass('bg-soft');
+  });
+
   it('asks once while a request is running, even if toggled again', async () => {
     const loadProperties = vi.fn(() => new Promise<readonly PropertyKeyView[]>(() => undefined));
     const { unmount } = renderRow(loadProperties);
