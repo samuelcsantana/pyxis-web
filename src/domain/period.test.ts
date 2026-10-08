@@ -14,6 +14,7 @@ import {
   todayIn,
 } from './period';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 
 const SAO_PAULO = 'America/Sao_Paulo';
 const LATE_EVENING_IN_SAO_PAULO = new Date('2026-10-06T02:30:00.000Z');
@@ -176,5 +177,12 @@ describe('formatDay and describePeriod', () => {
     expect(
       describePeriod({ preset: 'custom', from: '2026-09-01', to: '2026-09-10' }, english),
     ).toBe('Sep 1 – Sep 10, 2026');
+  });
+
+  it('names periods in Brazilian Portuguese, day before month', () => {
+    expect(describePeriod(presetPeriod('7d', '2026-10-05'), portuguese)).toBe('últimos 7 dias');
+    expect(formatPeriod(presetPeriod('30d', '2026-10-05'), portuguese)).toBe(
+      '6 de set. – 5 de out. de 2026',
+    );
   });
 });

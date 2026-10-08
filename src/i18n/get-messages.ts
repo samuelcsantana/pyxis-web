@@ -12,6 +12,7 @@ import { createTranslator, type Translator } from './translate';
 
 const LOADERS: Readonly<Record<Locale, () => Promise<Messages>>> = {
   en: async () => (await import('./messages/en')).en,
+  'pt-BR': async () => (await import('./messages/pt-BR')).ptBR,
 };
 
 export function loadMessages(locale: Locale): Promise<Messages> {
