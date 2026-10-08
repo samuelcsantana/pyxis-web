@@ -11,6 +11,7 @@ const PHONE_CARD_PADDING_PX = 14;
 const PHONE_CHART_MIN_PX = 176;
 const FUNNEL_STEP_MAX_PX = 160;
 const PHONE_TARGET_PX = 44;
+const TIMELINE_LOOKUP_MAX_PX = 130;
 const TABLET_WIDTHS = [768, 1024] as const;
 const KPI_COUNT = 4;
 const DESKTOP_FIELD_FONT_PX = 14;
@@ -299,6 +300,26 @@ test.describe('at 320×640, below the sm breakpoint, the content', () => {
     expect((await remove.boundingBox())?.height).toBeGreaterThanOrEqual(PHONE_TARGET_PX);
   });
 
+  test('keeps the Features search on one row with its button', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/features?q=cta`);
+    const search = page.getByRole('search');
+    await expect(search.getByRole('button', { name: 'Search' })).toBeVisible();
+
+    expect((await search.boundingBox())?.height).toBeLessThanOrEqual(PHONE_TARGET_PX);
+  });
+
+  test('puts the Timeline id beside its button', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/timeline?user=u_7f3a`);
+    const search = page.getByRole('search');
+    const id = search.getByRole('textbox', { name: 'User id' });
+    const submit = search.getByRole('button', { name: 'Show timeline' });
+    await expect(submit).toBeVisible();
+
+    const [idBox, submitBox] = await Promise.all([id.boundingBox(), submit.boundingBox()]);
+
+    expect(submitBox?.y).toBe(idBox?.y);
+  });
+
   test('gives the Overview chart room to read', async ({ page }) => {
     await page.goto(`/${STORE_ID}/overview`);
     const chart = page.getByRole('region', { name: 'Activity per day' }).getByRole('img');
@@ -354,3 +375,15 @@ for (const width of TABLET_WIDTHS) {
     });
   });
 }
+
+test.describe('at 390×844, the Timeline lookup', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('fits the select, the id and the button in two rows', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/timeline?user=u_7f3a`);
+    const search = page.getByRole('search');
+    await expect(search.getByRole('button', { name: 'Show timeline' })).toBeVisible();
+
+    expect((await search.boundingBox())?.height).toBeLessThanOrEqual(TIMELINE_LOOKUP_MAX_PX);
+  });
+});
