@@ -9,6 +9,8 @@ const MIN_PHONE_FIELD_FONT_PX = 16;
 const STAT_VALUE_LINE_PX = 28;
 const PHONE_CARD_PADDING_PX = 14;
 const PHONE_CHART_MIN_PX = 176;
+const FUNNEL_STEP_MAX_PX = 160;
+const PHONE_TARGET_PX = 44;
 const TABLET_WIDTHS = [768, 1024] as const;
 const KPI_COUNT = 4;
 const DESKTOP_FIELD_FONT_PX = 14;
@@ -284,6 +286,17 @@ test.describe('at 320×640, below the sm breakpoint, the content', () => {
       const value = page.getByRole('group', { name }).locator('p').first();
       expect((await value.boundingBox())?.height).toBeLessThanOrEqual(STAT_VALUE_LINE_PX);
     }
+  });
+
+  test('keeps each Funnel step on two rows of 44px controls', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/funnel`);
+    await page.getByRole('button', { name: 'Edit steps' }).click();
+    const step = page.locator('#funnel-editor li').first();
+    await expect(step).toBeVisible();
+
+    expect((await step.boundingBox())?.height).toBeLessThanOrEqual(FUNNEL_STEP_MAX_PX);
+    const remove = step.getByRole('button', { name: 'Remove step 1' });
+    expect((await remove.boundingBox())?.height).toBeGreaterThanOrEqual(PHONE_TARGET_PX);
   });
 
   test('gives the Overview chart room to read', async ({ page }) => {
