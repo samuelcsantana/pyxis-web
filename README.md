@@ -137,8 +137,11 @@ Shipping now:
   button, open when some are in use or were left out, and each visit is a card with every
   column; each row opens its visit, and an identified one its person, in the Timeline
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity
-  per day (with every daily figure of its cards), top pages and top events, and the routes of
-  Requests (writes or failed reads). The file is named after the screen, the table and the dates
+  per day (with every daily figure of its cards), top pages and top events; the routes of
+  Requests (writes or failed reads); the Features ranking (events or screens, search kept); the
+  Acquisition sources and visits per day by channel; every Devices breakdown in one file, named
+  in a `dimension` column; and the newest 1,000 visits matching the Visits filters, read page
+  after page on the server. The file is named after the screen, the table and the dates
   (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`), starts with a UTF-8 byte order mark so
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
@@ -213,20 +216,24 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 
 ### Routes
 
-| Route                          | What it shows                                                                                    |
-| ------------------------------ | ------------------------------------------------------------------------------------------------ |
-| `/`                            | Opens the first project the admin may read, or explains there is none                            |
-| `/sign-in`                     | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen  |
-| `/[projectId]/overview`        | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                             |
-| `/[projectId]/devices`         | Device types, browsers, systems, conversion by device and countries                              |
-| `/[projectId]/acquisition`     | Visits by channel per day, paid visits, the sources and their conversion                         |
-| `/[projectId]/features`        | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
-| `/[projectId]/requests`        | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
-| `/[projectId]/funnel`          | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
-| `/[projectId]/timeline`        | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
-| `/[projectId]/visits`          | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
-| `/[projectId]/overview/export` | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
-| `/[projectId]/requests/export` | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen` |
+| Route                             | What it shows                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `/`                               | Opens the first project the admin may read, or explains there is none                            |
+| `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen  |
+| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                             |
+| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                              |
+| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and their conversion                         |
+| `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
+| `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
+| `/[projectId]/funnel`             | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
+| `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
+| `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
+| `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
+| `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen` |
+| `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`             |
+| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|channels` (`sources` when absent), for the screen's period          |
+| `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                              |
+| `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters            |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
@@ -329,7 +336,9 @@ docs/adr/           architecture decision records
 - No secret in the browser bundle; data is read on the server
 - A CSV export is a Route Handler next to its screen that reads through the same service, with
   the same session cookie, as the page: it holds nothing the screen does not show, answers
-  `Cache-Control: private, no-store`, and a 404 for a table the screen does not have
+  `Cache-Control: private, no-store`, and a 404 for a table the screen does not have. The Visits
+  file carries the pseudonymous user id a site passed to `identify()`, as the Visits list and the
+  Timeline already show it: treat the file like the dashboard it came from
 - The session is an `HttpOnly` cookie set by the API; the dashboard's JavaScript never reads it.
   The only cookie the dashboard writes is `pyxis_theme`, the light or dark choice, which the root
   layout reads so the first paint has the right theme (so every page renders on request)
