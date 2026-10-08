@@ -37,7 +37,10 @@ const WIRE: RequestsWire = {
       ],
       median_duration_ms: 164,
       p95_duration_ms: 426,
-      screens: [{ path: '/orders/new', failed: 21 }],
+      screens: [
+        { path: '/orders/new', failed: 21 },
+        { path: '/orders', failed: 0 },
+      ],
       recent_failures: [
         {
           occurred_at: '2026-10-05T21:41:00.000Z',
@@ -256,7 +259,7 @@ describe('figures', () => {
 });
 
 describe('routeRows', () => {
-  it('gives each route its shares, status chips, screens and recent failures', () => {
+  it('gives each route its shares, status chips, failing screens and recent failures', () => {
     const [orders, me] = routeRows(ROUTES, 'America/Sao_Paulo', 'writes', english);
 
     expect(orders).toEqual({
