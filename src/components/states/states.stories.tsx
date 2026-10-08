@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, within } from 'storybook/test';
+import { english } from '@/test-utils/english';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
@@ -39,7 +40,7 @@ export const FailureWithoutRetry: Story = {
 export const EmptyDarkTheme: Story = { ...Empty, globals: { theme: 'dark' } };
 
 export const Demo: Story = {
-  render: () => <DemoBanner />,
+  render: () => <DemoBanner i18n={english} />,
   play: async ({ canvasElement }) => {
     const notice = within(canvasElement).getByRole('complementary', { name: 'Demo notice' });
     await expect(within(notice).getByRole('note')).toHaveTextContent('Demo data');
@@ -49,14 +50,14 @@ export const Demo: Story = {
 export const DemoDarkTheme: Story = { ...Demo, globals: { theme: 'dark' } };
 
 export const NoConversionEventSet: Story = {
-  render: () => <NoConversionEvent />,
+  render: () => <NoConversionEvent i18n={english} />,
 };
 
 export const DarkTheme: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <ErrorPanel detail="GET /v1/me · 503" onRetry={fn()} />
-      <NoConversionEvent />
+      <NoConversionEvent i18n={english} />
     </div>
   ),
   globals: { theme: 'dark' },

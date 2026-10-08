@@ -145,6 +145,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'acquisition', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
+            i18n={i18n}
           />
         )}
       </MainContent>

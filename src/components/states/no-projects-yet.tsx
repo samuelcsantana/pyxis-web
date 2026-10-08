@@ -1,19 +1,24 @@
 import { SignOutButton } from '@/components/shell/sign-out-button';
+import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { EmptyState } from './empty-state';
 
 export interface NoProjectsYetProps {
   readonly email: string;
   readonly authService?: IAuthService;
+  readonly i18n: I18n;
 }
 
-export function NoProjectsYet({ email, authService }: NoProjectsYetProps) {
+export function NoProjectsYet({ email, authService, i18n }: NoProjectsYetProps) {
   return (
     <>
-      <EmptyState headingLevel="h1" title="No projects yet">
+      <EmptyState headingLevel="h1" title={i18n.t('states.noProjects.title')}>
         <p>
-          <strong className="text-ink">{email}</strong> can sign in, but no project was granted to
-          it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your email.
+          {rich(i18n.t('states.noProjects.body'), {
+            email: () => <strong className="text-ink">{email}</strong>,
+            code: (text) => <code>{text}</code>,
+          })}
         </p>
       </EmptyState>
       <SignOutButton variant="page" authService={authService} />

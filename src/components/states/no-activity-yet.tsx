@@ -1,3 +1,5 @@
+import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { EmptyState } from './empty-state';
 
@@ -6,6 +8,7 @@ const SDK_README_URL = 'https://github.com/samuelcsantana/pyxis-sdk#readme';
 
 export interface NoActivityYetProps {
   readonly endpoint: string | undefined;
+  readonly i18n: I18n;
 }
 
 export function installSnippet(endpoint: string): string {
@@ -17,19 +20,21 @@ export function installSnippet(endpoint: string): string {
   ].join('\n');
 }
 
-export function NoActivityYet({ endpoint }: NoActivityYetProps) {
+export function NoActivityYet({ endpoint, i18n }: NoActivityYetProps) {
   return (
-    <EmptyState title="No events in this period yet">
-      <p>Install the SDK on your site and the first page views show up here within a minute.</p>
+    <EmptyState title={i18n.t('states.noActivity.title')}>
+      <p>{i18n.t('states.noActivity.install')}</p>
       <pre className="rounded-input bg-nav px-4 py-3.5 font-mono text-xs leading-5 whitespace-pre-wrap text-nav-text wrap-anywhere">
         <code>{installSnippet(endpoint ?? PLACEHOLDER_ENDPOINT)}</code>
       </pre>
       <p>
-        The full setup guide is in the{' '}
-        <a href={SDK_README_URL} className={TEXT_LINK}>
-          SDK&apos;s README
-        </a>
-        .
+        {rich(i18n.t('states.noActivity.guide'), {
+          readme: (text) => (
+            <a href={SDK_README_URL} className={TEXT_LINK}>
+              {text}
+            </a>
+          ),
+        })}
       </p>
     </EmptyState>
   );

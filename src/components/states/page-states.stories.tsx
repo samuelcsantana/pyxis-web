@@ -7,6 +7,7 @@ import { LookUpPrompt, NoVisitsFound } from '@/components/timeline/timeline-empt
 import { serializeSteps } from '@/domain/funnel';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
+import { english } from '@/test-utils/english';
 import { NoProjectsYet } from './no-projects-yet';
 
 const meta = {
@@ -28,7 +29,7 @@ class FailingSignOut extends MockAuthService {
 function HomeWithoutProjects({ authService }: { readonly authService: MockAuthService }) {
   return (
     <MainContent className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
-      <NoProjectsYet email={NEW_ADMIN} authService={authService} />
+      <NoProjectsYet email={NEW_ADMIN} authService={authService} i18n={english} />
     </MainContent>
   );
 }

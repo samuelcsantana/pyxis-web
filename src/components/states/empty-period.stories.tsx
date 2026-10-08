@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { english } from '@/test-utils/english';
 import { EmptyPeriod } from './empty-period';
 
 const meta = {
@@ -9,6 +10,7 @@ const meta = {
     view: { kind: 'quiet', latestEvent: 'Sep 19, 2026, 22:30', offersWiderPeriod: true },
     widerPeriodHref: '/demo/overview?range=30d',
     endpoint: 'https://api.pyxis.example.com',
+    i18n: english,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [

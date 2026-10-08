@@ -106,7 +106,7 @@ function OverviewReportView({
           selectable={!singleDay}
           i18n={i18n}
         />
-        {conversionEvent === null ? <NoConversionEvent /> : null}
+        {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
         {singleDay ? (
           <DayActivityFigures days={report.days} periodLabel={periodLabel} i18n={i18n} />
         ) : (
@@ -185,6 +185,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
             view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'overview', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
+            i18n={i18n}
           />
         )}
       </MainContent>
