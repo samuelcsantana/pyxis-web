@@ -39,6 +39,7 @@ export const timelineResponseSchema = z
       os: visit.os,
       country: visit.country,
       channel: visit.channel,
+      userId: visit.user_id ?? null,
       events: visit.events.map((event) => ({
         id: event.id,
         occurredAt: event.occurred_at,
