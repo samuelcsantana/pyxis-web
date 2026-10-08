@@ -173,7 +173,7 @@ describe('items', () => {
         time: '18:41:10',
         kind: 'request',
         title: 'POST /orders',
-        detail: 'status=409 · duration_ms=164 · error_code=order_number_in_use',
+        detail: '164 ms · order_number_in_use',
         tag: { label: '409', tone: 'client' },
       },
       {
@@ -181,7 +181,7 @@ describe('items', () => {
         time: '18:41:50',
         kind: 'request',
         title: 'POST /orders',
-        detail: 'status=201 · duration_ms=150',
+        detail: '150 ms',
         tag: { label: '201', tone: 'success' },
       },
       {
@@ -211,10 +211,15 @@ describe('items', () => {
       occurredAt: '2026-10-05T21:41:10.000Z',
       name: 'api_request',
       path: '/',
-      properties: { method: 'POST', route: '/x', status: 'oops' },
+      properties: { method: 'POST', route: '/x', status: 'oops', attempt: 2 },
     };
 
     expect(isFailedRequest(odd)).toBe(false);
+    const visits = REPORT.visits.slice(0, 1).map((visit) => ({ ...visit, events: [odd] }));
+    expect(visitViews(visits, 'UTC', 'all')[0]?.items[0]).toMatchObject({
+      tag: null,
+      detail: 'status=oops · attempt=2',
+    });
   });
 });
 

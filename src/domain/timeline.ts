@@ -117,11 +117,10 @@ export interface TimelineItem {
 }
 
 const TITLE_PROPERTIES: ReadonlySet<string> = new Set(['method', 'route']);
-const NO_PROPERTIES: ReadonlySet<string> = new Set();
+const SHOWN_BY_REQUEST_ITEM: ReadonlySet<string> = new Set([...TITLE_PROPERTIES, 'status']);
 
-function propertiesText(properties: TimelineEvent['properties'], skipped: ReadonlySet<string>) {
+function propertiesText(properties: TimelineEvent['properties']) {
   return Object.entries(properties)
-    .filter(([key]) => !skipped.has(key))
     .map(([key, value]) => `${key}=${String(value)}`)
     .join(' · ');
 }
@@ -139,12 +138,28 @@ function itemTitle(event: TimelineEvent): string {
   }
 }
 
+const REQUEST_VALUE_FORMATS: Readonly<Record<string, (value: string) => string>> = {
+  duration_ms: (value) => `${value} ms`,
+  error_code: (value) => value,
+};
+
+function requestDetail(event: TimelineEvent): string {
+  const skipped = requestStatus(event) === null ? TITLE_PROPERTIES : SHOWN_BY_REQUEST_ITEM;
+  return Object.entries(event.properties)
+    .filter(([key]) => !skipped.has(key))
+    .map(([key, value]) => {
+      const format = REQUEST_VALUE_FORMATS[key];
+      return format === undefined ? `${key}=${String(value)}` : format(String(value));
+    })
+    .join(' · ');
+}
+
 function itemDetail(event: TimelineEvent): string {
   const kind = itemKind(event);
-  const properties = propertiesText(
-    event.properties,
-    kind === 'request' ? TITLE_PROPERTIES : NO_PROPERTIES,
-  );
+  if (kind === 'request') {
+    return requestDetail(event);
+  }
+  const properties = propertiesText(event.properties);
   const parts = kind === 'event' ? [event.path, properties] : [properties];
   return parts.filter((part) => part !== '').join(' · ');
 }
