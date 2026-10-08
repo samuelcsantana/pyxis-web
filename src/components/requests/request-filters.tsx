@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { FAILED_READS, type RequestKind } from '@/domain/requests';
 import {
+  PENDING_HOST,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
   TEXT_LINK,
 } from '@/components/ui/control-classes';
+import { PendingMark } from '@/components/ui/pending-mark';
 
 export interface RequestFiltersProps {
   readonly kind: RequestKind;
@@ -17,7 +19,7 @@ export interface RequestFiltersProps {
   readonly clearScreenHref: string;
 }
 
-const OPTION_CLASS = `min-h-9 px-3.5 ${SEGMENTED_OPTION}`;
+const OPTION_CLASS = `min-h-9 px-3.5 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function RequestFilters({
   kind,
@@ -37,6 +39,7 @@ export function RequestFilters({
             className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_IDLE : SEGMENTED_SELECTED}`}
           >
             All routes
+            <PendingMark />
           </Link>
           <Link
             href={failingHref}
@@ -44,6 +47,7 @@ export function RequestFilters({
             className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
           >
             Failing only
+            <PendingMark />
           </Link>
         </nav>
       )}

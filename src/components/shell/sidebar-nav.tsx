@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import {
+  NAV_CONTROL,
+  NAV_ITEM_CURRENT,
+  NAV_ITEM_IDLE,
+  PENDING_HOST,
+} from '@/components/ui/control-classes';
+import { PendingMark } from '@/components/ui/pending-mark';
 import { periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface SidebarNavProps {
@@ -48,10 +54,11 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
               <Link
                 href={screenHref(projectId, screen.slug, query)}
                 aria-current={active ? 'page' : undefined}
-                className={`flex min-h-11 items-center gap-3 rounded-input px-3 text-sm ${NAV_CONTROL} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
+                className={`flex min-h-11 items-center gap-3 rounded-input px-3 text-sm ${PENDING_HOST} ${NAV_CONTROL} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
               >
                 <ScreenIcon path={screen.icon} active={active} />
                 <span>{screen.label}</span>
+                <PendingMark />
               </Link>
             </li>
           );

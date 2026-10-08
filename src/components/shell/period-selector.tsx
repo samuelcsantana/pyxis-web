@@ -2,12 +2,14 @@ import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 import {
   BUTTON_PRIMARY,
+  PENDING_HOST,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
+import { PendingMark } from '@/components/ui/pending-mark';
 import { CustomRangeFields } from './custom-range-fields';
 
 export type KeptParameters = Readonly<Record<string, string>>;
@@ -39,7 +41,7 @@ const PRESET_LABELS: Readonly<Record<PeriodPreset, string>> = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
-const OPTION_CLASS = `min-h-11 px-2.5 sm:min-h-8.5 sm:px-3 ${SEGMENTED_OPTION}`;
+const OPTION_CLASS = `min-h-11 px-2.5 sm:min-h-8.5 sm:px-3 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function PeriodSelector({
   basePath,
@@ -62,6 +64,7 @@ export function PeriodSelector({
               className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
             >
               {PRESET_LABELS[preset]}
+              <PendingMark />
             </Link>
           );
         })}

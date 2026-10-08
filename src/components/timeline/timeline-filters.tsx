@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { TimelineFilter } from '@/domain/timeline';
-import { PILL, PILL_IDLE, PILL_SELECTED } from '@/components/ui/control-classes';
+import { PENDING_HOST, PILL, PILL_IDLE, PILL_SELECTED } from '@/components/ui/control-classes';
+import { PendingMark } from '@/components/ui/pending-mark';
 
 export interface TimelineFilterLink {
   readonly filter: TimelineFilter;
@@ -30,9 +31,10 @@ export function TimelineFilters({ links, current }: TimelineFiltersProps) {
             key={link.filter}
             href={link.href}
             aria-current={selected ? 'page' : undefined}
-            className={`min-h-9 px-3.5 ${PILL} ${selected ? PILL_SELECTED : PILL_IDLE}`}
+            className={`min-h-9 px-3.5 ${PENDING_HOST} ${PILL} ${selected ? PILL_SELECTED : PILL_IDLE}`}
           >
             {LABELS[link.filter]}
+            <PendingMark />
           </Link>
         );
       })}
