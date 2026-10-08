@@ -52,7 +52,7 @@ function DevicesReportView({
   const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
     <>
-      <div className="grid gap-3.5 sm:grid-cols-[repeat(auto-fit,minmax(18.75rem,1fr))] sm:gap-4">
+      <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-4 sm:[&>:last-child:nth-child(odd)]:col-span-full xl:grid-cols-3 xl:[&>:last-child:nth-child(odd)]:col-span-1">
         <ShareDonut
           id="device-type"
           title="Device type"

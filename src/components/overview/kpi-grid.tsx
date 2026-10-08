@@ -12,7 +12,7 @@ export interface KpiGridProps {
 
 export function KpiGrid({ kpis, drillDownHref, selectable = false }: KpiGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
+    <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
       {selectable ? (
         <p id={KPI_TOGGLE_HINT_ID} hidden>
           Plots this figure per day on the chart below.
