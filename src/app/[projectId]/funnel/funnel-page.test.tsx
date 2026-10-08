@@ -184,6 +184,105 @@ describe('FunnelPage', () => {
     expect(screen.queryByRole('group', { name: 'Median time to finish' })).not.toBeInTheDocument();
   });
 
+  it('links every step to who reached it, and every later step to who left before it', async () => {
+    const subjects = vi.fn<IFunnelService['subjects']>();
+    state.subjects = subjects;
+
+    renderWithMessages(await renderFunnel({ range: '7d', steps: STEPS }));
+
+    expect(subjects).not.toHaveBeenCalled();
+    const steps = within(screen.getByRole('list', { name: 'Funnel' }));
+    const reached = steps.getAllByRole('link', { name: /, list who reached step \d$/ });
+    const dropped = steps.getAllByRole('link', { name: /dropped, list who left before step \d$/ });
+    expect(reached).toHaveLength(DEMO_FUNNEL_STEPS.length);
+    expect(dropped).toHaveLength(DEMO_FUNNEL_STEPS.length - 1);
+    const second = new URL(dropped[0]?.getAttribute('href') ?? '', 'https://x');
+    expect(second.searchParams.get('step')).toBe('2');
+    expect(second.searchParams.get('outcome')).toBe('dropped');
+    expect(second.searchParams.get('steps')).toBe(STEPS);
+    expect(second.hash).toBe('#funnel-subjects');
+    expect(screen.queryByRole('region', { name: /reached step/ })).not.toBeInTheDocument();
+  });
+
+  it('lists who left before a step, as many as the step lost, and pages to the older ones', async () => {
+    renderWithMessages(
+      await renderFunnel({ range: '30d', steps: STEPS, step: '2', outcome: 'dropped' }),
+    );
+
+    const list = screen.getByRole('region', { name: /visits reached step 1 and never step 2$/ });
+    const counted = Number(
+      /^([\d,]+) /.exec(list.querySelector('h2')?.textContent ?? '')?.[1]?.replaceAll(',', ''),
+    );
+    expect(counted).toBeGreaterThan(50);
+    expect(within(list).getAllByRole('row')).toHaveLength(51);
+    const opened = within(list).getAllByRole('link', {
+      name: /, open this visit in the timeline$/,
+    });
+    expect(opened[0]).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/p-store\/timeline\?range=30d&visit=[0-9a-f-]{36}$/),
+    );
+    const older = new URL(
+      within(list).getByRole('link', { name: 'Show older' }).getAttribute('href') ?? '',
+      'https://x',
+    );
+    expect(older.searchParams.get('cursor')).not.toBeNull();
+    expect(
+      within(list).queryByRole('link', { name: 'Back to the newest' }),
+    ).not.toBeInTheDocument();
+    expect(within(list).getByRole('link', { name: 'Close the list' })).toHaveAttribute(
+      'href',
+      `/p-store/funnel?range=30d&mode=visit&steps=${encodeURIComponent(STEPS)}`,
+    );
+    const current = screen.getByRole('link', { name: /dropped, list who left before step 2$/ });
+    expect(current).toHaveAttribute('aria-current', 'true');
+    const sevenDays = new URL(
+      screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
+      'https://x',
+    );
+    expect(sevenDays.searchParams.get('step')).toBe('2');
+    expect(sevenDays.searchParams.get('cursor')).toBeNull();
+  });
+
+  it('lists the people of a step in person mode, back to the newest from an older page', async () => {
+    const subjects = vi.fn<IFunnelService['subjects']>(() =>
+      Promise.resolve({
+        subjects: [{ id: 'u_7f3a', lastStepAt: '2026-10-04T12:00:00.000Z' }],
+        nextCursor: null,
+      }),
+    );
+    state.subjects = subjects;
+
+    renderWithMessages(
+      await renderFunnel({
+        range: '30d',
+        mode: 'user',
+        steps: STEPS,
+        step: '1',
+        outcome: 'reached',
+        cursor: 'older',
+      }),
+    );
+
+    expect(subjects).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-06', to: '2026-10-05' },
+      'user',
+      DEMO_FUNNEL_STEPS,
+      { step: 1, outcome: 'reached', cursor: 'older' },
+    );
+    const list = screen.getByRole('region', { name: /people reached step 1$/ });
+    expect(within(list).getByRole('columnheader', { name: 'Person' })).toBeInTheDocument();
+    expect(
+      within(list).getByRole('link', { name: 'u_7f3a, open the timeline of this person' }),
+    ).toHaveAttribute('href', '/p-store/timeline?range=30d&user=u_7f3a');
+    expect(within(list).getByRole('link', { name: 'Back to the newest' })).toHaveAttribute(
+      'href',
+      expect.not.stringContaining('cursor'),
+    );
+    expect(within(list).queryByRole('link', { name: 'Show older' })).not.toBeInTheDocument();
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.funnel = () => Promise.reject(new UnauthenticatedError());
 

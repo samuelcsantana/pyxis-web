@@ -2,9 +2,10 @@ import { BuildAFunnel } from '@/components/funnel/build-a-funnel';
 import { FunnelEditor } from '@/components/funnel/funnel-editor';
 import { FunnelModes } from '@/components/funnel/funnel-modes';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
+import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { StatCard } from '@/components/ui/stat-card';
 import {
@@ -20,6 +21,17 @@ import {
   serializeSteps,
   timeToFinish,
 } from '@/domain/funnel';
+import {
+  drillHeading,
+  drillParameters,
+  type FunnelDrill,
+  type FunnelDrillSearch,
+  type FunnelOutcome,
+  type FunnelSubjectsPage,
+  funnelDrillOf,
+  funnelSubjectsView,
+  withDrillLinks,
+} from '@/domain/funnel-subjects';
 import { funnelStepsOf } from '@/domain/funnel.schema';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
@@ -35,7 +47,7 @@ export const generateMetadata = screenMetadata('funnel');
 
 export interface FunnelPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch & FunnelSearch>;
+  readonly searchParams: Promise<PeriodSearch & FunnelSearch & FunnelDrillSearch>;
 }
 
 const MODE_LABELS: Readonly<Record<FunnelMode, string>> = {
@@ -48,8 +60,14 @@ const NEW_FUNNEL: readonly FunnelStep[] = [
   { type: 'event', name: '' },
 ];
 
-function stepsParameter(steps: readonly FunnelStep[] | null): Readonly<Record<string, string>> {
+type Parameters = Readonly<Record<string, string>>;
+
+function stepsParameter(steps: readonly FunnelStep[] | null): Parameters {
   return steps === null ? {} : { steps: serializeSteps(steps) };
+}
+
+function drillKept(drill: FunnelDrill | null): Parameters {
+  return drill === null ? {} : drillParameters(drill.step, drill.outcome);
 }
 
 export default async function FunnelPage({ params, searchParams }: FunnelPageProps) {
@@ -63,17 +81,23 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const linkTo = (parameters: Readonly<Record<string, string>>) =>
     `${basePath}?${withKeptParameters(periodQuery(period), parameters)}`;
   const editorKeep = { ...Object.fromEntries(new URLSearchParams(periodQuery(period))), mode };
-  const report =
+  const drill = steps === null ? null : funnelDrillOf(search, steps.length);
+  const range = { from: period.from, to: period.to };
+  const service = createFunnelService();
+  const [report, drilled] =
     steps === null
-      ? null
-      : await readOrSignIn(() =>
-          createFunnelService().funnel(
-            project.id,
-            { from: period.from, to: period.to },
-            mode,
-            steps,
-          ),
-        );
+      ? [null, null]
+      : await Promise.all([
+          readOrSignIn(() => service.funnel(project.id, range, mode, steps)),
+          drill === null
+            ? null
+            : readOrSignIn(() => service.subjects(project.id, range, mode, steps, drill)).then(
+                (page) => ({ drill, page }),
+              ),
+        ]);
+  const kept = { mode, ...stepsParameter(steps) };
+  const drillHref = (parameters: Parameters) =>
+    `${linkTo({ ...kept, ...parameters })}#${FUNNEL_SUBJECTS_ID}`;
   const i18n = await getI18n();
   return (
     <>
@@ -84,7 +108,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         period={period}
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
-        keep={{ mode, ...stepsParameter(steps) }}
+        keep={{ ...kept, ...drillKept(drill) }}
         i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
@@ -93,7 +117,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
           links={FUNNEL_MODES.map((target) => ({
             mode: target,
             label: MODE_LABELS[target],
-            href: linkTo({ mode: target, ...stepsParameter(steps) }),
+            href: linkTo({ ...kept, mode: target, ...drillKept(drill) }),
           }))}
         />
         {steps === null || report === null ? (
@@ -109,6 +133,31 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             secondsToFinish={report.medianSecondsOverall}
             mode={mode}
             i18n={i18n}
+            drill={drill}
+            drillHref={(step, outcome) => drillHref(drillParameters(step, outcome))}
+            subjects={
+              drilled === null ? null : (
+                <FunnelSubjects
+                  view={funnelSubjectsView(
+                    drilled.page,
+                    drillHeading(
+                      countedSteps(steps, report).map((step) => step.count),
+                      drilled.drill,
+                      mode,
+                      i18n,
+                    ),
+                    mode,
+                    project.timezone,
+                    (lookup) =>
+                      linkWith(screenHref(project.id, 'timeline', periodQuery(period)), lookup),
+                    i18n,
+                  )}
+                  olderHref={olderHref(drilled.page, drilled.drill, drillHref)}
+                  newestHref={newestHref(drilled.drill, drillHref)}
+                  closeHref={linkTo(kept)}
+                />
+              )
+            }
             editor={
               <FunnelEditor
                 key={serializeSteps(steps)}
@@ -125,15 +174,44 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   );
 }
 
+function olderHref(
+  page: FunnelSubjectsPage,
+  drill: FunnelDrill,
+  drillHref: (parameters: Parameters) => string,
+): string | null {
+  return page.nextCursor === null
+    ? null
+    : drillHref({ ...drillParameters(drill.step, drill.outcome), cursor: page.nextCursor });
+}
+
+function newestHref(
+  drill: FunnelDrill,
+  drillHref: (parameters: Parameters) => string,
+): string | null {
+  return drill.cursor === null ? null : drillHref(drillParameters(drill.step, drill.outcome));
+}
+
 interface FunnelReportViewProps {
   readonly counted: ReturnType<typeof countedSteps>;
   readonly secondsToFinish: number | null;
   readonly mode: FunnelMode;
   readonly editor: React.ReactNode;
+  readonly subjects: React.ReactNode;
+  readonly drill: FunnelDrill | null;
+  readonly drillHref: (step: number, outcome: FunnelOutcome) => string;
   readonly i18n: I18n;
 }
 
-function FunnelReportView({ counted, secondsToFinish, mode, editor, i18n }: FunnelReportViewProps) {
+function FunnelReportView({
+  counted,
+  secondsToFinish,
+  mode,
+  editor,
+  subjects,
+  drill,
+  drillHref,
+  i18n,
+}: FunnelReportViewProps) {
   const overall = overallConversion(counted, mode, i18n);
   const drop = biggestDropOff(counted, i18n);
   const finish = timeToFinish(secondsToFinish, counted.length, i18n);
@@ -162,7 +240,17 @@ function FunnelReportView({ counted, secondsToFinish, mode, editor, i18n }: Funn
           />
         )}
       </div>
-      <FunnelSteps rows={funnelRows(counted, i18n)} mode={mode} />
+      <FunnelSteps
+        rows={withDrillLinks(
+          funnelRows(counted, i18n),
+          counted.map((step) => step.count),
+          drill,
+          drillHref,
+          i18n,
+        )}
+        mode={mode}
+      />
+      {subjects}
     </>
   );
 }
