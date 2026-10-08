@@ -99,6 +99,7 @@ test('closes the custom period form once the focus leaves it, so the search stay
   page,
 }) => {
   await page.goto(`/${STORE_ID}/features`);
+  await page.waitForLoadState('networkidle');
   const custom = page.locator('details', { hasText: 'Custom' });
   const search = page.getByRole('searchbox', { name: 'Search events' });
 
