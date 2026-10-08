@@ -271,7 +271,7 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 152               |
 | Dashboard screens without a chart                      | 161               |
-| Dashboard screens with a chart (Overview, Acquisition) | 266               |
+| Dashboard screens with a chart (Overview, Acquisition) | 162               |
 
 ## Project structure
 
