@@ -224,10 +224,10 @@ describe('items', () => {
 });
 
 describe('totals and titles', () => {
-  it('count the visits, events and failed requests shown', () => {
+  it('count the visits, items and failed requests shown', () => {
     expect(timelineTotals(REPORT.visits)).toEqual({
       visits: '2 visits',
-      events: '5 events',
+      items: '5 items',
       failedRequests: '1 failed request',
       hasFailures: true,
     });
