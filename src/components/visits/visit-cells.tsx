@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow } from '@/domain/visits';
+import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { linkWith } from '@/components/shell/screens';
 
@@ -60,5 +61,9 @@ export function Highlights({ labels }: { labels: readonly string[] }) {
 }
 
 export function EntryPath({ path }: { path: string | null }) {
-  return path ?? <span className="font-sans text-muted">{NO_VALUE}</span>;
+  return path === null ? (
+    <span className="font-sans text-muted">{NO_VALUE}</span>
+  ) : (
+    <Breakable text={path} />
+  );
 }
