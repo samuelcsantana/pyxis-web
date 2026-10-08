@@ -51,6 +51,16 @@ export const acquisitionResponseSchema = z
       convertingVisits: source.converting_visits ?? null,
       fromAdClickVisits: source.from_ad_click_visits,
     })),
+    campaigns: (body.campaigns ?? []).map((campaign) => ({
+      campaign: campaign.campaign,
+      source: campaign.source,
+      medium: campaign.medium,
+      channel: campaign.channel,
+      visits: campaign.visits,
+      conversions: campaign.conversions,
+      convertingVisits: campaign.converting_visits,
+      fromAdClickVisits: campaign.from_ad_click_visits,
+    })),
   }));
 
 export type AcquisitionReport = z.output<typeof acquisitionResponseSchema>;

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   type AcquisitionWire,
   activeChannels,
+  type Campaign,
+  campaignRows,
   channelChartRows,
   channelSummary,
   channelTotals,
@@ -52,6 +54,26 @@ const GOOGLE: Source = {
   convertingVisits: null,
   fromAdClickVisits: 120,
 };
+const SPRING_WIRE = {
+  campaign: 'spring_sale',
+  source: 'google',
+  medium: 'cpc',
+  channel: 'paid',
+  visits: 80,
+  conversions: 6,
+  converting_visits: 4,
+  from_ad_click_visits: 72,
+} as const;
+const SPRING_SALE: Campaign = {
+  campaign: 'spring_sale',
+  source: 'google',
+  medium: 'cpc',
+  channel: 'paid',
+  visits: 80,
+  conversions: 6,
+  convertingVisits: 4,
+  fromAdClickVisits: 72,
+};
 
 describe('acquisitionResponseSchema', () => {
   it('maps the wire names to the dashboard ones', () => {
@@ -63,6 +85,55 @@ describe('acquisitionResponseSchema', () => {
       sources: [{ ...WIRE.sources[0], converting_visits: 5 }],
     }).sources;
     expect(counted?.convertingVisits).toBe(5);
+  });
+
+  it('maps the campaigns, and reads an API without them as none', () => {
+    expect(REPORT.campaigns).toEqual([]);
+    const [campaign] = acquisitionResponseSchema.parse({
+      ...WIRE,
+      campaigns: [SPRING_WIRE],
+    }).campaigns;
+    expect(campaign).toEqual(SPRING_SALE);
+  });
+});
+
+describe('campaignRows', () => {
+  it('gives each campaign its source, conversion rate and ad click visits', () => {
+    const [spring, brand] = campaignRows(
+      [SPRING_SALE, { ...SPRING_SALE, campaign: 'brand', source: '(direct)', visits: 20 }],
+      english,
+    );
+
+    expect(spring).toEqual({
+      key: 'spring_sale|google|cpc|paid',
+      campaign: 'spring_sale',
+      source: 'google',
+      sourceLabel: 'google',
+      medium: 'cpc',
+      channel: 'paid',
+      visits: '80',
+      conversions: '4',
+      conversionRate: '5.0%',
+      barWidth: '25.0%',
+      fromAdClicks: '72 from ad clicks',
+    });
+    expect(brand).toMatchObject({
+      source: '(direct)',
+      sourceLabel: 'Direct',
+      conversionRate: '20.0%',
+      barWidth: '100.0%',
+    });
+  });
+
+  it('falls back to conversion events and leaves rates out without a conversion event', () => {
+    const [events] = campaignRows([{ ...SPRING_SALE, convertingVisits: null }], english);
+    const [none] = campaignRows(
+      [{ ...SPRING_SALE, conversions: null, convertingVisits: null, fromAdClickVisits: 0 }],
+      english,
+    );
+
+    expect(events).toMatchObject({ conversions: '6', conversionRate: '7.5%' });
+    expect(none).toMatchObject({ conversions: null, conversionRate: null, fromAdClicks: null });
   });
 });
 

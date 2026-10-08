@@ -184,3 +184,25 @@ export function sourceRows(sources: readonly Source[], i18n: I18n): readonly Sou
     channel: source.channel,
   }));
 }
+
+export type Campaign = AcquisitionReport['campaigns'][number];
+
+export interface CampaignRow extends ConversionFigures {
+  readonly key: string;
+  readonly campaign: string;
+  readonly source: string;
+  readonly sourceLabel: string;
+  readonly medium: string | null;
+  readonly channel: Channel;
+}
+
+export function campaignRows(campaigns: readonly Campaign[], i18n: I18n): readonly CampaignRow[] {
+  return withConversionFigures(campaigns, i18n, (campaign) => ({
+    key: `${campaign.campaign}|${campaign.source}|${campaign.medium ?? ''}|${campaign.channel}`,
+    campaign: campaign.campaign,
+    source: campaign.source,
+    sourceLabel: sourceLabel(campaign.source, i18n),
+    medium: campaign.medium,
+    channel: campaign.channel,
+  }));
+}
