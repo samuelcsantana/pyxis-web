@@ -235,12 +235,25 @@ describe('Sidebar', () => {
   it('holds the project switcher, the screens, the privacy note and the account', () => {
     render(<Sidebar admin={ADMIN} project={store()} />);
 
-    const sidebar = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(screen.getByText('Privacy-first')).toBeInTheDocument();
+    expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
+  });
 
-    expect(within(sidebar).getByText('Privacy-first')).toBeInTheDocument();
-    expect(within(sidebar).getByText('owner@demo-store.example')).toBeInTheDocument();
-    expect(within(sidebar).getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
-    expect(within(sidebar).getByRole('link', { name: 'Overview' })).toBeInTheDocument();
+  it('becomes the main navigation inside the menu, with the menu bar', () => {
+    render(
+      <MobileMenu>
+        <Sidebar admin={ADMIN} project={store()} />
+      </MobileMenu>,
+    );
+
+    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
+
+    expect(within(navigation).getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
+    expect(
+      within(navigation).getByRole('button', { name: 'Sign out', hidden: true }),
+    ).toBeInTheDocument();
   });
 });
 

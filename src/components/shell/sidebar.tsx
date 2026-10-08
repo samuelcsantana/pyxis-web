@@ -15,10 +15,7 @@ const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 
 
 export function Sidebar({ admin, project }: SidebarProps) {
   return (
-    <nav
-      aria-label="Main navigation"
-      className="flex min-h-full grow flex-col gap-5.5 bg-nav px-3.5 pt-5 pb-6 text-nav-text"
-    >
+    <div className="flex min-h-full grow flex-col gap-5.5 bg-nav px-3.5 pt-5 pb-6 text-nav-text">
       <Link
         href="/"
         className={`hidden items-center gap-2.5 px-2 py-1 text-nav-strong ${NAV_FOCUS_RING} lg:flex`}
@@ -64,6 +61,6 @@ export function Sidebar({ admin, project }: SidebarProps) {
         </div>
         <SignOutButton />
       </div>
-    </nav>
+    </div>
   );
 }

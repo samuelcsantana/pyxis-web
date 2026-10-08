@@ -23,8 +23,11 @@ export function MobileMenu({ children }: MobileMenuProps) {
   };
 
   return (
-    <div className="lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
-      <div className="flex items-center justify-between bg-nav px-4 py-3 text-nav-strong lg:hidden">
+    <nav
+      aria-label="Main navigation"
+      className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0"
+    >
+      <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-nav px-4 text-nav-strong lg:hidden">
         <Link href="/" className={`flex items-center gap-2 ${NAV_FOCUS_RING}`}>
           <LogoMark size={24} />
           <span className="text-lg font-bold tracking-tight">Pyxis</span>
@@ -57,6 +60,6 @@ export function MobileMenu({ children }: MobileMenuProps) {
       >
         {children}
       </div>
-    </div>
+    </nav>
   );
 }
