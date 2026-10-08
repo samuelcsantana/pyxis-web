@@ -95,12 +95,88 @@ export const Pressed: Story = {
   parameters: { pseudo: { active: ['a[href*="/devices"]'] } },
 };
 
+type Play = NonNullable<Story['play']>;
+
+const openTheSwitcher: Play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByText('Switch project. Current project:'));
+  for (const project of DEMO_ADMIN.projects) {
+    await expect(canvas.getByRole('link', { name: project.name })).toBeVisible();
+  }
+  await expect(canvas.getByRole('link', { name: STORE.name })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+};
+
+export const SwitcherOpen: Story = { play: openTheSwitcher };
+
+export const SwitcherOpenDark: Story = { globals: { theme: 'dark' }, play: openTheSwitcher };
+
+class PendingSignOut extends MockAuthService {
+  override signOut(): Promise<void> {
+    return new Promise(() => undefined);
+  }
+}
+
+class FailingSignOut extends MockAuthService {
+  override signOut(): Promise<void> {
+    return Promise.reject(new Error('The API answered 503'));
+  }
+}
+
+const signOutWith = (authService: MockAuthService): Story['render'] =>
+  function SignOutOnTheNav() {
+    return (
+      <div className="flex flex-wrap gap-1 bg-nav p-4">
+        <SignOutButton authService={authService} />
+      </div>
+    );
+  };
+
+const clickSignOut = async (canvasElement: HTMLElement) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole('button', { name: 'Sign out' }));
+  return canvas;
+};
+
+const showsSigningOut: Play = async ({ canvasElement }) => {
+  const canvas = await clickSignOut(canvasElement);
+  const button = await canvas.findByRole('button', { name: 'Signing out…' });
+  await expect(button).toBeDisabled();
+  await expect(button).toHaveAttribute('aria-busy', 'true');
+};
+
+const showsTheSignOutError: Play = async ({ canvasElement }) => {
+  const canvas = await clickSignOut(canvasElement);
+  await expect(await canvas.findByRole('alert')).toHaveTextContent(
+    'Could not sign out. Try again.',
+  );
+  await expect(await canvas.findByRole('button', { name: 'Sign out' })).toBeEnabled();
+};
+
+export const SignOutIdle: Story = { render: signOutWith(new MockAuthService()) };
+
 export const SigningOut: Story = {
-  render: () => (
-    <div className="bg-nav p-4">
-      <SignOutButton authService={new MockAuthService()} />
-    </div>
-  ),
+  render: signOutWith(new PendingSignOut()),
+  play: showsSigningOut,
+};
+
+export const SigningOutDark: Story = {
+  render: signOutWith(new PendingSignOut()),
+  globals: { theme: 'dark' },
+  play: showsSigningOut,
+};
+
+export const SignOutFailed: Story = {
+  render: signOutWith(new FailingSignOut()),
+  play: showsTheSignOutError,
+};
+
+export const SignOutFailedDark: Story = {
+  render: signOutWith(new FailingSignOut()),
+  globals: { theme: 'dark' },
+  play: showsTheSignOutError,
 };
 
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
@@ -118,17 +194,35 @@ export const OnAPhone: Story = {
   decorators: insideTheMobileMenu,
 };
 
+const openTheMenu: Play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+  await expect(canvas.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+    'aria-expanded',
+    'true',
+  );
+  await expect(canvas.getByRole('link', { name: 'Funnel' })).toBeVisible();
+};
+
 export const MenuOpenOnAPhone: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   decorators: insideTheMobileMenu,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
-    await expect(canvas.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
-    await expect(canvas.getByRole('link', { name: 'Funnel' })).toBeVisible();
+  play: openTheMenu,
+};
+
+export const MenuOpenOnAPhoneDark: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  globals: { theme: 'dark' },
+  decorators: insideTheMobileMenu,
+  play: openTheMenu,
+};
+
+export const SwitcherOpenInTheMenuOnAPhone: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  decorators: insideTheMobileMenu,
+  play: async (context) => {
+    await openTheMenu(context);
+    await openTheSwitcher(context);
   },
 };
 
