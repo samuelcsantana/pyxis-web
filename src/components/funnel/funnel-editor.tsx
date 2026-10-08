@@ -38,6 +38,7 @@ export interface FunnelEditorProps {
 
 const ADD_STEP_ID = 'funnel-add-step';
 const BUTTON = `min-h-9 rounded-control px-2.5 text-[13px] ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
+const STEP_BUTTON = `min-h-11 min-w-10 rounded-control px-2.5 text-[13px] sm:min-h-9 sm:min-w-0 ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
 const FIELD_CLASS = `min-h-10 rounded-control px-2.5 text-base sm:text-sm ${FIELD}`;
 
 function toStep(draft: DraftStep): FunnelStep {
@@ -145,9 +146,9 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
               return (
                 <li
                   key={draft.id}
-                  className="grid grid-cols-1 gap-2 rounded-input border border-line p-3 sm:grid-cols-[10rem_minmax(0,1fr)_auto] sm:items-end"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-input border border-line p-3 sm:grid-cols-[10rem_minmax(0,1fr)_auto_auto]"
                 >
-                  <label className="flex flex-col gap-1 text-xs font-medium text-muted">
+                  <label className="col-start-1 row-start-1 flex flex-col gap-1 text-xs font-medium text-muted">
                     Step {position} type
                     <select
                       id={`step-type-${String(draft.id)}`}
@@ -163,7 +164,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       <option value="event">Event name</option>
                     </select>
                   </label>
-                  <label className="flex flex-col gap-1 text-xs font-medium text-muted">
+                  <label className="col-start-1 row-start-2 flex flex-col gap-1 text-xs font-medium text-muted sm:col-start-2 sm:row-start-1">
                     Step {position} {draft.type === 'page' ? 'page path' : 'event name'}
                     <input
                       id={`step-value-${String(draft.id)}`}
@@ -179,7 +180,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       className={`${FIELD_CLASS} font-mono`}
                     />
                   </label>
-                  <span className="flex gap-1.5">
+                  <span className="col-start-2 row-start-1 flex gap-1.5 sm:col-start-3">
                     <button
                       id={`move-up-${String(draft.id)}`}
                       type="button"
@@ -188,7 +189,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       onClick={() => {
                         move(index, -1, draft.id);
                       }}
-                      className={BUTTON}
+                      className={STEP_BUTTON}
                     >
                       ↑
                     </button>
@@ -200,25 +201,28 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       onClick={() => {
                         move(index, 1, draft.id);
                       }}
-                      className={BUTTON}
+                      className={STEP_BUTTON}
                     >
                       ↓
                     </button>
-                    <button
-                      id={`remove-step-${String(draft.id)}`}
-                      type="button"
-                      aria-label={`Remove step ${position}`}
-                      disabled={drafts.length <= MIN_FUNNEL_STEPS}
-                      onClick={() => {
-                        remove(index);
-                      }}
-                      className={BUTTON}
-                    >
-                      Remove
-                    </button>
                   </span>
+                  <button
+                    id={`remove-step-${String(draft.id)}`}
+                    type="button"
+                    aria-label={`Remove step ${position}`}
+                    disabled={drafts.length <= MIN_FUNNEL_STEPS}
+                    onClick={() => {
+                      remove(index);
+                    }}
+                    className={`col-start-2 row-start-2 sm:col-start-4 sm:row-start-1 ${STEP_BUTTON}`}
+                  >
+                    <span aria-hidden="true" className="sm:hidden">
+                      ✕
+                    </span>
+                    <span className="hidden sm:inline">Remove</span>
+                  </button>
                   {problem === null ? null : (
-                    <p id={problemId} className="text-xs text-bad sm:col-span-3">
+                    <p id={problemId} className="col-span-2 text-xs text-bad sm:col-span-4">
                       {problem}
                     </p>
                   )}
