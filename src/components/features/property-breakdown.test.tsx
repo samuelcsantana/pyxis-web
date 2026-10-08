@@ -56,21 +56,21 @@ describe('PropertyBreakdown', () => {
   it('says it is loading', () => {
     render(
       <PropertyBreakdown
-        eventLabel="Cta clicked"
+        eventLabel="CTA clicked"
         state={{ status: 'loading' }}
         onRetry={vi.fn()}
         valueHref={valueHref}
       />,
     );
 
-    expect(screen.getByRole('status')).toHaveTextContent('Loading the properties of Cta clicked…');
+    expect(screen.getByRole('status')).toHaveTextContent('Loading the properties of CTA clicked…');
   });
 
   it('offers to try again after a failure', async () => {
     const onRetry = vi.fn();
     render(
       <PropertyBreakdown
-        eventLabel="Cta clicked"
+        eventLabel="CTA clicked"
         state={{ status: 'error' }}
         onRetry={onRetry}
         valueHref={valueHref}
@@ -331,7 +331,7 @@ describe('FeatureTable with a property loader', () => {
       />,
     );
 
-    expect(screen.getByRole('button', { name: 'Properties of Cta clicked' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Properties of CTA clicked' })).toBeInTheDocument();
 
     rerender(
       <FeatureTable

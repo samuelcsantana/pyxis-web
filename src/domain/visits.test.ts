@@ -260,7 +260,7 @@ describe('visitRows', () => {
       entryPath: '/calculator',
       pageViews: '3',
       pagesLabel: '3 pages',
-      highlights: ['Calculator result shown', 'Cta clicked'],
+      highlights: ['Calculator result shown', 'CTA clicked'],
       failedRequests: 1,
       failedRequestsLabel: '1 failed request',
       device: 'Mobile · Safari · iOS · Brazil',

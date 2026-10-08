@@ -48,7 +48,7 @@ test('opens the visits of a screen and of a property value from Features', async
   await expect(visitRows(page).first()).toBeVisible();
 
   await page.goto(`/${STORE_ID}/features?range=30d`);
-  await page.getByRole('button', { name: 'Properties of Cta clicked' }).click();
+  await page.getByRole('button', { name: 'Properties of CTA clicked' }).click();
   await page
     .getByRole('link', { name: 'create_account: see the visits where cta is create_account' })
     .click();

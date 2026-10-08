@@ -161,6 +161,19 @@ describe('trendOf', () => {
 describe('eventLabel', () => {
   it('turns an event name into a sentence-case label', () => {
     expect(eventLabel('calculator_result_shown')).toBe('Calculator result shown');
-    expect(eventLabel('cta')).toBe('Cta');
+    expect(eventLabel('signup')).toBe('Signup');
+  });
+
+  it('writes the usual acronyms in capitals wherever they sit in the name', () => {
+    expect(eventLabel('cta_clicked')).toBe('CTA clicked');
+    expect(eventLabel('cta')).toBe('CTA');
+    expect(eventLabel('export_csv')).toBe('Export CSV');
+    expect(eventLabel('user_id_set')).toBe('User ID set');
+    expect(eventLabel('Api_Key_created')).toBe('API Key created');
+  });
+
+  it('leaves words that only contain an acronym alone', () => {
+    expect(eventLabel('identify_failed')).toBe('Identify failed');
+    expect(eventLabel('apiary_opened')).toBe('Apiary opened');
   });
 });

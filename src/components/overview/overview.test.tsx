@@ -412,11 +412,11 @@ describe('TopEventsList', () => {
     );
 
     const [item, single] = screen.getAllByRole('listitem');
-    expect(item).toHaveTextContent('Cta clicked');
+    expect(item).toHaveTextContent('CTA clicked');
     expect(item).toHaveTextContent('cta_clicked');
     expect(item).toHaveTextContent('1,200 in 900 visits');
     expect(single).toHaveTextContent('1 in 1 visit');
-    expect(screen.getByRole('link', { name: 'Cta clicked: see its visits' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'CTA clicked: see its visits' })).toHaveAttribute(
       'href',
       '/p-store/visits?range=7d&event=cta_clicked',
     );

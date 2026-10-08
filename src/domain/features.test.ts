@@ -28,7 +28,7 @@ describe('featureKindOf and searchQueryOf', () => {
 
 describe('featureLabel', () => {
   it('turns an event name into words and keeps a screen path as it is', () => {
-    expect(featureLabel('events', 'cta_clicked')).toBe('Cta clicked');
+    expect(featureLabel('events', 'cta_clicked')).toBe('CTA clicked');
     expect(featureLabel('screens', '/orders/:id')).toBe('/orders/:id');
   });
 });
@@ -47,7 +47,7 @@ describe('featureRows', () => {
       },
       {
         name: 'cta_clicked',
-        label: 'Cta clicked',
+        label: 'CTA clicked',
         count: '100',
         visits: '90',
         share: '25%',
