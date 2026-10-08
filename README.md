@@ -388,7 +388,9 @@ docs/adr/           architecture decision records
   the same session cookie, as the page: it holds nothing the screen does not show, answers
   `Cache-Control: private, no-store`, and a 404 for a table the screen does not have. The Visits
   file carries the pseudonymous user id a site passed to `identify()`, as the Visits list and the
-  Timeline already show it: treat the file like the dashboard it came from
+  Timeline already show it: treat the file like the dashboard it came from. The Visits export
+  follows the API's cursor, 50 visits a read, so it sets its own `maxDuration` of 60 seconds
+  rather than lean on the project's default
 - The session is an `HttpOnly` cookie set by the API; the dashboard's JavaScript never reads it.
   The only cookie the dashboard writes is `pyxis_theme`, the light or dark choice, which the root
   layout reads so the first paint has the right theme (so every page renders on request)
