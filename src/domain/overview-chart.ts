@@ -77,8 +77,6 @@ interface MetricSource {
 }
 
 const PERCENT_POINTS = 100;
-const NO_VALUE_GAP = 'no value';
-const NO_WRITES_GAP = 'no writes';
 
 export function chartMetric(
   value: string | readonly string[] | null | undefined,
@@ -149,16 +147,16 @@ function activitySeries(
 function activityChart(report: OverviewReport, i18n: I18n): OverviewChart {
   return {
     metric: ACTIVITY,
-    title: 'Activity per day',
-    subject: 'Page views and named events',
+    title: i18n.t('overviewChart.activityTitle'),
+    subject: i18n.t('overviewChart.activitySubject'),
     format: 'count',
     additive: true,
-    gapLabel: NO_VALUE_GAP,
+    gapLabel: i18n.t('overviewChart.gaps.noValue'),
     dates: report.days.map((day) => day.date),
     previousDates: previousDatesOf(report),
     series: [
-      activitySeries(report, 'pageViews', 'Page views', 'sky', i18n),
-      activitySeries(report, 'events', 'Named events', 'violet', i18n),
+      activitySeries(report, 'pageViews', i18n.t('overviewChart.pageViews'), 'sky', i18n),
+      activitySeries(report, 'events', i18n.t('overviewChart.namedEvents'), 'violet', i18n),
     ],
     previousTotal: null,
   };
@@ -169,12 +167,13 @@ function countSource(
   kpi: CountKpi,
   previousOf: (day: PreviousDay) => ChartValue,
   additive: boolean,
+  i18n: I18n,
 ): MetricSource {
   return {
     label,
     format: 'count',
     additive,
-    gapLabel: NO_VALUE_GAP,
+    gapLabel: i18n.t('overviewChart.gaps.noValue'),
     values: kpi.daily,
     previousOf,
     total: kpi.current,
@@ -182,12 +181,15 @@ function countSource(
   };
 }
 
-function writeErrorsSource(writeErrors: OverviewReport['kpis']['writeErrors']): MetricSource {
+function writeErrorsSource(
+  writeErrors: OverviewReport['kpis']['writeErrors'],
+  i18n: I18n,
+): MetricSource {
   return {
-    label: 'Write error rate',
+    label: i18n.t('overview.kpis.writeErrorRate'),
     format: 'percent',
     additive: false,
-    gapLabel: NO_WRITES_GAP,
+    gapLabel: i18n.t('overviewChart.gaps.noWrites'),
     values: writeErrors.daily.map(percentPoints),
     previousOf: (day) => percentPoints(day.writeErrors),
     total: percentPoints(writeErrors.current),
@@ -195,22 +197,37 @@ function writeErrorsSource(writeErrors: OverviewReport['kpis']['writeErrors']): 
   };
 }
 
-function metricSource(report: OverviewReport, id: KpiId): MetricSource | null {
+function conversionsSource(
+  conversions: CountKpi | null,
+  convertingVisits: CountKpi | null,
+  i18n: I18n,
+): MetricSource | null {
+  const label = i18n.t('overview.kpis.conversions');
+  if (convertingVisits !== null) {
+    return countSource(label, convertingVisits, (day) => day.convertingVisits, true, i18n);
+  }
+  return conversions === null
+    ? null
+    : countSource(label, conversions, (day) => day.conversions, true, i18n);
+}
+
+function metricSource(report: OverviewReport, id: KpiId, i18n: I18n): MetricSource | null {
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
   switch (id) {
     case 'visits':
-      return countSource('Visits', visits, (day) => day.visits, true);
+      return countSource(i18n.t('overview.kpis.visits'), visits, (day) => day.visits, true, i18n);
     case 'identified-users':
-      return countSource('Identified users', identifiedUsers, (day) => day.identifiedUsers, false);
+      return countSource(
+        i18n.t('overview.kpis.identifiedUsers'),
+        identifiedUsers,
+        (day) => day.identifiedUsers,
+        false,
+        i18n,
+      );
     case 'conversions':
-      if (convertingVisits !== null) {
-        return countSource('Conversions', convertingVisits, (day) => day.convertingVisits, true);
-      }
-      return conversions === null
-        ? null
-        : countSource('Conversions', conversions, (day) => day.conversions, true);
+      return conversionsSource(conversions, convertingVisits, i18n);
     case 'write-errors':
-      return writeErrorsSource(writeErrors);
+      return writeErrorsSource(writeErrors, i18n);
   }
 }
 
@@ -219,14 +236,14 @@ export function overviewChart(
   metric: ChartMetric,
   i18n: I18n,
 ): OverviewChart {
-  const source = metric === ACTIVITY ? null : metricSource(report, metric);
+  const source = metric === ACTIVITY ? null : metricSource(report, metric, i18n);
   if (metric === ACTIVITY || source === null) {
     return activityChart(report, i18n);
   }
   const previous = report.previousDays?.map(source.previousOf) ?? [];
   return {
     metric,
-    title: `${source.label} per day`,
+    title: i18n.t('overviewChart.metricTitle', { metric: source.label }),
     subject: source.label,
     format: source.format,
     additive: source.additive,
@@ -257,52 +274,76 @@ export function chartValues(chart: OverviewChart): readonly number[] {
 function seriesStatistics(values: readonly ChartValue[], chart: OverviewChart, i18n: I18n): string {
   const known = knownValues(values);
   if (known.length === 0) {
-    return `${chart.gapLabel} on any day`;
+    return i18n.t('overviewChart.statistics.noneOnAnyDay', { gap: chart.gapLabel });
   }
   const gaps = values.length - known.length;
   const lowest = formatChartValue(Math.min(...known), chart.format, i18n);
   const highest = formatChartValue(Math.max(...known), chart.format, i18n);
   return [
-    ...(chart.additive ? [`${formatCount(sum(known), i18n)} in total`] : []),
-    `between ${lowest} and ${highest} a day`,
-    ...(gaps > 0 ? [`${chart.gapLabel} on ${i18n.t('counts.day', { count: gaps })}`] : []),
+    ...(chart.additive
+      ? [i18n.t('overviewChart.statistics.total', { total: formatCount(sum(known), i18n) })]
+      : []),
+    i18n.t('overviewChart.statistics.range', { lowest, highest }),
+    ...(gaps > 0
+      ? [
+          i18n.t('overviewChart.statistics.gapDays', {
+            gap: chart.gapLabel,
+            days: i18n.t('counts.day', { count: gaps }),
+          }),
+        ]
+      : []),
   ].join(', ');
 }
 
+function seriesSentence(
+  series: ChartSeries,
+  values: readonly ChartValue[],
+  chart: OverviewChart,
+  i18n: I18n,
+): string {
+  return i18n.t('overviewChart.summary.series', {
+    series: series.label,
+    statistics: seriesStatistics(values, chart, i18n),
+  });
+}
+
 export function chartSummary(chart: OverviewChart, i18n: I18n): string {
-  const current = chart.series.map(
-    (series) => `${series.label}: ${seriesStatistics(series.values, chart, i18n)}.`,
-  );
+  const current = chart.series.map((series) => seriesSentence(series, series.values, chart, i18n));
   const previous =
     chart.previousDates === null
       ? []
       : [
-          'Dashed, the previous period.',
-          ...chart.series.map(
-            (series) => `${series.label}: ${seriesStatistics(series.previous, chart, i18n)}.`,
-          ),
+          i18n.t('overviewChart.summary.previous'),
+          ...chart.series.map((series) => seriesSentence(series, series.previous, chart, i18n)),
         ];
   return [
-    `Line chart of ${i18n.t('counts.day', { count: chart.dates.length })}.`,
+    i18n.t('overviewChart.summary.lineChart', {
+      days: i18n.t('counts.day', { count: chart.dates.length }),
+    }),
     ...current,
     ...previous,
   ].join(' ');
 }
 
-export function chartCaption(chart: OverviewChart, periodLabel: string): string {
-  const caption = `${chart.subject} per day, ${periodLabel}`;
-  return chart.previousDates === null ? caption : `${caption}, with the previous period`;
+export function chartCaption(chart: OverviewChart, periodLabel: string, i18n: I18n): string {
+  const caption = i18n.t('overviewChart.caption', { subject: chart.subject, period: periodLabel });
+  return chart.previousDates === null
+    ? caption
+    : i18n.t('overviewChart.captionWithPrevious', { caption });
 }
 
-export function chartColumns(chart: OverviewChart): readonly ChartColumn[] {
+export function chartColumns(chart: OverviewChart, i18n: I18n): readonly ChartColumn[] {
   const current = chart.series.map((series) => ({ label: series.label, numeric: true }));
   if (chart.previousDates === null) {
     return current;
   }
   return [
     ...current,
-    { label: 'Compared with', numeric: false },
-    ...chart.series.map((series) => ({ label: `${series.label} then`, numeric: true })),
+    { label: i18n.t('overviewChart.columns.comparedWith'), numeric: false },
+    ...chart.series.map((series) => ({
+      label: i18n.t('overviewChart.columns.previous', { series: series.label }),
+      numeric: true,
+    })),
   ];
 }
 
@@ -346,7 +387,7 @@ function previousPoints(chart: OverviewChart, index: number, i18n: I18n): readon
   }
   const day = dayLabelAt(chart.previousDates, index, i18n);
   return chart.series.map((series) => ({
-    label: `${series.label}, ${day}`,
+    label: i18n.t('overviewChart.point', { series: series.label, day }),
     value: valueAt(series.previous, index, chart, i18n),
     color: series.color,
     previous: true,

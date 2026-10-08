@@ -187,20 +187,20 @@ describe('previousPeriodNote', () => {
 
 describe('spokenChange', () => {
   it('names a figure as a change for a screen reader', () => {
-    expect(spokenChange('+12.4% (+525)')).toBe(' change');
-    expect(spokenChange('+2.0 pt')).toBe(' change');
+    expect(spokenChange('+12.4% (+525)', english)).toBe(' change');
+    expect(spokenChange('+2.0 pt', english)).toBe(' change');
   });
 
   it('adds nothing to "no change"', () => {
-    expect(spokenChange('no change')).toBe('');
+    expect(spokenChange('no change', english)).toBe('');
   });
 });
 
 describe('spokenTone', () => {
   it('tells a screen reader whether the change is good news, not only the colour', () => {
-    expect(spokenTone('good')).toBe(', better');
-    expect(spokenTone('bad')).toBe(', worse');
-    expect(spokenTone('neutral')).toBe('');
+    expect(spokenTone('good', english)).toBe(', better');
+    expect(spokenTone('bad', english)).toBe(', worse');
+    expect(spokenTone('neutral', english)).toBe('');
   });
 });
 

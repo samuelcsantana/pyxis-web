@@ -25,7 +25,11 @@ const meta = {
   title: 'Overview/KPI cards',
   component: KpiGrid,
   tags: ['autodocs'],
-  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english), drillDownHref },
+  args: {
+    kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english),
+    drillDownHref,
+    i18n: english,
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (

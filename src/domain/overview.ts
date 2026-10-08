@@ -3,7 +3,6 @@ import {
   countChange,
   formatCount,
   formatPercent,
-  NO_CHANGE,
   pointChange,
   rate,
   type Tone,
@@ -91,11 +90,13 @@ function visitsDrillDown(label: string, filter: Partial<VisitFilters>): KpiDrill
   };
 }
 
-const FAILING_ROUTES: KpiDrillDown = {
-  label: 'See failing routes',
-  screen: 'requests',
-  filter: { show: FAILING_ONLY } satisfies RequestsSearch,
-};
+function failingRoutes(i18n: I18n): KpiDrillDown {
+  return {
+    label: i18n.t('overview.drillDowns.failingRoutes'),
+    screen: 'requests',
+    filter: { show: FAILING_ONLY } satisfies RequestsSearch,
+  };
+}
 
 function countKpi(kpi: Kpi, text: KpiText, comparison: string, i18n: I18n): KpiView {
   const change = countChange(kpi.current, kpi.previous, i18n);
@@ -128,29 +129,33 @@ function writeErrorsKpi(
   );
   return {
     id: 'write-errors',
-    label: 'Write error rate',
+    label: i18n.t('overview.kpis.writeErrorRate'),
     value: formatPercent(current, i18n),
     change: change.text,
     tone: toneOf(change.trend, 'down'),
     comparison,
-    note: `${formatCount(writeErrors.current.failed, i18n)} of ${i18n.t('counts.write', { count: writeErrors.current.total })} failed`,
+    note: i18n.t('overview.notes.writeErrors', {
+      failed: formatCount(writeErrors.current.failed, i18n),
+      writes: i18n.t('counts.write', { count: writeErrors.current.total }),
+    }),
     series: writeErrors.daily.map(failureRate),
-    drillDown: writeErrors.current.failed > 0 ? FAILING_ROUTES : null,
+    drillDown: writeErrors.current.failed > 0 ? failingRoutes(i18n) : null,
   };
 }
 
-const SPOKEN_TONES: Readonly<Record<Tone, string>> = {
-  good: ', better',
-  bad: ', worse',
-  neutral: '',
-};
-
-export function spokenChange(change: string): string {
-  return change === NO_CHANGE ? '' : ' change';
+export function spokenChange(change: string, i18n: I18n): string {
+  return change === i18n.t('metrics.noChange') ? '' : ` ${i18n.t('overview.spoken.change')}`;
 }
 
-export function spokenTone(tone: Tone): string {
-  return SPOKEN_TONES[tone];
+export function spokenTone(tone: Tone, i18n: I18n): string {
+  switch (tone) {
+    case 'good':
+      return `, ${i18n.t('overview.spoken.better')}`;
+    case 'bad':
+      return `, ${i18n.t('overview.spoken.worse')}`;
+    case 'neutral':
+      return '';
+  }
 }
 
 export interface ComparedPeriod {
@@ -159,13 +164,15 @@ export interface ComparedPeriod {
 }
 
 function wholeDaysNote(days: number, i18n: I18n): string {
-  return days === 1 ? 'vs. the day before' : `vs. previous ${formatCount(days, i18n)} days`;
+  return days === 1
+    ? i18n.t('overview.comparison.dayBefore')
+    : i18n.t('overview.comparison.previousDays', { days: formatCount(days, i18n) });
 }
 
 function unfinishedTodayNote(days: number, i18n: I18n): string {
   return days === 1
-    ? 'so far today vs. all of yesterday'
-    : `vs. previous ${formatCount(days, i18n)} full days`;
+    ? i18n.t('overview.comparison.soFarToday')
+    : i18n.t('overview.comparison.previousFullDays', { days: formatCount(days, i18n) });
 }
 
 export function previousPeriodNote(
@@ -176,8 +183,11 @@ export function previousPeriodNote(
   switch (comparison.kind) {
     case 'same-time':
       return period.days === 1
-        ? `vs. yesterday until ${comparison.until}`
-        : `vs. previous ${formatCount(period.days, i18n)} days, until ${comparison.until}`;
+        ? i18n.t('overview.comparison.yesterdayUntil', { time: comparison.until })
+        : i18n.t('overview.comparison.previousDaysUntil', {
+            days: formatCount(period.days, i18n),
+            time: comparison.until,
+          });
     case 'whole-days':
       return wholeDaysNote(period.days, i18n);
     case 'unknown':
@@ -199,7 +209,10 @@ function withoutJudgement(kpi: KpiView): KpiView {
 }
 
 function shareOfVisits(converted: number, visits: number, i18n: I18n): string {
-  return `${formatPercent(rate(converted, visits), i18n)} of ${i18n.t('counts.visit', { count: visits })}`;
+  return i18n.t('overview.notes.shareOfVisits', {
+    share: formatPercent(rate(converted, visits), i18n),
+    visits: i18n.t('counts.visit', { count: visits }),
+  });
 }
 
 interface ConversionFigures {
@@ -210,29 +223,27 @@ interface ConversionFigures {
 }
 
 const CONVERSIONS_ID = 'conversions';
-const CONVERSIONS_LABEL = 'Conversions';
 
 function conversionsKpi(
   { event, conversions, convertingVisits, visits }: ConversionFigures,
   comparison: string,
   i18n: I18n,
 ): KpiView {
-  const drillDown = visitsDrillDown('See converting visits', { event });
+  const drillDown = visitsDrillDown(i18n.t('overview.drillDowns.convertingVisits'), { event });
+  const label = i18n.t('overview.kpis.conversions');
   if (convertingVisits === null) {
-    const note = `${event} · ${shareOfVisits(conversions.current, visits.current, i18n)}`;
-    return countKpi(
-      conversions,
-      { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
-      comparison,
-      i18n,
-    );
+    const note = i18n.t('overview.notes.conversionEvents', {
+      event,
+      share: shareOfVisits(conversions.current, visits.current, i18n),
+    });
+    return countKpi(conversions, { id: CONVERSIONS_ID, label, note, drillDown }, comparison, i18n);
   }
   const share = shareOfVisits(convertingVisits.current, visits.current, i18n);
   const events = i18n.t('counts.conversionEvent', { count: conversions.current });
-  const note = `${share} sent ${event} · ${events}`;
+  const note = i18n.t('overview.notes.convertingVisits', { share, event, events });
   return countKpi(
     convertingVisits,
-    { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
+    { id: CONVERSIONS_ID, label, note, drillDown },
     comparison,
     i18n,
   );
@@ -251,9 +262,9 @@ export function overviewKpis(
       visits,
       {
         id: 'visits',
-        label: 'Visits',
+        label: i18n.t('overview.kpis.visits'),
         note: null,
-        drillDown: visitsDrillDown('See the visits', {}),
+        drillDown: visitsDrillDown(i18n.t('overview.drillDowns.visits'), {}),
       },
       comparison,
       i18n,
@@ -262,9 +273,11 @@ export function overviewKpis(
       identifiedUsers,
       {
         id: 'identified-users',
-        label: 'Identified users',
-        note: 'signed in at least once',
-        drillDown: visitsDrillDown('See identified visits', { identity: 'identified' }),
+        label: i18n.t('overview.kpis.identifiedUsers'),
+        note: i18n.t('overview.notes.identifiedUsers'),
+        drillDown: visitsDrillDown(i18n.t('overview.drillDowns.identifiedVisits'), {
+          identity: 'identified',
+        }),
       },
       comparison,
       i18n,

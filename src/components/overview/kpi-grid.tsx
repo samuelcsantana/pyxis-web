@@ -1,5 +1,6 @@
 import type { KpiDrillDown, KpiView } from '@/domain/overview';
 import { KPI_COLORS } from '@/domain/overview-chart';
+import type { I18n } from '@/i18n/i18n';
 import { KpiCard } from './kpi-card';
 
 export const KPI_TOGGLE_HINT_ID = 'kpi-toggle-hint';
@@ -8,9 +9,10 @@ export interface KpiGridProps {
   readonly kpis: readonly KpiView[];
   readonly drillDownHref: (drillDown: KpiDrillDown) => string;
   readonly selectable?: boolean;
+  readonly i18n: I18n;
 }
 
-export function KpiGrid({ kpis, drillDownHref, selectable = false }: KpiGridProps) {
+export function KpiGrid({ kpis, drillDownHref, selectable = false, i18n }: KpiGridProps) {
   return (
     <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
       {selectable ? (
@@ -29,6 +31,7 @@ export function KpiGrid({ kpis, drillDownHref, selectable = false }: KpiGridProp
               : { label: kpi.drillDown.label, href: drillDownHref(kpi.drillDown) }
           }
           toggleHint={selectable ? KPI_TOGGLE_HINT_ID : null}
+          i18n={i18n}
         />
       ))}
     </div>

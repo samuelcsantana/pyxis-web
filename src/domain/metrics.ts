@@ -5,7 +5,6 @@ const CHANGE_PRECISION = 1000;
 const POINT_PRECISION = 10;
 const PERCENT_POINTS = 100;
 export const NO_VALUE = '—';
-export const NO_CHANGE = 'no change';
 export const MIN_COMPARABLE_BASE = 20;
 export const MIN_MEANINGFUL_CHANGE = 0.01;
 export const MIN_MEANINGFUL_POINTS = 0.5;
@@ -69,7 +68,7 @@ export function formatPointChange(
     return NO_VALUE;
   }
   if (points === 0) {
-    return NO_CHANGE;
+    return i18n.t('metrics.noChange');
   }
   return i18n.t('units.points', {
     points: signed(points, i18n.format.decimal(Math.abs(points))),
@@ -88,7 +87,7 @@ export interface Change {
 export function countChange(current: number, previous: number, i18n: I18n): Change {
   const difference = current - previous;
   if (difference === 0) {
-    return { text: NO_CHANGE, trend: 'flat' };
+    return { text: i18n.t('metrics.noChange'), trend: 'flat' };
   }
   const absolute = formatSignedCount(difference, i18n);
   const shown = displayedChange(percentChange(current, previous));

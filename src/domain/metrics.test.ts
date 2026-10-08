@@ -9,7 +9,6 @@ import {
   formatPointChange,
   formatSignedCount,
   MIN_COMPARABLE_BASE,
-  NO_CHANGE,
   NO_VALUE,
   percentChange,
   pointChange,
@@ -51,14 +50,14 @@ describe('formatters', () => {
   it('show a change that rounds to zero as no change, without a sign', () => {
     expect(formatChange(0.0004, english)).toBe('0.0%');
     expect(formatChange(-0.0004, english)).toBe('0.0%');
-    expect(formatPointChange(0.03001, 0.03, english)).toBe(NO_CHANGE);
-    expect(formatPointChange(0.03, 0.03004, english)).toBe(NO_CHANGE);
+    expect(formatPointChange(0.03001, 0.03, english)).toBe('no change');
+    expect(formatPointChange(0.03, 0.03004, english)).toBe('no change');
   });
 
   it('give a change of rates in percentage points', () => {
     expect(formatPointChange(0.024, 0.027, english)).toBe('−0.3 pt');
     expect(formatPointChange(0.03, 0.01, english)).toBe('+2.0 pt');
-    expect(formatPointChange(0.02, 0.02, english)).toBe(NO_CHANGE);
+    expect(formatPointChange(0.02, 0.02, english)).toBe('no change');
     expect(formatPointChange(null, 0.02, english)).toBe(NO_VALUE);
     expect(formatPointChange(0.02, null, english)).toBe(NO_VALUE);
   });
@@ -78,8 +77,8 @@ describe('countChange', () => {
   });
 
   it('says no change when the counts are equal', () => {
-    expect(countChange(0, 0, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
-    expect(countChange(42, 42, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
+    expect(countChange(0, 0, english)).toEqual({ text: 'no change', trend: 'flat' });
+    expect(countChange(42, 42, english)).toEqual({ text: 'no change', trend: 'flat' });
   });
 
   it('gives only the difference when there was nothing before', () => {
@@ -119,7 +118,7 @@ describe('pointChange', () => {
   });
 
   it('says no change, or nothing, when there is no move or nothing to compare', () => {
-    expect(pointChange(0.02, 0.02, 100, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
+    expect(pointChange(0.02, 0.02, 100, english)).toEqual({ text: 'no change', trend: 'flat' });
     expect(pointChange(null, 0.02, 0, english)).toEqual({ text: NO_VALUE, trend: 'flat' });
   });
 });

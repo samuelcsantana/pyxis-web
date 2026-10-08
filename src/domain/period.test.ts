@@ -123,7 +123,7 @@ describe('rejectedRangeNotice', () => {
     ['future', 'it ends after today'],
     ['too-long', 'it is longer than 400 days'],
   ] as const)('says why a %s range was not used', (problem, reason) => {
-    expect(rejectedRangeNotice({ from: '2026-09-02', to: '2026-09-01', problem })).toBe(
+    expect(rejectedRangeNotice({ from: '2026-09-02', to: '2026-09-01', problem }, english)).toBe(
       `That range was not used: ${reason}. Showing the last 30 days instead.`,
     );
   });

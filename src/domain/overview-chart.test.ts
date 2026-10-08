@@ -279,11 +279,11 @@ describe('chartSummary', () => {
 
 describe('the table of the chart', () => {
   it('has a column per series, and the compared day and values when there is a previous period', () => {
-    expect(chartColumns(chartOf(WIRE, ACTIVITY))).toEqual([
+    expect(chartColumns(chartOf(WIRE, ACTIVITY), english)).toEqual([
       { label: 'Page views', numeric: true },
       { label: 'Named events', numeric: true },
     ]);
-    expect(chartColumns(chartOf(WITH_PREVIOUS, 'visits'))).toEqual([
+    expect(chartColumns(chartOf(WITH_PREVIOUS, 'visits'), english)).toEqual([
       { label: 'Visits', numeric: true },
       { label: 'Compared with', numeric: false },
       { label: 'Visits then', numeric: true },
@@ -291,10 +291,10 @@ describe('the table of the chart', () => {
   });
 
   it('names the period and says whether the previous one is in it', () => {
-    expect(chartCaption(chartOf(WIRE, ACTIVITY), 'last 2 days')).toBe(
+    expect(chartCaption(chartOf(WIRE, ACTIVITY), 'last 2 days', english)).toBe(
       'Page views and named events per day, last 2 days',
     );
-    expect(chartCaption(chartOf(WITH_PREVIOUS, 'visits'), 'last 2 days')).toBe(
+    expect(chartCaption(chartOf(WITH_PREVIOUS, 'visits'), 'last 2 days', english)).toBe(
       'Visits per day, last 2 days, with the previous period',
     );
   });
