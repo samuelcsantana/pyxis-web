@@ -23,7 +23,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     summary: 'Line chart of 14 days, between 9 and 34 a day.',
-    heightClassName: 'h-30 sm:h-60',
+    heightClassName: 'h-44 sm:h-60',
     axis: AXIS,
     dates: DATES,
     layout: 'points',
