@@ -4,6 +4,7 @@ import prettier from 'eslint-config-prettier';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import { noComments } from './eslint-rules/no-comments.mjs';
+import { noPixelFontSize } from './eslint-rules/no-pixel-font-size.mjs';
 
 const DICTIONARY_IMPORTS = {
   group: ['**/i18n/messages/*', './messages/*'],
@@ -25,7 +26,9 @@ export default defineConfig(
   ...nextVitals,
   {
     linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' },
-    plugins: { local: { rules: { 'no-comments': noComments } } },
+    plugins: {
+      local: { rules: { 'no-comments': noComments, 'no-pixel-font-size': noPixelFontSize } },
+    },
     rules: { 'local/no-comments': 'error' },
   },
   tseslint.configs.strictTypeChecked,
@@ -44,6 +47,10 @@ export default defineConfig(
         },
       ],
     },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: { 'local/no-pixel-font-size': 'error' },
   },
   {
     files: ['src/**/*.{ts,tsx}'],
