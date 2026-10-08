@@ -35,6 +35,7 @@ const WIRE: RequestsWire = {
         { status: 0, count: 2 },
       ],
       median_duration_ms: 164,
+      p95_duration_ms: 426,
       screens: [{ path: '/orders/new', failed: 21 }],
       recent_failures: [
         {
@@ -66,6 +67,28 @@ describe('requestsResponseSchema', () => {
     expect(ORDERS.medianDurationMs).toBe(164);
     expect(ORDERS.recentFailures[0]?.errorCode).toBe('order_number_in_use');
     expect(ME.screens).toEqual([]);
+  });
+
+  it('reads the p95 and the failures per day, and an API without them as unknown', () => {
+    const report = requestsResponseSchema.parse({
+      ...WIRE,
+      days: [
+        {
+          date: '2026-10-05',
+          by_status_class: { success: 10, client_error: 2, server_error: 1, no_response: 0 },
+        },
+      ],
+    });
+
+    expect(ORDERS.p95DurationMs).toBe(426);
+    expect(ME.p95DurationMs).toBeNull();
+    expect(requestsResponseSchema.parse(WIRE).days).toEqual([]);
+    expect(report.days).toEqual([
+      {
+        date: '2026-10-05',
+        byStatusClass: { success: 10, clientError: 2, serverError: 1, noResponse: 0 },
+      },
+    ]);
   });
 
   it('reads a report that names its kind as well as one from an API that does not', () => {
@@ -228,6 +251,7 @@ describe('routeRows', () => {
         { label: 'No response × 2', tone: 'server' },
       ],
       median: '164 ms',
+      p95: '426 ms',
       summary: '1,284 requests · 1.9% errors · median 164 ms',
       screens: [{ path: '/orders/new', failed: '21 failed' }],
       failures: [
@@ -244,6 +268,7 @@ describe('routeRows', () => {
     });
     expect(me?.hasFailures).toBe(false);
     expect(me?.errorShare).toBe('0.0%');
+    expect(me?.p95).toBeNull();
   });
 
   it('sums a failed read up by its failures, with no share of errors', () => {

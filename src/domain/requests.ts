@@ -228,6 +228,7 @@ export interface RouteRow {
   readonly hasFailures: boolean;
   readonly statuses: readonly StatusChip[];
   readonly median: string;
+  readonly p95: string | null;
   readonly summary: string;
   readonly screens: readonly ScreenFailure[];
   readonly failures: readonly FailureRow[];
@@ -276,6 +277,7 @@ export function routeRows(
         tone: statusTone(entry.status),
       })),
       median,
+      p95: route.p95DurationMs === null ? null : formatDuration(route.p95DurationMs, i18n),
       summary: routeSummary(route, kind, { errorShare, median }, i18n),
       screens: route.screens.map((screen) => ({
         path: screen.path,
