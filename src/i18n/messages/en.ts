@@ -735,6 +735,35 @@ export const en = {
     },
   },
   funnelEditor: {
+    heading: 'Steps',
+    open: 'Edit steps',
+    close: 'Close the editor',
+    stepType: 'Step {step} type',
+    types: {
+      page: 'Page path',
+      event: 'Event name',
+    },
+    stepValue: {
+      page: 'Step {step} page path',
+      event: 'Step {step} event name',
+    },
+    placeholders: {
+      page: '/pricing or /blog/*',
+      event: 'signup_completed',
+    },
+    moveUp: 'Move step {step} up',
+    moveDown: 'Move step {step} down',
+    remove: 'Remove step {step}',
+    removeShort: 'Remove',
+    add: 'Add step',
+    stepCount: '{steps} of {max} steps, at least {min}',
+    apply: 'Apply',
+    applying: 'Applying…',
+    status: {
+      ready: 'Apply to count these {steps} steps.',
+      fillIn: 'Fill in every step to apply.',
+      fix: 'Fix the highlighted steps to apply.',
+    },
     problems: {
       pathStart: 'A page path starts with "/".',
       pathLength: 'A page path has at most {max} characters.',
