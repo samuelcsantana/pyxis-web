@@ -5,6 +5,7 @@ import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
+import { CsvDownloads } from '@/components/ui/csv-downloads';
 import {
   FEATURE_KINDS,
   type FeatureKind,
@@ -13,7 +14,9 @@ import {
   type FeatureSearch as FeatureSearchParameters,
   searchQueryOf,
 } from '@/domain/features';
+import { FEATURES_TABLE_LABELS } from '@/domain/features-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
@@ -46,6 +49,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const basePath = screenHref(project.id, 'features');
   const kindHref = (target: FeatureKind) =>
     `${basePath}?${withKeptParameters(periodQuery(period), { kind: target })}`;
+  const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
   return (
     <>
       <Topbar
@@ -55,7 +59,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         period={period}
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
-        keep={query === '' ? { kind } : { kind, q: query }}
+        keep={kept}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -84,6 +88,18 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
               ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
               : undefined
           }
+        />
+        <CsvDownloads
+          downloads={[
+            {
+              label: FEATURES_TABLE_LABELS[kind],
+              href: exportHref(
+                project.id,
+                'features',
+                withKeptParameters(periodQuery(period), kept),
+              ),
+            },
+          ]}
         />
         <p className="text-xs leading-[18px] text-muted">
           Events are sent by the site with the Pyxis SDK; open one to see how its property values
