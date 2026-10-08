@@ -1,4 +1,5 @@
 import { type Channel, CHANNEL_LABELS, type SourceRow } from '@/domain/acquisition';
+import { NO_VALUE } from '@/domain/metrics';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 import { CHANNEL_COLORS } from './channel-colors';
@@ -30,7 +31,14 @@ function ConversionCells({ row }: { readonly row: SourceRow }) {
           <span aria-hidden="true" className="hidden h-1.5 grow rounded-pill bg-soft sm:block">
             <span className="block h-1.5 rounded-pill bg-ok" style={{ width: row.barWidth }} />
           </span>
-          <span className="w-12 text-right font-semibold">{row.conversionRate}</span>
+          <span className="flex flex-col items-end gap-0.5 text-right sm:w-12">
+            <span className="font-semibold">{row.conversionRate}</span>
+            {row.conversions === null ? null : (
+              <span className="text-xs whitespace-nowrap text-muted sm:hidden">
+                {row.conversions} converted
+              </span>
+            )}
+          </span>
         </span>
       </td>
     </>
@@ -86,6 +94,9 @@ export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
                           href={channelVisitsHref(row.channel)}
                           label={CHANNEL_LABELS[row.channel]}
                         />
+                        {row.medium === null ? null : (
+                          <span className="font-mono sm:hidden">{row.medium}</span>
+                        )}
                         {row.fromAdClicks === null ? null : (
                           <span className="rounded-pill bg-warn-soft px-2 py-0.5 text-[11px] font-semibold text-warn">
                             {row.fromAdClicks}
@@ -96,7 +107,7 @@ export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
                   </span>
                 </th>
                 <td className={`${BODY_CELL} hidden font-mono text-xs text-muted sm:table-cell`}>
-                  {row.medium}
+                  {row.medium ?? NO_VALUE}
                 </td>
                 <td className={`${BODY_CELL} text-right font-semibold`}>{row.visits}</td>
                 {countsConversions ? <ConversionCells row={row} /> : null}
