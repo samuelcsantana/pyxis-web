@@ -67,6 +67,16 @@ export interface ShareRow {
   readonly visits: string;
   readonly share: string;
   readonly fraction: number;
+  readonly conversionRate: string | null;
+}
+
+function convertedVisits(share: ValueShare): number | null {
+  return share.conversions === null ? null : (share.convertingVisits ?? share.conversions);
+}
+
+function conversionRateOf(share: ValueShare): string | null {
+  const converted = convertedVisits(share);
+  return converted === null ? null : formatPercent(rate(converted, share.visits));
 }
 
 export function shareRows(
@@ -82,8 +92,13 @@ export function shareRows(
       visits: formatCount(share.visits),
       share: formatPercent(fraction),
       fraction: fraction ?? 0,
+      conversionRate: conversionRateOf(share),
     };
   });
+}
+
+export function countsConversions(rows: readonly ShareRow[]): boolean {
+  return rows.some((row) => row.conversionRate !== null);
 }
 
 export function shareSummary(title: string, rows: readonly ShareRow[]): string {
@@ -98,11 +113,10 @@ export interface DeviceConversion {
 }
 
 export function deviceConversions(deviceTypes: readonly ValueShare[]): readonly DeviceConversion[] {
-  const counted = deviceTypes.flatMap((share) =>
-    share.conversions === null
-      ? []
-      : [{ ...share, converted: share.convertingVisits ?? share.conversions }],
-  );
+  const counted = deviceTypes.flatMap((share) => {
+    const converted = convertedVisits(share);
+    return converted === null ? [] : [{ ...share, converted }];
+  });
   const rated = counted.map((share) => ({
     ...share,
     rate: rate(share.converted, share.visits),

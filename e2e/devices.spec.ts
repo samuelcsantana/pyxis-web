@@ -34,7 +34,7 @@ test('lists every value of each breakdown with shares that add up', async ({ pag
   await page.goto(`/${STORE_ID}/devices`);
 
   for (const name of ['Device type', 'Browser', 'Operating system', 'Countries']) {
-    const cells = page.getByRole('table', { name }).locator('tbody tr td:last-child');
+    const cells = page.getByRole('table', { name }).locator('tbody tr td:nth-of-type(2)');
     await expect(cells.first()).toBeVisible();
     const shares = await cells.allTextContents();
     const total = shares.reduce((sum, share) => sum + Number(share.replace('%', '')), 0);
@@ -44,13 +44,19 @@ test('lists every value of each breakdown with shares that add up', async ({ pag
   await expect(page.getByRole('table', { name: 'Countries' })).toContainText('Other countries');
 });
 
-test('shows conversion by device only when the project has a conversion event', async ({
-  page,
-}) => {
+test('shows conversions only when the project has a conversion event', async ({ page }) => {
+  const conversionRate = page.getByRole('columnheader', { name: 'Conversion rate' });
   await page.goto(`/${STORE_ID}/devices`);
   await expect(page.getByRole('heading', { name: 'Conversion by device' })).toBeVisible();
+  for (const name of ['Browser', 'Operating system', 'Countries']) {
+    await expect(
+      page.getByRole('table', { name }).getByRole('columnheader', { name: 'Conversion rate' }),
+    ).toBeVisible();
+  }
+  await expect(conversionRate).toHaveCount(3);
 
   await page.goto(`/${DOCS_ID}/devices`);
   await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Conversion by device' })).toHaveCount(0);
+  await expect(conversionRate).toHaveCount(0);
 });

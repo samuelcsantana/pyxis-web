@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   browserLabel,
+  countsConversions,
   countryCode,
   countryLabel,
   deviceConversions,
@@ -89,10 +90,44 @@ describe('shareRows and shareSummary', () => {
     const rows = shareRows(devicesResponseSchema.parse(WIRE).countries, countryLabel);
 
     expect(rows).toEqual([
-      { value: 'BR', label: 'Brazil', visits: '30', share: '75%', fraction: 0.75 },
-      { value: 'other', label: 'Other countries', visits: '10', share: '25%', fraction: 0.25 },
+      {
+        value: 'BR',
+        label: 'Brazil',
+        visits: '30',
+        share: '75%',
+        fraction: 0.75,
+        conversionRate: '6.7%',
+      },
+      {
+        value: 'other',
+        label: 'Other countries',
+        visits: '10',
+        share: '25%',
+        fraction: 0.25,
+        conversionRate: '0%',
+      },
     ]);
     expect(shareSummary('Country', rows)).toBe('Country: Brazil 75%, Other countries 25%.');
+    expect(countsConversions(rows)).toBe(true);
+  });
+
+  it('rate the visits that converted when the API counts them', () => {
+    const [row] = shareRows(
+      [{ value: 'chrome', visits: 100, conversions: 9, convertingVisits: 6 }],
+      browserLabel,
+    );
+
+    expect(row?.conversionRate).toBe('6%');
+  });
+
+  it('have no conversion rate when the project has no conversion event', () => {
+    const rows = shareRows(
+      [{ value: 'chrome', visits: 100, conversions: null, convertingVisits: null }],
+      browserLabel,
+    );
+
+    expect(rows[0]?.conversionRate).toBeNull();
+    expect(countsConversions(rows)).toBe(false);
   });
 
   it('show dashes, not NaN, when nobody visited', () => {

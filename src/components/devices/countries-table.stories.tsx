@@ -25,6 +25,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const WithConversionRate: Story = { args: { withConversionRate: true } };
+
 export const OnlyUnknownCountries: Story = {
   args: {
     rows: shareRows(
@@ -35,3 +37,8 @@ export const OnlyUnknownCountries: Story = {
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const WithConversionRateDarkTheme: Story = {
+  args: { withConversionRate: true },
+  globals: { theme: 'dark' },
+};

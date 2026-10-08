@@ -33,6 +33,10 @@ export const Browser: Story = {
   args: { id: 'browser', title: 'Browser', rows: shareRows(REPORT.browsers, browserLabel) },
 };
 
+export const BrowserWithConversionRate: Story = {
+  args: { ...Browser.args, withConversionRate: true },
+};
+
 export const OperatingSystem: Story = {
   args: {
     id: 'operating-system',
@@ -53,3 +57,8 @@ export const SingleValue: Story = {
 export const Empty: Story = { args: { rows: [] } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const WithConversionRateDarkTheme: Story = {
+  args: { ...Browser.args, withConversionRate: true },
+  globals: { theme: 'dark' },
+};

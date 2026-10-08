@@ -1,11 +1,13 @@
-import { countryCode, type ShareRow } from '@/domain/devices';
+import { countryCode, countsConversions, type ShareRow } from '@/domain/devices';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 export interface CountriesTableProps {
   readonly rows: readonly ShareRow[];
+  readonly withConversionRate?: boolean;
 }
 
-export function CountriesTable({ rows }: CountriesTableProps) {
+export function CountriesTable({ rows, withConversionRate = false }: CountriesTableProps) {
+  const showsConversionRate = withConversionRate && countsConversions(rows);
   return (
     <section aria-labelledby="countries-heading" className={PANEL}>
       <h2 id="countries-heading" className={PANEL_TITLE}>
@@ -23,9 +25,14 @@ export function CountriesTable({ rows }: CountriesTableProps) {
             <th scope="col" className={`${HEADER_CELL} text-right`}>
               Visits
             </th>
-            <th scope="col" className={`${HEADER_CELL} pr-0 text-right`}>
+            <th scope="col" className={`${HEADER_CELL} text-right last:pr-0`}>
               Share
             </th>
+            {showsConversionRate ? (
+              <th scope="col" className={`${HEADER_CELL} pr-0 text-right`}>
+                Conversion rate
+              </th>
+            ) : null}
           </tr>
         </thead>
         <tbody>
@@ -35,7 +42,7 @@ export function CountriesTable({ rows }: CountriesTableProps) {
                 <span className="flex items-center gap-2.5">
                   <span
                     aria-hidden="true"
-                    className="inline-block min-w-7.5 rounded-chip bg-soft py-0.5 text-center font-mono text-[11px] font-semibold"
+                    className="hidden min-w-7.5 rounded-chip bg-soft py-0.5 text-center font-mono text-[11px] font-semibold sm:inline-block"
                   >
                     {countryCode(row.value)}
                   </span>
@@ -43,7 +50,10 @@ export function CountriesTable({ rows }: CountriesTableProps) {
                 </span>
               </th>
               <td className={`${BODY_CELL} text-right`}>{row.visits}</td>
-              <td className={`${BODY_CELL} pr-0 text-right text-muted`}>{row.share}</td>
+              <td className={`${BODY_CELL} text-right text-muted last:pr-0`}>{row.share}</td>
+              {showsConversionRate ? (
+                <td className={`${BODY_CELL} pr-0 text-right`}>{row.conversionRate}</td>
+              ) : null}
             </tr>
           ))}
         </tbody>
