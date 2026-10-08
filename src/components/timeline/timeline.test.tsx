@@ -104,6 +104,7 @@ describe('TimelineSummary', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'User u_7f3a' })).toBeInTheDocument();
+    expect(screen.getByText(/^\d+ items$/)).toBeInTheDocument();
     expect(screen.getByText('2 failed requests')).toHaveClass('text-bad');
 
     rerender(<TimelineSummary title="User u_7f3a" totals={timelineTotals([])} />);

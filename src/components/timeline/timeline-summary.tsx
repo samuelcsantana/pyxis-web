@@ -16,7 +16,7 @@ export function TimelineSummary({ title, totals }: TimelineSummaryProps) {
       </h2>
       <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm tabular-nums">
         <li>{totals.visits}</li>
-        <li>{totals.events}</li>
+        <li>{totals.items}</li>
         <li className={totals.hasFailures ? 'font-semibold text-bad' : 'text-muted'}>
           {totals.failedRequests}
         </li>

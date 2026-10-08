@@ -250,17 +250,17 @@ export function visitViews(
 
 export interface TimelineTotals {
   readonly visits: string;
-  readonly events: string;
+  readonly items: string;
   readonly failedRequests: string;
   readonly hasFailures: boolean;
 }
 
 export function timelineTotals(visits: readonly TimelineVisit[]): TimelineTotals {
-  const events = visits.flatMap((visit) => visit.events);
-  const failed = events.filter(isFailedRequest).length;
+  const items = visits.flatMap((visit) => visit.events);
+  const failed = items.filter(isFailedRequest).length;
   return {
     visits: formatQuantity(visits.length, 'visit', 'visits'),
-    events: formatQuantity(events.length, 'event', 'events'),
+    items: formatQuantity(items.length, 'item', 'items'),
     failedRequests: formatQuantity(failed, 'failed request', 'failed requests'),
     hasFailures: failed > 0,
   };
