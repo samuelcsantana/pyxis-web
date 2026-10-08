@@ -80,10 +80,10 @@ Shipping now:
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Page views and named events per day
   ("Activity per day") as a chart or a table (a single day shows its two totals instead of a
-  one-point chart); the top pages and events, each opening its visits; a footnote defining
-  visit, identified user, conversion, write and failure, and when a change is coloured. Every
-  percentage sits next to the totals it comes from, and a division by zero shows a dash, never
-  `NaN%`
+  one-point chart); the top pages (views and visits) and events (count and the visits that had
+  them), each opening its visits; a footnote defining visit, identified user, conversion, write
+  and failure, and when a change is coloured. Every percentage sits next to the totals it comes
+  from, and a division by zero shows a dash, never `NaN%`
 - One word per idea across screens: "Write error rate" on the Overview and on Requests, "Failing
   only" for the failed-requests filter of Requests and of the Timeline, "Anonymous" for a visit
   without a user id; Overview, Visits and Requests define visit and write with the same sentence
@@ -98,7 +98,8 @@ Shipping now:
   Overview keeps the number of conversion events beside it; without a conversion event, the
   Overview and Devices say so in one line and how the operator sets one
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
-  value with its visits and share, conversion by device, and the countries by name
+  value with its visits and share, conversion by device, and the countries by name; with a
+  conversion event set, each browser, system and country also gives its conversion rate
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
   stacked by channel (chart or table), and the sources with their conversion rate and the visits
   that came from an ad click
