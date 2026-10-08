@@ -2,7 +2,7 @@ import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
@@ -10,6 +10,7 @@ import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { StatCard } from '@/components/ui/stat-card';
 import {
   type AcquisitionReport,
+  type Channel,
   paidVisits,
   sourceRows,
   topChannel,
@@ -42,6 +43,7 @@ interface AcquisitionReportViewProps {
   readonly report: AcquisitionReport;
   readonly period: Period;
   readonly downloads: readonly CsvDownload[];
+  readonly channelVisitsHref: (channel: Channel) => string;
 }
 
 function acquisitionDownloads(projectId: string, period: Period): readonly CsvDownload[] {
@@ -55,7 +57,12 @@ function acquisitionDownloads(projectId: string, period: Period): readonly CsvDo
   }));
 }
 
-function AcquisitionReportView({ report, period, downloads }: AcquisitionReportViewProps) {
+function AcquisitionReportView({
+  report,
+  period,
+  downloads,
+  channelVisitsHref,
+}: AcquisitionReportViewProps) {
   const paid = paidVisits(report.days);
   const top = topChannel(report.days);
   return (
@@ -65,7 +72,7 @@ function AcquisitionReportView({ report, period, downloads }: AcquisitionReportV
         <StatCard id="top-channel" label="Top channel" value={top.value} note={top.note} />
       </div>
       <ChannelChart days={report.days} periodLabel={describePeriod(period)} />
-      <SourcesTable rows={sourceRows(report.sources)} />
+      <SourcesTable rows={sourceRows(report.sources)} channelVisitsHref={channelVisitsHref} />
       <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
         An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
@@ -98,6 +105,9 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             report={report}
             period={period}
             downloads={acquisitionDownloads(project.id, period)}
+            channelVisitsHref={(channel) =>
+              linkWith(screenHref(project.id, 'visits', periodQuery(period)), { channel })
+            }
           />
         ) : (
           <EmptyPeriod

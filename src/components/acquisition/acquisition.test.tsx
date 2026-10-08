@@ -64,17 +64,28 @@ describe('ChannelChart', () => {
   });
 });
 
+function channelVisitsHref(channel: string): string {
+  return `/p1/visits?range=7d&channel=${channel}`;
+}
+
 describe('SourcesTable', () => {
   it('shows each source with its channel, ad click visits and conversion rate', () => {
-    render(<SourcesTable rows={sourceRows([GOOGLE])} />);
+    render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
 
     const [, row] = screen.getAllByRole('row');
     expect(row).toHaveTextContent('googlePaid1,100 from ad clickscpc1,200605%');
+    expect(screen.getByRole('link', { name: 'Paid: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=7d&channel=paid',
+    );
   });
 
   it('leaves the conversion columns out without a conversion event', () => {
     render(
-      <SourcesTable rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }])} />,
+      <SourcesTable
+        rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }])}
+        channelVisitsHref={channelVisitsHref}
+      />,
     );
 
     expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).not.toBeInTheDocument();
@@ -82,7 +93,7 @@ describe('SourcesTable', () => {
   });
 
   it('says so when no visit had a source', () => {
-    render(<SourcesTable rows={[]} />);
+    render(<SourcesTable rows={[]} channelVisitsHref={channelVisitsHref} />);
 
     expect(screen.getByText('No visits with a source in this period.')).toBeInTheDocument();
   });

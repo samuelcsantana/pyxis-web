@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AcquisitionReport } from '@/domain/acquisition';
 import type { Admin } from '@/domain/admin';
@@ -106,6 +106,15 @@ describe('AcquisitionPage', () => {
       'href',
       '/p-store/acquisition/export?range=7d&table=channels',
     );
+  });
+
+  it('links the channel of each source to its visits, in the same period', async () => {
+    render(await renderAcquisition());
+
+    const [paid] = within(screen.getByRole('table', { name: 'Sources' })).getAllByRole('link', {
+      name: 'Paid: see its visits',
+    });
+    expect(paid).toHaveAttribute('href', '/p-store/visits?range=7d&channel=paid');
   });
 
   it('shows how to install the SDK when nobody visited in the period', async () => {
