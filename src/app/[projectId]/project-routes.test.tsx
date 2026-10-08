@@ -147,7 +147,7 @@ describe('OverviewPage', () => {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
     }
     expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(4);
-    expect(screen.getByRole('region', { name: 'Conversions' })).toHaveTextContent(
+    expect(screen.getByRole('group', { name: 'Conversions' })).toHaveTextContent(
       /% of [\d,]+ visits sent signup_completed · [\d,]+ conversion events/,
     );
     expect(screen.getByRole('region', { name: 'Activity per day' })).toHaveTextContent(

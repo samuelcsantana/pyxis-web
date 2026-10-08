@@ -35,7 +35,8 @@ export interface KpiCardProps {
 export function KpiCard({ kpi, color, drillDown }: KpiCardProps) {
   const labelId = `kpi-${kpi.id}`;
   return (
-    <section
+    <div
+      role="group"
       aria-labelledby={labelId}
       className="flex flex-col gap-1.5 rounded-card border border-line bg-card p-3.5 text-ink sm:gap-2.5 sm:px-4.5 sm:pt-4.5 sm:pb-3.5"
     >
@@ -76,6 +77,6 @@ export function KpiCard({ kpi, color, drillDown }: KpiCardProps) {
           {drillDown.label}
         </Link>
       )}
-    </section>
+    </div>
   );
 }

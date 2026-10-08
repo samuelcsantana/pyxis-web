@@ -46,11 +46,11 @@ test('opens the funnel on the example of the project', async ({ page }) => {
 });
 
 test('shows the same figures on every screen for the same period', async ({ page }) => {
-  const valueOf = (role: 'region' | 'group', name: string) =>
-    page.getByRole(role, { name, exact: true }).locator('p').first();
+  const valueOf = (name: string) =>
+    page.getByRole('group', { name, exact: true }).locator('p').first();
   await page.goto(`/${STORE_ID}/overview?range=30d`);
-  const visits = (await valueOf('region', 'Visits').textContent()) ?? '';
-  const errorRate = (await valueOf('region', 'Write error rate').textContent()) ?? '';
+  const visits = (await valueOf('Visits').textContent()) ?? '';
+  const errorRate = (await valueOf('Write error rate').textContent()) ?? '';
 
   await page.goto(`/${STORE_ID}/acquisition?range=30d`);
   await expect(page.getByRole('group', { name: 'Paid visits' })).toContainText(
@@ -58,7 +58,7 @@ test('shows the same figures on every screen for the same period', async ({ page
   );
 
   await page.goto(`/${STORE_ID}/requests?range=30d`);
-  await expect(valueOf('group', 'Write error rate')).toHaveText(errorRate);
+  await expect(valueOf('Write error rate')).toHaveText(errorRate);
 });
 
 test('allows connections only to its own origin', async ({ request }) => {
