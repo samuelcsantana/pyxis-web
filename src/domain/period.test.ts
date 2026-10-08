@@ -13,6 +13,7 @@ import {
   resolvePeriod,
   todayIn,
 } from './period';
+import { english } from '@/test-utils/english';
 
 const SAO_PAULO = 'America/Sao_Paulo';
 const LATE_EVENING_IN_SAO_PAULO = new Date('2026-10-06T02:30:00.000Z');
@@ -149,29 +150,31 @@ describe('periodSearchParameters', () => {
 
 describe('formatPeriod', () => {
   it('shows a single day once', () => {
-    expect(formatPeriod(presetPeriod('today', '2026-10-05'))).toBe('Oct 5, 2026');
+    expect(formatPeriod(presetPeriod('today', '2026-10-05'), english)).toBe('Oct 5, 2026');
   });
 
   it('names the year once when both ends share it', () => {
-    expect(formatPeriod(presetPeriod('30d', '2026-10-05'))).toBe('Sep 6 – Oct 5, 2026');
+    expect(formatPeriod(presetPeriod('30d', '2026-10-05'), english)).toBe('Sep 6 – Oct 5, 2026');
   });
 
   it('names both years across new year', () => {
-    expect(formatPeriod(presetPeriod('7d', '2027-01-02'))).toBe('Dec 27, 2026 – Jan 2, 2027');
+    expect(formatPeriod(presetPeriod('7d', '2027-01-02'), english)).toBe(
+      'Dec 27, 2026 – Jan 2, 2027',
+    );
   });
 });
 
 describe('formatDay and describePeriod', () => {
   it('shows a day as month and day', () => {
-    expect(formatDay('2026-09-06')).toBe('Sep 6');
+    expect(formatDay('2026-09-06', english)).toBe('Sep 6');
   });
 
   it('names a preset in words and a custom period by its dates', () => {
-    expect(describePeriod(presetPeriod('today', '2026-10-05'))).toBe('today');
-    expect(describePeriod(presetPeriod('7d', '2026-10-05'))).toBe('last 7 days');
-    expect(describePeriod(presetPeriod('30d', '2026-10-05'))).toBe('last 30 days');
-    expect(describePeriod({ preset: 'custom', from: '2026-09-01', to: '2026-09-10' })).toBe(
-      'Sep 1 – Sep 10, 2026',
-    );
+    expect(describePeriod(presetPeriod('today', '2026-10-05'), english)).toBe('today');
+    expect(describePeriod(presetPeriod('7d', '2026-10-05'), english)).toBe('last 7 days');
+    expect(describePeriod(presetPeriod('30d', '2026-10-05'), english)).toBe('last 30 days');
+    expect(
+      describePeriod({ preset: 'custom', from: '2026-09-01', to: '2026-09-10' }, english),
+    ).toBe('Sep 1 – Sep 10, 2026');
   });
 });

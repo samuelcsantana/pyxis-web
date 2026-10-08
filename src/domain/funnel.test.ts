@@ -17,6 +17,7 @@ import {
   stepTarget,
 } from './funnel';
 import { funnelStepsOf, funnelStepsSchema } from './funnel.schema';
+import { english } from '@/test-utils/english';
 
 const CALCULATOR: FunnelStep = { type: 'page', path: '/calculator' };
 const RESULT: FunnelStep = { type: 'event', name: 'calculator_result_shown' };
@@ -114,6 +115,7 @@ describe('funnelRows', () => {
       countedSteps([CALCULATOR, RESULT, SIGN_UP], {
         steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }],
       }),
+      english,
     );
 
     expect(rows[0]).toEqual({
@@ -138,11 +140,12 @@ describe('funnelRows', () => {
   it('shows dashes when a step had nobody, and zero for a step the API did not count', () => {
     const rows = funnelRows(
       countedSteps([CALCULATOR, RESULT, SIGN_UP], { steps: [{ count: 0 }, { count: 0 }] }),
+      english,
     );
 
     expect(rows[1]).toMatchObject({ continued: '— continued', tone: 'neutral' });
     expect(rows[2]?.count).toBe('0');
-    expect(funnelRows([])).toEqual([]);
+    expect(funnelRows([], english)).toEqual([]);
   });
 });
 
@@ -152,18 +155,18 @@ describe('figures', () => {
   });
 
   it('give the share of the first step that reached the last one, with the totals', () => {
-    expect(overallConversion(counted, 'visit')).toEqual({
+    expect(overallConversion(counted, 'visit', english)).toEqual({
       value: '25.7%',
       note: '498 of 1,940 visits reached the last step',
     });
-    expect(overallConversion(counted, 'user').note).toBe(
+    expect(overallConversion(counted, 'user', english).note).toBe(
       '498 of 1,940 people reached the last step',
     );
-    expect(overallConversion([], 'visit').value).toBe('—');
+    expect(overallConversion([], 'visit', english).value).toBe('—');
   });
 
   it('name the transition where the fewest continued', () => {
-    expect(biggestDropOff(counted)).toEqual({
+    expect(biggestDropOff(counted, english)).toEqual({
       value: 'Step 2 → 3',
       note: 'Calculator result shown → Opened /sign-up · 41.1% continued',
     });
@@ -172,8 +175,9 @@ describe('figures', () => {
         countedSteps([CALCULATOR, RESULT, SIGN_UP], {
           steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
         }),
+        english,
       ).note,
     ).toBe('Opened /calculator → Calculator result shown · — continued');
-    expect(biggestDropOff([])).toEqual({ value: '—', note: 'No step to compare' });
+    expect(biggestDropOff([], english)).toEqual({ value: '—', note: 'No step to compare' });
   });
 });

@@ -13,7 +13,7 @@ import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
-  CHANGE_TONE_RULE,
+  changeToneRule,
   CONVERSION_DEFINITION,
   FAILURE_DEFINITION,
   IDENTIFIED_USER_DEFINITION,
@@ -38,6 +38,8 @@ import {
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
@@ -47,14 +49,16 @@ import { createOverviewService } from '@/services/overview/overview-service.fact
 
 export const generateMetadata = screenMetadata('Overview');
 
-const FOOTNOTE = [
-  VISIT_DEFINITION,
-  IDENTIFIED_USER_DEFINITION,
-  CONVERSION_DEFINITION,
-  WRITE_DEFINITION,
-  FAILURE_DEFINITION,
-  CHANGE_TONE_RULE,
-].join(' ');
+function footnote(i18n: I18n): string {
+  return [
+    VISIT_DEFINITION,
+    IDENTIFIED_USER_DEFINITION,
+    CONVERSION_DEFINITION,
+    WRITE_DEFINITION,
+    FAILURE_DEFINITION,
+    changeToneRule(i18n),
+  ].join(' ');
+}
 
 export interface OverviewSearch extends PeriodSearch {
   readonly metric?: string | string[];
@@ -73,6 +77,7 @@ interface OverviewReportViewProps {
   readonly period: Period;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
+  readonly i18n: I18n;
 }
 
 function overviewDownloads(projectId: string, period: Period): readonly CsvDownload[] {
@@ -94,9 +99,10 @@ function OverviewReportView({
   period,
   filteredHref,
   downloads,
+  i18n,
 }: OverviewReportViewProps) {
   const visitsHref = (filter: Readonly<Record<string, string>>) => filteredHref('visits', filter);
-  const periodLabel = describePeriod(period);
+  const periodLabel = describePeriod(period, i18n);
   const singleDay = report.days.length === 1;
   return (
     <>
@@ -108,10 +114,14 @@ function OverviewReportView({
         />
         {conversionEvent === null ? <NoConversionEvent /> : null}
         {singleDay ? (
-          <DayActivityFigures days={report.days} periodLabel={periodLabel} />
+          <DayActivityFigures days={report.days} periodLabel={periodLabel} i18n={i18n} />
         ) : (
           <MetricChartArea>
-            <OverviewChartPanel chart={overviewChart(report, metric)} periodLabel={periodLabel} />
+            <OverviewChartPanel
+              chart={overviewChart(report, metric, i18n)}
+              periodLabel={periodLabel}
+              i18n={i18n}
+            />
           </MetricChartArea>
         )}
       </MetricSelection>
@@ -120,14 +130,16 @@ function OverviewReportView({
           pages={report.topPages}
           totalPageViews={activityTotals(report.days).pageViews}
           visitsHref={(path) => visitsHref({ path })}
+          i18n={i18n}
         />
         <TopEventsList
           events={report.topEvents}
           visitsHref={(name) => visitsHref({ event: name })}
+          i18n={i18n}
         />
       </div>
       <CsvDownloads downloads={downloads} />
-      <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
+      <p className="text-xs leading-[18px] text-muted">{footnote(i18n)}</p>
     </>
   );
 }
@@ -142,7 +154,8 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
     createOverviewService().overview(project.id, { from: period.from, to: period.to }),
   );
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
-  const kpis = overviewKpis(report, compared, project.conversionEvent);
+  const i18n = await getI18n();
+  const kpis = overviewKpis(report, compared, project.conversionEvent, i18n);
   const metric = chartMetric(
     search.metric,
     kpis.map((kpi) => kpi.id),
@@ -157,6 +170,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         today={today}
         keep={keptMetric(metric)}
         theme={await chosenTheme()}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
         {hasActivity(report) ? (
@@ -170,10 +184,11 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
               linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
             }
             downloads={overviewDownloads(project.id, period)}
+            i18n={i18n}
           />
         ) : (
           <EmptyPeriod
-            view={emptyPeriodView(project, period)}
+            view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'overview', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
           />

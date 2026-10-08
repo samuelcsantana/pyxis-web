@@ -1,3 +1,4 @@
+import type { I18n } from '@/i18n/i18n';
 import type { Project } from './admin';
 import type { Period, PeriodPreset } from './period';
 
@@ -12,19 +13,7 @@ export type EmptyPeriodView =
       readonly offersWiderPeriod: boolean;
     };
 
-function eventTime(timeZone: string): Intl.DateTimeFormat {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  });
-}
-
-export function emptyPeriodView(project: Project, period: Period): EmptyPeriodView {
+export function emptyPeriodView(project: Project, period: Period, i18n: I18n): EmptyPeriodView {
   if (typeof project.firstEventAt !== 'string') {
     return { kind: 'first-run' };
   }
@@ -32,7 +21,7 @@ export function emptyPeriodView(project: Project, period: Period): EmptyPeriodVi
     kind: 'quiet',
     latestEvent:
       typeof project.lastEventAt === 'string'
-        ? eventTime(project.timezone).format(new Date(project.lastEventAt))
+        ? i18n.format.dateTime('eventTime', project.timezone)(new Date(project.lastEventAt))
         : null,
     offersWiderPeriod: period.preset !== WIDER_PERIOD,
   };

@@ -1,9 +1,12 @@
+import type { I18n } from '@/i18n/i18n';
 import type { CsvTable } from './csv';
 import { formatCount } from './metrics';
 import type { VisitSummary } from './visits';
 
 export const MAX_EXPORTED_VISITS = 1_000;
-export const VISITS_TABLE_LABEL = `Newest ${formatCount(MAX_EXPORTED_VISITS)} visits`;
+export function visitsTableLabel(i18n: I18n): string {
+  return `Newest ${formatCount(MAX_EXPORTED_VISITS, i18n)} visits`;
+}
 
 const HIGHLIGHT_SEPARATOR = '; ';
 

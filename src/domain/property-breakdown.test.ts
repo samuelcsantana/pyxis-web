@@ -5,6 +5,7 @@ import {
   propertyKeyViews,
 } from './property-breakdown';
 import { propertyBreakdownResponseSchema } from './property-breakdown.schema';
+import { english } from '@/test-utils/english';
 
 const WIRE: PropertyBreakdownWire = {
   name: 'calculator_result_shown',
@@ -40,7 +41,7 @@ describe('propertyBreakdownResponseSchema', () => {
 
 describe('propertyKeyViews', () => {
   it('shares each value out of the events that carry the key', () => {
-    const [calculator] = propertyKeyViews(propertyBreakdownResponseSchema.parse(WIRE));
+    const [calculator] = propertyKeyViews(propertyBreakdownResponseSchema.parse(WIRE), english);
 
     expect(calculator).toEqual({
       key: 'calculator',
@@ -54,7 +55,7 @@ describe('propertyKeyViews', () => {
   });
 
   it('adds the values left out as other, with no visits to show', () => {
-    const [, plan] = propertyKeyViews(propertyBreakdownResponseSchema.parse(WIRE));
+    const [, plan] = propertyKeyViews(propertyBreakdownResponseSchema.parse(WIRE), english);
 
     expect(plan?.carriedBy).toBe('1 event');
     expect(plan?.other).toEqual({

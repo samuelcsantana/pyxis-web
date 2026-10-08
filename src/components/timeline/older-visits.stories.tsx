@@ -3,11 +3,13 @@ import { expect, userEvent, within } from 'storybook/test';
 import { visitViews } from '@/domain/timeline';
 import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timeline';
 import { OlderVisits, type OlderVisitsPage } from './older-visits';
+import { english } from '@/test-utils/english';
 
 const [, MIDDLE] = visitViews(
   demoTimelineReport('demo', { kind: 'user', id: DEMO_USER_ID }, new Date()).visits,
   'America/Sao_Paulo',
   'all',
+  english,
 );
 
 function loadOlder(): Promise<OlderVisitsPage> {

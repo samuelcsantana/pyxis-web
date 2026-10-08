@@ -6,6 +6,7 @@ import { stackedBars } from '@/domain/stacked-bars';
 import { expect, fireEvent } from 'storybook/test';
 import { ChartFrame } from './chart-frame';
 import { ChartHover } from './chart-hover';
+import { english } from '@/test-utils/english';
 
 const VALUES = [12, 18, 9, 22, 30, 27, 16, 19, 25, 34, 28, 21, 17, 24] as const;
 const DATES = VALUES.map((_, index) => addDays('2026-09-22', index));
@@ -22,6 +23,7 @@ const meta = {
   component: ChartFrame,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     summary: 'Line chart of 14 days, between 9 and 34 a day.',
     heightClassName: 'h-44 sm:h-60',
     axis: AXIS,
@@ -53,7 +55,7 @@ type Story = StoryObj<typeof meta>;
 export const Points: Story = {};
 
 const HOVER_DAYS = VALUES.map((value, index) => ({
-  label: formatDay(DATES[index] ?? ''),
+  label: formatDay(DATES[index] ?? '', english),
   rows: [{ label: 'Visits', value: String(value), marker: 'size-2 rounded-[2px] bg-sky' }],
 }));
 

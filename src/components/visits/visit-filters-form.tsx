@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { CHANNEL_LABELS, CHANNELS } from '@/domain/acquisition';
 import { deviceTypeLabel } from '@/domain/devices';
 import { type Period, periodQuery } from '@/domain/period';
+import type { I18n } from '@/i18n/i18n';
 import {
   PAGE_FILTER_PARAMETERS,
   VISIT_DEVICE_TYPES,
@@ -22,6 +23,7 @@ export interface VisitFiltersFormProps {
   readonly filters: VisitFilters;
   readonly problems: readonly string[];
   readonly clearHref: string | null;
+  readonly i18n: I18n;
 }
 
 const PAGE_FIELD_LABELS: Readonly<Record<(typeof PAGE_FILTER_PARAMETERS)[number], string>> = {
@@ -45,6 +47,7 @@ export function VisitFiltersForm({
   filters,
   problems,
   clearHref,
+  i18n,
 }: VisitFiltersFormProps) {
   const activeCount = visitFilterCount(filters);
   return (
@@ -122,7 +125,7 @@ export function VisitFiltersForm({
               <option value="">Any device</option>
               {VISIT_DEVICE_TYPES.map((device) => (
                 <option key={device} value={device}>
-                  {deviceTypeLabel(device)}
+                  {deviceTypeLabel(device, i18n)}
                 </option>
               ))}
             </select>

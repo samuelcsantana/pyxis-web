@@ -15,6 +15,7 @@ import {
   withChartMetric,
 } from './overview-chart';
 import { overviewResponseSchema } from './overview.schema';
+import { english } from '@/test-utils/english';
 
 const WIRE: OverviewWire = {
   kpis: {
@@ -64,7 +65,7 @@ const PREVIOUS_DAYS: NonNullable<OverviewWire['previous_days']> = [
 const WITH_PREVIOUS: OverviewWire = { ...WIRE, previous_days: PREVIOUS_DAYS };
 
 function chartOf(wire: OverviewWire, metric: Parameters<typeof overviewChart>[1]) {
-  return overviewChart(overviewResponseSchema.parse(wire), metric);
+  return overviewChart(overviewResponseSchema.parse(wire), metric, english);
 }
 
 describe('chartMetric', () => {
@@ -105,9 +106,9 @@ describe('the metric in the address', () => {
 
 describe('formatChartValue', () => {
   it('writes counts with separators and rates as percentages, and a dash for no value', () => {
-    expect(formatChartValue(4758, 'count')).toBe('4,758');
-    expect(formatChartValue(2.5, 'percent')).toBe('2.5%');
-    expect(formatChartValue(null, 'percent')).toBe('—');
+    expect(formatChartValue(4758, 'count', english)).toBe('4,758');
+    expect(formatChartValue(2.5, 'percent', english)).toBe('2.5%');
+    expect(formatChartValue(null, 'percent', english)).toBe('—');
   });
 });
 
@@ -236,21 +237,21 @@ describe('chartValues', () => {
 
 describe('chartSummary', () => {
   it('describes the chart in words for screen readers', () => {
-    expect(chartSummary(chartOf(WIRE, ACTIVITY))).toBe(
+    expect(chartSummary(chartOf(WIRE, ACTIVITY), english)).toBe(
       'Line chart of 2 days. Page views: 354 in total, between 174 and 180 a day. ' +
         'Named events: 178 in total, between 82 and 96 a day.',
     );
   });
 
   it('describes the dashed previous period too', () => {
-    expect(chartSummary(chartOf(WITH_PREVIOUS, 'visits'))).toBe(
+    expect(chartSummary(chartOf(WITH_PREVIOUS, 'visits'), english)).toBe(
       'Line chart of 2 days. Visits: 4,758 in total, between 2,358 and 2,400 a day. ' +
         'Dashed, the previous period. Visits: 4,233 in total, between 2,100 and 2,133 a day.',
     );
   });
 
   it('gives no total for a figure that does not add up, and counts the days without a value', () => {
-    expect(chartSummary(chartOf(WITH_PREVIOUS, 'write-errors'))).toBe(
+    expect(chartSummary(chartOf(WITH_PREVIOUS, 'write-errors'), english)).toBe(
       'Line chart of 2 days. Write error rate: between 2.4% and 2.4% a day, ' +
         'no writes on 1 day. Dashed, the previous period. ' +
         'Write error rate: between 2.0% and 2.0% a day, no writes on 1 day.',
@@ -270,7 +271,7 @@ describe('chartSummary', () => {
       'write-errors',
     );
 
-    expect(chartSummary(quiet)).toBe(
+    expect(chartSummary(quiet, english)).toBe(
       'Line chart of 1 day. Write error rate: no writes on any day.',
     );
   });
@@ -299,11 +300,11 @@ describe('the table of the chart', () => {
   });
 
   it('writes one row per day, beside the same day of the previous period', () => {
-    expect(chartRows(chartOf(WIRE, ACTIVITY))).toEqual([
+    expect(chartRows(chartOf(WIRE, ACTIVITY), english)).toEqual([
       { day: 'Oct 4', cells: ['180', '96'] },
       { day: 'Oct 5', cells: ['174', '82'] },
     ]);
-    expect(chartRows(chartOf(WITH_PREVIOUS, 'write-errors'))).toEqual([
+    expect(chartRows(chartOf(WITH_PREVIOUS, 'write-errors'), english)).toEqual([
       { day: 'Oct 4', cells: ['—', 'Oct 2', '2.0%'] },
       { day: 'Oct 5', cells: ['2.4%', 'Oct 3', '—'] },
     ]);
@@ -312,7 +313,7 @@ describe('the table of the chart', () => {
   it('writes a dash where the previous period has fewer days', () => {
     const shorter = chartOf({ ...WIRE, previous_days: PREVIOUS_DAYS.slice(0, 1) }, 'visits');
 
-    expect(chartRows(shorter)).toEqual([
+    expect(chartRows(shorter, english)).toEqual([
       { day: 'Oct 4', cells: ['2,400', 'Oct 2', '2,100'] },
       { day: 'Oct 5', cells: ['2,358', '—', '—'] },
     ]);
@@ -321,7 +322,7 @@ describe('the table of the chart', () => {
 
 describe('chartDays', () => {
   it('lists the values of each day under the pointer, the previous period after them', () => {
-    expect(chartDays(chartOf(WITH_PREVIOUS, 'visits'))[1]).toEqual({
+    expect(chartDays(chartOf(WITH_PREVIOUS, 'visits'), english)[1]).toEqual({
       day: 'Oct 5',
       points: [
         { label: 'Visits', value: '2,358', color: 'sky', previous: false },
@@ -331,7 +332,7 @@ describe('chartDays', () => {
   });
 
   it('lists only the current values without a previous period', () => {
-    expect(chartDays(chartOf(WIRE, ACTIVITY))[0]).toEqual({
+    expect(chartDays(chartOf(WIRE, ACTIVITY), english)[0]).toEqual({
       day: 'Oct 4',
       points: [
         { label: 'Page views', value: '180', color: 'sky', previous: false },

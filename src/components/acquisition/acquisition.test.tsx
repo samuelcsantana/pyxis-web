@@ -8,6 +8,7 @@ import { StatCard } from '@/components/ui/stat-card';
 import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
 import { ChannelChart } from './channel-chart';
 import { SourcesTable } from './sources-table';
+import { english } from '@/test-utils/english';
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
 const REPORT = demoAcquisitionReport('demo', WEEK);
@@ -24,7 +25,7 @@ const GOOGLE: Source = {
 
 describe('ChannelChart', () => {
   it('stacks the active channels, with their totals beside the legend', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
 
     expect(screen.getByRole('img')).toHaveAccessibleName(/^Stacked bar chart of 7 days,/);
     expect(screen.getByText('Organic search')).toBeInTheDocument();
@@ -32,7 +33,7 @@ describe('ChannelChart', () => {
   });
 
   it('draws a bar per day, a segment per channel, with a card-coloured line between segments', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
 
     const figure = screen.getByRole('img');
     const rows = channelChartRows(REPORT.days);
@@ -50,7 +51,7 @@ describe('ChannelChart', () => {
   });
 
   it('shows the channels of the day under the pointer, and its total', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
     const layer = screen.getByRole('img').querySelector<HTMLElement>('[data-layer="hover"]');
     if (layer === null) {
       throw new Error('The hover layer was not drawn');
@@ -66,7 +67,7 @@ describe('ChannelChart', () => {
   });
 
   it('switches to a table of every day with its total', async () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Table' }));
 
@@ -86,7 +87,9 @@ function channelVisitsHref(channel: string): string {
 
 describe('SourcesTable', () => {
   it('shows each source with its channel, ad click visits and conversion rate', () => {
-    render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
+    render(
+      <SourcesTable rows={sourceRows([GOOGLE], english)} channelVisitsHref={channelVisitsHref} />,
+    );
 
     const [, row] = screen.getAllByRole('row');
     expect(row).toHaveTextContent('googlePaidcpc1,100 from ad clickscpc1,200605.0%60 converted');
@@ -97,7 +100,9 @@ describe('SourcesTable', () => {
   });
 
   it('keeps the totals beside the rate and the medium beside the channel on phones', () => {
-    render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
+    render(
+      <SourcesTable rows={sourceRows([GOOGLE], english)} channelVisitsHref={channelVisitsHref} />,
+    );
 
     expect(screen.getByText('60 converted')).toHaveClass('sm:hidden');
     expect(screen.getAllByText('cpc')[0]).toHaveClass('sm:hidden');
@@ -106,7 +111,10 @@ describe('SourcesTable', () => {
   it('shows a dash for a source without a medium, and no note for a source not counted', () => {
     render(
       <SourcesTable
-        rows={sourceRows([GOOGLE, { ...GOOGLE, source: 'bing', medium: null, conversions: null }])}
+        rows={sourceRows(
+          [GOOGLE, { ...GOOGLE, source: 'bing', medium: null, conversions: null }],
+          english,
+        )}
         channelVisitsHref={channelVisitsHref}
       />,
     );
@@ -119,7 +127,7 @@ describe('SourcesTable', () => {
   it('leaves the conversion columns out without a conversion event', () => {
     render(
       <SourcesTable
-        rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }])}
+        rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], english)}
         channelVisitsHref={channelVisitsHref}
       />,
     );

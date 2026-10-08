@@ -2,12 +2,14 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { VisitFiltersForm } from './visit-filters-form';
+import { english } from '@/test-utils/english';
 
 const meta = {
   title: 'Visits/Filters',
   component: VisitFiltersForm,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     action: '/demo/visits',
     period: { preset: '30d', from: '2026-09-06', to: '2026-10-05' },
     filters: NO_VISIT_FILTERS,

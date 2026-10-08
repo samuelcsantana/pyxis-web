@@ -3,10 +3,12 @@ import { countedSteps, funnelRows } from '@/domain/funnel';
 import { DEMO_FUNNEL_STEPS, demoFunnelReport } from '@/services/funnel/demo-funnel';
 import { FunnelModes } from './funnel-modes';
 import { FunnelSteps } from './funnel-steps';
+import { english } from '@/test-utils/english';
 
 const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
 const ROWS = funnelRows(
   countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport('demo', PERIOD, 'visit', DEMO_FUNNEL_STEPS)),
+  english,
 );
 
 const meta = {
@@ -41,6 +43,7 @@ export const PerPerson: Story = {
     mode: 'user',
     rows: funnelRows(
       countedSteps(DEMO_FUNNEL_STEPS, demoFunnelReport('demo', PERIOD, 'user', DEMO_FUNNEL_STEPS)),
+      english,
     ),
   },
 };
@@ -51,6 +54,7 @@ export const NobodyYet: Story = {
       countedSteps(DEMO_FUNNEL_STEPS.slice(0, 3), {
         steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
       }),
+      english,
     ),
   },
 };

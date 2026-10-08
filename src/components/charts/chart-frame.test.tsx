@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { valueAxis } from '@/domain/chart-scale';
 import { ChartFrame } from './chart-frame';
+import { english } from '@/test-utils/english';
 
 const WEEK = [
   '2026-09-29',
@@ -21,6 +22,7 @@ function renderFrame(dates: readonly string[] = WEEK, axis = valueAxis([191])) {
       axis={axis}
       dates={dates}
       layout="points"
+      i18n={english}
     >
       <path d="M0,0L1000,1000" stroke="var(--color-sky)" />
     </ChartFrame>,
@@ -98,6 +100,7 @@ describe('ChartFrame', () => {
         dates={WEEK}
         layout="points"
         formatTick={(tick) => `${String(tick)}%`}
+        i18n={english}
       >
         <path d="M0,0L1000,1000" />
       </ChartFrame>,

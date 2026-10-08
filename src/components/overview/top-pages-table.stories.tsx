@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { activityTotals } from '@/domain/overview';
 import { TopPagesTable } from './top-pages-table';
+import { english } from '@/test-utils/english';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -16,6 +17,7 @@ const meta = {
   component: TopPagesTable,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     pages: STORY_REPORT.topPages,
     totalPageViews: activityTotals(STORY_REPORT.days).pageViews,
     visitsHref,

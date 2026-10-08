@@ -12,6 +12,7 @@ import { valueAxis } from '@/domain/chart-scale';
 import { formatCount } from '@/domain/metrics';
 import { formatDay } from '@/domain/period';
 import { stackedBars } from '@/domain/stacked-bars';
+import type { I18n } from '@/i18n/i18n';
 import { ChartFrame } from '@/components/charts/chart-frame';
 import { ChartHover, type HoverDay } from '@/components/charts/chart-hover';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
@@ -25,21 +26,23 @@ const MARKER = 'size-2 rounded-[2px]';
 export interface ChannelChartProps {
   readonly days: readonly ChannelDay[];
   readonly periodLabel: string;
+  readonly i18n: I18n;
 }
 
 function hoverDays(
   rows: readonly ChannelChartRow[],
   channels: readonly Channel[],
+  i18n: I18n,
 ): readonly HoverDay[] {
   return rows.map((row) => ({
-    label: formatDay(row.date),
+    label: formatDay(row.date, i18n),
     rows: [
       ...channels.map((channel) => ({
         label: CHANNEL_LABELS[channel],
-        value: formatCount(row[channel]),
+        value: formatCount(row[channel], i18n),
         marker: `${MARKER} ${CHANNEL_COLORS[channel].swatch}`,
       })),
-      { label: 'Total', value: formatCount(row.total), marker: MARKER },
+      { label: 'Total', value: formatCount(row.total, i18n), marker: MARKER },
     ],
   }));
 }
@@ -47,21 +50,24 @@ function hoverDays(
 function ChannelBars({
   days,
   channels,
+  i18n,
 }: {
   readonly days: readonly ChannelDay[];
   readonly channels: readonly Channel[];
+  readonly i18n: I18n;
 }) {
   const rows = channelChartRows(days);
   const axis = valueAxis(rows.map((row) => row.total));
   const bars = stackedBars(rows, channels, axis.top);
   return (
     <ChartFrame
-      summary={channelSummary(days)}
+      summary={channelSummary(days, i18n)}
       heightClassName="h-50 sm:h-60"
       axis={axis}
       dates={rows.map((row) => row.date)}
       layout="bars"
-      hover={<ChartHover days={hoverDays(rows, channels)} layout="bars" />}
+      hover={<ChartHover days={hoverDays(rows, channels, i18n)} layout="bars" />}
+      i18n={i18n}
     >
       {bars.segments.map((segment) => (
         <rect
@@ -88,6 +94,7 @@ function ChannelTable({
   days,
   channels,
   periodLabel,
+  i18n,
 }: ChannelChartProps & { readonly channels: readonly Channel[] }) {
   const caption = `Visits by channel per day, ${periodLabel}`;
   return (
@@ -118,14 +125,16 @@ function ChannelTable({
           {channelChartRows(days).map((row) => (
             <tr key={row.date}>
               <th scope="row" className={`${BODY_CELL} text-left font-normal whitespace-nowrap`}>
-                {formatDay(row.date)}
+                {formatDay(row.date, i18n)}
               </th>
               {channels.map((channel) => (
                 <td key={channel} className={`${BODY_CELL} text-right`}>
-                  {formatCount(row[channel])}
+                  {formatCount(row[channel], i18n)}
                 </td>
               ))}
-              <td className={`${BODY_CELL} text-right font-semibold`}>{formatCount(row.total)}</td>
+              <td className={`${BODY_CELL} text-right font-semibold`}>
+                {formatCount(row.total, i18n)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -134,7 +143,7 @@ function ChannelTable({
   );
 }
 
-export function ChannelChart({ days, periodLabel }: ChannelChartProps) {
+export function ChannelChart({ days, periodLabel, i18n }: ChannelChartProps) {
   const channels = activeChannels(days);
   const totals = channelTotals(days);
   return (
@@ -146,11 +155,11 @@ export function ChannelChart({ days, periodLabel }: ChannelChartProps) {
           key={channel}
           swatch={CHANNEL_COLORS[channel].swatch}
           label={CHANNEL_LABELS[channel]}
-          total={formatCount(totals[channel])}
+          total={formatCount(totals[channel], i18n)}
         />
       ))}
-      chart={<ChannelBars days={days} channels={channels} />}
-      table={<ChannelTable days={days} channels={channels} periodLabel={periodLabel} />}
+      chart={<ChannelBars days={days} channels={channels} i18n={i18n} />}
+      table={<ChannelTable days={days} channels={channels} periodLabel={periodLabel} i18n={i18n} />}
     />
   );
 }

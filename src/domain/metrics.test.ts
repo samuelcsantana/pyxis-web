@@ -7,7 +7,6 @@ import {
   formatCount,
   formatPercent,
   formatPointChange,
-  formatQuantity,
   formatSignedCount,
   MIN_COMPARABLE_BASE,
   NO_CHANGE,
@@ -18,6 +17,7 @@ import {
   toneOf,
   trendOf,
 } from './metrics';
+import { english } from '@/test-utils/english';
 
 describe('rate and percentChange', () => {
   it('divide when there is something to divide by', () => {
@@ -33,102 +33,94 @@ describe('rate and percentChange', () => {
 
 describe('formatters', () => {
   it('group thousands', () => {
-    expect(formatCount(4758)).toBe('4,758');
+    expect(formatCount(4758, english)).toBe('4,758');
   });
 
   it('show a percentage with one decimal at most, and a dash for nothing', () => {
-    expect(formatPercent(0.0242)).toBe('2.4%');
-    expect(formatPercent(null)).toBe(NO_VALUE);
+    expect(formatPercent(0.0242, english)).toBe('2.4%');
+    expect(formatPercent(null, english)).toBe(NO_VALUE);
   });
 
   it('sign a change with a plus, a true minus or nothing', () => {
-    expect(formatChange(0.124)).toBe('+12.4%');
-    expect(formatChange(-0.05)).toBe('−5.0%');
-    expect(formatChange(0)).toBe('0.0%');
-    expect(formatChange(null)).toBe(NO_VALUE);
+    expect(formatChange(0.124, english)).toBe('+12.4%');
+    expect(formatChange(-0.05, english)).toBe('−5.0%');
+    expect(formatChange(0, english)).toBe('0.0%');
+    expect(formatChange(null, english)).toBe(NO_VALUE);
   });
 
   it('show a change that rounds to zero as no change, without a sign', () => {
-    expect(formatChange(0.0004)).toBe('0.0%');
-    expect(formatChange(-0.0004)).toBe('0.0%');
-    expect(formatPointChange(0.03001, 0.03)).toBe(NO_CHANGE);
-    expect(formatPointChange(0.03, 0.03004)).toBe(NO_CHANGE);
+    expect(formatChange(0.0004, english)).toBe('0.0%');
+    expect(formatChange(-0.0004, english)).toBe('0.0%');
+    expect(formatPointChange(0.03001, 0.03, english)).toBe(NO_CHANGE);
+    expect(formatPointChange(0.03, 0.03004, english)).toBe(NO_CHANGE);
   });
 
   it('give a change of rates in percentage points', () => {
-    expect(formatPointChange(0.024, 0.027)).toBe('−0.3 pt');
-    expect(formatPointChange(0.03, 0.01)).toBe('+2.0 pt');
-    expect(formatPointChange(0.02, 0.02)).toBe(NO_CHANGE);
-    expect(formatPointChange(null, 0.02)).toBe(NO_VALUE);
-    expect(formatPointChange(0.02, null)).toBe(NO_VALUE);
+    expect(formatPointChange(0.024, 0.027, english)).toBe('−0.3 pt');
+    expect(formatPointChange(0.03, 0.01, english)).toBe('+2.0 pt');
+    expect(formatPointChange(0.02, 0.02, english)).toBe(NO_CHANGE);
+    expect(formatPointChange(null, 0.02, english)).toBe(NO_VALUE);
+    expect(formatPointChange(0.02, null, english)).toBe(NO_VALUE);
   });
 });
 
 describe('formatSignedCount', () => {
   it('signs a difference of counts and groups its thousands', () => {
-    expect(formatSignedCount(1525)).toBe('+1,525');
-    expect(formatSignedCount(-3)).toBe('−3');
+    expect(formatSignedCount(1525, english)).toBe('+1,525');
+    expect(formatSignedCount(-3, english)).toBe('−3');
   });
 });
 
 describe('countChange', () => {
   it('gives the percentage and the difference, judged when the base is large enough', () => {
-    expect(countChange(4758, 4233)).toEqual({ text: '+12.4% (+525)', trend: 'up' });
-    expect(countChange(90, 100)).toEqual({ text: '−10.0% (−10)', trend: 'down' });
+    expect(countChange(4758, 4233, english)).toEqual({ text: '+12.4% (+525)', trend: 'up' });
+    expect(countChange(90, 100, english)).toEqual({ text: '−10.0% (−10)', trend: 'down' });
   });
 
   it('says no change when the counts are equal', () => {
-    expect(countChange(0, 0)).toEqual({ text: NO_CHANGE, trend: 'flat' });
-    expect(countChange(42, 42)).toEqual({ text: NO_CHANGE, trend: 'flat' });
+    expect(countChange(0, 0, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
+    expect(countChange(42, 42, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
   });
 
   it('gives only the difference when there was nothing before', () => {
-    expect(countChange(3, 0)).toEqual({ text: '+3', trend: 'flat' });
+    expect(countChange(3, 0, english)).toEqual({ text: '+3', trend: 'flat' });
   });
 
   it(`does not judge a change over fewer than ${String(MIN_COMPARABLE_BASE)} before`, () => {
-    expect(countChange(5, 4)).toEqual({ text: '+25.0% (+1)', trend: 'flat' });
-    expect(countChange(MIN_COMPARABLE_BASE + 5, MIN_COMPARABLE_BASE)).toEqual({
+    expect(countChange(5, 4, english)).toEqual({ text: '+25.0% (+1)', trend: 'flat' });
+    expect(countChange(MIN_COMPARABLE_BASE + 5, MIN_COMPARABLE_BASE, english)).toEqual({
       text: '+25.0% (+5)',
       trend: 'up',
     });
   });
 
   it('does not judge a change under one percent', () => {
-    expect(countChange(1009, 1000)).toEqual({ text: '+0.9% (+9)', trend: 'flat' });
-    expect(countChange(1010, 1000)).toEqual({ text: '+1.0% (+10)', trend: 'up' });
-    expect(countChange(10001, 10000)).toEqual({ text: '0.0% (+1)', trend: 'flat' });
+    expect(countChange(1009, 1000, english)).toEqual({ text: '+0.9% (+9)', trend: 'flat' });
+    expect(countChange(1010, 1000, english)).toEqual({ text: '+1.0% (+10)', trend: 'up' });
+    expect(countChange(10001, 10000, english)).toEqual({ text: '0.0% (+1)', trend: 'flat' });
   });
 });
 
 describe('pointChange', () => {
   it('judges a move of half a point or more over enough writes', () => {
-    expect(pointChange(0.03, 0.025, 100)).toEqual({ text: '+0.5 pt', trend: 'up' });
-    expect(pointChange(0.02, 0.03, 100)).toEqual({ text: '−1.0 pt', trend: 'down' });
+    expect(pointChange(0.03, 0.025, 100, english)).toEqual({ text: '+0.5 pt', trend: 'up' });
+    expect(pointChange(0.02, 0.03, 100, english)).toEqual({ text: '−1.0 pt', trend: 'down' });
   });
 
   it('does not judge a move under half a point', () => {
-    expect(pointChange(0.024, 0.027, 2500)).toEqual({ text: '−0.3 pt', trend: 'flat' });
+    expect(pointChange(0.024, 0.027, 2500, english)).toEqual({ text: '−0.3 pt', trend: 'flat' });
   });
 
   it(`does not judge rates over fewer than ${String(MIN_COMPARABLE_BASE)} writes`, () => {
-    expect(pointChange(0.1, 0, MIN_COMPARABLE_BASE - 1)).toEqual({
+    expect(pointChange(0.1, 0, MIN_COMPARABLE_BASE - 1, english)).toEqual({
       text: '+10.0 pt',
       trend: 'flat',
     });
   });
 
   it('says no change, or nothing, when there is no move or nothing to compare', () => {
-    expect(pointChange(0.02, 0.02, 100)).toEqual({ text: NO_CHANGE, trend: 'flat' });
-    expect(pointChange(null, 0.02, 0)).toEqual({ text: NO_VALUE, trend: 'flat' });
-  });
-});
-
-describe('formatQuantity', () => {
-  it('names one thing in the singular and any other count in the plural', () => {
-    expect(formatQuantity(1, 'day', 'days')).toBe('1 day');
-    expect(formatQuantity(30, 'day', 'days')).toBe('30 days');
-    expect(formatQuantity(1200, 'visit', 'visits')).toBe('1,200 visits');
+    expect(pointChange(0.02, 0.02, 100, english)).toEqual({ text: NO_CHANGE, trend: 'flat' });
+    expect(pointChange(null, 0.02, 0, english)).toEqual({ text: NO_VALUE, trend: 'flat' });
   });
 });
 

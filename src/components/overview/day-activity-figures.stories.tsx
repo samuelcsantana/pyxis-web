@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { DayActivityFigures } from './day-activity-figures';
+import { english } from '@/test-utils/english';
 
 const meta = {
   title: 'Overview/Activity of the day',
   component: DayActivityFigures,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     days: [{ date: '2026-10-05', pageViews: 1234, events: 56 }],
     periodLabel: 'today',
   },

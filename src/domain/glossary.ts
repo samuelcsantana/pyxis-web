@@ -1,3 +1,4 @@
+import type { I18n } from '@/i18n/i18n';
 import {
   formatCount,
   formatPercent,
@@ -19,4 +20,6 @@ export const WRITE_DEFINITION = 'A write is a POST, PUT, PATCH or DELETE sent wi
 
 export const FAILURE_DEFINITION = 'A failure is a status of 400 or above, or no response at all.';
 
-export const CHANGE_TONE_RULE = `A change is green or red only when the previous period counted at least ${formatCount(MIN_COMPARABLE_BASE)} and it moved by ${formatPercent(MIN_MEANINGFUL_CHANGE)} or more (${formatCount(MIN_MEANINGFUL_POINTS)} points for the write error rate).`;
+export function changeToneRule(i18n: I18n): string {
+  return `A change is green or red only when the previous period counted at least ${formatCount(MIN_COMPARABLE_BASE, i18n)} and it moved by ${formatPercent(MIN_MEANINGFUL_CHANGE, i18n)} or more (${formatCount(MIN_MEANINGFUL_POINTS, i18n)} points for the write error rate).`;
+}

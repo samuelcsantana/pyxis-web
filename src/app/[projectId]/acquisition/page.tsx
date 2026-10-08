@@ -25,6 +25,8 @@ import {
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -44,6 +46,7 @@ interface AcquisitionReportViewProps {
   readonly period: Period;
   readonly downloads: readonly CsvDownload[];
   readonly channelVisitsHref: (channel: Channel) => string;
+  readonly i18n: I18n;
 }
 
 function acquisitionDownloads(projectId: string, period: Period): readonly CsvDownload[] {
@@ -62,17 +65,18 @@ function AcquisitionReportView({
   period,
   downloads,
   channelVisitsHref,
+  i18n,
 }: AcquisitionReportViewProps) {
-  const paid = paidVisits(report.days);
-  const top = topChannel(report.days);
+  const paid = paidVisits(report.days, i18n);
+  const top = topChannel(report.days, i18n);
   return (
     <>
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
         <StatCard id="paid-visits" label="Paid visits" value={paid.value} note={paid.note} />
         <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>
-      <ChannelChart days={report.days} periodLabel={describePeriod(period)} />
-      <SourcesTable rows={sourceRows(report.sources)} channelVisitsHref={channelVisitsHref} />
+      <ChannelChart days={report.days} periodLabel={describePeriod(period, i18n)} i18n={i18n} />
+      <SourcesTable rows={sourceRows(report.sources, i18n)} channelVisitsHref={channelVisitsHref} />
       <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
         An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
@@ -89,6 +93,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
   const report = await readOrSignIn(() =>
     createAcquisitionService().acquisition(project.id, { from: period.from, to: period.to }),
   );
+  const i18n = await getI18n();
   return (
     <>
       <Topbar
@@ -98,6 +103,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
         period={period}
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
+        i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {visitsTotal(report.days) > 0 ? (
@@ -108,10 +114,11 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             channelVisitsHref={(channel) =>
               linkWith(screenHref(project.id, 'visits', periodQuery(period)), { channel })
             }
+            i18n={i18n}
           />
         ) : (
           <EmptyPeriod
-            view={emptyPeriodView(project, period)}
+            view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'acquisition', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
           />

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
 import { ChannelChart } from './channel-chart';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoAcquisitionReport('demo', { from: '2026-09-06', to: '2026-10-05' });
 
@@ -9,7 +10,7 @@ const meta = {
   title: 'Acquisition/Visits by channel',
   component: ChannelChart,
   tags: ['autodocs'],
-  args: { days: REPORT.days, periodLabel: 'last 30 days' },
+  args: { i18n: english, days: REPORT.days, periodLabel: 'last 30 days' },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

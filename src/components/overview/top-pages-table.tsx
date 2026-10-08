@@ -1,4 +1,5 @@
 import { barWidth, formatCount, formatPercent, rate } from '@/domain/metrics';
+import type { I18n } from '@/i18n/i18n';
 import type { OverviewReport } from '@/domain/overview';
 import {
   BAR_FILL,
@@ -14,9 +15,10 @@ export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
   readonly totalPageViews: number;
   readonly visitsHref: (path: string) => string;
+  readonly i18n: I18n;
 }
 
-export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTableProps) {
+export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPagesTableProps) {
   const mostViews = Math.max(0, ...pages.map((page) => page.views));
   return (
     <section aria-labelledby="top-pages-heading" className={PANEL}>
@@ -59,9 +61,9 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTab
                   >
                     <VisitsLink href={visitsHref(page.path)} label={page.path} />
                   </th>
-                  <td className={`${BODY_CELL} text-right`}>{formatCount(page.views)}</td>
+                  <td className={`${BODY_CELL} text-right`}>{formatCount(page.views, i18n)}</td>
                   <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>
-                    {formatCount(page.visits)}
+                    {formatCount(page.visits, i18n)}
                   </td>
                   <td className={`${BODY_CELL} hidden pr-0 sm:table-cell`}>
                     <span className="flex items-center gap-2">
@@ -72,7 +74,7 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTab
                         />
                       </span>
                       <span className="w-10 text-right text-xs text-muted">
-                        {formatPercent(rate(page.views, totalPageViews))}
+                        {formatPercent(rate(page.views, totalPageViews), i18n)}
                       </span>
                     </span>
                   </td>

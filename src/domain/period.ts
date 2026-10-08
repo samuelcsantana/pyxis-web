@@ -1,3 +1,5 @@
+import type { I18n } from '@/i18n/i18n';
+
 export const PERIOD_PRESETS = ['today', '7d', '30d'] as const;
 export type PeriodPreset = (typeof PERIOD_PRESETS)[number];
 
@@ -139,20 +141,8 @@ export function periodQuery(period: Period): string {
   return params.toString();
 }
 
-const MONTH_DAY = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'UTC',
-});
-const MONTH_DAY_YEAR = new Intl.DateTimeFormat('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-
-export function formatDay(isoDate: string): string {
-  return MONTH_DAY.format(calendarDate(isoDate));
+export function formatDay(isoDate: string, i18n: I18n): string {
+  return i18n.format.day(calendarDate(isoDate));
 }
 
 const PRESET_DESCRIPTIONS: Readonly<Record<PeriodPreset, string>> = {
@@ -161,17 +151,19 @@ const PRESET_DESCRIPTIONS: Readonly<Record<PeriodPreset, string>> = {
   '30d': 'last 30 days',
 };
 
-export function describePeriod(period: Period): string {
-  return period.preset === 'custom' ? formatPeriod(period) : PRESET_DESCRIPTIONS[period.preset];
+export function describePeriod(period: Period, i18n: I18n): string {
+  return period.preset === 'custom'
+    ? formatPeriod(period, i18n)
+    : PRESET_DESCRIPTIONS[period.preset];
 }
 
-export function formatPeriod(period: Period): string {
+export function formatPeriod(period: Period, i18n: I18n): string {
   const from = calendarDate(period.from);
   const to = calendarDate(period.to);
   if (period.from === period.to) {
-    return MONTH_DAY_YEAR.format(to);
+    return i18n.format.dayWithYear(to);
   }
   const sameYear = from.getUTCFullYear() === to.getUTCFullYear();
-  const start = sameYear ? MONTH_DAY.format(from) : MONTH_DAY_YEAR.format(from);
-  return `${start} – ${MONTH_DAY_YEAR.format(to)}`;
+  const start = sameYear ? i18n.format.day(from) : i18n.format.dayWithYear(from);
+  return `${start} – ${i18n.format.dayWithYear(to)}`;
 }

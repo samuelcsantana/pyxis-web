@@ -22,6 +22,8 @@ import {
   visitViews,
 } from '@/domain/timeline';
 import { type PeriodSearch, periodSearchParameters } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -56,6 +58,7 @@ interface TimelineViewProps {
   readonly basePath: string;
   readonly timeZone: string;
   readonly keptPeriod: Readonly<Record<string, string>>;
+  readonly i18n: I18n;
 }
 
 function TimelineView({
@@ -66,13 +69,14 @@ function TimelineView({
   basePath,
   timeZone,
   keptPeriod,
+  i18n,
 }: TimelineViewProps) {
   if (report.visits.length === 0) {
     return <NoVisitsFound lookupTitle={lookupTitle(lookup)} />;
   }
   return (
     <>
-      <TimelineSummary title={lookupTitle(lookup)} totals={timelineTotals(report.visits)} />
+      <TimelineSummary title={lookupTitle(lookup)} totals={timelineTotals(report.visits, i18n)} />
       <TimelineFilters
         current={filter}
         links={TIMELINE_FILTERS.map((target) => ({
@@ -80,7 +84,7 @@ function TimelineView({
           href: linkWith(basePath, { ...keptPeriod, ...lookupParameters(lookup, target) }),
         }))}
       />
-      {visitViews(report.visits, timeZone, filter).map((visit) => (
+      {visitViews(report.visits, timeZone, filter, i18n).map((visit) => (
         <VisitCard key={visit.key} visit={visit} />
       ))}
       {report.nextBefore === null ? null : (
@@ -137,6 +141,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
             basePath={basePath}
             timeZone={project.timezone}
             keptPeriod={keptPeriod}
+            i18n={await getI18n()}
           />
         )}
       </MainContent>

@@ -7,6 +7,7 @@ import { TimelineFilters } from './timeline-filters';
 import { TimelineSearch } from './timeline-search';
 import { TimelineSummary } from './timeline-summary';
 import { VisitCard } from './visit-card';
+import { english } from '@/test-utils/english';
 
 const REPORT = demoTimelineReport(
   'demo',
@@ -100,21 +101,21 @@ describe('TimelineFilters', () => {
 describe('TimelineSummary', () => {
   it('names who was looked up and counts what was found, failures in red', () => {
     const { rerender } = render(
-      <TimelineSummary title="User u_7f3a" totals={timelineTotals(REPORT.visits)} />,
+      <TimelineSummary title="User u_7f3a" totals={timelineTotals(REPORT.visits, english)} />,
     );
 
     expect(screen.getByRole('heading', { name: 'User u_7f3a' })).toBeInTheDocument();
     expect(screen.getByText(/^\d+ items$/)).toBeInTheDocument();
     expect(screen.getByText('2 failed requests')).toHaveClass('text-bad');
 
-    rerender(<TimelineSummary title="User u_7f3a" totals={timelineTotals([])} />);
+    rerender(<TimelineSummary title="User u_7f3a" totals={timelineTotals([], english)} />);
     expect(screen.getByText('0 failed requests')).toHaveClass('text-muted');
   });
 });
 
 describe('VisitCard', () => {
   it('tells a visit in order, with a status on each request', () => {
-    const [, , signUp] = visitViews(REPORT.visits, 'America/Sao_Paulo', 'all');
+    const [, , signUp] = visitViews(REPORT.visits, 'America/Sao_Paulo', 'all', english);
     if (signUp === undefined) {
       throw new Error('no sign-up visit in the demo');
     }
@@ -132,7 +133,7 @@ describe('VisitCard', () => {
   });
 
   it('says so when the filter leaves nothing in a visit', () => {
-    const [quiet] = visitViews(REPORT.visits, 'UTC', 'errors').filter(
+    const [quiet] = visitViews(REPORT.visits, 'UTC', 'errors', english).filter(
       (visit) => visit.items.length === 0,
     );
     if (quiet === undefined) {

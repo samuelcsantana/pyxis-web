@@ -1,14 +1,16 @@
-import { barWidth, eventLabel, formatCount, formatQuantity } from '@/domain/metrics';
+import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
+import type { I18n } from '@/i18n/i18n';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];
   readonly visitsHref: (name: string) => string;
+  readonly i18n: I18n;
 }
 
-export function TopEventsList({ events, visitsHref }: TopEventsListProps) {
+export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) {
   const mostCounted = Math.max(0, ...events.map((event) => event.count));
   return (
     <section aria-labelledby="top-events-heading" className={PANEL}>
@@ -34,9 +36,9 @@ export function TopEventsList({ events, visitsHref }: TopEventsListProps) {
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>
                 <span className="shrink-0 text-right font-semibold tabular-nums">
-                  {formatCount(event.count)}{' '}
+                  {formatCount(event.count, i18n)}{' '}
                   <span className="font-normal text-muted">
-                    in {formatQuantity(event.visits, 'visit', 'visits')}
+                    in {i18n.t('counts.visit', { count: event.visits })}
                   </span>
                 </span>
               </span>

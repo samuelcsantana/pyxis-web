@@ -15,6 +15,7 @@ import {
   visitViews,
 } from './timeline';
 import { timelineResponseSchema } from './timeline.schema';
+import { english } from '@/test-utils/english';
 
 const VISIT_ID = '3c07a1b2-0000-4000-8000-000000000001';
 
@@ -146,7 +147,7 @@ describe('items', () => {
   });
 
   it('read like a story, in the time zone of the project', () => {
-    const [visit, quiet] = visitViews(REPORT.visits, 'America/Sao_Paulo', 'all');
+    const [visit, quiet] = visitViews(REPORT.visits, 'America/Sao_Paulo', 'all', english);
 
     expect(visit?.heading).toBe('Visit 3c07a1b2 · Mon, Oct 5, 18:40');
     expect(visit?.meta).toBe('Mobile · Samsung Internet · Android · Brazil · Paid · 2 min 41 s');
@@ -197,7 +198,7 @@ describe('items', () => {
 
   it('keep only the kind the filter asks for', () => {
     const titles = (filter: Parameters<typeof visitViews>[2]) =>
-      visitViews(REPORT.visits, 'UTC', filter)[0]?.items.map((item) => item.kind);
+      visitViews(REPORT.visits, 'UTC', filter, english)[0]?.items.map((item) => item.kind);
 
     expect(titles('pages')).toEqual(['page']);
     expect(titles('events')).toEqual(['event', 'identify']);
@@ -216,7 +217,7 @@ describe('items', () => {
 
     expect(isFailedRequest(odd)).toBe(false);
     const visits = REPORT.visits.slice(0, 1).map((visit) => ({ ...visit, events: [odd] }));
-    expect(visitViews(visits, 'UTC', 'all')[0]?.items[0]).toMatchObject({
+    expect(visitViews(visits, 'UTC', 'all', english)[0]?.items[0]).toMatchObject({
       tag: null,
       detail: 'status=oops · attempt=2',
     });
@@ -225,13 +226,13 @@ describe('items', () => {
 
 describe('totals and titles', () => {
   it('count the visits, items and failed requests shown', () => {
-    expect(timelineTotals(REPORT.visits)).toEqual({
+    expect(timelineTotals(REPORT.visits, english)).toEqual({
       visits: '2 visits',
       items: '5 items',
       failedRequests: '1 failed request',
       hasFailures: true,
     });
-    expect(timelineTotals([]).hasFailures).toBe(false);
+    expect(timelineTotals([], english).hasFailures).toBe(false);
   });
 
   it('name the person or the visit looked up', () => {

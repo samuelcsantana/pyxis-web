@@ -13,6 +13,7 @@ import {
   visitsTotal,
 } from './acquisition';
 import { acquisitionResponseSchema } from './acquisition.schema';
+import { english } from '@/test-utils/english';
 
 const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
 
@@ -87,7 +88,7 @@ describe('channel totals', () => {
   });
 
   it('describe the chart in words, the biggest channel first', () => {
-    expect(channelSummary(REPORT.days)).toBe(
+    expect(channelSummary(REPORT.days, english)).toBe(
       'Stacked bar chart of 2 days, between 120 and 130 visits a day. ' +
         'Visits by channel: Paid 130, Organic search 90, Direct 30.',
     );
@@ -96,26 +97,32 @@ describe('channel totals', () => {
 
 describe('paidVisits', () => {
   it('gives the paid visits with their share of every visit', () => {
-    expect(paidVisits(REPORT.days)).toEqual({ value: '130', note: '52.0% of 250 visits' });
+    expect(paidVisits(REPORT.days, english)).toEqual({ value: '130', note: '52.0% of 250 visits' });
   });
 
   it('shows a dash for the share when nobody visited', () => {
-    expect(paidVisits([{ date: '2026-10-05', byChannel: NONE }]).note).toBe('— of 0 visits');
+    expect(paidVisits([{ date: '2026-10-05', byChannel: NONE }], english).note).toBe(
+      '— of 0 visits',
+    );
   });
 });
 
 describe('topChannel', () => {
   it('names the channel that brought the most visits, with its share', () => {
     expect(
-      topChannel([{ date: '2026-10-05', byChannel: { ...NONE, organic: 30, direct: 10 } }]),
+      topChannel(
+        [{ date: '2026-10-05', byChannel: { ...NONE, organic: 30, direct: 10 } }],
+        english,
+      ),
     ).toEqual({ label: 'Top channel', value: 'Organic search', note: '75.0% of 40 visits' });
   });
 
   it('names the runner-up when Paid leads, so it does not repeat the paid visits card', () => {
     expect(
-      topChannel([
-        { date: '2026-10-05', byChannel: { ...NONE, paid: 50, organic: 30, direct: 20 } },
-      ]),
+      topChannel(
+        [{ date: '2026-10-05', byChannel: { ...NONE, paid: 50, organic: 30, direct: 20 } }],
+        english,
+      ),
     ).toEqual({
       label: 'Top unpaid channel',
       value: 'Organic search',
@@ -124,7 +131,7 @@ describe('topChannel', () => {
   });
 
   it('keeps the plain top channel when there were no visits', () => {
-    expect(topChannel([{ date: '2026-10-05', byChannel: NONE }])).toMatchObject({
+    expect(topChannel([{ date: '2026-10-05', byChannel: NONE }], english)).toMatchObject({
       label: 'Top channel',
     });
   });
@@ -132,7 +139,7 @@ describe('topChannel', () => {
 
 describe('sourceRows', () => {
   it('gives each source its medium, conversion rate and ad click visits', () => {
-    const [google, direct] = sourceRows(REPORT.sources);
+    const [google, direct] = sourceRows(REPORT.sources, english);
 
     expect(google).toEqual({
       key: 'google|cpc|paid',
@@ -156,13 +163,13 @@ describe('sourceRows', () => {
   });
 
   it('rates the visits that converted when the API counts them', () => {
-    const [row] = sourceRows([{ ...GOOGLE, conversions: 9, convertingVisits: 5 }]);
+    const [row] = sourceRows([{ ...GOOGLE, conversions: 9, convertingVisits: 5 }], english);
 
     expect(row).toMatchObject({ conversions: '5', conversionRate: '3.8%' });
   });
 
   it('leaves conversions out when the project has no conversion event', () => {
-    const [row] = sourceRows([{ ...GOOGLE, conversions: null }]);
+    const [row] = sourceRows([{ ...GOOGLE, conversions: null }], english);
 
     expect(row?.conversions).toBeNull();
     expect(row?.conversionRate).toBeNull();
@@ -170,7 +177,7 @@ describe('sourceRows', () => {
   });
 
   it('shows a dash for a source without visits', () => {
-    const [row] = sourceRows([{ ...GOOGLE, visits: 0, conversions: 0 }]);
+    const [row] = sourceRows([{ ...GOOGLE, visits: 0, conversions: 0 }], english);
 
     expect(row?.conversionRate).toBe('—');
   });

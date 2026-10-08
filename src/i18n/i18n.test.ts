@@ -12,4 +12,13 @@ describe('createI18n', () => {
     expect(i18n.t('meta.description')).toBe(APP_DESCRIPTION);
     expect(i18n.format).toBe(createFormats('en-US'));
   });
+
+  it('counts things in the singular for one and in the plural otherwise', () => {
+    const { t } = createI18n('en', en);
+
+    expect(t('counts.day', { count: 1 })).toBe('1 day');
+    expect(t('counts.day', { count: 30 })).toBe('30 days');
+    expect(t('counts.visit', { count: 1200 })).toBe('1,200 visits');
+    expect(t('counts.person', { count: 0 })).toBe('0 people');
+  });
 });

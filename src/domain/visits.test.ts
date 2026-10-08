@@ -11,6 +11,7 @@ import {
   type VisitsWire,
 } from './visits';
 import { visitsResponseSchema } from './visits.schema';
+import { english } from '@/test-utils/english';
 
 const WIRE: VisitsWire = {
   visits: [
@@ -249,7 +250,11 @@ describe('isVisitCursor', () => {
 
 describe('visitRows', () => {
   it('describes each visit in the project time zone', () => {
-    const [first, second] = visitRows(visitsResponseSchema.parse(WIRE).visits, 'America/Sao_Paulo');
+    const [first, second] = visitRows(
+      visitsResponseSchema.parse(WIRE).visits,
+      'America/Sao_Paulo',
+      english,
+    );
 
     expect(first).toEqual({
       key: '3c07a1b2-0000-4000-8000-000000000001',
@@ -293,6 +298,7 @@ describe('visitRows', () => {
           .map((visit) => ({ ...visit, page_views: 1, failed_requests: 2 })),
       }).visits,
       'UTC',
+      english,
     );
 
     expect(row).toMatchObject({ pagesLabel: '1 page', failedRequestsLabel: '2 failed requests' });
@@ -305,6 +311,7 @@ describe('visitRows', () => {
         visits: WIRE.visits.slice(0, 1).map((visit) => ({ ...visit, user_id: 'u_7f3a' })),
       }).visits,
       'UTC',
+      english,
     );
 
     expect(row?.account).toEqual({

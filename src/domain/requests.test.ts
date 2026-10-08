@@ -19,6 +19,7 @@ import {
   writesFigure,
 } from './requests';
 import { requestsResponseSchema } from './requests.schema';
+import { english } from '@/test-utils/english';
 
 const WIRE: RequestsWire = {
   routes: [
@@ -121,14 +122,14 @@ describe('statuses', () => {
 
 describe('figures', () => {
   it('count the writes', () => {
-    expect(writesFigure(ROUTES)).toEqual({
+    expect(writesFigure(ROUTES, english)).toEqual({
       value: '1,372',
       note: 'POST, PUT, PATCH and DELETE calls from the browser',
     });
   });
 
   it('break the error rate down by kind of failure', () => {
-    expect(errorRateFigure(ROUTES)).toEqual({
+    expect(errorRateFigure(ROUTES, english)).toEqual({
       value: '1.7%',
       note: '24 failed: 16 client errors (4xx), 6 server errors (5xx), 2 with no response',
     });
@@ -137,70 +138,79 @@ describe('figures', () => {
   it('name only the kinds of failure that happened, in the singular when there is one', () => {
     const route = { ...ORDERS, failed: 1, statuses: [{ status: 400, count: 1 }] };
 
-    expect(errorRateFigure([route]).note).toBe('1 failed: 1 client error (4xx)');
-    expect(errorRateFigure([{ ...route, statuses: [{ status: 502, count: 1 }] }]).note).toBe(
-      '1 failed: 1 server error (5xx)',
-    );
+    expect(errorRateFigure([route], english).note).toBe('1 failed: 1 client error (4xx)');
+    expect(
+      errorRateFigure([{ ...route, statuses: [{ status: 502, count: 1 }] }], english).note,
+    ).toBe('1 failed: 1 server error (5xx)');
   });
 
   it('says there were no failures, and shows a dash without writes', () => {
-    expect(errorRateFigure([ME])).toEqual({ value: '0.0%', note: 'No failures in 88 writes' });
-    expect(errorRateFigure([]).value).toBe('—');
+    expect(errorRateFigure([ME], english)).toEqual({
+      value: '0.0%',
+      note: 'No failures in 88 writes',
+    });
+    expect(errorRateFigure([], english).value).toBe('—');
   });
 
   it('names the route with the slowest median', () => {
-    expect(slowestRouteFigure(ROUTES)).toEqual({
+    expect(slowestRouteFigure(ROUTES, english)).toEqual({
       value: '164 ms',
       note: 'median of POST /orders',
     });
-    expect(slowestRouteFigure([ME, ORDERS]).note).toBe('median of POST /orders');
-    expect(slowestRouteFigure([])).toEqual({ value: '—', note: 'No writes in this period' });
+    expect(slowestRouteFigure([ME, ORDERS], english).note).toBe('median of POST /orders');
+    expect(slowestRouteFigure([], english)).toEqual({
+      value: '—',
+      note: 'No writes in this period',
+    });
   });
 
   it('count the failed reads by kind of failure, never as a rate', () => {
-    expect(failedReadsFigure(ROUTES)).toEqual({
+    expect(failedReadsFigure(ROUTES, english)).toEqual({
       value: '24',
       note: '16 client errors (4xx), 6 server errors (5xx), 2 with no response',
     });
-    expect(failedReadsFigure([])).toEqual({ value: '0', note: 'No read failed in this period' });
+    expect(failedReadsFigure([], english)).toEqual({
+      value: '0',
+      note: 'No read failed in this period',
+    });
   });
 
   it('count the routes that failed and name the one that failed the most', () => {
     const lookup = { ...ORDERS, method: 'GET', route: '/orders/:id', total: 30, failed: 30 };
 
-    expect(failingRoutesFigure([ME, ORDERS, lookup])).toEqual({
+    expect(failingRoutesFigure([ME, ORDERS, lookup], english)).toEqual({
       value: '2',
       note: 'Most: GET /orders/:id, 30 failures',
     });
-    expect(failingRoutesFigure([{ ...lookup, failed: 1 }]).note).toBe(
+    expect(failingRoutesFigure([{ ...lookup, failed: 1 }], english).note).toBe(
       'Most: GET /orders/:id, 1 failure',
     );
-    expect(failingRoutesFigure([ME])).toEqual({
+    expect(failingRoutesFigure([ME], english)).toEqual({
       value: '0',
       note: 'No read failed in this period',
     });
   });
 
   it('give writes their volume, rate and speed, and failed reads their counts only', () => {
-    expect(requestFigures('writes', ROUTES).map((figure) => figure.label)).toEqual([
+    expect(requestFigures('writes', ROUTES, english).map((figure) => figure.label)).toEqual([
       'Writes',
       'Write error rate',
       'Slowest route',
     ]);
-    expect(requestFigures('reads', ROUTES)).toEqual([
-      { id: 'failed-reads', label: 'Failed reads', ...failedReadsFigure(ROUTES) },
-      { id: 'failing-routes', label: 'Routes failing', ...failingRoutesFigure(ROUTES) },
+    expect(requestFigures('reads', ROUTES, english)).toEqual([
+      { id: 'failed-reads', label: 'Failed reads', ...failedReadsFigure(ROUTES, english) },
+      { id: 'failing-routes', label: 'Routes failing', ...failingRoutesFigure(ROUTES, english) },
     ]);
   });
 
   it('formats a duration in milliseconds', () => {
-    expect(formatDuration(1234)).toBe('1,234 ms');
+    expect(formatDuration(1234, english)).toBe('1,234 ms');
   });
 });
 
 describe('routeRows', () => {
   it('gives each route its shares, status chips, screens and recent failures', () => {
-    const [orders, me] = routeRows(ROUTES, 'America/Sao_Paulo', 'writes');
+    const [orders, me] = routeRows(ROUTES, 'America/Sao_Paulo', 'writes', english);
 
     expect(orders).toEqual({
       key: 'POST /orders',
@@ -239,8 +249,12 @@ describe('routeRows', () => {
   it('sums a failed read up by its failures, with no share of errors', () => {
     const lookup = { ...ORDERS, method: 'GET', total: 1, failed: 1, medianDurationMs: 310 };
 
-    expect(routeRows([lookup], 'UTC', 'reads')[0]?.summary).toBe('1 failed read · median 310 ms');
-    expect(routeRows([ORDERS], 'UTC', 'reads')[0]?.summary).toBe('24 failed reads · median 164 ms');
+    expect(routeRows([lookup], 'UTC', 'reads', english)[0]?.summary).toBe(
+      '1 failed read · median 310 ms',
+    );
+    expect(routeRows([ORDERS], 'UTC', 'reads', english)[0]?.summary).toBe(
+      '24 failed reads · median 164 ms',
+    );
   });
 
   it('keeps every route, or only the failing ones', () => {

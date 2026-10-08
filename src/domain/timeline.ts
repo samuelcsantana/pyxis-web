@@ -1,6 +1,7 @@
+import type { I18n } from '@/i18n/i18n';
 import { CHANNEL_LABELS } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
-import { eventLabel, formatQuantity } from './metrics';
+import { eventLabel } from './metrics';
 import { statusLabel, type StatusTone, statusTone } from './requests';
 import type { TimelineReport, TimelineWire } from './timeline.schema';
 
@@ -171,28 +172,6 @@ function itemTag(event: TimelineEvent): ItemTag | null {
     : null;
 }
 
-function clock(timeZone: string): Intl.DateTimeFormat {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle: 'h23',
-  });
-}
-
-export function visitStartFormat(timeZone: string): Intl.DateTimeFormat {
-  return new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  });
-}
-
 export function formatVisitDuration(startedAt: string, endedAt: string): string {
   const seconds = Math.max(
     0,
@@ -223,23 +202,24 @@ export function visitViews(
   visits: readonly TimelineVisit[],
   timeZone: string,
   filter: TimelineFilter,
+  i18n: I18n,
 ): readonly VisitView[] {
-  const time = clock(timeZone);
-  const started = visitStartFormat(timeZone);
+  const time = i18n.format.dateTime('clock', timeZone);
+  const started = i18n.format.dateTime('visitStart', timeZone);
   return visits.map((visit) => ({
     key: visit.sessionId,
-    heading: `Visit ${shortId(visit.sessionId)} · ${started.format(new Date(visit.startedAt))}`,
+    heading: `Visit ${shortId(visit.sessionId)} · ${started(new Date(visit.startedAt))}`,
     meta: [
-      deviceTypeLabel(visit.deviceType),
-      browserLabel(visit.browser),
-      operatingSystemLabel(visit.os),
-      ...(visit.country === null ? [] : [countryLabel(visit.country)]),
+      deviceTypeLabel(visit.deviceType, i18n),
+      browserLabel(visit.browser, i18n),
+      operatingSystemLabel(visit.os, i18n),
+      ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
       ...(visit.channel === null ? [] : [CHANNEL_LABELS[visit.channel]]),
       formatVisitDuration(visit.startedAt, visit.endedAt),
     ].join(' · '),
     items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
       key: event.id,
-      time: time.format(new Date(event.occurredAt)),
+      time: time(new Date(event.occurredAt)),
       kind: itemKind(event),
       title: itemTitle(event),
       detail: itemDetail(event),
@@ -255,13 +235,13 @@ export interface TimelineTotals {
   readonly hasFailures: boolean;
 }
 
-export function timelineTotals(visits: readonly TimelineVisit[]): TimelineTotals {
+export function timelineTotals(visits: readonly TimelineVisit[], i18n: I18n): TimelineTotals {
   const items = visits.flatMap((visit) => visit.events);
   const failed = items.filter(isFailedRequest).length;
   return {
-    visits: formatQuantity(visits.length, 'visit', 'visits'),
-    items: formatQuantity(items.length, 'item', 'items'),
-    failedRequests: formatQuantity(failed, 'failed request', 'failed requests'),
+    visits: i18n.t('counts.visit', { count: visits.length }),
+    items: i18n.t('counts.item', { count: items.length }),
+    failedRequests: i18n.t('counts.failedRequest', { count: failed }),
     hasFailures: failed > 0,
   };
 }

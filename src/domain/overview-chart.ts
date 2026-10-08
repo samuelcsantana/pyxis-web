@@ -1,4 +1,5 @@
-import { formatCount, formatPercent, formatQuantity, NO_VALUE, rate } from './metrics';
+import type { I18n } from '@/i18n/i18n';
+import { formatCount, formatPercent, NO_VALUE, rate } from './metrics';
 import type { FailureCount, KpiId, OverviewReport } from './overview';
 import { formatDay } from './period';
 
@@ -100,11 +101,13 @@ export function keptMetric(metric: ChartMetric): Readonly<Record<string, string>
   return metric === ACTIVITY ? {} : { [METRIC_PARAMETER]: metric };
 }
 
-export function formatChartValue(value: ChartValue, format: ValueFormat): string {
+export function formatChartValue(value: ChartValue, format: ValueFormat, i18n: I18n): string {
   if (value === null) {
     return NO_VALUE;
   }
-  return format === 'count' ? formatCount(value) : formatPercent(value / PERCENT_POINTS);
+  return format === 'count'
+    ? formatCount(value, i18n)
+    : formatPercent(value / PERCENT_POINTS, i18n);
 }
 
 function knownValues(values: readonly ChartValue[]): readonly number[] {
@@ -129,6 +132,7 @@ function activitySeries(
   key: 'pageViews' | 'events',
   label: string,
   color: SeriesColor,
+  i18n: I18n,
 ): ChartSeries {
   const values = report.days.map((day) => day[key]);
   const previous = report.previousDays?.map((day) => day[key]) ?? [];
@@ -138,11 +142,11 @@ function activitySeries(
     color,
     values,
     previous,
-    total: formatCount(sum(values)),
+    total: formatCount(sum(values), i18n),
   };
 }
 
-function activityChart(report: OverviewReport): OverviewChart {
+function activityChart(report: OverviewReport, i18n: I18n): OverviewChart {
   return {
     metric: ACTIVITY,
     title: 'Activity per day',
@@ -153,8 +157,8 @@ function activityChart(report: OverviewReport): OverviewChart {
     dates: report.days.map((day) => day.date),
     previousDates: previousDatesOf(report),
     series: [
-      activitySeries(report, 'pageViews', 'Page views', 'sky'),
-      activitySeries(report, 'events', 'Named events', 'violet'),
+      activitySeries(report, 'pageViews', 'Page views', 'sky', i18n),
+      activitySeries(report, 'events', 'Named events', 'violet', i18n),
     ],
     previousTotal: null,
   };
@@ -210,10 +214,14 @@ function metricSource(report: OverviewReport, id: KpiId): MetricSource | null {
   }
 }
 
-export function overviewChart(report: OverviewReport, metric: ChartMetric): OverviewChart {
+export function overviewChart(
+  report: OverviewReport,
+  metric: ChartMetric,
+  i18n: I18n,
+): OverviewChart {
   const source = metric === ACTIVITY ? null : metricSource(report, metric);
   if (metric === ACTIVITY || source === null) {
-    return activityChart(report);
+    return activityChart(report, i18n);
   }
   const previous = report.previousDays?.map(source.previousOf) ?? [];
   return {
@@ -232,11 +240,13 @@ export function overviewChart(report: OverviewReport, metric: ChartMetric): Over
         color: KPI_COLORS[metric],
         values: source.values,
         previous,
-        total: formatChartValue(source.total, source.format),
+        total: formatChartValue(source.total, source.format, i18n),
       },
     ],
     previousTotal:
-      report.previousDays === null ? null : formatChartValue(source.previousTotal, source.format),
+      report.previousDays === null
+        ? null
+        : formatChartValue(source.previousTotal, source.format, i18n),
   };
 }
 
@@ -244,24 +254,24 @@ export function chartValues(chart: OverviewChart): readonly number[] {
   return chart.series.flatMap((series) => knownValues([...series.values, ...series.previous]));
 }
 
-function seriesStatistics(values: readonly ChartValue[], chart: OverviewChart): string {
+function seriesStatistics(values: readonly ChartValue[], chart: OverviewChart, i18n: I18n): string {
   const known = knownValues(values);
   if (known.length === 0) {
     return `${chart.gapLabel} on any day`;
   }
   const gaps = values.length - known.length;
-  const lowest = formatChartValue(Math.min(...known), chart.format);
-  const highest = formatChartValue(Math.max(...known), chart.format);
+  const lowest = formatChartValue(Math.min(...known), chart.format, i18n);
+  const highest = formatChartValue(Math.max(...known), chart.format, i18n);
   return [
-    ...(chart.additive ? [`${formatCount(sum(known))} in total`] : []),
+    ...(chart.additive ? [`${formatCount(sum(known), i18n)} in total`] : []),
     `between ${lowest} and ${highest} a day`,
-    ...(gaps > 0 ? [`${chart.gapLabel} on ${formatQuantity(gaps, 'day', 'days')}`] : []),
+    ...(gaps > 0 ? [`${chart.gapLabel} on ${i18n.t('counts.day', { count: gaps })}`] : []),
   ].join(', ');
 }
 
-export function chartSummary(chart: OverviewChart): string {
+export function chartSummary(chart: OverviewChart, i18n: I18n): string {
   const current = chart.series.map(
-    (series) => `${series.label}: ${seriesStatistics(series.values, chart)}.`,
+    (series) => `${series.label}: ${seriesStatistics(series.values, chart, i18n)}.`,
   );
   const previous =
     chart.previousDates === null
@@ -269,11 +279,11 @@ export function chartSummary(chart: OverviewChart): string {
       : [
           'Dashed, the previous period.',
           ...chart.series.map(
-            (series) => `${series.label}: ${seriesStatistics(series.previous, chart)}.`,
+            (series) => `${series.label}: ${seriesStatistics(series.previous, chart, i18n)}.`,
           ),
         ];
   return [
-    `Line chart of ${formatQuantity(chart.dates.length, 'day', 'days')}.`,
+    `Line chart of ${i18n.t('counts.day', { count: chart.dates.length })}.`,
     ...current,
     ...previous,
   ].join(' ');
@@ -296,59 +306,64 @@ export function chartColumns(chart: OverviewChart): readonly ChartColumn[] {
   ];
 }
 
-function dayLabelAt(dates: readonly string[], index: number): string {
+function dayLabelAt(dates: readonly string[], index: number, i18n: I18n): string {
   const date = dates[index];
-  return date === undefined ? NO_VALUE : formatDay(date);
+  return date === undefined ? NO_VALUE : formatDay(date, i18n);
 }
 
-function valueAt(values: readonly ChartValue[], index: number, chart: OverviewChart): string {
-  return formatChartValue(values[index] ?? null, chart.format);
+function valueAt(
+  values: readonly ChartValue[],
+  index: number,
+  chart: OverviewChart,
+  i18n: I18n,
+): string {
+  return formatChartValue(values[index] ?? null, chart.format, i18n);
 }
 
-function previousCells(chart: OverviewChart, index: number): readonly string[] {
+function previousCells(chart: OverviewChart, index: number, i18n: I18n): readonly string[] {
   if (chart.previousDates === null) {
     return [];
   }
   return [
-    dayLabelAt(chart.previousDates, index),
-    ...chart.series.map((series) => valueAt(series.previous, index, chart)),
+    dayLabelAt(chart.previousDates, index, i18n),
+    ...chart.series.map((series) => valueAt(series.previous, index, chart, i18n)),
   ];
 }
 
-export function chartRows(chart: OverviewChart): readonly ChartRow[] {
+export function chartRows(chart: OverviewChart, i18n: I18n): readonly ChartRow[] {
   return chart.dates.map((date, index) => ({
-    day: formatDay(date),
+    day: formatDay(date, i18n),
     cells: [
-      ...chart.series.map((series) => valueAt(series.values, index, chart)),
-      ...previousCells(chart, index),
+      ...chart.series.map((series) => valueAt(series.values, index, chart, i18n)),
+      ...previousCells(chart, index, i18n),
     ],
   }));
 }
 
-function previousPoints(chart: OverviewChart, index: number): readonly ChartPoint[] {
+function previousPoints(chart: OverviewChart, index: number, i18n: I18n): readonly ChartPoint[] {
   if (chart.previousDates === null) {
     return [];
   }
-  const day = dayLabelAt(chart.previousDates, index);
+  const day = dayLabelAt(chart.previousDates, index, i18n);
   return chart.series.map((series) => ({
     label: `${series.label}, ${day}`,
-    value: valueAt(series.previous, index, chart),
+    value: valueAt(series.previous, index, chart, i18n),
     color: series.color,
     previous: true,
   }));
 }
 
-export function chartDays(chart: OverviewChart): readonly ChartDay[] {
+export function chartDays(chart: OverviewChart, i18n: I18n): readonly ChartDay[] {
   return chart.dates.map((date, index) => ({
-    day: formatDay(date),
+    day: formatDay(date, i18n),
     points: [
       ...chart.series.map((series) => ({
         label: series.label,
-        value: valueAt(series.values, index, chart),
+        value: valueAt(series.values, index, chart, i18n),
         color: series.color,
         previous: false,
       })),
-      ...previousPoints(chart, index),
+      ...previousPoints(chart, index, i18n),
     ],
   }));
 }

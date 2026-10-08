@@ -7,6 +7,7 @@ import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.sch
 import { ExpandableFeatureRow } from './expandable-feature-row';
 import { FeatureTable } from './feature-table';
 import { PropertyBreakdown } from './property-breakdown';
+import { english } from '@/test-utils/english';
 
 const KEYS = propertyKeyViews(
   propertyBreakdownResponseSchema.parse({
@@ -24,12 +25,14 @@ const KEYS = propertyKeyViews(
       },
     ],
   }),
+  english,
 );
 
 const [ROW] = featureRows(
   [{ name: 'calculator_result_shown', count: 10, visits: 8, daily: [4, 6] }],
   'events',
   '',
+  english,
 );
 
 function renderRow(loadProperties: (name: string) => Promise<readonly PropertyKeyView[]>) {
@@ -153,6 +156,7 @@ describe('PropertyBreakdown', () => {
           },
         ],
       }),
+      english,
     );
     render(
       <PropertyBreakdown
@@ -295,6 +299,7 @@ describe('ExpandableFeatureRow', () => {
           },
         ],
       }),
+      english,
     );
     renderRow(() => Promise.resolve(keys));
 
@@ -320,6 +325,7 @@ describe('FeatureTable with a property loader', () => {
       [{ name: 'cta_clicked', count: 3, visits: 2, daily: [1, 2] }],
       'events',
       '',
+      english,
     );
     const { rerender } = render(
       <FeatureTable
@@ -336,7 +342,12 @@ describe('FeatureTable with a property loader', () => {
     rerender(
       <FeatureTable
         kind="screens"
-        rows={featureRows([{ name: '/orders', count: 3, visits: 2, daily: [1, 2] }], 'screens', '')}
+        rows={featureRows(
+          [{ name: '/orders', count: 3, visits: 2, daily: [1, 2] }],
+          'screens',
+          '',
+          english,
+        )}
         query=""
         visitsHref={() => EVENT_VISITS}
         loadProperties={vi.fn()}

@@ -1,3 +1,4 @@
+import type { I18n } from '@/i18n/i18n';
 import { barWidth, eventLabel, formatCount, formatPercent, rate } from './metrics';
 import type { FeaturesReport, FeaturesWire } from './features.schema';
 
@@ -59,15 +60,16 @@ export function featureRows(
   items: readonly Feature[],
   kind: FeatureKind,
   query: string,
+  i18n: I18n,
 ): readonly FeatureRow[] {
   const total = items.reduce((sum, item) => sum + item.count, 0);
   const most = Math.max(0, ...items.map((item) => item.count));
   return matchingFeatures(items, kind, query).map((item) => ({
     name: item.name,
     label: featureLabel(kind, item.name),
-    count: formatCount(item.count),
-    visits: formatCount(item.visits),
-    share: formatPercent(rate(item.count, total)),
+    count: formatCount(item.count, i18n),
+    visits: formatCount(item.visits, i18n),
+    share: formatPercent(rate(item.count, total), i18n),
     barWidth: barWidth(item.count, most),
     daily: item.daily,
   }));

@@ -1,4 +1,5 @@
-import { barWidth, formatCount, formatPercent, formatQuantity, rate } from './metrics';
+import type { I18n } from '@/i18n/i18n';
+import { barWidth, formatCount, formatPercent, rate } from './metrics';
 import type { AcquisitionReport, AcquisitionWire, ChannelVisits } from './acquisition.schema';
 
 export type { AcquisitionReport, AcquisitionWire, ChannelVisits };
@@ -67,15 +68,17 @@ export function channelChartRows(days: readonly ChannelDay[]): readonly ChannelC
   return days.map((day) => ({ date: day.date, ...day.byChannel, total: dayTotal(day) }));
 }
 
-export function channelSummary(days: readonly ChannelDay[]): string {
+export function channelSummary(days: readonly ChannelDay[], i18n: I18n): string {
   const totals = channelTotals(days);
   const daily = days.map(dayTotal);
   const ranked = activeChannels(days)
     .toSorted((left, right) => totals[right] - totals[left])
-    .map((channel) => `${CHANNEL_LABELS[channel]} ${formatCount(totals[channel])}`);
+    .map((channel) => `${CHANNEL_LABELS[channel]} ${formatCount(totals[channel], i18n)}`);
+  const lowest = formatCount(Math.min(...daily), i18n);
+  const highest = formatCount(Math.max(...daily), i18n);
   return [
-    `Stacked bar chart of ${formatQuantity(days.length, 'day', 'days')},`,
-    `between ${formatCount(Math.min(...daily))} and ${formatCount(Math.max(...daily))} visits a day.`,
+    `Stacked bar chart of ${i18n.t('counts.day', { count: days.length })},`,
+    `between ${lowest} and ${highest} visits a day.`,
     `Visits by channel: ${ranked.join(', ')}.`,
   ].join(' ');
 }
@@ -85,12 +88,15 @@ export interface PaidVisits {
   readonly note: string;
 }
 
-export function paidVisits(days: readonly ChannelDay[]): PaidVisits {
+function shareOfVisits(part: number, total: number, i18n: I18n): string {
+  return `${formatPercent(rate(part, total), i18n)} of ${i18n.t('counts.visit', { count: total })}`;
+}
+
+export function paidVisits(days: readonly ChannelDay[], i18n: I18n): PaidVisits {
   const paid = channelTotals(days).paid;
-  const total = visitsTotal(days);
   return {
-    value: formatCount(paid),
-    note: `${formatPercent(rate(paid, total))} of ${formatQuantity(total, 'visit', 'visits')}`,
+    value: formatCount(paid, i18n),
+    note: shareOfVisits(paid, visitsTotal(days), i18n),
   };
 }
 
@@ -104,16 +110,15 @@ function mostVisited(channels: readonly Channel[], totals: ChannelVisits): Chann
   return channels.reduce((best, channel) => (totals[channel] > totals[best] ? channel : best));
 }
 
-export function topChannel(days: readonly ChannelDay[]): ChannelFigure {
+export function topChannel(days: readonly ChannelDay[], i18n: I18n): ChannelFigure {
   const totals = channelTotals(days);
   const top = mostVisited(CHANNELS, totals);
   const paidLeads = top === 'paid' && totals.paid > 0;
   const shown = paidLeads ? mostVisited(UNPAID_CHANNELS, totals) : top;
-  const total = visitsTotal(days);
   return {
     label: paidLeads ? 'Top unpaid channel' : 'Top channel',
     value: CHANNEL_LABELS[shown],
-    note: `${formatPercent(rate(totals[shown], total))} of ${formatQuantity(total, 'visit', 'visits')}`,
+    note: shareOfVisits(totals[shown], visitsTotal(days), i18n),
   };
 }
 
@@ -133,7 +138,7 @@ export interface SourceRow {
   readonly fromAdClicks: string | null;
 }
 
-export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
+export function sourceRows(sources: readonly Source[], i18n: I18n): readonly SourceRow[] {
   const rated = sources.map((source) => {
     const converted = source.convertingVisits ?? source.conversions;
     return {
@@ -148,13 +153,13 @@ export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
     label: sourceLabel(source.source),
     medium: source.medium,
     channel: source.channel,
-    visits: formatCount(source.visits),
-    conversions: source.converted === null ? null : formatCount(source.converted),
-    conversionRate: source.converted === null ? null : formatPercent(source.rate),
+    visits: formatCount(source.visits, i18n),
+    conversions: source.converted === null ? null : formatCount(source.converted, i18n),
+    conversionRate: source.converted === null ? null : formatPercent(source.rate, i18n),
     barWidth: barWidth(source.rate ?? 0, best),
     fromAdClicks:
       source.fromAdClickVisits === 0
         ? null
-        : `${formatCount(source.fromAdClickVisits)} from ad clicks`,
+        : `${formatCount(source.fromAdClickVisits, i18n)} from ad clicks`,
   }));
 }
