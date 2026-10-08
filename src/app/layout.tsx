@@ -11,14 +11,13 @@ import { DOCUMENT_FONT_CLASSES } from './fonts';
 import './globals.css';
 
 const NOT_INDEXED: Metadata['robots'] = { index: false, follow: false };
-const DEMO_SHARE_TITLE = `${APP_NAME} live demo`;
 const TITLE_TEMPLATE = `%s · ${APP_NAME}`;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();
   const description = t('meta.description');
   const demo = isDemoMode();
-  const shareTitle = demo ? DEMO_SHARE_TITLE : APP_NAME;
+  const shareTitle = demo ? t('meta.demoShareTitle', { app: APP_NAME }) : APP_NAME;
   return {
     title: { template: TITLE_TEMPLATE, default: APP_NAME },
     description,

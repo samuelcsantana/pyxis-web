@@ -4,6 +4,7 @@ export const en = {
   meta: {
     description: APP_DESCRIPTION,
     screenTitle: '{screen} · {project}',
+    demoShareTitle: '{app} live demo',
   },
   screens: {
     overview: 'Overview',
