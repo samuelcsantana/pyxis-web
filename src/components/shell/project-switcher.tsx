@@ -52,7 +52,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
           height={16}
           viewBox="0 0 24 24"
           aria-hidden="true"
-          className="shrink-0 text-nav-muted transition-transform group-open:rotate-180"
+          className="shrink-0 text-nav-muted transition-transform group-open:rotate-180 motion-reduce:transition-none"
         >
           <path
             d="M7 10l5 5 5-5"
