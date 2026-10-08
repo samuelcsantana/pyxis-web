@@ -6,6 +6,10 @@ import { PropertyBreakdown } from './property-breakdown';
 
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
 
+function valueHref(key: string, value: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '7d', property: `${key}=${value}` }).toString()}`;
+}
+
 function demoKeys(name: string) {
   return propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name));
 }
@@ -18,8 +22,9 @@ const meta = {
     eventLabel: 'Calculator result shown',
     state: { status: 'ready', keys: demoKeys('calculator_result_shown') },
     onRetry: fn(),
+    valueHref,
   },
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,70rem)]">

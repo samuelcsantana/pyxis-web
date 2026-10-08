@@ -5,6 +5,10 @@ import { FeatureSearch } from './feature-search';
 import { FeatureTable } from './feature-table';
 import { FeatureTabs } from './feature-tabs';
 
+function visitsHref(name: string): string {
+  return `/p1/visits?${new URLSearchParams({ range: '7d', event: name }).toString()}`;
+}
+
 const ITEMS = [
   { name: 'cta_clicked', count: 120, visits: 90, daily: [50, 70] },
   { name: 'login_completed', count: 40, visits: 30, daily: [20, 20] },
@@ -70,7 +74,12 @@ describe('FeatureSearch', () => {
 describe('FeatureTable', () => {
   it('lists events by label and name, with count, visits, trend and share', () => {
     const { container } = render(
-      <FeatureTable kind="events" rows={featureRows(ITEMS, 'events', '')} query="" />,
+      <FeatureTable
+        kind="events"
+        rows={featureRows(ITEMS, 'events', '')}
+        query=""
+        visitsHref={visitsHref}
+      />,
     );
 
     const rows = screen.getAllByRole('row');
@@ -89,21 +98,44 @@ describe('FeatureTable', () => {
           '',
         )}
         query=""
+        visitsHref={(path) => `/p1/visits?range=7d&path=${encodeURIComponent(path)}`}
       />,
     );
 
     expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
     expect(screen.getAllByRole('row')[1]).toHaveTextContent('/orders/:id54100%');
+    expect(screen.getByRole('link', { name: '/orders/:id: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=7d&path=%2Forders%2F%3Aid',
+    );
+  });
+
+  it('links each event to the visits that sent it', () => {
+    render(
+      <FeatureTable
+        kind="events"
+        rows={featureRows(ITEMS, 'events', '')}
+        query=""
+        visitsHref={visitsHref}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Login completed: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=7d&event=login_completed',
+    );
   });
 
   it('says what is missing: nothing tracked, or nothing matching the search', () => {
-    const { rerender } = render(<FeatureTable kind="events" rows={[]} query="" />);
+    const { rerender } = render(
+      <FeatureTable kind="events" rows={[]} query="" visitsHref={visitsHref} />,
+    );
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
 
-    rerender(<FeatureTable kind="screens" rows={[]} query="" />);
+    rerender(<FeatureTable kind="screens" rows={[]} query="" visitsHref={visitsHref} />);
     expect(screen.getByText('No page views in this period.')).toBeInTheDocument();
 
-    rerender(<FeatureTable kind="events" rows={[]} query="zzz" />);
+    rerender(<FeatureTable kind="events" rows={[]} query="zzz" visitsHref={visitsHref} />);
     expect(screen.getByText('Nothing matches “zzz”.')).toBeInTheDocument();
   });
 });

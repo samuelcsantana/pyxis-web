@@ -3,7 +3,7 @@ import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import {
@@ -83,6 +83,12 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           kind={kind}
           rows={featureRows(report.items, kind, query)}
           query={query}
+          visitsHref={(name) =>
+            linkWith(
+              screenHref(project.id, 'visits', periodQuery(period)),
+              kind === 'events' ? { event: name } : { path: name },
+            )
+          }
           loadProperties={
             kind === 'events'
               ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })

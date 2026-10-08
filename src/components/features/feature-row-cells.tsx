@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { FeatureKind, FeatureRow } from '@/domain/features';
 import { Sparkline } from '@/components/ui/sparkline';
 import { BAR_FILL, BAR_TRACK, BODY_CELL } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 
 const TREND_BOX = { width: 96, height: 28, inset: 3 } as const;
 
@@ -10,19 +11,22 @@ export const FEATURE_COLUMNS = 5;
 export interface FeatureRowCellsProps {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
+  readonly visitsHref: string;
   readonly disclosure?: ReactNode;
 }
 
-export function FeatureRowCells({ kind, row, disclosure }: FeatureRowCellsProps) {
+export function FeatureRowCells({ kind, row, visitsHref, disclosure }: FeatureRowCellsProps) {
   return (
     <>
       <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
         <span className="flex items-start gap-2">
           {disclosure}
           <span className="flex min-w-0 flex-col">
-            <span className={kind === 'screens' ? 'font-mono text-xs wrap-anywhere' : ''}>
-              {row.label}
-            </span>
+            <VisitsLink
+              href={visitsHref}
+              label={row.label}
+              className={`w-fit ${kind === 'screens' ? 'font-mono text-xs wrap-anywhere' : ''}`}
+            />
             {kind === 'events' ? (
               <span className="font-mono text-xs font-normal text-muted wrap-anywhere">
                 {row.name}

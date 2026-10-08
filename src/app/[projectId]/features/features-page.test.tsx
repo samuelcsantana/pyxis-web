@@ -95,6 +95,9 @@ describe('FeaturesPage', () => {
       'href',
       '/p-store/features?range=today&kind=events',
     );
+    expect(
+      screen.getByRole('link', { name: 'Calculator result shown: see its visits' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=7d&event=calculator_result_shown');
   });
 
   it('ranks the screens when asked, and keeps the search across periods', async () => {
@@ -111,6 +114,10 @@ describe('FeaturesPage', () => {
     expect(screen.getByRole('link', { name: 'Clear' })).toHaveAttribute(
       'href',
       '/p-store/features?range=30d&kind=screens',
+    );
+    expect(screen.getByRole('link', { name: '/orders/:id: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=30d&path=%2Forders%2F%3Aid',
     );
   });
 

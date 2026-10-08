@@ -14,6 +14,10 @@ function loadDemoProperties(name: string) {
   return Promise.resolve(propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name)));
 }
 
+function visitsHref(name: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '7d', event: name }).toString()}`;
+}
+
 function failToLoadProperties() {
   return Promise.reject(new Error('The breakdown is unavailable.'));
 }
@@ -22,8 +26,8 @@ const meta = {
   title: 'Features/Ranking',
   component: FeatureTable,
   tags: ['autodocs'],
-  args: { kind: 'events', rows: featureRows(EVENTS, 'events', ''), query: '' },
-  parameters: { layout: 'padded' },
+  args: { kind: 'events', rows: featureRows(EVENTS, 'events', ''), query: '', visitsHref },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,70rem)]">

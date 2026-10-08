@@ -5,6 +5,8 @@ import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import type { FeatureRow } from '@/domain/features';
 import type { PropertyKeyView } from '@/domain/property-breakdown';
+import { propertyFilterOf } from '@/domain/visit-property';
+import { linkWith } from '@/components/shell/screens';
 import { BUTTON_ICON } from '@/components/ui/control-classes';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
@@ -15,6 +17,7 @@ export type LoadProperties = (name: string) => Promise<readonly PropertyKeyView[
 
 export interface ExpandableFeatureRowProps {
   readonly row: FeatureRow;
+  readonly visitsHref: string;
   readonly loadProperties: LoadProperties;
 }
 
@@ -28,7 +31,11 @@ function breakdownState(
   return keys === null ? { status: 'loading' } : { status: 'ready', keys };
 }
 
-export function ExpandableFeatureRow({ row, loadProperties }: ExpandableFeatureRowProps) {
+export function ExpandableFeatureRow({
+  row,
+  visitsHref,
+  loadProperties,
+}: ExpandableFeatureRowProps) {
   const [open, setOpen] = useState(false);
   const [keys, setKeys] = useState<readonly PropertyKeyView[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -51,6 +58,11 @@ export function ExpandableFeatureRow({ row, loadProperties }: ExpandableFeatureR
       .subscribe();
   };
 
+  const valueHref = (key: string, value: string) => {
+    const property = propertyFilterOf(key, value);
+    return property === null ? null : linkWith(visitsHref, { property });
+  };
+
   const toggle = () => {
     setOpen(!open);
     if (!open && (error !== null || (keys === null && !busy))) {
@@ -64,6 +76,7 @@ export function ExpandableFeatureRow({ row, loadProperties }: ExpandableFeatureR
         <FeatureRowCells
           kind="events"
           row={row}
+          visitsHref={visitsHref}
           disclosure={
             <button
               type="button"
@@ -97,6 +110,7 @@ export function ExpandableFeatureRow({ row, loadProperties }: ExpandableFeatureR
             eventLabel={row.label}
             state={breakdownState(error, keys)}
             onRetry={load}
+            valueHref={valueHref}
           />
         </td>
       </tr>
