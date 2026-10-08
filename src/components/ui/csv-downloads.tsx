@@ -13,7 +13,7 @@ const DOWNLOAD_ICON = 'M12 4v11 M7 10l5 5 5-5 M5 20h14';
 
 export function CsvDownloads({ downloads }: CsvDownloadsProps) {
   return (
-    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] leading-5">
+    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-caption leading-5">
       <span className="flex items-center gap-1.5 font-medium text-muted">
         <svg
           aria-hidden="true"

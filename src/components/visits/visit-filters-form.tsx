@@ -37,7 +37,7 @@ const IDENTITY_LABELS: Readonly<Record<VisitIdentity, string>> = {
   anonymous: 'Anonymous',
 };
 
-const LABEL = 'flex min-w-0 flex-col gap-1.5 text-[13px] font-medium';
+const LABEL = 'flex min-w-0 flex-col gap-1.5 text-caption font-medium';
 const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-base font-normal sm:text-sm ${FIELD}`;
 const HINT = 'text-xs font-normal text-muted';
 
@@ -60,7 +60,7 @@ export function VisitFiltersForm({
         initiallyOpen={activeCount > 0 || problems.length > 0}
       >
         <fieldset className="flex min-w-0 flex-col gap-2">
-          <legend className="mb-2 text-[13px] font-semibold">Passed by pages</legend>
+          <legend className="mb-2 text-caption font-semibold">Passed by pages</legend>
           <p id="visit-pages-hint" className={HINT}>
             A visit must have viewed every page given. A * matches any characters, as in /blog/*.
           </p>
@@ -143,7 +143,7 @@ export function VisitFiltersForm({
           </label>
         </div>
         {problems.length === 0 ? null : (
-          <div role="alert" className="rounded-input bg-bad-soft px-3 py-2 text-[13px] text-bad">
+          <div role="alert" className="rounded-input bg-bad-soft px-3 py-2 text-caption text-bad">
             <p className="font-semibold">Some filters were left out:</p>
             <ul className="list-disc pl-5">
               {problems.map((problem) => (
@@ -159,7 +159,7 @@ export function VisitFiltersForm({
             className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
           />
           {clearHref === null ? null : (
-            <Link href={clearHref} className={`text-[13px] ${TEXT_LINK}`}>
+            <Link href={clearHref} className={`text-caption ${TEXT_LINK}`}>
               Clear filters
             </Link>
           )}

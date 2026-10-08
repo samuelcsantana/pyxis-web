@@ -30,7 +30,7 @@ const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 function PeriodControls({ basePath, period, today, keep, i18n }: TopbarWithPeriodProps) {
   return (
     <>
-      <p className="flex items-center gap-2 text-[13px] text-muted">
+      <p className="flex items-center gap-2 text-caption text-muted">
         <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
           <path
             d={CALENDAR_ICON}
@@ -59,8 +59,8 @@ export function TopbarFrame({ title, subtitle, controls, notice }: TopbarFramePr
   return (
     <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:px-8 sm:py-4.5">
       <div className="flex min-w-0 flex-1 basis-64 flex-col gap-1">
-        <h1 className="text-[22px] leading-7 font-semibold tracking-tight">{title}</h1>
-        <p className="hidden text-[13px] text-muted sm:block">{subtitle}</p>
+        <h1 className="text-title leading-7 font-semibold tracking-tight">{title}</h1>
+        <p className="hidden text-caption text-muted sm:block">{subtitle}</p>
         {notice}
       </div>
       <div className="flex flex-wrap items-center gap-3">{controls}</div>
@@ -77,7 +77,7 @@ function RangeNotice(props: TopbarProps) {
     <p
       id={RANGE_NOTICE_ID}
       role="status"
-      className="mt-1 rounded-input bg-bad-soft px-3 py-2 text-[13px] text-bad"
+      className="mt-1 rounded-input bg-bad-soft px-3 py-2 text-caption text-bad"
     >
       {rejectedRangeNotice(rejected, props.i18n)}
     </p>

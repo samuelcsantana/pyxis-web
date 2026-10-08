@@ -40,7 +40,7 @@ export function TimelineSearch({
       {Object.entries(keep).map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
-      <label className="flex flex-col gap-1.5 text-[13px] font-medium">
+      <label className="flex flex-col gap-1.5 text-caption font-medium">
         Look up
         <select
           value={kind}
@@ -53,7 +53,7 @@ export function TimelineSearch({
           <option value="visit">One visit, by visit id</option>
         </select>
       </label>
-      <label className="flex min-w-0 grow basis-32 flex-col gap-1.5 text-[13px] font-medium sm:max-w-md sm:basis-64">
+      <label className="flex min-w-0 grow basis-32 flex-col gap-1.5 text-caption font-medium sm:max-w-md sm:basis-64">
         {kind === 'user' ? 'User id' : 'Visit id'}
         <input
           name={kind}
@@ -72,7 +72,7 @@ export function TimelineSearch({
         className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
       />
       {invalid ? (
-        <p id={ERROR_ID} className="basis-full text-[13px] font-medium text-bad">
+        <p id={ERROR_ID} className="basis-full text-caption font-medium text-bad">
           Nothing was looked up. {rejected.hint}
         </p>
       ) : null}

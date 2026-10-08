@@ -17,14 +17,14 @@ export const BUTTON_STRONG = `bg-ink font-semibold text-card enabled:hover:bg-in
 export const BUTTON_SECONDARY = `border border-line bg-card text-ink enabled:hover:border-muted enabled:hover:bg-soft enabled:active:border-muted enabled:active:bg-line ${CONTENT_CONTROL}`;
 export const BUTTON_ICON = `flex items-center justify-center ${BUTTON_SECONDARY}`;
 export const SEGMENTED_GROUP = 'flex gap-0.5 rounded-input border border-line bg-soft p-[3px]';
-export const SEGMENTED_OPTION = `flex items-center rounded-control text-[13px] font-medium ${CONTENT_CONTROL}`;
+export const SEGMENTED_OPTION = `flex items-center rounded-control text-caption font-medium ${CONTENT_CONTROL}`;
 export const SEGMENTED_SELECTED = 'bg-ink text-card';
 export const SEGMENTED_IDLE = 'text-muted hover:text-ink active:bg-card active:text-ink';
 export const TAB = `flex items-center border-b-2 text-sm font-semibold ${CONTENT_CONTROL}`;
 export const TAB_SELECTED = 'border-ink text-ink';
 export const TAB_IDLE =
   'border-transparent text-muted hover:text-ink active:border-muted active:text-ink';
-export const PILL = `flex items-center rounded-pill border text-[13px] font-medium ${CONTENT_CONTROL}`;
+export const PILL = `flex items-center rounded-pill border text-caption font-medium ${CONTENT_CONTROL}`;
 export const PILL_SELECTED = 'border-ink bg-ink text-card';
 export const PILL_IDLE =
   'border-line bg-card text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line';

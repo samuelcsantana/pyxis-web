@@ -26,7 +26,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
           >
             <MethodChip method={row.method} /> <span className="wrap-anywhere">{row.route}</span>
           </h2>
-          <p className="text-[13px] text-muted">{row.summary}</p>
+          <p className="text-caption text-muted">{row.summary}</p>
         </div>
         <button
           type="button"
@@ -65,13 +65,13 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
           Where it failed
         </h3>
         {row.screens.length === 0 ? (
-          <p className="text-[13px] text-muted">No failures in this period.</p>
+          <p className="text-caption text-muted">No failures in this period.</p>
         ) : (
           <ul className="flex flex-col">
             {row.screens.map((screen) => (
               <li
                 key={screen.path}
-                className="flex items-center justify-between gap-3 border-b border-line py-2 text-[13px]"
+                className="flex items-center justify-between gap-3 border-b border-line py-2 text-caption"
               >
                 <Link
                   href={screenHref(screen.path)}
@@ -92,7 +92,7 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
           Latest failures
         </h3>
         {row.failures.length === 0 ? (
-          <p className="text-[13px] text-muted">No failures in this period.</p>
+          <p className="text-caption text-muted">No failures in this period.</p>
         ) : (
           <ul className="flex flex-col">
             {row.failures.map((failure) => (

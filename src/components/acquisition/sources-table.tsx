@@ -53,16 +53,16 @@ export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
         <h2 id="sources-heading" className={PANEL_TITLE}>
           Sources
         </h2>
-        <p className="text-[13px] text-muted">
+        <p className="text-caption text-muted">
           The campaign source, else the referring site, of the first page of each visit
         </p>
       </div>
       {rows.length === 0 ? (
-        <p className="text-[13px] text-muted">No visits with a source in this period.</p>
+        <p className="text-caption text-muted">No visits with a source in this period.</p>
       ) : (
         <table
           aria-labelledby="sources-heading"
-          className="w-full border-collapse text-[13px] tabular-nums"
+          className="w-full border-collapse text-caption tabular-nums"
         >
           <thead>
             <tr>
@@ -98,7 +98,7 @@ export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
                           <span className="font-mono sm:hidden">{row.medium}</span>
                         )}
                         {row.fromAdClicks === null ? null : (
-                          <span className="rounded-pill bg-warn-soft px-2 py-0.5 text-[11px] font-semibold text-warn">
+                          <span className="rounded-pill bg-warn-soft px-2 py-0.5 text-micro font-semibold text-warn">
                             {row.fromAdClicks}
                           </span>
                         )}

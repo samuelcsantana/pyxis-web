@@ -104,7 +104,7 @@ function ChannelTable({
       aria-label={caption}
       tabIndex={0}
     >
-      <table className="w-full border-collapse text-[13px] tabular-nums">
+      <table className="w-full border-collapse text-caption tabular-nums">
         <caption className="pb-2 text-left text-muted">{caption}</caption>
         <thead>
           <tr>

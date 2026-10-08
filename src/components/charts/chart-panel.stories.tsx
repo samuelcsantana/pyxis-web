@@ -18,7 +18,7 @@ const meta = {
       />
     ),
     table: (
-      <table className="text-[13px]">
+      <table className="text-caption">
         <caption className="text-left text-muted">Visits per day, last 7 days</caption>
         <tbody>
           <tr>

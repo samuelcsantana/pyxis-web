@@ -43,7 +43,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="px-3 pb-1.5 text-[11px] font-semibold tracking-[0.08em] text-nav-muted uppercase">
+      <span className="px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase">
         Analytics
       </span>
       <ul className="flex flex-col gap-1">

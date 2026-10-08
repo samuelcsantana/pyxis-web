@@ -13,14 +13,14 @@ export function DeviceConversionList({ conversions, conversionEvent }: DeviceCon
         <h2 id="device-conversion-heading" className={PANEL_TITLE}>
           Conversion by device
         </h2>
-        <p className="text-[13px] text-muted">
+        <p className="text-caption text-muted">
           Share of visits that sent <code className="font-mono">{conversionEvent}</code>
         </p>
       </div>
       <ul className="flex flex-col gap-3.5">
         {conversions.map((conversion) => (
           <li key={conversion.label} className="flex flex-col gap-1.5">
-            <span className="flex flex-wrap justify-between gap-x-2 text-[13px]">
+            <span className="flex flex-wrap justify-between gap-x-2 text-caption">
               <span>{conversion.label}</span>
               <span className="font-semibold tabular-nums">
                 {conversion.rate}{' '}

@@ -21,7 +21,7 @@ export function methodClass(method: string): string {
 export function MethodChip({ method }: { readonly method: string }) {
   return (
     <span
-      className={`inline-block min-w-13.5 shrink-0 rounded-chip py-0.5 text-center font-mono text-[11px] font-semibold ${methodClass(method)}`}
+      className={`inline-block min-w-13.5 shrink-0 rounded-chip py-0.5 text-center font-mono text-micro font-semibold ${methodClass(method)}`}
     >
       {method}
     </span>

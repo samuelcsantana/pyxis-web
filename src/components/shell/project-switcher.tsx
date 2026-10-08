@@ -58,7 +58,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
         <span className="sr-only">Switch project. Current project: </span>
         <span
           aria-hidden="true"
-          className="flex size-8 shrink-0 items-center justify-center rounded-control bg-accent text-[13px] font-bold text-accent-ink"
+          className="flex size-8 shrink-0 items-center justify-center rounded-control bg-accent text-caption font-bold text-accent-ink"
         >
           {projectInitials(currentProject.name)}
         </span>
@@ -97,7 +97,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
               >
                 <span
                   aria-hidden="true"
-                  className="flex size-6 shrink-0 items-center justify-center rounded-chip bg-nav-border text-[11px] font-bold text-nav-strong"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-chip bg-nav-border text-micro font-bold text-nav-strong"
                 >
                   {projectInitials(project.name)}
                 </span>

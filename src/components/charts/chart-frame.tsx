@@ -72,7 +72,7 @@ export function ChartFrame({
     <figure
       role="img"
       aria-label={summary}
-      className={`grid w-full grid-cols-[2.5rem_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_1.25rem] overflow-hidden pt-2 pr-2 text-[11px] leading-none text-muted ${heightClassName}`}
+      className={`grid w-full grid-cols-[2.5rem_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_1.25rem] overflow-hidden pt-2 pr-2 text-micro leading-none text-muted ${heightClassName}`}
     >
       <div className="relative">
         {axis.ticks.map((tick) => (

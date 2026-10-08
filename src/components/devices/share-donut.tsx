@@ -89,7 +89,7 @@ export function ShareDonut({
         </svg>
         <table
           aria-labelledby={headingId}
-          className={`min-w-0 flex-1 border-collapse text-[13px] tabular-nums ${showsConversionRate ? 'basis-60' : 'basis-40'}`}
+          className={`min-w-0 flex-1 border-collapse text-caption tabular-nums ${showsConversionRate ? 'basis-60' : 'basis-40'}`}
         >
           <thead>
             <tr>

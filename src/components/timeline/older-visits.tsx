@@ -76,7 +76,7 @@ export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
         </div>
       ))}
       {before === null ? (
-        <p className="text-[13px] text-muted">That is every visit.</p>
+        <p className="text-caption text-muted">That is every visit.</p>
       ) : (
         <div className="flex flex-wrap items-center gap-3">
           <button
@@ -91,7 +91,7 @@ export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
             {busy ? 'Loading older visits…' : 'Load older visits'}
           </button>
           {error === null ? null : (
-            <p role="alert" className="text-[13px] text-bad">
+            <p role="alert" className="text-caption text-bad">
               Could not load older visits. Try again.
             </p>
           )}

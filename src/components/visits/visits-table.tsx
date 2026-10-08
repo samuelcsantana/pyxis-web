@@ -140,7 +140,7 @@ export function VisitsTable({
           <div className="hidden overflow-x-auto sm:block">
             <table
               aria-labelledby={HEADING_ID}
-              className="w-full border-collapse text-[13px] tabular-nums"
+              className="w-full border-collapse text-caption tabular-nums"
             >
               <thead>
                 <tr>
@@ -190,7 +190,7 @@ export function VisitsTable({
         </>
       )}
       {cursor === null && pages.length > 0 ? (
-        <p className="text-[13px] text-muted">That is every visit of this period.</p>
+        <p className="text-caption text-muted">That is every visit of this period.</p>
       ) : null}
       {cursor === null ? null : (
         <div className="flex flex-wrap items-center gap-3">
@@ -206,7 +206,7 @@ export function VisitsTable({
             {busy ? 'Loading older visits…' : 'Load older visits'}
           </button>
           {error === null ? null : (
-            <p role="alert" className="text-[13px] text-bad">
+            <p role="alert" className="text-caption text-bad">
               Could not load older visits. Try again.
             </p>
           )}

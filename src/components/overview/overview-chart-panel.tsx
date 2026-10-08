@@ -121,7 +121,7 @@ function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
       aria-label={caption}
       tabIndex={0}
     >
-      <table className="w-full border-collapse text-[13px] tabular-nums">
+      <table className="w-full border-collapse text-caption tabular-nums">
         <caption className="pb-2 text-left text-muted">{caption}</caption>
         <thead>
           <tr>
@@ -163,7 +163,7 @@ function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
 
 function PreviousPeriodLegend({ total }: { readonly total: string | null }) {
   return (
-    <p className="flex items-center gap-2 text-[13px]">
+    <p className="flex items-center gap-2 text-caption">
       <span aria-hidden="true" className="w-3.5 border-t-2 border-dashed border-muted" />
       Previous period
       {total === null ? null : <strong className="tabular-nums">{total}</strong>}

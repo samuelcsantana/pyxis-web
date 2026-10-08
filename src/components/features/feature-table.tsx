@@ -64,7 +64,7 @@ export function FeatureTable({ kind, rows, query, visitsHref, loadProperties }: 
       ) : (
         <table
           aria-labelledby="features-heading"
-          className="w-full border-collapse text-[13px] tabular-nums"
+          className="w-full border-collapse text-caption tabular-nums"
         >
           <thead>
             <tr>

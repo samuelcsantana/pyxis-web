@@ -18,7 +18,7 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
         Top events
       </h2>
       {events.length === 0 ? (
-        <p className="text-[13px] text-muted">
+        <p className="text-caption text-muted">
           No named events in this period. Events sent with{' '}
           <code className="font-mono">track()</code> show up here.
         </p>
@@ -26,7 +26,7 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
         <ul className="flex flex-col">
           {events.map((event) => (
             <li key={event.name} className="flex flex-col gap-1.5 border-b border-line py-2.5">
-              <span className="flex items-baseline justify-between gap-2 text-[13px]">
+              <span className="flex items-baseline justify-between gap-2 text-caption">
                 <span className="flex min-w-0 flex-col">
                   <VisitsLink
                     href={visitsHref(event.name)}

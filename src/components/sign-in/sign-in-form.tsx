@@ -43,7 +43,7 @@ export function signInErrorMessage(error: unknown): string {
 }
 
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 placeholder:text-muted ${FIELD}`;
-const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-[15px] ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
+const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-callout ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
 
 interface DemoHintProps {
@@ -53,7 +53,7 @@ interface DemoHintProps {
 
 function DemoHint({ code, children }: DemoHintProps) {
   return (
-    <p className="rounded-input bg-soft px-3 py-2.5 text-[13px] text-muted">
+    <p className="rounded-input bg-soft px-3 py-2.5 text-caption text-muted">
       {children} <code className="font-mono font-semibold text-ink">{code}</code>.
     </p>
   );
@@ -154,7 +154,7 @@ export function SignInForm({
       {step === 'email' ? (
         <form onSubmit={submitEmail} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-[22px] font-semibold">Sign in to Pyxis</h1>
+            <h1 className="text-title font-semibold">Sign in to Pyxis</h1>
             <p className="text-sm leading-5 text-muted">
               We will email you a 6-digit code. There is no password to remember.
             </p>
@@ -165,7 +165,7 @@ export function SignInForm({
             </p>
           ) : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="sign-in-email" className="text-[13px] font-medium">
+            <label htmlFor="sign-in-email" className="text-caption font-medium">
               Email
             </label>
             <input
@@ -182,14 +182,14 @@ export function SignInForm({
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
-              className={`${INPUT_CLASS} text-base sm:text-[15px]`}
+              className={`${INPUT_CLASS} text-base sm:text-callout`}
             />
           </div>
           {errorText === null ? null : (
             <p
               id={EMAIL_ERROR_ID}
               role="alert"
-              className="rounded-input bg-bad-soft px-3 py-2.5 text-[13px] font-medium text-bad"
+              className="rounded-input bg-bad-soft px-3 py-2.5 text-caption font-medium text-bad"
             >
               {errorText}
             </p>
@@ -206,14 +206,14 @@ export function SignInForm({
       ) : (
         <form onSubmit={submitCode} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-[22px] font-semibold">Check your email</h1>
+            <h1 className="text-title font-semibold">Check your email</h1>
             <p className="text-sm leading-5 text-muted">
               If <strong className="font-semibold text-ink">{email.trim()}</strong> can sign in to
               Pyxis, a code is on its way. It expires in 10 minutes.
             </p>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="sign-in-code" className="text-[13px] font-medium">
+            <label htmlFor="sign-in-code" className="text-caption font-medium">
               6-digit code
             </label>
             <input
@@ -231,17 +231,17 @@ export function SignInForm({
               onChange={(event) => {
                 setCode(event.target.value.replace(NOT_A_DIGIT, ''));
               }}
-              className={`${INPUT_CLASS} font-mono text-[22px] tracking-[0.5em]`}
+              className={`${INPUT_CLASS} font-mono text-title tracking-[0.5em]`}
             />
           </div>
-          <p role="status" className="min-h-5 text-[13px] text-ok">
+          <p role="status" className="min-h-5 text-caption text-ok">
             {codeSent && errorText === null ? 'Code sent.' : ''}
           </p>
           {errorText === null ? null : (
             <p
               id="sign-in-error"
               role="alert"
-              className="rounded-input bg-bad-soft px-3 py-2.5 text-[13px] font-medium text-bad"
+              className="rounded-input bg-bad-soft px-3 py-2.5 text-caption font-medium text-bad"
             >
               {errorText}
             </p>

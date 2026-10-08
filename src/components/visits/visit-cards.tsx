@@ -53,7 +53,7 @@ function VisitCard({
 
 export function VisitCards({ pages, timelinePath, labelledBy }: VisitCardsProps) {
   return (
-    <ul aria-labelledby={labelledBy} className="flex flex-col text-[13px] sm:hidden">
+    <ul aria-labelledby={labelledBy} className="flex flex-col text-caption sm:hidden">
       {pages.flatMap((page, index) =>
         page.map((row, position) => (
           <VisitCard
