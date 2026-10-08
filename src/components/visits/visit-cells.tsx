@@ -40,7 +40,7 @@ export function AccountCell({
     <Link
       href={timelineHref(timelinePath, { user: account.userId })}
       aria-label={account.linkName}
-      className={`${TEXT_LINK} font-mono text-xs`}
+      className={`${TEXT_LINK} -my-1 inline-block min-h-6 min-w-6 py-1 font-mono text-xs`}
     >
       {account.shown}
     </Link>
