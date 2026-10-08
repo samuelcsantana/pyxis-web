@@ -52,7 +52,7 @@ export function RequestFilters({
         </nav>
       )}
       {screen === null ? null : (
-        <p className="flex items-center gap-2 rounded-pill border border-line bg-card py-1 pr-1 pl-3 text-[13px]">
+        <p className="flex items-center gap-2 rounded-pill border border-line bg-card py-1 pr-1 pl-3 text-caption">
           <span>
             From screen <span className="font-mono text-xs">{screen}</span>
           </span>
@@ -65,7 +65,7 @@ export function RequestFilters({
           </Link>
         </p>
       )}
-      <span className="text-[13px] text-muted">
+      <span className="text-caption text-muted">
         Select a route to see its status codes, the screens where it failed and its latest failures.
       </span>
     </div>

@@ -123,7 +123,7 @@ export function RequestsTable({
       ) : (
         <table
           aria-labelledby="routes-heading"
-          className="w-full border-collapse text-[13px] tabular-nums"
+          className="w-full border-collapse text-caption tabular-nums"
         >
           <thead>
             <tr>

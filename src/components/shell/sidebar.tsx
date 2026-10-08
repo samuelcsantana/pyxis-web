@@ -48,7 +48,7 @@ export function Sidebar({ admin, project }: SidebarProps) {
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-1">
           <span
             aria-hidden="true"
-            className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-nav-border text-[13px] font-semibold text-nav-strong"
+            className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-nav-border text-caption font-semibold text-nav-strong"
           >
             {emailInitial(admin.email)}
           </span>

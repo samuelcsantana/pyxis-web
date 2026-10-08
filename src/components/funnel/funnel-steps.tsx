@@ -25,7 +25,7 @@ export function FunnelSteps({ rows, mode }: FunnelStepsProps) {
         <h2 id="funnel-heading" className={PANEL_TITLE}>
           Funnel
         </h2>
-        <p className="text-[13px] text-muted">{MODE_NOTES[mode]}</p>
+        <p className="text-caption text-muted">{MODE_NOTES[mode]}</p>
       </div>
       <ol aria-labelledby="funnel-heading" className="flex flex-col">
         {rows.map((row) => (
@@ -35,7 +35,7 @@ export function FunnelSteps({ rows, mode }: FunnelStepsProps) {
           >
             <span
               aria-hidden="true"
-              className="flex size-7 items-center justify-center rounded-pill bg-soft text-[13px] font-semibold"
+              className="flex size-7 items-center justify-center rounded-pill bg-soft text-caption font-semibold"
             >
               {row.position}
             </span>

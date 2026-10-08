@@ -31,7 +31,7 @@ export const BUTTON_RECIPES = [
 
 const PLUS_ICON = 'M12 5v14 M5 12h14';
 const ROW = 'flex flex-wrap items-center gap-3';
-const FIELD_LABEL = 'flex flex-col gap-1.5 text-[13px] font-medium';
+const FIELD_LABEL = 'flex flex-col gap-1.5 text-caption font-medium';
 const FIELD_CLASS = `min-h-11 rounded-input px-3 text-base sm:text-sm ${FIELD}`;
 
 export function ControlRecipes() {

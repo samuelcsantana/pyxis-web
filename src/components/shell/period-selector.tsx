@@ -97,7 +97,7 @@ export function PeriodSelector({
           <PendingSubmitButton
             label="Apply"
             pendingLabel="Applying…"
-            className={`min-h-11 rounded-control px-3 text-[13px] sm:min-h-9 ${BUTTON_PRIMARY}`}
+            className={`min-h-11 rounded-control px-3 text-caption sm:min-h-9 ${BUTTON_PRIMARY}`}
           />
         </Form>
       </DismissableDetails>

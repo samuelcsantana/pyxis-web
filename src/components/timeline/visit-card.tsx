@@ -41,14 +41,14 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
         <h3
           id={headingId}
           tabIndex={focusable ? -1 : undefined}
-          className={`text-[15px] font-semibold ${FOCUS_RING}`}
+          className={`text-callout font-semibold ${FOCUS_RING}`}
         >
           {visit.heading}
         </h3>
         <p className="text-xs text-muted">{visit.meta}</p>
       </div>
       {visit.items.length === 0 ? (
-        <p className="py-3.5 text-[13px] text-muted">Nothing of this kind in this visit.</p>
+        <p className="py-3.5 text-caption text-muted">Nothing of this kind in this visit.</p>
       ) : (
         <ol>
           {visit.items.map((item) => {

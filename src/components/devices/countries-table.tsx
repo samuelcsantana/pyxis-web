@@ -15,7 +15,7 @@ export function CountriesTable({ rows, withConversionRate = false }: CountriesTa
       </h2>
       <table
         aria-labelledby="countries-heading"
-        className="w-full border-collapse text-[13px] tabular-nums"
+        className="w-full border-collapse text-caption tabular-nums"
       >
         <thead>
           <tr>
@@ -42,7 +42,7 @@ export function CountriesTable({ rows, withConversionRate = false }: CountriesTa
                 <span className="flex items-center gap-2.5">
                   <span
                     aria-hidden="true"
-                    className="hidden min-w-7.5 rounded-chip bg-soft py-0.5 text-center font-mono text-[11px] font-semibold sm:inline-block"
+                    className="hidden min-w-7.5 rounded-chip bg-soft py-0.5 text-center font-mono text-micro font-semibold sm:inline-block"
                   >
                     {countryCode(row.value)}
                   </span>

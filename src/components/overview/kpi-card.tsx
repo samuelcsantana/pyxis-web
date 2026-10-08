@@ -55,19 +55,19 @@ export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProp
       aria-labelledby={labelId}
       className={toggleHint === null ? CARD : `${CARD} ${TOGGLE_CARD}`}
     >
-      <h2 id={labelId} className="text-xs font-medium text-muted sm:text-[13px]">
+      <h2 id={labelId} className="text-xs font-medium text-muted sm:text-caption">
         {toggleHint === null ? (
           kpi.label
         ) : (
           <MetricToggle metric={kpi.id} label={kpi.label} describedBy={toggleHint} />
         )}
       </h2>
-      <p className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:text-[30px] sm:leading-9">
+      <p className="text-title leading-7 font-semibold tracking-tight tabular-nums sm:text-figure-lg sm:leading-9">
         {kpi.value}
       </p>
       <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
         <span
-          className={`rounded-pill px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
+          className={`rounded-pill px-2 py-0.5 text-micro font-semibold tabular-nums sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
         >
           {kpi.change}
           <span className="sr-only">{spokenChange(kpi.change, i18n)}</span>

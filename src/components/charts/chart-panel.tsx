@@ -36,7 +36,7 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
           <h2 id={headingId} className={PANEL_TITLE}>
             {title}
           </h2>
-          <p className="text-[13px] text-muted">{description}</p>
+          <p className="text-caption text-muted">{description}</p>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {legend}
@@ -70,7 +70,7 @@ export interface LegendItemProps {
 
 export function LegendItem({ swatch, label, total }: LegendItemProps) {
   return (
-    <p className="flex items-center gap-2 text-[13px]">
+    <p className="flex items-center gap-2 text-caption">
       <span aria-hidden="true" className={`size-2.5 rounded-[3px] ${swatch}`} />
       {label}
       <strong className="tabular-nums">{total}</strong>

@@ -26,14 +26,14 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <MainContent className="flex w-full grow flex-col items-center justify-center gap-7 py-8">
         <div className="flex flex-col items-center gap-3.5">
           <LogoMark size={56} />
-          <span className="text-[26px] font-bold tracking-tight">Pyxis</span>
+          <span className="text-wordmark font-bold tracking-tight">Pyxis</span>
         </div>
         <SignInForm
           sessionExpired={expired === '1'}
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
           returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
         />
-        <p className="flex items-center gap-2 text-center text-[13px] text-muted">
+        <p className="flex items-center gap-2 text-center text-caption text-muted">
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
             <path
               d={SHIELD_ICON}

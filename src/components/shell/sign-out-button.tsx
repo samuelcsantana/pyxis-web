@@ -24,7 +24,7 @@ export interface SignOutButtonProps {
 const VARIANT_CLASSES = {
   nav: {
     frame: 'contents',
-    button: `px-2.5 text-[13px] ${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
+    button: `px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
     error: 'basis-full px-1 text-nav-text',
     withIcon: false,
   },

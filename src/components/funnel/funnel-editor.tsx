@@ -37,8 +37,8 @@ export interface FunnelEditorProps {
 }
 
 const ADD_STEP_ID = 'funnel-add-step';
-const BUTTON = `min-h-9 rounded-control px-2.5 text-[13px] ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
-const STEP_BUTTON = `min-h-11 min-w-10 rounded-control px-2.5 text-[13px] sm:min-h-9 sm:min-w-0 ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
+const BUTTON = `min-h-9 rounded-control px-2.5 text-caption ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
+const STEP_BUTTON = `min-h-11 min-w-10 rounded-control px-2.5 text-caption sm:min-h-9 sm:min-w-0 ${BUTTON_SECONDARY} ${CONTROL_DISABLED}`;
 const FIELD_CLASS = `min-h-10 rounded-control px-2.5 text-base sm:text-sm ${FIELD}`;
 
 function toStep(draft: DraftStep): FunnelStep {

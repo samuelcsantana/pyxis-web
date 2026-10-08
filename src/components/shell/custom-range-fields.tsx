@@ -11,7 +11,7 @@ export interface CustomRangeFieldsProps {
 }
 
 const LABEL_CLASS = 'flex flex-col gap-1 text-xs font-medium text-muted';
-const DATE_INPUT_CLASS = `min-h-11 rounded-control px-2 text-base sm:min-h-9 sm:text-[13px] ${FIELD}`;
+const DATE_INPUT_CLASS = `min-h-11 rounded-control px-2 text-base sm:min-h-9 sm:text-caption ${FIELD}`;
 
 export function CustomRangeFields({ from, to, today, problemId }: CustomRangeFieldsProps) {
   const [start, setStart] = useState(from);

@@ -26,12 +26,12 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
         Top pages
       </h2>
       {pages.length === 0 ? (
-        <p className="text-[13px] text-muted">No page views in this period.</p>
+        <p className="text-caption text-muted">No page views in this period.</p>
       ) : (
         <div className="overflow-x-auto">
           <table
             aria-labelledby="top-pages-heading"
-            className="w-full border-collapse text-[13px] tabular-nums"
+            className="w-full border-collapse text-caption tabular-nums"
           >
             <thead>
               <tr>

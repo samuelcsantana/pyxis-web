@@ -66,7 +66,7 @@ function PropertyKeyTable({
   readonly valueHref: ValueHref;
 }) {
   return (
-    <table className="w-full min-w-0 border-collapse text-[13px] tabular-nums">
+    <table className="w-full min-w-0 border-collapse text-caption tabular-nums">
       <caption className="pb-1.5 text-left">
         <span className="font-mono text-xs font-semibold">{view.key}</span>{' '}
         <span className="text-xs text-muted">· carried by {view.carriedBy}</span>
@@ -113,14 +113,14 @@ export function PropertyBreakdown({
 }: PropertyBreakdownProps) {
   if (state.status === 'loading') {
     return (
-      <p role="status" className="py-2 text-[13px] text-muted">
+      <p role="status" className="py-2 text-caption text-muted">
         Loading the properties of {eventLabel}…
       </p>
     );
   }
   if (state.status === 'error') {
     return (
-      <div role="alert" className="flex flex-wrap items-center gap-3 py-2 text-[13px] text-bad">
+      <div role="alert" className="flex flex-wrap items-center gap-3 py-2 text-caption text-bad">
         <span>Could not load the properties of {eventLabel}.</span>
         <button
           type="button"
@@ -133,7 +133,7 @@ export function PropertyBreakdown({
     );
   }
   return state.keys.length === 0 ? (
-    <p className="py-2 text-[13px] text-muted">
+    <p className="py-2 text-caption text-muted">
       {eventLabel} carried no properties in this period.
     </p>
   ) : (
