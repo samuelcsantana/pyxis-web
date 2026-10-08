@@ -200,7 +200,9 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/visits`      | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
-whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Both carry the
+whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
+pass through it, so `public/email/pyxis-logo.png` (and its `@2x`), the raster logo the API's
+sign-in email loads, answers without a session. Both carry the
 screen that was asked as `?next=`, and the sign-in form goes back to it; only a path of the form
 `/<project>/<screen>` on this site is accepted, anything else goes to `/`.
 
@@ -276,6 +278,7 @@ src/
 ├── services/       one interface per API area, with Http and Mock implementations
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
+public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
 e2e/                Playwright specs and the axe helper
 .storybook/         Storybook configuration
 eslint-rules/       the local no-comments ESLint rule
