@@ -72,11 +72,14 @@ function TimelineView({
   i18n,
 }: TimelineViewProps) {
   if (report.visits.length === 0) {
-    return <NoVisitsFound lookupTitle={lookupTitle(lookup)} />;
+    return <NoVisitsFound lookupTitle={lookupTitle(lookup, i18n)} />;
   }
   return (
     <>
-      <TimelineSummary title={lookupTitle(lookup)} totals={timelineTotals(report.visits, i18n)} />
+      <TimelineSummary
+        title={lookupTitle(lookup, i18n)}
+        totals={timelineTotals(report.visits, i18n)}
+      />
       <TimelineFilters
         current={filter}
         links={TIMELINE_FILTERS.map((target) => ({
@@ -111,8 +114,9 @@ function TimelineView({
 export default async function TimelinePage({ params, searchParams }: TimelinePageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
+  const i18n = await getI18n();
   const lookup = lookupOf(search);
-  const rejected = rejectedLookupOf(search);
+  const rejected = rejectedLookupOf(search, i18n);
   const filter = timelineFilterOf(search);
   const basePath = screenHref(project.id, 'timeline');
   const demoPerson = isDemoMode() ? demoPersonOf(project.id) : null;
@@ -152,7 +156,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
             basePath={basePath}
             timeZone={project.timezone}
             keptPeriod={keptPeriod}
-            i18n={await getI18n()}
+            i18n={i18n}
           />
         )}
       </MainContent>

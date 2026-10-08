@@ -40,20 +40,23 @@ export interface RejectedLookup {
   readonly hint: string;
 }
 
-const LOOKUP_HINTS: Readonly<Record<Lookup['kind'], string>> = {
-  visit: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
-  user: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
-};
-
-function rejected(kind: Lookup['kind'], value: string | undefined): RejectedLookup | null {
-  return value === undefined || value === '' ? null : { kind, value, hint: LOOKUP_HINTS[kind] };
+function rejected(
+  kind: Lookup['kind'],
+  value: string | undefined,
+  i18n: I18n,
+): RejectedLookup | null {
+  return value === undefined || value === ''
+    ? null
+    : { kind, value, hint: i18n.t(`timeline.lookupHints.${kind}`) };
 }
 
-export function rejectedLookupOf(search: TimelineSearch): RejectedLookup | null {
+export function rejectedLookupOf(search: TimelineSearch, i18n: I18n): RejectedLookup | null {
   if (lookupOf(search) !== null) {
     return null;
   }
-  return rejected('visit', single(search.visit)) ?? rejected('user', single(search.user));
+  return (
+    rejected('visit', single(search.visit), i18n) ?? rejected('user', single(search.user), i18n)
+  );
 }
 
 export function lookupOf(search: TimelineSearch): Lookup | null {
@@ -126,14 +129,14 @@ function propertiesText(properties: TimelineEvent['properties']) {
     .join(' · ');
 }
 
-function itemTitle(event: TimelineEvent): string {
+function itemTitle(event: TimelineEvent, i18n: I18n): string {
   switch (itemKind(event)) {
     case 'page':
-      return `Opened ${event.path}`;
+      return i18n.t('timeline.openedPage', { path: event.path });
     case 'request':
       return `${String(event.properties.method)} ${String(event.properties.route)}`;
     case 'identify':
-      return 'Visit linked to the user';
+      return i18n.t('timeline.linkedToUser');
     case 'event':
       return eventLabel(event.name);
   }
@@ -172,7 +175,7 @@ function itemTag(event: TimelineEvent, i18n: I18n): ItemTag | null {
     : null;
 }
 
-export function formatVisitDuration(startedAt: string, endedAt: string): string {
+export function formatVisitDuration(startedAt: string, endedAt: string, i18n: I18n): string {
   const seconds = Math.max(
     0,
     Math.round((Date.parse(endedAt) - Date.parse(startedAt)) / MILLISECONDS_PER_SECOND),
@@ -180,11 +183,17 @@ export function formatVisitDuration(startedAt: string, endedAt: string): string 
   const minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
   if (hours > 0) {
-    return `${String(hours)} h ${String(minutes % MINUTES_PER_HOUR)} min`;
+    return i18n.t('timeline.duration.hours', {
+      hours: String(hours),
+      minutes: String(minutes % MINUTES_PER_HOUR),
+    });
   }
   return minutes === 0
-    ? `${String(seconds)} s`
-    : `${String(minutes)} min ${String(seconds % SECONDS_PER_MINUTE)} s`;
+    ? i18n.t('timeline.duration.seconds', { seconds: String(seconds) })
+    : i18n.t('timeline.duration.minutes', {
+        minutes: String(minutes),
+        seconds: String(seconds % SECONDS_PER_MINUTE),
+      });
 }
 
 export interface VisitView {
@@ -210,20 +219,23 @@ export function visitViews(
   return visits.map((visit) => ({
     key: visit.sessionId,
     personId: visit.userId,
-    heading: `Visit ${shortId(visit.sessionId)} · ${started(new Date(visit.startedAt))}`,
+    heading: i18n.t('timeline.visitHeading', {
+      visit: shortId(visit.sessionId),
+      started: started(new Date(visit.startedAt)),
+    }),
     meta: [
       deviceTypeLabel(visit.deviceType, i18n),
       browserLabel(visit.browser, i18n),
       operatingSystemLabel(visit.os, i18n),
       ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
       ...(visit.channel === null ? [] : [channelLabel(visit.channel, i18n)]),
-      formatVisitDuration(visit.startedAt, visit.endedAt),
+      formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
     ].join(' · '),
     items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
       key: event.id,
       time: time(new Date(event.occurredAt)),
       kind: itemKind(event),
-      title: itemTitle(event),
+      title: itemTitle(event, i18n),
       detail: itemDetail(event),
       tag: itemTag(event, i18n),
     })),
@@ -248,6 +260,8 @@ export function timelineTotals(visits: readonly TimelineVisit[], i18n: I18n): Ti
   };
 }
 
-export function lookupTitle(lookup: Lookup): string {
-  return lookup.kind === 'user' ? `User ${lookup.id}` : `Visit ${shortId(lookup.id)}`;
+export function lookupTitle(lookup: Lookup, i18n: I18n): string {
+  return lookup.kind === 'user'
+    ? i18n.t('timeline.userTitle', { user: lookup.id })
+    : i18n.t('timeline.visitTitle', { visit: shortId(lookup.id) });
 }

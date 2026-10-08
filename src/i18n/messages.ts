@@ -4,7 +4,7 @@ import type { Widen } from './translate';
 export type SourceMessages = typeof en;
 export type Messages = Widen<SourceMessages>;
 
-export const CLIENT_NAMESPACES = [] as const satisfies readonly (keyof Messages)[];
+export const CLIENT_NAMESPACES = ['funnelEditor'] as const satisfies readonly (keyof Messages)[];
 export type ClientNamespace = (typeof CLIENT_NAMESPACES)[number];
 export type ClientSourceMessages = {
   readonly [Namespace in ClientNamespace]: SourceMessages[Namespace];

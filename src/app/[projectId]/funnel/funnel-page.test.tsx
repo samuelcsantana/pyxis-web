@@ -1,5 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import { serializeSteps } from '@/domain/funnel';
@@ -75,7 +76,7 @@ describe('FunnelPage', () => {
     const funnel = vi.fn<IFunnelService['funnel']>();
     state.funnel = funnel;
 
-    render(await renderFunnel({ range: '7d', steps: '[{"type":"page"}]' }));
+    renderWithMessages(await renderFunnel({ range: '7d', steps: '[{"type":"page"}]' }));
 
     expect(funnel).not.toHaveBeenCalled();
     expect(screen.getByRole('heading', { name: 'Build a funnel' })).toBeInTheDocument();
@@ -99,7 +100,7 @@ describe('FunnelPage', () => {
     );
     state.funnel = funnel;
 
-    render(await renderFunnel({ range: '7d' }));
+    renderWithMessages(await renderFunnel({ range: '7d' }));
 
     expect(funnel).toHaveBeenCalledWith(
       'p-store',
@@ -124,7 +125,7 @@ describe('FunnelPage', () => {
     );
     state.funnel = funnel;
 
-    render(await renderFunnel({ range: '30d', mode: 'user', steps: STEPS }));
+    renderWithMessages(await renderFunnel({ range: '30d', mode: 'user', steps: STEPS }));
 
     expect(funnel).toHaveBeenCalledWith(
       'p-store',

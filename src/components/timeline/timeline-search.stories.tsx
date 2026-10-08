@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { rejectedLookupOf } from '@/domain/timeline';
+import { english } from '@/test-utils/english';
 import { TimelineSearch } from './timeline-search';
 
 const meta = {
@@ -57,7 +58,7 @@ export const SwitchedToVisitMode: Story = {
   },
 };
 
-const REJECTED_VISIT = rejectedLookupOf({ visit: 'not-a-visit-id' });
+const REJECTED_VISIT = rejectedLookupOf({ visit: 'not-a-visit-id' }, english);
 
 const marksTheRejectedId: Story['play'] = async ({ canvasElement }) => {
   const field = within(canvasElement).getByRole('textbox', { name: 'Visit id' });
