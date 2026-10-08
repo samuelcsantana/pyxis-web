@@ -60,6 +60,7 @@ describe('RootLayout', () => {
       'notFound',
       'errorPanel',
       'signIn',
+      'chartPanel',
     ]);
   });
 

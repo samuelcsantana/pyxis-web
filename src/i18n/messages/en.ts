@@ -116,6 +116,11 @@ export const en = {
     skipToContent: 'Skip to content',
     privacy: 'No cookies, no personal data',
   },
+  chartPanel: {
+    showAs: 'Show as',
+    chart: 'Chart',
+    table: 'Table',
+  },
   units: {
     points: '{points} pt',
   },

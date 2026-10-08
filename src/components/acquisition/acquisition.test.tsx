@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import {
@@ -17,6 +17,7 @@ import { CampaignsTable } from './campaigns-table';
 import { ChannelChart } from './channel-chart';
 import { SourcesTable } from './sources-table';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
 const REPORT = demoAcquisitionReport('demo', WEEK);
@@ -33,7 +34,9 @@ const GOOGLE: Source = {
 
 describe('ChannelChart', () => {
   it('stacks the active channels, with their totals beside the legend', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
+    renderWithMessages(
+      <ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />,
+    );
 
     expect(screen.getByRole('img')).toHaveAccessibleName(/^Stacked bar chart of 7 days,/);
     expect(screen.getByText('Organic search')).toBeInTheDocument();
@@ -41,7 +44,9 @@ describe('ChannelChart', () => {
   });
 
   it('draws a bar per day, a segment per channel, with a card-coloured line between segments', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
+    renderWithMessages(
+      <ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />,
+    );
 
     const figure = screen.getByRole('img');
     const rows = channelChartRows(REPORT.days);
@@ -59,7 +64,9 @@ describe('ChannelChart', () => {
   });
 
   it('shows the channels of the day under the pointer, and its total', () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
+    renderWithMessages(
+      <ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />,
+    );
     const layer = screen.getByRole('img').querySelector<HTMLElement>('[data-layer="hover"]');
     if (layer === null) {
       throw new Error('The hover layer was not drawn');
@@ -75,7 +82,9 @@ describe('ChannelChart', () => {
   });
 
   it('switches to a table of every day with its total', async () => {
-    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />);
+    renderWithMessages(
+      <ChannelChart days={REPORT.days} periodLabel="last 7 days" i18n={english} />,
+    );
 
     await userEvent.click(screen.getByRole('button', { name: 'Table' }));
 
@@ -99,7 +108,7 @@ function sourceVisitsHref(source: string): string {
 
 describe('SourcesTable', () => {
   it('shows each source with its channel, ad click visits and conversion rate', () => {
-    render(
+    renderWithMessages(
       <SourcesTable
         i18n={english}
         rows={sourceRows([GOOGLE], english)}
@@ -121,7 +130,7 @@ describe('SourcesTable', () => {
   });
 
   it('keeps the totals beside the rate and the medium beside the channel on phones', () => {
-    render(
+    renderWithMessages(
       <SourcesTable
         i18n={english}
         rows={sourceRows([GOOGLE], english)}
@@ -135,7 +144,7 @@ describe('SourcesTable', () => {
   });
 
   it('shows a dash for a source without a medium, and no note for a source not counted', () => {
-    render(
+    renderWithMessages(
       <SourcesTable
         i18n={english}
         rows={sourceRows(
@@ -153,7 +162,7 @@ describe('SourcesTable', () => {
   });
 
   it('leaves the conversion columns out without a conversion event', () => {
-    render(
+    renderWithMessages(
       <SourcesTable
         i18n={english}
         rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], english)}
@@ -167,7 +176,7 @@ describe('SourcesTable', () => {
   });
 
   it('says so when no visit had a source', () => {
-    render(
+    renderWithMessages(
       <SourcesTable
         i18n={english}
         rows={[]}
@@ -197,7 +206,7 @@ function campaignVisitsHref({ campaign, source }: { campaign: string; source: st
 
 describe('CampaignsTable', () => {
   it('shows each campaign with its source, medium, ad click visits and conversion rate', () => {
-    render(
+    renderWithMessages(
       <CampaignsTable
         i18n={english}
         rows={campaignRows([SPRING_SALE], english)}
@@ -216,7 +225,7 @@ describe('CampaignsTable', () => {
   });
 
   it('keeps the source beside the campaign on phones, with a dash for no medium', () => {
-    render(
+    renderWithMessages(
       <CampaignsTable
         i18n={english}
         rows={campaignRows(
@@ -234,7 +243,7 @@ describe('CampaignsTable', () => {
   });
 
   it('leaves the conversion columns out without a conversion event', () => {
-    render(
+    renderWithMessages(
       <CampaignsTable
         i18n={english}
         rows={campaignRows(
@@ -249,7 +258,9 @@ describe('CampaignsTable', () => {
   });
 
   it('says so when no visit carried a campaign tag', () => {
-    render(<CampaignsTable i18n={english} rows={[]} campaignVisitsHref={campaignVisitsHref} />);
+    renderWithMessages(
+      <CampaignsTable i18n={english} rows={[]} campaignVisitsHref={campaignVisitsHref} />,
+    );
 
     expect(
       screen.getByText('No visit arrived with a campaign tag in this period.'),
@@ -260,7 +271,9 @@ describe('CampaignsTable', () => {
 
 describe('StatCard', () => {
   it('shows a figure with its label and note', () => {
-    render(<StatCard id="paid" label="Paid visits" value="829" note="34.7% of 2,390 visits" />);
+    renderWithMessages(
+      <StatCard id="paid" label="Paid visits" value="829" note="34.7% of 2,390 visits" />,
+    );
 
     expect(screen.getByRole('group', { name: 'Paid visits' })).toHaveTextContent(
       'Paid visits82934.7% of 2,390 visits',

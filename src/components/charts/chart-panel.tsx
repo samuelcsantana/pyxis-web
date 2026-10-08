@@ -2,6 +2,7 @@
 
 import { type ReactNode, useId, useState } from 'react';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { useT } from '@/i18n/messages-provider';
 import {
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
@@ -19,14 +20,12 @@ export interface ChartPanelProps {
 
 type ChartView = 'chart' | 'table';
 
-const VIEWS: readonly { readonly view: ChartView; readonly label: string }[] = [
-  { view: 'chart', label: 'Chart' },
-  { view: 'table', label: 'Table' },
-];
+const VIEWS: readonly ChartView[] = ['chart', 'table'];
 
 const VIEW_OPTION = `min-h-11 px-3 sm:min-h-8.5 ${SEGMENTED_OPTION}`;
 
 export function ChartPanel({ title, description, legend, chart, table }: ChartPanelProps) {
+  const t = useT();
   const [shown, setShown] = useState<ChartView>('chart');
   const headingId = useId();
   return (
@@ -40,8 +39,8 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {legend}
-          <div role="group" aria-label="Show as" className={SEGMENTED_GROUP}>
-            {VIEWS.map(({ view, label }) => (
+          <div role="group" aria-label={t('chartPanel.showAs')} className={SEGMENTED_GROUP}>
+            {VIEWS.map((view) => (
               <button
                 key={view}
                 type="button"
@@ -51,7 +50,7 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
                 }}
                 className={`${VIEW_OPTION} ${shown === view ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
               >
-                {label}
+                {t(`chartPanel.${view}`)}
               </button>
             ))}
           </div>
