@@ -176,10 +176,16 @@ function itemTag(event: TimelineEvent, i18n: I18n): ItemTag | null {
 }
 
 export function formatVisitDuration(startedAt: string, endedAt: string, i18n: I18n): string {
-  const seconds = Math.max(
-    0,
-    Math.round((Date.parse(endedAt) - Date.parse(startedAt)) / MILLISECONDS_PER_SECOND),
+  return formatSeconds(
+    Math.max(
+      0,
+      Math.round((Date.parse(endedAt) - Date.parse(startedAt)) / MILLISECONDS_PER_SECOND),
+    ),
+    i18n,
   );
+}
+
+export function formatSeconds(seconds: number, i18n: I18n): string {
   const minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
   if (hours > 0) {
