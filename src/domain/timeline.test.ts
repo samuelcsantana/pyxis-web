@@ -30,6 +30,7 @@ const WIRE: TimelineWire = {
       os: 'android',
       country: 'BR',
       channel: 'paid',
+      user_id: 'u_7f3a',
       events: [
         {
           id: '00000000-0000-4000-8000-000000000001',
@@ -152,6 +153,8 @@ describe('items', () => {
     expect(visit?.heading).toBe('Visit 3c07a1b2 · Mon, Oct 5, 18:40');
     expect(visit?.meta).toBe('Mobile · Samsung Internet · Android · Brazil · Paid · 2 min 41 s');
     expect(quiet?.meta).toBe('Desktop · Chrome · macOS · 42 s');
+    expect(visit?.personId).toBe('u_7f3a');
+    expect(quiet?.personId).toBeNull();
     expect(visit?.items).toEqual([
       {
         key: '00000000-0000-4000-8000-000000000001',

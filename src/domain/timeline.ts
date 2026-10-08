@@ -189,6 +189,7 @@ export function formatVisitDuration(startedAt: string, endedAt: string): string 
 
 export interface VisitView {
   readonly key: string;
+  readonly personId: string | null;
   readonly heading: string;
   readonly meta: string;
   readonly items: readonly TimelineItem[];
@@ -208,6 +209,7 @@ export function visitViews(
   const started = i18n.format.dateTime('visitStart', timeZone);
   return visits.map((visit) => ({
     key: visit.sessionId,
+    personId: visit.userId,
     heading: `Visit ${shortId(visit.sessionId)} · ${started(new Date(visit.startedAt))}`,
     meta: [
       deviceTypeLabel(visit.deviceType, i18n),
