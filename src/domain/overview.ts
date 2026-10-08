@@ -10,7 +10,9 @@ import {
   toneOf,
 } from './metrics';
 import type { OverviewReport, OverviewWire } from './overview.schema';
+import { FAILING_ONLY, type RequestsSearch } from './requests';
 import type { SparklineValue } from './sparkline';
+import { NO_VISIT_FILTERS, type VisitFilters, visitFilterParameters } from './visits';
 
 export type { OverviewReport, OverviewWire };
 
@@ -77,6 +79,12 @@ export function activitySummary(days: readonly DayActivity[]): string {
 
 export type KpiId = 'visits' | 'identified-users' | 'conversions' | 'write-errors';
 
+export interface KpiDrillDown {
+  readonly label: string;
+  readonly screen: 'visits' | 'requests';
+  readonly filter: Readonly<Record<string, string>>;
+}
+
 export interface KpiView {
   readonly id: KpiId;
   readonly label: string;
@@ -86,13 +94,29 @@ export interface KpiView {
   readonly comparison: string;
   readonly note: string | null;
   readonly series: readonly SparklineValue[];
+  readonly drillDown: KpiDrillDown | null;
 }
 
 interface KpiText {
   readonly id: KpiId;
   readonly label: string;
   readonly note: string | null;
+  readonly drillDown: KpiDrillDown;
 }
+
+function visitsDrillDown(label: string, filter: Partial<VisitFilters>): KpiDrillDown {
+  return {
+    label,
+    screen: 'visits',
+    filter: visitFilterParameters({ ...NO_VISIT_FILTERS, ...filter }),
+  };
+}
+
+const FAILING_ROUTES: KpiDrillDown = {
+  label: 'See failing routes',
+  screen: 'requests',
+  filter: { show: FAILING_ONLY } satisfies RequestsSearch,
+};
 
 function countKpi(kpi: Kpi, text: KpiText, comparison: string): KpiView {
   const change = countChange(kpi.current, kpi.previous);
@@ -103,6 +127,7 @@ function countKpi(kpi: Kpi, text: KpiText, comparison: string): KpiView {
     tone: toneOf(change.trend, 'up'),
     comparison,
     series: kpi.daily,
+    drillDown: kpi.current > 0 ? text.drillDown : null,
   };
 }
 
@@ -129,6 +154,7 @@ function writeErrorsKpi(
     comparison,
     note: `${formatCount(writeErrors.current.failed)} of ${formatQuantity(writeErrors.current.total, 'write', 'writes')} failed`,
     series: writeErrors.daily.map(failureRate),
+    drillDown: writeErrors.current.failed > 0 ? FAILING_ROUTES : null,
   };
 }
 
@@ -203,11 +229,12 @@ function conversionsKpi(
   { event, conversions, convertingVisits, visits }: ConversionFigures,
   comparison: string,
 ): KpiView {
+  const drillDown = visitsDrillDown('See converting visits', { event });
   if (convertingVisits === null) {
     const note = `${event} · ${shareOfVisits(conversions.current, visits.current)}`;
     return countKpi(
       conversions,
-      { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
+      { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
       comparison,
     );
   }
@@ -216,7 +243,7 @@ function conversionsKpi(
   const note = `${share} sent ${event} · ${events}`;
   return countKpi(
     convertingVisits,
-    { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
+    { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note, drillDown },
     comparison,
   );
 }
@@ -229,10 +256,24 @@ export function overviewKpis(
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
   const comparison = previousPeriodNote(report.comparison, period);
   const kpis = [
-    countKpi(visits, { id: 'visits', label: 'Visits', note: null }, comparison),
+    countKpi(
+      visits,
+      {
+        id: 'visits',
+        label: 'Visits',
+        note: null,
+        drillDown: visitsDrillDown('See the visits', {}),
+      },
+      comparison,
+    ),
     countKpi(
       identifiedUsers,
-      { id: 'identified-users', label: 'Identified users', note: 'signed in at least once' },
+      {
+        id: 'identified-users',
+        label: 'Identified users',
+        note: 'signed in at least once',
+        drillDown: visitsDrillDown('See identified visits', { identity: 'identified' }),
+      },
       comparison,
     ),
     ...(conversions === null || conversionEvent === null

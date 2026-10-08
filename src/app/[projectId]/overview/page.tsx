@@ -5,7 +5,7 @@ import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { screenHref } from '@/components/shell/screens';
+import { linkWith, type ScreenSlug, screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
@@ -58,7 +58,7 @@ interface OverviewReportViewProps {
   readonly conversionEvent: string | null;
   readonly period: Period;
   readonly today: string;
-  readonly visitsHref: (filter: Readonly<Record<string, string>>) => string;
+  readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
 }
 
@@ -78,13 +78,17 @@ function OverviewReportView({
   conversionEvent,
   period,
   today,
-  visitsHref,
+  filteredHref,
   downloads,
 }: OverviewReportViewProps) {
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
+  const visitsHref = (filter: Readonly<Record<string, string>>) => filteredHref('visits', filter);
   return (
     <>
-      <KpiGrid kpis={overviewKpis(report, compared, conversionEvent)} />
+      <KpiGrid
+        kpis={overviewKpis(report, compared, conversionEvent)}
+        drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
+      />
       {conversionEvent === null ? <NoConversionEvent /> : null}
       {report.days.length === 1 ? (
         <DayActivityFigures days={report.days} periodLabel={describePeriod(period)} />
@@ -133,8 +137,8 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
             conversionEvent={project.conversionEvent}
             period={period}
             today={today}
-            visitsHref={(filter) =>
-              screenHref(project.id, 'visits', withKeptParameters(periodQuery(period), filter))
+            filteredHref={(screen, filter) =>
+              linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
             }
             downloads={overviewDownloads(project.id, period)}
           />
