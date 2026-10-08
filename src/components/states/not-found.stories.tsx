@@ -8,6 +8,7 @@ const meta = {
   component: NotFoundPanel,
   parameters: { layout: 'fullscreen' },
   args: {
+    title: 'Page not found',
     explanation: 'This page does not exist, or the project is not one you may read.',
     href: '/',
     linkLabel: 'Go to your projects',

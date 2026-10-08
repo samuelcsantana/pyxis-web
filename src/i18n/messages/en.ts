@@ -45,6 +45,13 @@ export const en = {
     apply: 'Apply',
     applying: 'Applying…',
   },
+  notFound: {
+    title: 'Page not found',
+    outside: 'This page does not exist, or the project is not one you may read.',
+    toProjects: 'Go to your projects',
+    inProject: 'There is nothing at this address in this project.',
+    toOverview: 'Open the Overview',
+  },
   states: {
     emptyPeriod: {
       title: 'Nothing in this period',

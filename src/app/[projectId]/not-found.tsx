@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { MainContent } from '@/components/shell/main-content';
-import { NOT_FOUND_TITLE } from '@/components/states/not-found-panel';
 import { ProjectNotFoundPanel } from '@/components/states/project-not-found-panel';
+import { getTranslator } from '@/i18n/get-messages';
 
-export const metadata: Metadata = { title: NOT_FOUND_TITLE };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslator();
+  return { title: t('notFound.title') };
+}
 
 export default function ProjectNotFound() {
   return (
