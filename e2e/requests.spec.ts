@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Locator, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -15,7 +15,8 @@ for (const colorScheme of ['light', 'dark'] as const) {
       expect(await sidewaysOverflow(page)).toBe(0);
 
       await page.getByRole('button', { name: 'POST /orders, show details' }).click();
-      await expect(page.getByRole('dialog', { name: 'POST /orders' })).toBeVisible();
+      const details = page.getByRole('dialog', { name: 'POST /orders' });
+      await expect(details.getByRole('table', { name: 'Day by day' })).toBeVisible();
       expect(await axeViolations(page)).toEqual([]);
     });
 
@@ -159,6 +160,64 @@ test('reopens the details of a route after Back from one of its visits', async (
   await details.getByRole('button', { name: 'Close' }).click();
   await expect(page.getByRole('button', { name: 'POST /orders, show details' })).toBeFocused();
   await expect(page).toHaveURL(/\/requests\?range=7d$/);
+});
+
+async function cellNumbers(table: Locator, column: number): Promise<number[]> {
+  const texts = await table.locator(`tbody tr > :nth-child(${String(column)})`).allTextContents();
+  return texts.map((text) => Number(text.replaceAll(',', '')));
+}
+
+function sumOf(values: readonly number[]): number {
+  return values.reduce((sum, value) => sum + value, 0);
+}
+
+test('lists the days of a route in its details, adding up to its row', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/requests?range=7d`);
+  const row = page
+    .getByRole('table', { name: 'Routes' })
+    .getByRole('row')
+    .filter({ has: page.getByRole('button', { name: 'POST /orders, show details' }) });
+  const total = Number((await row.locator('td').first().textContent())?.replaceAll(',', ''));
+
+  await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+  const days = page.getByRole('dialog', { name: 'POST /orders' }).getByRole('table', {
+    name: 'Day by day',
+  });
+
+  await expect(days).toBeVisible();
+  await expect(days.getByRole('columnheader')).toHaveText([
+    'Day',
+    'Total',
+    'Failed',
+    'Median',
+    'p95',
+  ]);
+  expect(sumOf(await cellNumbers(days, 2))).toBe(total);
+});
+
+test('counts the failed reads of a route day by day, without a total', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/requests?range=30d&kind=reads`);
+  const row = page
+    .getByRole('table', { name: 'Routes' })
+    .getByRole('row')
+    .filter({ has: page.getByRole('button', { name: 'GET /orders/:id, show details' }) });
+  const failed = Number((await row.locator('td').first().textContent())?.replaceAll(',', ''));
+
+  await page.getByRole('button', { name: 'GET /orders/:id, show details' }).click();
+  const days = page.getByRole('dialog', { name: 'GET /orders/:id' }).getByRole('table', {
+    name: 'Day by day',
+  });
+
+  await expect(days.getByRole('columnheader')).toHaveText(['Day', 'Failed', 'Median', 'p95']);
+  expect(sumOf(await cellNumbers(days, 2))).toBe(failed);
+});
+
+test('lists the days of the route named in the address', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/requests?range=7d&route=POST+%2Forders`);
+
+  await expect(
+    page.getByRole('dialog', { name: 'POST /orders' }).getByRole('table', { name: 'Day by day' }),
+  ).toBeVisible();
 });
 
 test.describe('at 768×1024, with the details of a route open', () => {
