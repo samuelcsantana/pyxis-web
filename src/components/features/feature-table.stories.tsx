@@ -29,7 +29,13 @@ const meta = {
   title: 'Features/Ranking',
   component: FeatureTable,
   tags: ['autodocs'],
-  args: { kind: 'events', rows: featureRows(EVENTS, 'events', '', english), query: '', visitsHref },
+  args: {
+    i18n: english,
+    kind: 'events',
+    rows: featureRows(EVENTS, 'events', '', english),
+    query: '',
+    visitsHref,
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (

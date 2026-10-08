@@ -80,6 +80,7 @@ describe('FeatureTable', () => {
         rows={featureRows(ITEMS, 'events', '', english)}
         query=""
         visitsHref={visitsHref}
+        i18n={english}
       />,
     );
 
@@ -101,6 +102,7 @@ describe('FeatureTable', () => {
         )}
         query=""
         visitsHref={(path) => `/p1/visits?range=7d&path=${encodeURIComponent(path)}`}
+        i18n={english}
       />,
     );
 
@@ -119,6 +121,7 @@ describe('FeatureTable', () => {
         rows={featureRows(ITEMS, 'events', '', english)}
         query=""
         visitsHref={visitsHref}
+        i18n={english}
       />,
     );
 
@@ -130,14 +133,18 @@ describe('FeatureTable', () => {
 
   it('says what is missing: nothing tracked, or nothing matching the search', () => {
     const { rerender } = render(
-      <FeatureTable kind="events" rows={[]} query="" visitsHref={visitsHref} />,
+      <FeatureTable kind="events" rows={[]} query="" visitsHref={visitsHref} i18n={english} />,
     );
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
 
-    rerender(<FeatureTable kind="screens" rows={[]} query="" visitsHref={visitsHref} />);
+    rerender(
+      <FeatureTable kind="screens" rows={[]} query="" visitsHref={visitsHref} i18n={english} />,
+    );
     expect(screen.getByText('No page views in this period.')).toBeInTheDocument();
 
-    rerender(<FeatureTable kind="events" rows={[]} query="zzz" visitsHref={visitsHref} />);
+    rerender(
+      <FeatureTable kind="events" rows={[]} query="zzz" visitsHref={visitsHref} i18n={english} />,
+    );
     expect(screen.getByText('Nothing matches “zzz”.')).toBeInTheDocument();
   });
 });

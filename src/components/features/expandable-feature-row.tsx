@@ -18,6 +18,7 @@ export type LoadProperties = (name: string) => Promise<readonly PropertyKeyView[
 export interface ExpandableFeatureRowProps {
   readonly row: FeatureRow;
   readonly visitsHref: string;
+  readonly visitsPurpose: string;
   readonly loadProperties: LoadProperties;
 }
 
@@ -34,6 +35,7 @@ function breakdownState(
 export function ExpandableFeatureRow({
   row,
   visitsHref,
+  visitsPurpose,
   loadProperties,
 }: ExpandableFeatureRowProps) {
   const [open, setOpen] = useState(false);
@@ -77,6 +79,7 @@ export function ExpandableFeatureRow({
           kind="events"
           row={row}
           visitsHref={visitsHref}
+          visitsPurpose={visitsPurpose}
           disclosure={
             <button
               type="button"

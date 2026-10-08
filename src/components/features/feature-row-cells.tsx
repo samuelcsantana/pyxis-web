@@ -13,10 +13,17 @@ export interface FeatureRowCellsProps {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
   readonly visitsHref: string;
+  readonly visitsPurpose: string;
   readonly disclosure?: ReactNode;
 }
 
-export function FeatureRowCells({ kind, row, visitsHref, disclosure }: FeatureRowCellsProps) {
+export function FeatureRowCells({
+  kind,
+  row,
+  visitsHref,
+  visitsPurpose,
+  disclosure,
+}: FeatureRowCellsProps) {
   return (
     <>
       <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
@@ -26,6 +33,7 @@ export function FeatureRowCells({ kind, row, visitsHref, disclosure }: FeatureRo
             <VisitsLink
               href={visitsHref}
               label={row.label}
+              purpose={visitsPurpose}
               className={`w-fit ${kind === 'screens' ? 'font-mono text-xs wrap-anywhere' : ''}`}
             />
             {kind === 'events' ? (

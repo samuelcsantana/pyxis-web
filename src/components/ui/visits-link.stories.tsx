@@ -1,11 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { english } from '@/test-utils/english';
 import { VisitsLink } from './visits-link';
 
 const meta = {
   title: 'UI/Visits link',
   component: VisitsLink,
   tags: ['autodocs'],
-  args: { href: '/demo/visits?range=30d&path=%2Fcalculator', label: '/calculator' },
+  args: {
+    href: '/demo/visits?range=30d&path=%2Fcalculator',
+    label: '/calculator',
+    purpose: english.t('visitsLink.purpose'),
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof VisitsLink>;
 
