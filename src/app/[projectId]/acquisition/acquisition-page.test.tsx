@@ -124,6 +124,10 @@ describe('AcquisitionPage', () => {
     expect(
       within(campaigns).getByRole('link', { name: 'spring_sale: see its visits from google' }),
     ).toHaveAttribute('href', '/p-store/visits?range=7d&campaign=spring_sale&source=google');
+    expect(screen.getByRole('link', { name: 'Campaigns as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/acquisition/export?range=7d&table=campaigns',
+    );
   });
 
   it('shows how to install the SDK when nobody visited in the period', async () => {

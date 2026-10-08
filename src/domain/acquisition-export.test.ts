@@ -73,6 +73,13 @@ describe('acquisitionCsvTable', () => {
     });
   });
 
+  it('writes each campaign with its source, and conversions only when counted', () => {
+    expect(acquisitionCsvTable(REPORT, 'campaigns')).toEqual({
+      columns: ['campaign', 'source', 'medium', 'channel', 'visits', 'ad_click_visits'],
+      rows: [['spring_sale', 'google', 'cpc', 'paid', 8, 7]],
+    });
+  });
+
   it('writes the visits of each day split by channel', () => {
     expect(acquisitionCsvTable(REPORT, 'channels')).toEqual({
       columns: ['date', 'paid', 'email', 'social', 'campaign', 'organic', 'referral', 'direct'],

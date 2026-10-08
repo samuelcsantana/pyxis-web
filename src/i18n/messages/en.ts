@@ -247,6 +247,7 @@ export const en = {
     },
     acquisition: {
       sources: 'Sources',
+      campaigns: 'Campaigns',
       channels: 'Visits by channel',
     },
     devices: 'Device types, browsers, systems and countries',
