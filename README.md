@@ -92,7 +92,8 @@ Shipping now:
   `e2e/responsive.spec.ts`). The content is dense on phones too: figures stay on one line,
   cards share the panels' padding, a rate on the Sources table keeps its "6 converted" beside
   it, and routes, paths and event names break between their tokens (`/orders/` `:id`), never
-  inside one. On tablets the KPI cards sit two by two and the last donut takes the whole row,
+  inside one. The Overview chart is 176px tall on a phone, and each Funnel editor step takes two
+  rows of 44px controls. On tablets the KPI cards sit two by two and the last donut takes the whole row,
   so no card is left alone on a line; an open drawer holds the page behind it still
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
