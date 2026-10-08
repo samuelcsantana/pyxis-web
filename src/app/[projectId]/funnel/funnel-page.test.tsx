@@ -141,10 +141,11 @@ describe('FunnelPage', () => {
     expect(screen.getByRole('group', { name: 'Biggest drop-off' })).toHaveTextContent(
       /^Biggest drop-offStep \d → \d.+ → .+ · [\d.]+% continued$/,
     );
-    expect(screen.getByRole('button', { name: 'Edit steps' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
+    const editSteps = screen.getByRole('button', { name: 'Edit steps' });
+    expect(editSteps).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      editSteps.compareDocumentPosition(screen.getByRole('group', { name: 'Overall conversion' })),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     const sevenDays = new URL(
       screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
       'https://x',
