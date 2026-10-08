@@ -14,16 +14,21 @@ export interface DayActivityFiguresProps {
 export function DayActivityFigures({ days, periodLabel, i18n }: DayActivityFiguresProps) {
   const totals = activityTotals(days);
   const figures = [
-    { label: 'Page views', value: totals.pageViews, swatch: 'bg-sky' },
-    { label: 'Named events', value: totals.events, swatch: 'bg-violet' },
+    { label: i18n.t('overviewChart.pageViews'), value: totals.pageViews, swatch: 'bg-sky' },
+    { label: i18n.t('overviewChart.namedEvents'), value: totals.events, swatch: 'bg-violet' },
   ] as const;
   return (
     <section aria-labelledby={HEADING_ID} className={`${PANEL} gap-4`}>
       <div className="flex flex-col gap-1">
         <h2 id={HEADING_ID} className={PANEL_TITLE}>
-          Activity of the day
+          {i18n.t('overviewChart.dayTitle')}
         </h2>
-        <p className="text-caption text-muted">Page views and named events, {periodLabel}</p>
+        <p className="text-caption text-muted">
+          {i18n.t('overviewChart.subjectInPeriod', {
+            subject: i18n.t('overviewChart.activitySubject'),
+            period: periodLabel,
+          })}
+        </p>
       </div>
       <dl className="grid grid-cols-2 gap-3 sm:gap-4">
         {figures.map((figure) => (

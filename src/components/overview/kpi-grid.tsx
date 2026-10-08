@@ -17,7 +17,7 @@ export function KpiGrid({ kpis, drillDownHref, selectable = false, i18n }: KpiGr
     <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
       {selectable ? (
         <p id={KPI_TOGGLE_HINT_ID} hidden>
-          Plots this figure per day on the chart below.
+          {i18n.t('overview.kpiToggleHint')}
         </p>
       ) : null}
       {kpis.map((kpi) => (

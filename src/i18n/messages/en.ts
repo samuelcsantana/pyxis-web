@@ -174,6 +174,21 @@ export const en = {
     noChange: 'no change',
   },
   overview: {
+    subtitle: 'How {project} was used in the period',
+    kpiToggleHint: 'Plots this figure per day on the chart below.',
+    topPages: {
+      title: 'Top pages',
+      empty: 'No page views in this period.',
+      page: 'Page',
+      views: 'Views',
+      visits: 'Visits',
+      shareOfViews: 'Share of views',
+    },
+    topEvents: {
+      title: 'Top events',
+      empty: 'No named events in this period. Events sent with <code>track()</code> show up here.',
+      inVisits: 'in {visits}',
+    },
     kpis: {
       visits: 'Visits',
       identifiedUsers: 'Identified users',
@@ -209,7 +224,11 @@ export const en = {
   },
   overviewChart: {
     activityTitle: 'Activity per day',
+    dayTitle: 'Activity of the day',
     activitySubject: 'Page views and named events',
+    subjectInPeriod: '{subject}, {period}',
+    previousPeriod: 'Previous period',
+    day: 'Day',
     pageViews: 'Page views',
     namedEvents: 'Named events',
     metricTitle: '{metric} per day',

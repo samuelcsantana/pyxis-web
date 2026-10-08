@@ -126,7 +126,7 @@ function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
         <thead>
           <tr>
             <th scope="col" className={`${HEADER_CELL} text-left`}>
-              Day
+              {i18n.t('overviewChart.day')}
             </th>
             {columns.map((column) => (
               <th
@@ -161,11 +161,17 @@ function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
   );
 }
 
-function PreviousPeriodLegend({ total }: { readonly total: string | null }) {
+function PreviousPeriodLegend({
+  total,
+  i18n,
+}: {
+  readonly total: string | null;
+  readonly i18n: I18n;
+}) {
   return (
     <p className="flex items-center gap-2 text-caption">
       <span aria-hidden="true" className="w-3.5 border-t-2 border-dashed border-muted" />
-      Previous period
+      {i18n.t('overviewChart.previousPeriod')}
       {total === null ? null : <strong className="tabular-nums">{total}</strong>}
     </p>
   );
@@ -175,7 +181,10 @@ export function OverviewChartPanel({ chart, periodLabel, i18n }: OverviewChartPa
   return (
     <ChartPanel
       title={chart.title}
-      description={`${chart.subject}, ${periodLabel}`}
+      description={i18n.t('overviewChart.subjectInPeriod', {
+        subject: chart.subject,
+        period: periodLabel,
+      })}
       legend={
         <>
           {chart.series.map((series) => (
@@ -187,7 +196,7 @@ export function OverviewChartPanel({ chart, periodLabel, i18n }: OverviewChartPa
             />
           ))}
           {chart.previousDates === null ? null : (
-            <PreviousPeriodLegend total={chart.previousTotal} />
+            <PreviousPeriodLegend total={chart.previousTotal} i18n={i18n} />
           )}
         </>
       }

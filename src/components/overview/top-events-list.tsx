@@ -1,6 +1,7 @@
 import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
@@ -15,12 +16,13 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
   return (
     <section aria-labelledby="top-events-heading" className={PANEL}>
       <h2 id="top-events-heading" className={PANEL_TITLE}>
-        Top events
+        {i18n.t('overview.topEvents.title')}
       </h2>
       {events.length === 0 ? (
         <p className="text-caption text-muted">
-          No named events in this period. Events sent with{' '}
-          <code className="font-mono">track()</code> show up here.
+          {rich(i18n.t('overview.topEvents.empty'), {
+            code: (text) => <code className="font-mono">{text}</code>,
+          })}
         </p>
       ) : (
         <ul className="flex flex-col">
@@ -31,6 +33,7 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
                   <VisitsLink
                     href={visitsHref(event.name)}
                     label={eventLabel(event.name)}
+                    purpose={i18n.t('visitsLink.purpose')}
                     className="w-fit"
                   />
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
@@ -38,7 +41,9 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
                 <span className="shrink-0 text-right font-semibold tabular-nums">
                   {formatCount(event.count, i18n)}{' '}
                   <span className="font-normal text-muted">
-                    in {i18n.t('counts.visit', { count: event.visits })}
+                    {i18n.t('overview.topEvents.inVisits', {
+                      visits: i18n.t('counts.visit', { count: event.visits }),
+                    })}
                   </span>
                 </span>
               </span>
