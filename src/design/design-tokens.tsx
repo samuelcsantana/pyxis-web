@@ -40,11 +40,18 @@ export const COLOR_TOKENS = [
 export const RADIUS_TOKENS = ['chip', 'control', 'input', 'card', 'panel', 'pill'] as const;
 
 export const TYPE_SCALE = [
-  { label: 'Display', className: 'text-5xl font-bold tracking-tight' },
-  { label: 'Heading', className: 'text-2xl font-semibold tracking-tight' },
-  { label: 'Body', className: 'text-base' },
-  { label: 'Caption', className: 'text-sm text-muted' },
-  { label: 'Data', className: 'font-mono text-sm' },
+  { token: 'text-micro', size: '0.6875rem', use: 'Chips, method badges, axis labels' },
+  { token: 'text-xs', size: '0.75rem', use: 'Table headers, notes under a figure' },
+  { token: 'text-caption', size: '0.8125rem', use: 'Tables, secondary text, segmented options' },
+  { token: 'text-sm', size: '0.875rem', use: 'Body text, panel titles on phones' },
+  { token: 'text-callout', size: '0.9375rem', use: 'Visit titles, the sign-in form' },
+  { token: 'text-base', size: '1rem', use: 'Panel titles, fields on phones' },
+  { token: 'text-lg', size: '1.125rem', use: 'Empty and error states' },
+  { token: 'text-xl', size: '1.25rem', use: 'The wordmark in the sidebar' },
+  { token: 'text-title', size: '1.375rem', use: 'Page titles, figures on phones' },
+  { token: 'text-wordmark', size: '1.625rem', use: 'The wordmark on the sign-in page' },
+  { token: 'text-figure', size: '1.75rem', use: 'Stat figures' },
+  { token: 'text-figure-lg', size: '1.875rem', use: 'Overview KPI figures' },
 ] as const;
 
 export function DesignTokens() {
@@ -77,10 +84,22 @@ export function DesignTokens() {
         <h2 id="type-heading" className="text-lg font-semibold">
           Type
         </h2>
+        <p className="text-sm text-muted">
+          Every size is in rem, so text follows the reader’s default text size.
+        </p>
         <ul className="flex flex-col gap-3">
           {TYPE_SCALE.map((step) => (
-            <li key={step.label} className={step.className}>
-              {step.label}: 4,758 visits
+            <li
+              key={step.token}
+              className="grid gap-x-4 gap-y-1 border-b border-line pb-3 sm:grid-cols-[12rem_1fr]"
+            >
+              <span className="flex flex-col">
+                <code className="font-mono text-sm">{step.token}</code>
+                <span className="text-xs text-muted">
+                  {step.size} · {step.use}
+                </span>
+              </span>
+              <span className={`${step.token} font-semibold tabular-nums`}>4,758 visits</span>
             </li>
           ))}
         </ul>
