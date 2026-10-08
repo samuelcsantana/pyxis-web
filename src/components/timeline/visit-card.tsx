@@ -1,5 +1,6 @@
 import type { ItemKind, TimelineItem, VisitView } from '@/domain/timeline';
 import { TONE_CLASSES } from '@/components/requests/status-styles';
+import { Breakable } from '@/components/ui/breakable';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 
 const ICONS: Readonly<Record<ItemKind, string>> = {
@@ -74,10 +75,12 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
                   </svg>
                 </span>
                 <span className="flex min-w-0 flex-col gap-0.5">
-                  <span className="text-sm font-medium wrap-anywhere">{item.title}</span>
+                  <span className="text-sm font-medium wrap-anywhere">
+                    <Breakable text={item.title} />
+                  </span>
                   {item.detail === '' ? null : (
                     <span className="font-mono text-xs text-muted wrap-anywhere">
-                      {item.detail}
+                      <Breakable text={item.detail} />
                     </span>
                   )}
                 </span>

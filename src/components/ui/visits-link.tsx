@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Breakable } from './breakable';
 import { ROW_LINK } from './panel-classes';
 
 export const VISITS_LINK_PURPOSE = ': see its visits';
@@ -18,7 +19,7 @@ export function VisitsLink({
 }: VisitsLinkProps) {
   return (
     <Link href={href} aria-label={`${label}${purpose}`} className={`${ROW_LINK} ${className}`}>
-      {label}
+      <Breakable text={label} />
     </Link>
   );
 }

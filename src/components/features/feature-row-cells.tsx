@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { FeatureKind, FeatureRow } from '@/domain/features';
 import { Sparkline } from '@/components/ui/sparkline';
 import { BAR_FILL, BAR_TRACK, BODY_CELL } from '@/components/ui/panel-classes';
+import { Breakable } from '@/components/ui/breakable';
 import { VisitsLink } from '@/components/ui/visits-link';
 
 const TREND_BOX = { width: 96, height: 28, inset: 3 } as const;
@@ -29,7 +30,7 @@ export function FeatureRowCells({ kind, row, visitsHref, disclosure }: FeatureRo
             />
             {kind === 'events' ? (
               <span className="font-mono text-xs font-normal text-muted wrap-anywhere">
-                {row.name}
+                <Breakable text={row.name} />
               </span>
             ) : null}
           </span>

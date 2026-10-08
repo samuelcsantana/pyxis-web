@@ -12,6 +12,7 @@ import {
   PANEL_TITLE,
   ROW_BUTTON_TEXT,
 } from '@/components/ui/panel-classes';
+import { Breakable } from '@/components/ui/breakable';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
 import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
@@ -160,7 +161,7 @@ export function RequestsTable({
                   >
                     <MethodChip method={row.method} />{' '}
                     <span className={`font-mono text-xs wrap-anywhere ${ROW_BUTTON_TEXT}`}>
-                      {row.route}
+                      <Breakable text={row.route} />
                     </span>
                   </button>
                 </th>
