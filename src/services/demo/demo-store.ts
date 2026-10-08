@@ -1,6 +1,5 @@
 import { OTHER_VALUE } from '@/domain/devices';
 import { evenShares, type DemoProject } from './demo-catalog';
-import { demoCatalogVisits, type DemoVisitCatalog } from './demo-catalog-visits';
 import { DEMO_STORE_PERSON, DEMO_STORE_VISITS } from './demo-store-visits';
 
 const MONTHS_IN_A_YEAR = 12;
@@ -18,15 +17,12 @@ function signInMethods(emailCode: number, google: number, password: number) {
   ] as const;
 }
 
-const STORE_VISIT_SEED = 1000;
-
-const STORE_CATALOG: DemoVisitCatalog = {
+export const DEMO_STORE: DemoProject = {
   id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
   name: 'Demo Store',
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
   visitsPerPageView: 0.32,
-  identifiedShare: 0.09,
   signedInStage: 4,
   people: 220,
   pages: [
@@ -387,12 +383,6 @@ const STORE_CATALOG: DemoVisitCatalog = {
     { type: 'event', name: 'signup_completed' },
     { type: 'event', name: 'order_created' },
   ],
-  funnelContinuation: [0.625, 0.411, 0.538, 0.791, 0.458, 0.7, 0.6],
   person: DEMO_STORE_PERSON,
   showcase: DEMO_STORE_VISITS,
-};
-
-export const DEMO_STORE: DemoProject = {
-  ...STORE_CATALOG,
-  visits: [...DEMO_STORE_VISITS, ...demoCatalogVisits(STORE_CATALOG, STORE_VISIT_SEED)],
 };

@@ -15,9 +15,11 @@ const SOCIAL_VISIT = {
   events: [{ second: 3, name: 'page_view', path: '/' }],
 } as const;
 
+const STORE_SHOWCASE = { sources: DEMO_STORE.sources, visits: DEMO_STORE.showcase };
+
 describe('demoAttributedVisits', () => {
   it('gives the visits of a channel its sources and campaigns in turn', () => {
-    const paid = demoAttributedVisits(DEMO_STORE)
+    const paid = demoAttributedVisits(STORE_SHOWCASE)
       .filter(({ visit }) => visit.channel === 'paid')
       .slice(0, 5)
       .map(({ attribution }) => `${attribution.source} ${attribution.campaign ?? '-'}`);
@@ -27,12 +29,11 @@ describe('demoAttributedVisits', () => {
       'google brand_search',
       'google -',
       'bing spring_sale',
-      'google spring_sale',
     ]);
   });
 
   it('keeps the medium of the source', () => {
-    const [first] = demoAttributedVisits(DEMO_STORE).filter(
+    const [first] = demoAttributedVisits(STORE_SHOWCASE).filter(
       ({ visit }) => visit.channel === 'paid',
     );
 

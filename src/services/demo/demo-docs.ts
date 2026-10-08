@@ -1,6 +1,5 @@
 import { OTHER_VALUE } from '@/domain/devices';
 import { evenShares, type DemoProject } from './demo-catalog';
-import { demoCatalogVisits, type DemoVisitCatalog } from './demo-catalog-visits';
 import { type DemoVisit, request } from './demo-visits';
 
 const DOCS_VISITS: readonly DemoVisit[] = [
@@ -100,15 +99,12 @@ const DOCS_VISITS: readonly DemoVisit[] = [
   },
 ];
 
-const DOCS_VISIT_SEED = 2000;
-
-const DOCS_CATALOG: DemoVisitCatalog = {
+export const DEMO_DOCS: DemoProject = {
   id: '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d',
   name: 'Demo Docs',
   timezone: 'Europe/Lisbon',
   conversionEvent: null,
   visitsPerPageView: 0.38,
-  identifiedShare: 0,
   signedInStage: null,
   people: 0,
   pages: [
@@ -335,12 +331,6 @@ const DOCS_CATALOG: DemoVisitCatalog = {
     { type: 'page', path: '/docs/:slug' },
     { type: 'event', name: 'code_copied' },
   ],
-  funnelContinuation: [0.9, 0.55, 0.4],
   person: null,
   showcase: DOCS_VISITS,
-};
-
-export const DEMO_DOCS: DemoProject = {
-  ...DOCS_CATALOG,
-  visits: [...DOCS_VISITS, ...demoCatalogVisits(DOCS_CATALOG, DOCS_VISIT_SEED)],
 };
