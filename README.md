@@ -134,11 +134,12 @@ Shipping now:
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name; with a
   conversion event set, each browser, system and country also gives its conversion rate; each
-  device type opens its visits
+  device type and each country opens its visits
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
-  that came from an ad click; the channel of each source opens the visits from that channel
+  that came from an ad click; each source opens its visits, and its channel the visits from
+  that channel
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL; each event opens its
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
@@ -146,7 +147,8 @@ Shipping now:
   period kept; a link's name starts with the text it shows ("/pricing: see its visits")
 - Requests: every write by route with its success and error shares, status codes and median
   duration; a keyboard-accessible details panel with the screens where the route failed and its
-  latest failures with their error code; "failing only" and screen filters kept in the URL. A
+  latest failures with their error code, and a link to every visit with a failed call to that
+  route; "failing only" and screen filters kept in the URL. A
   "Failed reads" tab lists the GET calls that failed by route, as counts only (a site may send
   its reads only when they fail, so there is no read error rate)
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,

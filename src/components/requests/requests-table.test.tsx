@@ -31,6 +31,7 @@ function renderTable() {
       basePath="/p1/requests"
       query="range=7d"
       timelinePath="/p1/timeline?range=7d"
+      visitsPath="/p1/visits?range=7d"
       emptyMessage="Nothing"
     />,
   );
@@ -83,6 +84,9 @@ describe('RequestsTable', () => {
       'href',
       '/p1/requests?range=7d&screen=%2Forders%2Fnew',
     );
+    expect(
+      details.getByRole('link', { name: 'See every visit with a failed POST /orders' }),
+    ).toHaveAttribute('href', '/p1/visits?range=7d&route=POST+%2Forders&failed=true');
 
     await userEvent.click(details.getByRole('button', { name: 'Close' }));
 
@@ -173,6 +177,7 @@ describe('RequestsTable', () => {
         basePath="/p1/requests"
         query="range=7d"
         timelinePath="/p1/timeline?range=7d"
+        visitsPath="/p1/visits?range=7d"
         emptyMessage="Nothing"
       />,
     );
@@ -188,6 +193,9 @@ describe('RequestsTable', () => {
     await userEvent.click(screen.getByRole('button', { name: 'PATCH /users/me, show details' }));
 
     expect(within(dialog()).getAllByText('No failures in this period.')).toHaveLength(2);
+    expect(
+      within(dialog()).queryByRole('link', { name: /^See every visit with a failed/ }),
+    ).not.toBeInTheDocument();
   });
 
   it('shows the empty message without routes', () => {
@@ -198,6 +206,7 @@ describe('RequestsTable', () => {
         basePath="/p1/requests"
         query=""
         timelinePath="/p1/timeline"
+        visitsPath="/p1/visits"
         emptyMessage="No writes."
       />,
     );
@@ -215,6 +224,7 @@ describe('RequestsTable', () => {
         basePath="/p1/requests"
         query="range=7d&kind=reads"
         timelinePath="/p1/timeline"
+        visitsPath="/p1/visits"
         emptyMessage="Nothing"
       />,
     );
@@ -232,10 +242,13 @@ describe('RequestsTable', () => {
     expect(
       within(dialog()).getByText(`${String(orders?.failed)} failed reads · median 310 ms`),
     ).toBeInTheDocument();
-    expect(within(dialog()).getByRole('link', { name: /\/orders\/:id/ })).toHaveAttribute(
+    expect(within(dialog()).getByRole('link', { name: /^\/orders\/:id/ })).toHaveAttribute(
       'href',
       '/p1/requests?range=7d&kind=reads&screen=%2Forders%2F%3Aid',
     );
+    expect(
+      within(dialog()).getByRole('link', { name: 'See every visit with a failed GET /orders/:id' }),
+    ).toHaveAttribute('href', '/p1/visits?route=GET+%2Forders%2F%3Aid&failed=true');
   });
 });
 

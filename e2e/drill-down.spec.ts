@@ -78,3 +78,29 @@ test('opens the visits of a device type and of a channel', async ({ page }) => {
   await expect(filters(page).getByRole('combobox', { name: 'Channel' })).toHaveValue('social');
   await expect(visitRows(page).first()).toBeVisible();
 });
+
+test('opens the visits of a source, a country and a failing route', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/acquisition?range=30d`);
+  await page.getByRole('link', { name: 'google: see its visits' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&source=google$/);
+  await expect(filters(page).getByRole('textbox', { name: /^Source/ })).toHaveValue('google');
+  await expect(page.getByText(/^\d+ matching visits?$/)).toBeVisible();
+  await expect(visitRows(page).first()).toBeVisible();
+
+  await page.goto(`/${DOCS_ID}/devices?range=30d`);
+  await page.getByRole('link', { name: 'Portugal: see its visits' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&country=PT$/);
+  await expect(visitRows(page).first()).toBeVisible();
+
+  await page.goto(`/${STORE_ID}/requests?range=30d`);
+  await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+  await page.getByRole('link', { name: 'See every visit with a failed POST /orders' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&route=POST\+%2Forders&failed=true$/);
+  await expect(
+    filters(page).getByRole('checkbox', { name: 'With a failed request' }),
+  ).toBeChecked();
+  await expect(visitRows(page).first()).toBeVisible();
+});

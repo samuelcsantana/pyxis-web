@@ -177,6 +177,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               basePath={basePath}
               query={filterQuery(period, { ...filter, screen: null })}
               timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
+              visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
               emptyMessage={emptyMessage(filter)}
             />
             <CsvDownloads

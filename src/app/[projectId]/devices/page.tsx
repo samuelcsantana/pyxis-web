@@ -20,7 +20,7 @@ import {
 } from '@/domain/devices';
 import { devicesTableLabel } from '@/domain/devices-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
-import { deviceFilterOf } from '@/domain/visits';
+import { countryFilterOf, deviceFilterOf } from '@/domain/visits';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -43,6 +43,7 @@ interface DevicesReportViewProps {
   readonly exportPath: string;
   readonly deviceVisitsHref: (deviceType: string) => string | null;
   readonly i18n: I18n;
+  readonly countryVisitsHref: (country: string) => string | null;
 }
 
 function DevicesReportView({
@@ -51,6 +52,7 @@ function DevicesReportView({
   exportPath,
   deviceVisitsHref,
   i18n,
+  countryVisitsHref,
 }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes, i18n);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
@@ -84,6 +86,7 @@ function DevicesReportView({
         <CountriesTable
           rows={shareRows(report.countries, countryLabel, i18n)}
           withConversionRate={conversionEvent !== null}
+          visitsHref={countryVisitsHref}
         />
       </div>
       <CsvDownloads downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]} />
@@ -109,6 +112,10 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
     return device === null ? null : linkWith(visitsHref, { device });
   };
   const i18n = await getI18n();
+  const countryVisitsHref = (value: string) => {
+    const country = countryFilterOf(value);
+    return country === null ? null : linkWith(visitsHref, { country });
+  };
   return (
     <>
       <Topbar
@@ -128,6 +135,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             exportPath={exportHref(project.id, 'devices', periodQuery(period))}
             deviceVisitsHref={deviceVisitsHref}
             i18n={i18n}
+            countryVisitsHref={countryVisitsHref}
           />
         ) : (
           <EmptyPeriod

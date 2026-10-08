@@ -15,6 +15,7 @@ export interface SourcesTableProps {
   readonly rows: readonly SourceRow[];
   readonly channelVisitsHref: (channel: Channel) => string;
   readonly i18n: I18n;
+  readonly sourceVisitsHref: (source: string) => string;
 }
 
 function ConversionColumns() {
@@ -53,7 +54,12 @@ function ConversionCells({ row }: { readonly row: SourceRow }) {
   );
 }
 
-export function SourcesTable({ rows, channelVisitsHref, i18n }: SourcesTableProps) {
+export function SourcesTable({
+  rows,
+  channelVisitsHref,
+  sourceVisitsHref,
+  i18n,
+}: SourcesTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
   return (
     <section aria-labelledby="sources-heading" className={PANEL}>
@@ -96,8 +102,8 @@ export function SourcesTable({ rows, channelVisitsHref, i18n }: SourcesTableProp
                         aria-hidden="true"
                         className={`mt-1 size-2.5 shrink-0 rounded-[3px] ${CHANNEL_COLORS[row.channel].swatch}`}
                       />
-                      <span className="flex min-w-0 flex-col gap-1">
-                        <span className="wrap-anywhere">{row.label}</span>
+                      <span className="flex min-w-0 flex-col gap-2.5">
+                        <VisitsLink href={sourceVisitsHref(row.source)} label={row.label} />
                         <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
                           <VisitsLink
                             href={channelVisitsHref(row.channel)}

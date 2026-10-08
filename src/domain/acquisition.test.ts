@@ -143,6 +143,7 @@ describe('sourceRows', () => {
 
     expect(google).toEqual({
       key: 'google|cpc|paid',
+      source: 'google',
       label: 'google',
       medium: 'cpc',
       channel: 'paid',
@@ -154,6 +155,7 @@ describe('sourceRows', () => {
     });
     expect(direct).toMatchObject({
       key: '(direct)||direct',
+      source: '(direct)',
       label: 'Direct',
       medium: null,
       conversionRate: '10.0%',

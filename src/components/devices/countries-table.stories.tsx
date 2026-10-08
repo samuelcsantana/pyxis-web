@@ -28,6 +28,14 @@ export const Default: Story = {};
 
 export const WithConversionRate: Story = { args: { withConversionRate: true } };
 
+export const LinkedToTheirVisits: Story = {
+  args: {
+    visitsHref: (country: string) =>
+      country === 'other' ? null : `/demo/visits?range=30d&country=${country}`,
+  },
+  parameters: { nextjs: { appDirectory: true } },
+};
+
 export const OnlyUnknownCountries: Story = {
   args: {
     rows: shareRows(

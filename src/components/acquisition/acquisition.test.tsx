@@ -85,6 +85,10 @@ function channelVisitsHref(channel: string): string {
   return `/p1/visits?range=7d&channel=${channel}`;
 }
 
+function sourceVisitsHref(source: string): string {
+  return `/p1/visits?range=7d&source=${source}`;
+}
+
 describe('SourcesTable', () => {
   it('shows each source with its channel, ad click visits and conversion rate', () => {
     render(
@@ -92,11 +96,16 @@ describe('SourcesTable', () => {
         i18n={english}
         rows={sourceRows([GOOGLE], english)}
         channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
       />,
     );
 
     const [, row] = screen.getAllByRole('row');
     expect(row).toHaveTextContent('googlePaidcpc1,100 from ad clickscpc1,200605.0%60 converted');
+    expect(screen.getByRole('link', { name: 'google: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=7d&source=google',
+    );
     expect(screen.getByRole('link', { name: 'Paid: see its visits' })).toHaveAttribute(
       'href',
       '/p1/visits?range=7d&channel=paid',
@@ -109,6 +118,7 @@ describe('SourcesTable', () => {
         i18n={english}
         rows={sourceRows([GOOGLE], english)}
         channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
       />,
     );
 
@@ -125,6 +135,7 @@ describe('SourcesTable', () => {
           english,
         )}
         channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
       />,
     );
 
@@ -139,6 +150,7 @@ describe('SourcesTable', () => {
         i18n={english}
         rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], english)}
         channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
       />,
     );
 
@@ -147,7 +159,14 @@ describe('SourcesTable', () => {
   });
 
   it('says so when no visit had a source', () => {
-    render(<SourcesTable i18n={english} rows={[]} channelVisitsHref={channelVisitsHref} />);
+    render(
+      <SourcesTable
+        i18n={english}
+        rows={[]}
+        channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
+      />,
+    );
 
     expect(screen.getByText('No visits with a source in this period.')).toBeInTheDocument();
   });

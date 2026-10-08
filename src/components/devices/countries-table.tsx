@@ -6,13 +6,25 @@ import {
   PANEL_TITLE,
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 
 export interface CountriesTableProps {
   readonly rows: readonly ShareRow[];
   readonly withConversionRate?: boolean;
+  readonly visitsHref?: (country: string) => string | null;
 }
 
-export function CountriesTable({ rows, withConversionRate = false }: CountriesTableProps) {
+const NO_VISITS_LINK = () => null;
+
+function CountryName({ label, href }: { readonly label: string; readonly href: string | null }) {
+  return href === null ? label : <VisitsLink href={href} label={label} />;
+}
+
+export function CountriesTable({
+  rows,
+  withConversionRate = false,
+  visitsHref = NO_VISITS_LINK,
+}: CountriesTableProps) {
   const showsConversionRate = withConversionRate && countsConversions(rows);
   return (
     <section aria-labelledby="countries-heading" className={PANEL}>
@@ -53,7 +65,7 @@ export function CountriesTable({ rows, withConversionRate = false }: CountriesTa
                     >
                       {countryCode(row.value)}
                     </span>
-                    {row.label}
+                    <CountryName label={row.label} href={visitsHref(row.value)} />
                   </span>
                 </th>
                 <td className={`${BODY_CELL} text-right`}>{row.visits}</td>

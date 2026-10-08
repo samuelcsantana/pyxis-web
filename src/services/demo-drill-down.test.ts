@@ -1,13 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { addDays, todayIn } from '@/domain/period';
 import { propertyFilterOf } from '@/domain/visit-property';
-import { deviceFilterOf, NO_VISIT_FILTERS, type VisitFilters } from '@/domain/visits';
+import {
+  countryFilterOf,
+  deviceFilterOf,
+  NO_VISIT_FILTERS,
+  type VisitFilters,
+} from '@/domain/visits';
 import { MockAcquisitionService } from './acquisition/mock-acquisition-service';
 import type { DateRange } from './date-range';
 import { DEMO_PROJECTS } from './demo/demo-projects';
 import { MockDevicesService } from './devices/mock-devices-service';
 import { MockFeaturesService } from './features/mock-features-service';
 import { MockOverviewService } from './overview/mock-overview-service';
+import { MockRequestsService } from './requests/mock-requests-service';
 import { MockVisitsService } from './visits/mock-visits-service';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -99,6 +105,34 @@ describe('the demo visits behind every link into Visits', () => {
 
         for (const source of acquisition.sources) {
           expect(await visitsFound({ channel: source.channel }), source.source).toBeGreaterThan(0);
+        }
+      });
+
+      it('include a visit for every source Acquisition lists', async () => {
+        const acquisition = await new MockAcquisitionService().acquisition(project.id, range);
+
+        for (const { source } of acquisition.sources) {
+          expect(await visitsFound({ source }), source).toBeGreaterThan(0);
+        }
+      });
+
+      it('include a visit for every country Devices lists by its code', async () => {
+        const devices = await new MockDevicesService().devices(project.id, range);
+
+        for (const share of devices.countries) {
+          const country = countryFilterOf(share.value);
+          if (country !== null) {
+            expect(await visitsFound({ country }), country).toBeGreaterThan(0);
+          }
+        }
+      });
+
+      it('include a visit for every route that failed in Requests', async () => {
+        const requests = await new MockRequestsService().requests(project.id, range, null);
+
+        for (const route of requests.routes.filter((row) => row.failed > 0)) {
+          const shown = `${route.method} ${route.route}`;
+          expect(await visitsFound({ route: shown, failed: true }), shown).toBeGreaterThan(0);
         }
       });
 

@@ -34,6 +34,7 @@ const meta = {
     basePath: '/demo/requests',
     query: 'range=7d',
     timelinePath: '/demo/timeline',
+    visitsPath: '/demo/visits',
     emptyMessage: 'No writes in this period.',
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
