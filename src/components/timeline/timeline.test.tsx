@@ -89,7 +89,7 @@ describe('TimelineFilters', () => {
       />,
     );
 
-    expect(screen.getByRole('link', { name: 'Errors only' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Failing only' })).toHaveAttribute(
       'aria-current',
       'page',
     );

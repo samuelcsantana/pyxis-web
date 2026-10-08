@@ -242,7 +242,7 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
   {
     control: 'a filter pill',
     screen: 'timeline?user=u_7f3a',
-    target: (page) => page.getByRole('link', { name: 'Errors only' }),
+    target: (page) => page.getByRole('link', { name: 'Failing only' }),
   },
   {
     control: 'a text link',

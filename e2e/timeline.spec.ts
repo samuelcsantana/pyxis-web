@@ -30,7 +30,7 @@ test('looks up the demo person and filters the story', async ({ page }) => {
   await expect(page.getByRole('region', { name: /^Visit .+ · / })).toHaveCount(2);
   await expect(page.getByText('1 failed request')).toBeVisible();
 
-  await page.getByRole('link', { name: 'Errors only' }).click();
+  await page.getByRole('link', { name: 'Failing only' }).click();
   await expect(page).toHaveURL(/show=errors/);
   await expect(page.getByRole('listitem').filter({ hasText: 'POST /' })).toHaveCount(1);
 });

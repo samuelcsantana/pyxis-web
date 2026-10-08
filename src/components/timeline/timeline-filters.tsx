@@ -17,7 +17,7 @@ const LABELS: Readonly<Record<TimelineFilter, string>> = {
   pages: 'Page views',
   events: 'Events',
   requests: 'Requests',
-  errors: 'Errors only',
+  errors: 'Failing only',
 };
 
 export function TimelineFilters({ links, current }: TimelineFiltersProps) {

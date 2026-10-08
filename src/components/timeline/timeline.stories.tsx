@@ -50,7 +50,7 @@ type StoryEntry = StoryObj<typeof meta>;
 
 export const Everything: StoryEntry = {};
 
-export const ErrorsOnly: StoryEntry = { args: { filter: 'errors' } };
+export const FailingOnly: StoryEntry = { args: { filter: 'errors' } };
 
 export const PageViews: StoryEntry = { args: { filter: 'pages' } };
 
