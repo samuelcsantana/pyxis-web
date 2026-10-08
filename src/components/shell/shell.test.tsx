@@ -298,6 +298,100 @@ describe('MobileMenu', () => {
       'false',
     );
   });
+
+  function renderOpenMenu() {
+    const view = render(
+      <MobileMenu>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    return view;
+  }
+
+  it('closes on Escape and gives the focus back to its button', () => {
+    renderOpenMenu();
+    const link = screen.getByRole('link', { name: 'Overview' });
+    link.focus();
+
+    fireEvent.keyDown(link, { key: 'Escape' });
+
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveFocus();
+  });
+
+  it('stays open on any other key', () => {
+    renderOpenMenu();
+
+    fireEvent.keyDown(screen.getByRole('link', { name: 'Overview' }), { key: 'Enter' });
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+  });
+
+  it('leaves the focus alone on Escape while closed', () => {
+    render(
+      <MobileMenu>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    const link = screen.getByRole('link', { name: 'Overview', hidden: true });
+    link.focus();
+
+    fireEvent.keyDown(link, { key: 'Escape' });
+
+    expect(link).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('stays open while the address stays the same', () => {
+    const { rerender } = renderOpenMenu();
+
+    rerender(
+      <MobileMenu>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toBeInTheDocument();
+  });
+
+  it('closes when the query changes, as with a period link or Back', () => {
+    const { rerender } = renderOpenMenu();
+
+    navigation.search = 'range=30d';
+    rerender(
+      <MobileMenu>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('closes when the path changes', () => {
+    const { rerender } = renderOpenMenu();
+
+    navigation.pathname = '/p-store/funnel';
+    rerender(
+      <MobileMenu>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    navigation.pathname = '/p-store/overview';
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
+  });
 });
 
 describe('PeriodSelector', () => {

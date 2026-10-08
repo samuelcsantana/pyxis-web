@@ -172,6 +172,39 @@ test('collapses the navigation behind a menu button on a phone', async ({ page, 
   );
 });
 
+const MENU_BUTTON = 'button[aria-controls="main-navigation"]';
+
+test('closes the menu with Escape and gives the focus back to its button', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+  await page.goto(`/${STORE_ID}/overview`);
+
+  await page.getByRole('button', { name: 'Open menu' }).click();
+  await page.keyboard.press('Escape');
+
+  const toggle = page.locator(MENU_BUTTON);
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(toggle).toBeFocused();
+});
+
+test('closes the menu when Back changes the address', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+  await page.goto(`/${STORE_ID}/overview`);
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: '7 days' })
+    .click();
+  await expect(page).toHaveURL(/range=7d$/);
+
+  await page.getByRole('button', { name: 'Open menu' }).click();
+  await page.goBack();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview$`));
+  await expect(page.locator(MENU_BUTTON)).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('keeps the menu bar on screen while the page scrolls', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'The menu bar exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/visits`);
