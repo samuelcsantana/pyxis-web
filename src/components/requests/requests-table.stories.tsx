@@ -85,6 +85,20 @@ export const OpenedFromTheAddress: Story = {
   },
 };
 
+const QUIET_ROUTE = ROWS.find((row) => !row.hasFailures);
+if (QUIET_ROUTE === undefined) {
+  throw new Error('Every demo route has failures.');
+}
+
+export const DetailsOfARouteWithoutFailures: Story = {
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByRole('button', { name: `${QUIET_ROUTE.key}, show details` }));
+    const details = await page.findByRole('dialog', { name: QUIET_ROUTE.key });
+    await expect(within(details).getAllByText('No failures in this period.')).toHaveLength(2);
+  },
+};
+
 export const RouteHovered: Story = {
   parameters: { pseudo: { hover: ['tbody tr:first-child button'] } },
 };

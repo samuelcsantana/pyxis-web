@@ -36,6 +36,8 @@ export const FailureWithoutRetry: Story = {
   render: () => <ErrorPanel />,
 };
 
+export const EmptyDarkTheme: Story = { ...Empty, globals: { theme: 'dark' } };
+
 export const Demo: Story = {
   render: () => <DemoBanner />,
   play: async ({ canvasElement }) => {
@@ -43,6 +45,8 @@ export const Demo: Story = {
     await expect(within(notice).getByRole('note')).toHaveTextContent('Demo data');
   },
 };
+
+export const DemoDarkTheme: Story = { ...Demo, globals: { theme: 'dark' } };
 
 export const NoConversionEventSet: Story = {
   render: () => <NoConversionEvent />,

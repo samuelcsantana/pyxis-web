@@ -54,4 +54,24 @@ export const Failed: Story = {
   },
 };
 
+function pending(): Promise<OlderVisitsPage> {
+  return new Promise(() => undefined);
+}
+
+const showsLoading: Story['play'] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole('button', { name: 'Load older visits' }));
+  const button = await canvas.findByRole('button', { name: 'Loading older visits…' });
+  await expect(button).toBeDisabled();
+  await expect(button).toHaveAttribute('aria-busy', 'true');
+};
+
+export const Loading: Story = { args: { loadOlder: pending }, play: showsLoading };
+
+export const LoadingDark: Story = {
+  args: { loadOlder: pending },
+  globals: { theme: 'dark' },
+  play: showsLoading,
+};
+
 export const DarkTheme: Story = { ...Loaded, globals: { theme: 'dark' } };
