@@ -577,6 +577,51 @@ export const en = {
       minutes: '{minutes} min {seconds} s',
       seconds: '{seconds} s',
     },
+    page: {
+      subtitle: 'Everything one person or one visit did in {project}, in order',
+      tryPerson: 'Try {user}',
+    },
+    lookUp: {
+      title: 'Look up a person or a visit',
+      body: "Type a user id, the one your site passes to identify(), to see every visit of that person, or a visit id to see one visit. Events, page views and requests show in the order they happened, in the project's time zone.",
+      demoPerson: 'Open the timeline of the demo person {user}',
+    },
+    notFound: {
+      title: 'No visits found for {lookup}',
+      body: "The id may be mistyped, the visits may be older than the retention period, or the person's data may have been erased.",
+    },
+    filters: {
+      label: 'Show',
+      all: 'Everything',
+      pages: 'Page views',
+      events: 'Events',
+      requests: 'Requests',
+      errors: 'Failing only',
+    },
+    search: {
+      lookUp: 'Look up',
+      kinds: {
+        user: 'A person, by user id',
+        visit: 'One visit, by visit id',
+      },
+      ids: {
+        user: 'User id',
+        visit: 'Visit id',
+      },
+      submit: 'Show timeline',
+      pending: 'Looking up…',
+      rejected: 'Nothing was looked up. {hint}',
+    },
+    older: {
+      everyVisit: 'That is every visit.',
+      load: 'Load older visits',
+      loading: 'Loading older visits…',
+      failed: 'Could not load older visits. Try again.',
+    },
+    card: {
+      allVisitsOf: 'All visits of {user}',
+      nothingOfThisKind: 'Nothing of this kind in this visit.',
+    },
   },
   funnelEditor: {
     problems: {

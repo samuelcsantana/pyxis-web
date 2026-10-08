@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { visitViews } from '@/domain/timeline';
+import { olderVisitsText, visitViews } from '@/domain/timeline';
 import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timeline';
 import { OlderVisits, type OlderVisitsPage } from './older-visits';
 import { english } from '@/test-utils/english';
@@ -23,7 +23,11 @@ function failing(): Promise<OlderVisitsPage> {
 const meta = {
   title: 'Timeline/Older visits',
   component: OlderVisits,
-  args: { initialBefore: '2026-10-03T12:12:04.000Z', loadOlder },
+  args: {
+    initialBefore: '2026-10-03T12:12:04.000Z',
+    loadOlder,
+    text: olderVisitsText(english),
+  },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

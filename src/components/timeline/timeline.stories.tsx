@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { TIMELINE_FILTERS, timelineTotals, visitViews } from '@/domain/timeline';
+import {
+  TIMELINE_FILTERS,
+  timelineSearchText,
+  timelineTotals,
+  visitViews,
+} from '@/domain/timeline';
 import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timeline';
 import { TimelineFilters } from './timeline-filters';
 import { TimelineSearch } from './timeline-search';
@@ -16,6 +21,7 @@ function Story({ filter }: { readonly filter: (typeof TIMELINE_FILTERS)[number] 
         action="/demo/timeline"
         lookup={{ kind: 'user', id: DEMO_USER_ID }}
         hint={`Try ${DEMO_USER_ID}`}
+        text={timelineSearchText(english)}
       />
       <TimelineSummary
         title={`User ${DEMO_USER_ID}`}
@@ -23,13 +29,14 @@ function Story({ filter }: { readonly filter: (typeof TIMELINE_FILTERS)[number] 
       />
       <TimelineFilters
         current={filter}
+        i18n={english}
         links={TIMELINE_FILTERS.map((target) => ({
           filter: target,
           href: `/demo/timeline?user=${DEMO_USER_ID}&show=${target}`,
         }))}
       />
       {visitViews(REPORT.visits, 'America/Sao_Paulo', filter, english).map((visit) => (
-        <VisitCard key={visit.key} visit={visit} />
+        <VisitCard key={visit.key} visit={visit} emptyText="Nothing of this kind in this visit." />
       ))}
     </div>
   );
@@ -77,7 +84,11 @@ export const OneVisitLinkedToItsPerson: StoryEntry = {
         <VisitCard
           key={visit.key}
           visit={visit}
-          person={{ userId: DEMO_USER_ID, href: `/demo/timeline?user=${DEMO_USER_ID}` }}
+          emptyText="Nothing of this kind in this visit."
+          person={{
+            label: `All visits of ${DEMO_USER_ID}`,
+            href: `/demo/timeline?user=${DEMO_USER_ID}`,
+          }}
         />
       ))}
     </div>

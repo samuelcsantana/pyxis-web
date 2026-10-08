@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
-import type { VisitView } from '@/domain/timeline';
+import type { OlderVisitsText, VisitView } from '@/domain/timeline';
 import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { VisitCard } from './visit-card';
 
@@ -17,9 +17,10 @@ export interface OlderVisitsPage {
 export interface OlderVisitsProps {
   readonly initialBefore: string;
   readonly loadOlder: (before: string) => Promise<OlderVisitsPage>;
+  readonly text: OlderVisitsText;
 }
 
-export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
+export function OlderVisits({ initialBefore, loadOlder, text }: OlderVisitsProps) {
   const [pages, setPages] = useState<readonly (readonly VisitView[])[]>([]);
   const [before, setBefore] = useState<string | null>(initialBefore);
   const [busy, setBusy] = useState(false);
@@ -71,12 +72,12 @@ export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
       {pages.map((visits, page) => (
         <div key={page} data-page={page} className="flex flex-col gap-3.5 sm:gap-5">
           {visits.map((visit) => (
-            <VisitCard key={visit.key} visit={visit} focusable />
+            <VisitCard key={visit.key} visit={visit} emptyText={text.nothingOfThisKind} focusable />
           ))}
         </div>
       ))}
       {before === null ? (
-        <p className="text-caption text-muted">That is every visit.</p>
+        <p className="text-caption text-muted">{text.everyVisit}</p>
       ) : (
         <div className="flex flex-wrap items-center gap-3">
           <button
@@ -88,11 +89,11 @@ export function OlderVisits({ initialBefore, loadOlder }: OlderVisitsProps) {
             }}
             className={`min-h-11 rounded-input px-4 text-sm font-medium ${BUTTON_SECONDARY} ${CONTROL_BUSY}`}
           >
-            {busy ? 'Loading older visits…' : 'Load older visits'}
+            {busy ? text.loading : text.load}
           </button>
           {error === null ? null : (
             <p role="alert" className="text-caption text-bad">
-              Could not load older visits. Try again.
+              {text.failed}
             </p>
           )}
         </div>

@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { rejectedLookupOf } from '@/domain/timeline';
+import { rejectedLookupOf, timelineSearchText } from '@/domain/timeline';
 import { english } from '@/test-utils/english';
 import { TimelineSearch } from './timeline-search';
 
 const meta = {
   title: 'Timeline/Search',
   component: TimelineSearch,
-  args: { action: '/demo/timeline', lookup: null, hint: 'Try u_7f3a' },
+  args: {
+    action: '/demo/timeline',
+    lookup: null,
+    hint: 'Try u_7f3a',
+    text: timelineSearchText(english),
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof TimelineSearch>;
 

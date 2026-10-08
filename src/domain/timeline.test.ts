@@ -117,12 +117,13 @@ describe('rejectedLookupOf', () => {
     expect(rejectedLookupOf({ visit: 'not-a-visit-id' }, english)).toEqual({
       kind: 'visit',
       value: 'not-a-visit-id',
-      hint: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+      problem: 'Nothing was looked up. A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
     });
     expect(rejectedLookupOf({ user: ' ana@example.com ' }, english)).toEqual({
       kind: 'user',
       value: 'ana@example.com',
-      hint: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
+      problem:
+        'Nothing was looked up. A user id has 1 to 64 letters, digits, hyphens or underscores.',
     });
   });
 
