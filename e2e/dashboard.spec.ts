@@ -29,7 +29,7 @@ test('opens the first project from the root, with the demo banner', async ({ pag
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview$`));
   await expect(page.getByRole('note')).toContainText('Demo data');
-  await expect(page.getByText('How Demo Store was used in the period')).toBeVisible();
+  await expect(page).toHaveTitle('Overview · Demo Store · Pyxis');
 });
 
 test('writes the chosen period into the URL', async ({ page }) => {
@@ -128,7 +128,7 @@ test('switches project and keeps the period', async ({ page, isMobile }) => {
   await page.getByRole('link', { name: 'Demo Docs' }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
-  await expect(page.getByText('How Demo Docs was used in the period')).toBeVisible();
+  await expect(page).toHaveTitle(/^Overview · Demo Docs/);
 });
 
 test('closes the project switcher when the focus moves past it, leaving that focus in sight', async ({

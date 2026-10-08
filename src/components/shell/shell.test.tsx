@@ -662,6 +662,10 @@ describe('Topbar', () => {
     );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
+    expect(screen.getByText('How Demo Store was used in the period')).toHaveClass(
+      'hidden',
+      'sm:block',
+    );
     expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
     expect(screen.queryByRole('status')).not.toBeInTheDocument();

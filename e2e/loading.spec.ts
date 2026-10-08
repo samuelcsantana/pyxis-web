@@ -59,6 +59,6 @@ test('keeps the top bar with the destination title while a screen loads', async 
 
   release();
 
-  await expect(page.getByText('What people use to reach Demo Store')).toBeVisible();
+  await expect(page.getByText('What people use to reach Demo Store')).toBeAttached();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 });
