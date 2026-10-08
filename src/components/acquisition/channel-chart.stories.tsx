@@ -37,6 +37,23 @@ export const SingleDay: Story = {
   args: { days: REPORT.days.slice(-1), periodLabel: 'today' },
 };
 
+export const Empty: Story = {
+  args: {
+    days: REPORT.days.map((day) => ({
+      ...day,
+      byChannel: {
+        paid: 0,
+        email: 0,
+        social: 0,
+        campaign: 0,
+        organic: 0,
+        referral: 0,
+        direct: 0,
+      },
+    })),
+  },
+};
+
 export const OnAPhone: Story = {
   decorators: [
     (Story) => (
@@ -48,3 +65,5 @@ export const OnAPhone: Story = {
 };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const OnAPhoneDark: Story = { ...OnAPhone, globals: { theme: 'dark' } };

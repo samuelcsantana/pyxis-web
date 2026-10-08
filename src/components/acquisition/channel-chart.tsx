@@ -1,6 +1,3 @@
-'use client';
-
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import {
   activeChannels,
   type Channel,
@@ -10,19 +7,17 @@ import {
   channelSummary,
   channelTotals,
 } from '@/domain/acquisition';
+import { valueAxis } from '@/domain/chart-scale';
 import { formatCount } from '@/domain/metrics';
 import { formatDay } from '@/domain/period';
+import { stackedBars } from '@/domain/stacked-bars';
+import { ChartFrame } from '@/components/charts/chart-frame';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
 import { CHANNEL_COLORS } from './channel-colors';
 
-const CHART_INITIAL_SIZE = { width: 960, height: 240 } as const;
-const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 } as const;
-const AXIS_TICK = { fill: 'var(--color-muted)', fontSize: 11 } as const;
-const Y_AXIS_WIDTH = 40;
-const MIN_TICK_GAP = 24;
-const STACK = 'visits';
+const SEPARATOR_WIDTH = 1;
 
 export interface ChannelChartProps {
   readonly days: readonly ChannelDay[];
@@ -36,48 +31,35 @@ function ChannelBars({
   readonly days: readonly ChannelDay[];
   readonly channels: readonly Channel[];
 }) {
+  const rows = channelChartRows(days);
+  const axis = valueAxis(rows.map((row) => row.total));
+  const bars = stackedBars(rows, channels, axis.top);
   return (
-    <figure
-      role="img"
-      aria-label={channelSummary(days)}
-      className="h-50 w-full overflow-hidden sm:h-60"
+    <ChartFrame
+      summary={channelSummary(days)}
+      heightClassName="h-50 sm:h-60"
+      axis={axis}
+      dates={rows.map((row) => row.date)}
+      layout="bars"
     >
-      <ResponsiveContainer width="100%" height="100%" initialDimension={CHART_INITIAL_SIZE}>
-        <BarChart
-          data={[...channelChartRows(days)]}
-          margin={CHART_MARGIN}
-          accessibilityLayer={false}
-        >
-          <CartesianGrid vertical={false} stroke="var(--color-grid)" />
-          <XAxis
-            dataKey="date"
-            tickFormatter={formatDay}
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={false}
-            minTickGap={MIN_TICK_GAP}
-          />
-          <YAxis
-            width={Y_AXIS_WIDTH}
-            tickFormatter={formatCount}
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={false}
-            allowDecimals={false}
-          />
-          {channels.map((channel) => (
-            <Bar
-              key={channel}
-              dataKey={channel}
-              name={CHANNEL_LABELS[channel]}
-              stackId={STACK}
-              fill={CHANNEL_COLORS[channel].fill}
-              isAnimationActive={false}
-            />
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
-    </figure>
+      {bars.segments.map((segment) => (
+        <rect
+          key={`${segment.key}-${String(segment.day)}`}
+          x={segment.x}
+          y={segment.y}
+          width={segment.width}
+          height={segment.height}
+          fill={CHANNEL_COLORS[segment.key].fill}
+        />
+      ))}
+      <path
+        d={bars.separators}
+        fill="none"
+        stroke="var(--color-card)"
+        strokeWidth={SEPARATOR_WIDTH}
+        vectorEffect="non-scaling-stroke"
+      />
+    </ChartFrame>
   );
 }
 
