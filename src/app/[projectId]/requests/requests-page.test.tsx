@@ -1,4 +1,4 @@
-import { cleanup, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
@@ -296,6 +296,27 @@ describe('RequestsPage', () => {
 
     renderWithMessages(await renderRequests({ kind: 'reads', screen: '/settings' }));
     expect(screen.getByText('No failed reads from /settings in this period.')).toBeInTheDocument();
+  });
+
+  it('loads the days of an opened route in the period, tab and screen of the page', async () => {
+    const routeDays = vi.fn<IRequestsService['routeDays']>(
+      (projectId, range, kind, screenPath, route) =>
+        new MockRequestsService().routeDays(projectId, range, kind, screenPath, route),
+    );
+    state.routeDays = routeDays;
+    renderWithMessages(await renderRequests({ range: '7d', kind: 'reads', screen: '/products' }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'GET /products, show details' }));
+
+    const days = await screen.findByRole('table', { name: 'Day by day' });
+    expect(routeDays).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-29', to: '2026-10-05' },
+      'reads',
+      '/products',
+      'GET /products',
+    );
+    expect(within(days).queryByRole('columnheader', { name: 'Total' })).not.toBeInTheDocument();
   });
 
   it('sends an expired session back to the sign-in page', async () => {

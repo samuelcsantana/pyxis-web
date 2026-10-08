@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import type { RouteRow } from '@/domain/requests';
 import { BUTTON_ICON, TEXT_LINK } from '@/components/ui/control-classes';
 import { MethodChip, TONE_CLASSES } from './status-styles';
 
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
-const SECTION_TITLE = 'text-sm font-semibold';
+export const SECTION_TITLE = 'text-sm font-semibold';
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold tabular-nums';
 export const ROUTE_HEADING_ID = 'route-details-heading';
 
@@ -13,6 +14,7 @@ export interface RouteDetailsProps {
   readonly screenHref: (path: string) => string;
   readonly visitHref: (sessionId: string) => string;
   readonly failedVisitsHref: string;
+  readonly days: ReactNode;
   readonly onClose: () => void;
 }
 
@@ -21,6 +23,7 @@ export function RouteDetails({
   screenHref,
   visitHref,
   failedVisitsHref,
+  days,
   onClose,
 }: RouteDetailsProps) {
   return (
@@ -66,6 +69,8 @@ export function RouteDetails({
           ))}
         </ul>
       </section>
+
+      {days}
 
       <section aria-labelledby="route-screens-heading" className="flex flex-col gap-2.5">
         <h3 id="route-screens-heading" className={SECTION_TITLE}>

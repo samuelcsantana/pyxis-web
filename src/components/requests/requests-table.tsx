@@ -1,9 +1,17 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
+import {
+  type KeyboardEvent,
+  type MouseEvent,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
 import { NO_VALUE } from '@/domain/metrics';
 import { FAILED_READS, type RequestKind, type RouteRow } from '@/domain/requests';
+import type { RouteDaysText } from '@/domain/route-days';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
 import {
@@ -18,7 +26,9 @@ import { Breakable } from '@/components/ui/breakable';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
 import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
+import { RouteDays } from './route-days';
 import { MethodChip, TONE_CLASSES } from './status-styles';
+import { type LoadRouteDays, useRouteDays } from './use-route-days';
 
 export interface RequestsTableProps {
   readonly kind: RequestKind;
@@ -28,6 +38,8 @@ export interface RequestsTableProps {
   readonly timelinePath: string;
   readonly visitsPath: string;
   readonly emptyMessage: string;
+  readonly loadRouteDays: LoadRouteDays;
+  readonly routeDaysText: RouteDaysText;
 }
 
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums';
@@ -51,6 +63,8 @@ export function RequestsTable({
   timelinePath,
   visitsPath,
   emptyMessage,
+  loadRouteDays,
+  routeDaysText,
 }: RequestsTableProps) {
   const dialogRef = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
   const openers = useRef(new Map<string, HTMLButtonElement>());
@@ -59,12 +73,18 @@ export function RequestsTable({
   const shownKey = useRef(routeInAddress ?? '');
   const selected = rows.find((row) => row.key === selectedKey);
   const reopens = useRef(selected !== undefined);
+  const routeDays = useRouteDays(loadRouteDays);
 
-  useEffect(() => {
+  const reopenFromAddress = useEffectEvent(() => {
     if (reopens.current) {
       reopens.current = false;
       dialogRef.current.showModal();
+      routeDays.show(shownKey.current);
     }
+  });
+
+  useEffect(() => {
+    reopenFromAddress();
   }, []);
 
   const rememberOpener = (key: string) => (button: HTMLButtonElement | null) => {
@@ -80,6 +100,7 @@ export function RequestsTable({
     setSelectedKey(key);
     showRouteInAddress(key);
     dialogRef.current.showModal();
+    routeDays.show(key);
   };
 
   const closed = () => {
@@ -231,6 +252,15 @@ export function RequestsTable({
               route: `${selected.method} ${selected.route}`,
               failed: 'true',
             })}
+            days={
+              <RouteDays
+                state={routeDays.stateOf(selected.key)}
+                text={routeDaysText}
+                onRetry={() => {
+                  routeDays.retry(selected.key);
+                }}
+              />
+            }
             onClose={() => {
               dialogRef.current.close();
             }}
