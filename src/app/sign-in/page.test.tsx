@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import SignInPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
@@ -25,7 +26,7 @@ describe('SignInPage', () => {
   it('explains an ended session and shows the demo code in demo mode', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    render(await SignInPage({ searchParams: Promise.resolve({ expired: '1' }) }));
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({ expired: '1' }) }));
 
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Your session ended');
@@ -35,7 +36,7 @@ describe('SignInPage', () => {
   it('says nothing about a session when the visitor simply arrives', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    render(await SignInPage({ searchParams: Promise.resolve({}) }));
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
@@ -43,7 +44,7 @@ describe('SignInPage', () => {
   it('signs in back to the screen the visitor was sent away from', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
     router.replace.mockClear();
-    render(
+    renderWithMessages(
       await SignInPage({
         searchParams: Promise.resolve({ next: '/p1/requests?show=failing' }),
       }),
@@ -59,7 +60,9 @@ describe('SignInPage', () => {
   it('signs in to the projects when the return path is not a screen of this site', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
     router.replace.mockClear();
-    render(await SignInPage({ searchParams: Promise.resolve({ next: '//evil.example/p1' }) }));
+    renderWithMessages(
+      await SignInPage({ searchParams: Promise.resolve({ next: '//evil.example/p1' }) }),
+    );
 
     await signInWithTheDemoCode();
 

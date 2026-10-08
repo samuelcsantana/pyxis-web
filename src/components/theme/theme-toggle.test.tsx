@@ -1,8 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { CLIENT_NAMESPACES, pickNamespaces } from '@/i18n/messages';
+import { en } from '@/i18n/messages/en';
+import { MessagesProvider } from '@/i18n/messages-provider';
 import { parseTheme, themeCookie } from '@/lib/theme';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { ThemeToggle } from './theme-toggle';
 
 function preferDark(dark: boolean) {
@@ -20,7 +24,7 @@ describe('ThemeToggle', () => {
 
   it('switches a chosen light theme to dark and remembers it in a cookie', async () => {
     document.documentElement.dataset.theme = 'light';
-    render(<ThemeToggle initialTheme="light" />);
+    renderWithMessages(<ThemeToggle initialTheme="light" />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
 
@@ -33,7 +37,7 @@ describe('ThemeToggle', () => {
 
   it('starts from the system preference when nothing was chosen', async () => {
     preferDark(true);
-    render(<ThemeToggle />);
+    renderWithMessages(<ThemeToggle />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Switch theme' }));
 
@@ -42,7 +46,7 @@ describe('ThemeToggle', () => {
 
   it('starts from a light system preference too', async () => {
     preferDark(false);
-    render(<ThemeToggle />);
+    renderWithMessages(<ThemeToggle />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Switch theme' }));
 
@@ -51,7 +55,7 @@ describe('ThemeToggle', () => {
 
   it('follows a theme set on the page', async () => {
     document.documentElement.dataset.theme = 'dark';
-    render(<ThemeToggle />);
+    renderWithMessages(<ThemeToggle />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Switch to light theme' }));
 
@@ -60,7 +64,7 @@ describe('ThemeToggle', () => {
 
   it('keeps every toggle on the page in step, whichever one was pressed', async () => {
     document.documentElement.dataset.theme = 'light';
-    render(
+    renderWithMessages(
       <>
         <ThemeToggle initialTheme="light" surface="nav" />
         <ThemeToggle initialTheme="light" />
@@ -79,7 +83,7 @@ describe('ThemeToggle', () => {
   });
 
   it('wears the colours of the dark navigation bar when it sits there', () => {
-    render(<ThemeToggle surface="nav" />);
+    renderWithMessages(<ThemeToggle surface="nav" />);
 
     expect(screen.getByRole('button', { name: 'Switch theme' })).toHaveClass(
       'border-nav-border',
@@ -88,7 +92,11 @@ describe('ThemeToggle', () => {
   });
 
   it('renders the theme it was given on the server, before the page can be read', () => {
-    const html = renderToString(<ThemeToggle initialTheme="dark" />);
+    const html = renderToString(
+      <MessagesProvider locale="en" messages={pickNamespaces(en, CLIENT_NAMESPACES)}>
+        <ThemeToggle initialTheme="dark" />
+      </MessagesProvider>,
+    );
 
     expect(html).toContain('aria-label="Switch to light theme"');
   });

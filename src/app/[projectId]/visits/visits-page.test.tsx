@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
@@ -8,6 +8,7 @@ import { MockVisitsService } from '@/services/visits/mock-visits-service';
 import type { IVisitsService } from '@/services/visits/visits-service.interface';
 import { loadOlderVisitRows } from './actions';
 import VisitsPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{ admin: unknown; visits: IVisitsService['visits'] }>(() => ({
   admin: undefined,
@@ -81,7 +82,7 @@ describe('VisitsPage', () => {
   it('lists the visits of the period, newest first, each opening its timeline in the period', async () => {
     const visits = mockVisits();
 
-    render(await renderVisits());
+    renderWithMessages(await renderVisits());
 
     expect(visits).toHaveBeenCalledWith(
       'p-store',
@@ -107,7 +108,7 @@ describe('VisitsPage', () => {
   it('passes the filters to the API and keeps them in the period links', async () => {
     const visits = mockVisits();
 
-    render(
+    renderWithMessages(
       await renderVisits({
         range: '30d',
         path: '/calculator',
@@ -156,7 +157,7 @@ describe('VisitsPage', () => {
   it('passes where a visit came from and the request it made, and counts what matches', async () => {
     const visits = mockVisits();
 
-    render(
+    renderWithMessages(
       await renderVisits({
         range: '30d',
         country: 'pt',
@@ -187,7 +188,7 @@ describe('VisitsPage', () => {
   });
 
   it('says so when no visit matches the filters', async () => {
-    render(await renderVisits({ range: '30d', channel: 'email' }));
+    renderWithMessages(await renderVisits({ range: '30d', channel: 'email' }));
 
     expect(screen.getByText('No visit matches these filters in this period.')).toBeInTheDocument();
   });
@@ -195,7 +196,7 @@ describe('VisitsPage', () => {
   it('names the filters it left out and lists the period without them', async () => {
     const visits = mockVisits();
 
-    render(await renderVisits({ range: '7d', path: 'pricing', property: 'plan=pro' }));
+    renderWithMessages(await renderVisits({ range: '7d', path: 'pricing', property: 'plan=pro' }));
 
     expect(visits).toHaveBeenCalledWith(
       'p-store',
@@ -211,7 +212,7 @@ describe('VisitsPage', () => {
     state.visits = (): Promise<VisitsReport> =>
       Promise.resolve({ visits: [], nextCursor: null, total: null });
 
-    render(await renderVisits());
+    renderWithMessages(await renderVisits());
 
     expect(
       screen.getByText(
@@ -227,7 +228,7 @@ describe('VisitsPage', () => {
     vi.useRealTimers();
     vi.useFakeTimers({ toFake: ['Date'], shouldAdvanceTime: true });
     vi.setSystemTime(NOW);
-    render(await renderVisits({ range: '30d', identity: 'identified' }));
+    renderWithMessages(await renderVisits({ range: '30d', identity: 'identified' }));
 
     await userEvent.click(screen.getByRole('button', { name: 'Load older visits' }));
 

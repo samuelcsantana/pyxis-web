@@ -26,6 +26,11 @@ export const en = {
     signingOut: 'Signing out…',
     signOutFailed: 'Could not sign out. Try again.',
   },
+  theme: {
+    switch: 'Switch theme',
+    toLight: 'Switch to light theme',
+    toDark: 'Switch to dark theme',
+  },
   shell: {
     skipToContent: 'Skip to content',
     privacy: 'No cookies, no personal data',
