@@ -10,7 +10,7 @@ function count(text: string | null): number {
 }
 
 function dailyChart(page: Page): Locator {
-  return page.getByRole('region', { name: 'Events per day' });
+  return page.getByRole('region', { name: 'Activity per day' });
 }
 
 function chartFigure(page: Page): Locator {

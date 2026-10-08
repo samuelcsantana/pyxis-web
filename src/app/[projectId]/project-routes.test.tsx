@@ -145,7 +145,9 @@ describe('OverviewPage', () => {
     expect(screen.getByRole('region', { name: 'Conversions' })).toHaveTextContent(
       /% of [\d,]+ visits sent signup_completed · [\d,]+ conversion events/,
     );
-    expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Activity per day' })).toHaveTextContent(
+      'Page views and named events, last 7 days',
+    );
     expect(screen.getByRole('region', { name: 'Top pages' })).toHaveTextContent('/calculator');
     expect(screen.getByRole('region', { name: 'Top events' })).toHaveTextContent(
       'Calculator result shown',
@@ -186,7 +188,7 @@ describe('OverviewPage', () => {
     expect(screen.getByRole('region', { name: 'Activity of the day' })).toHaveTextContent(
       'Page views and named events, today',
     );
-    expect(screen.queryByRole('region', { name: 'Events per day' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Activity per day' })).not.toBeInTheDocument();
   });
 
   it('links the top pages and events to their visits in the same period', async () => {
