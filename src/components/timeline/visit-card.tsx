@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import type { ItemKind, TimelineItem, VisitView } from '@/domain/timeline';
 import { TONE_CLASSES } from '@/components/requests/status-styles';
 import { Breakable } from '@/components/ui/breakable';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
 
 const ICONS: Readonly<Record<ItemKind, string>> = {
   page: 'M6 3h9l3 3v15H6z M14 3v4h4',
@@ -25,12 +26,18 @@ function iconOf(item: TimelineItem): { readonly path: string; readonly classes: 
   return { path: ICONS[item.kind], classes: KIND_CLASSES[item.kind] };
 }
 
+export interface VisitPersonLink {
+  readonly userId: string;
+  readonly href: string;
+}
+
 export interface VisitCardProps {
   readonly visit: VisitView;
   readonly focusable?: boolean;
+  readonly person?: VisitPersonLink | null;
 }
 
-export function VisitCard({ visit, focusable = false }: VisitCardProps) {
+export function VisitCard({ visit, focusable = false, person = null }: VisitCardProps) {
   const headingId = `visit-${visit.key}`;
   return (
     <section
@@ -46,6 +53,11 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
           {visit.heading}
         </h3>
         <p className="text-xs text-muted">{visit.meta}</p>
+        {person === null ? null : (
+          <Link href={person.href} className={`text-xs ${TEXT_LINK}`}>
+            All visits of {person.userId}
+          </Link>
+        )}
       </div>
       {visit.items.length === 0 ? (
         <p className="py-3.5 text-caption text-muted">Nothing of this kind in this visit.</p>

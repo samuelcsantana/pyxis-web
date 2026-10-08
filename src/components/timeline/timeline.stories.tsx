@@ -69,3 +69,17 @@ export const OnAPhone: StoryEntry = {
 };
 
 export const DarkTheme: StoryEntry = { globals: { theme: 'dark' } };
+
+export const OneVisitLinkedToItsPerson: StoryEntry = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {visitViews(REPORT.visits.slice(0, 1), 'America/Sao_Paulo', 'all', english).map((visit) => (
+        <VisitCard
+          key={visit.key}
+          visit={visit}
+          person={{ userId: DEMO_USER_ID, href: `/demo/timeline?user=${DEMO_USER_ID}` }}
+        />
+      ))}
+    </div>
+  ),
+};

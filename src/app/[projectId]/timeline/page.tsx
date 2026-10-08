@@ -85,7 +85,18 @@ function TimelineView({
         }))}
       />
       {visitViews(report.visits, timeZone, filter, i18n).map((visit) => (
-        <VisitCard key={visit.key} visit={visit} />
+        <VisitCard
+          key={visit.key}
+          visit={visit}
+          person={
+            lookup.kind === 'visit' && visit.personId !== null
+              ? {
+                  userId: visit.personId,
+                  href: linkWith(basePath, { ...keptPeriod, user: visit.personId }),
+                }
+              : null
+          }
+        />
       ))}
       {report.nextBefore === null ? null : (
         <OlderVisits
