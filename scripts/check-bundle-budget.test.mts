@@ -26,7 +26,7 @@ const STATS = [
 const CHUNK_KIB: Readonly<Record<string, number>> = {
   framework: 130,
   devices: 20,
-  charts: 120,
+  charts: 28,
 };
 
 function fakeGzipBytes(chunkPath: string): number {
@@ -81,7 +81,7 @@ describe('routeSizes and overBudget', () => {
       {
         route: '/[projectId]/overview',
         routeClass: 'chart',
-        gzipBytes: 250 * KIB,
+        gzipBytes: 158 * KIB,
         budgetBytes: BUDGET_KIB.chart * KIB,
       },
     ]);
@@ -120,11 +120,11 @@ describe('formatReport', () => {
     assert.equal(report[0], 'Route | class | first-load JS, KiB gzip | budget, KiB');
     assert.equal(
       report[1],
-      `/[projectId]/overview | chart | 250.0 | ${BUDGET_KIB.chart.toFixed(1)}`,
+      `/[projectId]/devices | screen | 230.0 | ${BUDGET_KIB.screen.toFixed(1)} | OVER BUDGET`,
     );
     assert.equal(
       report[2],
-      `/[projectId]/devices | screen | 230.0 | ${BUDGET_KIB.screen.toFixed(1)} | OVER BUDGET`,
+      `/[projectId]/overview | chart | 158.0 | ${BUDGET_KIB.chart.toFixed(1)}`,
     );
     assert.equal(report[3], `/sign-in | entry | 130.0 | ${BUDGET_KIB.entry.toFixed(1)}`);
   });
