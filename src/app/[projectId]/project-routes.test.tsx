@@ -209,6 +209,23 @@ describe('OverviewPage', () => {
     );
   });
 
+  it('offers its tables as CSV files of the same period', async () => {
+    render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+
+    expect(screen.getByRole('link', { name: 'Activity per day as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/overview/export?from=2026-09-01&to=2026-09-30&table=daily',
+    );
+    expect(screen.getByRole('link', { name: 'Top pages as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/overview/export?from=2026-09-01&to=2026-09-30&table=pages',
+    );
+    expect(screen.getByRole('link', { name: 'Top events as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/overview/export?from=2026-09-01&to=2026-09-30&table=events',
+    );
+  });
+
   it('shows how to install the SDK when nothing arrived in the period', async () => {
     const empty = await new MockOverviewService().overview('p-store', {
       from: '2026-10-05',
