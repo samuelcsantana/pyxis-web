@@ -41,7 +41,7 @@ test('writes the chosen period into the URL', async ({ page }) => {
   await expect(page).toHaveURL(/range=7d$/);
   await expect(periods.getByRole('link', { name: '7 days' })).toHaveAttribute(
     'aria-current',
-    'true',
+    'page',
   );
 });
 
@@ -83,7 +83,7 @@ for (const { from, to, reason } of REJECTED_RANGES) {
     await expect(notice).toHaveAttribute('role', 'status');
     await expect(
       page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '30 days' }),
-    ).toHaveAttribute('aria-current', 'true');
+    ).toHaveAttribute('aria-current', 'page');
     for (const [label, value] of [
       ['From', from],
       ['To', to],

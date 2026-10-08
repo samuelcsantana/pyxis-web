@@ -504,7 +504,7 @@ describe('PeriodSelector', () => {
       'href',
       '/p1/overview?range=today',
     );
-    expect(presets.getByRole('link', { name: '7 days' })).toHaveAttribute('aria-current', 'true');
+    expect(presets.getByRole('link', { name: '7 days' })).toHaveAttribute('aria-current', 'page');
     expect(presets.getByRole('link', { name: '30 days' })).not.toHaveAttribute('aria-current');
   });
 
