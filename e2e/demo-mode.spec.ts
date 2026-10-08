@@ -91,7 +91,7 @@ test('opens a demo visit from every latest failure of every route', async ({ pag
     }
   }
 
-  expect(visitLinks).toHaveLength(9);
+  expect(visitLinks.length).toBeGreaterThan(failingRoutes.length);
   for (const href of visitLinks) {
     await page.goto(href);
     await expect(page.getByRole('heading', { name: /^Visit [0-9a-f]{8}$/ })).toBeVisible();

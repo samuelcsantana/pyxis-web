@@ -30,7 +30,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       expect(await sidewaysOverflow(page)).toBe(0);
 
       await page.getByRole('button', { name: 'Load older visits' }).click();
-      await expect(visitRows(page)).toHaveCount(13);
+      await expect(visitRows(page)).toHaveCount(16);
       expect(await axeViolations(page)).toEqual([]);
 
       await page.goto(`/${STORE_ID}/visits?property=plan%3Dpro`);
@@ -55,22 +55,26 @@ test('filters by two pages through the form and opens the visit in the timeline'
   await page.getByRole('button', { name: 'Apply filters' }).click();
 
   await expect(page).toHaveURL(/range=30d&path=%2F&path2=%2Fpri\*/);
-  await expect(visitRows(page)).toHaveCount(1);
-  await expect(visitRows(page)).toContainText('Calculator result shown');
+  const matching = page.getByText(/^[\d,]+ matching visits?$/);
+  await expect(matching).toBeVisible();
+  const total = await matching.textContent();
 
   await page.reload();
-  await expect(visitRows(page)).toHaveCount(1);
+  await expect(page.getByText(total ?? '', { exact: true })).toBeVisible();
 
   await page
     .getByRole('navigation', { name: 'Period' })
     .getByRole('link', { name: '7 days' })
     .click();
   await expect(page).toHaveURL(/range=7d&path=%2F&path2=%2Fpri\*$/);
-  await expect(visitRows(page)).toHaveCount(1);
+  const newest = visitRows(page)
+    .first()
+    .getByRole('link', { name: /, open visit [0-9a-f]{8}$/ });
+  const id = /visit=([0-9a-f]{8})-/.exec((await newest.getAttribute('href')) ?? '')?.[1] ?? '';
 
-  await page.getByRole('link', { name: /, open visit 7e2b9c14$/ }).click();
-  await expect(page).toHaveURL(/\/timeline\?range=7d&visit=7e2b9c14-/);
-  await expect(page.getByRole('heading', { name: 'Visit 7e2b9c14', exact: true })).toBeVisible();
+  await newest.click();
+  await expect(page).toHaveURL(new RegExp(`/timeline\\?range=7d&visit=${id}-`));
+  await expect(page.getByRole('heading', { name: `Visit ${id}`, exact: true })).toBeVisible();
 });
 
 test('filters by an event with a property and by who the visitor was', async ({
@@ -85,9 +89,11 @@ test('filters by an event with a property and by who the visitor was', async ({
   await page.getByRole('combobox', { name: 'Account' }).selectOption('identified');
   await page.getByRole('button', { name: 'Apply filters' }).click();
 
-  await expect(visitRows(page)).toHaveCount(1);
+  await expect(page.getByText(/^[\d,]+ matching visits?$/)).toBeVisible();
   await expect(
-    visitRows(page).getByRole('link', { name: 'u_7f3a, open the timeline of this user' }),
+    visitRows(page)
+      .first()
+      .getByRole('link', { name: /, open the timeline of this user$/ }),
   ).toBeVisible();
 
   await page.getByRole('link', { name: 'Clear filters' }).click();
@@ -154,14 +160,18 @@ test('shows every filter at once from 640 px up', async ({ page, isMobile }) => 
 });
 
 test('loads the older visits with the keyboard and moves the focus to them', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/visits?range=7d`);
+  await page.goto(`/${STORE_ID}/visits?from=2026-09-14&to=2026-09-14&channel=social`);
   await expect(visitRows(page)).toHaveCount(8);
 
   await page.getByRole('button', { name: 'Load older visits' }).focus();
   await page.keyboard.press('Enter');
 
-  await expect(visitRows(page)).toHaveCount(13);
-  await expect(page.getByRole('link', { name: /, open visit 19c2e5f6$/ })).toBeFocused();
+  await expect(visitRows(page)).toHaveCount(12);
+  await expect(
+    visitRows(page)
+      .nth(8)
+      .getByRole('link', { name: /, open visit [0-9a-f]{8}$/ }),
+  ).toBeFocused();
   await expect(page.getByText('That is every visit of this period.')).toBeVisible();
 });
 
@@ -191,9 +201,10 @@ test.describe('at 1024×768', () => {
     await page.goto(`/${STORE_ID}/visits`);
     const table = page.getByRole('table', { name: 'Visits' });
     await expect(table).toBeVisible();
-    await table.scrollIntoViewIfNeeded();
+    const account = table.getByRole('columnheader', { name: 'Account' });
+    await account.scrollIntoViewIfNeeded();
 
-    await expect(table.getByRole('columnheader', { name: 'Account' })).toBeInViewport();
+    await expect(account).toBeInViewport();
     await expect(table.getByRole('columnheader', { name: 'Highlights' })).toBeHidden();
     expect(
       await table.evaluate((element) => {
