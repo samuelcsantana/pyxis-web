@@ -334,7 +334,10 @@ returns.
 Tests run in English: the Vitest setup file replaces `currentLocale()`, the only code that reads
 the request's language, so a test never needs request headers to render a page. Domain functions
 and server components that write text take the request's `I18n` value (translator and formats)
-as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`.
+as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`. Client
+Components read their text with `useT()` from the messages provider, so their tests, and the tests
+of any page that contains one, render through `renderWithMessages`, which wraps the tree in the
+provider with the English messages the browser receives.
 
 ### Performance budget
 
