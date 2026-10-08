@@ -3,6 +3,7 @@ import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { VisitFiltersForm } from '@/components/visits/visit-filters-form';
 import { VisitsTable } from '@/components/visits/visits-table';
+import { VISIT_DEFINITION } from '@/domain/glossary';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import {
   hasVisitFilters,
@@ -23,6 +24,8 @@ export interface VisitsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
   readonly searchParams: Promise<PeriodSearch & VisitsSearch>;
 }
+
+const FOOTNOTE = `${VISIT_DEFINITION} Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.`;
 
 function emptyMessage(filtered: boolean): string {
   return filtered
@@ -75,12 +78,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
             Object.fromEntries(new URLSearchParams(listQuery)),
           )}
         />
-        <p className="text-xs leading-[18px] text-muted">
-          A visit is one browser tab, from its first event to its last; two tabs are never linked.
-          Highlights are its first five named events, in order. A failed request is a read or a
-          write sent with trackRequest() that answered 400 or above, or never answered; Requests
-          lists the writes and the failed reads on separate tabs.
-        </p>
+        <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
       </main>
     </>
   );

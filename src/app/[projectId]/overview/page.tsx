@@ -9,6 +9,14 @@ import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
+import {
+  CHANGE_TONE_RULE,
+  CONVERSION_DEFINITION,
+  FAILURE_DEFINITION,
+  IDENTIFIED_USER_DEFINITION,
+  VISIT_DEFINITION,
+  WRITE_DEFINITION,
+} from '@/domain/glossary';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
 import {
   daysBetween,
@@ -26,6 +34,15 @@ import { chosenTheme } from '@/lib/theme-cookie';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 
 export const generateMetadata = screenMetadata('Overview');
+
+const FOOTNOTE = [
+  VISIT_DEFINITION,
+  IDENTIFIED_USER_DEFINITION,
+  CONVERSION_DEFINITION,
+  WRITE_DEFINITION,
+  FAILURE_DEFINITION,
+  CHANGE_TONE_RULE,
+].join(' ');
 
 export interface OverviewPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
@@ -68,6 +85,7 @@ function OverviewReportView({
           visitsHref={(name) => visitsHref({ event: name })}
         />
       </div>
+      <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
     </>
   );
 }

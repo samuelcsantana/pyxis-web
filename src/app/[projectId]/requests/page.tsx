@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/states/empty-state';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
 import { ApiRequestError } from '@/domain/errors';
+import { FAILURE_DEFINITION, WRITE_DEFINITION } from '@/domain/glossary';
 import {
   type Period,
   type PeriodSearch,
@@ -56,7 +57,7 @@ const SOURCE_NOTE = "Only the route template is kept, never the URL's values or 
 const COUNTED_TOGETHER = 'Visits and the Timeline count failed reads and writes together.';
 
 const NOTES: Readonly<Record<RequestKind, string>> = {
-  writes: `A write is a POST, PUT, PATCH or DELETE sent with trackRequest(). A failure is a status of 400 or above, or no response at all. Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
+  writes: `${WRITE_DEFINITION} ${FAILURE_DEFINITION} Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
   reads: `A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
 };
 
