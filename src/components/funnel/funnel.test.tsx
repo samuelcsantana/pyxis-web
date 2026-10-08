@@ -1,6 +1,7 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { countedSteps, type FunnelStep, funnelRows } from '@/domain/funnel';
 import { FunnelEditor } from './funnel-editor';
 import { FunnelModes } from './funnel-modes';
@@ -13,7 +14,7 @@ const SIGN_UP: FunnelStep = { type: 'page', path: '/sign-up' };
 const STEPS: readonly FunnelStep[] = [CALCULATOR, RESULT, SIGN_UP];
 
 function editor(steps: readonly FunnelStep[] = STEPS, startOpen = true) {
-  return render(
+  return renderWithMessages(
     <FunnelEditor
       initialSteps={steps}
       action="/p1/funnel"
@@ -30,7 +31,7 @@ function hiddenSteps(container: HTMLElement): unknown {
 
 describe('FunnelSteps', () => {
   it('lists the steps in order with count, continuation and drop-off', () => {
-    render(
+    renderWithMessages(
       <FunnelSteps
         mode="visit"
         rows={funnelRows(
@@ -48,7 +49,7 @@ describe('FunnelSteps', () => {
   });
 
   it('explains how people are counted per person', () => {
-    render(<FunnelSteps mode="user" rows={[]} />);
+    renderWithMessages(<FunnelSteps mode="user" rows={[]} />);
 
     expect(screen.getByText(/Per person/)).toBeInTheDocument();
   });
@@ -56,7 +57,7 @@ describe('FunnelSteps', () => {
 
 describe('FunnelModes', () => {
   it('links both modes and marks the current one', () => {
-    render(
+    renderWithMessages(
       <FunnelModes
         current="user"
         links={[

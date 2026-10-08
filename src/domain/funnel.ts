@@ -1,4 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
+import type { ClientSourceMessages } from '@/i18n/messages';
+import type { Translator } from '@/i18n/translate';
 import { eventLabel, formatCount, formatPercent, rate, barWidth } from './metrics';
 import type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire } from './funnel.schema';
 
@@ -39,29 +41,42 @@ export function stepTarget(step: FunnelStep): string {
   return step.type === 'page' ? step.path : step.name;
 }
 
-export function stepLabel(step: FunnelStep): string {
-  return step.type === 'page' ? `Opened ${step.path}` : eventLabel(step.name);
+export function stepLabel(step: FunnelStep, i18n: I18n): string {
+  return step.type === 'page'
+    ? i18n.t('funnel.openedPage', { path: step.path })
+    : eventLabel(step.name);
 }
 
-export function stepProblem(step: FunnelStep): string | null {
+type StepProblem = 'path-start' | 'path-length' | 'event-name';
+
+function problemOf(step: FunnelStep): StepProblem | null {
   if (step.type === 'page') {
     if (!step.path.startsWith('/')) {
-      return 'A page path starts with "/".';
+      return 'path-start';
     }
-    return step.path.length > MAX_PATH_LENGTH
-      ? `A page path has at most ${String(MAX_PATH_LENGTH)} characters.`
-      : null;
+    return step.path.length > MAX_PATH_LENGTH ? 'path-length' : null;
   }
-  return EVENT_NAME_PATTERN.test(step.name)
-    ? null
-    : 'An event name starts with a lowercase letter and holds only lowercase letters, digits and _, 64 at most.';
+  return EVENT_NAME_PATTERN.test(step.name) ? null : 'event-name';
+}
+
+export function stepProblem(step: FunnelStep, t: Translator<ClientSourceMessages>): string | null {
+  switch (problemOf(step)) {
+    case 'path-start':
+      return t('funnelEditor.problems.pathStart');
+    case 'path-length':
+      return t('funnelEditor.problems.pathLength', { max: String(MAX_PATH_LENGTH) });
+    case 'event-name':
+      return t('funnelEditor.problems.eventName');
+    case null:
+      return null;
+  }
 }
 
 export function isCountableFunnel(steps: readonly FunnelStep[]): boolean {
   return (
     steps.length >= MIN_FUNNEL_STEPS &&
     steps.length <= MAX_FUNNEL_STEPS &&
-    steps.every((step) => stepProblem(step) === null)
+    steps.every((step) => problemOf(step) === null)
   );
 }
 
@@ -105,20 +120,20 @@ export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonl
     const base = {
       key: `${String(index)}-${step.type}-${stepTarget(step)}`,
       position: index + 1,
-      label: stepLabel(step),
+      label: stepLabel(step, i18n),
       target: stepTarget(step),
       count: formatCount(count, i18n),
       barWidth: barWidth(count, first),
     };
     if (previous === undefined) {
-      return { ...base, continued: 'Start', tone: 'start', dropped: '' };
+      return { ...base, continued: i18n.t('funnel.start'), tone: 'start', dropped: '' };
     }
     const continued = rate(count, previous.count);
     return {
       ...base,
-      continued: `${formatPercent(continued, i18n)} continued`,
+      continued: i18n.t('funnel.continued', { share: formatPercent(continued, i18n) }),
       tone: continuationTone(continued),
-      dropped: `${formatCount(previous.count - count, i18n)} dropped`,
+      dropped: i18n.t('funnel.dropped', { count: formatCount(previous.count - count, i18n) }),
     };
   });
 }
@@ -142,7 +157,7 @@ export function overallConversion(
   const subjects = i18n.t(SUBJECTS[mode], { count: first });
   return {
     value: formatPercent(rate(last, first), i18n),
-    note: `${formatCount(last, i18n)} of ${subjects} reached the last step`,
+    note: i18n.t('funnel.reachedLastStep', { reached: formatCount(last, i18n), subjects }),
   };
 }
 
@@ -164,10 +179,17 @@ export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): Fun
     (left, right) => (left.continued ?? 1) - (right.continued ?? 1),
   );
   if (worst === undefined) {
-    return { value: '—', note: 'No step to compare' };
+    return { value: '—', note: i18n.t('funnel.noStepToCompare') };
   }
   return {
-    value: `Step ${String(worst.position - 1)} → ${String(worst.position)}`,
-    note: `${stepLabel(worst.from)} → ${stepLabel(worst.to)} · ${formatPercent(worst.continued, i18n)} continued`,
+    value: i18n.t('funnel.transition', {
+      from: String(worst.position - 1),
+      to: String(worst.position),
+    }),
+    note: i18n.t('funnel.transitionNote', {
+      from: stepLabel(worst.from, i18n),
+      to: stepLabel(worst.to, i18n),
+      share: formatPercent(worst.continued, i18n),
+    }),
   };
 }

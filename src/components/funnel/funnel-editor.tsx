@@ -22,6 +22,7 @@ import {
   FIELD,
 } from '@/components/ui/control-classes';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
+import { useT } from '@/i18n/messages-provider';
 
 interface DraftStep {
   readonly id: number;
@@ -66,6 +67,7 @@ function moved(drafts: readonly DraftStep[], index: number, offset: number): Dra
 }
 
 export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEditorProps) {
+  const t = useT();
   const [open, setOpen] = useState(startOpen);
   const [drafts, setDrafts] = useState<readonly DraftStep[]>(() => initialSteps.map(toDraft));
   const nextId = useRef(initialSteps.length);
@@ -141,7 +143,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
           <ol className="flex flex-col gap-2.5">
             {drafts.map((draft, index) => {
               const position = String(index + 1);
-              const problem = draft.value === '' ? null : stepProblem(toStep(draft));
+              const problem = draft.value === '' ? null : stepProblem(toStep(draft), t);
               const problemId = `step-problem-${String(draft.id)}`;
               return (
                 <li

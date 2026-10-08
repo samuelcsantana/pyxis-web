@@ -74,16 +74,19 @@ describe('visitsResponseSchema', () => {
 
 describe('visitFiltersOf', () => {
   it('reads every filter from the URL', () => {
-    const reading = visitFiltersOf({
-      path: '/calculator-shipping',
-      path2: ' /calculator-* ',
-      path3: '/sign-up',
-      event: 'calculator_result_shown',
-      property: 'calculator=margin',
-      channel: 'paid',
-      device: 'mobile',
-      identity: 'anonymous',
-    });
+    const reading = visitFiltersOf(
+      {
+        path: '/calculator-shipping',
+        path2: ' /calculator-* ',
+        path3: '/sign-up',
+        event: 'calculator_result_shown',
+        property: 'calculator=margin',
+        channel: 'paid',
+        device: 'mobile',
+        identity: 'anonymous',
+      },
+      english,
+    );
 
     expect(reading).toEqual({
       filters: {
@@ -110,24 +113,27 @@ describe('visitFiltersOf', () => {
       identity: '',
     };
 
-    expect(visitFiltersOf(emptyForm)).toEqual({ filters: NO_VISIT_FILTERS, problems: [] });
-    expect(visitFiltersOf({})).toEqual({ filters: NO_VISIT_FILTERS, problems: [] });
+    expect(visitFiltersOf(emptyForm, english)).toEqual({ filters: NO_VISIT_FILTERS, problems: [] });
+    expect(visitFiltersOf({}, english)).toEqual({ filters: NO_VISIT_FILTERS, problems: [] });
   });
 
   it('keeps the pages typed in any of the three fields, in order', () => {
-    expect(visitFiltersOf({ path3: '/pricing', path: '/' }).filters.paths).toEqual([
+    expect(visitFiltersOf({ path3: '/pricing', path: '/' }, english).filters.paths).toEqual([
       '/',
       '/pricing',
     ]);
   });
 
   it('leaves out a page or an event that the API would refuse, and says why once', () => {
-    const reading = visitFiltersOf({
-      path: 'pricing',
-      path2: 'checkout',
-      path3: `/${'a'.repeat(256)}`,
-      event: 'Signup Completed',
-    });
+    const reading = visitFiltersOf(
+      {
+        path: 'pricing',
+        path2: 'checkout',
+        path3: `/${'a'.repeat(256)}`,
+        event: 'Signup Completed',
+      },
+      english,
+    );
 
     expect(reading.filters).toEqual(NO_VISIT_FILTERS);
     expect(reading.problems).toEqual([
@@ -138,8 +144,8 @@ describe('visitFiltersOf', () => {
   });
 
   it('leaves out a property without a valid event', () => {
-    const withoutEvent = visitFiltersOf({ property: 'calculator=shipping' });
-    const withBadEvent = visitFiltersOf({ event: 'Bad', property: 'calculator=shipping' });
+    const withoutEvent = visitFiltersOf({ property: 'calculator=shipping' }, english);
+    const withBadEvent = visitFiltersOf({ event: 'Bad', property: 'calculator=shipping' }, english);
 
     expect(withoutEvent.filters.property).toBeNull();
     expect(withoutEvent.problems).toEqual(['A property filter needs an event.']);
@@ -154,7 +160,7 @@ describe('visitFiltersOf', () => {
     ['with an empty value', 'calculator='],
     ['with a value over 100 characters', `calculator=${'x'.repeat(101)}`],
   ])('leaves out a property %s', (_case, property) => {
-    const reading = visitFiltersOf({ event: 'calculator_result_shown', property });
+    const reading = visitFiltersOf({ event: 'calculator_result_shown', property }, english);
 
     expect(reading.filters).toEqual({ ...NO_VISIT_FILTERS, event: 'calculator_result_shown' });
     expect(reading.problems).toEqual([
@@ -163,19 +169,22 @@ describe('visitFiltersOf', () => {
   });
 
   it('keeps an equals sign inside the property value', () => {
-    expect(visitFiltersOf({ event: 'cta_clicked', property: 'query=a=b' }).filters.property).toBe(
-      'query=a=b',
-    );
+    expect(
+      visitFiltersOf({ event: 'cta_clicked', property: 'query=a=b' }, english).filters.property,
+    ).toBe('query=a=b');
   });
 
   it('ignores an unknown choice or a repeated parameter', () => {
     expect(
-      visitFiltersOf({
-        path: ['/a', '/b'],
-        channel: 'billboard',
-        device: 'watch',
-        identity: 'someone',
-      }),
+      visitFiltersOf(
+        {
+          path: ['/a', '/b'],
+          channel: 'billboard',
+          device: 'watch',
+          identity: 'someone',
+        },
+        english,
+      ),
     ).toEqual({ filters: NO_VISIT_FILTERS, problems: [] });
   });
 });

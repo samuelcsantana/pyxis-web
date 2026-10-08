@@ -114,12 +114,12 @@ describe('lookupOf', () => {
 
 describe('rejectedLookupOf', () => {
   it('keeps an id it did not use, with an example of what it expected', () => {
-    expect(rejectedLookupOf({ visit: 'not-a-visit-id' })).toEqual({
+    expect(rejectedLookupOf({ visit: 'not-a-visit-id' }, english)).toEqual({
       kind: 'visit',
       value: 'not-a-visit-id',
       hint: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
     });
-    expect(rejectedLookupOf({ user: ' ana@example.com ' })).toEqual({
+    expect(rejectedLookupOf({ user: ' ana@example.com ' }, english)).toEqual({
       kind: 'user',
       value: 'ana@example.com',
       hint: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
@@ -127,9 +127,9 @@ describe('rejectedLookupOf', () => {
   });
 
   it('rejects nothing when an id was used or none was given', () => {
-    expect(rejectedLookupOf({ visit: 'v_3c07', user: 'u_7f3a' })).toBeNull();
-    expect(rejectedLookupOf({ user: '  ' })).toBeNull();
-    expect(rejectedLookupOf({})).toBeNull();
+    expect(rejectedLookupOf({ visit: 'v_3c07', user: 'u_7f3a' }, english)).toBeNull();
+    expect(rejectedLookupOf({ user: '  ' }, english)).toBeNull();
+    expect(rejectedLookupOf({}, english)).toBeNull();
   });
 });
 
@@ -239,16 +239,20 @@ describe('totals and titles', () => {
   });
 
   it('name the person or the visit looked up', () => {
-    expect(lookupTitle({ kind: 'user', id: 'u_7f3a' })).toBe('User u_7f3a');
-    expect(lookupTitle({ kind: 'visit', id: VISIT_ID })).toBe('Visit 3c07a1b2');
+    expect(lookupTitle({ kind: 'user', id: 'u_7f3a' }, english)).toBe('User u_7f3a');
+    expect(lookupTitle({ kind: 'visit', id: VISIT_ID }, english)).toBe('Visit 3c07a1b2');
     expect(shortId(VISIT_ID)).toBe('3c07a1b2');
   });
 
   it('give a visit its length in minutes and seconds, never negative', () => {
-    expect(formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T10:00:09.000Z')).toBe('9 s');
-    expect(formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T09:59:00.000Z')).toBe('0 s');
-    expect(formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T12:05:30.000Z')).toBe(
-      '2 h 5 min',
-    );
+    expect(
+      formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T10:00:09.000Z', english),
+    ).toBe('9 s');
+    expect(
+      formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T09:59:00.000Z', english),
+    ).toBe('0 s');
+    expect(
+      formatVisitDuration('2026-10-05T10:00:00.000Z', '2026-10-05T12:05:30.000Z', english),
+    ).toBe('2 h 5 min');
   });
 });

@@ -175,6 +175,50 @@ export const en = {
   properties: {
     otherValues: 'Other values',
   },
+  funnel: {
+    openedPage: 'Opened {path}',
+    start: 'Start',
+    continued: '{share} continued',
+    dropped: '{count} dropped',
+    reachedLastStep: '{reached} of {subjects} reached the last step',
+    noStepToCompare: 'No step to compare',
+    transition: 'Step {from} → {to}',
+    transitionNote: '{from} → {to} · {share} continued',
+  },
+  visits: {
+    problems: {
+      propertyNeedsEvent: 'A property filter needs an event.',
+      propertyFormat:
+        'A property filter is key=value: a key of lowercase letters, digits and _, and a value of 1 to {max} characters.',
+    },
+    accountLink: '{user}, open the timeline of this user',
+    shortAccountLink: '{shown}, open the timeline of user {user}',
+    noFailedRequest: 'No failed request',
+  },
+  timeline: {
+    lookupHints: {
+      visit: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+      user: 'A user id has 1 to 64 letters, digits, hyphens or underscores.',
+    },
+    openedPage: 'Opened {path}',
+    linkedToUser: 'Visit linked to the user',
+    visitHeading: 'Visit {visit} · {started}',
+    userTitle: 'User {user}',
+    visitTitle: 'Visit {visit}',
+    duration: {
+      hours: '{hours} h {minutes} min',
+      minutes: '{minutes} min {seconds} s',
+      seconds: '{seconds} s',
+    },
+  },
+  funnelEditor: {
+    problems: {
+      pathStart: 'A page path starts with "/".',
+      pathLength: 'A page path has at most {max} characters.',
+      eventName:
+        'An event name starts with a lowercase letter and holds only lowercase letters, digits and _, 64 at most.',
+    },
+  },
   exports: {
     overview: {
       daily: 'Activity per day',

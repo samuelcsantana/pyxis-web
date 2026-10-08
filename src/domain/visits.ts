@@ -70,9 +70,9 @@ export function deviceFilterOf(deviceType: string): VisitDeviceType | null {
   return oneOf(VISIT_DEVICE_TYPES, deviceType);
 }
 
-function propertyProblem(property: string, event: string | null): string | null {
+function propertyProblem(property: string, event: string | null, i18n: I18n): string | null {
   if (event === null) {
-    return 'A property filter needs an event.';
+    return i18n.t('visits.problems.propertyNeedsEvent');
   }
   const separator = property.indexOf(PROPERTY_SEPARATOR);
   const wellFormed =
@@ -80,19 +80,20 @@ function propertyProblem(property: string, event: string | null): string | null 
     isFilterableProperty(property.slice(0, separator), property.slice(separator + 1));
   return wellFormed
     ? null
-    : `A property filter is key=value: a key of lowercase letters, digits and _, and a value of 1 to ${String(MAX_PROPERTY_VALUE_LENGTH)} characters.`;
+    : i18n.t('visits.problems.propertyFormat', { max: String(MAX_PROPERTY_VALUE_LENGTH) });
 }
 
-export function visitFiltersOf(search: VisitsSearch): VisitFilterReading {
+export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterReading {
   const typedPaths = PAGE_FILTER_PARAMETERS.map((name) => single(search[name])).filter(
     (path) => path !== '',
   );
-  const pathProblems = typedPaths.map((path) => stepProblem({ type: 'page', path }));
+  const pathProblems = typedPaths.map((path) => stepProblem({ type: 'page', path }, i18n.t));
   const typedEvent = single(search.event);
-  const eventProblem = typedEvent === '' ? null : stepProblem({ type: 'event', name: typedEvent });
+  const eventProblem =
+    typedEvent === '' ? null : stepProblem({ type: 'event', name: typedEvent }, i18n.t);
   const event = typedEvent === '' || eventProblem !== null ? null : typedEvent;
   const typedProperty = single(search.property);
-  const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event);
+  const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event, i18n);
   return {
     filters: {
       paths: typedPaths.filter((_path, index) => pathProblems[index] === null),
@@ -164,20 +165,28 @@ export interface VisitRow {
   readonly account: VisitAccount | null;
 }
 
-function visitAccount(userId: string | null): VisitAccount | null {
+function visitAccount(userId: string | null, i18n: I18n): VisitAccount | null {
   if (userId === null) {
     return null;
   }
   const short = shortId(userId);
   if (short === userId) {
-    return { userId, shown: userId, linkName: `${userId}, open the timeline of this user` };
+    return {
+      userId,
+      shown: userId,
+      linkName: i18n.t('visits.accountLink', { user: userId }),
+    };
   }
   const shown = `${short}…`;
-  return { userId, shown, linkName: `${shown}, open the timeline of user ${userId}` };
+  return {
+    userId,
+    shown,
+    linkName: i18n.t('visits.shortAccountLink', { shown, user: userId }),
+  };
 }
 
 function failedRequestsLabel(count: number, i18n: I18n): string {
-  return count === 0 ? 'No failed request' : i18n.t('counts.failedRequest', { count });
+  return count === 0 ? i18n.t('visits.noFailedRequest') : i18n.t('counts.failedRequest', { count });
 }
 
 function deviceLabel(visit: VisitSummary, i18n: I18n): string {
@@ -200,7 +209,7 @@ export function visitRows(
     visit: shortId(visit.sessionId),
     started: started(new Date(visit.startedAt)),
     startedAt: visit.startedAt,
-    duration: formatVisitDuration(visit.startedAt, visit.endedAt),
+    duration: formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
     entryPath: visit.entryPath,
     pageViews: formatCount(visit.pageViews, i18n),
     pagesLabel: i18n.t('counts.page', { count: visit.pageViews }),
@@ -209,7 +218,7 @@ export function visitRows(
     failedRequestsLabel: failedRequestsLabel(visit.failedRequests, i18n),
     device: deviceLabel(visit, i18n),
     channel: visit.channel === null ? null : channelLabel(visit.channel, i18n),
-    account: visitAccount(visit.userId),
+    account: visitAccount(visit.userId, i18n),
   }));
 }
 

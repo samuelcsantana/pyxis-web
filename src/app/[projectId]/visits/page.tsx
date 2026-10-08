@@ -45,7 +45,8 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const search = await searchParams;
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
-  const { filters, problems } = visitFiltersOf(search);
+  const i18n = await getI18n();
+  const { filters, problems } = visitFiltersOf(search, i18n);
   const report = await readOrSignIn(() =>
     createVisitsService().visits(project.id, { from: period.from, to: period.to }, filters, null),
   );
@@ -53,7 +54,6 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const kept = visitFilterParameters(filters);
   const filtered = hasVisitFilters(filters);
   const listQuery = withKeptParameters(periodQuery(period), kept);
-  const i18n = await getI18n();
   return (
     <>
       <Topbar

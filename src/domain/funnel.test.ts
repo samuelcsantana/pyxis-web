@@ -67,8 +67,8 @@ describe('funnelModeOf', () => {
 
 describe('step labels and problems', () => {
   it('names a page step by its path and an event step in words', () => {
-    expect(stepLabel(CALCULATOR)).toBe('Opened /calculator');
-    expect(stepLabel(RESULT)).toBe('Calculator result shown');
+    expect(stepLabel(CALCULATOR, english)).toBe('Opened /calculator');
+    expect(stepLabel(RESULT, english)).toBe('Calculator result shown');
     expect(stepTarget(CALCULATOR)).toBe('/calculator');
     expect(stepTarget(RESULT)).toBe('calculator_result_shown');
   });
@@ -85,10 +85,12 @@ describe('step labels and problems', () => {
     ];
     for (const step of steps) {
       const accepted = funnelStepsSchema.safeParse([step, CALCULATOR]).success;
-      expect(stepProblem(step) === null, JSON.stringify(step)).toBe(accepted);
+      expect(stepProblem(step, english.t) === null, JSON.stringify(step)).toBe(accepted);
     }
-    expect(stepProblem({ type: 'page', path: 'x' })).toBe('A page path starts with "/".');
-    expect(stepProblem({ type: 'page', path: `/${'x'.repeat(256)}` })).toBe(
+    expect(stepProblem({ type: 'page', path: 'x' }, english.t)).toBe(
+      'A page path starts with "/".',
+    );
+    expect(stepProblem({ type: 'page', path: `/${'x'.repeat(256)}` }, english.t)).toBe(
       'A page path has at most 256 characters.',
     );
   });

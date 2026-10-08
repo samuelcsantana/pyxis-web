@@ -22,12 +22,13 @@ export async function loadOlderVisitRows(
     throw new Error('Older visits need a valid cursor.');
   }
   const period = resolvePeriod(search, project.timezone, new Date());
-  const { filters } = visitFiltersOf(search);
+  const i18n = await getI18n();
+  const { filters } = visitFiltersOf(search, i18n);
   const report = await readOrSignIn(() =>
     createVisitsService().visits(project.id, { from: period.from, to: period.to }, filters, cursor),
   );
   return {
-    rows: visitRows(report.visits, project.timezone, await getI18n()),
+    rows: visitRows(report.visits, project.timezone, i18n),
     nextCursor: report.nextCursor,
   };
 }
