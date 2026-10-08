@@ -31,6 +31,19 @@ export const en = {
     toLight: 'Switch to light theme',
     toDark: 'Switch to dark theme',
   },
+  periodSelector: {
+    label: 'Period',
+    presets: {
+      today: 'Today',
+      '7d': '7 days',
+      '30d': '30 days',
+    },
+    custom: 'Custom',
+    from: 'From',
+    to: 'To',
+    apply: 'Apply',
+    applying: 'Applying…',
+  },
   shell: {
     skipToContent: 'Skip to content',
     privacy: 'No cookies, no personal data',

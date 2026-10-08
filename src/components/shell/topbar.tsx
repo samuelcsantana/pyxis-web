@@ -43,7 +43,7 @@ function PeriodControls({ basePath, period, today, keep, i18n }: TopbarWithPerio
         </svg>
         <span className="tabular-nums">{formatPeriod(period, i18n)}</span>
       </p>
-      <PeriodSelector basePath={basePath} period={period} today={today} keep={keep} />
+      <PeriodSelector basePath={basePath} period={period} today={today} keep={keep} i18n={i18n} />
     </>
   );
 }
