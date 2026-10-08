@@ -4,6 +4,7 @@ export const PANEL =
 export const PANEL_TITLE = 'text-sm font-semibold sm:text-base';
 export const HEADER_CELL = 'border-b border-line px-2.5 py-2 font-medium text-muted';
 export const BODY_CELL = 'border-b border-line px-2.5 py-2.5';
+export const TABLE_SCROLL = 'relative -m-1 overflow-x-auto p-1';
 export const BAR_TRACK = 'block h-1.5 rounded-pill bg-soft';
 export const BAR_FILL = 'block h-1.5 rounded-pill';
 const ROW_LINK_TEXT = 'text-ink underline decoration-muted underline-offset-4';
