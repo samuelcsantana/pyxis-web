@@ -42,7 +42,12 @@ function renderRow(loadProperties: (name: string) => Promise<readonly PropertyKe
   return render(
     <table>
       <tbody>
-        <ExpandableFeatureRow row={ROW} visitsHref={EVENT_VISITS} loadProperties={loadProperties} />
+        <ExpandableFeatureRow
+          row={ROW}
+          visitsHref={EVENT_VISITS}
+          visitsPurpose={english.t('visitsLink.purpose')}
+          loadProperties={loadProperties}
+        />
       </tbody>
     </table>,
   );
@@ -334,6 +339,7 @@ describe('FeatureTable with a property loader', () => {
         query=""
         visitsHref={() => EVENT_VISITS}
         loadProperties={vi.fn()}
+        i18n={english}
       />,
     );
 
@@ -351,6 +357,7 @@ describe('FeatureTable with a property loader', () => {
         query=""
         visitsHref={() => EVENT_VISITS}
         loadProperties={vi.fn()}
+        i18n={english}
       />,
     );
 

@@ -97,6 +97,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
               ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
               : undefined
           }
+          i18n={i18n}
         />
         <CsvDownloads
           downloads={[

@@ -68,11 +68,16 @@ export function SourcesTable({
                         className={`mt-1 size-2.5 shrink-0 rounded-[3px] ${CHANNEL_COLORS[row.channel].swatch}`}
                       />
                       <span className="flex min-w-0 flex-col gap-2.5">
-                        <VisitsLink href={sourceVisitsHref(row.source)} label={row.label} />
+                        <VisitsLink
+                          href={sourceVisitsHref(row.source)}
+                          label={row.label}
+                          purpose={i18n.t('visitsLink.purpose')}
+                        />
                         <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
                           <VisitsLink
                             href={channelVisitsHref(row.channel)}
                             label={channelLabel(row.channel, i18n)}
+                            purpose={i18n.t('visitsLink.purpose')}
                           />
                           {row.medium === null ? null : (
                             <span className="font-mono sm:hidden">{row.medium}</span>

@@ -1,4 +1,5 @@
 import type { FeatureKind, FeatureRow } from '@/domain/features';
+import type { I18n } from '@/i18n/i18n';
 import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/panel-classes';
 import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
@@ -24,36 +25,52 @@ export interface FeatureTableProps {
   readonly query: string;
   readonly visitsHref: (name: string) => string;
   readonly loadProperties?: LoadProperties;
+  readonly i18n: I18n;
 }
 
 function emptyMessage(kind: FeatureKind, query: string): string {
   return query === '' ? NOTHING_YET[kind] : `Nothing matches “${query}”.`;
 }
 
-function TableRow({
-  kind,
-  row,
-  visitsHref,
-  loadProperties,
-}: {
+interface TableRowProps {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
   readonly visitsHref: string;
+  readonly visitsPurpose: string;
   readonly loadProperties: LoadProperties | undefined;
-}) {
+}
+
+function TableRow({ kind, row, visitsHref, visitsPurpose, loadProperties }: TableRowProps) {
   if (kind === 'events' && loadProperties !== undefined) {
     return (
-      <ExpandableFeatureRow row={row} visitsHref={visitsHref} loadProperties={loadProperties} />
+      <ExpandableFeatureRow
+        row={row}
+        visitsHref={visitsHref}
+        visitsPurpose={visitsPurpose}
+        loadProperties={loadProperties}
+      />
     );
   }
   return (
     <tr>
-      <FeatureRowCells kind={kind} row={row} visitsHref={visitsHref} />
+      <FeatureRowCells
+        kind={kind}
+        row={row}
+        visitsHref={visitsHref}
+        visitsPurpose={visitsPurpose}
+      />
     </tr>
   );
 }
 
-export function FeatureTable({ kind, rows, query, visitsHref, loadProperties }: FeatureTableProps) {
+export function FeatureTable({
+  kind,
+  rows,
+  query,
+  visitsHref,
+  loadProperties,
+  i18n,
+}: FeatureTableProps) {
   return (
     <section aria-labelledby="features-heading" className={PANEL}>
       <h2 id="features-heading" className={PANEL_TITLE}>
@@ -93,6 +110,7 @@ export function FeatureTable({ kind, rows, query, visitsHref, loadProperties }: 
                   kind={kind}
                   row={row}
                   visitsHref={visitsHref(row.name)}
+                  visitsPurpose={i18n.t('visitsLink.purpose')}
                   loadProperties={loadProperties}
                 />
               ))}
