@@ -97,6 +97,12 @@ const REPRESENTATIVES: readonly Representative[] = [
     prepare: editFunnelSteps,
   },
   {
+    control: 'a KPI card',
+    screen: 'overview',
+    target: (page) => page.getByRole('button', { name: 'Visits', exact: true }),
+    ring: (page) => page.getByRole('group', { name: 'Visits', exact: true }),
+  },
+  {
     control: 'a sidebar link',
     screen: 'overview',
     target: (page) =>
@@ -207,6 +213,11 @@ interface ContentControl {
 }
 
 const CONTENT_CONTROLS: readonly ContentControl[] = [
+  {
+    control: 'a KPI card',
+    screen: 'overview',
+    target: (page) => page.getByRole('group', { name: 'Visits', exact: true }),
+  },
   {
     control: 'a primary button',
     screen: 'visits?event=signup_completed',
