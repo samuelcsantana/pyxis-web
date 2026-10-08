@@ -136,6 +136,7 @@ test('closes the project switcher when the focus moves past it, leaving that foc
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
+  await page.waitForLoadState('networkidle');
   await openNavigation(page, isMobile);
   const switcher = page.locator('details', { hasText: 'Switch project' });
 
@@ -155,6 +156,7 @@ test('closes the project switcher on Escape and keeps the mobile menu open', asy
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
+  await page.waitForLoadState('networkidle');
   await openNavigation(page, isMobile);
   const switcher = page.locator('details', { hasText: 'Switch project' });
 
@@ -172,6 +174,7 @@ test('closes the project switcher on Escape and keeps the mobile menu open', asy
 test('closes the project switcher on a click outside it', async ({ page, isMobile }) => {
   test.skip(isMobile, 'On a phone the menu covers the page under the switcher.');
   await page.goto(`/${STORE_ID}/overview`);
+  await page.waitForLoadState('networkidle');
   const switcher = page.locator('details', { hasText: 'Switch project' });
 
   await switcher.locator('summary').click();
@@ -182,6 +185,7 @@ test('closes the project switcher on a click outside it', async ({ page, isMobil
 
 test('closes the custom period form on Escape and on a click outside it', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
+  await page.waitForLoadState('networkidle');
   const custom = page.locator('details', { hasText: 'Custom' });
 
   await custom.locator('summary').click();
