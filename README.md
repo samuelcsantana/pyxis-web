@@ -73,6 +73,9 @@ Shipping now:
   region; a shortened user id's link name starts with the text it shows
 - Form fields with a 3:1 border and 16px text on phones (so iOS does not zoom on focus); links
   whose underline thickens on hover, and row links with a visible underline and a 24px target
+- Text that follows the reader's default text size: every font size is a rem token (an ESLint
+  rule rejects sizes in px); with the browser's text set to 32px every text doubles, no screen
+  scrolls sideways at 390 or 1280px, and wide tables scroll inside their card
 - Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
@@ -301,7 +304,7 @@ server.
 npm run test:cov        # unit tests in jsdom, 100% coverage required
 npm run test:e2e        # Playwright, axe (WCAG 2.2 AA + best practices), light/dark, desktop/phone
 npm run test:storybook  # every story in headless Chromium, axe violations fail the run
-npm run test:tooling    # the lint rule, the comment check and the bundle budget
+npm run test:tooling    # the lint rules, the comment check and the bundle budget
 npm run budget          # after a build: first-load JavaScript of each route against its budget
 ```
 
@@ -364,7 +367,7 @@ contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
 e2e/                Playwright specs and the axe helper
 .storybook/         Storybook configuration
-eslint-rules/       the local no-comments ESLint rule
+eslint-rules/       the local ESLint rules: no comments, no font sizes in px
 scripts/            the comment check for files ESLint does not read
 docs/adr/           architecture decision records
 ```
