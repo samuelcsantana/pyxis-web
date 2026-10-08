@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { EmptyState } from '@/components/states/empty-state';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import type { I18n } from '@/i18n/i18n';
 
 export interface DemoPersonLink {
   readonly userId: string;
@@ -9,20 +10,17 @@ export interface DemoPersonLink {
 
 export interface LookUpPromptProps {
   readonly demoPerson: DemoPersonLink | null;
+  readonly i18n: I18n;
 }
 
-export function LookUpPrompt({ demoPerson }: LookUpPromptProps) {
+export function LookUpPrompt({ demoPerson, i18n }: LookUpPromptProps) {
   return (
-    <EmptyState title="Look up a person or a visit">
-      <p>
-        Type a user id, the one your site passes to identify(), to see every visit of that person,
-        or a visit id to see one visit. Events, page views and requests show in the order they
-        happened, in the project&apos;s time zone.
-      </p>
+    <EmptyState title={i18n.t('timeline.lookUp.title')}>
+      <p>{i18n.t('timeline.lookUp.body')}</p>
       {demoPerson === null ? null : (
         <p>
           <Link href={demoPerson.href} className={TEXT_LINK}>
-            Open the timeline of the demo person {demoPerson.userId}
+            {i18n.t('timeline.lookUp.demoPerson', { user: demoPerson.userId })}
           </Link>
         </p>
       )}
@@ -32,15 +30,13 @@ export function LookUpPrompt({ demoPerson }: LookUpPromptProps) {
 
 export interface NoVisitsFoundProps {
   readonly lookupTitle: string;
+  readonly i18n: I18n;
 }
 
-export function NoVisitsFound({ lookupTitle }: NoVisitsFoundProps) {
+export function NoVisitsFound({ lookupTitle, i18n }: NoVisitsFoundProps) {
   return (
-    <EmptyState title={`No visits found for ${lookupTitle}`}>
-      <p>
-        The id may be mistyped, the visits may be older than the retention period, or the
-        person&apos;s data may have been erased.
-      </p>
+    <EmptyState title={i18n.t('timeline.notFound.title', { lookup: lookupTitle })}>
+      <p>{i18n.t('timeline.notFound.body')}</p>
     </EmptyState>
   );
 }

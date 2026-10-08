@@ -37,7 +37,7 @@ function single(value: string | string[] | undefined): string | undefined {
 export interface RejectedLookup {
   readonly kind: Lookup['kind'];
   readonly value: string;
-  readonly hint: string;
+  readonly problem: string;
 }
 
 function rejected(
@@ -47,7 +47,13 @@ function rejected(
 ): RejectedLookup | null {
   return value === undefined || value === ''
     ? null
-    : { kind, value, hint: i18n.t(`timeline.lookupHints.${kind}`) };
+    : {
+        kind,
+        value,
+        problem: i18n.t('timeline.search.rejected', {
+          hint: i18n.t(`timeline.lookupHints.${kind}`),
+        }),
+      };
 }
 
 export function rejectedLookupOf(search: TimelineSearch, i18n: I18n): RejectedLookup | null {
@@ -270,4 +276,46 @@ export function lookupTitle(lookup: Lookup, i18n: I18n): string {
   return lookup.kind === 'user'
     ? i18n.t('timeline.userTitle', { user: lookup.id })
     : i18n.t('timeline.visitTitle', { visit: shortId(lookup.id) });
+}
+
+export interface TimelineSearchText {
+  readonly lookUp: string;
+  readonly kinds: Readonly<Record<Lookup['kind'], string>>;
+  readonly ids: Readonly<Record<Lookup['kind'], string>>;
+  readonly submit: string;
+  readonly pending: string;
+}
+
+export function timelineSearchText(i18n: I18n): TimelineSearchText {
+  return {
+    lookUp: i18n.t('timeline.search.lookUp'),
+    kinds: {
+      user: i18n.t('timeline.search.kinds.user'),
+      visit: i18n.t('timeline.search.kinds.visit'),
+    },
+    ids: {
+      user: i18n.t('timeline.search.ids.user'),
+      visit: i18n.t('timeline.search.ids.visit'),
+    },
+    submit: i18n.t('timeline.search.submit'),
+    pending: i18n.t('timeline.search.pending'),
+  };
+}
+
+export interface OlderVisitsText {
+  readonly everyVisit: string;
+  readonly load: string;
+  readonly loading: string;
+  readonly failed: string;
+  readonly nothingOfThisKind: string;
+}
+
+export function olderVisitsText(i18n: I18n): OlderVisitsText {
+  return {
+    everyVisit: i18n.t('timeline.older.everyVisit'),
+    load: i18n.t('timeline.older.load'),
+    loading: i18n.t('timeline.older.loading'),
+    failed: i18n.t('timeline.older.failed'),
+    nothingOfThisKind: i18n.t('timeline.card.nothingOfThisKind'),
+  };
 }

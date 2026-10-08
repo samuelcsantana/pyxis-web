@@ -1,5 +1,5 @@
 import { MainContent } from '@/components/shell/main-content';
-import { linkWith, screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { LookUpPrompt, NoVisitsFound } from '@/components/timeline/timeline-empty-states';
 import { TimelineFilters } from '@/components/timeline/timeline-filters';
@@ -12,12 +12,14 @@ import {
   type RejectedLookup,
   lookupOf,
   lookupTitle,
+  olderVisitsText,
   rejectedLookupOf,
   TIMELINE_FILTERS,
   type TimelineFilter,
   timelineFilterOf,
   type TimelineReport,
   type TimelineSearch as TimelineSearchParameters,
+  timelineSearchText,
   timelineTotals,
   visitViews,
 } from '@/domain/timeline';
@@ -72,7 +74,7 @@ function TimelineView({
   i18n,
 }: TimelineViewProps) {
   if (report.visits.length === 0) {
-    return <NoVisitsFound lookupTitle={lookupTitle(lookup, i18n)} />;
+    return <NoVisitsFound lookupTitle={lookupTitle(lookup, i18n)} i18n={i18n} />;
   }
   return (
     <>
@@ -82,6 +84,7 @@ function TimelineView({
       />
       <TimelineFilters
         current={filter}
+        i18n={i18n}
         links={TIMELINE_FILTERS.map((target) => ({
           filter: target,
           href: linkWith(basePath, { ...keptPeriod, ...lookupParameters(lookup, target) }),
@@ -91,10 +94,11 @@ function TimelineView({
         <VisitCard
           key={visit.key}
           visit={visit}
+          emptyText={i18n.t('timeline.card.nothingOfThisKind')}
           person={
             lookup.kind === 'visit' && visit.personId !== null
               ? {
-                  userId: visit.personId,
+                  label: i18n.t('timeline.card.allVisitsOf', { user: visit.personId }),
                   href: linkWith(basePath, { ...keptPeriod, user: visit.personId }),
                 }
               : null
@@ -105,6 +109,7 @@ function TimelineView({
         <OlderVisits
           initialBefore={report.nextBefore}
           loadOlder={loadOlderVisits.bind(null, projectId, lookupParameters(lookup, filter))}
+          text={olderVisitsText(i18n)}
         />
       )}
     </>
@@ -132,8 +137,8 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   return (
     <>
       <Topbar
-        title="Timeline"
-        subtitle={`Everything one person or one visit did in ${project.name}, in order`}
+        title={i18n.t(screenLabelKey('timeline'))}
+        subtitle={i18n.t('timeline.page.subtitle', { project: project.name })}
         theme={await chosenTheme()}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
@@ -142,11 +147,14 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
           action={basePath}
           lookup={lookup}
           rejected={rejected}
-          hint={demoPerson === null ? null : `Try ${demoPerson}`}
+          hint={
+            demoPerson === null ? null : i18n.t('timeline.page.tryPerson', { user: demoPerson })
+          }
           keep={keptPeriod}
+          text={timelineSearchText(i18n)}
         />
         {lookup === null || report === null ? (
-          <LookUpPrompt demoPerson={demoPersonLink} />
+          <LookUpPrompt demoPerson={demoPersonLink} i18n={i18n} />
         ) : (
           <TimelineView
             projectId={project.id}

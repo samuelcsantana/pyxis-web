@@ -2,7 +2,7 @@
 
 import Form from 'next/form';
 import { useState } from 'react';
-import type { Lookup, RejectedLookup } from '@/domain/timeline';
+import type { Lookup, RejectedLookup, TimelineSearchText } from '@/domain/timeline';
 import { BUTTON_PRIMARY, FIELD } from '@/components/ui/control-classes';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 
@@ -12,6 +12,7 @@ export interface TimelineSearchProps {
   readonly hint: string | null;
   readonly keep?: Readonly<Record<string, string>>;
   readonly rejected?: RejectedLookup | null;
+  readonly text: TimelineSearchText;
 }
 
 const NOTHING_KEPT: Readonly<Record<string, string>> = {};
@@ -27,6 +28,7 @@ export function TimelineSearch({
   hint,
   keep = NOTHING_KEPT,
   rejected = null,
+  text,
 }: TimelineSearchProps) {
   const [kind, setKind] = useState<LookupKind>(rejected?.kind ?? lookup?.kind ?? 'user');
   const invalid = rejected !== null && rejected.kind === kind;
@@ -41,7 +43,7 @@ export function TimelineSearch({
         <input key={name} type="hidden" name={name} value={value} />
       ))}
       <label className="flex max-w-full min-w-0 flex-col gap-1.5 text-caption font-medium">
-        Look up
+        {text.lookUp}
         <select
           value={kind}
           onChange={(event) => {
@@ -49,12 +51,12 @@ export function TimelineSearch({
           }}
           className={FIELD_CLASS}
         >
-          <option value="user">A person, by user id</option>
-          <option value="visit">One visit, by visit id</option>
+          <option value="user">{text.kinds.user}</option>
+          <option value="visit">{text.kinds.visit}</option>
         </select>
       </label>
       <label className="flex min-w-0 grow basis-32 flex-col gap-1.5 text-caption font-medium sm:max-w-md sm:basis-64">
-        {kind === 'user' ? 'User id' : 'Visit id'}
+        {text.ids[kind]}
         <input
           name={kind}
           defaultValue={rejected?.value ?? lookup?.id ?? ''}
@@ -67,13 +69,13 @@ export function TimelineSearch({
         />
       </label>
       <PendingSubmitButton
-        label="Show timeline"
-        pendingLabel="Looking up…"
+        label={text.submit}
+        pendingLabel={text.pending}
         className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
       />
       {invalid ? (
         <p id={ERROR_ID} className="basis-full text-caption font-medium text-bad">
-          Nothing was looked up. {rejected.hint}
+          {rejected.problem}
         </p>
       ) : null}
       {hint === null ? null : (

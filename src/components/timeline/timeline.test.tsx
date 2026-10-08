@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { timelineTotals, visitViews } from '@/domain/timeline';
+import { timelineSearchText, timelineTotals, visitViews } from '@/domain/timeline';
 import { DEMO_USER_ID, demoTimelineReport } from '@/services/timeline/demo-timeline';
 import { TimelineFilters } from './timeline-filters';
 import { TimelineSearch } from './timeline-search';
@@ -17,7 +17,14 @@ const REPORT = demoTimelineReport(
 
 describe('TimelineSearch', () => {
   it('looks a person up by user id unless one visit is chosen', async () => {
-    render(<TimelineSearch action="/p1/timeline" lookup={null} hint="Try u_7f3a" />);
+    render(
+      <TimelineSearch
+        action="/p1/timeline"
+        lookup={null}
+        hint="Try u_7f3a"
+        text={timelineSearchText(english)}
+      />,
+    );
     const field = screen.getByRole('textbox', { name: 'User id' });
 
     expect(field).toHaveAttribute('name', 'user');
@@ -33,6 +40,7 @@ describe('TimelineSearch', () => {
   it('starts from the lookup in the URL, without a hint outside the demo', () => {
     render(
       <TimelineSearch
+        text={timelineSearchText(english)}
         action="/p1/timeline"
         lookup={{ kind: 'visit', id: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }}
         hint={null}
@@ -50,13 +58,15 @@ describe('TimelineSearch with an id it did not use', () => {
   it('keeps the id, marks it invalid and says what an id looks like', async () => {
     render(
       <TimelineSearch
+        text={timelineSearchText(english)}
         action="/p1/timeline"
         lookup={null}
         hint={null}
         rejected={{
           kind: 'visit',
           value: 'not-a-visit-id',
-          hint: 'A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
+          problem:
+            'Nothing was looked up. A visit id looks like 94810767-edf6-4c2b-9a1d-2e3f4a5b6c01.',
         }}
       />,
     );
@@ -83,6 +93,7 @@ describe('TimelineFilters', () => {
     render(
       <TimelineFilters
         current="errors"
+        i18n={english}
         links={[
           { filter: 'all', href: '/p1/timeline?user=u' },
           { filter: 'errors', href: '/p1/timeline?user=u&show=errors' },
@@ -119,7 +130,9 @@ describe('VisitCard', () => {
     if (signUp === undefined) {
       throw new Error('no sign-up visit in the demo');
     }
-    const { container } = render(<VisitCard visit={signUp} />);
+    const { container } = render(
+      <VisitCard visit={signUp} emptyText="Nothing of this kind in this visit." />,
+    );
 
     const items = within(screen.getByRole('region', { name: /^Visit 19c2e5f6/ })).getAllByRole(
       'listitem',
@@ -140,7 +153,7 @@ describe('VisitCard', () => {
       throw new Error('every demo visit has an error');
     }
 
-    render(<VisitCard visit={quiet} />);
+    render(<VisitCard visit={quiet} emptyText="Nothing of this kind in this visit." />);
 
     expect(screen.getByText('Nothing of this kind in this visit.')).toBeInTheDocument();
   });

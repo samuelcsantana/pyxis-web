@@ -101,7 +101,7 @@ const DEMO_PERSON = { userId: 'u_7f3a', href: '/demo/timeline?user=u_7f3a' };
 export const LookUpPromptInTheDemo: Story = {
   render: () => (
     <OnAScreen>
-      <LookUpPrompt demoPerson={DEMO_PERSON} />
+      <LookUpPrompt demoPerson={DEMO_PERSON} i18n={english} />
     </OnAScreen>
   ),
   play: async ({ canvasElement }) => {
@@ -117,7 +117,7 @@ export const LookUpPromptDark: Story = { ...LookUpPromptInTheDemo, globals: { th
 export const LookUpPromptOutsideTheDemo: Story = {
   render: () => (
     <OnAScreen>
-      <LookUpPrompt demoPerson={null} />
+      <LookUpPrompt demoPerson={null} i18n={english} />
     </OnAScreen>
   ),
   play: async ({ canvasElement }) => {
@@ -128,7 +128,7 @@ export const LookUpPromptOutsideTheDemo: Story = {
 export const NoVisitsFoundForAPerson: Story = {
   render: () => (
     <OnAScreen>
-      <NoVisitsFound lookupTitle="User nobody_here" />
+      <NoVisitsFound lookupTitle="User nobody_here" i18n={english} />
     </OnAScreen>
   ),
   play: async ({ canvasElement }) => {

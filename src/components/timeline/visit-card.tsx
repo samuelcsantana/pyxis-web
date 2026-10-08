@@ -27,17 +27,18 @@ function iconOf(item: TimelineItem): { readonly path: string; readonly classes: 
 }
 
 export interface VisitPersonLink {
-  readonly userId: string;
+  readonly label: string;
   readonly href: string;
 }
 
 export interface VisitCardProps {
   readonly visit: VisitView;
+  readonly emptyText: string;
   readonly focusable?: boolean;
   readonly person?: VisitPersonLink | null;
 }
 
-export function VisitCard({ visit, focusable = false, person = null }: VisitCardProps) {
+export function VisitCard({ visit, emptyText, focusable = false, person = null }: VisitCardProps) {
   const headingId = `visit-${visit.key}`;
   return (
     <section
@@ -55,12 +56,12 @@ export function VisitCard({ visit, focusable = false, person = null }: VisitCard
         <p className="text-xs text-muted">{visit.meta}</p>
         {person === null ? null : (
           <Link href={person.href} className={`text-xs ${TEXT_LINK}`}>
-            All visits of {person.userId}
+            {person.label}
           </Link>
         )}
       </div>
       {visit.items.length === 0 ? (
-        <p className="py-3.5 text-caption text-muted">Nothing of this kind in this visit.</p>
+        <p className="py-3.5 text-caption text-muted">{emptyText}</p>
       ) : (
         <ol>
           {visit.items.map((item) => {
