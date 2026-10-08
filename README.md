@@ -139,7 +139,9 @@ Shipping now:
   cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
   that came from an ad click; each source opens its visits, and its channel the visits from
-  that channel
+  that channel; the campaigns (`utm_campaign`) that brought the most visits, up to 20, each with
+  the source that carried it, its conversion rate and its ad click visits, open the visits of
+  that campaign from that source
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL; each event opens its
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
@@ -173,8 +175,8 @@ Shipping now:
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity
   per day (with every daily figure of its cards), top pages and top events; the routes of
   Requests (writes or failed reads); the Features ranking (events or screens, search kept); the
-  Acquisition sources and visits per day by channel; every Devices breakdown in one file, named
-  in a `dimension` column; and the newest 1,000 visits matching the Visits filters, read page
+  Acquisition sources, campaigns and visits per day by channel; every Devices breakdown in one
+  file, named in a `dimension` column; and the newest 1,000 visits matching the Visits filters, read page
   after page on the server. The file is named after the screen, the table and the dates
   (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`), starts with a UTF-8 byte order mark so
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
@@ -263,7 +265,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen  |
 | `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure  |
 | `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                              |
-| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and their conversion                         |
+| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion       |
 | `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
 | `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
 | `/[projectId]/funnel`             | `?steps=<json>` and `?mode=visit\|user`; no steps opens the editor                               |
@@ -272,7 +274,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
 | `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen` |
 | `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`             |
-| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|channels` (`sources` when absent), for the screen's period          |
+| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period   |
 | `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                              |
 | `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters            |
 
