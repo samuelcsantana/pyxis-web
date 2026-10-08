@@ -9,7 +9,11 @@ import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
 import { demoFunnelWire } from './funnel/demo-funnel';
-import { demoFailedReadsWire, demoRequestsWire } from './requests/demo-requests';
+import {
+  demoFailedReadsWire,
+  demoRequestsWire,
+  demoRouteRequestsWire,
+} from './requests/demo-requests';
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
@@ -123,6 +127,21 @@ describe('the API contract copied from pyxis-api', () => {
         const wire = demoFailedReadsWire(project.id, RANGE, screen);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
+    }
+  });
+
+  it('accepts the demo days of one route, written or read, with and without a screen', () => {
+    const validate = contractSchema('RequestsReport');
+
+    for (const [kind, screen, route] of [
+      ['writes', null, 'POST /orders'],
+      ['writes', '/orders', 'POST /orders'],
+      ['reads', null, 'GET /products'],
+      ['reads', '/search', 'GET /search'],
+    ] as const) {
+      const wire = demoRouteRequestsWire(DEMO_STORE.id, RANGE, kind, screen, route, NOW);
+      expect(wire.route_days?.length).toBe(30);
+      expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
   });
 

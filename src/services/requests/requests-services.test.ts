@@ -3,7 +3,12 @@ import type { RequestsReport } from '@/domain/requests';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
-import { demoFailedReadsWire, demoRequestsWire, statusClassOf } from './demo-requests';
+import {
+  demoFailedReadsWire,
+  demoRequestsWire,
+  demoRouteRequestsWire,
+  statusClassOf,
+} from './demo-requests';
 import { HttpRequestsService } from './http-requests-service';
 import { MockRequestsService } from './mock-requests-service';
 import { createRequestsService } from './requests-service.factory';
@@ -68,6 +73,31 @@ describe('HttpRequestsService', () => {
     expect(report.routes.map((route) => `${route.method} ${route.route}`)).toEqual([
       'GET /products',
     ]);
+  });
+
+  it('asks the days of one route with its kind and screen, and reads them', async () => {
+    const fetchMock = answering(
+      demoRouteRequestsWire(STORE, RANGE, 'reads', '/products', 'GET /products', NOW),
+    );
+
+    const days = await new HttpRequestsService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).routeDays('p1', RANGE, 'reads', '/products', 'GET /products');
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p1/requests?from=2026-09-22&to=2026-10-05&screen=%2Fproducts&kind=reads&route=GET+%2Fproducts`,
+    );
+    expect(days).toHaveLength(14);
+  });
+
+  it('reads no days from an API that does not send them', async () => {
+    answering(demoRequestsWire(STORE, RANGE, null, NOW));
+
+    const days = await new HttpRequestsService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).routeDays('p1', RANGE, 'writes', null, 'POST /orders');
+
+    expect(days).toBeNull();
   });
 });
 
@@ -239,6 +269,75 @@ describe('MockRequestsService', () => {
     ]);
     const reads = await new MockRequestsService().failedReads(DEMO_DOCS.id, RANGE, null);
     expect(reads.routes.map((route) => route.route)).toEqual(['/search']);
+  });
+
+  const sumOf = (values: readonly number[]) => values.reduce((sum, value) => sum + value, 0);
+
+  it.each([null, '/orders'])(
+    'counts the writes of one route day by day, adding up to its row (screen %s)',
+    async (screen) => {
+      const report = await new MockRequestsService().requests(STORE, RANGE, screen);
+      const orders = report.routes.find((route) => route.route === '/orders');
+      const days = await new MockRequestsService().routeDays(
+        STORE,
+        RANGE,
+        'writes',
+        screen,
+        'POST /orders',
+      );
+
+      expect(days).toHaveLength(14);
+      expect(sumOf((days ?? []).map((day) => day.total))).toBe(orders?.total);
+      expect(sumOf((days ?? []).map((day) => day.failed))).toBe(orders?.failed);
+    },
+  );
+
+  it('gives a day with calls the durations of its route, and a quiet day none', async () => {
+    const days = await new MockRequestsService().routeDays(
+      STORE,
+      RANGE,
+      'writes',
+      null,
+      'POST /orders',
+    );
+    const busy = days?.find((day) => day.total > 0);
+
+    expect(busy?.medianDurationMs).toBeGreaterThan(0);
+    expect(busy?.p95DurationMs).toBeGreaterThan(busy?.medianDurationMs ?? 0);
+
+    const quiet = await new MockRequestsService().routeDays(
+      STORE,
+      RANGE,
+      'writes',
+      '/settings',
+      'POST /orders',
+    );
+    expect(quiet?.every((day) => day.total === 0 && day.medianDurationMs === null)).toBe(true);
+  });
+
+  it('counts the failed reads of one route day by day, every call a failure', async () => {
+    const report = await new MockRequestsService().failedReads(STORE, RANGE, null);
+    const products = report.routes.find((route) => route.route === '/products');
+    const days = await new MockRequestsService().routeDays(
+      STORE,
+      RANGE,
+      'reads',
+      null,
+      'GET /products',
+    );
+
+    expect(sumOf((days ?? []).map((day) => day.failed))).toBe(products?.failed);
+    expect(days?.every((day) => day.total === day.failed)).toBe(true);
+  });
+
+  it.each([
+    ['writes', 'DELETE /nowhere'],
+    ['reads', 'GET /nowhere'],
+  ] as const)('answers quiet days for a %s route the demo does not have', async (kind, route) => {
+    const days = await new MockRequestsService().routeDays(STORE, RANGE, kind, null, route);
+
+    expect(days).toHaveLength(14);
+    expect(days?.every((day) => day.total === 0)).toBe(true);
   });
 });
 
