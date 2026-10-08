@@ -1,5 +1,6 @@
 import { OTHER_VALUE } from '@/domain/devices';
-import { type DemoProject, evenShares } from './demo-catalog';
+import { evenShares, type DemoProject } from './demo-catalog';
+import { demoCatalogVisits, type DemoVisitCatalog } from './demo-catalog-visits';
 import { DEMO_STORE_PERSON, DEMO_STORE_VISITS } from './demo-store-visits';
 
 const MONTHS_IN_A_YEAR = 12;
@@ -17,7 +18,9 @@ function signInMethods(emailCode: number, google: number, password: number) {
   ] as const;
 }
 
-export const DEMO_STORE: DemoProject = {
+const STORE_VISIT_SEED = 1000;
+
+const STORE_CATALOG: DemoVisitCatalog = {
   id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
   name: 'Demo Store',
   timezone: 'America/Sao_Paulo',
@@ -42,6 +45,7 @@ export const DEMO_STORE: DemoProject = {
   events: [
     {
       name: 'calculator_result_shown',
+      page: '/calculator',
       perDay: 30,
       visitsPerCount: 0.75,
       properties: [
@@ -65,6 +69,7 @@ export const DEMO_STORE: DemoProject = {
     },
     {
       name: 'cta_clicked',
+      page: '/',
       perDay: 29,
       visitsPerCount: 0.81,
       properties: [
@@ -93,31 +98,36 @@ export const DEMO_STORE: DemoProject = {
     },
     {
       name: 'order_created',
+      page: '/orders',
       perDay: 26,
       visitsPerCount: 0.35,
       properties: [{ key: 'first', carriedShare: 0.14, values: [['true', 1]] }],
     },
     {
       name: 'login_completed',
+      page: '/dashboard',
       perDay: 13,
       visitsPerCount: 0.66,
       properties: [{ key: 'method', carriedShare: 1, values: signInMethods(0.55, 0.3, 0.15) }],
     },
     {
       name: 'signup_submitted',
+      page: '/sign-up',
       perDay: 9,
       visitsPerCount: 0.94,
       properties: [{ key: 'method', carriedShare: 1, values: signInMethods(0.6, 0.28, 0.12) }],
     },
     {
       name: 'signup_completed',
+      page: '/sign-up',
       perDay: 4.5,
       visitsPerCount: 1,
       properties: [{ key: 'method', carriedShare: 1, values: signInMethods(0.58, 0.3, 0.12) }],
     },
-    { name: 'product_created', perDay: 4, visitsPerCount: 0.46, properties: [] },
+    { name: 'product_created', page: '/products', perDay: 4, visitsPerCount: 0.46, properties: [] },
     {
       name: 'report_exported',
+      page: '/reports',
       perDay: 2,
       visitsPerCount: 0.47,
       properties: [
@@ -362,5 +372,9 @@ export const DEMO_STORE: DemoProject = {
   ],
   funnelContinuation: [0.625, 0.411, 0.538, 0.791, 0.458, 0.7, 0.6],
   person: DEMO_STORE_PERSON,
-  visits: DEMO_STORE_VISITS,
+};
+
+export const DEMO_STORE: DemoProject = {
+  ...STORE_CATALOG,
+  visits: [...DEMO_STORE_VISITS, ...demoCatalogVisits(STORE_CATALOG, STORE_VISIT_SEED)],
 };

@@ -1,5 +1,6 @@
 import { OTHER_VALUE } from '@/domain/devices';
-import { type DemoProject, evenShares } from './demo-catalog';
+import { evenShares, type DemoProject } from './demo-catalog';
+import { demoCatalogVisits, type DemoVisitCatalog } from './demo-catalog-visits';
 import { type DemoVisit, request } from './demo-visits';
 
 const DOCS_VISITS: readonly DemoVisit[] = [
@@ -85,7 +86,9 @@ const DOCS_VISITS: readonly DemoVisit[] = [
   },
 ];
 
-export const DEMO_DOCS: DemoProject = {
+const DOCS_VISIT_SEED = 2000;
+
+const DOCS_CATALOG: DemoVisitCatalog = {
   id: '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d',
   name: 'Demo Docs',
   timezone: 'Europe/Lisbon',
@@ -104,6 +107,7 @@ export const DEMO_DOCS: DemoProject = {
   events: [
     {
       name: 'code_copied',
+      page: '/docs/:slug',
       perDay: 40,
       visitsPerCount: 0.35,
       properties: [
@@ -121,6 +125,7 @@ export const DEMO_DOCS: DemoProject = {
     },
     {
       name: 'search_performed',
+      page: '/search',
       perDay: 26,
       visitsPerCount: 0.62,
       properties: [
@@ -136,6 +141,7 @@ export const DEMO_DOCS: DemoProject = {
     },
     {
       name: 'feedback_sent',
+      page: '/guides/:slug',
       perDay: 6,
       visitsPerCount: 0.97,
       properties: [
@@ -151,6 +157,7 @@ export const DEMO_DOCS: DemoProject = {
     },
     {
       name: 'version_switched',
+      page: '/guides/:slug',
       perDay: 5,
       visitsPerCount: 0.9,
       properties: [
@@ -164,7 +171,13 @@ export const DEMO_DOCS: DemoProject = {
         },
       ],
     },
-    { name: 'newsletter_subscribed', perDay: 1.5, visitsPerCount: 1, properties: [] },
+    {
+      name: 'newsletter_subscribed',
+      page: '/changelog',
+      perDay: 1.5,
+      visitsPerCount: 1,
+      properties: [],
+    },
   ],
   routes: [
     {
@@ -300,5 +313,9 @@ export const DEMO_DOCS: DemoProject = {
   ],
   funnelContinuation: [0.9, 0.55, 0.4],
   person: null,
-  visits: DOCS_VISITS,
+};
+
+export const DEMO_DOCS: DemoProject = {
+  ...DOCS_CATALOG,
+  visits: [...DOCS_VISITS, ...demoCatalogVisits(DOCS_CATALOG, DOCS_VISIT_SEED)],
 };
