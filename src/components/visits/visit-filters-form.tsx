@@ -73,7 +73,7 @@ export function VisitFiltersForm({
                 <input
                   name={name}
                   defaultValue={filters.paths[index] ?? ''}
-                  placeholder={index === 0 ? '/pricing' : undefined}
+                  placeholder={index === 0 ? t('visits.filters.placeholders.path') : undefined}
                   aria-describedby="visit-pages-hint"
                   autoComplete="off"
                   spellCheck={false}
@@ -89,7 +89,7 @@ export function VisitFiltersForm({
             <input
               name="event"
               defaultValue={filters.event ?? ''}
-              placeholder="signup_completed"
+              placeholder={t('visits.filters.placeholders.event')}
               autoComplete="off"
               spellCheck={false}
               className={`${FIELD_CLASS} font-mono`}
@@ -100,7 +100,7 @@ export function VisitFiltersForm({
             <input
               name="property"
               defaultValue={filters.property ?? ''}
-              placeholder="plan=pro"
+              placeholder={t('visits.filters.placeholders.property')}
               aria-describedby="visit-property-hint"
               autoComplete="off"
               spellCheck={false}
@@ -150,7 +150,7 @@ export function VisitFiltersForm({
             <input
               name="country"
               defaultValue={filters.country ?? ''}
-              placeholder="BR"
+              placeholder={t('visits.filters.placeholders.country')}
               maxLength={2}
               aria-describedby="visit-country-hint"
               autoComplete="off"
@@ -166,7 +166,7 @@ export function VisitFiltersForm({
             <input
               name="source"
               defaultValue={filters.source ?? ''}
-              placeholder="google"
+              placeholder={t('visits.filters.placeholders.source')}
               maxLength={MAX_SOURCE_LENGTH}
               aria-describedby="visit-source-hint"
               autoComplete="off"
@@ -182,7 +182,7 @@ export function VisitFiltersForm({
             <input
               name="campaign"
               defaultValue={filters.campaign ?? ''}
-              placeholder="spring_sale"
+              placeholder={t('visits.filters.placeholders.campaign')}
               maxLength={MAX_CAMPAIGN_LENGTH}
               autoComplete="off"
               spellCheck={false}
@@ -194,7 +194,7 @@ export function VisitFiltersForm({
             <input
               name="route"
               defaultValue={filters.route ?? ''}
-              placeholder="POST /orders"
+              placeholder={t('visits.filters.placeholders.route')}
               aria-describedby="visit-route-hint"
               autoComplete="off"
               spellCheck={false}
