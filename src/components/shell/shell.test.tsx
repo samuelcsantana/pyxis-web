@@ -532,7 +532,7 @@ describe('PeriodSelector', () => {
 
     expect(container.querySelector('details')).not.toHaveAttribute('open');
     expect(form).toHaveAttribute('action', '/p1/overview');
-    expect(form).toHaveAttribute('method', 'get');
+    expect(form).toHaveProperty('method', 'get');
     expect(screen.getByLabelText('From')).toHaveValue('2026-08-01');
     expect(screen.getByLabelText('To')).toHaveAttribute('max', today);
     expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-08-01');

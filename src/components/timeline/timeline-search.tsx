@@ -1,8 +1,10 @@
 'use client';
 
+import Form from 'next/form';
 import { useState } from 'react';
 import type { Lookup, RejectedLookup } from '@/domain/timeline';
 import { BUTTON_PRIMARY, FIELD } from '@/components/ui/control-classes';
+import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 
 export interface TimelineSearchProps {
   readonly action: string;
@@ -29,10 +31,9 @@ export function TimelineSearch({
   const [kind, setKind] = useState<LookupKind>(rejected?.kind ?? lookup?.kind ?? 'user');
   const invalid = rejected !== null && rejected.kind === kind;
   return (
-    <form
+    <Form
       role="search"
       action={action}
-      method="get"
       className="flex flex-wrap items-end gap-3"
       aria-describedby={hint === null ? undefined : 'timeline-search-hint'}
     >
@@ -65,9 +66,11 @@ export function TimelineSearch({
           className={`${FIELD_CLASS} font-mono`}
         />
       </label>
-      <button type="submit" className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}>
-        Show timeline
-      </button>
+      <PendingSubmitButton
+        label="Show timeline"
+        pendingLabel="Looking up…"
+        className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
+      />
       {invalid ? (
         <p id={ERROR_ID} className="basis-full text-[13px] font-medium text-bad">
           Nothing was looked up. {rejected.hint}
@@ -78,6 +81,6 @@ export function TimelineSearch({
           {hint}
         </span>
       )}
-    </form>
+    </Form>
   );
 }

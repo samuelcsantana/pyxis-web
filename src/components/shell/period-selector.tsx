@@ -1,3 +1,4 @@
+import Form from 'next/form';
 import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 import {
@@ -10,6 +11,7 @@ import {
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { PendingMark } from '@/components/ui/pending-mark';
+import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { CustomRangeFields } from './custom-range-fields';
 
 export type KeptParameters = Readonly<Record<string, string>>;
@@ -70,6 +72,7 @@ export function PeriodSelector({
         })}
       </nav>
       <DismissableDetails
+        key={`${period.preset}:${shown.from}:${shown.to}`}
         defaultOpen={period.rejected !== undefined}
         className="group relative max-sm:open:basis-full"
       >
@@ -78,9 +81,8 @@ export function PeriodSelector({
         >
           Custom
         </summary>
-        <form
+        <Form
           action={basePath}
-          method="get"
           className="mt-1.5 flex flex-wrap items-end gap-2 rounded-input border border-line bg-card p-3 sm:absolute sm:right-0 sm:z-10 sm:w-max sm:shadow-lg"
         >
           {Object.entries(keep).map(([name, value]) => (
@@ -92,13 +94,12 @@ export function PeriodSelector({
             today={today}
             problemId={period.rejected === undefined ? undefined : RANGE_NOTICE_ID}
           />
-          <button
-            type="submit"
+          <PendingSubmitButton
+            label="Apply"
+            pendingLabel="Applying…"
             className={`min-h-11 rounded-control px-3 text-[13px] sm:min-h-9 ${BUTTON_PRIMARY}`}
-          >
-            Apply
-          </button>
-        </form>
+          />
+        </Form>
       </DismissableDetails>
     </div>
   );
