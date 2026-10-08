@@ -160,8 +160,8 @@ in and out ([ADR 0002](docs/adr/0002-server-components-and-services.md)).
 Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 · Geist through
 `next/font` · Zod for API answers, on the server only (the schemas live in
 `src/domain/*.schema.ts`, and ESLint keeps Zod and those modules out of `src/components`) · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
-with RxJS for the few requests a Client Component starts · Recharts 3 for the charts, each with a table
-view ([ADR 0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)) · Vitest
+with RxJS for the few requests a Client Component starts · charts drawn as SVG on the server, each with a
+table view ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)) · Vitest
 and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
 CodeQL, Dependabot, Codecov and release-please.
 
@@ -273,6 +273,10 @@ that says why:
 | Dashboard screens without a chart                      | 161               |
 | Dashboard screens with a chart (Overview, Acquisition) | 162               |
 
+A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
+([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
+the two screens load 154.1 KiB, down from about 256 KiB with Recharts.
+
 ## Project structure
 
 ```text
@@ -281,7 +285,8 @@ src/
 ├── components/     UI components, each with its stories (overview, shell, sign-in, states, theme)
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
-│                   rates and changes, sparklines, device and country labels, donuts,
+│                   rates and changes, sparklines, chart scales, day labels, areas and
+│                   stacked bars, device and country labels, donuts,
 │                   channels and sources, feature ranking, search and property breakdowns,
 │                   routes and failures, funnel steps and counts, timeline items, visit
 │                   filters and rows, errors; the Zod schemas of the API answers sit
@@ -318,13 +323,14 @@ docs/adr/           architecture decision records
 
 ## Architecture decisions
 
-| ADR                                                                | Decision                                                |
-| ------------------------------------------------------------------ | ------------------------------------------------------- |
-| [0001](docs/adr/0001-record-architecture-decisions.md)             | Record architecture decisions                           |
-| [0002](docs/adr/0002-server-components-and-services.md)            | Server Components reading through service interfaces    |
-| [0003](docs/adr/0003-csp-without-nonces.md)                        | A Content Security Policy without nonces                |
-| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge |
-| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view            |
+| ADR                                                                | Decision                                                          |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [0001](docs/adr/0001-record-architecture-decisions.md)             | Record architecture decisions                                     |
+| [0002](docs/adr/0002-server-components-and-services.md)            | Server Components reading through service interfaces              |
+| [0003](docs/adr/0003-csp-without-nonces.md)                        | A Content Security Policy without nonces                          |
+| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge           |
+| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view (superseded by 0006) |
+| [0006](docs/adr/0006-server-rendered-svg-charts.md)                | Charts drawn as SVG on the server, each with a table view         |
 
 ## Roadmap
 
