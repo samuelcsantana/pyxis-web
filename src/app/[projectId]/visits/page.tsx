@@ -2,6 +2,7 @@ import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
+import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { VisitFiltersForm } from '@/components/visits/visit-filters-form';
 import { VisitsTable } from '@/components/visits/visits-table';
 import { VISIT_DEFINITION } from '@/domain/glossary';
@@ -13,6 +14,8 @@ import {
   visitRows,
   type VisitsSearch,
 } from '@/domain/visits';
+import { VISITS_TABLE_LABEL } from '@/domain/visits-export';
+import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
@@ -78,6 +81,11 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
             project.id,
             Object.fromEntries(new URLSearchParams(listQuery)),
           )}
+        />
+        <CsvDownloads
+          downloads={[
+            { label: VISITS_TABLE_LABEL, href: exportHref(project.id, 'visits', listQuery) },
+          ]}
         />
         <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
       </MainContent>

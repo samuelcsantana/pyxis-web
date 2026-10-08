@@ -142,6 +142,10 @@ describe('VisitsPage', () => {
       '/p-store/visits?range=30d',
     );
     expect(screen.getByRole('textbox', { name: 'Viewed page' })).toHaveValue('/calculator');
+    expect(screen.getByRole('link', { name: 'Newest 1,000 visits as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/visits/export?range=30d&path=%2Fcalculator&event=calculator_result_shown&property=calculator%3Dshipping&channel=paid&identity=identified',
+    );
     expect(within(screen.getByRole('table', { name: 'Visits' })).getAllByRole('row')).toHaveLength(
       2,
     );
