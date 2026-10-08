@@ -169,7 +169,12 @@ Shipping now:
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
 - Loading, empty and error states shared by every screen; while a screen loads, its top bar
-  already shows its title above a skeleton shaped like it; an empty period shows how to install
+  already shows its title above a skeleton shaped like it; a change of period, tab, filter or
+  screen marks the clicked link with a bar from the first frame and the content busy
+  (`aria-busy`, a thin bar along its top) until the server answers; the filter and search forms
+  submit in place with `next/form` (no new document) and their button says "Applying…" or
+  "Searching…" meanwhile, and they still work as plain GET forms without JavaScript; an empty
+  period shows how to install
   the SDK until the project's first event, and afterwards "Nothing in this period" with the time
   of the latest event and a link to the last 30 days; when the API cannot be reached at all, a
   branded error page with "Try again" instead of the framework's default; a "Page not found"
