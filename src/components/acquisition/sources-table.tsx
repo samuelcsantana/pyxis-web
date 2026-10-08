@@ -30,14 +30,12 @@ export function SourcesTable({
     <section aria-labelledby="sources-heading" className={PANEL}>
       <div className="flex flex-col gap-1">
         <h2 id="sources-heading" className={PANEL_TITLE}>
-          Sources
+          {i18n.t('acquisition.sources.title')}
         </h2>
-        <p className="text-caption text-muted">
-          The campaign source, else the referring site, of the first page of each visit
-        </p>
+        <p className="text-caption text-muted">{i18n.t('acquisition.sources.description')}</p>
       </div>
       {rows.length === 0 ? (
-        <p className="text-caption text-muted">No visits with a source in this period.</p>
+        <p className="text-caption text-muted">{i18n.t('acquisition.sources.empty')}</p>
       ) : (
         <div className={TABLE_SCROLL}>
           <table
@@ -47,13 +45,13 @@ export function SourcesTable({
             <thead>
               <tr>
                 <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                  Source
+                  {i18n.t('acquisition.sources.source')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden text-left sm:table-cell`}>
-                  Medium
+                  {i18n.t('acquisition.sources.medium')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
-                  Visits
+                  {i18n.t('acquisition.sources.visits')}
                 </th>
                 {countsConversions ? <ConversionColumns i18n={i18n} /> : null}
               </tr>

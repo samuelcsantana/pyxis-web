@@ -42,7 +42,11 @@ function hoverDays(
         value: formatCount(row[channel], i18n),
         marker: `${MARKER} ${CHANNEL_COLORS[channel].swatch}`,
       })),
-      { label: 'Total', value: formatCount(row.total, i18n), marker: MARKER },
+      {
+        label: i18n.t('acquisition.channelChart.total'),
+        value: formatCount(row.total, i18n),
+        marker: MARKER,
+      },
     ],
   }));
 }
@@ -96,7 +100,7 @@ function ChannelTable({
   periodLabel,
   i18n,
 }: ChannelChartProps & { readonly channels: readonly Channel[] }) {
-  const caption = `Visits by channel per day, ${periodLabel}`;
+  const caption = i18n.t('acquisition.channelChart.caption', { period: periodLabel });
   return (
     <div
       className={`overflow-x-auto ${FOCUS_RING}`}
@@ -109,7 +113,7 @@ function ChannelTable({
         <thead>
           <tr>
             <th scope="col" className={`${HEADER_CELL} text-left`}>
-              Day
+              {i18n.t('acquisition.channelChart.day')}
             </th>
             {channels.map((channel) => (
               <th key={channel} scope="col" className={`${HEADER_CELL} text-right`}>
@@ -117,7 +121,7 @@ function ChannelTable({
               </th>
             ))}
             <th scope="col" className={`${HEADER_CELL} text-right`}>
-              Total
+              {i18n.t('acquisition.channelChart.total')}
             </th>
           </tr>
         </thead>
@@ -148,8 +152,8 @@ export function ChannelChart({ days, periodLabel, i18n }: ChannelChartProps) {
   const totals = channelTotals(days);
   return (
     <ChartPanel
-      title="Visits by channel"
-      description={`Every visit by the channel it came from, ${periodLabel}`}
+      title={i18n.t('acquisition.channelChart.title')}
+      description={i18n.t('acquisition.channelChart.description', { period: periodLabel })}
       legend={channels.map((channel) => (
         <LegendItem
           key={channel}
