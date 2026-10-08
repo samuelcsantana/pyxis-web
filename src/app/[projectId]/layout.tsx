@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { MobileMenu } from '@/components/shell/mobile-menu';
+import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
 import { DemoBanner } from '@/components/states/demo-banner';
@@ -16,15 +17,17 @@ export interface ProjectLayoutProps {
 export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
-      <SkipLink />
-      <MobileMenu barActions={<ThemeToggle initialTheme={await chosenTheme()} surface="nav" />}>
-        <Sidebar admin={admin} project={project} />
-      </MobileMenu>
-      <div className="flex min-w-0 flex-col">
-        {isDemoMode() ? <DemoBanner /> : null}
-        {children}
+    <NavigationPendingProvider>
+      <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
+        <SkipLink />
+        <MobileMenu barActions={<ThemeToggle initialTheme={await chosenTheme()} surface="nav" />}>
+          <Sidebar admin={admin} project={project} />
+        </MobileMenu>
+        <NavigationRegion className="flex min-w-0 flex-col">
+          {isDemoMode() ? <DemoBanner /> : null}
+          {children}
+        </NavigationRegion>
       </div>
-    </div>
+    </NavigationPendingProvider>
   );
 }
