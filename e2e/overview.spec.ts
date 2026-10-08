@@ -117,7 +117,7 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
     .getByRole('table', { name: 'Visits' })
     .locator('tbody tr')
     .or(page.getByRole('list', { name: 'Visits' }).locator(':scope > li'));
-  await expect(rows).toHaveCount(2);
+  await expect(rows).toHaveCount(8);
 
   await page.goBack();
   const eventLink = page.getByRole('link', {
@@ -130,7 +130,7 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
   await expect(page.getByRole('textbox', { name: 'Had event' })).toHaveValue(
     'calculator_result_shown',
   );
-  await expect(rows).toHaveCount(2);
+  await expect(rows).toHaveCount(8);
 });
 
 test('plots the figure a card picks, from the keyboard too, and keeps it across periods', async ({
