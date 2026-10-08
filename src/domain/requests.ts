@@ -290,12 +290,14 @@ export function routeRows(
       median,
       p95: route.p95DurationMs === null ? null : formatDuration(route.p95DurationMs, i18n),
       summary: routeSummary(route, kind, { errorShare, median }, i18n),
-      screens: route.screens.map((screen) => ({
-        path: screen.path,
-        failed: i18n.t('requests.details.screenFailed', {
-          failed: formatCount(screen.failed, i18n),
-        }),
-      })),
+      screens: route.screens
+        .filter((screen) => screen.failed > 0)
+        .map((screen) => ({
+          path: screen.path,
+          failed: i18n.t('requests.details.screenFailed', {
+            failed: formatCount(screen.failed, i18n),
+          }),
+        })),
       failures: route.recentFailures.map((failure, index) => ({
         key: `${failure.occurredAt}-${String(index)}`,
         when: time(new Date(failure.occurredAt)),
