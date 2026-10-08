@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { parseTheme, themeCookie } from '@/lib/theme';
 import { ThemeToggle } from './theme-toggle';
@@ -18,13 +19,16 @@ describe('ThemeToggle', () => {
   });
 
   it('switches a chosen light theme to dark and remembers it in a cookie', async () => {
+    document.documentElement.dataset.theme = 'light';
     render(<ThemeToggle initialTheme="light" />);
 
     await userEvent.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
 
     expect(document.documentElement.dataset.theme).toBe('dark');
     expect(document.cookie).toContain('pyxis_theme=dark');
-    expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Switch to light theme' }),
+    ).toBeInTheDocument();
   });
 
   it('starts from the system preference when nothing was chosen', async () => {
@@ -45,13 +49,48 @@ describe('ThemeToggle', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
-  it('follows a theme set on the page when none was passed in', async () => {
+  it('follows a theme set on the page', async () => {
     document.documentElement.dataset.theme = 'dark';
     render(<ThemeToggle />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Switch theme' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Switch to light theme' }));
 
     expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
+  it('keeps every toggle on the page in step, whichever one was pressed', async () => {
+    document.documentElement.dataset.theme = 'light';
+    render(
+      <>
+        <ThemeToggle initialTheme="light" surface="nav" />
+        <ThemeToggle initialTheme="light" />
+      </>,
+    );
+    const [inTheMenuBar, inTheHeader] = screen.getAllByRole('button', {
+      name: 'Switch to dark theme',
+    });
+
+    await userEvent.click(inTheMenuBar ?? document.body);
+
+    await waitFor(() => {
+      expect(inTheHeader).toHaveAccessibleName('Switch to light theme');
+    });
+    expect(inTheMenuBar).toHaveAccessibleName('Switch to light theme');
+  });
+
+  it('wears the colours of the dark navigation bar when it sits there', () => {
+    render(<ThemeToggle surface="nav" />);
+
+    expect(screen.getByRole('button', { name: 'Switch theme' })).toHaveClass(
+      'border-nav-border',
+      'text-nav-strong',
+    );
+  });
+
+  it('renders the theme it was given on the server, before the page can be read', () => {
+    const html = renderToString(<ThemeToggle initialTheme="dark" />);
+
+    expect(html).toContain('aria-label="Switch to light theme"');
   });
 });
 

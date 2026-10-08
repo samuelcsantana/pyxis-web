@@ -30,6 +30,23 @@ export const HoveredDark: Story = {
   parameters: { pseudo: { hover: true } },
 };
 
+export const OnTheNavigationBar: Story = {
+  args: { initialTheme: 'light', surface: 'nav' },
+  decorators: [
+    (Story) => (
+      <div className="flex justify-end bg-nav p-3">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const OnTheNavigationBarDark: Story = {
+  ...OnTheNavigationBar,
+  args: { initialTheme: 'dark', surface: 'nav' },
+  globals: { theme: 'dark' },
+};
+
 export const KeyboardFocus: Story = {
   args: { initialTheme: 'light' },
   parameters: { pseudo: { focusVisible: true } },
