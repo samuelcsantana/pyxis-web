@@ -1,22 +1,8 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
+import { holdScreenRequests } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
-
-async function holdScreenRequests(page: Page): Promise<() => void> {
-  let release: () => void = () => undefined;
-  const released = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await page.route('**/*', async (route) => {
-    const headers = route.request().headers();
-    if (headers.rsc === '1' && headers['next-router-prefetch'] === undefined) {
-      await released;
-    }
-    await route.continue();
-  });
-  return release;
-}
 
 const PREFETCH_REQUESTS_PER_SCREEN = 2;
 
