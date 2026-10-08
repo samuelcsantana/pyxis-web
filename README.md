@@ -72,7 +72,10 @@ Shipping now:
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
-  button on phones
+  button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
+  a slim bar that stays at the top while the page scrolls, and it closes with Escape (the focus
+  goes back to its button), when a link in it is followed and when the address changes (Back,
+  Forward, a period link); an open menu taller than the screen scrolls inside itself
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Page views and named events per day
@@ -239,7 +242,7 @@ server.
 
 ```bash
 npm run test:cov        # unit tests in jsdom, 100% coverage required
-npm run test:e2e        # Playwright with axe, light and dark, desktop and phone, no sideways scroll
+npm run test:e2e        # Playwright, axe (WCAG 2.2 AA + best practices), light/dark, desktop/phone
 npm run test:storybook  # every story in headless Chromium, axe violations fail the run
 npm run test:tooling    # the lint rule, the comment check and the bundle budget
 npm run budget          # after a build: first-load JavaScript of each route against its budget
