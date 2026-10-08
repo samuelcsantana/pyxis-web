@@ -141,7 +141,7 @@ describe('OverviewPage', () => {
     for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
     }
-    expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(1);
+    expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(4);
     expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Top pages' })).toHaveTextContent('/calculator');
     expect(screen.getByRole('region', { name: 'Top events' })).toHaveTextContent(

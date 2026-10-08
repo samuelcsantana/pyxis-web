@@ -9,6 +9,7 @@ import {
   previousPeriodNote,
   comparesUnfinishedDayWithWholeOne,
   spokenChange,
+  spokenTone,
 } from './overview';
 import { overviewResponseSchema } from './overview.schema';
 
@@ -188,14 +189,21 @@ describe('previousPeriodNote', () => {
 });
 
 describe('spokenChange', () => {
-  it('tells a screen reader whether the change is good news, not only the colour', () => {
-    expect(spokenChange('+12.4% (+525)', 'good')).toBe(' change, better than the previous period');
-    expect(spokenChange('+2 pt', 'bad')).toBe(' change, worse than the previous period');
-    expect(spokenChange('+25% (+1)', 'neutral')).toBe(' change');
+  it('names a figure as a change for a screen reader', () => {
+    expect(spokenChange('+12.4% (+525)')).toBe(' change');
+    expect(spokenChange('+2 pt')).toBe(' change');
   });
 
   it('adds nothing to "no change"', () => {
-    expect(spokenChange('no change', 'neutral')).toBe('');
+    expect(spokenChange('no change')).toBe('');
+  });
+});
+
+describe('spokenTone', () => {
+  it('tells a screen reader whether the change is good news, not only the colour', () => {
+    expect(spokenTone('good')).toBe(', better');
+    expect(spokenTone('bad')).toBe(', worse');
+    expect(spokenTone('neutral')).toBe('');
   });
 });
 
@@ -218,10 +226,15 @@ describe('overviewKpis', () => {
       value: '4,758',
       change: '+12.4% (+525)',
       tone: 'good',
-      note: 'vs. previous 30 days',
+      comparison: 'vs. previous 30 days',
+      note: null,
       series: [2400, 2358],
     });
-    expect(users?.note).toBe('signed in at least once');
+    expect(users).toMatchObject({
+      comparison: 'vs. previous 30 days',
+      note: 'signed in at least once',
+    });
+    expect(conversions?.comparison).toBe('vs. previous 30 days');
     expect(conversions?.value).toBe('212');
     expect(conversions?.note).toBe('4.5% of 4,758 visits');
     expect(errors).toEqual({
@@ -230,6 +243,7 @@ describe('overviewKpis', () => {
       value: '2.4%',
       change: '−0.3 pt',
       tone: 'neutral',
+      comparison: 'vs. previous 30 days',
       note: '61 of 2,524 writes failed',
       series: [0.025, 31 / 1324],
     });
@@ -338,7 +352,9 @@ describe('overviewKpis', () => {
     const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 });
 
     expect(kpis.map((kpi) => kpi.tone)).toEqual(['neutral', 'neutral', 'neutral', 'neutral']);
-    expect(kpis[0]?.note).toBe('so far today vs. all of yesterday');
+    expect(kpis.map((kpi) => kpi.comparison)).toEqual(
+      Array.from({ length: 4 }, () => 'so far today vs. all of yesterday'),
+    );
   });
 
   it('judges the change when the API compared the same hours', () => {
@@ -347,6 +363,6 @@ describe('overviewKpis', () => {
       days: 1,
     });
 
-    expect(visits).toMatchObject({ tone: 'good', note: 'vs. yesterday until 10:03' });
+    expect(visits).toMatchObject({ tone: 'good', comparison: 'vs. yesterday until 10:03' });
   });
 });

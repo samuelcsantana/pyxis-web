@@ -93,7 +93,13 @@ test('draws one point per day, and the figures of a single day without a chart',
   const figures = page.getByRole('region', { name: 'Activity of the day' });
   await expect(figures).toContainText('Page views and named events, today');
   await expect(dailyChart(page)).toHaveCount(0);
-  await expect(page.getByText(/^vs\. yesterday until \d{2}:\d{2}$/)).toBeVisible();
+  for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
+    await expect(
+      page
+        .getByRole('region', { name, exact: true })
+        .getByText(/^vs\. yesterday until \d{2}:\d{2}(, better|, worse)?$/),
+    ).toBeVisible();
+  }
   expect(await axeViolations(page)).toEqual([]);
 });
 
