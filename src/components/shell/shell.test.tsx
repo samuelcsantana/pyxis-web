@@ -36,6 +36,10 @@ const ADMIN: Admin = {
     { id: 'p-docs', name: 'Demo Docs', timezone: 'Europe/Lisbon', conversionEvent: 'signup' },
   ],
 };
+function chooseNothing(): Promise<void> {
+  return Promise.resolve();
+}
+
 function store() {
   const [first] = ADMIN.projects;
   if (first === undefined) {
@@ -303,10 +307,14 @@ describe('SignOutButton', () => {
 });
 
 describe('Sidebar', () => {
-  it('holds the project switcher, the screens, the privacy note and the account', () => {
-    renderWithMessages(<Sidebar admin={ADMIN} project={store()} i18n={english} />);
+  it('holds the project switcher, the screens, the privacy note, the languages and the account', () => {
+    renderWithMessages(
+      <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
+    );
 
     expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
+    expect(screen.getByText('Language: English')).toBeInTheDocument();
+    expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(2);
     expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
@@ -315,7 +323,7 @@ describe('Sidebar', () => {
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
       <MobileMenu>
-        <Sidebar admin={ADMIN} project={store()} i18n={english} />
+        <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />
       </MobileMenu>,
     );
 

@@ -4,6 +4,7 @@ import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/
 import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
 import { DemoBanner } from '@/components/states/demo-banner';
+import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n } from '@/i18n/get-messages';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { isDemoMode } from '@/lib/api-config';
@@ -23,7 +24,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
         <SkipLink i18n={i18n} />
         <MobileMenu barActions={<ThemeToggle initialTheme={await chosenTheme()} surface="nav" />}>
-          <Sidebar admin={admin} project={project} i18n={i18n} />
+          <Sidebar admin={admin} project={project} i18n={i18n} chooseLocale={chooseLocale} />
         </MobileMenu>
         <NavigationRegion className="flex min-w-0 flex-col">
           {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
