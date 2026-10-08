@@ -31,7 +31,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
   };
 
   const closeOnEscape = (event: KeyboardEvent<HTMLElement>) => {
-    if (open && event.key === 'Escape') {
+    if (open && event.key === 'Escape' && !event.defaultPrevented) {
       setOpenAt(undefined);
       toggleRef.current?.focus();
     }

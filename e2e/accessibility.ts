@@ -14,6 +14,18 @@ export async function axeViolations(page: Page): Promise<string[]> {
   }, AXE_TAGS);
 }
 
+export async function focusedElementIsUncovered(page: Page): Promise<boolean> {
+  return page.evaluate(() => {
+    const focused = document.activeElement;
+    if (focused === null || focused === document.body) {
+      return false;
+    }
+    const box = focused.getBoundingClientRect();
+    const topmost = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    return topmost !== null && focused.contains(topmost);
+  });
+}
+
 export async function sidewaysOverflow(page: Page): Promise<number> {
   return page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
