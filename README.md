@@ -201,11 +201,15 @@ Shipping now:
   around an unknown screen of a known project
 - A demo mode with invented data and a visible banner when no API is configured, published as
   the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
-  two imaginary products, a store and a documentation site, each drawn from one invented
-  dataset, so every screen gives the same visits, conversions, events and write errors for the
-  same period, and every page, event, property value, device type and channel the screens rank
-  has at least one visit to open in the default 30 days; the Funnel opens on an example funnel,
-  and the banner links back to this repository
+  two imaginary products, a store and a documentation site. A seeded generator draws every
+  visit of each day from the product's catalog (about 90 a day, with devices, sources and
+  campaigns, a journey through the pages, events, writes and failed requests), the same visits
+  for the same day on every server, and each screen reduces those visits the way the API's
+  queries do. So the screens agree by construction: Visits lists as many visits as Overview
+  counts, every filter and drill-down link finds the visits behind its figure, every failure on
+  Requests opens its visit, and the Funnel counts the visits or people that went through its
+  steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
+  the banner links back to this repository
 
 ## Architecture
 
