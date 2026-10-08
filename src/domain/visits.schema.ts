@@ -18,9 +18,12 @@ export const visitsResponseSchema = z
         country: z.string().nullable(),
         channel: z.enum(CHANNELS).nullable(),
         user_id: z.string().nullable(),
+        source: z.string().nullable().optional(),
+        campaign: z.string().nullable().optional(),
       }),
     ),
     next_cursor: z.string().nullable(),
+    total: z.number().optional(),
   })
   .transform((body) => ({
     visits: body.visits.map((visit) => ({

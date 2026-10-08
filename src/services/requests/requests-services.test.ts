@@ -3,7 +3,7 @@ import type { RequestsReport } from '@/domain/requests';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
-import { demoFailedReadsWire, demoRequestsWire } from './demo-requests';
+import { demoFailedReadsWire, demoRequestsWire, statusClassOf } from './demo-requests';
 import { HttpRequestsService } from './http-requests-service';
 import { MockRequestsService } from './mock-requests-service';
 import { createRequestsService } from './requests-service.factory';
@@ -239,6 +239,56 @@ describe('MockRequestsService', () => {
     ]);
     const reads = await new MockRequestsService().failedReads(DEMO_DOCS.id, RANGE, null);
     expect(reads.routes.map((route) => route.route)).toEqual(['/search']);
+  });
+});
+
+describe('the demo request health', () => {
+  const sumOf = (values: readonly number[]) => values.reduce((sum, value) => sum + value, 0);
+
+  it('counts every write of every day by status class, adding up to the routes', () => {
+    const wire = demoRequestsWire(STORE, RANGE, null, NOW);
+    const days = wire.days ?? [];
+    const failed = sumOf(
+      days.map(({ by_status_class: day }) => day.client_error + day.server_error + day.no_response),
+    );
+
+    expect(days.map((day) => day.date)).toHaveLength(14);
+    expect(sumOf(days.map((day) => day.by_status_class.success)) + failed).toBe(
+      sumOf(wire.routes.map((route) => route.total)),
+    );
+    expect(failed).toBe(sumOf(wire.routes.map((route) => route.failed)));
+    expect(wire.route_days).toBeNull();
+  });
+
+  it('counts the failed reads of every day by status class, with no success', () => {
+    const wire = demoFailedReadsWire(DEMO_STORE.id, RANGE, null);
+    const days = wire.days ?? [];
+
+    expect(days.every((day) => day.by_status_class.success === 0)).toBe(true);
+    expect(
+      sumOf(
+        days.map(
+          ({ by_status_class: day }) => day.client_error + day.server_error + day.no_response,
+        ),
+      ),
+    ).toBeGreaterThan(0);
+  });
+
+  it('gives each route a p95 above its median', () => {
+    const wire = demoRequestsWire(STORE, RANGE, null, NOW);
+
+    expect(
+      wire.routes.every((route) => (route.p95_duration_ms ?? 0) > route.median_duration_ms),
+    ).toBe(true);
+  });
+
+  it('names the class of every status', () => {
+    expect([201, 404, 503, 0].map(statusClassOf)).toEqual([
+      'success',
+      'client_error',
+      'server_error',
+      'no_response',
+    ]);
   });
 });
 

@@ -74,6 +74,38 @@ describe('MockAcquisitionService', () => {
   });
 });
 
+describe('demoAcquisitionWire campaigns', () => {
+  it('splits the tagged share of a source over its campaigns, the biggest first', () => {
+    const wire = demoAcquisitionWire(DEMO_STORE.id, RANGE);
+    const google = wire.sources.find((source) => source.source === 'google');
+    const fromGoogle = wire.campaigns?.filter((campaign) => campaign.source === 'google') ?? [];
+
+    expect(wire.campaigns?.map((campaign) => `${campaign.campaign} ${campaign.source}`)).toEqual([
+      'spring_sale google',
+      'brand_search google',
+      'spring_sale bing',
+      'creator_week l.instagram.com',
+    ]);
+    expect(fromGoogle.reduce((sum, campaign) => sum + campaign.visits, 0)).toBeLessThan(
+      google?.visits ?? 0,
+    );
+    expect(fromGoogle.every((campaign) => (campaign.conversions ?? 0) > 0)).toBe(true);
+    expect(fromGoogle.every((campaign) => campaign.from_ad_click_visits > 0)).toBe(true);
+  });
+
+  it('has campaigns without conversions for a project without a conversion event', () => {
+    const wire = demoAcquisitionWire(DEMO_DOCS.id, RANGE);
+
+    expect(wire.campaigns).toEqual([
+      expect.objectContaining({
+        campaign: 'docs_v2_launch',
+        conversions: null,
+        converting_visits: null,
+      }),
+    ]);
+  });
+});
+
 describe('createAcquisitionService', () => {
   it('talks to the API when its URL is set', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', API);

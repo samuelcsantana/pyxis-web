@@ -17,6 +17,12 @@ import {
 } from '../demo/demo-series';
 
 type ChannelCounts = Readonly<Record<Channel, number>>;
+type CampaignShare = DemoSource['campaigns'][number];
+type CampaignWire = NonNullable<AcquisitionWire['campaigns']>[number];
+
+const MAX_CAMPAIGNS = 20;
+const UNTAGGED = '';
+const WHOLE_SHARE = 1;
 
 const NO_VISITS: ChannelCounts = {
   paid: 0,
@@ -60,6 +66,51 @@ function sourceConversions(
   );
 }
 
+function campaignShares(source: DemoSource): readonly CampaignShare[] {
+  const taggedShare = source.campaigns.reduce((sum, [, share]) => sum + share, 0);
+  return [...source.campaigns, [UNTAGGED, Math.max(0, WHOLE_SHARE - taggedShare)]];
+}
+
+function convertedEntries<Entry>(
+  conversions: number | null,
+  entries: readonly Apportioned<Entry>[],
+): readonly { readonly entry: Apportioned<Entry>; readonly conversions: number | null }[] {
+  if (conversions === null) {
+    return entries.map((entry) => ({ entry, conversions: null }));
+  }
+  return apportion(conversions, entries, (entry) => entry.count).map(({ item, count }) => ({
+    entry: item,
+    conversions: count,
+  }));
+}
+
+function campaignWires(
+  visits: readonly Apportioned<DemoSource>[],
+  conversions: readonly (number | null)[],
+): CampaignWire[] {
+  return visits
+    .flatMap(({ item: source, count }, index) =>
+      convertedEntries(
+        conversions[index] ?? null,
+        apportion(count, campaignShares(source), ([, share]) => share),
+      )
+        .filter(({ entry }) => entry.item[0] !== UNTAGGED)
+        .map(({ entry, conversions: converted }) => ({
+          campaign: entry.item[0],
+          source: source.source,
+          medium: source.medium,
+          channel: source.channel,
+          visits: entry.count,
+          conversions: converted,
+          converting_visits: demoConvertingVisitsOrNull(converted),
+          from_ad_click_visits: Math.round(entry.count * source.adClickShare),
+        })),
+    )
+    .filter((campaign) => campaign.visits > 0)
+    .toSorted((first, second) => second.visits - first.visits)
+    .slice(0, MAX_CAMPAIGNS);
+}
+
 export function demoAcquisitionWire(projectId: string, range: DateRange): AcquisitionWire {
   const project = demoProjectOf(projectId);
   const days = demoDays(range).map((date) => ({
@@ -93,6 +144,7 @@ export function demoAcquisitionWire(projectId: string, range: DateRange): Acquis
       }))
       .filter((source) => source.visits > 0)
       .toSorted((first, second) => second.visits - first.visits),
+    campaigns: campaignWires(visits, conversions),
   };
 }
 

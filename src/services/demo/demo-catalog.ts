@@ -53,6 +53,7 @@ export interface DemoSource {
   readonly share: number;
   readonly conversionWeight: number;
   readonly adClickShare: number;
+  readonly campaigns: readonly (readonly [campaign: string, share: number])[];
 }
 
 export interface DemoProject {

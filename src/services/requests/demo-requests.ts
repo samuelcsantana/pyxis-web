@@ -12,6 +12,56 @@ import { demoProjectOf } from '../demo/demo-projects';
 import { apportion, demoDays } from '../demo/demo-series';
 
 export const RECENT_FAILURES_PER_ROUTE = 5;
+const P95_TO_MEDIAN_DURATION = 2.6;
+const NO_RESPONSE_STATUS = 0;
+const FIRST_CLIENT_ERROR_STATUS = 400;
+const FIRST_SERVER_ERROR_STATUS = 500;
+
+type DayWire = NonNullable<RequestsWire['days']>[number];
+type StatusClass = keyof DayWire['by_status_class'];
+
+const NO_REQUESTS: DayWire['by_status_class'] = {
+  success: 0,
+  client_error: 0,
+  server_error: 0,
+  no_response: 0,
+};
+
+export function statusClassOf(status: number): StatusClass {
+  if (status === NO_RESPONSE_STATUS) {
+    return 'no_response';
+  }
+  if (status >= FIRST_SERVER_ERROR_STATUS) {
+    return 'server_error';
+  }
+  return status >= FIRST_CLIENT_ERROR_STATUS ? 'client_error' : 'success';
+}
+
+function p95Of(medianDurationMs: number): number {
+  return Math.round(medianDurationMs * P95_TO_MEDIAN_DURATION);
+}
+
+function onScreen(
+  count: number,
+  screens: readonly (readonly [path: string, share: number])[],
+  screen: string | null,
+): number {
+  if (screen === null) {
+    return count;
+  }
+  return apportion(count, screens, ([, share]) => share)
+    .filter(({ item: [path] }) => path === screen)
+    .reduce((sum, { count: onPath }) => sum + onPath, 0);
+}
+
+function successfulWritesOn(
+  project: DemoProject,
+  route: DemoRoute,
+  date: string,
+  screen: string | null,
+): number {
+  return onScreen(demoSuccessfulWritesOn(project, route, date), route.screens, screen);
+}
 
 function successfulWrites(
   project: DemoProject,
@@ -19,16 +69,39 @@ function successfulWrites(
   range: DateRange,
   screen: string | null,
 ): number {
-  const writes = demoDays(range).reduce(
-    (sum, date) => sum + demoSuccessfulWritesOn(project, route, date),
+  return demoDays(range).reduce(
+    (sum, date) => sum + successfulWritesOn(project, route, date, screen),
     0,
   );
-  if (screen === null) {
-    return writes;
-  }
-  return apportion(writes, route.screens, ([, share]) => share)
-    .filter(({ item: [path] }) => path === screen)
-    .reduce((sum, { count }) => sum + count, 0);
+}
+
+function addByClass(
+  counts: DayWire['by_status_class'],
+  status: number,
+  count: number,
+): DayWire['by_status_class'] {
+  const statusClass = statusClassOf(status);
+  return { ...counts, [statusClass]: counts[statusClass] + count };
+}
+
+function writeDays(
+  project: DemoProject,
+  range: DateRange,
+  screen: string | null,
+  failures: readonly DemoFailure[],
+): DayWire[] {
+  return demoDays(range).map((date) => ({
+    date,
+    by_status_class: failures
+      .filter((failure) => failure.date === date)
+      .reduce((counts, failure) => addByClass(counts, failure.status, failure.count), {
+        ...NO_REQUESTS,
+        success: project.routes.reduce(
+          (sum, route) => sum + successfulWritesOn(project, route, date, screen),
+          0,
+        ),
+      }),
+  }));
 }
 
 function countsBy<Key extends string | number>(
@@ -56,6 +129,7 @@ function routeWire(route: DemoRoute, successes: number, failures: readonly DemoF
         .toSorted((first, second) => first.status - second.status),
     ],
     median_duration_ms: route.medianDurationMs,
+    p95_duration_ms: p95Of(route.medianDurationMs),
     screens: [...countsBy(failures, (failure) => failure.path)]
       .map(([path, count]) => ({ path, failed: count }))
       .toSorted((first, second) => second.failed - first.failed),
@@ -96,7 +170,33 @@ export function demoRequestsWire(
       )
       .filter((route) => route.total > 0)
       .toSorted((first, second) => second.failed - first.failed || second.total - first.total),
+    days: writeDays(project, range, screen, failures),
+    route_days: null,
   };
+}
+
+function failedReadsOn(
+  project: DemoProject,
+  read: DemoFailedRead,
+  date: string,
+  screen: string | null,
+): number {
+  return onScreen(demoFailedReadsOn(project, read, date), read.screens, screen);
+}
+
+function readDays(project: DemoProject, range: DateRange, screen: string | null): DayWire[] {
+  return demoDays(range).map((date) => ({
+    date,
+    by_status_class: project.failedReads.reduce(
+      (counts, read) =>
+        apportion(
+          failedReadsOn(project, read, date, screen),
+          read.statuses,
+          ([, share]) => share,
+        ).reduce((sum, { item: [status], count }) => addByClass(sum, status, count), counts),
+      NO_REQUESTS,
+    ),
+  }));
 }
 
 function failedReadWire(
@@ -124,6 +224,7 @@ function failedReadWire(
       .filter((entry) => entry.count > 0)
       .toSorted((first, second) => first.status - second.status),
     median_duration_ms: read.medianDurationMs,
+    p95_duration_ms: p95Of(read.medianDurationMs),
     screens,
     recent_failures: [],
   };
@@ -141,6 +242,8 @@ export function demoFailedReadsWire(
       .map((read) => failedReadWire(project, read, range, screen))
       .filter((route) => route.failed > 0)
       .toSorted((first, second) => second.failed - first.failed),
+    days: readDays(project, range, screen),
+    route_days: null,
   };
 }
 

@@ -124,6 +124,18 @@ describe('MockTimelineService', () => {
     expect(nobody.visits).toEqual([]);
   });
 
+  it('names the person a visit was identified as, and nobody for an anonymous visit', () => {
+    const identified = demoTimelineWire('demo', { kind: 'visit', id: VISIT }, NOW);
+    const anonymous = demoTimelineWire(
+      'demo',
+      { kind: 'visit', id: '506cf1d6-18b8-4b20-87a4-8ba68956bf5b' },
+      NOW,
+    );
+
+    expect(identified.visits[0]?.user_id).toBe(DEMO_USER_ID);
+    expect(anonymous.visits[0]?.user_id).toBeNull();
+  });
+
   it('keeps the visits of each demo project to that project', async () => {
     const service = new MockTimelineService();
 

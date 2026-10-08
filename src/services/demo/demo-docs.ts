@@ -263,6 +263,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 0.85,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'duckduckgo.com',
@@ -271,6 +272,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 0.15,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'github.com',
@@ -279,6 +281,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 0.7,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'stackoverflow.com',
@@ -287,6 +290,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 0.3,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: '(direct)',
@@ -295,6 +299,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 1,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'www.linkedin.com',
@@ -303,6 +308,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       share: 1,
       conversionWeight: 1,
       adClickShare: 0,
+      campaigns: [['docs_v2_launch', 0.6]],
     },
   ],
   exampleFunnel: [

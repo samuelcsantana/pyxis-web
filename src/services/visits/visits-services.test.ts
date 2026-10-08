@@ -173,9 +173,22 @@ describe('MockVisitsService', () => {
         events: [{ second: 5, name: 'cta_clicked', path: '/' }],
       },
       NOW,
+      { source: '(direct)', medium: null, campaign: null },
     );
 
     expect(summary).toMatchObject({ entry_path: null, page_views: 0, highlights: ['cta_clicked'] });
+  });
+
+  it('counts every matching visit on every page, and names where each came from', () => {
+    const first = demoVisitsWire(STORE, RANGE, NO_VISIT_FILTERS, null, NOW);
+    const second = demoVisitsWire(STORE, RANGE, NO_VISIT_FILTERS, first.next_cursor, NOW);
+
+    expect(second.total).toBe(first.total);
+    expect(first.total).toBeGreaterThan(DEMO_VISITS_PAGE_SIZE);
+    expect(first.visits.every((visit) => typeof visit.source === 'string')).toBe(true);
+    expect(
+      first.visits.filter((visit) => visit.channel === 'direct').map((visit) => visit.source),
+    ).toEqual(expect.arrayContaining(['(direct)']));
   });
 
   it('opens every listed visit in the demo timeline, with the same start', () => {
