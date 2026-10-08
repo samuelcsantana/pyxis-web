@@ -164,8 +164,8 @@ describe('figures', () => {
 
   it('name the transition where the fewest continued', () => {
     expect(biggestDropOff(counted)).toEqual({
-      value: 'Calculator result shown → Opened /sign-up',
-      note: '41.1% continued',
+      value: 'Step 2 → 3',
+      note: 'Calculator result shown → Opened /sign-up · 41.1% continued',
     });
     expect(
       biggestDropOff(
@@ -173,7 +173,7 @@ describe('figures', () => {
           steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
         }),
       ).note,
-    ).toBe('— continued');
+    ).toBe('Opened /calculator → Calculator result shown · — continued');
     expect(biggestDropOff([])).toEqual({ value: '—', note: 'No step to compare' });
   });
 });
