@@ -5,6 +5,11 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import { noComments } from './eslint-rules/no-comments.mjs';
 
+const DICTIONARY_IMPORTS = {
+  group: ['**/i18n/messages/*', './messages/*'],
+  message: 'Dictionaries stay on the server: translate with getTranslator() or useT().',
+};
+
 export default defineConfig(
   globalIgnores([
     '.next/**',
@@ -41,6 +46,19 @@ export default defineConfig(
     },
   },
   {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/i18n/get-messages.ts',
+      'src/i18n/messages.ts',
+      'src/test-utils/**',
+      'src/**/*.test.{ts,tsx}',
+      'src/**/*.stories.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: [DICTIONARY_IMPORTS] }],
+    },
+  },
+  {
     files: ['src/components/**/*.{ts,tsx}'],
     ignores: ['src/components/**/*.test.tsx', 'src/components/**/*.stories.tsx'],
     rules: {
@@ -55,6 +73,7 @@ export default defineConfig(
               group: ['@/domain/*.schema'],
               message: 'Components reach the browser: import the pure domain module instead.',
             },
+            DICTIONARY_IMPORTS,
           ],
         },
       ],
