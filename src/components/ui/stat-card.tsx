@@ -10,12 +10,14 @@ export function StatCard({ id, label, value, note }: StatCardProps) {
     <div
       role="group"
       aria-labelledby={id}
-      className="flex flex-col gap-1.5 rounded-card border border-line bg-card px-4.5 py-4 text-ink"
+      className="flex flex-col gap-1.5 rounded-card border border-line bg-card px-3.5 py-3 text-ink sm:px-4.5 sm:py-4"
     >
       <h2 id={id} className="text-[13px] font-medium text-muted">
         {label}
       </h2>
-      <p className="text-[28px] leading-8 font-semibold tracking-tight tabular-nums">{value}</p>
+      <p className="text-[22px] leading-7 font-semibold tracking-tight tabular-nums sm:text-[28px] sm:leading-8">
+        {value}
+      </p>
       <p className="text-xs text-muted">{note}</p>
     </div>
   );
