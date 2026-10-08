@@ -67,6 +67,29 @@ describe('MockFunnelService', () => {
   });
 });
 
+describe('demoFunnelWire step times', () => {
+  it('times every reached step after the first, and the whole funnel as their sum', () => {
+    const wire = demoFunnelWire('demo', RANGE, 'visit', DEMO_FUNNEL_STEPS);
+    const [first, ...rest] = wire.steps;
+    const gaps = rest.map((step) => step.median_seconds_from_previous ?? 0);
+
+    expect(first?.median_seconds_from_previous).toBeNull();
+    expect(gaps.every((seconds) => seconds >= 20 && seconds < 600)).toBe(true);
+    expect(wire.median_seconds_overall).toBe(gaps.reduce((sum, seconds) => sum + seconds, 0));
+  });
+
+  it('has no time for a step nobody reached, and no overall time', () => {
+    const wire = demoFunnelWire('demo', RANGE, 'visit', [
+      ...TWO,
+      { type: 'event', name: 'never_sent' },
+    ]);
+
+    expect(wire.steps.at(-1)).toEqual({ count: 0, median_seconds_from_previous: null });
+    expect(wire.steps[1]?.median_seconds_from_previous).toBeGreaterThan(0);
+    expect(wire.median_seconds_overall).toBeNull();
+  });
+});
+
 describe('createFunnelService', () => {
   it('talks to the API when its URL is set', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', API);

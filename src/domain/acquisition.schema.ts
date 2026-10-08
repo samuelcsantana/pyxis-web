@@ -25,6 +25,20 @@ export const acquisitionResponseSchema = z
         from_ad_click_visits: z.number(),
       }),
     ),
+    campaigns: z
+      .array(
+        z.object({
+          campaign: z.string(),
+          source: z.string(),
+          medium: z.string().nullable(),
+          channel: z.enum(CHANNELS),
+          visits: z.number(),
+          conversions: z.number().nullable(),
+          converting_visits: z.number().nullable(),
+          from_ad_click_visits: z.number(),
+        }),
+      )
+      .optional(),
   })
   .transform((body) => ({
     days: body.days.map((day) => ({ date: day.date, byChannel: day.by_channel })),

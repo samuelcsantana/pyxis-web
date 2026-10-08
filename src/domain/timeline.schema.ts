@@ -15,6 +15,7 @@ export const timelineResponseSchema = z
         os: z.string(),
         country: z.string().nullable(),
         channel: z.enum(CHANNELS).nullable(),
+        user_id: z.string().nullable().optional(),
         events: z.array(
           z.object({
             id: z.string(),

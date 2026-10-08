@@ -3,8 +3,85 @@
     "schemas": {
       "AcquisitionReport": {
         "additionalProperties": false,
-        "description": "Visits per day and channel, every channel named, and the top sources: the source is the campaign source, else the referring host, else \"(direct)\", taken from the first page view of the visit that carries a channel.",
+        "description": "Visits per day and channel, every channel named, the top sources and the top campaigns: the source is the campaign source, else the referring host, else \"(direct)\", and the campaign is utm_campaign, both taken from the first page view of the visit that carries a channel. Visits without a campaign are left out of campaigns.",
         "properties": {
+          "campaigns": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "campaign": {
+                  "type": "string"
+                },
+                "channel": {
+                  "enum": [
+                    "paid",
+                    "email",
+                    "social",
+                    "campaign",
+                    "organic",
+                    "referral",
+                    "direct"
+                  ],
+                  "type": "string"
+                },
+                "conversions": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "converting_visits": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "from_ad_click_visits": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
+                },
+                "medium": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "source": {
+                  "type": "string"
+                },
+                "visits": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "campaign",
+                "source",
+                "medium",
+                "channel",
+                "visits",
+                "conversions",
+                "converting_visits",
+                "from_ad_click_visits"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "days": {
             "items": {
               "additionalProperties": false,
@@ -128,7 +205,8 @@
         },
         "required": [
           "days",
-          "sources"
+          "sources",
+          "campaigns"
         ],
         "type": "object"
       },
@@ -448,8 +526,20 @@
       },
       "FunnelReport": {
         "additionalProperties": false,
-        "description": "How many visits (mode=visit) or identified people (mode=user) reached each step, in order: a step counts only at or after the first time the previous one happened.",
+        "description": "How many visits (mode=visit) or identified people (mode=user) reached each step, in order: a step counts only at or after the first time the previous one happened. median_seconds_from_previous is the median time, in whole seconds, between reaching the previous step and this one, among those who reached it (null on the first step or when nobody did); median_seconds_overall the same from the first step to the last.",
         "properties": {
+          "median_seconds_overall": {
+            "anyOf": [
+              {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "steps": {
             "items": {
               "additionalProperties": false,
@@ -458,10 +548,23 @@
                   "maximum": 9007199254740991,
                   "minimum": -9007199254740991,
                   "type": "integer"
+                },
+                "median_seconds_from_previous": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 }
               },
               "required": [
-                "count"
+                "count",
+                "median_seconds_from_previous"
               ],
               "type": "object"
             },
@@ -469,7 +572,46 @@
           }
         },
         "required": [
-          "steps"
+          "steps",
+          "median_seconds_overall"
+        ],
+        "type": "object"
+      },
+      "FunnelSubjectsReport": {
+        "additionalProperties": false,
+        "description": "The visits (mode=visit: session ids) or identified people (mode=user: user ids) behind one step of a funnel: outcome=reached those who reached step n (1 is the first), outcome=dropped those who reached step n - 1 and never step n. last_step_at is when they reached the last step they did; newest first, 50 per page. next_cursor goes back as cursor for the older page, null on the last one.",
+        "properties": {
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "subjects": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "last_step_at": {
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "last_step_at"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "subjects",
+          "next_cursor"
         ],
         "type": "object"
       },
@@ -1190,14 +1332,117 @@
       },
       "RequestsReport": {
         "additionalProperties": false,
-        "description": "Writes (methods other than GET, kind=writes) or failed reads (GET, kind=reads) per route, the most failing first: a failure is status 0 or 400 and above. Reads count failures only, so total equals failed and no rate can be drawn from them: a site may send a GET only when it fails. Screens are the pages the calls were made from; at most five recent failures per route, newest first.",
+        "description": "Writes (methods other than GET, kind=writes) or failed reads (GET, kind=reads) per route, the most failing first: a failure is status 0 or 400 and above. Reads count failures only, so total equals failed and no rate can be drawn from them: a site may send a GET only when it fails. Screens are the pages the calls were made from; at most five recent failures per route, newest first. days counts the calls of every route per day by status class (success below 400, client_error 4xx, server_error 5xx, no_response status 0). route_days, only when a route is asked, gives that route per day: calls, failures, and the median and 95th percentile duration (null on a day without calls).",
         "properties": {
+          "days": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "by_status_class": {
+                  "additionalProperties": {
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991,
+                    "type": "integer"
+                  },
+                  "propertyNames": {
+                    "enum": [
+                      "success",
+                      "client_error",
+                      "server_error",
+                      "no_response"
+                    ],
+                    "type": "string"
+                  },
+                  "required": [
+                    "success",
+                    "client_error",
+                    "server_error",
+                    "no_response"
+                  ],
+                  "type": "object"
+                },
+                "date": {
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "date",
+                "by_status_class"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "kind": {
             "enum": [
               "writes",
               "reads"
             ],
             "type": "string"
+          },
+          "route_days": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "date": {
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+                      "type": "string"
+                    },
+                    "failed": {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    "median_duration_ms": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": -9007199254740991,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "p95_duration_ms": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": -9007199254740991,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "total": {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "date",
+                    "total",
+                    "failed",
+                    "median_duration_ms",
+                    "p95_duration_ms"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "routes": {
             "items": {
@@ -1215,6 +1460,11 @@
                 },
                 "method": {
                   "type": "string"
+                },
+                "p95_duration_ms": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
                 },
                 "recent_failures": {
                   "items": {
@@ -1312,6 +1562,7 @@
                 "failed",
                 "statuses",
                 "median_duration_ms",
+                "p95_duration_ms",
                 "screens",
                 "recent_failures"
               ],
@@ -1322,7 +1573,9 @@
         },
         "required": [
           "kind",
-          "routes"
+          "routes",
+          "days",
+          "route_days"
         ],
         "type": "object"
       },
@@ -1468,7 +1721,7 @@
       },
       "TimelineReport": {
         "additionalProperties": false,
-        "description": "The visits of a person (every visit with an event carrying the user id, the one they identified in included) or of one visit, newest first, 20 per page, with all their events. next_before is the cursor for the older page, null on the last one.",
+        "description": "The visits of a person (every visit with an event carrying the user id, the one they identified in included) or of one visit, newest first, 20 per page, with all their events. user_id is the first id the visit was identified with, null for an anonymous one. next_before is the cursor for the older page, null on the last one.",
         "properties": {
           "next_before": {
             "anyOf": [
@@ -1579,6 +1832,12 @@
                   "format": "date-time",
                   "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
                   "type": "string"
+                },
+                "user_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 }
               },
               "required": [
@@ -1590,6 +1849,7 @@
                 "os",
                 "country",
                 "channel",
+                "user_id",
                 "events"
               ],
               "type": "object"
@@ -1626,7 +1886,7 @@
       },
       "VisitsReport": {
         "additionalProperties": false,
-        "description": "The visits with events in the range, newest first, 50 per page. A visit is one browser tab; nothing links two of them. entry_path is its first page view, highlights its first named events in order, failed_requests its api_request events with status 0 or 400 and above, user_id the id it was identified with. next_cursor goes back as cursor for the older page, null on the last one.",
+        "description": "The visits with events in the range, newest first, 50 per page. A visit is one browser tab; nothing links two of them. entry_path is its first page view, highlights its first named events in order, failed_requests its api_request events with status 0 or 400 and above, source and campaign those of its entry page view (the source as Acquisition names it), user_id the id it was identified with. total counts every visit that matches the filters, on every page. next_cursor goes back as cursor for the older page, null on the last one.",
         "properties": {
           "next_cursor": {
             "type": [
@@ -1634,12 +1894,23 @@
               "null"
             ]
           },
+          "total": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer"
+          },
           "visits": {
             "items": {
               "additionalProperties": false,
               "properties": {
                 "browser": {
                   "type": "string"
+                },
+                "campaign": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "channel": {
                   "anyOf": [
@@ -1705,6 +1976,12 @@
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
                   "type": "string"
                 },
+                "source": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "started_at": {
                   "format": "date-time",
                   "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
@@ -1730,6 +2007,8 @@
                 "os",
                 "country",
                 "channel",
+                "source",
+                "campaign",
                 "user_id"
               ],
               "type": "object"
@@ -1739,7 +2018,8 @@
         },
         "required": [
           "visits",
-          "next_cursor"
+          "next_cursor",
+          "total"
         ],
         "type": "object"
       }
@@ -2569,6 +2849,145 @@
         ]
       }
     },
+    "/v1/projects/{projectId}/funnel/subjects": {
+      "get": {
+        "operationId": "FunnelSubjectsController_subjects",
+        "parameters": [
+          {
+            "description": "First day, inclusive, in the project time zone",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Last day, inclusive, at most today in the project time zone; 400 days at most",
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mode",
+            "required": true,
+            "schema": {
+              "enum": [
+                "visit",
+                "user"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The steps of the funnel, as for /funnel",
+            "in": "query",
+            "name": "steps",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The step, 1 for the first; dropped needs 2 or more",
+            "in": "query",
+            "name": "step",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "outcome",
+            "required": true,
+            "schema": {
+              "enum": [
+                "reached",
+                "dropped"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The next_cursor of the previous page",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "projectId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunnelSubjectsReport"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The project does not exist or the admin may not read it; the answer is the same."
+          }
+        },
+        "security": [
+          {
+            "pyxis_session": []
+          }
+        ],
+        "summary": "The visits or people who reached, or dropped at, one funnel step",
+        "tags": [
+          "dashboard queries"
+        ]
+      }
+    },
     "/v1/projects/{projectId}/overview": {
       "get": {
         "operationId": "QueriesController_overview",
@@ -2699,6 +3118,15 @@
                 "writes",
                 "reads"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Also answer route_days for this method and route: POST /orders/:id",
+            "in": "query",
+            "name": "route",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -2953,6 +3381,58 @@
               "enum": [
                 "identified",
                 "anonymous"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The two-letter country code of the visit",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The source of the visit as Acquisition names it: campaign source, referring host or (direct)",
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "type": "string"
+            }
+          },
+          {
+            "description": "The campaign (utm_campaign) of the visit entry",
+            "in": "query",
+            "name": "campaign",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "type": "string"
+            }
+          },
+          {
+            "description": "A request the visit made, as method and route: POST /orders/:id",
+            "in": "query",
+            "name": "route",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "true: the visit had a failed request (status 0 or 400 and above); with route, on that route",
+            "in": "query",
+            "name": "failed",
+            "required": false,
+            "schema": {
+              "enum": [
+                "true",
+                "false"
               ],
               "type": "string"
             }

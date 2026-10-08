@@ -2,6 +2,7 @@ import { todayIn } from '@/domain/period';
 import { type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/visits';
 import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
+import { type DemoAttribution, demoAttributedVisits } from '../demo/demo-attribution';
 import { pathPattern } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
 import { type DemoVisit, demoVisitWire, isFailedStatus } from '../demo/demo-visits';
@@ -23,7 +24,11 @@ export interface ListedVisit {
   readonly events: readonly TimelineEventWire[];
 }
 
-export function listedDemoVisit(visit: DemoVisit, now: Date): ListedVisit {
+export function listedDemoVisit(
+  visit: DemoVisit,
+  now: Date,
+  attribution: DemoAttribution,
+): ListedVisit {
   const wire = demoVisitWire(visit, now);
   const pageViews = wire.events.filter((event) => event.name === PAGE_VIEW);
   const named = wire.events.map((event) => event.name).filter((name) => !UNNAMED_EVENTS.has(name));
@@ -44,6 +49,8 @@ export function listedDemoVisit(visit: DemoVisit, now: Date): ListedVisit {
       country: wire.country,
       channel: wire.channel,
       user_id: visit.userId ?? null,
+      source: attribution.source,
+      campaign: attribution.campaign,
     },
     events: wire.events,
   };
@@ -103,15 +110,19 @@ export function demoVisitsWire(
   now: Date,
 ): VisitsWire {
   const project = demoProjectOf(projectId);
-  const listed = project.visits
-    .map((visit) => listedDemoVisit(visit, now))
+  const matching = demoAttributedVisits(project)
+    .map(({ visit, attribution }) => listedDemoVisit(visit, now, attribution))
     .filter((visit) => withinRange(visit, range, project.timezone) && matches(visit, filters))
     .map((visit) => visit.summary)
-    .toSorted((left, right) => cursorOf(right).localeCompare(cursorOf(left)))
-    .filter((visit) => cursor === null || cursorOf(visit) < cursor);
+    .toSorted((left, right) => cursorOf(right).localeCompare(cursorOf(left)));
+  const listed = matching.filter((visit) => cursor === null || cursorOf(visit) < cursor);
   const page = listed.slice(0, DEMO_VISITS_PAGE_SIZE);
   const last = listed.length > DEMO_VISITS_PAGE_SIZE ? page.at(-1) : undefined;
-  return { visits: page, next_cursor: last === undefined ? null : cursorOf(last) };
+  return {
+    visits: page,
+    next_cursor: last === undefined ? null : cursorOf(last),
+    total: matching.length,
+  };
 }
 
 export function demoVisitsReport(

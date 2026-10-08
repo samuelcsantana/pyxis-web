@@ -134,6 +134,7 @@ export function demoVisitWire(visit: DemoVisit, now: Date) {
     os: visit.os,
     country: visit.country,
     channel: visit.channel,
+    user_id: visit.userId ?? null,
     events: visit.events.map((event, index) => {
       const { name, properties } = eventWire(event);
       return {

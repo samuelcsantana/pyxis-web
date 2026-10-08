@@ -304,6 +304,10 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.8,
       conversionWeight: 1.02,
       adClickShare: 0.94,
+      campaigns: [
+        ['spring_sale', 0.55],
+        ['brand_search', 0.3],
+      ],
     },
     {
       source: 'bing',
@@ -312,6 +316,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.2,
       conversionWeight: 0.69,
       adClickShare: 0.81,
+      campaigns: [['spring_sale', 1]],
     },
     {
       source: 'www.google.com',
@@ -320,6 +325,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.9,
       conversionWeight: 1.22,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'duckduckgo.com',
@@ -328,6 +334,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.1,
       conversionWeight: 1.09,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: '(direct)',
@@ -336,6 +343,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 1,
       conversionWeight: 1.4,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'l.instagram.com',
@@ -344,6 +352,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.7,
       conversionWeight: 0.76,
       adClickShare: 0,
+      campaigns: [['creator_week', 0.4]],
     },
     {
       source: 't.co',
@@ -352,6 +361,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 0.3,
       conversionWeight: 0.47,
       adClickShare: 0,
+      campaigns: [],
     },
     {
       source: 'blog.example.com',
@@ -360,6 +370,7 @@ const STORE_CATALOG: DemoVisitCatalog = {
       share: 1,
       conversionWeight: 0.84,
       adClickShare: 0,
+      campaigns: [],
     },
   ],
   exampleFunnel: [
