@@ -95,8 +95,13 @@ Shipping now:
   the Conversions card names the conversion event it counts. Each card links to the list behind
   its figure, in the same period: the visits, the identified visits, the visits that sent the
   conversion event, and the failing routes on Requests (no link when the figure is zero). Page views and named events per day
-  ("Activity per day") as a chart or a table (a single day shows its two totals instead of a
-  one-point chart); the top pages (views and visits) and events (count and the visits that had
+  ("Activity per day") as lines or a table, with the same days of the previous period dashed
+  behind them (a single day shows its two totals instead of a one-point chart). Each card is
+  also a toggle that plots its own figure per day instead (`?metric=visits`,
+  `identified-users`, `conversions` or `write-errors`, kept by the period links), the write error
+  rate in percent with a gap on days without writes; pressing it again goes back to the activity.
+  A pointer over the chart shows that day's values beside the previous period's; the table stays
+  the accessible way to read them. The top pages (views and visits) and events (count and the visits that had
   them), each opening its visits; a footnote defining visit, identified user, conversion, write
   and failure, and when a change is coloured. Every percentage sits next to the totals it comes
   from, and a division by zero shows a dash, never `NaN%`
@@ -119,7 +124,7 @@ Shipping now:
   device type opens its visits
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
-  stacked by channel (chart or table), and the sources with their conversion rate and the visits
+  stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
   that came from an ad click; the channel of each source opens the visits from that channel
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL; each event opens its
@@ -232,7 +237,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | --------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `/`                               | Opens the first project the admin may read, or explains there is none                            |
 | `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen  |
-| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`                             |
+| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure  |
 | `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                              |
 | `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and their conversion                         |
 | `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
@@ -324,8 +329,8 @@ src/
 ├── components/     UI components, each with its stories (overview, shell, sign-in, states, theme)
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
-│                   rates and changes, sparklines, chart scales, day labels, areas and
-│                   stacked bars, device and country labels, donuts,
+│                   rates and changes, sparklines, chart scales, day labels, lines and
+│                   stacked bars, the Overview chart for each figure, device and country labels, donuts,
 │                   channels and sources, feature ranking, search and property breakdowns,
 │                   routes and failures, funnel steps and counts, timeline items, visit
 │                   filters and rows, CSV files and each screen's tables, errors; the Zod
