@@ -33,17 +33,19 @@ function visit(index: number): VisitSummary {
   };
 }
 
-const PAGES: Readonly<Record<string, { visits: VisitSummary[]; nextCursor: string | null }>> = {
-  first: { visits: [visit(1), visit(2)], nextCursor: 'second' },
-  second: { visits: [visit(3), visit(4)], nextCursor: 'third' },
-  third: { visits: [visit(5)], nextCursor: null },
+const PAGES: Readonly<
+  Record<string, { visits: VisitSummary[]; nextCursor: string | null; total: number }>
+> = {
+  first: { visits: [visit(1), visit(2)], nextCursor: 'second', total: 5 },
+  second: { visits: [visit(3), visit(4)], nextCursor: 'third', total: 5 },
+  third: { visits: [visit(5)], nextCursor: null, total: 5 },
 };
 
 let visits = vi.fn<IVisitsService['visits']>();
 
 beforeEach(() => {
   visits = vi.fn<IVisitsService['visits']>((_projectId, _range, _filters, cursor) =>
-    Promise.resolve(PAGES[cursor ?? 'first'] ?? { visits: [], nextCursor: null }),
+    Promise.resolve(PAGES[cursor ?? 'first'] ?? { visits: [], nextCursor: null, total: 0 }),
   );
   state.visits = visits;
 });

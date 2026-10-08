@@ -61,6 +61,11 @@ describe('HttpVisitsService', () => {
         channel: 'paid',
         device: 'mobile',
         identity: 'anonymous',
+        country: 'BR',
+        source: 'google',
+        campaign: 'spring_sale',
+        route: 'POST /orders',
+        failed: true,
       },
       '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
     );
@@ -76,6 +81,11 @@ describe('HttpVisitsService', () => {
       channel: 'paid',
       device: 'mobile',
       identity: 'anonymous',
+      country: 'BR',
+      source: 'google',
+      campaign: 'spring_sale',
+      route: 'POST /orders',
+      failed: 'true',
       cursor: '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
     });
   });
@@ -253,6 +263,31 @@ describe('MockVisitsService', () => {
       '94810767',
       '930c9810',
     ]);
+  });
+
+  it('filters by country, source and campaign, as Acquisition names them', () => {
+    expect(listed({ country: 'PT' })).toEqual(['5b8d2e7a']);
+    expect(listed({ source: 'google' })).toEqual(['506cf1d6', '0645362d', '19c2e5f6']);
+    expect(listed({ campaign: 'spring_sale' })).toEqual(['7e2b9c14', '19c2e5f6']);
+    expect(listed({ source: 'google', campaign: 'spring_sale' })).toEqual(['19c2e5f6']);
+  });
+
+  it('filters by a request the visit made, or one that failed, on a route or on any', () => {
+    const failing = demoVisitsWire(STORE, RANGE, { ...NO_VISIT_FILTERS, failed: true }, null, NOW);
+
+    expect(listed({ route: 'POST /orders' })).toEqual([
+      '3c07a1b2',
+      'a1fa5f88',
+      'd073f2ad',
+      '2a81c3d4',
+    ]);
+    expect(listed({ route: 'POST /orders', failed: true })).toEqual([
+      '3c07a1b2',
+      'a1fa5f88',
+      'd073f2ad',
+    ]);
+    expect(failing.total).toBe(9);
+    expect(failing.visits.every((visit) => visit.failed_requests > 0)).toBe(true);
   });
 
   it('keeps the visits that started in the period, by the day of the project', async () => {

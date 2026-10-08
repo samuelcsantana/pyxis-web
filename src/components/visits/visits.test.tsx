@@ -282,6 +282,11 @@ describe('VisitFiltersForm', () => {
           channel: 'paid',
           device: 'mobile',
           identity: 'anonymous',
+          country: 'BR',
+          source: 'google',
+          campaign: 'spring_sale',
+          route: 'POST /orders',
+          failed: true,
         }}
         problems={[]}
         clearHref="/p-store/visits?from=2026-09-01&to=2026-09-30"
@@ -306,6 +311,11 @@ describe('VisitFiltersForm', () => {
     expect(screen.getByRole('combobox', { name: 'Channel' })).toHaveValue('paid');
     expect(screen.getByRole('combobox', { name: 'Device' })).toHaveValue('mobile');
     expect(screen.getByRole('combobox', { name: 'Account' })).toHaveValue('anonymous');
+    expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('BR');
+    expect(screen.getByRole('textbox', { name: /^Source/ })).toHaveValue('google');
+    expect(screen.getByRole('textbox', { name: 'Campaign' })).toHaveValue('spring_sale');
+    expect(screen.getByRole('textbox', { name: /^Made request/ })).toHaveValue('POST /orders');
+    expect(screen.getByRole('checkbox', { name: 'With a failed request' })).toBeChecked();
     expect(
       [...container.querySelectorAll<HTMLInputElement>('input[type="hidden"]')].map(
         (input) => `${input.name}=${input.value}`,
@@ -316,7 +326,7 @@ describe('VisitFiltersForm', () => {
       '/p-store/visits?from=2026-09-01&to=2026-09-30',
     );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Filters · 7 active' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Filters · 12 active' })).toHaveAttribute(
       'aria-expanded',
       'true',
     );
@@ -336,6 +346,8 @@ describe('VisitFiltersForm', () => {
 
     expect(screen.getByRole('textbox', { name: 'Viewed page' })).toHaveValue('');
     expect(screen.getByRole('combobox', { name: 'Channel' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('');
+    expect(screen.getByRole('checkbox', { name: 'With a failed request' })).not.toBeChecked();
     expect(screen.getByRole('alert')).toHaveTextContent('A property filter needs an event.');
     expect(screen.queryByRole('link', { name: 'Clear filters' })).not.toBeInTheDocument();
     expect(

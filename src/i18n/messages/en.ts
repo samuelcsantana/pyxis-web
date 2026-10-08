@@ -9,6 +9,7 @@ export const en = {
   },
   counts: {
     visit: { one: '{count} visit', other: '{count} visits' },
+    matchingVisit: { one: '{count} matching visit', other: '{count} matching visits' },
     person: { one: '{count} person', other: '{count} people' },
     day: { one: '{count} day', other: '{count} days' },
     page: { one: '{count} page', other: '{count} pages' },
@@ -190,6 +191,10 @@ export const en = {
       propertyNeedsEvent: 'A property filter needs an event.',
       propertyFormat:
         'A property filter is key=value: a key of lowercase letters, digits and _, and a value of 1 to {max} characters.',
+      country: 'A country is its two-letter code, as BR.',
+      source: 'A source has at most {max} characters.',
+      campaign: 'A campaign has at most {max} characters.',
+      route: 'A request is a method and a route, as POST /orders/:id.',
     },
     accountLink: '{user}, open the timeline of this user',
     shortAccountLink: '{shown}, open the timeline of user {user}',

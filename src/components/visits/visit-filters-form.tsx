@@ -5,6 +5,8 @@ import { deviceTypeLabel } from '@/domain/devices';
 import { type Period, periodQuery } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
 import {
+  MAX_CAMPAIGN_LENGTH,
+  MAX_SOURCE_LENGTH,
   PAGE_FILTER_PARAMETERS,
   VISIT_DEVICE_TYPES,
   VISIT_IDENTITIES,
@@ -140,6 +142,77 @@ export function VisitFiltersForm({
                 </option>
               ))}
             </select>
+          </label>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <label className={LABEL}>
+            Country
+            <input
+              name="country"
+              defaultValue={filters.country ?? ''}
+              placeholder="BR"
+              maxLength={2}
+              aria-describedby="visit-country-hint"
+              autoComplete="off"
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono uppercase`}
+            />
+            <span id="visit-country-hint" className={HINT}>
+              Two-letter code
+            </span>
+          </label>
+          <label className={LABEL}>
+            Source
+            <input
+              name="source"
+              defaultValue={filters.source ?? ''}
+              placeholder="google"
+              maxLength={MAX_SOURCE_LENGTH}
+              aria-describedby="visit-source-hint"
+              autoComplete="off"
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono`}
+            />
+            <span id="visit-source-hint" className={HINT}>
+              As Acquisition names it
+            </span>
+          </label>
+          <label className={LABEL}>
+            Campaign
+            <input
+              name="campaign"
+              defaultValue={filters.campaign ?? ''}
+              placeholder="spring_sale"
+              maxLength={MAX_CAMPAIGN_LENGTH}
+              autoComplete="off"
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono`}
+            />
+          </label>
+          <label className={LABEL}>
+            Made request
+            <input
+              name="route"
+              defaultValue={filters.route ?? ''}
+              placeholder="POST /orders"
+              aria-describedby="visit-route-hint"
+              autoComplete="off"
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono`}
+            />
+            <span id="visit-route-hint" className={HINT}>
+              Method and route
+            </span>
+          </label>
+          <label className="flex min-h-11 items-center gap-2.5 self-end text-caption font-medium">
+            <input
+              type="checkbox"
+              name="failed"
+              value="true"
+              defaultChecked={filters.failed}
+              className="size-5 shrink-0 text-base sm:text-sm"
+            />
+            With a failed request
           </label>
         </div>
         {problems.length === 0 ? null : (

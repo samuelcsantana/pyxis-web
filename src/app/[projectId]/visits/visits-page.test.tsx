@@ -101,6 +101,7 @@ describe('VisitsPage', () => {
     expect(screen.getByRole('button', { name: 'Load older visits' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Clear filters' })).not.toBeInTheDocument();
     expect(screen.getByText(/A failed request is a read or a write/)).toBeInTheDocument();
+    expect(screen.getByText(/^\d+ visits$/)).toBeInTheDocument();
   });
 
   it('passes the filters to the API and keeps them in the period links', async () => {
@@ -149,6 +150,40 @@ describe('VisitsPage', () => {
     expect(within(screen.getByRole('table', { name: 'Visits' })).getAllByRole('row')).toHaveLength(
       2,
     );
+    expect(screen.getByText('1 matching visit')).toBeInTheDocument();
+  });
+
+  it('passes where a visit came from and the request it made, and counts what matches', async () => {
+    const visits = mockVisits();
+
+    render(
+      await renderVisits({
+        range: '30d',
+        country: 'pt',
+        source: 'www.google.com',
+        campaign: '',
+        route: 'GET /plans',
+        failed: 'true',
+      }),
+    );
+
+    expect(visits).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-06', to: '2026-10-05' },
+      {
+        ...NO_VISIT_FILTERS,
+        country: 'PT',
+        source: 'www.google.com',
+        route: 'GET /plans',
+        failed: true,
+      },
+      null,
+    );
+    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=7d&country=PT&source=www.google.com&route=GET+%2Fplans&failed=true',
+    );
+    expect(screen.getByText('0 matching visits')).toBeInTheDocument();
   });
 
   it('says so when no visit matches the filters', async () => {
@@ -173,7 +208,8 @@ describe('VisitsPage', () => {
   });
 
   it('says so when the period has no visit', async () => {
-    state.visits = (): Promise<VisitsReport> => Promise.resolve({ visits: [], nextCursor: null });
+    state.visits = (): Promise<VisitsReport> =>
+      Promise.resolve({ visits: [], nextCursor: null, total: null });
 
     render(await renderVisits());
 
@@ -183,6 +219,7 @@ describe('VisitsPage', () => {
       ),
     ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Load older visits' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/^\d+ (matching )?visits?$/)).not.toBeInTheDocument();
   });
 
   it('loads the older visits of the same period and filters through the server action', async () => {

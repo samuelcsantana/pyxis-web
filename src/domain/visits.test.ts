@@ -9,6 +9,7 @@ import {
   visitFiltersOf,
   visitRows,
   type VisitsWire,
+  isRequestRoute,
 } from './visits';
 import { visitsResponseSchema } from './visits.schema';
 import { english } from '@/test-utils/english';
@@ -84,6 +85,11 @@ describe('visitFiltersOf', () => {
         channel: 'paid',
         device: 'mobile',
         identity: 'anonymous',
+        country: ' br ',
+        source: 'google',
+        campaign: 'spring_sale',
+        route: 'POST /orders/:id',
+        failed: 'true',
       },
       english,
     );
@@ -96,6 +102,11 @@ describe('visitFiltersOf', () => {
         channel: 'paid',
         device: 'mobile',
         identity: 'anonymous',
+        country: 'BR',
+        source: 'google',
+        campaign: 'spring_sale',
+        route: 'POST /orders/:id',
+        failed: true,
       },
       problems: [],
     });
@@ -168,6 +179,47 @@ describe('visitFiltersOf', () => {
     ]);
   });
 
+  it('leaves out where a visit came from when the API would refuse it, and says why', () => {
+    const reading = visitFiltersOf(
+      {
+        country: 'Brazil',
+        source: 'x'.repeat(129),
+        campaign: 'y'.repeat(65),
+        route: 'FETCH /orders',
+        failed: 'false',
+      },
+      english,
+    );
+
+    expect(reading.filters).toEqual(NO_VISIT_FILTERS);
+    expect(reading.problems).toEqual([
+      'A country is its two-letter code, as BR.',
+      'A source has at most 128 characters.',
+      'A campaign has at most 64 characters.',
+      'A request is a method and a route, as POST /orders/:id.',
+    ]);
+  });
+
+  it('keeps the longest source and campaign the API takes', () => {
+    const reading = visitFiltersOf({ source: 'x'.repeat(128), campaign: 'y'.repeat(64) }, english);
+
+    expect(reading.filters.source).toHaveLength(128);
+    expect(reading.filters.campaign).toHaveLength(64);
+  });
+
+  it.each([
+    ['POST /orders/:id', true],
+    ['GET /', true],
+    [`DELETE /${'a'.repeat(99)}`, true],
+    [`DELETE /${'a'.repeat(100)}`, false],
+    ['POST orders', false],
+    ['POST /orders extra', false],
+    ['post /orders', false],
+    ['/orders', false],
+  ])('reads %s as a request route: %s', (route, expected) => {
+    expect(isRequestRoute(route)).toBe(expected);
+  });
+
   it('keeps an equals sign inside the property value', () => {
     expect(
       visitFiltersOf({ event: 'cta_clicked', property: 'query=a=b' }, english).filters.property,
@@ -199,6 +251,11 @@ describe('visitFilterParameters', () => {
         channel: 'paid',
         device: 'mobile',
         identity: 'identified',
+        country: 'BR',
+        source: '(direct)',
+        campaign: 'spring_sale',
+        route: 'GET /plans',
+        failed: true,
       }),
     ).toEqual({
       path: '/calculator-shipping',
@@ -208,6 +265,11 @@ describe('visitFilterParameters', () => {
       channel: 'paid',
       device: 'mobile',
       identity: 'identified',
+      country: 'BR',
+      source: '(direct)',
+      campaign: 'spring_sale',
+      route: 'GET /plans',
+      failed: 'true',
     });
   });
 
