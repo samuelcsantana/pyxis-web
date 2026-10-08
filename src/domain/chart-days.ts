@@ -54,6 +54,17 @@ function placed(date: string, index: number, span: DaySpan, width: number): DayL
   return { date, index, at: span.center, anchor: 'middle' };
 }
 
+export function dayAt(fraction: number, count: number, layout: DayLayout): number | null {
+  if (count === 0) {
+    return null;
+  }
+  const inside = Math.min(Math.max(fraction, 0), 1);
+  if (layout === 'points') {
+    return Math.round(inside * (count - 1));
+  }
+  return Math.min(Math.floor(inside * count), count - 1);
+}
+
 export interface LabelBox {
   readonly left: number;
   readonly right: number;

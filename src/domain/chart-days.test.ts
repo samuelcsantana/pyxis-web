@@ -3,6 +3,7 @@ import {
   BAR_SHARE,
   DATE_LABEL_GAP,
   DATE_LABEL_WIDTH,
+  dayAt,
   type DayLabel,
   type DayLayout,
   dayLabels,
@@ -46,6 +47,31 @@ describe('daySpan', () => {
     expect(span.start).toBeCloseTo(0.275);
     expect(span.end).toBeCloseTo(0.475);
     expect(span.end - span.start).toBeCloseTo(BAR_SHARE / 4);
+  });
+});
+
+describe('dayAt', () => {
+  it('finds the nearest point of a line under the pointer', () => {
+    expect(dayAt(0, 3, 'points')).toBe(0);
+    expect(dayAt(0.24, 3, 'points')).toBe(0);
+    expect(dayAt(0.26, 3, 'points')).toBe(1);
+    expect(dayAt(1, 3, 'points')).toBe(2);
+  });
+
+  it('finds the day whose band the pointer is in for bars', () => {
+    expect(dayAt(0.24, 4, 'bars')).toBe(0);
+    expect(dayAt(0.26, 4, 'bars')).toBe(1);
+    expect(dayAt(1, 4, 'bars')).toBe(3);
+  });
+
+  it('keeps a pointer past an edge on the first or the last day', () => {
+    expect(dayAt(-0.2, 5, 'points')).toBe(0);
+    expect(dayAt(1.3, 5, 'bars')).toBe(4);
+  });
+
+  it('finds the only day of a single-day chart, and none without days', () => {
+    expect(dayAt(0.9, 1, 'points')).toBe(0);
+    expect(dayAt(0.5, 0, 'bars')).toBeNull();
   });
 });
 

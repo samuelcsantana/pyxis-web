@@ -25,6 +25,7 @@ export interface ChartFrameProps {
   readonly dates: readonly string[];
   readonly layout: DayLayout;
   readonly formatTick?: (tick: number) => string;
+  readonly hover?: ReactNode;
   readonly children: ReactNode;
 }
 
@@ -57,6 +58,7 @@ export function ChartFrame({
   dates,
   layout,
   formatTick = formatCount,
+  hover,
   children,
 }: ChartFrameProps) {
   const labels = dayLabelSets(dates, layout);
@@ -77,20 +79,23 @@ export function ChartFrame({
           </span>
         ))}
       </div>
-      <svg
-        viewBox={VIEW_BOX}
-        preserveAspectRatio="none"
-        aria-hidden="true"
-        className="size-full overflow-visible"
-      >
-        <path
-          d={gridLines(axis)}
-          fill="none"
-          stroke="var(--color-grid)"
-          vectorEffect="non-scaling-stroke"
-        />
-        {children}
-      </svg>
+      <div className="relative min-h-0">
+        <svg
+          viewBox={VIEW_BOX}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          className="size-full overflow-visible"
+        >
+          <path
+            d={gridLines(axis)}
+            fill="none"
+            stroke="var(--color-grid)"
+            vectorEffect="non-scaling-stroke"
+          />
+          {children}
+        </svg>
+        {hover}
+      </div>
       <div className="@container relative col-start-2">
         <DayLabelRow labels={labels.narrow} className="@md:hidden" />
         <DayLabelRow labels={labels.wide} className="hidden @md:block" />

@@ -49,6 +49,18 @@ export interface ChartRow {
   readonly cells: readonly string[];
 }
 
+export interface ChartPoint {
+  readonly label: string;
+  readonly value: string;
+  readonly color: SeriesColor;
+  readonly previous: boolean;
+}
+
+export interface ChartDay {
+  readonly day: string;
+  readonly points: readonly ChartPoint[];
+}
+
 type PreviousDay = NonNullable<OverviewReport['previousDays']>[number];
 type CountKpi = OverviewReport['kpis']['visits'];
 
@@ -309,6 +321,34 @@ export function chartRows(chart: OverviewChart): readonly ChartRow[] {
     cells: [
       ...chart.series.map((series) => valueAt(series.values, index, chart)),
       ...previousCells(chart, index),
+    ],
+  }));
+}
+
+function previousPoints(chart: OverviewChart, index: number): readonly ChartPoint[] {
+  if (chart.previousDates === null) {
+    return [];
+  }
+  const day = dayLabelAt(chart.previousDates, index);
+  return chart.series.map((series) => ({
+    label: `${series.label}, ${day}`,
+    value: valueAt(series.previous, index, chart),
+    color: series.color,
+    previous: true,
+  }));
+}
+
+export function chartDays(chart: OverviewChart): readonly ChartDay[] {
+  return chart.dates.map((date, index) => ({
+    day: formatDay(date),
+    points: [
+      ...chart.series.map((series) => ({
+        label: series.label,
+        value: valueAt(series.values, index, chart),
+        color: series.color,
+        previous: false,
+      })),
+      ...previousPoints(chart, index),
     ],
   }));
 }

@@ -2,6 +2,7 @@ import {
   activeChannels,
   type Channel,
   CHANNEL_LABELS,
+  type ChannelChartRow,
   type ChannelDay,
   channelChartRows,
   channelSummary,
@@ -12,16 +13,35 @@ import { formatCount } from '@/domain/metrics';
 import { formatDay } from '@/domain/period';
 import { stackedBars } from '@/domain/stacked-bars';
 import { ChartFrame } from '@/components/charts/chart-frame';
+import { ChartHover, type HoverDay } from '@/components/charts/chart-hover';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
 import { CHANNEL_COLORS } from './channel-colors';
 
 const SEPARATOR_WIDTH = 1;
+const MARKER = 'size-2 rounded-[2px]';
 
 export interface ChannelChartProps {
   readonly days: readonly ChannelDay[];
   readonly periodLabel: string;
+}
+
+function hoverDays(
+  rows: readonly ChannelChartRow[],
+  channels: readonly Channel[],
+): readonly HoverDay[] {
+  return rows.map((row) => ({
+    label: formatDay(row.date),
+    rows: [
+      ...channels.map((channel) => ({
+        label: CHANNEL_LABELS[channel],
+        value: formatCount(row[channel]),
+        marker: `${MARKER} ${CHANNEL_COLORS[channel].swatch}`,
+      })),
+      { label: 'Total', value: formatCount(row.total), marker: MARKER },
+    ],
+  }));
 }
 
 function ChannelBars({
@@ -41,6 +61,7 @@ function ChannelBars({
       axis={axis}
       dates={rows.map((row) => row.date)}
       layout="bars"
+      hover={<ChartHover days={hoverDays(rows, channels)} layout="bars" />}
     >
       {bars.segments.map((segment) => (
         <rect
