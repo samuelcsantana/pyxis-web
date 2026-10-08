@@ -7,10 +7,12 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
+import { MainContent } from './main-content';
 import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from './screens';
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
+import { CONTENT_ID, SkipLink } from './skip-link';
 import { Topbar } from './topbar';
 
 const navigation = vi.hoisted(() => ({
@@ -391,6 +393,31 @@ describe('MobileMenu', () => {
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
+  });
+});
+
+describe('SkipLink and MainContent', () => {
+  it('link to the content, which takes the focus and keeps its own classes', () => {
+    render(
+      <>
+        <SkipLink />
+        <MainContent className="flex gap-4" aria-busy="true">
+          <p>content</p>
+        </MainContent>
+      </>,
+    );
+
+    const main = screen.getByRole('main');
+
+    expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute(
+      'href',
+      `#${CONTENT_ID}`,
+    );
+    expect(main).toHaveAttribute('id', CONTENT_ID);
+    expect(main).toHaveAttribute('tabindex', '-1');
+    expect(main).toHaveAttribute('aria-busy', 'true');
+    expect(main).toHaveClass('flex', 'gap-4');
+    expect(main).toHaveTextContent('content');
   });
 });
 

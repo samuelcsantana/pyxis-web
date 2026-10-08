@@ -1,6 +1,7 @@
 import { FeatureSearch } from '@/components/features/feature-search';
 import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
+import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
@@ -56,7 +57,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         theme={await chosenTheme()}
         keep={query === '' ? { kind } : { kind, q: query }}
       />
-      <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <FeatureTabs
             current={kind}
@@ -89,7 +90,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           break down. Screens are page views grouped by path template, so /orders/8213 and
           /orders/8214 count as /orders/:id.
         </p>
-      </main>
+      </MainContent>
     </>
   );
 }

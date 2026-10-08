@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { LogoMark } from '@/components/brand/logo-mark';
+import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
@@ -22,7 +23,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <div className="flex w-full max-w-6xl justify-end">
         <ThemeToggle initialTheme={await chosenTheme()} />
       </div>
-      <main className="flex w-full grow flex-col items-center justify-center gap-7 py-8">
+      <MainContent className="flex w-full grow flex-col items-center justify-center gap-7 py-8">
         <div className="flex flex-col items-center gap-3.5">
           <LogoMark size={56} />
           <span className="text-[26px] font-bold tracking-tight">Pyxis</span>
@@ -45,7 +46,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           </svg>
           Privacy-first product analytics · no cookies on your visitors, no personal data
         </p>
-      </main>
+      </MainContent>
     </div>
   );
 }

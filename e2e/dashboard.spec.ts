@@ -172,6 +172,19 @@ test('collapses the navigation behind a menu button on a phone', async ({ page, 
   );
 });
 
+test('skips the navigation to the content with the first Tab', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+
+  await page.keyboard.press('Tab');
+  const skipLink = page.getByRole('link', { name: 'Skip to content' });
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toBeInViewport();
+
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('main')).toBeFocused();
+});
+
 const MENU_BUTTON = 'button[aria-controls="main-navigation"]';
 
 test('closes the menu with Escape and gives the focus back to its button', async ({

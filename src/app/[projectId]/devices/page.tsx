@@ -1,6 +1,7 @@
 import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { ShareDonut } from '@/components/devices/share-donut';
+import { MainContent } from '@/components/shell/main-content';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
@@ -86,7 +87,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
         today={todayIn(project.timezone, now)}
         theme={await chosenTheme()}
       />
-      <main className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {hasVisits(report) ? (
           <DevicesReportView report={report} conversionEvent={project.conversionEvent} />
         ) : (
@@ -96,7 +97,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             endpoint={apiBaseUrl()}
           />
         )}
-      </main>
+      </MainContent>
     </>
   );
 }

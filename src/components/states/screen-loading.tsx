@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { MainContent } from '@/components/shell/main-content';
 import { SCREENS, type ScreenSlug } from '@/components/shell/screens';
 import { TopbarFrame } from '@/components/shell/topbar';
 import {
@@ -114,7 +115,7 @@ export function ScreenLoading({ screen }: ScreenLoadingProps) {
           </>
         }
       />
-      <main
+      <MainContent
         aria-busy="true"
         className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
       >
@@ -124,7 +125,7 @@ export function ScreenLoading({ screen }: ScreenLoadingProps) {
         <div aria-hidden="true" className="flex flex-col gap-3.5 sm:gap-5">
           {SCREEN_SKELETONS[screen]()}
         </div>
-      </main>
+      </MainContent>
     </>
   );
 }
