@@ -341,6 +341,19 @@ describe('MobileMenu', () => {
     expect(menu).toHaveClass('hidden');
   });
 
+  it('shows the actions it is given in its bar, beside the menu button, while closed', () => {
+    render(
+      <MobileMenu barActions={<button type="button">Switch theme</button>}>
+        <span>menu</span>
+      </MobileMenu>,
+    );
+
+    const action = screen.getByRole('button', { name: 'Switch theme' });
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(action.parentElement).toBe(toggle.parentElement);
+    expect(document.getElementById('main-navigation')).toHaveClass('hidden');
+  });
+
   it('closes with its own button', () => {
     render(
       <MobileMenu>

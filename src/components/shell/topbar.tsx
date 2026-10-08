@@ -91,7 +91,9 @@ export function Topbar(props: TopbarProps) {
       controls={
         <>
           {props.period === undefined ? null : <PeriodControls {...props} />}
-          <ThemeToggle initialTheme={props.theme} />
+          <div className="hidden lg:flex">
+            <ThemeToggle initialTheme={props.theme} />
+          </div>
         </>
       }
     />
