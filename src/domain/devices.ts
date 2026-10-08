@@ -101,10 +101,6 @@ export function countsConversions(rows: readonly ShareRow[]): boolean {
   return rows.some((row) => row.conversionRate !== null);
 }
 
-export function shareSummary(title: string, rows: readonly ShareRow[]): string {
-  return `${title}: ${rows.map((row) => `${row.label} ${row.share}`).join(', ')}.`;
-}
-
 export interface DeviceConversion {
   readonly label: string;
   readonly rate: string;
