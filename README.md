@@ -87,7 +87,9 @@ Shipping now:
   `e2e/responsive.spec.ts`)
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
-  the Conversions card names the conversion event it counts. Page views and named events per day
+  the Conversions card names the conversion event it counts. Each card links to the list behind
+  its figure, in the same period: the visits, the identified visits, the visits that sent the
+  conversion event, and the failing routes on Requests (no link when the figure is zero). Page views and named events per day
   ("Activity per day") as a chart or a table (a single day shows its two totals instead of a
   one-point chart); the top pages (views and visits) and events (count and the visits that had
   them), each opening its visits; a footnote defining visit, identified user, conversion, write
@@ -108,14 +110,16 @@ Shipping now:
   Overview and Devices say so in one line and how the operator sets one
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
   value with its visits and share, conversion by device, and the countries by name; with a
-  conversion event set, each browser, system and country also gives its conversion rate
+  conversion event set, each browser, system and country also gives its conversion rate; each
+  device type opens its visits
 - Acquisition: paid visits and the top channel with their share of every visit, visits per day
   stacked by channel (chart or table), and the sources with their conversion rate and the visits
-  that came from an ad click
+  that came from an ad click; the channel of each source opens the visits from that channel
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL; each event opens its
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
-  the rest as "Other values"
+  the rest as "Other values". Every event, screen and value opens the visits that had it, with the
+  period kept; a link's name starts with the text it shows ("/pricing: see its visits")
 - Requests: every write by route with its success and error shares, status codes and median
   duration; a keyboard-accessible details panel with the screens where the route failed and its
   latest failures with their error code; "failing only" and screen filters kept in the URL. A
@@ -156,8 +160,9 @@ Shipping now:
   the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
   two imaginary products, a store and a documentation site, each drawn from one invented
   dataset, so every screen gives the same visits, conversions, events and write errors for the
-  same period; the Funnel opens on an example funnel, and the banner links back to this
-  repository
+  same period, and every page, event, property value, device type and channel the screens rank
+  has at least one visit to open in the default 30 days; the Funnel opens on an example funnel,
+  and the banner links back to this repository
 
 ## Architecture
 
@@ -373,7 +378,7 @@ docs/adr/           architecture decision records
 - [x] Requests
 - [x] Funnel
 - [x] Timeline
-- [x] Visits list, linked from the Overview
+- [x] Visits list, linked from the Overview, Features, Devices and Acquisition
 - [x] Production domain
 - [x] Live demo with invented data
 - [x] Property breakdown of each event on Features
