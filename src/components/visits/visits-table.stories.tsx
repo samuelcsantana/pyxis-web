@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows } from '@/domain/visits';
+import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows, visitsTableText } from '@/domain/visits';
 import { demoVisitsReport } from '@/services/visits/demo-visit-list';
 import { VisitsTable } from './visits-table';
 import { english } from '@/test-utils/english';
@@ -33,6 +33,7 @@ const meta = {
     timelinePath: '/demo/timeline',
     emptyMessage: 'No visits in this period.',
     loadOlder,
+    text: visitsTableText(english),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [

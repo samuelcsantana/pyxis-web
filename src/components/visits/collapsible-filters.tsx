@@ -4,22 +4,14 @@ import { type ReactNode, useId, useState } from 'react';
 import { BUTTON_SECONDARY } from '@/components/ui/control-classes';
 
 export interface CollapsibleFiltersProps {
-  readonly activeCount: number;
+  readonly label: string;
   readonly initiallyOpen: boolean;
   readonly children: ReactNode;
 }
 
 const CHEVRON = 'M4 6l4 4 4-4';
 
-function toggleLabel(activeCount: number): string {
-  return activeCount === 0 ? 'Filters' : `Filters · ${String(activeCount)} active`;
-}
-
-export function CollapsibleFilters({
-  activeCount,
-  initiallyOpen,
-  children,
-}: CollapsibleFiltersProps) {
+export function CollapsibleFilters({ label, initiallyOpen, children }: CollapsibleFiltersProps) {
   const [open, setOpen] = useState(initiallyOpen);
   const fieldsId = useId();
   return (
@@ -33,7 +25,7 @@ export function CollapsibleFilters({
         }}
         className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-input px-4 text-sm font-medium sm:hidden ${BUTTON_SECONDARY}`}
       >
-        {toggleLabel(activeCount)}
+        {label}
         <svg
           aria-hidden="true"
           viewBox="0 0 16 16"

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
+import { shortId } from '@/domain/timeline';
 import { NO_VISIT_FILTERS, type VisitsReport } from '@/domain/visits';
 import { MockVisitsService } from '@/services/visits/mock-visits-service';
 import type { IVisitsService } from '@/services/visits/visits-service.interface';
@@ -260,7 +261,7 @@ describe('loadOlderVisitRows', () => {
       NO_VISIT_FILTERS,
       CURSOR,
     );
-    expect(page.rows.map((row) => row.visit)).toEqual([
+    expect(page.rows.map((row) => shortId(row.key))).toEqual([
       '19c2e5f6',
       '94810767',
       '930c9810',

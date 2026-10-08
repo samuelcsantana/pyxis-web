@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows } from '@/domain/visits';
+import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows, visitsTableText } from '@/domain/visits';
 import { demoVisitsReport } from '@/services/visits/demo-visit-list';
 import { VisitFiltersForm } from './visit-filters-form';
 import { VisitsTable } from './visits-table';
@@ -18,6 +18,7 @@ const CURSOR = '2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02';
 function renderTable(loadOlder: (cursor: string) => Promise<VisitRowsPage>, nextCursor = CURSOR) {
   return render(
     <VisitsTable
+      text={visitsTableText(english)}
       rows={FIRST_ROWS}
       nextCursor={nextCursor}
       timelinePath="/p-store/timeline"
@@ -92,6 +93,7 @@ describe('VisitsTable', () => {
     );
     render(
       <VisitsTable
+        text={visitsTableText(english)}
         rows={row === undefined ? [] : [row]}
         nextCursor={null}
         timelinePath="/p-store/timeline"
@@ -122,6 +124,7 @@ describe('VisitsTable', () => {
     );
     render(
       <VisitsTable
+        text={visitsTableText(english)}
         rows={row === undefined ? [] : [row]}
         nextCursor={null}
         timelinePath="/p-store/timeline"
@@ -148,6 +151,7 @@ describe('VisitsTable', () => {
     );
     render(
       <VisitsTable
+        text={visitsTableText(english)}
         rows={row === undefined ? [] : [row]}
         nextCursor={null}
         timelinePath="/p-store/timeline"
@@ -256,6 +260,7 @@ describe('VisitsTable', () => {
   it('says why the list is empty', () => {
     render(
       <VisitsTable
+        text={visitsTableText(english)}
         rows={[]}
         nextCursor={null}
         timelinePath="/p-store/timeline"
