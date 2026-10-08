@@ -4,7 +4,10 @@ import prettier from 'eslint-config-prettier';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import { noComments } from './eslint-rules/no-comments.mjs';
+import { noLiteralJsxText } from './eslint-rules/no-literal-jsx-text.mjs';
 import { noPixelFontSize } from './eslint-rules/no-pixel-font-size.mjs';
+
+const APP_NAME = 'Pyxis';
 
 const DICTIONARY_IMPORTS = {
   group: ['**/i18n/messages/*', './messages/*'],
@@ -27,7 +30,13 @@ export default defineConfig(
   {
     linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' },
     plugins: {
-      local: { rules: { 'no-comments': noComments, 'no-pixel-font-size': noPixelFontSize } },
+      local: {
+        rules: {
+          'no-comments': noComments,
+          'no-literal-jsx-text': noLiteralJsxText,
+          'no-pixel-font-size': noPixelFontSize,
+        },
+      },
     },
     rules: { 'local/no-comments': 'error' },
   },
@@ -51,6 +60,11 @@ export default defineConfig(
   {
     files: ['src/**/*.{ts,tsx}'],
     rules: { 'local/no-pixel-font-size': 'error' },
+  },
+  {
+    files: ['src/**/*.tsx'],
+    ignores: ['src/**/*.test.tsx', 'src/**/*.stories.tsx', 'src/design/**'],
+    rules: { 'local/no-literal-jsx-text': ['error', { allow: [APP_NAME] }] },
   },
   {
     files: ['src/**/*.{ts,tsx}'],
