@@ -2,7 +2,7 @@ import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { ShareDonut } from '@/components/devices/share-donut';
 import { MainContent } from '@/components/shell/main-content';
-import { linkWith, screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
@@ -61,43 +61,47 @@ function DevicesReportView({
       <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-4 sm:[&>:last-child:nth-child(odd)]:col-span-full xl:grid-cols-3 xl:[&>:last-child:nth-child(odd)]:col-span-1">
         <ShareDonut
           id="device-type"
-          title="Device type"
+          title={i18n.t('devices.panels.deviceType')}
           rows={shareRows(report.deviceTypes, deviceTypeLabel, i18n)}
           visitsHref={deviceVisitsHref}
+          i18n={i18n}
         />
         <ShareDonut
           id="browser"
-          title="Browser"
+          title={i18n.t('devices.panels.browser')}
           rows={shareRows(report.browsers, browserLabel, i18n)}
           withConversionRate={conversionEvent !== null}
+          i18n={i18n}
         />
         <ShareDonut
           id="operating-system"
-          title="Operating system"
+          title={i18n.t('devices.panels.operatingSystem')}
           rows={shareRows(report.operatingSystems, operatingSystemLabel, i18n)}
           withConversionRate={conversionEvent !== null}
+          i18n={i18n}
         />
       </div>
       {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
       <div className={`grid gap-3.5 sm:gap-4 ${showsConversions ? 'xl:grid-cols-2' : ''}`}>
         {showsConversions ? (
-          <DeviceConversionList conversions={conversions} conversionEvent={conversionEvent} />
+          <DeviceConversionList
+            conversions={conversions}
+            conversionEvent={conversionEvent}
+            i18n={i18n}
+          />
         ) : null}
         <CountriesTable
           rows={shareRows(report.countries, countryLabel, i18n)}
           withConversionRate={conversionEvent !== null}
           visitsHref={countryVisitsHref}
+          i18n={i18n}
         />
       </div>
       <CsvDownloads
         downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]}
         i18n={i18n}
       />
-      <p className="text-xs leading-[18px] text-muted">
-        Device, browser and system are worked out on the server from the browser&apos;s user agent,
-        which is then thrown away. The country comes from the edge network, never from a stored IP
-        address.
-      </p>
+      <p className="text-xs leading-[18px] text-muted">{i18n.t('devices.footnote')}</p>
     </>
   );
 }
@@ -122,8 +126,8 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   return (
     <>
       <Topbar
-        title="Devices"
-        subtitle={`What people use to reach ${project.name}`}
+        title={i18n.t(screenLabelKey('devices'))}
+        subtitle={i18n.t('devices.subtitle', { project: project.name })}
         basePath={screenHref(project.id, 'devices')}
         period={period}
         today={todayIn(project.timezone, now)}

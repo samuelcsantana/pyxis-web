@@ -10,7 +10,7 @@ const meta = {
   title: 'Devices/Countries',
   component: CountriesTable,
   tags: ['autodocs'],
-  args: { rows: shareRows(REPORT.countries, countryLabel, english) },
+  args: { i18n: english, rows: shareRows(REPORT.countries, countryLabel, english) },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

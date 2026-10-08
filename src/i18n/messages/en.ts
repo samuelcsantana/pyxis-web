@@ -121,6 +121,9 @@ export const en = {
     chart: 'Chart',
     table: 'Table',
   },
+  visitsLink: {
+    purpose: ': see its visits',
+  },
   units: {
     points: '{points} pt',
   },
@@ -279,6 +282,25 @@ export const en = {
     other: 'Other',
     otherCountries: 'Other countries',
     convertedOfVisits: '{converted} of {visits}',
+    subtitle: 'What people use to reach {project}',
+    panels: {
+      deviceType: 'Device type',
+      browser: 'Browser',
+      operatingSystem: 'Operating system',
+    },
+    columns: {
+      country: 'Country',
+      visits: 'Visits',
+      share: 'Share',
+      conversionRate: 'Conversion rate',
+    },
+    countries: 'Countries',
+    conversionByDevice: {
+      title: 'Conversion by device',
+      description: 'Share of visits that sent <code/>',
+    },
+    footnote:
+      "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country comes from the edge network, never from a stored IP address.",
   },
   requests: {
     noResponse: 'No response',

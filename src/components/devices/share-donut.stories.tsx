@@ -15,6 +15,7 @@ const meta = {
   component: ShareDonut,
   tags: ['autodocs'],
   args: {
+    i18n: english,
     id: 'device-type',
     title: 'Device type',
     rows: shareRows(REPORT.deviceTypes, deviceTypeLabel, english),
