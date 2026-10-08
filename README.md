@@ -157,8 +157,9 @@ Shipping now:
   may send its reads only when they fail, so there is no read error rate). The CSV of the routes
   carries the p95 too
 - Funnel: 2 to 8 steps (a page path with `*`, or an event name) counted per visit or per person,
-  with the share that continued and the drop-off at each step; a keyboard-operable step editor,
-  and the steps kept in the URL so a bookmark is a saved funnel
+  with the share that continued and the drop-off at each step, the median time each step took
+  after the one before and the median time to finish; a keyboard-operable step editor, and the
+  steps kept in the URL so a bookmark is a saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status
   (a request reads "164 ms · order_number_in_use", its status shown once, as the chip),
