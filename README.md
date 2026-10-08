@@ -338,7 +338,10 @@ and server components that write text take the request's `I18n` value (translato
 as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`. Client
 Components read their text with `useT()` from the messages provider, so their tests, and the tests
 of any page that contains one, render through `renderWithMessages`, which wraps the tree in the
-provider with the English messages the browser receives.
+provider with the English messages the browser receives. A Client Component that only shows words
+gets them ready from the server instead, as a `…Text` object built by a domain function (the
+Requests, Timeline and Visits tables do this), so those words travel with the page that needs
+them and not with every page; their tests pass the object built with `english`.
 
 ### Performance budget
 
