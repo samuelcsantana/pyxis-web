@@ -77,6 +77,16 @@ export const requestsResponseSchema = z
         noResponse: day.by_status_class.no_response,
       },
     })),
+    routeDays:
+      body.route_days === undefined || body.route_days === null
+        ? null
+        : body.route_days.map((day) => ({
+            date: day.date,
+            total: day.total,
+            failed: day.failed,
+            medianDurationMs: day.median_duration_ms,
+            p95DurationMs: day.p95_duration_ms,
+          })),
   }));
 
 export type RequestsReport = z.output<typeof requestsResponseSchema>;

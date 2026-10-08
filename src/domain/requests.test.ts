@@ -91,6 +91,29 @@ describe('requestsResponseSchema', () => {
     ]);
   });
 
+  it('reads the days of one route, and an API that does not send them as unknown', () => {
+    const report = requestsResponseSchema.parse({
+      ...WIRE,
+      route_days: [
+        {
+          date: '2026-10-04',
+          total: 0,
+          failed: 0,
+          median_duration_ms: null,
+          p95_duration_ms: null,
+        },
+        { date: '2026-10-05', total: 12, failed: 3, median_duration_ms: 150, p95_duration_ms: 420 },
+      ],
+    });
+
+    expect(report.routeDays).toEqual([
+      { date: '2026-10-04', total: 0, failed: 0, medianDurationMs: null, p95DurationMs: null },
+      { date: '2026-10-05', total: 12, failed: 3, medianDurationMs: 150, p95DurationMs: 420 },
+    ]);
+    expect(requestsResponseSchema.parse({ ...WIRE, route_days: null }).routeDays).toBeNull();
+    expect(requestsResponseSchema.parse(WIRE).routeDays).toBeNull();
+  });
+
   it('reads a report that names its kind as well as one from an API that does not', () => {
     expect(requestsResponseSchema.parse({ ...WIRE, kind: 'reads' }).routes).toEqual(ROUTES);
     expect(() => requestsResponseSchema.parse({ ...WIRE, kind: 'pages' })).toThrow();
