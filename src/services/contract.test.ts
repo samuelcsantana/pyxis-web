@@ -219,7 +219,7 @@ describe('the API contract copied from pyxis-api', () => {
     const bodies = sentBodies();
     const service = new HttpAuthService('https://api.pyxis.example.com');
 
-    await service.requestCode('owner@demo-store.example');
+    await service.requestCode('owner@demo-store.example', 'pt-BR');
     await service.verifyCode('owner@demo-store.example', '123456');
     const [requestCode, verifyCode] = bodies();
 

@@ -1,4 +1,5 @@
 import { ApiRequestError, InvalidCodeError, RateLimitedError } from '@/domain/errors';
+import type { Locale } from '@/i18n/locales';
 import type { IAuthService } from './auth-service.interface';
 
 const STATUS_BAD_REQUEST = 400;
@@ -7,8 +8,8 @@ const STATUS_TOO_MANY_REQUESTS = 429;
 export class HttpAuthService implements IAuthService {
   constructor(private readonly baseUrl: string) {}
 
-  requestCode(email: string): Promise<void> {
-    return this.post('/v1/auth/request-code', { email });
+  requestCode(email: string, locale: Locale): Promise<void> {
+    return this.post('/v1/auth/request-code', { email, locale });
   }
 
   async verifyCode(email: string, code: string): Promise<void> {
