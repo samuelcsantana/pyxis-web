@@ -77,7 +77,10 @@ Shipping now:
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. The
   sidebar fits in 700px, so Sign out shows without scrolling on a 1366×768 laptop, and the
-  account email, project names and time zones wrap instead of being cut
+  account email, project names and time zones wrap instead of being cut. The project switcher
+  and the custom range form close on Escape (the focus goes back to their button), when the
+  focus moves past them and on a click outside, so they never cover the control that has the
+  focus; inside the phone menu, the first Escape closes the switcher and the second the menu
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Page views and named events per day
