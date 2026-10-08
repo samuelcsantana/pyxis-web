@@ -47,6 +47,14 @@ function matches(feature: Feature, label: string, query: string): boolean {
   return feature.name.toLowerCase().includes(needle) || label.toLowerCase().includes(needle);
 }
 
+export function matchingFeatures(
+  items: readonly Feature[],
+  kind: FeatureKind,
+  query: string,
+): readonly Feature[] {
+  return items.filter((item) => matches(item, featureLabel(kind, item.name), query));
+}
+
 export function featureRows(
   items: readonly Feature[],
   kind: FeatureKind,
@@ -54,16 +62,13 @@ export function featureRows(
 ): readonly FeatureRow[] {
   const total = items.reduce((sum, item) => sum + item.count, 0);
   const most = Math.max(0, ...items.map((item) => item.count));
-  return items
-    .map((item) => ({ item, label: featureLabel(kind, item.name) }))
-    .filter(({ item, label }) => matches(item, label, query))
-    .map(({ item, label }) => ({
-      name: item.name,
-      label,
-      count: formatCount(item.count),
-      visits: formatCount(item.visits),
-      share: formatPercent(rate(item.count, total)),
-      barWidth: barWidth(item.count, most),
-      daily: item.daily,
-    }));
+  return matchingFeatures(items, kind, query).map((item) => ({
+    name: item.name,
+    label: featureLabel(kind, item.name),
+    count: formatCount(item.count),
+    visits: formatCount(item.visits),
+    share: formatPercent(rate(item.count, total)),
+    barWidth: barWidth(item.count, most),
+    daily: item.daily,
+  }));
 }
