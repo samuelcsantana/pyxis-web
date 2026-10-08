@@ -60,13 +60,16 @@ test('says when an event carried no properties', async ({ page }) => {
 test('switches between events and screens through the URL', async ({ page }) => {
   await page.goto(`/${STORE_ID}/features?range=7d`);
 
-  await page.getByRole('link', { name: 'Screens' }).click();
+  await page.getByRole('link', { name: 'Screens', exact: true }).click();
 
   await expect(page).toHaveURL(/range=7d&kind=screens$/);
   await expect(page.getByRole('table', { name: 'Most visited screens' })).toContainText(
     '/orders/:id',
   );
-  await expect(page.getByRole('link', { name: 'Screens' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', { name: 'Screens', exact: true })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });
 
 test('searches, keeps the search on reload and across periods, then clears it', async ({

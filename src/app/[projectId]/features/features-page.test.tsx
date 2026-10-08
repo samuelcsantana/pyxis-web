@@ -114,6 +114,24 @@ describe('FeaturesPage', () => {
     );
   });
 
+  it('offers the ranking it shows as a CSV file, kind and search kept', async () => {
+    render(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
+
+    expect(screen.getByRole('link', { name: 'Screens as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/features/export?range=30d&kind=screens&q=orders',
+    );
+  });
+
+  it('offers the events as a CSV file without a search', async () => {
+    render(await renderFeatures());
+
+    expect(screen.getByRole('link', { name: 'Events as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/features/export?range=7d&kind=events',
+    );
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.features = () => Promise.reject(new UnauthenticatedError());
 
