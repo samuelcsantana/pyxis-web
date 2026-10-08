@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { linePath } from '@/domain/line-chart';
 import { valueAxis } from '@/domain/chart-scale';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
@@ -9,9 +9,16 @@ import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DayActivityFigures } from './day-activity-figures';
 import { KpiGrid } from './kpi-grid';
+import { MetricSelection } from './metric-selection';
 import { OverviewChartPanel } from './overview-chart-panel';
 import { TopEventsList } from './top-events-list';
 import { TopPagesTable } from './top-pages-table';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: vi.fn() }),
+  usePathname: () => '/p-store/overview',
+  useSearchParams: () => new URLSearchParams('range=7d'),
+}));
 
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
 const AFTER_THE_WEEK = new Date('2026-10-06T15:00:00.000Z');
@@ -121,6 +128,44 @@ describe('KpiGrid', () => {
       'href',
       '/p-store/requests?range=7d&show=failing',
     );
+  });
+
+  it('keeps the cards plain when there is no chart to plot them on', () => {
+    render(
+      <KpiGrid
+        drillDownHref={drillDownHref}
+        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed')}
+      />,
+    );
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Visits' })).not.toHaveClass('cursor-pointer');
+  });
+
+  it('turns each card into a toggle that plots its figure, its link kept outside the toggle', () => {
+    const kpis = overviewKpis(REPORT, LAST_WEEK, 'signup_completed');
+    render(
+      <MetricSelection available={kpis.map((figure) => figure.id)}>
+        <KpiGrid drillDownHref={drillDownHref} kpis={kpis} selectable />
+      </MetricSelection>,
+    );
+
+    const toggles = screen.getAllByRole('button', {
+      description: 'Plots this figure per day on the chart below.',
+    });
+    expect(toggles.map((toggle) => toggle.textContent)).toEqual([
+      'Visits',
+      'Identified users',
+      'Conversions',
+      'Write error rate',
+    ]);
+    expect(toggles.every((toggle) => toggle.getAttribute('aria-pressed') === 'false')).toBe(true);
+    const visits = screen.getByRole('group', { name: 'Visits' });
+    expect(visits).toHaveClass('cursor-pointer');
+    const visitsToggle = within(visits).getByRole('button', { name: 'Visits' });
+    expect(within(visits).getByRole('heading', { name: 'Visits' })).toContainElement(visitsToggle);
+    expect(visitsToggle).not.toContainElement(within(visits).getByRole('link'));
+    expect(screen.getByText('Plots this figure per day on the chart below.')).not.toBeVisible();
   });
 
   it('offers no link to a list that would be empty', () => {

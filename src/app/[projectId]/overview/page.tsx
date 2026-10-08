@@ -1,5 +1,6 @@
 import { DayActivityFigures } from '@/components/overview/day-activity-figures';
 import { KpiGrid } from '@/components/overview/kpi-grid';
+import { MetricChartArea, MetricSelection } from '@/components/overview/metric-selection';
 import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
@@ -19,8 +20,14 @@ import {
   VISIT_DEFINITION,
   WRITE_DEFINITION,
 } from '@/domain/glossary';
-import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
-import { ACTIVITY, overviewChart } from '@/domain/overview-chart';
+import {
+  activityTotals,
+  hasActivity,
+  type KpiView,
+  type OverviewReport,
+  overviewKpis,
+} from '@/domain/overview';
+import { type ChartMetric, chartMetric, keptMetric, overviewChart } from '@/domain/overview-chart';
 import { OVERVIEW_TABLE_LABELS, OVERVIEW_TABLES } from '@/domain/overview-export';
 import {
   daysBetween,
@@ -49,16 +56,21 @@ const FOOTNOTE = [
   CHANGE_TONE_RULE,
 ].join(' ');
 
+export interface OverviewSearch extends PeriodSearch {
+  readonly metric?: string | string[];
+}
+
 export interface OverviewPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch>;
+  readonly searchParams: Promise<OverviewSearch>;
 }
 
 interface OverviewReportViewProps {
   readonly report: OverviewReport;
+  readonly kpis: readonly KpiView[];
+  readonly metric: ChartMetric;
   readonly conversionEvent: string | null;
   readonly period: Period;
-  readonly today: string;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
 }
@@ -76,29 +88,33 @@ function overviewDownloads(projectId: string, period: Period): readonly CsvDownl
 
 function OverviewReportView({
   report,
+  kpis,
+  metric,
   conversionEvent,
   period,
-  today,
   filteredHref,
   downloads,
 }: OverviewReportViewProps) {
-  const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   const visitsHref = (filter: Readonly<Record<string, string>>) => filteredHref('visits', filter);
+  const periodLabel = describePeriod(period);
+  const singleDay = report.days.length === 1;
   return (
     <>
-      <KpiGrid
-        kpis={overviewKpis(report, compared, conversionEvent)}
-        drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
-      />
-      {conversionEvent === null ? <NoConversionEvent /> : null}
-      {report.days.length === 1 ? (
-        <DayActivityFigures days={report.days} periodLabel={describePeriod(period)} />
-      ) : (
-        <OverviewChartPanel
-          chart={overviewChart(report, ACTIVITY)}
-          periodLabel={describePeriod(period)}
+      <MetricSelection available={kpis.map((kpi) => kpi.id)}>
+        <KpiGrid
+          kpis={kpis}
+          drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
+          selectable={!singleDay}
         />
-      )}
+        {conversionEvent === null ? <NoConversionEvent /> : null}
+        {singleDay ? (
+          <DayActivityFigures days={report.days} periodLabel={periodLabel} />
+        ) : (
+          <MetricChartArea>
+            <OverviewChartPanel chart={overviewChart(report, metric)} periodLabel={periodLabel} />
+          </MetricChartArea>
+        )}
+      </MetricSelection>
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">
         <TopPagesTable
           pages={report.topPages}
@@ -118,11 +134,18 @@ function OverviewReportView({
 
 export default async function OverviewPage({ params, searchParams }: OverviewPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
+  const search = await searchParams;
   const now = new Date();
-  const period = resolvePeriod(await searchParams, project.timezone, now);
+  const period = resolvePeriod(search, project.timezone, now);
   const today = todayIn(project.timezone, now);
   const report = await readOrSignIn(() =>
     createOverviewService().overview(project.id, { from: period.from, to: period.to }),
+  );
+  const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
+  const kpis = overviewKpis(report, compared, project.conversionEvent);
+  const metric = chartMetric(
+    search.metric,
+    kpis.map((kpi) => kpi.id),
   );
   return (
     <>
@@ -132,15 +155,17 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         basePath={screenHref(project.id, 'overview')}
         period={period}
         today={today}
+        keep={keptMetric(metric)}
         theme={await chosenTheme()}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
         {hasActivity(report) ? (
           <OverviewReportView
             report={report}
+            kpis={kpis}
+            metric={metric}
             conversionEvent={project.conversionEvent}
             period={period}
-            today={today}
             filteredHref={(screen, filter) =>
               linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
             }

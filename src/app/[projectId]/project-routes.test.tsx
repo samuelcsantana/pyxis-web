@@ -194,6 +194,37 @@ describe('OverviewPage', () => {
       'Page views and named events, today',
     );
     expect(screen.queryByRole('region', { name: 'Activity per day' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { pressed: false })).not.toBeInTheDocument();
+  });
+
+  it('plots the figure the address names, and keeps it when the period changes', async () => {
+    render(await renderOverview({ range: '7d', metric: 'visits' }));
+
+    expect(screen.getByRole('region', { name: 'Visits per day' })).toHaveTextContent(
+      'Visits, last 7 days',
+    );
+    expect(screen.getByRole('button', { name: 'Visits' })).toHaveAttribute('aria-pressed');
+    const periods = within(screen.getByRole('navigation', { name: 'Period' }));
+    expect(periods.getByRole('link', { name: '30 days' })).toHaveAttribute(
+      'href',
+      '/p-store/overview?range=30d&metric=visits',
+    );
+  });
+
+  it('plots the activity and keeps no figure for a figure without a card', async () => {
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
+    };
+
+    render(await renderOverview({ range: '7d', metric: 'conversions' }));
+
+    expect(screen.getByRole('region', { name: 'Activity per day' })).toBeInTheDocument();
+    const periods = within(screen.getByRole('navigation', { name: 'Period' }));
+    expect(periods.getByRole('link', { name: '30 days' })).toHaveAttribute(
+      'href',
+      '/p-store/overview?range=30d',
+    );
   });
 
   it('links the top pages and events to their visits in the same period', async () => {
