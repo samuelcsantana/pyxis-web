@@ -8,6 +8,7 @@ const EXAMPLE_FUNNEL =
 const MIN_PHONE_FIELD_FONT_PX = 16;
 const STAT_VALUE_LINE_PX = 28;
 const PHONE_CARD_PADDING_PX = 14;
+const PHONE_CHART_MIN_PX = 176;
 const TABLET_WIDTHS = [768, 1024] as const;
 const KPI_COUNT = 4;
 const DESKTOP_FIELD_FONT_PX = 14;
@@ -283,6 +284,14 @@ test.describe('at 320×640, below the sm breakpoint, the content', () => {
       const value = page.getByRole('group', { name }).locator('p').first();
       expect((await value.boundingBox())?.height).toBeLessThanOrEqual(STAT_VALUE_LINE_PX);
     }
+  });
+
+  test('gives the Overview chart room to read', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/overview`);
+    const chart = page.getByRole('region', { name: 'Activity per day' }).getByRole('img');
+    await expect(chart).toBeVisible();
+
+    expect((await chart.boundingBox())?.height).toBeGreaterThanOrEqual(PHONE_CHART_MIN_PX);
   });
 
   test('pads the Timeline cards like the panels', async ({ page }) => {

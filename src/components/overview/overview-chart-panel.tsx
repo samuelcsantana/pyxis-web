@@ -96,7 +96,7 @@ function Chart({ chart }: { readonly chart: OverviewChart }) {
   return (
     <ChartFrame
       summary={chartSummary(chart)}
-      heightClassName="h-30 sm:h-60"
+      heightClassName="h-44 sm:h-60"
       axis={axis}
       dates={chart.dates}
       layout="points"
