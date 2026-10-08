@@ -4,6 +4,7 @@ import {
   ACTIVITY,
   chartCaption,
   chartColumns,
+  chartDays,
   chartMetric,
   chartRows,
   chartSummary,
@@ -315,5 +316,27 @@ describe('the table of the chart', () => {
       { day: 'Oct 4', cells: ['2,400', 'Oct 2', '2,100'] },
       { day: 'Oct 5', cells: ['2,358', '—', '—'] },
     ]);
+  });
+});
+
+describe('chartDays', () => {
+  it('lists the values of each day under the pointer, the previous period after them', () => {
+    expect(chartDays(chartOf(WITH_PREVIOUS, 'visits'))[1]).toEqual({
+      day: 'Oct 5',
+      points: [
+        { label: 'Visits', value: '2,358', color: 'sky', previous: false },
+        { label: 'Visits, Oct 3', value: '2,133', color: 'sky', previous: true },
+      ],
+    });
+  });
+
+  it('lists only the current values without a previous period', () => {
+    expect(chartDays(chartOf(WIRE, ACTIVITY))[0]).toEqual({
+      day: 'Oct 4',
+      points: [
+        { label: 'Page views', value: '180', color: 'sky', previous: false },
+        { label: 'Named events', value: '96', color: 'violet', previous: false },
+      ],
+    });
   });
 });

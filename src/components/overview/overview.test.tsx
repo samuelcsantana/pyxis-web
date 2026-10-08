@@ -1,10 +1,16 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { linePath } from '@/domain/line-chart';
 import { valueAxis } from '@/domain/chart-scale';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
-import { ACTIVITY, chartRows, chartValues, overviewChart } from '@/domain/overview-chart';
+import {
+  ACTIVITY,
+  chartDays,
+  chartRows,
+  chartValues,
+  overviewChart,
+} from '@/domain/overview-chart';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { demoOverviewWire } from '@/services/overview/demo-overview';
 import { DayActivityFigures } from './day-activity-figures';
@@ -278,6 +284,24 @@ describe('OverviewChartPanel', () => {
     expect(screen.getByText('Previous period')).toHaveTextContent(
       `Previous period${String(chart.previousTotal)}`,
     );
+  });
+
+  it('shows the values of the day under the pointer, the previous period dashed', () => {
+    render(<OverviewChartPanel chart={ACTIVITY_CHART} periodLabel="last 7 days" />);
+    const layer = screen.getByRole('img').querySelector<HTMLElement>('[data-layer="hover"]');
+    if (layer === null) {
+      throw new Error('The hover layer was not drawn');
+    }
+    vi.spyOn(layer, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 600 } as DOMRect);
+
+    fireEvent.pointerMove(layer, { clientX: 0 });
+
+    const [first] = chartDays(ACTIVITY_CHART);
+    expect(layer).toHaveTextContent(
+      [first?.day, ...(first?.points ?? []).map((point) => point.label + point.value)].join(''),
+    );
+    expect(layer.querySelectorAll('.bg-sky.rounded-\\[2px\\]')).toHaveLength(1);
+    expect(layer.querySelectorAll('.border-dashed.border-violet')).toHaveLength(1);
   });
 
   it('switches to a table of the same days and back', async () => {

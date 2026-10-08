@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { activeChannels, channelChartRows, type Source, sourceRows } from '@/domain/acquisition';
 import { valueAxis } from '@/domain/chart-scale';
 import { stackedBars } from '@/domain/stacked-bars';
@@ -47,6 +47,22 @@ describe('ChannelChart', () => {
       bars.separators,
     );
     expect(bars.separators).not.toBe('');
+  });
+
+  it('shows the channels of the day under the pointer, and its total', () => {
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+    const layer = screen.getByRole('img').querySelector<HTMLElement>('[data-layer="hover"]');
+    if (layer === null) {
+      throw new Error('The hover layer was not drawn');
+    }
+    vi.spyOn(layer, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 700 } as DOMRect);
+
+    fireEvent.pointerMove(layer, { clientX: 690 });
+
+    const [last] = channelChartRows(REPORT.days).slice(-1);
+    expect(layer).toHaveTextContent('Oct 5');
+    expect(layer).toHaveTextContent(`Organic search${String(last?.organic)}`);
+    expect(layer).toHaveTextContent(`Total${String(last?.total)}`);
   });
 
   it('switches to a table of every day with its total', async () => {

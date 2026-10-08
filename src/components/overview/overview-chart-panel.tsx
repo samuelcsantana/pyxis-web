@@ -3,6 +3,7 @@ import { linePath } from '@/domain/line-chart';
 import {
   chartCaption,
   chartColumns,
+  chartDays,
   chartRows,
   chartSummary,
   chartValues,
@@ -11,6 +12,7 @@ import {
   type SeriesColor,
 } from '@/domain/overview-chart';
 import { ChartFrame } from '@/components/charts/chart-frame';
+import { ChartHover, type HoverDay } from '@/components/charts/chart-hover';
 import { ChartPanel, LegendItem } from '@/components/charts/chart-panel';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { BODY_CELL, HEADER_CELL } from '@/components/ui/panel-classes';
@@ -28,6 +30,16 @@ const SWATCHES: Readonly<Record<SeriesColor, string>> = {
   accent: 'bg-accent',
   bad: 'bg-bad',
 };
+
+const DASHED_MARKERS: Readonly<Record<SeriesColor, string>> = {
+  sky: 'border-sky',
+  violet: 'border-violet',
+  accent: 'border-accent',
+  bad: 'border-bad',
+};
+
+const SOLID_MARKER = 'size-2 rounded-[2px]';
+const DASHED_MARKER = 'w-3.5 border-t-2 border-dashed';
 
 const LINE_WIDTH = 2.5;
 const PREVIOUS_LINE_WIDTH = 1.75;
@@ -66,6 +78,19 @@ function SeriesLines({ chart, axis }: { readonly chart: OverviewChart; readonly 
   ));
 }
 
+function hoverDays(chart: OverviewChart): readonly HoverDay[] {
+  return chartDays(chart).map(({ day, points }) => ({
+    label: day,
+    rows: points.map((point) => ({
+      label: point.label,
+      value: point.value,
+      marker: point.previous
+        ? `${DASHED_MARKER} ${DASHED_MARKERS[point.color]}`
+        : `${SOLID_MARKER} ${SWATCHES[point.color]}`,
+    })),
+  }));
+}
+
 function Chart({ chart }: { readonly chart: OverviewChart }) {
   const axis = valueAxis(chartValues(chart));
   return (
@@ -76,6 +101,7 @@ function Chart({ chart }: { readonly chart: OverviewChart }) {
       dates={chart.dates}
       layout="points"
       formatTick={(tick) => formatChartValue(tick, chart.format)}
+      hover={<ChartHover days={hoverDays(chart)} layout="points" />}
     >
       <SeriesLines chart={chart} axis={axis} />
     </ChartFrame>
