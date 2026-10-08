@@ -178,3 +178,29 @@ test.describe('at 768×1024, with the details of a route open', () => {
     await expect(root).toHaveCSS('overflow-y', 'visible');
   });
 });
+
+test('charts the failures per day by what went wrong, with a table that adds up', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/requests?range=7d`);
+  const chart = page.getByRole('region', { name: 'Failures per day' });
+  await expect(chart.getByRole('img', { name: /^Stacked bar chart of 7 days,/ })).toBeVisible();
+
+  await chart.getByRole('button', { name: 'Table', exact: true }).click();
+
+  const rows = chart.getByRole('table').locator('tbody tr');
+  await expect(rows).toHaveCount(7);
+  for (const row of await rows.all()) {
+    const cells = (await row.locator('td').allTextContents()).map((text) =>
+      Number(text.replaceAll(',', '')),
+    );
+    const total = cells.pop();
+    expect(total).toBe(cells.reduce((sum, value) => sum + value, 0));
+  }
+  await expect(
+    page.getByRole('table', { name: 'Routes' }).getByRole('columnheader', { name: 'p95' }),
+  ).toHaveCount(isMobile ? 0 : 1);
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+});

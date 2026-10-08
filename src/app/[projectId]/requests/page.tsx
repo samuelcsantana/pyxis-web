@@ -1,3 +1,4 @@
+import { FailureDaysChart } from '@/components/requests/failure-days-chart';
 import { RequestFilters } from '@/components/requests/request-filters';
 import { RequestsTable } from '@/components/requests/requests-table';
 import { MainContent } from '@/components/shell/main-content';
@@ -8,6 +9,7 @@ import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
 import {
+  describePeriod,
   type Period,
   type PeriodSearch,
   periodQuery,
@@ -157,6 +159,16 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 />
               ))}
             </div>
+            {report.days.length === 0 ? null : (
+              <FailureDaysChart
+                days={report.days}
+                description={i18n.t(`requests.failureDays.description.${kind}`, {
+                  period: describePeriod(period, i18n),
+                })}
+                periodLabel={describePeriod(period, i18n)}
+                i18n={i18n}
+              />
+            )}
             <RequestFilters
               kind={kind}
               allHref={hrefFor({ ...filter, failingOnly: false })}

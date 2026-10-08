@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
@@ -110,6 +110,25 @@ describe('RequestsPage', () => {
       '/p-store/requests?range=7d&kind=reads',
     );
     expect(screen.getByText(/Failed reads have their own tab/)).toBeInTheDocument();
+    expect(
+      screen.getByText('Every write that failed, by what went wrong, last 7 days'),
+    ).toBeInTheDocument();
+  });
+
+  it('charts the failed reads per day, and nothing per day for an API that has no days', async () => {
+    render(await renderRequests({ range: '7d', kind: 'reads' }));
+    expect(
+      screen.getByText('Every read that failed, by what went wrong, last 7 days'),
+    ).toBeInTheDocument();
+    cleanup();
+
+    state.requests = (projectId, range, screenPath) =>
+      new MockRequestsService()
+        .requests(projectId, range, screenPath)
+        .then((report) => ({ ...report, days: [] }));
+    render(await renderRequests());
+
+    expect(screen.queryByText('Failures per day')).not.toBeInTheDocument();
   });
 
   it('shows the failed reads by count, without a rate, and keeps the tab in every link', async () => {
