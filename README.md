@@ -294,6 +294,9 @@ below it. Excluded, and why:
 The root layout is covered too: its test calls the server component and checks the document it
 returns.
 
+Tests run in English: the Vitest setup file replaces `currentLocale()`, the only code that reads
+the request's language, so a test never needs request headers to render a page.
+
 ### Performance budget
 
 The CI `build` job fails when a route's first-load JavaScript (every first-load chunk, gzip
@@ -326,8 +329,11 @@ src/
 │                   filters and rows, CSV files and each screen's tables, errors; the Zod
 │                   schemas of the API answers sit apart in *.schema.ts, imported by the
 │                   server only
+├── i18n/           interface languages: Accept-Language negotiation, typed dictionaries with
+│                   CLDR plurals, the request's language and the messages provider
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
+├── test-utils/     test helpers (rendering inside the messages provider)
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
@@ -371,6 +377,7 @@ docs/adr/           architecture decision records
 | [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge           |
 | [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view (superseded by 0006) |
 | [0006](docs/adr/0006-server-rendered-svg-charts.md)                | Charts drawn as SVG on the server, each with a table view         |
+| [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)    | Interface languages with typed dictionaries, a cookie and Intl    |
 
 ## Roadmap
 
