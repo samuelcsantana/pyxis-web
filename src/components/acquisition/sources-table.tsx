@@ -1,4 +1,5 @@
-import { type Channel, CHANNEL_LABELS, type SourceRow } from '@/domain/acquisition';
+import { type Channel, channelLabel, type SourceRow } from '@/domain/acquisition';
+import type { I18n } from '@/i18n/i18n';
 import { NO_VALUE } from '@/domain/metrics';
 import {
   BODY_CELL,
@@ -13,6 +14,7 @@ import { CHANNEL_COLORS } from './channel-colors';
 export interface SourcesTableProps {
   readonly rows: readonly SourceRow[];
   readonly channelVisitsHref: (channel: Channel) => string;
+  readonly i18n: I18n;
 }
 
 function ConversionColumns() {
@@ -51,7 +53,7 @@ function ConversionCells({ row }: { readonly row: SourceRow }) {
   );
 }
 
-export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
+export function SourcesTable({ rows, channelVisitsHref, i18n }: SourcesTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
   return (
     <section aria-labelledby="sources-heading" className={PANEL}>
@@ -99,7 +101,7 @@ export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
                         <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
                           <VisitsLink
                             href={channelVisitsHref(row.channel)}
-                            label={CHANNEL_LABELS[row.channel]}
+                            label={channelLabel(row.channel, i18n)}
                           />
                           {row.medium === null ? null : (
                             <span className="font-mono sm:hidden">{row.medium}</span>

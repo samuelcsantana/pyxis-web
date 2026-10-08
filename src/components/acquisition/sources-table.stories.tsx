@@ -17,7 +17,7 @@ const meta = {
   title: 'Acquisition/Sources',
   component: SourcesTable,
   tags: ['autodocs'],
-  args: { rows: sourceRows(REPORT.sources, english), channelVisitsHref },
+  args: { rows: sourceRows(REPORT.sources, english), channelVisitsHref, i18n: english },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (

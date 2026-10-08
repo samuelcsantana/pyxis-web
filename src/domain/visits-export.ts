@@ -5,7 +5,7 @@ import type { VisitSummary } from './visits';
 
 export const MAX_EXPORTED_VISITS = 1_000;
 export function visitsTableLabel(i18n: I18n): string {
-  return `Newest ${formatCount(MAX_EXPORTED_VISITS, i18n)} visits`;
+  return i18n.t('exports.visits', { visits: formatCount(MAX_EXPORTED_VISITS, i18n) });
 }
 
 const HIGHLIGHT_SEPARATOR = '; ';

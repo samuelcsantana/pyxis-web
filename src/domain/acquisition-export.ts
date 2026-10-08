@@ -1,13 +1,13 @@
+import type { I18n } from '@/i18n/i18n';
 import { type AcquisitionReport, CHANNELS, type Source } from './acquisition';
 import type { CsvTable, CsvValue } from './csv';
 
 export const ACQUISITION_TABLES = ['sources', 'channels'] as const;
 export type AcquisitionTable = (typeof ACQUISITION_TABLES)[number];
 
-export const ACQUISITION_TABLE_LABELS: Readonly<Record<AcquisitionTable, string>> = {
-  sources: 'Sources',
-  channels: 'Visits by channel',
-};
+export function acquisitionTableLabel(table: AcquisitionTable, i18n: I18n): string {
+  return i18n.t(`exports.acquisition.${table}`);
+}
 
 interface SourceColumn {
   readonly name: string;

@@ -16,7 +16,7 @@ import {
   topChannel,
   visitsTotal,
 } from '@/domain/acquisition';
-import { ACQUISITION_TABLE_LABELS, ACQUISITION_TABLES } from '@/domain/acquisition-export';
+import { ACQUISITION_TABLES, acquisitionTableLabel } from '@/domain/acquisition-export';
 import {
   describePeriod,
   type Period,
@@ -49,9 +49,13 @@ interface AcquisitionReportViewProps {
   readonly i18n: I18n;
 }
 
-function acquisitionDownloads(projectId: string, period: Period): readonly CsvDownload[] {
+function acquisitionDownloads(
+  projectId: string,
+  period: Period,
+  i18n: I18n,
+): readonly CsvDownload[] {
   return ACQUISITION_TABLES.map((table) => ({
-    label: ACQUISITION_TABLE_LABELS[table],
+    label: acquisitionTableLabel(table, i18n),
     href: exportHref(
       projectId,
       'acquisition',
@@ -76,7 +80,11 @@ function AcquisitionReportView({
         <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>
       <ChannelChart days={report.days} periodLabel={describePeriod(period, i18n)} i18n={i18n} />
-      <SourcesTable rows={sourceRows(report.sources, i18n)} channelVisitsHref={channelVisitsHref} />
+      <SourcesTable
+        rows={sourceRows(report.sources, i18n)}
+        channelVisitsHref={channelVisitsHref}
+        i18n={i18n}
+      />
       <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
         An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
@@ -110,7 +118,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
           <AcquisitionReportView
             report={report}
             period={period}
-            downloads={acquisitionDownloads(project.id, period)}
+            downloads={acquisitionDownloads(project.id, period, i18n)}
             channelVisitsHref={(channel) =>
               linkWith(screenHref(project.id, 'visits', periodQuery(period)), { channel })
             }

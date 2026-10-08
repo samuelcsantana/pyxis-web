@@ -1,10 +1,10 @@
+import type { I18n } from '@/i18n/i18n';
 import type { CsvTable } from './csv';
 import { type Feature, type FeatureKind, matchingFeatures } from './features';
 
-export const FEATURES_TABLE_LABELS: Readonly<Record<FeatureKind, string>> = {
-  events: 'Events',
-  screens: 'Screens',
-};
+export function featuresTableLabel(kind: FeatureKind, i18n: I18n): string {
+  return i18n.t(`exports.features.${kind}`);
+}
 
 const COLUMNS: Readonly<Record<FeatureKind, readonly string[]>> = {
   events: ['event', 'count', 'visits'],

@@ -4,8 +4,6 @@ import type { PropertyBreakdownReport, PropertyBreakdownWire } from './property-
 
 export type { PropertyBreakdownReport, PropertyBreakdownWire };
 
-export const OTHER_VALUES_LABEL = 'Other values';
-
 export interface PropertyValueRow {
   readonly value: string;
   readonly count: string;
@@ -44,6 +42,6 @@ export function propertyKeyViews(
     other:
       key.otherCount === 0
         ? null
-        : valueRow(OTHER_VALUES_LABEL, key.otherCount, NO_VALUE, key.events, i18n),
+        : valueRow(i18n.t('properties.otherValues'), key.otherCount, NO_VALUE, key.events, i18n),
   }));
 }

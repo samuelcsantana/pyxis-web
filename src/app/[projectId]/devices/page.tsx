@@ -18,7 +18,7 @@ import {
   operatingSystemLabel,
   shareRows,
 } from '@/domain/devices';
-import { DEVICES_TABLE_LABEL } from '@/domain/devices-export';
+import { devicesTableLabel } from '@/domain/devices-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { deviceFilterOf } from '@/domain/visits';
 import { getI18n } from '@/i18n/get-messages';
@@ -86,7 +86,7 @@ function DevicesReportView({
           withConversionRate={conversionEvent !== null}
         />
       </div>
-      <CsvDownloads downloads={[{ label: DEVICES_TABLE_LABEL, href: exportPath }]} />
+      <CsvDownloads downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]} />
       <p className="text-xs leading-[18px] text-muted">
         Device, browser and system are worked out on the server from the browser&apos;s user agent,
         which is then thrown away. The country comes from the edge network, never from a stored IP

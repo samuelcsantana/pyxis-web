@@ -14,7 +14,7 @@ import {
   type FeatureSearch as FeatureSearchParameters,
   searchQueryOf,
 } from '@/domain/features';
-import { FEATURES_TABLE_LABELS } from '@/domain/features-export';
+import { featuresTableLabel } from '@/domain/features-export';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
 import { exportHref } from '@/lib/csv-export';
@@ -101,7 +101,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         <CsvDownloads
           downloads={[
             {
-              label: FEATURES_TABLE_LABELS[kind],
+              label: featuresTableLabel(kind, i18n),
               href: exportHref(
                 project.id,
                 'features',

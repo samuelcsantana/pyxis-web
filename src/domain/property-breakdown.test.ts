@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  OTHER_VALUES_LABEL,
-  type PropertyBreakdownWire,
-  propertyKeyViews,
-} from './property-breakdown';
+import { type PropertyBreakdownWire, propertyKeyViews } from './property-breakdown';
 import { propertyBreakdownResponseSchema } from './property-breakdown.schema';
 import { english } from '@/test-utils/english';
 
@@ -59,7 +55,7 @@ describe('propertyKeyViews', () => {
 
     expect(plan?.carriedBy).toBe('1 event');
     expect(plan?.other).toEqual({
-      value: OTHER_VALUES_LABEL,
+      value: 'Other values',
       count: '1',
       visits: '—',
       share: '100.0%',

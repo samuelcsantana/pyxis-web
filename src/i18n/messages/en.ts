@@ -115,11 +115,85 @@ export const en = {
     },
     point: '{series}, {day}',
   },
+  acquisition: {
+    channels: {
+      paid: 'Paid',
+      email: 'Email',
+      social: 'Social',
+      campaign: 'Other campaigns',
+      organic: 'Organic search',
+      referral: 'Referral',
+      direct: 'Direct',
+    },
+    directSource: 'Direct',
+    topChannel: 'Top channel',
+    topUnpaidChannel: 'Top unpaid channel',
+    shareOfVisits: '{share} of {visits}',
+    fromAdClicks: '{visits} from ad clicks',
+    summary: {
+      bars: 'Stacked bar chart of {days},',
+      range: 'between {lowest} and {highest} visits a day.',
+      channels: 'Visits by channel: {channels}.',
+      channel: '{channel} {visits}',
+    },
+  },
+  devices: {
+    types: {
+      mobile: 'Mobile',
+      desktop: 'Desktop',
+      tablet: 'Tablet',
+    },
+    other: 'Other',
+    otherCountries: 'Other countries',
+    convertedOfVisits: '{converted} of {visits}',
+  },
+  requests: {
+    noResponse: 'No response',
+    figures: {
+      writes: 'Writes',
+      errorRate: 'Write error rate',
+      slowestRoute: 'Slowest route',
+      failedReads: 'Failed reads',
+      failingRoutes: 'Routes failing',
+    },
+    notes: {
+      writes: 'POST, PUT, PATCH and DELETE calls from the browser',
+      withNoResponse: '{count} with no response',
+      noFailures: 'No failures in {writes}',
+      failed: '{failed} failed: {kinds}',
+      noFailedRead: 'No read failed in this period',
+      mostFailing: 'Most: {route}, {failures}',
+      noWrites: 'No writes in this period',
+      slowestMedian: 'median of {route}',
+    },
+    duration: '{milliseconds} ms',
+    routeSummary: {
+      reads: '{failedReads} · median {median}',
+      writes: '{requests} · {errorShare} errors · median {median}',
+    },
+  },
+  properties: {
+    otherValues: 'Other values',
+  },
   exports: {
     overview: {
       daily: 'Activity per day',
       pages: 'Top pages',
       events: 'Top events',
     },
+    acquisition: {
+      sources: 'Sources',
+      channels: 'Visits by channel',
+    },
+    devices: 'Device types, browsers, systems and countries',
+    features: {
+      events: 'Events',
+      screens: 'Screens',
+    },
+    requests: {
+      writes: 'Writes',
+      reads: 'Failed reads',
+    },
+    visits: 'Newest {visits} visits',
   },
 } as const;

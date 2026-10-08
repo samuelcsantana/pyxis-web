@@ -1,6 +1,6 @@
 import Form from 'next/form';
 import Link from 'next/link';
-import { CHANNEL_LABELS, CHANNELS } from '@/domain/acquisition';
+import { CHANNELS, channelLabel } from '@/domain/acquisition';
 import { deviceTypeLabel } from '@/domain/devices';
 import { type Period, periodQuery } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
@@ -114,7 +114,7 @@ export function VisitFiltersForm({
               <option value="">Any channel</option>
               {CHANNELS.map((channel) => (
                 <option key={channel} value={channel}>
-                  {CHANNEL_LABELS[channel]}
+                  {channelLabel(channel, i18n)}
                 </option>
               ))}
             </select>

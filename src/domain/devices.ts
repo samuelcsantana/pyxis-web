@@ -7,16 +7,11 @@ export type { DevicesReport, DevicesWire };
 export type ValueShare = DevicesReport['browsers'][number];
 
 export const OTHER_VALUE = 'other';
-const OTHER_LABEL = 'Other';
-const OTHER_COUNTRIES_LABEL = 'Other countries';
 const OTHER_COUNTRIES_CODE = '··';
 const REGION_CODE = /^[A-Z]{2}$/;
 
-const DEVICE_TYPE_LABELS: Readonly<Record<string, string>> = {
-  mobile: 'Mobile',
-  desktop: 'Desktop',
-  tablet: 'Tablet',
-};
+const DEVICE_TYPES = ['mobile', 'desktop', 'tablet'] as const;
+type DeviceType = (typeof DEVICE_TYPES)[number];
 
 const BROWSER_LABELS: Readonly<Record<string, string>> = {
   chrome: 'Chrome',
@@ -39,16 +34,27 @@ const OPERATING_SYSTEM_LABELS: Readonly<Record<string, string>> = {
 export type ValueLabeller = (value: string, i18n: I18n) => string;
 
 function labelling(labels: Readonly<Record<string, string>>): ValueLabeller {
-  return (value) => (value === OTHER_VALUE ? OTHER_LABEL : (labels[value] ?? value));
+  return (value, i18n) =>
+    value === OTHER_VALUE ? i18n.t('devices.other') : (labels[value] ?? value);
 }
 
-export const deviceTypeLabel = labelling(DEVICE_TYPE_LABELS);
+function isDeviceType(value: string): value is DeviceType {
+  return DEVICE_TYPES.some((type) => type === value);
+}
+
+export function deviceTypeLabel(value: string, i18n: I18n): string {
+  if (value === OTHER_VALUE) {
+    return i18n.t('devices.other');
+  }
+  return isDeviceType(value) ? i18n.t(`devices.types.${value}`) : value;
+}
+
 export const browserLabel = labelling(BROWSER_LABELS);
 export const operatingSystemLabel = labelling(OPERATING_SYSTEM_LABELS);
 
 export function countryLabel(value: string, i18n: I18n): string {
   if (value === OTHER_VALUE) {
-    return OTHER_COUNTRIES_LABEL;
+    return i18n.t('devices.otherCountries');
   }
   return REGION_CODE.test(value) ? i18n.format.region(value) : value;
 }
@@ -125,7 +131,10 @@ export function deviceConversions(
   return rated.map((share) => ({
     label: deviceTypeLabel(share.value, i18n),
     rate: formatPercent(share.rate, i18n),
-    detail: `${formatCount(share.converted, i18n)} of ${i18n.t('counts.visit', { count: share.visits })}`,
+    detail: i18n.t('devices.convertedOfVisits', {
+      converted: formatCount(share.converted, i18n),
+      visits: i18n.t('counts.visit', { count: share.visits }),
+    }),
     barWidth: barWidth(share.rate ?? 0, best),
   }));
 }

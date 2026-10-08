@@ -105,8 +105,8 @@ describe('statuses', () => {
     expect(statusTone(409)).toBe('client');
     expect(statusTone(503)).toBe('server');
     expect(statusTone(0)).toBe('server');
-    expect(statusLabel(0)).toBe('No response');
-    expect(statusLabel(409)).toBe('409');
+    expect(statusLabel(0, english)).toBe('No response');
+    expect(statusLabel(409, english)).toBe('409');
   });
 
   it('count every failure by kind', () => {
