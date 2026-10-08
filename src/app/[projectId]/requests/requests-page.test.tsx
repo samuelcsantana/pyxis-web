@@ -218,6 +218,24 @@ describe('RequestsPage', () => {
     );
   });
 
+  it('offers the routes it shows as a CSV file, filters kept', async () => {
+    render(await renderRequests({ range: '30d', show: 'failing', screen: '/orders' }));
+
+    expect(screen.getByRole('link', { name: 'Writes as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/requests/export?range=30d&show=failing&screen=%2Forders',
+    );
+  });
+
+  it('offers the failed reads as their own CSV file', async () => {
+    render(await renderRequests({ range: '7d', kind: 'reads' }));
+
+    expect(screen.getByRole('link', { name: 'Failed reads as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/requests/export?range=7d&kind=reads',
+    );
+  });
+
   it('says what is missing for each filter', async () => {
     state.requests = (): Promise<RequestsReport> => Promise.resolve({ routes: [] });
 

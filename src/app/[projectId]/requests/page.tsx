@@ -4,6 +4,7 @@ import { MainContent } from '@/components/shell/main-content';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
+import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
 import { FAILURE_DEFINITION, WRITE_DEFINITION } from '@/domain/glossary';
@@ -26,7 +27,9 @@ import {
   screenFilterOf,
   visibleRoutes,
 } from '@/domain/requests';
+import { REQUESTS_TABLE_LABELS } from '@/domain/requests-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { readRequestsReport } from '@/services/requests/requests-report';
@@ -170,6 +173,14 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               query={filterQuery(period, { ...filter, screen: null })}
               timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
               emptyMessage={emptyMessage(filter)}
+            />
+            <CsvDownloads
+              downloads={[
+                {
+                  label: REQUESTS_TABLE_LABELS[kind],
+                  href: exportHref(project.id, 'requests', filterQuery(period, filter)),
+                },
+              ]}
             />
             <p className="text-xs leading-[18px] text-muted">{NOTES[kind]}</p>
           </>
