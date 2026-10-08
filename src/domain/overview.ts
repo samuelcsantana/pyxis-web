@@ -56,27 +56,6 @@ export function activityTotals(days: readonly DayActivity[]): ActivityTotals {
   );
 }
 
-function seriesSummary(label: string, values: readonly number[]): string {
-  const total = values.reduce((sum, value) => sum + value, 0);
-  const lowest = formatCount(Math.min(...values));
-  const highest = formatCount(Math.max(...values));
-  return `${label}: ${formatCount(total)} in total, between ${lowest} and ${highest} a day.`;
-}
-
-export function activitySummary(days: readonly DayActivity[]): string {
-  return [
-    `Line chart of ${formatQuantity(days.length, 'day', 'days')}.`,
-    seriesSummary(
-      'Page views',
-      days.map((day) => day.pageViews),
-    ),
-    seriesSummary(
-      'Named events',
-      days.map((day) => day.events),
-    ),
-  ].join(' ');
-}
-
 export type KpiId = 'visits' | 'identified-users' | 'conversions' | 'write-errors';
 
 export interface KpiDrillDown {
