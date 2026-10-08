@@ -120,7 +120,11 @@ describe('AcquisitionPage', () => {
   it('shows how to install the SDK when nobody visited in the period', async () => {
     const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
     state.acquisition = (): Promise<AcquisitionReport> =>
-      Promise.resolve({ days: [{ date: '2026-10-05', byChannel: NONE }], sources: [] });
+      Promise.resolve({
+        days: [{ date: '2026-10-05', byChannel: NONE }],
+        sources: [],
+        campaigns: [],
+      });
 
     render(await renderAcquisition());
 
@@ -132,7 +136,11 @@ describe('AcquisitionPage', () => {
   it('calls an empty period quiet once the project has received events', async () => {
     const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
     state.acquisition = (): Promise<AcquisitionReport> =>
-      Promise.resolve({ days: [{ date: '2026-10-05', byChannel: NONE }], sources: [] });
+      Promise.resolve({
+        days: [{ date: '2026-10-05', byChannel: NONE }],
+        sources: [],
+        campaigns: [],
+      });
     state.admin = {
       ...ADMIN,
       projects: ADMIN.projects.map((project) => ({

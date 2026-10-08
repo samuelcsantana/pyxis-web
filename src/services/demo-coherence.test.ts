@@ -91,6 +91,23 @@ describe('the demo screens', () => {
           expect(breakdownTotals).toEqual(breakdownTotals.map(() => conversions));
         });
 
+        it('never give a source fewer visits or conversions than its campaigns', async () => {
+          const { acquisition } = await screensOf(project.id, range);
+
+          for (const source of acquisition.sources) {
+            const campaigns = acquisition.campaigns.filter(
+              (campaign) =>
+                campaign.source === source.source && campaign.channel === source.channel,
+            );
+            expect(sum(campaigns.map((campaign) => campaign.visits))).toBeLessThanOrEqual(
+              source.visits,
+            );
+            expect(sum(campaigns.map((campaign) => campaign.conversions ?? 0))).toBeLessThanOrEqual(
+              source.conversions ?? 0,
+            );
+          }
+        });
+
         it('rank the same pages and events on Overview and Features', async () => {
           const { overview, events, pages } = await screensOf(project.id, range);
 

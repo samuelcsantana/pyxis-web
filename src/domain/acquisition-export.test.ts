@@ -28,6 +28,18 @@ const REPORT: AcquisitionReport = {
     },
   ],
   sources: [SOURCE, { ...SOURCE, source: 'google', medium: null, channel: 'paid', visits: 9 }],
+  campaigns: [
+    {
+      campaign: 'spring_sale',
+      source: 'google',
+      medium: 'cpc',
+      channel: 'paid',
+      visits: 8,
+      conversions: null,
+      convertingVisits: null,
+      fromAdClickVisits: 7,
+    },
+  ],
 };
 
 describe('acquisitionCsvTable', () => {
