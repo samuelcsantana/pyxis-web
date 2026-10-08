@@ -135,6 +135,10 @@ test.describe('at 1440×900', () => {
 });
 
 const SIDEBAR_BUDGET_PX = 700;
+const WCAG_TEXT_SPACING = `
+  * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+  p { margin-bottom: 2em !important; }
+`;
 
 test.describe('sidebar on a 1366×768 laptop', () => {
   test.use({ viewport: { width: 1366, height: 768 } });
@@ -162,5 +166,32 @@ test.describe(`sidebar in ${String(SIDEBAR_BUDGET_PX)}px of height`, () => {
     expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(
       SIDEBAR_BUDGET_PX,
     );
+  });
+});
+
+test.describe('sidebar under WCAG text spacing at 1280×800', () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  test('wraps the account email, the project and its time zone instead of cutting them', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    await page.goto(`/${STORE_ID}/overview`);
+    await page.addStyleTag({ content: WCAG_TEXT_SPACING });
+
+    const switcher = page.locator('summary', { hasText: 'Switch project' });
+    for (const text of [
+      page.getByText('owner@demo-store.example', { exact: true }),
+      switcher.getByText('Demo Store', { exact: true }),
+      switcher.getByText('America/Sao_Paulo', { exact: true }),
+    ]) {
+      const cut = await text.evaluate(
+        (element) =>
+          element.scrollWidth > element.clientWidth ||
+          getComputedStyle(element).textOverflow === 'ellipsis',
+      );
+      expect(cut).toBe(false);
+    }
   });
 });
