@@ -10,7 +10,6 @@ import {
   hasVisits,
   operatingSystemLabel,
   shareRows,
-  shareSummary,
 } from './devices';
 import { devicesResponseSchema } from './devices.schema';
 
@@ -85,7 +84,7 @@ describe('hasVisits', () => {
   });
 });
 
-describe('shareRows and shareSummary', () => {
+describe('shareRows', () => {
   it('give every value its visits and share of the total', () => {
     const rows = shareRows(devicesResponseSchema.parse(WIRE).countries, countryLabel);
 
@@ -107,7 +106,6 @@ describe('shareRows and shareSummary', () => {
         conversionRate: '0.0%',
       },
     ]);
-    expect(shareSummary('Country', rows)).toBe('Country: Brazil 75.0%, Other countries 25.0%.');
     expect(countsConversions(rows)).toBe(true);
   });
 
