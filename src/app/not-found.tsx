@@ -1,16 +1,22 @@
 import type { Metadata } from 'next';
 import { BrandedPage } from '@/components/brand/branded-page';
-import { NOT_FOUND_TITLE, NotFoundPanel } from '@/components/states/not-found-panel';
+import { NotFoundPanel } from '@/components/states/not-found-panel';
+import { getTranslator } from '@/i18n/get-messages';
 
-export const metadata: Metadata = { title: NOT_FOUND_TITLE };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslator();
+  return { title: t('notFound.title') };
+}
 
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getTranslator();
   return (
     <BrandedPage>
       <NotFoundPanel
-        explanation="This page does not exist, or the project is not one you may read."
+        title={t('notFound.title')}
+        explanation={t('notFound.outside')}
         href="/"
-        linkLabel="Go to your projects"
+        linkLabel={t('notFound.toProjects')}
       />
     </BrandedPage>
   );

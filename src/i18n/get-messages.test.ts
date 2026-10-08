@@ -31,6 +31,7 @@ describe('get-messages', () => {
       'nav',
       'theme',
       'periodSelector',
+      'notFound',
     ]);
     expect(messages.funnelEditor.problems.pathStart).toBe('A page path starts with "/".');
   });
