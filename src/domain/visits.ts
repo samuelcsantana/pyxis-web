@@ -2,7 +2,7 @@ import type { I18n } from '@/i18n/i18n';
 import { type Channel, CHANNELS, channelLabel } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { stepProblem } from './funnel';
-import { eventLabel, formatCount } from './metrics';
+import { eventLabel, formatCount, NO_VALUE } from './metrics';
 import { formatVisitDuration, shortId } from './timeline';
 import {
   isFilterableProperty,
@@ -251,7 +251,7 @@ export interface VisitAccount {
 
 export interface VisitRow {
   readonly key: string;
-  readonly visit: string;
+  readonly openLabel: string;
   readonly started: string;
   readonly startedAt: string;
   readonly duration: string;
@@ -263,6 +263,7 @@ export interface VisitRow {
   readonly failedRequestsLabel: string;
   readonly device: string;
   readonly channel: string | null;
+  readonly channelNote: string;
   readonly account: VisitAccount | null;
 }
 
@@ -305,22 +306,72 @@ export function visitRows(
   i18n: I18n,
 ): readonly VisitRow[] {
   const started = i18n.format.dateTime('visitStart', timeZone);
-  return visits.map((visit) => ({
-    key: visit.sessionId,
-    visit: shortId(visit.sessionId),
-    started: started(new Date(visit.startedAt)),
-    startedAt: visit.startedAt,
-    duration: formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
-    entryPath: visit.entryPath,
-    pageViews: formatCount(visit.pageViews, i18n),
-    pagesLabel: i18n.t('counts.page', { count: visit.pageViews }),
-    highlights: visit.highlights.map(eventLabel),
-    failedRequests: visit.failedRequests,
-    failedRequestsLabel: failedRequestsLabel(visit.failedRequests, i18n),
-    device: deviceLabel(visit, i18n),
-    channel: visit.channel === null ? null : channelLabel(visit.channel, i18n),
-    account: visitAccount(visit.userId, i18n),
-  }));
+  return visits.map((visit) => {
+    const startedText = started(new Date(visit.startedAt));
+    const channel = visit.channel === null ? null : channelLabel(visit.channel, i18n);
+    return {
+      key: visit.sessionId,
+      openLabel: i18n.t('visits.table.openVisit', {
+        started: startedText,
+        visit: shortId(visit.sessionId),
+      }),
+      started: startedText,
+      startedAt: visit.startedAt,
+      duration: formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
+      entryPath: visit.entryPath,
+      pageViews: formatCount(visit.pageViews, i18n),
+      pagesLabel: i18n.t('counts.page', { count: visit.pageViews }),
+      highlights: visit.highlights.map(eventLabel),
+      failedRequests: visit.failedRequests,
+      failedRequestsLabel: failedRequestsLabel(visit.failedRequests, i18n),
+      device: deviceLabel(visit, i18n),
+      channel,
+      channelNote: i18n.t('visits.table.channelNote', { channel: channel ?? NO_VALUE }),
+      account: visitAccount(visit.userId, i18n),
+    };
+  });
+}
+
+export interface VisitsTableText {
+  readonly heading: string;
+  readonly columns: {
+    readonly started: string;
+    readonly duration: string;
+    readonly entryPage: string;
+    readonly pages: string;
+    readonly highlights: string;
+    readonly failed: string;
+    readonly device: string;
+    readonly channel: string;
+    readonly account: string;
+  };
+  readonly anonymous: string;
+  readonly everyVisit: string;
+  readonly load: string;
+  readonly loading: string;
+  readonly failed: string;
+}
+
+export function visitsTableText(i18n: I18n): VisitsTableText {
+  return {
+    heading: i18n.t('visits.table.heading'),
+    columns: {
+      started: i18n.t('visits.table.columns.started'),
+      duration: i18n.t('visits.table.columns.duration'),
+      entryPage: i18n.t('visits.table.columns.entryPage'),
+      pages: i18n.t('visits.table.columns.pages'),
+      highlights: i18n.t('visits.table.columns.highlights'),
+      failed: i18n.t('visits.table.columns.failed'),
+      device: i18n.t('visits.table.columns.device'),
+      channel: i18n.t('visits.table.columns.channel'),
+      account: i18n.t('visits.table.columns.account'),
+    },
+    anonymous: i18n.t('visits.table.anonymous'),
+    everyVisit: i18n.t('visits.table.everyVisit'),
+    load: i18n.t('visits.table.load'),
+    loading: i18n.t('visits.table.loading'),
+    failed: i18n.t('visits.table.failed'),
+  };
 }
 
 export interface VisitRowsPage {

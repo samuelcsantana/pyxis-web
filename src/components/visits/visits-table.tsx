@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
-import type { VisitRow, VisitRowsPage } from '@/domain/visits';
+import type { VisitRow, VisitRowsPage, VisitsTableText } from '@/domain/visits';
+import { rich } from '@/i18n/rich';
 import {
   BODY_CELL,
   HEADER_CELL,
@@ -29,16 +30,19 @@ export interface VisitsTableProps {
   readonly timelinePath: string;
   readonly emptyMessage: string;
   readonly loadOlder: (cursor: string) => Promise<VisitRowsPage>;
+  readonly text: VisitsTableText;
 }
 
 function VisitTableRow({
   row,
   timelinePath,
   firstOfPage,
+  anonymous,
 }: {
   row: VisitRow;
   timelinePath: string;
   firstOfPage: number | undefined;
+  anonymous: string;
 }) {
   return (
     <tr data-first-of-page={firstOfPage}>
@@ -67,7 +71,7 @@ function VisitTableRow({
         {row.channel ?? <span className="text-muted">{NO_VALUE}</span>}
       </td>
       <td className={`${BODY_CELL} pr-0`}>
-        <AccountCell account={row.account} timelinePath={timelinePath} />
+        <AccountCell account={row.account} timelinePath={timelinePath} anonymous={anonymous} />
       </td>
     </tr>
   );
@@ -83,6 +87,7 @@ export function VisitsTable({
   timelinePath,
   emptyMessage,
   loadOlder,
+  text,
 }: VisitsTableProps) {
   const [pages, setPages] = useState<readonly (readonly VisitRow[])[]>([]);
   const [cursor, setCursor] = useState<string | null>(nextCursor);
@@ -136,13 +141,18 @@ export function VisitsTable({
   return (
     <section ref={section} aria-labelledby={HEADING_ID} className={PANEL}>
       <h2 id={HEADING_ID} className={PANEL_TITLE}>
-        Visits
+        {text.heading}
       </h2>
       {rows.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted">{emptyMessage}</p>
       ) : (
         <>
-          <VisitCards pages={allPages} timelinePath={timelinePath} labelledBy={HEADING_ID} />
+          <VisitCards
+            pages={allPages}
+            timelinePath={timelinePath}
+            labelledBy={HEADING_ID}
+            anonymous={text.anonymous}
+          />
           <div className={`hidden sm:block ${TABLE_SCROLL}`}>
             <table
               aria-labelledby={HEADING_ID}
@@ -151,31 +161,33 @@ export function VisitsTable({
               <thead>
                 <tr>
                   <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                    Started
+                    {text.columns.started}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-left`}>
-                    Duration
+                    {text.columns.duration}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} text-left`}>
-                    Entry page
+                    {text.columns.entryPage}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>
-                    Pages
+                    {text.columns.pages}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
-                    Highlights
+                    {text.columns.highlights}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>
-                    Failed<span className="sr-only"> requests</span>
+                    {rich(text.columns.failed, {
+                      hidden: (words) => <span className="sr-only">{words}</span>,
+                    })}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDER} text-left`}>
-                    Device
+                    {text.columns.device}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDER} text-left`}>
-                    Channel
+                    {text.columns.channel}
                   </th>
                   <th scope="col" className={`${HEADER_CELL} pr-0 text-left`}>
-                    Account
+                    {text.columns.account}
                   </th>
                 </tr>
               </thead>
@@ -187,6 +199,7 @@ export function VisitsTable({
                       row={row}
                       timelinePath={timelinePath}
                       firstOfPage={position === 0 ? index : undefined}
+                      anonymous={text.anonymous}
                     />
                   )),
                 )}
@@ -196,7 +209,7 @@ export function VisitsTable({
         </>
       )}
       {cursor === null && pages.length > 0 ? (
-        <p className="text-caption text-muted">That is every visit of this period.</p>
+        <p className="text-caption text-muted">{text.everyVisit}</p>
       ) : null}
       {cursor === null ? null : (
         <div className="flex flex-wrap items-center gap-3">
@@ -209,11 +222,11 @@ export function VisitsTable({
             }}
             className={`min-h-11 rounded-input px-4 text-sm font-medium ${BUTTON_SECONDARY} ${CONTROL_BUSY}`}
           >
-            {busy ? 'Loading older visits…' : 'Load older visits'}
+            {busy ? text.loading : text.load}
           </button>
           {error === null ? null : (
             <p role="alert" className="text-caption text-bad">
-              Could not load older visits. Try again.
+              {text.failed}
             </p>
           )}
         </div>

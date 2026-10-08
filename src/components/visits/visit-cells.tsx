@@ -16,7 +16,7 @@ export function VisitStartLink({ row, timelinePath }: { row: VisitRow; timelineP
   return (
     <Link
       href={timelineHref(timelinePath, { visit: row.key })}
-      aria-label={`${row.started}, open visit ${row.visit}`}
+      aria-label={row.openLabel}
       className={TEXT_LINK}
     >
       <time dateTime={row.startedAt}>{row.started}</time>
@@ -27,12 +27,14 @@ export function VisitStartLink({ row, timelinePath }: { row: VisitRow; timelineP
 export function AccountCell({
   account,
   timelinePath,
+  anonymous,
 }: {
   account: VisitAccount | null;
   timelinePath: string;
+  anonymous: string;
 }) {
   if (account === null) {
-    return <span className="text-muted">Anonymous</span>;
+    return <span className="text-muted">{anonymous}</span>;
   }
   return (
     <Link

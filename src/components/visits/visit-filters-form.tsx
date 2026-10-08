@@ -11,7 +11,6 @@ import {
   VISIT_DEVICE_TYPES,
   VISIT_IDENTITIES,
   type VisitFilters,
-  type VisitIdentity,
   visitFilterCount,
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
@@ -28,17 +27,6 @@ export interface VisitFiltersFormProps {
   readonly i18n: I18n;
 }
 
-const PAGE_FIELD_LABELS: Readonly<Record<(typeof PAGE_FILTER_PARAMETERS)[number], string>> = {
-  path: 'Viewed page',
-  path2: 'And page',
-  path3: 'And also page',
-};
-
-const IDENTITY_LABELS: Readonly<Record<VisitIdentity, string>> = {
-  identified: 'Identified',
-  anonymous: 'Anonymous',
-};
-
 const LABEL = 'flex min-w-0 flex-col gap-1.5 text-caption font-medium';
 const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-base font-normal sm:text-sm ${FIELD}`;
 const HINT = 'text-xs font-normal text-muted';
@@ -52,24 +40,36 @@ export function VisitFiltersForm({
   i18n,
 }: VisitFiltersFormProps) {
   const activeCount = visitFilterCount(filters);
+  const t = i18n.t;
   return (
-    <Form role="search" aria-label="Filter the visits" action={action} className={`${PANEL} gap-4`}>
+    <Form
+      role="search"
+      aria-label={t('visits.filters.label')}
+      action={action}
+      className={`${PANEL} gap-4`}
+    >
       {[...new URLSearchParams(periodQuery(period))].map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
       <CollapsibleFilters
-        activeCount={activeCount}
+        label={
+          activeCount === 0
+            ? t('visits.filters.toggle')
+            : t('visits.filters.toggleActive', { count: String(activeCount) })
+        }
         initiallyOpen={activeCount > 0 || problems.length > 0}
       >
         <fieldset className="flex min-w-0 flex-col gap-2">
-          <legend className="mb-2 text-caption font-semibold">Passed by pages</legend>
+          <legend className="mb-2 text-caption font-semibold">
+            {t('visits.filters.pages.legend')}
+          </legend>
           <p id="visit-pages-hint" className={HINT}>
-            A visit must have viewed every page given. A * matches any characters, as in /blog/*.
+            {t('visits.filters.pages.hint')}
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {PAGE_FILTER_PARAMETERS.map((name, index) => (
               <label key={name} className={LABEL}>
-                {PAGE_FIELD_LABELS[name]}
+                {t(`visits.filters.pages.${name}`)}
                 <input
                   name={name}
                   defaultValue={filters.paths[index] ?? ''}
@@ -85,7 +85,7 @@ export function VisitFiltersForm({
         </fieldset>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <label className={LABEL}>
-            Had event
+            {t('visits.filters.event')}
             <input
               name="event"
               defaultValue={filters.event ?? ''}
@@ -96,7 +96,7 @@ export function VisitFiltersForm({
             />
           </label>
           <label className={LABEL}>
-            With property
+            {t('visits.filters.property')}
             <input
               name="property"
               defaultValue={filters.property ?? ''}
@@ -107,13 +107,13 @@ export function VisitFiltersForm({
               className={`${FIELD_CLASS} font-mono`}
             />
             <span id="visit-property-hint" className={HINT}>
-              key=value, on the event above
+              {t('visits.filters.propertyHint')}
             </span>
           </label>
           <label className={LABEL}>
-            Channel
+            {t('visits.filters.channel')}
             <select name="channel" defaultValue={filters.channel ?? ''} className={FIELD_CLASS}>
-              <option value="">Any channel</option>
+              <option value="">{t('visits.filters.anyChannel')}</option>
               {CHANNELS.map((channel) => (
                 <option key={channel} value={channel}>
                   {channelLabel(channel, i18n)}
@@ -122,9 +122,9 @@ export function VisitFiltersForm({
             </select>
           </label>
           <label className={LABEL}>
-            Device
+            {t('visits.filters.device')}
             <select name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>
-              <option value="">Any device</option>
+              <option value="">{t('visits.filters.anyDevice')}</option>
               {VISIT_DEVICE_TYPES.map((device) => (
                 <option key={device} value={device}>
                   {deviceTypeLabel(device, i18n)}
@@ -133,12 +133,12 @@ export function VisitFiltersForm({
             </select>
           </label>
           <label className={LABEL}>
-            Account
+            {t('visits.filters.account')}
             <select name="identity" defaultValue={filters.identity ?? ''} className={FIELD_CLASS}>
-              <option value="">Anyone</option>
+              <option value="">{t('visits.filters.anyone')}</option>
               {VISIT_IDENTITIES.map((identity) => (
                 <option key={identity} value={identity}>
-                  {IDENTITY_LABELS[identity]}
+                  {t(`visits.filters.identities.${identity}`)}
                 </option>
               ))}
             </select>
@@ -146,7 +146,7 @@ export function VisitFiltersForm({
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <label className={LABEL}>
-            Country
+            {t('visits.filters.country')}
             <input
               name="country"
               defaultValue={filters.country ?? ''}
@@ -158,11 +158,11 @@ export function VisitFiltersForm({
               className={`${FIELD_CLASS} font-mono uppercase`}
             />
             <span id="visit-country-hint" className={HINT}>
-              Two-letter code
+              {t('visits.filters.countryHint')}
             </span>
           </label>
           <label className={LABEL}>
-            Source
+            {t('visits.filters.source')}
             <input
               name="source"
               defaultValue={filters.source ?? ''}
@@ -174,11 +174,11 @@ export function VisitFiltersForm({
               className={`${FIELD_CLASS} font-mono`}
             />
             <span id="visit-source-hint" className={HINT}>
-              As Acquisition names it
+              {t('visits.filters.sourceHint')}
             </span>
           </label>
           <label className={LABEL}>
-            Campaign
+            {t('visits.filters.campaign')}
             <input
               name="campaign"
               defaultValue={filters.campaign ?? ''}
@@ -190,7 +190,7 @@ export function VisitFiltersForm({
             />
           </label>
           <label className={LABEL}>
-            Made request
+            {t('visits.filters.route')}
             <input
               name="route"
               defaultValue={filters.route ?? ''}
@@ -201,7 +201,7 @@ export function VisitFiltersForm({
               className={`${FIELD_CLASS} font-mono`}
             />
             <span id="visit-route-hint" className={HINT}>
-              Method and route
+              {t('visits.filters.routeHint')}
             </span>
           </label>
           <label className="flex min-h-11 items-center gap-2.5 self-end text-caption font-medium">
@@ -212,12 +212,12 @@ export function VisitFiltersForm({
               defaultChecked={filters.failed}
               className="size-5 shrink-0 text-base sm:text-sm"
             />
-            With a failed request
+            {t('visits.filters.failed')}
           </label>
         </div>
         {problems.length === 0 ? null : (
           <div role="alert" className="rounded-input bg-bad-soft px-3 py-2 text-caption text-bad">
-            <p className="font-semibold">Some filters were left out:</p>
+            <p className="font-semibold">{t('visits.filters.leftOut')}</p>
             <ul className="list-disc pl-5">
               {problems.map((problem) => (
                 <li key={problem}>{problem}</li>
@@ -227,13 +227,13 @@ export function VisitFiltersForm({
         )}
         <div className="flex flex-wrap items-center gap-3">
           <PendingSubmitButton
-            label="Apply filters"
-            pendingLabel="Applying…"
+            label={t('visits.filters.apply')}
+            pendingLabel={t('visits.filters.applying')}
             className={`min-h-11 rounded-input px-4.5 text-sm ${BUTTON_PRIMARY}`}
           />
           {clearHref === null ? null : (
             <Link href={clearHref} className={`text-caption ${TEXT_LINK}`}>
-              Clear filters
+              {t('visits.filters.clear')}
             </Link>
           )}
         </div>

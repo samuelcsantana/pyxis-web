@@ -1,6 +1,6 @@
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { screenHref } from '@/components/shell/screens';
+import { screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { VisitFiltersForm } from '@/components/visits/visit-filters-form';
@@ -12,6 +12,7 @@ import {
   visitFiltersOf,
   visitRows,
   type VisitsSearch,
+  visitsTableText,
   visitsTotalLabel,
 } from '@/domain/visits';
 import { visitsTableLabel } from '@/domain/visits-export';
@@ -31,14 +32,10 @@ export interface VisitsPageProps {
   readonly searchParams: Promise<PeriodSearch & VisitsSearch>;
 }
 
-function footnote(i18n: I18n): string {
-  return `${i18n.t('glossary.visit')} Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.`;
-}
+const SENTENCE_JOINER = ' ';
 
-function emptyMessage(filtered: boolean): string {
-  return filtered
-    ? 'No visit matches these filters in this period.'
-    : 'No visits in this period. A visit shows up here once your site sends its first event.';
+function footnote(i18n: I18n): string {
+  return [i18n.t('glossary.visit'), i18n.t('visits.page.footnote')].join(SENTENCE_JOINER);
 }
 
 export default async function VisitsPage({ params, searchParams }: VisitsPageProps) {
@@ -59,8 +56,8 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   return (
     <>
       <Topbar
-        title="Visits"
-        subtitle={`Every visit to ${project.name} in the period, newest first`}
+        title={i18n.t(screenLabelKey('visits'))}
+        subtitle={i18n.t('visits.page.subtitle', { project: project.name })}
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
@@ -86,12 +83,15 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           rows={visitRows(report.visits, project.timezone, i18n)}
           nextCursor={report.nextCursor}
           timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
-          emptyMessage={emptyMessage(filtered)}
+          emptyMessage={
+            filtered ? i18n.t('visits.page.empty.filtered') : i18n.t('visits.page.empty.all')
+          }
           loadOlder={loadOlderVisitRows.bind(
             null,
             project.id,
             Object.fromEntries(new URLSearchParams(listQuery)),
           )}
+          text={visitsTableText(i18n)}
         />
         <CsvDownloads
           downloads={[

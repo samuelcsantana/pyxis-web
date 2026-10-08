@@ -9,6 +9,7 @@ import {
   visitFiltersOf,
   visitRows,
   type VisitsWire,
+  visitsTableText,
   isRequestRoute,
 } from './visits';
 import { visitsResponseSchema } from './visits.schema';
@@ -329,7 +330,7 @@ describe('visitRows', () => {
 
     expect(first).toEqual({
       key: '3c07a1b2-0000-4000-8000-000000000001',
-      visit: '3c07a1b2',
+      openLabel: 'Mon, Oct 5, 18:40, open visit 3c07a1b2',
       started: 'Mon, Oct 5, 18:40',
       startedAt: '2026-10-05T21:40:00.000Z',
       duration: '2 min 41 s',
@@ -341,6 +342,7 @@ describe('visitRows', () => {
       failedRequestsLabel: '1 failed request',
       device: 'Mobile · Safari · iOS · Brazil',
       channel: 'Paid',
+      channelNote: 'Channel: Paid',
       account: {
         userId: 'u_check_visits',
         shown: 'u_check_…',
@@ -356,6 +358,7 @@ describe('visitRows', () => {
       failedRequestsLabel: 'No failed request',
       device: 'Desktop · Chrome · Windows',
       channel: null,
+      channelNote: 'Channel: —',
       account: null,
     });
   });
@@ -389,6 +392,30 @@ describe('visitRows', () => {
       userId: 'u_7f3a',
       shown: 'u_7f3a',
       linkName: 'u_7f3a, open the timeline of this user',
+    });
+  });
+});
+
+describe('visitsTableText', () => {
+  it('names the columns of the visits table and its paging', () => {
+    expect(visitsTableText(english)).toEqual({
+      heading: 'Visits',
+      columns: {
+        started: 'Started',
+        duration: 'Duration',
+        entryPage: 'Entry page',
+        pages: 'Pages',
+        highlights: 'Highlights',
+        failed: 'Failed<hidden> requests</hidden>',
+        device: 'Device',
+        channel: 'Channel',
+        account: 'Account',
+      },
+      anonymous: 'Anonymous',
+      everyVisit: 'That is every visit of this period.',
+      load: 'Load older visits',
+      loading: 'Loading older visits…',
+      failed: 'Could not load older visits. Try again.',
     });
   });
 });
