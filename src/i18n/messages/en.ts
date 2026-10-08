@@ -547,6 +547,30 @@ export const en = {
     medianTime: 'median {duration} after the step before',
     timeToFinish: 'Median time to finish',
     timeToFinishNote: 'from step 1 to step {last}, for those who reached it',
+    subjects: {
+      reachedLink: '{count}, list who reached step {step}',
+      droppedLink: '{dropped}, list who left before step {step}',
+      reached: {
+        one: '{subjects} reached step {step}',
+        other: '{subjects} reached step {step}',
+      },
+      dropped: {
+        one: '{subjects} reached step {previous} and never step {step}',
+        other: '{subjects} reached step {previous} and never step {step}',
+      },
+      columns: {
+        visit: 'Visit',
+        person: 'Person',
+        reachedAt: 'Last step reached',
+      },
+      openVisit: '{visit}, open this visit in the timeline',
+      openPerson: '{user}, open the timeline of this person',
+      order: 'Newest first, 50 at a time.',
+      older: 'Show older',
+      newest: 'Back to the newest',
+      close: 'Close the list',
+      empty: 'Nobody in this period.',
+    },
   },
   visits: {
     problems: {

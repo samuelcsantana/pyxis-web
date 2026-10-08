@@ -8,7 +8,7 @@ import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
-import { demoFunnelWire } from './funnel/demo-funnel';
+import { demoFunnelSubjectsWire, demoFunnelWire } from './funnel/demo-funnel';
 import {
   demoFailedReadsWire,
   demoRequestsWire,
@@ -153,6 +153,31 @@ describe('the API contract copied from pyxis-api', () => {
         const wire = demoFunnelWire(project.id, RANGE, mode, project.exampleFunnel, NOW);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
+    }
+  });
+
+  it('accepts the demo lists of who reached or left a step, on the first and an older page', () => {
+    const validate = contractSchema('FunnelSubjectsReport');
+
+    for (const mode of ['visit', 'user'] as const) {
+      const first = demoFunnelSubjectsWire(
+        DEMO_STORE.id,
+        RANGE,
+        mode,
+        DEMO_STORE.exampleFunnel,
+        { step: 2, outcome: 'dropped', cursor: null },
+        NOW,
+      );
+      const older = demoFunnelSubjectsWire(
+        DEMO_STORE.id,
+        RANGE,
+        mode,
+        DEMO_STORE.exampleFunnel,
+        { step: 2, outcome: 'dropped', cursor: first.next_cursor },
+        NOW,
+      );
+      expect(validate(first), JSON.stringify(validate.errors)).toBe(true);
+      expect(validate(older), JSON.stringify(validate.errors)).toBe(true);
     }
   });
 

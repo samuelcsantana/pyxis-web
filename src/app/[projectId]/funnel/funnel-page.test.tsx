@@ -9,9 +9,14 @@ import type { IFunnelService } from '@/services/funnel/funnel-service.interface'
 import { MockFunnelService } from '@/services/funnel/mock-funnel-service';
 import FunnelPage from './page';
 
-const state = vi.hoisted<{ admin: unknown; funnel: IFunnelService['funnel'] }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  funnel: IFunnelService['funnel'];
+  subjects: IFunnelService['subjects'];
+}>(() => ({
   admin: undefined,
   funnel: () => Promise.reject(new Error('funnel not set')),
+  subjects: () => Promise.reject(new Error('subjects not set')),
 }));
 
 vi.mock('next/headers', () => ({
@@ -38,6 +43,8 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 vi.mock('@/services/funnel/funnel-service.factory', () => ({
   createFunnelService: (): IFunnelService => ({
     funnel: (projectId, range, mode, steps) => state.funnel(projectId, range, mode, steps),
+    subjects: (projectId, range, mode, steps, drill) =>
+      state.subjects(projectId, range, mode, steps, drill),
   }),
 }));
 
@@ -66,6 +73,8 @@ beforeEach(() => {
   state.admin = ADMIN;
   state.funnel = (projectId, range, mode, steps) =>
     new MockFunnelService().funnel(projectId, range, mode, steps);
+  state.subjects = (projectId, range, mode, steps, drill) =>
+    new MockFunnelService().subjects(projectId, range, mode, steps, drill);
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
 });
