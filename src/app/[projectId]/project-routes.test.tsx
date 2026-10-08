@@ -153,6 +153,21 @@ describe('OverviewPage', () => {
     expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
   });
 
+  it('defines its words in a footnote', async () => {
+    render(await renderOverview());
+
+    const footnote = screen.getByText(/^A visit is one browser tab/);
+    for (const word of [
+      'An identified user is',
+      'A conversion is a visit',
+      'A write is a POST',
+      'A failure is a status of 400',
+      'A change is green or red only when the previous period counted at least 20 and it moved by 1% or more (0.5 points for the write error rate).',
+    ]) {
+      expect(footnote).toHaveTextContent(word);
+    }
+  });
+
   it('says why conversions are missing when the project has no conversion event', async () => {
     state.admin = {
       ...ADMIN,
