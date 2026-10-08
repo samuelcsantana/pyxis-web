@@ -12,10 +12,12 @@ const state = vi.hoisted<{
   admin: unknown;
   requests: IRequestsService['requests'];
   failedReads: IRequestsService['failedReads'];
+  routeDays: IRequestsService['routeDays'];
 }>(() => ({
   admin: undefined,
   requests: () => Promise.reject(new Error('requests not set')),
   failedReads: () => Promise.reject(new Error('failed reads not set')),
+  routeDays: () => Promise.reject(new Error('route days not set')),
 }));
 
 vi.mock('next/headers', () => ({
@@ -43,6 +45,8 @@ vi.mock('@/services/requests/requests-service.factory', () => ({
   createRequestsService: (): IRequestsService => ({
     requests: (projectId, range, screenPath) => state.requests(projectId, range, screenPath),
     failedReads: (projectId, range, screenPath) => state.failedReads(projectId, range, screenPath),
+    routeDays: (projectId, range, kind, screenPath, route) =>
+      state.routeDays(projectId, range, kind, screenPath, route),
   }),
 }));
 
@@ -71,6 +75,8 @@ beforeEach(() => {
     new MockRequestsService().requests(projectId, range, screenPath);
   state.failedReads = (projectId, range, screenPath) =>
     new MockRequestsService().failedReads(projectId, range, screenPath);
+  state.routeDays = (projectId, range, kind, screenPath, route) =>
+    new MockRequestsService().routeDays(projectId, range, kind, screenPath, route);
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
 });

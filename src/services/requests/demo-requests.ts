@@ -1,4 +1,9 @@
-import { type RequestsReport, type RequestsWire } from '@/domain/requests';
+import {
+  FAILED_READS,
+  type RequestKind,
+  type RequestsReport,
+  type RequestsWire,
+} from '@/domain/requests';
 import { requestsResponseSchema } from '@/domain/requests.schema';
 import type { DateRange } from '../date-range';
 import type { DemoFailedRead, DemoProject, DemoRoute } from '../demo/demo-catalog';
@@ -245,6 +250,100 @@ export function demoFailedReadsWire(
     days: readDays(project, range, screen),
     route_days: null,
   };
+}
+
+type RouteDayWire = NonNullable<RequestsWire['route_days']>[number];
+
+function quietDay(date: string): RouteDayWire {
+  return { date, total: 0, failed: 0, median_duration_ms: null, p95_duration_ms: null };
+}
+
+function routeDayWire(
+  date: string,
+  total: number,
+  failed: number,
+  medianDurationMs: number,
+): RouteDayWire {
+  return total === 0
+    ? quietDay(date)
+    : {
+        date,
+        total,
+        failed,
+        median_duration_ms: medianDurationMs,
+        p95_duration_ms: p95Of(medianDurationMs),
+      };
+}
+
+function routeKey(method: string, route: string): string {
+  return `${method} ${route}`;
+}
+
+function writeRouteDays(
+  project: DemoProject,
+  range: DateRange,
+  screen: string | null,
+  key: string,
+  now: Date,
+): RouteDayWire[] {
+  const route = project.routes.find(
+    (candidate) => routeKey(candidate.method, candidate.route) === key,
+  );
+  if (route === undefined) {
+    return demoDays(range).map(quietDay);
+  }
+  const failures = demoFailures(project, range, now).filter(
+    (failure) =>
+      routeKey(failure.method, failure.route) === key &&
+      (screen === null || failure.path === screen),
+  );
+  return demoDays(range).map((date) => {
+    const failed = failures
+      .filter((failure) => failure.date === date)
+      .reduce((sum, failure) => sum + failure.count, 0);
+    return routeDayWire(
+      date,
+      successfulWritesOn(project, route, date, screen) + failed,
+      failed,
+      route.medianDurationMs,
+    );
+  });
+}
+
+function readRouteDays(
+  project: DemoProject,
+  range: DateRange,
+  screen: string | null,
+  key: string,
+): RouteDayWire[] {
+  const read = project.failedReads.find((candidate) => routeKey('GET', candidate.route) === key);
+  if (read === undefined) {
+    return demoDays(range).map(quietDay);
+  }
+  return demoDays(range).map((date) => {
+    const failed = failedReadsOn(project, read, date, screen);
+    return routeDayWire(date, failed, failed, read.medianDurationMs);
+  });
+}
+
+export function demoRouteRequestsWire(
+  projectId: string,
+  range: DateRange,
+  kind: RequestKind,
+  screen: string | null,
+  route: string,
+  now: Date,
+): RequestsWire {
+  const project = demoProjectOf(projectId);
+  return kind === FAILED_READS
+    ? {
+        ...demoFailedReadsWire(projectId, range, screen),
+        route_days: readRouteDays(project, range, screen, route),
+      }
+    : {
+        ...demoRequestsWire(projectId, range, screen, now),
+        route_days: writeRouteDays(project, range, screen, route, now),
+      };
 }
 
 export function demoFailedReadsReport(

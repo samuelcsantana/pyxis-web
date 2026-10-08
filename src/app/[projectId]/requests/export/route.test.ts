@@ -31,6 +31,7 @@ vi.mock('@/services/requests/requests-service.factory', () => ({
   createRequestsService: (): IRequestsService => ({
     requests: (projectId, range, screenPath) => state.requests(projectId, range, screenPath),
     failedReads: (projectId, range, screenPath) => state.failedReads(projectId, range, screenPath),
+    routeDays: () => Promise.reject(new Error('the export reads no route days')),
   }),
 }));
 
