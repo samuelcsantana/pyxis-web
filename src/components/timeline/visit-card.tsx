@@ -86,7 +86,7 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
                 </span>
                 {item.tag === null ? null : (
                   <span
-                    className={`col-start-3 justify-self-start rounded-pill px-2.5 py-0.5 text-xs font-semibold tabular-nums sm:col-start-auto ${TONE_CLASSES[item.tag.tone]}`}
+                    className={`col-start-3 max-w-full justify-self-start rounded-pill px-2.5 py-0.5 text-xs font-semibold tabular-nums wrap-anywhere sm:col-start-auto ${TONE_CLASSES[item.tag.tone]}`}
                   >
                     {item.tag.label}
                   </span>

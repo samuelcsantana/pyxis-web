@@ -71,7 +71,7 @@ function AcquisitionReportView({
   const top = topChannel(report.days, i18n);
   return (
     <>
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
         <StatCard id="paid-visits" label="Paid visits" value={paid.value} note={paid.note} />
         <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>

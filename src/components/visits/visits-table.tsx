@@ -5,7 +5,13 @@ import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { NO_VALUE } from '@/domain/metrics';
 import type { VisitRow, VisitRowsPage } from '@/domain/visits';
-import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import {
+  BODY_CELL,
+  HEADER_CELL,
+  PANEL,
+  PANEL_TITLE,
+  TABLE_SCROLL,
+} from '@/components/ui/panel-classes';
 import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { VisitCards } from './visit-cards';
 import { AccountCell, EntryPath, FAILED_CHIP, Highlights, VisitStartLink } from './visit-cells';
@@ -137,7 +143,7 @@ export function VisitsTable({
       ) : (
         <>
           <VisitCards pages={allPages} timelinePath={timelinePath} labelledBy={HEADING_ID} />
-          <div className="hidden overflow-x-auto sm:block">
+          <div className={`hidden sm:block ${TABLE_SCROLL}`}>
             <table
               aria-labelledby={HEADING_ID}
               className="w-full border-collapse text-caption tabular-nums"

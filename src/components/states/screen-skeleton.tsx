@@ -18,7 +18,7 @@ function rowWidths(count: number): readonly string[] {
 
 export function SkeletonCards({ count }: { readonly count: number }) {
   return (
-    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
       {indexes(count).map((index) => (
         <div key={index} className={`flex flex-col gap-3 p-4 ${CARD}`}>
           <span className={`h-2.5 w-3/5 ${PULSE}`} />

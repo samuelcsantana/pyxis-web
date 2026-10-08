@@ -40,7 +40,7 @@ export function TimelineSearch({
       {Object.entries(keep).map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
-      <label className="flex flex-col gap-1.5 text-caption font-medium">
+      <label className="flex max-w-full min-w-0 flex-col gap-1.5 text-caption font-medium">
         Look up
         <select
           value={kind}

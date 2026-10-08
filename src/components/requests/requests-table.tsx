@@ -11,6 +11,7 @@ import {
   PANEL,
   PANEL_TITLE,
   ROW_BUTTON_TEXT,
+  TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { Breakable } from '@/components/ui/breakable';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
@@ -121,86 +122,90 @@ export function RequestsTable({
       {rows.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted">{emptyMessage}</p>
       ) : (
-        <table
-          aria-labelledby="routes-heading"
-          className="w-full border-collapse text-caption tabular-nums"
-        >
-          <thead>
-            <tr>
-              <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                Route
-              </th>
-              <th scope="col" className={`${HEADER_CELL} text-right`}>
-                {failuresOnly ? 'Failed' : 'Total'}
-              </th>
-              {failuresOnly ? null : (
-                <th scope="col" className={`${HEADER_CELL} text-left sm:w-48`}>
-                  Success · errors
+        <div className={TABLE_SCROLL}>
+          <table
+            aria-labelledby="routes-heading"
+            className="w-full border-collapse text-caption tabular-nums"
+          >
+            <thead>
+              <tr>
+                <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
+                  Route
                 </th>
-              )}
-              <th scope="col" className={`${HEADER_CELL} hidden text-left lg:table-cell`}>
-                Status codes
-              </th>
-              <th scope="col" className={`${HEADER_CELL} hidden pr-0 text-right sm:table-cell`}>
-                Median
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.key} className={row.key === selectedKey ? 'bg-soft' : undefined}>
-                <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
-                  <button
-                    ref={rememberOpener(row.key)}
-                    type="button"
-                    aria-label={`${row.key}, show details`}
-                    onClick={() => {
-                      open(row.key);
-                    }}
-                    className={`group flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} ${CONTROL_TRANSITION} sm:flex-row sm:items-center sm:gap-2.5`}
-                  >
-                    <MethodChip method={row.method} />{' '}
-                    <span className={`font-mono text-xs wrap-anywhere ${ROW_BUTTON_TEXT}`}>
-                      <Breakable text={row.route} />
-                    </span>
-                  </button>
+                <th scope="col" className={`${HEADER_CELL} text-right`}>
+                  {failuresOnly ? 'Failed' : 'Total'}
                 </th>
-                <td className={`${BODY_CELL} text-right font-semibold`}>{row.total}</td>
                 {failuresOnly ? null : (
-                  <td className={BODY_CELL}>
-                    <span className="flex flex-col gap-1.5">
-                      <span
-                        aria-hidden="true"
-                        className="flex h-2 overflow-hidden rounded-pill bg-bad"
-                      >
-                        <span className="block bg-ok" style={{ width: row.successWidth }} />
+                  <th scope="col" className={`${HEADER_CELL} text-left sm:w-48`}>
+                    Success · errors
+                  </th>
+                )}
+                <th scope="col" className={`${HEADER_CELL} hidden text-left lg:table-cell`}>
+                  Status codes
+                </th>
+                <th scope="col" className={`${HEADER_CELL} hidden pr-0 text-right sm:table-cell`}>
+                  Median
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.key} className={row.key === selectedKey ? 'bg-soft' : undefined}>
+                  <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
+                    <button
+                      ref={rememberOpener(row.key)}
+                      type="button"
+                      aria-label={`${row.key}, show details`}
+                      onClick={() => {
+                        open(row.key);
+                      }}
+                      className={`group flex min-h-9 flex-col items-start gap-1 text-left text-ink ${FOCUS_RING} ${CONTROL_TRANSITION} sm:flex-row sm:items-center sm:gap-2.5`}
+                    >
+                      <MethodChip method={row.method} />{' '}
+                      <span className={`font-mono text-xs wrap-anywhere ${ROW_BUTTON_TEXT}`}>
+                        <Breakable text={row.route} />
                       </span>
-                      <span className="text-xs">
-                        <span className="font-semibold text-ok">{row.successShare} ok</span>
-                        <span className="text-muted"> · </span>
-                        <span className={row.hasFailures ? 'font-semibold text-bad' : 'text-muted'}>
-                          {row.errorShare} errors
+                    </button>
+                  </th>
+                  <td className={`${BODY_CELL} text-right font-semibold`}>{row.total}</td>
+                  {failuresOnly ? null : (
+                    <td className={BODY_CELL}>
+                      <span className="flex flex-col gap-1.5">
+                        <span
+                          aria-hidden="true"
+                          className="flex h-2 overflow-hidden rounded-pill bg-bad"
+                        >
+                          <span className="block bg-ok" style={{ width: row.successWidth }} />
+                        </span>
+                        <span className="text-xs">
+                          <span className="font-semibold text-ok">{row.successShare} ok</span>
+                          <span className="text-muted"> · </span>
+                          <span
+                            className={row.hasFailures ? 'font-semibold text-bad' : 'text-muted'}
+                          >
+                            {row.errorShare} errors
+                          </span>
                         </span>
                       </span>
+                    </td>
+                  )}
+                  <td className={`${BODY_CELL} hidden lg:table-cell`}>
+                    <span className="flex flex-wrap gap-1.5">
+                      {row.statuses.map((status) => (
+                        <span key={status.label} className={`${CHIP} ${TONE_CLASSES[status.tone]}`}>
+                          {status.label}
+                        </span>
+                      ))}
                     </span>
                   </td>
-                )}
-                <td className={`${BODY_CELL} hidden lg:table-cell`}>
-                  <span className="flex flex-wrap gap-1.5">
-                    {row.statuses.map((status) => (
-                      <span key={status.label} className={`${CHIP} ${TONE_CLASSES[status.tone]}`}>
-                        {status.label}
-                      </span>
-                    ))}
-                  </span>
-                </td>
-                <td className={`${BODY_CELL} hidden pr-0 text-right sm:table-cell`}>
-                  {row.median}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <td className={`${BODY_CELL} hidden pr-0 text-right sm:table-cell`}>
+                    {row.median}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
       <dialog
         ref={dialogRef}

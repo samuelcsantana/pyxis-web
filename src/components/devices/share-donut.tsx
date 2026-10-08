@@ -87,49 +87,53 @@ export function ShareDonut({
             />
           ))}
         </svg>
-        <table
-          aria-labelledby={headingId}
-          className={`min-w-0 flex-1 border-collapse text-caption tabular-nums ${showsConversionRate ? 'basis-60' : 'basis-40'}`}
+        <div
+          className={`relative -my-1 -mr-1 min-w-0 flex-1 overflow-x-auto py-1 pr-1 ${showsConversionRate ? 'basis-61' : 'basis-41'}`}
         >
-          <thead>
-            <tr>
-              <th scope="col" className="pb-1.5 text-left text-xs font-medium text-muted">
-                {title}
-              </th>
-              <th scope="col" className="pb-1.5 text-right text-xs font-medium text-muted">
-                Visits
-              </th>
-              <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
-                Share
-              </th>
-              {showsConversionRate ? (
+          <table
+            aria-labelledby={headingId}
+            className="w-full border-collapse text-caption tabular-nums"
+          >
+            <thead>
+              <tr>
+                <th scope="col" className="pb-1.5 text-left text-xs font-medium text-muted">
+                  {title}
+                </th>
+                <th scope="col" className="pb-1.5 text-right text-xs font-medium text-muted">
+                  Visits
+                </th>
                 <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
-                  Conversion rate
+                  Share
                 </th>
-              ) : null}
-            </tr>
-          </thead>
-          <tbody>
-            {drawn.map((row) => (
-              <tr key={row.value}>
-                <th scope="row" className="py-1 text-left font-normal">
-                  <span className="flex items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className={`size-2.5 shrink-0 rounded-[3px] ${row.color.swatch}`}
-                    />
-                    <RowName label={row.label} href={visitsHref(row.value)} />
-                  </span>
-                </th>
-                <td className="py-1 text-right text-muted">{row.visits}</td>
-                <td className="py-1 pl-3 text-right font-semibold">{row.share}</td>
                 {showsConversionRate ? (
-                  <td className="py-1 pl-3 text-right">{row.conversionRate}</td>
+                  <th scope="col" className="pb-1.5 pl-3 text-right text-xs font-medium text-muted">
+                    Conversion rate
+                  </th>
                 ) : null}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {drawn.map((row) => (
+                <tr key={row.value}>
+                  <th scope="row" className="py-1 text-left font-normal">
+                    <span className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className={`size-2.5 shrink-0 rounded-[3px] ${row.color.swatch}`}
+                      />
+                      <RowName label={row.label} href={visitsHref(row.value)} />
+                    </span>
+                  </th>
+                  <td className="py-1 text-right text-muted">{row.visits}</td>
+                  <td className="py-1 pl-3 text-right font-semibold">{row.share}</td>
+                  {showsConversionRate ? (
+                    <td className="py-1 pl-3 text-right">{row.conversionRate}</td>
+                  ) : null}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

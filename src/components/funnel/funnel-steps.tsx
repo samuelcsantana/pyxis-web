@@ -31,7 +31,7 @@ export function FunnelSteps({ rows, mode }: FunnelStepsProps) {
         {rows.map((row) => (
           <li
             key={row.key}
-            className="grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-line py-3 sm:grid-cols-[1.75rem_minmax(10rem,16rem)_minmax(0,1fr)_5rem_9rem] sm:gap-x-4"
+            className="grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-line py-3 sm:grid-cols-[1.75rem_minmax(0,16rem)_minmax(0,1fr)_5rem_9rem] sm:gap-x-4"
           >
             <span
               aria-hidden="true"

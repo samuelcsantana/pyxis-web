@@ -1,5 +1,5 @@
 import type { FeatureKind, FeatureRow } from '@/domain/features';
-import { HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/panel-classes';
 import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
 
@@ -62,41 +62,43 @@ export function FeatureTable({ kind, rows, query, visitsHref, loadProperties }: 
       {rows.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted">{emptyMessage(kind, query)}</p>
       ) : (
-        <table
-          aria-labelledby="features-heading"
-          className="w-full border-collapse text-caption tabular-nums"
-        >
-          <thead>
-            <tr>
-              <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                {NAME_HEADERS[kind]}
-              </th>
-              <th scope="col" className={`${HEADER_CELL} text-right`}>
-                Count
-              </th>
-              <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
-                Visits
-              </th>
-              <th scope="col" className={`${HEADER_CELL} hidden text-left md:table-cell`}>
-                Trend
-              </th>
-              <th scope="col" className={`${HEADER_CELL} pr-0 text-right sm:w-52 sm:text-left`}>
-                Share
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                kind={kind}
-                row={row}
-                visitsHref={visitsHref(row.name)}
-                loadProperties={loadProperties}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className={TABLE_SCROLL}>
+          <table
+            aria-labelledby="features-heading"
+            className="w-full border-collapse text-caption tabular-nums"
+          >
+            <thead>
+              <tr>
+                <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
+                  {NAME_HEADERS[kind]}
+                </th>
+                <th scope="col" className={`${HEADER_CELL} text-right`}>
+                  Count
+                </th>
+                <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
+                  Visits
+                </th>
+                <th scope="col" className={`${HEADER_CELL} hidden text-left md:table-cell`}>
+                  Trend
+                </th>
+                <th scope="col" className={`${HEADER_CELL} pr-0 text-right sm:w-52 sm:text-left`}>
+                  Share
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  kind={kind}
+                  row={row}
+                  visitsHref={visitsHref(row.name)}
+                  loadProperties={loadProperties}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );

@@ -8,6 +8,7 @@ import {
   HEADER_CELL,
   PANEL,
   PANEL_TITLE,
+  TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
@@ -28,7 +29,7 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
       {pages.length === 0 ? (
         <p className="text-caption text-muted">No page views in this period.</p>
       ) : (
-        <div className="overflow-x-auto">
+        <div className={TABLE_SCROLL}>
           <table
             aria-labelledby="top-pages-heading"
             className="w-full border-collapse text-caption tabular-nums"
