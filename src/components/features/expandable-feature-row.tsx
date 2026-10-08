@@ -72,7 +72,7 @@ export function ExpandableFeatureRow({
 
   return (
     <>
-      <tr>
+      <tr className={open ? 'bg-soft' : undefined}>
         <FeatureRowCells
           kind="events"
           row={row}
@@ -105,7 +105,10 @@ export function ExpandableFeatureRow({
         />
       </tr>
       <tr id={panelId} hidden={!open}>
-        <td colSpan={FEATURE_COLUMNS} className="border-b border-line bg-soft/40 px-2.5 py-3">
+        <td
+          colSpan={FEATURE_COLUMNS}
+          className="border-b border-l-2 border-line border-l-violet bg-soft px-2.5 py-3"
+        >
           <PropertyBreakdown
             eventLabel={row.label}
             state={breakdownState(error, keys)}
