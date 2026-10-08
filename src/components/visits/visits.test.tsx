@@ -83,7 +83,7 @@ describe('VisitsTable', () => {
     expect(within(bodyRow(1)).getByText('Anonymous')).toBeInTheDocument();
   });
 
-  it('shortens a long user id on screen and keeps it whole in the link name', () => {
+  it('shortens a long user id on screen and names the link with what it shows first', () => {
     const [row] = visitRows(
       FIRST.visits.slice(0, 1).map((visit) => ({ ...visit, userId: 'u_check_visits' })),
       'UTC',
@@ -99,7 +99,7 @@ describe('VisitsTable', () => {
     );
 
     const account = within(screen.getByRole('table', { name: 'Visits' })).getByRole('link', {
-      name: 'u_check_visits, open the timeline of this user',
+      name: 'u_check_…, open the timeline of user u_check_visits',
     });
     expect(account).toHaveTextContent('u_check_…');
     expect(screen.queryByText('That is every visit of this period.')).not.toBeInTheDocument();

@@ -143,6 +143,7 @@ export function isVisitCursor(text: string): boolean {
 export interface VisitAccount {
   readonly userId: string;
   readonly shown: string;
+  readonly linkName: string;
 }
 
 export interface VisitRow {
@@ -167,7 +168,11 @@ function visitAccount(userId: string | null): VisitAccount | null {
     return null;
   }
   const short = shortId(userId);
-  return { userId, shown: short === userId ? userId : `${short}…` };
+  if (short === userId) {
+    return { userId, shown: userId, linkName: `${userId}, open the timeline of this user` };
+  }
+  const shown = `${short}…`;
+  return { userId, shown, linkName: `${shown}, open the timeline of user ${userId}` };
 }
 
 function failedRequestsLabel(count: number): string {
