@@ -6,6 +6,7 @@ import type { MouseEvent } from 'react';
 import { type Project, projectInitials } from '@/domain/admin';
 import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
+import { useT } from '@/i18n/messages-provider';
 import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface ProjectSwitcherProps {
@@ -40,6 +41,7 @@ function CurrentCheck() {
 }
 
 export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherProps) {
+  const t = useT();
   const pathname = usePathname();
   const query = periodParameters(useSearchParams());
   const screen = sameScreenIn(pathname);
@@ -55,7 +57,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
       <summary
         className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
-        <span className="sr-only">Switch project. Current project: </span>
+        <span className="sr-only">{t('nav.switchProject')} </span>
         <span
           aria-hidden="true"
           className="flex size-8 shrink-0 items-center justify-center rounded-control bg-accent text-caption font-bold text-accent-ink"

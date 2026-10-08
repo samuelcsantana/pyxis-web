@@ -46,7 +46,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
   return (
     <div className="flex flex-col gap-1">
       <span className="px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase">
-        Analytics
+        {t('nav.section')}
       </span>
       <ul className="flex flex-col gap-1">
         {SCREENS.map((screen) => {

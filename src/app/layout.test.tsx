@@ -51,7 +51,7 @@ describe('RootLayout', () => {
     const provider = html.props.children.props.children;
 
     expect(provider.props.locale).toBe(html.props.lang);
-    expect(Object.keys(provider.props.messages)).toEqual(['funnelEditor', 'screens']);
+    expect(Object.keys(provider.props.messages)).toEqual(['funnelEditor', 'screens', 'nav']);
   });
 
   it('applies the theme the visitor chose, so the first paint is right', async () => {

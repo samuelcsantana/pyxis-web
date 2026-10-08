@@ -4,6 +4,7 @@ import type { Admin } from '@/domain/admin';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { english } from '@/test-utils/english';
 import { MobileMenu } from './mobile-menu';
 import { Sidebar } from './sidebar';
 import { SignOutButton } from './sign-out-button';
@@ -40,7 +41,7 @@ const meta = {
   title: 'Shell/Sidebar',
   component: Sidebar,
   tags: ['autodocs'],
-  args: { admin: DEMO_ADMIN, project: STORE },
+  args: { admin: DEMO_ADMIN, project: STORE, i18n: english },
   parameters: {
     layout: 'fullscreen',
     nextjs: {

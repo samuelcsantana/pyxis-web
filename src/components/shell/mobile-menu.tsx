@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { type KeyboardEvent, type MouseEvent, type ReactNode, useRef, useState } from 'react';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
+import { useT } from '@/i18n/messages-provider';
 
 export interface MobileMenuProps {
   readonly children: ReactNode;
@@ -20,6 +21,7 @@ function useLocationKey(): string {
 }
 
 export function MobileMenu({ children, barActions }: MobileMenuProps) {
+  const t = useT();
   const location = useLocationKey();
   const [openAt, setOpenAt] = useState<string>();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -40,7 +42,7 @@ export function MobileMenu({ children, barActions }: MobileMenuProps) {
 
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label={t('nav.label')}
       onKeyDown={closeOnEscape}
       className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0"
     >
@@ -61,7 +63,7 @@ export function MobileMenu({ children, barActions }: MobileMenuProps) {
             }}
             className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
           >
-            <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
+            <span className="sr-only">{open ? t('nav.closeMenu') : t('nav.openMenu')}</span>
             <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d={open ? CLOSE_ICON : OPEN_ICON}
