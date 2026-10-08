@@ -1,9 +1,11 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { routeRows } from '@/domain/requests';
+import { routeDaysText, type RouteDaysView } from '@/domain/route-days';
 import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
+import type { LoadRouteDays } from './use-route-days';
 import { methodClass } from './status-styles';
 import { english } from '@/test-utils/english';
 
@@ -23,7 +25,27 @@ const ROWS = routeRows(
   english,
 );
 
-function renderTable() {
+const DAYS: RouteDaysView = {
+  rows: [
+    {
+      date: '2026-10-04',
+      day: 'Oct 4',
+      total: '40',
+      failed: '2',
+      hasFailures: true,
+      median: '150 ms',
+      p95: '390 ms',
+    },
+  ],
+  note: null,
+};
+
+const ROUTE_DAYS = {
+  loadRouteDays: (() => Promise.resolve(DAYS)) satisfies LoadRouteDays,
+  routeDaysText: routeDaysText('writes', english),
+};
+
+function renderTable(loadRouteDays: LoadRouteDays = ROUTE_DAYS.loadRouteDays) {
   return render(
     <RequestsTable
       kind="writes"
@@ -33,6 +55,8 @@ function renderTable() {
       timelinePath="/p1/timeline?range=7d"
       visitsPath="/p1/visits?range=7d"
       emptyMessage="Nothing"
+      {...ROUTE_DAYS}
+      loadRouteDays={loadRouteDays}
     />,
   );
 }
@@ -76,6 +100,7 @@ describe('RequestsTable', () => {
         timelinePath="/p1/timeline?range=7d"
         visitsPath="/p1/visits?range=7d"
         emptyMessage="Nothing"
+        {...ROUTE_DAYS}
       />,
     );
 
@@ -198,6 +223,7 @@ describe('RequestsTable', () => {
         timelinePath="/p1/timeline?range=7d"
         visitsPath="/p1/visits?range=7d"
         emptyMessage="Nothing"
+        {...ROUTE_DAYS}
       />,
     );
     fireEvent.keyDown(dialog(), { key: 'Escape' });
@@ -227,6 +253,7 @@ describe('RequestsTable', () => {
         timelinePath="/p1/timeline"
         visitsPath="/p1/visits"
         emptyMessage="No writes."
+        {...ROUTE_DAYS}
       />,
     );
 
@@ -245,6 +272,7 @@ describe('RequestsTable', () => {
         timelinePath="/p1/timeline"
         visitsPath="/p1/visits"
         emptyMessage="Nothing"
+        {...ROUTE_DAYS}
       />,
     );
     const table = screen.getByRole('table', { name: 'Routes' });
@@ -268,6 +296,105 @@ describe('RequestsTable', () => {
     expect(
       within(dialog()).getByRole('link', { name: 'See every visit with a failed GET /orders/:id' }),
     ).toHaveAttribute('href', '/p1/visits?route=GET+%2Forders%2F%3Aid&failed=true');
+  });
+});
+
+describe('RequestsTable, day by day', () => {
+  afterEach(() => {
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('loads the days of a route when its details open, once while they stay the same', async () => {
+    const pending: ((view: RouteDaysView) => void)[] = [];
+    const loadRouteDays = vi.fn<LoadRouteDays>(
+      () =>
+        new Promise<RouteDaysView>((resolve) => {
+          pending.push(resolve);
+        }),
+    );
+    renderTable(loadRouteDays);
+
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+
+    expect(within(dialog()).getByRole('status')).toHaveTextContent(
+      'Loading the days of this route…',
+    );
+    act(() => {
+      pending[0]?.(DAYS);
+    });
+    const days = await within(dialog()).findByRole('table', { name: 'Day by day' });
+    expect(days).toHaveTextContent('Oct 4402150 ms390 ms');
+    expect(loadRouteDays).toHaveBeenCalledExactlyOnceWith('POST /orders');
+
+    await userEvent.click(within(dialog()).getByRole('button', { name: 'Close' }));
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+    expect(within(dialog()).getByRole('table', { name: 'Day by day' })).toBeInTheDocument();
+    expect(loadRouteDays).toHaveBeenCalledOnce();
+
+    await userEvent.click(within(dialog()).getByRole('button', { name: 'Close' }));
+    await userEvent.click(screen.getByRole('button', { name: 'PATCH /users/me, show details' }));
+    expect(loadRouteDays).toHaveBeenLastCalledWith('PATCH /users/me');
+    expect(within(dialog()).getByRole('status')).toBeInTheDocument();
+  });
+
+  it('loads the days of the route named in the address', async () => {
+    window.history.replaceState(null, '', '/p1/requests?route=POST+%2Forders');
+    const loadRouteDays = vi.fn<LoadRouteDays>(() => Promise.resolve(DAYS));
+    renderTable(loadRouteDays);
+
+    expect(await within(dialog()).findByRole('table', { name: 'Day by day' })).toBeInTheDocument();
+    expect(loadRouteDays).toHaveBeenCalledExactlyOnceWith('POST /orders');
+  });
+
+  it('says when the API cannot tell the days of a route', async () => {
+    renderTable(() => Promise.resolve(null));
+
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+
+    expect(
+      await within(dialog()).findByText('Day-by-day figures need a newer Pyxis API.'),
+    ).toBeInTheDocument();
+  });
+
+  it('alerts a failed load and loads again, also on reopening the route', async () => {
+    const loadRouteDays = vi
+      .fn<LoadRouteDays>()
+      .mockRejectedValueOnce(new Error('The API is unreachable.'))
+      .mockRejectedValueOnce(new Error('The API is unreachable.'))
+      .mockResolvedValue(DAYS);
+    renderTable(loadRouteDays);
+
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+    expect(await within(dialog()).findByRole('alert')).toHaveTextContent(
+      'Could not load the days of this route.',
+    );
+
+    await userEvent.click(within(dialog()).getByRole('button', { name: 'Try again' }));
+    expect(await within(dialog()).findByRole('alert')).toBeInTheDocument();
+    expect(loadRouteDays).toHaveBeenCalledTimes(2);
+
+    await userEvent.click(within(dialog()).getByRole('button', { name: 'Close' }));
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+
+    expect(await within(dialog()).findByRole('table', { name: 'Day by day' })).toBeInTheDocument();
+    expect(loadRouteDays).toHaveBeenCalledTimes(3);
+  });
+
+  it('drops a load still running when it goes away', async () => {
+    let settle: (view: RouteDaysView) => void = () => undefined;
+    const { unmount } = renderTable(
+      () =>
+        new Promise<RouteDaysView>((resolve) => {
+          settle = resolve;
+        }),
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'POST /orders, show details' }));
+
+    unmount();
+    settle(DAYS);
+
+    await Promise.resolve();
+    expect(document.querySelector('dialog')).toBeNull();
   });
 });
 

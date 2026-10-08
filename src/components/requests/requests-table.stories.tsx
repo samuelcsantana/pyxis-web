@@ -1,8 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { routeRows } from '@/domain/requests';
-import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
+import { type RequestKind, routeRows } from '@/domain/requests';
+import { requestsResponseSchema } from '@/domain/requests.schema';
+import { routeDaysText, routeDaysView } from '@/domain/route-days';
+import {
+  demoFailedReadsReport,
+  demoRequestsReport,
+  demoRouteRequestsWire,
+} from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
+import type { LoadRouteDays } from './use-route-days';
 import { english } from '@/test-utils/english';
 
 const ROWS = routeRows(
@@ -16,6 +23,26 @@ const ROWS = routeRows(
   'writes',
   english,
 );
+
+function demoRouteDays(kind: RequestKind): LoadRouteDays {
+  return (route: string) =>
+    Promise.resolve(
+      routeDaysView(
+        requestsResponseSchema.parse(
+          demoRouteRequestsWire(
+            'demo',
+            { from: '2026-09-22', to: '2026-10-05' },
+            kind,
+            null,
+            route,
+            new Date('2026-10-06T02:30:00.000Z'),
+          ),
+        ).routeDays ?? [],
+        kind,
+        english,
+      ),
+    );
+}
 
 const FAILED_READS = routeRows(
   demoFailedReadsReport('demo', { from: '2026-09-06', to: '2026-10-05' }, null).routes,
@@ -36,6 +63,8 @@ const meta = {
     timelinePath: '/demo/timeline',
     visitsPath: '/demo/visits',
     emptyMessage: 'No writes in this period.',
+    loadRouteDays: demoRouteDays('writes'),
+    routeDaysText: routeDaysText('writes', english),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
@@ -57,6 +86,7 @@ export const DetailsOpen: Story = {
     const page = within(canvasElement.ownerDocument.body);
     await userEvent.click(page.getByRole('button', { name: 'POST /orders, show details' }));
     const details = await page.findByRole('dialog', { name: 'POST /orders' });
+    await expect(await within(details).findByRole('table', { name: 'Day by day' })).toBeVisible();
     await userEvent.tab();
     await userEvent.tab();
     await userEvent.tab();
@@ -110,7 +140,13 @@ export const RouteHovered: Story = {
 export const Empty: Story = { args: { rows: [] } };
 
 export const FailedReads: Story = {
-  args: { kind: 'reads', rows: FAILED_READS, query: 'range=30d&kind=reads' },
+  args: {
+    kind: 'reads',
+    rows: FAILED_READS,
+    query: 'range=30d&kind=reads',
+    loadRouteDays: demoRouteDays('reads'),
+    routeDaysText: routeDaysText('reads', english),
+  },
 };
 
 export const FailedReadDetails: Story = {
@@ -118,7 +154,10 @@ export const FailedReadDetails: Story = {
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     await userEvent.click(page.getByRole('button', { name: 'GET /orders/:id, show details' }));
-    await expect(await page.findByRole('dialog', { name: 'GET /orders/:id' })).toBeVisible();
+    const details = await page.findByRole('dialog', { name: 'GET /orders/:id' });
+    await expect(details).toBeVisible();
+    const days = await within(details).findByRole('table', { name: 'Day by day' });
+    await expect(within(days).queryByRole('columnheader', { name: 'Total' })).toBeNull();
   },
 };
 
@@ -136,6 +175,33 @@ export const OnAPhone: Story = {
       </div>
     ),
   ],
+};
+
+export const DayByDayLoading: Story = {
+  args: { loadRouteDays: () => new Promise(() => undefined) },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByRole('button', { name: 'POST /orders, show details' }));
+    await expect(await page.findByText('Loading the days of this route…')).toBeVisible();
+  },
+};
+
+export const DayByDayFailed: Story = {
+  args: { loadRouteDays: () => Promise.reject(new Error('The API is unreachable.')) },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByRole('button', { name: 'POST /orders, show details' }));
+    await expect(await page.findByRole('button', { name: 'Try again' })).toBeVisible();
+  },
+};
+
+export const DayByDayFromAnOlderApi: Story = {
+  args: { loadRouteDays: () => Promise.resolve(null) },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByRole('button', { name: 'POST /orders, show details' }));
+    await expect(await page.findByText('Day-by-day figures need a newer Pyxis API.')).toBeVisible();
+  },
 };
 
 export const DarkThemeWithDetails: Story = {

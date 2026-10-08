@@ -29,6 +29,7 @@ import {
   visibleRoutes,
 } from '@/domain/requests';
 import { requestsTableLabel } from '@/domain/requests-export';
+import { routeDaysText } from '@/domain/route-days';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -36,6 +37,7 @@ import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { readRequestsReport } from '@/services/requests/requests-report';
+import { loadRouteDays } from './actions';
 
 export const generateMetadata = screenMetadata('requests');
 
@@ -191,6 +193,13 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
               visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
               emptyMessage={emptyMessage(filter)}
+              loadRouteDays={loadRouteDays.bind(null, project.id, {
+                from: period.from,
+                to: period.to,
+                kind,
+                screen: filter.screen,
+              })}
+              routeDaysText={routeDaysText(kind, i18n)}
             />
             <CsvDownloads
               downloads={[
