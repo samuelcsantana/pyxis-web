@@ -5,7 +5,7 @@ import { FunnelSteps } from '@/components/funnel/funnel-steps';
 import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
-import { linkWith, screenHref } from '@/components/shell/screens';
+import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { StatCard } from '@/components/ui/stat-card';
 import {
@@ -49,11 +49,6 @@ export interface FunnelPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
   readonly searchParams: Promise<PeriodSearch & FunnelSearch & FunnelDrillSearch>;
 }
-
-const MODE_LABELS: Readonly<Record<FunnelMode, string>> = {
-  visit: 'Per visit',
-  user: 'Per person',
-};
 
 const NEW_FUNNEL: readonly FunnelStep[] = [
   { type: 'page', path: '/' },
@@ -102,8 +97,8 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   return (
     <>
       <Topbar
-        title="Funnel"
-        subtitle={`Where people continue and where they drop off in ${project.name}`}
+        title={i18n.t(screenLabelKey('funnel'))}
+        subtitle={i18n.t('funnel.page.subtitle', { project: project.name })}
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
@@ -114,9 +109,10 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <FunnelModes
           current={mode}
+          label={i18n.t('funnel.page.countBy')}
           links={FUNNEL_MODES.map((target) => ({
             mode: target,
-            label: MODE_LABELS[target],
+            label: i18n.t(`funnel.page.modes.${target}`),
             href: linkTo({ ...kept, mode: target, ...drillKept(drill) }),
           }))}
         />
@@ -124,6 +120,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
           <>
             <BuildAFunnel
               exampleHref={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
+              i18n={i18n}
             />
             <FunnelEditor initialSteps={NEW_FUNNEL} action={basePath} keep={editorKeep} startOpen />
           </>
@@ -221,13 +218,13 @@ function FunnelReportView({
       <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
         <StatCard
           id="overall-conversion"
-          label="Overall conversion"
+          label={i18n.t('funnel.page.overallConversion')}
           value={overall.value}
           note={overall.note}
         />
         <StatCard
           id="biggest-drop-off"
-          label="Biggest drop-off"
+          label={i18n.t('funnel.page.biggestDropOff')}
           value={drop.value}
           note={drop.note}
         />
@@ -249,6 +246,7 @@ function FunnelReportView({
           i18n,
         )}
         mode={mode}
+        i18n={i18n}
       />
       {subjects}
     </>

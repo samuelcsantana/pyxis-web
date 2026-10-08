@@ -85,7 +85,7 @@ const offersTheExample: NonNullable<Story['play']> = async ({ canvasElement }) =
 export const BuildAFunnelOnTheFunnel: Story = {
   render: () => (
     <OnAScreen>
-      <BuildAFunnel exampleHref={EXAMPLE_FUNNEL} />
+      <BuildAFunnel exampleHref={EXAMPLE_FUNNEL} i18n={english} />
     </OnAScreen>
   ),
   play: offersTheExample,
