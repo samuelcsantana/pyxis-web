@@ -1,6 +1,7 @@
 import { countsConversions, OTHER_VALUE, type ShareRow } from '@/domain/devices';
 import { withDonutSegments } from '@/domain/donut';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 
 const SEGMENT_COLORS = [
   { stroke: 'stroke-sky', swatch: 'bg-sky' },
@@ -28,9 +29,22 @@ export interface ShareDonutProps {
   readonly title: string;
   readonly rows: readonly ShareRow[];
   readonly withConversionRate?: boolean;
+  readonly visitsHref?: (value: string) => string | null;
 }
 
-export function ShareDonut({ id, title, rows, withConversionRate = false }: ShareDonutProps) {
+const NO_VISITS_LINK = () => null;
+
+function RowName({ label, href }: { readonly label: string; readonly href: string | null }) {
+  return href === null ? label : <VisitsLink href={href} label={label} />;
+}
+
+export function ShareDonut({
+  id,
+  title,
+  rows,
+  withConversionRate = false,
+  visitsHref = NO_VISITS_LINK,
+}: ShareDonutProps) {
   const headingId = `${id}-heading`;
   const showsConversionRate = withConversionRate && countsConversions(rows);
   const drawn = withDonutSegments(
@@ -104,7 +118,7 @@ export function ShareDonut({ id, title, rows, withConversionRate = false }: Shar
                       aria-hidden="true"
                       className={`size-2.5 shrink-0 rounded-[3px] ${row.color.swatch}`}
                     />
-                    {row.label}
+                    <RowName label={row.label} href={visitsHref(row.value)} />
                   </span>
                 </th>
                 <td className="py-1 text-right text-muted">{row.visits}</td>

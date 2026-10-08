@@ -89,6 +89,24 @@ describe('DevicesPage', () => {
     );
   });
 
+  it('links each device type Visits filters by to its visits, in the same period', async () => {
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      const watch = { value: 'watch', visits: 1, conversions: 0, convertingVisits: 0 };
+      return { ...report, deviceTypes: [...report.deviceTypes, watch] };
+    };
+
+    render(await renderDevices());
+
+    const deviceTypes = screen.getByRole('table', { name: 'Device type' });
+    expect(
+      within(deviceTypes).getByRole('link', { name: 'Mobile: see its visits' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=30d&device=mobile');
+    expect(within(deviceTypes).getAllByRole('link')).toHaveLength(3);
+    expect(within(deviceTypes).getByRole('rowheader', { name: 'watch' })).toBeInTheDocument();
+    expect(within(screen.getByRole('table', { name: 'Browser' })).queryByRole('link')).toBeNull();
+  });
+
   it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
     render(await renderDevices());
 
