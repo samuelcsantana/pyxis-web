@@ -172,6 +172,37 @@ test('collapses the navigation behind a menu button on a phone', async ({ page, 
   );
 });
 
+test('keeps the menu bar on screen while the page scrolls', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The menu bar exists only on narrow screens.');
+  await page.goto(`/${STORE_ID}/visits`);
+
+  await page.evaluate(() => {
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  });
+
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  const bar = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
+  expect(bar?.y).toBe(0);
+  await expect(page.getByRole('button', { name: 'Open menu' })).toBeInViewport();
+});
+
+test.describe('on a short phone', () => {
+  test.use({ viewport: { width: 390, height: 640 } });
+
+  test('keeps sign-out reachable inside the open menu', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+    await page.goto(`/${STORE_ID}/overview`);
+
+    await page.getByRole('button', { name: 'Open menu' }).click();
+    const menu = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
+    await page.getByRole('button', { name: 'Sign out' }).scrollIntoViewIfNeeded();
+
+    expect(menu?.height).toBeLessThanOrEqual(640);
+    await expect(page.getByRole('button', { name: 'Sign out' })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Close menu' })).toBeInViewport();
+  });
+});
+
 test('sends the security headers', async ({ request }) => {
   const response = await request.get('/sign-in');
 

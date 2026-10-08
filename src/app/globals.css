@@ -148,6 +148,16 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: --spacing(14);
+  }
+
+  @media (width >= --theme(--breakpoint-lg)) {
+    html {
+      scroll-padding-top: 0;
+    }
+  }
+
   button:not(:disabled),
   [role='button']:not(:disabled),
   summary {
