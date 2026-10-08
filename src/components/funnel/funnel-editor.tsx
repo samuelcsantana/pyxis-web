@@ -124,7 +124,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
           onClick={() => {
             setOpen((wasOpen) => !wasOpen);
           }}
-          className={`min-h-10 rounded-input px-4 text-sm ${BUTTON_PRIMARY}`}
+          className={`min-h-10 rounded-input px-4 text-sm ${open ? BUTTON_SECONDARY : BUTTON_PRIMARY}`}
         >
           {open ? 'Close the editor' : 'Edit steps'}
         </button>
