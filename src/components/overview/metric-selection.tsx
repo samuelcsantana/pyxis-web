@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createContext, type ReactNode, startTransition, use, useOptimistic } from 'react';
+import { useHoldNavigationWhile } from '@/components/shell/navigation-pending';
+import { PendingBar } from '@/components/ui/pending-mark';
 import type { KpiId } from '@/domain/overview';
 import {
   ACTIVITY,
@@ -13,7 +15,7 @@ import {
 
 interface MetricSelectionState {
   readonly shown: ChartMetric;
-  readonly pending: boolean;
+  readonly pressing: KpiId | null;
   readonly toggle: (metric: KpiId) => void;
 }
 
@@ -39,20 +41,21 @@ export function MetricSelection({ available, children }: MetricSelectionProps) {
   const [shown, setShown] = useOptimistic(
     chartMetric(searchParams.get(METRIC_PARAMETER), available),
   );
-  const [pending, setPending] = useOptimistic(false);
+  const [pressing, setPressing] = useOptimistic<KpiId | null>(null);
+  useHoldNavigationWhile(pressing !== null);
 
   const toggle = (metric: KpiId) => {
     const next = shown === metric ? ACTIVITY : metric;
     const query = withChartMetric(searchParams.toString(), next);
     startTransition(() => {
       setShown(next);
-      setPending(true);
+      setPressing(metric);
       router.replace(query === '' ? pathname : `${pathname}?${query}`, { scroll: false });
     });
   };
 
   return (
-    <MetricSelectionContext value={{ shown, pending, toggle }}>{children}</MetricSelectionContext>
+    <MetricSelectionContext value={{ shown, pressing, toggle }}>{children}</MetricSelectionContext>
   );
 }
 
@@ -66,7 +69,7 @@ export interface MetricToggleProps {
 }
 
 export function MetricToggle({ metric, label, describedBy }: MetricToggleProps) {
-  const { shown, toggle } = useMetricSelection();
+  const { shown, pressing, toggle } = useMetricSelection();
   return (
     <button
       type="button"
@@ -78,18 +81,12 @@ export function MetricToggle({ metric, label, describedBy }: MetricToggleProps) 
       className={TOGGLE}
     >
       {label}
+      <PendingBar pending={pressing === metric} />
     </button>
   );
 }
 
-const BUSY_DIMMING =
-  'transition-opacity duration-150 motion-reduce:transition-none aria-busy:opacity-60';
-
 export function MetricChartArea({ children }: { readonly children: ReactNode }) {
-  const { pending } = useMetricSelection();
-  return (
-    <div aria-busy={pending} className={BUSY_DIMMING}>
-      {children}
-    </div>
-  );
+  const { pressing } = useMetricSelection();
+  return <div aria-busy={pressing !== null}>{children}</div>;
 }
