@@ -23,7 +23,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test('has no WCAG 2.2 A or AA violation, also with older visits and a filter left out', async ({
       page,
     }) => {
-      await page.goto(`/${STORE_ID}/visits`);
+      await page.goto(`/${STORE_ID}/visits?range=7d`);
       await expect(visitRows(page)).toHaveCount(8);
 
       expect(await axeViolations(page)).toEqual([]);
@@ -135,7 +135,7 @@ test('shows every filter at once from 640 px up', async ({ page, isMobile }) => 
 });
 
 test('loads the older visits with the keyboard and moves the focus to them', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/visits`);
+  await page.goto(`/${STORE_ID}/visits?range=7d`);
   await expect(visitRows(page)).toHaveCount(8);
 
   await page.getByRole('button', { name: 'Load older visits' }).focus();

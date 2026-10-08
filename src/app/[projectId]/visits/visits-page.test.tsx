@@ -228,8 +228,11 @@ describe('loadOlderVisitRows', () => {
       '930c9810',
       '6d4ebf3d',
       '5b8d2e7a',
+      '5cd5f0e2',
+      'bd0f5992',
+      '22477bd4',
     ]);
-    expect(page.nextCursor).toBeNull();
+    expect(page.nextCursor).toMatch(/~22477bd4-/);
   });
 
   it('refuses a cursor the API would refuse, without asking it', async () => {

@@ -16,6 +16,7 @@ export interface DemoProperty {
 
 export interface DemoEvent {
   readonly name: string;
+  readonly page: string;
   readonly perDay: number;
   readonly visitsPerCount: number;
   readonly properties: readonly DemoProperty[];
