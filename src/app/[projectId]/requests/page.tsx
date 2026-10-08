@@ -6,7 +6,6 @@ import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
-import { ApiRequestError } from '@/domain/errors';
 import { FAILURE_DEFINITION, WRITE_DEFINITION } from '@/domain/glossary';
 import {
   type Period,
@@ -20,7 +19,6 @@ import {
   FAILING_ONLY,
   failingOnlyOf,
   type RequestKind,
-  type RequestsReport,
   type RequestsSearch,
   requestFigures,
   requestKindOf,
@@ -31,8 +29,7 @@ import {
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
-import type { DateRange } from '@/services/date-range';
-import { createRequestsService } from '@/services/requests/requests-service.factory';
+import { readRequestsReport } from '@/services/requests/requests-report';
 
 export const generateMetadata = screenMetadata('Requests');
 
@@ -46,8 +43,6 @@ interface RequestFilter {
   readonly failingOnly: boolean;
   readonly screen: string | null;
 }
-
-const STATUS_BAD_REQUEST = 400;
 
 const KIND_TABS: readonly { readonly kind: RequestKind; readonly label: string }[] = [
   { kind: 'writes', label: 'Writes' },
@@ -98,25 +93,6 @@ function emptyMessage(filter: RequestFilter): string {
     : 'No writes in this period. Calls sent with trackRequest() show up here.';
 }
 
-async function readReport(
-  projectId: string,
-  range: DateRange,
-  filter: RequestFilter,
-): Promise<RequestsReport | null> {
-  const service = createRequestsService();
-  if (filter.kind !== FAILED_READS) {
-    return service.requests(projectId, range, filter.screen);
-  }
-  try {
-    return await service.failedReads(projectId, range, filter.screen);
-  } catch (error) {
-    if (error instanceof ApiRequestError && error.status === STATUS_BAD_REQUEST) {
-      return null;
-    }
-    throw error;
-  }
-}
-
 export default async function RequestsPage({ params, searchParams }: RequestsPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
@@ -129,7 +105,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
     screen: screenFilterOf(search),
   };
   const report = await readOrSignIn(() =>
-    readReport(project.id, { from: period.from, to: period.to }, filter),
+    readRequestsReport(project.id, { from: period.from, to: period.to }, kind, filter.screen),
   );
   const basePath = screenHref(project.id, 'requests');
   const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
