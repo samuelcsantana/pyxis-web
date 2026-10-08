@@ -25,7 +25,7 @@ describe('get-messages', () => {
   it('keeps the server-only namespaces out of the client messages', async () => {
     const messages = await clientMessages('en');
 
-    expect(Object.keys(messages)).toEqual(['funnelEditor', 'screens', 'nav']);
+    expect(Object.keys(messages)).toEqual(['funnelEditor', 'screens', 'nav', 'theme']);
     expect(messages.funnelEditor.problems.pathStart).toBe('A page path starts with "/".');
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
@@ -8,6 +8,7 @@ import { DEMO_USER_ID } from '@/services/timeline/demo-timeline';
 import { MockTimelineService } from '@/services/timeline/mock-timeline-service';
 import type { ITimelineService } from '@/services/timeline/timeline-service.interface';
 import TimelinePage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{ admin: unknown; timeline: ITimelineService['timeline'] }>(() => ({
   admin: undefined,
@@ -67,7 +68,7 @@ describe('TimelinePage', () => {
     state.timeline = timeline;
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    render(await renderTimeline({ user: 'not an id' }));
+    renderWithMessages(await renderTimeline({ user: 'not an id' }));
 
     expect(timeline).not.toHaveBeenCalled();
     expect(
@@ -83,7 +84,7 @@ describe('TimelinePage', () => {
   it('offers no demo person outside the demo', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    render(await renderTimeline({}));
+    renderWithMessages(await renderTimeline({}));
 
     expect(screen.queryByRole('link', { name: /demo person/ })).not.toBeInTheDocument();
   });
@@ -102,7 +103,7 @@ describe('TimelinePage', () => {
       ],
     };
 
-    render(
+    renderWithMessages(
       await TimelinePage({
         params: Promise.resolve({ projectId: DEMO_DOCS.id }),
         searchParams: Promise.resolve({}),
@@ -120,7 +121,7 @@ describe('TimelinePage', () => {
     state.timeline = timeline;
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    render(await renderTimeline({ user: DEMO_USER_ID, show: 'errors' }));
+    renderWithMessages(await renderTimeline({ user: DEMO_USER_ID, show: 'errors' }));
 
     expect(timeline).toHaveBeenCalledWith('p-store', { kind: 'user', id: DEMO_USER_ID }, null);
     expect(screen.getByRole('heading', { name: `User ${DEMO_USER_ID}` })).toBeInTheDocument();
@@ -138,14 +139,16 @@ describe('TimelinePage', () => {
 
   it('carries the period of the screen it came from, for the way back', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-    const { unmount } = render(await renderTimeline({ range: '7d' }));
+    const { unmount } = renderWithMessages(await renderTimeline({ range: '7d' }));
     expect(
       screen.getByRole('link', { name: `Open the timeline of the demo person ${DEMO_USER_ID}` }),
     ).toHaveAttribute('href', `/p-store/timeline?range=7d&user=${DEMO_USER_ID}`);
     expect(document.querySelector('input[type="hidden"][name="range"]')).toHaveValue('7d');
     unmount();
 
-    render(await renderTimeline({ user: DEMO_USER_ID, from: '2026-08-01', to: '2026-08-31' }));
+    renderWithMessages(
+      await renderTimeline({ user: DEMO_USER_ID, from: '2026-08-01', to: '2026-08-31' }),
+    );
 
     expect(screen.getByRole('link', { name: 'Failing only' })).toHaveAttribute(
       'href',
@@ -154,7 +157,7 @@ describe('TimelinePage', () => {
   });
 
   it('keeps an id it could not use in the form, marked invalid', async () => {
-    render(await renderTimeline({ visit: 'not-a-visit-id' }));
+    renderWithMessages(await renderTimeline({ visit: 'not-a-visit-id' }));
 
     expect(screen.getByRole('textbox', { name: 'Visit id' })).toHaveValue('not-a-visit-id');
     expect(screen.getByRole('textbox', { name: 'Visit id' })).toHaveAttribute(
@@ -167,14 +170,16 @@ describe('TimelinePage', () => {
   });
 
   it('opens one visit, with nothing older to show', async () => {
-    render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
+    renderWithMessages(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }));
 
     expect(screen.getAllByRole('region', { name: /^Visit .+ · / })).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'Load older visits' })).not.toBeInTheDocument();
   });
 
   it('links a visit opened by its id to every visit of the person it was identified as', async () => {
-    render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01', range: '7d' }));
+    renderWithMessages(
+      await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01', range: '7d' }),
+    );
 
     expect(screen.getByRole('link', { name: `All visits of ${DEMO_USER_ID}` })).toHaveAttribute(
       'href',
@@ -183,10 +188,10 @@ describe('TimelinePage', () => {
   });
 
   it('has no person link on an anonymous visit, nor on the visits of a person', async () => {
-    render(await renderTimeline({ visit: '506cf1d6-18b8-4b20-87a4-8ba68956bf5b' }));
+    renderWithMessages(await renderTimeline({ visit: '506cf1d6-18b8-4b20-87a4-8ba68956bf5b' }));
     expect(screen.queryByRole('link', { name: /^All visits of/ })).not.toBeInTheDocument();
 
-    render(await renderTimeline({ user: DEMO_USER_ID }));
+    renderWithMessages(await renderTimeline({ user: DEMO_USER_ID }));
     expect(screen.queryByRole('link', { name: /^All visits of/ })).not.toBeInTheDocument();
   });
 
@@ -194,7 +199,7 @@ describe('TimelinePage', () => {
     state.timeline = (): Promise<TimelineReport> =>
       Promise.resolve({ visits: [], nextBefore: null });
 
-    const { unmount } = render(
+    const { unmount } = renderWithMessages(
       await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01' }),
     );
     expect(
@@ -204,7 +209,7 @@ describe('TimelinePage', () => {
 
     state.timeline = (projectId, lookup, before) =>
       new MockTimelineService().timeline(projectId, lookup, before);
-    render(await renderTimeline({ user: DEMO_USER_ID }));
+    renderWithMessages(await renderTimeline({ user: DEMO_USER_ID }));
     expect(screen.getByRole('button', { name: 'Load older visits' })).toBeInTheDocument();
   });
 

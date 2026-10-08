@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AcquisitionReport } from '@/domain/acquisition';
 import type { Admin } from '@/domain/admin';
@@ -6,6 +6,7 @@ import { UnauthenticatedError } from '@/domain/errors';
 import type { IAcquisitionService } from '@/services/acquisition/acquisition-service.interface';
 import { MockAcquisitionService } from '@/services/acquisition/mock-acquisition-service';
 import AcquisitionPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{ admin: unknown; acquisition: IAcquisitionService['acquisition'] }>(
   () => ({
@@ -75,7 +76,7 @@ describe('AcquisitionPage', () => {
     );
     state.acquisition = acquisition;
 
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     expect(acquisition).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
     expect(screen.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeInTheDocument();
@@ -83,7 +84,7 @@ describe('AcquisitionPage', () => {
   });
 
   it('shows the paid visits, the top channel, the chart and the sources', async () => {
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     expect(screen.getByRole('group', { name: 'Paid visits' })).toHaveTextContent(
       /% of [\d,]+ visits/,
@@ -96,7 +97,7 @@ describe('AcquisitionPage', () => {
   });
 
   it('offers the sources and the visits by channel as CSV files of the period', async () => {
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     expect(screen.getByRole('link', { name: 'Sources as CSV' })).toHaveAttribute(
       'href',
@@ -109,7 +110,7 @@ describe('AcquisitionPage', () => {
   });
 
   it('links the channel of each source to its visits, in the same period', async () => {
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     const [paid] = within(screen.getByRole('table', { name: 'Sources' })).getAllByRole('link', {
       name: 'Paid: see its visits',
@@ -118,7 +119,7 @@ describe('AcquisitionPage', () => {
   });
 
   it('lists the campaigns, each opening the visits it brought from its source', async () => {
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     const campaigns = screen.getByRole('table', { name: 'Campaigns' });
     expect(
@@ -139,7 +140,7 @@ describe('AcquisitionPage', () => {
         campaigns: [],
       });
 
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     expect(
       screen.getByRole('heading', { name: 'No events in this period yet' }),
@@ -163,7 +164,7 @@ describe('AcquisitionPage', () => {
       })),
     };
 
-    render(await renderAcquisition());
+    renderWithMessages(await renderAcquisition());
 
     expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'See the last 30 days' })).toHaveAttribute(

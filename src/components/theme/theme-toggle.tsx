@@ -3,12 +3,17 @@
 import { useSyncExternalStore } from 'react';
 import { oppositeTheme, parseTheme, type Theme, themeCookie } from '@/lib/theme';
 import { BUTTON_ICON, NAV_CONTROL } from '@/components/ui/control-classes';
+import { useT } from '@/i18n/messages-provider';
 
 const SUN_ICON =
   'M12 8a4 4 0 1 1 0 8a4 4 0 1 1 0-8 M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4';
 const MOON_ICON = 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z';
 
 export type ThemeToggleSurface = 'page' | 'nav';
+
+const SWITCH_TO = { light: 'theme.toLight', dark: 'theme.toDark' } as const satisfies Readonly<
+  Record<Theme, string>
+>;
 
 const SURFACE_CLASSES: Readonly<Record<ThemeToggleSurface, string>> = {
   page: BUTTON_ICON,
@@ -40,6 +45,7 @@ function themeOnScreen(): Theme {
 }
 
 export function ThemeToggle({ initialTheme, surface = 'page' }: ThemeToggleProps) {
+  const t = useT();
   const theme = useSyncExternalStore(
     subscribeToThemeChanges,
     chosenThemeOnPage,
@@ -52,7 +58,7 @@ export function ThemeToggle({ initialTheme, surface = 'page' }: ThemeToggleProps
     document.cookie = themeCookie(next);
   };
 
-  const label = theme === undefined ? 'Switch theme' : `Switch to ${oppositeTheme(theme)} theme`;
+  const label = theme === undefined ? t('theme.switch') : t(SWITCH_TO[oppositeTheme(theme)]);
 
   return (
     <button

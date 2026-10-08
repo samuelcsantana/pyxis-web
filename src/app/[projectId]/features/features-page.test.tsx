@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IFeaturesService } from '@/services/features/features-service.interface';
 import { MockFeaturesService } from '@/services/features/mock-features-service';
 import FeaturesPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{ admin: unknown; features: IFeaturesService['features'] }>(() => ({
   admin: undefined,
@@ -74,7 +75,7 @@ describe('FeaturesPage', () => {
     );
     state.features = features;
 
-    render(await renderFeatures());
+    renderWithMessages(await renderFeatures());
 
     expect(features).toHaveBeenCalledWith(
       'p-store',
@@ -101,7 +102,7 @@ describe('FeaturesPage', () => {
   });
 
   it('ranks the screens when asked, and keeps the search across periods', async () => {
-    render(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
+    renderWithMessages(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
 
     expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
     expect(screen.getAllByRole('row')).toHaveLength(4);
@@ -122,7 +123,7 @@ describe('FeaturesPage', () => {
   });
 
   it('offers the ranking it shows as a CSV file, kind and search kept', async () => {
-    render(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
+    renderWithMessages(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
 
     expect(screen.getByRole('link', { name: 'Screens as CSV' })).toHaveAttribute(
       'href',
@@ -131,7 +132,7 @@ describe('FeaturesPage', () => {
   });
 
   it('offers the events as a CSV file without a search', async () => {
-    render(await renderFeatures());
+    renderWithMessages(await renderFeatures());
 
     expect(screen.getByRole('link', { name: 'Events as CSV' })).toHaveAttribute(
       'href',

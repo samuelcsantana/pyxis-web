@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { DevicesReport } from '@/domain/devices';
@@ -6,6 +6,7 @@ import { UnauthenticatedError } from '@/domain/errors';
 import { MockDevicesService } from '@/services/devices/mock-devices-service';
 import type { IDevicesService } from '@/services/devices/devices-service.interface';
 import DevicesPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{ admin: unknown; devices: IDevicesService['devices'] }>(() => ({
   admin: undefined,
@@ -69,7 +70,7 @@ describe('DevicesPage', () => {
     );
     state.devices = devices;
 
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     expect(devices).toHaveBeenCalledWith('p-store', { from: '2026-09-06', to: '2026-10-05' });
     expect(screen.getByRole('heading', { level: 1, name: 'Devices' })).toBeInTheDocument();
@@ -77,7 +78,7 @@ describe('DevicesPage', () => {
   });
 
   it('shows the three donuts, conversion by device and the countries', async () => {
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     for (const name of ['Device type', 'Browser', 'Operating system', 'Countries']) {
       expect(screen.getByRole('table', { name })).toBeInTheDocument();
@@ -96,7 +97,7 @@ describe('DevicesPage', () => {
       return { ...report, deviceTypes: [...report.deviceTypes, watch] };
     };
 
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     const deviceTypes = screen.getByRole('table', { name: 'Device type' });
     expect(
@@ -114,7 +115,7 @@ describe('DevicesPage', () => {
       return { ...report, countries: [...report.countries, other] };
     };
 
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     const countries = within(screen.getByRole('table', { name: 'Countries' }));
     expect(countries.getByRole('link', { name: 'Brazil: see its visits' })).toHaveAttribute(
@@ -125,7 +126,7 @@ describe('DevicesPage', () => {
   });
 
   it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     for (const name of ['Browser', 'Operating system', 'Countries']) {
       expect(
@@ -142,7 +143,7 @@ describe('DevicesPage', () => {
   });
 
   it('leaves conversion by device out for a project without a conversion event', async () => {
-    render(await renderDevices('p-docs'));
+    renderWithMessages(await renderDevices('p-docs'));
 
     expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
 
@@ -165,7 +166,7 @@ describe('DevicesPage', () => {
     };
     state.devices = (): Promise<DevicesReport> => Promise.resolve(counted);
 
-    render(await renderDevices('p-store'));
+    renderWithMessages(await renderDevices('p-store'));
 
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
     expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
@@ -175,7 +176,7 @@ describe('DevicesPage', () => {
   });
 
   it('offers every breakdown as one CSV file of the period', async () => {
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     expect(
       screen.getByRole('link', { name: 'Device types, browsers, systems and countries as CSV' }),
@@ -186,7 +187,7 @@ describe('DevicesPage', () => {
     state.devices = (): Promise<DevicesReport> =>
       Promise.resolve({ deviceTypes: [], browsers: [], operatingSystems: [], countries: [] });
 
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     expect(
       screen.getByRole('heading', { name: 'No events in this period yet' }),
@@ -208,7 +209,7 @@ describe('DevicesPage', () => {
       ],
     };
 
-    render(await renderDevices());
+    renderWithMessages(await renderDevices());
 
     expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
     expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();

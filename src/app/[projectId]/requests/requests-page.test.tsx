@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
@@ -6,6 +6,7 @@ import type { RequestsReport } from '@/domain/requests';
 import { MockRequestsService } from '@/services/requests/mock-requests-service';
 import type { IRequestsService } from '@/services/requests/requests-service.interface';
 import RequestsPage from './page';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const state = vi.hoisted<{
   admin: unknown;
@@ -81,7 +82,7 @@ describe('RequestsPage', () => {
     );
     state.requests = requests;
 
-    render(await renderRequests());
+    renderWithMessages(await renderRequests());
 
     expect(requests).toHaveBeenCalledWith(
       'p-store',
@@ -116,7 +117,7 @@ describe('RequestsPage', () => {
   });
 
   it('charts the failed reads per day, and nothing per day for an API that has no days', async () => {
-    render(await renderRequests({ range: '7d', kind: 'reads' }));
+    renderWithMessages(await renderRequests({ range: '7d', kind: 'reads' }));
     expect(
       screen.getByText('Every read that failed, by what went wrong, last 7 days'),
     ).toBeInTheDocument();
@@ -126,7 +127,7 @@ describe('RequestsPage', () => {
       new MockRequestsService()
         .requests(projectId, range, screenPath)
         .then((report) => ({ ...report, days: [] }));
-    render(await renderRequests());
+    renderWithMessages(await renderRequests());
 
     expect(screen.queryByText('Failures per day')).not.toBeInTheDocument();
   });
@@ -138,7 +139,7 @@ describe('RequestsPage', () => {
     state.failedReads = failedReads;
     state.requests = () => Promise.reject(new Error('the writes were asked'));
 
-    render(await renderRequests({ range: '30d', kind: 'reads', show: 'failing' }));
+    renderWithMessages(await renderRequests({ range: '30d', kind: 'reads', show: 'failing' }));
 
     expect(failedReads).toHaveBeenCalledWith(
       'p-store',
@@ -170,7 +171,7 @@ describe('RequestsPage', () => {
   });
 
   it('keeps the screen filter when it switches between writes and failed reads', async () => {
-    render(await renderRequests({ range: '30d', kind: 'reads', screen: '/products' }));
+    renderWithMessages(await renderRequests({ range: '30d', kind: 'reads', screen: '/products' }));
 
     expect(screen.getByRole('link', { name: 'Writes' })).toHaveAttribute(
       'href',
@@ -186,7 +187,7 @@ describe('RequestsPage', () => {
     state.failedReads = () =>
       Promise.reject(new ApiRequestError('/v1/projects/p-store/requests', 400));
 
-    render(await renderRequests({ kind: 'reads' }));
+    renderWithMessages(await renderRequests({ kind: 'reads' }));
 
     expect(
       screen.getByRole('heading', { level: 2, name: 'Failed reads need a newer Pyxis API' }),
@@ -213,7 +214,7 @@ describe('RequestsPage', () => {
     );
     state.requests = requests;
 
-    render(await renderRequests({ range: '30d', show: 'failing', screen: '/orders' }));
+    renderWithMessages(await renderRequests({ range: '30d', show: 'failing', screen: '/orders' }));
 
     expect(requests).toHaveBeenCalledWith(
       'p-store',
@@ -238,7 +239,7 @@ describe('RequestsPage', () => {
   });
 
   it('offers the routes it shows as a CSV file, filters kept', async () => {
-    render(await renderRequests({ range: '30d', show: 'failing', screen: '/orders' }));
+    renderWithMessages(await renderRequests({ range: '30d', show: 'failing', screen: '/orders' }));
 
     expect(screen.getByRole('link', { name: 'Writes as CSV' })).toHaveAttribute(
       'href',
@@ -247,7 +248,7 @@ describe('RequestsPage', () => {
   });
 
   it('offers the failed reads as their own CSV file', async () => {
-    render(await renderRequests({ range: '7d', kind: 'reads' }));
+    renderWithMessages(await renderRequests({ range: '7d', kind: 'reads' }));
 
     expect(screen.getByRole('link', { name: 'Failed reads as CSV' })).toHaveAttribute(
       'href',
@@ -258,23 +259,23 @@ describe('RequestsPage', () => {
   it('says what is missing for each filter', async () => {
     state.requests = (): Promise<RequestsReport> => Promise.resolve({ routes: [], days: [] });
 
-    const { unmount } = render(await renderRequests());
+    const { unmount } = renderWithMessages(await renderRequests());
     expect(
       screen.getByText('No writes in this period. Calls sent with trackRequest() show up here.'),
     ).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Slowest route' })).toHaveTextContent('—');
     unmount();
 
-    const failing = render(await renderRequests({ show: 'failing' }));
+    const failing = renderWithMessages(await renderRequests({ show: 'failing' }));
     expect(screen.getByText('No route failed in this period.')).toBeInTheDocument();
     failing.unmount();
 
-    const fromScreen = render(await renderRequests({ screen: '/settings' }));
+    const fromScreen = renderWithMessages(await renderRequests({ screen: '/settings' }));
     expect(screen.getByText('No writes from /settings in this period.')).toBeInTheDocument();
     fromScreen.unmount();
 
     state.failedReads = (): Promise<RequestsReport> => Promise.resolve({ routes: [], days: [] });
-    const reads = render(await renderRequests({ kind: 'reads' }));
+    const reads = renderWithMessages(await renderRequests({ kind: 'reads' }));
     expect(
       screen.getByText(
         'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.',
@@ -285,7 +286,7 @@ describe('RequestsPage', () => {
     );
     reads.unmount();
 
-    render(await renderRequests({ kind: 'reads', screen: '/settings' }));
+    renderWithMessages(await renderRequests({ kind: 'reads', screen: '/settings' }));
     expect(screen.getByText('No failed reads from /settings in this period.')).toBeInTheDocument();
   });
 
