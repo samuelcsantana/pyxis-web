@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
@@ -38,6 +38,10 @@ export const FailureWithoutRetry: Story = {
 
 export const Demo: Story = {
   render: () => <DemoBanner />,
+  play: async ({ canvasElement }) => {
+    const notice = within(canvasElement).getByRole('complementary', { name: 'Demo notice' });
+    await expect(within(notice).getByRole('note')).toHaveTextContent('Demo data');
+  },
 };
 
 export const NoConversionEventSet: Story = {
