@@ -265,7 +265,11 @@ describe('visitRows', () => {
       failedRequestsLabel: '1 failed request',
       device: 'Mobile · Safari · iOS · Brazil',
       channel: 'Paid',
-      account: { userId: 'u_check_visits', shown: 'u_check_…' },
+      account: {
+        userId: 'u_check_visits',
+        shown: 'u_check_…',
+        linkName: 'u_check_…, open the timeline of user u_check_visits',
+      },
     });
     expect(second).toMatchObject({
       started: 'Mon, Oct 5, 00:05',
@@ -303,6 +307,10 @@ describe('visitRows', () => {
       'UTC',
     );
 
-    expect(row?.account).toEqual({ userId: 'u_7f3a', shown: 'u_7f3a' });
+    expect(row?.account).toEqual({
+      userId: 'u_7f3a',
+      shown: 'u_7f3a',
+      linkName: 'u_7f3a, open the timeline of this user',
+    });
   });
 });
