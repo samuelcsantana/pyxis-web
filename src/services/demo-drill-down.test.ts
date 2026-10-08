@@ -116,6 +116,14 @@ describe('the demo visits behind every link into Visits', () => {
         }
       });
 
+      it('include a visit for every campaign Acquisition lists, from its source', async () => {
+        const acquisition = await new MockAcquisitionService().acquisition(project.id, range);
+
+        for (const { campaign, source } of acquisition.campaigns) {
+          expect(await visitsFound({ campaign, source }), campaign).toBeGreaterThan(0);
+        }
+      });
+
       it('include a visit for every country Devices lists by its code', async () => {
         const devices = await new MockDevicesService().devices(project.id, range);
 

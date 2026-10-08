@@ -1,3 +1,4 @@
+import { CampaignsTable } from '@/components/acquisition/campaigns-table';
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { MainContent } from '@/components/shell/main-content';
@@ -10,6 +11,8 @@ import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { StatCard } from '@/components/ui/stat-card';
 import {
   type AcquisitionReport,
+  type CampaignRow,
+  campaignRows,
   type Channel,
   paidVisits,
   sourceRows,
@@ -46,6 +49,7 @@ interface AcquisitionReportViewProps {
   readonly period: Period;
   readonly downloads: readonly CsvDownload[];
   readonly channelVisitsHref: (channel: Channel) => string;
+  readonly campaignVisitsHref: (row: CampaignRow) => string;
   readonly i18n: I18n;
   readonly sourceVisitsHref: (source: string) => string;
 }
@@ -70,6 +74,7 @@ function AcquisitionReportView({
   period,
   downloads,
   channelVisitsHref,
+  campaignVisitsHref,
   i18n,
   sourceVisitsHref,
 }: AcquisitionReportViewProps) {
@@ -87,6 +92,11 @@ function AcquisitionReportView({
         channelVisitsHref={channelVisitsHref}
         i18n={i18n}
         sourceVisitsHref={sourceVisitsHref}
+      />
+      <CampaignsTable
+        rows={campaignRows(report.campaigns, i18n)}
+        campaignVisitsHref={campaignVisitsHref}
+        i18n={i18n}
       />
       <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
@@ -125,6 +135,9 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             downloads={acquisitionDownloads(project.id, period, i18n)}
             channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
             sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
+            campaignVisitsHref={({ campaign, source }) =>
+              linkWith(visitsPath, { campaign, source })
+            }
             i18n={i18n}
           />
         ) : (

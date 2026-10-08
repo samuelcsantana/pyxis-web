@@ -117,6 +117,15 @@ describe('AcquisitionPage', () => {
     expect(paid).toHaveAttribute('href', '/p-store/visits?range=7d&channel=paid');
   });
 
+  it('lists the campaigns, each opening the visits it brought from its source', async () => {
+    render(await renderAcquisition());
+
+    const campaigns = screen.getByRole('table', { name: 'Campaigns' });
+    expect(
+      within(campaigns).getByRole('link', { name: 'spring_sale: see its visits from google' }),
+    ).toHaveAttribute('href', '/p-store/visits?range=7d&campaign=spring_sale&source=google');
+  });
+
   it('shows how to install the SDK when nobody visited in the period', async () => {
     const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
     state.acquisition = (): Promise<AcquisitionReport> =>

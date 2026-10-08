@@ -136,6 +136,16 @@ export const en = {
       conversionRate: 'Conversion rate',
       converted: '{conversions} converted',
     },
+    campaigns: {
+      title: 'Campaigns',
+      description:
+        'The campaign tag (utm_campaign) of the first page of each visit, with the source that carried it; the 20 that brought the most visits',
+      empty: 'No visit arrived with a campaign tag in this period.',
+      campaign: 'Campaign',
+      source: 'Source',
+      visits: 'Visits',
+      visitsLinkPurpose: ': see its visits from {source}',
+    },
     summary: {
       bars: 'Stacked bar chart of {days},',
       range: 'between {lowest} and {highest} visits a day.',

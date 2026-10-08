@@ -1,11 +1,19 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { activeChannels, channelChartRows, type Source, sourceRows } from '@/domain/acquisition';
+import {
+  activeChannels,
+  type Campaign,
+  campaignRows,
+  channelChartRows,
+  type Source,
+  sourceRows,
+} from '@/domain/acquisition';
 import { valueAxis } from '@/domain/chart-scale';
 import { stackedBars } from '@/domain/stacked-bars';
 import { StatCard } from '@/components/ui/stat-card';
 import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
+import { CampaignsTable } from './campaigns-table';
 import { ChannelChart } from './channel-chart';
 import { SourcesTable } from './sources-table';
 import { english } from '@/test-utils/english';
@@ -169,6 +177,84 @@ describe('SourcesTable', () => {
     );
 
     expect(screen.getByText('No visits with a source in this period.')).toBeInTheDocument();
+  });
+});
+
+const SPRING_SALE: Campaign = {
+  campaign: 'spring_sale',
+  source: 'google',
+  medium: 'cpc',
+  channel: 'paid',
+  visits: 800,
+  conversions: 50,
+  convertingVisits: 40,
+  fromAdClickVisits: 700,
+};
+
+function campaignVisitsHref({ campaign, source }: { campaign: string; source: string }): string {
+  return `/p1/visits?range=7d&campaign=${campaign}&source=${source}`;
+}
+
+describe('CampaignsTable', () => {
+  it('shows each campaign with its source, medium, ad click visits and conversion rate', () => {
+    render(
+      <CampaignsTable
+        i18n={english}
+        rows={campaignRows([SPRING_SALE], english)}
+        campaignVisitsHref={campaignVisitsHref}
+      />,
+    );
+
+    const [header, row] = screen.getAllByRole('row');
+    expect(header).toHaveTextContent('CampaignSourceVisitsConversionsConversion rate');
+    expect(row).toHaveTextContent(
+      'spring_salegooglecpc700 from ad clicksgooglecpc800405.0%40 converted',
+    );
+    expect(
+      screen.getByRole('link', { name: 'spring_sale: see its visits from google' }),
+    ).toHaveAttribute('href', '/p1/visits?range=7d&campaign=spring_sale&source=google');
+  });
+
+  it('keeps the source beside the campaign on phones, with a dash for no medium', () => {
+    render(
+      <CampaignsTable
+        i18n={english}
+        rows={campaignRows(
+          [{ ...SPRING_SALE, source: '(direct)', medium: null, fromAdClickVisits: 0 }],
+          english,
+        )}
+        campaignVisitsHref={campaignVisitsHref}
+      />,
+    );
+
+    const [phoneSource] = screen.getAllByText('Direct');
+    expect(phoneSource).toHaveClass('sm:hidden');
+    expect(screen.getByText('—')).toBeInTheDocument();
+    expect(screen.queryByText(/from ad clicks/)).not.toBeInTheDocument();
+  });
+
+  it('leaves the conversion columns out without a conversion event', () => {
+    render(
+      <CampaignsTable
+        i18n={english}
+        rows={campaignRows(
+          [{ ...SPRING_SALE, conversions: null, convertingVisits: null }],
+          english,
+        )}
+        campaignVisitsHref={campaignVisitsHref}
+      />,
+    );
+
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).not.toBeInTheDocument();
+  });
+
+  it('says so when no visit carried a campaign tag', () => {
+    render(<CampaignsTable i18n={english} rows={[]} campaignVisitsHref={campaignVisitsHref} />);
+
+    expect(
+      screen.getByText('No visit arrived with a campaign tag in this period.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 });
 
