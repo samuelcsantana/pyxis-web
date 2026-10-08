@@ -1,9 +1,11 @@
-import { CHANNEL_LABELS, type SourceRow } from '@/domain/acquisition';
+import { type Channel, CHANNEL_LABELS, type SourceRow } from '@/domain/acquisition';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 import { CHANNEL_COLORS } from './channel-colors';
 
 export interface SourcesTableProps {
   readonly rows: readonly SourceRow[];
+  readonly channelVisitsHref: (channel: Channel) => string;
 }
 
 function ConversionColumns() {
@@ -35,7 +37,7 @@ function ConversionCells({ row }: { readonly row: SourceRow }) {
   );
 }
 
-export function SourcesTable({ rows }: SourcesTableProps) {
+export function SourcesTable({ rows, channelVisitsHref }: SourcesTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
   return (
     <section aria-labelledby="sources-heading" className={PANEL}>
@@ -80,7 +82,10 @@ export function SourcesTable({ rows }: SourcesTableProps) {
                     <span className="flex min-w-0 flex-col gap-1">
                       <span className="wrap-anywhere">{row.label}</span>
                       <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
-                        {CHANNEL_LABELS[row.channel]}
+                        <VisitsLink
+                          href={channelVisitsHref(row.channel)}
+                          label={CHANNEL_LABELS[row.channel]}
+                        />
                         {row.fromAdClicks === null ? null : (
                           <span className="rounded-pill bg-warn-soft px-2 py-0.5 text-[11px] font-semibold text-warn">
                             {row.fromAdClicks}

@@ -8,12 +8,16 @@ const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
 const REPORT = demoAcquisitionReport('demo', PERIOD);
 const WITHOUT_CONVERSIONS = demoAcquisitionReport(DEMO_DOCS.id, PERIOD);
 
+function channelVisitsHref(channel: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '30d', channel }).toString()}`;
+}
+
 const meta = {
   title: 'Acquisition/Sources',
   component: SourcesTable,
   tags: ['autodocs'],
-  args: { rows: sourceRows(REPORT.sources) },
-  parameters: { layout: 'padded' },
+  args: { rows: sourceRows(REPORT.sources), channelVisitsHref },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
       <div className="w-[min(100%,70rem)]">
