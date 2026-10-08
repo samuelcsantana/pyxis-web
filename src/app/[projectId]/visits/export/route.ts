@@ -4,6 +4,8 @@ import { getI18n } from '@/i18n/get-messages';
 import { csvExport } from '@/lib/csv-export';
 import { readNewestVisits } from '@/services/visits/newest-visits';
 
+export const maxDuration = 60;
+
 export const GET = csvExport(async ({ project, period, search }) => {
   const visits = await readNewestVisits(
     project.id,
