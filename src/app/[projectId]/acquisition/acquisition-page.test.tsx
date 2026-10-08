@@ -95,6 +95,19 @@ describe('AcquisitionPage', () => {
     expect(screen.getByRole('table', { name: 'Sources' })).toHaveTextContent('google');
   });
 
+  it('offers the sources and the visits by channel as CSV files of the period', async () => {
+    render(await renderAcquisition());
+
+    expect(screen.getByRole('link', { name: 'Sources as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/acquisition/export?range=7d&table=sources',
+    );
+    expect(screen.getByRole('link', { name: 'Visits by channel as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/acquisition/export?range=7d&table=channels',
+    );
+  });
+
   it('shows how to install the SDK when nobody visited in the period', async () => {
     const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
     state.acquisition = (): Promise<AcquisitionReport> =>

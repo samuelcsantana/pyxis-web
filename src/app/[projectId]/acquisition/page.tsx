@@ -1,9 +1,11 @@
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { MainContent } from '@/components/shell/main-content';
+import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { StatCard } from '@/components/ui/stat-card';
 import {
@@ -13,14 +15,17 @@ import {
   topChannel,
   visitsTotal,
 } from '@/domain/acquisition';
+import { ACQUISITION_TABLE_LABELS, ACQUISITION_TABLES } from '@/domain/acquisition-export';
 import {
   describePeriod,
   type Period,
   type PeriodSearch,
+  periodQuery,
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
+import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
@@ -36,9 +41,21 @@ export interface AcquisitionPageProps {
 interface AcquisitionReportViewProps {
   readonly report: AcquisitionReport;
   readonly period: Period;
+  readonly downloads: readonly CsvDownload[];
 }
 
-function AcquisitionReportView({ report, period }: AcquisitionReportViewProps) {
+function acquisitionDownloads(projectId: string, period: Period): readonly CsvDownload[] {
+  return ACQUISITION_TABLES.map((table) => ({
+    label: ACQUISITION_TABLE_LABELS[table],
+    href: exportHref(
+      projectId,
+      'acquisition',
+      withKeptParameters(periodQuery(period), { [TABLE_PARAMETER]: table }),
+    ),
+  }));
+}
+
+function AcquisitionReportView({ report, period, downloads }: AcquisitionReportViewProps) {
   const paid = paidVisits(report.days);
   const top = topChannel(report.days);
   return (
@@ -49,6 +66,7 @@ function AcquisitionReportView({ report, period }: AcquisitionReportViewProps) {
       </div>
       <ChannelChart days={report.days} periodLabel={describePeriod(period)} />
       <SourcesTable rows={sourceRows(report.sources)} />
+      <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
         An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
         it was there, never the id itself, and keeps just the domain of a referring site.
@@ -76,7 +94,11 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         {visitsTotal(report.days) > 0 ? (
-          <AcquisitionReportView report={report} period={period} />
+          <AcquisitionReportView
+            report={report}
+            period={period}
+            downloads={acquisitionDownloads(project.id, period)}
+          />
         ) : (
           <EmptyPeriod
             view={emptyPeriodView(project, period)}
