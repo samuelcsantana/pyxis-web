@@ -131,6 +131,11 @@ export const en = {
     topUnpaidChannel: 'Top unpaid channel',
     shareOfVisits: '{share} of {visits}',
     fromAdClicks: '{visits} from ad clicks',
+    conversionColumns: {
+      conversions: 'Conversions',
+      conversionRate: 'Conversion rate',
+      converted: '{conversions} converted',
+    },
     summary: {
       bars: 'Stacked bar chart of {days},',
       range: 'between {lowest} and {highest} visits a day.',

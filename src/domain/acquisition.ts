@@ -127,12 +127,14 @@ export function sourceLabel(source: string, i18n: I18n): string {
   return source === DIRECT_SOURCE ? i18n.t('acquisition.directSource') : source;
 }
 
-export interface SourceRow {
-  readonly key: string;
-  readonly source: string;
-  readonly label: string;
-  readonly medium: string | null;
-  readonly channel: Channel;
+interface AttributedVisits {
+  readonly visits: number;
+  readonly conversions: number | null;
+  readonly convertingVisits: number | null;
+  readonly fromAdClickVisits: number;
+}
+
+export interface ConversionFigures {
   readonly visits: string;
   readonly conversions: string | null;
   readonly conversionRate: string | null;
@@ -140,31 +142,45 @@ export interface SourceRow {
   readonly fromAdClicks: string | null;
 }
 
-export function sourceRows(sources: readonly Source[], i18n: I18n): readonly SourceRow[] {
-  const rated = sources.map((source) => {
-    const converted = source.convertingVisits ?? source.conversions;
-    return {
-      ...source,
-      converted,
-      rate: converted === null ? null : rate(converted, source.visits),
-    };
+function withConversionFigures<Entry extends AttributedVisits, Row>(
+  entries: readonly Entry[],
+  i18n: I18n,
+  describe: (entry: Entry) => Row,
+): readonly (Row & ConversionFigures)[] {
+  const rated = entries.map((entry) => {
+    const converted = entry.convertingVisits ?? entry.conversions;
+    return { entry, converted, share: converted === null ? null : rate(converted, entry.visits) };
   });
-  const best = Math.max(0, ...rated.map((source) => source.rate ?? 0));
-  return rated.map((source) => ({
+  const best = Math.max(0, ...rated.map(({ share }) => share ?? 0));
+  return rated.map(({ entry, converted, share }) => ({
+    ...describe(entry),
+    visits: formatCount(entry.visits, i18n),
+    conversions: converted === null ? null : formatCount(converted, i18n),
+    conversionRate: converted === null ? null : formatPercent(share, i18n),
+    barWidth: barWidth(share ?? 0, best),
+    fromAdClicks:
+      entry.fromAdClickVisits === 0
+        ? null
+        : i18n.t('acquisition.fromAdClicks', {
+            visits: formatCount(entry.fromAdClickVisits, i18n),
+          }),
+  }));
+}
+
+export interface SourceRow extends ConversionFigures {
+  readonly key: string;
+  readonly source: string;
+  readonly label: string;
+  readonly medium: string | null;
+  readonly channel: Channel;
+}
+
+export function sourceRows(sources: readonly Source[], i18n: I18n): readonly SourceRow[] {
+  return withConversionFigures(sources, i18n, (source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
     source: source.source,
     label: sourceLabel(source.source, i18n),
     medium: source.medium,
     channel: source.channel,
-    visits: formatCount(source.visits, i18n),
-    conversions: source.converted === null ? null : formatCount(source.converted, i18n),
-    conversionRate: source.converted === null ? null : formatPercent(source.rate, i18n),
-    barWidth: barWidth(source.rate ?? 0, best),
-    fromAdClicks:
-      source.fromAdClickVisits === 0
-        ? null
-        : i18n.t('acquisition.fromAdClicks', {
-            visits: formatCount(source.fromAdClickVisits, i18n),
-          }),
   }));
 }
