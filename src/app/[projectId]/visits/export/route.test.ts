@@ -4,7 +4,7 @@ import type { Admin } from '@/domain/admin';
 import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { MockVisitsService } from '@/services/visits/mock-visits-service';
 import type { IVisitsService } from '@/services/visits/visits-service.interface';
-import { GET } from './route';
+import { GET, maxDuration } from './route';
 
 const state = vi.hoisted<{ visits: IVisitsService['visits'] }>(() => ({
   visits: () => Promise.reject(new Error('visits not set')),
@@ -57,6 +57,10 @@ beforeEach(() => {
 });
 
 describe('GET /[projectId]/visits/export', () => {
+  it('may run for a minute, the most a Vercel Hobby function gets in every compute mode', () => {
+    expect(maxDuration).toBe(60);
+  });
+
   it('sends every visit of the period and filters, reading every page', async () => {
     const visits = vi.fn<IVisitsService['visits']>((projectId, range, filters, cursor) =>
       new MockVisitsService().visits(projectId, range, filters, cursor),
