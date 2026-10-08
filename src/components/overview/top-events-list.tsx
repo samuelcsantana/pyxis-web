@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { barWidth, eventLabel, formatCount, formatQuantity } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
-import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE, ROW_LINK } from '@/components/ui/panel-classes';
+import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];
@@ -26,13 +26,11 @@ export function TopEventsList({ events, visitsHref }: TopEventsListProps) {
             <li key={event.name} className="flex flex-col gap-1.5 border-b border-line py-2.5">
               <span className="flex items-baseline justify-between gap-2 text-[13px]">
                 <span className="flex min-w-0 flex-col">
-                  <Link
+                  <VisitsLink
                     href={visitsHref(event.name)}
-                    aria-label={`See the visits that had ${eventLabel(event.name)}`}
-                    className={`w-fit ${ROW_LINK}`}
-                  >
-                    {eventLabel(event.name)}
-                  </Link>
+                    label={eventLabel(event.name)}
+                    className="w-fit"
+                  />
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>
                 <span className="shrink-0 text-right font-semibold tabular-nums">

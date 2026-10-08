@@ -217,7 +217,7 @@ describe('TopPagesTable', () => {
     );
 
     expect(
-      screen.getByRole('link', { name: 'See the visits that opened /calculator-shipping' }),
+      screen.getByRole('link', { name: '/calculator-shipping: see its visits' }),
     ).toHaveAttribute('href', '/p-store/visits?range=7d&path=%2Fcalculator-shipping');
   });
 
@@ -245,9 +245,10 @@ describe('TopEventsList', () => {
     expect(item).toHaveTextContent('cta_clicked');
     expect(item).toHaveTextContent('1,200 in 900 visits');
     expect(single).toHaveTextContent('1 in 1 visit');
-    expect(
-      screen.getByRole('link', { name: 'See the visits that had Cta clicked' }),
-    ).toHaveAttribute('href', '/p-store/visits?range=7d&event=cta_clicked');
+    expect(screen.getByRole('link', { name: 'Cta clicked: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=7d&event=cta_clicked',
+    );
   });
 
   it('says so when no event was tracked', () => {

@@ -199,11 +199,12 @@ describe('OverviewPage', () => {
   it('links the top pages and events to their visits in the same period', async () => {
     render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 
+    expect(screen.getByRole('link', { name: '/calculator: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?from=2026-09-01&to=2026-09-30&path=%2Fcalculator',
+    );
     expect(
-      screen.getByRole('link', { name: 'See the visits that opened /calculator' }),
-    ).toHaveAttribute('href', '/p-store/visits?from=2026-09-01&to=2026-09-30&path=%2Fcalculator');
-    expect(
-      screen.getByRole('link', { name: 'See the visits that had Calculator result shown' }),
+      screen.getByRole('link', { name: 'Calculator result shown: see its visits' }),
     ).toHaveAttribute(
       'href',
       '/p-store/visits?from=2026-09-01&to=2026-09-30&event=calculator_result_shown',
