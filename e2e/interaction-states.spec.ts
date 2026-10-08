@@ -22,7 +22,7 @@ const MIN_TARGET_PX = 24;
 const chartViews = (page: Page) => page.getByRole('group', { name: 'Show as' });
 
 const homePageRowLink = (page: Page) =>
-  page.getByRole('link', { name: 'See the visits that opened /', exact: true });
+  page.getByRole('link', { name: '/: see its visits', exact: true });
 
 const demoPersonLink = (page: Page) =>
   page.getByRole('link', { name: /^Open the timeline of the demo person/ });

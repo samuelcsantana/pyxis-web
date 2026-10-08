@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { barWidth, formatCount, formatPercent, rate } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
 import {
@@ -8,8 +7,8 @@ import {
   HEADER_CELL,
   PANEL,
   PANEL_TITLE,
-  ROW_LINK,
 } from '@/components/ui/panel-classes';
+import { VisitsLink } from '@/components/ui/visits-link';
 
 export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
@@ -58,13 +57,7 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref }: TopPagesTab
                     scope="row"
                     className={`${BODY_CELL} pl-0 text-left font-mono text-xs font-normal wrap-anywhere`}
                   >
-                    <Link
-                      href={visitsHref(page.path)}
-                      aria-label={`See the visits that opened ${page.path}`}
-                      className={ROW_LINK}
-                    >
-                      {page.path}
-                    </Link>
+                    <VisitsLink href={visitsHref(page.path)} label={page.path} />
                   </th>
                   <td className={`${BODY_CELL} text-right`}>{formatCount(page.views)}</td>
                   <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>

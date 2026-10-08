@@ -108,7 +108,7 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
 
-  await page.getByRole('link', { name: 'See the visits that opened /calculator' }).click();
+  await page.getByRole('link', { name: '/calculator: see its visits' }).click();
 
   await expect(page).toHaveURL(/\/visits\?range=7d&path=%2Fcalculator$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Visits' })).toBeVisible();
@@ -121,7 +121,7 @@ test('opens the visits of a top page, in the same period, from the keyboard too'
 
   await page.goBack();
   const eventLink = page.getByRole('link', {
-    name: 'See the visits that had Calculator result shown',
+    name: 'Calculator result shown: see its visits',
   });
   await eventLink.focus();
   await page.keyboard.press('Enter');
