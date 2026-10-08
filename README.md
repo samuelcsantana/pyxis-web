@@ -89,7 +89,11 @@ Shipping now:
   On phones the header stays compact: the theme toggle sits in the menu bar (every toggle on the
   page follows the same theme), the period presets and Custom are 44px targets on one row, and
   the content starts within 260px of the top of a 390×844 screen (budgets checked in
-  `e2e/responsive.spec.ts`)
+  `e2e/responsive.spec.ts`). The content is dense on phones too: figures stay on one line,
+  cards share the panels' padding, a rate on the Sources table keeps its "6 converted" beside
+  it, and routes, paths and event names break between their tokens (`/orders/` `:id`), never
+  inside one. On tablets the KPI cards sit two by two and the last donut takes the whole row,
+  so no card is left alone on a line; an open drawer holds the page behind it still
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Each card links to the list behind
