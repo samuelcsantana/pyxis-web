@@ -75,7 +75,9 @@ Shipping now:
   button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
   a slim bar that stays at the top while the page scrolls, and it closes with Escape (the focus
   goes back to its button), when a link in it is followed and when the address changes (Back,
-  Forward, a period link); an open menu taller than the screen scrolls inside itself
+  Forward, a period link); an open menu taller than the screen scrolls inside itself. The
+  sidebar fits in 700px, so Sign out shows without scrolling on a 1366×768 laptop, and the
+  account email, project names and time zones wrap instead of being cut
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Page views and named events per day
