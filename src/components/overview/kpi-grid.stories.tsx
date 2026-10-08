@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { overviewKpis } from '@/domain/overview';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
-import { DEMO_DOCS } from '@/services/demo/demo-projects';
+import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { KpiGrid } from './kpi-grid';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
@@ -13,12 +13,13 @@ const TEN_IN_SAO_PAULO = new Date('2026-10-05T13:03:00.000Z');
 const TODAY = { days: 1, endsToday: true } as const;
 
 const WITHOUT_CONVERSIONS = demoOverviewReport(DEMO_DOCS.id, STORY_PERIOD, STORY_NOW);
+const EVENT = DEMO_STORE.conversionEvent;
 
 const meta = {
   title: 'Overview/KPI cards',
   component: KpiGrid,
   tags: ['autodocs'],
-  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS) },
+  args: { kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT) },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (
@@ -35,7 +36,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
-  args: { kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS) },
+  args: { kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, DEMO_DOCS.conversionEvent) },
 };
 
 export const BadNews: Story = {
@@ -53,6 +54,7 @@ export const BadNews: Story = {
         },
       },
       LAST_30_DAYS,
+      EVENT,
     ),
   },
 };
@@ -75,6 +77,7 @@ export const NothingToCompare: Story = {
         },
       },
       { days: 1, endsToday: false },
+      EVENT,
     ),
   },
 };
@@ -100,12 +103,15 @@ export const SmallNumbers: Story = {
         },
       },
       { days: 2, endsToday: false },
+      EVENT,
     ),
   },
 };
 
 export const TodayUntilNow: Story = {
-  args: { kpis: overviewKpis(demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO), TODAY) },
+  args: {
+    kpis: overviewKpis(demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO), TODAY, EVENT),
+  },
 };
 
 export const TodayAgainstAllOfYesterday: Story = {
@@ -116,6 +122,7 @@ export const TodayAgainstAllOfYesterday: Story = {
         comparison: { kind: 'unknown' },
       },
       TODAY,
+      EVENT,
     ),
   },
 };

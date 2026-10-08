@@ -142,6 +142,9 @@ describe('OverviewPage', () => {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
     }
     expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(4);
+    expect(screen.getByRole('region', { name: 'Conversions' })).toHaveTextContent(
+      /% of [\d,]+ visits sent signup_completed · [\d,]+ conversion events/,
+    );
     expect(screen.getByText('Page views and named events, last 7 days')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Top pages' })).toHaveTextContent('/calculator');
     expect(screen.getByRole('region', { name: 'Top events' })).toHaveTextContent(
@@ -159,6 +162,7 @@ describe('OverviewPage', () => {
     render(await renderOverview());
 
     expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Conversions' })).not.toBeInTheDocument();
   });
 
   it('shows the figures of a single day instead of a chart of one point', async () => {

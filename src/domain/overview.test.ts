@@ -216,9 +216,15 @@ describe('comparesUnfinishedDayWithWholeOne', () => {
   });
 });
 
+const CONVERSION_EVENT = 'signup_completed';
+
 describe('overviewKpis', () => {
   it('gives the four figures with their change, tone and totals', () => {
-    const [visits, users, conversions, errors] = overviewKpis(report(), { ...ENDED, days: 30 });
+    const [visits, users, conversions, errors] = overviewKpis(
+      report(),
+      { ...ENDED, days: 30 },
+      CONVERSION_EVENT,
+    );
 
     expect(visits).toEqual({
       id: 'visits',
@@ -236,7 +242,7 @@ describe('overviewKpis', () => {
     });
     expect(conversions?.comparison).toBe('vs. previous 30 days');
     expect(conversions?.value).toBe('212');
-    expect(conversions?.note).toBe('4.5% of 4,758 visits');
+    expect(conversions?.note).toBe('signup_completed · 4.5% of 4,758 visits');
     expect(errors).toEqual({
       id: 'write-errors',
       label: 'Write error rate',
@@ -259,22 +265,30 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 30 },
+      CONVERSION_EVENT,
     );
 
     expect(conversions).toMatchObject({
       label: 'Conversions',
       value: '200',
       change: '+5.3% (+10)',
-      note: '4.2% of 4,758 visits · 212 conversion events',
+      note: '4.2% of 4,758 visits sent signup_completed · 212 conversion events',
       series: [95, 105],
     });
   });
 
-  it('leaves out conversions when the project has no conversion event', () => {
-    const kpis = overviewKpis(report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }), {
-      ...ENDED,
-      days: 7,
-    });
+  it('leaves out conversions when the API counts none', () => {
+    const kpis = overviewKpis(
+      report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }),
+      { ...ENDED, days: 7 },
+      CONVERSION_EVENT,
+    );
+
+    expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
+  });
+
+  it('leaves out conversions when the project names no conversion event', () => {
+    const kpis = overviewKpis(report(), { ...ENDED, days: 7 }, null);
 
     expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
   });
@@ -294,6 +308,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
+      CONVERSION_EVENT,
     );
 
     expect(visits?.tone).toBe('bad');
@@ -316,6 +331,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
+      CONVERSION_EVENT,
     );
 
     expect(visits).toMatchObject({ change: '0% (+1)', tone: 'neutral' });
@@ -337,6 +353,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
+      CONVERSION_EVENT,
     );
 
     expect(visits?.change).toBe('+5');
@@ -349,7 +366,7 @@ describe('overviewKpis', () => {
   });
 
   it('judges no change while today is compared with all of yesterday', () => {
-    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 });
+    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 }, CONVERSION_EVENT);
 
     expect(kpis.map((kpi) => kpi.tone)).toEqual(['neutral', 'neutral', 'neutral', 'neutral']);
     expect(kpis.map((kpi) => kpi.comparison)).toEqual(
@@ -358,10 +375,14 @@ describe('overviewKpis', () => {
   });
 
   it('judges the change when the API compared the same hours', () => {
-    const [visits] = overviewKpis(report({ ...WIRE, comparison_cutoff: '10:03:00.000' }), {
-      ...ENDS_TODAY,
-      days: 1,
-    });
+    const [visits] = overviewKpis(
+      report({ ...WIRE, comparison_cutoff: '10:03:00.000' }),
+      {
+        ...ENDS_TODAY,
+        days: 1,
+      },
+      CONVERSION_EVENT,
+    );
 
     expect(visits).toMatchObject({ tone: 'good', comparison: 'vs. yesterday until 10:03' });
   });

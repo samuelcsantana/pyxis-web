@@ -190,6 +190,7 @@ function shareOfVisits(converted: number, visits: number): string {
 }
 
 interface ConversionFigures {
+  readonly event: string;
   readonly conversions: Kpi;
   readonly convertingVisits: Kpi | null;
   readonly visits: Kpi;
@@ -199,19 +200,20 @@ const CONVERSIONS_ID = 'conversions';
 const CONVERSIONS_LABEL = 'Conversions';
 
 function conversionsKpi(
-  { conversions, convertingVisits, visits }: ConversionFigures,
+  { event, conversions, convertingVisits, visits }: ConversionFigures,
   comparison: string,
 ): KpiView {
   if (convertingVisits === null) {
-    const note = shareOfVisits(conversions.current, visits.current);
+    const note = `${event} · ${shareOfVisits(conversions.current, visits.current)}`;
     return countKpi(
       conversions,
       { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
       comparison,
     );
   }
+  const share = shareOfVisits(convertingVisits.current, visits.current);
   const events = formatQuantity(conversions.current, 'conversion event', 'conversion events');
-  const note = `${shareOfVisits(convertingVisits.current, visits.current)} · ${events}`;
+  const note = `${share} sent ${event} · ${events}`;
   return countKpi(
     convertingVisits,
     { id: CONVERSIONS_ID, label: CONVERSIONS_LABEL, note },
@@ -219,7 +221,11 @@ function conversionsKpi(
   );
 }
 
-export function overviewKpis(report: OverviewReport, period: ComparedPeriod): readonly KpiView[] {
+export function overviewKpis(
+  report: OverviewReport,
+  period: ComparedPeriod,
+  conversionEvent: string | null,
+): readonly KpiView[] {
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
   const comparison = previousPeriodNote(report.comparison, period);
   const kpis = [
@@ -229,9 +235,14 @@ export function overviewKpis(report: OverviewReport, period: ComparedPeriod): re
       { id: 'identified-users', label: 'Identified users', note: 'signed in at least once' },
       comparison,
     ),
-    ...(conversions === null
+    ...(conversions === null || conversionEvent === null
       ? []
-      : [conversionsKpi({ conversions, convertingVisits, visits }, comparison)]),
+      : [
+          conversionsKpi(
+            { event: conversionEvent, conversions, convertingVisits, visits },
+            comparison,
+          ),
+        ]),
     writeErrorsKpi(writeErrors, comparison),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)
