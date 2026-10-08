@@ -67,9 +67,9 @@ function AcquisitionReportView({
   const top = topChannel(report.days);
   return (
     <>
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fill,minmax(13.75rem,1fr))] sm:gap-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
         <StatCard id="paid-visits" label="Paid visits" value={paid.value} note={paid.note} />
-        <StatCard id="top-channel" label="Top channel" value={top.value} note={top.note} />
+        <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>
       <ChannelChart days={report.days} periodLabel={describePeriod(period)} />
       <SourcesTable rows={sourceRows(report.sources)} channelVisitsHref={channelVisitsHref} />

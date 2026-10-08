@@ -117,7 +117,8 @@ Shipping now:
   value with its visits and share, conversion by device, and the countries by name; with a
   conversion event set, each browser, system and country also gives its conversion rate; each
   device type opens its visits
-- Acquisition: paid visits and the top channel with their share of every visit, visits per day
+- Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
+  cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table), and the sources with their conversion rate and the visits
   that came from an ad click; the channel of each source opens the visits from that channel
 - Features: the most used events and the most visited screens, with count, visits, a daily trend

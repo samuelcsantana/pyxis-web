@@ -94,16 +94,26 @@ export function paidVisits(days: readonly ChannelDay[]): PaidVisits {
   };
 }
 
-export function topChannel(days: readonly ChannelDay[]): PaidVisits {
+export interface ChannelFigure extends PaidVisits {
+  readonly label: string;
+}
+
+const UNPAID_CHANNELS = CHANNELS.filter((channel) => channel !== 'paid');
+
+function mostVisited(channels: readonly Channel[], totals: ChannelVisits): Channel {
+  return channels.reduce((best, channel) => (totals[channel] > totals[best] ? channel : best));
+}
+
+export function topChannel(days: readonly ChannelDay[]): ChannelFigure {
   const totals = channelTotals(days);
-  const top = CHANNELS.reduce<Channel>(
-    (best, channel) => (totals[channel] > totals[best] ? channel : best),
-    CHANNELS[0],
-  );
+  const top = mostVisited(CHANNELS, totals);
+  const paidLeads = top === 'paid' && totals.paid > 0;
+  const shown = paidLeads ? mostVisited(UNPAID_CHANNELS, totals) : top;
   const total = visitsTotal(days);
   return {
-    value: CHANNEL_LABELS[top],
-    note: `${formatPercent(rate(totals[top], total))} of ${formatQuantity(total, 'visit', 'visits')}`,
+    label: paidLeads ? 'Top unpaid channel' : 'Top channel',
+    value: CHANNEL_LABELS[shown],
+    note: `${formatPercent(rate(totals[shown], total))} of ${formatQuantity(total, 'visit', 'visits')}`,
   };
 }
 
