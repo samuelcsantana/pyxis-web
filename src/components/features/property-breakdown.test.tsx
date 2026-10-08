@@ -111,9 +111,9 @@ describe('PropertyBreakdown', () => {
     const rows = within(table).getAllByRole('row');
     expect(rows.map((row) => row.textContent)).toEqual([
       'ValueShareCountVisits',
-      'shipping60%65',
-      'margin30%33',
-      'Other values10%1—',
+      'shipping60.0%65',
+      'margin30.0%33',
+      'Other values10.0%1—',
     ]);
   });
 

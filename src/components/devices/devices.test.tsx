@@ -36,8 +36,8 @@ describe('ShareDonut', () => {
     const table = screen.getByRole('table', { name: 'Device type' });
     const rows = within(table).getAllByRole('row');
     expect(rows).toHaveLength(4);
-    expect(rows[1]).toHaveTextContent('Mobile62062%');
-    expect(rows[3]).toHaveTextContent('Other404%');
+    expect(rows[1]).toHaveTextContent('Mobile62062.0%');
+    expect(rows[3]).toHaveTextContent('Other404.0%');
     expect(container.querySelectorAll('svg circle')).toHaveLength(4);
     expect(within(table).queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
   });
@@ -72,7 +72,7 @@ describe('ShareDonut', () => {
 
     const table = screen.getByRole('table', { name: 'Browser' });
     expect(within(table).getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
-    expect(within(table).getAllByRole('row')[1]).toHaveTextContent('Chrome60060%5%');
+    expect(within(table).getAllByRole('row')[1]).toHaveTextContent('Chrome60060.0%5.0%');
   });
 
   it('leaves the conversion rate out when the project has no conversion event', () => {
@@ -116,7 +116,7 @@ describe('ShareDonut', () => {
           value: 'other',
           label: 'Other',
           visits: '1',
-          share: '50%',
+          share: '50.0%',
           fraction: 0.5,
           conversionRate: null,
         },
@@ -156,8 +156,8 @@ describe('CountriesTable', () => {
     );
 
     const rows = screen.getAllByRole('row');
-    expect(rows[1]).toHaveTextContent('BRBrazil9090%');
-    expect(rows[2]).toHaveTextContent('··Other countries1010%');
+    expect(rows[1]).toHaveTextContent('BRBrazil9090.0%');
+    expect(rows[2]).toHaveTextContent('··Other countries1010.0%');
     expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
   });
 
@@ -177,7 +177,7 @@ describe('CountriesTable', () => {
 
     expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
     const rows = screen.getAllByRole('row');
-    expect(rows[1]).toHaveTextContent('BRBrazil9090%6.7%');
-    expect(rows[2]).toHaveTextContent('··Other countries1010%0%');
+    expect(rows[1]).toHaveTextContent('BRBrazil9090.0%6.7%');
+    expect(rows[2]).toHaveTextContent('··Other countries1010.0%0.0%');
   });
 });

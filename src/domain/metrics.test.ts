@@ -43,21 +43,21 @@ describe('formatters', () => {
 
   it('sign a change with a plus, a true minus or nothing', () => {
     expect(formatChange(0.124)).toBe('+12.4%');
-    expect(formatChange(-0.05)).toBe('−5%');
-    expect(formatChange(0)).toBe('0%');
+    expect(formatChange(-0.05)).toBe('−5.0%');
+    expect(formatChange(0)).toBe('0.0%');
     expect(formatChange(null)).toBe(NO_VALUE);
   });
 
   it('show a change that rounds to zero as no change, without a sign', () => {
-    expect(formatChange(0.0004)).toBe('0%');
-    expect(formatChange(-0.0004)).toBe('0%');
+    expect(formatChange(0.0004)).toBe('0.0%');
+    expect(formatChange(-0.0004)).toBe('0.0%');
     expect(formatPointChange(0.03001, 0.03)).toBe(NO_CHANGE);
     expect(formatPointChange(0.03, 0.03004)).toBe(NO_CHANGE);
   });
 
   it('give a change of rates in percentage points', () => {
     expect(formatPointChange(0.024, 0.027)).toBe('−0.3 pt');
-    expect(formatPointChange(0.03, 0.01)).toBe('+2 pt');
+    expect(formatPointChange(0.03, 0.01)).toBe('+2.0 pt');
     expect(formatPointChange(0.02, 0.02)).toBe(NO_CHANGE);
     expect(formatPointChange(null, 0.02)).toBe(NO_VALUE);
     expect(formatPointChange(0.02, null)).toBe(NO_VALUE);
@@ -74,7 +74,7 @@ describe('formatSignedCount', () => {
 describe('countChange', () => {
   it('gives the percentage and the difference, judged when the base is large enough', () => {
     expect(countChange(4758, 4233)).toEqual({ text: '+12.4% (+525)', trend: 'up' });
-    expect(countChange(90, 100)).toEqual({ text: '−10% (−10)', trend: 'down' });
+    expect(countChange(90, 100)).toEqual({ text: '−10.0% (−10)', trend: 'down' });
   });
 
   it('says no change when the counts are equal', () => {
@@ -87,24 +87,24 @@ describe('countChange', () => {
   });
 
   it(`does not judge a change over fewer than ${String(MIN_COMPARABLE_BASE)} before`, () => {
-    expect(countChange(5, 4)).toEqual({ text: '+25% (+1)', trend: 'flat' });
+    expect(countChange(5, 4)).toEqual({ text: '+25.0% (+1)', trend: 'flat' });
     expect(countChange(MIN_COMPARABLE_BASE + 5, MIN_COMPARABLE_BASE)).toEqual({
-      text: '+25% (+5)',
+      text: '+25.0% (+5)',
       trend: 'up',
     });
   });
 
   it('does not judge a change under one percent', () => {
     expect(countChange(1009, 1000)).toEqual({ text: '+0.9% (+9)', trend: 'flat' });
-    expect(countChange(1010, 1000)).toEqual({ text: '+1% (+10)', trend: 'up' });
-    expect(countChange(10001, 10000)).toEqual({ text: '0% (+1)', trend: 'flat' });
+    expect(countChange(1010, 1000)).toEqual({ text: '+1.0% (+10)', trend: 'up' });
+    expect(countChange(10001, 10000)).toEqual({ text: '0.0% (+1)', trend: 'flat' });
   });
 });
 
 describe('pointChange', () => {
   it('judges a move of half a point or more over enough writes', () => {
     expect(pointChange(0.03, 0.025, 100)).toEqual({ text: '+0.5 pt', trend: 'up' });
-    expect(pointChange(0.02, 0.03, 100)).toEqual({ text: '−1 pt', trend: 'down' });
+    expect(pointChange(0.02, 0.03, 100)).toEqual({ text: '−1.0 pt', trend: 'down' });
   });
 
   it('does not judge a move under half a point', () => {
@@ -112,7 +112,10 @@ describe('pointChange', () => {
   });
 
   it(`does not judge rates over fewer than ${String(MIN_COMPARABLE_BASE)} writes`, () => {
-    expect(pointChange(0.1, 0, MIN_COMPARABLE_BASE - 1)).toEqual({ text: '+10 pt', trend: 'flat' });
+    expect(pointChange(0.1, 0, MIN_COMPARABLE_BASE - 1)).toEqual({
+      text: '+10.0 pt',
+      trend: 'flat',
+    });
   });
 
   it('says no change, or nothing, when there is no move or nothing to compare', () => {

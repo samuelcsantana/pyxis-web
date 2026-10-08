@@ -89,7 +89,7 @@ describe('SourcesTable', () => {
     render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
 
     const [, row] = screen.getAllByRole('row');
-    expect(row).toHaveTextContent('googlePaid1,100 from ad clickscpc1,200605%');
+    expect(row).toHaveTextContent('googlePaid1,100 from ad clickscpc1,200605.0%');
     expect(screen.getByRole('link', { name: 'Paid: see its visits' })).toHaveAttribute(
       'href',
       '/p1/visits?range=7d&channel=paid',

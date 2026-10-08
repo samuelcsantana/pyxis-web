@@ -177,7 +177,7 @@ test('opens on the figure the address names, its table beside the previous perio
     'true',
   );
   await expect(chart.getByRole('img')).toBeVisible();
-  await expect(chart.getByText('0%', { exact: true })).toBeVisible();
+  await expect(chart.getByText('0.0%', { exact: true })).toBeVisible();
   expect(await axeViolations(page)).toEqual([]);
 
   await chart.getByRole('button', { name: 'Table', exact: true }).click();

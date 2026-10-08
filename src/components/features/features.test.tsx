@@ -84,7 +84,7 @@ describe('FeatureTable', () => {
 
     const rows = screen.getAllByRole('row');
     expect(screen.getByRole('table', { name: 'Most used events' })).toBeInTheDocument();
-    expect(rows[1]).toHaveTextContent('CTA clickedcta_clicked1209075%');
+    expect(rows[1]).toHaveTextContent('CTA clickedcta_clicked1209075.0%');
     expect(container.querySelectorAll('polyline')).toHaveLength(2);
   });
 
@@ -103,7 +103,7 @@ describe('FeatureTable', () => {
     );
 
     expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
-    expect(screen.getAllByRole('row')[1]).toHaveTextContent('/orders/:id54100%');
+    expect(screen.getAllByRole('row')[1]).toHaveTextContent('/orders/:id54100.0%');
     expect(screen.getByRole('link', { name: '/orders/:id: see its visits' })).toHaveAttribute(
       'href',
       '/p1/visits?range=7d&path=%2Forders%2F%3Aid',

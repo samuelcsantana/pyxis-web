@@ -26,7 +26,7 @@ export const Words: Story = {
     id: 'top-channel',
     label: 'Top channel',
     value: 'Organic search',
-    note: '31% of 2,390 visits',
+    note: '31.0% of 2,390 visits',
   },
 };
 

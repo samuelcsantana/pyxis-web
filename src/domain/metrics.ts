@@ -1,9 +1,13 @@
 const COUNT_FORMAT = new Intl.NumberFormat('en-US');
 const PERCENT_FORMAT = new Intl.NumberFormat('en-US', {
   style: 'percent',
+  minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 });
-const ONE_DECIMAL = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+const ONE_DECIMAL = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 const MINUS_SIGN = '−';
 const CHANGE_PRECISION = 1000;
 const POINT_PRECISION = 10;

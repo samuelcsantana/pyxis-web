@@ -94,7 +94,7 @@ describe('shareRows and shareSummary', () => {
         value: 'BR',
         label: 'Brazil',
         visits: '30',
-        share: '75%',
+        share: '75.0%',
         fraction: 0.75,
         conversionRate: '6.7%',
       },
@@ -102,12 +102,12 @@ describe('shareRows and shareSummary', () => {
         value: 'other',
         label: 'Other countries',
         visits: '10',
-        share: '25%',
+        share: '25.0%',
         fraction: 0.25,
-        conversionRate: '0%',
+        conversionRate: '0.0%',
       },
     ]);
-    expect(shareSummary('Country', rows)).toBe('Country: Brazil 75%, Other countries 25%.');
+    expect(shareSummary('Country', rows)).toBe('Country: Brazil 75.0%, Other countries 25.0%.');
     expect(countsConversions(rows)).toBe(true);
   });
 
@@ -117,7 +117,7 @@ describe('shareRows and shareSummary', () => {
       browserLabel,
     );
 
-    expect(row?.conversionRate).toBe('6%');
+    expect(row?.conversionRate).toBe('6.0%');
   });
 
   it('have no conversion rate when the project has no conversion event', () => {
@@ -160,7 +160,7 @@ describe('deviceConversions', () => {
       { value: 'mobile', visits: 100, conversions: 9, convertingVisits: 6 },
     ]);
 
-    expect(mobile).toMatchObject({ rate: '6%', detail: '6 of 100 visits' });
+    expect(mobile).toMatchObject({ rate: '6.0%', detail: '6 of 100 visits' });
   });
 
   it('is empty when the project has no conversion event', () => {
