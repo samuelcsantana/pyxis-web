@@ -168,7 +168,7 @@ export function requestFigures(
       ]
     : [
         { id: 'writes', label: 'Writes', ...writesFigure(routes) },
-        { id: 'error-rate', label: 'Error rate', ...errorRateFigure(routes) },
+        { id: 'error-rate', label: 'Write error rate', ...errorRateFigure(routes) },
         { id: 'slowest-route', label: 'Slowest route', ...slowestRouteFigure(routes) },
       ];
 }
