@@ -124,7 +124,7 @@ export function sourceLabel(source: string): string {
 export interface SourceRow {
   readonly key: string;
   readonly label: string;
-  readonly medium: string;
+  readonly medium: string | null;
   readonly channel: Channel;
   readonly visits: string;
   readonly conversions: string | null;
@@ -132,8 +132,6 @@ export interface SourceRow {
   readonly barWidth: string;
   readonly fromAdClicks: string | null;
 }
-
-const NO_MEDIUM = '—';
 
 export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
   const rated = sources.map((source) => {
@@ -148,7 +146,7 @@ export function sourceRows(sources: readonly Source[]): readonly SourceRow[] {
   return rated.map((source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
     label: sourceLabel(source.source),
-    medium: source.medium ?? NO_MEDIUM,
+    medium: source.medium,
     channel: source.channel,
     visits: formatCount(source.visits),
     conversions: source.converted === null ? null : formatCount(source.converted),

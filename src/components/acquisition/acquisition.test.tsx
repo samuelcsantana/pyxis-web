@@ -89,11 +89,31 @@ describe('SourcesTable', () => {
     render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
 
     const [, row] = screen.getAllByRole('row');
-    expect(row).toHaveTextContent('googlePaid1,100 from ad clickscpc1,200605.0%');
+    expect(row).toHaveTextContent('googlePaidcpc1,100 from ad clickscpc1,200605.0%60 converted');
     expect(screen.getByRole('link', { name: 'Paid: see its visits' })).toHaveAttribute(
       'href',
       '/p1/visits?range=7d&channel=paid',
     );
+  });
+
+  it('keeps the totals beside the rate and the medium beside the channel on phones', () => {
+    render(<SourcesTable rows={sourceRows([GOOGLE])} channelVisitsHref={channelVisitsHref} />);
+
+    expect(screen.getByText('60 converted')).toHaveClass('sm:hidden');
+    expect(screen.getAllByText('cpc')[0]).toHaveClass('sm:hidden');
+  });
+
+  it('shows a dash for a source without a medium, and no note for a source not counted', () => {
+    render(
+      <SourcesTable
+        rows={sourceRows([GOOGLE, { ...GOOGLE, source: 'bing', medium: null, conversions: null }])}
+        channelVisitsHref={channelVisitsHref}
+      />,
+    );
+
+    const [, , bing] = screen.getAllByRole('row');
+    expect(bing).toHaveTextContent('bingPaid1,100 from ad clicks—1,200');
+    expect(screen.getAllByText(/converted$/)).toHaveLength(1);
   });
 
   it('leaves the conversion columns out without a conversion event', () => {

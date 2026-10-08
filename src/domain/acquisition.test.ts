@@ -148,7 +148,7 @@ describe('sourceRows', () => {
     expect(direct).toMatchObject({
       key: '(direct)||direct',
       label: 'Direct',
-      medium: '—',
+      medium: null,
       conversionRate: '10.0%',
       barWidth: '100.0%',
       fromAdClicks: null,
