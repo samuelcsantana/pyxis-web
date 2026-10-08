@@ -156,8 +156,9 @@ Shipping now:
   device, channel and length, every page view, event and request with its properties and status
   (a request reads "164 ms · order_number_in_use", its status shown once, as the chip),
   and filters for page views, events, requests and failing requests only; older visits load on
-  demand, and a failed request in the Requests screen links to its visit; an id it cannot look up
-  stays in the field, marked invalid, with an example of what that kind of id looks like
+  demand, and a failed request in the Requests screen links to its visit; a visit opened by its id
+  links to every visit of the person it was identified as; an id it cannot look up stays in the
+  field, marked invalid, with an example of what that kind of id looks like
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and country, channel and
   account; filters for the pages it viewed (up to three, `*` matching any characters), an event

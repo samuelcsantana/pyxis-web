@@ -16,6 +16,13 @@ for (const colorScheme of ['light', 'dark'] as const) {
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
     });
+
+    test('has no violation on one visit linked to its person', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/timeline?visit=${SIGN_UP_VISIT}`);
+      await expect(page.getByRole('link', { name: `All visits of ${DEMO_USER}` })).toBeVisible();
+
+      expect(await axeViolations(page)).toEqual([]);
+    });
   });
 }
 
@@ -73,6 +80,11 @@ test('opens one visit by its id, and says when an id is unknown', async ({ page 
   await expect(page.getByRole('region', { name: /^Visit 19c2e5f6 · / })).toContainText(
     'Visit linked to the user',
   );
+
+  await page.getByRole('link', { name: `All visits of ${DEMO_USER}` }).click();
+  await expect(page).toHaveURL(new RegExp(`user=${DEMO_USER}$`));
+  await expect(page.getByRole('heading', { name: `User ${DEMO_USER}` })).toBeVisible();
+  await expect(page.getByRole('link', { name: /^All visits of/ })).toHaveCount(0);
 
   await page.goto(`/${STORE_ID}/timeline?user=nobody_here`);
   await expect(

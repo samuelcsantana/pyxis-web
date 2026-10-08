@@ -173,6 +173,23 @@ describe('TimelinePage', () => {
     expect(screen.queryByRole('button', { name: 'Load older visits' })).not.toBeInTheDocument();
   });
 
+  it('links a visit opened by its id to every visit of the person it was identified as', async () => {
+    render(await renderTimeline({ visit: '3c07a1b2-6d4e-4f10-9a2b-5c8d7e6f1a01', range: '7d' }));
+
+    expect(screen.getByRole('link', { name: `All visits of ${DEMO_USER_ID}` })).toHaveAttribute(
+      'href',
+      `/p-store/timeline?range=7d&user=${DEMO_USER_ID}`,
+    );
+  });
+
+  it('has no person link on an anonymous visit, nor on the visits of a person', async () => {
+    render(await renderTimeline({ visit: '506cf1d6-18b8-4b20-87a4-8ba68956bf5b' }));
+    expect(screen.queryByRole('link', { name: /^All visits of/ })).not.toBeInTheDocument();
+
+    render(await renderTimeline({ user: DEMO_USER_ID }));
+    expect(screen.queryByRole('link', { name: /^All visits of/ })).not.toBeInTheDocument();
+  });
+
   it('says when nothing was found, and when there are older visits', async () => {
     state.timeline = (): Promise<TimelineReport> =>
       Promise.resolve({ visits: [], nextBefore: null });
