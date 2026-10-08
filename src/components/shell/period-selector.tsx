@@ -58,7 +58,7 @@ export function PeriodSelector({
             <Link
               key={preset}
               href={`${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`}
-              aria-current={selected ? 'true' : undefined}
+              aria-current={selected ? 'page' : undefined}
               className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
             >
               {PRESET_LABELS[preset]}
