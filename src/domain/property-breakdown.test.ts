@@ -46,8 +46,8 @@ describe('propertyKeyViews', () => {
       key: 'calculator',
       carriedBy: '1,250 events',
       rows: [
-        { value: 'shipping', count: '775', visits: '640', share: '62%', barWidth: '62.0%' },
-        { value: 'margin', count: '475', visits: '410', share: '38%', barWidth: '38.0%' },
+        { value: 'shipping', count: '775', visits: '640', share: '62.0%', barWidth: '62.0%' },
+        { value: 'margin', count: '475', visits: '410', share: '38.0%', barWidth: '38.0%' },
       ],
       other: null,
     });
@@ -61,7 +61,7 @@ describe('propertyKeyViews', () => {
       value: OTHER_VALUES_LABEL,
       count: '1',
       visits: '—',
-      share: '100%',
+      share: '100.0%',
       barWidth: '100.0%',
     });
   });

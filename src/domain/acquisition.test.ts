@@ -96,7 +96,7 @@ describe('channel totals', () => {
 
 describe('paidVisits', () => {
   it('gives the paid visits with their share of every visit', () => {
-    expect(paidVisits(REPORT.days)).toEqual({ value: '130', note: '52% of 250 visits' });
+    expect(paidVisits(REPORT.days)).toEqual({ value: '130', note: '52.0% of 250 visits' });
   });
 
   it('shows a dash for the share when nobody visited', () => {
@@ -108,7 +108,7 @@ describe('topChannel', () => {
   it('names the channel that brought the most visits, with its share', () => {
     expect(
       topChannel([{ date: '2026-10-05', byChannel: { ...NONE, organic: 30, direct: 10 } }]),
-    ).toEqual({ label: 'Top channel', value: 'Organic search', note: '75% of 40 visits' });
+    ).toEqual({ label: 'Top channel', value: 'Organic search', note: '75.0% of 40 visits' });
   });
 
   it('names the runner-up when Paid leads, so it does not repeat the paid visits card', () => {
@@ -116,7 +116,11 @@ describe('topChannel', () => {
       topChannel([
         { date: '2026-10-05', byChannel: { ...NONE, paid: 50, organic: 30, direct: 20 } },
       ]),
-    ).toEqual({ label: 'Top unpaid channel', value: 'Organic search', note: '30% of 100 visits' });
+    ).toEqual({
+      label: 'Top unpaid channel',
+      value: 'Organic search',
+      note: '30.0% of 100 visits',
+    });
   });
 
   it('keeps the plain top channel when there were no visits', () => {
@@ -145,7 +149,7 @@ describe('sourceRows', () => {
       key: '(direct)||direct',
       label: 'Direct',
       medium: '—',
-      conversionRate: '10%',
+      conversionRate: '10.0%',
       barWidth: '100.0%',
       fromAdClicks: null,
     });

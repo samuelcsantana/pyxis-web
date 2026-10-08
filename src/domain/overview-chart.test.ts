@@ -253,7 +253,7 @@ describe('chartSummary', () => {
     expect(chartSummary(chartOf(WITH_PREVIOUS, 'write-errors'))).toBe(
       'Line chart of 2 days. Write error rate: between 2.4% and 2.4% a day, ' +
         'no writes on 1 day. Dashed, the previous period. ' +
-        'Write error rate: between 2% and 2% a day, no writes on 1 day.',
+        'Write error rate: between 2.0% and 2.0% a day, no writes on 1 day.',
     );
   });
 
@@ -304,7 +304,7 @@ describe('the table of the chart', () => {
       { day: 'Oct 5', cells: ['174', '82'] },
     ]);
     expect(chartRows(chartOf(WITH_PREVIOUS, 'write-errors'))).toEqual([
-      { day: 'Oct 4', cells: ['—', 'Oct 2', '2%'] },
+      { day: 'Oct 4', cells: ['—', 'Oct 2', '2.0%'] },
       { day: 'Oct 5', cells: ['2.4%', 'Oct 3', '—'] },
     ]);
   });

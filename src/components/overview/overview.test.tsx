@@ -74,16 +74,16 @@ describe('KpiGrid', () => {
       <KpiGrid
         drillDownHref={drillDownHref}
         kpis={[
-          { ...kpi('visits'), change: '+10%', tone: 'good' },
-          { ...kpi('identified-users'), change: '−10%', tone: 'bad' },
-          { ...kpi('write-errors'), change: '0 pt', tone: 'neutral' },
+          { ...kpi('visits'), change: '+10.0%', tone: 'good' },
+          { ...kpi('identified-users'), change: '−10.0%', tone: 'bad' },
+          { ...kpi('write-errors'), change: '0.0 pt', tone: 'neutral' },
         ]}
       />,
     );
 
-    expect(screen.getByText('+10%')).toHaveClass('text-ok');
-    expect(screen.getByText('−10%')).toHaveClass('text-bad');
-    expect(screen.getByText('0 pt')).toHaveClass('text-muted');
+    expect(screen.getByText('+10.0%')).toHaveClass('text-ok');
+    expect(screen.getByText('−10.0%')).toHaveClass('text-bad');
+    expect(screen.getByText('0.0 pt')).toHaveClass('text-muted');
   });
 
   it('leaves a gap in the error rate line on a day without writes', () => {
@@ -189,18 +189,18 @@ describe('KpiGrid', () => {
       <KpiGrid
         drillDownHref={drillDownHref}
         kpis={[
-          { ...kpi('visits'), change: '+10% (+40)', tone: 'good' },
-          { ...kpi('write-errors'), change: '+2 pt', tone: 'bad' },
+          { ...kpi('visits'), change: '+10.0% (+40)', tone: 'good' },
+          { ...kpi('write-errors'), change: '+2.0 pt', tone: 'bad' },
           { ...kpi('identified-users'), change: 'no change', tone: 'neutral' },
         ]}
       />,
     );
 
     expect(screen.getByRole('group', { name: 'Visits' })).toHaveTextContent(
-      '+10% (+40) change vs. previous 7 days, better',
+      '+10.0% (+40) change vs. previous 7 days, better',
     );
     expect(screen.getByRole('group', { name: 'Write error rate' })).toHaveTextContent(
-      '+2 pt change vs. previous 7 days, worse',
+      '+2.0 pt change vs. previous 7 days, worse',
     );
     const users = screen.getByRole('group', { name: 'Identified users' });
     expect(users).toHaveTextContent('no change vs. previous 7 days');
@@ -280,7 +280,7 @@ describe('OverviewChartPanel', () => {
     expect(screen.getByRole('heading', { name: 'Write error rate per day' })).toBeInTheDocument();
     const figure = screen.getByRole('img');
     expect(lines(figure, 'var(--color-bad)', 'current')).toHaveLength(1);
-    expect(within(figure).getByText('0%')).toBeInTheDocument();
+    expect(within(figure).getByText('0.0%')).toBeInTheDocument();
     expect(screen.getByText('Previous period')).toHaveTextContent(
       `Previous period${String(chart.previousTotal)}`,
     );
@@ -374,8 +374,8 @@ describe('TopPagesTable', () => {
     );
 
     const rows = within(screen.getByRole('table', { name: 'Top pages' })).getAllByRole('row');
-    expect(rows[1]).toHaveTextContent('/30020030%');
-    expect(rows[2]).toHaveTextContent('/pricing1009010%');
+    expect(rows[1]).toHaveTextContent('/30020030.0%');
+    expect(rows[2]).toHaveTextContent('/pricing1009010.0%');
   });
 
   it('links each page to the visits that opened it', () => {

@@ -183,7 +183,7 @@ describe('previousPeriodNote', () => {
 describe('spokenChange', () => {
   it('names a figure as a change for a screen reader', () => {
     expect(spokenChange('+12.4% (+525)')).toBe(' change');
-    expect(spokenChange('+2 pt')).toBe(' change');
+    expect(spokenChange('+2.0 pt')).toBe(' change');
   });
 
   it('adds nothing to "no change"', () => {
@@ -359,7 +359,7 @@ describe('overviewKpis', () => {
 
     expect(visits?.tone).toBe('bad');
     expect(errors?.tone).toBe('bad');
-    expect(errors?.change).toBe('+9 pt');
+    expect(errors?.change).toBe('+9.0 pt');
   });
 
   it('calls a change that rounds to zero neither good nor bad news', () => {
@@ -380,7 +380,7 @@ describe('overviewKpis', () => {
       CONVERSION_EVENT,
     );
 
-    expect(visits).toMatchObject({ change: '0% (+1)', tone: 'neutral' });
+    expect(visits).toMatchObject({ change: '0.0% (+1)', tone: 'neutral' });
     expect(errors).toMatchObject({ change: 'no change', tone: 'neutral' });
   });
 

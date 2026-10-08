@@ -41,7 +41,7 @@ describe('featureRows', () => {
         label: 'Calculator result shown',
         count: '300',
         visits: '200',
-        share: '75%',
+        share: '75.0%',
         barWidth: '100.0%',
         daily: [100, 200],
       },
@@ -50,7 +50,7 @@ describe('featureRows', () => {
         label: 'CTA clicked',
         count: '100',
         visits: '90',
-        share: '25%',
+        share: '25.0%',
         barWidth: '33.3%',
         daily: [40, 60],
       },
@@ -66,7 +66,7 @@ describe('featureRows', () => {
   });
 
   it('keeps the share of the whole ranking while searching', () => {
-    expect(featureRows(ITEMS, 'events', 'cta')[0]?.share).toBe('25%');
+    expect(featureRows(ITEMS, 'events', 'cta')[0]?.share).toBe('25.0%');
   });
 
   it('shows dashes, not NaN, for a ranking of zeros', () => {

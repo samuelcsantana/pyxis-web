@@ -169,7 +169,7 @@ describe('OverviewPage', () => {
       'A conversion is a visit',
       'A write is a POST',
       'A failure is a status of 400',
-      'A change is green or red only when the previous period counted at least 20 and it moved by 1% or more (0.5 points for the write error rate).',
+      'A change is green or red only when the previous period counted at least 20 and it moved by 1.0% or more (0.5 points for the write error rate).',
     ]) {
       expect(footnote).toHaveTextContent(word);
     }

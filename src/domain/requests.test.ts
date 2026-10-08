@@ -144,7 +144,7 @@ describe('figures', () => {
   });
 
   it('says there were no failures, and shows a dash without writes', () => {
-    expect(errorRateFigure([ME])).toEqual({ value: '0%', note: 'No failures in 88 writes' });
+    expect(errorRateFigure([ME])).toEqual({ value: '0.0%', note: 'No failures in 88 writes' });
     expect(errorRateFigure([]).value).toBe('—');
   });
 
@@ -233,7 +233,7 @@ describe('routeRows', () => {
       ],
     });
     expect(me?.hasFailures).toBe(false);
-    expect(me?.errorShare).toBe('0%');
+    expect(me?.errorShare).toBe('0.0%');
   });
 
   it('sums a failed read up by its failures, with no share of errors', () => {
