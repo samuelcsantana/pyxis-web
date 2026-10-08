@@ -147,7 +147,7 @@ describe('TimelinePage', () => {
 
     render(await renderTimeline({ user: DEMO_USER_ID, from: '2026-08-01', to: '2026-08-31' }));
 
-    expect(screen.getByRole('link', { name: 'Errors only' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Failing only' })).toHaveAttribute(
       'href',
       `/p-store/timeline?from=2026-08-01&to=2026-08-31&user=${DEMO_USER_ID}&show=errors`,
     );
