@@ -6,7 +6,7 @@ import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-
 import { defer, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { ClientSourceMessages } from '@/i18n/messages';
-import { useT } from '@/i18n/messages-provider';
+import { useLocale, useT } from '@/i18n/messages-provider';
 import { rich } from '@/i18n/rich';
 import type { Translator } from '@/i18n/translate';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
@@ -72,6 +72,7 @@ export function SignInForm({
   returnPath = HOME_PATH,
 }: SignInFormProps) {
   const t = useT();
+  const locale = useLocale();
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
   const [step, setStep] = useState<Step>('email');
@@ -111,7 +112,7 @@ export function SignInForm({
     start();
     notice.current?.abort();
     notice.current = new AbortController();
-    request.current = defer(() => service.requestCode(email.trim()))
+    request.current = defer(() => service.requestCode(email.trim(), locale))
       .pipe(
         tap(() => {
           setStep('code');

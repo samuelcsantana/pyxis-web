@@ -20,14 +20,24 @@ describe('HttpAuthService', () => {
   it('posts the email with credentials so the API can set its cookie', async () => {
     const fetchMock = answer(202);
 
-    await new HttpAuthService(API).requestCode('ana@example.com');
+    await new HttpAuthService(API).requestCode('ana@example.com', 'en');
 
     expect(fetchMock).toHaveBeenCalledWith(`${API}/v1/auth/request-code`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email: 'ana@example.com' }),
+      body: JSON.stringify({ email: 'ana@example.com', locale: 'en' }),
     });
+  });
+
+  it('asks for the sign-in email in the language of the dashboard', async () => {
+    const fetchMock = answer(202);
+
+    await new HttpAuthService(API).requestCode('ana@example.com', 'pt-BR');
+
+    expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(
+      JSON.stringify({ email: 'ana@example.com', locale: 'pt-BR' }),
+    );
   });
 
   it('posts the email and the code to verify them', async () => {
@@ -60,7 +70,7 @@ describe('HttpAuthService', () => {
   it('turns 429 into RateLimitedError', async () => {
     answer(429);
 
-    await expect(new HttpAuthService(API).requestCode('ana@example.com')).rejects.toThrow(
+    await expect(new HttpAuthService(API).requestCode('ana@example.com', 'en')).rejects.toThrow(
       RateLimitedError,
     );
   });

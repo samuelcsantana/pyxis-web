@@ -75,10 +75,22 @@ describe('SignInForm', () => {
     pending[0]?.resolve();
     await settle(SMOOTH_LOADING_MS);
 
-    expect(calls).toEqual([{ method: 'requestCode', args: ['ana@example.com'] }]);
+    expect(calls).toEqual([{ method: 'requestCode', args: ['ana@example.com', 'en'] }]);
     expect(screen.getByRole('heading', { name: 'Check your email' })).toBeInTheDocument();
     expect(screen.getByText('ana@example.com')).toBeInTheDocument();
     expect(screen.getByLabelText('6-digit code')).toHaveFocus();
+  });
+
+  it('asks for the code in the language the reader sees the dashboard in', async () => {
+    const { service, pending, calls } = controlledService();
+    renderWithMessages(<SignInForm authService={service} />, 'pt-BR');
+
+    fireEvent.change(screen.getByLabelText('E-mail'), { target: { value: 'ana@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Enviar código' }));
+    pending[0]?.resolve();
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(calls).toEqual([{ method: 'requestCode', args: ['ana@example.com', 'pt-BR'] }]);
   });
 
   it('keeps the busy state for a minimum time even when the API answers at once', async () => {
