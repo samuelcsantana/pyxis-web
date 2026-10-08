@@ -14,6 +14,7 @@ const SMOOTH_LOADING_MS = 400;
 const WIDE = 'hidden sm:table-cell';
 const WIDER = 'hidden lg:table-cell';
 const WIDEST = 'hidden xl:table-cell';
+const TIGHT_AT_LG = 'lg:px-2 xl:px-2.5';
 const HEADING_ID = 'visits-heading';
 
 export interface VisitsTableProps {
@@ -38,23 +39,25 @@ function VisitTableRow({
       <th scope="row" className={`${BODY_CELL} pl-0 text-left font-normal whitespace-nowrap`}>
         <VisitStartLink row={row} timelinePath={timelinePath} />
       </th>
-      <td className={`${BODY_CELL} ${WIDE} whitespace-nowrap text-muted`}>{row.duration}</td>
-      <td className={`${BODY_CELL} min-w-28 font-mono text-xs wrap-anywhere`}>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDE} whitespace-nowrap text-muted`}>
+        {row.duration}
+      </td>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} min-w-28 font-mono text-xs wrap-anywhere`}>
         <EntryPath path={row.entryPath} />
       </td>
-      <td className={`${BODY_CELL} ${WIDE} text-right`}>{row.pageViews}</td>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>{row.pageViews}</td>
       <td className={`${BODY_CELL} ${WIDEST}`}>
         <Highlights labels={row.highlights} />
       </td>
-      <td className={`${BODY_CELL} ${WIDE} text-right`}>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>
         {row.failedRequests === 0 ? (
           <span className="text-muted">0</span>
         ) : (
           <span className={FAILED_CHIP}>{row.failedRequests}</span>
         )}
       </td>
-      <td className={`${BODY_CELL} ${WIDER}`}>{row.device}</td>
-      <td className={`${BODY_CELL} ${WIDER}`}>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDER}`}>{row.device}</td>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDER}`}>
         {row.channel ?? <span className="text-muted">{NO_VALUE}</span>}
       </td>
       <td className={`${BODY_CELL} pr-0`}>
@@ -144,25 +147,25 @@ export function VisitsTable({
                   <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
                     Started
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-left`}>
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-left`}>
                     Duration
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} text-left`}>
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} text-left`}>
                     Entry page
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>
                     Pages
                   </th>
                   <th scope="col" className={`${HEADER_CELL} ${WIDEST} text-left`}>
                     Highlights
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} ${WIDE} text-right`}>
-                    Failed requests
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDE} text-right`}>
+                    Failed<span className="sr-only"> requests</span>
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDER} text-left`}>
                     Device
                   </th>
-                  <th scope="col" className={`${HEADER_CELL} ${WIDER} text-left`}>
+                  <th scope="col" className={`${HEADER_CELL} ${TIGHT_AT_LG} ${WIDER} text-left`}>
                     Channel
                   </th>
                   <th scope="col" className={`${HEADER_CELL} pr-0 text-left`}>
