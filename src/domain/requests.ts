@@ -86,15 +86,14 @@ export function writesFigure(routes: readonly RouteReport[], i18n: I18n): Figure
 }
 
 function failureKinds(counts: FailureCounts, i18n: I18n): string {
-  return [
+  const kinds = [
     counts.client === 0 ? null : i18n.t('counts.clientError', { count: counts.client }),
     counts.server === 0 ? null : i18n.t('counts.serverError', { count: counts.server }),
     counts.noResponse === 0
       ? null
       : i18n.t('requests.notes.withNoResponse', { count: formatCount(counts.noResponse, i18n) }),
-  ]
-    .filter((part) => part !== null)
-    .join(', ');
+  ].filter((part) => part !== null);
+  return i18n.format.list(kinds);
 }
 
 export function errorRateFigure(routes: readonly RouteReport[], i18n: I18n): Figure {

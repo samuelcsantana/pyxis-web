@@ -8,6 +8,7 @@ export interface Formats {
   readonly dayWithYear: (date: Date) => string;
   readonly dateTime: (style: DateTimeStyle, timeZone: string) => (date: Date) => string;
   readonly region: (code: string) => string;
+  readonly list: (items: readonly string[]) => string;
 }
 
 const ONE_DECIMAL: Intl.NumberFormatOptions = {
@@ -40,6 +41,7 @@ function buildFormats(tag: string): Formats {
     timeZone: 'UTC',
   });
   const regions = new Intl.DisplayNames([tag], { type: 'region', fallback: 'code' });
+  const lists = new Intl.ListFormat(tag, { type: 'unit', style: 'long' });
   return {
     count: (value) => count.format(value),
     percent: (value) => percent.format(value),
@@ -51,6 +53,7 @@ function buildFormats(tag: string): Formats {
       return (date) => format.format(date);
     },
     region: (code) => String(regions.of(code)),
+    list: (items) => lists.format(items),
   };
 }
 

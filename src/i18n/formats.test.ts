@@ -47,6 +47,12 @@ describe('createFormats', () => {
     expect(english.region('XZ')).toBe('XZ');
   });
 
+  it('joins a list with commas in English and with the conjunction of another language', () => {
+    expect(english.list(['Paid 12', 'Direct 8', 'Email 3'])).toBe('Paid 12, Direct 8, Email 3');
+    expect(english.list(['Paid 12'])).toBe('Paid 12');
+    expect(portuguese.list(['a', 'b', 'c'])).toBe('a, b e c');
+  });
+
   it('builds the formats of a language once', () => {
     expect(createFormats('en-US')).toBe(english);
   });
