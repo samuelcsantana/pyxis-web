@@ -69,6 +69,28 @@ test('marks the clicked period and keeps the content busy until the period arriv
   expect(await documentMarker(page)).toBe('kept');
 });
 
+test('marks the pressed KPI card and keeps the content busy until its chart arrives', async ({
+  page,
+}) => {
+  await openReadyPage(page, `/${STORE_ID}/overview`);
+  const release = await holdScreenRequests(page);
+  const visitsCard = page.getByRole('group', { name: 'Visits', exact: true });
+
+  await visitsCard.getByRole('button', { name: 'Visits', exact: true }).click();
+
+  await expectShownInside(visitsCard);
+  await expectScreenBusy(page);
+  expect(await axeViolations(page)).toEqual([]);
+
+  release();
+
+  await expect(page).toHaveURL(/\/overview\?metric=visits$/);
+  await expect(page.getByRole('region', { name: 'Visits per day' })).toBeVisible();
+  await expectScreenAtRest(page);
+  await expect(page.locator('[data-pending]')).toHaveCount(0);
+  expect(await documentMarker(page)).toBe('kept');
+});
+
 test('marks the clicked tab while its list loads', async ({ page }) => {
   await openReadyPage(page, `/${STORE_ID}/features?range=7d`);
   const release = await holdScreenRequests(page);
