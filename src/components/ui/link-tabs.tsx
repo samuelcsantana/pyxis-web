@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { TAB, TAB_IDLE, TAB_SELECTED } from './control-classes';
+import { PENDING_HOST, TAB, TAB_IDLE, TAB_SELECTED } from './control-classes';
+import { PendingMark } from './pending-mark';
 
 export interface LinkTab<Key extends string> {
   readonly key: Key;
@@ -13,7 +14,7 @@ export interface LinkTabsProps<Key extends string> {
   readonly current: Key;
 }
 
-const TAB_CLASS = `min-h-11 px-4 ${TAB}`;
+const TAB_CLASS = `min-h-11 px-4 ${PENDING_HOST} ${TAB}`;
 
 export function LinkTabs<Key extends string>({ label, tabs, current }: LinkTabsProps<Key>) {
   return (
@@ -28,6 +29,7 @@ export function LinkTabs<Key extends string>({ label, tabs, current }: LinkTabsP
             className={`${TAB_CLASS} ${selected ? TAB_SELECTED : TAB_IDLE}`}
           >
             {tab.label}
+            <PendingMark />
           </Link>
         );
       })}

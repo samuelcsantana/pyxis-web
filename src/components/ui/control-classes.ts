@@ -10,6 +10,7 @@ export const NAV_ITEM_IDLE = 'text-nav-text hover:bg-nav-hover active:bg-nav-act
 export const NAV_ITEM_CURRENT = 'bg-nav-active font-semibold text-nav-strong';
 export const CONTROL_DISABLED = 'disabled:cursor-not-allowed disabled:opacity-50';
 export const CONTROL_BUSY = 'aria-busy:cursor-wait';
+export const PENDING_HOST = 'relative';
 const CONTENT_CONTROL = `${FOCUS_RING} ${CONTROL_TRANSITION}`;
 export const BUTTON_PRIMARY = `bg-accent font-semibold text-accent-ink enabled:hover:bg-accent-hover enabled:active:bg-accent-pressed ${CONTENT_CONTROL}`;
 export const BUTTON_STRONG = `bg-ink font-semibold text-card enabled:hover:bg-ink-hover enabled:active:bg-ink-pressed ${CONTENT_CONTROL}`;

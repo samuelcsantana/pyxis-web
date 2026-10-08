@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import type { FunnelMode } from '@/domain/funnel';
 import {
+  PENDING_HOST,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
+import { PendingMark } from '@/components/ui/pending-mark';
 
 export interface FunnelModeLink {
   readonly mode: FunnelMode;
@@ -18,7 +20,7 @@ export interface FunnelModesProps {
   readonly current: FunnelMode;
 }
 
-const OPTION_CLASS = `min-h-9 px-3.5 ${SEGMENTED_OPTION}`;
+const OPTION_CLASS = `min-h-9 px-3.5 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function FunnelModes({ links, current }: FunnelModesProps) {
   return (
@@ -33,6 +35,7 @@ export function FunnelModes({ links, current }: FunnelModesProps) {
             className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
           >
             {link.label}
+            <PendingMark />
           </Link>
         );
       })}
