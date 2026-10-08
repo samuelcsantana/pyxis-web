@@ -109,14 +109,16 @@ const DOCS_CATALOG: DemoVisitCatalog = {
   conversionEvent: null,
   visitsPerPageView: 0.38,
   identifiedShare: 0,
+  signedInStage: null,
+  people: 0,
   pages: [
-    { path: '/docs/:slug', perDay: 120, visitsPerView: 0.42 },
-    { path: '/', perDay: 40, visitsPerView: 0.9 },
-    { path: '/guides/:slug', perDay: 35, visitsPerView: 0.55 },
-    { path: '/api/:section', perDay: 30, visitsPerView: 0.4 },
-    { path: '/search', perDay: 22, visitsPerView: 0.7 },
-    { path: '/changelog', perDay: 10, visitsPerView: 0.85 },
-    { path: '/status', perDay: 4, visitsPerView: 0.95 },
+    { path: '/docs/:slug', perDay: 120, visitsPerView: 0.42, stage: 3 },
+    { path: '/', perDay: 40, visitsPerView: 0.9, stage: 1 },
+    { path: '/guides/:slug', perDay: 35, visitsPerView: 0.55, stage: 3 },
+    { path: '/api/:section', perDay: 30, visitsPerView: 0.4, stage: 3 },
+    { path: '/search', perDay: 22, visitsPerView: 0.7, stage: 2 },
+    { path: '/changelog', perDay: 10, visitsPerView: 0.85, stage: 2 },
+    { path: '/status', perDay: 4, visitsPerView: 0.95, stage: 2 },
   ],
   events: [
     {
@@ -199,24 +201,26 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       route: '/feedback',
       perDay: 6,
       successStatus: 201,
-      failures: [[429, 0.02]],
+      failures: [[429, 0.02, 'feedback_rate_limited']],
       medianDurationMs: 120,
       screens: [
         ['/docs/:slug', 0.6],
         ['/guides/:slug', 0.4],
       ],
+      event: 'feedback_sent',
     },
     {
       method: 'POST',
       route: '/newsletter',
       perDay: 1.5,
       successStatus: 201,
-      failures: [[422, 0.05]],
+      failures: [[422, 0.05, 'email_invalid']],
       medianDurationMs: 210,
       screens: [
         ['/changelog', 0.55],
         ['/', 0.45],
       ],
+      event: 'newsletter_subscribed',
     },
   ],
   failedReads: [
@@ -224,8 +228,8 @@ const DOCS_CATALOG: DemoVisitCatalog = {
       route: '/search',
       perDay: 0.7,
       statuses: [
-        [429, 0.6],
-        [500, 0.4],
+        [429, 0.6, 'too_many_requests'],
+        [500, 0.4, 'internal_error'],
       ],
       medianDurationMs: 520,
       screens: [['/search', 1]],
@@ -333,6 +337,7 @@ const DOCS_CATALOG: DemoVisitCatalog = {
   ],
   funnelContinuation: [0.9, 0.55, 0.4],
   person: null,
+  showcase: DOCS_VISITS,
 };
 
 export const DEMO_DOCS: DemoProject = {

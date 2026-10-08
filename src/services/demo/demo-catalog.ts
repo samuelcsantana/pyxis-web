@@ -6,6 +6,7 @@ export interface DemoPage {
   readonly path: string;
   readonly perDay: number;
   readonly visitsPerView: number;
+  readonly stage: number;
 }
 
 export interface DemoProperty {
@@ -20,22 +21,26 @@ export interface DemoEvent {
   readonly perDay: number;
   readonly visitsPerCount: number;
   readonly properties: readonly DemoProperty[];
+  readonly after?: string;
 }
+
+export type DemoStatusShare = readonly [status: number, share: number, errorCode?: string];
 
 export interface DemoRoute {
   readonly method: string;
   readonly route: string;
   readonly perDay: number;
   readonly successStatus: number;
-  readonly failures: readonly (readonly [status: number, share: number])[];
+  readonly failures: readonly DemoStatusShare[];
   readonly medianDurationMs: number;
   readonly screens: readonly (readonly [path: string, share: number])[];
+  readonly event?: string;
 }
 
 export interface DemoFailedRead {
   readonly route: string;
   readonly perDay: number;
-  readonly statuses: readonly (readonly [status: number, share: number])[];
+  readonly statuses: readonly DemoStatusShare[];
   readonly medianDurationMs: number;
   readonly screens: readonly (readonly [path: string, share: number])[];
 }
@@ -63,6 +68,8 @@ export interface DemoProject {
   readonly conversionEvent: string | null;
   readonly visitsPerPageView: number;
   readonly identifiedShare: number;
+  readonly signedInStage: number | null;
+  readonly people: number;
   readonly pages: readonly DemoPage[];
   readonly events: readonly DemoEvent[];
   readonly routes: readonly DemoRoute[];
@@ -76,6 +83,7 @@ export interface DemoProject {
   readonly exampleFunnel: readonly FunnelStep[];
   readonly funnelContinuation: readonly number[];
   readonly person: string | null;
+  readonly showcase: readonly DemoVisit[];
   readonly visits: readonly DemoVisit[];
 }
 
