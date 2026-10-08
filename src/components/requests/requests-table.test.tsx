@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { routeRows } from '@/domain/requests';
+import { requestsTableText, routeRows } from '@/domain/requests';
 import { routeDaysText, type RouteDaysView } from '@/domain/route-days';
 import { demoFailedReadsReport, demoRequestsReport } from '@/services/requests/demo-requests';
 import { RequestsTable } from './requests-table';
@@ -43,6 +43,7 @@ const DAYS: RouteDaysView = {
 const ROUTE_DAYS = {
   loadRouteDays: (() => Promise.resolve(DAYS)) satisfies LoadRouteDays,
   routeDaysText: routeDaysText('writes', english),
+  text: requestsTableText(english),
 };
 
 function renderTable(loadRouteDays: LoadRouteDays = ROUTE_DAYS.loadRouteDays) {

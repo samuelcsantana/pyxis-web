@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { english } from '@/test-utils/english';
 import { RequestFilters } from './request-filters';
 
 const meta = {
@@ -12,6 +13,7 @@ const meta = {
     failingOnly: false,
     screen: null,
     clearScreenHref: '/demo/requests?range=7d',
+    i18n: english,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [

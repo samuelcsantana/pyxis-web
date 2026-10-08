@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import type { RouteRow } from '@/domain/requests';
+import type { RequestsTableText, RouteRow } from '@/domain/requests';
 import { BUTTON_ICON, TEXT_LINK } from '@/components/ui/control-classes';
 import { MethodChip, TONE_CLASSES } from './status-styles';
 
@@ -15,6 +15,7 @@ export interface RouteDetailsProps {
   readonly visitHref: (sessionId: string) => string;
   readonly failedVisitsHref: string;
   readonly days: ReactNode;
+  readonly text: RequestsTableText['details'];
   readonly onClose: () => void;
 }
 
@@ -24,6 +25,7 @@ export function RouteDetails({
   visitHref,
   failedVisitsHref,
   days,
+  text,
   onClose,
 }: RouteDetailsProps) {
   return (
@@ -44,7 +46,7 @@ export function RouteDetails({
           onClick={onClose}
           className={`size-10 shrink-0 rounded-input ${BUTTON_ICON}`}
         >
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{text.close}</span>
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
             <path
               d={CLOSE_ICON}
@@ -59,7 +61,7 @@ export function RouteDetails({
 
       <section aria-labelledby="route-statuses-heading" className="flex flex-col gap-2.5">
         <h3 id="route-statuses-heading" className={SECTION_TITLE}>
-          Status codes
+          {text.statuses}
         </h3>
         <ul className="flex flex-wrap gap-1.5">
           {row.statuses.map((status) => (
@@ -74,10 +76,10 @@ export function RouteDetails({
 
       <section aria-labelledby="route-screens-heading" className="flex flex-col gap-2.5">
         <h3 id="route-screens-heading" className={SECTION_TITLE}>
-          Where it failed
+          {text.whereItFailed}
         </h3>
         {row.screens.length === 0 ? (
-          <p className="text-caption text-muted">No failures in this period.</p>
+          <p className="text-caption text-muted">{text.noFailures}</p>
         ) : (
           <ul className="flex flex-col">
             {row.screens.map((screen) => (
@@ -90,7 +92,7 @@ export function RouteDetails({
                   className={`font-mono text-xs wrap-anywhere ${TEXT_LINK}`}
                 >
                   {screen.path}
-                  <span className="sr-only">: show only the requests made from this screen</span>
+                  <span className="sr-only">{text.onlyThisScreen}</span>
                 </Link>
                 <span className="shrink-0 tabular-nums">{screen.failed}</span>
               </li>
@@ -101,15 +103,15 @@ export function RouteDetails({
 
       <section aria-labelledby="route-failures-heading" className="flex flex-col gap-2.5">
         <h3 id="route-failures-heading" className={SECTION_TITLE}>
-          Latest failures
+          {text.latestFailures}
         </h3>
         {row.hasFailures ? (
           <Link href={failedVisitsHref} className={`w-fit text-caption ${TEXT_LINK}`}>
-            See every visit with a failed {row.method} {row.route}
+            {row.failedVisitsLabel}
           </Link>
         ) : null}
         {row.failures.length === 0 ? (
-          <p className="text-caption text-muted">No failures in this period.</p>
+          <p className="text-caption text-muted">{text.noFailures}</p>
         ) : (
           <ul className="flex flex-col">
             {row.failures.map((failure) => (
@@ -123,10 +125,10 @@ export function RouteDetails({
                 </span>
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="font-mono wrap-anywhere">
-                    {failure.errorCode ?? 'No error code'}
+                    {failure.errorCode ?? text.noErrorCode}
                   </span>
                   <Link href={visitHref(failure.sessionId)} className={`w-fit ${TEXT_LINK}`}>
-                    Open visit {failure.visit}
+                    {failure.openVisit}
                   </Link>
                 </span>
               </li>

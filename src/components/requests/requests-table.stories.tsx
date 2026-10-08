@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { type RequestKind, routeRows } from '@/domain/requests';
+import { type RequestKind, requestsTableText, routeRows } from '@/domain/requests';
 import { requestsResponseSchema } from '@/domain/requests.schema';
 import { routeDaysText, routeDaysView } from '@/domain/route-days';
 import {
@@ -65,6 +65,7 @@ const meta = {
     emptyMessage: 'No writes in this period.',
     loadRouteDays: demoRouteDays('writes'),
     routeDaysText: routeDaysText('writes', english),
+    text: requestsTableText(english),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [

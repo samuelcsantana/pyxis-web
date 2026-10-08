@@ -1,11 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { english } from '@/test-utils/english';
 import { RequestFilters } from './request-filters';
 
 describe('RequestFilters', () => {
   it('marks every route as shown and offers the failing ones', () => {
     render(
       <RequestFilters
+        i18n={english}
         kind="writes"
         allHref="/p1/requests?range=7d"
         failingHref="/p1/requests?range=7d&show=failing"
@@ -29,6 +31,7 @@ describe('RequestFilters', () => {
   it('shows the failing filter and the screen filter with a way to clear it', () => {
     render(
       <RequestFilters
+        i18n={english}
         kind="writes"
         allHref="/p1/requests?range=7d&screen=%2Forders"
         failingHref="/p1/requests?range=7d&show=failing&screen=%2Forders"
@@ -53,6 +56,7 @@ describe('RequestFilters', () => {
   it('offers no "failing only" switch for failed reads, which all failed', () => {
     render(
       <RequestFilters
+        i18n={english}
         kind="reads"
         allHref="/p1/requests?range=7d&kind=reads"
         failingHref="/p1/requests?range=7d&kind=reads&show=failing"
