@@ -180,6 +180,23 @@ test('closes the project switcher on a click outside it', async ({ page, isMobil
   await expect(switcher).not.toHaveAttribute('open');
 });
 
+test('closes the custom period form on Escape and on a click outside it', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  const custom = page.locator('details', { hasText: 'Custom' });
+
+  await custom.locator('summary').click();
+  await page.getByLabel('From', { exact: true }).focus();
+  await page.keyboard.press('Escape');
+
+  await expect(custom).not.toHaveAttribute('open');
+  await expect(custom.locator('summary')).toBeFocused();
+
+  await custom.locator('summary').click();
+  await page.getByRole('heading', { level: 1, name: 'Overview' }).click();
+
+  await expect(custom).not.toHaveAttribute('open');
+});
+
 test('answers not found for a project outside the account', async ({ page }) => {
   await page.goto('/00000000-0000-4000-8000-000000000000/overview');
 

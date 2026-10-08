@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { presetPeriod } from '@/domain/period';
 import { Topbar, type TopbarWithPeriodProps } from './topbar';
 
@@ -62,6 +62,17 @@ export const RejectedRangeOnAPhone: Story = {
   args: REJECTED,
   globals: { viewport: { value: 'mobile2', isRotated: false } },
   play: showsTheRejectedRange,
+};
+
+export const CustomFormClosedWithEscape: Story = {
+  args: REJECTED,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    canvas.getByLabelText('From').focus();
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.getByLabelText('From')).not.toBeVisible();
+    await expect(canvas.getByText('Custom')).toHaveFocus();
+  },
 };
 
 export const DarkTheme: Story = {
