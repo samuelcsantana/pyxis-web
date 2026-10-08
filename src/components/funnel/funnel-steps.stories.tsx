@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { countedSteps, funnelRows } from '@/domain/funnel';
+import { withDrillLinks } from '@/domain/funnel-subjects';
 import { DEMO_FUNNEL_STEPS, demoFunnelReport } from '@/services/funnel/demo-funnel';
 import { FunnelModes } from './funnel-modes';
 import { FunnelSteps } from './funnel-steps';
@@ -62,6 +63,20 @@ export const NobodyYet: Story = {
       countedSteps(DEMO_FUNNEL_STEPS.slice(0, 3), {
         steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
       }),
+      english,
+    ),
+  },
+};
+
+export const WithListLinks: Story = {
+  args: {
+    rows: withDrillLinks(
+      ROWS,
+      demoFunnelReport('demo', PERIOD, 'visit', DEMO_FUNNEL_STEPS, STORY_NOW).steps.map(
+        (step) => step.count,
+      ),
+      { step: 2, outcome: 'dropped', cursor: null },
+      (step, outcome) => `/demo/funnel?step=${String(step)}&outcome=${outcome}#funnel-subjects`,
       english,
     ),
   },
