@@ -8,6 +8,7 @@ import type { PropertyKeyView } from '@/domain/property-breakdown';
 import { propertyFilterOf } from '@/domain/visit-property';
 import { linkWith } from '@/components/shell/screens';
 import { BUTTON_ICON } from '@/components/ui/control-classes';
+import { useT } from '@/i18n/messages-provider';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
 
@@ -38,6 +39,7 @@ export function ExpandableFeatureRow({
   visitsPurpose,
   loadProperties,
 }: ExpandableFeatureRowProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [keys, setKeys] = useState<readonly PropertyKeyView[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -85,7 +87,7 @@ export function ExpandableFeatureRow({
               type="button"
               aria-expanded={open}
               aria-controls={panelId}
-              aria-label={`Properties of ${row.label}`}
+              aria-label={t('propertyBreakdown.toggle', { event: row.label })}
               onClick={toggle}
               className={`size-7 shrink-0 rounded-input ${BUTTON_ICON}`}
             >

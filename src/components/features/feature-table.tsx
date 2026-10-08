@@ -4,21 +4,6 @@ import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/p
 import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
 
-const TITLES: Readonly<Record<FeatureKind, string>> = {
-  events: 'Most used events',
-  screens: 'Most visited screens',
-};
-
-const NAME_HEADERS: Readonly<Record<FeatureKind, string>> = {
-  events: 'Event',
-  screens: 'Screen',
-};
-
-const NOTHING_YET: Readonly<Record<FeatureKind, string>> = {
-  events: 'No named events in this period. Events sent with track() show up here.',
-  screens: 'No page views in this period.',
-};
-
 export interface FeatureTableProps {
   readonly kind: FeatureKind;
   readonly rows: readonly FeatureRow[];
@@ -28,8 +13,10 @@ export interface FeatureTableProps {
   readonly i18n: I18n;
 }
 
-function emptyMessage(kind: FeatureKind, query: string): string {
-  return query === '' ? NOTHING_YET[kind] : `Nothing matches “${query}”.`;
+function emptyMessage(kind: FeatureKind, query: string, i18n: I18n): string {
+  return query === ''
+    ? i18n.t(`features.nothingYet.${kind}`)
+    : i18n.t('features.noMatch', { query });
 }
 
 interface TableRowProps {
@@ -74,10 +61,10 @@ export function FeatureTable({
   return (
     <section aria-labelledby="features-heading" className={PANEL}>
       <h2 id="features-heading" className={PANEL_TITLE}>
-        {TITLES[kind]}
+        {i18n.t(`features.titles.${kind}`)}
       </h2>
       {rows.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted">{emptyMessage(kind, query)}</p>
+        <p className="py-6 text-center text-sm text-muted">{emptyMessage(kind, query, i18n)}</p>
       ) : (
         <div className={TABLE_SCROLL}>
           <table
@@ -87,19 +74,19 @@ export function FeatureTable({
             <thead>
               <tr>
                 <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                  {NAME_HEADERS[kind]}
+                  {i18n.t(`features.nameHeaders.${kind}`)}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
-                  Count
+                  {i18n.t('features.columns.count')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
-                  Visits
+                  {i18n.t('features.columns.visits')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden text-left md:table-cell`}>
-                  Trend
+                  {i18n.t('features.columns.trend')}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} pr-0 text-right sm:w-52 sm:text-left`}>
-                  Share
+                  {i18n.t('features.columns.share')}
                 </th>
               </tr>
             </thead>

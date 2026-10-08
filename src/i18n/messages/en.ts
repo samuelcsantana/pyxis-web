@@ -418,6 +418,57 @@ export const en = {
   properties: {
     otherValues: 'Other values',
   },
+  features: {
+    subtitle: 'What people use the most in {project}',
+    kindLabel: 'Feature kind',
+    kinds: {
+      events: 'Events',
+      screens: 'Screens',
+    },
+    search: {
+      events: 'Search events',
+      screens: 'Search screens',
+      submit: 'Search',
+      submitting: 'Searching…',
+      clear: 'Clear',
+    },
+    titles: {
+      events: 'Most used events',
+      screens: 'Most visited screens',
+    },
+    nameHeaders: {
+      events: 'Event',
+      screens: 'Screen',
+    },
+    nothingYet: {
+      events: 'No named events in this period. Events sent with track() show up here.',
+      screens: 'No page views in this period.',
+    },
+    noMatch: 'Nothing matches “{query}”.',
+    columns: {
+      count: 'Count',
+      visits: 'Visits',
+      trend: 'Trend',
+      share: 'Share',
+    },
+    footnote:
+      'Events are sent by the site with the Pyxis SDK; open one to see how its property values break down. Screens are page views grouped by path template, so /orders/8213 and /orders/8214 count as /orders/:id.',
+  },
+  propertyBreakdown: {
+    toggle: 'Properties of {event}',
+    loading: 'Loading the properties of {event}…',
+    failed: 'Could not load the properties of {event}.',
+    retry: 'Try again',
+    none: '{event} carried no properties in this period.',
+    carriedBy: '· carried by {carriedBy}',
+    columns: {
+      value: 'Value',
+      share: 'Share',
+      count: 'Count',
+      visits: 'Visits',
+    },
+    valuePurpose: ': see the visits where {key} is {value}',
+  },
   funnel: {
     openedPage: 'Opened {path}',
     start: 'Start',

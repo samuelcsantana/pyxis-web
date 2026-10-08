@@ -61,6 +61,7 @@ describe('RootLayout', () => {
       'errorPanel',
       'signIn',
       'chartPanel',
+      'propertyBreakdown',
     ]);
   });
 

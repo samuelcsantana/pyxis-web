@@ -2,6 +2,7 @@ import type { PropertyKeyView, PropertyValueRow } from '@/domain/property-breakd
 import { BAR_FILL, BAR_TRACK } from '@/components/ui/panel-classes';
 import { BUTTON_SECONDARY } from '@/components/ui/control-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import { useT } from '@/i18n/messages-provider';
 
 export type PropertyBreakdownState =
   | { readonly status: 'loading' }
@@ -28,6 +29,7 @@ interface ValueRowProps {
 }
 
 function ValueRow({ row, other, propertyKey, href }: ValueRowProps) {
+  const t = useT();
   return (
     <tr className={other ? 'text-muted' : undefined}>
       <th
@@ -40,7 +42,7 @@ function ValueRow({ row, other, propertyKey, href }: ValueRowProps) {
           <VisitsLink
             href={href}
             label={row.value}
-            purpose={`: see the visits where ${propertyKey} is ${row.value}`}
+            purpose={t('propertyBreakdown.valuePurpose', { key: propertyKey, value: row.value })}
           />
         )}
       </th>
@@ -65,25 +67,28 @@ function PropertyKeyTable({
   readonly view: PropertyKeyView;
   readonly valueHref: ValueHref;
 }) {
+  const t = useT();
   return (
     <table className="w-full min-w-0 border-collapse text-caption tabular-nums">
       <caption className="pb-1.5 text-left">
         <span className="font-mono text-xs font-semibold">{view.key}</span>{' '}
-        <span className="text-xs text-muted">· carried by {view.carriedBy}</span>
+        <span className="text-xs text-muted">
+          {t('propertyBreakdown.carriedBy', { carriedBy: view.carriedBy })}
+        </span>
       </caption>
       <thead>
         <tr>
           <th scope="col" className={`${HEADER} pl-0 text-left`}>
-            Value
+            {t('propertyBreakdown.columns.value')}
           </th>
           <th scope="col" className={`${HEADER} text-left`}>
-            Share
+            {t('propertyBreakdown.columns.share')}
           </th>
           <th scope="col" className={`${HEADER} text-right`}>
-            Count
+            {t('propertyBreakdown.columns.count')}
           </th>
           <th scope="col" className={`${HEADER} hidden pr-0 text-right sm:table-cell`}>
-            Visits
+            {t('propertyBreakdown.columns.visits')}
           </th>
         </tr>
       </thead>
@@ -111,30 +116,31 @@ export function PropertyBreakdown({
   onRetry,
   valueHref,
 }: PropertyBreakdownProps) {
+  const t = useT();
   if (state.status === 'loading') {
     return (
       <p role="status" className="py-2 text-caption text-muted">
-        Loading the properties of {eventLabel}…
+        {t('propertyBreakdown.loading', { event: eventLabel })}
       </p>
     );
   }
   if (state.status === 'error') {
     return (
       <div role="alert" className="flex flex-wrap items-center gap-3 py-2 text-caption text-bad">
-        <span>Could not load the properties of {eventLabel}.</span>
+        <span>{t('propertyBreakdown.failed', { event: eventLabel })}</span>
         <button
           type="button"
           onClick={onRetry}
           className={`min-h-9 rounded-input px-3 ${BUTTON_SECONDARY}`}
         >
-          Try again
+          {t('propertyBreakdown.retry')}
         </button>
       </div>
     );
   }
   return state.keys.length === 0 ? (
     <p className="py-2 text-caption text-muted">
-      {eventLabel} carried no properties in this period.
+      {t('propertyBreakdown.none', { event: eventLabel })}
     </p>
   ) : (
     <div className="grid items-start gap-5 py-1 lg:grid-cols-2">

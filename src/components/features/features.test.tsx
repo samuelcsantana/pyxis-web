@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { featureRows } from '@/domain/features';
 import { FeatureSearch } from './feature-search';
 import { FeatureTable } from './feature-table';
 import { FeatureTabs } from './feature-tabs';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 function visitsHref(name: string): string {
   return `/p1/visits?${new URLSearchParams({ range: '7d', event: name }).toString()}`;
@@ -17,13 +18,14 @@ const ITEMS = [
 
 describe('FeatureTabs', () => {
   it('links both kinds and marks the current one', () => {
-    render(
+    renderWithMessages(
       <FeatureTabs
         current="screens"
         tabs={[
           { kind: 'events', label: 'Events', href: '/p1/features?range=7d&kind=events' },
           { kind: 'screens', label: 'Screens', href: '/p1/features?range=7d&kind=screens' },
         ]}
+        i18n={english}
       />,
     );
 
@@ -38,13 +40,14 @@ describe('FeatureTabs', () => {
 
 describe('FeatureSearch', () => {
   it('sends the search with the period and the kind, and offers to clear it', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <FeatureSearch
         action="/p1/features"
         keep={{ range: '7d', kind: 'events' }}
         query="cta"
         label="Search events"
         clearHref="/p1/features?range=7d&kind=events"
+        i18n={english}
       />,
     );
 
@@ -58,13 +61,14 @@ describe('FeatureSearch', () => {
   });
 
   it('offers nothing to clear without a search', () => {
-    render(
+    renderWithMessages(
       <FeatureSearch
         action="/p1/features"
         keep={{}}
         query=""
         label="Search screens"
         clearHref="/"
+        i18n={english}
       />,
     );
 
@@ -74,7 +78,7 @@ describe('FeatureSearch', () => {
 
 describe('FeatureTable', () => {
   it('lists events by label and name, with count, visits, trend and share', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <FeatureTable
         kind="events"
         rows={featureRows(ITEMS, 'events', '', english)}
@@ -91,7 +95,7 @@ describe('FeatureTable', () => {
   });
 
   it('lists screens by path only', () => {
-    render(
+    renderWithMessages(
       <FeatureTable
         kind="screens"
         rows={featureRows(
@@ -115,7 +119,7 @@ describe('FeatureTable', () => {
   });
 
   it('links each event to the visits that sent it', () => {
-    render(
+    renderWithMessages(
       <FeatureTable
         kind="events"
         rows={featureRows(ITEMS, 'events', '', english)}
@@ -132,7 +136,7 @@ describe('FeatureTable', () => {
   });
 
   it('says what is missing: nothing tracked, or nothing matching the search', () => {
-    const { rerender } = render(
+    const { rerender } = renderWithMessages(
       <FeatureTable kind="events" rows={[]} query="" visitsHref={visitsHref} i18n={english} />,
     );
     expect(screen.getByText(/No named events in this period/)).toBeInTheDocument();
