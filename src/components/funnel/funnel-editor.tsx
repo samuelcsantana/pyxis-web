@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/control-classes';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { useT } from '@/i18n/messages-provider';
+import type { ClientSourceMessages } from '@/i18n/messages';
+import type { Translator } from '@/i18n/translate';
 
 interface DraftStep {
   readonly id: number;
@@ -52,13 +54,17 @@ function toDraft(step: FunnelStep, id: number): DraftStep {
   return { id, type: step.type, value: stepTarget(step) };
 }
 
-function statusOf(drafts: readonly DraftStep[], valid: boolean): string {
+function statusOf(
+  drafts: readonly DraftStep[],
+  valid: boolean,
+  t: Translator<ClientSourceMessages>,
+): string {
   if (valid) {
-    return `Apply to count these ${String(drafts.length)} steps.`;
+    return t('funnelEditor.status.ready', { steps: String(drafts.length) });
   }
   return drafts.some((draft) => draft.value === '')
-    ? 'Fill in every step to apply.'
-    : 'Fix the highlighted steps to apply.';
+    ? t('funnelEditor.status.fillIn')
+    : t('funnelEditor.status.fix');
 }
 
 function moved(drafts: readonly DraftStep[], index: number, offset: number): DraftStep[] {
@@ -120,7 +126,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
     <section aria-labelledby="funnel-editor-heading" className={PANEL}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="funnel-editor-heading" className={PANEL_TITLE}>
-          Steps
+          {t('funnelEditor.heading')}
         </h2>
         <button
           type="button"
@@ -131,7 +137,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
           }}
           className={`min-h-10 rounded-input px-4 text-sm ${open ? BUTTON_SECONDARY : BUTTON_PRIMARY}`}
         >
-          {open ? 'Close the editor' : 'Edit steps'}
+          {open ? t('funnelEditor.close') : t('funnelEditor.open')}
         </button>
       </div>
       {open ? (
@@ -151,7 +157,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                   className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-input border border-line p-3 sm:grid-cols-[10rem_minmax(0,1fr)_auto_auto]"
                 >
                   <label className="col-start-1 row-start-1 flex flex-col gap-1 text-xs font-medium text-muted">
-                    Step {position} type
+                    {t('funnelEditor.stepType', { step: position })}
                     <select
                       id={`step-type-${String(draft.id)}`}
                       value={draft.type}
@@ -162,18 +168,16 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                       }}
                       className={FIELD_CLASS}
                     >
-                      <option value="page">Page path</option>
-                      <option value="event">Event name</option>
+                      <option value="page">{t('funnelEditor.types.page')}</option>
+                      <option value="event">{t('funnelEditor.types.event')}</option>
                     </select>
                   </label>
                   <label className="col-start-1 row-start-2 flex flex-col gap-1 text-xs font-medium text-muted sm:col-start-2 sm:row-start-1">
-                    Step {position} {draft.type === 'page' ? 'page path' : 'event name'}
+                    {t(`funnelEditor.stepValue.${draft.type}`, { step: position })}
                     <input
                       id={`step-value-${String(draft.id)}`}
                       value={draft.value}
-                      placeholder={
-                        draft.type === 'page' ? '/pricing or /blog/*' : 'signup_completed'
-                      }
+                      placeholder={t(`funnelEditor.placeholders.${draft.type}`)}
                       aria-invalid={problem !== null}
                       aria-describedby={problem === null ? undefined : problemId}
                       onChange={(event) => {
@@ -186,7 +190,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                     <button
                       id={`move-up-${String(draft.id)}`}
                       type="button"
-                      aria-label={`Move step ${position} up`}
+                      aria-label={t('funnelEditor.moveUp', { step: position })}
                       disabled={index === 0}
                       onClick={() => {
                         move(index, -1, draft.id);
@@ -198,7 +202,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                     <button
                       id={`move-down-${String(draft.id)}`}
                       type="button"
-                      aria-label={`Move step ${position} down`}
+                      aria-label={t('funnelEditor.moveDown', { step: position })}
                       disabled={index === drafts.length - 1}
                       onClick={() => {
                         move(index, 1, draft.id);
@@ -211,7 +215,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                   <button
                     id={`remove-step-${String(draft.id)}`}
                     type="button"
-                    aria-label={`Remove step ${position}`}
+                    aria-label={t('funnelEditor.remove', { step: position })}
                     disabled={drafts.length <= MIN_FUNNEL_STEPS}
                     onClick={() => {
                       remove(index);
@@ -221,7 +225,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                     <span aria-hidden="true" className="sm:hidden">
                       ✕
                     </span>
-                    <span className="hidden sm:inline">Remove</span>
+                    <span className="hidden sm:inline">{t('funnelEditor.removeShort')}</span>
                   </button>
                   {problem === null ? null : (
                     <p id={problemId} className="col-span-2 text-xs text-bad sm:col-span-4">
@@ -240,20 +244,24 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
               onClick={add}
               className={BUTTON}
             >
-              Add step
+              {t('funnelEditor.add')}
             </button>
             <span className="text-xs text-muted">
-              {drafts.length} of {MAX_FUNNEL_STEPS} steps, at least {MIN_FUNNEL_STEPS}
+              {t('funnelEditor.stepCount', {
+                steps: String(drafts.length),
+                max: String(MAX_FUNNEL_STEPS),
+                min: String(MIN_FUNNEL_STEPS),
+              })}
             </span>
             <PendingSubmitButton
-              label="Apply"
-              pendingLabel="Applying…"
+              label={t('funnelEditor.apply')}
+              pendingLabel={t('funnelEditor.applying')}
               disabled={!valid}
               aria-describedby="funnel-editor-status"
               className={`min-h-10 rounded-input px-4 text-sm ${BUTTON_STRONG} ${CONTROL_DISABLED}`}
             />
             <p id="funnel-editor-status" role="status" className="text-xs text-muted">
-              {statusOf(drafts, valid)}
+              {statusOf(drafts, valid, t)}
             </p>
           </div>
         </Form>
