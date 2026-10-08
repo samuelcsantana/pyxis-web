@@ -7,13 +7,15 @@ import { demoPropertyBreakdownReport } from '@/services/features/demo-properties
 import { FeatureTable } from './feature-table';
 import { english } from '@/test-utils/english';
 
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const PERIOD = { from: '2026-09-22', to: '2026-10-05' };
-const EVENTS = demoFeaturesReport('demo', PERIOD, 'events').items;
-const SCREENS = demoFeaturesReport('demo', PERIOD, 'screens').items;
+const EVENTS = demoFeaturesReport('demo', PERIOD, 'events', STORY_NOW).items;
+const SCREENS = demoFeaturesReport('demo', PERIOD, 'screens', STORY_NOW).items;
 
 function loadDemoProperties(name: string) {
   return Promise.resolve(
-    propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name), english),
+    propertyKeyViews(demoPropertyBreakdownReport('demo', PERIOD, name, STORY_NOW), english),
   );
 }
 

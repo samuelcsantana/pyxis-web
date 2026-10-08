@@ -1,13 +1,18 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { NO_VISIT_FILTERS, type VisitFilters, type VisitsReport } from '@/domain/visits';
+import { todayIn } from '@/domain/period';
+import { NO_VISIT_FILTERS, type VisitFilters } from '@/domain/visits';
+import { demoAcquisitionWire } from '../acquisition/demo-acquisition';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
+import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
+import { demoDevicesWire } from '../devices/demo-devices';
+import { demoOverviewWire } from '../overview/demo-overview';
 import { demoTimelineReport } from '../timeline/demo-timeline';
 import {
   DEMO_VISITS_PAGE_SIZE,
   demoVisitsReport,
   demoVisitsWire,
-  listedDemoVisit,
+  demoVisitSummary,
 } from './demo-visit-list';
 import { HttpVisitsService } from './http-visits-service';
 import { MockVisitsService } from './mock-visits-service';
@@ -15,12 +20,41 @@ import { createVisitsService } from './visits-service.factory';
 
 const API = 'https://api.pyxis.example.com';
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
+const SHOWCASE_DAYS = { from: '2026-10-01', to: '2026-10-05' };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const STORE = DEMO_STORE.id;
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
 }));
+
+const RECORD: DemoVisitRecord = {
+  sessionId: '1b2c3d4e-0000-4000-8000-000000000009',
+  userId: null,
+  deviceType: 'desktop',
+  browser: 'chrome',
+  os: 'windows',
+  country: 'BR',
+  channel: 'paid',
+  source: 'google',
+  medium: 'cpc',
+  campaign: 'spring_sale',
+  fromAdClick: true,
+  events: [],
+};
+
+function event(name: string, path: string, second: number): DemoEventRecord {
+  const at = Date.parse('2026-10-05T10:00:00.000Z') + second * 1000;
+  return {
+    at,
+    date: '2026-10-05',
+    time: '07:00:00.000',
+    name,
+    path,
+    properties: {},
+    request: null,
+  };
+}
 
 function answering(body: unknown) {
   const fetchMock = vi.fn<typeof fetch>(() => Promise.resolve(new Response(JSON.stringify(body))));
@@ -101,104 +135,65 @@ describe('MockVisitsService', () => {
     vi.useRealTimers();
   });
 
-  const ids = (report: VisitsReport) => report.visits.map((visit) => visit.sessionId.slice(0, 8));
+  function everyPage(filters: Partial<VisitFilters>, range = RANGE, projectId = STORE) {
+    const asked = { ...NO_VISIT_FILTERS, ...filters };
+    const first = demoVisitsWire(projectId, range, asked, null, NOW);
+    const pages = [first];
+    for (let cursor = first.next_cursor; cursor !== null;) {
+      const page = demoVisitsWire(projectId, range, asked, cursor, NOW);
+      pages.push(page);
+      cursor = page.next_cursor;
+    }
+    return { total: first.total ?? 0, visits: pages.flatMap((page) => page.visits) };
+  }
 
-  const listed = (filters: Partial<VisitFilters>) =>
-    ids(demoVisitsReport(STORE, RANGE, { ...NO_VISIT_FILTERS, ...filters }, null, NOW));
+  const totalOf = (filters: Partial<VisitFilters>) =>
+    demoVisitsWire(STORE, RANGE, { ...NO_VISIT_FILTERS, ...filters }, null, NOW).total ?? 0;
 
-  it('lists the demo visits newest first, a page at a time', async () => {
-    const mock = new MockVisitsService();
+  const ids = (filters: Partial<VisitFilters>) =>
+    everyPage(filters, SHOWCASE_DAYS).visits.map((visit) => visit.session_id.slice(0, 8));
 
-    const first = await mock.visits(STORE, RANGE, NO_VISIT_FILTERS, null);
-    const second = await mock.visits(STORE, RANGE, NO_VISIT_FILTERS, first.nextCursor);
+  it('lists every demo visit once, newest first, a page at a time', async () => {
+    const first = await new MockVisitsService().visits(STORE, RANGE, NO_VISIT_FILTERS, null);
+    const all = everyPage({}, SHOWCASE_DAYS);
+    const starts = all.visits.map((visit) => `${visit.started_at}~${visit.session_id}`);
 
-    expect(ids(first)).toEqual([
-      '3c07a1b2',
-      '506cf1d6',
-      '8c3f6a1d',
-      '0645362d',
-      '7e2b9c14',
-      'a1fa5f88',
-      'd073f2ad',
-      '2a81c3d4',
-    ]);
-    expect(first.nextCursor).toBe('2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02');
-    expect(ids(second)).toEqual(['19c2e5f6', '94810767', '930c9810', '6d4ebf3d', '5b8d2e7a']);
-    expect(second.nextCursor).toBeNull();
+    expect(first.visits).toHaveLength(DEMO_VISITS_PAGE_SIZE);
+    expect(all.visits).toHaveLength(all.total);
+    expect(new Set(starts).size).toBe(all.total);
+    expect(starts).toEqual(starts.toSorted().toReversed());
+    expect(totalOf({})).toBe(demoOverviewWire(STORE, RANGE, NOW).kpis.visits.current);
   });
 
-  it('sums each visit up the way the API does', async () => {
-    const report = await new MockVisitsService().visits(
-      STORE,
-      RANGE,
-      { ...NO_VISIT_FILTERS, paths: ['/', '/pricing'] },
-      null,
-    );
+  it('sums each visit up the way the API does', () => {
+    const summary = demoVisitSummary({
+      ...RECORD,
+      events: [
+        event('page_view', '/', 0),
+        event('identify', '/', 1),
+        event('cta_clicked', '/', 2),
+        event('page_view', '/pricing', 3),
+        event('cta_clicked', '/pricing', 4),
+        { ...event('api_request', '/pricing', 5), properties: { status: 500 } },
+        { ...event('api_request', '/pricing', 6), properties: { status: 201 } },
+      ],
+    });
 
-    expect(report.visits).toEqual([
-      {
-        sessionId: '7e2b9c14-3f5a-4d68-9b1e-0a2c4e6f8b10',
-        startedAt: '2026-10-04T14:05:02.000Z',
-        endedAt: '2026-10-04T14:07:21.000Z',
-        entryPath: '/',
-        pageViews: 4,
-        highlights: ['calculator_result_shown', 'cta_clicked'],
-        failedRequests: 0,
-        deviceType: 'mobile',
-        browser: 'chrome',
-        os: 'android',
-        country: 'BR',
-        channel: 'paid',
-        userId: null,
-      },
-    ]);
-  });
-
-  it('counts the failed requests and leaves identify out of the highlights', () => {
-    const report = demoVisitsReport(STORE, RANGE, NO_VISIT_FILTERS, null, NOW);
-    const pageTwo = demoVisitsReport(STORE, RANGE, NO_VISIT_FILTERS, report.nextCursor, NOW);
-    const visit = (prefix: string) =>
-      [...report.visits, ...pageTwo.visits].find((found) => found.sessionId.startsWith(prefix));
-
-    expect(visit('930c9810')?.failedRequests).toBe(1);
-    expect(visit('3c07a1b2')?.failedRequests).toBe(1);
-    expect(visit('8c3f6a1d')).toMatchObject({
-      highlights: ['login_completed'],
-      userId: 'u_c41e',
+    expect(summary).toMatchObject({
+      entry_path: '/',
+      page_views: 2,
+      highlights: ['cta_clicked'],
+      failed_requests: 1,
+      user_id: null,
+      source: 'google',
+      campaign: 'spring_sale',
     });
   });
 
   it('gives a visit without a page view no entry page', () => {
-    const { summary } = listedDemoVisit(
-      {
-        sessionId: '1b2c3d4e-0000-4000-8000-000000000009',
-        daysAgo: 1,
-        startHour: 10,
-        startMinute: 0,
-        deviceType: 'desktop',
-        browser: 'chrome',
-        os: 'windows',
-        country: 'BR',
-        channel: 'direct',
-        events: [{ second: 5, name: 'cta_clicked', path: '/' }],
-      },
-      NOW,
-      { source: '(direct)', medium: null, campaign: null },
-    );
+    const summary = demoVisitSummary({ ...RECORD, events: [event('cta_clicked', '/', 5)] });
 
     expect(summary).toMatchObject({ entry_path: null, page_views: 0, highlights: ['cta_clicked'] });
-  });
-
-  it('counts every matching visit on every page, and names where each came from', () => {
-    const first = demoVisitsWire(STORE, RANGE, NO_VISIT_FILTERS, null, NOW);
-    const second = demoVisitsWire(STORE, RANGE, NO_VISIT_FILTERS, first.next_cursor, NOW);
-
-    expect(second.total).toBe(first.total);
-    expect(first.total).toBeGreaterThan(DEMO_VISITS_PAGE_SIZE);
-    expect(first.visits.every((visit) => typeof visit.source === 'string')).toBe(true);
-    expect(
-      first.visits.filter((visit) => visit.channel === 'direct').map((visit) => visit.source),
-    ).toEqual(expect.arrayContaining(['(direct)']));
   });
 
   it('opens every listed visit in the demo timeline, with the same start', () => {
@@ -215,93 +210,87 @@ describe('MockVisitsService', () => {
   });
 
   it('keeps the visits that viewed every page asked, a star matching any characters', () => {
-    expect(listed({ paths: ['/', '/pricing'] })).toEqual(['7e2b9c14']);
-    expect(listed({ paths: ['/calculator'] })).toEqual(['7e2b9c14', '19c2e5f6']);
-    expect(listed({ paths: ['/orders*'] })).toEqual([
-      '3c07a1b2',
-      '8c3f6a1d',
-      'a1fa5f88',
-      'd073f2ad',
-      '2a81c3d4',
-      '6d4ebf3d',
-    ]);
-    expect(listed({ paths: ['/.*'] })).toEqual([]);
+    expect(ids({ paths: ['/', '/pricing'] })).toContain('7e2b9c14');
+    expect(totalOf({ paths: ['/', '/pricing'] })).toBeLessThan(totalOf({ paths: ['/pricing'] }));
+    expect(totalOf({ paths: ['/orders*'] })).toBeGreaterThan(totalOf({ paths: ['/orders'] }));
+    expect(totalOf({ paths: ['/.*'] })).toBe(0);
   });
 
   it('keeps the visits that sent an event, or an event that carried a property value', () => {
-    expect(listed({ event: 'signup_submitted' })).toEqual([
-      '506cf1d6',
-      '0645362d',
-      '19c2e5f6',
-      '5b8d2e7a',
-    ]);
-    expect(listed({ event: 'calculator_result_shown', property: 'calculator=margin' })).toEqual([
+    const shown = totalOf({ event: 'calculator_result_shown' });
+    const margin = totalOf({ event: 'calculator_result_shown', property: 'calculator=margin' });
+
+    expect(ids({ event: 'signup_submitted' })).toContain('506cf1d6');
+    expect(margin).toBeGreaterThan(0);
+    expect(margin).toBeLessThan(shown);
+    expect(ids({ event: 'calculator_result_shown', property: 'calculator=margin' })).toContain(
       '7e2b9c14',
-    ]);
-    expect(listed({ event: 'calculator_result_shown', property: 'used_plan_preset=true' })).toEqual(
-      ['19c2e5f6'],
     );
-    expect(listed({ event: 'calculator_result_shown', property: 'missing=x' })).toEqual([]);
+    expect(totalOf({ event: 'calculator_result_shown', property: 'missing=x' })).toBe(0);
   });
 
-  it('filters by channel, device and whether the visit was identified', () => {
-    expect(listed({ channel: 'organic' })).toEqual(['5b8d2e7a']);
-    expect(listed({ device: 'tablet' })).toEqual(['8c3f6a1d']);
-    expect(listed({ identity: 'anonymous' })).toEqual([
-      '506cf1d6',
-      '0645362d',
-      '7e2b9c14',
-      '5b8d2e7a',
-    ]);
-    expect(listed({ identity: 'identified' })).toEqual([
-      '3c07a1b2',
-      '8c3f6a1d',
-      'a1fa5f88',
-      'd073f2ad',
-      '2a81c3d4',
-      '19c2e5f6',
-      '94810767',
-      '930c9810',
-    ]);
+  it('filters by channel, device and identity as the other screens count them', () => {
+    const devices = demoDevicesWire(STORE, RANGE, NOW).device_types;
+    const organic = demoAcquisitionWire(STORE, RANGE, NOW)
+      .sources.filter((source) => source.channel === 'organic')
+      .reduce((sum, source) => sum + source.visits, 0);
+    const anonymous = totalOf({ identity: 'anonymous' });
+    const identified = totalOf({ identity: 'identified' });
+
+    expect(totalOf({ channel: 'organic' })).toBe(organic);
+    expect(totalOf({ device: 'tablet' })).toBe(
+      devices.find((share) => share.value === 'tablet')?.visits,
+    );
+    expect(anonymous + identified).toBe(totalOf({}));
+    expect(ids({ identity: 'identified' })).toContain('3c07a1b2');
+    expect(ids({ identity: 'anonymous' })).not.toContain('3c07a1b2');
   });
 
-  it('filters by country, source and campaign, as Acquisition names them', () => {
-    expect(listed({ country: 'PT' })).toEqual(['5b8d2e7a']);
-    expect(listed({ source: 'google' })).toEqual(['506cf1d6', '0645362d', '19c2e5f6']);
-    expect(listed({ campaign: 'spring_sale' })).toEqual(['7e2b9c14', '19c2e5f6']);
-    expect(listed({ source: 'google', campaign: 'spring_sale' })).toEqual(['19c2e5f6']);
+  it('filters by country, source and campaign as Devices and Acquisition name them', () => {
+    const { countries } = demoDevicesWire(STORE, RANGE, NOW);
+    const { sources, campaigns } = demoAcquisitionWire(STORE, RANGE, NOW);
+    const springSale = campaigns?.find(
+      (campaign) => campaign.campaign === 'spring_sale' && campaign.source === 'google',
+    );
+
+    expect(totalOf({ country: 'PT' })).toBe(
+      countries.find((share) => share.value === 'PT')?.visits,
+    );
+    expect(totalOf({ source: 'google' })).toBe(
+      sources.find((source) => source.source === 'google')?.visits,
+    );
+    expect(totalOf({ source: 'google', campaign: 'spring_sale' })).toBe(springSale?.visits);
   });
 
   it('filters by a request the visit made, or one that failed, on a route or on any', () => {
-    const failing = demoVisitsWire(STORE, RANGE, { ...NO_VISIT_FILTERS, failed: true }, null, NOW);
+    const failedOrders = totalOf({ route: 'POST /orders', failed: true });
+    const failing = everyPage({ failed: true });
 
-    expect(listed({ route: 'POST /orders' })).toEqual([
-      '3c07a1b2',
-      'a1fa5f88',
-      'd073f2ad',
-      '2a81c3d4',
-    ]);
-    expect(listed({ route: 'POST /orders', failed: true })).toEqual([
-      '3c07a1b2',
-      'a1fa5f88',
-      'd073f2ad',
-    ]);
-    expect(failing.total).toBe(9);
+    expect(failedOrders).toBeGreaterThan(0);
+    expect(failedOrders).toBeLessThan(totalOf({ route: 'POST /orders' }));
+    expect(ids({ route: 'POST /orders', failed: true })).toContain('3c07a1b2');
     expect(failing.visits.every((visit) => visit.failed_requests > 0)).toBe(true);
+    expect(failing.total).toBeLessThan(totalOf({}));
   });
 
-  it('keeps the visits that started in the period, by the day of the project', async () => {
-    const lastDay = { from: '2026-10-05', to: '2026-10-05' };
+  it('keeps the visits that started in the period, by the day of the project', () => {
+    const lastDay = everyPage({}, { from: '2026-10-05', to: '2026-10-05' });
 
-    const store = await new MockVisitsService().visits(STORE, lastDay, NO_VISIT_FILTERS, null);
-
-    expect(ids(store)).toEqual(['3c07a1b2', '506cf1d6', '8c3f6a1d']);
+    expect(lastDay.total).toBeGreaterThan(0);
+    expect(
+      lastDay.visits.every(
+        (visit) => todayIn(DEMO_STORE.timezone, new Date(visit.started_at)) === '2026-10-05',
+      ),
+    ).toBe(true);
   });
 
   it('lists the visits of the project it is asked about', async () => {
     const docs = await new MockVisitsService().visits(DEMO_DOCS.id, RANGE, NO_VISIT_FILTERS, null);
 
-    expect(ids(docs)).toEqual(['e5a1c9d2', 'f6b2d0e3', '07c3e1f4']);
+    expect(docs.visits).toHaveLength(DEMO_VISITS_PAGE_SIZE);
+    expect(
+      everyPage({}, SHOWCASE_DAYS, DEMO_DOCS.id).visits.map((visit) => visit.session_id),
+    ).toContain(DEMO_DOCS.showcase[0]?.sessionId);
   });
 });
 

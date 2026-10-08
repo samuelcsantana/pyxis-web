@@ -1,12 +1,14 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { channelTotals, visitsTotal } from '@/domain/acquisition';
 import { ApiReader } from '../api-reader';
-import { demoVisitsTotal } from '../demo/demo-dataset';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { createAcquisitionService } from './acquisition-service.factory';
 import { demoAcquisitionWire } from './demo-acquisition';
 import { HttpAcquisitionService } from './http-acquisition-service';
 import { MockAcquisitionService } from './mock-acquisition-service';
+import { demoOverviewWire } from '../overview/demo-overview';
+
+const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 const API = 'https://api.pyxis.example.com';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -22,7 +24,7 @@ describe('HttpAcquisitionService', () => {
 
   it('asks the acquisition of the project for the range and maps it', async () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
-      Promise.resolve(new Response(JSON.stringify(demoAcquisitionWire(DEMO_STORE.id, RANGE)))),
+      Promise.resolve(new Response(JSON.stringify(demoAcquisitionWire(DEMO_STORE.id, RANGE, NOW)))),
     );
     vi.stubGlobal('fetch', fetchMock);
 
@@ -38,10 +40,21 @@ describe('HttpAcquisitionService', () => {
 });
 
 describe('MockAcquisitionService', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('splits every demo visit of each day over the channels', async () => {
     const report = await new MockAcquisitionService().acquisition(DEMO_STORE.id, RANGE);
 
-    expect(visitsTotal(report.days)).toBe(demoVisitsTotal(DEMO_STORE, RANGE));
+    expect(visitsTotal(report.days)).toBe(
+      demoOverviewWire(DEMO_STORE.id, RANGE, NOW).kpis.visits.current,
+    );
     expect(report.days[0]?.date).toBe('2026-09-06');
   });
 
@@ -76,16 +89,21 @@ describe('MockAcquisitionService', () => {
 
 describe('demoAcquisitionWire campaigns', () => {
   it('splits the tagged share of a source over its campaigns, the biggest first', () => {
-    const wire = demoAcquisitionWire(DEMO_STORE.id, RANGE);
+    const wire = demoAcquisitionWire(DEMO_STORE.id, RANGE, NOW);
     const google = wire.sources.find((source) => source.source === 'google');
     const fromGoogle = wire.campaigns?.filter((campaign) => campaign.source === 'google') ?? [];
 
-    expect(wire.campaigns?.map((campaign) => `${campaign.campaign} ${campaign.source}`)).toEqual([
-      'spring_sale google',
+    expect(
+      wire.campaigns?.map((campaign) => `${campaign.campaign} ${campaign.source}`).toSorted(),
+    ).toEqual([
       'brand_search google',
-      'spring_sale bing',
       'creator_week l.instagram.com',
+      'spring_sale bing',
+      'spring_sale google',
     ]);
+    expect(wire.campaigns?.map((campaign) => campaign.visits)).toEqual(
+      wire.campaigns?.map((campaign) => campaign.visits).toSorted((left, right) => right - left),
+    );
     expect(fromGoogle.reduce((sum, campaign) => sum + campaign.visits, 0)).toBeLessThan(
       google?.visits ?? 0,
     );
@@ -94,7 +112,7 @@ describe('demoAcquisitionWire campaigns', () => {
   });
 
   it('has campaigns without conversions for a project without a conversion event', () => {
-    const wire = demoAcquisitionWire(DEMO_DOCS.id, RANGE);
+    const wire = demoAcquisitionWire(DEMO_DOCS.id, RANGE, NOW);
 
     expect(wire.campaigns).toEqual([
       expect.objectContaining({

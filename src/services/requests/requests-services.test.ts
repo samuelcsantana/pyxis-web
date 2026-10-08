@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { RequestsReport } from '@/domain/requests';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
@@ -34,7 +33,7 @@ describe('HttpRequestsService', () => {
   });
 
   it('asks the routes for the range', async () => {
-    const fetchMock = answering(demoRequestsWire(STORE, RANGE, null, NOW));
+    const fetchMock = answering(demoRequestsWire(STORE, RANGE, null, NOW, null));
 
     const report = await new HttpRequestsService(
       new ApiReader(API, () => Promise.resolve('token')),
@@ -43,11 +42,13 @@ describe('HttpRequestsService', () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe(
       `${API}/v1/projects/p%201/requests?from=2026-09-22&to=2026-10-05`,
     );
-    expect(report.routes[0]?.route).toBe('/orders');
+    expect(report.routes[0]?.route).toBe(
+      demoRequestsWire(STORE, RANGE, null, NOW, null).routes[0]?.route,
+    );
   });
 
   it('adds the screen filter when there is one', async () => {
-    const fetchMock = answering(demoRequestsWire(STORE, RANGE, '/sign-up', NOW));
+    const fetchMock = answering(demoRequestsWire(STORE, RANGE, '/sign-up', NOW, null));
 
     await new HttpRequestsService(new ApiReader(API, () => Promise.resolve('token'))).requests(
       'p1',
@@ -61,7 +62,7 @@ describe('HttpRequestsService', () => {
   });
 
   it('asks the failed reads with kind=reads, and the writes without a kind', async () => {
-    const fetchMock = answering(demoFailedReadsWire(STORE, RANGE, '/products'));
+    const fetchMock = answering(demoFailedReadsWire(STORE, RANGE, '/products', NOW, null));
 
     const report = await new HttpRequestsService(
       new ApiReader(API, () => Promise.resolve('token')),
@@ -91,7 +92,7 @@ describe('HttpRequestsService', () => {
   });
 
   it('reads no days from an API that does not send them', async () => {
-    answering(demoRequestsWire(STORE, RANGE, null, NOW));
+    answering(demoRequestsWire(STORE, RANGE, null, NOW, null));
 
     const days = await new HttpRequestsService(
       new ApiReader(API, () => Promise.resolve('token')),
@@ -111,50 +112,40 @@ describe('MockRequestsService', () => {
     vi.useRealTimers();
   });
 
-  function failuresOf(report: RequestsReport, route: string) {
-    return report.routes
-      .find((candidate) => candidate.route === route)
-      ?.recentFailures.map((failure) => `${String(failure.status)} ${failure.occurredAt}`);
-  }
-
   it('lists the routes, the most failing first, each adding up', async () => {
     const report = await new MockRequestsService().requests(STORE, RANGE, null);
 
-    expect(report.routes).toHaveLength(8);
+    expect(report.routes).toHaveLength(DEMO_STORE.routes.length);
     expect(report.routes.map((route) => route.failed)).toEqual(
       report.routes.map((route) => route.failed).toSorted((left, right) => right - left),
     );
     for (const route of report.routes) {
       expect(route.statuses.reduce((sum, entry) => sum + entry.count, 0)).toBe(route.total);
+      expect(route.screens.reduce((sum, screen) => sum + screen.failed, 0)).toBe(route.failed);
     }
     const orders = report.routes.find((route) => route.route === '/orders');
     expect(orders?.statuses[0]?.status).toBe(201);
     expect(report.routes.find((route) => route.method === 'DELETE')?.statuses[0]?.status).toBe(204);
-    expect(report.routes.find((route) => route.method === 'PATCH')?.statuses[0]?.status).toBe(200);
   });
 
-  it('lists the latest failures of a route, newest first', async () => {
+  it('lists at most five latest failures of a route, newest first, inside the period', async () => {
     const report = await new MockRequestsService().requests(STORE, RANGE, null);
 
-    expect(failuresOf(report, '/orders')).toEqual([
-      '409 2026-10-05T21:41:05.000Z',
-      '400 2026-10-04T11:02:01.000Z',
-      '409 2026-10-03T15:59:52.000Z',
-    ]);
-    expect(failuresOf(report, '/payouts')).toEqual([
-      '500 2026-10-02T12:00:00.000Z',
-      '0 2026-10-02T11:44:56.000Z',
-    ]);
-    expect(failuresOf(report, '/users/me')).toEqual([]);
+    for (const route of report.routes) {
+      const times = route.recentFailures.map((failure) => failure.occurredAt);
+      expect(times.length).toBeLessThanOrEqual(Math.min(5, route.failed));
+      expect(times).toEqual(times.toSorted().toReversed());
+      expect(times.every((time) => time >= '2026-09-22' && time < '2026-10-06T03:00')).toBe(true);
+    }
   });
 
-  it('opens a demo visit from every latest failure, at the same time', async () => {
+  it('opens the demo visit of every latest failure, at the same time', async () => {
     const report = await new MockRequestsService().requests(STORE, RANGE, null);
     const failures = report.routes.flatMap((route) =>
       route.recentFailures.map((failure) => ({ ...failure, route: route.route })),
     );
 
-    expect(failures).toHaveLength(9);
+    expect(failures.length).toBeGreaterThan(0);
     for (const failure of failures) {
       const { visits } = demoTimelineReport(STORE, { kind: 'visit', id: failure.sessionId }, NOW);
       const failedRequest = visits
@@ -167,31 +158,10 @@ describe('MockRequestsService', () => {
     }
   });
 
-  it('keeps only the failures of the period, by the day of the project', async () => {
-    const lastDay = { from: '2026-10-05', to: '2026-10-05' };
-    const store = await new MockRequestsService().requests(STORE, lastDay, null);
-    const unknown = await new MockRequestsService().requests('unknown', lastDay, null);
-
-    expect(failuresOf(store, '/orders')).toEqual(['409 2026-10-05T21:41:05.000Z']);
-    expect(failuresOf(store, '/payouts')).toEqual([]);
-    expect(failuresOf(unknown, '/orders')).toEqual(['409 2026-10-05T21:41:05.000Z']);
-  });
-
-  it('leaves out the failures after the period', async () => {
-    const report = await new MockRequestsService().requests(
-      STORE,
-      { from: '2026-09-22', to: '2026-10-02' },
-      null,
-    );
-
-    expect(failuresOf(report, '/orders')).toEqual([]);
-    expect(failuresOf(report, '/payouts')).toHaveLength(2);
-  });
-
   it('keeps only the routes called from the filtered screen', async () => {
     const report = await new MockRequestsService().requests(STORE, RANGE, '/sign-up');
 
-    expect(report.routes.map((route) => route.route)).toEqual([
+    expect(report.routes.map((route) => route.route).toSorted()).toEqual([
       '/auth/sign-up',
       '/auth/verify-code',
     ]);
@@ -213,24 +183,10 @@ describe('MockRequestsService', () => {
     expect(form?.screens).toEqual([{ path: '/orders/new', failed: form?.failed }]);
   });
 
-  it('counts the failures of older days, which have no demo visit to open', async () => {
-    const report = await new MockRequestsService().requests(
-      STORE,
-      { from: '2026-09-01', to: '2026-09-20' },
-      null,
-    );
-
-    expect(report.routes.reduce((sum, route) => sum + route.failed, 0)).toBeGreaterThan(0);
-    expect(report.routes.flatMap((route) => route.recentFailures)).toEqual([]);
-    for (const route of report.routes) {
-      expect(route.screens.reduce((sum, screen) => sum + screen.failed, 0)).toBe(route.failed);
-    }
-  });
-
-  it('lists the failed reads, the most failing first, every read a failure', async () => {
+  it('lists the failed reads, every read a failure that opens its visit', async () => {
     const report = await new MockRequestsService().failedReads(STORE, RANGE, null);
 
-    expect(report.routes.map((route) => `${route.method} ${route.route}`)).toEqual([
+    expect(report.routes.map((route) => `${route.method} ${route.route}`).toSorted()).toEqual([
       'GET /orders/:id',
       'GET /products',
     ]);
@@ -239,7 +195,7 @@ describe('MockRequestsService', () => {
       expect(route.statuses.reduce((sum, entry) => sum + entry.count, 0)).toBe(route.failed);
       expect(route.statuses.every((entry) => entry.status === 0 || entry.status >= 400)).toBe(true);
       expect(route.screens.reduce((sum, screen) => sum + screen.failed, 0)).toBe(route.failed);
-      expect(route.recentFailures).toEqual([]);
+      expect(route.recentFailures.length).toBeGreaterThan(0);
     }
   });
 
@@ -256,7 +212,6 @@ describe('MockRequestsService', () => {
     const elsewhere = await service.failedReads(STORE, RANGE, '/settings');
 
     expect((list?.failed ?? 0) + (form?.failed ?? 0)).toBe(all?.failed);
-    expect(form?.screens).toEqual([{ path: '/orders/new', failed: form?.failed }]);
     expect(elsewhere.routes).toEqual([]);
   });
 
@@ -345,7 +300,7 @@ describe('the demo request health', () => {
   const sumOf = (values: readonly number[]) => values.reduce((sum, value) => sum + value, 0);
 
   it('counts every write of every day by status class, adding up to the routes', () => {
-    const wire = demoRequestsWire(STORE, RANGE, null, NOW);
+    const wire = demoRequestsWire(STORE, RANGE, null, NOW, null);
     const days = wire.days ?? [];
     const failed = sumOf(
       days.map(({ by_status_class: day }) => day.client_error + day.server_error + day.no_response),
@@ -360,7 +315,7 @@ describe('the demo request health', () => {
   });
 
   it('counts the failed reads of every day by status class, with no success', () => {
-    const wire = demoFailedReadsWire(DEMO_STORE.id, RANGE, null);
+    const wire = demoFailedReadsWire(DEMO_STORE.id, RANGE, null, NOW, null);
     const days = wire.days ?? [];
 
     expect(days.every((day) => day.by_status_class.success === 0)).toBe(true);
@@ -374,11 +329,26 @@ describe('the demo request health', () => {
   });
 
   it('gives each route a p95 above its median', () => {
-    const wire = demoRequestsWire(STORE, RANGE, null, NOW);
+    const wire = demoRequestsWire(STORE, RANGE, null, NOW, null);
 
     expect(
       wire.routes.every((route) => (route.p95_duration_ms ?? 0) > route.median_duration_ms),
     ).toBe(true);
+  });
+
+  it('times one route day by day when asked for it, empty days without durations', () => {
+    const route = { method: 'POST', route: '/payouts' };
+    const wire = demoRequestsWire(STORE, RANGE, null, NOW, route);
+    const days = wire.route_days ?? [];
+    const payouts = wire.routes.find((candidate) => candidate.route === '/payouts');
+
+    expect(days).toHaveLength(14);
+    expect(sumOf(days.map((day) => day.total))).toBe(payouts?.total);
+    expect(sumOf(days.map((day) => day.failed))).toBe(payouts?.failed);
+    for (const day of days) {
+      expect(day.median_duration_ms === null).toBe(day.total === 0);
+    }
+    expect(demoFailedReadsWire(STORE, RANGE, null, NOW, route).route_days).toHaveLength(14);
   });
 
   it('names the class of every status', () => {

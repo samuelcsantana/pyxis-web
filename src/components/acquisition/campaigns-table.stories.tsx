@@ -5,9 +5,11 @@ import { DEMO_DOCS } from '@/services/demo/demo-projects';
 import { CampaignsTable } from './campaigns-table';
 import { english } from '@/test-utils/english';
 
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const PERIOD = { from: '2026-09-06', to: '2026-10-05' };
-const REPORT = demoAcquisitionReport('demo', PERIOD);
-const WITHOUT_CONVERSIONS = demoAcquisitionReport(DEMO_DOCS.id, PERIOD);
+const REPORT = demoAcquisitionReport('demo', PERIOD, STORY_NOW);
+const WITHOUT_CONVERSIONS = demoAcquisitionReport(DEMO_DOCS.id, PERIOD, STORY_NOW);
 
 function campaignVisitsHref({ campaign, source }: CampaignRow): string {
   return `/demo/visits?${new URLSearchParams({ range: '30d', campaign, source }).toString()}`;

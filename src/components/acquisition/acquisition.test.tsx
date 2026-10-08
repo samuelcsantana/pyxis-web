@@ -19,8 +19,10 @@ import { SourcesTable } from './sources-table';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
+const NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
-const REPORT = demoAcquisitionReport('demo', WEEK);
+const REPORT = demoAcquisitionReport('demo', WEEK, NOW);
 
 const GOOGLE: Source = {
   source: 'google',

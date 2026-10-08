@@ -4,7 +4,9 @@ import { demoDevicesReport } from '@/services/devices/demo-devices';
 import { ShareDonut } from './share-donut';
 import { english } from '@/test-utils/english';
 
-const REPORT = demoDevicesReport('demo', { from: '2026-09-06', to: '2026-10-05' });
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
+const REPORT = demoDevicesReport('demo', { from: '2026-09-06', to: '2026-10-05' }, STORY_NOW);
 
 function deviceVisitsHref(device: string): string {
   return `/demo/visits?${new URLSearchParams({ range: '30d', device }).toString()}`;

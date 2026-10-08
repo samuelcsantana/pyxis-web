@@ -6,148 +6,135 @@ import {
 } from '@/domain/acquisition';
 import { acquisitionResponseSchema } from '@/domain/acquisition.schema';
 import type { DateRange } from '../date-range';
-import type { DemoProject, DemoSource } from '../demo/demo-catalog';
-import { demoConversionsTotal, demoVisitsOn } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
+import type { DemoVisitRecord } from '../demo/demo-records';
+import { itemAt } from '../demo/demo-random';
 import {
-  apportion,
-  demoConvertingVisitsOrNull,
-  demoDays,
-  type Apportioned,
-} from '../demo/demo-series';
+  byKeys,
+  countWhere,
+  demoScopeOf,
+  demoVisitsIn,
+  groupedBy,
+  groupOf,
+  isPageView,
+  visitDate,
+} from '../demo/demo-scope';
+import { demoDays } from '../demo/demo-series';
 
 type ChannelCounts = Readonly<Record<Channel, number>>;
-type CampaignShare = DemoSource['campaigns'][number];
+type SourceWire = AcquisitionWire['sources'][number];
 type CampaignWire = NonNullable<AcquisitionWire['campaigns']>[number];
 
-const MAX_CAMPAIGNS = 20;
-const UNTAGGED = '';
-const WHOLE_SHARE = 1;
+export const TOP_SOURCES = 20;
+export const TOP_CAMPAIGNS = 20;
+const KEY_SEPARATOR = '\u0000';
 
-const NO_VISITS: ChannelCounts = {
-  paid: 0,
-  email: 0,
-  social: 0,
-  campaign: 0,
-  organic: 0,
-  referral: 0,
-  direct: 0,
-};
-
-function splitDay(project: DemoProject, visits: number): ChannelCounts {
-  return apportion(visits, CHANNELS, (channel) => project.channels[channel]).reduce(
-    (counts, { item, count }) => ({ ...counts, [item]: count }),
-    NO_VISITS,
-  );
+interface Entry {
+  readonly visit: DemoVisitRecord;
+  readonly conversions: number;
 }
 
-function sourceVisits(
-  project: DemoProject,
-  totals: ChannelCounts,
-): readonly Apportioned<DemoSource>[] {
-  return CHANNELS.flatMap((channel) =>
-    apportion(
-      totals[channel],
-      project.sources.filter((source) => source.channel === channel),
-      (source) => source.share,
-    ),
-  );
+function noVisits(): ChannelCounts {
+  return Object.fromEntries(CHANNELS.map((channel) => [channel, 0])) as Record<Channel, number>;
 }
 
-function sourceConversions(
-  visits: readonly Apportioned<DemoSource>[],
-  conversions: number | null,
-): readonly (number | null)[] {
-  if (conversions === null) {
-    return visits.map(() => null);
-  }
-  return apportion(conversions, visits, ({ item, count }) => count * item.conversionWeight).map(
-    ({ count }) => count,
-  );
-}
-
-function campaignShares(source: DemoSource): readonly CampaignShare[] {
-  const taggedShare = source.campaigns.reduce((sum, [, share]) => sum + share, 0);
-  return [...source.campaigns, [UNTAGGED, Math.max(0, WHOLE_SHARE - taggedShare)]];
-}
-
-function convertedEntries<Entry>(
-  conversions: number | null,
-  entries: readonly Apportioned<Entry>[],
-): readonly { readonly entry: Apportioned<Entry>; readonly conversions: number | null }[] {
-  if (conversions === null) {
-    return entries.map((entry) => ({ entry, conversions: null }));
-  }
-  return apportion(conversions, entries, (entry) => entry.count).map(({ item, count }) => ({
-    entry: item,
-    conversions: count,
-  }));
-}
-
-function campaignWires(
-  visits: readonly Apportioned<DemoSource>[],
-  conversions: readonly (number | null)[],
-): CampaignWire[] {
+function entriesOf(visits: readonly DemoVisitRecord[], conversionEvent: string | null) {
   return visits
-    .flatMap(({ item: source, count }, index) =>
-      convertedEntries(
-        conversions[index] ?? null,
-        apportion(count, campaignShares(source), ([, share]) => share),
-      )
-        .filter(({ entry }) => entry.item[0] !== UNTAGGED)
-        .map(({ entry, conversions: converted }) => ({
-          campaign: entry.item[0],
-          source: source.source,
-          medium: source.medium,
-          channel: source.channel,
-          visits: entry.count,
-          conversions: converted,
-          converting_visits: demoConvertingVisitsOrNull(converted),
-          from_ad_click_visits: Math.round(entry.count * source.adClickShare),
-        })),
-    )
-    .filter((campaign) => campaign.visits > 0)
-    .toSorted((first, second) => second.visits - first.visits)
-    .slice(0, MAX_CAMPAIGNS);
+    .filter((visit) => visit.events.some(isPageView))
+    .map((visit): Entry => ({
+      visit,
+      conversions: countWhere(visit.events, (event) => event.name === conversionEvent),
+    }));
 }
 
-export function demoAcquisitionWire(projectId: string, range: DateRange): AcquisitionWire {
-  const project = demoProjectOf(projectId);
-  const days = demoDays(range).map((date) => ({
-    date,
-    by_channel: splitDay(project, demoVisitsOn(project, date)),
-  }));
-  const totals = days.reduce<ChannelCounts>(
-    (sum, day) =>
-      CHANNELS.reduce(
-        (counts, channel) => ({
-          ...counts,
-          [channel]: counts[channel] + day.by_channel[channel],
-        }),
-        sum,
-      ),
-    NO_VISITS,
-  );
-  const visits = sourceVisits(project, totals);
-  const conversions = sourceConversions(visits, demoConversionsTotal(project, range));
+function sourceKey({ visit }: Entry): string {
+  return [visit.source, visit.medium ?? '', visit.channel].join(KEY_SEPARATOR);
+}
+
+function totals(group: readonly Entry[], countsConversions: boolean) {
+  const conversions = group.reduce((total, entry) => total + entry.conversions, 0);
+  const converting = countWhere(group, (entry) => entry.conversions > 0);
   return {
-    days,
-    sources: visits
-      .map(({ item, count }, index) => ({
-        source: item.source,
-        medium: item.medium,
-        channel: item.channel,
-        visits: count,
-        conversions: conversions[index] ?? null,
-        converting_visits: demoConvertingVisitsOrNull(conversions[index] ?? null),
-        from_ad_click_visits: Math.round(count * item.adClickShare),
-      }))
-      .filter((source) => source.visits > 0)
-      .toSorted((first, second) => second.visits - first.visits),
-    campaigns: campaignWires(visits, conversions),
+    visits: group.length,
+    conversions: countsConversions ? conversions : null,
+    converting_visits: countsConversions ? converting : null,
+    from_ad_click_visits: countWhere(group, (entry) => entry.visit.fromAdClick),
   };
 }
 
-export function demoAcquisitionReport(projectId: string, range: DateRange): AcquisitionReport {
-  return acquisitionResponseSchema.parse(demoAcquisitionWire(projectId, range));
+function sourcesOf(entries: readonly Entry[], countsConversions: boolean): SourceWire[] {
+  return [...groupedBy(entries, sourceKey).values()]
+    .map((group) => {
+      const { visit } = itemAt(group, 0);
+      return {
+        source: visit.source,
+        medium: visit.medium,
+        channel: visit.channel,
+        ...totals(group, countsConversions),
+      };
+    })
+    .toSorted(byKeys((source) => [-source.visits, source.source, source.medium ?? '']))
+    .slice(0, TOP_SOURCES);
+}
+
+function campaignsOf(entries: readonly Entry[], countsConversions: boolean): CampaignWire[] {
+  const tagged = entries.filter((entry) => entry.visit.campaign !== null);
+  return [
+    ...groupedBy(
+      tagged,
+      (entry) => `${String(entry.visit.campaign)}${KEY_SEPARATOR}${sourceKey(entry)}`,
+    ),
+  ]
+    .map(([, group]) => {
+      const { visit } = itemAt(group, 0);
+      return {
+        campaign: String(visit.campaign),
+        source: visit.source,
+        medium: visit.medium,
+        channel: visit.channel,
+        ...totals(group, countsConversions),
+      };
+    })
+    .toSorted(
+      byKeys((campaign) => [
+        -campaign.visits,
+        campaign.campaign,
+        campaign.source,
+        campaign.medium ?? '',
+      ]),
+    )
+    .slice(0, TOP_CAMPAIGNS);
+}
+
+export function demoAcquisitionWire(
+  projectId: string,
+  range: DateRange,
+  now: Date,
+): AcquisitionWire {
+  const project = demoProjectOf(projectId);
+  const entries = entriesOf(
+    demoVisitsIn(project, demoScopeOf(range, now)),
+    project.conversionEvent,
+  );
+  const byDate = groupedBy(entries, (entry) => visitDate(entry.visit));
+  const countsConversions = project.conversionEvent !== null;
+  return {
+    days: demoDays(range).map((date) => ({
+      date,
+      by_channel: groupOf(byDate, date).reduce<ChannelCounts>(
+        (counts, { visit }) => ({ ...counts, [visit.channel]: counts[visit.channel] + 1 }),
+        noVisits(),
+      ),
+    })),
+    sources: sourcesOf(entries, countsConversions),
+    campaigns: campaignsOf(entries, countsConversions),
+  };
+}
+
+export function demoAcquisitionReport(
+  projectId: string,
+  range: DateRange,
+  now: Date,
+): AcquisitionReport {
+  return acquisitionResponseSchema.parse(demoAcquisitionWire(projectId, range, now));
 }

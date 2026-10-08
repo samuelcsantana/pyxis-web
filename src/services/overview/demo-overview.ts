@@ -2,42 +2,67 @@ import { type OverviewReport, type OverviewWire } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { todayIn } from '@/domain/period';
 import type { DateRange } from '../date-range';
-import {
-  type DemoDay,
-  demoDayFigures,
-  demoEventTotals,
-  demoPageTotals,
-} from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
-import { demoConvertingVisits, previousRange } from '../demo/demo-series';
+import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
+import {
+  countWhere,
+  demoRanking,
+  type DemoScope,
+  demoVisitsIn,
+  distinctCount,
+  groupedBy,
+  groupOf,
+  hasFailed,
+  hasPageView,
+  isNamedEvent,
+  isPageView,
+  isWrite,
+  visitDate,
+} from '../demo/demo-scope';
+import { demoDays, previousRange } from '../demo/demo-series';
 
 export const TOP_ITEMS = 10;
 
-type CountedFigure = keyof Omit<DemoDay, 'date'>;
-
-function total(days: readonly DemoDay[], key: CountedFigure): number {
-  return days.reduce((sum, day) => sum + day[key], 0);
+interface Figures {
+  readonly visits: number;
+  readonly identifiedUsers: number;
+  readonly conversions: number;
+  readonly convertingVisits: number;
+  readonly writes: number;
+  readonly failedWrites: number;
+  readonly pageViews: number;
+  readonly events: number;
 }
 
-function kpi(current: readonly DemoDay[], previous: readonly DemoDay[], key: CountedFigure) {
+interface DayFigures extends Figures {
+  readonly date: string;
+}
+
+function figuresOf(visits: readonly DemoVisitRecord[], conversionEvent: string | null): Figures {
+  const events = visits.flatMap((visit) => visit.events);
+  const isConversion = (event: DemoEventRecord) => event.name === conversionEvent;
   return {
-    current: total(current, key),
-    previous: total(previous, key),
-    daily: current.map((day) => day[key]),
+    visits: countWhere(visits, hasPageView),
+    identifiedUsers: distinctCount(visits.map((visit) => visit.userId)),
+    conversions: countWhere(events, isConversion),
+    convertingVisits: countWhere(visits, (visit) => visit.events.some(isConversion)),
+    writes: countWhere(events, isWrite),
+    failedWrites: countWhere(events, (event) => isWrite(event) && hasFailed(event)),
+    pageViews: countWhere(events, isPageView),
+    events: countWhere(events, isNamedEvent),
   };
 }
 
-function convertingVisitsKpi(current: readonly DemoDay[], previous: readonly DemoDay[]) {
-  const daily = current.map((day) => demoConvertingVisits(day.conversions));
-  return {
-    current: daily.reduce((sum, value) => sum + value, 0),
-    previous: previous.reduce((sum, day) => sum + demoConvertingVisits(day.conversions), 0),
-    daily,
-  };
-}
-
-function failureCount(days: readonly DemoDay[]) {
-  return { failed: total(days, 'failedWrites'), total: total(days, 'writes') };
+function dailyFigures(
+  visits: readonly DemoVisitRecord[],
+  range: DateRange,
+  conversionEvent: string | null,
+): readonly DayFigures[] {
+  const byDate = groupedBy(visits, visitDate);
+  return demoDays(range).map((date) => ({
+    date,
+    ...figuresOf(groupOf(byDate, date), conversionEvent),
+  }));
 }
 
 function comparisonCutoff(range: DateRange, timeZone: string, now: Date): string | null {
@@ -54,40 +79,56 @@ function comparisonCutoff(range: DateRange, timeZone: string, now: Date): string
   }).format(now);
 }
 
+function kpi(current: Figures, previous: Figures, days: readonly Figures[], key: keyof Figures) {
+  return { current: current[key], previous: previous[key], daily: days.map((day) => day[key]) };
+}
+
+function writeErrors(figures: Figures) {
+  return { failed: figures.failedWrites, total: figures.writes };
+}
+
 export function demoOverviewWire(projectId: string, range: DateRange, now: Date): OverviewWire {
   const project = demoProjectOf(projectId);
-  const current = demoDayFigures(project, range, now);
-  const previous = demoDayFigures(project, previousRange(range), now);
-  const countsConversions = project.conversionEvent !== null;
+  const { conversionEvent } = project;
+  const cutoff = comparisonCutoff(range, project.timezone, now);
+  const currentScope: DemoScope = { range, now, until: null };
+  const previousScope: DemoScope = { range: previousRange(range), now, until: cutoff };
+  const visits = demoVisitsIn(project, currentScope);
+  const previousVisits = demoVisitsIn(project, previousScope);
+  const current = figuresOf(visits, conversionEvent);
+  const previous = figuresOf(previousVisits, conversionEvent);
+  const days = dailyFigures(visits, range, conversionEvent);
+  const previousDays = dailyFigures(previousVisits, previousScope.range, conversionEvent);
+  const counts = conversionEvent !== null;
   return {
     kpis: {
-      visits: kpi(current, previous, 'visits'),
-      identified_users: kpi(current, previous, 'identifiedUsers'),
-      conversions: countsConversions ? kpi(current, previous, 'conversions') : null,
-      converting_visits: countsConversions ? convertingVisitsKpi(current, previous) : null,
+      visits: kpi(current, previous, days, 'visits'),
+      identified_users: kpi(current, previous, days, 'identifiedUsers'),
+      conversions: counts ? kpi(current, previous, days, 'conversions') : null,
+      converting_visits: counts ? kpi(current, previous, days, 'convertingVisits') : null,
       write_errors: {
-        current: failureCount(current),
-        previous: failureCount(previous),
-        daily: current.map((day) => ({ failed: day.failedWrites, total: day.writes })),
+        current: writeErrors(current),
+        previous: writeErrors(previous),
+        daily: days.map(writeErrors),
       },
     },
-    days: current.map((day) => ({ date: day.date, page_views: day.pageViews, events: day.events })),
-    top_pages: demoPageTotals(project, range)
+    days: days.map((day) => ({ date: day.date, page_views: day.pageViews, events: day.events })),
+    top_pages: demoRanking(visits, isPageView, (event) => event.path)
       .slice(0, TOP_ITEMS)
       .map((page) => ({ path: page.name, views: page.count, visits: page.visits })),
-    top_events: demoEventTotals(project, range)
+    top_events: demoRanking(visits, isNamedEvent, (event) => event.name)
       .slice(0, TOP_ITEMS)
       .map((event) => ({ name: event.name, count: event.count, visits: event.visits })),
-    comparison_cutoff: comparisonCutoff(range, project.timezone, now),
-    previous_days: previous.map((day) => ({
+    comparison_cutoff: cutoff,
+    previous_days: previousDays.map((day) => ({
       date: day.date,
       page_views: day.pageViews,
       events: day.events,
       visits: day.visits,
       identified_users: day.identifiedUsers,
-      conversions: countsConversions ? day.conversions : null,
-      converting_visits: countsConversions ? demoConvertingVisits(day.conversions) : null,
-      write_errors: { failed: day.failedWrites, total: day.writes },
+      conversions: counts ? day.conversions : null,
+      converting_visits: counts ? day.convertingVisits : null,
+      write_errors: writeErrors(day),
     })),
   };
 }

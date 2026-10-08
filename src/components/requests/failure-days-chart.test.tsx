@@ -7,8 +7,10 @@ import { FailureDaysChart } from './failure-days-chart';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
+const NOW = new Date('2026-10-06T02:30:00.000Z');
+
 const WEEK = { from: '2026-09-29', to: '2026-10-05' };
-const DAYS = demoRequestsReport('demo', WEEK, null, new Date('2026-10-06T02:30:00.000Z')).days;
+const DAYS = demoRequestsReport('demo', WEEK, null, NOW, null).days;
 const QUIET = DAYS.map((day) => ({
   ...day,
   byStatusClass: { ...day.byStatusClass, clientError: 0, serverError: 0, noResponse: 0 },

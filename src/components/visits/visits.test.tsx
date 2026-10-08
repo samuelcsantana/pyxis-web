@@ -2,15 +2,15 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { NO_VISIT_FILTERS, type VisitRowsPage, visitRows, visitsTableText } from '@/domain/visits';
-import { demoVisitsReport } from '@/services/visits/demo-visit-list';
+import { showcaseVisitsReport } from '@/test-utils/showcase-visits';
 import { VisitFiltersForm } from './visit-filters-form';
 import { VisitsTable } from './visits-table';
 import { english } from '@/test-utils/english';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
-const FIRST = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
-const SECOND = demoVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
+const FIRST = showcaseVisitsReport('demo', RANGE, NO_VISIT_FILTERS, null, NOW);
+const SECOND = showcaseVisitsReport('demo', RANGE, NO_VISIT_FILTERS, FIRST.nextCursor, NOW);
 const FIRST_ROWS = visitRows(FIRST.visits, 'America/Sao_Paulo', english);
 const SECOND_ROWS = visitRows(SECOND.visits, 'America/Sao_Paulo', english);
 const CURSOR = '2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02';

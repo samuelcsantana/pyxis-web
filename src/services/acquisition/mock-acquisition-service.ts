@@ -5,6 +5,6 @@ import { demoAcquisitionReport } from './demo-acquisition';
 
 export class MockAcquisitionService implements IAcquisitionService {
   acquisition(projectId: string, range: DateRange): Promise<AcquisitionReport> {
-    return Promise.resolve(demoAcquisitionReport(projectId, range));
+    return Promise.resolve(demoAcquisitionReport(projectId, range, new Date()));
   }
 }

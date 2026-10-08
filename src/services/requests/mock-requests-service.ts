@@ -7,11 +7,11 @@ import type { IRequestsService } from './requests-service.interface';
 
 export class MockRequestsService implements IRequestsService {
   requests(projectId: string, range: DateRange, screen: string | null): Promise<RequestsReport> {
-    return Promise.resolve(demoRequestsReport(projectId, range, screen, new Date()));
+    return Promise.resolve(demoRequestsReport(projectId, range, screen, new Date(), null));
   }
 
   failedReads(projectId: string, range: DateRange, screen: string | null): Promise<RequestsReport> {
-    return Promise.resolve(demoFailedReadsReport(projectId, range, screen));
+    return Promise.resolve(demoFailedReadsReport(projectId, range, screen, new Date(), null));
   }
 
   routeDays(

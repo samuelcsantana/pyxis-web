@@ -4,7 +4,9 @@ import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
 import { ChannelChart } from './channel-chart';
 import { english } from '@/test-utils/english';
 
-const REPORT = demoAcquisitionReport('demo', { from: '2026-09-06', to: '2026-10-05' });
+const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
+
+const REPORT = demoAcquisitionReport('demo', { from: '2026-09-06', to: '2026-10-05' }, STORY_NOW);
 
 const meta = {
   title: 'Acquisition/Visits by channel',

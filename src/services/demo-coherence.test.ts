@@ -9,6 +9,10 @@ import { MockFeaturesService } from './features/mock-features-service';
 import { MockFunnelService } from './funnel/mock-funnel-service';
 import { MockOverviewService } from './overview/mock-overview-service';
 import { MockRequestsService } from './requests/mock-requests-service';
+import { MockVisitsService } from './visits/mock-visits-service';
+import { demoScopeOf, demoVisitsIn } from './demo/demo-scope';
+import { previousRange } from './demo/demo-series';
+import { NO_VISIT_FILTERS } from '@/domain/visits';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const PERIOD_DAYS = { today: 1, '7d': 7, '30d': 30 } as const;
@@ -156,6 +160,33 @@ describe('the demo screens', () => {
           );
         });
 
+        it('count the same visits on the Visits list as on Overview', async () => {
+          const { overview } = await screensOf(project.id, range);
+          const visits = await new MockVisitsService().visits(
+            project.id,
+            range,
+            NO_VISIT_FILTERS,
+            null,
+          );
+
+          expect(visits.total).toBe(overview.kpis.visits.current);
+        });
+
+        it('list a visit with a failed request for the failures Requests counts', async () => {
+          const { requests } = await screensOf(project.id, range);
+          const reads = await new MockRequestsService().failedReads(project.id, range, null);
+          const failures = sum([...requests.routes, ...reads.routes].map((route) => route.failed));
+          const visits = await new MockVisitsService().visits(
+            project.id,
+            range,
+            { ...NO_VISIT_FILTERS, failed: true },
+            null,
+          );
+
+          expect(visits.total ?? 0).toBeLessThanOrEqual(failures);
+          expect((visits.total ?? 0) > 0).toBe(failures > 0);
+        });
+
         it('start the example funnel at the visits Features gives its first page', async () => {
           const { pages, events } = await screensOf(project.id, range);
           const funnel = await new MockFunnelService().funnel(
@@ -181,10 +212,27 @@ describe('the demo screens', () => {
   it('show the latest failures of the store only from visits the demo can open', async () => {
     const range = periodEnding(DEMO_STORE.timezone, PERIOD_DAYS['30d']);
     const requests = await new MockRequestsService().requests(DEMO_STORE.id, range, null);
-    const visitIds = new Set(DEMO_STORE.visits.map((visit) => visit.sessionId));
+    const visitIds = new Set(
+      demoVisitsIn(DEMO_STORE, demoScopeOf(range, NOW)).map((visit) => visit.sessionId),
+    );
+    const failures = requests.routes.flatMap((route) => route.recentFailures);
 
-    for (const failure of requests.routes.flatMap((route) => route.recentFailures)) {
+    expect(failures.length).toBeGreaterThan(0);
+    for (const failure of failures) {
       expect(visitIds.has(failure.sessionId)).toBe(true);
     }
+  });
+
+  it('compare a past period with the period before it as that period counts itself', async () => {
+    const yesterday = addDays(todayIn(DEMO_STORE.timezone, NOW), -1);
+    const range = { from: addDays(yesterday, -6), to: yesterday };
+    const overview = new MockOverviewService();
+    const week = await overview.overview(DEMO_STORE.id, range);
+    const weekBefore = await overview.overview(DEMO_STORE.id, previousRange(range));
+
+    expect(week.comparison).toEqual({ kind: 'whole-days' });
+    expect(week.kpis.visits.previous).toBe(weekBefore.kpis.visits.current);
+    expect(week.kpis.identifiedUsers.previous).toBe(weekBefore.kpis.identifiedUsers.current);
+    expect(week.kpis.writeErrors.previous).toEqual(weekBefore.kpis.writeErrors.current);
   });
 });

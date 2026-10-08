@@ -4,46 +4,66 @@ import {
 } from '@/domain/property-breakdown';
 import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
 import type { DateRange } from '../date-range';
-import type { DemoProperty } from '../demo/demo-catalog';
-import { demoEventCountIn } from '../demo/demo-dataset';
 import { demoProjectOf } from '../demo/demo-projects';
-import { apportion } from '../demo/demo-series';
+import {
+  byKeys,
+  demoScopeOf,
+  demoVisitsIn,
+  distinctCount,
+  groupedBy,
+  isNamedEvent,
+} from '../demo/demo-scope';
 
-const VALUES_PER_KEY = 10;
+export const VALUES_PER_KEY = 10;
 
-function keyWire(property: DemoProperty, events: number, visitsPerCount: number) {
-  const carried = Math.round(events * property.carriedShare);
-  const values = apportion(carried, property.values, ([, share]) => share)
-    .filter((entry) => entry.count > 0)
-    .map(({ item: [value], count }) => ({
+interface Carried {
+  readonly key: string;
+  readonly value: string;
+  readonly session: string;
+}
+
+function valuesOf(key: string, carried: readonly Carried[]) {
+  const values = [...groupedBy(carried, (entry) => entry.value)]
+    .map(([value, group]) => ({
       value,
-      count,
-      visits: Math.min(count, Math.max(1, Math.round(count * visitsPerCount))),
+      count: group.length,
+      visits: distinctCount(group.map((entry) => entry.session)),
     }))
-    .toSorted((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+    .toSorted(byKeys((value) => [-value.count, value.value]));
   const shown = values.slice(0, VALUES_PER_KEY);
-  const otherCount = carried - shown.reduce((sum, value) => sum + value.count, 0);
-  return { key: property.key, events: carried, values: shown, other_count: otherCount };
+  return {
+    key,
+    events: carried.length,
+    values: shown,
+    other_count: carried.length - shown.reduce((total, value) => total + value.count, 0),
+  };
 }
 
 export function demoPropertyBreakdownWire(
   projectId: string,
   range: DateRange,
   name: string,
+  now: Date,
 ): PropertyBreakdownWire {
-  const project = demoProjectOf(projectId);
-  const event = project.events.find((candidate) => candidate.name === name);
-  if (event === undefined) {
-    return { name, events: 0, keys: [] };
-  }
-  const count = demoEventCountIn(project, event, range);
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const events = visits.flatMap((visit) =>
+    visit.events
+      .filter((event) => isNamedEvent(event) && event.name === name)
+      .map((event) => ({ event, session: visit.sessionId })),
+  );
+  const carried = events.flatMap(({ event, session }) =>
+    Object.entries(event.properties).map(([key, value]) => ({
+      key,
+      value: String(value),
+      session,
+    })),
+  );
   return {
     name,
-    events: count,
-    keys: event.properties
-      .map((property) => keyWire(property, count, event.visitsPerCount))
-      .filter((key) => key.events > 0)
-      .toSorted((a, b) => b.events - a.events || a.key.localeCompare(b.key)),
+    events: events.length,
+    keys: [...groupedBy(carried, (entry) => entry.key)]
+      .map(([key, group]) => valuesOf(key, group))
+      .toSorted(byKeys((key) => [-key.events, key.key])),
   };
 }
 
@@ -51,6 +71,9 @@ export function demoPropertyBreakdownReport(
   projectId: string,
   range: DateRange,
   name: string,
+  now: Date,
 ): PropertyBreakdownReport {
-  return propertyBreakdownResponseSchema.parse(demoPropertyBreakdownWire(projectId, range, name));
+  return propertyBreakdownResponseSchema.parse(
+    demoPropertyBreakdownWire(projectId, range, name, now),
+  );
 }
