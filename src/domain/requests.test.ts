@@ -184,7 +184,7 @@ describe('figures', () => {
   it('give writes their volume, rate and speed, and failed reads their counts only', () => {
     expect(requestFigures('writes', ROUTES).map((figure) => figure.label)).toEqual([
       'Writes',
-      'Error rate',
+      'Write error rate',
       'Slowest route',
     ]);
     expect(requestFigures('reads', ROUTES)).toEqual([

@@ -58,7 +58,7 @@ test('shows the same figures on every screen for the same period', async ({ page
   );
 
   await page.goto(`/${STORE_ID}/requests?range=30d`);
-  await expect(valueOf('Error rate')).toHaveText(errorRate);
+  await expect(valueOf('Write error rate')).toHaveText(errorRate);
 });
 
 test('allows connections only to its own origin', async ({ request }) => {

@@ -89,7 +89,7 @@ describe('RequestsPage', () => {
       null,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Requests' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Error rate' })).toHaveTextContent(/failed:/);
+    expect(screen.getByRole('region', { name: 'Write error rate' })).toHaveTextContent(/failed:/);
     expect(screen.getByRole('region', { name: 'Slowest route' })).toHaveTextContent(
       'median of POST /payouts',
     );
@@ -131,7 +131,7 @@ describe('RequestsPage', () => {
     expect(screen.getByRole('region', { name: 'Routes failing' })).toHaveTextContent(
       'Most: GET /orders/:id',
     );
-    expect(screen.queryByRole('region', { name: 'Error rate' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Write error rate' })).not.toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Show' })).not.toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Failed' })).toBeInTheDocument();
     expect(
