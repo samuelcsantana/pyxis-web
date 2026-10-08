@@ -25,6 +25,7 @@ export interface RequestsTableProps {
   readonly basePath: string;
   readonly query: string;
   readonly timelinePath: string;
+  readonly visitsPath: string;
   readonly emptyMessage: string;
 }
 
@@ -47,6 +48,7 @@ export function RequestsTable({
   basePath,
   query,
   timelinePath,
+  visitsPath,
   emptyMessage,
 }: RequestsTableProps) {
   const dialogRef = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
@@ -220,6 +222,10 @@ export function RequestsTable({
             row={selected}
             screenHref={screenHref}
             visitHref={(sessionId) => linkWith(timelinePath, { visit: sessionId })}
+            failedVisitsHref={linkWith(visitsPath, {
+              route: `${selected.method} ${selected.route}`,
+              failed: 'true',
+            })}
             onClose={() => {
               dialogRef.current.close();
             }}

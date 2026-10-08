@@ -16,6 +16,13 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     channel: 'organic',
     events: [
       { second: 2, name: 'page_view', path: '/' },
+      request(14, '/', {
+        method: 'POST',
+        route: '/newsletter',
+        status: 422,
+        durationMs: 196,
+        errorCode: 'email_invalid',
+      }),
       { second: 25, name: 'page_view', path: '/docs/:slug' },
       {
         second: 80,
@@ -50,6 +57,13 @@ const DOCS_VISITS: readonly DemoVisit[] = [
         path: '/guides/:slug',
         properties: { version: 'v1' },
       },
+      request(52, '/guides/:slug', {
+        method: 'POST',
+        route: '/feedback',
+        status: 429,
+        durationMs: 31,
+        errorCode: 'feedback_rate_limited',
+      }),
       request(61, '/guides/:slug', {
         method: 'POST',
         route: '/feedback',

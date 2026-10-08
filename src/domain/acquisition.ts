@@ -129,6 +129,7 @@ export function sourceLabel(source: string, i18n: I18n): string {
 
 export interface SourceRow {
   readonly key: string;
+  readonly source: string;
   readonly label: string;
   readonly medium: string | null;
   readonly channel: Channel;
@@ -151,6 +152,7 @@ export function sourceRows(sources: readonly Source[], i18n: I18n): readonly Sou
   const best = Math.max(0, ...rated.map((source) => source.rate ?? 0));
   return rated.map((source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
+    source: source.source,
     label: sourceLabel(source.source, i18n),
     medium: source.medium,
     channel: source.channel,

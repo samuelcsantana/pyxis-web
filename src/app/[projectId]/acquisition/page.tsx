@@ -47,6 +47,7 @@ interface AcquisitionReportViewProps {
   readonly downloads: readonly CsvDownload[];
   readonly channelVisitsHref: (channel: Channel) => string;
   readonly i18n: I18n;
+  readonly sourceVisitsHref: (source: string) => string;
 }
 
 function acquisitionDownloads(
@@ -70,6 +71,7 @@ function AcquisitionReportView({
   downloads,
   channelVisitsHref,
   i18n,
+  sourceVisitsHref,
 }: AcquisitionReportViewProps) {
   const paid = paidVisits(report.days, i18n);
   const top = topChannel(report.days, i18n);
@@ -84,6 +86,7 @@ function AcquisitionReportView({
         rows={sourceRows(report.sources, i18n)}
         channelVisitsHref={channelVisitsHref}
         i18n={i18n}
+        sourceVisitsHref={sourceVisitsHref}
       />
       <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">
@@ -102,6 +105,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
     createAcquisitionService().acquisition(project.id, { from: period.from, to: period.to }),
   );
   const i18n = await getI18n();
+  const visitsPath = screenHref(project.id, 'visits', periodQuery(period));
   return (
     <>
       <Topbar
@@ -119,9 +123,8 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
             report={report}
             period={period}
             downloads={acquisitionDownloads(project.id, period, i18n)}
-            channelVisitsHref={(channel) =>
-              linkWith(screenHref(project.id, 'visits', periodQuery(period)), { channel })
-            }
+            channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
+            sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
             i18n={i18n}
           />
         ) : (

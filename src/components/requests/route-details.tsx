@@ -12,10 +12,17 @@ export interface RouteDetailsProps {
   readonly row: RouteRow;
   readonly screenHref: (path: string) => string;
   readonly visitHref: (sessionId: string) => string;
+  readonly failedVisitsHref: string;
   readonly onClose: () => void;
 }
 
-export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetailsProps) {
+export function RouteDetails({
+  row,
+  screenHref,
+  visitHref,
+  failedVisitsHref,
+  onClose,
+}: RouteDetailsProps) {
   return (
     <div className="flex min-h-full flex-col gap-5 p-6">
       <div className="flex items-start justify-between gap-3">
@@ -91,6 +98,11 @@ export function RouteDetails({ row, screenHref, visitHref, onClose }: RouteDetai
         <h3 id="route-failures-heading" className={SECTION_TITLE}>
           Latest failures
         </h3>
+        {row.hasFailures ? (
+          <Link href={failedVisitsHref} className={`w-fit text-caption ${TEXT_LINK}`}>
+            See every visit with a failed {row.method} {row.route}
+          </Link>
+        ) : null}
         {row.failures.length === 0 ? (
           <p className="text-caption text-muted">No failures in this period.</p>
         ) : (

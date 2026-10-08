@@ -13,11 +13,20 @@ function channelVisitsHref(channel: string): string {
   return `/demo/visits?${new URLSearchParams({ range: '30d', channel }).toString()}`;
 }
 
+function sourceVisitsHref(source: string): string {
+  return `/demo/visits?${new URLSearchParams({ range: '30d', source }).toString()}`;
+}
+
 const meta = {
   title: 'Acquisition/Sources',
   component: SourcesTable,
   tags: ['autodocs'],
-  args: { rows: sourceRows(REPORT.sources, english), channelVisitsHref, i18n: english },
+  args: {
+    rows: sourceRows(REPORT.sources, english),
+    channelVisitsHref,
+    sourceVisitsHref,
+    i18n: english,
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (

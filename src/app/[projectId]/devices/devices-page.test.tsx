@@ -107,6 +107,23 @@ describe('DevicesPage', () => {
     expect(within(screen.getByRole('table', { name: 'Browser' })).queryByRole('link')).toBeNull();
   });
 
+  it('links each country to its visits, in the same period, and leaves the rest unlinked', async () => {
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      const other = { value: 'other', visits: 3, conversions: 0, convertingVisits: 0 };
+      return { ...report, countries: [...report.countries, other] };
+    };
+
+    render(await renderDevices());
+
+    const countries = within(screen.getByRole('table', { name: 'Countries' }));
+    expect(countries.getByRole('link', { name: 'Brazil: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=30d&country=BR',
+    );
+    expect(countries.queryByRole('link', { name: /^Other/ })).not.toBeInTheDocument();
+  });
+
   it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
     render(await renderDevices());
 

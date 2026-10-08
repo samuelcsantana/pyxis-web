@@ -88,6 +88,10 @@ function oneOf<Value extends string>(values: readonly Value[], text: string): Va
   return values.find((value) => value === text) ?? null;
 }
 
+export function countryFilterOf(country: string): string | null {
+  return COUNTRY_CODE_PATTERN.test(country) ? country : null;
+}
+
 export function deviceFilterOf(deviceType: string): VisitDeviceType | null {
   return oneOf(VISIT_DEVICE_TYPES, deviceType);
 }
