@@ -9,6 +9,7 @@ import { screenHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
+import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
   CHANGE_TONE_RULE,
@@ -19,6 +20,7 @@ import {
   WRITE_DEFINITION,
 } from '@/domain/glossary';
 import { activityTotals, hasActivity, type OverviewReport, overviewKpis } from '@/domain/overview';
+import { OVERVIEW_TABLE_LABELS, OVERVIEW_TABLES } from '@/domain/overview-export';
 import {
   daysBetween,
   describePeriod,
@@ -30,6 +32,7 @@ import {
 } from '@/domain/period';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
@@ -56,6 +59,18 @@ interface OverviewReportViewProps {
   readonly period: Period;
   readonly today: string;
   readonly visitsHref: (filter: Readonly<Record<string, string>>) => string;
+  readonly downloads: readonly CsvDownload[];
+}
+
+function overviewDownloads(projectId: string, period: Period): readonly CsvDownload[] {
+  return OVERVIEW_TABLES.map((table) => ({
+    label: OVERVIEW_TABLE_LABELS[table],
+    href: exportHref(
+      projectId,
+      'overview',
+      withKeptParameters(periodQuery(period), { [TABLE_PARAMETER]: table }),
+    ),
+  }));
 }
 
 function OverviewReportView({
@@ -64,6 +79,7 @@ function OverviewReportView({
   period,
   today,
   visitsHref,
+  downloads,
 }: OverviewReportViewProps) {
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return (
@@ -86,6 +102,7 @@ function OverviewReportView({
           visitsHref={(name) => visitsHref({ event: name })}
         />
       </div>
+      <CsvDownloads downloads={downloads} />
       <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
     </>
   );
@@ -119,6 +136,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
             visitsHref={(filter) =>
               screenHref(project.id, 'visits', withKeptParameters(periodQuery(period), filter))
             }
+            downloads={overviewDownloads(project.id, period)}
           />
         ) : (
           <EmptyPeriod
