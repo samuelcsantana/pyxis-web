@@ -98,3 +98,60 @@ test('times each step after the one before, and the whole funnel', async ({ page
   );
   expect(await sidewaysOverflow(page)).toBe(0);
 });
+
+test('lists the visits that left before a step, as many as it lost, and opens one', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/funnel?range=30d`);
+  const steps = page.getByRole('list', { name: 'Funnel' }).getByRole('listitem');
+  await expect(steps).toHaveCount(6);
+  const dropped = steps.nth(1).getByRole('link', { name: /dropped, list who left before step 2$/ });
+  const lost = Number(((await dropped.textContent()) ?? '').replace(/\D/g, ''));
+
+  await dropped.click();
+
+  await expect(page).toHaveURL(/step=2&outcome=dropped#funnel-subjects$/);
+  const list = page.getByRole('region', { name: /visits? reached step 1 and never step 2$/ });
+  await expect(list.getByRole('heading', { level: 2 })).toHaveText(
+    new RegExp(`^${lost.toLocaleString('en-US')} visits? `),
+  );
+  await expect(list).toBeInViewport();
+  await expect(dropped).toHaveAttribute('aria-current', 'true');
+  const rows = list.getByRole('row');
+  await expect(rows).toHaveCount(Math.min(lost, 50) + 1);
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+
+  let listed = (await rows.count()) - 1;
+  const older = list.getByRole('link', { name: 'Show older' });
+  while ((await older.count()) > 0) {
+    const cursor = new URL((await older.getAttribute('href')) ?? '', page.url()).searchParams.get(
+      'cursor',
+    );
+    await older.click();
+    await page.waitForURL((url) => url.searchParams.get('cursor') === cursor);
+    await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy', 'true');
+    await expect(list.getByRole('link', { name: 'Back to the newest' })).toBeVisible();
+    listed += (await rows.count()) - 1;
+  }
+  expect(listed).toBe(lost);
+
+  const first = list.getByRole('link', { name: /, open this visit in the timeline$/ }).first();
+  const visit = ((await first.textContent()) ?? '').trim();
+  await first.click();
+  await expect(page.getByRole('heading', { name: `Visit ${visit}`, exact: true })).toBeVisible();
+});
+
+test('lists the people of a step and closes the list', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/funnel?range=30d&mode=user&step=1&outcome=reached`);
+  const list = page.getByRole('region', { name: /(person|people) reached step 1$/ });
+  await expect(list.getByRole('columnheader', { name: 'Person' })).toBeVisible();
+  await expect(
+    list.getByRole('link', { name: /, open the timeline of this person$/ }).first(),
+  ).toHaveAttribute('href', /\/timeline\?range=30d&user=/);
+
+  await list.getByRole('link', { name: 'Close the list' }).click();
+
+  await expect(page).not.toHaveURL(/outcome=/);
+  await expect(page.getByRole('region', { name: /reached step/ })).toHaveCount(0);
+});
