@@ -1,3 +1,4 @@
+import type { I18n } from '@/i18n/i18n';
 import { TEXT_LINK } from './control-classes';
 
 export interface CsvDownload {
@@ -7,11 +8,12 @@ export interface CsvDownload {
 
 export interface CsvDownloadsProps {
   readonly downloads: readonly CsvDownload[];
+  readonly i18n: I18n;
 }
 
 const DOWNLOAD_ICON = 'M12 4v11 M7 10l5 5 5-5 M5 20h14';
 
-export function CsvDownloads({ downloads }: CsvDownloadsProps) {
+export function CsvDownloads({ downloads, i18n }: CsvDownloadsProps) {
   return (
     <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-caption leading-5">
       <span className="flex items-center gap-1.5 font-medium text-muted">
@@ -27,13 +29,13 @@ export function CsvDownloads({ downloads }: CsvDownloadsProps) {
         >
           <path d={DOWNLOAD_ICON} />
         </svg>
-        Download CSV
+        {i18n.t('exports.download')}
       </span>
       {downloads.map((download) => (
         <a
           key={download.href}
           href={download.href}
-          aria-label={`${download.label} as CSV`}
+          aria-label={i18n.t('exports.asCsv', { label: download.label })}
           className={`inline-flex min-h-6 items-center ${TEXT_LINK}`}
         >
           {download.label}

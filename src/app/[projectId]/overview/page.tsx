@@ -132,7 +132,7 @@ function OverviewReportView({
           i18n={i18n}
         />
       </div>
-      <CsvDownloads downloads={downloads} />
+      <CsvDownloads downloads={downloads} i18n={i18n} />
       <p className="text-xs leading-[18px] text-muted">{footnote(i18n)}</p>
     </>
   );

@@ -89,7 +89,10 @@ function DevicesReportView({
           visitsHref={countryVisitsHref}
         />
       </div>
-      <CsvDownloads downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]} />
+      <CsvDownloads
+        downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]}
+        i18n={i18n}
+      />
       <p className="text-xs leading-[18px] text-muted">
         Device, browser and system are worked out on the server from the browser&apos;s user agent,
         which is then thrown away. The country comes from the edge network, never from a stored IP

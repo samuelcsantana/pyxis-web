@@ -208,6 +208,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                   href: exportHref(project.id, 'requests', filterQuery(period, filter)),
                 },
               ]}
+              i18n={i18n}
             />
             <p className="text-xs leading-[18px] text-muted">{kindNote(kind, i18n)}</p>
           </>

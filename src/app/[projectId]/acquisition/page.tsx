@@ -98,7 +98,7 @@ function AcquisitionReportView({
         campaignVisitsHref={campaignVisitsHref}
         i18n={i18n}
       />
-      <CsvDownloads downloads={downloads} />
+      <CsvDownloads downloads={downloads} i18n={i18n} />
       <p className="text-xs leading-[18px] text-muted">
         An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that
         it was there, never the id itself, and keeps just the domain of a referring site.

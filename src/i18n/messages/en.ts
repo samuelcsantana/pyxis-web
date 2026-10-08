@@ -410,6 +410,8 @@ export const en = {
     },
   },
   exports: {
+    download: 'Download CSV',
+    asCsv: '{label} as CSV',
     overview: {
       daily: 'Activity per day',
       pages: 'Top pages',
