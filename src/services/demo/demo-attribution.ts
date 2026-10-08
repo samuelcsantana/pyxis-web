@@ -1,13 +1,7 @@
 import type { Channel } from '@/domain/acquisition';
-import type { DemoProject, DemoSource } from './demo-catalog';
-import { pick } from './demo-catalog-visits';
+import type { DemoSource } from './demo-catalog';
+import type { DemoAttribution } from './demo-records';
 import type { DemoVisit } from './demo-visits';
-
-export interface DemoAttribution {
-  readonly source: string;
-  readonly medium: string | null;
-  readonly campaign: string | null;
-}
 
 export interface DemoAttributedVisit {
   readonly visit: DemoVisit;
@@ -36,9 +30,14 @@ function channelAttributions(
   return sources.filter((source) => source.channel === channel).flatMap(sourceAttributions);
 }
 
-export function demoAttributedVisits(
-  project: Pick<DemoProject, 'sources' | 'visits'>,
-): readonly DemoAttributedVisit[] {
+function pick<Item>(items: readonly Item[], index: number, fallback: Item): Item {
+  return items[index % items.length] ?? fallback;
+}
+
+export function demoAttributedVisits(project: {
+  readonly sources: readonly DemoSource[];
+  readonly visits: readonly DemoVisit[];
+}): readonly DemoAttributedVisit[] {
   return project.visits.map((visit, index) => {
     const position = project.visits
       .slice(0, index)

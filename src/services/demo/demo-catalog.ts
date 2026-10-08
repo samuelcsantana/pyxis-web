@@ -67,7 +67,6 @@ export interface DemoProject {
   readonly timezone: string;
   readonly conversionEvent: string | null;
   readonly visitsPerPageView: number;
-  readonly identifiedShare: number;
   readonly signedInStage: number | null;
   readonly people: number;
   readonly pages: readonly DemoPage[];
@@ -81,10 +80,8 @@ export interface DemoProject {
   readonly channels: Readonly<Record<Channel, number>>;
   readonly sources: readonly DemoSource[];
   readonly exampleFunnel: readonly FunnelStep[];
-  readonly funnelContinuation: readonly number[];
   readonly person: string | null;
   readonly showcase: readonly DemoVisit[];
-  readonly visits: readonly DemoVisit[];
 }
 
 const EVEN_CONVERSION_WEIGHT = 1;
