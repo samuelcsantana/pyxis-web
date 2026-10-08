@@ -27,24 +27,41 @@ function statusesCell(route: RouteReport): string {
 export function requestsCsvTable(routes: readonly RouteReport[], kind: RequestKind): CsvTable {
   if (kind === FAILED_READS) {
     return {
-      columns: ['method', 'route', 'failed_reads', 'median_duration_ms', 'statuses'],
+      columns: [
+        'method',
+        'route',
+        'failed_reads',
+        'median_duration_ms',
+        'p95_duration_ms',
+        'statuses',
+      ],
       rows: routes.map((route) => [
         route.method,
         route.route,
         route.failed,
         route.medianDurationMs,
+        route.p95DurationMs,
         statusesCell(route),
       ]),
     };
   }
   return {
-    columns: ['method', 'route', 'requests', 'failed', 'median_duration_ms', 'statuses'],
+    columns: [
+      'method',
+      'route',
+      'requests',
+      'failed',
+      'median_duration_ms',
+      'p95_duration_ms',
+      'statuses',
+    ],
     rows: routes.map((route) => [
       route.method,
       route.route,
       route.total,
       route.failed,
       route.medianDurationMs,
+      route.p95DurationMs,
       statusesCell(route),
     ]),
   };
