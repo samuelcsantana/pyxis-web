@@ -72,6 +72,19 @@ export const SingleProject: Story = { args: { admin: ONE_PROJECT } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
+export const BrazilianPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('Sem cookies, sem dados pessoais')).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  },
+};
+
 export const LongValues: Story = {
   args: { admin: LONG_VALUES, project: LONG_PROJECT },
   play: nothingIsCut,
