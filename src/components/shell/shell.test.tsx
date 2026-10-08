@@ -157,6 +157,59 @@ describe('ProjectSwitcher', () => {
     expect(details.open).toBe(false);
   });
 
+  it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
+    const { container } = render(
+      <MobileMenu>
+        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
+      </MobileMenu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    const details = container.querySelector('details');
+    const summary = container.querySelector('summary');
+    if (details === null || summary === null) {
+      throw new Error('no project switcher');
+    }
+    details.open = true;
+    const link = screen.getByRole('link', { name: /Demo Docs/ });
+    link.focus();
+
+    fireEvent.keyDown(link, { key: 'Escape' });
+
+    expect(details.open).toBe(false);
+    expect(summary).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+
+    fireEvent.keyDown(summary, { key: 'Escape' });
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('closes when the focus moves past its last project', () => {
+    const { container } = render(
+      <>
+        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
+        <a href="#overview">Overview</a>
+      </>,
+    );
+    const details = container.querySelector('details');
+    if (details === null) {
+      throw new Error('no details element');
+    }
+    details.open = true;
+
+    fireEvent.blur(screen.getByRole('link', { name: /Demo Docs/ }), {
+      relatedTarget: screen.getByRole('link', { name: 'Overview' }),
+    });
+
+    expect(details.open).toBe(false);
+  });
+
   it('falls back to the first screen from a path without one', () => {
     navigation.pathname = '/p-store';
     render(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);

@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import { type Project, projectInitials } from '@/domain/admin';
 import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface ProjectSwitcherProps {
@@ -29,7 +30,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
   };
 
   return (
-    <details onClick={closeAfterChoice} className="group relative">
+    <DismissableDetails onClick={closeAfterChoice} className="group relative">
       <summary
         className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
@@ -82,6 +83,6 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
           </li>
         ))}
       </ul>
-    </details>
+    </DismissableDetails>
   );
 }

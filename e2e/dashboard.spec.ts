@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { axeViolations, sidewaysOverflow } from './accessibility';
+import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -129,6 +129,55 @@ test('switches project and keeps the period', async ({ page, isMobile }) => {
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
   await expect(page.getByText('How Demo Docs was used in the period')).toBeVisible();
+});
+
+test('closes the project switcher when the focus moves past it, leaving that focus in sight', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await openNavigation(page, isMobile);
+  const switcher = page.locator('details', { hasText: 'Switch project' });
+
+  await switcher.locator('summary').click();
+  await expect(switcher).toHaveAttribute('open');
+  for (let press = 0; press < 3; press += 1) {
+    await page.keyboard.press('Tab');
+  }
+
+  await expect(switcher).not.toHaveAttribute('open');
+  await expect(page.getByRole('link', { name: 'Overview', exact: true })).toBeFocused();
+  expect(await focusedElementIsUncovered(page)).toBe(true);
+});
+
+test('closes the project switcher on Escape and keeps the mobile menu open', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await openNavigation(page, isMobile);
+  const switcher = page.locator('details', { hasText: 'Switch project' });
+
+  await switcher.locator('summary').click();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Escape');
+
+  await expect(switcher).not.toHaveAttribute('open');
+  await expect(switcher.locator('summary')).toBeFocused();
+  if (isMobile) {
+    await expect(page.locator(MENU_BUTTON)).toHaveAttribute('aria-expanded', 'true');
+  }
+});
+
+test('closes the project switcher on a click outside it', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'On a phone the menu covers the page under the switcher.');
+  await page.goto(`/${STORE_ID}/overview`);
+  const switcher = page.locator('details', { hasText: 'Switch project' });
+
+  await switcher.locator('summary').click();
+  await page.getByRole('heading', { level: 1, name: 'Overview' }).click();
+
+  await expect(switcher).not.toHaveAttribute('open');
 });
 
 test('answers not found for a project outside the account', async ({ page }) => {
