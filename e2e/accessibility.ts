@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import axe from 'axe-core';
 
-const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
+const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 
 export async function axeViolations(page: Page): Promise<string[]> {
   await page.addScriptTag({ content: axe.source });
@@ -11,7 +11,7 @@ export async function axeViolations(page: Page): Promise<string[]> {
     return results.violations.map(
       (violation) => `${violation.id}: ${violation.nodes[0]?.html ?? '(no node)'}`,
     );
-  }, WCAG_TAGS);
+  }, AXE_TAGS);
 }
 
 export async function sidewaysOverflow(page: Page): Promise<number> {
