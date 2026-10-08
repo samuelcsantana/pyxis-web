@@ -1,7 +1,9 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { type Source, sourceRows } from '@/domain/acquisition';
+import { activeChannels, channelChartRows, type Source, sourceRows } from '@/domain/acquisition';
+import { valueAxis } from '@/domain/chart-scale';
+import { stackedBars } from '@/domain/stacked-bars';
 import { StatCard } from '@/components/ui/stat-card';
 import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
 import { ChannelChart } from './channel-chart';
@@ -27,6 +29,24 @@ describe('ChannelChart', () => {
     expect(screen.getByRole('img')).toHaveAccessibleName(/^Stacked bar chart of 7 days,/);
     expect(screen.getByText('Organic search')).toBeInTheDocument();
     expect(screen.queryByText('Email')).not.toBeInTheDocument();
+  });
+
+  it('draws a bar per day, a segment per channel, with a card-coloured line between segments', () => {
+    render(<ChannelChart days={REPORT.days} periodLabel="last 7 days" />);
+
+    const figure = screen.getByRole('img');
+    const rows = channelChartRows(REPORT.days);
+    const channels = activeChannels(REPORT.days);
+    const bars = stackedBars(rows, channels, valueAxis(rows.map((row) => row.total)).top);
+    const rects = [...figure.querySelectorAll('rect')];
+    expect(rects).toHaveLength(bars.segments.length);
+    expect(rects[0]).toHaveAttribute('fill', 'var(--color-accent)');
+    expect(new Set(rects.map((rect) => rect.getAttribute('x')))).toHaveProperty('size', 7);
+    expect(figure.querySelector('path[stroke="var(--color-card)"]')).toHaveAttribute(
+      'd',
+      bars.separators,
+    );
+    expect(bars.separators).not.toBe('');
   });
 
   it('switches to a table of every day with its total', async () => {
