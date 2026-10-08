@@ -53,7 +53,7 @@ export function TimelineSearch({
           <option value="visit">One visit, by visit id</option>
         </select>
       </label>
-      <label className="flex min-w-0 grow basis-64 flex-col gap-1.5 text-[13px] font-medium sm:max-w-md">
+      <label className="flex min-w-0 grow basis-32 flex-col gap-1.5 text-[13px] font-medium sm:max-w-md sm:basis-64">
         {kind === 'user' ? 'User id' : 'Visit id'}
         <input
           name={kind}
