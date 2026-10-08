@@ -34,7 +34,7 @@ export function VisitCard({ visit, focusable = false }: VisitCardProps) {
   return (
     <section
       aria-labelledby={headingId}
-      className="flex flex-col rounded-card border border-line bg-card px-5.5 pt-4.5 pb-2 text-ink"
+      className="flex flex-col rounded-card border border-line bg-card px-3.5 pt-3.5 pb-2 text-ink sm:px-5.5 sm:pt-4.5"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-3">
         <h3
