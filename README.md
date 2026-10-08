@@ -372,8 +372,9 @@ src/
 │                   schemas of the API answers sit apart in *.schema.ts, imported by the
 │                   server only
 ├── i18n/           interface languages: Accept-Language negotiation, typed dictionaries with
-│                   CLDR plurals, the number and date formats of each language, the request's
-│                   language and the messages provider
+│                   CLDR plurals, rich() for the elements inside a sentence, the number and
+│                   date formats of each language, the request's language and the messages
+│                   provider
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
 ├── test-utils/     test helpers (rendering inside the messages provider, the English I18n)
