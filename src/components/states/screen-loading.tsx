@@ -87,7 +87,7 @@ function ThemeTogglePlaceholder() {
   return (
     <span
       aria-hidden="true"
-      className="size-11 rounded-input border border-line bg-grid motion-safe:animate-pulse"
+      className="hidden size-11 rounded-input border border-line bg-grid motion-safe:animate-pulse lg:block"
     />
   );
 }

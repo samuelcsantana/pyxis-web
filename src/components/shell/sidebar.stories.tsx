@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
 import { MobileMenu } from './mobile-menu';
@@ -105,7 +106,7 @@ export const SigningOut: Story = {
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
   (Story) => (
     <div className="w-[390px]">
-      <MobileMenu>
+      <MobileMenu barActions={<ThemeToggle surface="nav" />}>
         <Story />
       </MobileMenu>
     </div>

@@ -8,6 +8,7 @@ import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface MobileMenuProps {
   readonly children: ReactNode;
+  readonly barActions?: ReactNode;
 }
 
 const MENU_ID = 'main-navigation';
@@ -18,7 +19,7 @@ function useLocationKey(): string {
   return `${usePathname()}?${useSearchParams().toString()}`;
 }
 
-export function MobileMenu({ children }: MobileMenuProps) {
+export function MobileMenu({ children, barActions }: MobileMenuProps) {
   const location = useLocationKey();
   const [openAt, setOpenAt] = useState<string>();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -48,27 +49,30 @@ export function MobileMenu({ children }: MobileMenuProps) {
           <LogoMark size={24} />
           <span className="text-lg font-bold tracking-tight">Pyxis</span>
         </Link>
-        <button
-          ref={toggleRef}
-          type="button"
-          aria-expanded={open}
-          aria-controls={MENU_ID}
-          onClick={() => {
-            setOpenAt(open ? undefined : location);
-          }}
-          className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
-        >
-          <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-          <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d={open ? CLOSE_ICON : OPEN_ICON}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+        <div className="flex items-center gap-2">
+          {barActions}
+          <button
+            ref={toggleRef}
+            type="button"
+            aria-expanded={open}
+            aria-controls={MENU_ID}
+            onClick={() => {
+              setOpenAt(open ? undefined : location);
+            }}
+            className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
+          >
+            <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
+            <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d={open ? CLOSE_ICON : OPEN_ICON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         id={MENU_ID}

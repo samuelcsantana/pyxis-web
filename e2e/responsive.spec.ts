@@ -46,6 +46,31 @@ for (const size of PHONE_SIZES) {
   });
 }
 
+test.describe('the theme toggle', () => {
+  test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' });
+
+  test('sits in the menu bar on a phone and agrees with the header one on a wider screen', async ({
+    page,
+  }) => {
+    await page.goto(`/${STORE_ID}/overview`);
+    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+    const header = page.getByRole('banner');
+
+    await expect(header.getByRole('button', { name: /^Switch/ })).toBeHidden();
+    await navigation.getByRole('button', { name: 'Switch theme' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(navigation.getByRole('button', { name: 'Switch to light theme' })).toBeVisible();
+
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(navigation.getByRole('button', { name: /^Switch/ })).toBeHidden();
+    await header.getByRole('button', { name: 'Switch to light theme' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(navigation.getByRole('button', { name: 'Switch to dark theme' })).toBeVisible();
+  });
+});
+
 const CHART_PANELS = [
   { heading: 'Overview', path: `/${STORE_ID}/overview`, panel: 'Activity per day' },
   { heading: 'Acquisition', path: `/${STORE_ID}/acquisition`, panel: 'Visits by channel' },
