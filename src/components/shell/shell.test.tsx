@@ -140,6 +140,17 @@ describe('ProjectSwitcher', () => {
     );
   });
 
+  it('marks the current project with a check and the current-item background, not by weight alone', () => {
+    render(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+
+    const current = screen.getByRole('link', { name: /Demo Store/ });
+    const other = screen.getByRole('link', { name: /Demo Docs/ });
+    expect(current.querySelector('svg')).toBeInTheDocument();
+    expect(other.querySelector('svg')).not.toBeInTheDocument();
+    expect(current).toHaveClass('bg-nav-active');
+    expect(other).not.toHaveClass('bg-nav-active');
+  });
+
   it('closes after a project is chosen', () => {
     const { container } = render(
       <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
