@@ -62,8 +62,9 @@ Shipping now:
 - A strict Content Security Policy and hardening headers on every page
 - Storybook with the design tokens page, a page of every control recipe (primary, strong,
   secondary and icon buttons, segmented options, tabs, pills, links, fields) at rest, hovered,
-  pressed, focused, unavailable and busy, and stories for those states; every story is also an
-  automated accessibility test
+  pressed, focused, unavailable and busy, and stories for those states; the open, busy and failed
+  states of the shell (project switcher, Custom period, phone menu, Sign out) and the app's own
+  empty pages under "Pages/States"; every story is also an automated accessibility test
 - Every control answers the pointer and a tap: hover and pressed states of at least 1.3:1 in both
   themes, the pointer cursor on enabled buttons, colour transitions that respect reduced motion
 - Form fields with a 3:1 border and 16px text on phones (so iOS does not zoom on focus); links
