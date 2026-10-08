@@ -9,7 +9,7 @@ export function TimelineSummary({ title, totals }: TimelineSummaryProps) {
   return (
     <section
       aria-labelledby="timeline-summary-heading"
-      className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-line bg-card px-5.5 py-5 text-ink"
+      className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-line bg-card p-3.5 text-ink sm:px-5.5 sm:py-5"
     >
       <h2 id="timeline-summary-heading" className="font-mono text-lg font-semibold">
         {title}
