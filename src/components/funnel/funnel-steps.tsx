@@ -50,6 +50,7 @@ export function FunnelSteps({ rows, mode }: FunnelStepsProps) {
             <span className="col-start-2 flex flex-col text-xs tabular-nums sm:col-start-auto sm:text-right">
               <span className={`font-semibold ${TONE_CLASSES[row.tone]}`}>{row.continued}</span>
               <span className="text-muted">{row.dropped}</span>
+              {row.time === null ? null : <span className="text-muted">{row.time}</span>}
             </span>
           </li>
         ))}

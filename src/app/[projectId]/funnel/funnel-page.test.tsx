@@ -155,6 +155,26 @@ describe('FunnelPage', () => {
     expect(sevenDays.searchParams.get('steps')).toBe(STEPS);
   });
 
+  it('times each step and the whole funnel, and leaves the time out when unmeasured', async () => {
+    const { unmount } = renderWithMessages(await renderFunnel({ range: '30d', steps: STEPS }));
+
+    expect(screen.getByRole('group', { name: 'Median time to finish' })).toHaveTextContent(
+      `from step 1 to step ${String(DEMO_FUNNEL_STEPS.length)}, for those who reached it`,
+    );
+    expect(screen.getAllByText(/^median .+ after the step before$/)).toHaveLength(
+      DEMO_FUNNEL_STEPS.length - 1,
+    );
+    unmount();
+
+    state.funnel = (projectId, range, mode, steps) =>
+      new MockFunnelService()
+        .funnel(projectId, range, mode, steps)
+        .then((report) => ({ ...report, medianSecondsOverall: null }));
+    renderWithMessages(await renderFunnel({ range: '30d', steps: STEPS }));
+
+    expect(screen.queryByRole('group', { name: 'Median time to finish' })).not.toBeInTheDocument();
+  });
+
   it('sends an expired session back to the sign-in page', async () => {
     state.funnel = () => Promise.reject(new UnauthenticatedError());
 

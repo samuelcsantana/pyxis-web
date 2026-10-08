@@ -83,3 +83,18 @@ test('switches between per visit and per person and keeps the steps', async ({ p
   await expect(page.getByRole('list', { name: 'Funnel' }).getByRole('listitem')).toHaveCount(6);
   await expect(page.getByText(/Per person: steps can span visits/)).toBeVisible();
 });
+
+test('times each step after the one before, and the whole funnel', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/funnel?range=30d`);
+  const steps = page.getByRole('list', { name: 'Funnel' }).getByRole('listitem');
+  await expect(steps).toHaveCount(6);
+
+  await expect(steps.first()).not.toContainText('after the step before');
+  for (const step of (await steps.all()).slice(1)) {
+    await expect(step).toContainText(/median .+ after the step before/);
+  }
+  await expect(page.getByRole('group', { name: 'Median time to finish' })).toContainText(
+    'from step 1 to step 6',
+  );
+  expect(await sidewaysOverflow(page)).toBe(0);
+});

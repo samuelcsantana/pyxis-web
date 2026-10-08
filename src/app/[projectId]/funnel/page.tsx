@@ -18,6 +18,7 @@ import {
   type FunnelStep,
   overallConversion,
   serializeSteps,
+  timeToFinish,
 } from '@/domain/funnel';
 import { funnelStepsOf } from '@/domain/funnel.schema';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
@@ -105,6 +106,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         ) : (
           <FunnelReportView
             counted={countedSteps(steps, report)}
+            secondsToFinish={report.medianSecondsOverall}
             mode={mode}
             i18n={i18n}
             editor={
@@ -125,14 +127,16 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
 
 interface FunnelReportViewProps {
   readonly counted: ReturnType<typeof countedSteps>;
+  readonly secondsToFinish: number | null;
   readonly mode: FunnelMode;
   readonly editor: React.ReactNode;
   readonly i18n: I18n;
 }
 
-function FunnelReportView({ counted, mode, editor, i18n }: FunnelReportViewProps) {
+function FunnelReportView({ counted, secondsToFinish, mode, editor, i18n }: FunnelReportViewProps) {
   const overall = overallConversion(counted, mode, i18n);
   const drop = biggestDropOff(counted, i18n);
+  const finish = timeToFinish(secondsToFinish, counted.length, i18n);
   return (
     <>
       {editor}
@@ -149,6 +153,14 @@ function FunnelReportView({ counted, mode, editor, i18n }: FunnelReportViewProps
           value={drop.value}
           note={drop.note}
         />
+        {finish === null ? null : (
+          <StatCard
+            id="time-to-finish"
+            label={i18n.t('funnel.timeToFinish')}
+            value={finish.value}
+            note={finish.note}
+          />
+        )}
       </div>
       <FunnelSteps rows={funnelRows(counted, i18n)} mode={mode} />
     </>
