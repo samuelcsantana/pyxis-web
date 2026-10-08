@@ -22,4 +22,24 @@ describe('DesignTokens', () => {
       within(screen.getByRole('region', { name: 'Radius' })).getAllByRole('listitem'),
     ).toHaveLength(RADIUS_TOKENS.length);
   });
+
+  it('names each type step with its rem size and draws a sample in it', () => {
+    render(<DesignTokens />);
+
+    const type = within(screen.getByRole('region', { name: 'Type' }));
+    const sample = type.getByText('text-caption').closest('li')?.lastElementChild;
+
+    expect(
+      type.getByText('0.8125rem · Tables, secondary text, segmented options'),
+    ).toBeInTheDocument();
+    expect(sample).toHaveTextContent('4,758 visits');
+    expect(sample).toHaveClass('text-caption');
+  });
+
+  it('lists the type scale from the smallest size to the largest, in rem', () => {
+    const sizes = TYPE_SCALE.map((step) => Number.parseFloat(step.size));
+
+    expect(TYPE_SCALE.every((step) => step.size.endsWith('rem'))).toBe(true);
+    expect(sizes).toEqual([...sizes].sort((left, right) => left - right));
+  });
 });
