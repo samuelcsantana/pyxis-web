@@ -1,10 +1,16 @@
-export function NoConversionEvent() {
+import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
+
+export interface NoConversionEventProps {
+  readonly i18n: I18n;
+}
+
+export function NoConversionEvent({ i18n }: NoConversionEventProps) {
   return (
     <p className="text-caption leading-5 text-muted">
-      No conversion event is set for this project, so conversions are not shown. The operator sets
-      one with the API&apos;s{' '}
-      <code className="font-mono text-xs whitespace-nowrap">project:update</code> command and its{' '}
-      <code className="font-mono text-xs whitespace-nowrap">--conversion-event</code> option.
+      {rich(i18n.t('states.noConversionEvent'), {
+        code: (text) => <code className="font-mono text-xs whitespace-nowrap">{text}</code>,
+      })}
     </p>
   );
 }

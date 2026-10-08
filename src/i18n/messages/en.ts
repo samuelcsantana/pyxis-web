@@ -45,6 +45,32 @@ export const en = {
     apply: 'Apply',
     applying: 'Applying…',
   },
+  states: {
+    emptyPeriod: {
+      title: 'Nothing in this period',
+      body: 'No event arrived in this period.',
+      bodyWithLatest: 'No event arrived in this period. The latest one arrived on {date}.',
+      widerPeriod: 'See the last 30 days',
+    },
+    noActivity: {
+      title: 'No events in this period yet',
+      install:
+        'Install the SDK on your site and the first page views show up here within a minute.',
+      guide: "The full setup guide is in the <readme>SDK's README</readme>.",
+    },
+    noConversionEvent:
+      "No conversion event is set for this project, so conversions are not shown. The operator sets one with the API's <code>project:update</code> command and its <code>--conversion-event</code> option.",
+    noProjects: {
+      title: 'No projects yet',
+      body: '<email/> can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your email.',
+    },
+  },
+  demo: {
+    label: 'Demo notice',
+    notice:
+      'Demo data: invented numbers for two imaginary products. No real visitor is shown here.',
+    source: 'Source on GitHub',
+  },
   shell: {
     skipToContent: 'Skip to content',
     privacy: 'No cookies, no personal data',

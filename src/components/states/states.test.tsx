@@ -5,7 +5,9 @@ import { DemoBanner } from './demo-banner';
 import { EmptyPeriod } from './empty-period';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
+import { english } from '@/test-utils/english';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
+import { NoConversionEvent } from './no-conversion-event';
 
 describe('EmptyState', () => {
   it('shows its title and explanation', () => {
@@ -75,7 +77,7 @@ describe('ErrorPanel', () => {
 
 describe('DemoBanner', () => {
   it('says the numbers are invented and links to the source code', () => {
-    render(<DemoBanner />);
+    render(<DemoBanner i18n={english} />);
 
     expect(screen.getByRole('complementary', { name: 'Demo notice' })).toContainElement(
       screen.getByRole('note'),
@@ -90,7 +92,7 @@ describe('DemoBanner', () => {
 
 describe('NoActivityYet', () => {
   it('shows the install snippet for the API the dashboard talks to', () => {
-    render(<NoActivityYet endpoint="https://api.pyxis.example.org" />);
+    render(<NoActivityYet endpoint="https://api.pyxis.example.org" i18n={english} />);
 
     expect(screen.getByText(/endpoint: 'https:\/\/api\.pyxis\.example\.org'/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: "SDK's README" })).toHaveAttribute(
@@ -100,7 +102,7 @@ describe('NoActivityYet', () => {
   });
 
   it('shows a placeholder endpoint in demo mode', () => {
-    render(<NoActivityYet endpoint={undefined} />);
+    render(<NoActivityYet endpoint={undefined} i18n={english} />);
 
     expect(screen.getByText(/npm install pyxis-analytics/).textContent).toBe(
       installSnippet(PLACEHOLDER_ENDPOINT),
@@ -115,6 +117,7 @@ describe('EmptyPeriod', () => {
         view={{ kind: 'first-run' }}
         widerPeriodHref="/p1/overview?range=30d"
         endpoint={undefined}
+        i18n={english}
       />,
     );
 
@@ -128,6 +131,7 @@ describe('EmptyPeriod', () => {
         view={{ kind: 'quiet', latestEvent: 'Sep 19, 2026, 22:30', offersWiderPeriod: true }}
         widerPeriodHref="/p1/overview?range=30d"
         endpoint={undefined}
+        i18n={english}
       />,
     );
 
@@ -152,10 +156,25 @@ describe('EmptyPeriod', () => {
         view={{ kind: 'quiet', latestEvent: null, offersWiderPeriod: false }}
         widerPeriodHref="/p1/overview?range=30d"
         endpoint={undefined}
+        i18n={english}
       />,
     );
 
     expect(screen.getByText('No event arrived in this period.')).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'See the last 30 days' })).not.toBeInTheDocument();
+  });
+});
+
+describe('NoConversionEvent', () => {
+  it('names the command and the option that set a conversion event, as code', () => {
+    const { container } = render(<NoConversionEvent i18n={english} />);
+
+    expect(container).toHaveTextContent(
+      "No conversion event is set for this project, so conversions are not shown. The operator sets one with the API's project:update command and its --conversion-event option.",
+    );
+    expect([...container.querySelectorAll('code')].map((code) => code.textContent)).toEqual([
+      'project:update',
+      '--conversion-event',
+    ]);
   });
 });

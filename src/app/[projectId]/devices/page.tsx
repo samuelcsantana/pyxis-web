@@ -78,7 +78,7 @@ function DevicesReportView({
           withConversionRate={conversionEvent !== null}
         />
       </div>
-      {conversionEvent === null ? <NoConversionEvent /> : null}
+      {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
       <div className={`grid gap-3.5 sm:gap-4 ${showsConversions ? 'xl:grid-cols-2' : ''}`}>
         {showsConversions ? (
           <DeviceConversionList conversions={conversions} conversionEvent={conversionEvent} />
@@ -142,6 +142,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             view={emptyPeriodView(project, period, i18n)}
             widerPeriodHref={screenHref(project.id, 'devices', WIDER_PERIOD_QUERY)}
             endpoint={apiBaseUrl()}
+            i18n={i18n}
           />
         )}
       </MainContent>
