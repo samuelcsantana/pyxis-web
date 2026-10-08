@@ -55,10 +55,10 @@ export interface TopbarFrameProps {
 
 export function TopbarFrame({ title, subtitle, controls, notice }: TopbarFrameProps) {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4 border-b border-line bg-card px-4 py-4.5 text-ink sm:px-8">
-      <div className="flex min-w-0 flex-col gap-1">
+    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:px-8 sm:py-4.5">
+      <div className="flex min-w-0 flex-1 basis-64 flex-col gap-1">
         <h1 className="text-[22px] leading-7 font-semibold tracking-tight">{title}</h1>
-        <p className="text-[13px] text-muted">{subtitle}</p>
+        <p className="hidden text-[13px] text-muted sm:block">{subtitle}</p>
         {notice}
       </div>
       <div className="flex flex-wrap items-center gap-3">{controls}</div>

@@ -46,6 +46,35 @@ for (const size of PHONE_SIZES) {
   });
 }
 
+const HEADER_BUDGETS = [
+  { name: '320×640 portrait', width: 320, height: 640, mainTopPx: 330 },
+  { name: '390×844 portrait', width: 390, height: 844, mainTopPx: 260 },
+  { name: '844×390 landscape', width: 844, height: 390, mainTopPx: 200 },
+] as const;
+
+async function mainTop(page: Page): Promise<number> {
+  const main = page.locator('main#content:not([aria-busy])');
+  await expect(main).toBeVisible();
+  return main.evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
+}
+
+for (const budget of HEADER_BUDGETS) {
+  test.describe(`at ${budget.name}, the page header`, () => {
+    test.use({ viewport: { width: budget.width, height: budget.height } });
+
+    for (const route of DEMO_ROUTES.filter(({ path }) => path !== '/sign-in')) {
+      test(`of ${route.heading} leaves the content within ${String(budget.mainTopPx)}px of the top`, async ({
+        page,
+      }) => {
+        await page.goto(route.path);
+        await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeVisible();
+
+        expect(await mainTop(page)).toBeLessThanOrEqual(budget.mainTopPx);
+      });
+    }
+  });
+}
+
 test.describe('at 320×640, below the sm breakpoint, the period controls', () => {
   test.use({ viewport: { width: 320, height: 640 } });
 

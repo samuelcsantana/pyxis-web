@@ -5,7 +5,7 @@ export function DemoBanner() {
     <aside aria-label="Demo notice">
       <p
         role="note"
-        className="bg-accent px-4 py-2 text-center text-sm font-medium text-accent-ink"
+        className="bg-accent px-4 py-1.5 text-center text-xs font-medium text-accent-ink sm:py-2 sm:text-sm"
       >
         Demo data: invented numbers for two imaginary products. No real visitor is shown here.{' '}
         <a
