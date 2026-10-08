@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
@@ -83,6 +83,31 @@ const insideTheMobileMenu: NonNullable<Story['decorators']> = [
 export const OnAPhone: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   decorators: insideTheMobileMenu,
+};
+
+export const MenuOpenOnAPhone: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  decorators: insideTheMobileMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    await expect(canvas.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+    await expect(canvas.getByRole('link', { name: 'Funnel' })).toBeVisible();
+  },
+};
+
+export const MenuClosedWithEscape: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  decorators: insideTheMobileMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.getByRole('button', { name: 'Open menu' })).toHaveFocus();
+  },
 };
 
 export const MenuButtonPressed: Story = {
