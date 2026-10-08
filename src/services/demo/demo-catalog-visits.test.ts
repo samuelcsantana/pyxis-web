@@ -63,8 +63,8 @@ describe('demoCatalogVisits', () => {
   it('opens alone every page that no event visit reaches', () => {
     const signup = DEMO_STORE.events.filter((event) => event.name === 'signup_completed');
     const pages = [
-      { path: '/sign-up', perDay: 1, visitsPerView: 1 },
-      { path: '/pricing', perDay: 1, visitsPerView: 1 },
+      { path: '/sign-up', perDay: 1, visitsPerView: 1, stage: 3 },
+      { path: '/pricing', perDay: 1, visitsPerView: 1, stage: 2 },
     ];
 
     const visits = demoCatalogVisits(catalog({ events: signup, pages }), SEED);
