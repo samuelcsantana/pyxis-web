@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { use, useEffect, useState } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import type { KpiId } from '@/domain/overview';
 import { MetricChartArea, MetricSelection, MetricToggle } from './metric-selection';
 
@@ -102,6 +104,62 @@ describe('MetricSelection', () => {
     await userEvent.click(toggle('Visits'));
 
     expect(replace).toHaveBeenCalledWith('/p-store/overview', { scroll: false });
+  });
+
+  it('marks the pressed figure and keeps the screen busy until its chart arrives', async () => {
+    const arrival = Promise.withResolvers<undefined>();
+    const destination: { open: (url: string) => void } = { open: () => undefined };
+    function Destination() {
+      const [opened, setOpened] = useState<string | null>(null);
+      useEffect(() => {
+        destination.open = setOpened;
+      }, []);
+      if (opened !== null) {
+        use(arrival.promise);
+      }
+      return null;
+    }
+    replace.mockImplementationOnce((url: string) => {
+      destination.open(url);
+    });
+    render(
+      <NavigationPendingProvider>
+        <NavigationRegion className="flex">
+          <Destination />
+          <MetricSelection available={AVAILABLE}>
+            <p id="hint">Plots this figure per day on the chart below.</p>
+            <MetricToggle metric="visits" label="Visits" describedBy="hint" />
+            <MetricToggle metric="write-errors" label="Write error rate" describedBy="hint" />
+          </MetricSelection>
+        </NavigationRegion>
+      </NavigationPendingProvider>,
+    );
+    const screenRegion = screen.getByText(
+      'Plots this figure per day on the chart below.',
+    ).parentElement;
+
+    await act(async () => {
+      await userEvent.click(toggle('Visits'));
+    });
+
+    expect(toggle('Visits').querySelector('[aria-hidden="true"]')).toHaveAttribute(
+      'data-pending',
+      '',
+    );
+    expect(toggle('Write error rate').querySelector('[aria-hidden="true"]')).not.toHaveAttribute(
+      'data-pending',
+    );
+    expect(screenRegion).toHaveAttribute('aria-busy', 'true');
+
+    await act(async () => {
+      arrival.resolve(undefined);
+      await arrival.promise;
+    });
+
+    expect(screenRegion).not.toHaveAttribute('aria-busy');
+    expect(toggle('Visits').querySelector('[aria-hidden="true"]')).not.toHaveAttribute(
+      'data-pending',
+    );
   });
 
   it('refuses to render a toggle outside a selection', () => {
