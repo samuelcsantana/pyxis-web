@@ -2,7 +2,7 @@ import { FailureDaysChart } from '@/components/requests/failure-days-chart';
 import { RequestFilters } from '@/components/requests/request-filters';
 import { RequestsTable } from '@/components/requests/requests-table';
 import { MainContent } from '@/components/shell/main-content';
-import { screenHref } from '@/components/shell/screens';
+import { screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyState } from '@/components/states/empty-state';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
@@ -24,6 +24,7 @@ import {
   type RequestsSearch,
   requestFigures,
   requestKindOf,
+  requestsTableText,
   routeRows,
   screenFilterOf,
   visibleRoutes,
@@ -52,18 +53,19 @@ interface RequestFilter {
   readonly screen: string | null;
 }
 
-const KIND_TABS: readonly { readonly kind: RequestKind; readonly label: string }[] = [
-  { kind: 'writes', label: 'Writes' },
-  { kind: FAILED_READS, label: 'Failed reads' },
-];
-
-const SOURCE_NOTE = "Only the route template is kept, never the URL's values or the body.";
-const COUNTED_TOGETHER = 'Visits and the Timeline count failed reads and writes together.';
+const KINDS: readonly RequestKind[] = ['writes', FAILED_READS];
+const SENTENCE_JOINER = ' ';
 
 function kindNote(kind: RequestKind, i18n: I18n): string {
-  return kind === 'writes'
-    ? `${i18n.t('glossary.write')} ${i18n.t('glossary.failure')} Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`
-    : `A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. ${COUNTED_TOGETHER} ${SOURCE_NOTE}`;
+  const sentences =
+    kind === FAILED_READS
+      ? [i18n.t('requests.page.footnote.failedRead')]
+      : [
+          i18n.t('glossary.write'),
+          i18n.t('glossary.failure'),
+          i18n.t('requests.page.footnote.ownTab'),
+        ];
+  return [...sentences, i18n.t('requests.page.footnote.source')].join(SENTENCE_JOINER);
 }
 
 function filterParameters(filter: RequestFilter): Readonly<Record<string, string>> {
@@ -82,24 +84,18 @@ function filterQuery(period: Period, filter: RequestFilter): string {
   return query.toString();
 }
 
-function subtitle(kind: RequestKind, projectName: string): string {
-  return kind === FAILED_READS
-    ? `The reads ${projectName} made that failed`
-    : `Every write ${projectName} made, and how it ended`;
-}
-
-function emptyMessage(filter: RequestFilter): string {
+function emptyMessage(filter: RequestFilter, i18n: I18n): string {
   if (filter.kind === FAILED_READS) {
     return filter.screen === null
-      ? 'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.'
-      : `No failed reads from ${filter.screen} in this period.`;
+      ? i18n.t('requests.page.empty.reads')
+      : i18n.t('requests.page.empty.readsFromScreen', { screen: filter.screen });
   }
   if (filter.screen !== null) {
-    return `No writes from ${filter.screen} in this period.`;
+    return i18n.t('requests.page.empty.writesFromScreen', { screen: filter.screen });
   }
   return filter.failingOnly
-    ? 'No route failed in this period.'
-    : 'No writes in this period. Calls sent with trackRequest() show up here.';
+    ? i18n.t('requests.page.empty.failing')
+    : i18n.t('requests.page.empty.writes');
 }
 
 export default async function RequestsPage({ params, searchParams }: RequestsPageProps) {
@@ -122,8 +118,8 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
   return (
     <>
       <Topbar
-        title="Requests"
-        subtitle={subtitle(kind, project.name)}
+        title={i18n.t(screenLabelKey('requests'))}
+        subtitle={i18n.t(`requests.page.subtitle.${kind}`, { project: project.name })}
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
@@ -133,20 +129,17 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <LinkTabs
-          label="Request kind"
+          label={i18n.t('requests.page.kinds.label')}
           current={kind}
-          tabs={KIND_TABS.map((tab) => ({
-            key: tab.kind,
-            label: tab.label,
-            href: hrefFor({ kind: tab.kind, failingOnly: false, screen: filter.screen }),
+          tabs={KINDS.map((tabKind) => ({
+            key: tabKind,
+            label: i18n.t(`requests.page.kinds.${tabKind}`),
+            href: hrefFor({ kind: tabKind, failingOnly: false, screen: filter.screen }),
           }))}
         />
         {report === null ? (
-          <EmptyState title="Failed reads need a newer Pyxis API">
-            <p>
-              This API reports writes only. Update pyxis-api to list the GET calls that failed; the
-              writes are on the Writes tab.
-            </p>
+          <EmptyState title={i18n.t('requests.page.readsNeedApi.title')}>
+            <p>{i18n.t('requests.page.readsNeedApi.body')}</p>
           </EmptyState>
         ) : (
           <>
@@ -178,6 +171,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               failingOnly={filter.failingOnly}
               screen={filter.screen}
               clearScreenHref={hrefFor({ ...filter, screen: null })}
+              i18n={i18n}
             />
             <RequestsTable
               key={`${kind}|${String(filter.failingOnly)}|${filter.screen ?? ''}`}
@@ -192,7 +186,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               query={filterQuery(period, { ...filter, screen: null })}
               timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
               visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
-              emptyMessage={emptyMessage(filter)}
+              emptyMessage={emptyMessage(filter, i18n)}
               loadRouteDays={loadRouteDays.bind(null, project.id, {
                 from: period.from,
                 to: period.to,
@@ -200,6 +194,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 screen: filter.screen,
               })}
               routeDaysText={routeDaysText(kind, i18n)}
+              text={requestsTableText(i18n)}
             />
             <CsvDownloads
               downloads={[

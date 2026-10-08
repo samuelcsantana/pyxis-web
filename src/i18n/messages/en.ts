@@ -414,6 +414,72 @@ export const en = {
         p95: 'p95',
       },
     },
+    page: {
+      subtitle: {
+        writes: 'Every write {project} made, and how it ended',
+        reads: 'The reads {project} made that failed',
+      },
+      kinds: {
+        label: 'Request kind',
+        writes: 'Writes',
+        reads: 'Failed reads',
+      },
+      readsNeedApi: {
+        title: 'Failed reads need a newer Pyxis API',
+        body: 'This API reports writes only. Update pyxis-api to list the GET calls that failed; the writes are on the Writes tab.',
+      },
+      empty: {
+        reads:
+          'No read failed in this period. GET calls sent with trackRequest() show up here when they fail.',
+        readsFromScreen: 'No failed reads from {screen} in this period.',
+        writesFromScreen: 'No writes from {screen} in this period.',
+        failing: 'No route failed in this period.',
+        writes: 'No writes in this period. Calls sent with trackRequest() show up here.',
+      },
+      footnote: {
+        ownTab:
+          'Failed reads have their own tab; Visits and the Timeline count failed reads and writes together.',
+        failedRead:
+          'A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. Visits and the Timeline count failed reads and writes together.',
+        source: "Only the route template is kept, never the URL's values or the body.",
+      },
+    },
+    filters: {
+      label: 'Show',
+      all: 'All routes',
+      failingOnly: 'Failing only',
+      fromScreen: 'From screen <screen/>',
+      clearScreen: 'Clear the screen filter',
+      clear: 'Clear',
+      hint: 'Select a route to see its status codes, the screens where it failed and its latest failures.',
+    },
+    table: {
+      heading: 'Routes',
+      columns: {
+        route: 'Route',
+        total: 'Total',
+        failed: 'Failed',
+        outcomes: 'Success · errors',
+        statuses: 'Status codes',
+        median: 'Median',
+        p95: 'p95',
+      },
+      showDetails: '{route}, show details',
+      successShare: '{share} ok',
+      errorShare: '{share} errors',
+    },
+    details: {
+      close: 'Close',
+      statuses: 'Status codes',
+      whereItFailed: 'Where it failed',
+      screenFailed: '{failed} failed',
+      onlyThisScreen: ': show only the requests made from this screen',
+      latestFailures: 'Latest failures',
+      noFailures: 'No failures in this period.',
+      failedVisits: 'See every visit with a failed {method} {route}',
+      noErrorCode: 'No error code',
+      openVisit: 'Open visit {visit}',
+    },
   },
   properties: {
     otherValues: 'Other values',

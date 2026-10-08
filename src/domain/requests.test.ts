@@ -8,6 +8,7 @@ import {
   formatDuration,
   requestFigures,
   requestKindOf,
+  requestsTableText,
   type RequestsWire,
   type RouteReport,
   routeRows,
@@ -263,8 +264,10 @@ describe('routeRows', () => {
       method: 'POST',
       route: '/orders',
       total: '1,284',
-      successShare: '98.1%',
-      errorShare: '1.9%',
+      detailsLabel: 'POST /orders, show details',
+      successNote: '98.1% ok',
+      errorNote: '1.9% errors',
+      failedVisitsLabel: 'See every visit with a failed POST /orders',
       successWidth: '98.1%',
       hasFailures: true,
       statuses: [
@@ -284,13 +287,13 @@ describe('routeRows', () => {
           status: '409',
           tone: 'client',
           errorCode: 'order_number_in_use',
-          visit: '3c07a1b2',
+          openVisit: 'Open visit 3c07a1b2',
           sessionId: '3c07a1b2-0000-4000-8000-000000000001',
         },
       ],
     });
     expect(me?.hasFailures).toBe(false);
-    expect(me?.errorShare).toBe('0.0%');
+    expect(me?.errorNote).toBe('0.0% errors');
     expect(me?.p95).toBeNull();
   });
 
@@ -308,5 +311,31 @@ describe('routeRows', () => {
   it('keeps every route, or only the failing ones', () => {
     expect(visibleRoutes(ROUTES, false)).toHaveLength(2);
     expect(visibleRoutes(ROUTES, true)).toEqual([ORDERS]);
+  });
+});
+
+describe('requestsTableText', () => {
+  it('names the columns of the routes table and the sections of a route', () => {
+    const text = requestsTableText(english);
+
+    expect(text.heading).toBe('Routes');
+    expect(text.columns).toEqual({
+      route: 'Route',
+      total: 'Total',
+      failed: 'Failed',
+      outcomes: 'Success · errors',
+      statuses: 'Status codes',
+      median: 'Median',
+      p95: 'p95',
+    });
+    expect(text.details).toEqual({
+      close: 'Close',
+      statuses: 'Status codes',
+      whereItFailed: 'Where it failed',
+      onlyThisScreen: ': show only the requests made from this screen',
+      latestFailures: 'Latest failures',
+      noFailures: 'No failures in this period.',
+      noErrorCode: 'No error code',
+    });
   });
 });

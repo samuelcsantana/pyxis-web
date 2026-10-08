@@ -213,7 +213,7 @@ export interface FailureRow {
   readonly status: string;
   readonly tone: StatusTone;
   readonly errorCode: string | null;
-  readonly visit: string;
+  readonly openVisit: string;
   readonly sessionId: string;
 }
 
@@ -222,8 +222,10 @@ export interface RouteRow {
   readonly method: string;
   readonly route: string;
   readonly total: string;
-  readonly successShare: string;
-  readonly errorShare: string;
+  readonly detailsLabel: string;
+  readonly successNote: string;
+  readonly errorNote: string;
+  readonly failedVisitsLabel: string;
   readonly successWidth: string;
   readonly hasFailures: boolean;
   readonly statuses: readonly StatusChip[];
@@ -268,8 +270,17 @@ export function routeRows(
       method: route.method,
       route: route.route,
       total: formatCount(route.total, i18n),
-      successShare: formatPercent(rate(route.total - route.failed, route.total), i18n),
-      errorShare,
+      detailsLabel: i18n.t('requests.table.showDetails', {
+        route: `${route.method} ${route.route}`,
+      }),
+      successNote: i18n.t('requests.table.successShare', {
+        share: formatPercent(rate(route.total - route.failed, route.total), i18n),
+      }),
+      errorNote: i18n.t('requests.table.errorShare', { share: errorShare }),
+      failedVisitsLabel: i18n.t('requests.details.failedVisits', {
+        method: route.method,
+        route: route.route,
+      }),
       successWidth: barWidth(route.total - route.failed, route.total),
       hasFailures: route.failed > 0,
       statuses: route.statuses.map((entry) => ({
@@ -281,7 +292,9 @@ export function routeRows(
       summary: routeSummary(route, kind, { errorShare, median }, i18n),
       screens: route.screens.map((screen) => ({
         path: screen.path,
-        failed: `${formatCount(screen.failed, i18n)} failed`,
+        failed: i18n.t('requests.details.screenFailed', {
+          failed: formatCount(screen.failed, i18n),
+        }),
       })),
       failures: route.recentFailures.map((failure, index) => ({
         key: `${failure.occurredAt}-${String(index)}`,
@@ -289,11 +302,59 @@ export function routeRows(
         status: statusLabel(failure.status, i18n),
         tone: statusTone(failure.status),
         errorCode: failure.errorCode,
-        visit: failure.sessionId.slice(0, VISIT_ID_LENGTH),
+        openVisit: i18n.t('requests.details.openVisit', {
+          visit: failure.sessionId.slice(0, VISIT_ID_LENGTH),
+        }),
         sessionId: failure.sessionId,
       })),
     };
   });
+}
+
+export interface RequestsTableText {
+  readonly heading: string;
+  readonly columns: {
+    readonly route: string;
+    readonly total: string;
+    readonly failed: string;
+    readonly outcomes: string;
+    readonly statuses: string;
+    readonly median: string;
+    readonly p95: string;
+  };
+  readonly details: {
+    readonly close: string;
+    readonly statuses: string;
+    readonly whereItFailed: string;
+    readonly onlyThisScreen: string;
+    readonly latestFailures: string;
+    readonly noFailures: string;
+    readonly noErrorCode: string;
+  };
+}
+
+export function requestsTableText(i18n: I18n): RequestsTableText {
+  return {
+    heading: i18n.t('requests.table.heading'),
+    columns: {
+      route: i18n.t('requests.table.columns.route'),
+      total: i18n.t('requests.table.columns.total'),
+      failed: i18n.t('requests.table.columns.failed'),
+      outcomes: i18n.t('requests.table.columns.outcomes'),
+      statuses: i18n.t('requests.table.columns.statuses'),
+      median: i18n.t('requests.table.columns.median'),
+      p95: i18n.t('requests.table.columns.p95'),
+    },
+    details: {
+      close: i18n.t('requests.details.close'),
+      statuses: i18n.t('requests.details.statuses'),
+      whereItFailed: i18n.t('requests.details.whereItFailed'),
+      onlyThisScreen: i18n.t('requests.details.onlyThisScreen'),
+      latestFailures: i18n.t('requests.details.latestFailures'),
+      noFailures: i18n.t('requests.details.noFailures'),
+      noErrorCode: i18n.t('requests.details.noErrorCode'),
+    },
+  };
 }
 
 export function visibleRoutes(

@@ -10,7 +10,12 @@ import {
   useState,
 } from 'react';
 import { NO_VALUE } from '@/domain/metrics';
-import { FAILED_READS, type RequestKind, type RouteRow } from '@/domain/requests';
+import {
+  FAILED_READS,
+  type RequestKind,
+  type RequestsTableText,
+  type RouteRow,
+} from '@/domain/requests';
 import type { RouteDaysText } from '@/domain/route-days';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
@@ -40,6 +45,7 @@ export interface RequestsTableProps {
   readonly emptyMessage: string;
   readonly loadRouteDays: LoadRouteDays;
   readonly routeDaysText: RouteDaysText;
+  readonly text: RequestsTableText;
 }
 
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums';
@@ -65,6 +71,7 @@ export function RequestsTable({
   emptyMessage,
   loadRouteDays,
   routeDaysText,
+  text,
 }: RequestsTableProps) {
   const dialogRef = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
   const openers = useRef(new Map<string, HTMLButtonElement>());
@@ -141,7 +148,7 @@ export function RequestsTable({
   return (
     <section aria-labelledby="routes-heading" className={PANEL}>
       <h2 id="routes-heading" className={PANEL_TITLE}>
-        Routes
+        {text.heading}
       </h2>
       {rows.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted">{emptyMessage}</p>
@@ -154,24 +161,24 @@ export function RequestsTable({
             <thead>
               <tr>
                 <th scope="col" className={`${HEADER_CELL} pl-0 text-left`}>
-                  Route
+                  {text.columns.route}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
-                  {failuresOnly ? 'Failed' : 'Total'}
+                  {failuresOnly ? text.columns.failed : text.columns.total}
                 </th>
                 {failuresOnly ? null : (
                   <th scope="col" className={`${HEADER_CELL} text-left sm:w-48`}>
-                    Success · errors
+                    {text.columns.outcomes}
                   </th>
                 )}
                 <th scope="col" className={`${HEADER_CELL} hidden text-left lg:table-cell`}>
-                  Status codes
+                  {text.columns.statuses}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
-                  Median
+                  {text.columns.median}
                 </th>
                 <th scope="col" className={`${HEADER_CELL} hidden pr-0 text-right sm:table-cell`}>
-                  p95
+                  {text.columns.p95}
                 </th>
               </tr>
             </thead>
@@ -182,7 +189,7 @@ export function RequestsTable({
                     <button
                       ref={rememberOpener(row.key)}
                       type="button"
-                      aria-label={`${row.key}, show details`}
+                      aria-label={row.detailsLabel}
                       onClick={() => {
                         open(row.key);
                       }}
@@ -205,12 +212,12 @@ export function RequestsTable({
                           <span className="block bg-ok" style={{ width: row.successWidth }} />
                         </span>
                         <span className="text-xs">
-                          <span className="font-semibold text-ok">{row.successShare} ok</span>
+                          <span className="font-semibold text-ok">{row.successNote}</span>
                           <span className="text-muted"> · </span>
                           <span
                             className={row.hasFailures ? 'font-semibold text-bad' : 'text-muted'}
                           >
-                            {row.errorShare} errors
+                            {row.errorNote}
                           </span>
                         </span>
                       </span>
@@ -261,6 +268,7 @@ export function RequestsTable({
                 }}
               />
             }
+            text={text.details}
             onClose={() => {
               dialogRef.current.close();
             }}
