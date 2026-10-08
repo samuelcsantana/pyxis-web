@@ -80,7 +80,11 @@ Shipping now:
   account email, project names and time zones wrap instead of being cut. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
   focus moves past them and on a click outside, so they never cover the control that has the
-  focus; inside the phone menu, the first Escape closes the switcher and the second the menu
+  focus; inside the phone menu, the first Escape closes the switcher and the second the menu.
+  On phones the header stays compact: the theme toggle sits in the menu bar (every toggle on the
+  page follows the same theme), the period presets and Custom are 44px targets on one row, and
+  the content starts within 260px of the top of a 390×844 screen (budgets checked in
+  `e2e/responsive.spec.ts`)
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
   the Conversions card names the conversion event it counts. Page views and named events per day
