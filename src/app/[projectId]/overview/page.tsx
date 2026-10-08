@@ -40,7 +40,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 
-export const generateMetadata = screenMetadata('Overview');
+export const generateMetadata = screenMetadata('overview');
 
 function footnote(i18n: I18n): string {
   return [

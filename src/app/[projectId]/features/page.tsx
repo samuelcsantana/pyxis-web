@@ -24,7 +24,7 @@ import { chosenTheme } from '@/lib/theme-cookie';
 import { createFeaturesService } from '@/services/features/features-service.factory';
 import { loadPropertyBreakdown } from './actions';
 
-export const generateMetadata = screenMetadata('Features');
+export const generateMetadata = screenMetadata('features');
 
 export interface FeaturesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

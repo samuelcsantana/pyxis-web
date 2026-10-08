@@ -31,7 +31,7 @@ import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_FUNNEL_STEPS, demoExampleFunnel } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
 
-export const generateMetadata = screenMetadata('Funnel');
+export const generateMetadata = screenMetadata('funnel');
 
 export interface FunnelPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

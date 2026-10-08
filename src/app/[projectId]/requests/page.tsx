@@ -37,7 +37,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { readRequestsReport } from '@/services/requests/requests-report';
 
-export const generateMetadata = screenMetadata('Requests');
+export const generateMetadata = screenMetadata('requests');
 
 export interface RequestsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;

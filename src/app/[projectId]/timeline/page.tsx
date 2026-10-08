@@ -32,7 +32,7 @@ import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
 import { loadOlderVisits } from './actions';
 
-export const generateMetadata = screenMetadata('Timeline');
+export const generateMetadata = screenMetadata('timeline');
 
 export interface TimelinePageProps {
   readonly params: Promise<{ readonly projectId: string }>;

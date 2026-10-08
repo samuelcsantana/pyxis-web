@@ -9,7 +9,8 @@ import {
   PENDING_HOST,
 } from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
-import { periodParameters, SCREENS, screenHref, screenOf } from './screens';
+import { useT } from '@/i18n/messages-provider';
+import { periodParameters, SCREENS, screenHref, screenLabelKey, screenOf } from './screens';
 
 export interface SidebarNavProps {
   readonly projectId: string;
@@ -37,6 +38,7 @@ function ScreenIcon({ path, active }: { readonly path: string; readonly active: 
 }
 
 export function SidebarNav({ projectId }: SidebarNavProps) {
+  const t = useT();
   const pathname = usePathname();
   const query = periodParameters(useSearchParams());
   const current = screenOf(pathname);
@@ -57,7 +59,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
                 className={`flex min-h-11 items-center gap-3 rounded-input px-3 text-sm ${PENDING_HOST} ${NAV_CONTROL} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
               >
                 <ScreenIcon path={screen.icon} active={active} />
-                <span>{screen.label}</span>
+                <span>{t(screenLabelKey(screen.slug))}</span>
                 <PendingMark />
               </Link>
             </li>

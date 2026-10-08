@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { english } from '@/test-utils/english';
 import { ScreenLoading } from './screen-loading';
 
 const meta = {
   title: 'States/Screen loading',
   component: ScreenLoading,
   parameters: { layout: 'fullscreen' },
-  args: { screen: 'overview' },
+  args: { screen: 'overview', i18n: english },
 } satisfies Meta<typeof ScreenLoading>;
 
 export default meta;

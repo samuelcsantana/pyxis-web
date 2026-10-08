@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { presetPeriod } from '@/domain/period';
@@ -15,6 +15,7 @@ import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID, SkipLink } from './skip-link';
 import { Topbar } from './topbar';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const navigation = vi.hoisted(() => ({
   pathname: '/p-store/overview',
@@ -95,7 +96,7 @@ describe('screens helpers', () => {
 
 describe('SidebarNav', () => {
   it('links each screen with the period and marks the current one', () => {
-    render(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav projectId="p-store" />);
 
     const overview = screen.getByRole('link', { name: 'Overview' });
 
@@ -109,7 +110,7 @@ describe('SidebarNav', () => {
   });
 
   it('links every screen', () => {
-    render(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav projectId="p-store" />);
 
     expect(screen.getAllByRole('link')).toHaveLength(8);
     expect(screen.queryByText('Soon')).not.toBeInTheDocument();
@@ -117,7 +118,7 @@ describe('SidebarNav', () => {
 
   it('marks nothing current on another screen', () => {
     navigation.pathname = '/p-store/settings';
-    render(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav projectId="p-store" />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
@@ -126,7 +127,7 @@ describe('SidebarNav', () => {
 
 describe('ProjectSwitcher', () => {
   it('names the current project and links every project on the same screen and period', () => {
-    render(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 
     expect(document.querySelector('summary')).toHaveTextContent(
       /^Switch project\. Current project: .*Demo Store/,
@@ -142,7 +143,7 @@ describe('ProjectSwitcher', () => {
   });
 
   it('marks the current project with a check and the current-item background, not by weight alone', () => {
-    render(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 
     const current = screen.getByRole('link', { name: /Demo Store/ });
     const other = screen.getByRole('link', { name: /Demo Docs/ });
@@ -153,7 +154,7 @@ describe('ProjectSwitcher', () => {
   });
 
   it('closes after a project is chosen', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
     );
     const details = container.querySelector('details');
@@ -170,7 +171,7 @@ describe('ProjectSwitcher', () => {
   });
 
   it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <MobileMenu>
         <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
       </MobileMenu>,
@@ -203,7 +204,7 @@ describe('ProjectSwitcher', () => {
   });
 
   it('closes when the focus moves past its last project', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <>
         <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
         <a href="#overview">Overview</a>
@@ -224,7 +225,7 @@ describe('ProjectSwitcher', () => {
 
   it('falls back to the first screen from a path without one', () => {
     navigation.pathname = '/p-store';
-    render(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: /Demo Docs/ })).toHaveAttribute(
@@ -252,7 +253,7 @@ describe('SignOutButton', () => {
   }
 
   it('signs out and goes to the sign-in page', async () => {
-    render(<SignOutButton authService={new MockAuthService()} />);
+    renderWithMessages(<SignOutButton authService={new MockAuthService()} />);
 
     expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).toBeNull();
 
@@ -270,7 +271,7 @@ describe('SignOutButton', () => {
       verifyCode: () => Promise.resolve(),
       signOut: () => Promise.reject(new TypeError('Failed to fetch')),
     };
-    render(<SignOutButton authService={failing} variant="page" />);
+    renderWithMessages(<SignOutButton authService={failing} variant="page" />);
 
     expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
@@ -282,7 +283,7 @@ describe('SignOutButton', () => {
 
   it('builds its own service when none is given', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-    render(<SignOutButton />);
+    renderWithMessages(<SignOutButton />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     await settle(SIGN_OUT_MIN_BUSY_MS);
@@ -291,7 +292,7 @@ describe('SignOutButton', () => {
   });
 
   it('does not navigate once it is gone', async () => {
-    const { unmount } = render(<SignOutButton authService={new MockAuthService()} />);
+    const { unmount } = renderWithMessages(<SignOutButton authService={new MockAuthService()} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     unmount();
@@ -303,7 +304,7 @@ describe('SignOutButton', () => {
 
 describe('Sidebar', () => {
   it('holds the project switcher, the screens, the privacy note and the account', () => {
-    render(<Sidebar admin={ADMIN} project={store()} />);
+    renderWithMessages(<Sidebar admin={ADMIN} project={store()} />);
 
     expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
     expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
@@ -312,7 +313,7 @@ describe('Sidebar', () => {
   });
 
   it('becomes the main navigation inside the menu, with the menu bar', () => {
-    render(
+    renderWithMessages(
       <MobileMenu>
         <Sidebar admin={ADMIN} project={store()} />
       </MobileMenu>,
@@ -329,7 +330,7 @@ describe('Sidebar', () => {
 
 describe('MobileMenu', () => {
   it('opens and closes the navigation, and closes after a link is followed', () => {
-    render(
+    renderWithMessages(
       <MobileMenu>
         <a href="#overview">Overview</a>
         <span>Not a link</span>
@@ -354,7 +355,7 @@ describe('MobileMenu', () => {
   });
 
   it('shows the actions it is given in its bar, beside the menu button, while closed', () => {
-    render(
+    renderWithMessages(
       <MobileMenu barActions={<button type="button">Switch theme</button>}>
         <span>menu</span>
       </MobileMenu>,
@@ -367,7 +368,7 @@ describe('MobileMenu', () => {
   });
 
   it('closes with its own button', () => {
-    render(
+    renderWithMessages(
       <MobileMenu>
         <span>menu</span>
       </MobileMenu>,
@@ -383,7 +384,7 @@ describe('MobileMenu', () => {
   });
 
   function renderOpenMenu() {
-    const view = render(
+    const view = renderWithMessages(
       <MobileMenu>
         <a href="#overview">Overview</a>
       </MobileMenu>,
@@ -416,7 +417,7 @@ describe('MobileMenu', () => {
   });
 
   it('leaves the focus alone on Escape while closed', () => {
-    render(
+    renderWithMessages(
       <MobileMenu>
         <a href="#overview">Overview</a>
       </MobileMenu>,
@@ -479,7 +480,7 @@ describe('MobileMenu', () => {
 
 describe('SkipLink and MainContent', () => {
   it('link to the content, which takes the focus and keeps its own classes', () => {
-    render(
+    renderWithMessages(
       <>
         <SkipLink />
         <MainContent className="flex gap-4" aria-busy="true">
@@ -506,7 +507,7 @@ describe('PeriodSelector', () => {
   const today = '2026-10-05';
 
   it('links each preset and marks the current one', () => {
-    render(
+    renderWithMessages(
       <PeriodSelector basePath="/p1/overview" period={presetPeriod('7d', today)} today={today} />,
     );
 
@@ -521,7 +522,7 @@ describe('PeriodSelector', () => {
   });
 
   it('offers a plain form for a custom period, closed until asked for', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
@@ -542,7 +543,7 @@ describe('PeriodSelector', () => {
   });
 
   it('keeps "To" from going before "From" as the start changes', () => {
-    render(
+    renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
@@ -559,7 +560,7 @@ describe('PeriodSelector', () => {
   });
 
   it('opens the custom form with a range it could not use, marked as not used', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
         period={{
@@ -584,7 +585,7 @@ describe('PeriodSelector', () => {
   });
 
   it('closes the custom form on Escape, with the focus back on "Custom"', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
         period={{
@@ -606,7 +607,7 @@ describe('PeriodSelector', () => {
   });
 
   it('closes the custom form when the focus moves to a preset', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
         period={{
@@ -627,7 +628,7 @@ describe('PeriodSelector', () => {
 
 describe('PeriodSelector with parameters of the screen', () => {
   it('carries them into every preset and into the custom form', () => {
-    const { container } = render(
+    const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/features"
         period={presetPeriod('7d', '2026-10-05')}
@@ -647,7 +648,7 @@ describe('PeriodSelector with parameters of the screen', () => {
 
 describe('Topbar without a period', () => {
   it('shows the title and the theme toggle, and no period controls', () => {
-    render(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
+    renderWithMessages(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
 
     expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
@@ -662,7 +663,7 @@ describe('Topbar', () => {
 
   it('shows the title, the subtitle and the period in words', () => {
     document.documentElement.dataset.theme = 'dark';
-    render(
+    renderWithMessages(
       <Topbar
         title="Overview"
         subtitle="How Demo Store was used in the period"
@@ -685,7 +686,7 @@ describe('Topbar', () => {
   });
 
   it('says which custom range it did not use, and what it shows instead', () => {
-    render(
+    renderWithMessages(
       <Topbar
         title="Overview"
         subtitle="How Demo Store was used in the period"

@@ -1,10 +1,11 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import type { OverviewReport } from '@/domain/overview';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import ProjectError from './error';
 import ProjectLayout from './layout';
 import OverviewPage from './overview/page';
@@ -84,7 +85,7 @@ describe('ProjectLayout', () => {
   it('frames the screen with the sidebar and the demo banner in demo mode', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    render(
+    renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
@@ -104,7 +105,7 @@ describe('ProjectLayout', () => {
   it('shows no demo banner with a real API', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    render(
+    renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
@@ -133,7 +134,7 @@ describe('OverviewPage', () => {
     );
     state.overview = overview;
 
-    render(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     expect(overview).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
@@ -141,7 +142,7 @@ describe('OverviewPage', () => {
   });
 
   it('shows the figures, the daily chart and the top pages and events', async () => {
-    render(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
@@ -161,7 +162,7 @@ describe('OverviewPage', () => {
   });
 
   it('defines its words in a footnote', async () => {
-    render(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     const footnote = screen.getByText(/^A visit is one browser tab/);
     for (const word of [
@@ -181,14 +182,14 @@ describe('OverviewPage', () => {
       projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
     };
 
-    render(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Conversions' })).not.toBeInTheDocument();
   });
 
   it('shows the figures of a single day instead of a chart of one point', async () => {
-    render(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(screen.getByRole('region', { name: 'Activity of the day' })).toHaveTextContent(
       'Page views and named events, today',
@@ -198,7 +199,7 @@ describe('OverviewPage', () => {
   });
 
   it('plots the figure the address names, and keeps it when the period changes', async () => {
-    render(await renderOverview({ range: '7d', metric: 'visits' }));
+    renderWithMessages(await renderOverview({ range: '7d', metric: 'visits' }));
 
     expect(screen.getByRole('region', { name: 'Visits per day' })).toHaveTextContent(
       'Visits, last 7 days',
@@ -217,7 +218,7 @@ describe('OverviewPage', () => {
       projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
     };
 
-    render(await renderOverview({ range: '7d', metric: 'conversions' }));
+    renderWithMessages(await renderOverview({ range: '7d', metric: 'conversions' }));
 
     expect(screen.getByRole('region', { name: 'Activity per day' })).toBeInTheDocument();
     const periods = within(screen.getByRole('navigation', { name: 'Period' }));
@@ -228,7 +229,7 @@ describe('OverviewPage', () => {
   });
 
   it('links the top pages and events to their visits in the same period', async () => {
-    render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+    renderWithMessages(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 
     expect(screen.getByRole('link', { name: '/calculator: see its visits' })).toHaveAttribute(
       'href',
@@ -243,7 +244,7 @@ describe('OverviewPage', () => {
   });
 
   it('offers its tables as CSV files of the same period', async () => {
-    render(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+    renderWithMessages(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 
     expect(screen.getByRole('link', { name: 'Activity per day as CSV' })).toHaveAttribute(
       'href',
@@ -270,7 +271,7 @@ describe('OverviewPage', () => {
         days: empty.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
       });
 
-    render(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(
       screen.getByRole('heading', { name: 'No events in this period yet' }),
@@ -297,7 +298,7 @@ describe('OverviewPage', () => {
       })),
     };
 
-    render(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
     expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();
@@ -332,7 +333,7 @@ describe('error state', () => {
   it('offers a retry and the error id when the screen fails', () => {
     const retry = vi.fn();
     const error = Object.assign(new Error('boom'), { digest: 'abc123' });
-    render(<ProjectError error={error} retry={retry} />);
+    renderWithMessages(<ProjectError error={error} retry={retry} />);
 
     screen.getByRole('button', { name: 'Try again' }).click();
 
@@ -344,7 +345,7 @@ describe('error state', () => {
   });
 
   it('shows no error id when there is none', () => {
-    render(<ProjectError error={new Error('boom')} retry={vi.fn()} />);
+    renderWithMessages(<ProjectError error={new Error('boom')} retry={vi.fn()} />);
 
     expect(screen.queryByText(/error id/)).not.toBeInTheDocument();
   });
