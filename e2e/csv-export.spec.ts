@@ -59,7 +59,9 @@ test('downloads the failing written routes the Requests screen shows', async ({ 
   const csv = await downloadCsv(page, 'Writes as CSV');
 
   expect(csv.fileName).toMatch(new RegExp(`^pyxis-requests-writes-${ISO_DAY}-${ISO_DAY}\\.csv$`));
-  expect(csv.lines[0]).toBe('method,route,requests,failed,median_duration_ms,statuses');
+  expect(csv.lines[0]).toBe(
+    'method,route,requests,failed,median_duration_ms,p95_duration_ms,statuses',
+  );
   expect(csv.lines).toHaveLength(shownRoutes);
   const failed = csv.lines.slice(1).map((line) => Number(line.split(',')[FAILED_COLUMN]));
   expect(failed.every((count) => count > 0)).toBe(true);

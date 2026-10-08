@@ -21,8 +21,16 @@ const ROUTE: RouteReport = {
 describe('requestsCsvTable', () => {
   it('writes each written route with its requests, failures, median and statuses', () => {
     expect(requestsCsvTable([ROUTE], 'writes')).toEqual({
-      columns: ['method', 'route', 'requests', 'failed', 'median_duration_ms', 'statuses'],
-      rows: [['POST', '/orders', 42, 3, 180, '201 × 39; 409 × 2; No response × 1']],
+      columns: [
+        'method',
+        'route',
+        'requests',
+        'failed',
+        'median_duration_ms',
+        'p95_duration_ms',
+        'statuses',
+      ],
+      rows: [['POST', '/orders', 42, 3, 180, 460, '201 × 39; 409 × 2; No response × 1']],
     });
   });
 
@@ -34,11 +42,19 @@ describe('requestsCsvTable', () => {
       total: 5,
       failed: 5,
       statuses: [{ status: 404, count: 5 }],
+      p95DurationMs: null,
     };
 
     expect(requestsCsvTable([read], 'reads')).toEqual({
-      columns: ['method', 'route', 'failed_reads', 'median_duration_ms', 'statuses'],
-      rows: [['GET', '/orders/:id', 5, 180, '404 × 5']],
+      columns: [
+        'method',
+        'route',
+        'failed_reads',
+        'median_duration_ms',
+        'p95_duration_ms',
+        'statuses',
+      ],
+      rows: [['GET', '/orders/:id', 5, 180, null, '404 × 5']],
     });
   });
 });

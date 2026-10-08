@@ -81,7 +81,9 @@ describe('GET /[projectId]/requests/export', () => {
       'attachment; filename="pyxis-requests-writes-2026-09-30-2026-10-06.csv"',
     );
     const rows = lines(await response.text());
-    expect(rows[0]).toBe('method,route,requests,failed,median_duration_ms,statuses');
+    expect(rows[0]).toBe(
+      'method,route,requests,failed,median_duration_ms,p95_duration_ms,statuses',
+    );
     expect(rows).toHaveLength(report.routes.length + 1);
   });
 
@@ -108,7 +110,7 @@ describe('GET /[projectId]/requests/export', () => {
       'attachment; filename="pyxis-requests-failed-reads-2026-09-30-2026-10-06.csv"',
     );
     const rows = lines(await response.text());
-    expect(rows[0]).toBe('method,route,failed_reads,median_duration_ms,statuses');
+    expect(rows[0]).toBe('method,route,failed_reads,median_duration_ms,p95_duration_ms,statuses');
     expect(rows).toHaveLength(report.routes.length + 1);
   });
 

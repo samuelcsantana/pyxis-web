@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
+import { NO_VALUE } from '@/domain/metrics';
 import { FAILED_READS, type RequestKind, type RouteRow } from '@/domain/requests';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith } from '@/components/shell/screens';
@@ -145,8 +146,11 @@ export function RequestsTable({
                 <th scope="col" className={`${HEADER_CELL} hidden text-left lg:table-cell`}>
                   Status codes
                 </th>
-                <th scope="col" className={`${HEADER_CELL} hidden pr-0 text-right sm:table-cell`}>
+                <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
                   Median
+                </th>
+                <th scope="col" className={`${HEADER_CELL} hidden pr-0 text-right sm:table-cell`}>
+                  p95
                 </th>
               </tr>
             </thead>
@@ -200,8 +204,9 @@ export function RequestsTable({
                       ))}
                     </span>
                   </td>
+                  <td className={`${BODY_CELL} hidden text-right sm:table-cell`}>{row.median}</td>
                   <td className={`${BODY_CELL} hidden pr-0 text-right sm:table-cell`}>
-                    {row.median}
+                    {row.p95 ?? NO_VALUE}
                   </td>
                 </tr>
               ))}

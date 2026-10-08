@@ -62,6 +62,25 @@ describe('RequestsTable', () => {
     expect(rows[1]).toHaveTextContent('POST /orders339');
     expect(rows[1]).toHaveTextContent('98.5% ok · 1.5% errors');
     expect(rows[1]).toHaveTextContent('201 × 334400 × 3409 × 2');
+    expect(rows[1]).toHaveTextContent('164 ms426 ms');
+  });
+
+  it('shows a dash for the p95 of an API that does not report it', () => {
+    const [first] = ROWS;
+    render(
+      <RequestsTable
+        kind="writes"
+        rows={first === undefined ? [] : [{ ...first, p95: null }]}
+        basePath="/p1/requests"
+        query="range=7d"
+        timelinePath="/p1/timeline?range=7d"
+        visitsPath="/p1/visits?range=7d"
+        emptyMessage="Nothing"
+      />,
+    );
+
+    const [, row] = within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row');
+    expect(row).toHaveTextContent('164 ms—');
   });
 
   it('opens the details of a route, and gives the focus back when they close', async () => {
