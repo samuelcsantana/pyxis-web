@@ -114,7 +114,7 @@ export function DailyActivityChart({ days, periodLabel }: DailyActivityChartProp
   const totals = activityTotals(days);
   return (
     <ChartPanel
-      title="Events per day"
+      title="Activity per day"
       description={`Page views and named events, ${periodLabel}`}
       legend={SERIES.map((series) => (
         <LegendItem
