@@ -112,8 +112,8 @@ function Chart({ chart, i18n }: { readonly chart: OverviewChart; readonly i18n: 
 }
 
 function ChartTable({ chart, periodLabel, i18n }: OverviewChartPanelProps) {
-  const caption = chartCaption(chart, periodLabel);
-  const columns = chartColumns(chart);
+  const caption = chartCaption(chart, periodLabel, i18n);
+  const columns = chartColumns(chart, i18n);
   return (
     <div
       className={`overflow-x-auto ${FOCUS_RING}`}

@@ -5,7 +5,6 @@ import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { VisitFiltersForm } from '@/components/visits/visit-filters-form';
 import { VisitsTable } from '@/components/visits/visits-table';
-import { VISIT_DEFINITION } from '@/domain/glossary';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import {
   hasVisitFilters,
@@ -16,6 +15,7 @@ import {
 } from '@/domain/visits';
 import { visitsTableLabel } from '@/domain/visits-export';
 import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -30,7 +30,9 @@ export interface VisitsPageProps {
   readonly searchParams: Promise<PeriodSearch & VisitsSearch>;
 }
 
-const FOOTNOTE = `${VISIT_DEFINITION} Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.`;
+function footnote(i18n: I18n): string {
+  return `${i18n.t('glossary.visit')} Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.`;
+}
 
 function emptyMessage(filtered: boolean): string {
   return filtered
@@ -91,7 +93,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
             { label: visitsTableLabel(i18n), href: exportHref(project.id, 'visits', listQuery) },
           ]}
         />
-        <p className="text-xs leading-[18px] text-muted">{FOOTNOTE}</p>
+        <p className="text-xs leading-[18px] text-muted">{footnote(i18n)}</p>
       </MainContent>
     </>
   );

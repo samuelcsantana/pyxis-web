@@ -48,6 +48,7 @@ describe('KpiGrid', () => {
   it('shows each figure with its change, what it compares with, its note and sparkline', () => {
     const { container } = render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
@@ -73,6 +74,7 @@ describe('KpiGrid', () => {
   it('colors the change by whether it is good news', () => {
     render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={[
           { ...kpi('visits'), change: '+10.0%', tone: 'good' },
@@ -90,6 +92,7 @@ describe('KpiGrid', () => {
   it('leaves a gap in the error rate line on a day without writes', () => {
     render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={[{ ...kpi('write-errors'), series: [0.02, null, 0.04, 0.01] }]}
       />,
@@ -103,7 +106,11 @@ describe('KpiGrid', () => {
 
   it('draws no sparkline for a single day', () => {
     const { container } = render(
-      <KpiGrid drillDownHref={drillDownHref} kpis={[{ ...kpi('visits'), series: [12] }]} />,
+      <KpiGrid
+        i18n={english}
+        drillDownHref={drillDownHref}
+        kpis={[{ ...kpi('visits'), series: [12] }]}
+      />,
     );
 
     expect(container.querySelector('svg')).not.toBeInTheDocument();
@@ -112,6 +119,7 @@ describe('KpiGrid', () => {
   it('links each figure to the screen that lists what it counts, in the same period', () => {
     render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
@@ -140,6 +148,7 @@ describe('KpiGrid', () => {
   it('keeps the cards plain when there is no chart to plot them on', () => {
     render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
       />,
@@ -153,7 +162,7 @@ describe('KpiGrid', () => {
     const kpis = overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english);
     render(
       <MetricSelection available={kpis.map((figure) => figure.id)}>
-        <KpiGrid drillDownHref={drillDownHref} kpis={kpis} selectable />
+        <KpiGrid i18n={english} drillDownHref={drillDownHref} kpis={kpis} selectable />
       </MetricSelection>,
     );
 
@@ -177,7 +186,11 @@ describe('KpiGrid', () => {
 
   it('offers no link to a list that would be empty', () => {
     render(
-      <KpiGrid drillDownHref={drillDownHref} kpis={[{ ...kpi('visits'), drillDown: null }]} />,
+      <KpiGrid
+        i18n={english}
+        drillDownHref={drillDownHref}
+        kpis={[{ ...kpi('visits'), drillDown: null }]}
+      />,
     );
 
     expect(
@@ -188,6 +201,7 @@ describe('KpiGrid', () => {
   it('says in words, not only in colour, whether a change is good news', () => {
     render(
       <KpiGrid
+        i18n={english}
         drillDownHref={drillDownHref}
         kpis={[
           { ...kpi('visits'), change: '+10.0% (+40)', tone: 'good' },

@@ -1,14 +1,13 @@
+import type { I18n } from '@/i18n/i18n';
 import type { CsvTable, CsvValue } from './csv';
 import type { OverviewReport } from './overview';
 
 export const OVERVIEW_TABLES = ['daily', 'pages', 'events'] as const;
 export type OverviewTable = (typeof OVERVIEW_TABLES)[number];
 
-export const OVERVIEW_TABLE_LABELS: Readonly<Record<OverviewTable, string>> = {
-  daily: 'Activity per day',
-  pages: 'Top pages',
-  events: 'Top events',
-};
+export function overviewTableLabel(table: OverviewTable, i18n: I18n): string {
+  return i18n.t(`exports.overview.${table}`);
+}
 
 interface DailySeries {
   readonly column: string;

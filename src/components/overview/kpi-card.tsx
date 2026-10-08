@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Tone } from '@/domain/metrics';
 import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
 import type { SeriesColor } from '@/domain/overview-chart';
+import type { I18n } from '@/i18n/i18n';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { Sparkline } from '@/components/ui/sparkline';
 import { MetricToggle } from './metric-selection';
@@ -33,6 +34,7 @@ export interface KpiCardProps {
   readonly color: KpiColor;
   readonly drillDown: KpiDrillDownLink | null;
   readonly toggleHint: string | null;
+  readonly i18n: I18n;
 }
 
 const CARD =
@@ -45,7 +47,7 @@ const TOGGLE_CARD = [
   'has-[[aria-pressed]:focus-visible]:outline-2 has-[[aria-pressed]:focus-visible]:outline-offset-2 has-[[aria-pressed]:focus-visible]:outline-focus',
 ].join(' ');
 
-export function KpiCard({ kpi, color, drillDown, toggleHint }: KpiCardProps) {
+export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProps) {
   const labelId = `kpi-${kpi.id}`;
   return (
     <div
@@ -68,11 +70,11 @@ export function KpiCard({ kpi, color, drillDown, toggleHint }: KpiCardProps) {
           className={`rounded-pill px-2 py-0.5 text-[11px] font-semibold tabular-nums sm:text-xs ${TONE_CLASSES[kpi.tone]}`}
         >
           {kpi.change}
-          <span className="sr-only">{spokenChange(kpi.change)}</span>
+          <span className="sr-only">{spokenChange(kpi.change, i18n)}</span>
         </span>{' '}
         <span>
           {kpi.comparison}
-          <span className="sr-only">{spokenTone(kpi.tone)}</span>
+          <span className="sr-only">{spokenTone(kpi.tone, i18n)}</span>
         </span>
       </p>
       {kpi.series.length > 1 ? (

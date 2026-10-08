@@ -121,16 +121,24 @@ export function resolvePeriod(search: PeriodSearch, timeZone: string, now: Date)
     : { ...fallback, rejected: { from, to, problem } };
 }
 
-const RANGE_PROBLEMS: Readonly<Record<RangeProblem, string>> = {
-  'not-a-date': 'one of its dates is not a calendar date',
-  inverted: 'it ends before it starts',
-  future: 'it ends after today',
-  'too-long': `it is longer than ${String(MAX_PERIOD_DAYS)} days`,
-};
+function rangeProblemText(problem: RangeProblem, i18n: I18n): string {
+  switch (problem) {
+    case 'not-a-date':
+      return i18n.t('period.rangeProblems.notADate');
+    case 'inverted':
+      return i18n.t('period.rangeProblems.inverted');
+    case 'future':
+      return i18n.t('period.rangeProblems.future');
+    case 'too-long':
+      return i18n.t('period.rangeProblems.tooLong', { days: String(MAX_PERIOD_DAYS) });
+  }
+}
 
-export function rejectedRangeNotice(rejected: RejectedRange): string {
-  const shownDays = String(PRESET_DAYS[DEFAULT_PERIOD_PRESET]);
-  return `That range was not used: ${RANGE_PROBLEMS[rejected.problem]}. Showing the last ${shownDays} days instead.`;
+export function rejectedRangeNotice(rejected: RejectedRange, i18n: I18n): string {
+  return i18n.t('period.rejectedRange', {
+    problem: rangeProblemText(rejected.problem, i18n),
+    days: String(PRESET_DAYS[DEFAULT_PERIOD_PRESET]),
+  });
 }
 
 export function periodQuery(period: Period): string {
@@ -145,16 +153,10 @@ export function formatDay(isoDate: string, i18n: I18n): string {
   return i18n.format.day(calendarDate(isoDate));
 }
 
-const PRESET_DESCRIPTIONS: Readonly<Record<PeriodPreset, string>> = {
-  today: 'today',
-  '7d': 'last 7 days',
-  '30d': 'last 30 days',
-};
-
 export function describePeriod(period: Period, i18n: I18n): string {
   return period.preset === 'custom'
     ? formatPeriod(period, i18n)
-    : PRESET_DESCRIPTIONS[period.preset];
+    : i18n.t(`period.presets.${period.preset}`);
 }
 
 export function formatPeriod(period: Period, i18n: I18n): string {

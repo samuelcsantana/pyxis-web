@@ -7,7 +7,6 @@ import { EmptyState } from '@/components/states/empty-state';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
-import { FAILURE_DEFINITION, WRITE_DEFINITION } from '@/domain/glossary';
 import {
   type Period,
   type PeriodSearch,
@@ -29,6 +28,7 @@ import {
 } from '@/domain/requests';
 import { REQUESTS_TABLE_LABELS } from '@/domain/requests-export';
 import { getI18n } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -56,10 +56,11 @@ const KIND_TABS: readonly { readonly kind: RequestKind; readonly label: string }
 const SOURCE_NOTE = "Only the route template is kept, never the URL's values or the body.";
 const COUNTED_TOGETHER = 'Visits and the Timeline count failed reads and writes together.';
 
-const NOTES: Readonly<Record<RequestKind, string>> = {
-  writes: `${WRITE_DEFINITION} ${FAILURE_DEFINITION} Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
-  reads: `A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. ${COUNTED_TOGETHER} ${SOURCE_NOTE}`,
-};
+function kindNote(kind: RequestKind, i18n: I18n): string {
+  return kind === 'writes'
+    ? `${i18n.t('glossary.write')} ${i18n.t('glossary.failure')} Failed reads have their own tab; ${COUNTED_TOGETHER} ${SOURCE_NOTE}`
+    : `A failed read is a GET sent with trackRequest() that answered 400 or above, or never answered. A site may send its reads only when they fail, so reads have no error rate. ${COUNTED_TOGETHER} ${SOURCE_NOTE}`;
+}
 
 function filterParameters(filter: RequestFilter): Readonly<Record<string, string>> {
   return {
@@ -186,7 +187,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 },
               ]}
             />
-            <p className="text-xs leading-[18px] text-muted">{NOTES[kind]}</p>
+            <p className="text-xs leading-[18px] text-muted">{kindNote(kind, i18n)}</p>
           </>
         )}
       </MainContent>

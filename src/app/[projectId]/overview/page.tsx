@@ -12,14 +12,7 @@ import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
-import {
-  changeToneRule,
-  CONVERSION_DEFINITION,
-  FAILURE_DEFINITION,
-  IDENTIFIED_USER_DEFINITION,
-  VISIT_DEFINITION,
-  WRITE_DEFINITION,
-} from '@/domain/glossary';
+import { changeToneRule } from '@/domain/glossary';
 import {
   activityTotals,
   hasActivity,
@@ -28,7 +21,7 @@ import {
   overviewKpis,
 } from '@/domain/overview';
 import { type ChartMetric, chartMetric, keptMetric, overviewChart } from '@/domain/overview-chart';
-import { OVERVIEW_TABLE_LABELS, OVERVIEW_TABLES } from '@/domain/overview-export';
+import { OVERVIEW_TABLES, overviewTableLabel } from '@/domain/overview-export';
 import {
   daysBetween,
   describePeriod,
@@ -51,11 +44,11 @@ export const generateMetadata = screenMetadata('Overview');
 
 function footnote(i18n: I18n): string {
   return [
-    VISIT_DEFINITION,
-    IDENTIFIED_USER_DEFINITION,
-    CONVERSION_DEFINITION,
-    WRITE_DEFINITION,
-    FAILURE_DEFINITION,
+    i18n.t('glossary.visit'),
+    i18n.t('glossary.identifiedUser'),
+    i18n.t('glossary.conversion'),
+    i18n.t('glossary.write'),
+    i18n.t('glossary.failure'),
     changeToneRule(i18n),
   ].join(' ');
 }
@@ -80,9 +73,9 @@ interface OverviewReportViewProps {
   readonly i18n: I18n;
 }
 
-function overviewDownloads(projectId: string, period: Period): readonly CsvDownload[] {
+function overviewDownloads(projectId: string, period: Period, i18n: I18n): readonly CsvDownload[] {
   return OVERVIEW_TABLES.map((table) => ({
-    label: OVERVIEW_TABLE_LABELS[table],
+    label: overviewTableLabel(table, i18n),
     href: exportHref(
       projectId,
       'overview',
@@ -111,6 +104,7 @@ function OverviewReportView({
           kpis={kpis}
           drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
           selectable={!singleDay}
+          i18n={i18n}
         />
         {conversionEvent === null ? <NoConversionEvent /> : null}
         {singleDay ? (
@@ -183,7 +177,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
             filteredHref={(screen, filter) =>
               linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
             }
-            downloads={overviewDownloads(project.id, period)}
+            downloads={overviewDownloads(project.id, period, i18n)}
             i18n={i18n}
           />
         ) : (

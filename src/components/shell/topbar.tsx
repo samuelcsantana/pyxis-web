@@ -68,9 +68,9 @@ export function TopbarFrame({ title, subtitle, controls, notice }: TopbarFramePr
   );
 }
 
-function RangeNotice({ period }: { period: Period | undefined }) {
-  const rejected = period?.rejected;
-  if (rejected === undefined) {
+function RangeNotice(props: TopbarProps) {
+  const rejected = props.period?.rejected;
+  if (props.period === undefined || rejected === undefined) {
     return null;
   }
   return (
@@ -79,7 +79,7 @@ function RangeNotice({ period }: { period: Period | undefined }) {
       role="status"
       className="mt-1 rounded-input bg-bad-soft px-3 py-2 text-[13px] text-bad"
     >
-      {rejectedRangeNotice(rejected)}
+      {rejectedRangeNotice(rejected, props.i18n)}
     </p>
   );
 }
@@ -89,7 +89,7 @@ export function Topbar(props: TopbarProps) {
     <TopbarFrame
       title={props.title}
       subtitle={props.subtitle}
-      notice={<RangeNotice period={props.period} />}
+      notice={<RangeNotice {...props} />}
       controls={
         <>
           {props.period === undefined ? null : <PeriodControls {...props} />}
