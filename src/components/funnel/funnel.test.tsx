@@ -85,6 +85,18 @@ describe('FunnelEditor', () => {
     expect(screen.getByRole('button', { name: 'Apply' })).toBeInTheDocument();
   });
 
+  it('keeps the accent for opening the editor and makes closing it a secondary action', async () => {
+    editor(STEPS, false);
+    const toggle = screen.getByRole('button', { name: 'Edit steps' });
+    expect(toggle).toHaveClass('bg-accent');
+
+    await userEvent.click(toggle);
+
+    expect(toggle).toHaveAccessibleName('Close the editor');
+    expect(toggle).not.toHaveClass('bg-accent');
+    expect(toggle).toHaveClass('border-line', 'bg-card');
+  });
+
   it('sends the steps with the period and the mode once every step is valid', () => {
     const { container } = editor();
 
