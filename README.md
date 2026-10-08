@@ -235,6 +235,9 @@ every text; each other language is a typed translation of it.
   zone: `2.789`, `62,3%`, `9 de set.`, and lists joined with the language's own "and"
   (`a, b e c`). Plurals follow CLDR, with a zero form where the language needs one (Portuguese
   says "0 visitas").
+- **The sign-in email follows:** "Send code" passes the reader's language to the API
+  (`locale` on `POST /v1/auth/request-code`), so the code arrives in the language the sign-in
+  page was read in; the API falls back to English for a language it has no email for.
 - **Customer data is never translated:** event names, paths, routes, status and error codes,
   property keys and values, project names, browser and system names appear as they were sent,
   and CSV files keep English column headers.
