@@ -88,7 +88,7 @@ describe('AcquisitionPage', () => {
     expect(screen.getByRole('group', { name: 'Paid visits' })).toHaveTextContent(
       /% of [\d,]+ visits/,
     );
-    expect(screen.getByRole('group', { name: 'Top channel' })).toHaveTextContent('Paid');
+    expect(screen.getByRole('group', { name: 'Top unpaid channel' })).not.toHaveTextContent('Paid');
     expect(
       screen.getByText('Every visit by the channel it came from, last 7 days'),
     ).toBeInTheDocument();

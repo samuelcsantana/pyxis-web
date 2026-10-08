@@ -108,7 +108,21 @@ describe('topChannel', () => {
   it('names the channel that brought the most visits, with its share', () => {
     expect(
       topChannel([{ date: '2026-10-05', byChannel: { ...NONE, organic: 30, direct: 10 } }]),
-    ).toEqual({ value: 'Organic search', note: '75% of 40 visits' });
+    ).toEqual({ label: 'Top channel', value: 'Organic search', note: '75% of 40 visits' });
+  });
+
+  it('names the runner-up when Paid leads, so it does not repeat the paid visits card', () => {
+    expect(
+      topChannel([
+        { date: '2026-10-05', byChannel: { ...NONE, paid: 50, organic: 30, direct: 20 } },
+      ]),
+    ).toEqual({ label: 'Top unpaid channel', value: 'Organic search', note: '30% of 100 visits' });
+  });
+
+  it('keeps the plain top channel when there were no visits', () => {
+    expect(topChannel([{ date: '2026-10-05', byChannel: NONE }])).toMatchObject({
+      label: 'Top channel',
+    });
   });
 });
 
