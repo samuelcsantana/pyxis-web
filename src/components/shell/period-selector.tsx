@@ -1,19 +1,17 @@
 import Form from 'next/form';
-import Link from 'next/link';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 import {
   BUTTON_PRIMARY,
   PENDING_HOST,
-  SEGMENTED_GROUP,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
-import { PendingMark } from '@/components/ui/pending-mark';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import type { I18n } from '@/i18n/i18n';
 import { CustomRangeFields } from './custom-range-fields';
+import { PeriodPresets } from './period-presets';
 
 export type KeptParameters = Readonly<Record<string, string>>;
 
@@ -45,7 +43,7 @@ const PRESET_LABELS = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
-const OPTION_CLASS = `min-h-11 px-2.5 sm:min-h-8.5 sm:px-3 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
+const OPTION_CLASS = `min-h-11 px-2 sm:min-h-8.5 sm:px-3 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function PeriodSelector({
   basePath,
@@ -58,22 +56,15 @@ export function PeriodSelector({
   const shown = period.rejected ?? period;
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <nav aria-label={i18n.t('periodSelector.label')} className={SEGMENTED_GROUP}>
-        {PRESETS.map((preset) => {
-          const selected = period.preset === preset;
-          return (
-            <Link
-              key={preset}
-              href={`${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`}
-              aria-current={selected ? 'page' : undefined}
-              className={`${OPTION_CLASS} ${selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
-            >
-              {i18n.t(PRESET_LABELS[preset])}
-              <PendingMark />
-            </Link>
-          );
-        })}
-      </nav>
+      <PeriodPresets
+        label={i18n.t('periodSelector.label')}
+        current={period.preset}
+        links={PRESETS.map((preset) => ({
+          preset,
+          label: i18n.t(PRESET_LABELS[preset]),
+          href: `${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`,
+        }))}
+      />
       <DismissableDetails
         key={`${period.preset}:${shown.from}:${shown.to}`}
         defaultOpen={period.rejected !== undefined}
