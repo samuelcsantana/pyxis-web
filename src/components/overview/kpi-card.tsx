@@ -44,7 +44,7 @@ const TOGGLE_CARD = [
   'cursor-pointer transition-colors duration-150 motion-reduce:transition-none',
   'has-[[aria-pressed]:hover]:border-muted has-[[aria-pressed]:active]:bg-soft',
   'has-[[aria-pressed=true]]:border-ink has-[[aria-pressed=true]]:ring-1 has-[[aria-pressed=true]]:ring-ink',
-  'has-[[aria-pressed]:focus-visible]:outline-2 has-[[aria-pressed]:focus-visible]:outline-offset-2 has-[[aria-pressed]:focus-visible]:outline-focus',
+  'outline-focus has-[[aria-pressed]:focus-visible]:outline-2 has-[[aria-pressed]:focus-visible]:outline-offset-2',
 ].join(' ');
 
 export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProps) {
