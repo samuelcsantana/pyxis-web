@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.9.0...v0.9.1) (2026-10-09)
+
+
+### Bug Fixes
+
+* **shell:** keep the header in view on a desktop while the page scrolls ([c33aecb](https://github.com/samuelcsantana/pyxis-web/commit/c33aecbd1f06ebd31b2910c1103a9b439b3a7260))
+* **shell:** keep the header's width on a desktop, long screen or short ([e007374](https://github.com/samuelcsantana/pyxis-web/commit/e007374798bfa38ba6655ac4ac1b4504d364c46a))
+
 ## [0.9.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.8.1...v0.9.0) (2026-10-09)
 
 
