@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.10.0...v0.11.0) (2026-10-09)
+
+
+### Features
+
+* **visits:** list the applied filters above the visits, each removable ([119f712](https://github.com/samuelcsantana/pyxis-web/commit/119f712b4ce8c17a4d352fc714833f50d849d412))
+* **visits:** tell when the filters form holds changes not applied yet ([c30dce1](https://github.com/samuelcsantana/pyxis-web/commit/c30dce1eb96e3aaaac5cfce8f5ee6010b2d139d8))
+
 ## [0.10.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.9.1...v0.10.0) (2026-10-09)
 
 
