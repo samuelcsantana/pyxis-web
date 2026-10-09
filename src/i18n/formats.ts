@@ -1,4 +1,5 @@
 export type DateTimeStyle = 'clock' | 'visitStart' | 'failureTime' | 'eventTime';
+export type WeekdayWidth = 'short' | 'long';
 
 export interface Formats {
   readonly count: (value: number) => string;
@@ -9,7 +10,11 @@ export interface Formats {
   readonly dateTime: (style: DateTimeStyle, timeZone: string) => (date: Date) => string;
   readonly region: (code: string) => string;
   readonly list: (items: readonly string[]) => string;
+  readonly weekday: (isoWeekday: number, width: WeekdayWidth) => string;
 }
+
+const A_MONDAY_IN_UTC = Date.UTC(2024, 0, 1);
+const MILLISECONDS_PER_DAY = 86_400_000;
 
 const ONE_DECIMAL: Intl.NumberFormatOptions = {
   minimumFractionDigits: 1,
@@ -42,6 +47,10 @@ function buildFormats(tag: string): Formats {
   });
   const regions = new Intl.DisplayNames([tag], { type: 'region', fallback: 'code' });
   const lists = new Intl.ListFormat(tag, { type: 'unit', style: 'long' });
+  const weekdays: Readonly<Record<WeekdayWidth, Intl.DateTimeFormat>> = {
+    short: new Intl.DateTimeFormat(tag, { weekday: 'short', timeZone: 'UTC' }),
+    long: new Intl.DateTimeFormat(tag, { weekday: 'long', timeZone: 'UTC' }),
+  };
   return {
     count: (value) => count.format(value),
     percent: (value) => percent.format(value),
@@ -54,6 +63,8 @@ function buildFormats(tag: string): Formats {
     },
     region: (code) => String(regions.of(code)),
     list: (items) => lists.format(items),
+    weekday: (isoWeekday, width) =>
+      weekdays[width].format(new Date(A_MONDAY_IN_UTC + (isoWeekday - 1) * MILLISECONDS_PER_DAY)),
   };
 }
 
