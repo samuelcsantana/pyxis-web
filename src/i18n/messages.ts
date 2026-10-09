@@ -15,6 +15,7 @@ export const CLIENT_NAMESPACES = [
   'signIn',
   'chartPanel',
   'propertyBreakdown',
+  'emailPreferences',
 ] as const satisfies readonly (keyof Messages)[];
 export type ClientNamespace = (typeof CLIENT_NAMESPACES)[number];
 export type ClientSourceMessages = {

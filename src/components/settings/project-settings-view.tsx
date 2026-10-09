@@ -6,11 +6,15 @@ import {
   type ProjectKeySummary,
   type ProjectSettings,
 } from '@/domain/project-settings';
+import type { EmailPreferences } from '@/domain/email-preferences';
 import type { I18n } from '@/i18n/i18n';
+import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
 export interface ProjectSettingsViewProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
+  readonly emailPreferences: EmailPreferences;
+  readonly chooseEmailPreferences: ChooseEmailPreferences;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -185,11 +189,39 @@ interface SectionProps {
   readonly when: (iso: string) => string;
 }
 
-export function ProjectSettingsView({ settings, i18n }: ProjectSettingsViewProps) {
+interface EmailPanelProps {
+  readonly settings: ProjectSettings;
+  readonly i18n: I18n;
+  readonly preferences: EmailPreferences;
+  readonly choose: ChooseEmailPreferences;
+}
+
+function EmailPanel({ settings, i18n, preferences, choose }: EmailPanelProps) {
+  return (
+    <SettingsPanel id="settings-email" title={i18n.t('emailPreferences.heading')}>
+      <WeeklyDigestSwitch initial={preferences} timezone={settings.timezone} choose={choose} />
+    </SettingsPanel>
+  );
+}
+
+export function ProjectSettingsView({
+  settings,
+  i18n,
+  emailPreferences,
+  chooseEmailPreferences,
+}: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const section: SectionProps = { settings, i18n, when: (iso) => format(new Date(iso)) };
   return (
     <div className="grid gap-3.5 sm:gap-4 lg:grid-cols-2">
+      <div className="lg:col-span-2">
+        <EmailPanel
+          settings={settings}
+          i18n={i18n}
+          preferences={emailPreferences}
+          choose={chooseEmailPreferences}
+        />
+      </div>
       <ProjectPanel {...section} />
       <ActivityPanel {...section} />
       <OriginsPanel {...section} />

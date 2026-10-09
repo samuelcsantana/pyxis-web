@@ -62,6 +62,7 @@ describe('RootLayout', () => {
       'signIn',
       'chartPanel',
       'propertyBreakdown',
+      'emailPreferences',
     ]);
   });
 
