@@ -1,9 +1,11 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import axe from 'axe-core';
 
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
+const ANY_TITLE = /\S/;
 
 export async function axeViolations(page: Page): Promise<string[]> {
+  await expect(page).toHaveTitle(ANY_TITLE);
   await page.addScriptTag({ content: axe.source });
   return page.evaluate(async (tags) => {
     const runner = (window as unknown as { axe: typeof axe }).axe;
