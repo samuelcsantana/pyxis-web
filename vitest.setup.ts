@@ -15,6 +15,24 @@ HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
   this.dispatchEvent(new Event('close'));
 };
 
+class ResizeObserverForTests implements ResizeObserver {
+  private readonly observed = new Set<Element>();
+
+  observe(target: Element): void {
+    this.observed.add(target);
+  }
+
+  unobserve(target: Element): void {
+    this.observed.delete(target);
+  }
+
+  disconnect(): void {
+    this.observed.clear();
+  }
+}
+
+globalThis.ResizeObserver = ResizeObserverForTests;
+
 afterEach(() => {
   cleanup();
 });

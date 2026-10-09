@@ -1,7 +1,14 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import {
+  NAV_CONTROL,
+  NAV_ITEM_CURRENT,
+  NAV_ITEM_IDLE,
+  SLIDING_INDICATOR,
+} from '@/components/ui/control-classes';
+import { SlidingIndicator } from '@/components/ui/sliding-indicator';
+import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
 import { useT } from '@/i18n/messages-provider';
 import { parseTheme, type Theme, THEME_CHOICES, type ThemeChoice, themeCookie } from '@/lib/theme';
 
@@ -14,6 +21,10 @@ const CHOICE_LABELS = {
   dark: 'theme.dark',
   system: 'theme.system',
 } as const satisfies Readonly<Record<ThemeChoice, string>>;
+
+const CHOICE = `relative z-[1] flex h-8 items-center rounded-control px-2.5 text-caption ${NAV_CONTROL}`;
+const CHOSEN = `${NAV_ITEM_CURRENT} group-data-sliding/theme:bg-transparent`;
+const HIGHLIGHT = `rounded-control bg-nav-active ${SLIDING_INDICATOR}`;
 
 function subscribeToThemeChanges(onChange: () => void): () => void {
   const observer = new MutationObserver(onChange);
@@ -44,17 +55,26 @@ export function ThemeChoiceGroup({ initialTheme }: ThemeChoiceProps) {
     choiceOnPage,
     () => initialTheme ?? 'system',
   );
+  const { attach, frame, sliding } = useSlidingIndicator(chosen);
   return (
-    <div role="group" aria-label={t('theme.label')} className="flex flex-col gap-1">
+    <div
+      ref={attach}
+      role="group"
+      aria-label={t('theme.label')}
+      data-sliding={sliding}
+      className="group/theme relative flex flex-col gap-1"
+    >
+      <SlidingIndicator frame={frame} shape="fill" className={HIGHLIGHT} />
       {THEME_CHOICES.map((choice) => (
         <button
           key={choice}
           type="button"
+          {...choiceMark(choice)}
           aria-pressed={choice === chosen}
           onClick={() => {
             apply(choice);
           }}
-          className={`flex h-8 items-center rounded-control px-2.5 text-caption ${NAV_CONTROL} ${choice === chosen ? NAV_ITEM_CURRENT : NAV_ITEM_IDLE}`}
+          className={`${CHOICE} ${choice === chosen ? CHOSEN : NAV_ITEM_IDLE}`}
         >
           {t(CHOICE_LABELS[choice])}
         </button>

@@ -8,7 +8,10 @@ import {
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
+  SEGMENTED_THUMB,
 } from '@/components/ui/control-classes';
+import { SlidingIndicator } from '@/components/ui/sliding-indicator';
+import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
 
 export interface ChartPanelProps {
   readonly title: string;
@@ -27,6 +30,7 @@ const VIEW_OPTION = `min-h-11 px-3 sm:min-h-8.5 ${SEGMENTED_OPTION}`;
 export function ChartPanel({ title, description, legend, chart, table }: ChartPanelProps) {
   const t = useT();
   const [shown, setShown] = useState<ChartView>('chart');
+  const { attach, frame, sliding } = useSlidingIndicator(shown);
   const headingId = useId();
   return (
     <section aria-labelledby={headingId} className={`${PANEL} gap-4`}>
@@ -39,11 +43,19 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {legend}
-          <div role="group" aria-label={t('chartPanel.showAs')} className={SEGMENTED_GROUP}>
+          <div
+            ref={attach}
+            role="group"
+            aria-label={t('chartPanel.showAs')}
+            data-sliding={sliding}
+            className={SEGMENTED_GROUP}
+          >
+            <SlidingIndicator frame={frame} shape="fill" className={SEGMENTED_THUMB} />
             {VIEWS.map((view) => (
               <button
                 key={view}
                 type="button"
+                {...choiceMark(view)}
                 aria-pressed={shown === view}
                 onClick={() => {
                   setShown(view);
