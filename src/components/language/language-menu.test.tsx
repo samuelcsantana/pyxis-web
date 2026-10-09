@@ -42,4 +42,22 @@ describe('LanguageMenu', () => {
       'bg-nav-active',
     );
   });
+
+  it('stacks the languages in a column when asked, and lays them in a row otherwise', () => {
+    const { rerender } = render(
+      <LanguageMenu
+        locale="en"
+        label="Language"
+        choose={chooser()}
+        surface="nav"
+        layout="column"
+      />,
+    );
+
+    expect(screen.getByRole('group', { name: 'Language' })).toHaveClass('flex-col');
+
+    rerender(<LanguageMenu locale="en" label="Language" choose={chooser()} surface="nav" />);
+
+    expect(screen.getByRole('group', { name: 'Language' })).not.toHaveClass('flex-col');
+  });
 });

@@ -162,3 +162,23 @@ test('keeps a chosen language over the one the browser asks for', async ({
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
   await expect(page.getByRole('heading', { level: 1, name: 'Visitas' })).toBeVisible();
 });
+
+test('opens the language menu inside the window, from the globe in the sidebar', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'Phones list the languages in the menu, without the globe.');
+  await page.goto(`/${STORE_ID}/overview`);
+
+  await openLanguages(page, isMobile, 'Open menu', 'Language: English');
+
+  const languages = page.getByRole('group', { name: 'Language', exact: true });
+  await expect(languages).toBeVisible();
+  const box = await languages.boundingBox();
+  const width = page.viewportSize()?.width ?? 0;
+  expect(box?.x).toBeGreaterThanOrEqual(0);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
+  for (const name of ['English', 'Português (Brasil)']) {
+    await expect(languages.getByRole('button', { name })).toBeInViewport({ ratio: 1 });
+  }
+});

@@ -15,8 +15,9 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   decorators: [
     (Story) => (
-      <div className="flex h-40 w-[248px] justify-end bg-nav p-3.5">
+      <div className="flex h-40 w-[248px] items-start justify-end gap-1 bg-nav p-3.5">
         <Story />
+        <span aria-hidden="true" className="size-9 shrink-0 rounded-input bg-nav-raised" />
       </div>
     ),
   ],

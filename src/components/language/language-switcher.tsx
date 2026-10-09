@@ -32,7 +32,7 @@ export function LanguageSwitcher({ locale, label, summary, choose }: LanguageSwi
         </svg>
       </summary>
       <div className="absolute top-full right-0 z-10 mt-1.5 w-max rounded-input border border-nav-border bg-nav-raised p-1.5 shadow-lg">
-        <LanguageMenu locale={locale} label={label} choose={choose} surface="nav" />
+        <LanguageMenu locale={locale} label={label} choose={choose} surface="nav" layout="column" />
       </div>
     </DismissableDetails>
   );
