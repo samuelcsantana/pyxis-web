@@ -3,7 +3,9 @@ import { withKeptParameters } from '@/components/shell/period-selector';
 import { screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
+import { AppliedVisitFilters } from '@/components/visits/applied-visit-filters';
 import { VisitFiltersForm } from '@/components/visits/visit-filters-form';
+import { appliedVisitFilters } from '@/domain/applied-visit-filters';
 import { VisitsTable } from '@/components/visits/visits-table';
 import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
 import {
@@ -71,6 +73,14 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
           filters={filters}
           problems={problems}
           clearHref={filtered ? `${basePath}?${periodQuery(period)}` : null}
+          i18n={i18n}
+        />
+        <AppliedVisitFilters
+          applied={appliedVisitFilters(filters, i18n)}
+          removeHref={(without) =>
+            `${basePath}?${withKeptParameters(periodQuery(period), visitFilterParameters(without))}`
+          }
+          clearHref={`${basePath}?${periodQuery(period)}`}
           i18n={i18n}
         />
         {totalLabel === null ? null : (
