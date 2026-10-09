@@ -1,5 +1,6 @@
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LinkTabs } from './link-tabs';
 import { SegmentedLinks } from './segmented-links';
 import { SlidingIndicator } from './sliding-indicator';
 import { useSlidingIndicator } from './use-sliding-indicator';
@@ -39,6 +40,8 @@ interface Box {
 const BOXES: Readonly<Record<string, Box>> = {
   all: { left: 3, top: 3, width: 110, height: 36 },
   failing: { left: 115, top: 3, width: 90, height: 36 },
+  events: { left: 0, top: 0, width: 96, height: 44 },
+  screens: { left: 100, top: 0, width: 80, height: 44 },
 };
 
 const NO_BOX: Box = { left: 0, top: 0, width: 0, height: 0 };
@@ -50,6 +53,11 @@ function boxOf(element: HTMLElement): Box {
 const ROUTES = [
   { key: 'all', label: 'All routes', href: '/p/requests' },
   { key: 'failing', label: 'Failing only', href: '/p/requests?show=failing' },
+] as const;
+
+const TABS = [
+  { key: 'events', label: 'Events', href: '/p/features' },
+  { key: 'screens', label: 'Screens', href: '/p/features?kind=screens' },
 ] as const;
 
 function indicator() {
@@ -125,6 +133,27 @@ describe('SegmentedLinks', () => {
       'aria-current',
       'page',
     );
+  });
+});
+
+describe('LinkTabs', () => {
+  it('underlines the current tab with a line laid on its bottom edge', () => {
+    render(<LinkTabs label="Feature kind" tabs={TABS} current="events" />);
+
+    expect(indicator()).toHaveStyle({ width: '96px', translate: '0px calc(44px - 100%)' });
+    expect(screen.getByRole('link', { name: 'Events' })).toHaveClass(
+      'border-ink',
+      'group-data-sliding/tabs:border-transparent',
+    );
+  });
+
+  it('moves the line to a clicked tab at once', () => {
+    render(<LinkTabs label="Feature kind" tabs={TABS} current="events" />);
+
+    fireEvent.click(screen.getByRole('link', { name: 'Screens' }));
+
+    expect(indicator()).toHaveStyle({ width: '80px', translate: '100px calc(44px - 100%)' });
+    expect(screen.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
   });
 });
 

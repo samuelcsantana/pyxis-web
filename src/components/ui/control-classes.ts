@@ -26,7 +26,9 @@ export const SEGMENTED_SELECTED = 'bg-ink text-card group-data-sliding/segmented
 export const SEGMENTED_THUMB = `rounded-control bg-ink ${SLIDING_INDICATOR}`;
 export const SEGMENTED_IDLE = 'text-muted hover:text-ink active:bg-card active:text-ink';
 export const TAB = `flex items-center border-b-2 text-sm font-semibold ${CONTENT_CONTROL}`;
-export const TAB_SELECTED = 'border-ink text-ink';
+export const TAB_LIST = 'group/tabs relative flex flex-wrap gap-1 border-b border-line';
+export const TAB_SELECTED = 'border-ink text-ink group-data-sliding/tabs:border-transparent';
+export const TAB_BAR = `h-0.5 bg-ink ${SLIDING_INDICATOR}`;
 export const TAB_IDLE =
   'border-transparent text-muted hover:text-ink active:border-muted active:text-ink';
 export const PILL = `flex items-center rounded-pill border text-caption font-medium ${CONTENT_CONTROL}`;
