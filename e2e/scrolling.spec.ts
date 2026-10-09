@@ -68,6 +68,21 @@ test('scrolls with the keyboard as soon as the page opens', async ({ page, isMob
   await expect.poll(() => pageScroll(page)).toBeGreaterThan(0);
 });
 
+test('opens the next screen at the top of the page', async ({ page, isMobile }) => {
+  test.skip(isMobile, PHONES_KEEP_ONLY_THEIR_MENU_BAR);
+  await openScreen(page, 'overview');
+  await page.evaluate(() => {
+    window.scrollTo({ top: 900, behavior: 'instant' });
+  });
+  expect(await pageScroll(page)).toBeGreaterThan(0);
+
+  await page.getByRole('link', { name: 'Acquisition', exact: true }).click();
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  await expect.poll(() => pageScroll(page)).toBe(0);
+});
+
 test('goes back to the same place after visiting another screen', async ({ page, isMobile }) => {
   test.skip(isMobile, PHONES_KEEP_ONLY_THEIR_MENU_BAR);
   await openScreen(page, 'overview');
