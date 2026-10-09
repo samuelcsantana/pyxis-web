@@ -1,3 +1,4 @@
+import { EngagementPanels } from '@/components/features/engagement-panels';
 import { FeatureSearch } from '@/components/features/feature-search';
 import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
@@ -15,7 +16,13 @@ import {
   searchQueryOf,
 } from '@/domain/features';
 import { featuresTableLabel } from '@/domain/features-export';
-import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import {
+  describePeriod,
+  type PeriodSearch,
+  periodQuery,
+  resolvePeriod,
+  todayIn,
+} from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -38,9 +45,14 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const period = resolvePeriod(search, project.timezone, now);
   const kind = featureKindOf(search);
   const query = searchQueryOf(search);
-  const report = await readOrSignIn(() =>
-    createFeaturesService().features(project.id, { from: period.from, to: period.to }, kind),
-  );
+  const range = { from: period.from, to: period.to };
+  const [report, engagement] = await readOrSignIn(() => {
+    const service = createFeaturesService();
+    return Promise.all([
+      service.features(project.id, range, kind),
+      kind === 'screens' ? service.engagement(project.id, range) : Promise.resolve(null),
+    ]);
+  });
   const basePath = screenHref(project.id, 'features');
   const kindHref = (target: FeatureKind) =>
     `${basePath}?${withKeptParameters(periodQuery(period), { kind: target })}`;
@@ -95,6 +107,13 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           }
           i18n={i18n}
         />
+        {engagement === null ? null : (
+          <EngagementPanels
+            report={engagement}
+            periodLabel={describePeriod(period, i18n)}
+            i18n={i18n}
+          />
+        )}
         <CsvDownloads
           downloads={[
             {

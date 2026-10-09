@@ -128,3 +128,27 @@ test('says when nothing matches the search', async ({ page }) => {
 
   await expect(page.getByText('Nothing matches “refund”.')).toBeVisible();
 });
+
+test('shows where visits start and end and how long they last on the screens tab', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/features?range=30d&kind=screens`);
+
+  const entries = page.getByRole('table', { name: 'Where visits start' });
+  await expect(entries.getByRole('row')).not.toHaveCount(1);
+  await expect(page.getByRole('table', { name: 'Where visits end' })).toBeVisible();
+  const length = page.getByRole('region', { name: 'How long visits last' });
+  await expect(length).toContainText('Median visit');
+  const buckets = length.getByRole('table').locator('tbody tr');
+  await expect(buckets).toHaveCount(7);
+  const visits = (await buckets.locator('td:nth-last-child(2)').allTextContents())
+    .map((text) => Number(text.replaceAll(',', '')))
+    .reduce((sum, value) => sum + value, 0);
+  expect(visits).toBeGreaterThan(0);
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+
+  await page.goto(`/${STORE_ID}/features?range=30d&kind=events`);
+
+  await expect(page.getByRole('region', { name: 'How long visits last' })).toHaveCount(0);
+});
