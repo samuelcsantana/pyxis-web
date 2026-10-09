@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.10.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.9.1...v0.10.0) (2026-10-09)
+
+
+### Features
+
+* **ui:** fade in the content a switch or a tab brings ([6629afa](https://github.com/samuelcsantana/pyxis-web/commit/6629afa909dc7479c747025c332f2ca7a9975a0b))
+* **ui:** open select lists on the dashboard's own surface ([17c3cd9](https://github.com/samuelcsantana/pyxis-web/commit/17c3cd930c6cd0724b579cb00c5643f40faf5e19))
+* **ui:** slide the fill of a switch to the chosen option ([c7f0948](https://github.com/samuelcsantana/pyxis-web/commit/c7f09486f8e0b13a18a5601bf7c0fe82307c176e))
+* **ui:** slide the underline of the tabs to the chosen tab ([81bed69](https://github.com/samuelcsantana/pyxis-web/commit/81bed69cf623f888a180a0d08b55a06790241fa9))
+
+
+### Bug Fixes
+
+* **ui:** draw focus rings in their color from the first frame ([1109e90](https://github.com/samuelcsantana/pyxis-web/commit/1109e90a2c2ba6e4d013b67849b3115246733d2a))
+* **ui:** end a long select option with an ellipsis before its chevron ([12f9944](https://github.com/samuelcsantana/pyxis-web/commit/12f99440f6895102754edc49d49ae7f0ebbdaa7a))
+* **ui:** place a switch's fill only once the switch is drawn ([a19b950](https://github.com/samuelcsantana/pyxis-web/commit/a19b9504d8db14b9275ea0fddd3a5ea836bc67d5))
+
+
+### Refactoring
+
+* **ui:** share the period presets' click-ahead choice as a hook ([984a224](https://github.com/samuelcsantana/pyxis-web/commit/984a2244cce4bc79d2d2961547e12080fec13357))
+
 ## [0.9.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.9.0...v0.9.1) (2026-10-09)
 
 
