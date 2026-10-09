@@ -28,6 +28,13 @@ describe('createFormats', () => {
     expect(portuguese.day(SEPTEMBER_8)).toBe('8 de set.');
   });
 
+  it('names the month of a calendar and a day in full, for headings and screen readers', () => {
+    expect(english.monthWithYear(SEPTEMBER_8)).toBe('September 2026');
+    expect(portuguese.monthWithYear(SEPTEMBER_8)).toBe('setembro de 2026');
+    expect(english.fullDay(SEPTEMBER_8)).toBe('Tuesday, September 8, 2026');
+    expect(portuguese.fullDay(SEPTEMBER_8)).toBe('terça-feira, 8 de setembro de 2026');
+  });
+
   it('formats instants in the project time zone, in every style', () => {
     const at = (style: Parameters<typeof english.dateTime>[0]) =>
       english.dateTime(style, SAO_PAULO)(EVENING_IN_SAO_PAULO);
@@ -65,6 +72,8 @@ describe('createFormats', () => {
     ]);
     expect(english.weekday(1, 'long')).toBe('Monday');
     expect(portuguese.weekday(7, 'long')).toBe('domingo');
+    expect(english.weekday(7, 'narrow')).toBe('S');
+    expect(portuguese.weekday(4, 'narrow')).toBe('Q');
   });
 
   it('builds the formats of a language once', () => {

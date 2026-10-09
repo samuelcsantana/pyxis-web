@@ -5,6 +5,10 @@ import { createTranslator, type Translator } from './translate';
 
 const DISPLAY_TAGS: Readonly<Record<Locale, string>> = { en: 'en-US', 'pt-BR': 'pt-BR' };
 
+export function displayTag(locale: Locale): string {
+  return DISPLAY_TAGS[locale];
+}
+
 export interface I18n {
   readonly locale: Locale;
   readonly t: Translator<SourceMessages>;
@@ -15,6 +19,6 @@ export function createI18n(locale: Locale, messages: Messages): I18n {
   return {
     locale,
     t: createTranslator<SourceMessages>(messages, locale),
-    format: createFormats(DISPLAY_TAGS[locale]),
+    format: createFormats(displayTag(locale)),
   };
 }
