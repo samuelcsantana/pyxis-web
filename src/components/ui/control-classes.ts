@@ -1,7 +1,9 @@
 export const FOCUS_RING =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus';
-export const FOCUS_WITHIN_RING =
-  'focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus';
+export const FIELD_FOCUS_RING =
+  'focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-focus';
+export const FIELD_FOCUS_WITHIN_RING =
+  'focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-focus';
 export const NAV_FOCUS_RING =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
 export const CONTROL_TRANSITION = 'transition-colors duration-150 motion-reduce:transition-none';
@@ -28,5 +30,5 @@ export const PILL = `flex items-center rounded-pill border text-caption font-med
 export const PILL_SELECTED = 'border-ink bg-ink text-card';
 export const PILL_IDLE =
   'border-line bg-card text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line';
-export const FIELD = `border border-field bg-card text-ink aria-invalid:border-bad ${CONTENT_CONTROL}`;
+export const FIELD = `border border-field bg-card text-ink aria-invalid:border-bad ${FIELD_FOCUS_RING} ${CONTROL_TRANSITION}`;
 export const TEXT_LINK = `text-sky-ink underline underline-offset-2 hover:text-ink hover:decoration-2 active:text-ink active:decoration-2 ${CONTENT_CONTROL}`;

@@ -1,7 +1,11 @@
 import Form from 'next/form';
 import Link from 'next/link';
 import type { KeptParameters } from '@/components/shell/period-selector';
-import { BUTTON_SECONDARY, FOCUS_WITHIN_RING, TEXT_LINK } from '@/components/ui/control-classes';
+import {
+  BUTTON_SECONDARY,
+  FIELD_FOCUS_WITHIN_RING,
+  TEXT_LINK,
+} from '@/components/ui/control-classes';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import type { I18n } from '@/i18n/i18n';
 
@@ -27,7 +31,7 @@ export function FeatureSearch({ action, keep, query, label, clearHref, i18n }: F
         <input key={name} type="hidden" name={name} value={value} />
       ))}
       <label
-        className={`flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-input border border-field bg-card px-3 ${FOCUS_WITHIN_RING} sm:w-80 sm:flex-none`}
+        className={`flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-input border border-field bg-card px-3 ${FIELD_FOCUS_WITHIN_RING} sm:w-80 sm:flex-none`}
       >
         <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="text-muted">
           <path

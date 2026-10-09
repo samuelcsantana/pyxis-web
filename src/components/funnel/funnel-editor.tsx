@@ -21,6 +21,7 @@ import {
   CONTROL_DISABLED,
   FIELD,
 } from '@/components/ui/control-classes';
+import { SelectField } from '@/components/ui/select-field';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { useT } from '@/i18n/messages-provider';
 import type { ClientSourceMessages } from '@/i18n/messages';
@@ -158,7 +159,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                 >
                   <label className="col-start-1 row-start-1 flex flex-col gap-1 text-xs font-medium text-muted">
                     {t('funnelEditor.stepType', { step: position })}
-                    <select
+                    <SelectField
                       id={`step-type-${String(draft.id)}`}
                       value={draft.type}
                       onChange={(event: ChangeEvent<HTMLSelectElement>) => {
@@ -170,7 +171,7 @@ export function FunnelEditor({ initialSteps, action, keep, startOpen }: FunnelEd
                     >
                       <option value="page">{t('funnelEditor.types.page')}</option>
                       <option value="event">{t('funnelEditor.types.event')}</option>
-                    </select>
+                    </SelectField>
                   </label>
                   <label className="col-start-1 row-start-2 flex flex-col gap-1 text-xs font-medium text-muted sm:col-start-2 sm:row-start-1">
                     {t(`funnelEditor.stepValue.${draft.type}`, { step: position })}

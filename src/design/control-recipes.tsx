@@ -18,6 +18,7 @@ import {
   TAB_SELECTED,
   TEXT_LINK,
 } from '@/components/ui/control-classes';
+import { SelectField } from '@/components/ui/select-field';
 import { ROW_LINK } from '@/components/ui/panel-classes';
 
 export const BUTTON_RECIPES = [
@@ -144,10 +145,10 @@ export function ControlRecipes() {
           </label>
           <label className={FIELD_LABEL}>
             Select
-            <select defaultValue="paid" className={FIELD_CLASS}>
+            <SelectField defaultValue="paid" className={FIELD_CLASS}>
               <option value="paid">Paid</option>
               <option value="organic">Organic</option>
-            </select>
+            </SelectField>
           </label>
           <label className={FIELD_LABEL}>
             Invalid field

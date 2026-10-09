@@ -4,6 +4,7 @@ import Form from 'next/form';
 import { useState } from 'react';
 import type { Lookup, RejectedLookup, TimelineSearchText } from '@/domain/timeline';
 import { BUTTON_PRIMARY, FIELD } from '@/components/ui/control-classes';
+import { SelectField } from '@/components/ui/select-field';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 
 export interface TimelineSearchProps {
@@ -44,7 +45,7 @@ export function TimelineSearch({
       ))}
       <label className="flex max-w-full min-w-0 flex-col gap-1.5 text-caption font-medium">
         {text.lookUp}
-        <select
+        <SelectField
           value={kind}
           onChange={(event) => {
             setKind(event.target.value === 'visit' ? 'visit' : 'user');
@@ -53,7 +54,7 @@ export function TimelineSearch({
         >
           <option value="user">{text.kinds.user}</option>
           <option value="visit">{text.kinds.visit}</option>
-        </select>
+        </SelectField>
       </label>
       <label className="flex min-w-0 grow basis-32 flex-col gap-1.5 text-caption font-medium sm:max-w-md sm:basis-64">
         {text.ids[kind]}
