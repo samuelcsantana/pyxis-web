@@ -166,8 +166,10 @@ Shipping now:
   with the share that continued and the drop-off at each step, the median time each step took
   after the one before and the median time to finish; each step's figure links to who reached
   it and each drop-off to who left before it, a list of the visits or people (newest first, 50 at
-  a time) that opens each one in the Timeline; a keyboard-operable step editor, and the steps
-  kept in the URL so a bookmark is a saved funnel
+  a time) that opens each one in the Timeline; per visit, the same funnel split by device type or
+  by channel (`?by=channel`), every segment on one scale with its overall conversion, adding up to
+  the funnel; a keyboard-operable step editor, and the steps kept in the URL so a bookmark is a
+  saved funnel
 - Timeline: everything one person (by user id) or one visit did, in order, with each visit's
   device, channel and length, every page view, event and request with its properties and status
   (a request reads "164 ms · order_number_in_use", its status shown once, as the chip),
