@@ -4,6 +4,7 @@ import { MetricChartArea, MetricSelection } from '@/components/overview/metric-s
 import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
+import { VisitStartsPanel } from '@/components/overview/visit-starts-panel';
 import { MainContent } from '@/components/shell/main-content';
 import { withKeptParameters } from '@/components/shell/period-selector';
 import { linkWith, type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
@@ -31,6 +32,7 @@ import {
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
+import type { TimeOfDayReport } from '@/domain/time-of-day';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -64,6 +66,7 @@ export interface OverviewPageProps {
 
 interface OverviewReportViewProps {
   readonly report: OverviewReport;
+  readonly timeOfDay: TimeOfDayReport;
   readonly kpis: readonly KpiView[];
   readonly metric: ChartMetric;
   readonly conversionEvent: string | null;
@@ -86,6 +89,7 @@ function overviewDownloads(projectId: string, period: Period, i18n: I18n): reado
 
 function OverviewReportView({
   report,
+  timeOfDay,
   kpis,
   metric,
   conversionEvent,
@@ -132,6 +136,7 @@ function OverviewReportView({
           i18n={i18n}
         />
       </div>
+      <VisitStartsPanel report={timeOfDay} periodLabel={periodLabel} i18n={i18n} />
       <CsvDownloads downloads={downloads} i18n={i18n} />
       <p className="text-xs leading-[18px] text-muted">{footnote(i18n)}</p>
     </>
@@ -144,9 +149,11 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const today = todayIn(project.timezone, now);
-  const report = await readOrSignIn(() =>
-    createOverviewService().overview(project.id, { from: period.from, to: period.to }),
-  );
+  const range = { from: period.from, to: period.to };
+  const [report, timeOfDay] = await readOrSignIn(() => {
+    const service = createOverviewService();
+    return Promise.all([service.overview(project.id, range), service.timeOfDay(project.id, range)]);
+  });
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   const i18n = await getI18n();
   const kpis = overviewKpis(report, compared, project.conversionEvent, i18n);
@@ -170,6 +177,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         {hasActivity(report) ? (
           <OverviewReportView
             report={report}
+            timeOfDay={timeOfDay}
             kpis={kpis}
             metric={metric}
             conversionEvent={project.conversionEvent}

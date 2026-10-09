@@ -19,7 +19,8 @@ const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' })
 const UNDERLINE_ON_HOVER = '2px';
 const MIN_TARGET_PX = 24;
 
-const chartViews = (page: Page) => page.getByRole('group', { name: 'Show as' });
+const chartViews = (page: Page) =>
+  page.getByRole('region', { name: 'Activity per day' }).getByRole('group', { name: 'Show as' });
 
 const homePageRowLink = (page: Page) =>
   page.getByRole('link', { name: '/: see its visits', exact: true });
