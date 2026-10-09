@@ -15,6 +15,7 @@ import {
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
 import { BUTTON_PRIMARY, FIELD, TEXT_LINK } from '@/components/ui/control-classes';
+import { SelectField } from '@/components/ui/select-field';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { CollapsibleFilters } from './collapsible-filters';
 
@@ -112,36 +113,44 @@ export function VisitFiltersForm({
           </label>
           <label className={LABEL}>
             {t('visits.filters.channel')}
-            <select name="channel" defaultValue={filters.channel ?? ''} className={FIELD_CLASS}>
+            <SelectField
+              name="channel"
+              defaultValue={filters.channel ?? ''}
+              className={FIELD_CLASS}
+            >
               <option value="">{t('visits.filters.anyChannel')}</option>
               {CHANNELS.map((channel) => (
                 <option key={channel} value={channel}>
                   {channelLabel(channel, i18n)}
                 </option>
               ))}
-            </select>
+            </SelectField>
           </label>
           <label className={LABEL}>
             {t('visits.filters.device')}
-            <select name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>
+            <SelectField name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>
               <option value="">{t('visits.filters.anyDevice')}</option>
               {VISIT_DEVICE_TYPES.map((device) => (
                 <option key={device} value={device}>
                   {deviceTypeLabel(device, i18n)}
                 </option>
               ))}
-            </select>
+            </SelectField>
           </label>
           <label className={LABEL}>
             {t('visits.filters.account')}
-            <select name="identity" defaultValue={filters.identity ?? ''} className={FIELD_CLASS}>
+            <SelectField
+              name="identity"
+              defaultValue={filters.identity ?? ''}
+              className={FIELD_CLASS}
+            >
               <option value="">{t('visits.filters.anyone')}</option>
               {VISIT_IDENTITIES.map((identity) => (
                 <option key={identity} value={identity}>
                   {t(`visits.filters.identities.${identity}`)}
                 </option>
               ))}
-            </select>
+            </SelectField>
           </label>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -204,7 +213,7 @@ export function VisitFiltersForm({
               {t('visits.filters.routeHint')}
             </span>
           </label>
-          <label className="flex min-h-11 items-center gap-2.5 self-end text-caption font-medium">
+          <label className="flex min-h-11 items-center gap-2.5 self-start text-caption font-medium sm:mt-6">
             <input
               type="checkbox"
               name="failed"
