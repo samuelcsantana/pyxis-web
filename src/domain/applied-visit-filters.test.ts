@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
-import { appliedVisitFilters } from './applied-visit-filters';
+import { appliedVisitFilters, changedVisitFilterFields } from './applied-visit-filters';
 import { NO_VISIT_FILTERS, type VisitFilters, visitFilterParameters } from './visits';
 
 const EVERY_FILTER: VisitFilters = {
@@ -62,5 +62,23 @@ describe('appliedVisitFilters', () => {
       );
     }
     expect(without.failed).not.toHaveProperty('failed');
+  });
+});
+
+describe('changedVisitFilterFields', () => {
+  const applied = visitFilterParameters({ ...NO_VISIT_FILTERS, channel: 'paid', country: 'BR' });
+
+  it('finds no change when the form holds what is applied, spaces and case aside', () => {
+    expect(changedVisitFilterFields(applied, { channel: 'paid', country: ' br ' })).toEqual([]);
+  });
+
+  it('names each field whose value differs from the applied one', () => {
+    expect(
+      changedVisitFilterFields(applied, { channel: 'email', country: 'BR', event: 'cta_clicked' }),
+    ).toEqual(['event', 'channel']);
+  });
+
+  it('counts a field left empty against an applied value as changed', () => {
+    expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country']);
   });
 });

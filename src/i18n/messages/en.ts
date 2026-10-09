@@ -734,6 +734,8 @@ export const en = {
         removeFlag: 'Remove {filter}',
         clearAll: 'Clear all',
       },
+      unapplied: 'Changes not applied yet',
+      undo: 'Undo',
     },
     table: {
       heading: 'Visits',

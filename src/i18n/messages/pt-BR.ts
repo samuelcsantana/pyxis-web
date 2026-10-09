@@ -744,6 +744,8 @@ export const ptBR = translation({
         removeFlag: 'Remover {filter}',
         clearAll: 'Limpar todos',
       },
+      unapplied: 'Alterações ainda não aplicadas',
+      undo: 'Desfazer',
     },
     table: {
       heading: 'Visitas',
