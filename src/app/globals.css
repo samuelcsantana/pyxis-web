@@ -161,7 +161,7 @@
 
   @media (width >= --theme(--breakpoint-lg)) {
     html {
-      scroll-padding-top: 0;
+      scroll-padding-top: --spacing(24);
       scrollbar-gutter: stable;
     }
   }
