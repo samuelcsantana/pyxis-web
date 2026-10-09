@@ -719,9 +719,16 @@ describe('Topbar', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
     expect(screen.getByText('How Demo Store was used in the period')).toHaveClass(
       'hidden',
-      'sm:block',
+      'sm:inline',
+      'truncate',
     );
-    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
+    const range = screen.getByText('Sep 6 – Oct 5, 2026');
+    expect(range.closest('p')).toContainElement(
+      screen.getByText('How Demo Store was used in the period'),
+    );
+    expect(range.closest('p')).toHaveClass('flex');
+    expect(range.parentElement).toHaveClass('shrink-0');
+    expect(screen.getByRole('navigation', { name: 'Period' })).not.toContainElement(range);
     expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });

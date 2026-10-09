@@ -330,3 +330,34 @@ test('sends the security headers', async ({ request }) => {
   expect(response.headers()['x-content-type-options']).toBe('nosniff');
   expect(response.headers()['x-powered-by']).toBeUndefined();
 });
+
+for (const [locale, width] of [
+  ['pt-BR', 1024],
+  ['pt-BR', 1280],
+  ['en', 1024],
+] as const) {
+  test(`keeps the header still while the period changes (${locale}, ${String(width)} px)`, async ({
+    page,
+    context,
+    baseURL,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'The widths under test are desktop widths.');
+    await context.addCookies([{ name: 'pyxis_locale', value: locale, url: baseURL ?? '' }]);
+    await page.setViewportSize({ width, height: 800 });
+    const header = page.locator('header').first();
+    const presets = header.getByRole('navigation');
+
+    const layouts: string[] = [];
+    for (const range of ['today', '7d', '30d']) {
+      await page.goto(`/${STORE_ID}/overview?range=${range}`);
+      const frame = await header.boundingBox();
+      const group = await presets.boundingBox();
+      layouts.push(
+        JSON.stringify({ header: frame?.height, x: group?.x, y: group?.y, width: group?.width }),
+      );
+    }
+
+    expect(new Set(layouts).size, layouts.join('\n')).toBe(1);
+  });
+}
