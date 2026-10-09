@@ -74,6 +74,5 @@ test('lists the campaigns, each opening its visits from the source that carried 
 
   await expect(page).toHaveURL(/\/visits\?range=30d&campaign=spring_sale&source=google$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Visits' })).toBeVisible();
-  await expect(page.getByText(/^\d+ matching visits?$/)).toBeVisible();
-  await expect(page.getByText('0 matching visits')).toHaveCount(0);
+  await expect(page.getByText(/^[1-9]\d* matching visits?$/)).toBeVisible();
 });
