@@ -1,6 +1,7 @@
 import { BuildAFunnel } from '@/components/funnel/build-a-funnel';
 import { FunnelEditor } from '@/components/funnel/funnel-editor';
 import { FunnelModes } from '@/components/funnel/funnel-modes';
+import { FunnelSegmentsPanel } from '@/components/funnel/funnel-segments-panel';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
 import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
 import { MainContent } from '@/components/shell/main-content';
@@ -33,7 +34,18 @@ import {
   withDrillLinks,
 } from '@/domain/funnel-subjects';
 import { funnelStepsOf } from '@/domain/funnel.schema';
-import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import {
+  type FunnelSegmentDimension,
+  funnelSegmentDimensionOf,
+  SEGMENT_PARAMETER,
+} from '@/domain/funnel-segments';
+import {
+  describePeriod,
+  type PeriodSearch,
+  periodQuery,
+  resolvePeriod,
+  todayIn,
+} from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
@@ -47,7 +59,9 @@ export const generateMetadata = screenMetadata('funnel');
 
 export interface FunnelPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch & FunnelSearch & FunnelDrillSearch>;
+  readonly searchParams: Promise<
+    PeriodSearch & FunnelSearch & FunnelDrillSearch & { readonly [SEGMENT_PARAMETER]?: string }
+  >;
 }
 
 const NEW_FUNNEL: readonly FunnelStep[] = [
@@ -59,6 +73,10 @@ type Parameters = Readonly<Record<string, string>>;
 
 function stepsParameter(steps: readonly FunnelStep[] | null): Parameters {
   return steps === null ? {} : { steps: serializeSteps(steps) };
+}
+
+function segmentKept(by: FunnelSegmentDimension): Parameters {
+  return by === 'device' ? {} : { [SEGMENT_PARAMETER]: by };
 }
 
 function drillKept(drill: FunnelDrill | null): Parameters {
@@ -77,11 +95,12 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
     `${basePath}?${withKeptParameters(periodQuery(period), parameters)}`;
   const editorKeep = { ...Object.fromEntries(new URLSearchParams(periodQuery(period))), mode };
   const drill = steps === null ? null : funnelDrillOf(search, steps.length);
+  const by = funnelSegmentDimensionOf(search[SEGMENT_PARAMETER]);
   const range = { from: period.from, to: period.to };
   const service = createFunnelService();
-  const [report, drilled] =
+  const [report, drilled, segments] =
     steps === null
-      ? [null, null]
+      ? [null, null, null]
       : await Promise.all([
           readOrSignIn(() => service.funnel(project.id, range, mode, steps)),
           drill === null
@@ -89,8 +108,11 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             : readOrSignIn(() => service.subjects(project.id, range, mode, steps, drill)).then(
                 (page) => ({ drill, page }),
               ),
+          mode === 'visit'
+            ? readOrSignIn(() => service.segments(project.id, range, steps, by))
+            : null,
         ]);
-  const kept = { mode, ...stepsParameter(steps) };
+  const kept = { mode, ...stepsParameter(steps), ...segmentKept(by) };
   const drillHref = (parameters: Parameters) =>
     `${linkTo({ ...kept, ...parameters })}#${FUNNEL_SUBJECTS_ID}`;
   const i18n = await getI18n();
@@ -125,46 +147,58 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             <FunnelEditor initialSteps={NEW_FUNNEL} action={basePath} keep={editorKeep} startOpen />
           </>
         ) : (
-          <FunnelReportView
-            counted={countedSteps(steps, report)}
-            secondsToFinish={report.medianSecondsOverall}
-            mode={mode}
-            i18n={i18n}
-            drill={drill}
-            drillHref={(step, outcome) => drillHref(drillParameters(step, outcome))}
-            subjects={
-              drilled === null ? null : (
-                <FunnelSubjects
-                  view={funnelSubjectsView(
-                    drilled.page,
-                    drillHeading(
-                      countedSteps(steps, report).map((step) => step.count),
-                      drilled.drill,
+          <>
+            <FunnelReportView
+              counted={countedSteps(steps, report)}
+              secondsToFinish={report.medianSecondsOverall}
+              mode={mode}
+              i18n={i18n}
+              drill={drill}
+              drillHref={(step, outcome) => drillHref(drillParameters(step, outcome))}
+              subjects={
+                drilled === null ? null : (
+                  <FunnelSubjects
+                    view={funnelSubjectsView(
+                      drilled.page,
+                      drillHeading(
+                        countedSteps(steps, report).map((step) => step.count),
+                        drilled.drill,
+                        mode,
+                        i18n,
+                      ),
                       mode,
+                      project.timezone,
+                      (lookup) =>
+                        linkWith(screenHref(project.id, 'timeline', periodQuery(period)), lookup),
                       i18n,
-                    ),
-                    mode,
-                    project.timezone,
-                    (lookup) =>
-                      linkWith(screenHref(project.id, 'timeline', periodQuery(period)), lookup),
-                    i18n,
-                  )}
-                  olderHref={olderHref(drilled.page, drilled.drill, drillHref)}
-                  newestHref={newestHref(drilled.drill, drillHref)}
-                  closeHref={linkTo(kept)}
+                    )}
+                    olderHref={olderHref(drilled.page, drilled.drill, drillHref)}
+                    newestHref={newestHref(drilled.drill, drillHref)}
+                    closeHref={linkTo(kept)}
+                  />
+                )
+              }
+              editor={
+                <FunnelEditor
+                  key={serializeSteps(steps)}
+                  initialSteps={steps}
+                  action={basePath}
+                  keep={editorKeep}
+                  startOpen={false}
                 />
-              )
-            }
-            editor={
-              <FunnelEditor
-                key={serializeSteps(steps)}
-                initialSteps={steps}
-                action={basePath}
-                keep={editorKeep}
-                startOpen={false}
-              />
-            }
-          />
+              }
+            />
+            <FunnelSegmentsPanel
+              by={by}
+              report={segments}
+              stepCount={steps.length}
+              periodLabel={describePeriod(period, i18n)}
+              hrefOf={(target) =>
+                `${linkTo({ mode, ...stepsParameter(steps), ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
+              }
+              i18n={i18n}
+            />
+          </>
         )}
       </MainContent>
     </>

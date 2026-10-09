@@ -155,3 +155,23 @@ test('lists the people of a step and closes the list', async ({ page }) => {
   await expect(page).not.toHaveURL(/outcome=/);
   await expect(page.getByRole('region', { name: /reached step/ })).toHaveCount(0);
 });
+
+test('splits the per-visit funnel by device, then by channel, kept across periods', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/funnel?range=30d`);
+  const byDevice = page.getByRole('table', { name: 'The funnel by device type' });
+  await expect(byDevice.locator('tbody tr').first()).toBeVisible();
+
+  await page
+    .getByRole('navigation', { name: 'Split the funnel' })
+    .getByRole('link', { name: 'By channel' })
+    .click();
+
+  await expect(page).toHaveURL(/by=channel/);
+  const byChannel = page.getByRole('table', { name: 'The funnel by channel' });
+  await expect(byChannel.locator('tbody tr').first()).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+  await expect(page.getByRole('link', { name: '7 days' })).toHaveAttribute('href', /by=channel/);
+});
