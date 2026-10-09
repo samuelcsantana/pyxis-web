@@ -15,9 +15,13 @@ export function choiceMark(key: string) {
   return { [CHOICE_ATTRIBUTE]: key };
 }
 
+function isNotDrawn(element: HTMLElement): boolean {
+  return element.offsetWidth === 0 && element.offsetHeight === 0;
+}
+
 function frameOf(container: HTMLElement, choice: string): IndicatorFrame | null {
   const chosen = container.querySelector<HTMLElement>(`[${CHOICE_ATTRIBUTE}="${choice}"]`);
-  if (chosen === null) {
+  if (chosen === null || isNotDrawn(chosen)) {
     return null;
   }
   return {
