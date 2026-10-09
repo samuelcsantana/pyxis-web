@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
+import { openAccountMenu } from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -57,9 +58,10 @@ const REPRESENTATIVES: readonly Representative[] = [
     target: (page) => page.locator('summary').filter({ hasText: 'Custom' }),
   },
   {
-    control: 'the theme toggle',
+    control: 'a theme choice',
     screen: 'overview',
-    target: (page) => page.getByRole('button', { name: /theme/ }),
+    target: (page) => page.getByRole('button', { name: 'Dark' }),
+    prepare: openAccountMenu,
   },
   {
     control: 'a feature tab',
@@ -154,8 +156,13 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
         .getByRole('link', { name: 'Funnel' }),
   },
   {
+    control: 'the account menu',
+    target: (page) => page.locator('summary', { hasText: 'Account and preferences' }),
+  },
+  {
     control: 'the sign-out button',
     target: (page) => page.getByRole('button', { name: 'Sign out' }),
+    prepare: (page) => openAccountMenu(page, false),
   },
   {
     control: 'the project switcher',
@@ -237,8 +244,8 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
   },
   {
     control: 'an icon button',
-    screen: 'overview',
-    target: (page) => page.getByRole('button', { name: /theme/ }),
+    screen: 'features',
+    target: (page) => page.getByRole('button', { name: /^Properties of / }).first(),
   },
   {
     control: 'a segmented option',

@@ -5,7 +5,6 @@ import { Topbar } from '@/components/shell/topbar';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { chooseEmailPreferences } from './actions';
@@ -32,7 +31,6 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       <Topbar
         title={i18n.t('settings.title')}
         subtitle={i18n.t('settings.subtitle', { project: project.name })}
-        theme={await chosenTheme()}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <ProjectSettingsView

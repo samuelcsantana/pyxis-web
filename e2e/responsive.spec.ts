@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { openAccountMenu } from './navigation';
 import { sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -101,28 +102,23 @@ test.describe('at 320×640, below the sm breakpoint, the period controls', () =>
   });
 });
 
-test.describe('the theme toggle', () => {
+test.describe('the theme choice', () => {
   test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' });
 
-  test('sits in the menu bar on a phone and agrees with the header one on a wider screen', async ({
-    page,
-  }) => {
+  test('sits in the account menu, on a phone and on a wider screen alike', async ({ page }) => {
     await page.goto(`/${STORE_ID}/overview`);
-    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
     const header = page.getByRole('banner');
 
-    await expect(header.getByRole('button', { name: /^Switch/ })).toBeHidden();
-    await navigation.getByRole('button', { name: 'Switch theme' }).click();
+    await expect(header.getByRole('button', { name: /theme/i })).toHaveCount(0);
+    await openAccountMenu(page, true);
+    await page.getByRole('button', { name: 'Dark' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expect(navigation.getByRole('button', { name: 'Switch to light theme' })).toBeVisible();
 
     await page.setViewportSize({ width: 1280, height: 800 });
-    await expect(navigation.getByRole('button', { name: /^Switch/ })).toBeHidden();
-    await header.getByRole('button', { name: 'Switch to light theme' }).click();
+    await page.reload();
+    await openAccountMenu(page, false);
+    await page.getByRole('button', { name: 'Light' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-
-    await page.setViewportSize({ width: 390, height: 844 });
-    await expect(navigation.getByRole('button', { name: 'Switch to dark theme' })).toBeVisible();
   });
 });
 
@@ -222,13 +218,15 @@ const WCAG_TEXT_SPACING = `
 test.describe('sidebar on a 1366×768 laptop', () => {
   test.use({ viewport: { width: 1366, height: 768 } });
 
-  test('shows Sign out without scrolling the sidebar', async ({ page, isMobile }) => {
+  test('shows the account menu without scrolling the sidebar', async ({ page, isMobile }) => {
     test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
     await page.goto(`/${STORE_ID}/overview`);
 
     const navigation = page.getByRole('navigation', { name: 'Main navigation' });
 
-    await expect(page.getByRole('button', { name: 'Sign out' })).toBeInViewport({ ratio: 1 });
+    await expect(page.locator('summary', { hasText: 'Account and preferences' })).toBeInViewport({
+      ratio: 1,
+    });
     expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(768);
   });
 });

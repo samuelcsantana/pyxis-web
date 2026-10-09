@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { formatPeriod, type Period, rejectedRangeNotice } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
-import type { Theme } from '@/lib/theme';
 import { type KeptParameters, PeriodSelector, RANGE_NOTICE_ID } from './period-selector';
 
 interface TopbarBase {
   readonly title: string;
   readonly subtitle: string;
-  readonly theme?: Theme;
 }
 
 export interface TopbarWithPeriodProps extends TopbarBase {
@@ -101,20 +98,15 @@ export function Topbar(props: TopbarProps) {
       }
       notice={<RangeNotice {...props} />}
       controls={
-        <>
-          {props.period === undefined ? null : (
-            <PeriodSelector
-              basePath={props.basePath}
-              period={props.period}
-              today={props.today}
-              keep={props.keep}
-              i18n={props.i18n}
-            />
-          )}
-          <div className="hidden lg:flex">
-            <ThemeToggle initialTheme={props.theme} />
-          </div>
-        </>
+        props.period === undefined ? null : (
+          <PeriodSelector
+            basePath={props.basePath}
+            period={props.period}
+            today={props.today}
+            keep={props.keep}
+            i18n={props.i18n}
+          />
+        )
       }
     />
   );

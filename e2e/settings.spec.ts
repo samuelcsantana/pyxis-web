@@ -18,13 +18,13 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the gear and marks it current', async ({ page, isMobile }) => {
+test('opens from the navigation and marks it current', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
 
-  await page.getByRole('link', { name: 'Project settings' }).click();
+  await page.getByRole('link', { name: 'Settings' }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings$`));
   await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
@@ -32,7 +32,7 @@ test('opens from the gear and marks it current', async ({ page, isMobile }) => {
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  await expect(page.getByRole('link', { name: 'Project settings' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Settings' })).toHaveAttribute(
     'aria-current',
     'page',
   );

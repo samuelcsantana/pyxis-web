@@ -8,12 +8,13 @@ export function parseTheme(value: string | undefined): Theme | undefined {
   return THEMES.find((theme) => theme === value);
 }
 
-export function oppositeTheme(theme: Theme): Theme {
-  return theme === 'dark' ? 'light' : 'dark';
-}
+export type ThemeChoice = Theme | 'system';
+export const THEME_CHOICES: readonly ThemeChoice[] = ['light', 'dark', 'system'];
 
-export function themeCookie(theme: Theme): string {
-  return `${THEME_COOKIE_NAME}=${theme}; Path=/; Max-Age=${String(ONE_YEAR_IN_SECONDS)}; SameSite=Lax`;
+export function themeCookie(choice: ThemeChoice): string {
+  const maxAge = choice === 'system' ? 0 : ONE_YEAR_IN_SECONDS;
+  const value = choice === 'system' ? '' : choice;
+  return `${THEME_COOKIE_NAME}=${value}; Path=/; Max-Age=${String(maxAge)}; SameSite=Lax`;
 }
 
 export function themeFromCookies(cookies: string): Theme | undefined {

@@ -51,7 +51,6 @@ import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_FUNNEL_STEPS, demoExampleFunnel } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
 
@@ -124,7 +123,6 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
-        theme={await chosenTheme()}
         keep={{ ...kept, ...drillKept(drill) }}
         i18n={i18n}
       />

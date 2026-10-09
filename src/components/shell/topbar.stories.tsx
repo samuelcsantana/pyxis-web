@@ -12,7 +12,6 @@ const WITH_PERIOD: TopbarWithPeriodProps = {
   basePath: '/demo/overview',
   period: presetPeriod('30d', TODAY),
   today: TODAY,
-  theme: 'light',
   i18n: english,
 };
 
@@ -58,7 +57,7 @@ const showsTheRejectedRange: Story['play'] = async ({ canvasElement }) => {
 export const RejectedRange: Story = { args: REJECTED, play: showsTheRejectedRange };
 
 export const RejectedRangeDark: Story = {
-  args: { ...REJECTED, theme: 'dark' },
+  args: { ...REJECTED },
   globals: { theme: 'dark' },
   play: showsTheRejectedRange,
 };
@@ -79,7 +78,7 @@ const openTheCustomForm: NonNullable<Story['play']> = async ({ canvasElement }) 
 export const CustomFormOpen: Story = { play: openTheCustomForm };
 
 export const CustomFormOpenDark: Story = {
-  args: { ...WITH_PERIOD, theme: 'dark' },
+  args: { ...WITH_PERIOD },
   globals: { theme: 'dark' },
   play: openTheCustomForm,
 };
@@ -103,7 +102,7 @@ export const CustomFormClosedWithEscape: Story = {
 };
 
 export const DarkTheme: Story = {
-  args: { ...WITH_PERIOD, theme: 'dark' },
+  args: { ...WITH_PERIOD },
   globals: { theme: 'dark' },
 };
 
@@ -116,7 +115,7 @@ const focusSevenDays: Story['play'] = async ({ canvasElement }) => {
 export const KeyboardFocus: Story = { play: focusSevenDays };
 
 export const KeyboardFocusDark: Story = {
-  args: { ...WITH_PERIOD, theme: 'dark' },
+  args: { ...WITH_PERIOD },
   globals: { theme: 'dark' },
   play: focusSevenDays,
 };

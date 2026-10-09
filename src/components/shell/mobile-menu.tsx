@@ -9,7 +9,6 @@ import { useT } from '@/i18n/messages-provider';
 
 export interface MobileMenuProps {
   readonly children: ReactNode;
-  readonly barActions?: ReactNode;
 }
 
 const MENU_ID = 'main-navigation';
@@ -20,7 +19,7 @@ function useLocationKey(): string {
   return `${usePathname()}?${useSearchParams().toString()}`;
 }
 
-export function MobileMenu({ children, barActions }: MobileMenuProps) {
+export function MobileMenu({ children }: MobileMenuProps) {
   const t = useT();
   const location = useLocationKey();
   const [openAt, setOpenAt] = useState<string>();
@@ -52,7 +51,6 @@ export function MobileMenu({ children, barActions }: MobileMenuProps) {
           <span className="text-lg font-bold tracking-tight">Pyxis</span>
         </Link>
         <div className="flex items-center gap-2">
-          {barActions}
           <button
             ref={toggleRef}
             type="button"

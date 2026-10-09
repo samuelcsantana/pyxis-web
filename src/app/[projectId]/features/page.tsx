@@ -27,7 +27,6 @@ import { getI18n } from '@/i18n/get-messages';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { createFeaturesService } from '@/services/features/features-service.factory';
 import { loadPropertyBreakdown } from './actions';
 
@@ -66,7 +65,6 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
-        theme={await chosenTheme()}
         i18n={i18n}
         keep={kept}
       />

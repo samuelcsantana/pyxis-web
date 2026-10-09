@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
+import { openAccountMenu } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -180,11 +181,7 @@ test('closes the project switcher when the focus moves past it, leaving that foc
   }
 
   await expect(switcher).not.toHaveAttribute('open');
-  await expect(
-    isMobile
-      ? page.getByRole('link', { name: 'Project settings' })
-      : page.getByRole('link', { name: 'Overview', exact: true }),
-  ).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Overview', exact: true })).toBeFocused();
   expect(await focusedElementIsUncovered(page)).toBe(true);
 });
 
@@ -246,22 +243,32 @@ test('answers not found for a project outside the account', async ({ page }) => 
 
 test('signs out to the sign-in page', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await openNavigation(page, isMobile);
+  await openAccountMenu(page, isMobile);
 
   await page.getByRole('button', { name: 'Sign out' }).click();
 
   await expect(page).toHaveURL(/\/sign-in$/);
 });
 
-test('remembers the chosen theme across a reload', async ({ page }) => {
+test('remembers the chosen theme across a reload, and goes back to the system one', async ({
+  page,
+  isMobile,
+}) => {
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`/${STORE_ID}/overview`);
 
-  await page.getByRole('button', { name: 'Switch theme' }).click();
+  await openAccountMenu(page, isMobile);
+  await page.getByRole('button', { name: 'Dark' }).click();
   await page.reload();
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.getByRole('button', { name: 'Switch to light theme' })).toBeVisible();
+  await openAccountMenu(page, isMobile);
+  await expect(page.getByRole('button', { name: 'Dark' })).toHaveAttribute('aria-pressed', 'true');
+
+  await page.getByRole('button', { name: 'System' }).click();
+  await page.reload();
+
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme');
 });
 
 test('collapses the navigation behind a menu button on a phone', async ({ page, isMobile }) => {
@@ -346,7 +353,7 @@ test.describe('on a short phone', () => {
     test.skip(!isMobile, 'The menu button exists only on narrow screens.');
     await page.goto(`/${STORE_ID}/overview`);
 
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openAccountMenu(page, isMobile);
     const menu = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
     await page.getByRole('button', { name: 'Sign out' }).scrollIntoViewIfNeeded();
 
