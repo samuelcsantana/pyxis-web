@@ -863,6 +863,27 @@ export const en = {
       atLeast: '{lower} or more',
     },
   },
+  funnelSegments: {
+    title: 'The funnel by {by}',
+    description: 'Visits of {period} that reached each step, per {by}, on one scale.',
+    dimensions: {
+      device: 'device type',
+      channel: 'channel',
+    },
+    tabs: {
+      device: 'By device',
+      channel: 'By channel',
+    },
+    label: 'Split the funnel',
+    table: 'Funnel steps per segment',
+    segment: 'Segment',
+    step: 'Step {number}',
+    conversion: 'Overall',
+    unknown: 'Unknown',
+    empty: 'No visit reached the first step in this period.',
+    userMode:
+      'Per person, a device or a channel is not defined: switch to per visit to split the funnel.',
+  },
   exports: {
     download: 'Download CSV',
     asCsv: '{label} as CSV',

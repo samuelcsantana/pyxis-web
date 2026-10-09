@@ -9,7 +9,11 @@ import { demoDevicesWire } from './devices/demo-devices';
 import { demoEngagementWire } from './features/demo-engagement';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
-import { demoFunnelSubjectsWire, demoFunnelWire } from './funnel/demo-funnel';
+import {
+  demoFunnelSegmentsWire,
+  demoFunnelSubjectsWire,
+  demoFunnelWire,
+} from './funnel/demo-funnel';
 import {
   demoFailedReadsWire,
   demoRequestsWire,
@@ -93,6 +97,21 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       const report = demoEngagementWire(project.id, RANGE, NOW);
+      expect(validate(report), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo funnel segments by device and by channel', () => {
+    const validate = contractSchema('FunnelSegmentsReport');
+
+    for (const by of ['device', 'channel'] as const) {
+      const report = demoFunnelSegmentsWire(
+        DEMO_STORE.id,
+        RANGE,
+        DEMO_STORE.exampleFunnel,
+        by,
+        NOW,
+      );
       expect(validate(report), JSON.stringify(validate.errors)).toBe(true);
     }
   });

@@ -4,6 +4,7 @@ import {
   type FunnelStep,
   type FunnelWire,
 } from '@/domain/funnel';
+import type { FunnelSegmentDimension } from '@/domain/funnel-segments';
 import type { FunnelDrill } from '@/domain/funnel-subjects';
 import { type FunnelSubjectsWire, funnelResponseSchema } from '@/domain/funnel.schema';
 import type { DateRange } from '../date-range';
@@ -119,6 +120,43 @@ export function demoFunnelWire(
         index === 0 ? null : medianSeconds(gapsBetween(subjects, index, index - 1)),
     })),
     median_seconds_overall: medianSeconds(gapsBetween(subjects, steps.length - 1, 0)),
+  };
+}
+
+function segmentOf(visits: readonly DemoVisitRecord[], by: FunnelSegmentDimension): string {
+  const visit = itemAt(visits, 0);
+  return by === 'device' ? visit.deviceType : visit.channel;
+}
+
+export function demoFunnelSegmentsWire(
+  projectId: string,
+  range: DateRange,
+  steps: readonly FunnelStep[],
+  by: FunnelSegmentDimension,
+  now: Date,
+) {
+  const matchers = steps.map(matcherOf);
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const reached = [...groupedBy(visits, (visit) => visit.sessionId).values()]
+    .map((owned) => ({
+      segment: segmentOf(owned, by),
+      reached: stepTimes(
+        owned.flatMap((visit) => visit.events).toSorted((first, second) => first.at - second.at),
+        matchers,
+      ),
+    }))
+    .filter((subject) => subject.reached.length > 0);
+  const segments = [...groupedBy(reached, (subject) => subject.segment)].map(
+    ([segment, subjects]) => ({
+      segment,
+      steps: steps.map(
+        (_, index) => subjects.filter((subject) => subject.reached.length > index).length,
+      ),
+    }),
+  );
+  return {
+    by,
+    segments: segments.toSorted(byKeys((row) => [-itemAt(row.steps, 0), row.segment])),
   };
 }
 
