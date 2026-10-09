@@ -18,7 +18,12 @@ const meta = {
   title: 'Settings/Project settings',
   component: ProjectSettingsView,
   tags: ['autodocs'],
-  args: { settings: STORE, i18n: english },
+  args: {
+    settings: STORE,
+    i18n: english,
+    emailPreferences: { weeklyDigest: true },
+    chooseEmailPreferences: (chosen) => Promise.resolve(chosen),
+  },
   parameters: { layout: 'padded' },
 } satisfies Meta<typeof ProjectSettingsView>;
 

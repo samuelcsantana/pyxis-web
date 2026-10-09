@@ -57,3 +57,34 @@ test('shows the origins, a public key and no secret key value for each project',
     'https://docs.example.com',
   );
 });
+
+test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const email = page.getByRole('region', { name: 'E-mail' });
+  const toggle = email.getByRole('switch', { name: 'Weekly digest' });
+
+  await expect(toggle).toBeChecked();
+  await expect(email).toContainText('the week that closed on Sunday in');
+
+  await toggle.click();
+
+  await expect(toggle).not.toBeChecked();
+  await expect(email.getByText('Saved')).toBeVisible();
+  await expect(email.getByRole('alert')).toHaveCount(0);
+
+  await toggle.press('Space');
+
+  await expect(toggle).toBeChecked();
+});
+
+test('names the switch in Portuguese', async ({ page, context, baseURL }) => {
+  await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
+
+  await page.goto(`/${STORE_ID}/settings`);
+
+  await expect(
+    page.getByRole('region', { name: 'E-mail' }).getByRole('switch', { name: 'Resumo semanal' }),
+  ).toBeChecked();
+});

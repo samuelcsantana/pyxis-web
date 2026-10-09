@@ -1,7 +1,8 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { english } from '@/test-utils/english';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { ProjectSettingsView } from './project-settings-view';
 
 const PUBLIC_KEY = `pyxis_pk_${'a'.repeat(32)}`;
@@ -20,13 +21,18 @@ const SETTINGS: ProjectSettings = {
   secretKeys: [{ id: 'k2', createdAt: '2026-09-03T12:00:00.000Z' }],
 };
 
+const EMAIL = {
+  emailPreferences: { weeklyDigest: true },
+  chooseEmailPreferences: (chosen: { readonly weeklyDigest: boolean }) => Promise.resolve(chosen),
+};
+
 function panel(name: string) {
   return screen.getByRole('region', { name });
 }
 
 describe('ProjectSettingsView', () => {
   it('shows how the project is set up, its activity, origins, keys and retention', () => {
-    render(<ProjectSettingsView settings={SETTINGS} i18n={english} />);
+    renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
 
     const project = panel('Project');
     expect(within(project).getByText('Shop')).toBeInTheDocument();
@@ -43,8 +49,17 @@ describe('ProjectSettingsView', () => {
     expect(panel('Data retention')).toHaveTextContent('Events are kept for 13 months');
   });
 
+  it('puts the weekly digest switch first, in the e-mail panel, in the project time zone', () => {
+    renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
+
+    const email = panel('E-mail');
+    expect(within(email).getByRole('switch', { name: 'Weekly digest' })).toBeChecked();
+    expect(email).toHaveTextContent('the week that closed on Sunday in UTC');
+    expect(screen.getAllByRole('region')[0]).toBe(email);
+  });
+
   it('says when the project waits for its first event and has nothing set yet', () => {
-    render(
+    renderWithMessages(
       <ProjectSettingsView
         settings={{
           ...SETTINGS,
@@ -56,6 +71,7 @@ describe('ProjectSettingsView', () => {
           secretKeys: [],
         }}
         i18n={english}
+        {...EMAIL}
       />,
     );
 

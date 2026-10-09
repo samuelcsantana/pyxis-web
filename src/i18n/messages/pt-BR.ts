@@ -134,7 +134,7 @@ export const ptBR = translation({
   settings: {
     title: 'Configurações',
     subtitle:
-      'Como o {project} está configurado. Só leitura: as configurações mudam pela linha de comando.',
+      'Como o {project} está configurado e os e-mails que você recebe sobre ele. As configurações do projeto mudam pela linha de comando.',
     project: {
       heading: 'Projeto',
       name: 'Nome',
@@ -171,6 +171,17 @@ export const ptBR = translation({
       heading: 'Retenção de dados',
       body: 'Os eventos ficam guardados por {months} meses; depois, uma rotina diária os apaga.',
     },
+  },
+  emailPreferences: {
+    heading: 'E-mail',
+    weeklyDigest: 'Resumo semanal',
+    weeklyDigestNote:
+      'Toda segunda-feira, a semana que terminou no domingo em {timezone}: visitas, conversões, gravações com falha, páginas mais vistas e principais eventos. Cada admin escolhe o seu.',
+    on: 'Ligado',
+    off: 'Desligado',
+    saving: 'Salvando…',
+    saved: 'Salvo',
+    failed: 'A mudança não foi salva. Tente de novo.',
   },
   chartPanel: {
     showAs: 'Mostrar como',

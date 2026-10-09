@@ -123,7 +123,8 @@ export const en = {
   },
   settings: {
     title: 'Settings',
-    subtitle: 'How {project} is set up. Read-only: settings change through the command line.',
+    subtitle:
+      'How {project} is set up, and the e-mails you get about it. Project settings change through the command line.',
     project: {
       heading: 'Project',
       name: 'Name',
@@ -160,6 +161,17 @@ export const en = {
       heading: 'Data retention',
       body: 'Events are kept for {months} months, then a daily job deletes them.',
     },
+  },
+  emailPreferences: {
+    heading: 'E-mail',
+    weeklyDigest: 'Weekly digest',
+    weeklyDigestNote:
+      'Every Monday, the week that closed on Sunday in {timezone}: visits, conversions, failed writes, top pages and events. Each admin chooses for themselves.',
+    on: 'On',
+    off: 'Off',
+    saving: 'Saving…',
+    saved: 'Saved',
+    failed: 'The change was not saved. Try again.',
   },
   chartPanel: {
     showAs: 'Show as',
