@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.7.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.6.0...v0.7.0) (2026-10-09)
+
+
+### Features
+
+* **features:** read how the visits of a period entered, left and lasted ([d9dcea9](https://github.com/samuelcsantana/pyxis-web/commit/d9dcea9b402d19b512ac401289a7ca11dd06379b))
+* **features:** show where visits start and end and how long they last ([1740de4](https://github.com/samuelcsantana/pyxis-web/commit/1740de48ccb114c32ba4684779480059ec28f4ac))
+* **funnel:** read the funnel per device type or channel of the visit ([9f73f08](https://github.com/samuelcsantana/pyxis-web/commit/9f73f0805e618cc07b99b18be9081c2c9274ebff))
+* **funnel:** split the per-visit funnel by device or channel ([c25b647](https://github.com/samuelcsantana/pyxis-web/commit/c25b6471321df6b65b507a6820e32fde6a3bc6b8))
+* **i18n:** name the weekdays in each language ([f56d068](https://github.com/samuelcsantana/pyxis-web/commit/f56d0684aa5e36cc83cfe5d96459d2cb9f5a1e37))
+* **overview:** read when the visits of a period started ([033e802](https://github.com/samuelcsantana/pyxis-web/commit/033e8021cf42b2ad3970279273d5fd70ee8c504f))
+* **overview:** show when visits start, by weekday and hour ([452e310](https://github.com/samuelcsantana/pyxis-web/commit/452e310d69540596b093e02a4bdffc703fa86669))
+* **projects:** read the settings of a project from the API and the demo ([3f5a44f](https://github.com/samuelcsantana/pyxis-web/commit/3f5a44f7c2d91c404414944714aef91abc30a611))
+* **settings:** open the settings of a project from a gear beside it ([dc5d698](https://github.com/samuelcsantana/pyxis-web/commit/dc5d698dc0e07fc99812c003176ea3e4a1ea4d7e))
+* **settings:** show how a project is set up, read-only ([00aceb6](https://github.com/samuelcsantana/pyxis-web/commit/00aceb65edde5f33ae2e1b55a57457faf5d26bfc))
+
+
+### Bug Fixes
+
+* **settings:** keep the desktop gear in the brand row ([b8271f4](https://github.com/samuelcsantana/pyxis-web/commit/b8271f4f0026ed292ec61c90f130e2bed08968a2))
+
+
+### Documentation
+
+* **readme:** describe the entry, exit and visit length panels ([fff3f51](https://github.com/samuelcsantana/pyxis-web/commit/fff3f5105e549f67ae7ce9c30cc739e595466325))
+* **readme:** describe the funnel split by device or channel ([bbdb7d2](https://github.com/samuelcsantana/pyxis-web/commit/bbdb7d2df3d754e74520ed85539340b44b63afe1))
+* **readme:** describe the read-only Settings page ([5ab488f](https://github.com/samuelcsantana/pyxis-web/commit/5ab488feaad4a59c8abf12274cc099717e658a66))
+* **readme:** describe the When visits start panel ([6fab3e5](https://github.com/samuelcsantana/pyxis-web/commit/6fab3e58eda3bde264c3607b1dbb647a3730a228))
+
 ## [0.6.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.5.0...v0.6.0) (2026-10-09)
 
 
