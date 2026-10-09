@@ -76,3 +76,33 @@ test('moves through the channels with the keyboard', async ({ page, isMobile }) 
 
   await expect(channel).toHaveValue('paid');
 });
+
+test.describe('a select narrower than its chosen option', () => {
+  test.use({ locale: 'pt-BR' });
+
+  test('ends the option with an ellipsis before the chevron', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'The step type select is only narrow beside the value field.');
+    await page.goto(`/${STORE_ID}/funnel`);
+    await page.getByRole('button', { name: 'Editar passos' }).click();
+    const stepType = page.getByRole('combobox', { name: 'Tipo do passo 1' });
+    await expect(stepType).toHaveValue('page');
+
+    const fit = await stepType.evaluate((select) => {
+      const text = select.querySelector('selectedcontent');
+      if (text === null) {
+        return null;
+      }
+      const style = getComputedStyle(select);
+      const contentRight =
+        select.getBoundingClientRect().right -
+        Number.parseFloat(style.paddingRight) -
+        Number.parseFloat(style.borderRightWidth);
+      return {
+        clearOfTheChevron: text.getBoundingClientRect().right <= contentRight + 0.5,
+        cut: text.scrollWidth > text.clientWidth,
+      };
+    });
+
+    expect(fit).toEqual({ clearOfTheChevron: true, cut: true });
+  });
+});
