@@ -1,16 +1,14 @@
 import Form from 'next/form';
 import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
 import {
-  BUTTON_PRIMARY,
   PENDING_HOST,
   SEGMENTED_IDLE,
   SEGMENTED_OPTION,
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
-import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import type { I18n } from '@/i18n/i18n';
-import { CustomRangeFields } from './custom-range-fields';
+import { LazyRangeCalendar } from './lazy-range-calendar';
 import { PeriodPresets } from './period-presets';
 
 export type KeptParameters = Readonly<Record<string, string>>;
@@ -77,21 +75,17 @@ export function PeriodSelector({
         </summary>
         <Form
           action={basePath}
-          className="mt-1.5 flex flex-wrap items-end gap-2 rounded-input border border-line bg-card p-3 sm:absolute sm:right-0 sm:z-10 sm:w-max sm:shadow-lg"
+          className="mt-1.5 rounded-input border border-line bg-card p-4 sm:absolute sm:right-0 sm:z-10 sm:shadow-lg"
         >
           {Object.entries(keep).map(([name, value]) => (
             <input key={name} type="hidden" name={name} value={value} />
           ))}
-          <CustomRangeFields
-            from={shown.from}
-            to={shown.to}
+          <LazyRangeCalendar
+            from={period.from}
+            to={period.to}
             today={today}
             problemId={period.rejected === undefined ? undefined : RANGE_NOTICE_ID}
-          />
-          <PendingSubmitButton
-            label={i18n.t('periodSelector.apply')}
-            pendingLabel={i18n.t('periodSelector.applying')}
-            className={`min-h-11 rounded-control px-3 text-caption sm:min-h-9 ${BUTTON_PRIMARY}`}
+            openAtFirst={period.rejected !== undefined}
           />
         </Form>
       </DismissableDetails>

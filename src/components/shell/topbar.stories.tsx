@@ -48,8 +48,11 @@ const showsTheRejectedRange: Story['play'] = async ({ canvasElement }) => {
   await expect(canvas.getByRole('status')).toHaveTextContent(
     'That range was not used: it ends before it starts.',
   );
-  await expect(canvas.getByLabelText('From')).toBeVisible();
-  await expect(canvas.getByLabelText('To')).toHaveAttribute('aria-invalid', 'true');
+  await expect(await canvas.findByRole('grid', {}, { timeout: 4000 })).toBeVisible();
+  await expect(canvas.getByText(/· 30 days$/)).toHaveAttribute(
+    'aria-describedby',
+    'period-range-notice',
+  );
 };
 
 export const RejectedRange: Story = { args: REJECTED, play: showsTheRejectedRange };
@@ -69,9 +72,8 @@ export const RejectedRangeOnAPhone: Story = {
 const openTheCustomForm: NonNullable<Story['play']> = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   await userEvent.click(canvas.getByText('Custom'));
-  await expect(canvas.getByLabelText('From')).toBeVisible();
-  await expect(canvas.getByLabelText('To')).toBeVisible();
-  await expect(canvas.getByLabelText('To')).not.toHaveAttribute('aria-invalid', 'true');
+  await expect(await canvas.findByRole('grid', {}, { timeout: 4000 })).toBeVisible();
+  await expect(canvas.getByRole('button', { name: 'Apply' })).toBeEnabled();
 };
 
 export const CustomFormOpen: Story = { play: openTheCustomForm };
@@ -91,9 +93,11 @@ export const CustomFormClosedWithEscape: Story = {
   args: REJECTED,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    canvas.getByLabelText('From').focus();
+    const grid = await canvas.findByRole('grid', {}, { timeout: 4000 });
+    const focusable = grid.querySelector<HTMLButtonElement>('button[tabindex="0"]');
+    focusable?.focus();
     await userEvent.keyboard('{Escape}');
-    await expect(canvas.getByLabelText('From')).not.toBeVisible();
+    await expect(grid).not.toBeVisible();
     await expect(canvas.getByText('Custom')).toHaveFocus();
   },
 };

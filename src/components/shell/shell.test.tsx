@@ -533,6 +533,14 @@ describe('SkipLink and MainContent', () => {
   });
 });
 
+function openDetails(container: HTMLElement) {
+  const details = container.querySelector('details');
+  if (details === null) {
+    throw new Error('The period selector has no custom form.');
+  }
+  details.open = true;
+}
+
 describe('PeriodSelector', () => {
   const today = '2026-10-05';
 
@@ -556,7 +564,7 @@ describe('PeriodSelector', () => {
     expect(presets.getByRole('link', { name: '30 days' })).not.toHaveAttribute('aria-current');
   });
 
-  it('offers a plain form for a custom period, closed until asked for', () => {
+  it('offers a calendar for a custom period in a plain form, closed until asked for', async () => {
     const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
@@ -571,32 +579,19 @@ describe('PeriodSelector', () => {
     expect(container.querySelector('details')).not.toHaveAttribute('open');
     expect(form).toHaveAttribute('action', '/p1/overview');
     expect(form).toHaveProperty('method', 'get');
-    expect(screen.getByLabelText('From')).toHaveValue('2026-08-01');
-    expect(screen.getByLabelText('To')).toHaveAttribute('max', today);
-    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-08-01');
-    expect(screen.getByLabelText('From')).not.toHaveAttribute('aria-invalid');
-    expect(screen.getByLabelText('To')).not.toHaveAttribute('aria-describedby');
-  });
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
 
-  it('keeps "To" from going before "From" as the start changes', () => {
-    renderWithMessages(
-      <PeriodSelector
-        basePath="/p1/overview"
-        period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
-        today={today}
-        i18n={english}
-      />,
+    openDetails(container);
+
+    expect(await screen.findByRole('grid', { name: 'August 2026' })).toBeInTheDocument();
+    expect(container.querySelector('input[name="from"]')).toHaveValue('2026-08-01');
+    expect(container.querySelector('input[name="to"]')).toHaveValue('2026-08-31');
+    expect(screen.getByText('Aug 1 – Aug 31, 2026 · 31 days')).not.toHaveAttribute(
+      'aria-describedby',
     );
-    const from = screen.getByLabelText('From');
-
-    fireEvent.change(from, { target: { value: '2026-08-20' } });
-    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-08-20');
-
-    fireEvent.change(from, { target: { value: '' } });
-    expect(screen.getByLabelText('To')).not.toHaveAttribute('min');
   });
 
-  it('opens the custom form with a range it could not use, marked as not used', () => {
+  it('opens on the period in force when a range was not used, pointing at the notice', async () => {
     const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
@@ -610,19 +605,16 @@ describe('PeriodSelector', () => {
     );
 
     expect(container.querySelector('details')).toHaveAttribute('open');
-    for (const [label, value] of [
-      ['From', '2026-10-05'],
-      ['To', '2026-09-20'],
-    ] as const) {
-      const field = screen.getByLabelText(label);
-      expect(field).toHaveValue(value);
-      expect(field).toHaveAttribute('aria-invalid', 'true');
-      expect(field).toHaveAttribute('aria-describedby', 'period-range-notice');
-    }
-    expect(screen.getByLabelText('To')).toHaveAttribute('min', '2026-10-05');
+    expect(await screen.findByRole('grid', { name: 'October 2026' })).toBeInTheDocument();
+    expect(container.querySelector('input[name="from"]')).toHaveValue('2026-09-06');
+    expect(container.querySelector('input[name="to"]')).toHaveValue('2026-10-05');
+    expect(screen.getByText('Sep 6 – Oct 5, 2026 · 30 days')).toHaveAttribute(
+      'aria-describedby',
+      'period-range-notice',
+    );
   });
 
-  it('closes the custom form on Escape, with the focus back on "Custom"', () => {
+  it('closes the custom form on Escape, with the focus back on "Custom"', async () => {
     const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
@@ -634,18 +626,18 @@ describe('PeriodSelector', () => {
         i18n={english}
       />,
     );
-    const from = screen.getByLabelText('From');
-    from.focus();
+    const day = await screen.findByRole('button', { name: 'Monday, October 5, 2026' });
+    day.focus();
 
-    fireEvent.blur(from, { relatedTarget: null });
+    fireEvent.blur(day, { relatedTarget: null });
     expect(container.querySelector('details')).toHaveAttribute('open');
 
-    fireEvent.keyDown(from, { key: 'Escape' });
+    fireEvent.keyDown(day, { key: 'Escape' });
     expect(container.querySelector('details')).not.toHaveAttribute('open');
     expect(screen.getByText('Custom')).toHaveFocus();
   });
 
-  it('closes the custom form when the focus moves to a preset', () => {
+  it('closes the custom form when the focus moves to a preset', async () => {
     const { container } = renderWithMessages(
       <PeriodSelector
         basePath="/p1/overview"
@@ -658,7 +650,8 @@ describe('PeriodSelector', () => {
       />,
     );
 
-    fireEvent.blur(screen.getByRole('button', { name: 'Apply' }), {
+    const apply = await screen.findByRole('button', { name: 'Apply' });
+    fireEvent.blur(apply, {
       relatedTarget: screen.getByRole('link', { name: '7 days' }),
     });
 

@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
 import { documentMarker, holdScreenRequests, markTheDocument } from './navigation';
+import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEMO_USER = 'u_7f3a';
@@ -135,9 +136,7 @@ test('applies a custom period in place and closes its form', async ({ page }) =>
   const custom = page.locator('details', { hasText: 'Custom' });
 
   await custom.locator('summary').click();
-  await page.getByLabel('From', { exact: true }).fill('2026-08-01');
-  await page.getByLabel('To', { exact: true }).fill('2026-08-31');
-  await page.getByRole('button', { name: 'Apply' }).click();
+  await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
 
   await expect(page).toHaveURL(/from=2026-08-01&to=2026-08-31$/);
   await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
