@@ -25,6 +25,8 @@ import { demoOverviewWire } from './overview/demo-overview';
 import { demoProjectSettingsWire } from './projects/demo-project-settings';
 import { demoTimeOfDayWire } from './overview/demo-time-of-day';
 import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
+import { DEMO_EMAIL_PREFERENCES_WIRE } from './preferences/mock-email-preferences-service';
+import { emailPreferencesWire } from '@/domain/email-preferences';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 
 const CONTRACT_FILE = 'contract/openapi.json';
@@ -274,6 +276,14 @@ describe('the API contract copied from pyxis-api', () => {
 
     expect(contractSchema('RequestCodeRequest')(requestCode)).toBe(true);
     expect(contractSchema('VerifyCodeRequest')(verifyCode)).toBe(true);
+  });
+
+  it('accepts the demo e-mail preferences and the body the Settings switch sends', () => {
+    const validate = contractSchema('EmailPreferences');
+
+    expect(validate(DEMO_EMAIL_PREFERENCES_WIRE), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate(emailPreferencesWire({ weeklyDigest: false }))).toBe(true);
+    expect(validate({ weekly_digest: 'yes' })).toBe(false);
   });
 
   it('would catch a body that drifted from the contract', () => {
