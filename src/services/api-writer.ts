@@ -5,7 +5,7 @@ import {
   SessionRequests,
 } from './session-requests';
 
-export class ApiReader {
+export class ApiWriter {
   private readonly requests: SessionRequests;
 
   constructor(
@@ -17,7 +17,7 @@ export class ApiReader {
     this.requests = new SessionRequests(baseUrl, sessionToken, log, now);
   }
 
-  get<Value>(path: string, schema: ResponseSchema<Value>): Promise<Value> {
-    return this.requests.send('api_read', path, schema);
+  put<Value>(path: string, body: unknown, schema: ResponseSchema<Value>): Promise<Value> {
+    return this.requests.send('api_write', path, schema, { method: 'PUT', body });
   }
 }

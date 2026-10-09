@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
-import { ApiReader, pathTemplate } from './api-reader';
+import { ApiReader } from './api-reader';
+import { pathTemplate } from './session-requests';
 import { createApiReader } from './api-reader.factory';
 
 const API = 'https://api.pyxis.example.com';
