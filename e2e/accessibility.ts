@@ -4,8 +4,33 @@ import axe from 'axe-core';
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
 const ANY_TITLE = /\S/;
 
+async function finishedMoving(page: Page): Promise<void> {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((animation) => {
+          const target =
+            animation.effect instanceof KeyframeEffect ? animation.effect.target : null;
+          return (
+            (animation.playState === 'running' || animation.pending) &&
+            animation.effect?.getComputedTiming().endTime !== Infinity &&
+            target?.checkVisibility() === true
+          );
+        })
+        .map((animation) =>
+          animation.finished.then(
+            () => undefined,
+            () => undefined,
+          ),
+        ),
+    ),
+  );
+}
+
 export async function axeViolations(page: Page): Promise<string[]> {
   await expect(page).toHaveTitle(ANY_TITLE);
+  await finishedMoving(page);
   await page.addScriptTag({ content: axe.source });
   return page.evaluate(async (tags) => {
     const runner = (window as unknown as { axe: typeof axe }).axe;
