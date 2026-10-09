@@ -212,7 +212,8 @@ Shipping now:
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner links back to this repository
-- A read-only Settings page per project, behind the gear beside the project switcher: time zone,
+- A read-only Settings page per project, behind the gear next to the language button (beside
+  the project switcher in the phone menu): time zone,
   conversion event, allowed origins, the live public keys (a public key ships in the site, so it
   is shown in full), when each live secret key was created (never the key, which the API keeps
   only as a hash), how many months events are kept, and whether the project still waits for its
