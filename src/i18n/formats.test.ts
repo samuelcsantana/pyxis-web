@@ -53,6 +53,20 @@ describe('createFormats', () => {
     expect(portuguese.list(['a', 'b', 'c'])).toBe('a, b e c');
   });
 
+  it('names ISO weekdays, Monday first, short and long, in each language', () => {
+    expect([1, 2, 3, 4, 5, 6, 7].map((weekday) => english.weekday(weekday, 'short'))).toEqual([
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
+    ]);
+    expect(english.weekday(1, 'long')).toBe('Monday');
+    expect(portuguese.weekday(7, 'long')).toBe('domingo');
+  });
+
   it('builds the formats of a language once', () => {
     expect(createFormats('en-US')).toBe(english);
   });
