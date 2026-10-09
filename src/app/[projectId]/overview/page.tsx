@@ -39,7 +39,6 @@ import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 
 export const generateMetadata = screenMetadata('overview');
@@ -170,7 +169,6 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
         period={period}
         today={today}
         keep={keptMetric(metric)}
-        theme={await chosenTheme()}
         i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">

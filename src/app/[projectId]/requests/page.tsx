@@ -36,7 +36,6 @@ import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { readRequestsReport } from '@/services/requests/requests-report';
 import { loadRouteDays } from './actions';
 
@@ -123,7 +122,6 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
         basePath={basePath}
         period={period}
         today={todayIn(project.timezone, now)}
-        theme={await chosenTheme()}
         keep={filterParameters(filter)}
         i18n={i18n}
       />

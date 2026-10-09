@@ -66,29 +66,20 @@ describe('ThemeToggle', () => {
     document.documentElement.dataset.theme = 'light';
     renderWithMessages(
       <>
-        <ThemeToggle initialTheme="light" surface="nav" />
+        <ThemeToggle initialTheme="light" />
         <ThemeToggle initialTheme="light" />
       </>,
     );
-    const [inTheMenuBar, inTheHeader] = screen.getAllByRole('button', {
+    const [first, second] = screen.getAllByRole('button', {
       name: 'Switch to dark theme',
     });
 
-    await userEvent.click(inTheMenuBar ?? document.body);
+    await userEvent.click(first ?? document.body);
 
     await waitFor(() => {
-      expect(inTheHeader).toHaveAccessibleName('Switch to light theme');
+      expect(second).toHaveAccessibleName('Switch to light theme');
     });
-    expect(inTheMenuBar).toHaveAccessibleName('Switch to light theme');
-  });
-
-  it('wears the colours of the dark navigation bar when it sits there', () => {
-    renderWithMessages(<ThemeToggle surface="nav" />);
-
-    expect(screen.getByRole('button', { name: 'Switch theme' })).toHaveClass(
-      'border-nav-border',
-      'text-nav-strong',
-    );
+    expect(first).toHaveAccessibleName('Switch to light theme');
   });
 
   it('renders the theme it was given on the server, before the page can be read', () => {

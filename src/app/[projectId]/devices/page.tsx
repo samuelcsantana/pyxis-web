@@ -27,7 +27,6 @@ import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
-import { chosenTheme } from '@/lib/theme-cookie';
 import { createDevicesService } from '@/services/devices/devices-service.factory';
 
 export const generateMetadata = screenMetadata('devices');
@@ -131,7 +130,6 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
         basePath={screenHref(project.id, 'devices')}
         period={period}
         today={todayIn(project.timezone, now)}
-        theme={await chosenTheme()}
         i18n={i18n}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">

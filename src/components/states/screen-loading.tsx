@@ -78,15 +78,6 @@ function PeriodPlaceholder() {
   );
 }
 
-function ThemeTogglePlaceholder() {
-  return (
-    <span
-      aria-hidden="true"
-      className="hidden size-11 rounded-input border border-line bg-grid motion-safe:animate-pulse lg:block"
-    />
-  );
-}
-
 export interface ScreenLoadingProps {
   readonly screen: ScreenSlug;
   readonly i18n: I18n;
@@ -104,12 +95,7 @@ export function ScreenLoading({ screen, i18n }: ScreenLoadingProps) {
             className="inline-block h-3 w-56 max-w-full rounded-chip bg-grid motion-safe:animate-pulse"
           />
         }
-        controls={
-          <>
-            {SCREENS_WITHOUT_PERIOD.has(screen) ? null : <PeriodPlaceholder />}
-            <ThemeTogglePlaceholder />
-          </>
-        }
+        controls={<>{SCREENS_WITHOUT_PERIOD.has(screen) ? null : <PeriodPlaceholder />}</>}
       />
       <MainContent
         aria-busy="true"

@@ -98,7 +98,7 @@ describe('ProjectLayout', () => {
     expect(links[0]).toHaveAccessibleName('Skip to content');
     expect(links[0]).toHaveAttribute('href', '#content');
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
-    expect(within(navigation).getByRole('button', { name: 'Switch theme' })).toBeInTheDocument();
+    expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByText('screen')).toBeInTheDocument();
   });

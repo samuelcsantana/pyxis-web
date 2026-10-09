@@ -10,7 +10,6 @@ import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from './screens';
 import { Sidebar } from './sidebar';
-import { SettingsLink } from './settings-link';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID, SkipLink } from './skip-link';
@@ -114,10 +113,11 @@ describe('SidebarNav', () => {
     expect(screen.getByRole('link', { name: 'Devices' })).not.toHaveAttribute('aria-current');
   });
 
-  it('links every screen', () => {
+  it('links every screen, then the project settings', () => {
     renderWithMessages(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(8);
+    expect(screen.getAllByRole('link')).toHaveLength(9);
+    expect(screen.getAllByRole('link').at(-1)).toHaveAccessibleName('Settings');
     expect(screen.queryByText('Soon')).not.toBeInTheDocument();
   });
 
@@ -130,24 +130,24 @@ describe('SidebarNav', () => {
   });
 });
 
-describe('SettingsLink', () => {
-  it('links the settings of the project, named for screen readers', () => {
-    renderWithMessages(<SettingsLink projectId="p-store" />);
+describe('the project settings in the navigation', () => {
+  it('links the settings of the project in a list of its own, without the period', () => {
+    renderWithMessages(<SidebarNav projectId="p-store" />);
 
-    const link = screen.getByRole('link', { name: 'Project settings' });
+    const link = within(screen.getByRole('list', { name: 'Project' })).getByRole('link', {
+      name: 'Settings',
+    });
     expect(link).toHaveAttribute('href', '/p-store/settings');
     expect(link).not.toHaveAttribute('aria-current');
   });
 
-  it('marks itself current on the settings page', () => {
+  it('marks the settings current on the settings page, and no screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<SettingsLink projectId="p-store" />);
+    renderWithMessages(<SidebarNav projectId="p-store" />);
     navigation.pathname = '/p-store/overview';
 
-    expect(screen.getByRole('link', { name: 'Project settings' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
   });
 });
 
@@ -329,17 +329,20 @@ describe('SignOutButton', () => {
 });
 
 describe('Sidebar', () => {
-  it('holds the project switcher, the screens, the privacy note, the languages and the account', () => {
+  it('holds the project switcher, the screens, the settings, the privacy note and the account menu', () => {
     renderWithMessages(
       <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
     );
 
     expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
-    expect(screen.getByText('Language: English')).toBeInTheDocument();
-    expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(2);
-    expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByText('Account and preferences')).toBeInTheDocument();
+    expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(1);
+    expect(screen.getByRole('group', { name: 'Theme', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sign out', hidden: true })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Project settings' })).not.toBeInTheDocument();
   });
 
   it('becomes the main navigation inside the menu, with the menu bar', () => {
@@ -382,19 +385,6 @@ describe('MobileMenu', () => {
       'false',
     );
     expect(menu).toHaveClass('hidden');
-  });
-
-  it('shows the actions it is given in its bar, beside the menu button, while closed', () => {
-    renderWithMessages(
-      <MobileMenu barActions={<button type="button">Switch theme</button>}>
-        <span>menu</span>
-      </MobileMenu>,
-    );
-
-    const action = screen.getByRole('button', { name: 'Switch theme' });
-    const toggle = screen.getByRole('button', { name: 'Open menu' });
-    expect(action.parentElement).toBe(toggle.parentElement);
-    expect(document.getElementById('main-navigation')).toHaveClass('hidden');
   });
 
   it('closes with its own button', () => {
@@ -681,12 +671,12 @@ describe('PeriodSelector with parameters of the screen', () => {
 });
 
 describe('Topbar without a period', () => {
-  it('shows the title and the theme toggle, and no period controls', () => {
+  it('shows the title, with no period controls and no theme toggle', () => {
     renderWithMessages(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
 
     expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /theme/ })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /theme/ })).not.toBeInTheDocument();
   });
 });
 
@@ -704,7 +694,6 @@ describe('Topbar', () => {
         basePath="/p1/overview"
         period={presetPeriod('30d', '2026-10-05')}
         today="2026-10-05"
-        theme="dark"
         i18n={english}
       />,
     );
@@ -722,7 +711,7 @@ describe('Topbar', () => {
     expect(range.closest('p')).toHaveClass('flex');
     expect(range.parentElement).toHaveClass('shrink-0');
     expect(screen.getByRole('navigation', { name: 'Period' })).not.toContainElement(range);
-    expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /theme/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 

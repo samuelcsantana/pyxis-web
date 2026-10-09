@@ -29,12 +29,11 @@ function watchConsoleErrors(page: Page): string[] {
   return errors;
 }
 
-async function openLanguages(page: Page, isMobile: boolean, menu: string, languages: string) {
+async function openLanguages(page: Page, isMobile: boolean, menu: string, account: string) {
   if (isMobile) {
     await page.getByRole('button', { name: menu }).click();
-    return;
   }
-  await page.locator('summary', { hasText: languages }).click();
+  await page.locator('summary', { hasText: account }).click();
 }
 
 async function visitsFigure(page: Page, name: string): Promise<string | null> {
@@ -132,7 +131,7 @@ test('switches the language in place, keeping the address, and back', async ({
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
-  await openLanguages(page, isMobile, 'Open menu', 'Language: English');
+  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
   await page.getByRole('button', { name: 'Português (Brasil)' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
@@ -142,7 +141,7 @@ test('switches the language in place, keeping the address, and back', async ({
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 
-  await openLanguages(page, isMobile, 'Abrir menu', 'Idioma: Português (Brasil)');
+  await openLanguages(page, isMobile, 'Abrir menu', 'Conta e preferências');
   await page.getByRole('button', { name: 'English' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -163,14 +162,13 @@ test('keeps a chosen language over the one the browser asks for', async ({
   await expect(page.getByRole('heading', { level: 1, name: 'Visitas' })).toBeVisible();
 });
 
-test('opens the language menu inside the window, from the globe in the sidebar', async ({
+test('opens the account menu inside the window, with the languages in it', async ({
   page,
   isMobile,
 }) => {
-  test.skip(isMobile, 'Phones list the languages in the menu, without the globe.');
   await page.goto(`/${STORE_ID}/overview`);
 
-  await openLanguages(page, isMobile, 'Open menu', 'Language: English');
+  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
 
   const languages = page.getByRole('group', { name: 'Language', exact: true });
   await expect(languages).toBeVisible();

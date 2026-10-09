@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
 import { english } from '@/test-utils/english';
@@ -78,12 +77,27 @@ export const BrazilianPortuguese: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('Sem cookies, sem dados pessoais')).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
+    await userEvent.click(canvas.getByText('Conta e preferências'));
     await expect(canvas.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
+    await expect(canvas.getByRole('group', { name: 'Tema' })).toBeVisible();
   },
 };
+
+const openTheAccountMenu: Play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByText('Account and preferences'));
+  await expect(canvas.getByRole('group', { name: 'Language' })).toBeVisible();
+  await expect(canvas.getByRole('group', { name: 'Theme' })).toBeVisible();
+  await expect(canvas.getByRole('button', { name: 'Sign out' })).toBeVisible();
+};
+
+export const AccountMenuOpen: Story = { play: openTheAccountMenu };
+
+export const AccountMenuOpenDark: Story = { globals: { theme: 'dark' }, play: openTheAccountMenu };
 
 export const LongValues: Story = {
   args: { admin: LONG_VALUES, project: LONG_PROJECT },
@@ -201,7 +215,7 @@ export const SignOutFailedDark: Story = {
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
   (Story) => (
     <div className="w-[390px]">
-      <MobileMenu barActions={<ThemeToggle surface="nav" />}>
+      <MobileMenu>
         <Story />
       </MobileMenu>
     </div>
