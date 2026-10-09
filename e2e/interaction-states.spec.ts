@@ -125,7 +125,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test.use({ colorScheme });
 
     for (const { control, screen, target, ring, prepare } of REPRESENTATIVES) {
-      test(`${control} on ${screen} shows a ring at 3:1 or more`, async ({ page, isMobile }) => {
+      test(`${control} on ${screen} shows a ring at 3:1 or more, in its color from the first frame`, async ({
+        page,
+        isMobile,
+      }) => {
         await page.goto(`/${STORE_ID}/${screen}`);
         await prepare?.(page, isMobile);
 
@@ -134,6 +137,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
         expect(reading.focusVisible).toBe(true);
         expect(reading.drawn).toBe(true);
         expect(reading.contrast).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+        expect(reading.steady).toBe(true);
       });
     }
   });

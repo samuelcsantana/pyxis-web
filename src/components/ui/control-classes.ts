@@ -1,11 +1,10 @@
-export const FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus';
+export const FOCUS_RING = 'outline-focus focus-visible:outline-2 focus-visible:outline-offset-2';
 export const FIELD_FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-focus';
+  'outline-focus focus-visible:outline-2 focus-visible:-outline-offset-1';
 export const FIELD_FOCUS_WITHIN_RING =
-  'focus-within:outline-2 focus-within:-outline-offset-1 focus-within:outline-focus';
+  'outline-focus focus-within:outline-2 focus-within:-outline-offset-1';
 export const NAV_FOCUS_RING =
-  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+  'outline-accent focus-visible:outline-2 focus-visible:outline-offset-2';
 export const CONTROL_TRANSITION = 'transition-colors duration-150 motion-reduce:transition-none';
 export const NAV_CONTROL = `${NAV_FOCUS_RING} ${CONTROL_TRANSITION}`;
 export const NAV_ITEM_IDLE = 'text-nav-text hover:bg-nav-hover active:bg-nav-active';
