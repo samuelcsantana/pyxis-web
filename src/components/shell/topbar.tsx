@@ -52,7 +52,7 @@ export interface TopbarFrameProps {
 
 export function TopbarFrame({ title, subtitle, context, controls, notice }: TopbarFrameProps) {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:px-8 sm:py-4.5">
+    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:px-8 sm:py-4.5 lg:sticky lg:top-0 lg:z-20">
       <div className="flex min-w-0 flex-1 basis-64 flex-col gap-1">
         <h1 className="text-title leading-7 font-semibold tracking-tight">{title}</h1>
         {context === undefined ? (
