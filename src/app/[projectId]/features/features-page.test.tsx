@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
@@ -38,6 +38,7 @@ vi.mock('@/services/features/features-service.factory', () => ({
     features: (projectId, range, kind) => state.features(projectId, range, kind),
     properties: (projectId, range, name) =>
       new MockFeaturesService().properties(projectId, range, name),
+    engagement: (projectId, range) => new MockFeaturesService().engagement(projectId, range),
   }),
 }));
 
@@ -104,8 +105,8 @@ describe('FeaturesPage', () => {
   it('ranks the screens when asked, and keeps the search across periods', async () => {
     renderWithMessages(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
 
-    expect(screen.getByRole('table', { name: 'Most visited screens' })).toBeInTheDocument();
-    expect(screen.getAllByRole('row')).toHaveLength(4);
+    const ranking = screen.getByRole('table', { name: 'Most visited screens' });
+    expect(within(ranking).getAllByRole('row')).toHaveLength(4);
     expect(screen.queryByRole('button', { name: /^Properties of/ })).toBeNull();
     expect(screen.getByRole('searchbox', { name: 'Search screens' })).toHaveValue('orders');
     expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
@@ -120,6 +121,22 @@ describe('FeaturesPage', () => {
       'href',
       '/p-store/visits?range=30d&path=%2Forders%2F%3Aid',
     );
+  });
+
+  it('shows where visits start and end and how long they last on the screens tab only', async () => {
+    renderWithMessages(await renderFeatures({ range: '30d', kind: 'screens' }));
+
+    expect(screen.getByRole('table', { name: 'Where visits start' })).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Where visits end' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'How long visits last' })).toHaveTextContent(
+      'Median visit',
+    );
+  });
+
+  it('leaves the visit shapes out of the events tab', async () => {
+    renderWithMessages(await renderFeatures({ range: '30d', kind: 'events' }));
+
+    expect(screen.queryByRole('region', { name: 'How long visits last' })).toBeNull();
   });
 
   it('offers the ranking it shows as a CSV file, kind and search kept', async () => {
