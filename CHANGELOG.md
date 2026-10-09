@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.8.1...v0.9.0) (2026-10-09)
+
+
+### Features
+
+* **i18n:** name calendar months and days in full in each language ([d8b92e3](https://github.com/samuelcsantana/pyxis-web/commit/d8b92e34079305dd9c75db2b4709dc8399809c48))
+* **period:** pick a date range on a calendar, as pure rules ([de67757](https://github.com/samuelcsantana/pyxis-web/commit/de677574c5b9c46f44fc53541dfe9afa5d3e4da0))
+* **shell:** choose a custom period on a calendar ([278a189](https://github.com/samuelcsantana/pyxis-web/commit/278a1891bd1512c1c77f128a3e578adb6dc44f0b))
+* **shell:** move settings into the navigation and preferences into an account menu ([306cfb3](https://github.com/samuelcsantana/pyxis-web/commit/306cfb31e70bd02e4ae518d69776d4816f0b838b))
+
 ## [0.8.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.8.0...v0.8.1) (2026-10-09)
 
 
