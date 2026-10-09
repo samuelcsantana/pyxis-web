@@ -27,7 +27,7 @@ export async function focusedElementIsUncovered(page: Page): Promise<boolean> {
 }
 
 export async function sidewaysOverflow(page: Page): Promise<number> {
-  return page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  return page.evaluate(() =>
+    Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth),
   );
 }
