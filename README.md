@@ -148,7 +148,10 @@ Shipping now:
   and the share of the ranking; a search by name that lives in the URL; each event opens its
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
   the rest as "Other values". Every event, screen and value opens the visits that had it, with the
-  period kept; a link's name starts with the text it shows ("/pricing: see its visits")
+  period kept; a link's name starts with the text it shows ("/pricing: see its visits"). The
+  screens tab also shows where visits start (with how many left after that page) and end, and how
+  long they last from their first to their last event: the median, the share that viewed one
+  page, and seven length buckets — all from the visits the Overview counts
 - Requests: the failures of each day stacked by what went wrong (client errors, server errors,
   no response; chart or table, a pointer over a day lists them), then every write by route with
   its success and error shares, status codes, median and 95th percentile duration; a
