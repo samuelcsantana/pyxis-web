@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.8.0...v0.8.1) (2026-10-09)
+
+
+### Bug Fixes
+
+* **devices:** put every breakdown table under its donut ([d76ba5b](https://github.com/samuelcsantana/pyxis-web/commit/d76ba5b8a8c4009347710895cdab333bc999aebc))
+* **forms:** hug fields with their focus ring and align the selects ([3d1ad7e](https://github.com/samuelcsantana/pyxis-web/commit/3d1ad7e87952a03c6d9f86a04adf902c7ad4757f))
+* **shell:** keep the header still when the period changes ([9bbeb6a](https://github.com/samuelcsantana/pyxis-web/commit/9bbeb6aa6a6c8e9dbdbb612c988a5f87c0afdc32))
+* **shell:** keep the language menu inside the window ([5eb1ba0](https://github.com/samuelcsantana/pyxis-web/commit/5eb1ba0d0ee7b8ba2608a2e64290b03f09c4cc8f))
+
 ## [0.8.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.7.0...v0.8.0) (2026-10-09)
 
 
