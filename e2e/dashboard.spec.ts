@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
+import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -17,6 +18,18 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test('has no WCAG 2.2 A or AA violation and never scrolls sideways', async ({ page }) => {
       await page.goto(`/${STORE_ID}/overview`);
       await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
+
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
+    });
+
+    test('has no WCAG 2.2 A or AA violation while a custom period is being picked', async ({
+      page,
+    }) => {
+      await page.goto(`/${STORE_ID}/overview`);
+      await page.getByText('Custom', { exact: true }).click();
+      await page.getByRole('grid').locator('button[tabindex="0"]').click();
+      await expect(page.getByText(/now choose the last day/)).toBeVisible();
 
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
@@ -45,24 +58,48 @@ test('writes the chosen period into the URL', async ({ page }) => {
   );
 });
 
-test('applies a custom period through a plain form', async ({ page }) => {
+test('applies a custom period picked on the calendar through a plain form', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
   await page.getByText('Custom', { exact: true }).click();
-  await page.getByLabel('From', { exact: true }).fill('2026-08-01');
-  await page.getByLabel('To', { exact: true }).fill('2026-08-31');
-  await page.getByRole('button', { name: 'Apply' }).click();
+  await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
 
   await expect(page).toHaveURL(/from=2026-08-01&to=2026-08-31$/);
   await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
   await expect(page.getByText('Page views and named events, Aug 1 – Aug 31, 2026')).toBeVisible();
 });
 
-test('keeps a custom period form closed until asked for', async ({ page }) => {
+test('picks a custom period with the keyboard alone', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await page.waitForLoadState('networkidle');
+  const custom = page.locator('summary', { hasText: 'Custom' });
+
+  await custom.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('grid')).toBeVisible();
+  await page.getByRole('grid').locator('button[tabindex="0"]').focus();
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(/now choose the last day/)).toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(/· 2 days$/)).toBeVisible();
+  await page.getByRole('button', { name: 'Apply' }).focus();
+  await page.keyboard.press('Enter');
+
+  await expect(page).toHaveURL(/from=\d{4}-\d{2}-\d{2}&to=\d{4}-\d{2}-\d{2}$/);
+  const url = new URL(page.url());
+  const from = Date.parse(url.searchParams.get('from') ?? '');
+  const to = Date.parse(url.searchParams.get('to') ?? '');
+  expect((to - from) / 86_400_000).toBe(1);
+});
+
+test('keeps the custom period calendar closed until asked for', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
 
   await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
-  await expect(page.getByLabel('From', { exact: true })).toBeHidden();
+  await expect(page.getByRole('grid')).toBeHidden();
 });
 
 const REJECTED_RANGES = [
@@ -71,7 +108,7 @@ const REJECTED_RANGES = [
 ] as const;
 
 for (const { from, to, reason } of REJECTED_RANGES) {
-  test(`says it did not use ${from} to ${to}, and keeps the dates in the form`, async ({
+  test(`says it did not use ${from} to ${to}, and opens the calendar on the period in force`, async ({
     page,
   }) => {
     await page.goto(`/${STORE_ID}/overview?from=${from}&to=${to}`);
@@ -84,15 +121,11 @@ for (const { from, to, reason } of REJECTED_RANGES) {
     await expect(
       page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '30 days' }),
     ).toHaveAttribute('aria-current', 'page');
-    for (const [label, value] of [
-      ['From', from],
-      ['To', to],
-    ] as const) {
-      const field = page.getByLabel(label, { exact: true });
-      await expect(field).toBeVisible();
-      await expect(field).toHaveValue(value);
-      await expect(field).toHaveAttribute('aria-invalid', 'true');
-    }
+    await expect(page.getByRole('grid')).toBeVisible();
+    await expect(page.getByText(/· 30 days$/)).toHaveAttribute(
+      'aria-describedby',
+      'period-range-notice',
+    );
     expect(await axeViolations(page)).toEqual([]);
     expect(await sidewaysOverflow(page)).toBe(0);
   });
@@ -103,7 +136,7 @@ test('keeps the custom period form inside the screen', async ({ page }) => {
 
   await page.getByText('Custom', { exact: true }).click();
 
-  const form = page.locator('form', { has: page.getByLabel('From', { exact: true }) });
+  const form = page.locator('form', { has: page.getByRole('grid') });
   await expect(form).toBeVisible();
   const box = await form.boundingBox();
   const screenWidth = page.viewportSize()?.width ?? 0;
@@ -193,7 +226,7 @@ test('closes the custom period form on Escape and on a click outside it', async 
   const custom = page.locator('details', { hasText: 'Custom' });
 
   await custom.locator('summary').click();
-  await page.getByLabel('From', { exact: true }).focus();
+  await page.getByRole('grid').locator('button[tabindex="0"]').focus();
   await page.keyboard.press('Escape');
 
   await expect(custom).not.toHaveAttribute('open');

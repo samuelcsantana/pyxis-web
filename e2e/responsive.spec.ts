@@ -174,7 +174,6 @@ const FORM_SCREENS = [
   { name: 'Features', path: `/${STORE_ID}/features` },
   { name: 'Sign in', path: '/sign-in' },
   { name: 'Funnel', path: `/${STORE_ID}/funnel`, open: 'Edit steps' },
-  { name: 'Overview', path: `/${STORE_ID}/overview`, open: 'Custom' },
 ] as const;
 
 async function fieldFontSizes(page: Page): Promise<number[]> {
