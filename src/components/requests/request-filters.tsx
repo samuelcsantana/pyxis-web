@@ -2,15 +2,8 @@ import Link from 'next/link';
 import { FAILED_READS, type RequestKind } from '@/domain/requests';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
-import {
-  PENDING_HOST,
-  SEGMENTED_GROUP,
-  SEGMENTED_IDLE,
-  SEGMENTED_OPTION,
-  SEGMENTED_SELECTED,
-  TEXT_LINK,
-} from '@/components/ui/control-classes';
-import { PendingMark } from '@/components/ui/pending-mark';
+import { TEXT_LINK } from '@/components/ui/control-classes';
+import { SegmentedLinks } from '@/components/ui/segmented-links';
 
 export interface RequestFiltersProps {
   readonly kind: RequestKind;
@@ -21,8 +14,6 @@ export interface RequestFiltersProps {
   readonly clearScreenHref: string;
   readonly i18n: I18n;
 }
-
-const OPTION_CLASS = `min-h-9 px-3.5 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function RequestFilters({
   kind,
@@ -36,24 +27,14 @@ export function RequestFilters({
   return (
     <div className="flex flex-wrap items-center gap-3">
       {kind === FAILED_READS ? null : (
-        <nav aria-label={i18n.t('requests.filters.label')} className={SEGMENTED_GROUP}>
-          <Link
-            href={allHref}
-            aria-current={failingOnly ? undefined : 'page'}
-            className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_IDLE : SEGMENTED_SELECTED}`}
-          >
-            {i18n.t('requests.filters.all')}
-            <PendingMark />
-          </Link>
-          <Link
-            href={failingHref}
-            aria-current={failingOnly ? 'page' : undefined}
-            className={`${OPTION_CLASS} ${failingOnly ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
-          >
-            {i18n.t('requests.filters.failingOnly')}
-            <PendingMark />
-          </Link>
-        </nav>
+        <SegmentedLinks
+          label={i18n.t('requests.filters.label')}
+          links={[
+            { key: 'all', label: i18n.t('requests.filters.all'), href: allHref },
+            { key: 'failing', label: i18n.t('requests.filters.failingOnly'), href: failingHref },
+          ]}
+          current={failingOnly ? 'failing' : 'all'}
+        />
       )}
       {screen === null ? null : (
         <p className="flex items-center gap-2 rounded-pill border border-line bg-card py-1 pr-1 pl-3 text-caption">

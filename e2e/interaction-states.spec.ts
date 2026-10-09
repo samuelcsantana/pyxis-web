@@ -320,7 +320,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await table.click();
 
       await expect(table).toHaveAttribute('aria-pressed', 'true');
-      const paint = await readPaint(table);
+      const paint = await readPaint(chartViews(page).getByTestId('sliding-indicator'));
       expect(contrastRatio(paint.fill, paint.behind)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
     });
   });
