@@ -31,6 +31,7 @@ export const ptBR = translation({
     signOut: 'Sair',
     signingOut: 'Saindo…',
     signOutFailed: 'Não foi possível sair. Tente de novo.',
+    projectSettings: 'Configurações do projeto',
   },
   theme: {
     switch: 'Trocar o tema',
@@ -129,6 +130,47 @@ export const ptBR = translation({
   language: {
     label: 'Idioma',
     current: 'Idioma: {name}',
+  },
+  settings: {
+    title: 'Configurações',
+    subtitle:
+      'Como o {project} está configurado. Só leitura: as configurações mudam pela linha de comando.',
+    project: {
+      heading: 'Projeto',
+      name: 'Nome',
+      timezone: 'Fuso horário',
+      conversionEvent: 'Evento de conversão',
+      noConversionEvent: 'Nenhum, por isso as conversões não aparecem',
+      created: 'Criado em',
+    },
+    activity: {
+      heading: 'Atividade',
+      firstEvent: 'Evento mais antigo guardado',
+      latestEvent: 'Evento mais recente',
+      waiting: 'Aguardando o primeiro evento',
+      install:
+        'Instale o SDK com uma chave pública abaixo; as visualizações de página das origens permitidas aparecem em até um minuto.',
+    },
+    origins: {
+      heading: 'Origens permitidas',
+      note: 'Só páginas nessas origens podem enviar eventos com uma chave pública.',
+      none: 'Nenhuma origem permitida ainda, então nenhuma página consegue enviar eventos.',
+    },
+    keys: {
+      heading: 'Chaves',
+      public: 'Chaves públicas',
+      publicNote: 'A chave pública vai nas páginas do seu site, então não é um segredo.',
+      noPublicKey: 'Nenhuma chave pública ativa, então o site não consegue enviar eventos.',
+      secret: 'Chaves secretas',
+      secretNote:
+        'A chave secreta permite que o backend do seu site apague e exporte os dados de uma pessoa. Ela é guardada como hash e nunca aparece aqui.',
+      noSecretKey: 'Nenhuma chave secreta ativa.',
+      created: 'Criada em {date}',
+    },
+    retention: {
+      heading: 'Retenção de dados',
+      body: 'Os eventos ficam guardados por {months} meses; depois, uma rotina diária os apaga.',
+    },
   },
   chartPanel: {
     showAs: 'Mostrar como',

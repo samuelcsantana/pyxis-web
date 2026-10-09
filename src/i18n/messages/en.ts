@@ -26,6 +26,7 @@ export const en = {
     signOut: 'Sign out',
     signingOut: 'Signing out…',
     signOutFailed: 'Could not sign out. Try again.',
+    projectSettings: 'Project settings',
   },
   theme: {
     switch: 'Switch theme',
@@ -119,6 +120,46 @@ export const en = {
   language: {
     label: 'Language',
     current: 'Language: {name}',
+  },
+  settings: {
+    title: 'Settings',
+    subtitle: 'How {project} is set up. Read-only: settings change through the command line.',
+    project: {
+      heading: 'Project',
+      name: 'Name',
+      timezone: 'Time zone',
+      conversionEvent: 'Conversion event',
+      noConversionEvent: 'None, so conversions are not shown',
+      created: 'Created',
+    },
+    activity: {
+      heading: 'Activity',
+      firstEvent: 'Oldest event kept',
+      latestEvent: 'Latest event',
+      waiting: 'Waiting for the first event',
+      install:
+        'Install the SDK with a public key below; page views from the allowed origins show up within a minute.',
+    },
+    origins: {
+      heading: 'Allowed origins',
+      note: 'Only pages on these origins can send events with a public key.',
+      none: 'No origin is allowed yet, so no page can send events.',
+    },
+    keys: {
+      heading: 'Keys',
+      public: 'Public keys',
+      publicNote: "A public key goes in your site's pages, so it is not a secret.",
+      noPublicKey: 'No live public key, so the site cannot send events.',
+      secret: 'Secret keys',
+      secretNote:
+        "A secret key lets your site's backend erase and export a person's data. It is stored as a hash and never shown here.",
+      noSecretKey: 'No live secret key.',
+      created: 'Created {date}',
+    },
+    retention: {
+      heading: 'Data retention',
+      body: 'Events are kept for {months} months, then a daily job deletes them.',
+    },
   },
   chartPanel: {
     showAs: 'Show as',
