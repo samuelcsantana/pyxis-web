@@ -40,6 +40,7 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/services/overview/overview-service.factory', () => ({
   createOverviewService: (): IOverviewService => ({
     overview: (projectId, range) => state.overview(projectId, range),
+    timeOfDay: (projectId, range) => new MockOverviewService().timeOfDay(projectId, range),
   }),
 }));
 

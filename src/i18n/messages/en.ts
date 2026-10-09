@@ -825,6 +825,17 @@ export const en = {
         'An event name starts with a lowercase letter and holds only lowercase letters, digits and _, 64 at most.',
     },
   },
+  timeOfDay: {
+    title: 'When visits start',
+    description: 'Visits of {period} by the weekday and hour of their first page view.',
+    summary: 'Busiest: {weekday}, {from} to {to} ({visits}).',
+    summaryEmpty: 'No visit started in this period.',
+    cell: '{weekday}, {from}: {visits}',
+    weekday: 'Weekday',
+    table: 'Visits by weekday and hour',
+    fewer: 'Fewer',
+    more: 'More',
+  },
   exports: {
     download: 'Download CSV',
     asCsv: '{label} as CSV',

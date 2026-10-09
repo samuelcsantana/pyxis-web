@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoOverviewWire } from './demo-overview';
+import { demoTimeOfDayWire } from './demo-time-of-day';
 import { HttpOverviewService } from './http-overview-service';
 import { MockOverviewService } from './mock-overview-service';
 import { createOverviewService } from './overview-service.factory';
@@ -33,6 +34,22 @@ describe('HttpOverviewService', () => {
       `${API}/v1/projects/p%201/overview?from=2026-09-29&to=2026-10-05`,
     );
     expect(report.days).toHaveLength(7);
+  });
+
+  it('asks when the visits of the range started and reads the week of hours', async () => {
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(new Response(JSON.stringify(demoTimeOfDayWire(DEMO_STORE.id, RANGE, NOW)))),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const report = await new HttpOverviewService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).timeOfDay('p 1', RANGE);
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p%201/time-of-day?from=2026-09-29&to=2026-10-05`,
+    );
+    expect(report.map((day) => day.weekday)).toEqual([1, 2, 3, 4, 5, 6, 7]);
   });
 });
 
@@ -115,6 +132,23 @@ describe('MockOverviewService', () => {
       store.kpis.visits.previous,
     );
     expect(docs.previous_days?.every((day) => day.conversions === null)).toBe(true);
+  });
+
+  it('starts every visit the overview counts once, at a weekday and hour of the week', async () => {
+    const service = new MockOverviewService();
+
+    for (const project of [DEMO_STORE, DEMO_DOCS]) {
+      const [overview, timeOfDay] = await Promise.all([
+        service.overview(project.id, RANGE),
+        service.timeOfDay(project.id, RANGE),
+      ]);
+      const started = timeOfDay
+        .flatMap((day) => day.hours)
+        .reduce((total, visits) => total + visits, 0);
+      expect(timeOfDay.every((day) => day.hours.length === 24)).toBe(true);
+      expect(started).toBe(overview.kpis.visits.current);
+      expect(started).toBeGreaterThan(0);
+    }
   });
 
   it('has no conversions for a project without a conversion event', async () => {

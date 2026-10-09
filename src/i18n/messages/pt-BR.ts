@@ -836,6 +836,18 @@ export const ptBR = translation({
         'O nome de um evento começa com uma letra minúscula e só tem letras minúsculas, dígitos e _, no máximo 64.',
     },
   },
+  timeOfDay: {
+    title: 'Quando as visitas começam',
+    description:
+      'Visitas de {period} pelo dia da semana e pela hora da primeira visualização de página.',
+    summary: 'Pico: {weekday}, das {from} às {to} ({visits}).',
+    summaryEmpty: 'Nenhuma visita começou neste período.',
+    cell: '{weekday}, {from}: {visits}',
+    weekday: 'Dia da semana',
+    table: 'Visitas por dia da semana e hora',
+    fewer: 'Menos',
+    more: 'Mais',
+  },
   exports: {
     download: 'Baixar CSV',
     asCsv: '{label} em CSV',
