@@ -10,12 +10,14 @@ import {
 import { type Locale, LOCALES, localeName } from '@/i18n/locales';
 
 export type LanguageMenuSurface = 'page' | 'nav';
+export type LanguageMenuLayout = 'row' | 'column';
 
 export interface LanguageMenuProps {
   readonly locale: Locale;
   readonly label: string;
   readonly choose: (form: FormData) => Promise<void>;
   readonly surface?: LanguageMenuSurface;
+  readonly layout?: LanguageMenuLayout;
 }
 
 interface SurfaceClasses {
@@ -40,11 +42,23 @@ const SURFACES: Readonly<Record<LanguageMenuSurface, SurfaceClasses>> = {
   },
 };
 
-export function LanguageMenu({ locale, label, choose, surface = 'page' }: LanguageMenuProps) {
+const COLUMN_GROUP = 'flex flex-col gap-1';
+
+export function LanguageMenu({
+  locale,
+  label,
+  choose,
+  surface = 'page',
+  layout = 'row',
+}: LanguageMenuProps) {
   const classes = SURFACES[surface];
   return (
     <form action={choose}>
-      <div role="group" aria-label={label} className={classes.group}>
+      <div
+        role="group"
+        aria-label={label}
+        className={layout === 'column' ? COLUMN_GROUP : classes.group}
+      >
         {LOCALES.map((each) => (
           <button
             key={each}
