@@ -183,4 +183,16 @@ describe('useSlidingIndicator', () => {
     expect(result.current.frame).toBeNull();
     expect(release).toBeTypeOf('function');
   });
+
+  it('measures nothing while the chosen item is not drawn, as in a closed menu', () => {
+    const { result } = renderHook(() => useSlidingIndicator('folded'));
+    const container = document.createElement('div');
+    const item = document.createElement('button');
+    item.dataset.choice = 'folded';
+    container.append(item);
+
+    result.current.attach(container);
+
+    expect(result.current.frame).toBeNull();
+  });
 });

@@ -81,3 +81,19 @@ test('slides the highlight to the chosen theme in the account menu', async ({ pa
 
   await expectIndicatorOn(themes, themes.getByRole('button', { name: 'Dark' }));
 });
+
+test('shows the theme highlight in place as the account menu opens, without sliding in', async ({
+  page,
+  isMobile,
+}) => {
+  await open(page, 'overview');
+  await openAccountMenu(page, isMobile);
+  const themes = page.getByRole('group', { name: 'Theme' });
+
+  const moving = await themes
+    .getByTestId('sliding-indicator')
+    .evaluate((indicator) => indicator.getAnimations().length);
+
+  expect(moving).toBe(0);
+  await expectIndicatorOn(themes, themes.getByRole('button', { name: 'System' }));
+});
