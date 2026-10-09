@@ -876,6 +876,27 @@ export const ptBR = translation({
       atLeast: '{lower} ou mais',
     },
   },
+  funnelSegments: {
+    title: 'O funil por {by}',
+    description: 'Visitas de {period} que chegaram a cada passo, por {by}, na mesma escala.',
+    dimensions: {
+      device: 'tipo de dispositivo',
+      channel: 'canal',
+    },
+    tabs: {
+      device: 'Por dispositivo',
+      channel: 'Por canal',
+    },
+    label: 'Dividir o funil',
+    table: 'Passos do funil por segmento',
+    segment: 'Segmento',
+    step: 'Passo {number}',
+    conversion: 'Total',
+    unknown: 'Desconhecido',
+    empty: 'Nenhuma visita chegou ao primeiro passo neste período.',
+    userMode:
+      'Por pessoa, dispositivo e canal não são definidos: mude para por visita para dividir o funil.',
+  },
   exports: {
     download: 'Baixar CSV',
     asCsv: '{label} em CSV',

@@ -45,6 +45,8 @@ vi.mock('@/services/funnel/funnel-service.factory', () => ({
     funnel: (projectId, range, mode, steps) => state.funnel(projectId, range, mode, steps),
     subjects: (projectId, range, mode, steps, drill) =>
       state.subjects(projectId, range, mode, steps, drill),
+    segments: (projectId, range, steps, by) =>
+      new MockFunnelService().segments(projectId, range, steps, by),
   }),
 }));
 
@@ -281,6 +283,30 @@ describe('FunnelPage', () => {
       expect.not.stringContaining('cursor'),
     );
     expect(within(list).queryByRole('link', { name: 'Show older' })).not.toBeInTheDocument();
+  });
+
+  it('splits the per-visit funnel by device, and by channel when the address asks', async () => {
+    const { unmount } = renderWithMessages(await renderFunnel({ range: '30d', steps: STEPS }));
+
+    expect(screen.getByRole('table', { name: 'The funnel by device type' })).toBeInTheDocument();
+    unmount();
+
+    renderWithMessages(await renderFunnel({ range: '30d', steps: STEPS, by: 'channel' }));
+
+    expect(screen.getByRole('table', { name: 'The funnel by channel' })).toBeInTheDocument();
+    const tabs = screen.getByRole('navigation', { name: 'Split the funnel' });
+    expect(
+      within(tabs).getByRole('link', { name: 'By device' }).getAttribute('href'),
+    ).not.toContain('by=');
+    expect(screen.getByRole('link', { name: '7 days' }).getAttribute('href')).toContain(
+      'by=channel',
+    );
+  });
+
+  it('explains there is no split per person', async () => {
+    renderWithMessages(await renderFunnel({ range: '30d', mode: 'user', steps: STEPS }));
+
+    expect(screen.getByText(/Per person, a device or a channel is not defined/)).toBeVisible();
   });
 
   it('sends an expired session back to the sign-in page', async () => {

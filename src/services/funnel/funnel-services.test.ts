@@ -4,6 +4,7 @@ import { ApiReader } from '../api-reader';
 import { demoFeaturesWire } from '../features/demo-features';
 import {
   DEMO_FUNNEL_STEPS,
+  demoFunnelSegmentsWire,
   demoFunnelSubjectsWire,
   demoFunnelWire,
   FUNNEL_SUBJECTS_PER_PAGE,
@@ -89,6 +90,58 @@ describe('HttpFunnelService', () => {
     expect(urls[0]?.searchParams.has('cursor')).toBe(false);
     expect(urls[1]?.searchParams.get('cursor')).toBe('c2');
     expect(page.subjects.length).toBeGreaterThan(0);
+  });
+});
+
+describe('HttpFunnelService segments', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('asks the funnel per channel for the range and steps, and reads the segments', async () => {
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(demoFunnelSegmentsWire('demo', RANGE, TWO, 'channel', NOW))),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const report = await new HttpFunnelService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).segments('p 1', RANGE, TWO, 'channel');
+
+    const url = new URL(fetchMock.mock.calls[0]?.[0] as string);
+    expect(url.pathname).toBe('/v1/projects/p%201/funnel/segments');
+    expect(url.searchParams.get('by')).toBe('channel');
+    expect(JSON.parse(url.searchParams.get('steps') ?? '[]')).toEqual(TWO);
+    expect(report.by).toBe('channel');
+  });
+});
+
+describe('MockFunnelService segments', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('splits the per-visit funnel by device and by channel, adding up to it, largest first', async () => {
+    const service = new MockFunnelService();
+    const funnel = await service.funnel('demo', RANGE, 'visit', DEMO_FUNNEL_STEPS);
+
+    for (const by of ['device', 'channel'] as const) {
+      const report = await service.segments('demo', RANGE, DEMO_FUNNEL_STEPS, by);
+      const sums = DEMO_FUNNEL_STEPS.map((_, index) =>
+        report.segments.reduce((total, segment) => total + (segment.steps[index] ?? 0), 0),
+      );
+      expect(report.by).toBe(by);
+      expect(sums).toEqual(funnel.steps.map((step) => step.count));
+      const firsts = report.segments.map((segment) => segment.steps[0] ?? 0);
+      expect(firsts).toEqual(firsts.toSorted((left, right) => right - left));
+    }
   });
 });
 

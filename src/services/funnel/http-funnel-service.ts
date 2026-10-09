@@ -4,6 +4,8 @@ import {
   type FunnelStep,
   serializeSteps,
 } from '@/domain/funnel';
+import type { FunnelSegmentDimension, FunnelSegmentsReport } from '@/domain/funnel-segments';
+import { funnelSegmentsResponseSchema } from '@/domain/funnel-segments.schema';
 import type { FunnelDrill, FunnelSubjectsPage } from '@/domain/funnel-subjects';
 import { funnelResponseSchema, funnelSubjectsResponseSchema } from '@/domain/funnel.schema';
 import type { ApiReader } from '../api-reader';
@@ -19,6 +21,21 @@ function funnelQuery(range: DateRange, mode: FunnelMode, steps: readonly FunnelS
 
 export class HttpFunnelService implements IFunnelService {
   constructor(private readonly api: ApiReader) {}
+
+  segments(
+    projectId: string,
+    range: DateRange,
+    steps: readonly FunnelStep[],
+    by: FunnelSegmentDimension,
+  ): Promise<FunnelSegmentsReport> {
+    const query = new URLSearchParams(rangeQuery(range));
+    query.set('steps', serializeSteps(steps));
+    query.set('by', by);
+    return this.api.get(
+      `/v1/projects/${encodeURIComponent(projectId)}/funnel/segments?${query.toString()}`,
+      funnelSegmentsResponseSchema,
+    );
+  }
 
   funnel(
     projectId: string,
