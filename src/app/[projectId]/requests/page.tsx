@@ -34,6 +34,8 @@ import { routeDaysText } from '@/domain/route-days';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { SECTION_STACK } from '@/components/ui/panel-classes';
+import { Reveal } from '@/components/ui/reveal';
 import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { readRequestsReport } from '@/services/requests/requests-report';
@@ -135,77 +137,80 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
             href: hrefFor({ kind: tabKind, failingOnly: false, screen: filter.screen }),
           }))}
         />
-        {report === null ? (
-          <EmptyState title={i18n.t('requests.page.readsNeedApi.title')}>
-            <p>{i18n.t('requests.page.readsNeedApi.body')}</p>
-          </EmptyState>
-        ) : (
-          <>
-            <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
-              {requestFigures(kind, report.routes, i18n).map((figure) => (
-                <StatCard
-                  key={figure.id}
-                  id={figure.id}
-                  label={figure.label}
-                  value={figure.value}
-                  note={figure.note}
+        <Reveal show={kind} className={SECTION_STACK}>
+          {report === null ? (
+            <EmptyState title={i18n.t('requests.page.readsNeedApi.title')}>
+              <p>{i18n.t('requests.page.readsNeedApi.body')}</p>
+            </EmptyState>
+          ) : (
+            <>
+              <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
+                {requestFigures(kind, report.routes, i18n).map((figure) => (
+                  <StatCard
+                    key={figure.id}
+                    id={figure.id}
+                    label={figure.label}
+                    value={figure.value}
+                    note={figure.note}
+                  />
+                ))}
+              </div>
+              {report.days.length === 0 ? null : (
+                <FailureDaysChart
+                  days={report.days}
+                  description={i18n.t(`requests.failureDays.description.${kind}`, {
+                    period: describePeriod(period, i18n),
+                  })}
+                  periodLabel={describePeriod(period, i18n)}
+                  i18n={i18n}
                 />
-              ))}
-            </div>
-            {report.days.length === 0 ? null : (
-              <FailureDaysChart
-                days={report.days}
-                description={i18n.t(`requests.failureDays.description.${kind}`, {
-                  period: describePeriod(period, i18n),
-                })}
-                periodLabel={describePeriod(period, i18n)}
+              )}
+              <RequestFilters
+                kind={kind}
+                allHref={hrefFor({ ...filter, failingOnly: false })}
+                failingHref={hrefFor({ ...filter, failingOnly: true })}
+                failingOnly={filter.failingOnly}
+                screen={filter.screen}
+                clearScreenHref={hrefFor({ ...filter, screen: null })}
                 i18n={i18n}
               />
-            )}
-            <RequestFilters
-              kind={kind}
-              allHref={hrefFor({ ...filter, failingOnly: false })}
-              failingHref={hrefFor({ ...filter, failingOnly: true })}
-              failingOnly={filter.failingOnly}
-              screen={filter.screen}
-              clearScreenHref={hrefFor({ ...filter, screen: null })}
-              i18n={i18n}
-            />
-            <RequestsTable
-              key={`${kind}|${String(filter.failingOnly)}|${filter.screen ?? ''}`}
-              kind={kind}
-              rows={routeRows(
-                visibleRoutes(report.routes, filter.failingOnly),
-                project.timezone,
-                kind,
-                i18n,
-              )}
-              basePath={basePath}
-              query={filterQuery(period, { ...filter, screen: null })}
-              timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
-              visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
-              emptyMessage={emptyMessage(filter, i18n)}
-              loadRouteDays={loadRouteDays.bind(null, project.id, {
-                from: period.from,
-                to: period.to,
-                kind,
-                screen: filter.screen,
-              })}
-              routeDaysText={routeDaysText(kind, i18n)}
-              text={requestsTableText(i18n)}
-            />
-            <CsvDownloads
-              downloads={[
-                {
-                  label: requestsTableLabel(kind, i18n),
-                  href: exportHref(project.id, 'requests', filterQuery(period, filter)),
-                },
-              ]}
-              i18n={i18n}
-            />
-            <p className="text-xs leading-[18px] text-muted">{kindNote(kind, i18n)}</p>
-          </>
-        )}
+              <Reveal show={`${String(filter.failingOnly)}|${filter.screen ?? ''}`}>
+                <RequestsTable
+                  kind={kind}
+                  rows={routeRows(
+                    visibleRoutes(report.routes, filter.failingOnly),
+                    project.timezone,
+                    kind,
+                    i18n,
+                  )}
+                  basePath={basePath}
+                  query={filterQuery(period, { ...filter, screen: null })}
+                  timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
+                  visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
+                  emptyMessage={emptyMessage(filter, i18n)}
+                  loadRouteDays={loadRouteDays.bind(null, project.id, {
+                    from: period.from,
+                    to: period.to,
+                    kind,
+                    screen: filter.screen,
+                  })}
+                  routeDaysText={routeDaysText(kind, i18n)}
+                  text={requestsTableText(i18n)}
+                />
+              </Reveal>
+              <CsvDownloads
+                downloads={[
+                  {
+                    label: requestsTableLabel(kind, i18n),
+                    href: exportHref(project.id, 'requests', filterQuery(period, filter)),
+                  },
+                ]}
+                i18n={i18n}
+              />
+              <p className="text-xs leading-[18px] text-muted">{kindNote(kind, i18n)}</p>
+            </>
+          )}
+        </Reveal>
       </MainContent>
     </>
   );

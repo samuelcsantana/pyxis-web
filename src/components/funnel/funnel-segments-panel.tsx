@@ -1,5 +1,6 @@
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { LinkTabs } from '@/components/ui/link-tabs';
+import { Reveal } from '@/components/ui/reveal';
 import {
   BAR_FILL,
   BAR_TRACK,
@@ -119,11 +120,13 @@ export function FunnelSegmentsPanel({
           href: hrefOf(dimensionKey),
         }))}
       />
-      {report === null ? (
-        <p className="text-sm">{i18n.t('funnelSegments.userMode')}</p>
-      ) : (
-        <SegmentsTable report={report} stepCount={stepCount} i18n={i18n} />
-      )}
+      <Reveal show={by}>
+        {report === null ? (
+          <p className="text-sm">{i18n.t('funnelSegments.userMode')}</p>
+        ) : (
+          <SegmentsTable report={report} stepCount={stepCount} i18n={i18n} />
+        )}
+      </Reveal>
     </section>
   );
 }

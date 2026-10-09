@@ -10,3 +10,4 @@ export const BAR_FILL = 'block h-1.5 rounded-pill';
 const ROW_LINK_TEXT = 'text-ink underline decoration-muted underline-offset-4';
 export const ROW_LINK = `-my-1 inline-block min-h-6 min-w-6 py-1 ${ROW_LINK_TEXT} hover:text-sky-ink hover:decoration-2 active:text-sky-ink active:decoration-2 ${FOCUS_RING} ${CONTROL_TRANSITION}`;
 export const ROW_BUTTON_TEXT = `${ROW_LINK_TEXT} group-hover:text-sky-ink group-hover:decoration-2 group-active:text-sky-ink group-active:decoration-2`;
+export const SECTION_STACK = 'flex flex-col gap-3.5 sm:gap-5';

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import type { OverviewReport } from '@/domain/overview';
 import { ACTIVITY, overviewChart } from '@/domain/overview-chart';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { OverviewChartPanel } from './overview-chart-panel';
 import { english } from '@/test-utils/english';
 
@@ -63,7 +63,9 @@ export const AsTable: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: 'Table' }));
     await expect(canvas.getAllByRole('row')).toHaveLength(STORY_REPORT.days.length + 1);
-    await expect(canvas.getByRole('columnheader', { name: 'Visits then' })).toBeVisible();
+    await waitFor(() =>
+      expect(canvas.getByRole('columnheader', { name: 'Visits then' })).toBeVisible(),
+    );
   },
 };
 
