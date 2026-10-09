@@ -12,12 +12,14 @@ import {
   VISIT_IDENTITIES,
   type VisitFilters,
   visitFilterCount,
+  visitFilterParameters,
 } from '@/domain/visits';
 import { PANEL } from '@/components/ui/panel-classes';
 import { BUTTON_PRIMARY, FIELD, TEXT_LINK } from '@/components/ui/control-classes';
 import { SelectField } from '@/components/ui/select-field';
 import { PendingSubmitButton } from '@/components/ui/pending-submit-button';
 import { CollapsibleFilters } from './collapsible-filters';
+import { UnappliedFilterChanges } from './unapplied-filter-changes';
 
 export interface VisitFiltersFormProps {
   readonly action: string;
@@ -29,7 +31,7 @@ export interface VisitFiltersFormProps {
 }
 
 const LABEL = 'flex min-w-0 flex-col gap-1.5 text-caption font-medium';
-const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-base font-normal sm:text-sm ${FIELD}`;
+const FIELD_CLASS = `min-h-11 w-full rounded-input px-3 text-base font-normal sm:text-sm data-changed:bg-warn-soft ${FIELD}`;
 const HINT = 'text-xs font-normal text-muted';
 
 export function VisitFiltersForm({
@@ -245,6 +247,11 @@ export function VisitFiltersForm({
               {t('visits.filters.clear')}
             </Link>
           )}
+          <UnappliedFilterChanges
+            applied={visitFilterParameters(filters)}
+            notice={t('visits.filters.unapplied')}
+            undo={t('visits.filters.undo')}
+          />
         </div>
       </CollapsibleFilters>
     </Form>

@@ -104,3 +104,18 @@ export const FiltersLeftOutOnAPhone: Story = {
 export const DarkThemeOnAPhone: Story = {
   globals: { ...PHONE, theme: 'dark' },
 };
+
+const changeTheChannel: NonNullable<Story['play']> = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Channel' }), 'email');
+  await expect(canvas.getByRole('status')).toHaveTextContent('Changes not applied yet');
+  await expect(canvas.getByRole('combobox', { name: 'Channel' })).toHaveAttribute('data-changed');
+};
+
+export const WithChangesNotApplied: Story = { ...Filtered, play: changeTheChannel };
+
+export const WithChangesNotAppliedDark: Story = {
+  ...Filtered,
+  globals: { theme: 'dark' },
+  play: changeTheChannel,
+};

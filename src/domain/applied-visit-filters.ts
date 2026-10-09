@@ -11,6 +11,24 @@ export interface AppliedVisitFilter {
   readonly without: VisitFilters;
 }
 
+export const VISIT_FILTER_FIELDS = [
+  ...PAGE_FILTER_PARAMETERS,
+  'event',
+  'property',
+  'channel',
+  'device',
+  'identity',
+  'country',
+  'source',
+  'campaign',
+  'route',
+  'failed',
+] as const;
+
+export type VisitFilterField = (typeof VISIT_FILTER_FIELDS)[number];
+
+const UPPERCASE_FIELDS: ReadonlySet<VisitFilterField> = new Set(['country']);
+
 function pageFilters(filters: VisitFilters, i18n: I18n): readonly AppliedVisitFilter[] {
   return PAGE_FILTER_PARAMETERS.flatMap((name, index) => {
     const path = filters.paths[index];
@@ -102,4 +120,18 @@ export function appliedVisitFilters(
     ...shown('route', t('visits.filters.route'), filters.route, true, { ...filters, route: null }),
     ...flag('failed', t('visits.filters.failed'), filters.failed, { ...filters, failed: false }),
   ];
+}
+
+function entered(field: VisitFilterField, value: string): string {
+  const trimmed = value.trim();
+  return UPPERCASE_FIELDS.has(field) ? trimmed.toUpperCase() : trimmed;
+}
+
+export function changedVisitFilterFields(
+  applied: Readonly<Partial<Record<string, string>>>,
+  form: Readonly<Partial<Record<VisitFilterField, string>>>,
+): readonly VisitFilterField[] {
+  return VISIT_FILTER_FIELDS.filter(
+    (field) => entered(field, form[field] ?? '') !== (applied[field] ?? ''),
+  );
 }
