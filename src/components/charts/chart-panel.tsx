@@ -2,6 +2,7 @@
 
 import { type ReactNode, useId, useState } from 'react';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { Reveal } from '@/components/ui/reveal';
 import { useT } from '@/i18n/messages-provider';
 import {
   SEGMENTED_GROUP,
@@ -68,7 +69,7 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
           </div>
         </div>
       </div>
-      {shown === 'table' ? table : chart}
+      <Reveal show={shown}>{shown === 'table' ? table : chart}</Reveal>
     </section>
   );
 }

@@ -154,6 +154,17 @@
   --radius-pill: 999px;
 }
 
+@theme {
+  --animate-reveal: reveal 180ms ease-out both;
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      translate: 0 --spacing(1);
+    }
+  }
+}
+
 @layer base {
   html {
     scroll-padding-top: --spacing(14);

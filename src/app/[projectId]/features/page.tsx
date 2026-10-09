@@ -24,6 +24,8 @@ import {
   todayIn,
 } from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
+import { SECTION_STACK } from '@/components/ui/panel-classes';
+import { Reveal } from '@/components/ui/reveal';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -88,30 +90,32 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
             i18n={i18n}
           />
         </div>
-        <FeatureTable
-          kind={kind}
-          rows={featureRows(report.items, kind, query, i18n)}
-          query={query}
-          visitsHref={(name) =>
-            linkWith(
-              screenHref(project.id, 'visits', periodQuery(period)),
-              kind === 'events' ? { event: name } : { path: name },
-            )
-          }
-          loadProperties={
-            kind === 'events'
-              ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
-              : undefined
-          }
-          i18n={i18n}
-        />
-        {engagement === null ? null : (
-          <EngagementPanels
-            report={engagement}
-            periodLabel={describePeriod(period, i18n)}
+        <Reveal show={kind} className={SECTION_STACK}>
+          <FeatureTable
+            kind={kind}
+            rows={featureRows(report.items, kind, query, i18n)}
+            query={query}
+            visitsHref={(name) =>
+              linkWith(
+                screenHref(project.id, 'visits', periodQuery(period)),
+                kind === 'events' ? { event: name } : { path: name },
+              )
+            }
+            loadProperties={
+              kind === 'events'
+                ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
+                : undefined
+            }
             i18n={i18n}
           />
-        )}
+          {engagement === null ? null : (
+            <EngagementPanels
+              report={engagement}
+              periodLabel={describePeriod(period, i18n)}
+              i18n={i18n}
+            />
+          )}
+        </Reveal>
         <CsvDownloads
           downloads={[
             {

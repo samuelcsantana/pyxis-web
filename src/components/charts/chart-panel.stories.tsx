@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ChartPanel, LegendItem } from './chart-panel';
 
 const meta = {
@@ -50,7 +50,7 @@ export const Table: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: 'Table' }));
-    await expect(canvas.getByRole('table')).toBeVisible();
+    await waitFor(() => expect(canvas.getByRole('table')).toBeVisible());
     await expect(canvas.getByRole('button', { name: 'Table' })).toHaveAttribute(
       'aria-pressed',
       'true',
