@@ -62,6 +62,16 @@ test('slides the fill to the clicked requests filter and keeps it there on the n
   await expectIndicatorOn(filters, failing);
 });
 
+test('moves the underline to the clicked feature tab', async ({ page }) => {
+  await open(page, 'features');
+  const tabs = page.getByRole('navigation', { name: 'Feature kind' });
+  await expectIndicatorOn(tabs, tabs.getByRole('link', { name: 'Events' }));
+
+  await tabs.getByRole('link', { name: 'Screens' }).click();
+
+  await expectIndicatorOn(tabs, tabs.getByRole('link', { name: 'Screens' }));
+});
+
 test('slides the highlight to the chosen theme in the account menu', async ({ page, isMobile }) => {
   await open(page, 'overview');
   await openAccountMenu(page, isMobile);
