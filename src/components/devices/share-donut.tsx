@@ -96,9 +96,7 @@ export function ShareDonut({
             />
           ))}
         </svg>
-        <div
-          className={`relative -my-1 -mr-1 min-w-0 flex-1 overflow-x-auto py-1 pr-1 ${showsConversionRate ? 'basis-61' : 'basis-41'}`}
-        >
+        <div className="relative -my-1 -mr-1 min-w-0 flex-1 basis-full overflow-x-auto py-1 pr-1">
           <table
             aria-labelledby={headingId}
             className="w-full border-collapse text-caption tabular-nums"

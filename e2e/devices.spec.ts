@@ -60,3 +60,31 @@ test('shows conversions only when the project has a conversion event', async ({ 
   await expect(page.getByRole('heading', { name: 'Conversion by device' })).toHaveCount(0);
   await expect(conversionRate).toHaveCount(0);
 });
+
+for (const locale of ['en', 'pt-BR'] as const) {
+  test(`puts each breakdown table under its donut, never scrolling it sideways (${locale})`, async ({
+    page,
+    context,
+    baseURL,
+  }) => {
+    await context.addCookies([{ name: 'pyxis_locale', value: locale, url: baseURL ?? '' }]);
+    await page.goto(`/${STORE_ID}/devices`);
+
+    const tables = page.locator('section:has(> div > svg) table');
+    await expect(tables).toHaveCount(3);
+    for (const table of await tables.all()) {
+      const fits = await table.evaluate((element) => {
+        const frame = element.parentElement;
+        const donut = frame?.previousElementSibling;
+        if (frame === null || !(donut instanceof SVGElement)) {
+          return { scrolls: true, below: false };
+        }
+        return {
+          scrolls: frame.scrollWidth > frame.clientWidth,
+          below: frame.getBoundingClientRect().top >= donut.getBoundingClientRect().bottom,
+        };
+      });
+      expect(fits).toEqual({ scrolls: false, below: true });
+    }
+  });
+}
