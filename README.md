@@ -416,11 +416,13 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 152               |
 | Dashboard screens without a chart                      | 170               |
-| Dashboard screens with a chart (Overview, Acquisition) | 162               |
+| Dashboard screens with a chart (Overview, Acquisition) | 163               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
-the two screens load 154.1 KiB, down from about 256 KiB with Recharts.
+the two screens load 154.1 KiB, down from about 256 KiB with Recharts. The budget went from 162 to 163 KiB
+with the sliding period presets, a client component of about 1 KiB that moves the indicator on
+the click, before the next page arrives.
 
 ## Project structure
 
