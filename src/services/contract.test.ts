@@ -17,6 +17,7 @@ import {
 import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
+import { demoProjectSettingsWire } from './projects/demo-project-settings';
 import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 
@@ -54,6 +55,15 @@ describe('the API contract copied from pyxis-api', () => {
     const validate = contractSchema('Me');
 
     expect(validate(DEMO_ME_RESPONSE), JSON.stringify(validate.errors)).toBe(true);
+  });
+
+  it('accepts the demo settings of each demo project', () => {
+    const validate = contractSchema('ProjectSettings');
+
+    for (const project of DEMO_PROJECTS) {
+      const settings = demoProjectSettingsWire(project.id, NOW);
+      expect(validate(settings), JSON.stringify(validate.errors)).toBe(true);
+    }
   });
 
   it('accepts the demo overview of each demo project', () => {

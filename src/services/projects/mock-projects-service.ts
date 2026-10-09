@@ -1,9 +1,10 @@
 import { type Admin } from '@/domain/admin';
 import { meResponseSchema } from '@/domain/admin.schema';
+import type { ProjectSettings } from '@/domain/project-settings';
+import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { DEMO_PROJECTS } from '../demo/demo-projects';
+import { DEMO_FIRST_EVENT_AT, demoProjectSettingsWire } from './demo-project-settings';
 import type { IProjectsService } from './projects-service.interface';
-
-export const DEMO_FIRST_EVENT_AT = '2025-01-06T09:00:00.000Z';
 
 export const DEMO_ME_RESPONSE = {
   email: 'owner@demo-store.example',
@@ -22,5 +23,11 @@ export const DEMO_ADMIN: Admin = meResponseSchema.parse(DEMO_ME_RESPONSE);
 export class MockProjectsService implements IProjectsService {
   currentAdmin(): Promise<Admin> {
     return Promise.resolve(DEMO_ADMIN);
+  }
+
+  settings(projectId: string): Promise<ProjectSettings> {
+    return Promise.resolve(
+      projectSettingsResponseSchema.parse(demoProjectSettingsWire(projectId, new Date())),
+    );
   }
 }
