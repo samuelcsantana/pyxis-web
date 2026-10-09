@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { PENDING_HOST, SEGMENTED_IDLE, SEGMENTED_OPTION } from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
+import { useChoiceAhead } from '@/components/ui/use-choice-ahead';
 import type { PeriodPreset } from '@/domain/period';
 
 export interface PresetLink {
@@ -16,11 +16,6 @@ export interface PeriodPresetsProps {
   readonly label: string;
   readonly links: readonly PresetLink[];
   readonly current: PeriodPreset | 'custom';
-}
-
-interface Choice {
-  readonly preset: PeriodPreset;
-  readonly madeOn: PeriodPreset | 'custom';
 }
 
 const GROUP =
@@ -37,8 +32,7 @@ function indicatorWidth(options: number): string {
 }
 
 export function PeriodPresets({ label, links, current }: PeriodPresetsProps) {
-  const [choice, setChoice] = useState<Choice | null>(null);
-  const shown = choice !== null && choice.madeOn === current ? choice.preset : current;
+  const [shown, choose] = useChoiceAhead<PeriodPreset | 'custom'>(current);
   const index = links.findIndex((link) => link.preset === shown);
   return (
     <nav aria-label={label} className={GROUP}>
@@ -57,7 +51,7 @@ export function PeriodPresets({ label, links, current }: PeriodPresetsProps) {
           href={link.href}
           aria-current={link.preset === current ? 'page' : undefined}
           onClick={() => {
-            setChoice({ preset: link.preset, madeOn: current });
+            choose(link.preset);
           }}
           className={`${OPTION} ${link.preset === shown ? 'text-card' : SEGMENTED_IDLE}`}
         >
