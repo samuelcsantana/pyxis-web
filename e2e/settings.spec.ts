@@ -18,7 +18,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the gear beside the project and marks it current', async ({ page, isMobile }) => {
+test('opens from the gear and marks it current', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();

@@ -31,18 +31,23 @@ export function Sidebar({ admin, project, i18n, chooseLocale }: SidebarProps) {
           <LogoMark size={28} />
           <span className="text-xl font-bold tracking-tight">Pyxis</span>
         </Link>
-        <LanguageSwitcher
-          locale={i18n.locale}
-          label={i18n.t('language.label')}
-          summary={i18n.t('language.current', { name: localeName(i18n.locale) })}
-          choose={chooseLocale}
-        />
+        <div className="flex items-center gap-1">
+          <LanguageSwitcher
+            locale={i18n.locale}
+            label={i18n.t('language.label')}
+            summary={i18n.t('language.current', { name: localeName(i18n.locale) })}
+            choose={chooseLocale}
+          />
+          <SettingsLink projectId={project.id} />
+        </div>
       </div>
       <div className="flex items-start gap-1.5">
         <div className="min-w-0 flex-1">
           <ProjectSwitcher projects={admin.projects} currentProject={project} />
         </div>
-        <SettingsLink projectId={project.id} />
+        <div className="lg:hidden">
+          <SettingsLink projectId={project.id} />
+        </div>
       </div>
       <SidebarNav projectId={project.id} />
       <div className="mt-auto flex flex-col gap-3 border-t border-nav-line pt-3">
