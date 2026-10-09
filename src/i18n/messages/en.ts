@@ -727,6 +727,13 @@ export const en = {
       apply: 'Apply filters',
       applying: 'Applying…',
       clear: 'Clear filters',
+      applied: {
+        label: 'Applied filters',
+        item: '{filter}: <value/>',
+        remove: 'Remove {filter}: {value}',
+        removeFlag: 'Remove {filter}',
+        clearAll: 'Clear all',
+      },
     },
     table: {
       heading: 'Visits',

@@ -737,6 +737,13 @@ export const ptBR = translation({
       apply: 'Aplicar filtros',
       applying: 'Aplicando…',
       clear: 'Limpar filtros',
+      applied: {
+        label: 'Filtros aplicados',
+        item: '{filter}: <value/>',
+        remove: 'Remover {filter}: {value}',
+        removeFlag: 'Remover {filter}',
+        clearAll: 'Limpar todos',
+      },
     },
     table: {
       heading: 'Visitas',
