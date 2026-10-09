@@ -18,7 +18,7 @@ const TAB_CLASS = `min-h-11 px-4 ${PENDING_HOST} ${TAB}`;
 
 export function LinkTabs<Key extends string>({ label, tabs, current }: LinkTabsProps<Key>) {
   return (
-    <nav aria-label={label} className="flex gap-1 border-b border-line">
+    <nav aria-label={label} className="flex flex-wrap gap-1 border-b border-line">
       {tabs.map((tab) => {
         const selected = tab.key === current;
         return (
