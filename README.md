@@ -212,6 +212,11 @@ Shipping now:
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner links back to this repository
+- A read-only Settings page per project, behind the gear beside the project switcher: time zone,
+  conversion event, allowed origins, the live public keys (a public key ships in the site, so it
+  is shown in full), when each live secret key was created (never the key, which the API keeps
+  only as a hash), how many months events are kept, and whether the project still waits for its
+  first event. Settings change through the API's command line; the page only reads them
 - The interface in English and in Brazilian Portuguese (see
   [Internationalization](#internationalization))
 
@@ -315,6 +320,7 @@ ignore ports, so the dashboard's server receives it and forwards it to the API.
 | `/[projectId]/funnel`             | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor              |
 | `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
 | `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
+| `/[projectId]/settings`           | Read-only settings: origins, public keys, secret keys by date only, retention, first/last event  |
 | `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
 | `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen` |
 | `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`             |
