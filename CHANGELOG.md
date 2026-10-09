@@ -1,5 +1,104 @@
 # Changelog
 
+## [0.6.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.5.0...v0.6.0) (2026-10-09)
+
+
+### Features
+
+* **acquisition:** download the campaigns as a CSV file ([c449558](https://github.com/samuelcsantana/pyxis-web/commit/c4495586b51ee66468540789ea56c2b7bfb98a3e))
+* **acquisition:** list the campaigns, each opening its visits from its source ([db84f4b](https://github.com/samuelcsantana/pyxis-web/commit/db84f4b7da7e22e966afea98b1402177350a96d2))
+* **acquisition:** read the campaigns the API ranks ([b1cb410](https://github.com/samuelcsantana/pyxis-web/commit/b1cb410c22b71ab9944c886ee50b90a355636fb2))
+* **demo:** add seeded random helpers for the demo data ([d93ff32](https://github.com/samuelcsantana/pyxis-web/commit/d93ff32804f105c938e86976648434039e68d6a1))
+* **demo:** draw every visit of a demo day from the project catalog ([135321e](https://github.com/samuelcsantana/pyxis-web/commit/135321e6307ead5ff5e8dbb8f673c9a42d918371))
+* **funnel:** list who reached or left each step, from links on its figures ([98a3a39](https://github.com/samuelcsantana/pyxis-web/commit/98a3a397c32521d5406c5089cf9521a11a13f22e))
+* **funnel:** read the median time of each step and of the whole funnel ([3e3f0e0](https://github.com/samuelcsantana/pyxis-web/commit/3e3f0e04500a188364199355fbda9276dffbd93b))
+* **funnel:** read who reached or left a step from the API and the demo ([d49887e](https://github.com/samuelcsantana/pyxis-web/commit/d49887e59fa3c023a2b6c4216b29489c93ef68fc))
+* **funnel:** show how long each step took and the time to finish ([fc44fc0](https://github.com/samuelcsantana/pyxis-web/commit/fc44fc0079f162e121f7b6efae1b3541f398abaa))
+* **i18n:** fill the elements inside a message with rich() ([adc30d9](https://github.com/samuelcsantana/pyxis-web/commit/adc30d91aca7e67ac5cfabf13962de8a5f08e855))
+* **i18n:** give the domain the formats and translator of the request ([ff7d957](https://github.com/samuelcsantana/pyxis-web/commit/ff7d957cdc535d19118bc0189850b43ed6c592ca))
+* **i18n:** join lists the way each language does ([8104d8e](https://github.com/samuelcsantana/pyxis-web/commit/8104d8e3d15c157a150fbc9166761d568aafa500))
+* **i18n:** let the reader choose the interface language ([0cbc2a6](https://github.com/samuelcsantana/pyxis-web/commit/0cbc2a6bf8513cba80c4d66a645bca188e0dc1d8))
+* **i18n:** ship the dashboard in Brazilian Portuguese ([bf391d5](https://github.com/samuelcsantana/pyxis-web/commit/bf391d51a4533c045f15f9e8418a81c00cff5f64))
+* open the visits of a source, a country and a failing route ([3b1cac5](https://github.com/samuelcsantana/pyxis-web/commit/3b1cac5d6c8f6a213d6ee70e7eb779d255d06f0e))
+* **requests:** ask the days of one route from the API and the demo ([7e57acf](https://github.com/samuelcsantana/pyxis-web/commit/7e57acf9f07424b3637522840927361818b7a301))
+* **requests:** chart the failures of each day by what went wrong ([4a908cc](https://github.com/samuelcsantana/pyxis-web/commit/4a908cce7bd36cea67d8e65f22d6e9e82c8246bb))
+* **requests:** list the days of a route in its details panel ([fce4cab](https://github.com/samuelcsantana/pyxis-web/commit/fce4cab5ed12ab76f27d63e70d6821fff5f4d97d))
+* **requests:** read the days of one route and shape them for its details ([9e72aa4](https://github.com/samuelcsantana/pyxis-web/commit/9e72aa4defe6d5c159cfaa3183d7e164cefc8c48))
+* **requests:** read the p95 and the failures per day the API reports ([c33d476](https://github.com/samuelcsantana/pyxis-web/commit/c33d476f1f180f70284e72db54c997cf000cd08b))
+* **requests:** show the p95 of each route beside its median ([0719f66](https://github.com/samuelcsantana/pyxis-web/commit/0719f66280d68a06c00649271f5f7c2d1d15f414))
+* **sign-in:** ask for the sign-in email in the reader's language ([fe755d6](https://github.com/samuelcsantana/pyxis-web/commit/fe755d601ce83f13c59fefcce87772838ce7a714))
+* **theme:** add a rem type scale to the design tokens ([a555456](https://github.com/samuelcsantana/pyxis-web/commit/a5554561c4afcefb16ef65b4288cdbf7373ffec0))
+* **timeline:** link a visit opened by its id to every visit of its person ([164b640](https://github.com/samuelcsantana/pyxis-web/commit/164b64014c3a01d8d0aea4c3bc6bb324565b6436))
+* **timeline:** read the person each visit was identified as ([dfccd24](https://github.com/samuelcsantana/pyxis-web/commit/dfccd2469e656ebd55c043311238afe112f29a9d))
+* **visits:** filter by country, source, campaign and a failed request ([8d53c99](https://github.com/samuelcsantana/pyxis-web/commit/8d53c997ff597a4023e2b2af02e759fd4266ff1d))
+
+
+### Bug Fixes
+
+* **layout:** keep every screen inside the window at large text sizes ([9a01350](https://github.com/samuelcsantana/pyxis-web/commit/9a01350044921d7d705795364c292630422786e2))
+* **overview:** mark the pressed KPI card and the screen busy like any link ([f2dac56](https://github.com/samuelcsantana/pyxis-web/commit/f2dac56e1d24aca1ef377a118830413bb7b77087))
+* **requests:** list only the screens where a route failed ([338e5fd](https://github.com/samuelcsantana/pyxis-web/commit/338e5fd05be833af0024a07cb469137da809c8ca))
+* **visits:** give the account link of a visit a 24px target ([8e4e351](https://github.com/samuelcsantana/pyxis-web/commit/8e4e351511c4be538feb0d01526e0f8318edf4d4))
+* **visits:** give the Visits CSV export its own 60-second limit ([ea4e497](https://github.com/samuelcsantana/pyxis-web/commit/ea4e497635e80de822d75dc7ff57742b9dfe30a9))
+
+
+### Refactoring
+
+* **acquisition:** read the Acquisition text from the dictionary ([ef86baa](https://github.com/samuelcsantana/pyxis-web/commit/ef86baac8a949e7de2c452b184288327c4ce4401))
+* **acquisition:** share the conversion figures and columns of a ranking ([2a469fd](https://github.com/samuelcsantana/pyxis-web/commit/2a469fd2ef1c337f44cd84a84cbc7d1c9361f79f))
+* **app:** read the title shared by the demo from the dictionary ([883c73a](https://github.com/samuelcsantana/pyxis-web/commit/883c73a113e48a3a151736b54335082a4a380779))
+* **charts:** read the Chart and Table switch from the dictionary ([09a0d9b](https://github.com/samuelcsantana/pyxis-web/commit/09a0d9b742d5f3e8a07ade0598f5b4c931c6bc8b))
+* **demo:** delete the statistical model the screens no longer read ([2a4ed4a](https://github.com/samuelcsantana/pyxis-web/commit/2a4ed4ad9bc87a836b7174d8b4c62a58f72ecbc2))
+* **demo:** reduce every demo screen from the drawn visits ([ca7d361](https://github.com/samuelcsantana/pyxis-web/commit/ca7d361ce7ccbc7cdd9c1dbeeeea62aa668c4aa2))
+* **devices:** delete the share summary that nothing renders ([6ab2ca2](https://github.com/samuelcsantana/pyxis-web/commit/6ab2ca2cd74924322689a3b30d97cafe855762ba))
+* **devices:** read the Devices text from the dictionary ([5de4a24](https://github.com/samuelcsantana/pyxis-web/commit/5de4a24be5bcb729eff6c9a427dd85e064b742b5))
+* **domain:** format and count through the request language ([6a7f49e](https://github.com/samuelcsantana/pyxis-web/commit/6a7f49e0ecd183f8753ec591c4b10291f53202e9))
+* **features:** read the Features text from the dictionary ([ab1f143](https://github.com/samuelcsantana/pyxis-web/commit/ab1f143654ed193cf9546219a6919a23f717535e))
+* **funnel:** read the funnel editor text from the dictionary ([707cd48](https://github.com/samuelcsantana/pyxis-web/commit/707cd48f13f105780fc0d2775dc8399369e62b2c))
+* **funnel:** read the Funnel page text from the dictionary ([62880b1](https://github.com/samuelcsantana/pyxis-web/commit/62880b128e406cdcfc77fcd1d435e1f947e3b4bf))
+* **i18n:** read the Acquisition, Devices and Requests text from the dictionary ([f0c4a1e](https://github.com/samuelcsantana/pyxis-web/commit/f0c4a1ea760a75336578d57e3768b541fa2bdea0))
+* **i18n:** read the Funnel, Visits and Timeline text and the problems from the dictionary ([561476b](https://github.com/samuelcsantana/pyxis-web/commit/561476bc5966eccb965e1a6af8439f9e7cbb8317))
+* **i18n:** read the Overview, period and glossary text from the dictionary ([8b9f0f6](https://github.com/samuelcsantana/pyxis-web/commit/8b9f0f64d541b6ac886686e7e1b489f5346c9fa6))
+* **i18n:** read the Requests text from the dictionary ([4a13160](https://github.com/samuelcsantana/pyxis-web/commit/4a13160e4223042023a2ca4dfdcfc71943f31086))
+* **i18n:** read the Timeline text from the dictionary ([6146dda](https://github.com/samuelcsantana/pyxis-web/commit/6146dda597f6671107870736d143aa32b5dd38d4))
+* **i18n:** read the Visits text from the dictionary ([d6ef73e](https://github.com/samuelcsantana/pyxis-web/commit/d6ef73e91d637e483b58e2fe46927b64d5ef7707))
+* **overview:** read the Overview text from the dictionary ([91a7678](https://github.com/samuelcsantana/pyxis-web/commit/91a7678513f7a1efd35707a62de2ecb9a2299c1f))
+* **shell:** read the navigation and account text from the dictionary ([5a51f40](https://github.com/samuelcsantana/pyxis-web/commit/5a51f403dbcfc097131af9b6e41c63195667951f))
+* **shell:** read the period selector text from the dictionary ([af9828f](https://github.com/samuelcsantana/pyxis-web/commit/af9828f991ecd9336db038ac409e23c04dd9cf75))
+* **shell:** read the screen names from the dictionary ([745d182](https://github.com/samuelcsantana/pyxis-web/commit/745d18204543e7d60be7b1b86e022aec727e4208))
+* **sign-in:** read the sign-in form and page from the dictionary ([026cc26](https://github.com/samuelcsantana/pyxis-web/commit/026cc266ab7fd4634ed61cbd0934bbcb14083a2d))
+* **states:** read the empty, first-run and demo text from the dictionary ([aa3b78e](https://github.com/samuelcsantana/pyxis-web/commit/aa3b78e5d2494d1fd8a41bb12d2d5c1abe0d2c17))
+* **states:** read the error panels from the dictionary ([0fddbb2](https://github.com/samuelcsantana/pyxis-web/commit/0fddbb28cb572cdd3d140b7fe130f70eb3cd3677))
+* **states:** read the not-found pages from the dictionary ([09e9b75](https://github.com/samuelcsantana/pyxis-web/commit/09e9b7510541812a3f74d6b3d18522fdec702cf3))
+* **theme:** name the theme toggle with whole sentences ([7d1e9fb](https://github.com/samuelcsantana/pyxis-web/commit/7d1e9fb0bdd89a79dd1366c15476daef86ae60da))
+* **timeline:** name the formatting of a number of seconds ([3e4c266](https://github.com/samuelcsantana/pyxis-web/commit/3e4c266d3bd89c6d43c57b9bc0a52b3624f7542c))
+* **ui:** make every visits link say its purpose from the dictionary ([81cdc3c](https://github.com/samuelcsantana/pyxis-web/commit/81cdc3c18a57ac0458bb19d3459750c4e5584c8c))
+* **ui:** read the CSV download text from the dictionary ([7ecc1a9](https://github.com/samuelcsantana/pyxis-web/commit/7ecc1a937f7fe0ca03f21af74598fcc869bc6437))
+* **ui:** size every text with the rem type tokens ([d64f34e](https://github.com/samuelcsantana/pyxis-web/commit/d64f34e4ad68ad9223be9f277077f6ae36808181))
+* **visits:** read the filter placeholders from the dictionary ([41cebcb](https://github.com/samuelcsantana/pyxis-web/commit/41cebcb83605eff65b958233f55479f89f04098b))
+
+
+### Documentation
+
+* describe the interface languages and record the pt-BR glossary ([af1571e](https://github.com/samuelcsantana/pyxis-web/commit/af1571e6872f2d0243d11a706937361da290bf70))
+* **readme:** describe text that follows the reader's text size ([326206f](https://github.com/samuelcsantana/pyxis-web/commit/326206f0281fe575d8828ed935d4ccdfafda048e))
+* **readme:** describe the campaigns of Acquisition ([0f1c5c9](https://github.com/samuelcsantana/pyxis-web/commit/0f1c5c9c4a69957793d4e04d24d75cda5e518ce6))
+* **readme:** describe the day by day of a route in the Requests details ([347a88a](https://github.com/samuelcsantana/pyxis-web/commit/347a88adc6e8a4bdf898dd0d066eb19b678e5758))
+* **readme:** describe the failures per day and the p95 of Requests ([bb2ffaf](https://github.com/samuelcsantana/pyxis-web/commit/bb2ffaf8453eeb103db160a66363452f1e5be700))
+* **readme:** describe the step times of the Funnel ([d4b607b](https://github.com/samuelcsantana/pyxis-web/commit/d4b607bd4661aa4f9922ccc133e596bd6f6592f0))
+* **readme:** list rich() among the interface language helpers ([d6c05a7](https://github.com/samuelcsantana/pyxis-web/commit/d6c05a71d23ec5a76e4b7d72e3517e0b68b912fc))
+* **readme:** re-record the tour and the screenshots from the current demo ([ce28adf](https://github.com/samuelcsantana/pyxis-web/commit/ce28adf9aa48b0abf977be789ce8ceb8cfacb0b4))
+* **readme:** say a lint rule keeps interface text in the dictionary ([1d34c0a](https://github.com/samuelcsantana/pyxis-web/commit/1d34c0ac75592423f9782b2fb88c1d9eae817ea6))
+* **readme:** say each funnel figure lists who reached or left the step ([88c6cfa](https://github.com/samuelcsantana/pyxis-web/commit/88c6cfa9806f2312471ca36cd188dc5e7997221b))
+* **readme:** say how Client Components that only show words get them from the server ([5bb50f7](https://github.com/samuelcsantana/pyxis-web/commit/5bb50f7621c05819778fd8a9e4f95f158e72c4b9))
+* **readme:** say how tests render the Client Components that read the dictionary ([01212af](https://github.com/samuelcsantana/pyxis-web/commit/01212af1a9a3d51368a2de9bb67d26f76f974b12))
+* **readme:** say how the domain gets the language of a request ([c6b8e98](https://github.com/samuelcsantana/pyxis-web/commit/c6b8e984a61b0bed9743a2e5b75460b814a3a77f))
+* **readme:** say the demo screens reduce one set of drawn visits ([acc8b98](https://github.com/samuelcsantana/pyxis-web/commit/acc8b98f5536bf68e5332b7b94c0f5aa372be325))
+* **readme:** say the KPI cards take part in the navigation feedback ([8c66cc8](https://github.com/samuelcsantana/pyxis-web/commit/8c66cc84737628e3fc971470f63ccef06e68b91b))
+* **readme:** say the sign-in email follows the reader's language ([d6ec93d](https://github.com/samuelcsantana/pyxis-web/commit/d6ec93d170d9617c0e1abc905bef78d16790e796))
+* **readme:** say the Visits export sets its own time limit ([e4cc9af](https://github.com/samuelcsantana/pyxis-web/commit/e4cc9af58a2067f9fc637bee575a13e0f24dd4fb))
+* **storybook:** switch the stories' language from the toolbar ([91d9f0e](https://github.com/samuelcsantana/pyxis-web/commit/91d9f0e6e8c5950dd045eb92526e33b3c37d09bc))
+
 ## [0.5.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.4.0...v0.5.0) (2026-10-08)
 
 
