@@ -183,3 +183,93 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
+
+.select-field {
+  appearance: none;
+}
+
+@supports (appearance: base-select) {
+  .select-field,
+  .select-field::picker(select) {
+    appearance: base-select;
+  }
+
+  .select-field {
+    display: flex;
+    align-items: center;
+  }
+
+  .select-field::picker-icon {
+    display: none;
+  }
+
+  .select-field:open + .select-chevron {
+    rotate: 180deg;
+  }
+
+  .select-field::picker(select) {
+    margin-block: --spacing(1.5);
+    padding: --spacing(1);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-card);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-lg);
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 160ms ease-out,
+      translate 160ms ease-out,
+      display 160ms allow-discrete,
+      overlay 160ms allow-discrete;
+  }
+
+  .select-field:not(:open)::picker(select) {
+    opacity: 0;
+    translate: 0 --spacing(-1);
+  }
+
+  @starting-style {
+    .select-field:open::picker(select) {
+      opacity: 0;
+      translate: 0 --spacing(-1);
+    }
+  }
+
+  .select-field option {
+    display: flex;
+    align-items: center;
+    gap: --spacing(2.5);
+    min-block-size: --spacing(9);
+    padding-inline: --spacing(2.5);
+    border-radius: var(--radius-control);
+    color: var(--color-ink);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+
+  .select-field option:hover {
+    background: var(--color-soft);
+  }
+
+  .select-field option:focus-visible {
+    background: var(--color-soft);
+    outline: 2px solid var(--color-focus);
+    outline-offset: -2px;
+  }
+
+  .select-field option:checked {
+    font-weight: 600;
+  }
+
+  .select-field option::checkmark {
+    order: 1;
+    margin-inline-start: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .select-field::picker(select) {
+      transition: none;
+    }
+  }
+}

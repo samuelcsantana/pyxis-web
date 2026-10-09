@@ -16,7 +16,7 @@ export function SelectField({
     <span className={`relative flex min-w-0 ${frameClassName}`}>
       <select
         {...select}
-        className={`w-full min-w-0 cursor-pointer appearance-none truncate pr-9 ${className}`}
+        className={`select-field w-full min-w-0 cursor-pointer truncate pr-9 ${className}`}
       >
         {children}
       </select>
@@ -25,7 +25,7 @@ export function SelectField({
         height={16}
         viewBox="0 0 24 24"
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted"
+        className="select-chevron pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted transition-[rotate] duration-150 motion-reduce:transition-none"
       >
         <path
           d={CHEVRON}

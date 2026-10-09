@@ -16,7 +16,7 @@ describe('SelectField', () => {
     );
 
     const select = screen.getByRole('combobox', { name: 'Channel' });
-    expect(select).toHaveClass('appearance-none', 'pr-9', 'px-3');
+    expect(select).toHaveClass('select-field', 'pr-9', 'px-3');
     expect(select).toHaveAttribute('name', 'channel');
 
     fireEvent.change(select, { target: { value: 'paid' } });
