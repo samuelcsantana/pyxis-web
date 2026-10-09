@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.7.0...v0.8.0) (2026-10-09)
+
+
+### Features
+
+* **services:** write to the API with the admin's session ([0f9480b](https://github.com/samuelcsantana/pyxis-web/commit/0f9480b6cb674c9e149cb7a082a7c8e077c1de24))
+* **settings:** read and choose the e-mail preferences through a service ([97cf910](https://github.com/samuelcsantana/pyxis-web/commit/97cf910a51c8b7c5f6599281ffa0caa83026458a))
+* **settings:** turn the weekly digest on or off in Settings ([b51f9b1](https://github.com/samuelcsantana/pyxis-web/commit/b51f9b1c3474ef00f3e9a34889cc05ca36adee04))
+
+
+### Documentation
+
+* **readme:** describe the weekly digest switch in Settings ([ef93f4e](https://github.com/samuelcsantana/pyxis-web/commit/ef93f4ee820280b0b068b1d2d72e75379a88faa9))
+
 ## [0.7.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.6.0...v0.7.0) (2026-10-09)
 
 
