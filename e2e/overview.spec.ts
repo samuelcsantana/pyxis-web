@@ -212,3 +212,29 @@ test('shows the values of the day under the pointer', async ({ page, isMobile })
   await page.mouse.move(0, 0);
   await expect(plot).toBeEmpty();
 });
+
+test('shows when visits start, adding up to the Visits figure, also as a table', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=30d`);
+  const panel = page.getByRole('region', { name: 'When visits start' });
+  await expect(panel.getByRole('img', { name: /^Busiest: / })).toBeVisible();
+  const visits = count(
+    await page
+      .getByRole('group', { name: 'Visits', exact: true })
+      .locator('p.tabular-nums')
+      .first()
+      .textContent(),
+  );
+
+  await panel.getByRole('button', { name: 'Table', exact: true }).click();
+
+  const rows = panel.getByRole('table').locator('tbody tr');
+  await expect(rows).toHaveCount(7);
+  const started = (await rows.locator('td').allTextContents())
+    .map(count)
+    .reduce((sum, value) => sum + value, 0);
+  expect(started).toBe(visits);
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+});

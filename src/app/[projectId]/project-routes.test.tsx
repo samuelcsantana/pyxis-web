@@ -196,7 +196,9 @@ describe('OverviewPage', () => {
       'Page views and named events, today',
     );
     expect(screen.queryByRole('region', { name: 'Activity per day' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { pressed: false })).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole('group', { name: 'Visits' })).queryByRole('button'),
+    ).not.toBeInTheDocument();
   });
 
   it('plots the figure the address names, and keeps it when the period changes', async () => {
