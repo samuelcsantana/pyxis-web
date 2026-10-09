@@ -18,6 +18,7 @@ import { DEMO_USER_ID, demoTimelineWire } from './timeline/demo-timeline';
 import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
 import { demoProjectSettingsWire } from './projects/demo-project-settings';
+import { demoTimeOfDayWire } from './overview/demo-time-of-day';
 import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 
@@ -74,6 +75,15 @@ describe('the API contract copied from pyxis-api', () => {
         const wire = demoOverviewWire(project.id, RANGE, now);
         expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
       }
+    }
+  });
+
+  it('accepts the demo time of day of each demo project', () => {
+    const validate = contractSchema('TimeOfDayReport');
+
+    for (const project of DEMO_PROJECTS) {
+      const report = demoTimeOfDayWire(project.id, RANGE, NOW);
+      expect(validate(report), JSON.stringify(validate.errors)).toBe(true);
     }
   });
 
