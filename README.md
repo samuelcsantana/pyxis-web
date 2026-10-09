@@ -17,9 +17,9 @@ per-person timelines of a product, measured without cookies or personal data.**
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?logo=conventionalcommits&logoColor=white)](https://www.conventionalcommits.org)
 [![Playwright + axe](https://img.shields.io/badge/Playwright-axe%20WCAG%202.2-2EAD33?logo=playwright&logoColor=white)](e2e)
 [![Storybook](https://img.shields.io/badge/Storybook-components-FF4785?logo=storybook&logoColor=white)](https://samuelcsantana.github.io/pyxis-web/)
-[![Live demo](https://img.shields.io/badge/Live%20demo-invented%20data-F5B83D?logo=vercel&logoColor=white)](https://demo.pyxis.samuelsantana.dev)
+[![Live demo](https://img.shields.io/badge/Live%20demo-invented%20data-F5B83D?logo=vercel&logoColor=white)](https://demo.pyxis-analytics.dev)
 
-**[Live demo](https://demo.pyxis.samuelsantana.dev)** ·
+**[Live demo](https://demo.pyxis-analytics.dev)** ·
 **[Storybook](https://samuelcsantana.github.io/pyxis-web/)** ·
 **[API reference](https://samuelcsantana.github.io/pyxis-api/)** ·
 **[SDK playground](https://samuelcsantana.github.io/pyxis-sdk/)**
@@ -33,11 +33,11 @@ per-person timelines of a product, measured without cookies or personal data.**
 | <img alt="The Requests screen of the demo store with the details of POST /orders open: its status codes and, day by day, its calls, failures, median and p95 duration" src=".github/assets/screenshots/requests-light.png"> | <img alt="A six-step sign-up funnel in the dark theme: the overall conversion, the biggest drop-off and the median time to finish, then at each step the share that continued, the visits that dropped and the median time after the step before" src=".github/assets/screenshots/funnel-dark.png"> | <img alt="The timeline of the demo person: a failed order, its retry and the order created" src=".github/assets/screenshots/timeline-light.png"> |
 
 The tour and the screenshots show invented demo data: the dashboard runs on it when no API is
-configured. The tour was recorded from the [live demo](https://demo.pyxis.samuelsantana.dev).
+configured. The tour was recorded from the [live demo](https://demo.pyxis-analytics.dev).
 
 > **Status:** early development, in production. Every screen works against the API, deployed at
-> `pyxis.samuelsantana.dev` for the projects' admins, and against invented data in the public
-> [live demo](https://demo.pyxis.samuelsantana.dev).
+> `app.pyxis-analytics.dev` for the projects' admins, and against invented data in the public
+> [live demo](https://demo.pyxis-analytics.dev).
 
 ## Ecosystem
 
@@ -209,7 +209,7 @@ Shipping now:
   page, titled as such, for an unknown address or project, which keeps the project's navigation
   around an unknown screen of a known project
 - A demo mode with invented data and a visible banner when no API is configured, published as
-  the [live demo](https://demo.pyxis.samuelsantana.dev): no sign-in and no real API. It holds
+  the [live demo](https://demo.pyxis-analytics.dev): no sign-in and no real API. It holds
   two imaginary products, a store and a documentation site. A seeded generator draws every
   visit of each day from the product's catalog (about 90 a day, with devices, sources and
   campaigns, a journey through the pages, events, writes and failed requests), the same visits
@@ -355,10 +355,10 @@ match it, and a daily workflow runs that test against the API's `main`.
 
 Two Vercel projects build this repository, and every merge to `main` deploys both:
 
-| Project      | Address                                                                                       | `NEXT_PUBLIC_PYXIS_API_URL`           |
-| ------------ | --------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `pyxis-web`  | `https://pyxis.samuelsantana.dev`, the dashboard for the projects' admins                     | `https://api.pyxis.samuelsantana.dev` |
-| `pyxis-demo` | [`https://demo.pyxis.samuelsantana.dev`](https://demo.pyxis.samuelsantana.dev), the live demo | unset                                 |
+| Project      | Address                                                                               | `NEXT_PUBLIC_PYXIS_API_URL`       |
+| ------------ | ------------------------------------------------------------------------------------- | --------------------------------- |
+| `pyxis-web`  | `https://app.pyxis-analytics.dev`, the dashboard for the projects' admins             | `https://api.pyxis-analytics.dev` |
+| `pyxis-demo` | [`https://demo.pyxis-analytics.dev`](https://demo.pyxis-analytics.dev), the live demo | unset                             |
 
 Only `main` deploys: `vercel.json` turns Git deployments off for every other branch, so pull
 requests get no preview deployment and spend none of the Hobby plan's build quota. Check a change
