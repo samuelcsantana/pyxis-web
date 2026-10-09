@@ -1,3 +1,4 @@
+import type { Formats } from '@/i18n/formats';
 import type { I18n } from '@/i18n/i18n';
 
 export const PERIOD_PRESETS = ['today', '7d', '30d'] as const;
@@ -159,13 +160,17 @@ export function describePeriod(period: Period, i18n: I18n): string {
     : i18n.t(`period.presets.${period.preset}`);
 }
 
-export function formatPeriod(period: Period, i18n: I18n): string {
-  const from = calendarDate(period.from);
-  const to = calendarDate(period.to);
-  if (period.from === period.to) {
-    return i18n.format.dayWithYear(to);
+export function formatDayRange(from: string, to: string, format: Formats): string {
+  const first = calendarDate(from);
+  const last = calendarDate(to);
+  if (from === to) {
+    return format.dayWithYear(last);
   }
-  const sameYear = from.getUTCFullYear() === to.getUTCFullYear();
-  const start = sameYear ? i18n.format.day(from) : i18n.format.dayWithYear(from);
-  return `${start} – ${i18n.format.dayWithYear(to)}`;
+  const sameYear = first.getUTCFullYear() === last.getUTCFullYear();
+  const start = sameYear ? format.day(first) : format.dayWithYear(first);
+  return `${start} – ${format.dayWithYear(last)}`;
+}
+
+export function formatPeriod(period: Period, i18n: I18n): string {
+  return formatDayRange(period.from, period.to, i18n.format);
 }
