@@ -35,8 +35,8 @@ per-person timelines of a product, measured without cookies or personal data.**
 The tour and the screenshots show invented demo data: the dashboard runs on it when no API is
 configured. The tour was recorded from the [live demo](https://demo.pyxis-analytics.dev).
 
-> **Status:** early development, in production. Every screen works against the API, deployed at
-> `app.pyxis-analytics.dev` for the projects' admins, and against invented data in the public
+> **Status:** in production since 2026-10-06 at `app.pyxis-analytics.dev` for the projects'
+> admins; the same screens run on invented data in the public
 > [live demo](https://demo.pyxis-analytics.dev).
 
 ## Ecosystem
