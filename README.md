@@ -112,7 +112,9 @@ Shipping now:
   rate in percent with a gap on days without writes; pressing it again goes back to the activity.
   A pointer over the chart shows that day's values beside the previous period's; the table stays
   the accessible way to read them. The top pages (views and visits) and events (count and the visits that had
-  them), each opening its visits; a footnote defining visit, identified user, conversion, write
+  them), each opening its visits; "When visits start", a week of hours (Monday first, in the
+  project's time zone) shaded by the visits whose first page view happened then, named by its
+  busiest hour and readable as a 7 × 24 table, adding up to the Visits figure; a footnote defining visit, identified user, conversion, write
   and failure, and when a change is coloured. Every percentage sits next to the totals it comes
   from, and a division by zero shows a dash, never `NaN%`
 - One word per idea across screens: "Write error rate" on the Overview and on Requests, "Failing
