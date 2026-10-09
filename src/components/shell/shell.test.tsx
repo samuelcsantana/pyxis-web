@@ -10,6 +10,7 @@ import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from './screens';
 import { Sidebar } from './sidebar';
+import { SettingsLink } from './settings-link';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID, SkipLink } from './skip-link';
@@ -126,6 +127,27 @@ describe('SidebarNav', () => {
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
+  });
+});
+
+describe('SettingsLink', () => {
+  it('links the settings of the project, named for screen readers', () => {
+    renderWithMessages(<SettingsLink projectId="p-store" />);
+
+    const link = screen.getByRole('link', { name: 'Project settings' });
+    expect(link).toHaveAttribute('href', '/p-store/settings');
+    expect(link).not.toHaveAttribute('aria-current');
+  });
+
+  it('marks itself current on the settings page', () => {
+    navigation.pathname = '/p-store/settings';
+    renderWithMessages(<SettingsLink projectId="p-store" />);
+    navigation.pathname = '/p-store/overview';
+
+    expect(screen.getByRole('link', { name: 'Project settings' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 });
 

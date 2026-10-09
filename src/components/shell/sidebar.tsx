@@ -7,6 +7,7 @@ import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { localeName } from '@/i18n/locales';
 import { ProjectSwitcher } from './project-switcher';
+import { SettingsLink } from './settings-link';
 import { SidebarNav } from './sidebar-nav';
 import { SignOutButton } from './sign-out-button';
 
@@ -37,7 +38,12 @@ export function Sidebar({ admin, project, i18n, chooseLocale }: SidebarProps) {
           choose={chooseLocale}
         />
       </div>
-      <ProjectSwitcher projects={admin.projects} currentProject={project} />
+      <div className="flex items-start gap-1.5">
+        <div className="min-w-0 flex-1">
+          <ProjectSwitcher projects={admin.projects} currentProject={project} />
+        </div>
+        <SettingsLink projectId={project.id} />
+      </div>
       <SidebarNav projectId={project.id} />
       <div className="mt-auto flex flex-col gap-3 border-t border-nav-line pt-3">
         <p className="flex items-center gap-2 rounded-input bg-nav-raised px-2.5 py-2 text-xs text-nav-text">

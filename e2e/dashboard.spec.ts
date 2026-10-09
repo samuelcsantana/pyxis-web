@@ -147,7 +147,7 @@ test('closes the project switcher when the focus moves past it, leaving that foc
   }
 
   await expect(switcher).not.toHaveAttribute('open');
-  await expect(page.getByRole('link', { name: 'Overview', exact: true })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Project settings' })).toBeFocused();
   expect(await focusedElementIsUncovered(page)).toBe(true);
 });
 

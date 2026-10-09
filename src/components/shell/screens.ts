@@ -63,6 +63,12 @@ export function screenHref(projectId: string, slug: ScreenSlug, query = ''): str
   return query === '' ? path : `${path}?${query}`;
 }
 
+export const SETTINGS_SEGMENT = 'settings';
+
+export function settingsHref(projectId: string): string {
+  return `/${encodeURIComponent(projectId)}/${SETTINGS_SEGMENT}`;
+}
+
 const LINK_BASE = 'http://link.invalid';
 
 export function linkWith(href: string, parameters: Readonly<Record<string, string>>): string {
