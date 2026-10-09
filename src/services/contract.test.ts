@@ -6,6 +6,7 @@ import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { HttpAuthService } from './auth/http-auth-service';
 import { demoAcquisitionWire } from './acquisition/demo-acquisition';
 import { demoDevicesWire } from './devices/demo-devices';
+import { demoEngagementWire } from './features/demo-engagement';
 import { demoFeaturesWire } from './features/demo-features';
 import { demoPropertyBreakdownWire } from './features/demo-properties';
 import { demoFunnelSubjectsWire, demoFunnelWire } from './funnel/demo-funnel';
@@ -83,6 +84,15 @@ describe('the API contract copied from pyxis-api', () => {
 
     for (const project of DEMO_PROJECTS) {
       const report = demoTimeOfDayWire(project.id, RANGE, NOW);
+      expect(validate(report), JSON.stringify(validate.errors)).toBe(true);
+    }
+  });
+
+  it('accepts the demo engagement of each demo project', () => {
+    const validate = contractSchema('EngagementReport');
+
+    for (const project of DEMO_PROJECTS) {
+      const report = demoEngagementWire(project.id, RANGE, NOW);
       expect(validate(report), JSON.stringify(validate.errors)).toBe(true);
     }
   });

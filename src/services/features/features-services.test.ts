@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiReader } from '../api-reader';
-import { DEMO_DOCS } from '../demo/demo-projects';
+import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
+import { MockOverviewService } from '../overview/mock-overview-service';
+import { demoEngagementWire } from './demo-engagement';
 import { demoFeaturesWire } from './demo-features';
 import { demoPropertyBreakdownWire } from './demo-properties';
 import { createFeaturesService } from './features-service.factory';
@@ -55,6 +57,68 @@ describe('HttpFeaturesService', () => {
       `${API}/v1/projects/p%201/features/properties?from=2026-09-22&to=2026-10-05&name=cta_clicked`,
     );
     expect(report.keys.map((key) => key.key)).toEqual(['cta', 'location']);
+  });
+
+  it('asks how the visits of the range entered, left and lasted', async () => {
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(new Response(JSON.stringify(demoEngagementWire('demo', RANGE, NOW)))),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const report = await new HttpFeaturesService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).engagement('p 1', RANGE);
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p%201/engagement?from=2026-09-22&to=2026-10-05`,
+    );
+    expect(report.visitLengths).toHaveLength(7);
+  });
+});
+
+describe('MockFeaturesService engagement', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shapes the visits the overview counts, so every figure adds up to them', async () => {
+    for (const project of [DEMO_STORE, DEMO_DOCS]) {
+      const [engagement, overview] = await Promise.all([
+        new MockFeaturesService().engagement(project.id, RANGE),
+        new MockOverviewService().overview(project.id, RANGE),
+      ]);
+      const sum = (values: readonly number[]) => values.reduce((total, value) => total + value, 0);
+
+      expect(engagement.visits).toBe(overview.kpis.visits.current);
+      expect(sum(engagement.visitLengths.map((bucket) => bucket.visits))).toBe(engagement.visits);
+      expect(engagement.entryPages.length).toBeLessThanOrEqual(10);
+      expect(engagement.entryPages[0]?.visits).toBeGreaterThanOrEqual(
+        engagement.entryPages.at(-1)?.visits ?? 0,
+      );
+      expect(engagement.singlePageVisits).toBeLessThan(engagement.visits);
+      expect(engagement.medianVisitSeconds).not.toBeNull();
+    }
+  });
+
+  it('answers no visits, no median and empty buckets for a range before the demo began', async () => {
+    const engagement = await new MockFeaturesService().engagement(DEMO_STORE.id, {
+      from: '2024-01-01',
+      to: '2024-01-07',
+    });
+
+    expect(engagement).toMatchObject({
+      visits: 0,
+      singlePageVisits: 0,
+      medianVisitSeconds: null,
+      entryPages: [],
+      exitPages: [],
+    });
+    expect(engagement.visitLengths.every((bucket) => bucket.visits === 0)).toBe(true);
   });
 });
 

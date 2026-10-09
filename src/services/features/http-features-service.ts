@@ -1,3 +1,5 @@
+import type { EngagementReport } from '@/domain/engagement';
+import { engagementResponseSchema } from '@/domain/engagement.schema';
 import { type FeatureKind, type FeaturesReport } from '@/domain/features';
 import { featuresResponseSchema } from '@/domain/features.schema';
 import { type PropertyBreakdownReport } from '@/domain/property-breakdown';
@@ -24,6 +26,13 @@ export class HttpFeaturesService implements IFeaturesService {
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/features/properties?${query.toString()}`,
       propertyBreakdownResponseSchema,
+    );
+  }
+
+  engagement(projectId: string, range: DateRange): Promise<EngagementReport> {
+    return this.api.get(
+      `/v1/projects/${encodeURIComponent(projectId)}/engagement?${rangeQuery(range)}`,
+      engagementResponseSchema,
     );
   }
 }
