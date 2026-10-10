@@ -88,3 +88,46 @@ test('names the switch in Portuguese', async ({ page, context, baseURL }) => {
     page.getByRole('region', { name: 'E-mail' }).getByRole('switch', { name: 'Resumo semanal' }),
   ).toBeChecked();
 });
+
+test('lists the sessions with this device marked, and ends another one from its row', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const sessions = page.getByRole('region', { name: 'Sessions' });
+  const rows = sessions.getByRole('listitem');
+
+  await expect(rows).toHaveCount(3);
+  await expect(rows.nth(0)).toContainText('Chrome on Windows');
+  await expect(rows.nth(0)).toContainText('This device');
+  await expect(rows.nth(1)).toContainText('Safari on iOS');
+  await expect(rows.nth(2)).toContainText('Unknown browser');
+
+  await rows.nth(1).getByRole('button', { name: 'End' }).click();
+
+  await expect(rows.nth(1).getByRole('status')).toHaveText('Session ended');
+  await expect(sessions.getByRole('alert')).toHaveCount(0);
+});
+
+test('signs out everywhere from the sessions panel, to the sign-in page', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/settings`);
+
+  await page
+    .getByRole('region', { name: 'Sessions' })
+    .getByRole('button', { name: 'Sign out everywhere' })
+    .click();
+
+  await expect(page).toHaveURL(/\/sign-in$/);
+});
+
+test('names the sessions panel in Portuguese', async ({ page, context, baseURL }) => {
+  await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
+
+  await page.goto(`/${STORE_ID}/settings`);
+  const sessions = page.getByRole('region', { name: 'Sessões' });
+
+  await expect(sessions).toContainText('Este dispositivo');
+  await expect(sessions.getByRole('button', { name: 'Encerrar' })).toHaveCount(3);
+  await expect(
+    sessions.getByRole('button', { name: 'Sair de todos os dispositivos' }),
+  ).toBeVisible();
+});

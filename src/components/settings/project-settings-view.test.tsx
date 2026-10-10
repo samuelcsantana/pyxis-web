@@ -1,6 +1,10 @@
 import { screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { ProjectSettings } from '@/domain/project-settings';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+}));
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { ProjectSettingsView } from './project-settings-view';
@@ -24,6 +28,18 @@ const SETTINGS: ProjectSettings = {
 const EMAIL = {
   emailPreferences: { weeklyDigest: true },
   chooseEmailPreferences: (chosen: { readonly weeklyDigest: boolean }) => Promise.resolve(chosen),
+  sessions: [
+    {
+      id: '5d2f8c1a-6b3e-4a7f-9c0d-1e2f3a4b5c6d',
+      browser: 'chrome',
+      os: 'windows',
+      deviceType: 'desktop',
+      createdAt: '2026-10-05T09:00:00.000Z',
+      lastUsedAt: '2026-10-05T09:30:00.000Z',
+      current: true,
+    },
+  ],
+  endSession: () => Promise.resolve(),
 };
 
 function panel(name: string) {
@@ -31,6 +47,22 @@ function panel(name: string) {
 }
 
 describe('ProjectSettingsView', () => {
+  it('lists the sessions between the e-mail panel and the project, with this device marked', () => {
+    renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
+
+    const sessions = panel('Sessions');
+    expect(sessions).toHaveTextContent('Chrome on Windows');
+    expect(sessions).toHaveTextContent('This device');
+    expect(within(sessions).getByRole('button', { name: 'End' })).toBeInTheDocument();
+    expect(
+      within(sessions).getByRole('button', { name: 'Sign out everywhere' }),
+    ).toBeInTheDocument();
+    const headings = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((heading) => heading.textContent);
+    expect(headings.indexOf('Sessions')).toBe(headings.indexOf('E-mail') + 1);
+  });
+
   it('shows how the project is set up, its activity, origins, keys and retention', () => {
     renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
 

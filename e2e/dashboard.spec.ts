@@ -250,18 +250,6 @@ test('signs out to the sign-in page', async ({ page, isMobile }) => {
   await expect(page).toHaveURL(/\/sign-in$/);
 });
 
-test('signs out everywhere from the account menu, to the sign-in page', async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto(`/${STORE_ID}/overview`);
-  await openAccountMenu(page, isMobile);
-
-  await page.getByRole('button', { name: 'Sign out everywhere' }).click();
-
-  await expect(page).toHaveURL(/\/sign-in$/);
-});
-
 test('remembers the chosen theme across a reload, and goes back to the system one', async ({
   page,
   isMobile,

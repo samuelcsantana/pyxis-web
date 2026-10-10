@@ -7,7 +7,10 @@ import {
   type ProjectSettings,
 } from '@/domain/project-settings';
 import type { EmailPreferences } from '@/domain/email-preferences';
+import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
+import type { EndSession } from './end-session-button';
+import { SessionsPanel } from './sessions-panel';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
 export interface ProjectSettingsViewProps {
@@ -15,6 +18,8 @@ export interface ProjectSettingsViewProps {
   readonly i18n: I18n;
   readonly emailPreferences: EmailPreferences;
   readonly chooseEmailPreferences: ChooseEmailPreferences;
+  readonly sessions: readonly AdminSession[];
+  readonly endSession: EndSession;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -209,9 +214,12 @@ export function ProjectSettingsView({
   i18n,
   emailPreferences,
   chooseEmailPreferences,
+  sessions,
+  endSession,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
-  const section: SectionProps = { settings, i18n, when: (iso) => format(new Date(iso)) };
+  const when = (iso: string) => format(new Date(iso));
+  const section: SectionProps = { settings, i18n, when };
   return (
     <div className="grid gap-3.5 sm:gap-4 lg:grid-cols-2">
       <div className="lg:col-span-2">
@@ -221,6 +229,9 @@ export function ProjectSettingsView({
           preferences={emailPreferences}
           choose={chooseEmailPreferences}
         />
+      </div>
+      <div className="lg:col-span-2">
+        <SessionsPanel sessions={sessions} i18n={i18n} when={when} end={endSession} />
       </div>
       <ProjectPanel {...section} />
       <ActivityPanel {...section} />

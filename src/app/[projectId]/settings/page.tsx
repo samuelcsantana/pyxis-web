@@ -7,7 +7,8 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
-import { chooseEmailPreferences } from './actions';
+import { createSessionsService } from '@/services/sessions/sessions-service.factory';
+import { chooseEmailPreferences, endSession } from './actions';
 
 export interface SettingsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
@@ -21,9 +22,10 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences] = await Promise.all([
+  const [settings, emailPreferences, sessions] = await Promise.all([
     readOrSignIn(() => createProjectsService().settings(project.id)),
     readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
+    readOrSignIn(() => createSessionsService().list()),
   ]);
   const i18n = await getI18n();
   return (
@@ -38,6 +40,8 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           i18n={i18n}
           emailPreferences={emailPreferences}
           chooseEmailPreferences={chooseEmailPreferences.bind(null, project.id)}
+          sessions={sessions}
+          endSession={endSession.bind(null, project.id)}
         />
       </MainContent>
     </>

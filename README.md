@@ -222,7 +222,10 @@ Shipping now:
 - A Settings page per project, behind the gear next to the language button (beside the project
   switcher in the phone menu). It opens with the admin's own weekly digest switch: the Monday
   e-mail with the week that closed on Sunday, on by default, saved through a server action that
-  re-checks access, moving back with an alert when the API refuses. Below it, read-only: time
+  re-checks access, moving back with an alert when the API refuses. Then the admin's sessions:
+  every device where they are signed in, named by the browser and system classified at sign-in
+  (never the user agent), this one marked, each with a button to end it, and "Sign out
+  everywhere" below the list. Below it, read-only: time
   zone, conversion event, allowed origins, the live public keys (a public key ships in the site,
   so it is shown in full), when each live secret key was created (never the key, which the API
   keeps only as a hash), how many months events are kept, and whether the project still waits
@@ -322,25 +325,25 @@ origin the sign-in and sign-out calls carry.
 
 ### Routes
 
-| Route                             | What it shows                                                                                    |
-| --------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `/`                               | Opens the first project the admin may read, or explains there is none                            |
-| `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen  |
-| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure  |
-| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                              |
-| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion       |
-| `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                |
-| `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one            |
-| `/[projectId]/funnel`             | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor              |
-| `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back |
-| `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`          |
-| `/[projectId]/settings`           | The weekly digest switch, then origins, public keys, secret keys by date only, retention, events |
-| `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period         |
-| `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen` |
-| `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`             |
-| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period   |
-| `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                              |
-| `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters            |
+| Route                             | What it shows                                                                                                                                         |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                               | Opens the first project the admin may read, or explains there is none                                                                                 |
+| `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                       |
+| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                       |
+| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                                                                                   |
+| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                            |
+| `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                     |
+| `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                 |
+| `/[projectId]/funnel`             | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                   |
+| `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                      |
+| `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                               |
+| `/[projectId]/settings`           | The weekly digest switch, the sessions list (end one, or sign out everywhere), then origins, public keys, secret keys by date only, retention, events |
+| `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                              |
+| `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                      |
+| `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                  |
+| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                        |
+| `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                                                                                   |
+| `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                 |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
