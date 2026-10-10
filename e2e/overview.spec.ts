@@ -78,7 +78,23 @@ test('shows the chart as a table that adds up to the legend totals', async ({ pa
   expect(await sidewaysOverflow(page)).toBe(0);
 });
 
-test('draws one point per day, and the figures of a single day without a chart', async ({
+async function expectFiguresOfTheDay(page: Page, figures: Locator): Promise<void> {
+  await expect(figures).toContainText('Page views and named events, today');
+  for (const name of FIGURES) {
+    await expect(
+      page
+        .getByRole('group', { name, exact: true })
+        .getByText(/^vs\. yesterday until \d{2}:\d{2}(, better|, worse)?$/),
+    ).toBeVisible();
+  }
+}
+
+async function expectNothingArrivedYet(page: Page): Promise<void> {
+  await expect(page.getByText(/^No event arrived in this period\./)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'See the last 30 days' })).toBeVisible();
+}
+
+test('draws one point per day; a single day shows its figures, or that nothing arrived yet, never a chart', async ({
   page,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=30d`);
@@ -91,14 +107,13 @@ test('draws one point per day, and the figures of a single day without a chart',
 
   await expect(page).toHaveURL(/range=today$/);
   const figures = page.getByRole('region', { name: 'Activity of the day' });
-  await expect(figures).toContainText('Page views and named events, today');
+  const nothingYet = page.getByRole('heading', { name: 'Nothing in this period' });
+  await expect(figures.or(nothingYet)).toBeVisible();
   await expect(dailyChart(page)).toHaveCount(0);
-  for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
-    await expect(
-      page
-        .getByRole('group', { name, exact: true })
-        .getByText(/^vs\. yesterday until \d{2}:\d{2}(, better|, worse)?$/),
-    ).toBeVisible();
+  if (await figures.isVisible()) {
+    await expectFiguresOfTheDay(page, figures);
+  } else {
+    await expectNothingArrivedYet(page);
   }
   expect(await axeViolations(page)).toEqual([]);
 });
