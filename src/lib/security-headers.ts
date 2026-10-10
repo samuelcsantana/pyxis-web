@@ -1,12 +1,17 @@
 export interface CspOptions {
   readonly apiOrigin?: string;
   readonly isDev: boolean;
+  readonly nonce: string;
 }
 
 export interface SecurityHeader {
   readonly key: string;
   readonly value: string;
 }
+
+export const CONTENT_SECURITY_POLICY_HEADER = 'Content-Security-Policy';
+
+const NONCE_BYTES = 16;
 
 export function apiOriginFrom(apiUrl: string | undefined): string | undefined {
   if (!apiUrl) {
@@ -19,12 +24,17 @@ export function apiOriginFrom(apiUrl: string | undefined): string | undefined {
   }
 }
 
-export function buildContentSecurityPolicy({ apiOrigin, isDev }: CspOptions): string {
+export function createNonce(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(NONCE_BYTES));
+  return btoa(String.fromCharCode(...bytes));
+}
+
+export function buildContentSecurityPolicy({ apiOrigin, isDev, nonce }: CspOptions): string {
   const self = "'self'";
   const api = apiOrigin ? ` ${apiOrigin}` : '';
   return [
     `default-src ${self}`,
-    `script-src ${self} 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+    `script-src ${self} 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ''}`,
     `style-src ${self} 'unsafe-inline'`,
     `img-src ${self} data: blob:`,
     `font-src ${self}`,
@@ -36,9 +46,8 @@ export function buildContentSecurityPolicy({ apiOrigin, isDev }: CspOptions): st
   ].join('; ');
 }
 
-export function buildSecurityHeaders(options: CspOptions): SecurityHeader[] {
+export function buildSecurityHeaders(): SecurityHeader[] {
   return [
-    { key: 'Content-Security-Policy', value: buildContentSecurityPolicy(options) },
     { key: 'X-Frame-Options', value: 'DENY' },
     { key: 'X-Content-Type-Options', value: 'nosniff' },
     { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

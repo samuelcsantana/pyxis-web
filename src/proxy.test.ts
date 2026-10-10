@@ -10,11 +10,48 @@ function visit(path: string, cookie?: string) {
   );
 }
 
+const FORWARDED_CSP_HEADER = 'x-middleware-request-content-security-policy';
+
+function nonceOf(policy: string | null): string | undefined {
+  return /'nonce-([^']+)'/.exec(policy ?? '')?.[1];
+}
+
 describe('proxy', () => {
   it('asks for nothing in demo mode', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
     expect(visit('/p1/overview').headers.get('location')).toBeNull();
+  });
+
+  describe('content security policy', () => {
+    it('sends a policy with a fresh nonce on every rendered page, in demo mode too', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const first = visit('/p1/overview').headers.get('content-security-policy');
+      const second = visit('/p1/overview').headers.get('content-security-policy');
+
+      expect(first).toContain(`'nonce-${nonceOf(first) ?? ''}' 'strict-dynamic'`);
+      expect(first).toContain("connect-src 'self';");
+      expect(nonceOf(first)).toBeDefined();
+      expect(nonceOf(second)).not.toBe(nonceOf(first));
+    });
+
+    it('hands the same policy to the renderer, so Next adds the nonce to its scripts', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+      const response = visit('/p1/overview', 'pyxis_session=token');
+
+      expect(response.headers.get(FORWARDED_CSP_HEADER)).toBe(
+        response.headers.get('content-security-policy'),
+      );
+      expect(response.headers.get('content-security-policy')).toContain(
+        "connect-src 'self' https://api.pyxis.example.com",
+      );
+    });
+
+    it('sends no policy with a redirect, which renders nothing', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      expect(visit('/p1/overview').headers.get('content-security-policy')).toBeNull();
+    });
   });
 
   describe('with an API configured', () => {

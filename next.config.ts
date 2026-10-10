@@ -1,10 +1,7 @@
 import type { NextConfig } from 'next';
-import { apiOriginFrom, buildSecurityHeaders } from './src/lib/security-headers';
+import { buildSecurityHeaders } from './src/lib/security-headers';
 
-const securityHeaders = buildSecurityHeaders({
-  apiOrigin: apiOriginFrom(process.env.NEXT_PUBLIC_PYXIS_API_URL),
-  isDev: process.env.NODE_ENV === 'development',
-});
+const securityHeaders = buildSecurityHeaders();
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
