@@ -265,15 +265,17 @@ every text; each other language is a typed translation of it.
 
 ```mermaid
 flowchart LR
-  Browser["Browser"] -- "sign-in, sign-out" --> API["pyxis-api"]
-  Browser -- "pages" --> Next["Next.js 16<br>Server Components"]
+  Browser["Browser"] -- "sign-in code" --> API["pyxis-api"]
+  Browser -- "pages, session cookie" --> Next["Next.js 16<br>Server Components"]
   Next --> Factory["create*Service()"]
   Factory -- "API URL set" --> Http["Http*Service<br>(forwards the session cookie)"] --> API
   Factory -- "no API URL" --> Mock["Mock*Service<br>(demo, tests, Storybook)"]
 ```
 
-Pages read data on the server through service interfaces; the browser calls the API only to sign
-in and out ([ADR 0002](docs/adr/0002-server-components-and-services.md)).
+Pages read data on the server through service interfaces; the browser calls the API only to ask
+for and verify a sign-in code, and hands the token it gets back to a Server Action that keeps it in
+a cookie of this host ([ADR 0002](docs/adr/0002-server-components-and-services.md),
+[ADR 0008](docs/adr/0008-host-only-session-cookie.md)).
 
 ## Tech stack
 
@@ -313,8 +315,10 @@ NEXT_PUBLIC_PYXIS_API_URL=http://localhost:3040 npx next dev -p 3000
 ```
 
 Outside production the API logs the sign-in code instead of emailing it
-(`docker compose logs api`). The session cookie is set by the API for `localhost`, and cookies
-ignore ports, so the dashboard's server receives it and forwards it to the API.
+(`docker compose logs api`). The dashboard keeps the session in a `__Host-pyxis_session` cookie,
+which needs `Secure`: browsers treat `http://localhost` as a secure context, so it works in
+development without TLS. The API's local `DASHBOARD_ORIGIN` must be `http://localhost:3000`, the
+origin the sign-in and sign-out calls carry.
 
 ### Routes
 
@@ -475,8 +479,12 @@ docs/adr/           architecture decision records
   Timeline already show it: treat the file like the dashboard it came from. The Visits export
   follows the API's cursor, 50 visits a read, so it sets its own `maxDuration` of 60 seconds
   rather than lean on the project's default
-- The session is an `HttpOnly` cookie set by the API; the dashboard's JavaScript never reads it.
-  The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
+- The session is a `__Host-pyxis_session` cookie set by a Server Action of this host from the
+  token the API answers at sign-in: `HttpOnly`, `Secure`, `SameSite=Lax`, no `Domain`, so no other
+  host under the domain ever receives it; the server forwards it to the API as `pyxis_session` and
+  signs out by calling the API's logout with it before clearing it. The token crosses the sign-in
+  page's script once, between the API's answer and the action, which is what the nonce CSP
+  protects. The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
   which the root layout reads so the first paint has the right theme (so every page renders on
   request), and `pyxis_locale`, the language chosen in the language menu, set by a Server Action
   as `HttpOnly` because only the server reads it. Neither identifies anyone
@@ -500,6 +508,7 @@ docs/adr/           architecture decision records
 | [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view (superseded by 0006) |
 | [0006](docs/adr/0006-server-rendered-svg-charts.md)                | Charts drawn as SVG on the server, each with a table view         |
 | [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)    | Interface languages with typed dictionaries, a cookie and Intl    |
+| [0008](docs/adr/0008-host-only-session-cookie.md)                  | Keep the session in a host-only cookie set by a Server Action     |
 
 ## Roadmap
 
