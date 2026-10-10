@@ -1,7 +1,13 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { returnPathOf } from '@/components/shell/screens';
-import { isDemoMode, SESSION_COOKIE_NAME } from '@/lib/api-config';
+import { apiBaseUrl, isDemoMode, SESSION_COOKIE_NAME } from '@/lib/api-config';
 import { REQUESTED_PATH_HEADER } from '@/lib/requested-path';
+import {
+  apiOriginFrom,
+  buildContentSecurityPolicy,
+  CONTENT_SECURITY_POLICY_HEADER,
+  createNonce,
+} from '@/lib/security-headers';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const RETURN_PARAMETER = 'next';
@@ -16,18 +22,34 @@ function signInUrl(request: NextRequest): URL {
   return url;
 }
 
-function withRequestedPath(request: NextRequest): NextResponse {
+function contentSecurityPolicy(): string {
+  return buildContentSecurityPolicy({
+    apiOrigin: apiOriginFrom(apiBaseUrl()),
+    isDev: process.env.NODE_ENV === 'development',
+    nonce: createNonce(),
+  });
+}
+
+function renderWith(
+  request: NextRequest,
+  requestHeaders: Readonly<Record<string, string>> = {},
+): NextResponse {
+  const policy = contentSecurityPolicy();
   const headers = new Headers(request.headers);
-  const { pathname, search } = request.nextUrl;
-  headers.set(REQUESTED_PATH_HEADER, `${pathname}${search}`);
-  return NextResponse.next({ request: { headers } });
+  headers.set(CONTENT_SECURITY_POLICY_HEADER, policy);
+  for (const [name, value] of Object.entries(requestHeaders)) {
+    headers.set(name, value);
+  }
+  const response = NextResponse.next({ request: { headers } });
+  response.headers.set(CONTENT_SECURITY_POLICY_HEADER, policy);
+  return response;
 }
 
 export function proxy(request: NextRequest) {
   if (isDemoMode()) {
-    return NextResponse.next();
+    return renderWith(request);
   }
-  const { pathname, searchParams } = request.nextUrl;
+  const { pathname, search, searchParams } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
   const onSignIn = pathname === SIGN_IN_PATH;
 
@@ -38,7 +60,7 @@ export function proxy(request: NextRequest) {
     const returnPath = returnPathOf(searchParams.get(RETURN_PARAMETER)) ?? '/';
     return NextResponse.redirect(new URL(returnPath, request.url));
   }
-  return withRequestedPath(request);
+  return renderWith(request, { [REQUESTED_PATH_HEADER]: `${pathname}${search}` });
 }
 
 export const config = {

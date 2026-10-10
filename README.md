@@ -461,9 +461,12 @@ docs/adr/           architecture decision records
 
 ## Privacy and security
 
-- Content Security Policy without nonces, so pages stay prerendered: scripts, styles, images and
-  fonts from this origin only, connections only to this origin and the Pyxis API, no plugins, no
-  framing
+- Content Security Policy set by the proxy on every rendered page, with a fresh nonce: scripts
+  run only when they carry the nonce or are loaded by one that does (`'strict-dynamic'`), so an
+  injected inline script never runs; styles, images and fonts from this origin only (inline
+  styles stay allowed for Tailwind and the SVG charts), connections only to this origin and the
+  Pyxis API, no plugins, no framing. Every page already renders on request (the layout reads the
+  theme cookie), so the nonce costs no prerendering
 - No secret in the browser bundle; data is read on the server
 - A CSV export is a Route Handler next to its screen that reads through the same service, with
   the same session cookie, as the page: it holds nothing the screen does not show, answers
