@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { returnPathOf } from '@/components/shell/screens';
-import { apiBaseUrl, isDemoMode, SESSION_COOKIE_NAME } from '@/lib/api-config';
+import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
 import { REQUESTED_PATH_HEADER } from '@/lib/requested-path';
+import { SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 import {
   apiOriginFrom,
   buildContentSecurityPolicy,
