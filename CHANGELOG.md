@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.12.0...v0.13.0) (2026-10-10)
+
+
+### Features
+
+* **auth:** sign out of every device from the account menu ([37b6627](https://github.com/samuelcsantana/pyxis-web/commit/37b66274af4c11daf175e5fc34520e8872468cf9))
+* **settings:** list the sessions of the admin and end one from its row ([0e39182](https://github.com/samuelcsantana/pyxis-web/commit/0e3918297e95b4659a9f42607112188416d88543))
+
 ## [0.12.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.11.0...v0.12.0) (2026-10-10)
 
 

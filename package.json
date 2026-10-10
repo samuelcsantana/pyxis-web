@@ -1,6 +1,6 @@
 {
   "name": "pyxis-web",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "type": "module",
   "description": "Privacy-first product analytics dashboard: funnels, timelines and request errors.",
