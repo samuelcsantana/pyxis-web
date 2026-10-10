@@ -245,7 +245,19 @@ test('signs out to the sign-in page', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await openAccountMenu(page, isMobile);
 
-  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+
+  await expect(page).toHaveURL(/\/sign-in$/);
+});
+
+test('signs out everywhere from the account menu, to the sign-in page', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await openAccountMenu(page, isMobile);
+
+  await page.getByRole('button', { name: 'Sign out everywhere' }).click();
 
   await expect(page).toHaveURL(/\/sign-in$/);
 });
@@ -355,10 +367,10 @@ test.describe('on a short phone', () => {
 
     await openAccountMenu(page, isMobile);
     const menu = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
-    await page.getByRole('button', { name: 'Sign out' }).scrollIntoViewIfNeeded();
+    await page.getByRole('button', { name: 'Sign out', exact: true }).scrollIntoViewIfNeeded();
 
     expect(menu?.height).toBeLessThanOrEqual(640);
-    await expect(page.getByRole('button', { name: 'Sign out' })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Sign out', exact: true })).toBeInViewport();
     await expect(page.getByRole('button', { name: 'Close menu' })).toBeInViewport();
   });
 });

@@ -291,11 +291,36 @@ describe('SignOutButton', () => {
     expect(navigation.router.refresh).toHaveBeenCalledOnce();
   });
 
+  it('signs out everywhere when asked to, and goes to the sign-in page', async () => {
+    const calls: string[] = [];
+    const recording: IAuthService = {
+      requestCode: () => Promise.resolve(),
+      verifyCode: () => Promise.resolve(),
+      signOut: () => {
+        calls.push('signOut');
+        return Promise.resolve();
+      },
+      signOutEverywhere: () => {
+        calls.push('signOutEverywhere');
+        return Promise.resolve();
+      },
+    };
+    renderWithMessages(<SignOutButton authService={recording} scope="everywhere" />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sign out everywhere' }));
+
+    expect(screen.getByRole('button', { name: 'Signing out…' })).toBeDisabled();
+    await settle(SIGN_OUT_MIN_BUSY_MS);
+    expect(calls).toEqual(['signOutEverywhere']);
+    expect(navigation.router.replace).toHaveBeenCalledWith('/sign-in');
+  });
+
   it('stays and says so when signing out fails', async () => {
     const failing: IAuthService = {
       requestCode: () => Promise.resolve(),
       verifyCode: () => Promise.resolve(),
       signOut: () => Promise.reject(new TypeError('Failed to fetch')),
+      signOutEverywhere: () => Promise.reject(new TypeError('Failed to fetch')),
     };
     renderWithMessages(<SignOutButton authService={failing} variant="page" />);
 

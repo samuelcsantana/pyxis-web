@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { endSession, keepSession } from './actions';
+import { endAllSessions, endSession, keepSession } from './actions';
 
 interface SetCookieCall {
   readonly name: string;
@@ -11,7 +11,7 @@ const state = vi.hoisted(() => ({
   cookieValue: undefined as string | undefined,
   setCalls: [] as SetCookieCall[],
   requestOrigin: null as string | null,
-  revoked: [] as { baseUrl: string; token: string; origin: string | null }[],
+  revoked: [] as { baseUrl: string; token: string; origin: string | null; scope: string }[],
   revokeFails: false,
 }));
 
@@ -31,8 +31,8 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('@/services/auth/revoke-session', () => ({
-  revokeSession: (baseUrl: string, token: string, origin: string | null) => {
-    state.revoked.push({ baseUrl, token, origin });
+  revokeSession: (baseUrl: string, token: string, origin: string | null, scope: string) => {
+    state.revoked.push({ baseUrl, token, origin, scope });
     return state.revokeFails ? Promise.reject(new Error('refused')) : Promise.resolve();
   },
 }));
@@ -88,7 +88,12 @@ describe('endSession', () => {
     await endSession();
 
     expect(state.revoked).toEqual([
-      { baseUrl: API, token: TOKEN, origin: 'https://app.pyxis.example.com' },
+      {
+        baseUrl: API,
+        token: TOKEN,
+        origin: 'https://app.pyxis.example.com',
+        scope: 'this-session',
+      },
     ]);
     expect(state.setCalls).toEqual([
       { name: '__Host-pyxis_session', value: '', options: { ...HOST_ONLY, maxAge: 0 } },
@@ -119,6 +124,37 @@ describe('endSession', () => {
     state.revokeFails = true;
 
     await expect(endSession()).rejects.toThrow('refused');
+    expect(state.setCalls).toEqual([]);
+  });
+});
+
+describe('endAllSessions', () => {
+  beforeEach(() => {
+    state.setCalls = [];
+    state.revoked = [];
+    state.revokeFails = false;
+    state.requestOrigin = 'https://app.pyxis.example.com';
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', API);
+  });
+
+  it('revokes every session of the admin on the API, then clears the cookie', async () => {
+    state.cookieValue = TOKEN;
+
+    await endAllSessions();
+
+    expect(state.revoked).toEqual([
+      { baseUrl: API, token: TOKEN, origin: 'https://app.pyxis.example.com', scope: 'everywhere' },
+    ]);
+    expect(state.setCalls).toEqual([
+      { name: '__Host-pyxis_session', value: '', options: { ...HOST_ONLY, maxAge: 0 } },
+    ]);
+  });
+
+  it('keeps the cookie when the API refuses, like signing out of one device', async () => {
+    state.cookieValue = TOKEN;
+    state.revokeFails = true;
+
+    await expect(endAllSessions()).rejects.toThrow('refused');
     expect(state.setCalls).toEqual([]);
   });
 });

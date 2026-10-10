@@ -29,6 +29,7 @@ export const ptBR = translation({
     section: 'Análises',
     switchProject: 'Trocar de projeto. Projeto atual:',
     signOut: 'Sair',
+    signOutEverywhere: 'Sair de todos os dispositivos',
     signingOut: 'Saindo…',
     signOutFailed: 'Não foi possível sair. Tente de novo.',
     projectSection: 'Projeto',

@@ -482,7 +482,8 @@ docs/adr/           architecture decision records
 - The session is a `__Host-pyxis_session` cookie set by a Server Action of this host from the
   token the API answers at sign-in: `HttpOnly`, `Secure`, `SameSite=Lax`, no `Domain`, so no other
   host under the domain ever receives it; the server forwards it to the API as `pyxis_session` and
-  signs out by calling the API's logout with it before clearing it. The token crosses the sign-in
+  signs out by calling the API's logout with it before clearing it, or every session of the admin
+  at once ("Sign out everywhere" in the account menu). The token crosses the sign-in
   page's script once, between the API's answer and the action, which is what the nonce CSP
   protects. The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
   which the root layout reads so the first paint has the right theme (so every page renders on

@@ -8,7 +8,7 @@ import {
   SESSION_COOKIE_NAME,
   SESSION_MAX_AGE_SECONDS,
 } from '@/lib/session-cookie';
-import { revokeSession } from '@/services/auth/revoke-session';
+import { type RevocationScope, revokeSession } from '@/services/auth/revoke-session';
 
 export async function keepSession(token: unknown): Promise<void> {
   if (!isSessionToken(token)) {
@@ -20,12 +20,20 @@ export async function keepSession(token: unknown): Promise<void> {
   });
 }
 
-export async function endSession(): Promise<void> {
+async function endSessions(scope: RevocationScope): Promise<void> {
   const store = await cookies();
   const token = store.get(SESSION_COOKIE_NAME)?.value;
   const baseUrl = apiBaseUrl();
   if (token !== undefined && baseUrl !== undefined) {
-    await revokeSession(baseUrl, token, (await headers()).get('origin'));
+    await revokeSession(baseUrl, token, (await headers()).get('origin'), scope);
   }
   store.set(SESSION_COOKIE_NAME, '', { ...SESSION_COOKIE_ATTRIBUTES, maxAge: 0 });
+}
+
+export async function endSession(): Promise<void> {
+  await endSessions('this-session');
+}
+
+export async function endAllSessions(): Promise<void> {
+  await endSessions('everywhere');
 }

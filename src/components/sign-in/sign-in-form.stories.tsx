@@ -9,18 +9,21 @@ const neverAnswers: IAuthService = {
   requestCode: () => new Promise<void>(() => undefined),
   verifyCode: () => new Promise<void>(() => undefined),
   signOut: () => new Promise<void>(() => undefined),
+  signOutEverywhere: () => new Promise<void>(() => undefined),
 };
 
 const refusesEveryCode: IAuthService = {
   requestCode: () => Promise.resolve(),
   verifyCode: () => Promise.reject(new InvalidCodeError()),
   signOut: () => Promise.resolve(),
+  signOutEverywhere: () => Promise.resolve(),
 };
 
 const refusesEveryEmail: IAuthService = {
   requestCode: () => Promise.reject(new RateLimitedError()),
   verifyCode: () => Promise.resolve(),
   signOut: () => Promise.resolve(),
+  signOutEverywhere: () => Promise.resolve(),
 };
 
 const meta = {

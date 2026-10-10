@@ -24,6 +24,7 @@ export const en = {
     section: 'Analytics',
     switchProject: 'Switch project. Current project:',
     signOut: 'Sign out',
+    signOutEverywhere: 'Sign out everywhere',
     signingOut: 'Signing out…',
     signOutFailed: 'Could not sign out. Try again.',
     projectSection: 'Project',

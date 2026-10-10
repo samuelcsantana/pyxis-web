@@ -27,6 +27,7 @@ function answer(status: number, body?: unknown) {
 function sessionKeeper() {
   const kept: string[] = [];
   let ended = 0;
+  let endedEverywhere = 0;
   const keeper: SessionKeeper = {
     keep: (token) => {
       kept.push(token);
@@ -36,8 +37,17 @@ function sessionKeeper() {
       ended += 1;
       return Promise.resolve();
     },
+    endAll: () => {
+      endedEverywhere += 1;
+      return Promise.resolve();
+    },
   };
-  return { keeper, kept, endedTimes: () => ended };
+  return {
+    keeper,
+    kept,
+    endedTimes: () => ended,
+    endedEverywhereTimes: () => endedEverywhere,
+  };
 }
 
 function service(keeper: SessionKeeper = sessionKeeper().keeper) {
@@ -124,11 +134,23 @@ describe('HttpAuthService', () => {
 
   it('signs out through the keeper, which holds the cookie, never from the browser', async () => {
     const fetchMock = answer(204);
-    const { keeper, endedTimes } = sessionKeeper();
+    const { keeper, endedTimes, endedEverywhereTimes } = sessionKeeper();
 
     await service(keeper).signOut();
 
     expect(endedTimes()).toBe(1);
+    expect(endedEverywhereTimes()).toBe(0);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('signs out everywhere through the keeper as well', async () => {
+    const fetchMock = answer(204);
+    const { keeper, endedTimes, endedEverywhereTimes } = sessionKeeper();
+
+    await service(keeper).signOutEverywhere();
+
+    expect(endedEverywhereTimes()).toBe(1);
+    expect(endedTimes()).toBe(0);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
@@ -141,6 +163,7 @@ describe('MockAuthService', () => {
     await expect(mock.verifyCode('any@example.com', DEMO_SIGN_IN_CODE)).resolves.toBeUndefined();
     await expect(mock.verifyCode('any@example.com', '123456')).rejects.toThrow(InvalidCodeError);
     await expect(mock.signOut()).resolves.toBeUndefined();
+    await expect(mock.signOutEverywhere()).resolves.toBeUndefined();
   });
 });
 

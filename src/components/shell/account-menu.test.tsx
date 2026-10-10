@@ -41,6 +41,7 @@ describe('AccountMenu', () => {
     );
     expect(screen.getByRole('button', { name: 'Dark' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sign out everywhere' })).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Theme' }).closest('div.absolute')).toHaveClass(
       'bottom-full',
     );

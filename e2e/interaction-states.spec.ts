@@ -165,7 +165,7 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   },
   {
     control: 'the sign-out button',
-    target: (page) => page.getByRole('button', { name: 'Sign out' }),
+    target: (page) => page.getByRole('button', { name: 'Sign out', exact: true }),
     prepare: (page) => openAccountMenu(page, false),
   },
   {

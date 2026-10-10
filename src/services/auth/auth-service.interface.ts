@@ -4,4 +4,5 @@ export interface IAuthService {
   requestCode(email: string, locale: Locale): Promise<void>;
   verifyCode(email: string, code: string): Promise<void>;
   signOut(): Promise<void>;
+  signOutEverywhere(): Promise<void>;
 }
