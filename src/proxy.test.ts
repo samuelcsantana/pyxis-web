@@ -37,7 +37,7 @@ describe('proxy', () => {
 
     it('hands the same policy to the renderer, so Next adds the nonce to its scripts', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-      const response = visit('/p1/overview', 'pyxis_session=token');
+      const response = visit('/p1/overview', '__Host-pyxis_session=token');
 
       expect(response.headers.get(FORWARDED_CSP_HEADER)).toBe(
         response.headers.get('content-security-policy'),
@@ -73,26 +73,38 @@ describe('proxy', () => {
     it('sends a signed-in visitor away from the sign-in page, to a known screen only', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-      expect(visit('/sign-in', 'pyxis_session=token').headers.get('location')).toBe(
+      expect(visit('/sign-in', '__Host-pyxis_session=token').headers.get('location')).toBe(
         'https://pyxis.example.com/',
       );
       expect(
-        visit('/sign-in?next=%2Fp1%2Ffunnel', 'pyxis_session=token').headers.get('location'),
+        visit('/sign-in?next=%2Fp1%2Ffunnel', '__Host-pyxis_session=token').headers.get('location'),
       ).toBe('https://pyxis.example.com/p1/funnel');
       expect(
-        visit('/sign-in?next=%2F%2Fevil.example', 'pyxis_session=token').headers.get('location'),
+        visit('/sign-in?next=%2F%2Fevil.example', '__Host-pyxis_session=token').headers.get(
+          'location',
+        ),
       ).toBe('https://pyxis.example.com/');
+    });
+
+    it('ignores the parent-domain cookie the API used to set, so that visitor signs in again', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      expect(visit('/p1/overview', 'pyxis_session=legacy').headers.get('location')).toBe(
+        'https://pyxis.example.com/sign-in?next=%2Fp1%2Foverview',
+      );
     });
 
     it('keeps a rejected session on the sign-in page, so nothing loops', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-      expect(visit('/sign-in?expired=1', 'pyxis_session=stale').headers.get('location')).toBeNull();
+      expect(
+        visit('/sign-in?expired=1', '__Host-pyxis_session=stale').headers.get('location'),
+      ).toBeNull();
     });
 
     it('lets a visitor with a session through, telling the page which address was asked', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-      const response = visit('/p1/overview?range=7d', 'pyxis_session=token');
+      const response = visit('/p1/overview?range=7d', '__Host-pyxis_session=token');
 
       expect(response.headers.get('location')).toBeNull();
       expect(response.headers.get('x-middleware-request-x-pyxis-requested-path')).toBe(

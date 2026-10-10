@@ -14,7 +14,7 @@ vi.mock('next/headers', () => ({
   cookies: () =>
     Promise.resolve({
       get: (name: string) =>
-        name === 'pyxis_session' && cookieStore.value !== undefined
+        name === '__Host-pyxis_session' && cookieStore.value !== undefined
           ? { name, value: cookieStore.value }
           : undefined,
     }),

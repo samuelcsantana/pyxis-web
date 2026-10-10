@@ -1,5 +1,5 @@
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
-import { SESSION_COOKIE_NAME } from '@/lib/api-config';
+import { API_SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 
 const STATUS_UNAUTHORIZED = 401;
 const STATUS_NOT_FOUND = 404;
@@ -51,7 +51,7 @@ function monotonicNow(): number {
 }
 
 function requestInit(token: string, outgoing: OutgoingBody | undefined): RequestInit {
-  const headers = { cookie: `${SESSION_COOKIE_NAME}=${token}`, accept: 'application/json' };
+  const headers = { cookie: `${API_SESSION_COOKIE_NAME}=${token}`, accept: 'application/json' };
   if (outgoing === undefined) {
     return { headers, cache: 'no-store' };
   }
