@@ -509,6 +509,7 @@ docs/adr/           architecture decision records
 | [0006](docs/adr/0006-server-rendered-svg-charts.md)                | Charts drawn as SVG on the server, each with a table view         |
 | [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)    | Interface languages with typed dictionaries, a cookie and Intl    |
 | [0008](docs/adr/0008-host-only-session-cookie.md)                  | Keep the session in a host-only cookie set by a Server Action     |
+| [0009](docs/adr/0009-csp-with-nonces.md)                           | A Content Security Policy with a nonce per request                |
 
 ## Roadmap
 
