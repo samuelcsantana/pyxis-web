@@ -4,7 +4,9 @@ Date: 2026-10-05
 
 ## Status
 
-Accepted
+Superseded by [ADR 0009](0009-csp-with-nonces.md) on 2026-10-10: every page renders on request
+since the theme cookie, so the reason for a static policy was gone, and the proxy now sets a nonce
+per request.
 
 ## Context
 

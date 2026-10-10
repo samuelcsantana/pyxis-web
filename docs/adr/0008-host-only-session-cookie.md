@@ -37,8 +37,7 @@ Only the dashboard can set a cookie that reaches the dashboard alone.
 - No host other than the dashboard's receives a session token.
 - The token is readable by the sign-in page's script for the instant between the API's answer and
   the action. A script injected at that moment could read it, which the nonce-based Content
-  Security Policy ([ADR 0003](0003-csp-without-nonces.md), superseded by the nonce policy of
-  2026-10-10) is there to prevent.
+  Security Policy ([ADR 0009](0009-csp-with-nonces.md)) is there to prevent.
 - One forced sign-in for every admin when this shipped: the old parent-domain cookie is ignored.
   Its session expires on the API after a day without use, so the dashboard does not clear it.
 - The demo and the Playwright suite, which run without an API, keep the mock service and set no
