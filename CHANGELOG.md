@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.11.0...v0.12.0) (2026-10-10)
+
+
+### Features
+
+* **auth:** keep the session in a host-only cookie set by a Server Action ([a4f001f](https://github.com/samuelcsantana/pyxis-web/commit/a4f001fbc1d183349816adc214e8adfafbd47a36))
+* **security:** allow scripts by a per-request nonce instead of unsafe-inline ([614cac7](https://github.com/samuelcsantana/pyxis-web/commit/614cac7b094c766206c1dbc5b25b99048a8aebef))
+
+
+### Documentation
+
+* **adr:** record the host-only session cookie ([a84dd95](https://github.com/samuelcsantana/pyxis-web/commit/a84dd950c7f2c400a6e0a261f6dc1b8b6d87dfd3))
+* **adr:** record the nonce-based Content Security Policy ([32acbfa](https://github.com/samuelcsantana/pyxis-web/commit/32acbfa7b2ea70171b0699d7f56d6f5d52060501))
+* **readme:** point the links at pyxis-analytics.dev ([45f3a2c](https://github.com/samuelcsantana/pyxis-web/commit/45f3a2cbb5d19ff3fc29f64e2c69b8a06e8fc6e4))
+* **readme:** state the production status ([ac7c93e](https://github.com/samuelcsantana/pyxis-web/commit/ac7c93e850491eb594596d789590bcf2a19ec00e))
+
 ## [0.11.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.10.0...v0.11.0) (2026-10-09)
 
 
