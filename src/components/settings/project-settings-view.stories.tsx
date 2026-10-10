@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
+import { sessionsResponseSchema } from '@/domain/sessions.schema';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
+import { demoSessionsWire } from '@/services/sessions/mock-sessions-service';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { ProjectSettingsView } from './project-settings-view';
@@ -23,6 +25,8 @@ const meta = {
     i18n: english,
     emailPreferences: { weeklyDigest: true },
     chooseEmailPreferences: (chosen) => Promise.resolve(chosen),
+    sessions: sessionsResponseSchema.parse(demoSessionsWire(STORY_NOW)),
+    endSession: () => Promise.resolve(),
   },
   parameters: { layout: 'padded' },
 } satisfies Meta<typeof ProjectSettingsView>;

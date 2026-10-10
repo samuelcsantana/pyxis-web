@@ -65,7 +65,6 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
         </div>
         <div className="border-t border-nav-line pt-2">
           <SignOutButton />
-          <SignOutButton scope="everywhere" />
         </div>
       </div>
     </DismissableDetails>

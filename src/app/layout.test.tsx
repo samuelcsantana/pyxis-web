@@ -63,6 +63,7 @@ describe('RootLayout', () => {
       'chartPanel',
       'propertyBreakdown',
       'emailPreferences',
+      'sessions',
     ]);
   });
 

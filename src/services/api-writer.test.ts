@@ -18,6 +18,7 @@ vi.mock('next/headers', () => ({
           ? { name, value: cookieStore.value }
           : undefined,
     }),
+  headers: () => Promise.resolve(new Headers({ origin: 'https://app.pyxis.example.com' })),
 }));
 
 function answer(status: number, body: unknown = null) {
@@ -103,6 +104,67 @@ describe('ApiWriter', () => {
 
     expect(fetchMock.mock.calls[0]?.[1]?.headers).toMatchObject({
       cookie: 'pyxis_session=from-the-request',
+      origin: 'https://app.pyxis.example.com',
     });
+  });
+
+  it('names no origin when the writer was given none', async () => {
+    const fetchMock = answer(200, { weekly_digest: true });
+
+    await new ApiWriter(
+      API,
+      () => Promise.resolve('token'),
+      () => undefined,
+    ).put(PATH, { weekly_digest: true }, schema);
+
+    expect(fetchMock.mock.calls[0]?.[1]?.headers).not.toHaveProperty('origin');
+  });
+});
+
+describe('ApiWriter delete', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('deletes with the session cookie and accepts an empty answer, logging the session route as a template', async () => {
+    const fetchMock = answer(204);
+    const lines: string[] = [];
+    const path = '/v1/me/sessions/6e3a9d2b-7c4f-4b8a-8d1e-2f3a4b5c6d7e';
+
+    await expect(
+      new ApiWriter(
+        API,
+        () => Promise.resolve('token'),
+        (line) => {
+          lines.push(line);
+        },
+        () => 0,
+      ).delete(path),
+    ).resolves.toBeUndefined();
+    expect(fetchMock).toHaveBeenCalledWith(`${API}${path}`, {
+      method: 'DELETE',
+      headers: { cookie: 'pyxis_session=token', accept: 'application/json' },
+      cache: 'no-store',
+    });
+    expect(lines).toEqual([
+      JSON.stringify({
+        event: 'api_write',
+        path: '/v1/me/sessions/:sessionId',
+        status: 204,
+        duration_ms: 0,
+      }),
+    ]);
+  });
+
+  it('turns a 404 of a delete into the not-found error', async () => {
+    answer(404);
+
+    await expect(
+      new ApiWriter(
+        API,
+        () => Promise.resolve('token'),
+        () => undefined,
+      ).delete('/v1/me/sessions/x'),
+    ).rejects.toBeInstanceOf(ApiNotFoundError);
   });
 });
