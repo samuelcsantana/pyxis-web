@@ -19,7 +19,7 @@ const meta = {
   component: EndSessionButton,
   tags: ['autodocs'],
   args: { sessionId: SESSION_ID, end: endRightAway },
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof EndSessionButton>;
 
 export default meta;

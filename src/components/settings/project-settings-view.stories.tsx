@@ -28,7 +28,7 @@ const meta = {
     sessions: sessionsResponseSchema.parse(demoSessionsWire(STORY_NOW)),
     endSession: () => Promise.resolve(),
   },
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof ProjectSettingsView>;
 
 export default meta;

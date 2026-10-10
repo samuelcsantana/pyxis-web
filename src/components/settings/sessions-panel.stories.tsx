@@ -19,7 +19,7 @@ const meta = {
     when: (iso: string) => format(new Date(iso)),
     end: () => Promise.resolve(),
   },
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof SessionsPanel>;
 
 export default meta;
