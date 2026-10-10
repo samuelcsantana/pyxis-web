@@ -63,7 +63,11 @@ function sentBodies() {
     );
 }
 
-const NO_SESSION_KEEPER = { keep: () => Promise.resolve(), end: () => Promise.resolve() };
+const NO_SESSION_KEEPER = {
+  keep: () => Promise.resolve(),
+  end: () => Promise.resolve(),
+  endAll: () => Promise.resolve(),
+};
 
 describe('the API contract copied from pyxis-api', () => {
   afterEach(() => {

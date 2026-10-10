@@ -34,6 +34,7 @@ function controlledService() {
     requestCode: (...args) => next('requestCode', args),
     verifyCode: (...args) => next('verifyCode', args),
     signOut: (...args) => next('signOut', args),
+    signOutEverywhere: (...args) => next('signOutEverywhere', args),
   };
   return { service, pending, calls };
 }

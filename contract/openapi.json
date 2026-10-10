@@ -2480,7 +2480,48 @@
             "pyxis_session": []
           }
         ],
-        "summary": "Revoke the session and clear its cookie",
+        "summary": "Revoke the session of the pyxis_session cookie",
+        "tags": [
+          "dashboard sign-in"
+        ]
+      }
+    },
+    "/v1/auth/logout-all": {
+      "post": {
+        "description": "Signs the admin out of every device at once. Needs a live session.",
+        "operationId": "AuthController_logoutAll",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Signed out everywhere."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "pyxis_session": []
+          }
+        ],
+        "summary": "Revoke every session of the signed-in admin, this one included",
         "tags": [
           "dashboard sign-in"
         ]
@@ -2565,7 +2606,7 @@
                 }
               }
             },
-            "description": "Signed in; the body carries the session token for the dashboard to keep in a cookie of its own host. The API still sets its cookie as well while the dashboard moves to the body."
+            "description": "Signed in; the body carries the session token for the dashboard to keep in a cookie of its own host and send back as the pyxis_session cookie."
           },
           "400": {
             "content": {
@@ -2598,7 +2639,7 @@
             "description": ""
           }
         },
-        "summary": "Exchange a sign-in code for a session cookie",
+        "summary": "Exchange a sign-in code for a session token",
         "tags": [
           "dashboard sign-in"
         ]

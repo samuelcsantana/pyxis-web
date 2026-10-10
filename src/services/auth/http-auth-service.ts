@@ -9,6 +9,7 @@ const STATUS_TOO_MANY_REQUESTS = 429;
 export interface SessionKeeper {
   keep(token: string): Promise<void>;
   end(): Promise<void>;
+  endAll(): Promise<void>;
 }
 
 export class MalformedSignInAnswerError extends Error {
@@ -54,6 +55,10 @@ export class HttpAuthService implements IAuthService {
 
   signOut(): Promise<void> {
     return this.session.end();
+  }
+
+  signOutEverywhere(): Promise<void> {
+    return this.session.endAll();
   }
 
   private async post(path: string, body: Readonly<Record<string, string>>): Promise<Response> {

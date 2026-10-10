@@ -15,4 +15,8 @@ export class MockAuthService implements IAuthService {
   signOut(): Promise<void> {
     return Promise.resolve();
   }
+
+  signOutEverywhere(): Promise<void> {
+    return Promise.resolve();
+  }
 }

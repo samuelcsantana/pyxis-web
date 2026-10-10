@@ -17,10 +17,18 @@ import { createAuthService } from '@/services/auth/auth-service.factory';
 export const SIGN_OUT_MIN_BUSY_MS = 400;
 const SIGN_OUT_ICON = 'M15 4h4v16h-4 M10 8l-4 4 4 4 M6 12h10';
 
+export type SignOutScope = 'this-device' | 'everywhere';
+
 export interface SignOutButtonProps {
   readonly authService?: IAuthService;
   readonly variant?: 'nav' | 'page';
+  readonly scope?: SignOutScope;
 }
+
+const LABEL_KEY_BY_SCOPE = {
+  'this-device': 'nav.signOut',
+  everywhere: 'nav.signOutEverywhere',
+} as const;
 
 const VARIANT_CLASSES = {
   nav: {
@@ -52,7 +60,11 @@ function SignOutIcon() {
   );
 }
 
-export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonProps) {
+export function SignOutButton({
+  authService,
+  variant = 'nav',
+  scope = 'this-device',
+}: SignOutButtonProps) {
   const t = useT();
   const classes = VARIANT_CLASSES[variant];
   const router = useRouter();
@@ -66,7 +78,9 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
   const signOut = () => {
     request.current?.unsubscribe();
     setError(null);
-    request.current = defer(() => service.signOut())
+    request.current = defer(() =>
+      scope === 'everywhere' ? service.signOutEverywhere() : service.signOut(),
+    )
       .pipe(
         tap(() => {
           router.replace('/sign-in');
@@ -88,7 +102,7 @@ export function SignOutButton({ authService, variant = 'nav' }: SignOutButtonPro
         className={`flex min-h-11 shrink-0 items-center rounded-input ${CONTROL_BUSY} ${classes.button}`}
       >
         {classes.withIcon ? <SignOutIcon /> : null}
-        <span>{busy ? t('nav.signingOut') : t('nav.signOut')}</span>
+        <span>{busy ? t('nav.signingOut') : t(LABEL_KEY_BY_SCOPE[scope])}</span>
       </button>
       {error === null ? null : (
         <p role="alert" className={`text-xs ${classes.error}`}>
