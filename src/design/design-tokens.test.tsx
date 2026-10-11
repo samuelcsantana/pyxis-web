@@ -1,6 +1,12 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { COLOR_TOKENS, DesignTokens, RADIUS_TOKENS, TYPE_SCALE } from './design-tokens';
+import {
+  COLOR_TOKENS,
+  DesignTokens,
+  RADIUS_TOKENS,
+  SHADOW_TOKENS,
+  TYPE_SCALE,
+} from './design-tokens';
 
 describe('DesignTokens', () => {
   it('shows a swatch for every color token, painted from its CSS variable', () => {
@@ -21,6 +27,17 @@ describe('DesignTokens', () => {
     expect(
       within(screen.getByRole('region', { name: 'Radius' })).getAllByRole('listitem'),
     ).toHaveLength(RADIUS_TOKENS.length);
+  });
+
+  it('shows every shadow, painted from its CSS variable', () => {
+    render(<DesignTokens />);
+
+    const shadows = within(screen.getByRole('region', { name: 'Shadow' })).getAllByRole('listitem');
+
+    expect(shadows).toHaveLength(SHADOW_TOKENS.length);
+    expect(shadows[0]?.querySelector('span')?.getAttribute('style')).toContain(
+      'var(--shadow-raised)',
+    );
   });
 
   it('names each type step with its rem size and draws a sample in it', () => {

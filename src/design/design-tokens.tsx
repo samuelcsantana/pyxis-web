@@ -2,6 +2,7 @@ export const COLOR_TOKENS = [
   { name: 'bg', use: 'Page background' },
   { name: 'card', use: 'Cards, panels, inputs' },
   { name: 'line', use: 'Borders and dividers' },
+  { name: 'line-strong', use: 'Border of the card on a standalone page' },
   { name: 'field', use: 'Borders of inputs and selects' },
   { name: 'grid', use: 'Chart grid lines' },
   { name: 'ink', use: 'Text, selected controls' },
@@ -26,6 +27,10 @@ export const COLOR_TOKENS = [
   { name: 'bad-soft', use: 'Error background' },
   { name: 'warn', use: 'Client errors (4xx)' },
   { name: 'warn-soft', use: 'Warning background' },
+  { name: 'dust', use: 'Star dust behind a standalone page' },
+  { name: 'mark-faint', use: 'The large, faint brand mark behind a standalone page' },
+  { name: 'mark-mid', use: 'The middle star of that mark' },
+  { name: 'glow', use: 'The amber glow around that star' },
   { name: 'nav', use: 'Sidebar background, both themes' },
   { name: 'nav-raised', use: 'Sidebar cards and the project switcher' },
   { name: 'nav-hover', use: 'Sidebar item under the pointer' },
@@ -38,6 +43,10 @@ export const COLOR_TOKENS = [
 ] as const;
 
 export const RADIUS_TOKENS = ['chip', 'control', 'input', 'card', 'panel', 'pill'] as const;
+
+export const SHADOW_TOKENS = [
+  { name: 'raised', use: 'The card on a standalone page (sign-in, not found, error, no projects)' },
+] as const;
 
 export const TYPE_SCALE = [
   { token: 'text-micro', size: '0.6875rem', use: 'Chips, method badges, axis labels' },
@@ -99,6 +108,27 @@ export function DesignTokens() {
                 </span>
               </span>
               <span className={`${step.token} font-semibold tabular-nums`}>4,758 visits</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="shadow-heading" className="flex flex-col gap-4">
+        <h2 id="shadow-heading" className="text-lg font-semibold">
+          Shadow
+        </h2>
+        <p className="text-sm text-muted">
+          Cards on dashboard screens stay flat. Only the single card of a standalone page is raised.
+        </p>
+        <ul className="flex flex-wrap gap-6">
+          {SHADOW_TOKENS.map((shadow) => (
+            <li key={shadow.name} className="flex flex-col gap-2">
+              <span
+                aria-hidden="true"
+                className="h-16 w-40 rounded-panel border border-line-strong bg-card"
+                style={{ boxShadow: `var(--shadow-${shadow.name})` }}
+              />
+              <code className="font-mono text-sm">{shadow.name}</code>
+              <span className="max-w-56 text-sm text-muted">{shadow.use}</span>
             </li>
           ))}
         </ul>
