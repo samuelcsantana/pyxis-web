@@ -28,6 +28,12 @@
   --pyx-bad-soft: #fee2e2;
   --pyx-warn: #b45309;
   --pyx-warn-soft: #fef3c7;
+  --pyx-line-strong: #cfd7e3;
+  --pyx-raised-shadow: 0 1px 2px rgb(14 26 43 / 0.05), 0 20px 44px -24px rgb(14 26 43 / 0.28);
+  --pyx-dust: #7c8aa0;
+  --pyx-mark-faint: #dde2e9;
+  --pyx-mark-mid: #fbe3ae;
+  --pyx-glow: rgb(245 184 61 / 0.42);
   --pyx-nav: #0e1a2b;
   --pyx-nav-raised: #13223a;
   --pyx-nav-hover: #243858;
@@ -67,6 +73,12 @@
     --pyx-bad-soft: #3a1518;
     --pyx-warn: #fbbf24;
     --pyx-warn-soft: #3a2a0b;
+    --pyx-line-strong: #2a3c58;
+    --pyx-raised-shadow: 0 20px 44px -24px rgb(0 0 0 / 0.7);
+    --pyx-dust: #93a3ba;
+    --pyx-mark-faint: #24344d;
+    --pyx-mark-mid: #6a5426;
+    --pyx-glow: rgb(245 184 61 / 0.26);
     color-scheme: dark;
   }
 }
@@ -97,6 +109,12 @@
   --pyx-bad-soft: #3a1518;
   --pyx-warn: #fbbf24;
   --pyx-warn-soft: #3a2a0b;
+  --pyx-line-strong: #2a3c58;
+  --pyx-raised-shadow: 0 20px 44px -24px rgb(0 0 0 / 0.7);
+  --pyx-dust: #93a3ba;
+  --pyx-mark-faint: #24344d;
+  --pyx-mark-mid: #6a5426;
+  --pyx-glow: rgb(245 184 61 / 0.26);
   color-scheme: dark;
 }
 
@@ -128,6 +146,12 @@
   --color-bad-soft: var(--pyx-bad-soft);
   --color-warn: var(--pyx-warn);
   --color-warn-soft: var(--pyx-warn-soft);
+  --color-line-strong: var(--pyx-line-strong);
+  --color-dust: var(--pyx-dust);
+  --color-mark-faint: var(--pyx-mark-faint);
+  --color-mark-mid: var(--pyx-mark-mid);
+  --color-glow: var(--pyx-glow);
+  --shadow-raised: var(--pyx-raised-shadow);
   --color-nav: var(--pyx-nav);
   --color-nav-raised: var(--pyx-nav-raised);
   --color-nav-hover: var(--pyx-nav-hover);
@@ -288,5 +312,61 @@ body {
     .select-field::picker(select) {
       transition: none;
     }
+  }
+}
+
+.brand-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.brand-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-dust);
+  mask: url('/brand/star-dust.svg') center / cover no-repeat;
+}
+
+.brand-backdrop-mark {
+  position: absolute;
+  right: -3.25rem;
+  bottom: -2.5rem;
+  width: 15.625rem;
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, var(--color-glow), transparent) center / 62.5% 62.5%
+    no-repeat;
+}
+
+.brand-backdrop-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-mark-faint);
+  mask: url('/brand/brand-needle.svg') center / contain no-repeat;
+}
+
+.brand-backdrop-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--color-mark-mid);
+  translate: -50% -50%;
+}
+
+@media (width >= --theme(--breakpoint-sm)) {
+  .brand-backdrop-mark {
+    top: 50%;
+    right: 6%;
+    bottom: auto;
+    width: 19.375rem;
+    translate: 0 -50%;
   }
 }
