@@ -61,7 +61,8 @@ export const CodeStep: Story = {
   args: { demoCode: DEMO_SIGN_IN_CODE },
   play: async ({ canvasElement }) => {
     const canvas = await reachCodeStep(canvasElement);
-    await expect(await canvas.findByLabelText('6-digit code')).toBeVisible();
+    await expect(await canvas.findByLabelText('6-digit code')).toHaveFocus();
+    await expect(canvas.getByTestId('code-cells')).toBeVisible();
   },
 };
 
