@@ -166,14 +166,13 @@ describe('SignInForm', () => {
     expect(field).not.toHaveAttribute('aria-describedby');
   });
 
-  it('keeps only digits in the code and signs in with it', async () => {
+  it('keeps only digits in the code and signs in as soon as the sixth one arrives', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
     pending[0]?.resolve();
     await settle();
 
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '12a 3456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
     pending[1]?.resolve();
     await settle(SMOOTH_LOADING_MS);
 
@@ -190,10 +189,111 @@ describe('SignInForm', () => {
     const field = screen.getByLabelText('6-digit code');
 
     fireEvent.change(field, { target: { value: 'Code 123456, valid for 10 minutes' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
 
     expect(field).toHaveValue('123456');
     expect(calls[1]).toEqual({ method: 'verifyCode', args: ['ana@example.com', '123456'] });
+  });
+
+  it('waits for all six digits before verifying', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+
+    fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '12345' } });
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(calls.map((call) => call.method)).toEqual(['requestCode']);
+    expect(screen.getByRole('button', { name: 'Verify and continue' })).toBeEnabled();
+  });
+
+  it('still verifies from the button, so the same code can be tried again', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
+    pending[1]?.reject(new TypeError('Failed to fetch'));
+    await settle(SMOOTH_LOADING_MS);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
+
+    expect(calls.map((call) => call.method)).toEqual(['requestCode', 'verifyCode', 'verifyCode']);
+    expect(calls[2]?.args).toEqual(['ana@example.com', '123456']);
+  });
+
+  it('verifies a code that arrives while the sending state is still on screen', async () => {
+    const { service, pending, calls } = controlledService();
+    renderWithMessages(<SignInForm authService={service} />);
+    typeEmail('ana@example.com');
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+    pending[0]?.resolve();
+    await settle();
+    expect(screen.getByRole('button', { name: 'Verifying…' })).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
+
+    expect(calls[1]).toEqual({ method: 'verifyCode', args: ['ana@example.com', '123456'] });
+  });
+
+  it('leaves a pending verification alone while more digits arrive', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+
+    fireEvent.change(field, { target: { value: '123456' } });
+    await settle();
+    fireEvent.change(field, { target: { value: '654321' } });
+
+    expect(calls.map((call) => call.method)).toEqual(['requestCode', 'verifyCode']);
+  });
+
+  it('does not send a code it already verified on its own again', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+    fireEvent.change(field, { target: { value: '123456' } });
+    pending[1]?.resolve();
+    await settle(SMOOTH_LOADING_MS);
+
+    fireEvent.change(field, { target: { value: '1234567' } });
+
+    expect(calls.map((call) => call.method)).toEqual(['requestCode', 'verifyCode']);
+  });
+
+  it('verifies new digits typed right after a refusal, before the error settles', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+    fireEvent.change(field, { target: { value: '123456' } });
+    pending[1]?.reject(new InvalidCodeError());
+    await settle();
+
+    fireEvent.change(field, { target: { value: '654321' } });
+
+    expect(calls[2]).toEqual({ method: 'verifyCode', args: ['ana@example.com', '654321'] });
+  });
+
+  it('verifies a refused code again when it is pasted again', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+    fireEvent.change(field, { target: { value: '123456' } });
+    pending[1]?.reject(new InvalidCodeError());
+    await settle(SMOOTH_LOADING_MS);
+
+    fireEvent.change(field, { target: { value: '' } });
+    fireEvent.change(field, { target: { value: '123456' } });
+
+    expect(calls.map((call) => call.method)).toEqual(['requestCode', 'verifyCode', 'verifyCode']);
   });
 
   it('lets a paste reach the field whole, so spaces in it cost no digit', async () => {
@@ -206,7 +306,6 @@ describe('SignInForm', () => {
     await reachCodeStep(new MockAuthService());
 
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
     await settle(SMOOTH_LOADING_MS);
 
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid or expired code');
@@ -222,7 +321,6 @@ describe('SignInForm', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Code sent.');
 
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
     await settle(SMOOTH_LOADING_MS);
 
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid or expired code');
@@ -246,7 +344,6 @@ describe('SignInForm', () => {
   it('goes back to the email step without keeping the error', async () => {
     await reachCodeStep(new MockAuthService());
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '111111' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
     await settle(SMOOTH_LOADING_MS);
 
     fireEvent.click(screen.getByRole('button', { name: 'Use a different email' }));
@@ -279,7 +376,6 @@ describe('SignInForm', () => {
     pending[0]?.resolve();
     await settle(SMOOTH_LOADING_MS);
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
 
     unmount();
     pending[1]?.resolve();

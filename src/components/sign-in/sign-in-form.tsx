@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
-import { defer, type Subscription, tap } from 'rxjs';
+import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import { useLocale, useT } from '@/i18n/messages-provider';
@@ -91,6 +91,8 @@ export function SignInForm({
   const codeInput = useRef<HTMLInputElement>(null);
   const emailInput = useRef<HTMLInputElement>(null);
   const shownStep = useRef<Step>(step);
+  const verifiedOnItsOwn = useRef('');
+  const verifying = useRef(false);
 
   useEffect(
     () => () => {
@@ -130,10 +132,14 @@ export function SignInForm({
       .subscribe();
   };
 
-  const verifyCode = () => {
+  const verifyCode = (value: string) => {
     start();
-    request.current = defer(() => service.verifyCode(email.trim(), code))
+    verifying.current = true;
+    request.current = defer(() => service.verifyCode(email.trim(), value))
       .pipe(
+        finalize(() => {
+          verifying.current = false;
+        }),
         tap(() => {
           router.replace(returnPath);
           router.refresh();
@@ -151,7 +157,21 @@ export function SignInForm({
 
   const submitCode = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    verifyCode();
+    verifyCode(code);
+  };
+
+  const changeCode = (value: string) => {
+    const digits = digitsOfCode(value);
+    setCode(digits);
+    if (digits.length < SIGN_IN_CODE_LENGTH) {
+      verifiedOnItsOwn.current = '';
+      return;
+    }
+    if (verifying.current || digits === verifiedOnItsOwn.current) {
+      return;
+    }
+    verifiedOnItsOwn.current = digits;
+    verifyCode(digits);
   };
 
   const useAnotherEmail = () => {
@@ -234,9 +254,7 @@ export function SignInForm({
               value={code}
               invalid={errorText !== null}
               describedBy={errorText === null ? undefined : 'sign-in-error'}
-              onChange={(value) => {
-                setCode(digitsOfCode(value));
-              }}
+              onChange={changeCode}
             />
           </div>
           <p role="status" className="min-h-5 text-caption text-ok">

@@ -81,8 +81,8 @@ export const WrongCode: Story = {
   args: { authService: refusesEveryCode },
   play: async ({ canvasElement }) => {
     const canvas = await reachCodeStep(canvasElement);
-    await userEvent.type(await canvas.findByLabelText('6-digit code'), '123456');
-    await userEvent.click(await canvas.findByRole('button', { name: 'Verify and continue' }));
+    const code = await canvas.findByLabelText<HTMLInputElement>('6-digit code');
+    await userEvent.type(code, '123456');
     await expect(await canvas.findByRole('alert')).toHaveTextContent('Invalid or expired code');
   },
 };
