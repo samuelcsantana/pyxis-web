@@ -68,14 +68,16 @@ export const en = {
     sendCode: 'Send code',
     sending: 'Sending…',
     checkTitle: 'Check your email',
-    checkBody: 'If <email/> can sign in to Pyxis, a code is on its way. It expires in 10 minutes.',
+    checkBody:
+      'If this address can sign in to Pyxis, a code is on its way. It expires in 10 minutes.',
+    change: 'Change',
+    changeEmail: 'Change email',
     code: '{digits}-digit code',
     codeSent: 'Code sent.',
     demoCode: 'Demo mode: no email is sent. Use the code <code/>.',
     verify: 'Verify and continue',
     verifying: 'Verifying…',
     resend: 'Send a new code',
-    otherEmail: 'Use a different email',
     resendIn: 'Send a new code in {time}',
     resent: 'New code sent. Only the latest one works.',
     errors: {

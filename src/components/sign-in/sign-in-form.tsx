@@ -22,7 +22,9 @@ import {
   BUTTON_PRIMARY,
   CONTROL_BUSY,
   CONTROL_DISABLED,
+  CONTROL_TRANSITION,
   FIELD,
+  FOCUS_RING,
   TEXT_LINK,
 } from '@/components/ui/control-classes';
 
@@ -36,6 +38,7 @@ const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
 const CODE_ERROR_ID = 'sign-in-error';
 const ALERT_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7.5v5.5 M12 16.5h.01';
+const MAIL_ICON = 'M4 6h16v12H4z M4 7l8 6 8-6';
 const ONE_SECOND_MS = 1_000;
 const HOME_PATH = '/';
 
@@ -81,6 +84,7 @@ export function signInErrorMessage(error: unknown, t: Translator<ClientSourceMes
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 placeholder:text-muted ${FIELD}`;
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-callout ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
+const CHANGE_BUTTON_CLASS = `min-h-7 shrink-0 rounded-pill bg-card px-3 text-caption font-semibold text-sky-ink hover:text-ink active:text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`;
 
 interface DemoHintProps {
   readonly code: string;
@@ -341,11 +345,33 @@ export function SignInForm({
         <form noValidate onSubmit={submitCode} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
             <h1 className="text-title font-semibold">{t('signIn.checkTitle')}</h1>
-            <p className="text-sm leading-5 text-muted">
-              {rich(t('signIn.checkBody'), {
-                email: () => <strong className="font-semibold text-ink">{email.trim()}</strong>,
-              })}
-            </p>
+            <div className="my-1 flex max-w-full items-center gap-2 self-start rounded-card border border-line bg-soft py-1 pr-1 pl-3 text-sm">
+              <svg
+                width={16}
+                height={16}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="shrink-0 text-muted"
+              >
+                <path
+                  d={MAIL_ICON}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="min-w-0 font-semibold wrap-anywhere">{email.trim()}</span>
+              <button
+                type="button"
+                onClick={useAnotherEmail}
+                aria-label={t('signIn.changeEmail')}
+                className={CHANGE_BUTTON_CLASS}
+              >
+                {t('signIn.change')}
+              </button>
+            </div>
+            <p className="text-sm leading-5 text-muted">{t('signIn.checkBody')}</p>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="sign-in-code" className="text-caption font-medium">
@@ -374,27 +400,22 @@ export function SignInForm({
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? t('signIn.verifying') : t('signIn.verify')}
           </button>
-          <div className="flex flex-wrap items-start justify-between gap-2">
-            <div className="flex flex-col items-start gap-1">
-              <button
-                type="button"
-                onClick={() => {
-                  sendCode(true);
-                }}
-                disabled={busy || waitLeft > 0}
-                className={LINK_BUTTON_CLASS}
-              >
-                {waitLeft > 0
-                  ? t('signIn.resendIn', { time: countdownLabel(waitLeft) })
-                  : t('signIn.resend')}
-              </button>
-              <p role="status" className="text-caption text-ok">
-                {resent ? t('signIn.resent') : ''}
-              </p>
-            </div>
-            <button type="button" onClick={useAnotherEmail} className={LINK_BUTTON_CLASS}>
-              {t('signIn.otherEmail')}
+          <div className="flex flex-col items-start gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                sendCode(true);
+              }}
+              disabled={busy || waitLeft > 0}
+              className={LINK_BUTTON_CLASS}
+            >
+              {waitLeft > 0
+                ? t('signIn.resendIn', { time: countdownLabel(waitLeft) })
+                : t('signIn.resend')}
             </button>
+            <p role="status" className="text-caption text-ok">
+              {resent ? t('signIn.resent') : ''}
+            </p>
           </div>
         </form>
       )}

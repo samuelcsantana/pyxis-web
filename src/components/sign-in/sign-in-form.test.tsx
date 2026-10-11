@@ -462,12 +462,24 @@ describe('SignInForm', () => {
     expect(screen.queryByText('New code sent. Only the latest one works.')).not.toBeInTheDocument();
   });
 
+  it('shows the email it sent to above the code, with a way to change it', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    expect(screen.getByText('ana@example.com')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Change email' })).toHaveTextContent('Change');
+    expect(
+      screen.getByText(
+        'If this address can sign in to Pyxis, a code is on its way. It expires in 10 minutes.',
+      ),
+    ).toBeInTheDocument();
+  });
+
   it('goes back to the email step without keeping the error', async () => {
     await reachCodeStep(new MockAuthService());
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '111111' } });
     await settle(SMOOTH_LOADING_MS);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Use a different email' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Change email' }));
 
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -478,7 +490,7 @@ describe('SignInForm', () => {
     await reachCodeStep(new MockAuthService());
     expect(screen.getByLabelText('6-digit code')).toHaveFocus();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Use a different email' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Change email' }));
 
     expect(screen.getByLabelText('Email')).toHaveFocus();
   });
