@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.14.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.13.0...v0.14.0) (2026-10-11)
+
+
+### Features
+
+* **app:** serve the project icon from the dashboard's own address ([c7d6ee6](https://github.com/samuelcsantana/pyxis-web/commit/c7d6ee65d36a3cef923148dc74f911cc5283a0b8))
+* **brand:** add the cover backdrop and a raised card for standalone pages ([df461f5](https://github.com/samuelcsantana/pyxis-web/commit/df461f5d6ad1c48d1ab7aac0c842e00d418b7801))
+* **domain:** read the version of each project's site icon ([abd02bb](https://github.com/samuelcsantana/pyxis-web/commit/abd02bb6b8dd9580eff3b5a1350ddc28c780859b))
+* **language:** slide to the chosen language and bring the page in ([3470be9](https://github.com/samuelcsantana/pyxis-web/commit/3470be9d16cd1f2b1844cf0cbc400a857fc0fc14))
+* **services:** read the icon of a project as bytes ([f568923](https://github.com/samuelcsantana/pyxis-web/commit/f568923cec934e323734a1b38cdda71fffb1ba35))
+* **shell:** show the icon of each project's site in the switcher ([0097e86](https://github.com/samuelcsantana/pyxis-web/commit/0097e86257a14a4a57fb2b3bd452016a85da6184))
+* **sign-in:** draw the cover backdrop and raise the card ([99c4cb3](https://github.com/samuelcsantana/pyxis-web/commit/99c4cb3ba859cefa8ed12dbb5a249fc7b3b897b2))
+* **sign-in:** explain empty and incomplete fields in the page's language ([076fb43](https://github.com/samuelcsantana/pyxis-web/commit/076fb43e5178f5eb25f547b36723d7710cb186d7))
+* **sign-in:** fill the demo code from the demo hint ([2d6e94c](https://github.com/samuelcsantana/pyxis-web/commit/2d6e94cc7af1e75ea5c4f5f14133a69d7fa2b12a))
+* **sign-in:** keep a refused code selected for retyping ([03f52fd](https://github.com/samuelcsantana/pyxis-web/commit/03f52fdf76136383bb2561d1fbce90a6f9b4fa04))
+* **sign-in:** keep the code step through a reload of the tab ([dee6c01](https://github.com/samuelcsantana/pyxis-web/commit/dee6c0113c5bb6ae0af02e619af2a61bc49ccc16))
+* **sign-in:** name Pyxis once, in the header ([e12effb](https://github.com/samuelcsantana/pyxis-web/commit/e12effb00a6c7dc7361bfdd0c72772fbe6a10270))
+* **sign-in:** offer the live demo to visitors without access ([fdea3e7](https://github.com/samuelcsantana/pyxis-web/commit/fdea3e7f6acd43a33ab3f1a05faf5a9873d597c8))
+* **sign-in:** show errors right under their field ([f2bb78d](https://github.com/samuelcsantana/pyxis-web/commit/f2bb78d098949fa0b891a53b567ae61d648075bf))
+* **sign-in:** show the address above the code, with a Change button ([8e31132](https://github.com/samuelcsantana/pyxis-web/commit/8e311327f60e1edfdd8f1be6c2622719936b3f3b))
+* **sign-in:** show the code in six cells over one field ([f4e3ed2](https://github.com/samuelcsantana/pyxis-web/commit/f4e3ed22eb662746c26631530a04e0cc3545d9bf))
+* **sign-in:** verify the code as soon as the sixth digit is in ([dd942ba](https://github.com/samuelcsantana/pyxis-web/commit/dd942bab18019aeded90a4fc761f17427f0e1055))
+* **sign-in:** wait 30 seconds before another code can be asked for ([151666f](https://github.com/samuelcsantana/pyxis-web/commit/151666f08b00d49f57aaa8e78d2688dc965501e4))
+* **states:** draw the cover backdrop behind the standalone pages ([dd6f6f8](https://github.com/samuelcsantana/pyxis-web/commit/dd6f6f89ce6efe5e94043ffe23761467485b70c1))
+
+
+### Bug Fixes
+
+* **brand:** load the backdrop masks next to the stylesheet ([6b13531](https://github.com/samuelcsantana/pyxis-web/commit/6b1353104090b2a1539d02febe54529895bc001e))
+* **sign-in:** keep every digit of a pasted code ([2ecb50d](https://github.com/samuelcsantana/pyxis-web/commit/2ecb50db971a6b3521d55f7817cddb58d752a4d0))
+
+
+### Refactoring
+
+* **shell:** move the main content id into its own module ([9cb24ea](https://github.com/samuelcsantana/pyxis-web/commit/9cb24ea3fd210ed5f66dc57044d4db3e538bb5dc))
+* **states:** move the error boundary texts out of the error screen ([1dfd108](https://github.com/samuelcsantana/pyxis-web/commit/1dfd108e3f97a1752f6c9fb3738993e397606fe1))
+
+
+### Documentation
+
+* **readme:** describe the sign-in code cells and automatic verification ([4caa95b](https://github.com/samuelcsantana/pyxis-web/commit/4caa95bf3bad0dd9eceb3a6f9c037b5f5958064b))
+* **readme:** describe the sign-in header, the demo link and the demo code button ([92538c4](https://github.com/samuelcsantana/pyxis-web/commit/92538c4892f52eae369e5ff9750480447b42e260))
+* **readme:** describe the sign-in resend wait, address and reload ([04e0cdd](https://github.com/samuelcsantana/pyxis-web/commit/04e0cddaef52d464d2708d35cb311163942448cf))
+* **readme:** mention the backdrop shared by the standalone pages ([2d4b716](https://github.com/samuelcsantana/pyxis-web/commit/2d4b7164904f9f4f020f3a92829b8811a25a3e55))
+* **readme:** mention the sign-in messages in the page's language ([c43d4b7](https://github.com/samuelcsantana/pyxis-web/commit/c43d4b7f83ab68ddab990878de43d2bc2d5da121))
+
 ## [0.13.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.12.0...v0.13.0) (2026-10-10)
 
 
