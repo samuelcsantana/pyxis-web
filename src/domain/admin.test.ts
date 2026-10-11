@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emailInitial, findProject, projectInitials } from './admin';
+import { emailInitial, findProject, projectIconHref, projectInitials } from './admin';
 import { meResponseSchema } from './admin.schema';
 
 const WIRE = {
@@ -24,9 +24,19 @@ describe('meResponseSchema', () => {
           name: 'Demo Store',
           timezone: 'America/Sao_Paulo',
           conversionEvent: 'signup_completed',
+          iconVersion: null,
         },
       ],
     });
+  });
+
+  it('reads the version of the icon taken from the project site', () => {
+    const [project] = meResponseSchema.parse({
+      ...WIRE,
+      projects: [{ ...WIRE.projects[0], icon_version: '0123456789abcdef' }],
+    }).projects;
+
+    expect(project?.iconVersion).toBe('0123456789abcdef');
   });
 
   it('reads when the events of each project began and last arrived, null before the first', () => {
@@ -85,5 +95,25 @@ describe('projectInitials and emailInitial', () => {
 
   it('take the first letter of an email', () => {
     expect(emailInitial('owner@demo-store.example')).toBe('O');
+  });
+});
+
+describe('projectIconHref', () => {
+  const project = {
+    id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
+    name: 'Demo Store',
+    timezone: 'UTC',
+    conversionEvent: null,
+  };
+
+  it('points at the icon route of the project, versioned so it caches until the icon changes', () => {
+    expect(projectIconHref({ ...project, iconVersion: '0123456789abcdef' })).toBe(
+      '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/icon?v=0123456789abcdef',
+    );
+  });
+
+  it('points nowhere when the project has no icon', () => {
+    expect(projectIconHref({ ...project, iconVersion: null })).toBeNull();
+    expect(projectIconHref(project)).toBeNull();
   });
 });
