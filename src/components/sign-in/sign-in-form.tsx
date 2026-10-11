@@ -5,6 +5,7 @@ import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
+import { codeProblem, emailProblem, type SignInFieldProblem } from '@/domain/sign-in';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import { rich } from '@/i18n/rich';
@@ -26,6 +27,7 @@ export const SIGN_IN_CODE_LENGTH = 6;
 const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
+const CODE_ERROR_ID = 'sign-in-error';
 const HOME_PATH = '/';
 
 type Step = 'email' | 'code';
@@ -35,6 +37,22 @@ export interface SignInFormProps {
   readonly sessionExpired?: boolean;
   readonly demoCode?: string;
   readonly returnPath?: string;
+}
+
+const PROBLEM_MESSAGES: Readonly<
+  Record<SignInFieldProblem, (t: Translator<ClientSourceMessages>) => string>
+> = {
+  emailMissing: (t) => t('signIn.validation.emailMissing'),
+  emailMalformed: (t) => t('signIn.validation.emailMalformed'),
+  codeIncomplete: (t) =>
+    t('signIn.validation.codeIncomplete', { digits: String(SIGN_IN_CODE_LENGTH) }),
+};
+
+export function signInProblemMessage(
+  problem: SignInFieldProblem,
+  t: Translator<ClientSourceMessages>,
+): string {
+  return PROBLEM_MESSAGES[problem](t);
 }
 
 function digitsOfCode(value: string): string {
@@ -86,6 +104,7 @@ export function SignInForm({
   const [busy, setBusy] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<unknown>(null);
+  const [problem, setProblem] = useState<SignInFieldProblem | null>(null);
   const request = useRef<Subscription | undefined>(undefined);
   const notice = useRef<AbortController | undefined>(undefined);
   const codeInput = useRef<HTMLInputElement>(null);
@@ -110,9 +129,14 @@ export function SignInForm({
     (step === 'code' ? codeInput : emailInput).current?.focus();
   }, [step]);
 
+  const forgetErrors = () => {
+    setError(null);
+    setProblem(null);
+  };
+
   const start = () => {
     request.current?.unsubscribe();
-    setError(null);
+    forgetErrors();
   };
 
   const sendCode = () => {
@@ -161,11 +185,23 @@ export function SignInForm({
 
   const submitEmail = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const found = emailProblem(email);
+    if (found !== null) {
+      setProblem(found);
+      emailInput.current?.focus();
+      return;
+    }
     sendCode();
   };
 
   const submitCode = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const found = codeProblem(code, SIGN_IN_CODE_LENGTH);
+    if (found !== null) {
+      setProblem(found);
+      codeInput.current?.focus();
+      return;
+    }
     verifyCode(code);
   };
 
@@ -189,13 +225,18 @@ export function SignInForm({
     setCode('');
   };
 
-  const errorText = error === null ? null : signInErrorMessage(error, t);
+  const errorText =
+    problem !== null
+      ? signInProblemMessage(problem, t)
+      : error === null
+        ? null
+        : signInErrorMessage(error, t);
   const digits = String(SIGN_IN_CODE_LENGTH);
 
   return (
     <section className="flex w-full max-w-[420px] flex-col gap-5 rounded-panel border border-line bg-card p-8 text-ink">
       {step === 'email' ? (
-        <form onSubmit={submitEmail} className="flex flex-col gap-5">
+        <form noValidate onSubmit={submitEmail} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
             <h1 className="text-title font-semibold">{t('signIn.title')}</h1>
             <p className="text-sm leading-5 text-muted">{t('signIn.intro', { digits })}</p>
@@ -243,7 +284,7 @@ export function SignInForm({
           </button>
         </form>
       ) : (
-        <form onSubmit={submitCode} className="flex flex-col gap-5">
+        <form noValidate onSubmit={submitCode} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
             <h1 className="text-title font-semibold">{t('signIn.checkTitle')}</h1>
             <p className="text-sm leading-5 text-muted">
@@ -262,7 +303,7 @@ export function SignInForm({
               length={SIGN_IN_CODE_LENGTH}
               value={code}
               invalid={errorText !== null}
-              describedBy={errorText === null ? undefined : 'sign-in-error'}
+              describedBy={errorText === null ? undefined : CODE_ERROR_ID}
               onChange={changeCode}
             />
           </div>
@@ -271,7 +312,7 @@ export function SignInForm({
           </p>
           {errorText === null ? null : (
             <p
-              id="sign-in-error"
+              id={CODE_ERROR_ID}
               role="alert"
               className="rounded-input bg-bad-soft px-3 py-2.5 text-caption font-medium text-bad"
             >

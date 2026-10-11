@@ -89,6 +89,26 @@ export const WrongCode: Story = {
   },
 };
 
+export const EmailMissing: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('Enter your email.');
+    await expect(canvas.getByLabelText('Email')).toHaveFocus();
+  },
+};
+
+export const CodeIncomplete: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = await reachCodeStep(canvasElement);
+    await expect(await canvas.findByRole('button', { name: 'Verify and continue' })).toBeEnabled();
+    await userEvent.type(canvas.getByLabelText('6-digit code'), '482{Enter}');
+    await expect(await canvas.findByRole('alert')).toHaveTextContent(
+      'Enter all 6 digits of the code.',
+    );
+  },
+};
+
 export const EmailRefused: Story = {
   args: { authService: refusesEveryEmail },
   play: async ({ canvasElement }) => {
