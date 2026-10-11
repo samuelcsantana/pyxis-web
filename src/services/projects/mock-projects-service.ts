@@ -1,4 +1,4 @@
-import { type Admin } from '@/domain/admin';
+import { type Admin, type ProjectIcon } from '@/domain/admin';
 import { meResponseSchema } from '@/domain/admin.schema';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
@@ -15,6 +15,7 @@ export const DEMO_ME_RESPONSE = {
     conversion_event: project.conversionEvent,
     first_event_at: DEMO_FIRST_EVENT_AT,
     last_event_at: new Date().toISOString(),
+    icon_version: null,
   })),
 };
 
@@ -23,6 +24,10 @@ export const DEMO_ADMIN: Admin = meResponseSchema.parse(DEMO_ME_RESPONSE);
 export class MockProjectsService implements IProjectsService {
   currentAdmin(): Promise<Admin> {
     return Promise.resolve(DEMO_ADMIN);
+  }
+
+  icon(): Promise<ProjectIcon | null> {
+    return Promise.resolve(null);
   }
 
   settings(projectId: string): Promise<ProjectSettings> {

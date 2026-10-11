@@ -67,6 +67,41 @@ describe('ApiReader', () => {
     ).rejects.toThrow(kind);
   });
 
+  it('reads bytes with their type, asking for an image, and turns failures into errors', async () => {
+    const png = Uint8Array.from([0x89, 0x50, 0x4e, 0x47]);
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(new Response(png, { headers: { 'content-type': 'image/png' } })),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const reader = new ApiReader(API, () => Promise.resolve('token'));
+
+    const fetched = await reader.getBytes('/v1/projects/p1/icon');
+
+    expect(fetched.contentType).toBe('image/png');
+    expect(new Uint8Array(fetched.bytes)).toEqual(png);
+    expect(fetchMock).toHaveBeenCalledWith(`${API}/v1/projects/p1/icon`, {
+      headers: { cookie: 'pyxis_session=token', accept: 'image/*' },
+      cache: 'no-store',
+    });
+
+    answer(404);
+    await expect(reader.getBytes('/v1/projects/p1/icon')).rejects.toThrow(ApiNotFoundError);
+    await expect(
+      new ApiReader(API, () => Promise.resolve(undefined)).getBytes('/v1/projects/p1/icon'),
+    ).rejects.toThrow(UnauthenticatedError);
+  });
+
+  it('calls bytes of an unknown type what they are', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>(() => Promise.resolve(new Response(new Uint8Array([1])))),
+    );
+
+    const fetched = await new ApiReader(API, () => Promise.resolve('token')).getBytes('/v1/x');
+
+    expect(fetched.contentType).toBe('application/octet-stream');
+  });
+
   it('reads the session cookie of the request when built by the factory', async () => {
     cookieStore.value = 'from-the-request';
     const fetchMock = answer(200, { ok: true });

@@ -1,5 +1,6 @@
 import {
   type Clock,
+  type FetchedBytes,
   type RequestLogger,
   type ResponseSchema,
   SessionRequests,
@@ -19,5 +20,9 @@ export class ApiReader {
 
   get<Value>(path: string, schema: ResponseSchema<Value>): Promise<Value> {
     return this.requests.send('api_read', path, schema);
+  }
+
+  getBytes(path: string): Promise<FetchedBytes> {
+    return this.requests.sendForBytes('api_read', path);
   }
 }

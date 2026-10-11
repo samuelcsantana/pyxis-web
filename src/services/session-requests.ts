@@ -10,6 +10,9 @@ const PROJECT_PATH = /^\/v1\/projects\/[^/?]+/;
 const PROJECT_PATH_TEMPLATE = '/v1/projects/:projectId';
 const SESSION_PATH = /^\/v1\/me\/sessions\/[^/?]+/;
 const SESSION_PATH_TEMPLATE = '/v1/me/sessions/:sessionId';
+const JSON_ACCEPT = 'application/json';
+const IMAGE_ACCEPT = 'image/*';
+const UNKNOWN_CONTENT_TYPE = 'application/octet-stream';
 
 export type RequestEvent = 'api_read' | 'api_write';
 
@@ -19,6 +22,11 @@ export interface ResponseSchema<Value> {
 
 export type RequestLogger = (line: string) => void;
 export type Clock = () => number;
+
+export interface FetchedBytes {
+  readonly contentType: string;
+  readonly bytes: ArrayBuffer;
+}
 
 export type OutgoingBody =
   { readonly method: 'PUT'; readonly body: unknown } | { readonly method: 'DELETE' };
@@ -63,10 +71,11 @@ function requestInit(
   token: string,
   origin: string | null,
   outgoing: OutgoingBody | undefined,
+  accept = JSON_ACCEPT,
 ): RequestInit {
   const headers = {
     cookie: `${API_SESSION_COOKIE_NAME}=${token}`,
-    accept: 'application/json',
+    accept,
     ...(origin === null ? {} : { origin }),
   };
   if (outgoing === undefined) {
@@ -98,12 +107,36 @@ export class SessionRequests {
     schema: ResponseSchema<Value>,
     outgoing?: OutgoingBody,
   ): Promise<Value> {
+    const token = await this.requiredToken();
+    const origin = outgoing === undefined ? null : await this.origin();
+    const response = this.checked(
+      path,
+      await this.timedFetch(event, path, requestInit(token, origin, outgoing)),
+    );
+    return schema.parse(response.status === STATUS_NO_CONTENT ? undefined : await response.json());
+  }
+
+  async sendForBytes(event: RequestEvent, path: string): Promise<FetchedBytes> {
+    const token = await this.requiredToken();
+    const response = this.checked(
+      path,
+      await this.timedFetch(event, path, requestInit(token, null, undefined, IMAGE_ACCEPT)),
+    );
+    return {
+      contentType: response.headers.get('content-type') ?? UNKNOWN_CONTENT_TYPE,
+      bytes: await response.arrayBuffer(),
+    };
+  }
+
+  private async requiredToken(): Promise<string> {
     const token = await this.sessionToken();
     if (token === undefined) {
       throw new UnauthenticatedError();
     }
-    const origin = outgoing === undefined ? null : await this.origin();
-    const response = await this.timedFetch(event, path, requestInit(token, origin, outgoing));
+    return token;
+  }
+
+  private checked(path: string, response: Response): Response {
     if (response.status === STATUS_UNAUTHORIZED) {
       throw new UnauthenticatedError();
     }
@@ -113,7 +146,7 @@ export class SessionRequests {
     if (!response.ok) {
       throw new ApiRequestError(path, response.status);
     }
-    return schema.parse(response.status === STATUS_NO_CONTENT ? undefined : await response.json());
+    return response;
   }
 
   private async timedFetch(
