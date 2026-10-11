@@ -46,6 +46,24 @@ describe('SignInPage', () => {
     expect(screen.getByRole('main')).not.toHaveTextContent(/^Pyxis/);
   });
 
+  it('offers the live demo to a visitor without access', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    expect(
+      screen.getByRole('link', { name: 'No access? See the live demo, with invented data' }),
+    ).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev');
+  });
+
+  it('does not offer the live demo inside the live demo', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.queryByRole('link', { name: /See the live demo/ })).not.toBeInTheDocument();
+  });
+
   it('says nothing about a session when the visitor simply arrives', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
