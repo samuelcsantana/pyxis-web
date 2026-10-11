@@ -193,6 +193,21 @@ describe('SignInForm', () => {
     expect(calls).toEqual([]);
   });
 
+  it('forgets an error as soon as the email changes', async () => {
+    const { service, pending } = controlledService();
+    renderWithMessages(<SignInForm authService={service} />);
+    typeEmail('ana@example.com');
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+    pending[0]?.reject(new RateLimitedError());
+    await settle(SMOOTH_LOADING_MS);
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+
+    typeEmail('ana@example.org');
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toHaveAttribute('aria-invalid', 'false');
+  });
+
   it('asks for every digit when an incomplete code is submitted', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
@@ -207,6 +222,19 @@ describe('SignInForm', () => {
     expect(field).toHaveAccessibleDescription('Enter all 6 digits of the code.');
     expect(field).toHaveFocus();
     expect(calls.map((call) => call.method)).toEqual(['requestCode']);
+  });
+
+  it('forgets an error as soon as the code changes', async () => {
+    await reachCodeStep(new MockAuthService());
+    const field = screen.getByLabelText('6-digit code');
+    fireEvent.change(field, { target: { value: '12' } });
+    fireEvent.submit(field);
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+
+    fireEvent.change(field, { target: { value: '123' } });
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('leaves the checks to itself rather than to the browser', async () => {
@@ -391,7 +419,7 @@ describe('SignInForm', () => {
     await settle(SMOOTH_LOADING_MS);
 
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid or expired code');
-    expect(screen.getByRole('status')).toHaveTextContent('');
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
   it('sends a new code on demand', async () => {

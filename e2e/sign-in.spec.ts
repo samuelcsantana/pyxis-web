@@ -92,6 +92,7 @@ test('explains a missing email and an incomplete code itself, not with the brows
   await expect(page.locator('#sign-in-email-error')).toHaveText('Enter your email.');
 
   await page.getByLabel('Email').fill('owner@demo-store.example');
+  await expect(page.locator('#sign-in-email-error')).toHaveCount(0);
   await page.getByRole('button', { name: 'Send code' }).click();
   await expect(page.getByRole('button', { name: 'Verify and continue' })).toBeEnabled();
   await page.keyboard.type('482');

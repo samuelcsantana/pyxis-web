@@ -28,6 +28,7 @@ const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
 const CODE_ERROR_ID = 'sign-in-error';
+const ALERT_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7.5v5.5 M12 16.5h.01';
 const HOME_PATH = '/';
 
 type Step = 'email' | 'code';
@@ -76,6 +77,29 @@ const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
 interface DemoHintProps {
   readonly code: string;
   readonly message: string;
+}
+
+interface FieldErrorProps {
+  readonly id: string;
+  readonly text: string;
+}
+
+function FieldError({ id, text }: FieldErrorProps) {
+  return (
+    <p id={id} role="alert" className="flex items-start gap-1.5 text-caption font-medium text-bad">
+      <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="mt-px shrink-0">
+        <path
+          d={ALERT_ICON}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.8}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span>{text}</span>
+    </p>
+  );
 }
 
 function DemoHint({ code, message }: DemoHintProps) {
@@ -208,6 +232,7 @@ export function SignInForm({
   const changeCode = (value: string) => {
     const digits = digitsOfCode(value);
     setCode(digits);
+    forgetErrors();
     if (digits.length < SIGN_IN_CODE_LENGTH) {
       verifiedOnItsOwn.current = '';
       return;
@@ -263,19 +288,12 @@ export function SignInForm({
               aria-describedby={errorText === null ? undefined : EMAIL_ERROR_ID}
               onChange={(event) => {
                 setEmail(event.target.value);
+                forgetErrors();
               }}
               className={`${INPUT_CLASS} text-base sm:text-callout`}
             />
+            {errorText === null ? null : <FieldError id={EMAIL_ERROR_ID} text={errorText} />}
           </div>
-          {errorText === null ? null : (
-            <p
-              id={EMAIL_ERROR_ID}
-              role="alert"
-              className="rounded-input bg-bad-soft px-3 py-2.5 text-caption font-medium text-bad"
-            >
-              {errorText}
-            </p>
-          )}
           {demoCode === undefined ? null : (
             <DemoHint code={demoCode} message={t('signIn.demoEmail')} />
           )}
@@ -306,19 +324,14 @@ export function SignInForm({
               describedBy={errorText === null ? undefined : CODE_ERROR_ID}
               onChange={changeCode}
             />
+            {errorText === null ? (
+              <p role="status" className="min-h-5 text-caption text-ok">
+                {codeSent ? t('signIn.codeSent') : ''}
+              </p>
+            ) : (
+              <FieldError id={CODE_ERROR_ID} text={errorText} />
+            )}
           </div>
-          <p role="status" className="min-h-5 text-caption text-ok">
-            {codeSent && errorText === null ? t('signIn.codeSent') : ''}
-          </p>
-          {errorText === null ? null : (
-            <p
-              id={CODE_ERROR_ID}
-              role="alert"
-              className="rounded-input bg-bad-soft px-3 py-2.5 text-caption font-medium text-bad"
-            >
-              {errorText}
-            </p>
-          )}
           {demoCode === undefined ? null : (
             <DemoHint code={demoCode} message={t('signIn.demoCode')} />
           )}
