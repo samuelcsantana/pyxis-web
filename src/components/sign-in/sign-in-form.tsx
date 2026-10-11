@@ -19,6 +19,11 @@ import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 import { CodeField } from './code-field';
 import {
+  bestEffortForgetPendingSignIn,
+  bestEffortRememberPendingSignIn,
+  useRestoredSignIn,
+} from './pending-sign-in';
+import {
   BUTTON_PRIMARY,
   CONTROL_BUSY,
   CONTROL_DISABLED,
@@ -151,6 +156,16 @@ export function SignInForm({
   const shownStep = useRef<Step>(step);
   const verifiedOnItsOwn = useRef('');
   const verifying = useRef(false);
+  const restored = useRestoredSignIn();
+  const [restoredOnce, setRestoredOnce] = useState(false);
+
+  if (restored !== null && !restoredOnce) {
+    setRestoredOnce(true);
+    setEmail(restored.email);
+    setResendAt(restored.sentAt + RESEND_WAIT_MS);
+    setNow(restored.readAt);
+    setStep('code');
+  }
 
   useEffect(
     () => () => {
@@ -207,6 +222,7 @@ export function SignInForm({
           setCode('');
           setResendAt(sentAt + RESEND_WAIT_MS);
           setNow(sentAt);
+          bestEffortRememberPendingSignIn({ email: sentTo, sentAt });
         }),
         withTemporarySuccess(
           again ? setResent : setCodeSent,
@@ -235,6 +251,7 @@ export function SignInForm({
         }),
         tap({
           next: () => {
+            bestEffortForgetPendingSignIn();
             router.replace(returnPath);
             router.refresh();
           },
@@ -285,6 +302,7 @@ export function SignInForm({
 
   const useAnotherEmail = () => {
     start();
+    bestEffortForgetPendingSignIn();
     setStep('email');
     setCode('');
   };

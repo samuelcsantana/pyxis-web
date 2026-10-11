@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { DEMO_SIGN_IN_CODE, MockAuthService } from '@/services/auth/mock-auth-service';
+import { PENDING_SIGN_IN_KEY } from './pending-sign-in';
 import { SignInForm } from './sign-in-form';
 
 const neverAnswers: IAuthService = {
@@ -32,6 +33,9 @@ const meta = {
   tags: ['autodocs'],
   args: { authService: new MockAuthService() },
   parameters: { layout: 'centered', nextjs: { appDirectory: true } },
+  beforeEach: () => {
+    window.sessionStorage.removeItem(PENDING_SIGN_IN_KEY);
+  },
   decorators: [
     (Story) => (
       <div className="flex w-[min(92vw,420px)] justify-center">
@@ -63,6 +67,23 @@ export const CodeStep: Story = {
     const canvas = await reachCodeStep(canvasElement);
     await expect(await canvas.findByLabelText('6-digit code')).toHaveFocus();
     await expect(canvas.getByTestId('code-cells')).toBeVisible();
+  },
+};
+
+export const RestoredAfterReload: Story = {
+  beforeEach: () => {
+    window.sessionStorage.setItem(
+      PENDING_SIGN_IN_KEY,
+      JSON.stringify({ email: 'owner@demo-store.example', sentAt: Date.now() - 12_000 }),
+    );
+    return () => {
+      window.sessionStorage.removeItem(PENDING_SIGN_IN_KEY);
+    };
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByRole('heading', { name: 'Check your email' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: /Send a new code in 0:1\d/ })).toBeDisabled();
   },
 };
 

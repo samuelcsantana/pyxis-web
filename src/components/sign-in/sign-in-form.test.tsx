@@ -4,6 +4,7 @@ import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { english } from '@/test-utils/english';
+import { PENDING_SIGN_IN_KEY, PENDING_SIGN_IN_LIFETIME_MS } from './pending-sign-in';
 import {
   CODE_SENT_NOTICE_MS,
   RESEND_WAIT_MS,
@@ -493,6 +494,62 @@ describe('SignInForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Change email' }));
 
     expect(screen.getByLabelText('Email')).toHaveFocus();
+  });
+
+  it('remembers, in this tab, whom the code went to and when', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    expect(JSON.parse(window.sessionStorage.getItem(PENDING_SIGN_IN_KEY) ?? '')).toEqual({
+      email: 'ana@example.com',
+      sentAt: Date.now() - SMOOTH_LOADING_MS,
+    });
+  });
+
+  it('opens on the code step after a reload, with the time left to ask for a new code', () => {
+    window.sessionStorage.setItem(
+      PENDING_SIGN_IN_KEY,
+      JSON.stringify({ email: 'ana@example.com', sentAt: Date.now() - 10_000 }),
+    );
+
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
+
+    expect(screen.getByRole('heading', { name: 'Check your email' })).toBeInTheDocument();
+    expect(screen.getByText('ana@example.com')).toBeInTheDocument();
+    expect(screen.getByLabelText('6-digit code')).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Send a new code in 0:20' })).toBeDisabled();
+    expect(screen.queryByText('Code sent.')).not.toBeInTheDocument();
+  });
+
+  it('opens on the email step when the kept code has expired', () => {
+    window.sessionStorage.setItem(
+      PENDING_SIGN_IN_KEY,
+      JSON.stringify({
+        email: 'ana@example.com',
+        sentAt: Date.now() - PENDING_SIGN_IN_LIFETIME_MS,
+      }),
+    );
+
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
+
+    expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
+  });
+
+  it('forgets the pending sign-in once signed in', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '000000' } });
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(router.replace).toHaveBeenCalledWith('/');
+    expect(window.sessionStorage.getItem(PENDING_SIGN_IN_KEY)).toBeNull();
+  });
+
+  it('forgets the pending sign-in when the email is changed', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    fireEvent.click(screen.getByRole('button', { name: 'Change email' }));
+
+    expect(window.sessionStorage.getItem(PENDING_SIGN_IN_KEY)).toBeNull();
   });
 
   it('leaves the focus alone when the page opens', () => {
