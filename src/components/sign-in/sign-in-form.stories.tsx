@@ -87,6 +87,15 @@ export const RestoredAfterReload: Story = {
   },
 };
 
+export const DemoFillsTheCode: Story = {
+  args: { demoCode: DEMO_SIGN_IN_CODE },
+  play: async ({ canvasElement }) => {
+    const canvas = await reachCodeStep(canvasElement);
+    await userEvent.click(await canvas.findByRole('button', { name: 'Fill in 000000' }));
+    await expect(canvas.getByLabelText('6-digit code')).toHaveValue('000000');
+  },
+};
+
 export const Loading: Story = {
   args: { authService: neverAnswers },
   play: async ({ canvasElement }) => {

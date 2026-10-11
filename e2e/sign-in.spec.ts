@@ -138,6 +138,16 @@ test('offers no live demo link inside the live demo', async ({ page }) => {
   await expect(page.getByRole('link', { name: /See the live demo/ })).toHaveCount(0);
 });
 
+test('signs in with the demo code filled in from the hint', async ({ page }) => {
+  await page.goto('/sign-in');
+  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByRole('button', { name: 'Send code' }).click();
+
+  await page.getByRole('button', { name: 'Fill in 000000' }).click();
+
+  await expect(page).toHaveURL(DEMO_PROJECT_PATH);
+});
+
 test('starts the card under the header on a phone, centred on a wide screen', async ({
   page,
   isMobile,

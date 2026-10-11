@@ -597,10 +597,24 @@ describe('SignInForm', () => {
     );
   });
 
+  it('fills the demo code from the hint, which signs in', async () => {
+    renderWithMessages(<SignInForm authService={new MockAuthService()} demoCode="000000" />);
+    typeEmail('ana@example.com');
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+    await settle(SMOOTH_LOADING_MS);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Fill in 000000' }));
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(screen.getByLabelText('6-digit code')).toHaveValue('000000');
+    expect(router.replace).toHaveBeenCalledWith('/');
+  });
+
   it('shows no demo hint outside demo mode', () => {
     renderWithMessages(<SignInForm authService={new MockAuthService()} />);
 
     expect(screen.queryByText(/Demo mode/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Fill in/ })).not.toBeInTheDocument();
   });
 
   it('builds its own service when none is given', async () => {
