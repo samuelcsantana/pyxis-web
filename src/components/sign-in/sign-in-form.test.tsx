@@ -182,6 +182,26 @@ describe('SignInForm', () => {
     expect(router.refresh).toHaveBeenCalledOnce();
   });
 
+  it('keeps the first six digits of a code pasted with words and numbers around it', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+
+    fireEvent.change(field, { target: { value: 'Code 123456, valid for 10 minutes' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
+
+    expect(field).toHaveValue('123456');
+    expect(calls[1]).toEqual({ method: 'verifyCode', args: ['ana@example.com', '123456'] });
+  });
+
+  it('lets a paste reach the field whole, so spaces in it cost no digit', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    expect(screen.getByLabelText('6-digit code')).not.toHaveAttribute('maxlength');
+  });
+
   it('marks the code invalid and explains why', async () => {
     await reachCodeStep(new MockAuthService());
 
