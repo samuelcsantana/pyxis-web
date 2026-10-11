@@ -11,6 +11,7 @@ import { rich } from '@/i18n/rich';
 import type { Translator } from '@/i18n/translate';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
+import { CodeField } from './code-field';
 import {
   BUTTON_PRIMARY,
   CONTROL_BUSY,
@@ -226,21 +227,16 @@ export function SignInForm({
             <label htmlFor="sign-in-code" className="text-caption font-medium">
               {t('signIn.code', { digits })}
             </label>
-            <input
-              ref={codeInput}
+            <CodeField
+              inputRef={codeInput}
               id="sign-in-code"
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              required
-              pattern={`[0-9]{${String(SIGN_IN_CODE_LENGTH)}}`}
+              length={SIGN_IN_CODE_LENGTH}
               value={code}
-              aria-invalid={errorText !== null}
-              aria-describedby={errorText === null ? undefined : 'sign-in-error'}
-              onChange={(event) => {
-                setCode(digitsOfCode(event.target.value));
+              invalid={errorText !== null}
+              describedBy={errorText === null ? undefined : 'sign-in-error'}
+              onChange={(value) => {
+                setCode(digitsOfCode(value));
               }}
-              className={`${INPUT_CLASS} font-mono text-title tracking-[0.5em]`}
             />
           </div>
           <p role="status" className="min-h-5 text-caption text-ok">
