@@ -11,6 +11,32 @@ async function open(page: Page, screen: string): Promise<void> {
 
 const activity = (page: Page) => page.getByRole('region', { name: 'Activity per day' });
 
+const RECORD_ANIMATIONS = `
+  window.animatedIds = [];
+  const animate = HTMLElement.prototype.animate;
+  HTMLElement.prototype.animate = function (...args) {
+    window.animatedIds.push(this.id);
+    return animate.apply(this, args);
+  };
+`;
+
+test('brings the sign-in page in when its new language arrives, keeping the email typed', async ({
+  page,
+}) => {
+  await page.addInitScript({ content: RECORD_ANIMATIONS });
+  await page.goto('/sign-in');
+  await page.getByLabel('Email').fill('owner@demo-store.example');
+
+  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Entrar no Pyxis' })).toBeVisible();
+  const animatedIds = await page.evaluate(
+    () => (window as unknown as { readonly animatedIds: readonly string[] }).animatedIds,
+  );
+  expect(animatedIds).toEqual(['content']);
+  await expect(page.getByLabel('E-mail')).toHaveValue('owner@demo-store.example');
+});
+
 test('shows a chart panel still when the page opens, and brings the table in when chosen', async ({
   page,
 }) => {

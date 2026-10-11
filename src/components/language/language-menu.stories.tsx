@@ -27,6 +27,19 @@ export const English: Story = {
 
 export const Portuguese: Story = { args: { locale: 'pt-BR', label: 'Idioma' } };
 
+export const SlidesToTheChoice: Story = {
+  args: { choose: fn(() => new Promise<void>(() => undefined)) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Português (Brasil)' }));
+    await expect(canvas.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(canvas.getByTestId('sliding-indicator')).toBeVisible();
+  },
+};
+
 export const Dark: Story = { globals: { theme: 'dark' } };
 
 export const InTheSidebar: Story = {
