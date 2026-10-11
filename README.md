@@ -257,10 +257,11 @@ every text; each other language is a typed translation of it.
   the language, so `pt-PT` gets Brazilian Portuguese; otherwise English. The address never
   changes, so links, bookmarks and the demo links work in every language.
 - **The menu:** each language named in itself (English, Português (Brasil)). On the sign-in page
-  it sits in the top bar beside the theme toggle; on desktop, a globe button in the sidebar's
-  brand row opens it; on phones and tablets it is in the sidebar footer, inside the menu. It is a
-  plain form posting to a Server Action, so it ships no client script, and the screen changes
-  language in place, keeping its address and query.
+  it sits in the top bar beside the theme toggle; in the dashboard it is in the account menu at
+  the foot of the sidebar. It posts to a Server Action and the screen changes language in place,
+  keeping its address, its query and what was typed. The fill slides to the chosen language on the
+  click, before the page in that language arrives, and the content comes in with the short reveal
+  of a screen change when it does (still, when the system asks for reduced motion).
 - **Numbers, dates and lists** go through `Intl` in the reader's language and the project's time
   zone: `2.789`, `62,3%`, `9 de set.`, and lists joined with the language's own "and"
   (`a, b e c`). Plurals follow CLDR, with a zero form where the language needs one (Portuguese
@@ -433,7 +434,7 @@ that says why:
 
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
-| Sign-in, home and not-found pages                      | 152               |
+| Sign-in, home and not-found pages                      | 153               |
 | Dashboard screens without a chart                      | 170               |
 | Dashboard screens with a chart (Overview, Acquisition) | 165               |
 
@@ -444,6 +445,12 @@ with the sliding period presets, a client component of about 1 KiB that moves th
 the click, before the next page arrives, and to 165 KiB with the sliding indicators of the other
 switches, the tabs and the theme choice (about 1.4 KiB on these two screens: a hook that measures
 the chosen item and the indicator it places, shared with the click-ahead state of the presets).
+The sign-in budget went from 152 to 153 KiB with the sliding language switch: the language menu
+became a client component that moves the indicator on the click, before the page in the new
+language arrives, and brings the content in when it does (about 1.1 KiB, the same indicator hook
+as the other switches). The code step's own work in the same release (the six cells, the page's
+own messages, the resend wait and the step kept through a reload) had taken the page from 149.5
+to 151.3 KiB.
 
 ## Project structure
 

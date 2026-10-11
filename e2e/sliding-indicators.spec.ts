@@ -36,6 +36,20 @@ async function open(page: Page, screen: string): Promise<void> {
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 }
 
+test('slides the fill to the language chosen on the sign-in page', async ({ page }) => {
+  await page.goto('/sign-in');
+  const languages = page.getByRole('group', { name: 'Language' });
+  await expectIndicatorOn(languages, languages.getByRole('button', { name: 'English' }));
+
+  await languages.getByRole('button', { name: 'Português (Brasil)' }).click();
+
+  const portuguese = page
+    .getByRole('group', { name: 'Idioma' })
+    .getByRole('button', { name: 'Português (Brasil)' });
+  await expectIndicatorOn(page.getByRole('group', { name: 'Idioma' }), portuguese);
+  await expect(page.getByRole('heading', { name: 'Entrar no Pyxis' })).toBeVisible();
+});
+
 test('slides the fill from Chart to Table on a chart panel', async ({ page }) => {
   await open(page, 'overview');
   const views = page
