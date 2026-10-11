@@ -76,6 +76,8 @@ export const en = {
     verifying: 'Verifying…',
     resend: 'Send a new code',
     otherEmail: 'Use a different email',
+    resendIn: 'Send a new code in {time}',
+    resent: 'New code sent. Only the latest one works.',
     errors: {
       invalidCode: 'Invalid or expired code. Check the latest email or send a new code.',
       rateLimited: 'Too many attempts from this network. Wait a few minutes and try again.',

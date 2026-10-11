@@ -11,6 +11,15 @@ export function emailProblem(email: string): SignInFieldProblem | null {
   return EMAIL_ADDRESS.test(trimmed) ? null : 'emailMalformed';
 }
 
+const MILLISECONDS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+
+export function countdownLabel(milliseconds: number): string {
+  const seconds = Math.max(0, Math.ceil(milliseconds / MILLISECONDS_PER_SECOND));
+  const minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
+  return `${String(minutes)}:${String(seconds % SECONDS_PER_MINUTE).padStart(2, '0')}`;
+}
+
 export function codeProblem(code: string, length: number): SignInFieldProblem | null {
   return code.length < length ? 'codeIncomplete' : null;
 }

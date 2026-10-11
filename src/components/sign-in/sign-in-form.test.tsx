@@ -6,6 +6,8 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { english } from '@/test-utils/english';
 import {
   CODE_SENT_NOTICE_MS,
+  RESEND_WAIT_MS,
+  RESENT_NOTICE_MS,
   SignInForm,
   signInErrorMessage,
   SMOOTH_LOADING_MS,
@@ -124,11 +126,11 @@ describe('SignInForm', () => {
   it('announces the code was sent, then clears the notice', async () => {
     await reachCodeStep(new MockAuthService());
 
-    expect(screen.getByRole('status')).toHaveTextContent('Code sent.');
+    expect(screen.getByText('Code sent.')).toHaveAttribute('role', 'status');
 
     await settle(CODE_SENT_NOTICE_MS);
 
-    expect(screen.getByRole('status')).toHaveTextContent('');
+    expect(screen.queryByText('Code sent.')).not.toBeInTheDocument();
   });
 
   it('stays on the email step and explains a refused request', async () => {
@@ -234,7 +236,7 @@ describe('SignInForm', () => {
     fireEvent.change(field, { target: { value: '123' } });
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getByText('Code sent.')).toBeInTheDocument();
   });
 
   it('leaves the checks to itself rather than to the browser', async () => {
@@ -413,27 +415,51 @@ describe('SignInForm', () => {
 
   it('drops "Code sent." as soon as an error shows', async () => {
     await reachCodeStep(new MockAuthService());
-    expect(screen.getByRole('status')).toHaveTextContent('Code sent.');
+    expect(screen.getByText('Code sent.')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('6-digit code'), { target: { value: '123456' } });
     await settle(SMOOTH_LOADING_MS);
 
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid or expired code');
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.queryByText('Code sent.')).not.toBeInTheDocument();
   });
 
-  it('sends a new code on demand', async () => {
+  it('waits 30 seconds before a new code can be asked for, counting them down', async () => {
+    await reachCodeStep(new MockAuthService());
+
+    expect(screen.getByRole('button', { name: 'Send a new code in 0:30' })).toBeDisabled();
+
+    await settle(1_000);
+
+    expect(screen.getByRole('button', { name: 'Send a new code in 0:29' })).toBeDisabled();
+
+    await settle(RESEND_WAIT_MS - 1_000);
+
+    expect(screen.getByRole('button', { name: 'Send a new code' })).toBeEnabled();
+  });
+
+  it('sends a new code on demand, says only the latest one works, then waits again', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
     pending[0]?.resolve();
-    await settle(SMOOTH_LOADING_MS);
+    await settle();
+    await settle(RESEND_WAIT_MS);
 
     fireEvent.click(screen.getByRole('button', { name: 'Send a new code' }));
     pending[1]?.resolve();
     await settle(SMOOTH_LOADING_MS);
 
     expect(calls.map((call) => call.method)).toEqual(['requestCode', 'requestCode']);
-    expect(screen.getByRole('status')).toHaveTextContent('Code sent.');
+    expect(screen.getByText('New code sent. Only the latest one works.')).toHaveAttribute(
+      'role',
+      'status',
+    );
+    expect(screen.queryByText('Code sent.')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Send a new code in 0:/ })).toBeDisabled();
+
+    await settle(RESENT_NOTICE_MS);
+
+    expect(screen.queryByText('New code sent. Only the latest one works.')).not.toBeInTheDocument();
   });
 
   it('goes back to the email step without keeping the error', async () => {
@@ -445,6 +471,7 @@ describe('SignInForm', () => {
 
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toHaveValue('ana@example.com');
   });
 
   it('puts the focus on the email field when going back to change the email', async () => {

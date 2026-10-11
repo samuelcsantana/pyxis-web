@@ -84,6 +84,8 @@ export const ptBR = translation({
     verifying: 'Verificando…',
     resend: 'Enviar um novo código',
     otherEmail: 'Usar outro e-mail',
+    resendIn: 'Enviar um novo código em {time}',
+    resent: 'Novo código enviado. Só o mais recente vale.',
     errors: {
       invalidCode:
         'Código inválido ou expirado. Confira o e-mail mais recente ou envie um novo código.',
