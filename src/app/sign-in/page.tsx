@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import { LogoMark } from '@/components/brand/logo-mark';
+import { RAISED_CARDS } from '@/components/brand/raised-cards';
 import { LanguageMenu } from '@/components/language/language-menu';
 import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
@@ -30,7 +32,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { t, locale } = await getI18n();
   const demo = isDemoMode();
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
+    <div className="relative isolate flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
+      <BrandBackdrop />
       <header className="flex w-full max-w-6xl flex-wrap items-center justify-end gap-2">
         <p className="mr-auto flex items-center gap-2.5 text-xl font-bold tracking-tight">
           <LogoMark size={28} />
@@ -39,7 +42,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         <LanguageMenu locale={locale} label={t('language.label')} choose={chooseLocale} />
         <ThemeToggle initialTheme={await chosenTheme()} />
       </header>
-      <MainContent className="flex w-full grow flex-col items-center justify-start gap-7 pt-5 pb-8 sm:justify-center sm:py-8">
+      <MainContent
+        className={`flex w-full grow flex-col items-center justify-start gap-7 pt-5 pb-8 sm:justify-center sm:py-8 ${RAISED_CARDS}`}
+      >
         <SignInForm
           sessionExpired={expired === '1'}
           demoCode={demo ? DEMO_SIGN_IN_CODE : undefined}

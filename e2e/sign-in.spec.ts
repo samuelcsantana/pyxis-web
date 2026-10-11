@@ -168,6 +168,26 @@ test('starts the card under the header on a phone, centred on a wide screen', as
   }
 });
 
+test('draws the brand backdrop from images the site serves', async ({ page, request }) => {
+  await page.goto('/sign-in');
+
+  const masks = await page.getByTestId('brand-backdrop').evaluate((backdrop) => {
+    const mark = backdrop.querySelector('.brand-backdrop-mark');
+    return {
+      dust: getComputedStyle(backdrop, '::before').maskImage,
+      needle: mark === null ? '' : getComputedStyle(mark, '::before').maskImage,
+    };
+  });
+  expect(masks.dust).toContain('/brand/star-dust.svg');
+  expect(masks.needle).toContain('/brand/brand-needle.svg');
+
+  for (const image of ['/brand/star-dust.svg', '/brand/brand-needle.svg']) {
+    const response = await request.get(image);
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('image/svg+xml');
+  }
+});
+
 test('leaves the focus alone when the page opens', async ({ page }) => {
   await page.goto('/sign-in');
 
