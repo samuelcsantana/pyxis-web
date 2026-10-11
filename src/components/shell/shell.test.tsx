@@ -12,7 +12,8 @@ import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from '
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
-import { CONTENT_ID, SkipLink } from './skip-link';
+import { CONTENT_ID } from './content-id';
+import { SkipLink } from './skip-link';
 import { Topbar } from './topbar';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';

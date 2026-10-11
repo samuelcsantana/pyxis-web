@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import { CONTENT_ID } from './skip-link';
+import { CONTENT_ID } from './content-id';
 
 export type MainContentProps = Omit<ComponentProps<'main'>, 'id' | 'tabIndex'> & {
   readonly className: string;
