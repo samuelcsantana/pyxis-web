@@ -36,6 +36,10 @@ export interface SignInFormProps {
   readonly returnPath?: string;
 }
 
+function digitsOfCode(value: string): string {
+  return value.replace(NOT_A_DIGIT, '').slice(0, SIGN_IN_CODE_LENGTH);
+}
+
 export function signInErrorMessage(error: unknown, t: Translator<ClientSourceMessages>): string {
   if (error instanceof InvalidCodeError) {
     return t('signIn.errors.invalidCode');
@@ -230,12 +234,11 @@ export function SignInForm({
               autoComplete="one-time-code"
               required
               pattern={`[0-9]{${String(SIGN_IN_CODE_LENGTH)}}`}
-              maxLength={SIGN_IN_CODE_LENGTH}
               value={code}
               aria-invalid={errorText !== null}
               aria-describedby={errorText === null ? undefined : 'sign-in-error'}
               onChange={(event) => {
-                setCode(event.target.value.replace(NOT_A_DIGIT, ''));
+                setCode(digitsOfCode(event.target.value));
               }}
               className={`${INPUT_CLASS} font-mono text-title tracking-[0.5em]`}
             />

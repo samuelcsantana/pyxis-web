@@ -48,6 +48,25 @@ test('refuses a wrong code, then signs in with the demo code', async ({ page }) 
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
 });
 
+test.describe('pasting the code', () => {
+  test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
+
+  for (const pasted of [' 000 000 ', '000-000', 'Code: 000000']) {
+    test(`keeps all six digits of "${pasted}"`, async ({ page }) => {
+      await page.goto('/sign-in');
+      await page.getByLabel('Email').fill('owner@demo-store.example');
+      await page.getByRole('button', { name: 'Send code' }).click();
+      const code = page.getByLabel('6-digit code');
+      await expect(code).toBeFocused();
+
+      await page.evaluate((text) => navigator.clipboard.writeText(text), pasted);
+      await page.keyboard.press('ControlOrMeta+V');
+
+      await expect(code).toHaveValue('000000');
+    });
+  }
+});
+
 test('goes back to change the email', async ({ page }) => {
   await page.goto('/sign-in');
   await page.getByLabel('Email').fill('typo@demo-store.example');
