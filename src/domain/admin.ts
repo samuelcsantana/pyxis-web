@@ -5,6 +5,19 @@ export interface Project {
   readonly conversionEvent: string | null;
   readonly firstEventAt?: string | null;
   readonly lastEventAt?: string | null;
+  readonly iconVersion?: string | null;
+}
+
+export interface ProjectIcon {
+  readonly contentType: string;
+  readonly bytes: ArrayBuffer;
+}
+
+export function projectIconHref(project: Project): string | null {
+  if (project.iconVersion === undefined || project.iconVersion === null) {
+    return null;
+  }
+  return `/${encodeURIComponent(project.id)}/icon?v=${encodeURIComponent(project.iconVersion)}`;
 }
 
 export interface Admin {

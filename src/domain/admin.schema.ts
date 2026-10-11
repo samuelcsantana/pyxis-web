@@ -12,6 +12,7 @@ export const meResponseSchema = z
         conversion_event: z.string().nullable(),
         first_event_at: z.string().nullable().optional(),
         last_event_at: z.string().nullable().optional(),
+        icon_version: z.string().nullable().optional(),
       }),
     ),
   })
@@ -24,5 +25,6 @@ export const meResponseSchema = z
       conversionEvent: project.conversion_event,
       firstEventAt: project.first_event_at,
       lastEventAt: project.last_event_at,
+      iconVersion: project.icon_version ?? null,
     })),
   }));

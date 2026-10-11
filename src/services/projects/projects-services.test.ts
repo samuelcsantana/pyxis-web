@@ -35,7 +35,9 @@ describe('HttpProjectsService', () => {
 
     expect(admin).toEqual({
       email: 'ana@example.com',
-      projects: [{ id: 'p1', name: 'Shop', timezone: 'UTC', conversionEvent: null }],
+      projects: [
+        { id: 'p1', name: 'Shop', timezone: 'UTC', conversionEvent: null, iconVersion: null },
+      ],
     });
     expect(fetchMock.mock.calls[0]?.[0]).toBe(`${API}/v1/me`);
   });
