@@ -84,6 +84,8 @@ export const WrongCode: Story = {
     const code = await canvas.findByLabelText<HTMLInputElement>('6-digit code');
     await userEvent.type(code, '123456');
     await expect(await canvas.findByRole('alert')).toHaveTextContent('Invalid or expired code');
+    await expect(code).toHaveFocus();
+    await expect([code.selectionStart, code.selectionEnd]).toEqual([0, 6]);
   },
 };
 
