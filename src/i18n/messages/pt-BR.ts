@@ -103,6 +103,7 @@ export const ptBR = translation({
     title: 'Entrar',
     privacy:
       'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem dados pessoais',
+    demoLink: 'Sem acesso? Veja a demonstração, com dados inventados',
   },
   errorPanel: {
     title: 'Não foi possível carregar estes dados',

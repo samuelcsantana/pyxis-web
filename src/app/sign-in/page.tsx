@@ -5,9 +5,11 @@ import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
+import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
 
@@ -17,6 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
+const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';
 
 export interface SignInPageProps {
   readonly searchParams: Promise<Readonly<Record<string, string | string[] | undefined>>>;
@@ -42,6 +45,27 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           demoCode={demo ? DEMO_SIGN_IN_CODE : undefined}
           returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
         />
+        {demo ? null : (
+          <a href={LIVE_DEMO_URL} className={`text-center text-sm ${TEXT_LINK}`}>
+            {t('signInPage.demoLink')}
+            <svg
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="ml-1 inline align-[-3px]"
+            >
+              <path
+                d={ARROW_ICON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        )}
         <p className="flex items-center gap-2 text-center text-caption text-muted">
           <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
             <path

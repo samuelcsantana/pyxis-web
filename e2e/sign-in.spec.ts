@@ -131,6 +131,13 @@ test('stays on the code step through a reload, until the email is changed', asyn
   await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
 });
 
+test('offers no live demo link inside the live demo', async ({ page }) => {
+  await page.goto('/sign-in');
+
+  await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /See the live demo/ })).toHaveCount(0);
+});
+
 test('starts the card under the header on a phone, centred on a wide screen', async ({
   page,
   isMobile,

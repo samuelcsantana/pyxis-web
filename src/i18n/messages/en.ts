@@ -94,6 +94,7 @@ export const en = {
   signInPage: {
     title: 'Sign in',
     privacy: 'Privacy-first product analytics · no cookies on your visitors, no personal data',
+    demoLink: 'No access? See the live demo, with invented data',
   },
   errorPanel: {
     title: 'Could not load this data',
