@@ -6,7 +6,7 @@ import { EmptyPeriod } from './empty-period';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
 import { ENGLISH_ERROR_TEXTS, englishErrorTexts } from './english-error-texts';
-import { errorTexts } from './error-screen';
+import { errorTexts } from './error-texts';
 import { english } from '@/test-utils/english';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 import { NoConversionEvent } from './no-conversion-event';

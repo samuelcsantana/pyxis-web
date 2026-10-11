@@ -1,5 +1,5 @@
 import type { ErrorTexts } from './error-panel';
-import type { ErrorBoundaryProps } from './error-screen';
+import type { ErrorBoundaryProps } from './error-texts';
 
 export const ENGLISH_ERROR_TEXTS = {
   title: 'Could not load this data',

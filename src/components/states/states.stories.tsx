@@ -4,7 +4,7 @@ import { english } from '@/test-utils/english';
 import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
-import { errorTexts } from './error-screen';
+import { errorTexts } from './error-texts';
 import { NoConversionEvent } from './no-conversion-event';
 
 const TEXTS = errorTexts(new Error('GET /v1/me failed'), english.t);
