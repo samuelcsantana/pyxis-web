@@ -173,16 +173,17 @@ test('draws the brand backdrop from images the site serves', async ({ page, requ
 
   const masks = await page.getByTestId('brand-backdrop').evaluate((backdrop) => {
     const mark = backdrop.querySelector('.brand-backdrop-mark');
-    return {
-      dust: getComputedStyle(backdrop, '::before').maskImage,
-      needle: mark === null ? '' : getComputedStyle(mark, '::before').maskImage,
-    };
+    return [
+      getComputedStyle(backdrop, '::before').maskImage,
+      mark === null ? '' : getComputedStyle(mark, '::before').maskImage,
+    ];
   });
-  expect(masks.dust).toContain('/brand/star-dust.svg');
-  expect(masks.needle).toContain('/brand/brand-needle.svg');
+  expect(masks[0]).toContain('star-dust');
+  expect(masks[1]).toContain('brand-needle');
 
-  for (const image of ['/brand/star-dust.svg', '/brand/brand-needle.svg']) {
-    const response = await request.get(image);
+  for (const mask of masks) {
+    const address = /url\("([^"]+)"\)/.exec(mask)?.[1] ?? '';
+    const response = await request.get(address);
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('image/svg+xml');
   }

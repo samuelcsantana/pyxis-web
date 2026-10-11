@@ -328,7 +328,7 @@ body {
   position: absolute;
   inset: 0;
   background-color: var(--color-dust);
-  mask: url('/brand/star-dust.svg') center / cover no-repeat;
+  mask: url('./brand/star-dust.svg') center / cover no-repeat;
 }
 
 .brand-backdrop-mark {
@@ -346,7 +346,7 @@ body {
   position: absolute;
   inset: 0;
   background-color: var(--color-mark-faint);
-  mask: url('/brand/brand-needle.svg') center / contain no-repeat;
+  mask: url('./brand/brand-needle.svg') center / contain no-repeat;
 }
 
 .brand-backdrop-mark::after {
