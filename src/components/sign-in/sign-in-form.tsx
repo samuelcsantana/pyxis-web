@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
@@ -25,6 +25,7 @@ import {
 } from './pending-sign-in';
 import {
   BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
   CONTROL_BUSY,
   CONTROL_DISABLED,
   CONTROL_TRANSITION,
@@ -89,11 +90,13 @@ export function signInErrorMessage(error: unknown, t: Translator<ClientSourceMes
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 placeholder:text-muted ${FIELD}`;
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-callout ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
+const DEMO_FILL_CLASS = `min-h-8 shrink-0 rounded-control px-2.5 text-caption font-semibold ${BUTTON_SECONDARY}`;
 const CHANGE_BUTTON_CLASS = `min-h-7 shrink-0 rounded-pill bg-card px-3 text-caption font-semibold text-sky-ink hover:text-ink active:text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`;
 
 interface DemoHintProps {
   readonly code: string;
   readonly message: string;
+  readonly action?: ReactNode;
 }
 
 interface FieldErrorProps {
@@ -119,13 +122,16 @@ function FieldError({ id, text }: FieldErrorProps) {
   );
 }
 
-function DemoHint({ code, message }: DemoHintProps) {
+function DemoHint({ code, message, action }: DemoHintProps) {
   return (
-    <p className="rounded-input bg-soft px-3 py-2.5 text-caption text-muted">
-      {rich(message, {
-        code: () => <code className="font-mono font-semibold text-ink">{code}</code>,
-      })}
-    </p>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-input bg-soft px-3 py-2.5 text-caption text-muted">
+      <p className="min-w-0 flex-[1_1_12rem]">
+        {rich(message, {
+          code: () => <code className="font-mono font-semibold text-ink">{code}</code>,
+        })}
+      </p>
+      {action}
+    </div>
   );
 }
 
@@ -413,7 +419,21 @@ export function SignInForm({
             )}
           </div>
           {demoCode === undefined ? null : (
-            <DemoHint code={demoCode} message={t('signIn.demoCode')} />
+            <DemoHint
+              code={demoCode}
+              message={t('signIn.demoCode')}
+              action={
+                <button
+                  type="button"
+                  onClick={() => {
+                    changeCode(demoCode);
+                  }}
+                  className={DEMO_FILL_CLASS}
+                >
+                  {t('signIn.demoFill', { code: demoCode })}
+                </button>
+              }
+            />
           )}
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? t('signIn.verifying') : t('signIn.verify')}

@@ -75,6 +75,7 @@ export const en = {
     code: '{digits}-digit code',
     codeSent: 'Code sent.',
     demoCode: 'Demo mode: no email is sent. Use the code <code/>.',
+    demoFill: 'Fill in {code}',
     verify: 'Verify and continue',
     verifying: 'Verifying…',
     resend: 'Send a new code',

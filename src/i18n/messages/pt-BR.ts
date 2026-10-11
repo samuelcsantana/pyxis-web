@@ -82,6 +82,7 @@ export const ptBR = translation({
     code: 'Código de {digits} dígitos',
     codeSent: 'Código enviado.',
     demoCode: 'Modo de demonstração: nenhum e-mail é enviado. Use o código <code/>.',
+    demoFill: 'Preencher {code}',
     verify: 'Verificar e continuar',
     verifying: 'Verificando…',
     resend: 'Enviar um novo código',
