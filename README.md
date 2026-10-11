@@ -76,7 +76,9 @@ Shipping now:
 - Text that follows the reader's default text size: every font size is a rem token (an ESLint
   rule rejects sizes in px); with the browser's text set to 32px every text doubles, no screen
   scrolls sideways at 390 or 1280px, and wide tables scroll inside their card
-- Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in
+- Sign-in with a six-digit code sent by email; the page never tells whether an email can sign in.
+  The code goes in six cells over one real field (so the phone can offer the code it received),
+  is verified as soon as the sixth digit is in, and a refused code stays selected for retyping
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
