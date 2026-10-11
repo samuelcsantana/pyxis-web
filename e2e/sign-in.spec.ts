@@ -37,12 +37,11 @@ test('refuses a wrong code, then signs in with the demo code', async ({ page }) 
   await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
   await expect(page.getByText('Code sent.')).toBeVisible();
 
-  await page.getByLabel('6-digit code').fill('123456');
-  await page.getByRole('button', { name: 'Verify and continue' }).click();
+  const code = page.getByLabel('6-digit code');
+  await code.fill('123456');
   await expect(page.locator('#sign-in-error')).toContainText('Invalid or expired code');
 
-  await page.getByLabel('6-digit code').fill('000000');
-  await page.getByRole('button', { name: 'Verify and continue' }).click();
+  await code.fill('000000');
 
   await expect(page).toHaveURL(DEMO_PROJECT_PATH);
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
@@ -52,19 +51,34 @@ test.describe('pasting the code', () => {
   test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
 
   for (const pasted of [' 000 000 ', '000-000', 'Code: 000000']) {
-    test(`keeps all six digits of "${pasted}"`, async ({ page }) => {
+    test(`signs in with all six digits of "${pasted}"`, async ({ page }) => {
       await page.goto('/sign-in');
       await page.getByLabel('Email').fill('owner@demo-store.example');
       await page.getByRole('button', { name: 'Send code' }).click();
-      const code = page.getByLabel('6-digit code');
-      await expect(code).toBeFocused();
+      await expect(page.getByLabel('6-digit code')).toBeFocused();
 
       await page.evaluate((text) => navigator.clipboard.writeText(text), pasted);
       await page.keyboard.press('ControlOrMeta+V');
 
-      await expect(code).toHaveValue('000000');
+      await expect(page).toHaveURL(DEMO_PROJECT_PATH);
     });
   }
+});
+
+test('shows each typed digit in its own cell and waits for the sixth', async ({ page }) => {
+  await page.goto('/sign-in');
+  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByRole('button', { name: 'Send code' }).click();
+  await expect(page.getByLabel('6-digit code')).toBeFocused();
+
+  await page.keyboard.type('00000');
+
+  await expect(page.getByTestId('code-cells')).toHaveText('00000');
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
+
+  await page.keyboard.type('0');
+
+  await expect(page).toHaveURL(DEMO_PROJECT_PATH);
 });
 
 test('goes back to change the email', async ({ page }) => {
@@ -88,7 +102,6 @@ async function signInWithTheDemoCode(page: Page) {
   await page.getByLabel('Email').fill('owner@demo-store.example');
   await page.getByRole('button', { name: 'Send code' }).click();
   await page.getByLabel('6-digit code').fill('000000');
-  await page.getByRole('button', { name: 'Verify and continue' }).click();
 }
 
 test('comes back to the screen it was sent from, filters included', async ({ page }) => {
