@@ -90,6 +90,11 @@ export const ptBR = translation({
       rateLimited: 'Muitas tentativas a partir desta rede. Aguarde alguns minutos e tente de novo.',
       unreachable: 'Não foi possível acessar o Pyxis. Verifique a sua conexão e tente de novo.',
     },
+    validation: {
+      emailMissing: 'Digite o seu e-mail.',
+      emailMalformed: 'Digite um e-mail completo, como voce@empresa.com.',
+      codeIncomplete: 'Digite os {digits} dígitos do código.',
+    },
   },
   signInPage: {
     title: 'Entrar',

@@ -83,6 +83,24 @@ test('shows each typed digit in its own cell and waits for the sixth', async ({ 
   await expect(page).toHaveURL(DEMO_PROJECT_PATH);
 });
 
+test('explains a missing email and an incomplete code itself, not with the browser', async ({
+  page,
+}) => {
+  await page.goto('/sign-in');
+
+  await page.getByRole('button', { name: 'Send code' }).click();
+  await expect(page.locator('#sign-in-email-error')).toHaveText('Enter your email.');
+
+  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByRole('button', { name: 'Send code' }).click();
+  await expect(page.getByRole('button', { name: 'Verify and continue' })).toBeEnabled();
+  await page.keyboard.type('482');
+  await page.keyboard.press('Enter');
+
+  await expect(page.locator('#sign-in-error')).toHaveText('Enter all 6 digits of the code.');
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
+});
+
 test('goes back to change the email', async ({ page }) => {
   await page.goto('/sign-in');
   await page.getByLabel('Email').fill('typo@demo-store.example');

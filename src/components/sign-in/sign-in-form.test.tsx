@@ -166,6 +166,62 @@ describe('SignInForm', () => {
     expect(field).not.toHaveAttribute('aria-describedby');
   });
 
+  it('explains a missing email under the field, in the page language, without asking the API', () => {
+    const { service, calls } = controlledService();
+    renderWithMessages(<SignInForm authService={service} />, 'pt-BR');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Enviar código' }));
+
+    const field = screen.getByLabelText('E-mail');
+    expect(screen.getByRole('alert')).toHaveTextContent('Digite o seu e-mail.');
+    expect(field).toHaveAccessibleDescription('Digite o seu e-mail.');
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveFocus();
+    expect(calls).toEqual([]);
+  });
+
+  it('explains an email that is not a full address', () => {
+    const { service, calls } = controlledService();
+    renderWithMessages(<SignInForm authService={service} />);
+    typeEmail('ana@example');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Enter a full email address, like you@company.com.',
+    );
+    expect(calls).toEqual([]);
+  });
+
+  it('asks for every digit when an incomplete code is submitted', async () => {
+    const { service, pending, calls } = controlledService();
+    await reachCodeStep(service);
+    pending[0]?.resolve();
+    await settle();
+    const field = screen.getByLabelText('6-digit code');
+    fireEvent.change(field, { target: { value: '123' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Verify and continue' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Enter all 6 digits of the code.');
+    expect(field).toHaveAccessibleDescription('Enter all 6 digits of the code.');
+    expect(field).toHaveFocus();
+    expect(calls.map((call) => call.method)).toEqual(['requestCode']);
+  });
+
+  it('leaves the checks to itself rather than to the browser', async () => {
+    renderWithMessages(<SignInForm authService={new MockAuthService()} />);
+    expect(screen.getByRole('button', { name: 'Send code' }).closest('form')).toHaveAttribute(
+      'novalidate',
+    );
+
+    typeEmail('ana@example.com');
+    fireEvent.click(screen.getByRole('button', { name: 'Send code' }));
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(screen.getByLabelText('6-digit code').closest('form')).toHaveAttribute('novalidate');
+  });
+
   it('keeps only digits in the code and signs in as soon as the sixth one arrives', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);

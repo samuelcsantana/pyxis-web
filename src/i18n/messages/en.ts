@@ -81,6 +81,11 @@ export const en = {
       rateLimited: 'Too many attempts from this network. Wait a few minutes and try again.',
       unreachable: 'Could not reach Pyxis. Check your connection and try again.',
     },
+    validation: {
+      emailMissing: 'Enter your email.',
+      emailMalformed: 'Enter a full email address, like you@company.com.',
+      codeIncomplete: 'Enter all {digits} digits of the code.',
+    },
   },
   signInPage: {
     title: 'Sign in',
