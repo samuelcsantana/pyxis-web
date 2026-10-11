@@ -5,7 +5,12 @@ import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
-import { codeProblem, emailProblem, type SignInFieldProblem } from '@/domain/sign-in';
+import {
+  codeProblem,
+  countdownLabel,
+  emailProblem,
+  type SignInFieldProblem,
+} from '@/domain/sign-in';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import { rich } from '@/i18n/rich';
@@ -23,12 +28,15 @@ import {
 
 export const SMOOTH_LOADING_MS = 400;
 export const CODE_SENT_NOTICE_MS = 4_000;
+export const RESEND_WAIT_MS = 30_000;
+export const RESENT_NOTICE_MS = 8_000;
 export const SIGN_IN_CODE_LENGTH = 6;
 const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
 const CODE_ERROR_ID = 'sign-in-error';
 const ALERT_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7.5v5.5 M12 16.5h.01';
+const ONE_SECOND_MS = 1_000;
 const HOME_PATH = '/';
 
 type Step = 'email' | 'code';
@@ -127,6 +135,9 @@ export function SignInForm({
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
+  const [resent, setResent] = useState(false);
+  const [resendAt, setResendAt] = useState(0);
+  const [now, setNow] = useState(0);
   const [error, setError] = useState<unknown>(null);
   const [problem, setProblem] = useState<SignInFieldProblem | null>(null);
   const request = useRef<Subscription | undefined>(undefined);
@@ -146,6 +157,22 @@ export function SignInForm({
   );
 
   useEffect(() => {
+    if (resendAt <= Date.now()) {
+      return;
+    }
+    const timer = setInterval(() => {
+      const current = Date.now();
+      setNow(current);
+      if (current >= resendAt) {
+        clearInterval(timer);
+      }
+    }, ONE_SECOND_MS);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [resendAt]);
+
+  useEffect(() => {
     if (step === shownStep.current) {
       return;
     }
@@ -163,17 +190,25 @@ export function SignInForm({
     forgetErrors();
   };
 
-  const sendCode = () => {
+  const sendCode = (again: boolean) => {
     start();
     notice.current?.abort();
     notice.current = new AbortController();
-    request.current = defer(() => service.requestCode(email.trim(), locale))
+    const sentTo = email.trim();
+    request.current = defer(() => service.requestCode(sentTo, locale))
       .pipe(
         tap(() => {
+          const sentAt = Date.now();
           setStep('code');
           setCode('');
+          setResendAt(sentAt + RESEND_WAIT_MS);
+          setNow(sentAt);
         }),
-        withTemporarySuccess(setCodeSent, CODE_SENT_NOTICE_MS, { signal: notice.current.signal }),
+        withTemporarySuccess(
+          again ? setResent : setCodeSent,
+          again ? RESENT_NOTICE_MS : CODE_SENT_NOTICE_MS,
+          { signal: notice.current.signal },
+        ),
         catchToState(setError),
         withSmoothLoading(setBusy, SMOOTH_LOADING_MS),
       )
@@ -215,7 +250,7 @@ export function SignInForm({
       emailInput.current?.focus();
       return;
     }
-    sendCode();
+    sendCode(false);
   };
 
   const submitCode = (event: SubmitEvent<HTMLFormElement>) => {
@@ -257,6 +292,7 @@ export function SignInForm({
         ? null
         : signInErrorMessage(error, t);
   const digits = String(SIGN_IN_CODE_LENGTH);
+  const waitLeft = Math.max(0, resendAt - now);
 
   return (
     <section className="flex w-full max-w-[420px] flex-col gap-5 rounded-panel border border-line bg-card p-8 text-ink">
@@ -338,10 +374,24 @@ export function SignInForm({
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? t('signIn.verifying') : t('signIn.verify')}
           </button>
-          <div className="flex flex-wrap justify-between gap-2">
-            <button type="button" onClick={sendCode} disabled={busy} className={LINK_BUTTON_CLASS}>
-              {t('signIn.resend')}
-            </button>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="flex flex-col items-start gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  sendCode(true);
+                }}
+                disabled={busy || waitLeft > 0}
+                className={LINK_BUTTON_CLASS}
+              >
+                {waitLeft > 0
+                  ? t('signIn.resendIn', { time: countdownLabel(waitLeft) })
+                  : t('signIn.resend')}
+              </button>
+              <p role="status" className="text-caption text-ok">
+                {resent ? t('signIn.resent') : ''}
+              </p>
+            </div>
             <button type="button" onClick={useAnotherEmail} className={LINK_BUTTON_CLASS}>
               {t('signIn.otherEmail')}
             </button>
