@@ -76,14 +76,15 @@ export const ptBR = translation({
     sending: 'Enviando…',
     checkTitle: 'Confira o seu e-mail',
     checkBody:
-      'Se <email/> pode entrar no Pyxis, um código está a caminho. Ele expira em 10 minutos.',
+      'Se este endereço pode entrar no Pyxis, um código está a caminho. Ele expira em 10 minutos.',
+    change: 'Trocar',
+    changeEmail: 'Trocar o e-mail',
     code: 'Código de {digits} dígitos',
     codeSent: 'Código enviado.',
     demoCode: 'Modo de demonstração: nenhum e-mail é enviado. Use o código <code/>.',
     verify: 'Verificar e continuar',
     verifying: 'Verificando…',
     resend: 'Enviar um novo código',
-    otherEmail: 'Usar outro e-mail',
     resendIn: 'Enviar um novo código em {time}',
     resent: 'Novo código enviado. Só o mais recente vale.',
     errors: {

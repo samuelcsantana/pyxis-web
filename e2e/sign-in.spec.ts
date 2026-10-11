@@ -107,7 +107,7 @@ test('goes back to change the email', async ({ page }) => {
   await page.getByLabel('Email').fill('typo@demo-store.example');
   await page.getByRole('button', { name: 'Send code' }).click();
 
-  await page.getByRole('button', { name: 'Use a different email' }).click();
+  await page.getByRole('button', { name: 'Change email' }).click();
 
   await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
   await expect(page.getByLabel('Email')).toBeFocused();
