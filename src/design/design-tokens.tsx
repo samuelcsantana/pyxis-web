@@ -47,9 +47,8 @@ export const TYPE_SCALE = [
   { token: 'text-callout', size: '0.9375rem', use: 'Visit titles, the sign-in form' },
   { token: 'text-base', size: '1rem', use: 'Panel titles, fields on phones' },
   { token: 'text-lg', size: '1.125rem', use: 'Empty and error states' },
-  { token: 'text-xl', size: '1.25rem', use: 'The wordmark in the sidebar' },
+  { token: 'text-xl', size: '1.25rem', use: 'The wordmark in the sidebar and the sign-in header' },
   { token: 'text-title', size: '1.375rem', use: 'Page titles, figures on phones' },
-  { token: 'text-wordmark', size: '1.625rem', use: 'The wordmark on the sign-in page' },
   { token: 'text-figure', size: '1.75rem', use: 'Stat figures' },
   { token: 'text-figure-lg', size: '1.875rem', use: 'Overview KPI figures' },
 ] as const;

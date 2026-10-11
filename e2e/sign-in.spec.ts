@@ -131,6 +131,26 @@ test('stays on the code step through a reload, until the email is changed', asyn
   await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
 });
 
+test('starts the card under the header on a phone, centred on a wide screen', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/sign-in');
+  const header = await page.getByRole('banner').boundingBox();
+  const card = await page.getByRole('heading', { name: 'Sign in to Pyxis' }).boundingBox();
+  const viewport = page.viewportSize();
+  if (header === null || card === null || viewport === null) {
+    throw new Error('the sign-in page did not lay out');
+  }
+
+  const gapUnderHeader = card.y - (header.y + header.height);
+  if (isMobile) {
+    expect(gapUnderHeader).toBeLessThan(80);
+  } else {
+    expect(card.y).toBeGreaterThan(viewport.height / 4);
+  }
+});
+
 test('leaves the focus alone when the page opens', async ({ page }) => {
   await page.goto('/sign-in');
 
