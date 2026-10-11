@@ -2,7 +2,7 @@
 
 import { MainContent } from '@/components/shell/main-content';
 import { ErrorPanel } from '@/components/states/error-panel';
-import { type ErrorBoundaryProps, errorTexts } from '@/components/states/error-screen';
+import { type ErrorBoundaryProps, errorTexts } from '@/components/states/error-texts';
 import { useT } from '@/i18n/messages-provider';
 
 export default function ProjectError({ error, retry }: ErrorBoundaryProps) {

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { fn } from 'storybook/test';
 import { english } from '@/test-utils/english';
-import { ErrorScreen, errorTexts } from './error-screen';
+import { ErrorScreen } from './error-screen';
+import { errorTexts } from './error-texts';
 
 const meta = {
   title: 'States/Error screen',
