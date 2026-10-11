@@ -97,7 +97,10 @@ Shipping now:
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. The
   sidebar fits in 700px, so Sign out shows without scrolling on a 1366×768 laptop, and the
-  account email, project names and time zones wrap instead of being cut. The project switcher
+  account email, project names and time zones wrap instead of being cut. Each project in the
+  switcher shows the icon of its own site (the API fetches it daily from the project's first
+  allowed origin, and this dashboard serves it from its own address, so the Content Security
+  Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
   focus moves past them and on a click outside, so they never cover the control that has the
   focus; inside the phone menu, the first Escape closes the switcher and the second the menu.
@@ -357,6 +360,7 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                        |
 | `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                                                                                   |
 | `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                 |
+| `/[projectId]/icon`               | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                  |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never

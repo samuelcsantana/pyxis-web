@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
-import { type Project, projectInitials } from '@/domain/admin';
+import type { Project } from '@/domain/admin';
 import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { useT } from '@/i18n/messages-provider';
+import { ProjectMark } from './project-mark';
 import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
 
 export interface ProjectSwitcherProps {
@@ -58,12 +59,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
         className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
         <span className="sr-only">{t('nav.switchProject')} </span>
-        <span
-          aria-hidden="true"
-          className="flex size-8 shrink-0 items-center justify-center rounded-control bg-accent text-caption font-bold text-accent-ink"
-        >
-          {projectInitials(currentProject.name)}
-        </span>
+        <ProjectMark project={currentProject} size="large" />
         <span className="flex min-w-0 grow flex-col gap-0.5">
           <span className="text-sm font-semibold break-words">{currentProject.name}</span>
           <span className="font-mono text-xs break-words text-nav-muted">
@@ -97,12 +93,7 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
                 aria-current={current ? 'page' : undefined}
                 className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${current ? NAV_ITEM_CURRENT : NAV_ITEM_IDLE}`}
               >
-                <span
-                  aria-hidden="true"
-                  className="flex size-6 shrink-0 items-center justify-center rounded-chip bg-nav-border text-micro font-bold text-nav-strong"
-                >
-                  {projectInitials(project.name)}
-                </span>
+                <ProjectMark project={project} size="small" />
                 <span className="min-w-0 grow break-words">{project.name}</span>
                 {current ? <CurrentCheck /> : null}
               </Link>
