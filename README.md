@@ -86,7 +86,9 @@ Shipping now:
   the tab for the ten minutes a code lives (the address and the time it was sent stay in
   `sessionStorage`, forgotten on sign-in or on Change). The page names Pyxis once, in its header,
   and starts the card right under it on a phone; outside the demo it links to the live demo for
-  visitors without access, and in the demo a button fills in the demo code
+  visitors without access, and in the demo a button fills in the demo code. The sign-in page and
+  the other standalone pages (page not found, the error screen, no projects yet) share the
+  GitHub cover's backdrop, star dust and the faint brand mark, behind one raised card
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
