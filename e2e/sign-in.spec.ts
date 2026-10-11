@@ -40,8 +40,10 @@ test('refuses a wrong code, then signs in with the demo code', async ({ page }) 
   const code = page.getByLabel('6-digit code');
   await code.fill('123456');
   await expect(page.locator('#sign-in-error')).toContainText('Invalid or expired code');
+  await expect(code).toBeFocused();
+  expect(await code.evaluate((field: HTMLInputElement) => field.selectionEnd)).toBe(6);
 
-  await code.fill('000000');
+  await page.keyboard.type('000000');
 
   await expect(page).toHaveURL(DEMO_PROJECT_PATH);
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();

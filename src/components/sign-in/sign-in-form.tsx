@@ -132,6 +132,12 @@ export function SignInForm({
       .subscribe();
   };
 
+  const selectCodeForRetyping = () => {
+    verifiedOnItsOwn.current = '';
+    codeInput.current?.focus();
+    codeInput.current?.select();
+  };
+
   const verifyCode = (value: string) => {
     start();
     verifying.current = true;
@@ -140,9 +146,12 @@ export function SignInForm({
         finalize(() => {
           verifying.current = false;
         }),
-        tap(() => {
-          router.replace(returnPath);
-          router.refresh();
+        tap({
+          next: () => {
+            router.replace(returnPath);
+            router.refresh();
+          },
+          error: selectCodeForRetyping,
         }),
         catchToState(setError),
         withSmoothLoading(setBusy, SMOOTH_LOADING_MS),

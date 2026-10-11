@@ -265,6 +265,17 @@ describe('SignInForm', () => {
     expect(calls.map((call) => call.method)).toEqual(['requestCode', 'verifyCode']);
   });
 
+  it('selects a refused code, so the next digits typed replace it', async () => {
+    await reachCodeStep(new MockAuthService());
+    const field = screen.getByLabelText<HTMLInputElement>('6-digit code');
+
+    fireEvent.change(field, { target: { value: '123456' } });
+    await settle(SMOOTH_LOADING_MS);
+
+    expect(field).toHaveFocus();
+    expect([field.selectionStart, field.selectionEnd]).toEqual([0, 6]);
+  });
+
   it('verifies new digits typed right after a refusal, before the error settles', async () => {
     const { service, pending, calls } = controlledService();
     await reachCodeStep(service);
