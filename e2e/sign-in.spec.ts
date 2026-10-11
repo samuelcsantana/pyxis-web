@@ -113,6 +113,24 @@ test('goes back to change the email', async ({ page }) => {
   await expect(page.getByLabel('Email')).toBeFocused();
 });
 
+test('stays on the code step through a reload, until the email is changed', async ({ page }) => {
+  await page.goto('/sign-in');
+  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByRole('button', { name: 'Send code' }).click();
+  await expect(page.getByRole('button', { name: /Send a new code in 0:[0-3]\d/ })).toBeDisabled();
+
+  await page.reload();
+
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
+  await expect(page.getByText('owner@demo-store.example')).toBeVisible();
+  await expect(page.getByLabel('6-digit code')).toBeFocused();
+
+  await page.getByRole('button', { name: 'Change email' }).click();
+  await page.reload();
+
+  await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
+});
+
 test('leaves the focus alone when the page opens', async ({ page }) => {
   await page.goto('/sign-in');
 

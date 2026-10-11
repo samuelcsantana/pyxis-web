@@ -35,4 +35,5 @@ globalThis.ResizeObserver = ResizeObserverForTests;
 
 afterEach(() => {
   cleanup();
+  window.sessionStorage.clear();
 });
