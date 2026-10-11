@@ -80,7 +80,11 @@ Shipping now:
   The code goes in six cells over one real field (so the phone can offer the code it received),
   is verified as soon as the sixth digit is in, and a refused code stays selected for retyping.
   A missing email, a malformed one or an incomplete code is explained right under its field, in
-  the page's language, instead of by the browser's own bubble
+  the page's language, instead of by the browser's own bubble. The code step shows the address
+  the code went to with a Change button, waits 30 seconds before another code can be asked for
+  (each one replaces the last, and the API sends at most five an hour), and survives a reload of
+  the tab for the ten minutes a code lives (the address and the time it was sent stay in
+  `sessionStorage`, forgotten on sign-in or on Change)
 - The app shell: sidebar with the screens, project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
