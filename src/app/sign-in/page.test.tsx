@@ -46,6 +46,15 @@ describe('SignInPage', () => {
     expect(screen.getByRole('main')).not.toHaveTextContent(/^Pyxis/);
   });
 
+  it('draws the brand backdrop behind the page and raises the card', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();
+    expect(screen.getByRole('main')).toHaveClass('[&>section]:shadow-raised');
+  });
+
   it('offers the live demo to a visitor without access', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
