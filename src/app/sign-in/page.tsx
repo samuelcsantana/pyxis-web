@@ -25,20 +25,21 @@ export interface SignInPageProps {
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { expired, next } = await searchParams;
   const { t, locale } = await getI18n();
+  const demo = isDemoMode();
   return (
     <div className="flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
       <header className="flex w-full max-w-6xl flex-wrap items-center justify-end gap-2">
+        <p className="mr-auto flex items-center gap-2.5 text-xl font-bold tracking-tight">
+          <LogoMark size={28} />
+          Pyxis
+        </p>
         <LanguageMenu locale={locale} label={t('language.label')} choose={chooseLocale} />
         <ThemeToggle initialTheme={await chosenTheme()} />
       </header>
-      <MainContent className="flex w-full grow flex-col items-center justify-center gap-7 py-8">
-        <div className="flex flex-col items-center gap-3.5">
-          <LogoMark size={56} />
-          <span className="text-wordmark font-bold tracking-tight">Pyxis</span>
-        </div>
+      <MainContent className="flex w-full grow flex-col items-center justify-start gap-7 pt-5 pb-8 sm:justify-center sm:py-8">
         <SignInForm
           sessionExpired={expired === '1'}
-          demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
+          demoCode={demo ? DEMO_SIGN_IN_CODE : undefined}
           returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
         />
         <p className="flex items-center gap-2 text-center text-caption text-muted">

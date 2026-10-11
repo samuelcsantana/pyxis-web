@@ -37,6 +37,15 @@ describe('SignInPage', () => {
     expect(screen.getByRole('group', { name: 'Language' })).toBeInTheDocument();
   });
 
+  it('names Pyxis once, small, at the start of the header', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByRole('banner')).toHaveTextContent(/^Pyxis/);
+    expect(screen.getByRole('main')).not.toHaveTextContent(/^Pyxis/);
+  });
+
   it('says nothing about a session when the visitor simply arrives', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
