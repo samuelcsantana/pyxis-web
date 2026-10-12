@@ -12,6 +12,8 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     country: 'BR',
+    region: 'BR-SP',
+    regionName: 'São Paulo',
     channel: 'direct',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -36,6 +38,8 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     country: 'BR',
+    region: 'BR-RJ',
+    regionName: 'Rio de Janeiro',
     channel: 'direct',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -62,6 +66,8 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     browser: 'safari',
     os: 'ios',
     country: 'BR',
+    region: 'BR-SP',
+    regionName: 'São Paulo',
     channel: 'paid',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -126,6 +132,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'firefox',
     os: 'linux',
     country: 'BR',
+    region: 'BR-MG',
+    regionName: 'Minas Gerais',
     channel: 'direct',
     userId: 'u_93d1',
     events: [
@@ -156,6 +164,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'edge',
     os: 'windows',
     country: 'BR',
+    region: 'BR-BA',
+    regionName: 'Bahia',
     channel: 'direct',
     userId: 'u_93d1',
     events: [
@@ -174,6 +184,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     country: 'BR',
+    region: 'BR-PR',
+    regionName: 'Paraná',
     channel: 'direct',
     userId: 'u_2b6e',
     events: [
@@ -203,6 +215,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'safari',
     os: 'ios',
     country: 'BR',
+    region: 'BR-SP',
+    regionName: 'São Paulo',
     channel: 'paid',
     events: [
       { second: 4, name: 'page_view', path: '/sign-up' },
@@ -236,6 +250,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'macos',
     country: 'BR',
+    region: 'BR-RS',
+    regionName: 'Rio Grande do Sul',
     channel: 'paid',
     events: [
       { second: 3, name: 'page_view', path: '/sign-up' },
@@ -269,6 +285,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     country: 'BR',
+    region: 'BR-PE',
+    regionName: 'Pernambuco',
     channel: 'direct',
     userId: 'u_5e0a',
     events: [
@@ -291,6 +309,8 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     country: 'BR',
+    region: 'BR-SC',
+    regionName: 'Santa Catarina',
     channel: 'direct',
     userId: 'u_5e0a',
     events: [
@@ -311,6 +331,8 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     country: 'BR',
+    region: 'BR-SP',
+    regionName: 'São Paulo',
     channel: 'paid',
     events: [
       { second: 2, name: 'page_view', path: '/' },
@@ -340,6 +362,8 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     browser: 'safari',
     os: 'macos',
     country: 'PT',
+    region: 'PT-11',
+    regionName: 'Lisboa',
     channel: 'organic',
     events: [
       { second: 1, name: 'page_view', path: '/blog/:slug' },
@@ -362,6 +386,8 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     browser: 'safari',
     os: 'ios',
     country: 'BR',
+    region: 'BR-DF',
+    regionName: 'Distrito Federal',
     channel: 'direct',
     userId: 'u_c41e',
     events: [

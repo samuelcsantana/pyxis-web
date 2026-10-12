@@ -29,6 +29,8 @@ const WIRE: TimelineWire = {
       browser: 'samsung',
       os: 'android',
       country: 'BR',
+      region: 'BR-BA',
+      region_name: 'Bahia',
       channel: 'paid',
       user_id: 'u_7f3a',
       events: [
@@ -83,6 +85,8 @@ const WIRE: TimelineWire = {
       browser: 'chrome',
       os: 'macos',
       country: null,
+      region: null,
+      region_name: null,
       channel: null,
       events: [],
     },

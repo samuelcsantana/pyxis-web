@@ -22,6 +22,8 @@ const VISIT: DemoVisit = {
   browser: 'chrome',
   os: 'windows',
   country: 'BR',
+  region: 'BR-MG',
+  regionName: 'Minas Gerais',
   channel: 'paid',
   userId: 'u_7f3a',
   events: [

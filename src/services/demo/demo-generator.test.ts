@@ -80,6 +80,22 @@ describe('demoGeneratedVisits', () => {
     expect(new Set(STORE_WEEK.map((visit) => visit.country)).size).toBeGreaterThan(5);
   });
 
+  it('places most visits in a region of their country, and a few nowhere', () => {
+    const placed = STORE_WEEK.filter((visit) => visit.region !== null);
+
+    for (const visit of placed) {
+      expect(visit.region?.startsWith(`${visit.country}-`)).toBe(true);
+      expect(visit.regionName).not.toBeNull();
+    }
+    expect(placed.length).toBeGreaterThan(STORE_WEEK.length * 0.9);
+    expect(placed.length).toBeLessThan(STORE_WEEK.length);
+    expect(
+      STORE_WEEK.filter((visit) => visit.region === null).every(
+        (visit) => visit.regionName === null,
+      ),
+    ).toBe(true);
+  });
+
   it('tags only the campaigns the source of a visit runs', () => {
     const tagged = STORE_WEEK.filter((visit) => visit.campaign !== null);
 

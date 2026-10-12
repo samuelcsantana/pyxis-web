@@ -1,6 +1,7 @@
 import { type DevicesReport, type DevicesWire, OTHER_VALUE } from '@/domain/devices';
 import { devicesResponseSchema } from '@/domain/devices.schema';
 import type { DateRange } from '../date-range';
+import { itemAt } from '../demo/demo-random';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoVisitRecord } from '../demo/demo-records';
 import {
@@ -13,8 +14,10 @@ import {
 } from '../demo/demo-scope';
 
 export const TOP_DEVICE_VALUES = 5;
+export const TOP_REGIONS = 10;
 
 type ShareWire = DevicesWire['device_types'][number];
+type RegionShareWire = DevicesWire['regions'][number];
 
 interface ValueCount {
   readonly value: string;
@@ -70,6 +73,55 @@ function shares(
   }));
 }
 
+function regionShare(
+  value: string | null,
+  name: string | null,
+  count: ValueCount,
+  countsConversions: boolean,
+): RegionShareWire {
+  return {
+    value,
+    name,
+    visits: count.visits,
+    conversions: countsConversions ? count.conversions : null,
+    converting_visits: countsConversions ? count.convertingVisits : null,
+  };
+}
+
+function regionShares(
+  visits: readonly DemoVisitRecord[],
+  conversionEvent: string | null,
+): RegionShareWire[] {
+  const countsConversions = conversionEvent !== null;
+  const located = visits.filter((visit) => visit.region !== null);
+  const ranked = [...groupedBy(located, (visit) => String(visit.region))]
+    .map(([region, group]) => ({
+      name: itemAt(group, 0).regionName,
+      count: counted(region, group, conversionEvent),
+    }))
+    .toSorted(byKeys(({ count }) => [-count.visits, count.value]));
+  const rest = ranked.slice(TOP_REGIONS).map(({ count }) => count);
+  const unlocated = visits.filter((visit) => visit.region === null);
+  return [
+    ...ranked
+      .slice(0, TOP_REGIONS)
+      .map(({ name, count }) => regionShare(count.value, name, count, countsConversions)),
+    ...(rest.length === 0
+      ? []
+      : [regionShare(OTHER_VALUE, null, summed(OTHER_VALUE, rest), countsConversions)]),
+    ...(unlocated.length === 0
+      ? []
+      : [
+          regionShare(
+            null,
+            null,
+            counted(OTHER_VALUE, unlocated, conversionEvent),
+            countsConversions,
+          ),
+        ]),
+  ];
+}
+
 export function demoDevicesWire(projectId: string, range: DateRange, now: Date): DevicesWire {
   const project = demoProjectOf(projectId);
   const visits = demoVisitsIn(project, demoScopeOf(range, now));
@@ -80,6 +132,7 @@ export function demoDevicesWire(projectId: string, range: DateRange, now: Date):
     browsers: of((visit) => visit.browser),
     operating_systems: of((visit) => visit.os),
     countries: of((visit) => visit.country),
+    regions: regionShares(visits, project.conversionEvent),
   };
 }
 

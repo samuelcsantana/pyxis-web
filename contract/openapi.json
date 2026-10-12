@@ -241,7 +241,7 @@
       },
       "DevicesReport": {
         "additionalProperties": false,
-        "description": "Visits, conversion events and converting visits (both null without a conversion event) per value, sorted by visits: the top five values and \"other\" for the rest, unknown countries included.",
+        "description": "Visits, conversion events and converting visits (both null without a conversion event) per value, sorted by visits: the top five values and \"other\" for the rest, unknown countries included. regions lists the top 10 regions (the first subdivision of the country, as an ISO 3166-2 code such as BR-SP, with the name CloudFront gave it), then \"other\" for the rest, then a null value for visits without a region.",
         "properties": {
           "browsers": {
             "items": {
@@ -430,13 +430,71 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "regions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "conversions": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "converting_visits": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "visits": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "value",
+                "name",
+                "visits",
+                "conversions",
+                "converting_visits"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           }
         },
         "required": [
           "device_types",
           "browsers",
           "operating_systems",
-          "countries"
+          "countries",
+          "regions"
         ],
         "type": "object"
       },
@@ -2058,6 +2116,18 @@
                     "null"
                   ]
                 },
+                "region": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "region_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "session_id": {
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
@@ -2097,6 +2167,8 @@
                 "browser",
                 "os",
                 "country",
+                "region",
+                "region_name",
                 "properties"
               ],
               "type": "object"
@@ -2226,6 +2298,18 @@
                 "os": {
                   "type": "string"
                 },
+                "region": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "region_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "session_id": {
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
@@ -2251,6 +2335,8 @@
                 "browser",
                 "os",
                 "country",
+                "region",
+                "region_name",
                 "channel",
                 "user_id",
                 "events"
@@ -2416,6 +2502,18 @@
                   "minimum": -9007199254740991,
                   "type": "integer"
                 },
+                "region": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "region_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "session_id": {
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
@@ -2451,6 +2549,8 @@
                 "browser",
                 "os",
                 "country",
+                "region",
+                "region_name",
                 "channel",
                 "source",
                 "campaign",
@@ -3132,7 +3232,7 @@
             "pyxis_session": []
           }
         ],
-        "summary": "Visits and conversions by device type, browser, system and country",
+        "summary": "Visits and conversions by device type, browser, system, country and region",
         "tags": [
           "dashboard queries"
         ]
@@ -4541,6 +4641,16 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The region of the visit: its ISO 3166-2 code, the country code, a hyphen and the subdivision",
+            "in": "query",
+            "name": "region",
+            "required": false,
+            "schema": {
+              "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
               "type": "string"
             }
           },
