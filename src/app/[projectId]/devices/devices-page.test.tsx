@@ -77,17 +77,19 @@ describe('DevicesPage', () => {
     expect(screen.getByText('What people use to reach Demo Store')).toBeInTheDocument();
   });
 
-  it('shows the three donuts, conversion by device and the countries', async () => {
+  it('shows the three donuts, conversion by device, the countries and the regions', async () => {
     renderWithMessages(await renderDevices());
 
-    for (const name of ['Device type', 'Browser', 'Operating system', 'Countries']) {
+    for (const name of ['Device type', 'Browser', 'Operating system', 'Countries', 'Regions']) {
       expect(screen.getByRole('table', { name })).toBeInTheDocument();
     }
     expect(screen.getByRole('heading', { name: 'Conversion by device' })).toBeInTheDocument();
     expect(screen.getByText('Brazil')).toBeInTheDocument();
-    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).toHaveClass(
-      'xl:grid-cols-2',
-    );
+    expect(screen.getByText('São Paulo')).toBeInTheDocument();
+    const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
+    expect(grid).toHaveClass('xl:grid-cols-2');
+    expect(grid?.children).toHaveLength(3);
+    expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));
   });
 
   it('links each device type Visits filters by to its visits, in the same period', async () => {
@@ -125,10 +127,23 @@ describe('DevicesPage', () => {
     expect(countries.queryByRole('link', { name: /^Other/ })).not.toBeInTheDocument();
   });
 
+  it('links each region to its visits, in the same period, and leaves the rest unlinked', async () => {
+    renderWithMessages(await renderDevices());
+
+    const regions = within(screen.getByRole('table', { name: 'Regions' }));
+    expect(regions.getByRole('link', { name: 'São Paulo: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=30d&region=BR-SP',
+    );
+    expect(regions.getByRole('rowheader', { name: 'Other regions' })).toBeInTheDocument();
+    expect(regions.getByRole('rowheader', { name: 'Unknown' })).toBeInTheDocument();
+    expect(regions.queryByRole('link', { name: /^(Other regions|Unknown)/ })).toBeNull();
+  });
+
   it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
     renderWithMessages(await renderDevices());
 
-    for (const name of ['Browser', 'Operating system', 'Countries']) {
+    for (const name of ['Browser', 'Operating system', 'Countries', 'Regions']) {
       expect(
         within(screen.getByRole('table', { name })).getByRole('columnheader', {
           name: 'Conversion rate',
@@ -150,9 +165,9 @@ describe('DevicesPage', () => {
     expect(screen.getByRole('table', { name: 'Device type' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
     expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
-    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).not.toHaveClass(
-      'xl:grid-cols-2',
-    );
+    const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
+    expect(grid?.children).toHaveLength(2);
+    expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));
   });
 
   it('leaves conversion by device out when the API counted none', async () => {
@@ -170,16 +185,18 @@ describe('DevicesPage', () => {
 
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
     expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
-    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).not.toHaveClass(
-      'xl:grid-cols-2',
-    );
+    const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
+    expect(grid?.children).toHaveLength(2);
+    expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));
   });
 
   it('offers every breakdown as one CSV file of the period', async () => {
     renderWithMessages(await renderDevices());
 
     expect(
-      screen.getByRole('link', { name: 'Device types, browsers, systems and countries as CSV' }),
+      screen.getByRole('link', {
+        name: 'Device types, browsers, systems, countries and regions as CSV',
+      }),
     ).toHaveAttribute('href', '/p-store/devices/export?range=30d');
   });
 

@@ -423,6 +423,8 @@ export const ptBR = translation({
     },
     other: 'Outros',
     otherCountries: 'Outros países',
+    otherRegions: 'Outros estados',
+    unknownRegion: 'Não identificado',
     convertedOfVisits: '{converted} de {visits}',
     subtitle: 'O que as pessoas usam para acessar {project}',
     panels: {
@@ -432,17 +434,19 @@ export const ptBR = translation({
     },
     columns: {
       country: 'País',
+      region: 'Estado',
       visits: 'Visitas',
       share: 'Parcela',
       conversionRate: 'Taxa de conversão',
     },
     countries: 'Países',
+    regions: 'Estados',
     conversionByDevice: {
       title: 'Conversão por dispositivo',
       description: 'Parcela das visitas que enviaram <code/>',
     },
     footnote:
-      'Dispositivo, navegador e sistema são deduzidos no servidor a partir do user agent do navegador, que depois é descartado. O país vem da rede de borda, nunca de um endereço IP guardado.',
+      'Dispositivo, navegador e sistema são deduzidos no servidor a partir do user agent do navegador, que depois é descartado. O país e o estado vêm da rede de borda, nunca de um endereço IP guardado, e a cidade nunca é registrada. Visitas mais antigas têm só o país.',
   },
   requests: {
     noResponse: 'Sem resposta',
@@ -965,7 +969,7 @@ export const ptBR = translation({
       campaigns: 'Campanhas',
       channels: 'Visitas por canal',
     },
-    devices: 'Tipos de dispositivo, navegadores, sistemas e países',
+    devices: 'Tipos de dispositivo, navegadores, sistemas, países e estados',
     features: {
       events: 'Eventos',
       screens: 'Telas',

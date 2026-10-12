@@ -5,11 +5,14 @@ import {
   countryLabel,
   deviceConversions,
   deviceTypeLabel,
+  regionRows,
+  type RegionShare,
   shareRows,
   type ValueShare,
 } from '@/domain/devices';
 import { CountriesTable } from './countries-table';
 import { DeviceConversionList } from './device-conversion-list';
+import { RegionsTable } from './regions-table';
 import { segmentColor, ShareDonut } from './share-donut';
 import { english } from '@/test-utils/english';
 
@@ -191,5 +194,64 @@ describe('CountriesTable', () => {
     const rows = screen.getAllByRole('row');
     expect(rows[1]).toHaveTextContent('BRBrazil9090.0%6.7%');
     expect(rows[2]).toHaveTextContent('··Other countries1010.0%0.0%');
+  });
+});
+
+function region(value: string | null, name: string | null, visits: number): RegionShare {
+  return { value, name, visits, conversions: 0, convertingVisits: 0 };
+}
+
+const REGIONS: readonly RegionShare[] = [
+  region('BR-SP', 'São Paulo', 60),
+  region('PT-11', 'Lisboa', 20),
+  region('other', null, 15),
+  region(null, null, 5),
+];
+
+describe('RegionsTable', () => {
+  it('names each region beside its code, with its country when the list spans several', () => {
+    render(<RegionsTable rows={regionRows(REGIONS, english)} i18n={english} />);
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Regions' })).toBeInTheDocument();
+    const rows = screen.getAllByRole('row');
+    expect(rows[1]).toHaveTextContent('SPSão PauloBrazil6060.0%');
+    expect(rows[2]).toHaveTextContent('11LisboaPortugal2020.0%');
+    expect(rows[3]).toHaveTextContent('··Other regions1515.0%');
+    expect(rows[4]).toHaveTextContent('—Unknown55.0%');
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
+    expect(screen.queryByRole('link')).toBeNull();
+  });
+
+  it('links each region to its visits, never the other or unknown rows', () => {
+    render(
+      <RegionsTable
+        rows={regionRows(REGIONS, english)}
+        visitsHref={(code) => (code === 'PT-11' ? null : `/p1/visits?region=${code}`)}
+        i18n={english}
+      />,
+    );
+
+    const table = within(screen.getByRole('table', { name: 'Regions' }));
+    expect(table.getByRole('link', { name: 'São Paulo: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?region=BR-SP',
+    );
+    expect(table.getAllByRole('link')).toHaveLength(1);
+  });
+
+  it('adds the conversion rate of each region when asked and a conversion event is set', () => {
+    render(
+      <RegionsTable
+        rows={regionRows(
+          [{ value: 'BR-SP', name: 'São Paulo', visits: 50, conversions: 4, convertingVisits: 2 }],
+          english,
+        )}
+        withConversionRate
+        i18n={english}
+      />,
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
+    expect(screen.getAllByRole('row')[1]).toHaveTextContent('SPSão Paulo50100.0%4.0%');
   });
 });

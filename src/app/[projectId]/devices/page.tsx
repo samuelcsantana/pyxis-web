@@ -1,5 +1,6 @@
 import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
+import { RegionsTable } from '@/components/devices/regions-table';
 import { ShareDonut } from '@/components/devices/share-donut';
 import { MainContent } from '@/components/shell/main-content';
 import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
@@ -16,6 +17,7 @@ import {
   deviceTypeLabel,
   hasVisits,
   operatingSystemLabel,
+  regionRows,
   shareRows,
 } from '@/domain/devices';
 import { devicesTableLabel } from '@/domain/devices-export';
@@ -43,6 +45,7 @@ interface DevicesReportViewProps {
   readonly deviceVisitsHref: (deviceType: string) => string | null;
   readonly i18n: I18n;
   readonly countryVisitsHref: (country: string) => string | null;
+  readonly regionVisitsHref: (region: string) => string | null;
 }
 
 function DevicesReportView({
@@ -52,6 +55,7 @@ function DevicesReportView({
   deviceVisitsHref,
   i18n,
   countryVisitsHref,
+  regionVisitsHref,
 }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes, i18n);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
@@ -81,7 +85,7 @@ function DevicesReportView({
         />
       </div>
       {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
-      <div className={`grid gap-3.5 sm:gap-4 ${showsConversions ? 'xl:grid-cols-2' : ''}`}>
+      <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2 xl:[&>:last-child:nth-child(odd)]:col-span-full">
         {showsConversions ? (
           <DeviceConversionList
             conversions={conversions}
@@ -93,6 +97,12 @@ function DevicesReportView({
           rows={shareRows(report.countries, countryLabel, i18n)}
           withConversionRate={conversionEvent !== null}
           visitsHref={countryVisitsHref}
+          i18n={i18n}
+        />
+        <RegionsTable
+          rows={regionRows(report.regions, i18n)}
+          withConversionRate={conversionEvent !== null}
+          visitsHref={regionVisitsHref}
           i18n={i18n}
         />
       </div>
@@ -122,6 +132,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
     const country = countryFilterOf(value);
     return country === null ? null : linkWith(visitsHref, { country });
   };
+  const regionVisitsHref = (region: string) => linkWith(visitsHref, { region });
   return (
     <>
       <Topbar
@@ -141,6 +152,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
             deviceVisitsHref={deviceVisitsHref}
             i18n={i18n}
             countryVisitsHref={countryVisitsHref}
+            regionVisitsHref={regionVisitsHref}
           />
         ) : (
           <EmptyPeriod

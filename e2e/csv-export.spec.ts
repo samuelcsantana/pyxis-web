@@ -110,12 +110,22 @@ test('downloads every Devices breakdown in one file', async ({ page }) => {
   await page.goto(`/${STORE_ID}/devices?range=30d`);
   await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
 
-  const csv = await downloadCsv(page, 'Device types, browsers, systems and countries as CSV');
+  const csv = await downloadCsv(
+    page,
+    'Device types, browsers, systems, countries and regions as CSV',
+  );
 
   expect(csv.fileName).toMatch(new RegExp(`^pyxis-devices-${ISO_DAY}-${ISO_DAY}\\.csv$`));
-  expect(csv.lines[0]).toMatch(/^dimension,value,visits/);
+  expect(csv.lines[0]).toMatch(/^dimension,value,name,visits/);
   const dimensions = new Set(csv.lines.slice(1).map((line) => line.split(',')[0]));
-  expect([...dimensions]).toEqual(['device_type', 'browser', 'operating_system', 'country']);
+  expect([...dimensions]).toEqual([
+    'device_type',
+    'browser',
+    'operating_system',
+    'country',
+    'region',
+  ]);
+  expect(csv.lines.some((line) => /^region,BR-SP,São Paulo,\d+,\d+,\d+$/.test(line))).toBe(true);
 });
 
 test('downloads the visits that match the Visits filters', async ({ page }) => {
