@@ -49,9 +49,9 @@ describe('createFormats', () => {
   });
 
   it('names countries in the language, keeping a code it does not know', () => {
-    expect(english.region('BR')).toBe('Brazil');
-    expect(portuguese.region('US')).toBe('Estados Unidos');
-    expect(english.region('XZ')).toBe('XZ');
+    expect(english.country('BR')).toBe('Brazil');
+    expect(portuguese.country('US')).toBe('Estados Unidos');
+    expect(english.country('XZ')).toBe('XZ');
   });
 
   it('joins a list with commas in English and with the conjunction of another language', () => {

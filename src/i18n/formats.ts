@@ -10,7 +10,7 @@ export interface Formats {
   readonly monthWithYear: (date: Date) => string;
   readonly fullDay: (date: Date) => string;
   readonly dateTime: (style: DateTimeStyle, timeZone: string) => (date: Date) => string;
-  readonly region: (code: string) => string;
+  readonly country: (code: string) => string;
   readonly list: (items: readonly string[]) => string;
   readonly weekday: (isoWeekday: number, width: WeekdayWidth) => string;
 }
@@ -59,7 +59,7 @@ function buildFormats(tag: string): Formats {
     year: 'numeric',
     timeZone: 'UTC',
   });
-  const regions = new Intl.DisplayNames([tag], { type: 'region', fallback: 'code' });
+  const countries = new Intl.DisplayNames([tag], { type: 'region', fallback: 'code' });
   const lists = new Intl.ListFormat(tag, { type: 'unit', style: 'long' });
   const weekdays: Readonly<Record<WeekdayWidth, Intl.DateTimeFormat>> = {
     narrow: new Intl.DateTimeFormat(tag, { weekday: 'narrow', timeZone: 'UTC' }),
@@ -78,7 +78,7 @@ function buildFormats(tag: string): Formats {
       const format = new Intl.DateTimeFormat(tag, { ...DATE_TIME_STYLES[style], timeZone });
       return (date) => format.format(date);
     },
-    region: (code) => String(regions.of(code)),
+    country: (code) => String(countries.of(code)),
     list: (items) => lists.format(items),
     weekday: (isoWeekday, width) =>
       weekdays[width].format(new Date(A_MONDAY_IN_UTC + (isoWeekday - 1) * MILLISECONDS_PER_DAY)),

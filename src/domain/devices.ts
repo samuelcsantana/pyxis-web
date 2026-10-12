@@ -8,7 +8,7 @@ export type ValueShare = DevicesReport['browsers'][number];
 
 export const OTHER_VALUE = 'other';
 const OTHER_COUNTRIES_CODE = '··';
-const REGION_CODE = /^[A-Z]{2}$/;
+const COUNTRY_CODE = /^[A-Z]{2}$/;
 
 const DEVICE_TYPES = ['mobile', 'desktop', 'tablet'] as const;
 type DeviceType = (typeof DEVICE_TYPES)[number];
@@ -56,7 +56,7 @@ export function countryLabel(value: string, i18n: I18n): string {
   if (value === OTHER_VALUE) {
     return i18n.t('devices.otherCountries');
   }
-  return REGION_CODE.test(value) ? i18n.format.region(value) : value;
+  return COUNTRY_CODE.test(value) ? i18n.format.country(value) : value;
 }
 
 export function countryCode(value: string): string {
