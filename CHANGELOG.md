@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.15.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.14.0...v0.15.0) (2026-10-12)
+
+
+### Features
+
+* **devices:** list the regions of the visits on the Devices screen ([7b64cf4](https://github.com/samuelcsantana/pyxis-web/commit/7b64cf4d68ccbd0f48ddeeed006205d537c5dbfd))
+* **devices:** read the visitor's region from the API ([c6c01ea](https://github.com/samuelcsantana/pyxis-web/commit/c6c01ea400ab358e87c873aff5af262770695d56))
+* **timeline:** name the region of each visit in its card ([acebe1c](https://github.com/samuelcsantana/pyxis-web/commit/acebe1c3a52bc732c2999e3e1055f010b57aa956))
+* **visits:** show the region of each visit and filter the list by it ([8d3f3ef](https://github.com/samuelcsantana/pyxis-web/commit/8d3f3efb6e8e8ef3652fec70a3a5d19ac4fef56d))
+
+
+### Refactoring
+
+* **i18n:** name the country formatter after what it formats ([73f9738](https://github.com/samuelcsantana/pyxis-web/commit/73f9738953d06009dbd60d3913da33632dc7f14a))
+
+
+### Documentation
+
+* **readme:** describe the regions on Devices, Visits and their files ([b4bfd6f](https://github.com/samuelcsantana/pyxis-web/commit/b4bfd6f86fe29a699326b2bc3fcbb111af9e7926))
+
 ## [0.14.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.13.0...v0.14.0) (2026-10-11)
 
 
