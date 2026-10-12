@@ -66,7 +66,9 @@ function VisitTableRow({
           <span className={FAILED_CHIP}>{row.failedRequests}</span>
         )}
       </td>
-      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDER}`}>{row.device}</td>
+      <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDER} wrap-anywhere hyphens-auto`}>
+        {row.device}
+      </td>
       <td className={`${BODY_CELL} ${TIGHT_AT_LG} ${WIDER}`}>
         {row.channel ?? <span className="text-muted">{NO_VALUE}</span>}
       </td>

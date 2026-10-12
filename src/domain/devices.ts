@@ -67,6 +67,18 @@ export function countryCode(value: string): string {
   return value === OTHER_VALUE ? OTHER_COUNTRIES_CODE : value;
 }
 
+export function placeLabel(
+  country: string | null,
+  regionName: string | null,
+  i18n: I18n,
+): string | null {
+  if (country === null) {
+    return null;
+  }
+  const countryName = countryLabel(country, i18n);
+  return regionName === null ? countryName : `${regionName}, ${countryName}`;
+}
+
 export function isRegionCode(value: string): boolean {
   return REGION_CODE.test(value);
 }

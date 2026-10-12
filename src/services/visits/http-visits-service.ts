@@ -11,6 +11,7 @@ const SINGLE_FILTERS = [
   'device',
   'identity',
   'country',
+  'region',
   'source',
   'campaign',
   'route',

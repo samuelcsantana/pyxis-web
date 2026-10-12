@@ -10,11 +10,13 @@ import {
   hasVisits,
   isRegionCode,
   operatingSystemLabel,
+  placeLabel,
   regionRows,
   shareRows,
 } from './devices';
 import { devicesResponseSchema } from './devices.schema';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 
 const WIRE: DevicesWire = {
   device_types: [
@@ -85,6 +87,13 @@ describe('labels', () => {
   it('keep a value that is not a country code as it came', () => {
     expect(countryLabel('Brazil', english)).toBe('Brazil');
     expect(countryLabel('XX', english)).toBe('XX');
+  });
+
+  it('place a visit by its region and country, or by its country alone', () => {
+    expect(placeLabel('BR', 'São Paulo', english)).toBe('São Paulo, Brazil');
+    expect(placeLabel('BR', 'São Paulo', portuguese)).toBe('São Paulo, Brasil');
+    expect(placeLabel('PT', null, english)).toBe('Portugal');
+    expect(placeLabel(null, null, english)).toBeNull();
   });
 
   it('tell a region code, the country code then the region, from anything else', () => {

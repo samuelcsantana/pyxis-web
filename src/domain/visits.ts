@@ -1,6 +1,12 @@
 import type { I18n } from '@/i18n/i18n';
 import { type Channel, CHANNELS, channelLabel } from './acquisition';
-import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
+import {
+  browserLabel,
+  deviceTypeLabel,
+  isRegionCode,
+  operatingSystemLabel,
+  placeLabel,
+} from './devices';
 import { stepProblem } from './funnel';
 import { eventLabel, formatCount, NO_VALUE } from './metrics';
 import { formatVisitDuration, shortId } from './timeline';
@@ -23,6 +29,7 @@ export type VisitIdentity = (typeof VISIT_IDENTITIES)[number];
 export const REQUEST_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as const;
 export const MAX_SOURCE_LENGTH = 128;
 export const MAX_CAMPAIGN_LENGTH = 64;
+export const MAX_REGION_LENGTH = 6;
 export const MAX_ROUTE_LENGTH = 100;
 const COUNTRY_CODE_PATTERN = /^[A-Z]{2}$/;
 const ROUTE_SEPARATOR = ' ';
@@ -41,6 +48,7 @@ export interface VisitsSearch {
   readonly device?: string | string[];
   readonly identity?: string | string[];
   readonly country?: string | string[];
+  readonly region?: string | string[];
   readonly source?: string | string[];
   readonly campaign?: string | string[];
   readonly route?: string | string[];
@@ -55,6 +63,7 @@ export interface VisitFilters {
   readonly device: VisitDeviceType | null;
   readonly identity: VisitIdentity | null;
   readonly country: string | null;
+  readonly region: string | null;
   readonly source: string | null;
   readonly campaign: string | null;
   readonly route: string | null;
@@ -69,6 +78,7 @@ export const NO_VISIT_FILTERS: VisitFilters = {
   device: null,
   identity: null,
   country: null,
+  region: null,
   source: null,
   campaign: null,
   route: null,
@@ -140,6 +150,11 @@ function attributionFilters(search: VisitsSearch, i18n: I18n) {
       (text) => COUNTRY_CODE_PATTERN.test(text),
       i18n.t('visits.problems.country'),
     ),
+    region: textFilter(
+      single(search.region).toUpperCase(),
+      isRegionCode,
+      i18n.t('visits.problems.region'),
+    ),
     source: textFilter(
       single(search.source),
       (text) => text.length <= MAX_SOURCE_LENGTH,
@@ -165,7 +180,7 @@ export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterRea
   const event = typedEvent === '' || eventProblem !== null ? null : typedEvent;
   const typedProperty = single(search.property);
   const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event, i18n);
-  const { country, source, campaign, route } = attributionFilters(search, i18n);
+  const { country, region, source, campaign, route } = attributionFilters(search, i18n);
   return {
     filters: {
       paths: typedPaths.filter((_path, index) => pathProblems[index] === null),
@@ -175,6 +190,7 @@ export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterRea
       device: oneOf(VISIT_DEVICE_TYPES, single(search.device)),
       identity: oneOf(VISIT_IDENTITIES, single(search.identity)),
       country: country.value,
+      region: region.value,
       source: source.value,
       campaign: campaign.value,
       route: route.value,
@@ -187,6 +203,7 @@ export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterRea
           eventProblem,
           propertyIssue,
           country.problem,
+          region.problem,
           source.problem,
           campaign.problem,
           route.problem,
@@ -213,6 +230,7 @@ export function visitFilterParameters(filters: VisitFilters): Readonly<Record<st
     ...optional('device', filters.device),
     ...optional('identity', filters.identity),
     ...optional('country', filters.country),
+    ...optional('region', filters.region),
     ...optional('source', filters.source),
     ...optional('campaign', filters.campaign),
     ...optional('route', filters.route),
@@ -292,11 +310,12 @@ function failedRequestsLabel(count: number, i18n: I18n): string {
 }
 
 function deviceLabel(visit: VisitSummary, i18n: I18n): string {
+  const place = placeLabel(visit.country, visit.regionName, i18n);
   return [
     deviceTypeLabel(visit.deviceType, i18n),
     browserLabel(visit.browser, i18n),
     operatingSystemLabel(visit.os, i18n),
-    ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
+    ...(place === null ? [] : [place]),
   ].join(' · ');
 }
 

@@ -94,6 +94,13 @@ test('opens the visits of a source, a country and a failing route', async ({ pag
   await expect(page).toHaveURL(/\/visits\?range=30d&country=PT$/);
   await expect(visitRows(page).first()).toBeVisible();
 
+  await page.goto(`/${STORE_ID}/devices?range=30d`);
+  await page.getByRole('link', { name: 'São Paulo: see its visits' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&region=BR-SP$/);
+  await expect(filters(page).getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
+  await expect(visitRows(page).first()).toContainText('São Paulo');
+
   await page.goto(`/${STORE_ID}/requests?range=30d`);
   await page.getByRole('button', { name: 'POST /orders, show details' }).click();
   await page.getByRole('link', { name: 'See every visit with a failed POST /orders' }).click();

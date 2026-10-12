@@ -93,6 +93,7 @@ describe('visitFiltersOf', () => {
         device: 'mobile',
         identity: 'anonymous',
         country: ' br ',
+        region: ' br-sp ',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
@@ -110,6 +111,7 @@ describe('visitFiltersOf', () => {
         device: 'mobile',
         identity: 'anonymous',
         country: 'BR',
+        region: 'BR-SP',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
@@ -190,6 +192,7 @@ describe('visitFiltersOf', () => {
     const reading = visitFiltersOf(
       {
         country: 'Brazil',
+        region: 'São Paulo',
         source: 'x'.repeat(129),
         campaign: 'y'.repeat(65),
         route: 'FETCH /orders',
@@ -201,6 +204,7 @@ describe('visitFiltersOf', () => {
     expect(reading.filters).toEqual(NO_VISIT_FILTERS);
     expect(reading.problems).toEqual([
       'A country is its two-letter code, as BR.',
+      'A region is its country and region code, as BR-SP.',
       'A source has at most 128 characters.',
       'A campaign has at most 64 characters.',
       'A request is a method and a route, as POST /orders/:id.',
@@ -259,6 +263,7 @@ describe('visitFilterParameters', () => {
         device: 'mobile',
         identity: 'identified',
         country: 'BR',
+        region: 'BR-MG',
         source: '(direct)',
         campaign: 'spring_sale',
         route: 'GET /plans',
@@ -273,6 +278,7 @@ describe('visitFilterParameters', () => {
       device: 'mobile',
       identity: 'identified',
       country: 'BR',
+      region: 'BR-MG',
       source: '(direct)',
       campaign: 'spring_sale',
       route: 'GET /plans',
@@ -346,7 +352,7 @@ describe('visitRows', () => {
       highlights: ['Calculator result shown', 'CTA clicked'],
       failedRequests: 1,
       failedRequestsLabel: '1 failed request',
-      device: 'Mobile · Safari · iOS · Brazil',
+      device: 'Mobile · Safari · iOS · São Paulo, Brazil',
       channel: 'Paid',
       channelNote: 'Channel: Paid',
       account: {

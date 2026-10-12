@@ -21,6 +21,20 @@ test('lists the applied filters above the visits, each removable on its own', as
   await expect(applied(page).getByRole('listitem')).toHaveText(['Had event: signup_completed']);
 });
 
+test('names a country and keeps the code of a region in their chips', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/visits?range=30d&country=BR&region=BR-SP`);
+
+  await expect(applied(page).getByRole('listitem')).toHaveText([
+    'Country: Brazil',
+    'Region: BR-SP',
+  ]);
+
+  await applied(page).getByRole('link', { name: 'Remove Region: BR-SP' }).click();
+
+  await expect(page).not.toHaveURL(/region=/);
+  await expect(applied(page).getByRole('listitem')).toHaveText(['Country: Brazil']);
+});
+
 test('clears every applied filter at once, keeping the period', async ({ page }) => {
   await page.goto(`/${STORE_ID}/visits?range=7d&channel=paid&failed=true`);
   await expect(applied(page).getByRole('listitem')).toHaveText([
@@ -60,7 +74,7 @@ test('says when the form holds changes not applied yet, and undoes them', async 
 test('stops flagging a field typed back to the applied value', async ({ page }) => {
   await page.goto(`/${STORE_ID}/visits?range=30d&country=BR`);
   const status = page.getByRole('search').getByRole('status');
-  const country = page.getByRole('textbox', { name: 'Country' });
+  const country = page.getByRole('textbox', { name: /^Country/ });
 
   await country.fill('US');
   await expect(status).toContainText('Changes not applied yet');
