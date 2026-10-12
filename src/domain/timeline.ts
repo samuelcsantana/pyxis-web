@@ -1,6 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import { channelLabel } from './acquisition';
-import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
+import { browserLabel, deviceTypeLabel, operatingSystemLabel, placeLabel } from './devices';
 import { eventLabel } from './metrics';
 import { statusLabel, type StatusTone, statusTone } from './requests';
 import type { TimelineReport, TimelineWire } from './timeline.schema';
@@ -228,30 +228,33 @@ export function visitViews(
 ): readonly VisitView[] {
   const time = i18n.format.dateTime('clock', timeZone);
   const started = i18n.format.dateTime('visitStart', timeZone);
-  return visits.map((visit) => ({
-    key: visit.sessionId,
-    personId: visit.userId,
-    heading: i18n.t('timeline.visitHeading', {
-      visit: shortId(visit.sessionId),
-      started: started(new Date(visit.startedAt)),
-    }),
-    meta: [
-      deviceTypeLabel(visit.deviceType, i18n),
-      browserLabel(visit.browser, i18n),
-      operatingSystemLabel(visit.os, i18n),
-      ...(visit.country === null ? [] : [countryLabel(visit.country, i18n)]),
-      ...(visit.channel === null ? [] : [channelLabel(visit.channel, i18n)]),
-      formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
-    ].join(' · '),
-    items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
-      key: event.id,
-      time: time(new Date(event.occurredAt)),
-      kind: itemKind(event),
-      title: itemTitle(event, i18n),
-      detail: itemDetail(event),
-      tag: itemTag(event, i18n),
-    })),
-  }));
+  return visits.map((visit) => {
+    const place = placeLabel(visit.country, visit.regionName, i18n);
+    return {
+      key: visit.sessionId,
+      personId: visit.userId,
+      heading: i18n.t('timeline.visitHeading', {
+        visit: shortId(visit.sessionId),
+        started: started(new Date(visit.startedAt)),
+      }),
+      meta: [
+        deviceTypeLabel(visit.deviceType, i18n),
+        browserLabel(visit.browser, i18n),
+        operatingSystemLabel(visit.os, i18n),
+        ...(place === null ? [] : [place]),
+        ...(visit.channel === null ? [] : [channelLabel(visit.channel, i18n)]),
+        formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
+      ].join(' · '),
+      items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
+        key: event.id,
+        time: time(new Date(event.occurredAt)),
+        kind: itemKind(event),
+        title: itemTitle(event, i18n),
+        detail: itemDetail(event),
+        tag: itemTag(event, i18n),
+      })),
+    };
+  });
 }
 
 export interface TimelineTotals {
