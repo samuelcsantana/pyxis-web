@@ -412,6 +412,8 @@ export const en = {
     },
     other: 'Other',
     otherCountries: 'Other countries',
+    otherRegions: 'Other regions',
+    unknownRegion: 'Unknown',
     convertedOfVisits: '{converted} of {visits}',
     subtitle: 'What people use to reach {project}',
     panels: {
@@ -421,17 +423,19 @@ export const en = {
     },
     columns: {
       country: 'Country',
+      region: 'Region',
       visits: 'Visits',
       share: 'Share',
       conversionRate: 'Conversion rate',
     },
     countries: 'Countries',
+    regions: 'Regions',
     conversionByDevice: {
       title: 'Conversion by device',
       description: 'Share of visits that sent <code/>',
     },
     footnote:
-      "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country comes from the edge network, never from a stored IP address.",
+      "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country and the region come from the edge network, never from a stored IP address, and the city is never recorded. Older visits have only the country.",
   },
   requests: {
     noResponse: 'No response',
@@ -954,7 +958,7 @@ export const en = {
       campaigns: 'Campaigns',
       channels: 'Visits by channel',
     },
-    devices: 'Device types, browsers, systems and countries',
+    devices: 'Device types, browsers, systems, countries and regions',
     features: {
       events: 'Events',
       screens: 'Screens',

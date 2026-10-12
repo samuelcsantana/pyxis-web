@@ -8,7 +8,9 @@ import {
   deviceTypeLabel,
   type DevicesWire,
   hasVisits,
+  isRegionCode,
   operatingSystemLabel,
+  regionRows,
   shareRows,
 } from './devices';
 import { devicesResponseSchema } from './devices.schema';
@@ -80,9 +82,108 @@ describe('labels', () => {
     expect(countryCode('other')).toBe('··');
   });
 
-  it('keep a value that is not a region code as it came', () => {
+  it('keep a value that is not a country code as it came', () => {
     expect(countryLabel('Brazil', english)).toBe('Brazil');
     expect(countryLabel('XX', english)).toBe('XX');
+  });
+
+  it('tell a region code, the country code then the region, from anything else', () => {
+    expect(isRegionCode('BR-SP')).toBe(true);
+    expect(isRegionCode('MX-CMX')).toBe(true);
+    expect(isRegionCode('PT-11')).toBe(true);
+    expect(isRegionCode('SP')).toBe(false);
+    expect(isRegionCode('br-sp')).toBe(false);
+    expect(isRegionCode('BR-ABCD')).toBe(false);
+  });
+});
+
+describe('regionRows', () => {
+  const regions = devicesResponseSchema.parse({
+    ...WIRE,
+    regions: [
+      { value: 'BR-SP', name: 'São Paulo', visits: 60, conversions: 6, converting_visits: 3 },
+      { value: 'PT-11', name: null, visits: 20, conversions: 0, converting_visits: 0 },
+      { value: 'other', name: null, visits: 15, conversions: 1, converting_visits: 1 },
+      { value: null, name: null, visits: 5, conversions: 0, converting_visits: 0 },
+    ],
+  }).regions;
+
+  it('show the region part of the code, the name, the share and what each row filters by', () => {
+    expect(regionRows(regions, english)).toEqual([
+      {
+        key: 'BR-SP',
+        code: 'SP',
+        label: 'São Paulo',
+        country: 'Brazil',
+        filterValue: 'BR-SP',
+        visits: '60',
+        share: '60.0%',
+        fraction: 0.6,
+        conversionRate: '5.0%',
+      },
+      {
+        key: 'PT-11',
+        code: '11',
+        label: 'PT-11',
+        country: 'Portugal',
+        filterValue: 'PT-11',
+        visits: '20',
+        share: '20.0%',
+        fraction: 0.2,
+        conversionRate: '0.0%',
+      },
+      {
+        key: 'other',
+        code: '··',
+        label: 'Other regions',
+        country: null,
+        filterValue: null,
+        visits: '15',
+        share: '15.0%',
+        fraction: 0.15,
+        conversionRate: '6.7%',
+      },
+      {
+        key: 'unknown',
+        code: '—',
+        label: 'Unknown',
+        country: null,
+        filterValue: null,
+        visits: '5',
+        share: '5.0%',
+        fraction: 0.05,
+        conversionRate: '0.0%',
+      },
+    ]);
+  });
+
+  it('show dashes, not NaN, when nobody visited', () => {
+    const [row] = regionRows(
+      [{ value: 'BR-SP', name: 'São Paulo', visits: 0, conversions: null, convertingVisits: null }],
+      english,
+    );
+
+    expect(row).toMatchObject({ share: '—', fraction: 0 });
+  });
+
+  it('leave the country out when every region is in the same one', () => {
+    const rows = regionRows(
+      [
+        { value: 'BR-SP', name: 'São Paulo', visits: 3, conversions: null, convertingVisits: null },
+        {
+          value: 'BR-RJ',
+          name: 'Rio de Janeiro',
+          visits: 1,
+          conversions: null,
+          convertingVisits: null,
+        },
+      ],
+      english,
+    );
+
+    expect(rows.map((row) => row.country)).toEqual([null, null]);
+    expect(rows.map((row) => row.conversionRate)).toEqual([null, null]);
+    expect(countsConversions(rows)).toBe(false);
   });
 });
 

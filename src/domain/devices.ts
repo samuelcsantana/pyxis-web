@@ -1,14 +1,18 @@
 import type { I18n } from '@/i18n/i18n';
-import { barWidth, formatCount, formatPercent, rate } from './metrics';
+import { barWidth, formatCount, formatPercent, NO_VALUE, rate } from './metrics';
 import type { DevicesReport, DevicesWire } from './devices.schema';
 
 export type { DevicesReport, DevicesWire };
 
 export type ValueShare = DevicesReport['browsers'][number];
+export type RegionShare = DevicesReport['regions'][number];
 
 export const OTHER_VALUE = 'other';
 const OTHER_COUNTRIES_CODE = '··';
+const OTHER_REGIONS_CODE = '··';
+const UNKNOWN_REGION_KEY = 'unknown';
 const COUNTRY_CODE = /^[A-Z]{2}$/;
+const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
 
 const DEVICE_TYPES = ['mobile', 'desktop', 'tablet'] as const;
 type DeviceType = (typeof DEVICE_TYPES)[number];
@@ -63,6 +67,15 @@ export function countryCode(value: string): string {
   return value === OTHER_VALUE ? OTHER_COUNTRIES_CODE : value;
 }
 
+export function isRegionCode(value: string): boolean {
+  return REGION_CODE.test(value);
+}
+
+function regionParts(value: string | null): { country: string; subdivision: string } | null {
+  const match = value === null ? null : REGION_CODE.exec(value);
+  return match === null ? null : { country: String(match[1]), subdivision: String(match[2]) };
+}
+
 export function hasVisits(report: DevicesReport): boolean {
   return report.deviceTypes.some((share) => share.visits > 0);
 }
@@ -76,11 +89,13 @@ export interface ShareRow {
   readonly conversionRate: string | null;
 }
 
-function convertedVisits(share: ValueShare): number | null {
+type ConversionCounts = Pick<ValueShare, 'visits' | 'conversions' | 'convertingVisits'>;
+
+function convertedVisits(share: ConversionCounts): number | null {
   return share.conversions === null ? null : (share.convertingVisits ?? share.conversions);
 }
 
-function conversionRateOf(share: ValueShare, i18n: I18n): string | null {
+function conversionRateOf(share: ConversionCounts, i18n: I18n): string | null {
   const converted = convertedVisits(share);
   return converted === null ? null : formatPercent(rate(converted, share.visits), i18n);
 }
@@ -104,7 +119,57 @@ export function shareRows(
   });
 }
 
-export function countsConversions(rows: readonly ShareRow[]): boolean {
+export interface RegionRow {
+  readonly key: string;
+  readonly code: string;
+  readonly label: string;
+  readonly country: string | null;
+  readonly filterValue: string | null;
+  readonly visits: string;
+  readonly share: string;
+  readonly fraction: number;
+  readonly conversionRate: string | null;
+}
+
+function regionCode(share: RegionShare): string {
+  if (share.value === null) {
+    return NO_VALUE;
+  }
+  return regionParts(share.value)?.subdivision ?? OTHER_REGIONS_CODE;
+}
+
+function regionName(share: RegionShare, i18n: I18n): string {
+  if (share.value === null) {
+    return i18n.t('devices.unknownRegion');
+  }
+  if (share.value === OTHER_VALUE) {
+    return i18n.t('devices.otherRegions');
+  }
+  return share.name ?? share.value;
+}
+
+export function regionRows(regions: readonly RegionShare[], i18n: I18n): readonly RegionRow[] {
+  const total = regions.reduce((sum, share) => sum + share.visits, 0);
+  const countries = new Set(regions.flatMap((share) => regionParts(share.value)?.country ?? []));
+  const namesCountry = countries.size > 1;
+  return regions.map((share) => {
+    const parts = regionParts(share.value);
+    const fraction = rate(share.visits, total);
+    return {
+      key: share.value ?? UNKNOWN_REGION_KEY,
+      code: regionCode(share),
+      label: regionName(share, i18n),
+      country: namesCountry && parts !== null ? countryLabel(parts.country, i18n) : null,
+      filterValue: parts === null ? null : share.value,
+      visits: formatCount(share.visits, i18n),
+      share: formatPercent(fraction, i18n),
+      fraction: fraction ?? 0,
+      conversionRate: conversionRateOf(share, i18n),
+    };
+  });
+}
+
+export function countsConversions(rows: readonly { conversionRate: string | null }[]): boolean {
   return rows.some((row) => row.conversionRate !== null);
 }
 

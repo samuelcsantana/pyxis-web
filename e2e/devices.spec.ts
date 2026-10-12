@@ -33,7 +33,7 @@ test('opens from the sidebar and keeps the period', async ({ page, isMobile }) =
 test('lists every value of each breakdown with shares that add up', async ({ page }) => {
   await page.goto(`/${STORE_ID}/devices`);
 
-  for (const name of ['Device type', 'Browser', 'Operating system', 'Countries']) {
+  for (const name of ['Device type', 'Browser', 'Operating system', 'Countries', 'Regions']) {
     const cells = page.getByRole('table', { name }).locator('tbody tr td:nth-of-type(2)');
     await expect(cells.first()).toBeVisible();
     const shares = await cells.allTextContents();
@@ -42,18 +42,22 @@ test('lists every value of each breakdown with shares that add up', async ({ pag
   }
   await expect(page.getByRole('table', { name: 'Countries' })).toContainText('Brazil');
   await expect(page.getByRole('table', { name: 'Countries' })).toContainText('Other countries');
+  const regions = page.getByRole('table', { name: 'Regions' });
+  for (const text of ['São Paulo', 'Other regions', 'Unknown']) {
+    await expect(regions).toContainText(text);
+  }
 });
 
 test('shows conversions only when the project has a conversion event', async ({ page }) => {
   const conversionRate = page.getByRole('columnheader', { name: 'Conversion rate' });
   await page.goto(`/${STORE_ID}/devices`);
   await expect(page.getByRole('heading', { name: 'Conversion by device' })).toBeVisible();
-  for (const name of ['Browser', 'Operating system', 'Countries']) {
+  for (const name of ['Browser', 'Operating system', 'Countries', 'Regions']) {
     await expect(
       page.getByRole('table', { name }).getByRole('columnheader', { name: 'Conversion rate' }),
     ).toBeVisible();
   }
-  await expect(conversionRate).toHaveCount(3);
+  await expect(conversionRate).toHaveCount(4);
 
   await page.goto(`/${DOCS_ID}/devices`);
   await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();

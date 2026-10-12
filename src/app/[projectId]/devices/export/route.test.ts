@@ -70,13 +70,14 @@ describe('GET /[projectId]/devices/export', () => {
       'attachment; filename="pyxis-devices-2026-09-07-2026-10-06.csv"',
     );
     const rows = (await response.text()).trimEnd().split('\r\n');
-    expect(rows[0]).toBe('dimension,value,visits,conversion_events,converting_visits');
+    expect(rows[0]).toBe('dimension,value,name,visits,conversion_events,converting_visits');
     expect(rows).toHaveLength(
       1 +
         report.deviceTypes.length +
         report.browsers.length +
         report.operatingSystems.length +
-        report.countries.length,
+        report.countries.length +
+        report.regions.length,
     );
   });
 });

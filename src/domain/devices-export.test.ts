@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DevicesReport, ValueShare } from './devices';
+import type { DevicesReport, RegionShare, ValueShare } from './devices';
 import { devicesCsvTable } from './devices-export';
 
 function share(value: string, visits: number, conversions: number | null): ValueShare {
@@ -11,40 +11,59 @@ function share(value: string, visits: number, conversions: number | null): Value
   };
 }
 
+function region(
+  value: string | null,
+  name: string | null,
+  visits: number,
+  conversions: number | null,
+): RegionShare {
+  return { ...share('', visits, conversions), value, name };
+}
+
 const REPORT: DevicesReport = {
   deviceTypes: [share('mobile', 30, 4)],
   browsers: [share('chrome', 25, 3)],
   operatingSystems: [share('android', 20, 2)],
   countries: [share('BR', 28, 4), share('other', 2, 1)],
-  regions: [],
+  regions: [
+    region('BR-SP', 'São Paulo', 20, 3),
+    region('other', null, 8, 1),
+    region(null, null, 2, 1),
+  ],
 };
 
 describe('devicesCsvTable', () => {
-  it('writes every breakdown in one table, named in a dimension column', () => {
+  it('writes every breakdown in one table, named in a dimension column, regions with their name', () => {
     expect(devicesCsvTable(REPORT)).toEqual({
-      columns: ['dimension', 'value', 'visits', 'conversion_events', 'converting_visits'],
+      columns: ['dimension', 'value', 'name', 'visits', 'conversion_events', 'converting_visits'],
       rows: [
-        ['device_type', 'mobile', 30, 4, 3],
-        ['browser', 'chrome', 25, 3, 2],
-        ['operating_system', 'android', 20, 2, 1],
-        ['country', 'BR', 28, 4, 3],
-        ['country', 'other', 2, 1, 0],
+        ['device_type', 'mobile', null, 30, 4, 3],
+        ['browser', 'chrome', null, 25, 3, 2],
+        ['operating_system', 'android', null, 20, 2, 1],
+        ['country', 'BR', null, 28, 4, 3],
+        ['country', 'other', null, 2, 1, 0],
+        ['region', 'BR-SP', 'São Paulo', 20, 3, 2],
+        ['region', 'other', null, 8, 1, 0],
+        ['region', null, null, 2, 1, 0],
       ],
     });
   });
 
-  it('leaves the conversion columns out for a project without a conversion event', () => {
+  it('leaves the conversion and name columns out when nothing fills them', () => {
     const table = devicesCsvTable({
       deviceTypes: [share('desktop', 10, null)],
       browsers: [],
       operatingSystems: [],
       countries: [],
-      regions: [],
+      regions: [region(null, null, 10, null)],
     });
 
     expect(table).toEqual({
       columns: ['dimension', 'value', 'visits'],
-      rows: [['device_type', 'desktop', 10]],
+      rows: [
+        ['device_type', 'desktop', 10],
+        ['region', null, 10],
+      ],
     });
   });
 });
