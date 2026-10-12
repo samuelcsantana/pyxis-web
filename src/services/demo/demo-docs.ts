@@ -12,6 +12,8 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     browser: 'firefox',
     os: 'linux',
     country: 'PT',
+    region: 'PT-13',
+    regionName: 'Porto',
     channel: 'organic',
     events: [
       { second: 2, name: 'page_view', path: '/' },
@@ -47,6 +49,8 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'android',
     country: 'BR',
+    region: 'BR-RJ',
+    regionName: 'Rio de Janeiro',
     channel: 'referral',
     events: [
       { second: 3, name: 'page_view', path: '/guides/:slug' },
@@ -81,6 +85,8 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     browser: 'chrome',
     os: 'windows',
     country: 'ES',
+    region: 'ES-CT',
+    regionName: 'Cataluña',
     channel: 'direct',
     events: [
       { second: 1, name: 'page_view', path: '/search' },

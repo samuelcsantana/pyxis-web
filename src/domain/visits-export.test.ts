@@ -15,6 +15,8 @@ const VISIT: VisitSummary = {
   browser: 'safari',
   os: 'ios',
   country: 'BR',
+  region: 'BR-PE',
+  regionName: 'Pernambuco',
   channel: 'social',
   userId: 'user-42',
 };

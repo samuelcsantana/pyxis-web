@@ -34,6 +34,8 @@ export interface DemoVisit {
   readonly browser: string;
   readonly os: string;
   readonly country: string;
+  readonly region: string | null;
+  readonly regionName: string | null;
   readonly channel: Channel;
   readonly userId?: string;
   readonly events: readonly DemoEvent[];

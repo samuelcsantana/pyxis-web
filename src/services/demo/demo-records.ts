@@ -26,6 +26,8 @@ export interface DemoVisitRecord extends DemoAttribution {
   readonly browser: string;
   readonly os: string;
   readonly country: string;
+  readonly region: string | null;
+  readonly regionName: string | null;
   readonly channel: Channel;
   readonly fromAdClick: boolean;
   readonly events: readonly DemoEventRecord[];
@@ -129,6 +131,8 @@ export function showcaseRecord(
     browser: visit.browser,
     os: visit.os,
     country: visit.country,
+    region: visit.region,
+    regionName: visit.regionName,
     channel: visit.channel,
     ...attribution,
     fromAdClick: false,
@@ -165,6 +169,8 @@ export function demoVisitRecordWire(visit: DemoVisitRecord) {
     browser: visit.browser,
     os: visit.os,
     country: visit.country,
+    region: visit.region,
+    region_name: visit.regionName,
     channel: visit.channel,
     user_id: visit.userId,
     events: visit.events.map((event, index) => ({

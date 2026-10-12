@@ -185,7 +185,13 @@ describe('DevicesPage', () => {
 
   it('shows how to install the SDK when nobody visited in the period', async () => {
     state.devices = (): Promise<DevicesReport> =>
-      Promise.resolve({ deviceTypes: [], browsers: [], operatingSystems: [], countries: [] });
+      Promise.resolve({
+        deviceTypes: [],
+        browsers: [],
+        operatingSystems: [],
+        countries: [],
+        regions: [],
+      });
 
     renderWithMessages(await renderDevices());
 
@@ -196,7 +202,13 @@ describe('DevicesPage', () => {
 
   it('calls an empty period quiet once the project has received events', async () => {
     state.devices = (): Promise<DevicesReport> =>
-      Promise.resolve({ deviceTypes: [], browsers: [], operatingSystems: [], countries: [] });
+      Promise.resolve({
+        deviceTypes: [],
+        browsers: [],
+        operatingSystems: [],
+        countries: [],
+        regions: [],
+      });
     state.admin = {
       ...ADMIN,
       projects: [

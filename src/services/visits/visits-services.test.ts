@@ -35,6 +35,8 @@ const RECORD: DemoVisitRecord = {
   browser: 'chrome',
   os: 'windows',
   country: 'BR',
+  region: 'BR-RJ',
+  regionName: 'Rio de Janeiro',
   channel: 'paid',
   source: 'google',
   medium: 'cpc',
@@ -180,6 +182,8 @@ describe('MockVisitsService', () => {
     });
 
     expect(summary).toMatchObject({
+      region: 'BR-RJ',
+      region_name: 'Rio de Janeiro',
       entry_path: '/',
       page_views: 2,
       highlights: ['cta_clicked'],

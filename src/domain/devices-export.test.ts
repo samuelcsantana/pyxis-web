@@ -16,6 +16,7 @@ const REPORT: DevicesReport = {
   browsers: [share('chrome', 25, 3)],
   operatingSystems: [share('android', 20, 2)],
   countries: [share('BR', 28, 4), share('other', 2, 1)],
+  regions: [],
 };
 
 describe('devicesCsvTable', () => {
@@ -38,6 +39,7 @@ describe('devicesCsvTable', () => {
       browsers: [],
       operatingSystems: [],
       countries: [],
+      regions: [],
     });
 
     expect(table).toEqual({

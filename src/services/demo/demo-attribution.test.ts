@@ -11,6 +11,8 @@ const SOCIAL_VISIT = {
   browser: 'chrome',
   os: 'android',
   country: 'BR',
+  region: 'BR-SP',
+  regionName: 'São Paulo',
   channel: 'social',
   events: [{ second: 3, name: 'page_view', path: '/' }],
 } as const;

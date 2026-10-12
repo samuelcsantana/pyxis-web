@@ -28,6 +28,8 @@ function visit(index: number): VisitSummary {
     browser: 'chrome',
     os: 'windows',
     country: 'BR',
+    region: null,
+    regionName: null,
     channel: 'direct',
     userId: null,
   };

@@ -26,6 +26,10 @@ const WIRE: DevicesWire = {
     { value: 'BR', visits: 30, conversions: 2 },
     { value: 'other', visits: 10, conversions: 0 },
   ],
+  regions: [
+    { value: 'BR-SP', name: 'São Paulo', visits: 20, conversions: 2, converting_visits: 1 },
+    { value: 'other', name: null, visits: 10, conversions: 0, converting_visits: 0 },
+  ],
 };
 
 describe('devicesResponseSchema', () => {
@@ -46,6 +50,13 @@ describe('devicesResponseSchema', () => {
       }).browsers[0]?.convertingVisits,
     ).toBe(2);
     expect(report.countries).toHaveLength(2);
+    expect(report.regions[0]).toEqual({
+      value: 'BR-SP',
+      name: 'São Paulo',
+      visits: 20,
+      conversions: 2,
+      convertingVisits: 1,
+    });
     expect(report.browsers[0]?.value).toBe('samsung');
   });
 });

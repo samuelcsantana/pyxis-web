@@ -58,15 +58,30 @@ describe('MockDevicesService', () => {
     expect(totalOf(report.browsers)).toBe(visits);
     expect(totalOf(report.operatingSystems)).toBe(visits);
     expect(totalOf(report.countries)).toBe(visits);
+    expect(totalOf(report.regions)).toBe(visits);
     expect(report.deviceTypes.map((share) => share.value)).toEqual(['mobile', 'desktop', 'tablet']);
     expect(report.countries.at(-1)?.value).toBe('other');
     expect(report.deviceTypes[1]?.conversions).toBeGreaterThan(0);
+  });
+
+  it('ranks the ten regions with most visits, then the other ones, then the unknown', async () => {
+    const { regions } = await new MockDevicesService().devices(DEMO_STORE.id, RANGE);
+    const ranked = regions.slice(0, 10);
+
+    expect(regions.map((share) => share.value).slice(-2)).toEqual(['other', null]);
+    expect(ranked[0]).toMatchObject({ value: 'BR-SP', name: 'São Paulo' });
+    expect(ranked.map((share) => share.visits)).toEqual(
+      ranked.map((share) => share.visits).toSorted((first, second) => second - first),
+    );
+    expect(regions.at(-1)?.name).toBeNull();
+    expect(ranked[0]?.conversions).toBeGreaterThan(0);
   });
 
   it('has no conversions for a project without a conversion event', async () => {
     const report = await new MockDevicesService().devices(DEMO_DOCS.id, RANGE);
 
     expect(report.deviceTypes.every((share) => share.conversions === null)).toBe(true);
+    expect(report.regions.every((share) => share.convertingVisits === null)).toBe(true);
   });
 });
 

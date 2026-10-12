@@ -30,6 +30,7 @@ import {
   weightedPick,
   weightedSample,
 } from './demo-random';
+import { demoPlaceFor } from './demo-regions';
 import { apportion, demoCount, textSalt } from './demo-series';
 import type { DemoRequest } from './demo-visits';
 
@@ -41,6 +42,8 @@ interface VisitProfile {
   readonly browser: string;
   readonly os: string;
   readonly country: string;
+  readonly region: string | null;
+  readonly regionName: string | null;
   readonly channel: Channel;
   readonly source: string;
   readonly medium: string | null;
@@ -228,7 +231,12 @@ interface Profiled {
   readonly conversionWeight: number;
 }
 
-function profilesOf(project: DemoProject, count: number, random: Random): readonly Profiled[] {
+function profilesOf(
+  project: DemoProject,
+  count: number,
+  random: Random,
+  placeRandom: Random,
+): readonly Profiled[] {
   const devices = shuffled(
     spread(count, project.deviceTypes, (share) => share.share),
     random,
@@ -245,12 +253,14 @@ function profilesOf(project: DemoProject, count: number, random: Random): readon
     const channel = itemAt(channels, index);
     const source = sourceFor(project, channel, random);
     const [browser, os] = softwareFor(project, device.value, random);
+    const country = countryFor(itemAt(countries, index), random);
     return {
       profile: {
         deviceType: device.value,
         browser,
         os,
-        country: countryFor(itemAt(countries, index), random),
+        country,
+        ...demoPlaceFor(country, placeRandom),
         channel,
         source: source.source,
         medium: source.medium,
@@ -680,7 +690,7 @@ export function demoGeneratedVisits(
   const random = seededRandom(saltOf(project, 'day', date));
   const pageViews = sum(project.pages.map((page) => pageViewsOn(project, page, date)));
   const count = Math.round(pageViews * project.visitsPerPageView);
-  const profiles = profilesOf(project, count, random);
+  const profiles = profilesOf(project, count, random, seededRandom(saltOf(project, 'place', date)));
   const visits = pagesOfVisits(project, date, count, random).map((pages, index): PlannedVisit => ({
     ...itemAt(profiles, index),
     views: timedViews(pages, random),

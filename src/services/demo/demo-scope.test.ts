@@ -56,6 +56,8 @@ const VISIT: DemoVisitRecord = {
   browser: 'chrome',
   os: 'windows',
   country: 'BR',
+  region: null,
+  regionName: null,
   channel: 'direct',
   source: '(direct)',
   medium: null,
