@@ -98,6 +98,7 @@ describe('HttpVisitsService', () => {
         device: 'mobile',
         identity: 'anonymous',
         country: 'BR',
+        region: 'BR-SP',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders',
@@ -118,6 +119,7 @@ describe('HttpVisitsService', () => {
       device: 'mobile',
       identity: 'anonymous',
       country: 'BR',
+      region: 'BR-SP',
       source: 'google',
       campaign: 'spring_sale',
       route: 'POST /orders',
@@ -264,6 +266,17 @@ describe('MockVisitsService', () => {
       sources.find((source) => source.source === 'google')?.visits,
     );
     expect(totalOf({ source: 'google', campaign: 'spring_sale' })).toBe(springSale?.visits);
+  });
+
+  it('filters by region as Devices counts it, alone or with its country', () => {
+    const { regions } = demoDevicesWire(STORE, RANGE, NOW);
+    const saoPaulo = regions.find((share) => share.value === 'BR-SP');
+
+    expect(saoPaulo?.visits).toBeGreaterThan(0);
+    expect(totalOf({ region: 'BR-SP' })).toBe(saoPaulo?.visits);
+    expect(totalOf({ country: 'BR', region: 'BR-SP' })).toBe(saoPaulo?.visits);
+    expect(totalOf({ country: 'PT', region: 'BR-SP' })).toBe(0);
+    expect(ids({ region: 'BR-SP' })).toContain('3c07a1b2');
   });
 
   it('filters by a request the visit made, or one that failed, on a route or on any', () => {

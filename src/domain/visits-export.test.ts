@@ -36,6 +36,8 @@ describe('visitsCsvTable', () => {
         'browser',
         'os',
         'country',
+        'region',
+        'region_name',
         'channel',
         'user_id',
       ],
@@ -52,6 +54,8 @@ describe('visitsCsvTable', () => {
           'safari',
           'ios',
           'BR',
+          'BR-PE',
+          'Pernambuco',
           'social',
           'user-42',
         ],
@@ -61,7 +65,16 @@ describe('visitsCsvTable', () => {
 
   it('leaves the missing values of an anonymous visit empty', () => {
     const [row] = visitsCsvTable([
-      { ...VISIT, entryPath: null, country: null, channel: null, userId: null, highlights: [] },
+      {
+        ...VISIT,
+        entryPath: null,
+        country: null,
+        region: null,
+        regionName: null,
+        channel: null,
+        userId: null,
+        highlights: [],
+      },
     ]).rows;
 
     expect(row).toEqual([
@@ -75,6 +88,8 @@ describe('visitsCsvTable', () => {
       'mobile',
       'safari',
       'ios',
+      null,
+      null,
       null,
       null,
       null,

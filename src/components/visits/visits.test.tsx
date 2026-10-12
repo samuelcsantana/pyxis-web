@@ -288,6 +288,7 @@ describe('VisitFiltersForm', () => {
           device: 'mobile',
           identity: 'anonymous',
           country: 'BR',
+          region: 'BR-SP',
           source: 'google',
           campaign: 'spring_sale',
           route: 'POST /orders',
@@ -317,6 +318,7 @@ describe('VisitFiltersForm', () => {
     expect(screen.getByRole('combobox', { name: 'Device' })).toHaveValue('mobile');
     expect(screen.getByRole('combobox', { name: 'Account' })).toHaveValue('anonymous');
     expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('BR');
+    expect(screen.getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
     expect(screen.getByRole('textbox', { name: /^Source/ })).toHaveValue('google');
     expect(screen.getByRole('textbox', { name: 'Campaign' })).toHaveValue('spring_sale');
     expect(screen.getByRole('textbox', { name: /^Made request/ })).toHaveValue('POST /orders');
@@ -331,7 +333,7 @@ describe('VisitFiltersForm', () => {
       '/p-store/visits?from=2026-09-01&to=2026-09-30',
     );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Filters · 12 active' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Filters · 13 active' })).toHaveAttribute(
       'aria-expanded',
       'true',
     );
@@ -352,6 +354,7 @@ describe('VisitFiltersForm', () => {
     expect(screen.getByRole('textbox', { name: 'Viewed page' })).toHaveValue('');
     expect(screen.getByRole('combobox', { name: 'Channel' })).toHaveValue('');
     expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: /^Region/ })).toHaveValue('');
     expect(screen.getByRole('checkbox', { name: 'With a failed request' })).not.toBeChecked();
     expect(screen.getByRole('alert')).toHaveTextContent('A property filter needs an event.');
     expect(screen.queryByRole('link', { name: 'Clear filters' })).not.toBeInTheDocument();

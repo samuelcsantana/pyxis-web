@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -8,6 +8,13 @@ function visitRows(page: Page) {
     .getByRole('table', { name: 'Visits' })
     .locator('tbody tr')
     .or(page.getByRole('list', { name: 'Visits' }).locator(':scope > li'));
+}
+
+function innerScroll(table: Locator): Promise<number> {
+  return table.evaluate((element) => {
+    const scroller = element.parentElement;
+    return scroller === null ? -1 : scroller.scrollWidth - scroller.clientWidth;
+  });
 }
 
 async function openFiltersOnAPhone(page: Page, isMobile: boolean) {
@@ -122,6 +129,24 @@ test('filters by where a visit came from and by a failed request', async ({ page
   ).toContainText('A country is its two-letter code, as BR.');
 });
 
+test('filters by the region of a visit, typed in any case', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/visits`);
+  await openFiltersOnAPhone(page, isMobile);
+
+  await page.getByRole('textbox', { name: /^Region/ }).fill('sp');
+  await page.getByRole('button', { name: 'Apply filters' }).click();
+  await expect(
+    page.getByRole('search', { name: 'Filter the visits' }).getByRole('alert'),
+  ).toContainText('A region is its country and region code, as BR-SP.');
+
+  await page.getByRole('textbox', { name: /^Region/ }).fill('br-sp');
+  await page.getByRole('button', { name: 'Apply filters' }).click();
+  await expect(page).toHaveURL(/&region=br-sp&/);
+  await expect(page.getByText(/^\d+ matching visits?$/)).toBeVisible();
+  await expect(page.getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
+  await expect(visitRows(page).first()).toContainText('São Paulo, Brazil');
+});
+
 test('keeps the filters behind a toggle on a phone unless some are in use', async ({
   page,
   isMobile,
@@ -206,12 +231,15 @@ test.describe('at 1024×768', () => {
 
     await expect(account).toBeInViewport();
     await expect(table.getByRole('columnheader', { name: 'Highlights' })).toBeHidden();
-    expect(
-      await table.evaluate((element) => {
-        const scroller = element.parentElement;
-        return scroller === null ? -1 : scroller.scrollWidth - scroller.clientWidth;
-      }),
-    ).toBe(0);
+    expect(await innerScroll(table)).toBe(0);
+  });
+
+  test('fits the table when a place has a long word, as Massachusetts', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/visits?range=30d&region=US-MA`);
+    const table = page.getByRole('table', { name: 'Visits' });
+    await expect(table).toContainText('Massachusetts, United States');
+
+    expect(await innerScroll(table)).toBe(0);
   });
 });
 

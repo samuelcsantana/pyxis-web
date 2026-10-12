@@ -6,6 +6,7 @@ import { type Period, periodQuery } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
 import {
   MAX_CAMPAIGN_LENGTH,
+  MAX_REGION_LENGTH,
   MAX_SOURCE_LENGTH,
   PAGE_FILTER_PARAMETERS,
   VISIT_DEVICE_TYPES,
@@ -173,6 +174,22 @@ export function VisitFiltersForm({
             </span>
           </label>
           <label className={LABEL}>
+            {t('visits.filters.region')}
+            <input
+              name="region"
+              defaultValue={filters.region ?? ''}
+              placeholder={t('visits.filters.placeholders.region')}
+              maxLength={MAX_REGION_LENGTH}
+              aria-describedby="visit-region-hint"
+              autoComplete="off"
+              spellCheck={false}
+              className={`${FIELD_CLASS} font-mono uppercase`}
+            />
+            <span id="visit-region-hint" className={HINT}>
+              {t('visits.filters.regionHint')}
+            </span>
+          </label>
+          <label className={LABEL}>
             {t('visits.filters.source')}
             <input
               name="source"
@@ -215,7 +232,7 @@ export function VisitFiltersForm({
               {t('visits.filters.routeHint')}
             </span>
           </label>
-          <label className="flex min-h-11 items-center gap-2.5 self-start text-caption font-medium sm:mt-6">
+          <label className="flex min-h-11 items-center gap-2.5 self-start text-caption font-medium sm:mt-6 lg:mt-0">
             <input
               type="checkbox"
               name="failed"

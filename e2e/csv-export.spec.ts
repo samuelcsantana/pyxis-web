@@ -5,7 +5,7 @@ const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const ISO_DAY = /\d{4}-\d{2}-\d{2}/.source;
 const BYTE_ORDER_MARK = String.fromCharCode(0xfeff);
 const FAILED_COLUMN = 3;
-const CHANNEL_COLUMN = 11;
+const CHANNEL_COLUMN = 13;
 
 interface DownloadedCsv {
   readonly fileName: string;

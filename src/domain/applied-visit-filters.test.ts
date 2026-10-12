@@ -11,6 +11,7 @@ const EVERY_FILTER: VisitFilters = {
   device: 'mobile',
   identity: 'identified',
   country: 'BR',
+  region: 'BR-SP',
   source: 'google',
   campaign: 'spring_sale',
   route: 'POST /orders',
@@ -34,6 +35,7 @@ describe('appliedVisitFilters', () => {
       { key: 'device', label: 'Device', value: 'Mobile', code: false },
       { key: 'identity', label: 'Account', value: 'Identified', code: false },
       { key: 'country', label: 'Country', value: 'Brazil', code: false },
+      { key: 'region', label: 'Region', value: 'BR-SP', code: true },
       { key: 'source', label: 'Source', value: 'google', code: true },
       { key: 'campaign', label: 'Campaign', value: 'spring_sale', code: true },
       { key: 'route', label: 'Made request', value: 'POST /orders', code: true },
@@ -55,7 +57,16 @@ describe('appliedVisitFilters', () => {
     expect(without.event).not.toHaveProperty('property');
     expect(without.property).toMatchObject({ event: 'signup_completed' });
     expect(without.property).not.toHaveProperty('property');
-    for (const key of ['channel', 'device', 'identity', 'country', 'source', 'campaign', 'route']) {
+    for (const key of [
+      'channel',
+      'device',
+      'identity',
+      'country',
+      'region',
+      'source',
+      'campaign',
+      'route',
+    ]) {
       expect(without[key]).not.toHaveProperty(key);
       expect(Object.keys(without[key] ?? {})).toHaveLength(
         Object.keys(visitFilterParameters(EVERY_FILTER)).length - 1,
@@ -66,19 +77,31 @@ describe('appliedVisitFilters', () => {
 });
 
 describe('changedVisitFilterFields', () => {
-  const applied = visitFilterParameters({ ...NO_VISIT_FILTERS, channel: 'paid', country: 'BR' });
+  const applied = visitFilterParameters({
+    ...NO_VISIT_FILTERS,
+    channel: 'paid',
+    country: 'BR',
+    region: 'BR-SP',
+  });
 
   it('finds no change when the form holds what is applied, spaces and case aside', () => {
-    expect(changedVisitFilterFields(applied, { channel: 'paid', country: ' br ' })).toEqual([]);
+    expect(
+      changedVisitFilterFields(applied, { channel: 'paid', country: ' br ', region: 'br-sp' }),
+    ).toEqual([]);
   });
 
   it('names each field whose value differs from the applied one', () => {
     expect(
-      changedVisitFilterFields(applied, { channel: 'email', country: 'BR', event: 'cta_clicked' }),
-    ).toEqual(['event', 'channel']);
+      changedVisitFilterFields(applied, {
+        channel: 'email',
+        country: 'BR',
+        region: 'BR-RJ',
+        event: 'cta_clicked',
+      }),
+    ).toEqual(['event', 'channel', 'region']);
   });
 
   it('counts a field left empty against an applied value as changed', () => {
-    expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country']);
+    expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country', 'region']);
   });
 });

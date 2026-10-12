@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { regionRows } from '@/domain/devices';
 import { addDays, todayIn } from '@/domain/period';
 import { propertyFilterOf } from '@/domain/visit-property';
 import {
@@ -15,6 +16,7 @@ import { MockFeaturesService } from './features/mock-features-service';
 import { MockOverviewService } from './overview/mock-overview-service';
 import { MockRequestsService } from './requests/mock-requests-service';
 import { MockVisitsService } from './visits/mock-visits-service';
+import { english } from '@/test-utils/english';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const DEFAULT_PERIOD_DAYS = 30;
@@ -131,6 +133,16 @@ describe('the demo visits behind every link into Visits', () => {
           const country = countryFilterOf(share.value);
           if (country !== null) {
             expect(await visitsFound({ country }), country).toBeGreaterThan(0);
+          }
+        }
+      });
+
+      it('include a visit for every region Devices lists by its code', async () => {
+        const devices = await new MockDevicesService().devices(project.id, range);
+
+        for (const { filterValue: region } of regionRows(devices.regions, english)) {
+          if (region !== null) {
+            expect(await visitsFound({ region }), region).toBeGreaterThan(0);
           }
         }
       });

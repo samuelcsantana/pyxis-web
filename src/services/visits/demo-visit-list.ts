@@ -98,6 +98,7 @@ function madeRequest(visit: DemoVisitRecord, route: string | null, failed: boole
 function cameFrom(visit: DemoVisitRecord, filters: VisitFilters): boolean {
   return (
     (filters.country === null || visit.country === filters.country) &&
+    (filters.region === null || visit.region === filters.region) &&
     (filters.source === null || visit.source === filters.source) &&
     (filters.campaign === null || visit.campaign === filters.campaign)
   );

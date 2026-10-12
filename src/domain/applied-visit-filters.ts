@@ -19,6 +19,7 @@ export const VISIT_FILTER_FIELDS = [
   'device',
   'identity',
   'country',
+  'region',
   'source',
   'campaign',
   'route',
@@ -27,7 +28,7 @@ export const VISIT_FILTER_FIELDS = [
 
 export type VisitFilterField = (typeof VISIT_FILTER_FIELDS)[number];
 
-const UPPERCASE_FIELDS: ReadonlySet<VisitFilterField> = new Set(['country']);
+const UPPERCASE_FIELDS: ReadonlySet<VisitFilterField> = new Set(['country', 'region']);
 
 function pageFilters(filters: VisitFilters, i18n: I18n): readonly AppliedVisitFilter[] {
   return PAGE_FILTER_PARAMETERS.flatMap((name, index) => {
@@ -109,6 +110,10 @@ export function appliedVisitFilters(
       false,
       { ...filters, country: null },
     ),
+    ...shown('region', t('visits.filters.region'), filters.region, true, {
+      ...filters,
+      region: null,
+    }),
     ...shown('source', t('visits.filters.source'), filters.source, true, {
       ...filters,
       source: null,
