@@ -149,9 +149,11 @@ Shipping now:
   Overview keeps the number of conversion events beside it; without a conversion event, the
   Overview and Devices say so in one line and how the operator sets one
 - Devices: device type, browser and operating system as donuts whose legend is a table of every
-  value with its visits and share, conversion by device, and the countries by name; with a
-  conversion event set, each browser, system and country also gives its conversion rate; each
-  device type and each country opens its visits
+  value with its visits and share, conversion by device, the countries by name and the regions
+  (a state or a province: the ten with most visits by name, the rest, and the visits the edge
+  network could not place, which includes every visit from before regions were recorded); with a
+  conversion event set, each browser, system, country and region also gives its conversion rate;
+  each device type, country and region opens its visits
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
@@ -193,11 +195,12 @@ Shipping now:
   links to every visit of the person it was identified as; an id it cannot look up stays in the
   field, marked invalid, with an example of what that kind of id looks like
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
-  count, first named events, failed requests (reads and writes), device and country, channel and
-  account; filters for the pages it viewed (up to three, `*` matching any characters), an event
-  with an optional `key=value` property, the channel, the device, identified or anonymous
-  visitors, the country, the source and campaign (as Acquisition names them), a request it made
-  (`POST /orders/:id`) and whether it had a failed request, all kept in the URL, with the number
+  count, first named events, failed requests (reads and writes), device and place (region and
+  country, or the country alone), channel and account; filters for the pages it viewed (up to
+  three, `*` matching any characters), an event with an optional `key=value` property, the
+  channel, the device, identified or anonymous visitors, the country, the region (`BR-SP`), the
+  source and campaign (as Acquisition names them), a request it made (`POST /orders/:id`) and
+  whether it had a failed request, all kept in the URL, with the number
   of matching visits above the list; on a phone the filters fold behind a "Filters · 2 active"
   button, open when some are in use or were left out, and each visit is a card with every
   column; each row opens its visit, and an identified one its person, in the Timeline
@@ -346,7 +349,7 @@ origin the sign-in and sign-out calls carry.
 | `/`                               | Opens the first project the admin may read, or explains there is none                                                                                 |
 | `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                       |
 | `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                       |
-| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device and countries                                                                                   |
+| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device, countries and regions                                                                          |
 | `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                            |
 | `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                     |
 | `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                 |
@@ -465,7 +468,7 @@ src/
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, chart scales, day labels, lines and
-│                   stacked bars, the Overview chart for each figure, device and country labels, donuts,
+│                   stacked bars, the Overview chart for each figure, device, country and region labels, donuts,
 │                   channels and sources, feature ranking, search and property breakdowns,
 │                   routes and failures, funnel steps and counts, timeline items, visit
 │                   filters and rows, CSV files and each screen's tables, errors; the Zod
