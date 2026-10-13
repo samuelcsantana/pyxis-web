@@ -257,6 +257,13 @@ Shipping now:
   for its first event. Project settings change through the API's command line
 - The interface in English and in Brazilian Portuguese (see
   [Internationalization](#internationalization))
+- A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
+  that host: English at `/`, Brazilian Portuguese at `/pt-br`, each with its own title,
+  canonical address, `hreflang` alternates, share image and `SoftwareApplication` structured
+  data, plus its own `robots.txt` and `sitemap.xml`. Its language comes from the address, never
+  from a cookie or the browser, so crawlers and visitors read the same page; the page sets no
+  cookie (the theme choice stays in `localStorage`). Being built in steps; until the domain moves
+  from the dashboard's Vercel project to the demo's, the domain still redirects to the dashboard
 
 ## Internationalization
 
@@ -351,26 +358,27 @@ origin the sign-in and sign-out calls carry.
 
 ### Routes
 
-| Route                             | What it shows                                                                                                                                         |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                               | Opens the first project the admin may read, or explains there is none                                                                                 |
-| `/sign-in`                        | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                       |
-| `/[projectId]/overview`           | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                       |
-| `/[projectId]/devices`            | Device types, browsers, systems, conversion by device, countries and regions                                                                          |
-| `/[projectId]/acquisition`        | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                            |
-| `/[projectId]/features`           | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                     |
-| `/[projectId]/requests`           | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                 |
-| `/[projectId]/funnel`             | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                   |
-| `/[projectId]/timeline`           | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                      |
-| `/[projectId]/visits`             | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                               |
-| `/[projectId]/settings`           | The weekly digest switch, the sessions list (end one, or sign out everywhere), then origins, public keys, secret keys by date only, retention, events |
-| `/[projectId]/overview/export`    | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                              |
-| `/[projectId]/requests/export`    | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                      |
-| `/[projectId]/features/export`    | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                  |
-| `/[projectId]/acquisition/export` | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                        |
-| `/[projectId]/devices/export`     | A CSV file of every breakdown of the Devices screen, for its period                                                                                   |
-| `/[projectId]/visits/export`      | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                 |
-| `/[projectId]/icon`               | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                  |
+| Route                                     | What it shows                                                                                                                                         |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                       | Opens the first project the admin may read, or explains there is none                                                                                 |
+| `/` and `/pt-br` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en` and `/landing/pt-br`; asking for those directly answers 308                                |
+| `/sign-in`                                | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                       |
+| `/[projectId]/overview`                   | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                       |
+| `/[projectId]/devices`                    | Device types, browsers, systems, conversion by device, countries and regions                                                                          |
+| `/[projectId]/acquisition`                | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                            |
+| `/[projectId]/features`                   | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                     |
+| `/[projectId]/requests`                   | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                 |
+| `/[projectId]/funnel`                     | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                   |
+| `/[projectId]/timeline`                   | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                      |
+| `/[projectId]/visits`                     | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                               |
+| `/[projectId]/settings`                   | The weekly digest switch, the sessions list (end one, or sign out everywhere), then origins, public keys, secret keys by date only, retention, events |
+| `/[projectId]/overview/export`            | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                              |
+| `/[projectId]/requests/export`            | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                      |
+| `/[projectId]/features/export`            | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                  |
+| `/[projectId]/acquisition/export`         | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                        |
+| `/[projectId]/devices/export`             | A CSV file of every breakdown of the Devices screen, for its period                                                                                   |
+| `/[projectId]/visits/export`              | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                 |
+| `/[projectId]/icon`                       | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                  |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
@@ -378,6 +386,16 @@ pass through it, so `public/email/pyxis-logo.png` (and its `@2x`), the raster lo
 sign-in email loads, answers without a session. Both carry the
 screen that was asked as `?next=`, and the sign-in form goes back to it; only a path of the form
 `/<project>/<screen>` on this site is accepted, anything else goes to `/`.
+
+In demo mode the proxy looks at the host the visitor asked for (`x-forwarded-host`, then
+`Host`). On `pyxis-analytics.dev` only `/` and `/pt-br` render, the home page, with the
+language named in a request header that `currentLocale()` trusts over the cookie; any other
+address there answers 308 to the same address on the demo host, so the demo is never served
+twice. Every other request has that header removed. To try the home page locally, send the
+header yourself: `curl -H 'x-forwarded-host: pyxis-analytics.dev' http://localhost:3000/`
+(a browser cannot simply resolve `pyxis-analytics.dev` to the machine: the whole `.dev` domain
+is on the HSTS preload list, so Chromium upgrades it to HTTPS). The `landing-*` Playwright
+projects do exactly that.
 
 ### Contract
 
