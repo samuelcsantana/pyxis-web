@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { currentLocale } from './current-locale';
+import { currentLocale, PATH_LOCALE_HEADER } from './current-locale';
 
 vi.unmock('@/i18n/current-locale');
 
 const request = vi.hoisted(() => ({
   cookie: undefined as string | undefined,
   acceptLanguage: null as string | null,
-  readHeaders: { count: 0 },
+  pathLocale: null as string | null,
 }));
 
 vi.mock('next/headers', () => ({
@@ -18,12 +18,14 @@ vi.mock('next/headers', () => ({
           : undefined,
     }),
   headers: () => {
-    request.readHeaders.count += 1;
-    return Promise.resolve(
-      new Headers(
-        request.acceptLanguage === null ? {} : { 'accept-language': request.acceptLanguage },
-      ),
-    );
+    const entries: Record<string, string> = {};
+    if (request.acceptLanguage !== null) {
+      entries['accept-language'] = request.acceptLanguage;
+    }
+    if (request.pathLocale !== null) {
+      entries['x-pyxis-path-locale'] = request.pathLocale;
+    }
+    return Promise.resolve(new Headers(entries));
   },
 }));
 
@@ -31,15 +33,14 @@ describe('currentLocale', () => {
   beforeEach(() => {
     request.cookie = undefined;
     request.acceptLanguage = null;
-    request.readHeaders.count = 0;
+    request.pathLocale = null;
   });
 
-  it('follows the language the admin chose, without reading the browser languages', async () => {
+  it('follows the language the admin chose over the browser languages', async () => {
     request.cookie = 'en';
     request.acceptLanguage = 'fr';
 
     await expect(currentLocale()).resolves.toBe('en');
-    expect(request.readHeaders.count).toBe(0);
   });
 
   it('keeps the chosen Brazilian Portuguese even when the browser asks for English', async () => {
@@ -47,7 +48,6 @@ describe('currentLocale', () => {
     request.acceptLanguage = 'en-GB,en;q=0.9';
 
     await expect(currentLocale()).resolves.toBe('pt-BR');
-    expect(request.readHeaders.count).toBe(0);
   });
 
   it('asks the browser when the cookie holds a language the dashboard does not ship', async () => {
@@ -55,7 +55,6 @@ describe('currentLocale', () => {
     request.acceptLanguage = 'en-GB,en;q=0.9';
 
     await expect(currentLocale()).resolves.toBe('en');
-    expect(request.readHeaders.count).toBe(1);
   });
 
   it('serves Brazilian Portuguese to a browser that asks for any Portuguese', async () => {
@@ -66,6 +65,33 @@ describe('currentLocale', () => {
 
   it('falls back to English without a cookie or a header', async () => {
     await expect(currentLocale()).resolves.toBe('en');
-    expect(request.readHeaders.count).toBe(1);
+  });
+
+  describe('on a page whose address names its language', () => {
+    it('uses the language of the address over the cookie and the browser', async () => {
+      request.pathLocale = 'pt-BR';
+      request.cookie = 'en';
+      request.acceptLanguage = 'en-US,en;q=0.9';
+
+      await expect(currentLocale()).resolves.toBe('pt-BR');
+    });
+
+    it('serves English at the English address to a browser that asks for Portuguese', async () => {
+      request.pathLocale = 'en';
+      request.acceptLanguage = 'pt-BR,pt;q=0.9';
+
+      await expect(currentLocale()).resolves.toBe('en');
+    });
+
+    it('ignores a value that is not a language the dashboard ships', async () => {
+      request.pathLocale = 'fr';
+      request.cookie = 'pt-BR';
+
+      await expect(currentLocale()).resolves.toBe('pt-BR');
+    });
+  });
+
+  it('names the header the proxy sets', () => {
+    expect(PATH_LOCALE_HEADER).toBe('x-pyxis-path-locale');
   });
 });
