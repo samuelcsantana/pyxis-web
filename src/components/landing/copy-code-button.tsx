@@ -13,6 +13,7 @@ export interface CopyCodeButtonProps {
   readonly code: string;
   readonly targetId: string;
   readonly labels: CopyCodeLabels;
+  readonly track?: Readonly<Record<string, string>>;
 }
 
 type CopyState = 'idle' | 'copied' | 'selected';
@@ -35,7 +36,7 @@ function labelOf(state: CopyState, labels: CopyCodeLabels): string {
   return state === 'idle' ? labels.copy : labels[state];
 }
 
-export function CopyCodeButton({ code, targetId, labels }: CopyCodeButtonProps) {
+export function CopyCodeButton({ code, targetId, labels, track = {} }: CopyCodeButtonProps) {
   const [state, setState] = useState<CopyState>('idle');
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export function CopyCodeButton({ code, targetId, labels }: CopyCodeButtonProps) 
   return (
     <button
       type="button"
+      {...track}
       onClick={() => {
         void copy();
       }}

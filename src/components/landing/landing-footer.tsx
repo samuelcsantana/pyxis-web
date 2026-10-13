@@ -1,16 +1,24 @@
 import { LogoMark } from '@/components/brand/logo-mark';
+import type { ReactNode } from 'react';
 import type { I18n } from '@/i18n/i18n';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface LandingFooterProps {
   readonly i18n: I18n;
+  readonly note?: ReactNode;
 }
 
 interface FooterLink {
   readonly href: string;
   readonly label: string;
+  readonly track?: Readonly<Record<string, string>>;
+}
+
+function codeLink(href: string, label: string): FooterLink {
+  return { href, label, track: trackAttributes(LANDING_EVENTS.codeOpened, { repo: label }) };
 }
 
 interface FooterColumnProps {
@@ -27,7 +35,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
       <ul className="grid gap-2 text-sm">
         {links.map((link) => (
           <li key={link.href}>
-            <a href={link.href} className={LINK_LIST}>
+            <a href={link.href} className={LINK_LIST} {...link.track}>
               {link.label}
             </a>
           </li>
@@ -37,7 +45,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
   );
 }
 
-export function LandingFooter({ i18n }: LandingFooterProps) {
+export function LandingFooter({ i18n, note }: LandingFooterProps) {
   const { t } = i18n;
   return (
     <footer className="border-t border-line">
@@ -54,7 +62,11 @@ export function LandingFooter({ i18n }: LandingFooterProps) {
         <FooterColumn
           title={t('landing.footer.product')}
           links={[
-            { href: LANDING_LINKS.demo, label: t('landing.footer.demo') },
+            {
+              href: LANDING_LINKS.demo,
+              label: t('landing.footer.demo'),
+              track: trackAttributes(LANDING_EVENTS.demoOpened, { from: 'footer' }),
+            },
             { href: LANDING_LINKS.storybook, label: PROPER_NAMES.storybook },
             { href: LANDING_LINKS.apiReference, label: t('landing.footer.apiReference') },
             { href: LANDING_LINKS.playground, label: t('landing.footer.playground') },
@@ -63,10 +75,10 @@ export function LandingFooter({ i18n }: LandingFooterProps) {
         <FooterColumn
           title={t('landing.footer.code')}
           links={[
-            { href: LANDING_LINKS.api, label: PROPER_NAMES.api },
-            { href: LANDING_LINKS.sdk, label: PROPER_NAMES.sdk },
-            { href: LANDING_LINKS.web, label: PROPER_NAMES.web },
-            { href: LANDING_LINKS.npm, label: PROPER_NAMES.npm },
+            codeLink(LANDING_LINKS.api, PROPER_NAMES.api),
+            codeLink(LANDING_LINKS.sdk, PROPER_NAMES.sdk),
+            codeLink(LANDING_LINKS.web, PROPER_NAMES.web),
+            codeLink(LANDING_LINKS.npm, PROPER_NAMES.npm),
           ]}
         />
         <FooterColumn
@@ -74,10 +86,11 @@ export function LandingFooter({ i18n }: LandingFooterProps) {
           links={[{ href: LANDING_LINKS.author, label: PROPER_NAMES.author }]}
         />
       </div>
-      <div className={`${LANDING_WIDTH} pb-10`}>
-        <p className="border-t border-line pt-5 text-caption text-muted">
-          {t('landing.footer.madeBy')}
-        </p>
+      <div className={`${LANDING_WIDTH} pb-24`}>
+        <div className="flex flex-col gap-2 border-t border-line pt-5 lg:flex-row lg:items-center lg:justify-between">
+          {note}
+          <p className="text-caption text-muted">{t('landing.footer.madeBy')}</p>
+        </div>
       </div>
     </footer>
   );

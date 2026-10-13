@@ -1,6 +1,7 @@
 import { SEGMENTED_GROUP, SEGMENTED_IDLE, SEGMENTED_OPTION } from '@/components/ui/control-classes';
 import { type Locale, localeName } from '@/i18n/locales';
 import { LANDING_PAGES, type LandingPage } from '@/lib/landing-pages';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface LanguageLinksProps {
   readonly current: LandingPage;
@@ -27,6 +28,7 @@ export function LanguageLinks({ current, label }: LanguageLinksProps) {
                 hrefLang={page.locale}
                 lang={page.locale}
                 aria-current={isCurrent ? 'page' : undefined}
+                {...trackAttributes(LANDING_EVENTS.languageSwitched, { to: page.locale })}
                 className={`isolate h-8 px-2.5 ${SEGMENTED_OPTION} ${isCurrent ? 'text-card' : SEGMENTED_IDLE}`}
               >
                 {isCurrent ? (

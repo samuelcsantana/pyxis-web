@@ -7,6 +7,7 @@ import { FOCUS_RING } from '@/components/ui/control-classes';
 import { LANDING_WIDTH, LINK_QUIET, LINK_SMALL } from './landing-classes';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 import { LanguageLinks } from './language-links';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NEVER_STORED_ID } from './never-stored-section';
 
 export interface LandingHeaderProps {
@@ -30,13 +31,21 @@ export function LandingHeader({ i18n, page }: LandingHeaderProps) {
           aria-label={t('landing.nav.label')}
           className="ml-3 hidden items-center gap-5 text-sm md:flex"
         >
-          <a href={LANDING_LINKS.demo} className={LINK_QUIET}>
+          <a
+            href={LANDING_LINKS.demo}
+            className={LINK_QUIET}
+            {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'header' })}
+          >
             {t('landing.nav.demo')}
           </a>
           <a href={`#${NEVER_STORED_ID}`} className={LINK_QUIET}>
             {t('landing.nav.privacy')}
           </a>
-          <a href={LANDING_LINKS.api} className={LINK_QUIET}>
+          <a
+            href={LANDING_LINKS.api}
+            className={LINK_QUIET}
+            {...trackAttributes(LANDING_EVENTS.codeOpened, { repo: PROPER_NAMES.api })}
+          >
             {PROPER_NAMES.gitHub}
           </a>
         </nav>

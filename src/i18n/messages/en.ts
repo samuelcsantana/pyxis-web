@@ -1182,6 +1182,26 @@ export const en = {
       body: 'The introduction post explains why it was built and what it never stores.',
       cta: 'Read the post',
     },
+    measurement: {
+      measured: 'This page is measured by Pyxis itself: no cookie, no IP address stored.',
+      see: 'See what it recorded',
+      optOut: 'Don’t measure my visits',
+      off: 'Measurement is off in this browser.',
+      optIn: 'Measure again',
+      blocked: 'Measurement is off by your browser’s “do not track”.',
+    },
+    recorded: {
+      button: 'What this page recorded',
+      title: 'What this page recorded',
+      subtitle: 'This visit, live. Sent to Pyxis every 5 seconds.',
+      visit: 'Visit {id}… · this tab only',
+      referrer: 'referrer: {host}',
+      noReferrer: 'referrer: none',
+      empty: 'Nothing sent yet. The first batch leaves within 5 seconds.',
+      never:
+        '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page. <strong>Added by the server:</strong> country and state, from the request; then the address is dropped.',
+      close: 'Close',
+    },
     footer: {
       tagline: 'Privacy-first product analytics.',
       product: 'Product',

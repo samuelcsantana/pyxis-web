@@ -3,6 +3,7 @@ import { returnPathOf } from '@/components/shell/screens';
 import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
 import { requestHostname } from '@/lib/host-name';
+import { landingIngestionUrl } from '@/lib/landing-measurement-config';
 import {
   internalPathOf,
   isInternalLandingPath,
@@ -35,9 +36,9 @@ function signInUrl(request: NextRequest): URL {
   return url;
 }
 
-function contentSecurityPolicy(): string {
+function contentSecurityPolicy(apiOrigin: string | undefined): string {
   return buildContentSecurityPolicy({
-    apiOrigin: apiOriginFrom(apiBaseUrl()),
+    apiOrigin,
     isDev: process.env.NODE_ENV === 'development',
     nonce: createNonce(),
   });
@@ -57,15 +58,20 @@ function forwardedHeaders(
   return headers;
 }
 
+interface Rewrite {
+  readonly to: URL;
+  readonly apiOrigin: string | undefined;
+}
+
 function renderWith(
   request: NextRequest,
   requestHeaders: Readonly<Record<string, string>> = {},
-  rewriteTo?: URL,
+  rewrite?: Rewrite,
 ): NextResponse {
-  const policy = contentSecurityPolicy();
+  const policy = contentSecurityPolicy(rewrite?.apiOrigin ?? apiOriginFrom(apiBaseUrl()));
   const init = { request: { headers: forwardedHeaders(request, policy, requestHeaders) } };
   const response =
-    rewriteTo === undefined ? NextResponse.next(init) : NextResponse.rewrite(rewriteTo, init);
+    rewrite === undefined ? NextResponse.next(init) : NextResponse.rewrite(rewrite.to, init);
   response.headers.set(CONTENT_SECURITY_POLICY_HEADER, policy);
   return response;
 }
@@ -91,7 +97,11 @@ function landingOrDemo(request: NextRequest): NextResponse {
   }
   const internal = new URL(internalPathOf(page), request.url);
   internal.search = search;
-  return renderWith(request, { [PATH_LOCALE_HEADER]: page.locale }, internal);
+  return renderWith(
+    request,
+    { [PATH_LOCALE_HEADER]: page.locale },
+    { to: internal, apiOrigin: apiOriginFrom(landingIngestionUrl()) },
+  );
 }
 
 export function proxy(request: NextRequest) {

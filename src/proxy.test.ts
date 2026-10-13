@@ -133,6 +133,9 @@ describe('proxy', () => {
       );
       expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('en');
       expect(response.headers.get('content-security-policy')).toContain("'strict-dynamic'");
+      expect(response.headers.get('content-security-policy')).toContain(
+        "connect-src 'self' https://api.pyxis-analytics.dev;",
+      );
     });
 
     it('renders the Brazilian Portuguese page at /pt-br, keeping the campaign tags', () => {
@@ -181,12 +184,13 @@ describe('proxy', () => {
       expect(fromMain.headers.get('location')).toBe('https://pyxis-analytics.dev/');
     });
 
-    it('keeps the demo screens on the demo host', () => {
+    it('keeps the demo screens on the demo host, where nothing is measured', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
       const response = visitAt('https://demo.pyxis-analytics.dev/');
 
       expect(response.headers.get('location')).toBeNull();
       expect(response.headers.get('x-middleware-rewrite')).toBeNull();
+      expect(response.headers.get('content-security-policy')).toContain("connect-src 'self';");
     });
 
     it('drops a language header a visitor sends to any other page', () => {

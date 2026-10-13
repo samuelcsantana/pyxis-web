@@ -11,6 +11,12 @@ import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHeader } from '@/components/landing/landing-header';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
+import { LandingMeasurementBoot } from '@/components/landing/measurement/landing-measurement-boot';
+import {
+  measurementLabelsOf,
+  recordedLabelsOf,
+} from '@/components/landing/measurement/measurement-labels';
+import { MeasurementNote } from '@/components/landing/measurement/measurement-note';
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
 import { StorySection } from '@/components/landing/story-section';
 import { MainContent } from '@/components/shell/main-content';
@@ -22,9 +28,10 @@ import {
 import { resolvePeriod, todayIn } from '@/domain/period';
 import { SkipLink } from '@/components/shell/skip-link';
 import { loadMessages } from '@/i18n/get-messages';
-import { createI18n, type I18n } from '@/i18n/i18n';
+import { createI18n, displayTag, type I18n } from '@/i18n/i18n';
 import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
+import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measurement-config';
 import {
   LANDING_PAGES,
   type LandingPage,
@@ -107,6 +114,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
     notFound();
   }
   const { page, i18n } = landing;
+  const trackingKey = landingTrackingKey();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
       <SkipLink i18n={i18n} />
@@ -123,7 +131,20 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <FaqSection i18n={i18n} />
         <StorySection i18n={i18n} />
       </MainContent>
-      <LandingFooter i18n={i18n} />
+      <LandingFooter
+        i18n={i18n}
+        note={
+          trackingKey === undefined ? null : <MeasurementNote labels={measurementLabelsOf(i18n)} />
+        }
+      />
+      {trackingKey === undefined ? null : (
+        <LandingMeasurementBoot
+          trackingKey={trackingKey}
+          endpoint={landingIngestionUrl()}
+          labels={recordedLabelsOf(i18n)}
+          locale={displayTag(page.locale)}
+        />
+      )}
       <LandingStructuredData i18n={i18n} page={page} />
     </div>
   );

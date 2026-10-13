@@ -262,8 +262,20 @@ Shipping now:
   canonical address, `hreflang` alternates, share image and `SoftwareApplication` structured
   data, plus its own `robots.txt` and `sitemap.xml`. Its language comes from the address, never
   from a cookie or the browser, so crawlers and visitors read the same page; the page sets no
-  cookie (the theme choice stays in `localStorage`). Being built in steps; until the domain moves
-  from the dashboard's Vercel project to the demo's, the domain still redirects to the dashboard
+  cookie (the theme choice stays in `localStorage`). Its sections: what never gets stored, what
+  the dashboard answers (each card opens that screen in the demo), how a site installs the
+  tracker, the sites it measures, how it is built, the architecture, a comparison, a FAQ and the
+  introduction post. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document
+  view transition between the two languages) plus a count-up of the preview figures, and none of
+  it runs under `prefers-reduced-motion`
+- The home page measures itself with this project's own tracker (`pyxis-analytics` from npm),
+  only when `NEXT_PUBLIC_LANDING_PYXIS_KEY` is set: clicks on elements carrying `data-track`
+  become named events (`demo_opened`, `code_opened`, `docs_opened`, `post_opened`,
+  `site_opened`, `snippet_copied`, `language_switched`), a button lists what this visit sent, live
+  (the SDK's `debug.onBatch`), and the footer says the page is measured, with a switch to stop
+  measuring in this browser. The Content Security Policy lets the home page, and no other page,
+  reach the ingestion API. Until the domain moves from the dashboard's Vercel project to the
+  demo's, `pyxis-analytics.dev` still redirects to the dashboard
 
 ## Internationalization
 
@@ -411,6 +423,12 @@ Two Vercel projects build this repository, and every merge to `main` deploys bot
 | ------------ | ------------------------------------------------------------------------------------- | --------------------------------- |
 | `pyxis-web`  | `https://app.pyxis-analytics.dev`, the dashboard for the projects' admins             | `https://api.pyxis-analytics.dev` |
 | `pyxis-demo` | [`https://demo.pyxis-analytics.dev`](https://demo.pyxis-analytics.dev), the live demo | unset                             |
+
+The demo's project also builds the home page. `NEXT_PUBLIC_LANDING_PYXIS_KEY` (the public key of
+the Pyxis project that measures the home page) turns its measurement on;
+`NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT` overrides the ingestion URL, which defaults to
+`https://api.pyxis-analytics.dev` (the e2e suite points it at the local server and answers the
+batches itself).
 
 Only `main` deploys: `vercel.json` turns Git deployments off for every other branch, so pull
 requests get no preview deployment and spend none of the Hobby plan's build quota. Check a change

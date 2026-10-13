@@ -2,6 +2,7 @@ import type { I18n } from '@/i18n/i18n';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface InstallSectionProps {
   readonly i18n: I18n;
@@ -67,7 +68,12 @@ function CodeBlock({ id, tokens, labels }: CodeBlockProps) {
           ))}
         </code>
       </pre>
-      <CopyCodeButton code={codeTextOf(tokens)} targetId={id} labels={labels} />
+      <CopyCodeButton
+        code={codeTextOf(tokens)}
+        targetId={id}
+        labels={labels}
+        track={trackAttributes(LANDING_EVENTS.snippetCopied, { snippet: id })}
+      />
     </div>
   );
 }

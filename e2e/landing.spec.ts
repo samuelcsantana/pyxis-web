@@ -165,6 +165,34 @@ test('shows every section fully once it has been scrolled into view', async ({ p
   await expect(story.locator('.landing-reveal')).toHaveCSS('opacity', '1');
 });
 
+test.describe('measuring itself', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/v1/batch', (route) => route.fulfill({ status: 202, body: '' }));
+  });
+
+  test('lists what this visit sent, live, and what never leaves the browser', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'See what it recorded' }).click();
+
+    const recorded = page.getByRole('region', { name: 'What this page recorded' });
+    await expect(recorded.getByText('page_view', { exact: true })).toBeVisible({
+      timeout: 10_000,
+    });
+    await expect(recorded).toContainText('Never sent:');
+  });
+
+  test('stops measuring in this browser when asked, until asked again', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Don’t measure my visits' }).click();
+
+    await expect(page.getByText('Measurement is off in this browser.')).toBeVisible();
+    await page.reload();
+    await expect(page.getByText('Measurement is off in this browser.')).toBeVisible();
+    await page.getByRole('button', { name: 'Measure again' }).click();
+    await expect(page.getByText(/measured by Pyxis itself/)).toBeVisible();
+  });
+});
+
 test('sends any other address on the main domain to the demo', async ({ request }) => {
   const response = await request.get(`${DEMO_SCREEN}?range=7d`, { maxRedirects: 0 });
 
