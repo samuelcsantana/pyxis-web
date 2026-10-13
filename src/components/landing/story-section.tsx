@@ -2,6 +2,7 @@ import type { I18n } from '@/i18n/i18n';
 import type { Locale } from '@/i18n/locales';
 import { LANDING_WIDTH, LINK_SECONDARY, REVEAL } from './landing-classes';
 import { Eyebrow } from './landing-section';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface StorySectionProps {
   readonly i18n: I18n;
@@ -36,7 +37,11 @@ export function StorySection({ i18n }: StorySectionProps) {
             </h2>
             <p className="text-base text-muted">{t('landing.story.body')}</p>
           </div>
-          <a href={INTRODUCTION_POSTS[locale]} className={LINK_SECONDARY}>
+          <a
+            href={INTRODUCTION_POSTS[locale]}
+            className={LINK_SECONDARY}
+            {...trackAttributes(LANDING_EVENTS.postOpened)}
+          >
             {t('landing.story.cta')}
             <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
               <path

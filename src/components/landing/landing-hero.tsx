@@ -2,7 +2,8 @@ import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import type { LandingPreviewView } from '@/domain/landing-preview';
 import type { I18n } from '@/i18n/i18n';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
-import { LANDING_LINKS } from './landing-links';
+import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { LandingPreview } from './landing-preview';
 import { LandingProof } from './landing-proof';
 import { Eyebrow } from './landing-section';
@@ -34,7 +35,11 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
               {t('landing.hero.lead')}
             </p>
             <div className="mt-1 flex flex-wrap gap-2.5">
-              <a href={LANDING_LINKS.demo} className={LINK_PRIMARY}>
+              <a
+                href={LANDING_LINKS.demo}
+                className={LINK_PRIMARY}
+                {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
+              >
                 {t('landing.hero.openDemo')}
                 <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
                   <path
@@ -47,7 +52,11 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
                   />
                 </svg>
               </a>
-              <a href={LANDING_LINKS.api} className={LINK_SECONDARY}>
+              <a
+                href={LANDING_LINKS.api}
+                className={LINK_SECONDARY}
+                {...trackAttributes(LANDING_EVENTS.codeOpened, { repo: PROPER_NAMES.api })}
+              >
                 {t('landing.hero.readCode')}
               </a>
             </div>

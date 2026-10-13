@@ -1194,6 +1194,26 @@ export const ptBR = translation({
       body: 'O post de apresentação conta por que ele foi construído e o que ele nunca guarda.',
       cta: 'Ler o post',
     },
+    measurement: {
+      measured: 'Esta página é medida pelo próprio Pyxis: sem cookie e sem guardar IP.',
+      see: 'Ver o que foi registrado',
+      optOut: 'Não medir minhas visitas',
+      off: 'Medição desligada neste navegador.',
+      optIn: 'Medir de novo',
+      blocked: 'Medição desligada pelo seu navegador (“não rastrear”).',
+    },
+    recorded: {
+      button: 'O que esta página registrou',
+      title: 'O que esta página registrou',
+      subtitle: 'Esta visita, ao vivo. Enviado ao Pyxis a cada 5 segundos.',
+      visit: 'Visita {id}… · só esta aba',
+      referrer: 'origem: {host}',
+      noReferrer: 'origem: nenhuma',
+      empty: 'Nada enviado ainda. O primeiro lote sai em até 5 segundos.',
+      never:
+        '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página. <strong>Acrescentado pelo servidor:</strong> país e estado, a partir da requisição; depois o endereço é descartado.',
+      close: 'Fechar',
+    },
     footer: {
       tagline: 'Análise de produto com privacidade em primeiro lugar.',
       product: 'Produto',

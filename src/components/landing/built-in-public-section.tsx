@@ -2,6 +2,7 @@ import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes'
 import type { I18n } from '@/i18n/i18n';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 
 export interface BuiltInPublicSectionProps {
@@ -33,16 +34,19 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
   const { t } = i18n;
   const documents = [
     {
+      doc: 'storybook',
       name: PROPER_NAMES.storybook,
       note: t('landing.public.storybook'),
       href: LANDING_LINKS.storybook,
     },
     {
+      doc: 'api_reference',
       name: t('landing.footer.apiReference'),
       note: t('landing.public.apiReference'),
       href: LANDING_LINKS.apiReference,
     },
     {
+      doc: 'playground',
       name: t('landing.footer.playground'),
       note: t('landing.public.playground'),
       href: LANDING_LINKS.playground,
@@ -68,6 +72,7 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
             <li key={document.href} className={`flex ${REVEAL}`}>
               <a
                 href={document.href}
+                {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: document.doc })}
                 className={`flex grow items-center justify-between gap-3 rounded-card border border-line bg-card px-4 py-3.5 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
               >
                 <span className="flex flex-col">

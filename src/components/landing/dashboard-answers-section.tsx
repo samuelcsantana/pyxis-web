@@ -5,6 +5,7 @@ import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
+import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { ScreenGlyph } from './screen-glyph';
 
 export interface DashboardAnswersSectionProps {
@@ -42,6 +43,7 @@ export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) 
           <li key={screen} className={`flex ${REVEAL}`}>
             <a
               href={demoScreenUrl(screen)}
+              {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'screens', screen })}
               className={`flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
             >
               <ScreenGlyph screen={screen} />

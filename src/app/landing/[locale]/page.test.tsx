@@ -3,6 +3,20 @@ import { describe, expect, it, vi } from 'vitest';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import LandingHome, { generateMetadata } from './page';
 
+vi.mock('@/components/landing/measurement/landing-measurement-boot', () => ({
+  LandingMeasurementBoot: ({
+    trackingKey,
+    endpoint,
+  }: {
+    trackingKey: string;
+    endpoint: string;
+  }) => <div data-testid="measurement-boot" data-key={trackingKey} data-endpoint={endpoint} />,
+}));
+
+vi.mock('@/components/landing/measurement/measurement-note', () => ({
+  MeasurementNote: () => <p data-testid="measurement-note" />,
+}));
+
 vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('not-found');
@@ -110,6 +124,28 @@ describe('the home page on the main domain', () => {
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute(
       'href',
       '/pt-br',
+    );
+  });
+
+  it('measures itself only when a public key is configured', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    vi.stubEnv('NEXT_PUBLIC_LANDING_PYXIS_KEY', '');
+    const { unmount } = renderWithMessages(await LandingHome(atSlug('en')));
+
+    expect(screen.queryByTestId('measurement-boot')).toBeNull();
+    expect(screen.queryByTestId('measurement-note')).toBeNull();
+    unmount();
+
+    vi.stubEnv('NEXT_PUBLIC_LANDING_PYXIS_KEY', 'pyxis_pk_home');
+    renderWithMessages(await LandingHome(atSlug('en')));
+
+    expect(screen.getByTestId('measurement-boot')).toHaveAttribute('data-key', 'pyxis_pk_home');
+    expect(screen.getByTestId('measurement-boot')).toHaveAttribute(
+      'data-endpoint',
+      'https://api.pyxis-analytics.dev',
+    );
+    expect(screen.getByRole('contentinfo')).toContainElement(
+      screen.getByTestId('measurement-note'),
     );
   });
 

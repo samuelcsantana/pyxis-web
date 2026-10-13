@@ -34,6 +34,11 @@ export default defineConfig({
     url: BASE_URL,
     reuseExistingServer: false,
     timeout: 180_000,
-    env: { NEXT_PUBLIC_PYXIS_API_URL: '', NEXT_TELEMETRY_DISABLED: '1' },
+    env: {
+      NEXT_PUBLIC_PYXIS_API_URL: '',
+      NEXT_PUBLIC_LANDING_PYXIS_KEY: 'pyxis_pk_e2e_local',
+      NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT: BASE_URL,
+      NEXT_TELEMETRY_DISABLED: '1',
+    },
   },
 });

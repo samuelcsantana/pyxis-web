@@ -29,6 +29,22 @@ describe('LandingFooter', () => {
     expect(linksUnder('Author')).toEqual([['samuelsantana.dev', 'https://www.samuelsantana.dev']]);
   });
 
+  it('shows the measurement note it is given beside the credits', () => {
+    render(<LandingFooter i18n={english} note={<p>Measured by Pyxis</p>} />);
+
+    expect(screen.getByRole('contentinfo')).toHaveTextContent('Measured by Pyxis');
+  });
+
+  it('tags the demo and code links for the page measurement', () => {
+    render(<LandingFooter i18n={english} />);
+
+    expect(screen.getByRole('link', { name: 'Live demo' })).toHaveAttribute(
+      'data-track-from',
+      'footer',
+    );
+    expect(screen.getByRole('link', { name: 'npm' })).toHaveAttribute('data-track-repo', 'npm');
+  });
+
   it('names the product, its promise and who made it', () => {
     render(<LandingFooter i18n={english} />);
 
