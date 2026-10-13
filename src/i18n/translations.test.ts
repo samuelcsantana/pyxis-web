@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { en } from './messages/en';
+import { es } from './messages/es';
 import { ptBR } from './messages/pt-BR';
 import { PLURAL_CATEGORIES, type PluralForms } from './plural';
 import type { Dictionary, Message } from './translate';
@@ -9,7 +10,10 @@ const TAG = /<\/?([a-z]+)\/?>/gi;
 
 type Node = Message | Dictionary;
 
-const TRANSLATIONS: readonly (readonly [string, Dictionary])[] = [['pt-BR', ptBR]];
+const TRANSLATIONS: readonly (readonly [string, Dictionary])[] = [
+  ['pt-BR', ptBR],
+  ['es', es],
+];
 
 function isPluralForms(node: Node): node is PluralForms {
   return (
