@@ -1,0 +1,26 @@
+import { DASHBOARD_URL, LIVE_DEMO_URL } from '@/lib/site';
+
+const GITHUB_PROFILE = 'https://github.com/samuelcsantana';
+
+export const LANDING_LINKS = {
+  demo: LIVE_DEMO_URL,
+  signIn: `${DASHBOARD_URL}/sign-in`,
+  api: `${GITHUB_PROFILE}/pyxis-api`,
+  sdk: `${GITHUB_PROFILE}/pyxis-sdk`,
+  web: `${GITHUB_PROFILE}/pyxis-web`,
+  npm: 'https://www.npmjs.com/package/pyxis-analytics',
+  storybook: 'https://samuelcsantana.github.io/pyxis-web/',
+  apiReference: 'https://samuelcsantana.github.io/pyxis-api/',
+  playground: 'https://samuelcsantana.github.io/pyxis-sdk/',
+  author: 'https://www.samuelsantana.dev',
+} as const;
+
+export const PROPER_NAMES = {
+  gitHub: 'GitHub',
+  storybook: 'Storybook',
+  npm: 'npm',
+  api: 'pyxis-api',
+  sdk: 'pyxis-sdk',
+  web: 'pyxis-web',
+  author: 'samuelsantana.dev',
+} as const;

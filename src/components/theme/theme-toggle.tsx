@@ -1,9 +1,12 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
+import { bestEffortReadDeviceTheme, bestEffortRememberDeviceTheme } from '@/lib/device-theme';
 import { parseTheme, type Theme, themeCookie } from '@/lib/theme';
 import { BUTTON_ICON } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
+
+export type ThemeMemory = 'cookie' | 'device';
 
 const SUN_ICON =
   'M12 8a4 4 0 1 1 0 8a4 4 0 1 1 0-8 M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4';
@@ -15,6 +18,7 @@ const SWITCH_TO = { light: 'theme.toLight', dark: 'theme.toDark' } as const sati
 
 export interface ThemeToggleProps {
   readonly initialTheme?: Theme;
+  readonly remember?: ThemeMemory;
 }
 
 function subscribeToThemeChanges(onChange: () => void): () => void {
@@ -40,18 +44,39 @@ function oppositeTheme(theme: Theme): Theme {
   return theme === 'dark' ? 'light' : 'dark';
 }
 
-export function ThemeToggle({ initialTheme }: ThemeToggleProps) {
+function useThemeRememberedOnTheDevice(remember: ThemeMemory): void {
+  useEffect(() => {
+    if (remember !== 'device') {
+      return;
+    }
+    const stored = bestEffortReadDeviceTheme();
+    if (stored !== undefined) {
+      document.documentElement.dataset.theme = stored;
+    }
+  }, [remember]);
+}
+
+function rememberTheme(theme: Theme, remember: ThemeMemory): void {
+  if (remember === 'device') {
+    bestEffortRememberDeviceTheme(theme);
+    return;
+  }
+  document.cookie = themeCookie(theme);
+}
+
+export function ThemeToggle({ initialTheme, remember = 'cookie' }: ThemeToggleProps) {
   const t = useT();
   const theme = useSyncExternalStore(
     subscribeToThemeChanges,
     chosenThemeOnPage,
     () => initialTheme,
   );
+  useThemeRememberedOnTheDevice(remember);
 
   const toggle = () => {
     const next = oppositeTheme(themeOnScreen());
     document.documentElement.dataset.theme = next;
-    document.cookie = themeCookie(next);
+    rememberTheme(next, remember);
   };
 
   const label = theme === undefined ? t('theme.switch') : t(SWITCH_TO[oppositeTheme(theme)]);

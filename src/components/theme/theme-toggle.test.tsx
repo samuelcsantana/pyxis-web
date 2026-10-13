@@ -82,6 +82,39 @@ describe('ThemeToggle', () => {
     expect(first).toHaveAccessibleName('Switch to light theme');
   });
 
+  describe('remembering on the device instead of a cookie', () => {
+    afterEach(() => {
+      window.localStorage.clear();
+    });
+
+    it('stores the choice on the device and sets no cookie', async () => {
+      document.documentElement.dataset.theme = 'light';
+      renderWithMessages(<ThemeToggle remember="device" />);
+
+      await userEvent.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
+
+      expect(document.documentElement.dataset.theme).toBe('dark');
+      expect(window.localStorage.getItem('pyxis:theme')).toBe('dark');
+      expect(document.cookie).not.toContain('pyxis_theme');
+    });
+
+    it('brings back the theme chosen on an earlier visit', async () => {
+      window.localStorage.setItem('pyxis:theme', 'dark');
+      renderWithMessages(<ThemeToggle remember="device" />);
+
+      expect(
+        await screen.findByRole('button', { name: 'Switch to light theme' }),
+      ).toBeInTheDocument();
+      expect(document.documentElement.dataset.theme).toBe('dark');
+    });
+
+    it('leaves the system theme alone when nothing was chosen on this device', () => {
+      renderWithMessages(<ThemeToggle remember="device" />);
+
+      expect(document.documentElement.dataset.theme).toBeUndefined();
+    });
+  });
+
   it('renders the theme it was given on the server, before the page can be read', () => {
     const html = renderToString(
       <MessagesProvider locale="en" messages={pickNamespaces(en, CLIENT_NAMESPACES)}>

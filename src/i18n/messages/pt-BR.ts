@@ -984,4 +984,35 @@ export const ptBR = translation({
     },
     visits: 'As {visits} visitas mais recentes',
   },
+  landing: {
+    meta: {
+      title: 'Análise de produto sem cookie e sem dado pessoal · Pyxis',
+      description:
+        'Análise de uso de produto de código aberto que não guarda cookie, IP nem dado pessoal. Funis, requisições com falha e visitas, com demonstração ao vivo.',
+    },
+    nav: {
+      label: 'Principal',
+      demo: 'Demonstração',
+      language: 'Idioma',
+      signIn: 'Entrar',
+    },
+    hero: {
+      eyebrow: 'Análise de produto de código aberto',
+      title: 'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
+      lead: 'O Pyxis mostra quais funcionalidades são usadas, onde um cadastro perde gente e quais requisições falham. Ele não guarda cookie, endereço IP, user agent nem nada pessoal, e cada uma dessas regras está no código, coberta por testes.',
+      openDemo: 'Abrir a demonstração',
+      readCode: 'Ver o código',
+      note: 'Sem cadastro. Dados inventados. Abre direto no painel.',
+    },
+    footer: {
+      tagline: 'Análise de produto com privacidade em primeiro lugar.',
+      product: 'Produto',
+      code: 'Código',
+      author: 'Autor',
+      demo: 'Demonstração',
+      apiReference: 'Documentação da API',
+      playground: 'Playground do SDK',
+      madeBy: 'Feito por Samuel Santana · Licença MIT',
+    },
+  },
 });
