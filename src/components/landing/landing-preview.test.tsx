@@ -30,6 +30,17 @@ describe('LandingPreview', () => {
     expect(screen.getByText('Invented data, like the live demo.')).toBeInTheDocument();
   });
 
+  it('marks the parts that move as the page opens, and the figures that count up', () => {
+    const { container } = render(<LandingPreview view={showcasePreview(english)} i18n={english} />);
+
+    expect(screen.getByRole('figure')).toHaveAttribute('id', 'landing-preview');
+    expect(screen.getByRole('figure')).toHaveClass('landing-preview');
+    expect(container.querySelectorAll('[data-count]')).toHaveLength(4);
+    expect(container.querySelector('.landing-preview-line')).toHaveAttribute('pathLength', '1');
+    expect(container.querySelectorAll('.landing-preview-late')).toHaveLength(2);
+    expect(container.querySelectorAll('.landing-preview-bar')).toHaveLength(3);
+  });
+
   it('draws no end point for a period without visits', () => {
     const view = { ...showcasePreview(english), current: [], previous: [] };
 

@@ -1,6 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import type { Locale } from '@/i18n/locales';
-import { LANDING_WIDTH, LINK_SECONDARY } from './landing-classes';
+import { LANDING_WIDTH, LINK_SECONDARY, REVEAL } from './landing-classes';
 import { Eyebrow } from './landing-section';
 
 export interface StorySectionProps {
@@ -26,7 +26,9 @@ export function StorySection({ i18n }: StorySectionProps) {
       className="scroll-mt-16 border-t border-line py-16 lg:py-22"
     >
       <div className={LANDING_WIDTH}>
-        <div className="flex flex-wrap items-center justify-between gap-5 rounded-panel border border-line-strong bg-card p-7 shadow-raised">
+        <div
+          className={`flex flex-wrap items-center justify-between gap-5 rounded-panel border border-line-strong bg-card p-7 shadow-raised ${REVEAL}`}
+        >
           <div className="flex max-w-xl flex-col gap-2">
             <Eyebrow>{t('landing.story.eyebrow')}</Eyebrow>
             <h2 id={titleId} className="text-2xl font-semibold tracking-tight">

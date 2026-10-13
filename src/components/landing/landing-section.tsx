@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { LANDING_WIDTH } from './landing-classes';
+import { LANDING_WIDTH, REVEAL } from './landing-classes';
 
 export interface EyebrowProps {
   readonly children: ReactNode;
@@ -31,7 +31,7 @@ export function LandingSection({ id, eyebrow, title, lead, children }: LandingSe
       className="scroll-mt-16 border-t border-line py-16 lg:py-22"
     >
       <div className={LANDING_WIDTH}>
-        <div className="mb-9 flex max-w-2xl flex-col gap-3">
+        <div className={`mb-9 flex max-w-2xl flex-col gap-3 ${REVEAL}`}>
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id={titleId}

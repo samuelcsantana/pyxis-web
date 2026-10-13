@@ -32,6 +32,7 @@ import {
   languageAlternatesOf,
 } from '@/lib/landing-pages';
 import { APP_NAME, LANDING_ORIGIN } from '@/lib/site';
+import './landing.css';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 

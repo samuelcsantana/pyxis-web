@@ -1,4 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
 export interface NeverStoredSectionProps {
@@ -27,7 +28,7 @@ export function NeverStoredSection({ i18n }: NeverStoredSectionProps) {
         {ROWS.map((row) => (
           <li
             key={row}
-            className="grid gap-x-5 gap-y-2.5 rounded-card border border-line bg-card px-4.5 py-4 lg:grid-cols-[11rem_minmax(0,1.25fr)_auto_minmax(0,1fr)] lg:items-center"
+            className={`grid gap-x-5 gap-y-2.5 rounded-card border border-line bg-card px-4.5 py-4 lg:grid-cols-[11rem_minmax(0,1.25fr)_auto_minmax(0,1fr)] lg:items-center ${REVEAL}`}
           >
             <p className="text-sm font-semibold">
               {t(`landing.never.rows.${row}.label`)}

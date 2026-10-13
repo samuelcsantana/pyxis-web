@@ -3,6 +3,7 @@ import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes'
 import type { I18n } from '@/i18n/i18n';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 import { ScreenGlyph } from './screen-glyph';
 
@@ -38,7 +39,7 @@ export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) 
     >
       <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {SCREENS_SHOWN.map((screen) => (
-          <li key={screen} className="flex">
+          <li key={screen} className={`flex ${REVEAL}`}>
             <a
               href={demoScreenUrl(screen)}
               className={`flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}

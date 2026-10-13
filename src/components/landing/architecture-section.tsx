@@ -1,4 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
 export interface ArchitectureSectionProps {
@@ -22,7 +23,7 @@ export function ArchitectureSection({ i18n }: ArchitectureSectionProps) {
         {FLOW.map((part, index) => (
           <li
             key={part}
-            className="relative flex flex-col gap-1 rounded-card border border-line-strong bg-card px-4 py-3.5"
+            className={`relative flex flex-col gap-1 rounded-card border border-line-strong bg-card px-4 py-3.5 ${REVEAL}`}
           >
             <span className="text-base font-semibold">
               {t(`landing.architecture.${part}.name`)}
@@ -43,7 +44,7 @@ export function ArchitectureSection({ i18n }: ArchitectureSectionProps) {
         {BESIDE.map((part) => (
           <li
             key={part}
-            className="flex flex-col rounded-card border border-dashed border-line-strong px-4 py-3"
+            className={`flex flex-col rounded-card border border-dashed border-line-strong px-4 py-3 ${REVEAL}`}
           >
             <span className="text-sm font-semibold">{t(`landing.architecture.${part}.name`)}</span>
             <span className="text-sm text-muted">{t(`landing.architecture.${part}.note`)}</span>

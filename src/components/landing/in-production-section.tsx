@@ -1,5 +1,6 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 
@@ -24,7 +25,7 @@ export function InProductionSection({ i18n }: InProductionSectionProps) {
     >
       <ul className="grid gap-3 md:grid-cols-2">
         {SITES.map((site) => (
-          <li key={site.domain} className="flex">
+          <li key={site.domain} className={`flex ${REVEAL}`}>
             <a
               href={site.href}
               className={`flex grow flex-col gap-1 rounded-card border border-line bg-card px-5 py-4.5 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}

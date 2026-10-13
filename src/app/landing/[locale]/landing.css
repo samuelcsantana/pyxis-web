@@ -1,0 +1,99 @@
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+}
+
+.landing-language-thumb {
+  view-transition-name: landing-language-thumb;
+}
+
+::view-transition-group(landing-language-thumb) {
+  animation-duration: 220ms;
+  animation-timing-function: ease-out;
+}
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.75rem;
+  }
+}
+
+@keyframes landing-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes landing-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes landing-grow {
+  from {
+    scale: 0 1;
+  }
+}
+
+.landing-faq details {
+  interpolate-size: allow-keywords;
+}
+
+.landing-faq details::details-content {
+  block-size: 0;
+  overflow-y: clip;
+  transition:
+    block-size 300ms ease,
+    content-visibility 300ms allow-discrete;
+}
+
+.landing-faq details[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .landing-reveal {
+      animation: landing-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 60%;
+    }
+  }
+
+  .landing-preview {
+    animation: landing-rise 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .landing-preview-line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: landing-draw 1300ms 250ms ease-out forwards;
+  }
+
+  .landing-preview-late {
+    animation: landing-fade 500ms 1200ms ease-out both;
+  }
+
+  .landing-preview-bar {
+    transform-origin: left center;
+    animation: landing-grow 900ms 400ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-faq details::details-content {
+    transition: none;
+  }
+}

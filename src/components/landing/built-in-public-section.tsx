@@ -1,5 +1,6 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 
@@ -56,7 +57,7 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
       <div className="grid gap-7 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <ul className="grid gap-3.5">
           {ITEMS.map((item) => (
-            <li key={item} className="flex gap-3 text-base leading-relaxed">
+            <li key={item} className={`flex gap-3 text-base leading-relaxed ${REVEAL}`}>
               <Icon path={CHECK_ICON} className="mt-1 shrink-0 text-ok" />
               {t(`landing.public.items.${item}`)}
             </li>
@@ -64,7 +65,7 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
         </ul>
         <ul className="flex flex-col gap-2">
           {documents.map((document) => (
-            <li key={document.href} className="flex">
+            <li key={document.href} className={`flex ${REVEAL}`}>
               <a
                 href={document.href}
                 className={`flex grow items-center justify-between gap-3 rounded-card border border-line bg-card px-4 py-3.5 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}

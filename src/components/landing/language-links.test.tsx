@@ -25,6 +25,15 @@ describe('LanguageLinks', () => {
     expect(screen.getByRole('link', { name: 'English' })).not.toHaveAttribute('aria-current');
   });
 
+  it('draws the dark pill only under the current language, named for the page transition', () => {
+    render(<LanguageLinks current={landingPageOfLocale('pt-BR')} label="Idioma" />);
+
+    const thumbs = screen.getAllByTestId('language-thumb');
+    expect(thumbs).toHaveLength(1);
+    expect(thumbs[0]).toHaveClass('landing-language-thumb', 'bg-ink');
+    expect(screen.getByRole('link', { current: 'page' })).toContainElement(thumbs[0] ?? null);
+  });
+
   it('shows a two-letter code on phones, hidden from screen readers', () => {
     render(<LanguageLinks current={DEFAULT_LANDING_PAGE} label="Language" />);
 

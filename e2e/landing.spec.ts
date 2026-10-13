@@ -6,7 +6,7 @@ const DEMO_SCREEN = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`home page, ${colorScheme} theme`, () => {
-    test.use({ colorScheme });
+    test.use({ colorScheme, reducedMotion: 'reduce' });
 
     for (const path of ['/', '/pt-br']) {
       test(`has no WCAG 2.2 A or AA violation and no sideways scroll at ${path}`, async ({
@@ -143,6 +143,26 @@ test('copies the install command', async ({ page, context, browserName }) => {
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     'npm install pyxis-analytics',
   );
+});
+
+test.describe('with reduced motion', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('moves nothing, on load or while scrolling', async ({ page }) => {
+    await page.goto('/');
+    await page.mouse.wheel(0, 2_000);
+
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+  });
+});
+
+test('shows every section fully once it has been scrolled into view', async ({ page }) => {
+  await page.goto('/');
+
+  const story = page.getByRole('region', { name: 'Why Pyxis exists' });
+  await story.scrollIntoViewIfNeeded();
+
+  await expect(story.locator('.landing-reveal')).toHaveCSS('opacity', '1');
 });
 
 test('sends any other address on the main domain to the demo', async ({ request }) => {

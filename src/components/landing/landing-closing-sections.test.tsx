@@ -81,6 +81,8 @@ describe('FaqSection', () => {
     expect(items).toHaveLength(6);
     expect([...items].map((item) => item.open)).toEqual([true, false, false, false, false, false]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
+    expect(items[0]?.parentElement).toHaveClass('landing-faq');
+    expect(items[0]).toHaveClass('landing-reveal');
   });
 
   it('sets the names of code in code type', () => {
