@@ -22,7 +22,7 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
     <section aria-labelledby={HERO_TITLE_ID} className="relative isolate overflow-hidden">
       <BrandBackdrop />
       <div className={`${LANDING_WIDTH} py-10 sm:py-16 lg:py-20`}>
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
+        <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
           <div className="flex max-w-2xl flex-col gap-5">
             <Eyebrow>{t('landing.hero.eyebrow')}</Eyebrow>
             <h1

@@ -160,3 +160,16 @@ describe('LanguageMenu', () => {
     expect(screen.getByRole('group', { name: 'Language' })).not.toHaveClass('flex-col');
   });
 });
+
+describe('LanguageMenu on a narrow header', () => {
+  it('shows two-letter codes on phones while keeping each full name for screen readers', () => {
+    render(<LanguageMenu locale="pt-BR" label="Idioma" choose={chooser()} compactOnPhones />);
+
+    expect(screen.getByRole('button', { name: 'English' })).toHaveTextContent('EN');
+    expect(screen.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByText('PT')).toHaveAttribute('aria-hidden', 'true');
+  });
+});

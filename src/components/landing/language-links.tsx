@@ -1,5 +1,5 @@
 import { SEGMENTED_GROUP, SEGMENTED_IDLE, SEGMENTED_OPTION } from '@/components/ui/control-classes';
-import { type Locale, localeName } from '@/i18n/locales';
+import { localeCode, localeName } from '@/i18n/locales';
 import { LANDING_PAGES, type LandingPage } from '@/lib/landing-pages';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
@@ -8,12 +8,7 @@ export interface LanguageLinksProps {
   readonly label: string;
 }
 
-const SHORT_NAME_LENGTH = 2;
 export const LANGUAGE_THUMB = 'landing-language-thumb';
-
-function shortName(locale: Locale): string {
-  return locale.slice(0, SHORT_NAME_LENGTH).toUpperCase();
-}
 
 export function LanguageLinks({ current, label }: LanguageLinksProps) {
   return (
@@ -40,7 +35,7 @@ export function LanguageLinks({ current, label }: LanguageLinksProps) {
                 ) : null}
                 <span className="sr-only sm:not-sr-only">{localeName(page.locale)}</span>
                 <span aria-hidden="true" className="sm:hidden">
-                  {shortName(page.locale)}
+                  {localeCode(page.locale)}
                 </span>
               </a>
             </li>

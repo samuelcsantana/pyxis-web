@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
-import { LogoMark } from '@/components/brand/logo-mark';
 import { RAISED_CARDS } from '@/components/brand/raised-cards';
+import { SiteHeader } from '@/components/landing/site-header';
 import { LanguageMenu } from '@/components/language/language-menu';
 import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
@@ -11,6 +11,7 @@ import { TEXT_LINK } from '@/components/ui/control-classes';
 import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
+import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
@@ -29,21 +30,28 @@ export interface SignInPageProps {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { expired, next } = await searchParams;
-  const { t, locale } = await getI18n();
+  const i18n = await getI18n();
+  const { t, locale } = i18n;
   const demo = isDemoMode();
   return (
-    <div className="relative isolate flex min-h-dvh flex-col items-center bg-bg px-4 pt-6 pb-10 text-ink">
+    <div className="relative isolate flex min-h-dvh flex-col bg-bg text-ink">
       <BrandBackdrop />
-      <header className="flex w-full max-w-6xl flex-wrap items-center justify-end gap-2">
-        <p className="mr-auto flex items-center gap-2.5 text-xl font-bold tracking-tight">
-          <LogoMark size={28} />
-          Pyxis
-        </p>
-        <LanguageMenu locale={locale} label={t('language.label')} choose={chooseLocale} />
-        <ThemeToggle initialTheme={await chosenTheme()} />
-      </header>
+      <SiteHeader
+        i18n={i18n}
+        homeHref={landingUrlOf(landingPageOfLocale(locale))}
+        language={
+          <LanguageMenu
+            locale={locale}
+            label={t('language.label')}
+            choose={chooseLocale}
+            compactOnPhones
+          />
+        }
+        theme={<ThemeToggle initialTheme={await chosenTheme()} />}
+        withSignIn={false}
+      />
       <MainContent
-        className={`flex w-full grow flex-col items-center justify-start gap-7 pt-5 pb-8 sm:justify-center sm:py-8 ${RAISED_CARDS}`}
+        className={`flex w-full grow flex-col items-center justify-start gap-7 px-4 pt-5 pb-10 sm:justify-center sm:py-8 ${RAISED_CARDS}`}
       >
         <SignInForm
           sessionExpired={expired === '1'}

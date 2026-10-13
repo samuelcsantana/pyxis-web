@@ -21,6 +21,25 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
+for (const path of ['/', '/pt-br']) {
+  test(`grows with the reader's text size and never scrolls sideways at ${path}`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const before = await page
+      .getByRole('heading', { level: 1 })
+      .evaluate((heading) => parseFloat(getComputedStyle(heading).fontSize));
+
+    await page.addStyleTag({ content: 'html { font-size: 32px; }' });
+
+    const after = await page
+      .getByRole('heading', { level: 1 })
+      .evaluate((heading) => parseFloat(getComputedStyle(heading).fontSize));
+    expect(after).toBe(before * 2);
+    await expect.poll(() => sidewaysOverflow(page)).toBe(0);
+  });
+}
+
 test('serves each language at its own address, with the tags search engines read', async ({
   page,
 }) => {

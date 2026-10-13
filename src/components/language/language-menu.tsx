@@ -16,7 +16,7 @@ import {
 import { SlidingIndicator } from '@/components/ui/sliding-indicator';
 import { useChoiceAhead } from '@/components/ui/use-choice-ahead';
 import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
-import { type Locale, LOCALES, localeName } from '@/i18n/locales';
+import { type Locale, LOCALES, localeCode, localeName } from '@/i18n/locales';
 
 export type LanguageMenuSurface = 'page' | 'nav';
 export type LanguageMenuLayout = 'row' | 'column';
@@ -27,6 +27,7 @@ export interface LanguageMenuProps {
   readonly choose: (form: FormData) => Promise<void>;
   readonly surface?: LanguageMenuSurface;
   readonly layout?: LanguageMenuLayout;
+  readonly compactOnPhones?: boolean;
 }
 
 interface SurfaceClasses {
@@ -92,6 +93,7 @@ export function LanguageMenu({
   choose,
   surface = 'page',
   layout = 'row',
+  compactOnPhones = false,
 }: LanguageMenuProps) {
   const classes = SURFACES[surface];
   const [shown, chooseAhead] = useChoiceAhead(locale);
@@ -121,7 +123,16 @@ export function LanguageMenu({
             }}
             className={`${classes.option} ${each === shown ? classes.current : classes.other}`}
           >
-            {localeName(each)}
+            {compactOnPhones ? (
+              <>
+                <span className="sr-only sm:not-sr-only">{localeName(each)}</span>
+                <span aria-hidden="true" className="sm:hidden">
+                  {localeCode(each)}
+                </span>
+              </>
+            ) : (
+              localeName(each)
+            )}
           </button>
         ))}
       </div>
