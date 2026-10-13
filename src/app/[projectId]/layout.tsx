@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { MobileMenu } from '@/components/shell/mobile-menu';
 import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import { Sidebar } from '@/components/shell/sidebar';
@@ -22,6 +23,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
     <NavigationPendingProvider>
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
         <SkipLink i18n={i18n} />
+        <PreferenceCarrier locale={i18n.locale} />
         <MobileMenu>
           <Sidebar
             admin={admin}

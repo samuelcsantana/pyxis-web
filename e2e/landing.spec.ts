@@ -92,12 +92,41 @@ test('leads to the live demo and the dashboard sign-in', async ({ page }) => {
 
   await expect(page.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
     'href',
-    'https://demo.pyxis-analytics.dev',
+    'https://demo.pyxis-analytics.dev/?lang=en',
   );
   await expect(page.getByRole('link', { name: 'Sign in' })).toHaveAttribute(
     'href',
-    'https://app.pyxis-analytics.dev/sign-in',
+    'https://app.pyxis-analytics.dev/sign-in?lang=en',
   );
+});
+
+test('carries the language and the chosen theme to the dashboard and the demo', async ({
+  page,
+}) => {
+  await page.goto('/pt-br');
+  await page.getByRole('button', { name: /tema/i }).click();
+  const theme = await page.locator('html').getAttribute('data-theme');
+
+  await expect(page.getByRole('link', { name: 'Entrar' })).toHaveAttribute(
+    'href',
+    `https://app.pyxis-analytics.dev/sign-in?lang=pt-BR&theme=${theme ?? ''}`,
+  );
+  await expect(page.getByRole('link', { name: 'Abrir a demonstração' })).toHaveAttribute(
+    'href',
+    `https://demo.pyxis-analytics.dev/?lang=pt-BR&theme=${theme ?? ''}`,
+  );
+});
+
+test('wears the theme a link brought and remembers it, with no cookie and a clean address', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/pt-br?theme=dark');
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page).toHaveURL(/\/pt-br$/);
+  expect(await page.evaluate(() => window.localStorage.getItem('pyxis:theme'))).toBe('dark');
+  expect(await context.cookies()).toEqual([]);
 });
 
 test('shows the sections in order', async ({ page }) => {
@@ -121,6 +150,9 @@ test('unfolds a question of the FAQ', async ({ page }) => {
   await page.goto('/');
 
   const question = page.getByText('Does it store IP addresses?');
+  await question.evaluate((summary) => {
+    summary.scrollIntoView({ block: 'center' });
+  });
   await question.click();
 
   await expect(page.getByText(/the address itself is never written anywhere/)).toBeVisible();
@@ -146,7 +178,7 @@ test('opens each dashboard screen of the demo store from its card', async ({ pag
   await expect(cards).toHaveCount(8);
   await expect(cards.first()).toHaveAttribute(
     'href',
-    'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview',
+    'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview?lang=en',
   );
 });
 
