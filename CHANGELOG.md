@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.17.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.16.0...v0.17.0) (2026-10-13)
+
+
+### Features
+
+* **demo:** link the demo banner to the page that explains Pyxis ([ce43e78](https://github.com/samuelcsantana/pyxis-web/commit/ce43e78f17166982d7e73748842a2a0490c9c155))
+* **landing:** keep the recorder toggle off the first screen until the visitor scrolls ([fefe000](https://github.com/samuelcsantana/pyxis-web/commit/fefe0009f1c25d71cc7059d50d2313e99eb69668))
+* **preferences:** carry the language and the theme between the Pyxis addresses ([47b5c26](https://github.com/samuelcsantana/pyxis-web/commit/47b5c26fc44dbf62303bbfc0c864a75e71d20e58))
+* **sign-in:** wear the home page header on the sign-in page ([3b23db3](https://github.com/samuelcsantana/pyxis-web/commit/3b23db382261bcaca0f4b29e71f6441d9d210ff2))
+
 ## [0.16.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.15.0...v0.16.0) (2026-10-13)
 
 
