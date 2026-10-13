@@ -1,14 +1,14 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
 import { fakeSdk, SAMPLE_BATCH, startedMeasurement } from '@/test-utils/fake-measurement';
 import { createMeasurement } from './landing-measurement';
 import { LandingMeasurementBoot } from './landing-measurement-boot';
 import { measurementLabelsOf, recordedLabelsOf } from './measurement-labels';
 import { MeasurementNote } from './measurement-note';
-import { RecordedDrawer } from './recorded-drawer';
+import { RecordedDrawer, REVEAL_AFTER_SCROLL_PX } from './recorded-drawer';
 
 const RECORDED = recordedLabelsOf(english);
 const NOTE = measurementLabelsOf(english);
@@ -72,6 +72,77 @@ describe('RecordedDrawer', () => {
     await userEvent.click(screen.getByRole('button', { name: /What this page recorded/ }));
 
     expect(screen.getByRole('listitem')).toHaveTextContent('referrer: www.linkedin.com');
+  });
+
+  describe('on the first screen', () => {
+    function scrollTo(top: number) {
+      Object.defineProperty(window, 'scrollY', { configurable: true, value: top });
+      fireEvent.scroll(window);
+    }
+
+    afterEach(() => {
+      Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 });
+    });
+
+    it('keeps its toggle out of sight until the visitor scrolls, and again back at the top', () => {
+      render(
+        <RecordedDrawer
+          labels={RECORDED}
+          locale="en-US"
+          measurement={startedMeasurement(fakeSdk())}
+        />,
+      );
+      const toggle = screen.getByRole('button', { name: 'What this page recorded 0' });
+      expect(toggle).toHaveClass('invisible', 'opacity-0');
+
+      act(() => {
+        scrollTo(REVEAL_AFTER_SCROLL_PX - 1);
+      });
+      expect(toggle).toHaveClass('invisible');
+
+      act(() => {
+        scrollTo(REVEAL_AFTER_SCROLL_PX);
+      });
+      expect(toggle).not.toHaveClass('invisible');
+      expect(toggle).not.toHaveClass('opacity-0');
+
+      act(() => {
+        scrollTo(0);
+      });
+      expect(toggle).toHaveClass('invisible');
+    });
+
+    it('keeps its toggle in sight while the list is open, wherever the page is', async () => {
+      const measurement = startedMeasurement(fakeSdk());
+      render(<RecordedDrawer labels={RECORDED} locale="en-US" measurement={measurement} />);
+
+      act(() => {
+        measurement.setDrawerOpen(true);
+      });
+
+      expect(screen.getByRole('button', { name: /What this page recorded/ })).not.toHaveClass(
+        'invisible',
+      );
+      await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+      expect(screen.getByRole('button', { name: /What this page recorded/ })).toHaveClass(
+        'invisible',
+      );
+    });
+
+    it('shows its toggle from the start when told to reveal it without scrolling', () => {
+      render(
+        <RecordedDrawer
+          labels={RECORDED}
+          locale="en-US"
+          measurement={startedMeasurement(fakeSdk())}
+          revealAfterScroll={0}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: /What this page recorded/ })).not.toHaveClass(
+        'invisible',
+      );
+    });
   });
 
   it('says nothing was sent yet, then closes by its button or Escape, back on the toggle', async () => {

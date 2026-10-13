@@ -232,6 +232,37 @@ test.describe('measuring itself', () => {
     await expect(recorded).toContainText('Never sent:');
   });
 
+  test('keeps the recorder toggle off the first screen until the visitor scrolls', async ({
+    page,
+  }) => {
+    for (const path of ['/', '/pt-br']) {
+      await page.goto(path);
+      const toggle = page.getByRole('button', {
+        name: /What this page recorded|O que esta página registrou/,
+        includeHidden: true,
+      });
+      await expect(toggle).toHaveCount(1);
+      await expect(toggle).toBeHidden();
+
+      await page.evaluate(() => {
+        window.scrollTo({ top: 400, behavior: 'instant' });
+      });
+      await expect(toggle).toBeVisible();
+
+      await toggle.click();
+      await page.evaluate(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      });
+      await expect(toggle).toBeVisible();
+      await expect(
+        page.getByRole('region', { name: /What this page recorded|O que esta página registrou/ }),
+      ).toBeVisible();
+
+      await page.keyboard.press('Escape');
+      await expect(toggle).toBeHidden();
+    }
+  });
+
   test('stops measuring in this browser when asked, until asked again', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Don’t measure my visits' }).click();

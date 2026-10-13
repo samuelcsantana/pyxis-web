@@ -17,7 +17,7 @@ const meta = {
   title: 'Landing/RecordedDrawer',
   component: RecordedDrawer,
   parameters: { layout: 'fullscreen' },
-  args: { labels: recordedLabelsOf(english), locale: 'en-US' },
+  args: { labels: recordedLabelsOf(english), locale: 'en-US', revealAfterScroll: 0 },
   decorators: [
     (Story) => (
       <div className="min-h-[36rem] bg-bg text-ink">

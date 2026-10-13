@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useSyncExternalStore } from 'react';
-import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { rich } from '@/i18n/rich';
 import { landingMeasurement, type Measurement, type RecordedEvent } from './landing-measurement';
 import { HOST_PLACEHOLDER, ID_PLACEHOLDER, type RecordedLabels } from './measurement-labels';
@@ -10,15 +10,27 @@ export interface RecordedDrawerProps {
   readonly labels: RecordedLabels;
   readonly locale: string;
   readonly measurement?: Measurement;
+  readonly revealAfterScroll?: number;
 }
 
 const SHOWN_ID_LENGTH = 8;
 const NO_EVENTS: readonly RecordedEvent[] = [];
 const ESCAPE = 'Escape';
+export const REVEAL_AFTER_SCROLL_PX = 120;
+const TOGGLE_TRANSITION =
+  'transition-[background-color,opacity,visibility] duration-200 motion-reduce:transition-none';
 
 const nothingYet = () => NO_EVENTS;
 const closedOnTheServer = () => false;
 const unknownOnTheServer = () => null;
+const atTheTopOnTheServer = () => false;
+
+function subscribeToScroll(onScroll: () => void): () => void {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  return () => {
+    window.removeEventListener('scroll', onScroll);
+  };
+}
 
 function detailsOf(event: RecordedEvent, labels: RecordedLabels): string {
   const referrer =
@@ -49,6 +61,7 @@ export function RecordedDrawer({
   labels,
   locale,
   measurement = landingMeasurement,
+  revealAfterScroll = REVEAL_AFTER_SCROLL_PX,
 }: RecordedDrawerProps) {
   const events = useSyncExternalStore(measurement.subscribe, measurement.events, nothingYet);
   const open = useSyncExternalStore(
@@ -60,6 +73,11 @@ export function RecordedDrawer({
     measurement.subscribe,
     measurement.status,
     unknownOnTheServer,
+  );
+  const scrolled = useSyncExternalStore(
+    subscribeToScroll,
+    () => window.scrollY >= revealAfterScroll,
+    atTheTopOnTheServer,
   );
   const panelId = useId();
   const titleId = useId();
@@ -85,6 +103,7 @@ export function RecordedDrawer({
     return null;
   }
   const visit = events.at(-1)?.sessionId.slice(0, SHOWN_ID_LENGTH);
+  const shown = scrolled || open;
   return (
     <>
       <button
@@ -95,7 +114,7 @@ export function RecordedDrawer({
         onClick={() => {
           measurement.setDrawerOpen(!open);
         }}
-        className={`fixed bottom-4 left-4 z-30 flex items-center gap-2 rounded-pill border border-line-strong bg-card py-2 pr-3.5 pl-3 text-caption font-semibold text-ink shadow-raised hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+        className={`fixed bottom-4 left-4 z-30 flex items-center gap-2 rounded-pill border border-line-strong bg-card py-2 pr-3.5 pl-3 text-caption font-semibold text-ink shadow-raised hover:bg-soft active:bg-line ${FOCUS_RING} ${TOGGLE_TRANSITION} ${shown ? '' : 'invisible opacity-0'}`}
       >
         <span aria-hidden="true" className="size-2 rounded-pill bg-ok ring-3 ring-ok-soft" />
         {labels.button}{' '}
