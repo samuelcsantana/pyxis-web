@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { APP_DESCRIPTION } from '@/lib/site';
 import { clientMessages, getI18n, getTranslator, loadMessages } from './get-messages';
 import { en } from './messages/en';
+import { es } from './messages/es';
 import { ptBR } from './messages/pt-BR';
 
 describe('get-messages', () => {
   it('loads the dictionary of a language', async () => {
     await expect(loadMessages('en')).resolves.toBe(en);
     await expect(loadMessages('pt-BR')).resolves.toBe(ptBR);
+    await expect(loadMessages('es')).resolves.toBe(es);
   });
 
   it('translates in the language of the request', async () => {

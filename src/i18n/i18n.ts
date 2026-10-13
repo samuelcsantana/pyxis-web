@@ -3,7 +3,11 @@ import type { Locale } from './locales';
 import type { Messages, SourceMessages } from './messages';
 import { createTranslator, type Translator } from './translate';
 
-const DISPLAY_TAGS: Readonly<Record<Locale, string>> = { en: 'en-US', 'pt-BR': 'pt-BR' };
+const DISPLAY_TAGS: Readonly<Record<Locale, string>> = {
+  en: 'en-US',
+  'pt-BR': 'pt-BR',
+  es: 'es',
+};
 
 export function displayTag(locale: Locale): string {
   return DISPLAY_TAGS[locale];

@@ -16,6 +16,7 @@ export const LANDING_PAGES: readonly LandingPage[] = [ENGLISH, BRAZILIAN_PORTUGU
 const LANDING_PAGE_OF_LOCALE: Readonly<Record<Locale, LandingPage>> = {
   en: ENGLISH,
   'pt-BR': BRAZILIAN_PORTUGUESE,
+  es: ENGLISH,
 };
 
 const INTERNAL_PREFIX = '/landing';

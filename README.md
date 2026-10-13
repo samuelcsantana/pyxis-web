@@ -255,7 +255,7 @@ Shipping now:
   so it is shown in full), when each live secret key was created (never the key, which the API
   keeps only as a hash), how many months events are kept, and whether the project still waits
   for its first event. Project settings change through the API's command line
-- The interface in English and in Brazilian Portuguese (see
+- The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
   that host: English at `/`, Brazilian Portuguese at `/pt-br`, each with its own title,
@@ -281,23 +281,27 @@ Shipping now:
 
 <img alt="The Overview of the demo store in Brazilian Portuguese: Visão geral, its figures written as 2.764 and +3,6%, its dates as 9 de set. – 8 de out. de 2026, and the event names exactly as the site sent them" src=".github/assets/screenshots/overview-pt-br-light.png">
 
-The dashboard speaks English and Brazilian Portuguese. English is the default and the source of
-every text; each other language is a typed translation of it.
+The dashboard speaks English, Brazilian Portuguese and Spanish. English is the default and the
+source of every text; each other language is a typed translation of it. The Spanish is neutral
+(for Spain and Latin America) and addresses the reader as _tú_; its numbers and dates follow
+Spain's conventions (`es`).
 
 - **Which language:** the one chosen in the language menu wins, kept in the functional
   `pyxis_locale` cookie; without a choice, the browser's `Accept-Language` decides, matching on
-  the language, so `pt-PT` gets Brazilian Portuguese; otherwise English. The address never
-  changes, so links, bookmarks and the demo links work in every language.
-- **The menu:** each language named in itself (English, Português (Brasil)). On the sign-in page
-  it sits in the top bar beside the theme toggle; in the dashboard it is in the account menu at
-  the foot of the sidebar. It posts to a Server Action and the screen changes language in place,
-  keeping its address, its query and what was typed. The fill slides to the chosen language on the
-  click, before the page in that language arrives, and the content comes in with the short reveal
-  of a screen change when it does (still, when the system asks for reduced motion).
+  the language, so `pt-PT` gets Brazilian Portuguese and `es-MX` gets Spanish; otherwise
+  English. The address never changes, so links, bookmarks and the demo links work in every
+  language.
+- **The menu:** each language named in itself (English, Português (Brasil), Español). On the
+  sign-in page it sits in the top bar beside the theme toggle; in the dashboard it is in the
+  account menu at the foot of the sidebar. It posts to a Server Action and the screen changes
+  language in place, keeping its address, its query and what was typed. The fill slides to the
+  chosen language on the click, before the page in that language arrives, and the content comes
+  in with the short reveal of a screen change when it does (still, when the system asks for
+  reduced motion).
 - **Numbers, dates and lists** go through `Intl` in the reader's language and the project's time
-  zone: `2.789`, `62,3%`, `9 de set.`, and lists joined with the language's own "and"
-  (`a, b e c`). Plurals follow CLDR, with a zero form where the language needs one (Portuguese
-  says "0 visitas").
+  zone: `2.789`, `62,3%`, `9 de set.` in Portuguese, `2789`, `62,3 %`, `9 sept` in Spanish, and
+  lists joined with the language's own "and" (`a, b e c`). Plurals follow CLDR, with a zero form
+  where the language needs one (Portuguese says "0 visitas").
 - **The sign-in email follows:** "Send code" passes the reader's language to the API
   (`locale` on `POST /v1/auth/request-code`), so the code arrives in the language the sign-in
   page was read in; the API falls back to English for a language it has no email for.
@@ -307,7 +311,8 @@ every text; each other language is a typed translation of it.
 - **Checked, not trusted:** a translation that misses or adds a key, or drops or invents a
   placeholder, fails the typecheck; a test walks every translation for the same keys,
   placeholders, rich-text tags and plural categories; `e2e/i18n.spec.ts` opens every translated
-  screen in Portuguese with axe, at 1440 and 390px, and checks the language switch round trip.
+  screen in Portuguese and in Spanish with axe, at 1440 and 390px, and checks the language
+  switch round trip through the three languages.
 
 ## Architecture
 
@@ -461,7 +466,7 @@ Tests run in English: the Vitest setup file replaces `currentLocale()`, the only
 the request's language, so a test never needs request headers to render a page. Domain functions
 and server components that write text take the request's `I18n` value (translator and formats)
 as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`, or
-`portuguese` from `src/test-utils/portuguese.ts` to check a Brazilian Portuguese sentence. Client
+`portuguese` or `spanish` from `src/test-utils/` to check a sentence in another language. Client
 Components read their text with `useT()` from the messages provider, so their tests, and the tests
 of any page that contains one, render through `renderWithMessages`, which wraps the tree in the
 provider with the English messages the browser receives. A Client Component that only shows words
@@ -527,8 +532,8 @@ src/
 │                   provider
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
-├── test-utils/     test helpers (rendering inside the messages provider, the English and
-│                   Portuguese I18n)
+├── test-utils/     test helpers (rendering inside the messages provider, the English,
+│                   Portuguese and Spanish I18n)
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
