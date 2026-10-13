@@ -9,6 +9,7 @@ import {
   landingPageOfLocale,
   landingPageOfSlug,
   landingUrlOf,
+  languageAlternatesOf,
 } from './landing-pages';
 
 describe('landing pages', () => {
@@ -56,6 +57,19 @@ describe('landing pages', () => {
     expect(landingPageOfInternalPath('/landing/en').path).toBe('/');
     expect(landingPageOfInternalPath('/landing').path).toBe('/');
     expect(landingPageOfInternalPath('/landing/fr').path).toBe('/');
+  });
+
+  it('lists each language and the default for search engines, as paths or full addresses', () => {
+    expect(languageAlternatesOf((page) => page.path)).toEqual({
+      en: '/',
+      'pt-BR': '/pt-br',
+      'x-default': '/',
+    });
+    expect(languageAlternatesOf(landingUrlOf)).toEqual({
+      en: 'https://pyxis-analytics.dev/',
+      'pt-BR': 'https://pyxis-analytics.dev/pt-br',
+      'x-default': 'https://pyxis-analytics.dev/',
+    });
   });
 
   it('gives the public address of each page on the main domain', () => {

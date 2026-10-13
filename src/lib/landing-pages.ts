@@ -51,3 +51,14 @@ export function landingPageOfInternalPath(path: string): LandingPage {
 export function landingUrlOf(page: LandingPage): string {
   return new URL(page.path, LANDING_ORIGIN).toString();
 }
+
+const X_DEFAULT = 'x-default';
+
+export function languageAlternatesOf(
+  addressOf: (page: LandingPage) => string,
+): Record<string, string> {
+  return {
+    ...Object.fromEntries(LANDING_PAGES.map((page) => [page.locale, addressOf(page)])),
+    [X_DEFAULT]: addressOf(DEFAULT_LANDING_PAGE),
+  };
+}
