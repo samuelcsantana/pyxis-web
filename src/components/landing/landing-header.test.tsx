@@ -22,6 +22,10 @@ describe('LandingHeader', () => {
       'href',
       'https://demo.pyxis-analytics.dev',
     );
+    expect(within(main).getByRole('link', { name: 'Privacy' })).toHaveAttribute(
+      'href',
+      '#never-stored',
+    );
     expect(within(main).getByRole('link', { name: 'GitHub' })).toHaveAttribute(
       'href',
       'https://github.com/samuelcsantana/pyxis-api',

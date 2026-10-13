@@ -16,6 +16,7 @@ export const LANDING_LINKS = {
   apiReference: 'https://samuelcsantana.github.io/pyxis-api/',
   playground: 'https://samuelcsantana.github.io/pyxis-sdk/',
   author: 'https://www.samuelsantana.dev',
+  bolsoverde: 'https://bolsoverde.com',
 } as const;
 
 export const PROPER_NAMES = {
@@ -26,4 +27,5 @@ export const PROPER_NAMES = {
   sdk: 'pyxis-sdk',
   web: 'pyxis-web',
   author: 'samuelsantana.dev',
+  bolsoverde: 'bolsoverde.com',
 } as const;

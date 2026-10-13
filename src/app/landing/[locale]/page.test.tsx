@@ -80,6 +80,12 @@ describe('the home page on the main domain', () => {
     expect(
       screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
     ).toHaveTextContent('Demo Store');
+    expect(
+      screen
+        .getAllByRole('region')
+        .map((region) => region.id)
+        .filter((id) => id !== ''),
+    ).toEqual(['never-stored', 'dashboard', 'install', 'in-production']);
   });
 
   it('serves the Brazilian Portuguese page, marking it as the current language', async () => {

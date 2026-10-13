@@ -81,6 +81,57 @@ test('leads to the live demo and the dashboard sign-in', async ({ page }) => {
   );
 });
 
+test('shows the four sections in order', async ({ page }) => {
+  await page.goto('/');
+
+  const sections = page.locator('main section[id]');
+  await expect(sections).toHaveCount(4);
+  expect(await sections.evaluateAll((all) => all.map((section) => section.id))).toEqual([
+    'never-stored',
+    'dashboard',
+    'install',
+    'in-production',
+  ]);
+});
+
+test('jumps to the privacy section from the header', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the header keeps only the essentials on a phone');
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link', { name: 'Privacy' })
+    .click();
+
+  await expect(page).toHaveURL(/#never-stored$/);
+  await expect(page.getByRole('heading', { name: 'What never gets stored' })).toBeInViewport();
+});
+
+test('opens each dashboard screen of the demo store from its card', async ({ page }) => {
+  await page.goto('/');
+
+  const cards = page.getByRole('region', { name: 'What the dashboard answers' }).getByRole('link');
+  await expect(cards).toHaveCount(8);
+  await expect(cards.first()).toHaveAttribute(
+    'href',
+    'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview',
+  );
+});
+
+test('copies the install command', async ({ page, context, browserName }) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/');
+
+  const install = page.getByRole('region', { name: 'What a site adds' });
+  await install.getByRole('button', { name: 'Copy' }).first().click();
+
+  await expect(install.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    'npm install pyxis-analytics',
+  );
+});
+
 test('sends any other address on the main domain to the demo', async ({ request }) => {
   const response = await request.get(`${DEMO_SCREEN}?range=7d`, { maxRedirects: 0 });
 
