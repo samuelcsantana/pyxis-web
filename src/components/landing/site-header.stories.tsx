@@ -1,0 +1,72 @@
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, fn, within } from 'storybook/test';
+import { LanguageMenu } from '@/components/language/language-menu';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
+import { DEFAULT_LANDING_PAGE, landingPageOfLocale } from '@/lib/landing-pages';
+import { english } from '@/test-utils/english';
+import { LanguageLinks } from './language-links';
+import { SiteHeader } from './site-header';
+
+const meta = {
+  title: 'Landing/SiteHeader',
+  component: SiteHeader,
+  parameters: { layout: 'fullscreen' },
+  args: {
+    i18n: english,
+    homeHref: '/',
+    language: <LanguageLinks current={DEFAULT_LANDING_PAGE} label="Language" />,
+    theme: <ThemeToggle remember="device" />,
+    withSignIn: true,
+  },
+  decorators: [
+    (Story) => (
+      <div className="min-h-64 bg-bg text-ink">
+        <Story />
+      </div>
+    ),
+  ],
+} satisfies Meta<typeof SiteHeader>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const OnTheHomePage: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { current: 'page' })).toHaveAccessibleName('English');
+    await expect(canvas.getByRole('link', { name: 'Sign in' })).toBeVisible();
+  },
+};
+
+export const OnTheHomePageInPortuguese: Story = {
+  args: {
+    homeHref: '/pt-br',
+    language: <LanguageLinks current={landingPageOfLocale('pt-BR')} label="Idioma" />,
+  },
+  globals: { locale: 'pt-BR' },
+};
+
+export const OnTheSignInPage: Story = {
+  args: {
+    homeHref: 'https://pyxis-analytics.dev/',
+    language: (
+      <LanguageMenu
+        locale="en"
+        label="Language"
+        choose={fn(() => Promise.resolve())}
+        compactOnPhones
+      />
+    ),
+    theme: <ThemeToggle />,
+    withSignIn: false,
+  },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).queryByRole('link', { name: 'Sign in' }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
+
+export const DarkTheme: Story = { globals: { theme: 'dark' } };

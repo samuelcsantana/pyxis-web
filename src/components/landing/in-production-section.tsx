@@ -26,13 +26,13 @@ export function InProductionSection({ i18n }: InProductionSectionProps) {
     >
       <ul className="grid gap-3 md:grid-cols-2">
         {SITES.map((site) => (
-          <li key={site.domain} className={`flex ${REVEAL}`}>
+          <li key={site.domain} className={`flex min-w-0 ${REVEAL}`}>
             <a
               href={site.href}
               {...trackAttributes(LANDING_EVENTS.siteOpened, { site: site.domain })}
-              className={`flex grow flex-col gap-1 rounded-card border border-line bg-card px-5 py-4.5 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+              className={`flex min-w-0 grow flex-col gap-1 rounded-card border border-line bg-card px-5 py-4.5 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
             >
-              <span className="font-mono text-lg font-semibold">{site.domain}</span>
+              <span className="font-mono text-lg font-semibold wrap-anywhere">{site.domain}</span>
               <span className="text-sm text-muted">{t(`landing.production.${site.note}`)}</span>
             </a>
           </li>

@@ -18,10 +18,10 @@ export function LandingProof({ i18n }: LandingProofProps) {
   return (
     <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-panel border border-line bg-line md:grid-cols-4">
       {FACTS.map((fact) => (
-        <li key={fact.key} className="flex">
+        <li key={fact.key} className="flex min-w-0">
           <a
             href={fact.href}
-            className={`flex grow flex-col gap-0.5 bg-card px-4.5 py-4 hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+            className={`flex min-w-0 grow flex-col gap-0.5 bg-card px-4.5 py-4 wrap-break-word hyphens-auto hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}
           >
             <span className="font-mono text-figure leading-tight font-semibold tracking-tight tabular-nums">
               {t(`landing.proof.${fact.key}.value`)}

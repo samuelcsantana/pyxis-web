@@ -8,9 +8,9 @@ import { FaqSection } from '@/components/landing/faq-section';
 import { InProductionSection } from '@/components/landing/in-production-section';
 import { InstallSection } from '@/components/landing/install-section';
 import { LandingFooter } from '@/components/landing/landing-footer';
-import { LandingHeader } from '@/components/landing/landing-header';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
+import { LanguageLinks } from '@/components/landing/language-links';
 import { LandingMeasurementBoot } from '@/components/landing/measurement/landing-measurement-boot';
 import {
   measurementLabelsOf,
@@ -18,8 +18,10 @@ import {
 } from '@/components/landing/measurement/measurement-labels';
 import { MeasurementNote } from '@/components/landing/measurement/measurement-note';
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
+import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
 import { MainContent } from '@/components/shell/main-content';
+import { ThemeToggle } from '@/components/theme/theme-toggle';
 import {
   LANDING_PREVIEW_RANGE,
   type LandingPreviewView,
@@ -118,7 +120,13 @@ export default async function LandingHome({ params }: LandingHomeProps) {
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
       <SkipLink i18n={i18n} />
-      <LandingHeader i18n={i18n} page={page} />
+      <SiteHeader
+        i18n={i18n}
+        homeHref={page.path}
+        language={<LanguageLinks current={page} label={i18n.t('landing.nav.language')} />}
+        theme={<ThemeToggle remember="device" />}
+        withSignIn
+      />
       <MainContent className="grow">
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
         <NeverStoredSection i18n={i18n} />

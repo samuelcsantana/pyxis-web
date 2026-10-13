@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import SignInPage, { generateMetadata } from './page';
@@ -44,6 +44,24 @@ describe('SignInPage', () => {
 
     expect(screen.getByRole('banner')).toHaveTextContent(/^Pyxis/);
     expect(screen.getByRole('main')).not.toHaveTextContent(/^Pyxis/);
+  });
+
+  it('wears the home page header, leading back to it without offering a sign-in', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    const banner = screen.getByRole('banner');
+    expect(within(banner).getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/',
+    );
+    expect(within(banner).getByRole('link', { name: 'Live demo' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: 'Privacy' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/#never-stored',
+    );
+    expect(within(banner).queryByRole('link', { name: 'Sign in' })).toBeNull();
   });
 
   it('draws the brand backdrop behind the page and raises the card', async () => {
