@@ -243,7 +243,7 @@ Shipping now:
   counts, every filter and drill-down link finds the visits behind its figure, every failure on
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
-  the banner links back to this repository
+  the banner's "What is Pyxis?" links to the home page in the demo's language
 - A Settings page per project, behind the gear next to the language button (beside the project
   switcher in the phone menu). It opens with the admin's own weekly digest switch: the Monday
   e-mail with the week that closed on Sunday, on by default, saved through a server action that

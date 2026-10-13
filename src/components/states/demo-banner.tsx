@@ -1,6 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
-
-const SOURCE_CODE_URL = 'https://github.com/samuelcsantana/pyxis-web';
+import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
 
 export interface DemoBannerProps {
   readonly i18n: I18n;
@@ -15,10 +14,10 @@ export function DemoBanner({ i18n }: DemoBannerProps) {
       >
         {i18n.t('demo.notice')}{' '}
         <a
-          href={SOURCE_CODE_URL}
+          href={landingUrlOf(landingPageOfLocale(i18n.locale))}
           className="font-semibold underline underline-offset-2 hover:decoration-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-ink"
         >
-          {i18n.t('demo.source')}
+          {i18n.t('demo.homePage')}
         </a>
       </p>
     </aside>

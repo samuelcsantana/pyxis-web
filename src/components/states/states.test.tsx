@@ -8,6 +8,7 @@ import { ErrorPanel } from './error-panel';
 import { ENGLISH_ERROR_TEXTS, englishErrorTexts } from './english-error-texts';
 import { errorTexts } from './error-texts';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
 import { NoConversionEvent } from './no-conversion-event';
 
@@ -102,16 +103,25 @@ describe('error texts', () => {
 });
 
 describe('DemoBanner', () => {
-  it('says the numbers are invented and links to the source code', () => {
+  it('says the numbers are invented and links to the page that explains Pyxis', () => {
     render(<DemoBanner i18n={english} />);
 
     expect(screen.getByRole('complementary', { name: 'Demo notice' })).toContainElement(
       screen.getByRole('note'),
     );
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
-    expect(screen.getByRole('link', { name: 'Source on GitHub' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'What is Pyxis?' })).toHaveAttribute(
       'href',
-      'https://github.com/samuelcsantana/pyxis-web',
+      'https://pyxis-analytics.dev/',
+    );
+  });
+
+  it('links to the Portuguese page when the demo is in Portuguese', () => {
+    render(<DemoBanner i18n={portuguese} />);
+
+    expect(screen.getByRole('link', { name: 'O que é o Pyxis?' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/pt-br',
     );
   });
 });
