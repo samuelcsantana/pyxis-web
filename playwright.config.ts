@@ -3,6 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 const PORT = 3101;
 const BASE_URL = `http://localhost:${String(PORT)}`;
 const isCi = process.env.CI !== undefined;
+const LANDING_SPECS = /landing.*\.spec\.ts/;
+const ON_THE_MAIN_DOMAIN = { extraHTTPHeaders: { 'x-forwarded-host': 'pyxis-analytics.dev' } };
+const DESKTOP = { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } };
+const MOBILE = { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } };
 
 export default defineConfig({
   testDir: './e2e',
@@ -16,14 +20,14 @@ export default defineConfig({
     locale: 'en-US',
   },
   projects: [
+    { name: 'desktop', testIgnore: LANDING_SPECS, use: DESKTOP },
+    { name: 'mobile', testIgnore: LANDING_SPECS, use: MOBILE },
     {
-      name: 'desktop',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+      name: 'landing-desktop',
+      testMatch: LANDING_SPECS,
+      use: { ...DESKTOP, ...ON_THE_MAIN_DOMAIN },
     },
-    {
-      name: 'mobile',
-      use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } },
-    },
+    { name: 'landing-mobile', testMatch: LANDING_SPECS, use: { ...MOBILE, ...ON_THE_MAIN_DOMAIN } },
   ],
   webServer: {
     command: `npm run build && npm run start -- -p ${String(PORT)}`,
