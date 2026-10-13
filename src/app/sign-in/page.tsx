@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import { RAISED_CARDS } from '@/components/brand/raised-cards';
 import { SiteHeader } from '@/components/landing/site-header';
+import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { LanguageMenu } from '@/components/language/language-menu';
 import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
@@ -36,6 +37,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   return (
     <div className="relative isolate flex min-h-dvh flex-col bg-bg text-ink">
       <BrandBackdrop />
+      <PreferenceCarrier locale={locale} />
       <SiteHeader
         i18n={i18n}
         homeHref={landingUrlOf(landingPageOfLocale(locale))}

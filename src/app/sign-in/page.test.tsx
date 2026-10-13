@@ -73,14 +73,14 @@ describe('SignInPage', () => {
     expect(screen.getByRole('main')).toHaveClass('[&>section]:shadow-raised');
   });
 
-  it('offers the live demo to a visitor without access', async () => {
+  it('offers the live demo to a visitor without access, in the language being read', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
     renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
     expect(
       screen.getByRole('link', { name: 'No access? See the live demo, with invented data' }),
-    ).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev');
+    ).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev/?lang=en');
   });
 
   it('does not offer the live demo inside the live demo', async () => {

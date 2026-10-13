@@ -20,6 +20,8 @@ import { MeasurementNote } from '@/components/landing/measurement/measurement-no
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
+import { LinkPreferencesReceiver } from '@/components/preferences/link-preferences-receiver';
+import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { MainContent } from '@/components/shell/main-content';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import {
@@ -154,6 +156,8 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         />
       )}
       <LandingStructuredData i18n={i18n} page={page} />
+      <PreferenceCarrier locale={page.locale} />
+      <LinkPreferencesReceiver />
     </div>
   );
 }

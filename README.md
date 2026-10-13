@@ -484,9 +484,9 @@ that says why:
 
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
-| Sign-in, home and not-found pages                      | 153               |
+| Sign-in, home and not-found pages                      | 155               |
 | Dashboard screens without a chart                      | 170               |
-| Dashboard screens with a chart (Overview, Acquisition) | 165               |
+| Dashboard screens with a chart (Overview, Acquisition) | 166               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -500,7 +500,11 @@ became a client component that moves the indicator on the click, before the page
 language arrives, and brings the content in when it does (about 1.1 KiB, the same indicator hook
 as the other switches). The code step's own work in the same release (the six cells, the page's
 own messages, the resend wait and the step kept through a reload) had taken the page from 149.5
-to 151.3 KiB.
+to 151.3 KiB. The sign-in budget then went to 155 KiB and the chart budget to 166 KiB with the
+preference carrier, which adds the chosen language and theme to the links between the home page,
+the dashboard and the live demo, so a visitor who changes either keeps it on the next address: it
+measured 154.1 KiB on the sign-in page (1.4 KiB more: about 1 KiB of code, the rest the shared
+chunk it splits off) and 165.3 KiB on Overview (0.5 KiB more).
 
 ## Project structure
 

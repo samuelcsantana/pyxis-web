@@ -1,9 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { returnPathOf } from '@/components/shell/screens';
+import { LOCALE_COOKIE_NAME } from '@/i18n/locales';
 import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
 import { requestHostname } from '@/lib/host-name';
 import { landingIngestionUrl } from '@/lib/landing-measurement-config';
+import { carriesPreferences, preferencesIn, withoutPreferences } from '@/lib/link-preferences';
 import {
   internalPathOf,
   isInternalLandingPath,
@@ -20,11 +22,34 @@ import {
   createNonce,
 } from '@/lib/security-headers';
 import { LANDING_HOST, LIVE_DEMO_URL } from '@/lib/site';
+import { THEME_COOKIE_NAME } from '@/lib/theme';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const RETURN_PARAMETER = 'next';
 
 const PERMANENT_REDIRECT = 308;
+const TEMPORARY_REDIRECT = 307;
+const ONE_YEAR_IN_SECONDS = 31_536_000;
+
+function rememberLinkPreferences(request: NextRequest): NextResponse | undefined {
+  const { searchParams } = request.nextUrl;
+  if (!carriesPreferences(searchParams)) {
+    return undefined;
+  }
+  const { locale, theme } = preferencesIn(searchParams);
+  const response = NextResponse.redirect(
+    withoutPreferences(new URL(request.url)),
+    TEMPORARY_REDIRECT,
+  );
+  const lasting = { path: '/', maxAge: ONE_YEAR_IN_SECONDS, sameSite: 'lax' } as const;
+  if (locale !== undefined) {
+    response.cookies.set(LOCALE_COOKIE_NAME, locale, { ...lasting, httpOnly: true });
+  }
+  if (theme !== undefined) {
+    response.cookies.set(THEME_COOKIE_NAME, theme, lasting);
+  }
+  return response;
+}
 
 function signInUrl(request: NextRequest): URL {
   const url = new URL(SIGN_IN_PATH, request.url);
@@ -86,7 +111,7 @@ function landingOrDemo(request: NextRequest): NextResponse {
   }
   const hostname = requestHostname(request.headers) ?? request.nextUrl.hostname;
   if (hostname !== LANDING_HOST) {
-    return renderWith(request);
+    return rememberLinkPreferences(request) ?? renderWith(request);
   }
   const page = landingPageAt(pathname);
   if (page === undefined) {
@@ -107,6 +132,10 @@ function landingOrDemo(request: NextRequest): NextResponse {
 export function proxy(request: NextRequest) {
   if (isDemoMode()) {
     return landingOrDemo(request);
+  }
+  const remembered = rememberLinkPreferences(request);
+  if (remembered !== undefined) {
+    return remembered;
   }
   const { pathname, search, searchParams } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);

@@ -83,7 +83,7 @@ describe('the home page on the main domain', () => {
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
       'href',
-      'https://demo.pyxis-analytics.dev',
+      'https://demo.pyxis-analytics.dev/?lang=en',
     );
     expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveAttribute(
       'href',

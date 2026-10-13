@@ -224,6 +224,55 @@ describe('proxy', () => {
     });
   });
 
+  describe('preferences carried by a link from another Pyxis address', () => {
+    it('remembers the language and the theme on the demo, then shows the clean address', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt(
+        'https://demo.pyxis-analytics.dev/p1/overview?range=7d&lang=pt-BR&theme=dark',
+      );
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get('location')).toBe(
+        'https://demo.pyxis-analytics.dev/p1/overview?range=7d',
+      );
+      expect(response.cookies.get('pyxis_locale')).toMatchObject({
+        value: 'pt-BR',
+        httpOnly: true,
+        path: '/',
+      });
+      expect(response.cookies.get('pyxis_theme')).toMatchObject({ value: 'dark', path: '/' });
+      expect(response.cookies.get('pyxis_theme')?.httpOnly).toBeFalsy();
+    });
+
+    it('does it on the dashboard before asking for a session', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+      const response = visit('/sign-in?lang=en&theme=light');
+
+      expect(response.headers.get('location')).toBe('https://pyxis.example.com/sign-in');
+      expect(response.cookies.get('pyxis_locale')?.value).toBe('en');
+      expect(response.cookies.get('pyxis_theme')?.value).toBe('light');
+    });
+
+    it('drops values it does not know without remembering them', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+      const response = visit('/sign-in?lang=fr&theme=neon');
+
+      expect(response.headers.get('location')).toBe('https://pyxis.example.com/sign-in');
+      expect(response.cookies.get('pyxis_locale')).toBeUndefined();
+      expect(response.cookies.get('pyxis_theme')).toBeUndefined();
+    });
+
+    it('leaves them to the page on the main domain, which sets no cookie', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://pyxis-analytics.dev/pt-br?theme=dark');
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-analytics.dev/landing/pt-br?theme=dark',
+      );
+      expect(response.cookies.getAll()).toEqual([]);
+    });
+  });
+
   describe('matcher', () => {
     const [pattern] = config.matcher;
     const matches = (path: string) => new RegExp(`^${pattern ?? ''}$`).test(path);
