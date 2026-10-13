@@ -81,17 +81,30 @@ test('leads to the live demo and the dashboard sign-in', async ({ page }) => {
   );
 });
 
-test('shows the four sections in order', async ({ page }) => {
+test('shows the sections in order', async ({ page }) => {
   await page.goto('/');
 
   const sections = page.locator('main section[id]');
-  await expect(sections).toHaveCount(4);
   expect(await sections.evaluateAll((all) => all.map((section) => section.id))).toEqual([
     'never-stored',
     'dashboard',
     'install',
     'in-production',
+    'built-in-public',
+    'architecture',
+    'comparison',
+    'faq',
+    'story',
   ]);
+});
+
+test('unfolds a question of the FAQ', async ({ page }) => {
+  await page.goto('/');
+
+  const question = page.getByText('Does it store IP addresses?');
+  await question.click();
+
+  await expect(page.getByText(/the address itself is never written anywhere/)).toBeVisible();
 });
 
 test('jumps to the privacy section from the header', async ({ page, isMobile }) => {
