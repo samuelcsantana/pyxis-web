@@ -87,4 +87,22 @@ describe('SettingsPage', () => {
 
     expect(metadata.title).toBe('Settings · Demo Store');
   });
+
+  it('gives the demo settings their live demo address as the canonical one', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const metadata = await generateMetadata({ params: Promise.resolve({ projectId: STORE.id }) });
+
+    expect(metadata.alternates?.canonical).toBe(
+      `https://demo.pyxis-analytics.dev/${STORE.id}/settings`,
+    );
+  });
+
+  it('gives the settings of a dashboard with a real API no canonical address', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    const metadata = await generateMetadata({ params: Promise.resolve({ projectId: STORE.id }) });
+
+    expect(metadata.alternates).toBeUndefined();
+  });
 });

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { ProjectSettingsView } from '@/components/settings/project-settings-view';
 import { MainContent } from '@/components/shell/main-content';
+import { settingsHref } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
+import { demoCanonical } from '@/lib/demo-canonical';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
@@ -17,7 +19,10 @@ export interface SettingsPageProps {
 export async function generateMetadata({ params }: ScreenMetadataProps): Promise<Metadata> {
   const { project } = await projectOrNotFound((await params).projectId);
   const t = await getTranslator();
-  return { title: t('meta.screenTitle', { screen: t('settings.title'), project: project.name }) };
+  return {
+    title: t('meta.screenTitle', { screen: t('settings.title'), project: project.name }),
+    ...demoCanonical(settingsHref(project.id)),
+  };
 }
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
