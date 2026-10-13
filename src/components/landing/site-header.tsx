@@ -21,7 +21,7 @@ export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: Site
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-md">
       <div
-        className={`${LANDING_WIDTH} flex min-h-16 flex-wrap items-center gap-x-5 gap-y-2 py-2.5`}
+        className={`${LANDING_WIDTH} flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-2.5 sm:gap-x-5`}
       >
         <a
           href={homeHref}

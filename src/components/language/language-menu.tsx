@@ -58,6 +58,7 @@ const SURFACES: Readonly<Record<LanguageMenuSurface, SurfaceClasses>> = {
   },
 };
 
+const COMPACT_OPTION = 'max-sm:px-2';
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 const REVEAL_MS = 180;
 const REVEAL_FRAMES: Keyframe[] = [
@@ -121,7 +122,7 @@ export function LanguageMenu({
             onClick={() => {
               chooseAhead(each);
             }}
-            className={`${classes.option} ${each === shown ? classes.current : classes.other}`}
+            className={`${classes.option} ${compactOnPhones ? COMPACT_OPTION : ''} ${each === shown ? classes.current : classes.other}`}
           >
             {compactOnPhones ? (
               <>

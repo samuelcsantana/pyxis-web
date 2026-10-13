@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
+const ONE_ROW_HEADER_PX = 72;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
 const DEMO_SCREEN = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
 
@@ -39,6 +40,16 @@ for (const path of ['/', '/pt-br', '/es']) {
     await expect.poll(() => sidewaysOverflow(page)).toBe(0);
   });
 }
+
+test('keeps the header on one row on a phone, in every language', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'Only a phone is narrow enough to wrap the header.');
+  for (const path of ['/', '/pt-br', '/es']) {
+    await page.goto(path);
+
+    const header = await page.getByRole('banner').boundingBox();
+    expect(header?.height).toBeLessThan(ONE_ROW_HEADER_PX);
+  }
+});
 
 test('serves each language at its own address, with the tags search engines read', async ({
   page,
