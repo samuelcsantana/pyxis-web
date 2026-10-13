@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { returnPathOf } from '@/components/shell/screens';
 import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
+import { requestHostname } from '@/lib/host-name';
 import {
   internalPathOf,
   isInternalLandingPath,
@@ -70,13 +71,14 @@ function renderWith(
 }
 
 function landingOrDemo(request: NextRequest): NextResponse {
-  const { hostname, pathname, search } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
   if (isInternalLandingPath(pathname)) {
     return NextResponse.redirect(
       landingUrlOf(landingPageOfInternalPath(pathname)),
       PERMANENT_REDIRECT,
     );
   }
+  const hostname = requestHostname(request.headers) ?? request.nextUrl.hostname;
   if (hostname !== LANDING_HOST) {
     return renderWith(request);
   }
