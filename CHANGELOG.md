@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.16.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.15.0...v0.16.0) (2026-10-13)
+
+
+### Features
+
+* **i18n:** let a page's address name its language ([f62e7a5](https://github.com/samuelcsantana/pyxis-web/commit/f62e7a5926560b61849965ef24cb19557c169f0c))
+* **landing:** engineering, architecture, comparison, FAQ and the post ([3914c80](https://github.com/samuelcsantana/pyxis-web/commit/3914c806416b1dd490a4d40aa1418b822275e3ad))
+* **landing:** home page with its head, header, hero and footer ([47480dd](https://github.com/samuelcsantana/pyxis-web/commit/47480ddfb8b25fec66fbfa9641652d826fc34624))
+* **landing:** motion on the home page, none when less is asked for ([831374b](https://github.com/samuelcsantana/pyxis-web/commit/831374b48637c3dcc11f85e272d14a349f8259bb))
+* **landing:** route the main domain to the home page ([7222ac2](https://github.com/samuelcsantana/pyxis-web/commit/7222ac27030946b26107548e0581aa48769a66c0))
+* **landing:** sections on privacy, the dashboard, installing and production use ([df8898d](https://github.com/samuelcsantana/pyxis-web/commit/df8898ddc5a811c3bdd8e1092cd10f2b09503709))
+* **landing:** show the demo's Overview and checkable numbers in the hero ([78e8200](https://github.com/samuelcsantana/pyxis-web/commit/78e8200e39fc129bfd9cdf3a4c6d8f16b2b990ae))
+* **landing:** the home page measures itself and shows what it recorded ([a86a5d3](https://github.com/samuelcsantana/pyxis-web/commit/a86a5d3093162a8726d429b35697260a2991e92d))
+* **seo:** give each demo screen its canonical address ([44b0af9](https://github.com/samuelcsantana/pyxis-web/commit/44b0af99e2cbe405a39f2f25f876a489e1a16eb0))
+* **seo:** give the main domain its own robots.txt and sitemap ([9590df6](https://github.com/samuelcsantana/pyxis-web/commit/9590df65575741440cfc3c469c47c306bceb1b5e))
+* **seo:** publish a sitemap of the live demo ([53f78c8](https://github.com/samuelcsantana/pyxis-web/commit/53f78c8d752dd348c53be6f8ea7c50ad4ac30f90))
+
+
+### Bug Fixes
+
+* **landing:** find the main domain by the Host header ([88e3603](https://github.com/samuelcsantana/pyxis-web/commit/88e360349deac404e45bc7dfac80bb1f9078e11d))
+
+
+### Documentation
+
+* **readme:** describe the home page and how to try it locally ([a4fb887](https://github.com/samuelcsantana/pyxis-web/commit/a4fb8870977e879f0016ea6943c2ba3a5385902a))
+* **readme:** link the introduction post ([049d01e](https://github.com/samuelcsantana/pyxis-web/commit/049d01efd061e9a39b06c6c5d9f9f41629c846ae))
+* **readme:** re-record the screenshots with the visitor's state ([38c3b05](https://github.com/samuelcsantana/pyxis-web/commit/38c3b058fd715ea57067ed821ea1e9b9023e93ab))
+* **readme:** record the tour again from the current demo ([0b9f4c7](https://github.com/samuelcsantana/pyxis-web/commit/0b9f4c79e99c7e729b8ded413050acef50bdce52))
+
 ## [0.15.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.14.0...v0.15.0) (2026-10-12)
 
 
