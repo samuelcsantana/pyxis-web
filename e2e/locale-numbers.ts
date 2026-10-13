@@ -1,4 +1,4 @@
-const SAMPLE = 1234.5;
+const SAMPLE = 12_345.5;
 
 function separator(locale: string, type: 'group' | 'decimal'): string {
   return (

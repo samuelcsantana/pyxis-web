@@ -3,10 +3,11 @@ import type { ReactElement, ReactNode } from 'react';
 import { DEFAULT_LOCALE, type Locale } from '@/i18n/locales';
 import { CLIENT_NAMESPACES, type Messages, pickNamespaces } from '@/i18n/messages';
 import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
 import { ptBR } from '@/i18n/messages/pt-BR';
 import { MessagesProvider } from '@/i18n/messages-provider';
 
-const MESSAGES: Readonly<Record<Locale, Messages>> = { en, 'pt-BR': ptBR };
+const MESSAGES: Readonly<Record<Locale, Messages>> = { en, 'pt-BR': ptBR, es };
 
 export function renderWithMessages(
   ui: ReactElement,

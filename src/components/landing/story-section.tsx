@@ -13,6 +13,7 @@ export const STORY_ID = 'story';
 export const INTRODUCTION_POSTS: Readonly<Record<Locale, string>> = {
   en: 'https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data',
   'pt-BR': 'https://www.samuelsantana.dev/blog/pyxis-analytics-sem-cookie-sem-ip-sem-dado-pessoal',
+  es: 'https://www.samuelsantana.dev/es/blog/pyxis-analytics-sin-cookies-sin-ip-sin-datos-personales',
 };
 
 const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';

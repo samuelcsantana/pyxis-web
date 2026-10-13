@@ -17,6 +17,7 @@ import {
 import { acquisitionResponseSchema } from './acquisition.schema';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
+import { spanish } from '@/test-utils/spanish';
 
 const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
 
@@ -170,6 +171,13 @@ describe('channel totals', () => {
     expect(channelSummary(REPORT.days, portuguese)).toBe(
       'Gráfico de barras empilhadas de 2 dias, entre 120 e 130 visitas por dia. ' +
         'Visitas por canal: Pago 130, Busca orgânica 90 e Direto 30.',
+    );
+  });
+
+  it('describe the chart in Spanish, joining the last channel with "y"', () => {
+    expect(channelSummary(REPORT.days, spanish)).toBe(
+      'Gráfico de barras apiladas de 2 días, entre 120 y 130 visitas al día. ' +
+        'Visitas por canal: De pago 130, Búsqueda orgánica 90 y Directo 30.',
     );
   });
 });

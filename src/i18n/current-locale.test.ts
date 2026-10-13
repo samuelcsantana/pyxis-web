@@ -64,6 +64,19 @@ describe('currentLocale', () => {
     await expect(currentLocale()).resolves.toBe('pt-BR');
   });
 
+  it('serves Spanish to a browser that asks for any Spanish', async () => {
+    request.acceptLanguage = 'es-MX,es;q=0.9,en;q=0.5';
+
+    await expect(currentLocale()).resolves.toBe('es');
+  });
+
+  it('keeps the chosen Spanish even when the browser asks for Portuguese', async () => {
+    request.cookie = 'es';
+    request.acceptLanguage = 'pt-BR,pt;q=0.9';
+
+    await expect(currentLocale()).resolves.toBe('es');
+  });
+
   it('falls back to English without a cookie or a header', async () => {
     await expect(currentLocale()).resolves.toBe('en');
   });

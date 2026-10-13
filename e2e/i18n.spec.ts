@@ -112,6 +112,79 @@ test.describe('a browser that asks for Brazilian Portuguese', () => {
   });
 });
 
+const SPANISH = 'es';
+
+const SPANISH_SCREENS = [
+  ['overview', 'Vista general'],
+  ['funnel', 'Embudo'],
+  ['features', 'Funcionalidades'],
+  ['requests', 'Solicitudes'],
+  ['timeline', 'Línea de tiempo'],
+  ['visits', 'Visitas'],
+  ['devices', 'Dispositivos'],
+  ['acquisition', 'Adquisición'],
+] as const;
+
+test.describe('a browser that asks for Spanish', () => {
+  test.use({ locale: 'es-MX' });
+
+  for (const [slug, heading] of SPANISH_SCREENS) {
+    test(`reads ${slug} in Spanish, accessible, without hydration errors or a sideways scroll`, async ({
+      page,
+    }) => {
+      const errors = watchConsoleErrors(page);
+
+      await page.goto(`/${STORE_ID}/${slug}`);
+
+      await expect(page.locator('html')).toHaveAttribute('lang', SPANISH);
+      await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+      await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy', 'true');
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
+      expect(errors).toEqual([]);
+    });
+  }
+
+  test('signs in in Spanish', async ({ page }) => {
+    await page.goto('/sign-in');
+
+    await expect(page).toHaveTitle('Iniciar sesión · Pyxis');
+    await expect(page.getByRole('heading', { name: 'Iniciar sesión en Pyxis' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Español' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(await axeViolations(page)).toEqual([]);
+    expect(await sidewaysOverflow(page)).toBe(0);
+  });
+
+  test('counts the same visits as in English, written the Spanish way', async ({
+    page,
+    browser,
+  }) => {
+    await page.goto(`/${STORE_ID}/overview?range=30d`);
+    const spanish = await visitsFigure(page, 'Visitas');
+    const englishContext = await browser.newContext({ locale: 'en-US' });
+    const englishPage = await englishContext.newPage();
+    await englishPage.goto(`/${STORE_ID}/overview?range=30d`);
+    const english = await visitsFigure(englishPage, 'Visits');
+    await englishContext.close();
+
+    expect(parseCount(spanish, SPANISH)).toBe(parseCount(english, 'en-US'));
+    expect(parseCount(spanish, SPANISH)).toBeGreaterThan(999);
+  });
+
+  test('loads the rows a Server Action returns in Spanish', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/requests?range=7d`);
+
+    await page.getByRole('button', { name: 'POST /orders, ver detalles' }).click();
+
+    const details = page.getByRole('dialog', { name: 'POST /orders' });
+    await expect(details.getByRole('table', { name: 'Día a día' })).toBeVisible();
+    await expect(details.getByRole('columnheader', { name: 'Mediana' })).toBeVisible();
+  });
+});
+
 test('serves Brazilian Portuguese to a browser that asks for European Portuguese', async ({
   browser,
 }) => {
@@ -142,6 +215,16 @@ test('switches the language in place, keeping the address, and back', async ({
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 
   await openLanguages(page, isMobile, 'Abrir menu', 'Conta e preferências');
+  await page.getByRole('button', { name: 'Español' }).click();
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect(page.getByRole('heading', { level: 1, name: 'Vista general' })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+
+  await openLanguages(page, isMobile, 'Abrir el menú', 'Cuenta y preferencias');
   await page.getByRole('button', { name: 'English' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -176,7 +259,7 @@ test('opens the account menu inside the window, with the languages in it', async
   const width = page.viewportSize()?.width ?? 0;
   expect(box?.x).toBeGreaterThanOrEqual(0);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
-  for (const name of ['English', 'Português (Brasil)']) {
+  for (const name of ['English', 'Português (Brasil)', 'Español']) {
     await expect(languages.getByRole('button', { name })).toBeInViewport({ ratio: 1 });
   }
 });

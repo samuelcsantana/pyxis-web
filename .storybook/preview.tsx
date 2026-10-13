@@ -5,13 +5,19 @@ import { DEFAULT_LOCALE, type Locale, LOCALES, localeName, parseLocale } from '@
 import { MessagesProvider } from '@/i18n/messages-provider';
 import { CLIENT_NAMESPACES, type Messages, pickNamespaces } from '@/i18n/messages';
 import { en } from '@/i18n/messages/en';
+import { es } from '@/i18n/messages/es';
 import { ptBR } from '@/i18n/messages/pt-BR';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
+import { spanish } from '@/test-utils/spanish';
 import '../src/app/globals.css';
 
-const DICTIONARIES: Readonly<Record<Locale, Messages>> = { en, 'pt-BR': ptBR };
-const SERVER_TEXTS: Readonly<Record<Locale, I18n>> = { en: english, 'pt-BR': portuguese };
+const DICTIONARIES: Readonly<Record<Locale, Messages>> = { en, 'pt-BR': ptBR, es };
+const SERVER_TEXTS: Readonly<Record<Locale, I18n>> = {
+  en: english,
+  'pt-BR': portuguese,
+  es: spanish,
+};
 
 function storyLocale(value: unknown): Locale {
   return parseLocale(typeof value === 'string' ? value : undefined) ?? DEFAULT_LOCALE;

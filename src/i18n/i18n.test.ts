@@ -3,6 +3,7 @@ import { APP_DESCRIPTION } from '@/lib/site';
 import { createFormats } from './formats';
 import { createI18n } from './i18n';
 import { en } from './messages/en';
+import { es } from './messages/es';
 import { ptBR } from './messages/pt-BR';
 
 describe('createI18n', () => {
@@ -38,6 +39,25 @@ describe('createI18n', () => {
     expect(t('counts.visit', { count: 0 })).toBe('0 visitas');
     expect(t('counts.visit', { count: 1 })).toBe('1 visita');
     expect(t('counts.visit', { count: 2 })).toBe('2 visitas');
+    expect(t('counts.visit', { count: 1_000_000 })).toBe('1.000.000 visitas');
+  });
+
+  it('formats Spanish as Spain does, with no separator in four-digit numbers', () => {
+    const i18n = createI18n('es', es);
+
+    expect(i18n.locale).toBe('es');
+    expect(i18n.format).toBe(createFormats('es'));
+    expect(i18n.format.count(2697)).toBe('2697');
+    expect(i18n.format.count(12_345)).toBe('12.345');
+  });
+
+  it('counts in Spanish, with zero and a million in the plural', () => {
+    const { t } = createI18n('es', es);
+
+    expect(t('counts.visit', { count: 0 })).toBe('0 visitas');
+    expect(t('counts.visit', { count: 1 })).toBe('1 visita');
+    expect(t('counts.visit', { count: 2 })).toBe('2 visitas');
+    expect(new Intl.PluralRules('es').select(1_000_000)).toBe('many');
     expect(t('counts.visit', { count: 1_000_000 })).toBe('1.000.000 visitas');
   });
 });
