@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { type ScreenSlug, screenLabelKey } from '@/components/shell/screens';
+import { type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { getTranslator } from '@/i18n/get-messages';
 import { projectOrNotFound } from './current-admin';
+import { demoCanonical } from './demo-canonical';
 
 export interface ScreenMetadataProps {
   readonly params: Promise<{ readonly projectId: string }>;
@@ -15,6 +16,7 @@ export function screenMetadata(
     const t = await getTranslator();
     return {
       title: t('meta.screenTitle', { screen: t(screenLabelKey(screen)), project: project.name }),
+      ...demoCanonical(screenHref(project.id, screen)),
     };
   };
 }

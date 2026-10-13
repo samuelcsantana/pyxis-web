@@ -36,6 +36,26 @@ describe('screenMetadata', () => {
     expect(metadata.title).toBe('Overview · Demo Store');
   });
 
+  it('gives a demo screen its address without filters as the canonical one', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const metadata = await screenMetadata('visits')({
+      params: Promise.resolve({ projectId: 'p-store' }),
+    });
+
+    expect(metadata.alternates?.canonical).toBe('https://demo.pyxis-analytics.dev/p-store/visits');
+  });
+
+  it('gives a screen of a dashboard with a real API no canonical address', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+    const metadata = await screenMetadata('visits')({
+      params: Promise.resolve({ projectId: 'p-store' }),
+    });
+
+    expect(metadata.alternates).toBeUndefined();
+  });
+
   it('answers not found for any other project, so the 404 names itself in the title', async () => {
     await expect(
       screenMetadata('overview')({ params: Promise.resolve({ projectId: 'p-other' }) }),
