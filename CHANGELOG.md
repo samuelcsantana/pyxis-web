@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.18.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.17.0...v0.18.0) (2026-10-13)
+
+
+### Features
+
+* **i18n:** add the Spanish dictionary ([f5fd337](https://github.com/samuelcsantana/pyxis-web/commit/f5fd337f87e8a009bc4d5956824a74a3e733f213))
+* **i18n:** ship the dashboard in Spanish ([8b86961](https://github.com/samuelcsantana/pyxis-web/commit/8b86961d27884909d6ab2a9e79ea40879731afe9))
+* **landing:** serve the home page in Spanish at /es ([3599c1c](https://github.com/samuelcsantana/pyxis-web/commit/3599c1c3c5244a9ca6e4eaa9712983f7b1d1fb0a))
+
+
+### Bug Fixes
+
+* **landing:** keep the header on one row on a phone with three languages ([d07ae74](https://github.com/samuelcsantana/pyxis-web/commit/d07ae74a7b1e681973c838224f354a10ae666ee3))
+
 ## [0.17.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.16.0...v0.17.0) (2026-10-13)
 
 
