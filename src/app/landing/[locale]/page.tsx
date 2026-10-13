@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { DashboardAnswersSection } from '@/components/landing/dashboard-answers-section';
+import { InProductionSection } from '@/components/landing/in-production-section';
+import { InstallSection } from '@/components/landing/install-section';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHeader } from '@/components/landing/landing-header';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
+import { NeverStoredSection } from '@/components/landing/never-stored-section';
 import { MainContent } from '@/components/shell/main-content';
 import {
   LANDING_PREVIEW_RANGE,
@@ -103,6 +107,10 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       <LandingHeader i18n={i18n} page={page} />
       <MainContent className="grow">
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
+        <NeverStoredSection i18n={i18n} />
+        <DashboardAnswersSection i18n={i18n} />
+        <InstallSection i18n={i18n} />
+        <InProductionSection i18n={i18n} />
       </MainContent>
       <LandingFooter i18n={i18n} />
       <LandingStructuredData i18n={i18n} page={page} />

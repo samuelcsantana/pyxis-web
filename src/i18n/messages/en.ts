@@ -982,6 +982,7 @@ export const en = {
     nav: {
       label: 'Main',
       demo: 'Live demo',
+      privacy: 'Privacy',
       language: 'Language',
       signIn: 'Sign in',
     },
@@ -1006,6 +1007,80 @@ export const en = {
       dependencies: { value: '0', label: 'runtime dependencies' },
       coverage: { value: '100%', label: 'test coverage in all three repositories' },
       license: { value: 'MIT', label: 'license, infrastructure included' },
+    },
+    never: {
+      eyebrow: 'Privacy',
+      title: 'What never gets stored',
+      raw: 'An ordinary tag would send:',
+      kept: 'What is left:',
+      lead: 'Five things an ordinary analytics tag would send, and what is left of each one. The browser cuts first; the API checks again before anything reaches the database.',
+      rows: {
+        address: {
+          label: 'Page address',
+          where: 'In the browser',
+          raw: 'https://shop.example/orders/48213?email=ana@example.com&utm_source=news',
+          kept: '/orders/:id · utm_source=news',
+        },
+        ip: {
+          label: 'IP address',
+          where:
+            'At the API: country and state, then the address is dropped. The city is never read.',
+          raw: '203.0.113.7',
+          kept: 'BR · BR-BA',
+        },
+        browser: {
+          label: 'Browser',
+          where: 'At the API: classified, then dropped',
+          raw: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36',
+          kept: 'desktop · Chrome · Windows',
+        },
+        property: {
+          label: 'Event property',
+          where: 'At the API: anything shaped like an email, a phone number or a tax id',
+          raw: '"coupon": "ana@example.com"',
+          kept: 'dropped',
+        },
+        visit: {
+          label: 'Visit',
+          where: 'In the browser: no cookie, nothing that links two tabs',
+          raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
+          kept: 'sessionStorage · ends with the tab',
+        },
+      },
+      foot: 'A browser that sends “do not track” (Global Privacy Control or Do Not Track) switches the tracker off before anything is queued. Events are deleted after 13 months.',
+    },
+    answers: {
+      eyebrow: 'Dashboard',
+      title: 'What the dashboard answers',
+      lead: 'Eight screens, each built around one question. Every card opens that screen in the live demo.',
+      open: 'Open in the demo',
+      questions: {
+        overview:
+          'How many visits, conversions and failed writes this period, against the one before?',
+        acquisition: 'Which channels, sources and campaigns bring visits that convert?',
+        devices: 'Which devices, browsers, countries and states do visits come from?',
+        features: 'Which events and screens get used, and how does one property break down?',
+        funnel: 'Where does a sign-up lose people, and how long does each step take?',
+        requests: 'Which routes of your API fail, how often and how slowly?',
+        visits: 'Which visits did one thing, filtered by page, event, channel, device or failure?',
+        timeline: 'What did one visit, or one signed-in person, do, in order?',
+      },
+    },
+    install: {
+      eyebrow: 'Install',
+      title: 'What a site adds',
+      lead: 'One package and two lines. Page views are recorded on their own; a named event is one call.',
+      copy: 'Copy',
+      copied: 'Copied',
+      selected: 'Selected, press Ctrl+C',
+      note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All three repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+    },
+    production: {
+      eyebrow: 'In production',
+      title: 'Measuring real sites since October 2026',
+      bolsoverde: 'A sales, fees and payouts tracker for small sellers',
+      blog: 'The author’s blog',
+      foot: 'Neither site needs a cookie to be measured.',
     },
     footer: {
       tagline: 'Privacy-first product analytics.',

@@ -993,6 +993,7 @@ export const ptBR = translation({
     nav: {
       label: 'Principal',
       demo: 'Demonstração',
+      privacy: 'Privacidade',
       language: 'Idioma',
       signIn: 'Entrar',
     },
@@ -1017,6 +1018,80 @@ export const ptBR = translation({
       dependencies: { value: '0', label: 'dependências em execução' },
       coverage: { value: '100%', label: 'de cobertura de testes nos três repositórios' },
       license: { value: 'MIT', label: 'de licença, infraestrutura incluída' },
+    },
+    never: {
+      eyebrow: 'Privacidade',
+      title: 'O que nunca é guardado',
+      raw: 'Uma ferramenta comum enviaria:',
+      kept: 'O que sobra:',
+      lead: 'Cinco coisas que uma ferramenta comum de análise enviaria, e o que sobra de cada uma. O navegador corta primeiro; a API confere de novo antes de qualquer coisa chegar ao banco.',
+      rows: {
+        address: {
+          label: 'Endereço da página',
+          where: 'No navegador',
+          raw: 'https://loja.example/pedidos/48213?email=ana@example.com&utm_source=news',
+          kept: '/pedidos/:id · utm_source=news',
+        },
+        ip: {
+          label: 'Endereço IP',
+          where: 'Na API: país e estado, depois o endereço é descartado. A cidade nunca é lida.',
+          raw: '203.0.113.7',
+          kept: 'BR · BR-BA',
+        },
+        browser: {
+          label: 'Navegador',
+          where: 'Na API: classificado e descartado',
+          raw: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36',
+          kept: 'desktop · Chrome · Windows',
+        },
+        property: {
+          label: 'Propriedade de evento',
+          where: 'Na API: tudo o que parece e-mail, telefone ou CPF/CNPJ',
+          raw: '"cupom": "ana@example.com"',
+          kept: 'descartada',
+        },
+        visit: {
+          label: 'Visita',
+          where: 'No navegador: sem cookie, nada que ligue duas abas',
+          raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
+          kept: 'sessionStorage · acaba com a aba',
+        },
+      },
+      foot: 'Um navegador que pede para não ser rastreado (Global Privacy Control ou Do Not Track) desliga o rastreador antes de qualquer coisa entrar na fila. Os eventos são apagados depois de 13 meses.',
+    },
+    answers: {
+      eyebrow: 'Painel',
+      title: 'O que o painel responde',
+      lead: 'Oito telas, cada uma feita em torno de uma pergunta. Cada cartão abre essa tela na demonstração.',
+      open: 'Abrir na demonstração',
+      questions: {
+        overview:
+          'Quantas visitas, conversões e gravações com falha neste período, contra o anterior?',
+        acquisition: 'Quais canais, origens e campanhas trazem visitas que convertem?',
+        devices: 'De quais aparelhos, navegadores, países e estados vêm as visitas?',
+        features: 'Quais eventos e telas são usados, e como uma propriedade se divide?',
+        funnel: 'Onde um cadastro perde gente, e quanto tempo leva cada passo?',
+        requests: 'Quais rotas da sua API falham, com que frequência e com que lentidão?',
+        visits:
+          'Quais visitas fizeram uma coisa, filtradas por página, evento, canal, aparelho ou falha?',
+        timeline: 'O que uma visita, ou uma pessoa que entrou na conta, fez, em ordem?',
+      },
+    },
+    install: {
+      eyebrow: 'Instalação',
+      title: 'O que um site acrescenta',
+      lead: 'Um pacote e duas linhas. As visualizações de página são registradas sozinhas; um evento com nome é uma chamada.',
+      copy: 'Copiar',
+      copied: 'Copiado',
+      selected: 'Selecionado, aperte Ctrl+C',
+      note: 'As chaves são criadas por quem opera a API, e hoje não há cadastro aberto. Os três repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
+    },
+    production: {
+      eyebrow: 'Em produção',
+      title: 'Medindo sites de verdade desde outubro de 2026',
+      bolsoverde: 'Controle de vendas, taxas e repasses para pequenos vendedores',
+      blog: 'O blog do autor',
+      foot: 'Nenhum dos dois precisa de cookie para ser medido.',
     },
     footer: {
       tagline: 'Análise de produto com privacidade em primeiro lugar.',
