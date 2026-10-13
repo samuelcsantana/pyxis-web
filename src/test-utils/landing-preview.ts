@@ -1,0 +1,50 @@
+import { type LandingPreviewView, landingPreviewOf } from '@/domain/landing-preview';
+import type { OverviewReport } from '@/domain/overview';
+import type { I18n } from '@/i18n/i18n';
+
+const DAYS = 30;
+const PERIOD = { preset: '30d', from: '2026-09-14', to: '2026-10-13' } as const;
+const TODAY = '2026-10-14';
+
+function wave(base: number, rise: number): number[] {
+  return Array.from({ length: DAYS }, (_, day) =>
+    Math.round((base + day * rise) * (day % 7 >= 5 ? 0.72 : 1)),
+  );
+}
+
+const PREVIOUS_DAY = {
+  date: '2026-08-15',
+  pageViews: 300,
+  events: 90,
+  identifiedUsers: 12,
+  conversions: 3,
+  convertingVisits: 3,
+  writeErrors: { failed: 0, total: 40 },
+};
+
+export const SHOWCASE_OVERVIEW: OverviewReport = {
+  kpis: {
+    visits: { current: 3214, previous: 2870, daily: wave(92, 1.3) },
+    identifiedUsers: { current: 418, previous: 398, daily: wave(12, 0.1) },
+    conversions: { current: 96, previous: 81, daily: wave(3, 0.05) },
+    convertingVisits: { current: 96, previous: 81, daily: wave(3, 0.05) },
+    writeErrors: {
+      current: { failed: 4, total: 1000 },
+      previous: { failed: 7, total: 1000 },
+      daily: [{ failed: 4, total: 1000 }],
+    },
+  },
+  days: [{ date: PERIOD.to, pageViews: 410, events: 130 }],
+  topPages: [
+    { path: '/pricing', views: 1284, visits: 700 },
+    { path: '/blog/:slug', views: 962, visits: 512 },
+    { path: '/calculator', views: 731, visits: 402 },
+  ],
+  topEvents: [],
+  comparison: { kind: 'whole-days' },
+  previousDays: wave(84, 0.6).map((visits) => ({ ...PREVIOUS_DAY, visits })),
+};
+
+export function showcasePreview(i18n: I18n): LandingPreviewView {
+  return landingPreviewOf(SHOWCASE_OVERVIEW, PERIOD, TODAY, 'signup_completed', i18n);
+}

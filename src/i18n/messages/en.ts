@@ -993,6 +993,20 @@ export const en = {
       readCode: 'Read the code',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
     },
+    preview: {
+      label: 'Preview of the Overview screen',
+      range: 'Last 30 days',
+      current: 'This period',
+      previous: 'Previous period',
+      topPages: 'Top pages',
+      invented: 'Invented data, like the live demo.',
+    },
+    proof: {
+      size: { value: 'under 5 KB', label: 'tracker, gzipped' },
+      dependencies: { value: '0', label: 'runtime dependencies' },
+      coverage: { value: '100%', label: 'test coverage in all three repositories' },
+      license: { value: 'MIT', label: 'license, infrastructure included' },
+    },
     footer: {
       tagline: 'Privacy-first product analytics.',
       product: 'Product',

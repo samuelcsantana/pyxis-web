@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
 import { english } from '@/test-utils/english';
+import { showcasePreview } from '@/test-utils/landing-preview';
 import { LandingHero } from './landing-hero';
 
 const meta = {
   title: 'Landing/LandingHero',
   component: LandingHero,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english },
+  args: { i18n: english, preview: showcasePreview(english) },
+  render: (args) => <LandingHero i18n={args.i18n} preview={showcasePreview(args.i18n)} />,
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">

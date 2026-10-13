@@ -5,6 +5,12 @@ import { LandingHeader } from '@/components/landing/landing-header';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
 import { MainContent } from '@/components/shell/main-content';
+import {
+  LANDING_PREVIEW_RANGE,
+  type LandingPreviewView,
+  landingPreviewOf,
+} from '@/domain/landing-preview';
+import { resolvePeriod, todayIn } from '@/domain/period';
 import { SkipLink } from '@/components/shell/skip-link';
 import { loadMessages } from '@/i18n/get-messages';
 import { createI18n, type I18n } from '@/i18n/i18n';
@@ -17,6 +23,8 @@ import {
   languageAlternatesOf,
 } from '@/lib/landing-pages';
 import { APP_NAME, LANDING_ORIGIN } from '@/lib/site';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { createOverviewService } from '@/services/overview/overview-service.factory';
 
 export interface LandingHomeProps {
   readonly params: Promise<{ readonly locale: string }>;
@@ -37,6 +45,22 @@ async function landingOf(params: LandingHomeProps['params']): Promise<Landing | 
     return undefined;
   }
   return { page, i18n: createI18n(page.locale, await loadMessages(page.locale)) };
+}
+
+async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
+  const now = new Date();
+  const period = resolvePeriod({ range: LANDING_PREVIEW_RANGE }, DEMO_STORE.timezone, now);
+  const report = await createOverviewService().overview(DEMO_STORE.id, {
+    from: period.from,
+    to: period.to,
+  });
+  return landingPreviewOf(
+    report,
+    period,
+    todayIn(DEMO_STORE.timezone, now),
+    DEMO_STORE.conversionEvent,
+    i18n,
+  );
 }
 
 export async function generateMetadata({ params }: LandingHomeProps): Promise<Metadata> {
@@ -78,7 +102,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       <SkipLink i18n={i18n} />
       <LandingHeader i18n={i18n} page={page} />
       <MainContent className="grow">
-        <LandingHero i18n={i18n} />
+        <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
       </MainContent>
       <LandingFooter i18n={i18n} />
       <LandingStructuredData i18n={i18n} page={page} />

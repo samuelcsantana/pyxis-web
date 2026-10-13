@@ -77,6 +77,9 @@ describe('the home page on the main domain', () => {
     );
     expect(screen.getByRole('main')).toContainElement(screen.getByRole('heading', { level: 1 }));
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Made by Samuel Santana');
+    expect(
+      screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
+    ).toHaveTextContent('Demo Store');
   });
 
   it('serves the Brazilian Portuguese page, marking it as the current language', async () => {
