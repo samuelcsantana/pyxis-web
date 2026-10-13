@@ -1,6 +1,7 @@
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { APP_NAME } from '@/lib/site';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
 export interface ComparisonSectionProps {
@@ -26,7 +27,7 @@ export function ComparisonSection({ i18n }: ComparisonSectionProps) {
         role="region"
         aria-label={t('landing.comparison.table')}
         tabIndex={0}
-        className={`overflow-x-auto rounded-card border border-line bg-card ${FOCUS_RING}`}
+        className={`overflow-x-auto rounded-card border border-line bg-card ${FOCUS_RING} ${REVEAL}`}
       >
         <table
           aria-labelledby={`${COMPARISON_ID}-title`}

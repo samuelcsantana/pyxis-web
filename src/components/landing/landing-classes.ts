@@ -1,6 +1,7 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 
 export const LANDING_WIDTH = 'mx-auto w-full max-w-6xl px-5 lg:px-12';
+export const REVEAL = 'landing-reveal';
 
 const LINK_CONTROL = `${FOCUS_RING} ${CONTROL_TRANSITION}`;
 const LINK_BUTTON = `inline-flex min-h-12 items-center gap-2 rounded-card px-4.5 text-callout font-semibold ${LINK_CONTROL}`;

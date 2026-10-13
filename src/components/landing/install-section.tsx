@@ -1,5 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
+import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
 export interface InstallSectionProps {
@@ -88,11 +89,13 @@ export function InstallSection({ i18n }: InstallSectionProps) {
       lead={t('landing.install.lead')}
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
-        <div className="flex min-w-0 flex-col gap-2.5">
+        <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
           <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />
           <CodeBlock id="install-first-event" tokens={FIRST_EVENT} labels={labels} />
         </div>
-        <p className="flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted">
+        <p
+          className={`flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted ${REVEAL}`}
+        >
           <svg
             width={18}
             height={18}

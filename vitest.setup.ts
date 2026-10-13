@@ -33,6 +33,29 @@ class ResizeObserverForTests implements ResizeObserver {
 
 globalThis.ResizeObserver = ResizeObserverForTests;
 
+function noMediaQueryMatches(query: string): MediaQueryList {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  };
+}
+
+Object.defineProperty(window, 'matchMedia', {
+  configurable: true,
+  writable: true,
+  value: noMediaQueryMatches,
+});
+
+Element.prototype.getAnimations = function noAnimations(): Animation[] {
+  return [];
+};
+
 afterEach(() => {
   cleanup();
   window.sessionStorage.clear();
