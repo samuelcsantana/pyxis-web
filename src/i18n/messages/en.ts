@@ -973,4 +973,35 @@ export const en = {
     },
     visits: 'Newest {visits} visits',
   },
+  landing: {
+    meta: {
+      title: 'Product analytics without cookies or personal data · Pyxis',
+      description:
+        'Open-source product analytics that stores no cookie, no IP address and no personal data. Funnels, failing requests and visits, with a live demo.',
+    },
+    nav: {
+      label: 'Main',
+      demo: 'Live demo',
+      language: 'Language',
+      signIn: 'Sign in',
+    },
+    hero: {
+      eyebrow: 'Open-source product analytics',
+      title: 'Product analytics without cookies, IP addresses or personal data.',
+      lead: 'Pyxis shows which features get used, where a sign-up loses people and which requests fail. It stores no cookie, no IP address, no user agent and nothing personal, and each of those rules lives in code, covered by tests.',
+      openDemo: 'Open the live demo',
+      readCode: 'Read the code',
+      note: 'No sign-up. Invented data. It opens straight on the dashboard.',
+    },
+    footer: {
+      tagline: 'Privacy-first product analytics.',
+      product: 'Product',
+      code: 'Code',
+      author: 'Author',
+      demo: 'Live demo',
+      apiReference: 'API reference',
+      playground: 'SDK playground',
+      madeBy: 'Made by Samuel Santana · MIT License',
+    },
+  },
 } as const;
