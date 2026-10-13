@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
+import { showcasePreview } from '@/test-utils/landing-preview';
 import { portuguese } from '@/test-utils/portuguese';
 import { LandingHero } from './landing-hero';
 
 describe('LandingHero', () => {
   it('states what Pyxis is in the page title, over the brand backdrop', () => {
-    render(<LandingHero i18n={english} />);
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
 
     expect(
       screen.getByRole('region', {
@@ -18,9 +19,10 @@ describe('LandingHero', () => {
   });
 
   it('leads to the live demo first and to the code second, promising no sign-up', () => {
-    render(<LandingHero i18n={english} />);
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
 
-    const [demo, code] = screen.getAllByRole('link');
+    const hero = screen.getByRole('region');
+    const [demo, code] = within(hero).getAllByRole('link');
     expect(demo).toHaveAccessibleName('Open the live demo');
     expect(demo).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev');
     expect(code).toHaveAccessibleName('Read the code');
@@ -28,8 +30,17 @@ describe('LandingHero', () => {
     expect(screen.getByText(/No sign-up\. Invented data\./)).toBeInTheDocument();
   });
 
+  it('shows the product beside the title and the checkable numbers below', () => {
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
+
+    expect(
+      screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'under 5 KB tracker, gzipped' })).toBeInTheDocument();
+  });
+
   it('speaks Brazilian Portuguese on the Portuguese page', () => {
-    render(<LandingHero i18n={portuguese} />);
+    render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} />);
 
     expect(screen.getByRole('link', { name: 'Abrir a demonstração' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ver o código' })).toBeInTheDocument();

@@ -1004,6 +1004,20 @@ export const ptBR = translation({
       readCode: 'Ver o código',
       note: 'Sem cadastro. Dados inventados. Abre direto no painel.',
     },
+    preview: {
+      label: 'Prévia da tela Visão geral',
+      range: 'Últimos 30 dias',
+      current: 'Este período',
+      previous: 'Período anterior',
+      topPages: 'Páginas mais vistas',
+      invented: 'Dados inventados, como na demonstração.',
+    },
+    proof: {
+      size: { value: 'menos de 5 KB', label: 'de rastreador, com gzip' },
+      dependencies: { value: '0', label: 'dependências em execução' },
+      coverage: { value: '100%', label: 'de cobertura de testes nos três repositórios' },
+      license: { value: 'MIT', label: 'de licença, infraestrutura incluída' },
+    },
     footer: {
       tagline: 'Análise de produto com privacidade em primeiro lugar.',
       product: 'Produto',
