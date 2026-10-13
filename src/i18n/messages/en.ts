@@ -1082,6 +1082,106 @@ export const en = {
       blog: 'The author’s blog',
       foot: 'Neither site needs a cookie to be measured.',
     },
+    public: {
+      eyebrow: 'Engineering',
+      title: 'Built in public',
+      items: {
+        coverage:
+          '100% of statements, branches, functions and lines covered in all three repositories. CI fails below that.',
+        realServices:
+          'Integration tests against a real Postgres, and end-to-end tests in a real browser with axe accessibility checks.',
+        provenance: 'The tracker is published to npm from GitHub Actions, with provenance.',
+        decisions: 'Decisions written down as architecture decision records in each repository.',
+        storybook: 'A Storybook where every story is also an accessibility test.',
+      },
+      storybook: 'Every dashboard component and its states',
+      apiReference: 'Generated from the routes’ own schemas',
+      playground: 'The real tracker, showing every batch it would send',
+    },
+    architecture: {
+      eyebrow: 'Architecture',
+      title: 'How the pieces fit',
+      site: { name: 'Your site', note: 'pyxis-analytics in the browser' },
+      edge: { name: 'CloudFront', note: 'In front of the API' },
+      api: { name: 'API', note: 'NestJS on AWS Lambda, in São Paulo' },
+      database: { name: 'Postgres', note: 'Neon, reached by a role that cannot change the schema' },
+      dashboard: { name: 'Dashboard', note: 'Next.js on Vercel, reads the API' },
+      retention: { name: 'Daily job', note: 'Deletes events after 13 months' },
+      digest: { name: 'Weekly digest', note: 'An e-mail every Monday' },
+    },
+    comparison: {
+      eyebrow: 'Compared',
+      title: 'Pyxis and a typical cookie-based tag',
+      aspect: 'Aspect',
+      typical: 'Typical cookie-based tag',
+      table: 'Comparison table',
+      rows: {
+        cookie: {
+          aspect: 'Cookie on your visitors',
+          pyxis: 'None',
+          typical: 'An id cookie, usually kept for months',
+        },
+        address: {
+          aspect: 'IP address',
+          pyxis: 'Read for country and state, never stored',
+          typical: 'Depends on the tool and its settings',
+        },
+        linking: {
+          aspect: 'Links the visits of an anonymous visitor',
+          pyxis: 'Never: a visit is one tab',
+          typical: 'Yes, through the cookie',
+        },
+        thirdParties: {
+          aspect: 'Third parties',
+          pyxis: 'None',
+          typical: 'Depends on the tool; sometimes an ad network',
+        },
+        source: { aspect: 'Source code', pyxis: 'MIT, on GitHub', typical: 'Varies' },
+      },
+      foot: '“Typical” describes a common setup, not any one product.',
+    },
+    faq: {
+      eyebrow: 'FAQ',
+      title: 'Questions people ask',
+      items: {
+        cookies: {
+          question: 'Does Pyxis set cookies on my visitors?',
+          answer:
+            'No. A visit’s id lives in the tab’s <code>sessionStorage</code> and ends when the tab closes. Cookies exist only in the Pyxis dashboard itself, for the people who use it, never on the sites it measures.',
+        },
+        address: {
+          question: 'Does it store IP addresses?',
+          answer:
+            'No. CloudFront tells the API the country and the state of each request; the address itself is never written anywhere, and the city is never read.',
+        },
+        people: {
+          question: 'Can it tell that two visits came from the same person?',
+          answer:
+            'Only for people signed in to your site, through your own internal id, never an email. Anonymous visits are never linked: not across tabs, not across days.',
+        },
+        optOut: {
+          question: 'Can a visitor opt out?',
+          answer:
+            'Global Privacy Control and Do Not Track switch the tracker off, and a site can offer its own switch with <code>optOut()</code> and <code>trackingStatus()</code>.',
+        },
+        retention: {
+          question: 'How long is data kept?',
+          answer:
+            'Thirteen months, then a daily job deletes it. A person’s events can be exported or erased from your backend at any time.',
+        },
+        use: {
+          question: 'Can I use it on my site?',
+          answer:
+            'The code is MIT-licensed on GitHub. Today keys are issued by whoever runs the API; there is no public sign-up.',
+        },
+      },
+    },
+    story: {
+      eyebrow: 'The story',
+      title: 'Why Pyxis exists',
+      body: 'The introduction post explains why it was built and what it never stores.',
+      cta: 'Read the post',
+    },
     footer: {
       tagline: 'Privacy-first product analytics.',
       product: 'Product',

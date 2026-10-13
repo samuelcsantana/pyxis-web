@@ -85,7 +85,17 @@ describe('the home page on the main domain', () => {
         .getAllByRole('region')
         .map((region) => region.id)
         .filter((id) => id !== ''),
-    ).toEqual(['never-stored', 'dashboard', 'install', 'in-production']);
+    ).toEqual([
+      'never-stored',
+      'dashboard',
+      'install',
+      'in-production',
+      'built-in-public',
+      'architecture',
+      'comparison',
+      'faq',
+      'story',
+    ]);
   });
 
   it('serves the Brazilian Portuguese page, marking it as the current language', async () => {

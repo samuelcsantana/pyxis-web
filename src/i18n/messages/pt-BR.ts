@@ -1093,6 +1093,107 @@ export const ptBR = translation({
       blog: 'O blog do autor',
       foot: 'Nenhum dos dois precisa de cookie para ser medido.',
     },
+    public: {
+      eyebrow: 'Engenharia',
+      title: 'Feito em público',
+      items: {
+        coverage:
+          '100% das instruções, ramos, funções e linhas cobertos por testes nos três repositórios. O CI falha abaixo disso.',
+        realServices:
+          'Testes de integração contra um Postgres de verdade, e testes de ponta a ponta num navegador de verdade, com verificação de acessibilidade pelo axe.',
+        provenance: 'O rastreador é publicado no npm pelo GitHub Actions, com proveniência.',
+        decisions:
+          'Decisões registradas como ADRs (registros de decisão de arquitetura) em cada repositório.',
+        storybook: 'Um Storybook em que cada história também é um teste de acessibilidade.',
+      },
+      storybook: 'Cada componente do painel e os seus estados',
+      apiReference: 'Gerada dos próprios esquemas das rotas',
+      playground: 'O rastreador de verdade, mostrando cada lote que enviaria',
+    },
+    architecture: {
+      eyebrow: 'Arquitetura',
+      title: 'Como as peças se encaixam',
+      site: { name: 'Seu site', note: 'pyxis-analytics no navegador' },
+      edge: { name: 'CloudFront', note: 'Na frente da API' },
+      api: { name: 'API', note: 'NestJS no AWS Lambda, em São Paulo' },
+      database: { name: 'Postgres', note: 'Neon, acessado por um papel que não muda o esquema' },
+      dashboard: { name: 'Painel', note: 'Next.js na Vercel, lê a API' },
+      retention: { name: 'Tarefa diária', note: 'Apaga eventos depois de 13 meses' },
+      digest: { name: 'Resumo semanal', note: 'Um e-mail toda segunda-feira' },
+    },
+    comparison: {
+      eyebrow: 'Comparação',
+      title: 'O Pyxis e uma ferramenta típica com cookie',
+      aspect: 'Aspecto',
+      typical: 'Ferramenta típica com cookie',
+      table: 'Tabela de comparação',
+      rows: {
+        cookie: {
+          aspect: 'Cookie nos visitantes',
+          pyxis: 'Nenhum',
+          typical: 'Um cookie de identificação, em geral guardado por meses',
+        },
+        address: {
+          aspect: 'Endereço IP',
+          pyxis: 'Lido para país e estado, nunca guardado',
+          typical: 'Depende da ferramenta e da configuração',
+        },
+        linking: {
+          aspect: 'Liga as visitas de um visitante anônimo',
+          pyxis: 'Nunca: uma visita é uma aba',
+          typical: 'Sim, pelo cookie',
+        },
+        thirdParties: {
+          aspect: 'Terceiros',
+          pyxis: 'Nenhum',
+          typical: 'Depende da ferramenta; às vezes uma rede de anúncios',
+        },
+        source: { aspect: 'Código-fonte', pyxis: 'MIT, no GitHub', typical: 'Varia' },
+      },
+      foot: '“Típica” descreve uma configuração comum, não um produto específico.',
+    },
+    faq: {
+      eyebrow: 'Perguntas',
+      title: 'Perguntas frequentes',
+      items: {
+        cookies: {
+          question: 'O Pyxis coloca cookie nos meus visitantes?',
+          answer:
+            'Não. O identificador da visita fica no <code>sessionStorage</code> da aba e acaba quando a aba fecha. Cookies só existem no próprio painel do Pyxis, para quem o usa, nunca nos sites que ele mede.',
+        },
+        address: {
+          question: 'Ele guarda endereço IP?',
+          answer:
+            'Não. O CloudFront informa à API o país e o estado de cada requisição; o endereço em si nunca é gravado, e a cidade nunca é lida.',
+        },
+        people: {
+          question: 'Ele sabe que duas visitas são da mesma pessoa?',
+          answer:
+            'Só para quem entrou na conta do seu site, pelo identificador interno do próprio site, nunca um e-mail. Visitas anônimas nunca são ligadas: nem entre abas, nem entre dias.',
+        },
+        optOut: {
+          question: 'O visitante pode pedir para não ser medido?',
+          answer:
+            'O Global Privacy Control e o Do Not Track desligam o rastreador, e o site pode oferecer a sua própria chave com <code>optOut()</code> e <code>trackingStatus()</code>.',
+        },
+        retention: {
+          question: 'Por quanto tempo os dados ficam guardados?',
+          answer:
+            'Treze meses; depois uma tarefa diária apaga. Os eventos de uma pessoa podem ser exportados ou apagados pelo backend do site a qualquer momento.',
+        },
+        use: {
+          question: 'Posso usar no meu site?',
+          answer:
+            'O código tem licença MIT e está no GitHub. Hoje as chaves são criadas por quem opera a API; não há cadastro aberto.',
+        },
+      },
+    },
+    story: {
+      eyebrow: 'A história',
+      title: 'Por que o Pyxis existe',
+      body: 'O post de apresentação conta por que ele foi construído e o que ele nunca guarda.',
+      cta: 'Ler o post',
+    },
     footer: {
       tagline: 'Análise de produto com privacidade em primeiro lugar.',
       product: 'Produto',
