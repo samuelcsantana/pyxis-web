@@ -125,6 +125,11 @@ describe('proxy', () => {
       expect(matches('/_next/static/chunk.js')).toBe(false);
     });
 
+    it('serves the crawler files without asking for a session', () => {
+      expect(matches('/robots.txt')).toBe(false);
+      expect(matches('/sitemap.xml')).toBe(false);
+    });
+
     it('serves the logo the sign-in email loads without asking for a session', () => {
       expect(matches('/email/pyxis-logo.png')).toBe(false);
       expect(matches('/email/pyxis-logo@2x.png')).toBe(false);
