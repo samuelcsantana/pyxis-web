@@ -4,6 +4,7 @@ import { parseCount } from './locale-numbers';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PORTUGUESE = 'pt-BR';
+const ONE_ROW_HEADER_PX = 72;
 
 const SCREENS = [
   ['overview', 'Visão geral'],
@@ -150,6 +151,7 @@ test.describe('a browser that asks for Spanish', () => {
 
     await expect(page).toHaveTitle('Iniciar sesión · Pyxis');
     await expect(page.getByRole('heading', { name: 'Iniciar sesión en Pyxis' })).toBeVisible();
+    expect((await page.getByRole('banner').boundingBox())?.height).toBeLessThan(ONE_ROW_HEADER_PX);
     await expect(page.getByRole('button', { name: 'Español' })).toHaveAttribute(
       'aria-pressed',
       'true',
