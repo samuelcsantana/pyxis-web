@@ -11,10 +11,10 @@ import { createI18n, type I18n } from '@/i18n/i18n';
 import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
 import {
-  DEFAULT_LANDING_PAGE,
   LANDING_PAGES,
   type LandingPage,
   landingPageOfSlug,
+  languageAlternatesOf,
 } from '@/lib/landing-pages';
 import { APP_NAME, LANDING_ORIGIN } from '@/lib/site';
 
@@ -28,7 +28,8 @@ interface Landing {
 }
 
 const OPEN_GRAPH_LOCALES: Readonly<Record<Locale, string>> = { en: 'en_US', 'pt-BR': 'pt_BR' };
-const X_DEFAULT = 'x-default';
+
+const pathOf = (page: LandingPage): string => page.path;
 
 async function landingOf(params: LandingHomeProps['params']): Promise<Landing | undefined> {
   const page = landingPageOfSlug((await params).locale);
@@ -36,13 +37,6 @@ async function landingOf(params: LandingHomeProps['params']): Promise<Landing | 
     return undefined;
   }
   return { page, i18n: createI18n(page.locale, await loadMessages(page.locale)) };
-}
-
-function languageAlternates(): Record<string, string> {
-  return {
-    ...Object.fromEntries(LANDING_PAGES.map((page) => [page.locale, page.path])),
-    [X_DEFAULT]: DEFAULT_LANDING_PAGE.path,
-  };
 }
 
 export async function generateMetadata({ params }: LandingHomeProps): Promise<Metadata> {
@@ -57,7 +51,7 @@ export async function generateMetadata({ params }: LandingHomeProps): Promise<Me
     metadataBase: new URL(LANDING_ORIGIN),
     title: { absolute: title },
     description,
-    alternates: { canonical: page.path, languages: languageAlternates() },
+    alternates: { canonical: page.path, languages: languageAlternatesOf(pathOf) },
     openGraph: {
       type: 'website',
       siteName: APP_NAME,
