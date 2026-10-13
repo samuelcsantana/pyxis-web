@@ -9,14 +9,15 @@ export interface LandingPage {
 
 const ENGLISH: LandingPage = { locale: 'en', path: '/', slug: 'en' };
 const BRAZILIAN_PORTUGUESE: LandingPage = { locale: 'pt-BR', path: '/pt-br', slug: 'pt-br' };
+const SPANISH: LandingPage = { locale: 'es', path: '/es', slug: 'es' };
 
 export const DEFAULT_LANDING_PAGE = ENGLISH;
-export const LANDING_PAGES: readonly LandingPage[] = [ENGLISH, BRAZILIAN_PORTUGUESE];
+export const LANDING_PAGES: readonly LandingPage[] = [ENGLISH, BRAZILIAN_PORTUGUESE, SPANISH];
 
 const LANDING_PAGE_OF_LOCALE: Readonly<Record<Locale, LandingPage>> = {
   en: ENGLISH,
   'pt-BR': BRAZILIAN_PORTUGUESE,
-  es: ENGLISH,
+  es: SPANISH,
 };
 
 const INTERNAL_PREFIX = '/landing';

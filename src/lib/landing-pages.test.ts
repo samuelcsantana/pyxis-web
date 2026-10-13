@@ -13,10 +13,11 @@ import {
 } from './landing-pages';
 
 describe('landing pages', () => {
-  it('serves the home page in English at the root and in Brazilian Portuguese at /pt-br', () => {
+  it('serves the home page in English at the root, then at /pt-br and /es', () => {
     expect(LANDING_PAGES.map((page) => [page.path, page.locale])).toEqual([
       ['/', 'en'],
       ['/pt-br', 'pt-BR'],
+      ['/es', 'es'],
     ]);
     expect(DEFAULT_LANDING_PAGE.locale).toBe('en');
   });
@@ -24,23 +25,31 @@ describe('landing pages', () => {
   it('finds a page by its public address, and nothing at any other address', () => {
     expect(landingPageAt('/')?.locale).toBe('en');
     expect(landingPageAt('/pt-br')?.locale).toBe('pt-BR');
+    expect(landingPageAt('/es')?.locale).toBe('es');
     expect(landingPageAt('/pt-BR')).toBeUndefined();
+    expect(landingPageAt('/es-mx')).toBeUndefined();
     expect(landingPageAt('/en')).toBeUndefined();
   });
 
   it('finds a page by the slug of its internal route', () => {
     expect(landingPageOfSlug('en')?.path).toBe('/');
     expect(landingPageOfSlug('pt-br')?.path).toBe('/pt-br');
-    expect(landingPageOfSlug('es')).toBeUndefined();
+    expect(landingPageOfSlug('es')?.path).toBe('/es');
+    expect(landingPageOfSlug('fr')).toBeUndefined();
   });
 
   it('finds the page of each language the dashboard ships', () => {
     expect(landingPageOfLocale('en').path).toBe('/');
     expect(landingPageOfLocale('pt-BR').path).toBe('/pt-br');
+    expect(landingPageOfLocale('es').path).toBe('/es');
   });
 
   it('maps each page to the internal route the proxy rewrites to', () => {
-    expect(LANDING_PAGES.map(internalPathOf)).toEqual(['/landing/en', '/landing/pt-br']);
+    expect(LANDING_PAGES.map(internalPathOf)).toEqual([
+      '/landing/en',
+      '/landing/pt-br',
+      '/landing/es',
+    ]);
   });
 
   it('recognizes the internal route and nothing that only starts like it', () => {
@@ -63,11 +72,13 @@ describe('landing pages', () => {
     expect(languageAlternatesOf((page) => page.path)).toEqual({
       en: '/',
       'pt-BR': '/pt-br',
+      es: '/es',
       'x-default': '/',
     });
     expect(languageAlternatesOf(landingUrlOf)).toEqual({
       en: 'https://pyxis-analytics.dev/',
       'pt-BR': 'https://pyxis-analytics.dev/pt-br',
+      es: 'https://pyxis-analytics.dev/es',
       'x-default': 'https://pyxis-analytics.dev/',
     });
   });
@@ -76,6 +87,7 @@ describe('landing pages', () => {
     expect(LANDING_PAGES.map(landingUrlOf)).toEqual([
       'https://pyxis-analytics.dev/',
       'https://pyxis-analytics.dev/pt-br',
+      'https://pyxis-analytics.dev/es',
     ]);
   });
 });

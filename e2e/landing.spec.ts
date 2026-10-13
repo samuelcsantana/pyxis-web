@@ -8,7 +8,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`home page, ${colorScheme} theme`, () => {
     test.use({ colorScheme, reducedMotion: 'reduce' });
 
-    for (const path of ['/', '/pt-br']) {
+    for (const path of ['/', '/pt-br', '/es']) {
       test(`has no WCAG 2.2 A or AA violation and no sideways scroll at ${path}`, async ({
         page,
       }) => {
@@ -21,7 +21,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-for (const path of ['/', '/pt-br']) {
+for (const path of ['/', '/pt-br', '/es']) {
   test(`grows with the reader's text size and never scrolls sideways at ${path}`, async ({
     page,
   }) => {
@@ -52,6 +52,10 @@ test('serves each language at its own address, with the tags search engines read
     'href',
     `${MAIN_DOMAIN}/pt-br`,
   );
+  await expect(page.locator('link[rel="alternate"][hreflang="es"]')).toHaveAttribute(
+    'href',
+    `${MAIN_DOMAIN}/es`,
+  );
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
     '"@type":"SoftwareApplication"',
   );
@@ -70,6 +74,19 @@ test('serves each language at its own address, with the tags search engines read
     'href',
     `${MAIN_DOMAIN}/pt-br`,
   );
+
+  await page
+    .getByRole('navigation', { name: 'Idioma' })
+    .getByRole('link', { name: 'Español' })
+    .click();
+
+  await expect(page).toHaveURL(/\/es$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  await expect(page).toHaveTitle('Analítica de producto sin cookies ni datos personales · Pyxis');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Analítica de producto sin cookies, sin IP y sin datos personales.',
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${MAIN_DOMAIN}/es`);
 });
 
 test('keeps the chosen theme in both languages without setting a cookie', async ({
@@ -235,10 +252,10 @@ test.describe('measuring itself', () => {
   test('keeps the recorder toggle off the first screen until the visitor scrolls', async ({
     page,
   }) => {
-    for (const path of ['/', '/pt-br']) {
+    for (const path of ['/', '/pt-br', '/es']) {
       await page.goto(path);
       const toggle = page.getByRole('button', {
-        name: /What this page recorded|O que esta página registrou/,
+        name: /What this page recorded|O que esta página registrou|Lo que registró esta página/,
         includeHidden: true,
       });
       await expect(toggle).toHaveCount(1);
@@ -255,7 +272,9 @@ test.describe('measuring itself', () => {
       });
       await expect(toggle).toBeVisible();
       await expect(
-        page.getByRole('region', { name: /What this page recorded|O que esta página registrou/ }),
+        page.getByRole('region', {
+          name: /What this page recorded|O que esta página registrou|Lo que registró esta página/,
+        }),
       ).toBeVisible();
 
       await page.keyboard.press('Escape');
@@ -291,5 +310,6 @@ test('gives crawlers of the main domain their own robots.txt and sitemap', async
   expect(robots).toContain(`Sitemap: ${MAIN_DOMAIN}/sitemap.xml`);
   expect(sitemap).toContain(`<loc>${MAIN_DOMAIN}/</loc>`);
   expect(sitemap).toContain(`<loc>${MAIN_DOMAIN}/pt-br</loc>`);
+  expect(sitemap).toContain(`<loc>${MAIN_DOMAIN}/es</loc>`);
   expect(sitemap).toContain('hreflang="x-default"');
 });
