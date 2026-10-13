@@ -148,6 +148,16 @@ describe('proxy', () => {
       expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('pt-BR');
     });
 
+    it('renders the Spanish page at /es', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://pyxis-analytics.dev/es');
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-analytics.dev/landing/es',
+      );
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('es');
+    });
+
     it('knows the main domain by the Host header when the server calls itself localhost', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
       const byHost = visitAt('http://localhost:3101/pt-br', { host: 'pyxis-analytics.dev:3101' });

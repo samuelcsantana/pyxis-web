@@ -38,18 +38,20 @@ describe('sitemap', () => {
     );
   });
 
-  it('lists the home page in both languages on the main domain, each naming the other', async () => {
+  it('lists the home page in every language on the main domain, each naming the others', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
     request.host = 'pyxis-analytics.dev';
     const languages = {
       en: 'https://pyxis-analytics.dev/',
       'pt-BR': 'https://pyxis-analytics.dev/pt-br',
+      es: 'https://pyxis-analytics.dev/es',
       'x-default': 'https://pyxis-analytics.dev/',
     };
 
     await expect(sitemap()).resolves.toEqual([
       { url: 'https://pyxis-analytics.dev/', alternates: { languages } },
       { url: 'https://pyxis-analytics.dev/pt-br', alternates: { languages } },
+      { url: 'https://pyxis-analytics.dev/es', alternates: { languages } },
     ]);
   });
 
