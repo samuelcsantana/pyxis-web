@@ -54,6 +54,13 @@ loses people and what one person did, in order. Pyxis answers those questions fr
 carry no cookie, no IP address and no personal data. This dashboard is where the answers are read:
 one admin, one email code to sign in, and a design that puts the number that matters first.
 
+Read more: [why Pyxis was built and what it never stores][post], the introduction post on the
+author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
+
+[post]: https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data
+[post-pt]: https://www.samuelsantana.dev/blog/pyxis-analytics-sem-cookie-sem-ip-sem-dado-pessoal
+[post-es]: https://www.samuelsantana.dev/es/blog/pyxis-analytics-sin-cookies-sin-ip-sin-datos-personales
+
 ## Features
 
 Shipping now:
