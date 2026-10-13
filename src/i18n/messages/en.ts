@@ -134,7 +134,7 @@ export const en = {
     label: 'Demo notice',
     notice:
       'Demo data: invented numbers for two imaginary products. No real visitor is shown here.',
-    source: 'Source on GitHub',
+    homePage: 'What is Pyxis?',
   },
   shell: {
     skipToContent: 'Skip to content',

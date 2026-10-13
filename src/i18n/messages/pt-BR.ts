@@ -143,7 +143,7 @@ export const ptBR = translation({
     label: 'Aviso de demonstração',
     notice:
       'Dados de demonstração: números inventados para dois produtos imaginários. Nenhum visitante real aparece aqui.',
-    source: 'Código no GitHub',
+    homePage: 'O que é o Pyxis?',
   },
   shell: {
     skipToContent: 'Pular para o conteúdo',
