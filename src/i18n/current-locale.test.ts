@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { currentLocale, PATH_LOCALE_HEADER } from './current-locale';
+import { currentLocale } from './current-locale';
+import { PATH_LOCALE_HEADER } from './path-locale';
 
 vi.unmock('@/i18n/current-locale');
 

@@ -10,7 +10,17 @@ function visit(path: string, cookie?: string) {
   );
 }
 
+function visitAt(url: string, headers: Readonly<Record<string, string>> = {}) {
+  return proxy(new NextRequest(url, { headers }));
+}
+
 const FORWARDED_CSP_HEADER = 'x-middleware-request-content-security-policy';
+const FORWARDED_LOCALE_HEADER = 'x-middleware-request-x-pyxis-path-locale';
+const OVERRIDDEN_HEADERS = 'x-middleware-override-headers';
+
+function forwardedHeaderNames(response: Response): string[] {
+  return (response.headers.get(OVERRIDDEN_HEADERS) ?? '').split(',');
+}
 
 function nonceOf(policy: string | null): string | undefined {
   return /'nonce-([^']+)'/.exec(policy ?? '')?.[1];
@@ -109,6 +119,89 @@ describe('proxy', () => {
       expect(response.headers.get('location')).toBeNull();
       expect(response.headers.get('x-middleware-request-x-pyxis-requested-path')).toBe(
         '/p1/overview?range=7d',
+      );
+    });
+  });
+
+  describe('home page on the main domain, in demo mode', () => {
+    it('renders the English page at the root of the main domain', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://pyxis-analytics.dev/');
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-analytics.dev/landing/en',
+      );
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('en');
+      expect(response.headers.get('content-security-policy')).toContain("'strict-dynamic'");
+    });
+
+    it('renders the Brazilian Portuguese page at /pt-br, keeping the campaign tags', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://pyxis-analytics.dev/pt-br?utm_source=linkedin');
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-analytics.dev/landing/pt-br?utm_source=linkedin',
+      );
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('pt-BR');
+    });
+
+    it('sends any other address on the main domain to the same address in the demo', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+      const response = visitAt('https://pyxis-analytics.dev/p1/overview?range=7d');
+
+      expect(response.status).toBe(308);
+      expect(response.headers.get('location')).toBe(
+        'https://demo.pyxis-analytics.dev/p1/overview?range=7d',
+      );
+    });
+
+    it('sends the internal route to its public address, from any host', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+      const fromDemo = visitAt('https://demo.pyxis-analytics.dev/landing/pt-br');
+      const fromMain = visitAt('https://pyxis-analytics.dev/landing/en');
+
+      expect(fromDemo.status).toBe(308);
+      expect(fromDemo.headers.get('location')).toBe('https://pyxis-analytics.dev/pt-br');
+      expect(fromMain.headers.get('location')).toBe('https://pyxis-analytics.dev/');
+    });
+
+    it('keeps the demo screens on the demo host', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://demo.pyxis-analytics.dev/');
+
+      expect(response.headers.get('location')).toBeNull();
+      expect(response.headers.get('x-middleware-rewrite')).toBeNull();
+    });
+
+    it('drops a language header a visitor sends to any other page', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      const response = visitAt('https://demo.pyxis-analytics.dev/p1/overview', {
+        'x-pyxis-path-locale': 'pt-BR',
+      });
+
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBeNull();
+      expect(forwardedHeaderNames(response)).not.toContain('x-pyxis-path-locale');
+    });
+
+    it('drops it on the dashboard too', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+      const response = visit('/p1/overview', '__Host-pyxis_session=token');
+      const forged = visitAt('https://pyxis.example.com/p1/overview', {
+        cookie: '__Host-pyxis_session=token',
+        'x-pyxis-path-locale': 'pt-BR',
+      });
+
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBeNull();
+      expect(forwardedHeaderNames(forged)).not.toContain('x-pyxis-path-locale');
+    });
+
+    it('never serves the home page outside demo mode', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      expect(visitAt('https://pyxis-analytics.dev/').headers.get('location')).toBe(
+        'https://pyxis-analytics.dev/sign-in',
       );
     });
   });

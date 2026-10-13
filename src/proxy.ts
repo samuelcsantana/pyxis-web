@@ -1,6 +1,14 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { returnPathOf } from '@/components/shell/screens';
+import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
+import {
+  internalPathOf,
+  isInternalLandingPath,
+  landingPageAt,
+  landingPageOfInternalPath,
+  landingUrlOf,
+} from '@/lib/landing-pages';
 import { REQUESTED_PATH_HEADER } from '@/lib/requested-path';
 import { SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 import {
@@ -9,9 +17,12 @@ import {
   CONTENT_SECURITY_POLICY_HEADER,
   createNonce,
 } from '@/lib/security-headers';
+import { LANDING_HOST, LIVE_DEMO_URL } from '@/lib/site';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const RETURN_PARAMETER = 'next';
+
+const PERMANENT_REDIRECT = 308;
 
 function signInUrl(request: NextRequest): URL {
   const url = new URL(SIGN_IN_PATH, request.url);
@@ -31,24 +42,59 @@ function contentSecurityPolicy(): string {
   });
 }
 
-function renderWith(
+function forwardedHeaders(
   request: NextRequest,
-  requestHeaders: Readonly<Record<string, string>> = {},
-): NextResponse {
-  const policy = contentSecurityPolicy();
+  policy: string,
+  requestHeaders: Readonly<Record<string, string>>,
+): Headers {
   const headers = new Headers(request.headers);
+  headers.delete(PATH_LOCALE_HEADER);
   headers.set(CONTENT_SECURITY_POLICY_HEADER, policy);
   for (const [name, value] of Object.entries(requestHeaders)) {
     headers.set(name, value);
   }
-  const response = NextResponse.next({ request: { headers } });
+  return headers;
+}
+
+function renderWith(
+  request: NextRequest,
+  requestHeaders: Readonly<Record<string, string>> = {},
+  rewriteTo?: URL,
+): NextResponse {
+  const policy = contentSecurityPolicy();
+  const init = { request: { headers: forwardedHeaders(request, policy, requestHeaders) } };
+  const response =
+    rewriteTo === undefined ? NextResponse.next(init) : NextResponse.rewrite(rewriteTo, init);
   response.headers.set(CONTENT_SECURITY_POLICY_HEADER, policy);
   return response;
 }
 
+function landingOrDemo(request: NextRequest): NextResponse {
+  const { hostname, pathname, search } = request.nextUrl;
+  if (isInternalLandingPath(pathname)) {
+    return NextResponse.redirect(
+      landingUrlOf(landingPageOfInternalPath(pathname)),
+      PERMANENT_REDIRECT,
+    );
+  }
+  if (hostname !== LANDING_HOST) {
+    return renderWith(request);
+  }
+  const page = landingPageAt(pathname);
+  if (page === undefined) {
+    return NextResponse.redirect(
+      new URL(`${pathname}${search}`, LIVE_DEMO_URL),
+      PERMANENT_REDIRECT,
+    );
+  }
+  const internal = new URL(internalPathOf(page), request.url);
+  internal.search = search;
+  return renderWith(request, { [PATH_LOCALE_HEADER]: page.locale }, internal);
+}
+
 export function proxy(request: NextRequest) {
   if (isDemoMode()) {
-    return renderWith(request);
+    return landingOrDemo(request);
   }
   const { pathname, search, searchParams } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
