@@ -260,7 +260,9 @@ Shipping now:
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
   that host: English at `/`, Brazilian Portuguese at `/pt-br`, Spanish at `/es`, each with its
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
-  structured data, plus its own `robots.txt` and `sitemap.xml`. Its language comes from the address, never
+  structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
+  models and coding agents what Pyxis is, how to install the tracker and the rules an
+  integration must follow (404 on the demo and the dashboard). Its language comes from the address, never
   from a cookie or the browser, so crawlers and visitors read the same page; the page sets no
   cookie (the theme choice stays in `localStorage`). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
