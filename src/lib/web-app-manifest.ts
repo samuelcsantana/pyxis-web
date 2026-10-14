@@ -9,6 +9,7 @@ const DASHBOARD_ROOT = '/';
 
 export function dashboardManifest(): MetadataRoute.Manifest {
   return {
+    id: DASHBOARD_ROOT,
     name: APP_NAME,
     short_name: APP_NAME,
     description: APP_DESCRIPTION,
