@@ -27,6 +27,11 @@ import { demoTimeOfDayWire } from './overview/demo-time-of-day';
 import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
 import { DEMO_EMAIL_PREFERENCES_WIRE } from './preferences/mock-email-preferences-service';
 import { emailPreferencesWire } from '@/domain/email-preferences';
+import { newAccessTokenWire } from '@/domain/access-tokens.schema';
+import {
+  demoAccessTokensWire,
+  demoCreatedAccessTokenWire,
+} from './access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 
 const CONTRACT_FILE = 'contract/openapi.json';
@@ -279,6 +284,19 @@ describe('the API contract copied from pyxis-api', () => {
       expect(wire.visits.length).toBeGreaterThan(0);
       expect(validate(wire), JSON.stringify(validate.errors)).toBe(true);
     }
+  });
+
+  it('accepts the demo access tokens, the body that creates one and the token it answers', () => {
+    const list = contractSchema('AccessTokens');
+    const create = contractSchema('CreateAccessToken');
+    const created = contractSchema('CreatedAccessToken');
+    const request = { name: ' Claude Code ', lifetimeDays: 365 } as const;
+
+    expect(list(demoAccessTokensWire(NOW)), JSON.stringify(list.errors)).toBe(true);
+    expect(create(newAccessTokenWire(request)), JSON.stringify(create.errors)).toBe(true);
+    expect(created(demoCreatedAccessTokenWire(request, NOW)), JSON.stringify(created.errors)).toBe(
+      true,
+    );
   });
 
   it('accepts the bodies the sign-in form sends, and the answer it keeps a token from', async () => {
