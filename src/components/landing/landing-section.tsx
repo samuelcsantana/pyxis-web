@@ -35,7 +35,7 @@ export function LandingSection({ id, eyebrow, title, lead, children }: LandingSe
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id={titleId}
-            className="text-3xl leading-tight font-semibold tracking-[-0.03em] text-balance lg:text-4xl"
+            className="text-3xl leading-tight font-semibold tracking-[-0.03em] text-balance wrap-break-word hyphens-auto lg:text-4xl"
           >
             {title}
           </h2>
