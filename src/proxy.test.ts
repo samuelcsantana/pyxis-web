@@ -298,6 +298,7 @@ describe('proxy', () => {
     it('serves the crawler files without asking for a session', () => {
       expect(matches('/robots.txt')).toBe(false);
       expect(matches('/sitemap.xml')).toBe(false);
+      expect(matches('/llms.txt')).toBe(false);
     });
 
     it('serves the logo the sign-in email loads without asking for a session', () => {
