@@ -40,6 +40,17 @@ const EMAIL = {
     },
   ],
   endSession: () => Promise.resolve(),
+  accessTokens: [
+    {
+      id: '1a7c3e5f-2b4d-4c6e-8f1a-3b5c7d9e1f2a',
+      name: 'Claude Code',
+      createdAt: '2026-10-01T09:00:00.000Z',
+      lastUsedAt: null,
+      expiresAt: '2026-12-30T09:00:00.000Z',
+    },
+  ],
+  createAccessToken: () => Promise.resolve({ kind: 'tooMany' } as const),
+  revokeAccessToken: () => Promise.resolve(),
 };
 
 function panel(name: string) {
@@ -61,6 +72,21 @@ describe('ProjectSettingsView', () => {
       .getAllByRole('heading', { level: 2 })
       .map((heading) => heading.textContent);
     expect(headings.indexOf('Sessions')).toBe(headings.indexOf('E-mail') + 1);
+  });
+
+  it('lists the access tokens right after the sessions, each with its revoke button', () => {
+    renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
+
+    const tokens = panel('Access tokens');
+    expect(tokens).toHaveTextContent('Claude Code');
+    expect(tokens).toHaveTextContent('Last usedNever used');
+    expect(
+      within(tokens).getByRole('button', { name: 'Revoke', description: 'Claude Code' }),
+    ).toBeInTheDocument();
+    const headings = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((heading) => heading.textContent);
+    expect(headings.indexOf('Access tokens')).toBe(headings.indexOf('Sessions') + 1);
   });
 
   it('shows how the project is set up, its activity, origins, keys and retention', () => {

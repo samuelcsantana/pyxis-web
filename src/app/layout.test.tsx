@@ -64,6 +64,7 @@ describe('RootLayout', () => {
       'propertyBreakdown',
       'emailPreferences',
       'sessions',
+      'accessTokens',
     ]);
   });
 

@@ -42,6 +42,7 @@ describe('get-messages', () => {
       'propertyBreakdown',
       'emailPreferences',
       'sessions',
+      'accessTokens',
     ]);
     expect(messages.funnelEditor.problems.pathStart).toBe('A page path starts with "/".');
   });
