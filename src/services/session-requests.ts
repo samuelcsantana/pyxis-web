@@ -10,6 +10,8 @@ const PROJECT_PATH = /^\/v1\/projects\/[^/?]+/;
 const PROJECT_PATH_TEMPLATE = '/v1/projects/:projectId';
 const SESSION_PATH = /^\/v1\/me\/sessions\/[^/?]+/;
 const SESSION_PATH_TEMPLATE = '/v1/me/sessions/:sessionId';
+const ACCESS_TOKEN_PATH = /^\/v1\/me\/tokens\/[^/?]+/;
+const ACCESS_TOKEN_PATH_TEMPLATE = '/v1/me/tokens/:tokenId';
 const JSON_ACCEPT = 'application/json';
 const IMAGE_ACCEPT = 'image/*';
 const UNKNOWN_CONTENT_TYPE = 'application/octet-stream';
@@ -29,14 +31,15 @@ export interface FetchedBytes {
 }
 
 export type OutgoingBody =
-  { readonly method: 'PUT'; readonly body: unknown } | { readonly method: 'DELETE' };
+  { readonly method: 'POST' | 'PUT'; readonly body: unknown } | { readonly method: 'DELETE' };
 
 export function pathTemplate(path: string): string {
   const queryStart = path.indexOf(QUERY_START);
   const route = queryStart === -1 ? path : path.slice(0, queryStart);
   return route
     .replace(PROJECT_PATH, PROJECT_PATH_TEMPLATE)
-    .replace(SESSION_PATH, SESSION_PATH_TEMPLATE);
+    .replace(SESSION_PATH, SESSION_PATH_TEMPLATE)
+    .replace(ACCESS_TOKEN_PATH, ACCESS_TOKEN_PATH_TEMPLATE);
 }
 
 export function requestLogLine(

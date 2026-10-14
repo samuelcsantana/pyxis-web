@@ -21,6 +21,10 @@ export class ApiWriter {
     this.requests = new SessionRequests(baseUrl, sessionToken, log, now, origin);
   }
 
+  post<Value>(path: string, body: unknown, schema: ResponseSchema<Value>): Promise<Value> {
+    return this.requests.send('api_write', path, schema, { method: 'POST', body });
+  }
+
   put<Value>(path: string, body: unknown, schema: ResponseSchema<Value>): Promise<Value> {
     return this.requests.send('api_write', path, schema, { method: 'PUT', body });
   }
