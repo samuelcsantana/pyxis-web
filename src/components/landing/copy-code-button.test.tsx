@@ -70,6 +70,16 @@ describe('CopyCodeButton', () => {
     ).toBeInTheDocument();
   });
 
+  it('sits in the corner of its code block unless asked to sit beside the code', () => {
+    const { unmount } = renderButton();
+    expect(screen.getByRole('button', { name: 'Copy' })).toHaveClass('absolute');
+    unmount();
+
+    render(<CopyCodeButton code="hello" targetId="code" labels={LABELS} placement="inline" />);
+
+    expect(screen.getByRole('button', { name: 'Copy' })).not.toHaveClass('absolute');
+  });
+
   it('selects nothing when the code it names is not on the page', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     stubClipboard(() => Promise.reject(new Error('no clipboard')));

@@ -14,7 +14,15 @@ export interface CopyCodeButtonProps {
   readonly targetId: string;
   readonly labels: CopyCodeLabels;
   readonly track?: Readonly<Record<string, string>>;
+  readonly placement?: CopyButtonPlacement;
 }
+
+export type CopyButtonPlacement = 'corner' | 'inline';
+
+const PLACEMENT_CLASS: Readonly<Record<CopyButtonPlacement, string>> = {
+  corner: 'absolute top-2.5 right-2.5',
+  inline: 'shrink-0',
+};
 
 type CopyState = 'idle' | 'copied' | 'selected';
 
@@ -36,7 +44,13 @@ function labelOf(state: CopyState, labels: CopyCodeLabels): string {
   return state === 'idle' ? labels.copy : labels[state];
 }
 
-export function CopyCodeButton({ code, targetId, labels, track = {} }: CopyCodeButtonProps) {
+export function CopyCodeButton({
+  code,
+  targetId,
+  labels,
+  track = {},
+  placement = 'corner',
+}: CopyCodeButtonProps) {
   const [state, setState] = useState<CopyState>('idle');
 
   useEffect(() => {
@@ -69,7 +83,7 @@ export function CopyCodeButton({ code, targetId, labels, track = {} }: CopyCodeB
       onClick={() => {
         void copy();
       }}
-      className={`absolute top-2.5 right-2.5 h-8 rounded-control border border-nav-border bg-nav-raised px-2.5 text-caption font-semibold text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_FOCUS_RING} ${CONTROL_TRANSITION}`}
+      className={`${PLACEMENT_CLASS[placement]} h-8 rounded-control border border-nav-border bg-nav-raised px-2.5 text-caption font-semibold text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_FOCUS_RING} ${CONTROL_TRANSITION}`}
     >
       <span aria-live="polite">{labelOf(state, labels)}</span>
     </button>
