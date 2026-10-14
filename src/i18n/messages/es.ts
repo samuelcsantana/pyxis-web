@@ -1624,7 +1624,32 @@ export const es = translation({
         use: {
           question: '¿Puedo usarlo en mi sitio?',
           answer:
-            'El código tiene licencia MIT y está en GitHub. Hoy las claves las emite quien opera la API; no hay registro abierto.',
+            'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Para suscribirte, pide acceso en hello@pyxis-analytics.dev.',
+        },
+        price: {
+          question: '¿Cuánto cuesta?',
+          answer:
+            'R$ 39 al mes o R$ 390 al año (dos meses gratis), con tarjeta. Incluye hasta 100 mil eventos al mes, 3 sitios, 3 personas en el panel, 13 meses de historial, el resumen semanal y el servidor MCP.',
+        },
+        trial: {
+          question: '¿Cómo funciona la prueba gratis?',
+          answer:
+            'Son 14 días sin pagar. La tarjeta se pide al principio y solo se cobra el día 15; si cancelas antes, no se cobra nada.',
+        },
+        cancel: {
+          question: '¿Cómo cancelo?',
+          answer:
+            'En el portal de la suscripción, en cualquier momento. El acceso sigue hasta el final del periodo pagado, y los datos de tu proyecto se borran 30 días después. Si lo pides dentro de los 7 días posteriores al primer cobro, se devuelve el importe completo.',
+        },
+        limit: {
+          question: '¿Y si paso de 100 mil eventos?',
+          answer:
+            'Por ahora, recibes un aviso por correo y lo conversamos. No se corta nada sin aviso.',
+        },
+        payment: {
+          question: '¿Hay Pix o factura?',
+          answer:
+            'Por ahora, solo con tarjeta; el Pix para el plan anual depende de que Stripe lo habilite. Todavía no se emite factura brasileña (nota fiscal): si la necesitas, escribe antes de suscribirte.',
         },
       },
     },

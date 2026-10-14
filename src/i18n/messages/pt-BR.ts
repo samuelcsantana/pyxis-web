@@ -1616,7 +1616,32 @@ export const ptBR = translation({
         use: {
           question: 'Posso usar no meu site?',
           answer:
-            'O código tem licença MIT e está no GitHub. Hoje as chaves são criadas por quem opera a API; não há cadastro aberto.',
+            'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Para assinar, peça acesso em hello@pyxis-analytics.dev.',
+        },
+        price: {
+          question: 'Quanto custa?',
+          answer:
+            'R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão. Inclui até 100 mil eventos por mês, 3 sites, 3 pessoas no painel, 13 meses de histórico, o resumo semanal e o servidor MCP.',
+        },
+        trial: {
+          question: 'Como funciona o teste grátis?',
+          answer:
+            'São 14 dias sem pagar. O cartão é pedido no começo e só é cobrado no 15º dia; se você cancelar antes, nada é cobrado.',
+        },
+        cancel: {
+          question: 'Como eu cancelo?',
+          answer:
+            'No portal da assinatura, a qualquer momento. O acesso continua até o fim do período pago, e os dados do seu projeto são apagados 30 dias depois. Se pedir em até 7 dias da primeira cobrança, o valor é devolvido inteiro.',
+        },
+        limit: {
+          question: 'E se eu passar de 100 mil eventos?',
+          answer:
+            'Nesta fase, você recebe um aviso por e-mail e a gente conversa. Nada é cortado sem aviso.',
+        },
+        payment: {
+          question: 'Tem Pix ou nota fiscal?',
+          answer:
+            'Por enquanto, o pagamento é só no cartão; o Pix para o plano anual depende de liberação do Stripe. Ainda não há emissão de nota fiscal: se você precisa de nota, escreva antes de assinar.',
         },
       },
     },

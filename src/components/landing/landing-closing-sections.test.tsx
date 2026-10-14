@@ -78,11 +78,23 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(6);
-    expect([...items].map((item) => item.open)).toEqual([true, false, false, false, false, false]);
+    expect(items).toHaveLength(11);
+    expect([...items].map((item) => item.open)).toEqual([
+      true,
+      ...Array.from({ length: 10 }, () => false),
+    ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');
     expect(items[0]).toHaveClass('landing-reveal');
+  });
+
+  it('answers what the hosted plan costs and how to leave it', () => {
+    render(<FaqSection i18n={english} />);
+
+    expect(screen.getByText('How much does it cost?')).toBeInTheDocument();
+    expect(screen.getByText(/R\$ 39 a month or R\$ 390 a year/)).toBeInTheDocument();
+    expect(screen.getByText(/deleted 30 days later/)).toBeInTheDocument();
+    expect(screen.getByText(/request access at hello@pyxis-analytics\.dev/)).toBeInTheDocument();
   });
 
   it('sets the names of code in code type', () => {

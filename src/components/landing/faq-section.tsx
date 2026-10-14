@@ -10,7 +10,19 @@ export interface FaqSectionProps {
 
 export const FAQ_ID = 'faq';
 
-const QUESTIONS = ['cookies', 'address', 'people', 'optOut', 'retention', 'use'] as const;
+const QUESTIONS = [
+  'cookies',
+  'address',
+  'people',
+  'optOut',
+  'retention',
+  'use',
+  'price',
+  'trial',
+  'cancel',
+  'limit',
+  'payment',
+] as const;
 const FIRST_OPEN = 'cookies';
 const FAQ_MOTION = 'landing-faq';
 
