@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.18.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.18.0...v0.18.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **app:** answer the demo's missing manifest at request time ([c3511cd](https://github.com/samuelcsantana/pyxis-web/commit/c3511cdf3550eb87c044832f57be3216f966a6f9))
+* **app:** give the installed dashboard a fixed identity ([42f2911](https://github.com/samuelcsantana/pyxis-web/commit/42f2911c0c3f9a056f6e4c799629cbcff311c5dd))
+* **app:** offer the install only on the dashboard ([37b548a](https://github.com/samuelcsantana/pyxis-web/commit/37b548abbffe8ecf02ee609bd33555d7999bb538))
+
+
+### Refactoring
+
+* **app:** serve the web app manifest from a route handler ([f0f1976](https://github.com/samuelcsantana/pyxis-web/commit/f0f197646a4c6c8b6a1751b1e01c0f0000766f32))
+
 ## [0.18.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.17.0...v0.18.0) (2026-10-13)
 
 
