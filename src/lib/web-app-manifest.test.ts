@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import manifest from './manifest';
+import { dashboardManifest } from './web-app-manifest';
 
-describe('manifest', () => {
+describe('dashboardManifest', () => {
   it('names the app and points at the icons it already serves', () => {
-    const app = manifest();
+    const app = dashboardManifest();
 
     expect(app.name).toBe('Pyxis');
     expect(app.start_url).toBe('/');

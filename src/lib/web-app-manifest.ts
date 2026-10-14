@@ -2,12 +2,17 @@ import type { MetadataRoute } from 'next';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/site';
 import { THEME_BACKGROUNDS } from '@/lib/theme';
 
-export default function manifest(): MetadataRoute.Manifest {
+export const WEB_APP_MANIFEST_PATH = '/manifest.webmanifest';
+export const WEB_APP_MANIFEST_CONTENT_TYPE = 'application/manifest+json';
+
+const DASHBOARD_ROOT = '/';
+
+export function dashboardManifest(): MetadataRoute.Manifest {
   return {
     name: APP_NAME,
     short_name: APP_NAME,
     description: APP_DESCRIPTION,
-    start_url: '/',
+    start_url: DASHBOARD_ROOT,
     display: 'standalone',
     background_color: THEME_BACKGROUNDS.light,
     theme_color: THEME_BACKGROUNDS.light,
