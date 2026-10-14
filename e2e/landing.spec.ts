@@ -169,6 +169,7 @@ test('shows the sections in order', async ({ page }) => {
     'built-in-public',
     'architecture',
     'comparison',
+    'pricing',
     'faq',
     'story',
   ]);
@@ -197,6 +198,37 @@ test('jumps to the privacy section from the header', async ({ page, isMobile }) 
 
   await expect(page).toHaveURL(/#never-stored$/);
   await expect(page.getByRole('heading', { name: 'What never gets stored' })).toBeInViewport();
+});
+
+test('shows the yearly price once the visitor picks it', async ({ page }) => {
+  await page.goto('/pt-br#pricing');
+  const pricing = page.getByRole('region', {
+    name: 'Um plano, em reais, com tudo o que a demonstração mostra',
+  });
+
+  await expect(pricing.getByText('R$ 39', { exact: true })).toBeVisible();
+  await expect(pricing.getByText('R$ 390', { exact: true })).toBeHidden();
+  await pricing.locator('label').filter({ hasText: 'Anual' }).click();
+
+  await expect(pricing.getByRole('radio', { name: /^Anual/ })).toBeChecked();
+  await expect(pricing.getByText('R$ 390', { exact: true })).toBeVisible();
+  await expect(pricing.getByText('R$ 39', { exact: true })).toBeHidden();
+});
+
+test('opens the request for access with the address to write to', async ({ page }) => {
+  await page.goto('/#pricing');
+  const pricing = page.getByRole('region', {
+    name: 'One plan, in reais, with everything the demo shows',
+  });
+
+  await expect(pricing.getByText('hello@pyxis-analytics.dev')).toBeHidden();
+  await pricing.getByText('Request access').click();
+
+  await expect(pricing.getByText('hello@pyxis-analytics.dev')).toBeVisible();
+  await expect(pricing.getByRole('link', { name: 'Open in my e-mail app' })).toHaveAttribute(
+    'href',
+    'mailto:hello@pyxis-analytics.dev?subject=I%20would%20like%20to%20use%20Pyxis',
+  );
 });
 
 test('opens each dashboard screen of the demo store from its card', async ({ page }) => {

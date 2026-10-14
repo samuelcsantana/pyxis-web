@@ -6,6 +6,8 @@ export const LANDING_EVENTS = {
   siteOpened: 'site_opened',
   snippetCopied: 'snippet_copied',
   languageSwitched: 'language_switched',
+  pricingOpened: 'pricing_opened',
+  accessRequested: 'access_requested',
 } as const;
 
 export type LandingEvent = (typeof LANDING_EVENTS)[keyof typeof LANDING_EVENTS];

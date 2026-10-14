@@ -18,6 +18,7 @@ import {
 } from '@/components/landing/measurement/measurement-labels';
 import { MeasurementNote } from '@/components/landing/measurement/measurement-note';
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
+import { PricingSection } from '@/components/landing/pricing-section';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
 import { LinkPreferencesReceiver } from '@/components/preferences/link-preferences-receiver';
@@ -143,6 +144,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <BuiltInPublicSection i18n={i18n} />
         <ArchitectureSection i18n={i18n} />
         <ComparisonSection i18n={i18n} />
+        <PricingSection i18n={i18n} />
         <FaqSection i18n={i18n} />
         <StorySection i18n={i18n} />
       </MainContent>

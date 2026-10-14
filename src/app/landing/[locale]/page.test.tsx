@@ -124,6 +124,7 @@ describe('the home page on the main domain', () => {
       'built-in-public',
       'architecture',
       'comparison',
+      'pricing',
       'faq',
       'story',
     ]);
