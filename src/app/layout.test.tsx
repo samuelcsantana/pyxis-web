@@ -87,17 +87,17 @@ describe('RootLayout', () => {
     const metadata = await generateMetadata();
 
     expect(metadata.title).toEqual({ template: '%s · Pyxis', default: 'Pyxis' });
-    expect(metadata.manifest).toBe('/manifest.webmanifest');
     expect(metadata.description).toMatch(/no cookies/);
     expect(metadata.openGraph).toMatchObject({ description: metadata.description });
     expect(metadata.twitter).toMatchObject({ description: metadata.description });
   });
 
-  it('lets search engines index the live demo and names it in link previews', async () => {
+  it('lets search engines index the live demo, names it in link previews and offers no install', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
     const metadata = await generateMetadata();
 
     expect(metadata.robots).toBeNull();
+    expect(metadata.manifest).toBeNull();
     expect(metadata.openGraph).toMatchObject({ siteName: 'Pyxis', title: 'Pyxis live demo' });
     expect(metadata.twitter).toMatchObject({
       card: 'summary_large_image',
@@ -105,11 +105,12 @@ describe('RootLayout', () => {
     });
   });
 
-  it('keeps a dashboard with a real API out of search engines', async () => {
+  it('keeps a dashboard with a real API out of search engines and makes it installable', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     const metadata = await generateMetadata();
 
     expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.manifest).toBe('/manifest.webmanifest');
     expect(metadata.openGraph).toMatchObject({ title: 'Pyxis' });
   });
 

@@ -324,3 +324,10 @@ test('gives crawlers of the main domain their own robots.txt and sitemap', async
   expect(sitemap).toContain(`<loc>${MAIN_DOMAIN}/es</loc>`);
   expect(sitemap).toContain('hreflang="x-default"');
 });
+
+test('offers no install of the home page as an app', async ({ page, request }) => {
+  await page.goto('/');
+
+  await expect(page.locator('link[rel="manifest"]')).toHaveCount(0);
+  expect((await request.get('/manifest.webmanifest')).status()).toBe(404);
+});

@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { template: TITLE_TEMPLATE, default: APP_NAME },
     description,
     robots: demo ? null : NOT_INDEXED,
-    manifest: WEB_APP_MANIFEST_PATH,
+    manifest: demo ? null : WEB_APP_MANIFEST_PATH,
     openGraph: {
       type: 'website',
       siteName: APP_NAME,

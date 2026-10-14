@@ -45,12 +45,13 @@ test('follows the system theme in the browser bar when none was chosen', async (
   ).toHaveAttribute('content', LIGHT_BACKGROUND);
 });
 
-test('serves the manifest, the favicon and a robots file that lets crawlers into the demo', async ({
+test('offers no install of the demo, and serves the favicon and a robots file that lets crawlers in', async ({
+  page,
   request,
 }) => {
-  const manifest = await request.get('/manifest.webmanifest');
-  expect(manifest.status()).toBe(200);
-  expect(await manifest.json()).toMatchObject({ name: 'Pyxis', start_url: '/' });
+  await page.goto('/sign-in');
+  await expect(page.locator('link[rel="manifest"]')).toHaveCount(0);
+  expect((await request.get('/manifest.webmanifest')).status()).toBe(404);
 
   expect((await request.get('/favicon.ico')).status()).toBe(200);
 
