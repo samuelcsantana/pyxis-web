@@ -131,3 +131,75 @@ test('names the sessions panel in Portuguese', async ({ page, context, baseURL }
     sessions.getByRole('button', { name: 'Sair de todos os dispositivos' }),
   ).toBeVisible();
 });
+
+test.describe('access tokens', () => {
+  test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
+
+  test('creates a token, shows it once with a copy button, then offers the form again', async ({
+    page,
+  }) => {
+    await page.goto(`/${STORE_ID}/settings`);
+    const tokens = page.getByRole('region', { name: 'Access tokens' });
+    await expect(tokens.getByRole('listitem')).toHaveCount(2);
+    await expect(tokens.getByRole('listitem').nth(1)).toContainText('Never used');
+
+    await tokens.getByRole('textbox', { name: 'Name' }).fill('Claude Code');
+    await tokens.getByRole('combobox', { name: 'Expires in' }).selectOption('30');
+    await tokens.getByRole('button', { name: 'Create token' }).click();
+
+    const reveal = tokens.getByRole('group', { name: 'Copy your new token now' });
+    await expect(reveal).toContainText(/pyxis_at_[A-Za-z0-9]{32}/);
+    await expect(page.getByRole('heading', { name: 'Copy your new token now' })).toBeFocused();
+    expect(await axeViolations(page)).toEqual([]);
+    expect(await sidewaysOverflow(page)).toBe(0);
+
+    await reveal.getByRole('button', { name: 'Copy' }).click();
+
+    await expect(reveal.getByRole('button', { name: 'Copied' })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
+      /^pyxis_at_[A-Za-z0-9]{32}$/,
+    );
+
+    await reveal.getByRole('button', { name: 'Done' }).click();
+
+    await expect(tokens.getByRole('textbox', { name: 'Name' })).toHaveValue('');
+  });
+
+  test('asks for a name under the field before calling anything', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/settings`);
+    const tokens = page.getByRole('region', { name: 'Access tokens' });
+
+    await tokens.getByRole('button', { name: 'Create token' }).click();
+
+    await expect(tokens.getByRole('alert')).toHaveText(
+      'Give the token a name, so you can tell it apart later.',
+    );
+    await expect(tokens.getByRole('textbox', { name: 'Name' })).toBeFocused();
+  });
+
+  test('revokes a token from its row', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/settings`);
+    const tokens = page.getByRole('region', { name: 'Access tokens' });
+
+    await tokens
+      .getByRole('listitem')
+      .filter({ hasText: 'Claude Code' })
+      .getByRole('button', { name: 'Revoke' })
+      .click();
+
+    await expect(tokens.getByRole('listitem').nth(0).getByRole('status')).toHaveText(
+      'Token revoked',
+    );
+    await expect(tokens.getByRole('alert')).toHaveCount(0);
+  });
+
+  test('speaks Portuguese', async ({ page, context, baseURL }) => {
+    await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
+
+    await page.goto(`/${STORE_ID}/settings`);
+
+    const tokens = page.getByRole('region', { name: 'Tokens de acesso' });
+    await expect(tokens.getByRole('button', { name: 'Criar token' })).toBeVisible();
+    await expect(tokens.getByRole('listitem').nth(1)).toContainText('Nunca usado');
+  });
+});

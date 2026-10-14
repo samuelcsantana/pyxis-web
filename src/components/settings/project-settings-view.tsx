@@ -6,10 +6,14 @@ import {
   type ProjectKeySummary,
   type ProjectSettings,
 } from '@/domain/project-settings';
+import type { AccessToken } from '@/domain/access-tokens';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
+import { AccessTokensPanel } from './access-tokens-panel';
+import type { CreateAccessToken } from './create-access-token-form';
 import type { EndSession } from './end-session-button';
+import type { RevokeAccessToken } from './revoke-access-token-button';
 import { SessionsPanel } from './sessions-panel';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
@@ -20,6 +24,9 @@ export interface ProjectSettingsViewProps {
   readonly chooseEmailPreferences: ChooseEmailPreferences;
   readonly sessions: readonly AdminSession[];
   readonly endSession: EndSession;
+  readonly accessTokens: readonly AccessToken[];
+  readonly createAccessToken: CreateAccessToken;
+  readonly revokeAccessToken: RevokeAccessToken;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -216,6 +223,9 @@ export function ProjectSettingsView({
   chooseEmailPreferences,
   sessions,
   endSession,
+  accessTokens,
+  createAccessToken,
+  revokeAccessToken,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
@@ -232,6 +242,15 @@ export function ProjectSettingsView({
       </div>
       <div className="lg:col-span-2">
         <SessionsPanel sessions={sessions} i18n={i18n} when={when} end={endSession} />
+      </div>
+      <div className="lg:col-span-2">
+        <AccessTokensPanel
+          tokens={accessTokens}
+          i18n={i18n}
+          when={when}
+          create={createAccessToken}
+          revoke={revokeAccessToken}
+        />
       </div>
       <ProjectPanel {...section} />
       <ActivityPanel {...section} />

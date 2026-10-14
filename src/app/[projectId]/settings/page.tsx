@@ -7,10 +7,16 @@ import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { demoCanonical } from '@/lib/demo-canonical';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
+import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
-import { chooseEmailPreferences, endSession } from './actions';
+import {
+  chooseEmailPreferences,
+  createAccessToken,
+  endSession,
+  revokeAccessToken,
+} from './actions';
 
 export interface SettingsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
@@ -27,10 +33,11 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences, sessions] = await Promise.all([
+  const [settings, emailPreferences, sessions, accessTokens] = await Promise.all([
     readOrSignIn(() => createProjectsService().settings(project.id)),
     readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
     readOrSignIn(() => createSessionsService().list()),
+    readOrSignIn(() => createAccessTokensService().list()),
   ]);
   const i18n = await getI18n();
   return (
@@ -47,6 +54,9 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           chooseEmailPreferences={chooseEmailPreferences.bind(null, project.id)}
           sessions={sessions}
           endSession={endSession.bind(null, project.id)}
+          accessTokens={accessTokens}
+          createAccessToken={createAccessToken.bind(null, project.id)}
+          revokeAccessToken={revokeAccessToken.bind(null, project.id)}
         />
       </MainContent>
     </>

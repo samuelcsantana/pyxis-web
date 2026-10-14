@@ -1,19 +1,37 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { NewAccessToken } from '@/domain/access-tokens';
 import type { Admin } from '@/domain/admin';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import { UnauthenticatedError } from '@/domain/errors';
+import type { IAccessTokensService } from '@/services/access-tokens/access-tokens-service.interface';
 import type { IEmailPreferencesService } from '@/services/preferences/email-preferences-service.interface';
 import type { ISessionsService } from '@/services/sessions/sessions-service.interface';
-import { chooseEmailPreferences, endSession } from './actions';
+import {
+  chooseEmailPreferences,
+  createAccessToken,
+  endSession,
+  revokeAccessToken,
+} from './actions';
 
 const state = vi.hoisted<{
   admin: unknown;
   choose: IEmailPreferencesService['choose'];
   end: ISessionsService['end'];
+  create: IAccessTokensService['create'];
+  revoke: IAccessTokensService['revoke'];
 }>(() => ({
   admin: undefined,
   choose: () => Promise.reject(new Error('choose not set')),
   end: () => Promise.reject(new Error('end not set')),
+  create: () => Promise.reject(new Error('create not set')),
+  revoke: () => Promise.reject(new Error('revoke not set')),
+}));
+
+vi.mock('@/services/access-tokens/access-tokens-service.factory', () => ({
+  createAccessTokensService: (): Pick<IAccessTokensService, 'create' | 'revoke'> => ({
+    create: (request) => state.create(request),
+    revoke: (tokenId) => state.revoke(tokenId),
+  }),
 }));
 
 vi.mock('@/services/sessions/sessions-service.factory', () => ({
@@ -136,6 +154,101 @@ describe('endSession', () => {
     state.end = () => Promise.reject(new UnauthenticatedError());
 
     await expect(endSession('p-store', SESSION_ID)).rejects.toThrow(
+      /^redirect:\/sign-in\?expired=1/,
+    );
+  });
+});
+
+describe('createAccessToken', () => {
+  const CREATED = {
+    kind: 'created',
+    token: {
+      id: '3c9e5a7b-4d6f-4e8a-8b3c-5d7e9f1a3b4c',
+      name: 'Claude Code',
+      token: `pyxis_at_${'A'.repeat(32)}`,
+      createdAt: '2026-10-14T12:00:00.000Z',
+      lastUsedAt: null,
+      expiresAt: '2027-01-12T12:00:00.000Z',
+    },
+  } as const;
+
+  it('creates the token for an admin who can read the project, its name trimmed', async () => {
+    const create = vi.fn<IAccessTokensService['create']>(() => Promise.resolve(CREATED));
+    state.create = create;
+
+    await expect(
+      createAccessToken('p-store', { name: ' Claude Code ', lifetimeDays: 90 }),
+    ).resolves.toEqual(CREATED);
+    expect(create).toHaveBeenCalledWith({ name: 'Claude Code', lifetimeDays: 90 });
+  });
+
+  it('answers not found for a project the admin cannot read, without creating anything', async () => {
+    const create = vi.fn<IAccessTokensService['create']>();
+    state.create = create;
+
+    await expect(
+      createAccessToken('p-other', { name: 'Claude Code', lifetimeDays: 90 }),
+    ).rejects.toThrow('not-found');
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [{ name: '   ', lifetimeDays: 90 }],
+    [{ name: 'x'.repeat(65), lifetimeDays: 90 }],
+    [{ name: 'Claude Code', lifetimeDays: 7 }],
+    [{ name: 'Claude Code', lifetimeDays: 90, scope: 'write' }],
+  ])('refuses %j, since it comes from the browser', async (forged) => {
+    const create = vi.fn<IAccessTokensService['create']>();
+    state.create = create;
+
+    await expect(createAccessToken('p-store', forged as unknown as NewAccessToken)).rejects.toThrow(
+      'An access token needs a name and a lifetime of 30, 90 or 365 days.',
+    );
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('sends an expired session back to sign-in', async () => {
+    state.create = () => Promise.reject(new UnauthenticatedError());
+
+    await expect(
+      createAccessToken('p-store', { name: 'Claude Code', lifetimeDays: 30 }),
+    ).rejects.toThrow(/^redirect:\/sign-in\?expired=1/);
+  });
+});
+
+describe('revokeAccessToken', () => {
+  const TOKEN_ID = '1a7c3e5f-2b4d-4c6e-8f1a-3b5c7d9e1f2a';
+
+  it('revokes the token for an admin who can read the project', async () => {
+    const revoke = vi.fn<IAccessTokensService['revoke']>(() => Promise.resolve());
+    state.revoke = revoke;
+
+    await expect(revokeAccessToken('p-store', TOKEN_ID)).resolves.toBeUndefined();
+    expect(revoke).toHaveBeenCalledWith(TOKEN_ID);
+  });
+
+  it('answers not found for a project the admin cannot read, without revoking anything', async () => {
+    const revoke = vi.fn<IAccessTokensService['revoke']>();
+    state.revoke = revoke;
+
+    await expect(revokeAccessToken('p-other', TOKEN_ID)).rejects.toThrow('not-found');
+    expect(revoke).not.toHaveBeenCalled();
+  });
+
+  it('refuses an id that is not a UUID, since it comes from the browser', async () => {
+    const revoke = vi.fn<IAccessTokensService['revoke']>();
+    state.revoke = revoke;
+
+    await expect(revokeAccessToken('p-store', 'not-a-token')).rejects.toThrow(
+      'An access token is revoked by its id.',
+    );
+    expect(revoke).not.toHaveBeenCalled();
+  });
+
+  it('sends an expired session back to sign-in', async () => {
+    state.revoke = () => Promise.reject(new UnauthenticatedError());
+
+    await expect(revokeAccessToken('p-store', TOKEN_ID)).rejects.toThrow(
       /^redirect:\/sign-in\?expired=1/,
     );
   });
