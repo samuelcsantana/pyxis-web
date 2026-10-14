@@ -121,6 +121,64 @@ describe('ApiWriter', () => {
   });
 });
 
+describe('ApiWriter post', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('posts a JSON body with the session cookie and parses the created answer', async () => {
+    const fetchMock = answer(201, { id: 'token-1' });
+    const lines: string[] = [];
+
+    await expect(
+      new ApiWriter(
+        API,
+        () => Promise.resolve('token'),
+        (line) => {
+          lines.push(line);
+        },
+        () => 0,
+      ).post('/v1/me/tokens', { name: 'Claude Code' }, z.object({ id: z.string() })),
+    ).resolves.toEqual({ id: 'token-1' });
+    expect(fetchMock).toHaveBeenCalledWith(`${API}/v1/me/tokens`, {
+      method: 'POST',
+      headers: {
+        cookie: 'pyxis_session=token',
+        accept: 'application/json',
+        'content-type': 'application/json',
+      },
+      body: '{"name":"Claude Code"}',
+      cache: 'no-store',
+    });
+    expect(lines).toEqual([
+      JSON.stringify({ event: 'api_write', path: '/v1/me/tokens', status: 201, duration_ms: 0 }),
+    ]);
+  });
+
+  it('logs a revoked token route as a template', async () => {
+    answer(204);
+    const lines: string[] = [];
+
+    await new ApiWriter(
+      API,
+      () => Promise.resolve('token'),
+      (line) => {
+        lines.push(line);
+      },
+      () => 0,
+    ).delete('/v1/me/tokens/0f4b0e3c-8d5a-4c9b-9e2f-3a4b5c6d7e8f');
+
+    expect(lines).toEqual([
+      JSON.stringify({
+        event: 'api_write',
+        path: '/v1/me/tokens/:tokenId',
+        status: 204,
+        duration_ms: 0,
+      }),
+    ]);
+  });
+});
+
 describe('ApiWriter delete', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
