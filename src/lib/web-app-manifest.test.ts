@@ -10,4 +10,8 @@ describe('dashboardManifest', () => {
     expect(app.display).toBe('standalone');
     expect(app.icons?.map((icon) => icon.src)).toEqual(['/icon.svg', '/apple-icon.png']);
   });
+
+  it('fixes the identity of the installed app to the dashboard root', () => {
+    expect(dashboardManifest().id).toBe('/');
+  });
 });
