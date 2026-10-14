@@ -2,11 +2,12 @@ import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import type { LandingPreviewView } from '@/domain/landing-preview';
 import type { I18n } from '@/i18n/i18n';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
-import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { LANDING_LINKS } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { LandingPreview } from './landing-preview';
 import { LandingProof } from './landing-proof';
 import { Eyebrow } from './landing-section';
+import { PRICING_ID } from './pricing-section';
 
 export interface LandingHeroProps {
   readonly i18n: I18n;
@@ -53,11 +54,11 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
                 </svg>
               </a>
               <a
-                href={LANDING_LINKS.api}
+                href={`#${PRICING_ID}`}
                 className={LINK_SECONDARY}
-                {...trackAttributes(LANDING_EVENTS.codeOpened, { repo: PROPER_NAMES.api })}
+                {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'hero' })}
               >
-                {t('landing.hero.readCode')}
+                {t('landing.hero.seePricing')}
               </a>
             </div>
             <p className="text-caption text-muted">{t('landing.hero.note')}</p>

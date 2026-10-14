@@ -1386,6 +1386,7 @@ export const es = translation({
       label: 'Principal',
       demo: 'Demo en vivo',
       privacy: 'Privacidad',
+      pricing: 'Precio',
       language: 'Idioma',
       signIn: 'Entrar',
     },
@@ -1394,7 +1395,7 @@ export const es = translation({
       title: 'Analítica de producto sin cookies, sin IP y sin datos personales.',
       lead: 'Pyxis muestra qué funcionalidades se usan, dónde un registro pierde gente y qué solicitudes fallan. No guarda cookies, direcciones IP, user agent ni nada personal, y cada una de esas reglas está en el código, cubierta por pruebas.',
       openDemo: 'Abrir la demo en vivo',
-      readCode: 'Ver el código',
+      seePricing: 'Ver precio',
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',
     },
     preview: {
@@ -1656,6 +1657,7 @@ export const es = translation({
     footer: {
       tagline: 'Analítica de producto que prioriza la privacidad.',
       product: 'Producto',
+      pricing: 'Precio',
       code: 'Código',
       author: 'Autor',
       demo: 'Demo en vivo',

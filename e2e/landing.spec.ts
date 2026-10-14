@@ -200,6 +200,21 @@ test('jumps to the privacy section from the header', async ({ page, isMobile }) 
   await expect(page.getByRole('heading', { name: 'What never gets stored' })).toBeInViewport();
 });
 
+test('jumps to the pricing from the header', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the header keeps only the essentials on a phone');
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link', { name: 'Pricing' })
+    .click();
+
+  await expect(page).toHaveURL(/#pricing$/);
+  await expect(
+    page.getByRole('heading', { name: 'One plan, in reais, with everything the demo shows' }),
+  ).toBeInViewport();
+});
+
 test('shows the yearly price once the visitor picks it', async ({ page }) => {
   await page.goto('/pt-br#pricing');
   const pricing = page.getByRole('region', {
