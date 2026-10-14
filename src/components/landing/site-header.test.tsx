@@ -26,7 +26,7 @@ describe('SiteHeader', () => {
     window.localStorage.clear();
   });
 
-  it('links the brand home and the main links to the demo, the privacy section and the code', () => {
+  it('links the brand home and the main links to the demo, privacy, pricing and the code', () => {
     renderWithMessages(homeHeader());
 
     const banner = screen.getByRole('banner');
@@ -40,6 +40,10 @@ describe('SiteHeader', () => {
       'href',
       '/#never-stored',
     );
+    const pricing = within(main).getByRole('link', { name: 'Pricing' });
+    expect(pricing).toHaveAttribute('href', '/#pricing');
+    expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
+    expect(pricing).toHaveAttribute('data-track-from', 'header');
     expect(within(main).getByRole('link', { name: 'GitHub' })).toHaveAttribute(
       'href',
       'https://github.com/samuelcsantana/pyxis-api',

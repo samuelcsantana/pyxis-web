@@ -1381,6 +1381,7 @@ export const ptBR = translation({
       label: 'Principal',
       demo: 'Demonstração',
       privacy: 'Privacidade',
+      pricing: 'Preço',
       language: 'Idioma',
       signIn: 'Entrar',
     },
@@ -1389,7 +1390,7 @@ export const ptBR = translation({
       title: 'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
       lead: 'O Pyxis mostra quais funcionalidades são usadas, onde um cadastro perde gente e quais requisições falham. Ele não guarda cookie, endereço IP, user agent nem nada pessoal, e cada uma dessas regras está no código, coberta por testes.',
       openDemo: 'Abrir a demonstração',
-      readCode: 'Ver o código',
+      seePricing: 'Ver preço',
       note: 'Sem cadastro. Dados inventados. Abre direto no painel.',
     },
     preview: {
@@ -1648,6 +1649,7 @@ export const ptBR = translation({
     footer: {
       tagline: 'Análise de produto com privacidade em primeiro lugar.',
       product: 'Produto',
+      pricing: 'Preço',
       code: 'Código',
       author: 'Autor',
       demo: 'Demonstração',

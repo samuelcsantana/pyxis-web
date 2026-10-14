@@ -18,15 +18,17 @@ describe('LandingHero', () => {
     expect(screen.getByText('Open-source product analytics')).toBeInTheDocument();
   });
 
-  it('leads to the live demo first and to the code second, promising no sign-up', () => {
+  it('leads to the live demo first and to the pricing second, promising no sign-up', () => {
     render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
 
     const hero = screen.getByRole('region');
-    const [demo, code] = within(hero).getAllByRole('link');
+    const [demo, pricing] = within(hero).getAllByRole('link');
     expect(demo).toHaveAccessibleName('Open the live demo');
     expect(demo).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev');
-    expect(code).toHaveAccessibleName('Read the code');
-    expect(code).toHaveAttribute('href', 'https://github.com/samuelcsantana/pyxis-api');
+    expect(pricing).toHaveAccessibleName('See pricing');
+    expect(pricing).toHaveAttribute('href', '#pricing');
+    expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
+    expect(pricing).toHaveAttribute('data-track-from', 'hero');
     expect(screen.getByText(/No sign-up\. Invented data\./)).toBeInTheDocument();
   });
 
@@ -43,6 +45,6 @@ describe('LandingHero', () => {
     render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} />);
 
     expect(screen.getByRole('link', { name: 'Abrir a demonstração' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ver o código' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ver preço' })).toBeInTheDocument();
   });
 });

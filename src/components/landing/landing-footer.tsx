@@ -7,8 +7,9 @@ import type { Seller } from '@/lib/legal-config';
 import { CONTRACT_LANGUAGE, LEGAL_DOCUMENTS } from '@/lib/legal-documents';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
-import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { CONTACT_EMAIL, LANDING_LINKS, PROPER_NAMES } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
+import { PRICING_ID } from './pricing-section';
 
 export interface LandingFooterProps {
   readonly i18n: I18n;
@@ -86,6 +87,11 @@ export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
               label: t('landing.footer.demo'),
               track: trackAttributes(LANDING_EVENTS.demoOpened, { from: 'footer' }),
             },
+            {
+              href: `#${PRICING_ID}`,
+              label: t('landing.footer.pricing'),
+              track: trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'footer' }),
+            },
             { href: LANDING_LINKS.storybook, label: PROPER_NAMES.storybook },
             { href: LANDING_LINKS.apiReference, label: t('landing.footer.apiReference') },
             { href: LANDING_LINKS.playground, label: t('landing.footer.playground') },
@@ -102,7 +108,10 @@ export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
         />
         <FooterColumn
           title={t('landing.footer.author')}
-          links={[{ href: LANDING_LINKS.author, label: PROPER_NAMES.author }]}
+          links={[
+            { href: LANDING_LINKS.author, label: PROPER_NAMES.author },
+            { href: `mailto:${CONTACT_EMAIL}`, label: CONTACT_EMAIL },
+          ]}
         />
         {seller === undefined ? null : (
           <FooterColumn

@@ -23,6 +23,7 @@ describe('LandingFooter', () => {
 
     expect(linksUnder('Product')).toEqual([
       ['Live demo', 'https://demo.pyxis-analytics.dev'],
+      ['Pricing', '#pricing'],
       ['Storybook', 'https://samuelcsantana.github.io/pyxis-web/'],
       ['API reference', 'https://samuelcsantana.github.io/pyxis-api/'],
       ['SDK playground', 'https://samuelcsantana.github.io/pyxis-sdk/'],
@@ -33,7 +34,10 @@ describe('LandingFooter', () => {
       ['pyxis-web', 'https://github.com/samuelcsantana/pyxis-web'],
       ['npm', 'https://www.npmjs.com/package/pyxis-analytics'],
     ]);
-    expect(linksUnder('Author')).toEqual([['samuelsantana.dev', 'https://www.samuelsantana.dev']]);
+    expect(linksUnder('Author')).toEqual([
+      ['samuelsantana.dev', 'https://www.samuelsantana.dev'],
+      ['hello@pyxis-analytics.dev', 'mailto:hello@pyxis-analytics.dev'],
+    ]);
   });
 
   it('shows the measurement note it is given beside the credits', () => {

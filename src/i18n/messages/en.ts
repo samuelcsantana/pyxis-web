@@ -1368,6 +1368,7 @@ export const en = {
       label: 'Main',
       demo: 'Live demo',
       privacy: 'Privacy',
+      pricing: 'Pricing',
       language: 'Language',
       signIn: 'Sign in',
     },
@@ -1376,7 +1377,7 @@ export const en = {
       title: 'Product analytics without cookies, IP addresses or personal data.',
       lead: 'Pyxis shows which features get used, where a sign-up loses people and which requests fail. It stores no cookie, no IP address, no user agent and nothing personal, and each of those rules lives in code, covered by tests.',
       openDemo: 'Open the live demo',
-      readCode: 'Read the code',
+      seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
     },
     preview: {
@@ -1634,6 +1635,7 @@ export const en = {
     footer: {
       tagline: 'Privacy-first product analytics.',
       product: 'Product',
+      pricing: 'Pricing',
       code: 'Code',
       author: 'Author',
       demo: 'Live demo',

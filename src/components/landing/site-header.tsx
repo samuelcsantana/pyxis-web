@@ -7,6 +7,7 @@ import { LANDING_WIDTH, LINK_QUIET, LINK_SMALL } from './landing-classes';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NEVER_STORED_ID } from './never-stored-section';
+import { PRICING_ID } from './pricing-section';
 
 export interface SiteHeaderProps {
   readonly i18n: I18n;
@@ -43,6 +44,13 @@ export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: Site
           </a>
           <a href={`${homeHref}#${NEVER_STORED_ID}`} className={LINK_QUIET}>
             {t('landing.nav.privacy')}
+          </a>
+          <a
+            href={`${homeHref}#${PRICING_ID}`}
+            className={LINK_QUIET}
+            {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'header' })}
+          >
+            {t('landing.nav.pricing')}
           </a>
           <a
             href={LANDING_LINKS.api}
