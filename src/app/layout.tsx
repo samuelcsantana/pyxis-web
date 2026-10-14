@@ -7,6 +7,7 @@ import { isDemoMode } from '@/lib/api-config';
 import { APP_NAME } from '@/lib/site';
 import { themeColorFor } from '@/lib/theme';
 import { chosenTheme } from '@/lib/theme-cookie';
+import { WEB_APP_MANIFEST_PATH } from '@/lib/web-app-manifest';
 import { DOCUMENT_FONT_CLASSES } from './fonts';
 import './globals.css';
 
@@ -22,6 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { template: TITLE_TEMPLATE, default: APP_NAME },
     description,
     robots: demo ? null : NOT_INDEXED,
+    manifest: WEB_APP_MANIFEST_PATH,
     openGraph: {
       type: 'website',
       siteName: APP_NAME,

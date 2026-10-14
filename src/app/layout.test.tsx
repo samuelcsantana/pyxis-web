@@ -87,6 +87,7 @@ describe('RootLayout', () => {
     const metadata = await generateMetadata();
 
     expect(metadata.title).toEqual({ template: '%s · Pyxis', default: 'Pyxis' });
+    expect(metadata.manifest).toBe('/manifest.webmanifest');
     expect(metadata.description).toMatch(/no cookies/);
     expect(metadata.openGraph).toMatchObject({ description: metadata.description });
     expect(metadata.twitter).toMatchObject({ description: metadata.description });
