@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { ProjectSettings } from '@/domain/project-settings';
 
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
 }));
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -53,6 +53,23 @@ const EMAIL = {
   ],
   createAccessToken: () => Promise.resolve({ kind: 'tooMany' } as const),
   revokeAccessToken: () => Promise.resolve(),
+  manage: {
+    timezones: ['America/Sao_Paulo', 'UTC'],
+    save: () => Promise.resolve({ kind: 'saved' } as const),
+    createKey: () => Promise.resolve({ kind: 'tooMany' } as const),
+    revokeKey: () => Promise.resolve({ kind: 'revoked' } as const),
+    remove: () => Promise.resolve({ kind: 'deleted' } as const),
+  },
+};
+
+const OWNED: ProjectSettings = {
+  ...SETTINGS,
+  accountId: 'a1',
+  role: 'owner',
+  publicKeys: [
+    ...SETTINGS.publicKeys,
+    { id: 'k3', key: `pyxis_pk_${'b'.repeat(32)}`, createdAt: '2026-10-01T08:00:00.000Z' },
+  ],
 };
 
 function panel(name: string) {
@@ -140,5 +157,64 @@ describe('ProjectSettingsView', () => {
     expect(panel('Allowed origins')).toHaveTextContent('No origin is allowed yet');
     expect(panel('Keys')).toHaveTextContent('No live public key');
     expect(panel('Keys')).toHaveTextContent('No live secret key.');
+  });
+
+  it('lets the owner edit the project, its origins and its keys, and delete it', () => {
+    renderWithMessages(<ProjectSettingsView settings={OWNED} i18n={english} {...EMAIL} />);
+
+    const project = panel('Project');
+    expect(project).toHaveTextContent('Created Sep 1, 2026');
+    expect(within(project).getByRole('textbox', { name: 'Name' })).toHaveValue('Shop');
+    expect(within(project).getByRole('textbox', { name: 'Origin 2' })).toHaveValue(
+      'https://www.shop.example.com',
+    );
+    expect(within(project).getByRole('textbox', { name: 'Conversion event' })).toHaveValue(
+      'signup_completed',
+    );
+    expect(screen.queryByRole('region', { name: 'Allowed origins' })).not.toBeInTheDocument();
+    const keys = panel('Keys');
+    expect(within(keys).getAllByRole('button', { name: 'Revoke' })).toHaveLength(3);
+    expect(
+      within(keys).getByRole('button', { name: 'Revoke', description: /^pyxis_pk_a+Created/ }),
+    ).toBeInTheDocument();
+    expect(within(keys).getByRole('button', { name: 'New public key' })).toBeInTheDocument();
+    expect(within(keys).getByRole('button', { name: 'New secret key' })).toBeInTheDocument();
+    expect(
+      within(panel('Delete project')).getByRole('textbox', { name: 'Type Shop to confirm' }),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the only public key of an owned project, saying why', () => {
+    renderWithMessages(
+      <ProjectSettingsView
+        settings={{ ...OWNED, publicKeys: SETTINGS.publicKeys, secretKeys: [] }}
+        i18n={english}
+        {...EMAIL}
+      />,
+    );
+
+    const keys = panel('Keys');
+    expect(within(keys).queryByRole('button', { name: 'Revoke' })).not.toBeInTheDocument();
+    expect(keys).toHaveTextContent('The only public key stays');
+    expect(keys).toHaveTextContent('No live secret key.');
+  });
+
+  it('says an owned project has no public key and offers to create one', () => {
+    renderWithMessages(
+      <ProjectSettingsView settings={{ ...OWNED, publicKeys: [] }} i18n={english} {...EMAIL} />,
+    );
+
+    expect(panel('Keys')).toHaveTextContent('No live public key');
+  });
+
+  it('shows someone the owner added the project as it is, without changing it', () => {
+    renderWithMessages(
+      <ProjectSettingsView settings={{ ...OWNED, role: 'member' }} i18n={english} {...EMAIL} />,
+    );
+
+    expect(within(panel('Project')).queryByRole('textbox')).not.toBeInTheDocument();
+    expect(panel('Allowed origins')).toBeInTheDocument();
+    expect(within(panel('Keys')).queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Delete project' })).not.toBeInTheDocument();
   });
 });

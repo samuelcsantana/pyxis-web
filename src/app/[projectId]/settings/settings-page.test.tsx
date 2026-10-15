@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
@@ -28,7 +28,7 @@ vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('not-found');
   },
-  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
   usePathname: () => `/${DEMO_STORE.id}/settings`,
   useSearchParams: () => new URLSearchParams(),
 }));
@@ -68,8 +68,30 @@ describe('SettingsPage', () => {
 
     expect(settings).toHaveBeenCalledWith(DEMO_STORE.id);
     expect(screen.getByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByText(/How Demo Store is set up/)).toBeInTheDocument();
+    expect(screen.getByText(/How Demo Store is set up, its keys/)).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Keys' })).toHaveTextContent('pyxis_pk_');
+    expect(
+      within(screen.getByRole('region', { name: 'Project' })).getByRole('textbox', {
+        name: 'Name',
+      }),
+    ).toHaveValue(DEMO_STORE.name);
+  });
+
+  it.each([
+    ['someone the owner added', 'member', /Only the owner of its account changes the project/],
+    ['the operator', null, /Project settings change through the command line/],
+  ] as const)('tells %s who changes the project', async (_, role, subtitle) => {
+    state.settings = async (projectId) => ({
+      ...(await new MockProjectsService().settings(projectId)),
+      role,
+    });
+
+    renderWithMessages(await renderSettings());
+
+    expect(screen.getByText(subtitle)).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('region', { name: 'Project' })).queryByRole('textbox'),
+    ).not.toBeInTheDocument();
   });
 
   it('sends a signed-out admin to sign in again', async () => {

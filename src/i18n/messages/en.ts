@@ -148,6 +148,9 @@ export const en = {
     title: 'Settings',
     subtitle:
       'How {project} is set up, and the e-mails you get about it. Project settings change through the command line.',
+    subtitleOwner: 'How {project} is set up, its keys, and the e-mails you get about it.',
+    subtitleMember:
+      'How {project} is set up, and the e-mails you get about it. Only the owner of its account changes the project.',
     project: {
       heading: 'Project',
       name: 'Name',
@@ -155,6 +158,7 @@ export const en = {
       conversionEvent: 'Conversion event',
       noConversionEvent: 'None, so conversions are not shown',
       created: 'Created',
+      createdOn: 'Created {date}',
     },
     activity: {
       heading: 'Activity',
@@ -184,6 +188,70 @@ export const en = {
       heading: 'Data retention',
       body: 'Events are kept for {months} months, then a daily job deletes them.',
     },
+  },
+  projectForm: {
+    heading: 'Project',
+    name: 'Name',
+    origins: 'Allowed origins',
+    originsNote:
+      'Only pages on these origins can send events with a public key. Write scheme, host and port, like https://shop.example.com; up to {max}.',
+    origin: 'Origin {number}',
+    originPlaceholder: 'https://shop.example.com',
+    conversionEventPlaceholder: 'signup_completed',
+    addOrigin: 'Add an origin',
+    removeOrigin: 'Remove origin {number}',
+    timezone: 'Time zone',
+    timezoneNote: 'Days and hours in the reports and in the weekly digest follow it.',
+    conversionEvent: 'Conversion event',
+    conversionEventNote:
+      'Optional. The event that counts as a conversion, such as signup_completed.',
+    save: 'Save changes',
+    saving: 'Saving…',
+    saved: 'Saved',
+    nameMissing: 'Give the project a name.',
+    nameTooLong: 'Use at most {max} characters.',
+    originsMissing: 'Give at least one origin.',
+    originsInvalid: 'Write each origin as scheme, host and port, like https://shop.example.com.',
+    originsTooMany: 'Use at most {max} origins.',
+    timezoneInvalid: 'Choose a time zone from the list.',
+    conversionEventInvalid:
+      'Use lower-case letters, digits and underscores, starting with a letter.',
+    invalid: 'These settings were refused. Check the fields and try again.',
+    subscriptionRequired:
+      'This account has no running subscription, so its projects cannot change.',
+    failed: 'The changes were not saved. Try again.',
+  },
+  projectKeys: {
+    newPublic: 'New public key',
+    newSecret: 'New secret key',
+    creating: 'Creating…',
+    publicCreated: 'Public key created. Put it in your pages, then revoke the old one.',
+    tooMany:
+      'This project has {max} live keys of this kind, the most it can keep. Revoke one first.',
+    revoke: 'Revoke',
+    revoking: 'Revoking…',
+    revoked: 'Key revoked',
+    onlyPublicKey: 'The only public key stays, or the site could not send events.',
+    lastPublicKey:
+      'The last public key stays, or the site could not send events. Create another one first.',
+    subscriptionRequired: 'This account has no running subscription, so its keys cannot change.',
+    failed: 'That did not work. Try again.',
+    revealHeading: 'Copy the secret key now',
+    revealNote:
+      "This is the only time it is shown: Pyxis keeps only a hash of it. Keep it in your backend's environment, never in a page.",
+    copy: 'Copy',
+    copied: 'Copied',
+    selected: 'Selected, press Ctrl+C',
+    done: 'Done',
+  },
+  deleteProject: {
+    heading: 'Delete project',
+    note: 'Deletes {project}, its events and its keys for good, and its site stops sending events at once. This cannot be undone.',
+    confirm: 'Type {project} to confirm',
+    delete: 'Delete project for good',
+    deleting: 'Deleting…',
+    nameMismatch: "The name typed is not this project's name.",
+    failed: 'The project was not deleted. Try again.',
   },
   emailPreferences: {
     heading: 'E-mail',

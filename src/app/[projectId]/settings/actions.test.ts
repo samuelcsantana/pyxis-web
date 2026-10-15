@@ -5,12 +5,17 @@ import type { EmailPreferences } from '@/domain/email-preferences';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IAccessTokensService } from '@/services/access-tokens/access-tokens-service.interface';
 import type { IEmailPreferencesService } from '@/services/preferences/email-preferences-service.interface';
+import type { IProjectManagementService } from '@/services/project-management/project-management-service.interface';
 import type { ISessionsService } from '@/services/sessions/sessions-service.interface';
 import {
   chooseEmailPreferences,
   createAccessToken,
+  createProjectKey,
+  deleteProject,
   endSession,
   revokeAccessToken,
+  revokeProjectKey,
+  updateProject,
 } from './actions';
 
 const state = vi.hoisted<{
@@ -19,12 +24,28 @@ const state = vi.hoisted<{
   end: ISessionsService['end'];
   create: IAccessTokensService['create'];
   revoke: IAccessTokensService['revoke'];
+  management: IProjectManagementService;
 }>(() => ({
   admin: undefined,
   choose: () => Promise.reject(new Error('choose not set')),
   end: () => Promise.reject(new Error('end not set')),
   create: () => Promise.reject(new Error('create not set')),
   revoke: () => Promise.reject(new Error('revoke not set')),
+  management: {
+    update: () => Promise.reject(new Error('update not set')),
+    createKey: () => Promise.reject(new Error('createKey not set')),
+    revokeKey: () => Promise.reject(new Error('revokeKey not set')),
+    delete: () => Promise.reject(new Error('delete not set')),
+  },
+}));
+
+vi.mock('@/services/project-management/project-management-service.factory', () => ({
+  createProjectManagementService: (): IProjectManagementService => ({
+    update: (projectId, changes) => state.management.update(projectId, changes),
+    createKey: (projectId, kind) => state.management.createKey(projectId, kind),
+    revokeKey: (projectId, keyId) => state.management.revokeKey(projectId, keyId),
+    delete: (projectId, confirmName) => state.management.delete(projectId, confirmName),
+  }),
 }));
 
 vi.mock('@/services/access-tokens/access-tokens-service.factory', () => ({
@@ -249,6 +270,91 @@ describe('revokeAccessToken', () => {
     state.revoke = () => Promise.reject(new UnauthenticatedError());
 
     await expect(revokeAccessToken('p-store', TOKEN_ID)).rejects.toThrow(
+      /^redirect:\/sign-in\?expired=1/,
+    );
+  });
+});
+
+describe('the owner managing a project', () => {
+  const KEY_ID = '4d0f6b8c-5e7a-4f9b-8c4d-6e8f0a2b4c5d';
+  const CHANGES = {
+    name: 'Shop',
+    allowedOrigins: ['https://shop.example.com'],
+    timezone: 'UTC',
+    conversionEvent: null,
+  };
+
+  function management(overrides: Partial<IProjectManagementService>) {
+    const mocks = {
+      update: vi.fn<IProjectManagementService['update']>(() => Promise.resolve({ kind: 'saved' })),
+      createKey: vi.fn<IProjectManagementService['createKey']>(() =>
+        Promise.resolve({ kind: 'tooMany' }),
+      ),
+      revokeKey: vi.fn<IProjectManagementService['revokeKey']>(() =>
+        Promise.resolve({ kind: 'revoked' }),
+      ),
+      delete: vi.fn<IProjectManagementService['delete']>(() =>
+        Promise.resolve({ kind: 'deleted' }),
+      ),
+    };
+    state.management = {
+      update: overrides.update ?? mocks.update,
+      createKey: mocks.createKey,
+      revokeKey: mocks.revokeKey,
+      delete: mocks.delete,
+    };
+    return mocks;
+  }
+
+  it('passes each change of a readable project to the API', async () => {
+    const service = management({});
+
+    await expect(updateProject('p-store', CHANGES)).resolves.toEqual({ kind: 'saved' });
+    await expect(createProjectKey('p-store', 'secret')).resolves.toEqual({ kind: 'tooMany' });
+    await expect(revokeProjectKey('p-store', KEY_ID)).resolves.toEqual({ kind: 'revoked' });
+    await expect(deleteProject('p-store', 'Demo Store')).resolves.toEqual({ kind: 'deleted' });
+    expect(service.update).toHaveBeenCalledWith('p-store', CHANGES);
+    expect(service.createKey).toHaveBeenCalledWith('p-store', 'secret');
+    expect(service.revokeKey).toHaveBeenCalledWith('p-store', KEY_ID);
+    expect(service.delete).toHaveBeenCalledWith('p-store', 'Demo Store');
+  });
+
+  it('answers not found for a project the admin cannot read, changing nothing', async () => {
+    const service = management({});
+
+    await expect(updateProject('p-other', CHANGES)).rejects.toThrow('not-found');
+    await expect(createProjectKey('p-other', 'public')).rejects.toThrow('not-found');
+    await expect(revokeProjectKey('p-other', KEY_ID)).rejects.toThrow('not-found');
+    await expect(deleteProject('p-other', 'Other')).rejects.toThrow('not-found');
+    expect(service.update).not.toHaveBeenCalled();
+    expect(service.createKey).not.toHaveBeenCalled();
+    expect(service.revokeKey).not.toHaveBeenCalled();
+    expect(service.delete).not.toHaveBeenCalled();
+  });
+
+  it('refuses what the browser sent wrong before calling the API', async () => {
+    const service = management({});
+
+    await expect(updateProject('p-store', { ...CHANGES, allowedOrigins: [] })).resolves.toEqual({
+      kind: 'invalid',
+    });
+    await expect(createProjectKey('p-store', 'private' as 'public')).rejects.toThrow(
+      'A project key is public or secret.',
+    );
+    await expect(revokeProjectKey('p-store', 'not-a-key')).rejects.toThrow(
+      'A project key is revoked by its id.',
+    );
+    await expect(deleteProject('p-store', '')).resolves.toEqual({ kind: 'nameMismatch' });
+    expect(service.update).not.toHaveBeenCalled();
+    expect(service.createKey).not.toHaveBeenCalled();
+    expect(service.revokeKey).not.toHaveBeenCalled();
+    expect(service.delete).not.toHaveBeenCalled();
+  });
+
+  it('sends an expired session back to sign-in', async () => {
+    management({ update: () => Promise.reject(new UnauthenticatedError()) });
+
+    await expect(updateProject('p-store', CHANGES)).rejects.toThrow(
       /^redirect:\/sign-in\?expired=1/,
     );
   });

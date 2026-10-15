@@ -8,9 +8,21 @@ import {
   type NewAccessToken,
 } from '@/domain/access-tokens';
 import type { EmailPreferences } from '@/domain/email-preferences';
+import {
+  type CreateProjectKeyOutcome,
+  type DeleteProjectOutcome,
+  MAX_ALLOWED_ORIGINS,
+  MAX_PROJECT_NAME_LENGTH,
+  PROJECT_KEY_KINDS,
+  type ProjectChanges,
+  type ProjectKeyKind,
+  type RevokeProjectKeyOutcome,
+  type SaveProjectOutcome,
+} from '@/domain/project-management';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
+import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
@@ -20,6 +32,15 @@ const newAccessTokenSchema = z.strictObject({
   lifetimeDays: z.literal([...ACCESS_TOKEN_LIFETIMES]),
 });
 const accessTokenIdSchema = z.uuid();
+const projectChangesSchema = z.strictObject({
+  name: z.string().trim().min(1).max(MAX_PROJECT_NAME_LENGTH),
+  allowedOrigins: z.array(z.string().min(1)).min(1).max(MAX_ALLOWED_ORIGINS),
+  timezone: z.string().min(1),
+  conversionEvent: z.string().min(1).nullable(),
+});
+const projectKeyKindSchema = z.enum(PROJECT_KEY_KINDS);
+const projectKeyIdSchema = z.uuid();
+const confirmNameSchema = z.string().min(1).max(MAX_PROJECT_NAME_LENGTH);
 
 export async function chooseEmailPreferences(
   projectId: string,
@@ -61,4 +82,52 @@ export async function revokeAccessToken(projectId: string, tokenId: string): Pro
     throw new Error('An access token is revoked by its id.');
   }
   await readOrSignIn(() => createAccessTokensService().revoke(parsed.data));
+}
+
+export async function updateProject(
+  projectId: string,
+  changes: ProjectChanges,
+): Promise<SaveProjectOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = projectChangesSchema.safeParse(changes);
+  if (!parsed.success) {
+    return { kind: 'invalid' };
+  }
+  return readOrSignIn(() => createProjectManagementService().update(project.id, parsed.data));
+}
+
+export async function createProjectKey(
+  projectId: string,
+  kind: ProjectKeyKind,
+): Promise<CreateProjectKeyOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = projectKeyKindSchema.safeParse(kind);
+  if (!parsed.success) {
+    throw new Error('A project key is public or secret.');
+  }
+  return readOrSignIn(() => createProjectManagementService().createKey(project.id, parsed.data));
+}
+
+export async function revokeProjectKey(
+  projectId: string,
+  keyId: string,
+): Promise<RevokeProjectKeyOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = projectKeyIdSchema.safeParse(keyId);
+  if (!parsed.success) {
+    throw new Error('A project key is revoked by its id.');
+  }
+  return readOrSignIn(() => createProjectManagementService().revokeKey(project.id, parsed.data));
+}
+
+export async function deleteProject(
+  projectId: string,
+  confirmName: string,
+): Promise<DeleteProjectOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = confirmNameSchema.safeParse(confirmName);
+  if (!parsed.success) {
+    return { kind: 'nameMismatch' };
+  }
+  return readOrSignIn(() => createProjectManagementService().delete(project.id, parsed.data));
 }

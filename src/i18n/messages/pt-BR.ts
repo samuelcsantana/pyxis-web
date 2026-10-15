@@ -157,6 +157,10 @@ export const ptBR = translation({
     title: 'Configurações',
     subtitle:
       'Como o {project} está configurado e os e-mails que você recebe sobre ele. As configurações do projeto mudam pela linha de comando.',
+    subtitleOwner:
+      'Como o {project} está configurado, as chaves dele e os e-mails que você recebe sobre ele.',
+    subtitleMember:
+      'Como o {project} está configurado e os e-mails que você recebe sobre ele. Só o dono da conta muda o projeto.',
     project: {
       heading: 'Projeto',
       name: 'Nome',
@@ -164,6 +168,7 @@ export const ptBR = translation({
       conversionEvent: 'Evento de conversão',
       noConversionEvent: 'Nenhum, por isso as conversões não aparecem',
       created: 'Criado em',
+      createdOn: 'Criado em {date}',
     },
     activity: {
       heading: 'Atividade',
@@ -193,6 +198,70 @@ export const ptBR = translation({
       heading: 'Retenção de dados',
       body: 'Os eventos ficam guardados por {months} meses; depois, uma rotina diária os apaga.',
     },
+  },
+  projectForm: {
+    heading: 'Projeto',
+    name: 'Nome',
+    origins: 'Origens permitidas',
+    originsNote:
+      'Só páginas nessas origens podem enviar eventos com uma chave pública. Escreva esquema, host e porta, como https://loja.exemplo.com.br; até {max}.',
+    origin: 'Origem {number}',
+    originPlaceholder: 'https://loja.exemplo.com.br',
+    conversionEventPlaceholder: 'signup_completed',
+    addOrigin: 'Adicionar origem',
+    removeOrigin: 'Remover a origem {number}',
+    timezone: 'Fuso horário',
+    timezoneNote: 'Os dias e horas dos relatórios e do resumo semanal seguem esse fuso.',
+    conversionEvent: 'Evento de conversão',
+    conversionEventNote: 'Opcional. O evento que conta como conversão, como signup_completed.',
+    save: 'Salvar alterações',
+    saving: 'Salvando…',
+    saved: 'Salvo',
+    nameMissing: 'Dê um nome ao projeto.',
+    nameTooLong: 'Use no máximo {max} caracteres.',
+    originsMissing: 'Informe pelo menos uma origem.',
+    originsInvalid:
+      'Escreva cada origem como esquema, host e porta, como https://loja.exemplo.com.br.',
+    originsTooMany: 'Use no máximo {max} origens.',
+    timezoneInvalid: 'Escolha um fuso horário da lista.',
+    conversionEventInvalid:
+      'Use letras minúsculas, números e sublinhados, começando por uma letra.',
+    invalid: 'Essas configurações foram recusadas. Confira os campos e tente de novo.',
+    subscriptionRequired:
+      'Esta conta não tem uma assinatura ativa, então os projetos dela não podem mudar.',
+    failed: 'As alterações não foram salvas. Tente de novo.',
+  },
+  projectKeys: {
+    newPublic: 'Nova chave pública',
+    newSecret: 'Nova chave secreta',
+    creating: 'Criando…',
+    publicCreated: 'Chave pública criada. Coloque-a nas suas páginas e depois revogue a antiga.',
+    tooMany: 'Este projeto já tem {max} chaves ativas deste tipo, o máximo. Revogue uma antes.',
+    revoke: 'Revogar',
+    revoking: 'Revogando…',
+    revoked: 'Chave revogada',
+    onlyPublicKey: 'A única chave pública fica, senão o site não consegue enviar eventos.',
+    lastPublicKey:
+      'A última chave pública fica, senão o site não consegue enviar eventos. Crie outra antes.',
+    subscriptionRequired:
+      'Esta conta não tem uma assinatura ativa, então as chaves dela não podem mudar.',
+    failed: 'Não deu certo. Tente de novo.',
+    revealHeading: 'Copie a chave secreta agora',
+    revealNote:
+      'Ela só aparece esta vez: o Pyxis guarda apenas um hash dela. Guarde-a nas variáveis de ambiente do seu backend, nunca numa página.',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    selected: 'Selecionado, aperte Ctrl+C',
+    done: 'Pronto',
+  },
+  deleteProject: {
+    heading: 'Apagar o projeto',
+    note: 'Apaga o {project}, os eventos e as chaves dele para sempre, e o site para de enviar eventos na hora. Não dá para desfazer.',
+    confirm: 'Digite {project} para confirmar',
+    delete: 'Apagar o projeto para sempre',
+    deleting: 'Apagando…',
+    nameMismatch: 'O nome digitado não é o nome deste projeto.',
+    failed: 'O projeto não foi apagado. Tente de novo.',
   },
   emailPreferences: {
     heading: 'E-mail',

@@ -42,8 +42,9 @@ test('shows the origins, a public key and no secret key value for each project',
   page,
 }) => {
   await page.goto(`/${STORE_ID}/settings`);
+  const project = page.getByRole('region', { name: 'Project' });
 
-  await expect(page.getByRole('region', { name: 'Allowed origins' })).toContainText(
+  await expect(project.getByRole('textbox', { name: 'Origin 1' })).toHaveValue(
     'https://store.example.com',
   );
   const keys = page.getByRole('region', { name: 'Keys' });
@@ -53,9 +54,63 @@ test('shows the origins, a public key and no secret key value for each project',
 
   await page.goto(`/${DOCS_ID}/settings`);
 
-  await expect(page.getByRole('region', { name: 'Allowed origins' })).toContainText(
-    'https://docs.example.com',
-  );
+  await expect(
+    page.getByRole('region', { name: 'Project' }).getByRole('textbox', { name: 'Origin 1' }),
+  ).toHaveValue('https://docs.example.com');
+});
+
+test('lets the owner change the project, with each problem named under its field', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const project = page.getByRole('region', { name: 'Project' });
+  const name = project.getByRole('textbox', { name: 'Name' });
+
+  await name.fill('');
+  await project.getByRole('button', { name: 'Save changes' }).click();
+
+  await expect(name).toBeFocused();
+  await expect(project.getByRole('alert')).toHaveText('Give the project a name.');
+
+  await name.fill('Demo Store BR');
+  await project.getByRole('button', { name: 'Add an origin' }).click();
+  await project.getByRole('textbox', { name: 'Origin 3' }).fill('shop.example.com');
+  await project.getByRole('button', { name: 'Save changes' }).click();
+
+  await expect(project.getByRole('status')).toHaveText('Saved');
+});
+
+test('creates a secret key, shows it once, and keeps the only public key', async ({ page }) => {
+  await page.goto(`/${DOCS_ID}/settings`);
+  const keys = page.getByRole('region', { name: 'Keys' });
+
+  await expect(keys).toContainText('The only public key stays');
+  await keys.getByRole('button', { name: 'New secret key' }).click();
+
+  const reveal = keys.getByRole('group', { name: 'Copy the secret key now' });
+  await expect(reveal).toContainText('pyxis_sk_');
+  await expect(keys.getByRole('heading', { name: 'Copy the secret key now' })).toBeFocused();
+  expect(await axeViolations(page)).toEqual([]);
+
+  await reveal.getByRole('button', { name: 'Done' }).click();
+
+  await expect(keys).not.toContainText('pyxis_sk_');
+});
+
+test('deletes a project only with its name typed, then leaves its settings', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const danger = page.getByRole('region', { name: 'Delete project' });
+  const confirm = danger.getByRole('textbox', { name: 'Type Demo Store to confirm' });
+
+  await confirm.fill('Demo');
+  await danger.getByRole('button', { name: 'Delete project for good' }).click();
+
+  await expect(danger.getByRole('alert')).toHaveText("The name typed is not this project's name.");
+
+  await confirm.fill('Demo Store');
+  await danger.getByRole('button', { name: 'Delete project for good' }).click();
+
+  await expect(page).not.toHaveURL(/\/settings$/);
 });
 
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({

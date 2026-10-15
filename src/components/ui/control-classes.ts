@@ -16,6 +16,7 @@ const CONTENT_CONTROL = `${FOCUS_RING} ${CONTROL_TRANSITION}`;
 export const BUTTON_PRIMARY = `bg-accent font-semibold text-accent-ink enabled:hover:bg-accent-hover enabled:active:bg-accent-pressed ${CONTENT_CONTROL}`;
 export const BUTTON_STRONG = `bg-ink font-semibold text-card enabled:hover:bg-ink-hover enabled:active:bg-ink-pressed ${CONTENT_CONTROL}`;
 export const BUTTON_SECONDARY = `border border-line bg-card text-ink enabled:hover:border-muted enabled:hover:bg-soft enabled:active:border-muted enabled:active:bg-line ${CONTENT_CONTROL}`;
+export const BUTTON_DANGER = `border border-bad bg-card font-semibold text-bad enabled:hover:bg-bad-soft enabled:active:bg-bad-soft ${CONTENT_CONTROL}`;
 export const BUTTON_ICON = `flex items-center justify-center ${BUTTON_SECONDARY}`;
 export const SLIDING_INDICATOR =
   'pointer-events-none absolute top-0 left-0 transition-[translate,width,height] duration-200 ease-out motion-reduce:transition-none';

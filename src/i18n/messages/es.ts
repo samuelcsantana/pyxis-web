@@ -157,6 +157,10 @@ export const es = translation({
     title: 'Configuración',
     subtitle:
       'Cómo está configurado {project} y los correos que recibes sobre él. La configuración del proyecto se cambia desde la línea de comandos.',
+    subtitleOwner:
+      'Cómo está configurado {project}, sus claves y los correos que recibes sobre él.',
+    subtitleMember:
+      'Cómo está configurado {project} y los correos que recibes sobre él. Solo el dueño de la cuenta cambia el proyecto.',
     project: {
       heading: 'Proyecto',
       name: 'Nombre',
@@ -164,6 +168,7 @@ export const es = translation({
       conversionEvent: 'Evento de conversión',
       noConversionEvent: 'Ninguno, así que las conversiones no se muestran',
       created: 'Creado',
+      createdOn: 'Creado el {date}',
     },
     activity: {
       heading: 'Actividad',
@@ -193,6 +198,71 @@ export const es = translation({
       heading: 'Retención de datos',
       body: 'Los eventos se guardan durante {months} meses; después, una tarea diaria los borra.',
     },
+  },
+  projectForm: {
+    heading: 'Proyecto',
+    name: 'Nombre',
+    origins: 'Orígenes permitidos',
+    originsNote:
+      'Solo las páginas de estos orígenes pueden enviar eventos con una clave pública. Escribe esquema, host y puerto, como https://tienda.ejemplo.com; hasta {max}.',
+    origin: 'Origen {number}',
+    originPlaceholder: 'https://tienda.ejemplo.com',
+    conversionEventPlaceholder: 'signup_completed',
+    addOrigin: 'Añadir un origen',
+    removeOrigin: 'Quitar el origen {number}',
+    timezone: 'Zona horaria',
+    timezoneNote: 'Los días y las horas de los informes y del resumen semanal siguen esta zona.',
+    conversionEvent: 'Evento de conversión',
+    conversionEventNote: 'Opcional. El evento que cuenta como conversión, como signup_completed.',
+    save: 'Guardar los cambios',
+    saving: 'Guardando…',
+    saved: 'Guardado',
+    nameMissing: 'Ponle un nombre al proyecto.',
+    nameTooLong: 'Usa como máximo {max} caracteres.',
+    originsMissing: 'Indica al menos un origen.',
+    originsInvalid:
+      'Escribe cada origen como esquema, host y puerto, como https://tienda.ejemplo.com.',
+    originsTooMany: 'Usa como máximo {max} orígenes.',
+    timezoneInvalid: 'Elige una zona horaria de la lista.',
+    conversionEventInvalid:
+      'Usa letras minúsculas, números y guiones bajos, empezando por una letra.',
+    invalid: 'Esta configuración fue rechazada. Revisa los campos e inténtalo de nuevo.',
+    subscriptionRequired:
+      'Esta cuenta no tiene una suscripción activa, así que sus proyectos no pueden cambiar.',
+    failed: 'Los cambios no se guardaron. Inténtalo de nuevo.',
+  },
+  projectKeys: {
+    newPublic: 'Nueva clave pública',
+    newSecret: 'Nueva clave secreta',
+    creating: 'Creando…',
+    publicCreated: 'Clave pública creada. Ponla en tus páginas y luego revoca la anterior.',
+    tooMany:
+      'Este proyecto ya tiene {max} claves activas de este tipo, el máximo. Revoca una antes.',
+    revoke: 'Revocar',
+    revoking: 'Revocando…',
+    revoked: 'Clave revocada',
+    onlyPublicKey: 'La única clave pública se queda; si no, el sitio no podría enviar eventos.',
+    lastPublicKey:
+      'La última clave pública se queda; si no, el sitio no podría enviar eventos. Crea otra antes.',
+    subscriptionRequired:
+      'Esta cuenta no tiene una suscripción activa, así que sus claves no pueden cambiar.',
+    failed: 'No funcionó. Inténtalo de nuevo.',
+    revealHeading: 'Copia la clave secreta ahora',
+    revealNote:
+      'Solo se muestra esta vez: Pyxis guarda solo un hash de ella. Guárdala en las variables de entorno de tu backend, nunca en una página.',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    selected: 'Seleccionado, presiona Ctrl+C',
+    done: 'Listo',
+  },
+  deleteProject: {
+    heading: 'Borrar el proyecto',
+    note: 'Borra {project}, sus eventos y sus claves para siempre, y su sitio deja de enviar eventos al instante. No se puede deshacer.',
+    confirm: 'Escribe {project} para confirmar',
+    delete: 'Borrar el proyecto para siempre',
+    deleting: 'Borrando…',
+    nameMismatch: 'El nombre escrito no es el de este proyecto.',
+    failed: 'El proyecto no se borró. Inténtalo de nuevo.',
   },
   emailPreferences: {
     heading: 'Correo electrónico',

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Breakable } from '@/components/ui/breakable';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
+  canManageProject,
   projectActivity,
   type ProjectKeySummary,
   type ProjectSettings,
@@ -12,10 +13,22 @@ import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
 import { AccessTokensPanel } from './access-tokens-panel';
 import type { CreateAccessToken } from './create-access-token-form';
+import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-key-button';
+import { type DeleteProject, DeleteProjectForm } from './delete-project-form';
+import { ProjectForm, type SaveProject } from './project-form';
+import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-key-button';
 import type { EndSession } from './end-session-button';
 import type { RevokeAccessToken } from './revoke-access-token-button';
 import { SessionsPanel } from './sessions-panel';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
+
+export interface ProjectManagement {
+  readonly timezones: readonly string[];
+  readonly save: SaveProject;
+  readonly createKey: CreateProjectKey;
+  readonly revokeKey: RevokeProjectKey;
+  readonly remove: DeleteProject;
+}
 
 export interface ProjectSettingsViewProps {
   readonly settings: ProjectSettings;
@@ -27,6 +40,7 @@ export interface ProjectSettingsViewProps {
   readonly accessTokens: readonly AccessToken[];
   readonly createAccessToken: CreateAccessToken;
   readonly revokeAccessToken: RevokeAccessToken;
+  readonly manage: ProjectManagement;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -183,6 +197,126 @@ function KeysPanel({ settings, i18n, when }: SectionProps) {
   );
 }
 
+export function projectKeyId(keyId: string): string {
+  return `project-key-${keyId}`;
+}
+
+interface ManagedSectionProps extends SectionProps {
+  readonly manage: ProjectManagement;
+}
+
+function ProjectEditPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
+  return (
+    <SettingsPanel id="settings-project" title={i18n.t('projectForm.heading')}>
+      <p className={NOTE}>
+        {i18n.t('settings.project.createdOn', { date: when(settings.createdAt) })}
+      </p>
+      <ProjectForm
+        saved={{
+          name: settings.name,
+          allowedOrigins: settings.allowedOrigins,
+          timezone: settings.timezone,
+          conversionEvent: settings.conversionEvent,
+        }}
+        timezones={manage.timezones}
+        save={manage.save}
+      />
+    </SettingsPanel>
+  );
+}
+
+interface ManagedKeyRowProps {
+  readonly keyId: string;
+  readonly children: ReactNode;
+  readonly action: ReactNode;
+}
+
+function ManagedKeyRow({ keyId, children, action }: ManagedKeyRowProps) {
+  return (
+    <li className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-2.5 first:pt-0 last:pb-0">
+      <div id={projectKeyId(keyId)} className="flex min-w-0 flex-col gap-0.5 text-sm">
+        {children}
+      </div>
+      {action}
+    </li>
+  );
+}
+
+function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
+  const created = (key: ProjectKeySummary) => (
+    <span className="text-xs text-muted">
+      {i18n.t('settings.keys.created', { date: when(key.createdAt) })}
+    </span>
+  );
+  const onlyPublicKey = settings.publicKeys.length === 1;
+  const revoke = (keyId: string) => (
+    <RevokeProjectKeyButton
+      keyId={keyId}
+      describedBy={projectKeyId(keyId)}
+      revoke={manage.revokeKey}
+    />
+  );
+  return (
+    <SettingsPanel id="settings-keys" title={i18n.t('settings.keys.heading')}>
+      <div className="flex flex-col gap-2">
+        <h3 className={SUBHEADING}>{i18n.t('settings.keys.public')}</h3>
+        {settings.publicKeys.length === 0 ? (
+          <p className="text-sm">{i18n.t('settings.keys.noPublicKey')}</p>
+        ) : (
+          <ul className="flex flex-col divide-y divide-line">
+            {settings.publicKeys.map((key) => (
+              <ManagedKeyRow
+                key={key.id}
+                keyId={key.id}
+                action={
+                  onlyPublicKey ? (
+                    <p className="max-w-60 text-xs text-muted">
+                      {i18n.t('projectKeys.onlyPublicKey')}
+                    </p>
+                  ) : (
+                    revoke(key.id)
+                  )
+                }
+              >
+                <code className={CODE}>
+                  <Breakable text={key.key} />
+                </code>
+                {created(key)}
+              </ManagedKeyRow>
+            ))}
+          </ul>
+        )}
+        <p className={NOTE}>{i18n.t('settings.keys.publicNote')}</p>
+        <CreateProjectKeyButton kind="public" create={manage.createKey} />
+      </div>
+      <div className="flex flex-col gap-2 border-t border-line pt-3">
+        <h3 className={SUBHEADING}>{i18n.t('settings.keys.secret')}</h3>
+        {settings.secretKeys.length === 0 ? (
+          <p className="text-sm">{i18n.t('settings.keys.noSecretKey')}</p>
+        ) : (
+          <ul className="flex flex-col divide-y divide-line">
+            {settings.secretKeys.map((key) => (
+              <ManagedKeyRow key={key.id} keyId={key.id} action={revoke(key.id)}>
+                {created(key)}
+              </ManagedKeyRow>
+            ))}
+          </ul>
+        )}
+        <p className={NOTE}>{i18n.t('settings.keys.secretNote')}</p>
+        <CreateProjectKeyButton kind="secret" create={manage.createKey} />
+      </div>
+    </SettingsPanel>
+  );
+}
+
+function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
+  return (
+    <SettingsPanel id="settings-delete" title={i18n.t('deleteProject.heading')}>
+      <DeleteProjectForm projectName={settings.name} remove={manage.remove} />
+    </SettingsPanel>
+  );
+}
+
 function RetentionPanel({ settings, i18n }: SectionProps) {
   return (
     <SettingsPanel id="settings-retention" title={i18n.t('settings.retention.heading')}>
@@ -226,10 +360,12 @@ export function ProjectSettingsView({
   accessTokens,
   createAccessToken,
   revokeAccessToken,
+  manage,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
   const section: SectionProps = { settings, i18n, when };
+  const owner = canManageProject(settings);
   return (
     <div className="grid gap-3.5 sm:gap-4 lg:grid-cols-2">
       <div className="lg:col-span-2">
@@ -252,13 +388,31 @@ export function ProjectSettingsView({
           revoke={revokeAccessToken}
         />
       </div>
-      <ProjectPanel {...section} />
-      <ActivityPanel {...section} />
-      <OriginsPanel {...section} />
-      <RetentionPanel {...section} />
-      <div className="lg:col-span-2">
-        <KeysPanel {...section} />
-      </div>
+      {owner ? (
+        <>
+          <div className="lg:col-span-2">
+            <ProjectEditPanel {...section} manage={manage} />
+          </div>
+          <ActivityPanel {...section} />
+          <RetentionPanel {...section} />
+          <div className="lg:col-span-2">
+            <ManagedKeysPanel {...section} manage={manage} />
+          </div>
+          <div className="lg:col-span-2">
+            <DeletePanel {...section} manage={manage} />
+          </div>
+        </>
+      ) : (
+        <>
+          <ProjectPanel {...section} />
+          <ActivityPanel {...section} />
+          <OriginsPanel {...section} />
+          <RetentionPanel {...section} />
+          <div className="lg:col-span-2">
+            <KeysPanel {...section} />
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { accessTokensResponseSchema } from '@/domain/access-tokens.schema';
+import { timeZoneChoices } from '@/domain/project-management';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { sessionsResponseSchema } from '@/domain/sessions.schema';
 import {
@@ -8,9 +9,11 @@ import {
 } from '@/services/access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
+import { MockProjectManagementService } from '@/services/project-management/mock-project-management-service';
 import { demoSessionsWire } from '@/services/sessions/mock-sessions-service';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
+import { spanish } from '@/test-utils/spanish';
 import { ProjectSettingsView } from './project-settings-view';
 
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -20,6 +23,7 @@ function demoSettings(projectId: string) {
 }
 
 const STORE = demoSettings(DEMO_STORE.id);
+const MANAGEMENT = new MockProjectManagementService();
 
 const meta = {
   title: 'Settings/Project settings',
@@ -46,6 +50,13 @@ const meta = {
         },
       }),
     revokeAccessToken: () => Promise.resolve(),
+    manage: {
+      timezones: timeZoneChoices(STORE.timezone),
+      save: () => MANAGEMENT.update(),
+      createKey: (kind) => MANAGEMENT.createKey(STORE.id, kind),
+      revokeKey: (keyId) => MANAGEMENT.revokeKey(STORE.id, keyId),
+      remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
+    },
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof ProjectSettingsView>;
@@ -56,6 +67,26 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const AnotherProject: Story = { args: { settings: demoSettings(DEMO_DOCS.id) } };
+
+export const ReadOnlyForSomeoneTheOwnerAdded: Story = {
+  args: { settings: { ...STORE, role: 'member' } },
+};
+
+export const OperatorProject: Story = {
+  args: { settings: { ...STORE, accountId: null, role: null } },
+};
+
+export const WithoutASubscription: Story = {
+  args: {
+    manage: {
+      timezones: timeZoneChoices(STORE.timezone),
+      save: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      createKey: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      revokeKey: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
+    },
+  },
+};
 
 export const WaitingForTheFirstEvent: Story = {
   args: {
@@ -72,5 +103,7 @@ export const WaitingForTheFirstEvent: Story = {
 };
 
 export const InPortuguese: Story = { args: { i18n: portuguese } };
+
+export const InSpanish: Story = { args: { i18n: spanish } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
