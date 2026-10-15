@@ -31,6 +31,7 @@ const ACCOUNT: Account = {
   suspendedAt: null,
   suspensionReason: null,
   deletionHeldAt: null,
+  quotaPauseExemptUntil: null,
   month: '2026-11',
   eventsThisMonth: 41_230,
   measuredAt: '2026-11-20T03:00:00.000Z',

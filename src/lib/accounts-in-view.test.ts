@@ -24,6 +24,7 @@ const ENDING: Account = {
   suspendedAt: null,
   suspensionReason: null,
   deletionHeldAt: null,
+  quotaPauseExemptUntil: null,
   month: '2026-11',
   eventsThisMonth: 10,
   measuredAt: null,
