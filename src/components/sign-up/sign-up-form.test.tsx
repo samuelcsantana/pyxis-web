@@ -108,6 +108,7 @@ describe('SignUpForm', () => {
     renderForm(signUp, openCheckout);
 
     expect(screen.getByText(/14 days free/)).toBeInTheDocument();
+    expect(screen.getByText('One free trial per customer.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Terms of Use/ })).toHaveAttribute(
       'href',
       TERMS.termsUrl,

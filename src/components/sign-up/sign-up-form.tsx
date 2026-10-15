@@ -300,6 +300,7 @@ export function SignUpForm({
             <p className="text-sm leading-5 text-muted">
               {t('signUp.intro', { days: String(TRIAL_DAYS) })}
             </p>
+            <p className="text-sm leading-5 text-muted">{t('signUp.oneTrial')}</p>
           </div>
           <div className="flex flex-col gap-1.5">
             <span id="sign-up-plan" className="text-caption font-medium">

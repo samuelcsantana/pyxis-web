@@ -466,6 +466,7 @@ export const ptBR = translation({
     title: 'Comece o teste grátis',
     intro:
       '{days} dias grátis, depois o plano que você escolher. Nada é cobrado se você cancelar durante o teste.',
+    oneTrial: 'Um teste grátis por cliente.',
     plan: 'Plano',
     monthly: 'Mensal',
     yearly: 'Anual',
