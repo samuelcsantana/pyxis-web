@@ -7,6 +7,8 @@ import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { demoCanonical } from '@/lib/demo-canonical';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
+import { timeZoneChoices } from '@/domain/project-management';
+import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
@@ -14,9 +16,26 @@ import { createSessionsService } from '@/services/sessions/sessions-service.fact
 import {
   chooseEmailPreferences,
   createAccessToken,
+  createProjectKey,
+  deleteProject,
   endSession,
   revokeAccessToken,
+  revokeProjectKey,
+  updateProject,
 } from './actions';
+
+const SUBTITLES = {
+  owner: 'settings.subtitleOwner',
+  member: 'settings.subtitleMember',
+  operator: 'settings.subtitle',
+} as const;
+
+function subtitleOf(settings: ProjectSettings) {
+  if (canManageProject(settings)) {
+    return SUBTITLES.owner;
+  }
+  return settings.role === 'member' ? SUBTITLES.member : SUBTITLES.operator;
+}
 
 export interface SettingsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
@@ -44,7 +63,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
     <>
       <Topbar
         title={i18n.t('settings.title')}
-        subtitle={i18n.t('settings.subtitle', { project: project.name })}
+        subtitle={i18n.t(subtitleOf(settings), { project: project.name })}
       />
       <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <ProjectSettingsView
@@ -57,6 +76,13 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           accessTokens={accessTokens}
           createAccessToken={createAccessToken.bind(null, project.id)}
           revokeAccessToken={revokeAccessToken.bind(null, project.id)}
+          manage={{
+            timezones: timeZoneChoices(settings.timezone),
+            save: updateProject.bind(null, project.id),
+            createKey: createProjectKey.bind(null, project.id),
+            revokeKey: revokeProjectKey.bind(null, project.id),
+            remove: deleteProject.bind(null, project.id),
+          }}
         />
       </MainContent>
     </>

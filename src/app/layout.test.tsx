@@ -65,6 +65,9 @@ describe('RootLayout', () => {
       'emailPreferences',
       'sessions',
       'accessTokens',
+      'projectForm',
+      'projectKeys',
+      'deleteProject',
     ]);
   });
 

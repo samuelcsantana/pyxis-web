@@ -9,13 +9,13 @@ export interface NewAccessTokenRevealProps {
   readonly onDone: () => void;
 }
 
-type CopyState = 'idle' | 'copied' | 'selected';
+export type CopyState = 'idle' | 'copied' | 'selected';
 
 export const COPY_STATE_MS = 1_600;
 export const AUTHORIZATION_EXAMPLE = 'Authorization: Bearer pyxis_at_…';
 
 const NOTE = 'text-xs leading-[18px] text-muted';
-const CODE_BOX =
+export const CODE_BOX =
   'min-w-0 flex-[1_1_16rem] rounded-control border border-line bg-card px-3 py-2 font-mono text-sm break-all select-all';
 
 export function selectContents(target: HTMLElement | null): void {
@@ -29,7 +29,7 @@ export function selectContents(target: HTMLElement | null): void {
   selection.addRange(range);
 }
 
-function useCopy(text: string, target: () => HTMLElement | null) {
+export function useCopy(text: string, target: () => HTMLElement | null, what: string) {
   const [state, setState] = useState<CopyState>('idle');
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function useCopy(text: string, target: () => HTMLElement | null) {
       await navigator.clipboard.writeText(text);
       setState('copied');
     } catch (error) {
-      console.warn('access token: could not copy it, selecting it instead', error);
+      console.warn(`${what}: could not copy it, selecting it instead`, error);
       selectContents(target());
       setState('selected');
     }
@@ -63,7 +63,7 @@ export function NewAccessTokenReveal({ token, onDone }: NewAccessTokenRevealProp
   const headingId = useId();
   const heading = useRef<HTMLHeadingElement>(null);
   const tokenBox = useRef<HTMLElement>(null);
-  const { state, copy } = useCopy(token, () => tokenBox.current);
+  const { state, copy } = useCopy(token, () => tokenBox.current, 'access token');
 
   useEffect(() => {
     heading.current?.focus();
