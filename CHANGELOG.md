@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.20.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.19.0...v0.20.0) (2026-10-15)
+
+
+### Features
+
+* **account:** show a suspension and a held deletion on the account page ([31613f8](https://github.com/samuelcsantana/pyxis-web/commit/31613f8a3abae5908ddbc77662f5ddc3e0f3d341))
+* **account:** warn across the dashboard when an account is suspended ([4c01d7f](https://github.com/samuelcsantana/pyxis-web/commit/4c01d7f662d2f2c4a889aabaf035ddd65de8bd8e))
+* **settings:** explain a project kept while its account's deletion is held ([440b7da](https://github.com/samuelcsantana/pyxis-web/commit/440b7da44538626c6d9e53bd1e837b0cebe3981e))
+* **shell:** explain a suspended account instead of failing the screen ([58fb543](https://github.com/samuelcsantana/pyxis-web/commit/58fb543aea46ddf64810c88243c715c062df7b9e))
+* **sign-up:** say the free trial is one per customer ([590aac5](https://github.com/samuelcsantana/pyxis-web/commit/590aac5043a277745b42681a1b94c9c8a9833b4a))
+
+
+### Bug Fixes
+
+* **account:** keep the closing confirmation after the page refreshes ([2adf7e0](https://github.com/samuelcsantana/pyxis-web/commit/2adf7e0b2c9b93b9946ca159c008e62d01830f92))
+* **account:** stop offering billing on an ended account ([0f7d538](https://github.com/samuelcsantana/pyxis-web/commit/0f7d5380140e605095110ae816dcd4f564094666))
+
+
+### Documentation
+
+* describe a suspended account, a held deletion and the one-trial rule ([51c1540](https://github.com/samuelcsantana/pyxis-web/commit/51c15402f6f569109041aa413d6b348ed97c1683))
+
 ## [0.19.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.18.1...v0.19.0) (2026-10-15)
 
 
