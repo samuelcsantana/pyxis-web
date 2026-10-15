@@ -140,6 +140,7 @@ describe('ProjectLayout', () => {
           suspendedAt: null,
           suspensionReason: null,
           deletionHeldAt: null,
+          quotaPauseExemptUntil: null,
           month: '2026-10',
           eventsThisMonth: 10,
           measuredAt: null,

@@ -43,6 +43,7 @@ export interface Account {
   readonly suspendedAt: string | null;
   readonly suspensionReason: string | null;
   readonly deletionHeldAt: string | null;
+  readonly quotaPauseExemptUntil: string | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
@@ -111,6 +112,26 @@ export function hasBillingPortal(account: Account): boolean {
 
 export function needsCheckout(account: Account): boolean {
   return account.status === 'incomplete';
+}
+
+export function canSubscribeAgain(account: Account): boolean {
+  return account.role === 'owner' && account.status === 'ended';
+}
+
+export type WelcomeStage = 'confirming' | 'firstSubscription' | 'subscriptionBack';
+
+export function welcomeStage(account: Account): WelcomeStage {
+  if (account.status === 'incomplete' || account.status === 'ended') {
+    return 'confirming';
+  }
+  return account.status === 'trialing' ? 'firstSubscription' : 'subscriptionBack';
+}
+
+export function quotaPauseExemptUntil(account: Account, now: Date): string | null {
+  return account.quotaPauseExemptUntil !== null &&
+    new Date(account.quotaPauseExemptUntil).getTime() > now.getTime()
+    ? account.quotaPauseExemptUntil
+    : null;
 }
 
 export function isSuspended(account: Account): boolean {

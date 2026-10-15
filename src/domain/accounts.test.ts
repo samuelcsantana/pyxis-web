@@ -3,6 +3,7 @@ import {
   type Account,
   accountNotice,
   canClose,
+  canSubscribeAgain,
   deletionDateOf,
   firstNotice,
   hasBillingPortal,
@@ -10,7 +11,9 @@ import {
   isSuspended,
   needsCheckout,
   ownedAccounts,
+  quotaPauseExemptUntil,
   quotaShare,
+  welcomeStage,
 } from './accounts';
 import {
   billingRedirectResponseSchema,
@@ -35,6 +38,7 @@ const ACCOUNT: Account = {
   suspendedAt: null,
   suspensionReason: null,
   deletionHeldAt: null,
+  quotaPauseExemptUntil: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -205,6 +209,7 @@ describe('accounts on the wire', () => {
           suspended_at: '2026-11-19T10:00:00.000Z',
           suspension_reason: 'Events carried e-mail addresses.',
           deletion_held_at: '2026-11-19T10:05:00.000Z',
+          quota_pause_exempt_until: '2027-01-01T00:00:00.000Z',
           month: '2026-11',
           events_this_month: 10_000,
           measured_at: '2026-11-20T03:00:00.000Z',
@@ -218,6 +223,7 @@ describe('accounts on the wire', () => {
       suspendedAt: '2026-11-19T10:00:00.000Z',
       suspensionReason: 'Events carried e-mail addresses.',
       deletionHeldAt: '2026-11-19T10:05:00.000Z',
+      quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z',
     });
   });
 
@@ -227,6 +233,42 @@ describe('accounts on the wire', () => {
     );
     expect(checkoutWire('year', 'pt-BR')).toEqual({ interval: 'year', locale: 'pt-BR' });
     expect(portalWire('es')).toEqual({ locale: 'es' });
+  });
+});
+
+describe('subscribing again', () => {
+  it('is for the owner of an ended account that is not deleted yet', () => {
+    expect(canSubscribeAgain({ ...ACCOUNT, status: 'ended' })).toBe(true);
+    expect(canSubscribeAgain({ ...ACCOUNT, status: 'ended', role: 'member' })).toBe(false);
+    expect(canSubscribeAgain(ACCOUNT)).toBe(false);
+    expect(canSubscribeAgain({ ...ACCOUNT, status: 'incomplete' })).toBe(false);
+  });
+});
+
+describe('welcomeStage', () => {
+  it.each([
+    ['incomplete', 'confirming'],
+    ['ended', 'confirming'],
+    ['trialing', 'firstSubscription'],
+    ['active', 'subscriptionBack'],
+    ['past_due', 'subscriptionBack'],
+  ] as const)('is %s → %s', (status, stage) => {
+    expect(welcomeStage({ ...ACCOUNT, status })).toBe(stage);
+  });
+});
+
+describe('quotaPauseExemptUntil', () => {
+  it('gives the date while Pyxis exempts the account from the pause', () => {
+    expect(
+      quotaPauseExemptUntil({ ...ACCOUNT, quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z' }, NOW),
+    ).toBe('2027-01-01T00:00:00.000Z');
+  });
+
+  it('gives nothing once the exemption is over, or without one', () => {
+    expect(
+      quotaPauseExemptUntil({ ...ACCOUNT, quotaPauseExemptUntil: '2026-11-01T00:00:00.000Z' }, NOW),
+    ).toBeNull();
+    expect(quotaPauseExemptUntil(ACCOUNT, NOW)).toBeNull();
   });
 });
 
