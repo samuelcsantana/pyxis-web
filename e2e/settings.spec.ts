@@ -113,6 +113,26 @@ test('deletes a project only with its name typed, then leaves its settings', asy
   await expect(page).not.toHaveURL(/\/settings$/);
 });
 
+test('lists the people, adds an address with an e-mail and removes a member', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const people = page.getByRole('region', { name: 'People' });
+
+  await expect(people).toContainText('owner@demo-store.example (you)');
+  await people.getByRole('button', { name: 'Add person' }).click();
+  await expect(people.getByRole('alert')).toHaveText(
+    'Write the e-mail address of the person to add.',
+  );
+
+  await people.getByRole('textbox', { name: 'E-mail address' }).fill('ana@example.com');
+  await people.getByRole('button', { name: 'Add person' }).click();
+  await expect(people.getByRole('status')).toHaveText(
+    'ana@example.com was added and got an e-mail with how to sign in.',
+  );
+
+  await people.getByRole('button', { name: 'Remove' }).click();
+  await expect(people.getByText('Removed')).toBeVisible();
+});
+
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({
   page,
 }) => {

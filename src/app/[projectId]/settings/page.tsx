@@ -11,14 +11,17 @@ import { timeZoneChoices } from '@/domain/project-management';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
+import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 import {
+  addProjectPerson,
   chooseEmailPreferences,
   createAccessToken,
   createProjectKey,
   deleteProject,
   endSession,
+  removeProjectPerson,
   revokeAccessToken,
   revokeProjectKey,
   updateProject,
@@ -51,12 +54,13 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 }
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
-  const { project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences, sessions, accessTokens] = await Promise.all([
+  const { admin, project } = await projectOrNotFound((await params).projectId);
+  const [settings, emailPreferences, sessions, accessTokens, people] = await Promise.all([
     readOrSignIn(() => createProjectsService().settings(project.id)),
     readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
     readOrSignIn(() => createSessionsService().list()),
     readOrSignIn(() => createAccessTokensService().list()),
+    readOrSignIn(() => createProjectPeopleService().list(project.id)),
   ]);
   const i18n = await getI18n();
   return (
@@ -82,7 +86,11 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             createKey: createProjectKey.bind(null, project.id),
             revokeKey: revokeProjectKey.bind(null, project.id),
             remove: deleteProject.bind(null, project.id),
+            addPerson: addProjectPerson.bind(null, project.id),
+            removePerson: removeProjectPerson.bind(null, project.id),
           }}
+          people={people}
+          myEmail={admin.email}
         />
       </MainContent>
     </>

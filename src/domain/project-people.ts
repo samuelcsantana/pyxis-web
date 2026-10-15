@@ -16,3 +16,9 @@ export type AddPersonOutcome =
   | { readonly kind: 'invalidEmail' };
 
 export type RemovePersonOutcome = { readonly kind: 'removed' } | { readonly kind: 'ownerStays' };
+
+export function ownerFirst(people: readonly ProjectPerson[]): readonly ProjectPerson[] {
+  return [...people].sort(
+    (left, right) => Number(right.role === 'owner') - Number(left.role === 'owner'),
+  );
+}

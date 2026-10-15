@@ -59,7 +59,24 @@ const EMAIL = {
     createKey: () => Promise.resolve({ kind: 'tooMany' } as const),
     revokeKey: () => Promise.resolve({ kind: 'revoked' } as const),
     remove: () => Promise.resolve({ kind: 'deleted' } as const),
+    addPerson: () => Promise.resolve({ kind: 'limitReached' } as const),
+    removePerson: () => Promise.resolve({ kind: 'removed' } as const),
   },
+  people: [
+    {
+      adminUserId: 'u1',
+      email: 'owner@shop.example.com',
+      role: 'owner',
+      addedAt: '2026-09-01T08:00:00.000Z',
+    },
+    {
+      adminUserId: 'u2',
+      email: 'ana@shop.example.com',
+      role: 'member',
+      addedAt: '2026-09-10T08:00:00.000Z',
+    },
+  ] as const,
+  myEmail: 'owner@shop.example.com',
 };
 
 const OWNED: ProjectSettings = {
@@ -216,5 +233,40 @@ describe('ProjectSettingsView', () => {
     expect(panel('Allowed origins')).toBeInTheDocument();
     expect(within(panel('Keys')).queryByRole('button')).not.toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Delete project' })).not.toBeInTheDocument();
+  });
+
+  it('lists the people of an owned project, marks the admin, and lets the owner add and remove', () => {
+    renderWithMessages(<ProjectSettingsView settings={OWNED} i18n={english} {...EMAIL} />);
+
+    const people = panel('People');
+    expect(people).toHaveTextContent('The account has room for 3 people, you included.');
+    expect(people).toHaveTextContent('owner@shop.example.com (you)');
+    expect(people).toHaveTextContent('Owner · Added Sep 1, 2026');
+    expect(within(people).getAllByRole('button', { name: 'Remove' })).toHaveLength(1);
+    expect(
+      within(people).getByRole('button', { name: 'Remove', description: /ana@shop/ }),
+    ).toBeInTheDocument();
+    expect(within(people).getByRole('textbox', { name: 'E-mail address' })).toBeInTheDocument();
+    const headings = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((heading) => heading.textContent);
+    expect(headings.indexOf('People')).toBe(headings.indexOf('Keys') + 1);
+  });
+
+  it('shows the people read-only to someone the owner added', () => {
+    renderWithMessages(
+      <ProjectSettingsView
+        settings={{ ...OWNED, role: 'member' }}
+        i18n={english}
+        {...EMAIL}
+        myEmail="ana@shop.example.com"
+      />,
+    );
+
+    const people = panel('People');
+    expect(people).toHaveTextContent('Who can open this project.');
+    expect(people).toHaveTextContent('ana@shop.example.com (you)');
+    expect(within(people).queryByRole('button')).not.toBeInTheDocument();
+    expect(within(people).queryByRole('textbox')).not.toBeInTheDocument();
   });
 });

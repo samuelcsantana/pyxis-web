@@ -4,6 +4,7 @@ import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { MockProjectsService } from '@/services/projects/mock-projects-service';
+import { MockProjectPeopleService } from '@/services/project-people/mock-project-people-service';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import SettingsPage, { generateMetadata } from './page';
@@ -31,6 +32,10 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
   usePathname: () => `/${DEMO_STORE.id}/settings`,
   useSearchParams: () => new URLSearchParams(),
+}));
+
+vi.mock('@/services/project-people/project-people-service.factory', () => ({
+  createProjectPeopleService: () => new MockProjectPeopleService(),
 }));
 
 vi.mock('@/services/projects/projects-service.factory', () => ({
