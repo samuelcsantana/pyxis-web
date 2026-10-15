@@ -537,8 +537,9 @@ that says why:
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
+| Sign-up page                                           | 162               |
 | Dashboard screens without a chart                      | 170               |
-| Dashboard screens with a chart (Overview, Acquisition) | 166               |
+| Dashboard screens with a chart (Overview, Acquisition) | 167               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -556,7 +557,13 @@ to 151.3 KiB. The sign-in budget then went to 155 KiB and the chart budget to 16
 preference carrier, which adds the chosen language and theme to the links between the home page,
 the dashboard and the live demo, so a visitor who changes either keeps it on the next address: it
 measured 154.1 KiB on the sign-in page (1.4 KiB more: about 1 KiB of code, the rest the shared
-chunk it splits off) and 165.3 KiB on Overview (0.5 KiB more).
+chunk it splits off) and 165.3 KiB on Overview (0.5 KiB more). The sign-up page has its own
+budget, 162 KiB: it measured 159.4 KiB, the sign-in's shell plus the sign-up form, the code
+cells, the terms and the Checkout step (its answers are read without a schema library, as the
+sign-in's are, which took it down from 251 KiB). The chart budget went to 167 KiB in the same pull
+request: with the sign-up page sharing part of the dashboard's shell, the bundler split a shared
+chunk in two, and the two halves compress 1.1 KiB worse on every dashboard screen (166.6 KiB on
+Overview) without any code added to them.
 
 ## Project structure
 
