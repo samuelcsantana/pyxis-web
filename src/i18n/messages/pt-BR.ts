@@ -208,6 +208,8 @@ export const ptBR = translation({
       noSecretKey: 'Nenhuma chave secreta ativa.',
       created: 'Criada em {date}',
     },
+    deletionHeld:
+      'A exclusão deste projeto está em espera: ele não pode ser apagado até o Pyxis liberar a exclusão. Para perguntar, escreva para <mail>hello@pyxis-analytics.dev</mail>.',
     retention: {
       heading: 'Retenção de dados',
       body: 'Os eventos ficam guardados por {months} meses; depois, uma rotina diária os apaga.',

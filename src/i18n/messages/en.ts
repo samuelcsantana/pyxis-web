@@ -197,6 +197,8 @@ export const en = {
       noSecretKey: 'No live secret key.',
       created: 'Created {date}',
     },
+    deletionHeld:
+      'The deletion of this project is on hold: it cannot be deleted until Pyxis lifts the hold. To ask about it, write to <mail>hello@pyxis-analytics.dev</mail>.',
     retention: {
       heading: 'Data retention',
       body: 'Events are kept for {months} months, then a daily job deletes them.',

@@ -240,6 +240,26 @@ describe('ProjectSettingsView', () => {
     expect(within(keys).getByRole('button', { name: 'New public key' })).toBeInTheDocument();
   });
 
+  it('says the deletion of an owned project is on hold instead of offering to delete it', () => {
+    renderWithMessages(
+      <ProjectSettingsView
+        settings={{ ...OWNED, deletionHeldAt: '2026-10-04T00:00:00.000Z' }}
+        i18n={english}
+        {...EMAIL}
+      />,
+    );
+
+    const deletion = panel('Delete project');
+    expect(deletion).toHaveTextContent(
+      'The deletion of this project is on hold: it cannot be deleted until Pyxis lifts the hold.',
+    );
+    expect(
+      within(deletion).getByRole('link', { name: 'hello@pyxis-analytics.dev' }),
+    ).toHaveAttribute('href', 'mailto:hello@pyxis-analytics.dev');
+    expect(within(deletion).queryByRole('textbox')).not.toBeInTheDocument();
+    expect(within(deletion).queryByRole('button')).not.toBeInTheDocument();
+  });
+
   it('shows someone the owner added the project as it is, without changing it', () => {
     renderWithMessages(
       <ProjectSettingsView settings={{ ...OWNED, role: 'member' }} i18n={english} {...EMAIL} />,
