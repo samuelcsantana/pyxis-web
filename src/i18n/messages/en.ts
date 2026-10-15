@@ -337,6 +337,10 @@ export const en = {
     contest: 'To contest it, write to <mail>hello@pyxis-analytics.dev</mail>.',
     deletionHeld:
       'Deletion is on hold: nothing in this account is deleted until Pyxis lifts the hold.',
+    resubscribe:
+      'Subscribe again before {date} to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+    resubscribeUndated:
+      'Subscribe again to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
     notice: {
       suspended: 'This account is suspended, so its projects stopped measuring.',
       why: 'See why',
@@ -364,6 +368,9 @@ export const en = {
     contest: "To contest it, the account's owner writes to <mail>hello@pyxis-analytics.dev</mail>.",
   },
   billing: {
+    subscribeAgain: 'Subscribe again',
+    resubscribeUnavailable:
+      'Subscribing again is not open in the dashboard yet. Write to hello@pyxis-analytics.dev and we reactivate the subscription.',
     manage: 'Manage billing',
     finish: 'Finish subscription',
     opening: 'Opening Stripe…',

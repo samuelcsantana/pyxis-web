@@ -23,7 +23,7 @@ export type OpenCheckout = (interval: BillingInterval) => Promise<BillingRedirec
 export type OpenBillingPortal = () => Promise<BillingRedirectOutcome>;
 
 export type BillingActionsProps =
-  | { readonly kind: 'checkout'; readonly open: OpenCheckout }
+  | { readonly kind: 'checkout' | 'resubscribe'; readonly open: OpenCheckout }
   | { readonly kind: 'portal'; readonly open: OpenBillingPortal };
 
 type Refusal = 'noBillingYet' | 'subscriptionExists' | 'unavailable' | 'failed';
@@ -37,6 +37,17 @@ const REFUSALS = {
   failed: 'billing.failed',
 } as const satisfies Record<Refusal, string>;
 const INTERVAL_LABELS = { month: 'billing.monthly', year: 'billing.yearly' } as const;
+const ACTION_LABELS = {
+  checkout: 'billing.finish',
+  resubscribe: 'billing.subscribeAgain',
+  portal: 'billing.manage',
+} as const satisfies Record<BillingActionsProps['kind'], string>;
+
+function refusalMessage(kind: BillingActionsProps['kind'], refusal: Refusal) {
+  return kind === 'resubscribe' && refusal === 'unavailable'
+    ? 'billing.resubscribeUnavailable'
+    : REFUSALS[refusal];
+}
 
 export function BillingActions(props: BillingActionsProps) {
   const t = useT();
@@ -51,7 +62,7 @@ export function BillingActions(props: BillingActionsProps) {
   const open = () => {
     request.current?.unsubscribe();
     setRefusal(null);
-    request.current = defer(() => (props.kind === 'checkout' ? props.open(interval) : props.open()))
+    request.current = defer(() => (props.kind === 'portal' ? props.open() : props.open(interval)))
       .pipe(
         tap((outcome) => {
           if (outcome.kind === 'redirect') {
@@ -70,7 +81,7 @@ export function BillingActions(props: BillingActionsProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      {props.kind === 'checkout' ? (
+      {props.kind === 'portal' ? null : (
         <div className="flex flex-col gap-1.5">
           <span id={groupId} className="text-caption font-medium">
             {t('billing.interval')}
@@ -91,21 +102,19 @@ export function BillingActions(props: BillingActionsProps) {
             ))}
           </div>
         </div>
-      ) : null}
+      )}
       <button
         type="button"
         onClick={open}
         disabled={busy}
         aria-busy={busy}
-        className={`min-h-11 self-start rounded-input px-4 text-sm ${props.kind === 'checkout' ? BUTTON_PRIMARY : BUTTON_SECONDARY} ${CONTROL_BUSY}`}
+        className={`min-h-11 self-start rounded-input px-4 text-sm ${props.kind === 'portal' ? BUTTON_SECONDARY : BUTTON_PRIMARY} ${CONTROL_BUSY}`}
       >
-        {busy
-          ? t('billing.opening')
-          : t(props.kind === 'checkout' ? 'billing.finish' : 'billing.manage')}
+        {busy ? t('billing.opening') : t(ACTION_LABELS[props.kind])}
       </button>
       {refusal === null ? null : (
         <p role="alert" className="text-caption font-medium text-bad">
-          {t(REFUSALS[refusal])}
+          {t(refusalMessage(props.kind, refusal))}
         </p>
       )}
     </div>

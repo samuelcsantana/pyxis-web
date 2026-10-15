@@ -49,6 +49,20 @@ export const Unavailable: Story = {
   },
 };
 
+export const SubscribeAgain: Story = { args: { kind: 'resubscribe', open: slowly } };
+
+export const SubscribeAgainNotOpenYet: Story = {
+  args: {
+    kind: 'resubscribe',
+    open: (): Promise<BillingRedirectOutcome> => Promise.resolve({ kind: 'unavailable' }),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Subscribe again' }));
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('hello@pyxis-analytics.dev');
+  },
+};
+
 export const DarkTheme: Story = {
   args: { kind: 'checkout', open: slowly },
   globals: { theme: 'dark' },

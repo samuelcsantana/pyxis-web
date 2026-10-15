@@ -347,6 +347,10 @@ export const ptBR = translation({
     contest: 'Para contestar, escreva para <mail>hello@pyxis-analytics.dev</mail>.',
     deletionHeld:
       'A exclusão está em espera: nada desta conta é apagado até o Pyxis liberar a exclusão.',
+    resubscribe:
+      'Assine de novo antes de {date} para manter os dados: não há novo teste grátis, o plano é cobrado a partir de hoje, e as chaves antigas continuam revogadas, então cada projeto precisa de uma chave pública nova.',
+    resubscribeUndated:
+      'Assine de novo para manter os dados: não há novo teste grátis, o plano é cobrado a partir de hoje, e as chaves antigas continuam revogadas, então cada projeto precisa de uma chave pública nova.',
     notice: {
       suspended: 'Esta conta está suspensa, então os projetos dela pararam de medir.',
       why: 'Ver o motivo',
@@ -374,6 +378,9 @@ export const ptBR = translation({
     contest: 'Para contestar, o dono da conta escreve para <mail>hello@pyxis-analytics.dev</mail>.',
   },
   billing: {
+    subscribeAgain: 'Assinar de novo',
+    resubscribeUnavailable:
+      'Assinar de novo ainda não está aberto no painel. Escreva para hello@pyxis-analytics.dev e reativamos a assinatura.',
     manage: 'Gerenciar cobrança',
     finish: 'Concluir a assinatura',
     opening: 'Abrindo o Stripe…',

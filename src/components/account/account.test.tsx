@@ -209,6 +209,37 @@ describe('AccountOverview', () => {
     },
   );
 
+  it('offers an ended account to subscribe again before its deletion date, with a plan choice', () => {
+    overview({ status: 'ended', accessEndsAt: '2026-11-10T00:00:00.000Z' });
+
+    expect(
+      screen.getByText(
+        'Subscribe again before Dec 10, 2026 to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Billing' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Subscribe again' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['without an end date', { accessEndsAt: null }],
+    [
+      'whose deletion is on hold',
+      { accessEndsAt: '2026-11-10T00:00:00.000Z', deletionHeldAt: '2026-11-12T00:00:00.000Z' },
+    ],
+  ] as const)('offers to subscribe again with no date an ended account %s', (_, account) => {
+    overview({ status: 'ended', ...account });
+
+    expect(screen.getByText(/^Subscribe again to keep the data:/)).toBeInTheDocument();
+  });
+
+  it('offers to subscribe again only to an ended account', () => {
+    overview();
+
+    expect(screen.queryByRole('button', { name: 'Subscribe again' })).not.toBeInTheDocument();
+  });
+
   it('says nothing about a pause already over', () => {
     overview({ ingestionPausedUntil: '2026-11-01T00:00:00.000Z' });
 
@@ -277,6 +308,52 @@ describe('BillingActions', () => {
     await settle();
 
     expect(screen.getByRole('alert')).toHaveTextContent(message);
+  });
+
+  it('subscribes an ended account again with the plan chosen', async () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    const open = vi.fn<billing.OpenCheckout>(() =>
+      Promise.resolve({ kind: 'redirect', url: 'https://checkout.stripe.com/c/again' }),
+    );
+    renderWithMessages(<billing.BillingActions kind="resubscribe" open={open} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Subscribe again' }));
+    await settle();
+
+    expect(open).toHaveBeenCalledWith('year');
+    expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/again');
+  });
+
+  it('points to hello@ when subscribing again is not open in the dashboard', async () => {
+    renderWithMessages(
+      <billing.BillingActions
+        kind="resubscribe"
+        open={() => Promise.resolve({ kind: 'unavailable' })}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Subscribe again' }));
+    await settle();
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Subscribing again is not open in the dashboard yet. Write to hello@pyxis-analytics.dev and we reactivate the subscription.',
+    );
+  });
+
+  it('explains any other refusal to subscribe again as usual', async () => {
+    renderWithMessages(
+      <billing.BillingActions
+        kind="resubscribe"
+        open={() => Promise.resolve({ kind: 'subscriptionExists' })}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Subscribe again' }));
+    await settle();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('This account already has a subscription.');
   });
 
   it('says Stripe could not be opened when the call fails', async () => {
