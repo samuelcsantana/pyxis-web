@@ -307,6 +307,15 @@ Shipping now:
   free trial, billing from that day, new keys to create), and the welcome page tells a returning
   subscriber that the subscription is active again; an account Pyxis exempted from the pause
   shows until when. The sign-up says the free trial is one per customer
+- A consent page for the Claude connector (`/connect?request=<id>`), where the API's OAuth
+  server sends the browser when Claude or Claude Code asks to connect. A visitor without a session
+  signs in first and comes back to the same request. The page names the app by the API's own name
+  for it and the host of its client document, where the browser goes back to (with a warning when
+  the answer goes to a program on this computer), what the app may do (read the numbers of every
+  project the admin can open, never change anything) with the list of those projects, and the
+  admin's address. Allow sends the browser back with a one-time code; Cancel sends it back with
+  the refusal. A request that ended (answered, or older than ten minutes) says so, and an admin
+  who already keeps ten connected apps is pointed to Settings. The demo has no such page
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
@@ -443,6 +452,7 @@ origin the sign-in and sign-out calls carry.
 | `/new-project`                                                                 | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
 | `/[projectId]/install`                                                         | The tracker's snippets with the project's key, and the wait for its first event                                                                                                                                                                                                              |
 | `/account`                                                                     | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
+| `/connect?request=<id>`                                                        | The consent page of the Claude connector: allow or cancel an app's request to read the projects, or say that the request ended; not in the demo                                                                                                                                              |
 | `/account-suspended`                                                           | Where the screens of a suspended account's projects go: the account is suspended, and the owner finds the reason in Account and billing                                                                                                                                                      |
 | `/sign-in`                                                                     | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                                                              |
 | `/[projectId]/overview`                                                        | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                                                              |
@@ -641,6 +651,11 @@ docs/adr/           architecture decision records
   name, the lifetime and the id; the new token travels to the browser once, in the action's answer,
   is kept only in the component's state until "Done", and is never written to a cookie, storage or
   the page's HTML. The list shows names and dates, never a token
+- The consent page reads the request and answers it through Server Actions that validate the
+  request id; the API decides everything else (the session, the dashboard's origin, the ten-app
+  limit) and answers the address the browser goes to next, which the page follows only when it is
+  an `http` or `https` address. The page cannot be framed (`frame-ancestors 'none'`), so another
+  site cannot trick a click on Allow
 - A project's settings, keys and deletion go through Server Actions that re-check access and
   validate what the browser sent; the API decides who owns the project and answers its refusals
   by code (no subscription, the last public key, the key limit, a name typed wrong), which the
