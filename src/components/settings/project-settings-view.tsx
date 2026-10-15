@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
 import { SETTINGS_KEYS_PANEL } from '@/components/shell/screens';
 import { Breakable } from '@/components/ui/breakable';
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { SUPPORT_EMAIL } from '@/domain/accounts';
 import {
   canManageProject,
   hasLivePublicKey,
+  isProjectDeletionHeld,
   projectActivity,
   type ProjectKeySummary,
   type ProjectSettings,
@@ -15,6 +18,7 @@ import type { ProjectPerson } from '@/domain/project-people';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { AccessTokensPanel } from './access-tokens-panel';
 import type { CreateAccessToken } from './create-access-token-form';
 import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-key-button';
@@ -340,7 +344,19 @@ function ExportPanel({ settings, i18n, manage }: ManagedSectionProps) {
 function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
   return (
     <SettingsPanel id="settings-delete" title={i18n.t('deleteProject.heading')}>
-      <DeleteProjectForm projectName={settings.name} remove={manage.remove} />
+      {isProjectDeletionHeld(settings) ? (
+        <p className="text-sm">
+          {rich(i18n.t('settings.deletionHeld'), {
+            mail: (text) => (
+              <a href={`mailto:${SUPPORT_EMAIL}`} className={TEXT_LINK}>
+                {text}
+              </a>
+            ),
+          })}
+        </p>
+      ) : (
+        <DeleteProjectForm projectName={settings.name} remove={manage.remove} />
+      )}
     </SettingsPanel>
   );
 }

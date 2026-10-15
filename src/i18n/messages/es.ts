@@ -208,6 +208,8 @@ export const es = translation({
       noSecretKey: 'No hay ninguna clave secreta activa.',
       created: 'Creada el {date}',
     },
+    deletionHeld:
+      'El borrado de este proyecto está en espera: no se puede borrar hasta que Pyxis lo libere. Para preguntar, escribe a <mail>hello@pyxis-analytics.dev</mail>.',
     retention: {
       heading: 'Retención de datos',
       body: 'Los eventos se guardan durante {months} meses; después, una tarea diaria los borra.',

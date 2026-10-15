@@ -129,6 +129,14 @@ export const NoLivePublicKeyInPortuguese: Story = {
   args: { settings: { ...STORE, publicKeys: [] }, i18n: portuguese },
 };
 
+export const DeletionOnHold: Story = {
+  args: { settings: { ...STORE, deletionHeldAt: '2026-10-04T12:00:00.000Z' } },
+};
+
+export const DeletionOnHoldInSpanish: Story = {
+  args: { settings: { ...STORE, deletionHeldAt: '2026-10-04T12:00:00.000Z' }, i18n: spanish },
+};
+
 export const InPortuguese: Story = { args: { i18n: portuguese } };
 
 export const InSpanish: Story = { args: { i18n: spanish } };
