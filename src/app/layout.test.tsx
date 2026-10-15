@@ -73,6 +73,7 @@ describe('RootLayout', () => {
       'exportEvents',
       'closeAccount',
       'newProject',
+      'signUp',
     ]);
   });
 

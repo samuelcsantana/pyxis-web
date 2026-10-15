@@ -16,6 +16,7 @@ const MEASURED_HOURS_AGO = 3;
 const HOUR_MS = 60 * 60 * 1000;
 
 export const DEMO_BILLING_URL = '/account';
+export const DEMO_WELCOME_URL = `/welcome?account=${DEMO_ACCOUNT_ID}`;
 const DEMO_OWNER_EMAIL = DEMO_ME_RESPONSE.email;
 
 export function demoAccountsWire(now: Date) {
@@ -48,7 +49,7 @@ export class MockAccountsService implements IAccountsService {
   }
 
   checkout(): Promise<BillingRedirectOutcome> {
-    return Promise.resolve({ kind: 'redirect', url: DEMO_BILLING_URL });
+    return Promise.resolve({ kind: 'redirect', url: DEMO_WELCOME_URL });
   }
 
   portal(): Promise<BillingRedirectOutcome> {

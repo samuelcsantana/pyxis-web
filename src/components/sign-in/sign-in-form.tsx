@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { type ReactNode, type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
@@ -13,11 +13,11 @@ import {
 } from '@/domain/sign-in';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import { useLocale, useT } from '@/i18n/messages-provider';
-import { rich } from '@/i18n/rich';
 import type { Translator } from '@/i18n/translate';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 import { CodeField } from './code-field';
+import { DemoHint, FieldError } from './form-messages';
 import {
   bestEffortForgetPendingSignIn,
   bestEffortRememberPendingSignIn,
@@ -43,7 +43,6 @@ const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
 const EMAIL_ERROR_ID = 'sign-in-email-error';
 const CODE_ERROR_ID = 'sign-in-error';
-const ALERT_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7.5v5.5 M12 16.5h.01';
 const MAIL_ICON = 'M4 6h16v12H4z M4 7l8 6 8-6';
 const ONE_SECOND_MS = 1_000;
 const HOME_PATH = '/';
@@ -92,48 +91,6 @@ const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-callout ${BUTTO
 const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
 const DEMO_FILL_CLASS = `min-h-8 shrink-0 rounded-control px-2.5 text-caption font-semibold ${BUTTON_SECONDARY}`;
 const CHANGE_BUTTON_CLASS = `min-h-7 shrink-0 rounded-pill bg-card px-3 text-caption font-semibold text-sky-ink hover:text-ink active:text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`;
-
-interface DemoHintProps {
-  readonly code: string;
-  readonly message: string;
-  readonly action?: ReactNode;
-}
-
-interface FieldErrorProps {
-  readonly id: string;
-  readonly text: string;
-}
-
-function FieldError({ id, text }: FieldErrorProps) {
-  return (
-    <p id={id} role="alert" className="flex items-start gap-1.5 text-caption font-medium text-bad">
-      <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="mt-px shrink-0">
-        <path
-          d={ALERT_ICON}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.8}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <span>{text}</span>
-    </p>
-  );
-}
-
-function DemoHint({ code, message, action }: DemoHintProps) {
-  return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-input bg-soft px-3 py-2.5 text-caption text-muted">
-      <p className="min-w-0 flex-[1_1_12rem]">
-        {rich(message, {
-          code: () => <code className="font-mono font-semibold text-ink">{code}</code>,
-        })}
-      </p>
-      {action}
-    </div>
-  );
-}
 
 export function SignInForm({
   authService,

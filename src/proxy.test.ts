@@ -80,6 +80,15 @@ describe('proxy', () => {
       expect(visit('/sign-in').headers.get('location')).toBeNull();
     });
 
+    it('lets a visitor without a session reach the sign-up page, and a signed-in one too', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      expect(visit('/sign-up').headers.get('location')).toBeNull();
+      expect(
+        visit('/sign-up?step=plan', '__Host-pyxis_session=token').headers.get('location'),
+      ).toBeNull();
+    });
+
     it('sends a signed-in visitor away from the sign-in page, to a known screen only', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 

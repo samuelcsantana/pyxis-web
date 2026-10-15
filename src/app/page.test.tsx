@@ -94,6 +94,23 @@ describe('HomePage', () => {
     expect(screen.queryByText('admin:grant')).not.toBeInTheDocument();
   });
 
+  it('asks an owner whose sign-up is unfinished to finish the subscription', async () => {
+    state.admin = { ...ADMIN, projects: [] };
+    state.accounts = async () =>
+      (await new MockAccountsService().list()).map((account) => ({
+        ...account,
+        status: 'incomplete',
+      }));
+
+    renderWithMessages(await HomePage());
+
+    expect(screen.getByRole('main')).toHaveTextContent('Your account is waiting for a plan.');
+    expect(screen.getByRole('link', { name: 'Finish your subscription' })).toHaveAttribute(
+      'href',
+      '/account',
+    );
+  });
+
   it('sends an ended session back to sign in, saying why', async () => {
     state.failure = new UnauthenticatedError();
 

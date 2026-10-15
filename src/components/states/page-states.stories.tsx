@@ -70,6 +70,23 @@ export const NoProjectsYetForAnAccountOwner: Story = {
   },
 };
 
+export const NoProjectsYetWithAnUnfinishedSignUp: Story = {
+  render: () => (
+    <MainContent className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-4 px-4 py-16">
+      <NoProjectsYet
+        email={NEW_ADMIN}
+        authService={new MockAuthService()}
+        i18n={english}
+        hasUnfinishedSignUp
+      />
+    </MainContent>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Finish your subscription' })).toBeVisible();
+  },
+};
+
 export const NoProjectsYetDark: Story = {
   render: () => <HomeWithoutProjects authService={new MockAuthService()} />,
   globals: { theme: 'dark' },

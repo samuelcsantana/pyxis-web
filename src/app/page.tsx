@@ -12,13 +12,18 @@ export default async function HomePage() {
   if (firstProject !== undefined) {
     redirect(screenHref(firstProject.id, FIRST_SCREEN));
   }
-  const [i18n, { canCreateProject }] = await Promise.all([
+  const [i18n, { canCreateProject, hasUnfinishedSignUp }] = await Promise.all([
     getI18n(),
     bestEffortAccountsInView(new Date()),
   ]);
   return (
     <BrandedPage>
-      <NoProjectsYet email={admin.email} i18n={i18n} canCreateProject={canCreateProject} />
+      <NoProjectsYet
+        email={admin.email}
+        i18n={i18n}
+        canCreateProject={canCreateProject}
+        hasUnfinishedSignUp={hasUnfinishedSignUp}
+      />
     </BrandedPage>
   );
 }
