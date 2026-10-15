@@ -455,6 +455,7 @@ export const en = {
   signUp: {
     title: 'Start your free trial',
     intro: '{days} days free, then the plan you choose. No charge if you cancel during the trial.',
+    oneTrial: 'One free trial per customer.',
     plan: 'Plan',
     monthly: 'Monthly',
     yearly: 'Yearly',

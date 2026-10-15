@@ -469,6 +469,7 @@ export const es = translation({
     title: 'Empieza tu prueba gratis',
     intro:
       '{days} días gratis, después el plan que elijas. No se cobra nada si cancelas durante la prueba.',
+    oneTrial: 'Una prueba gratis por cliente.',
     plan: 'Plan',
     monthly: 'Mensual',
     yearly: 'Anual',

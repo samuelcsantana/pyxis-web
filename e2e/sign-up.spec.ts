@@ -19,6 +19,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 test('signs up with the demo code and lands on the welcome page', async ({ page }) => {
   await page.goto('/sign-up');
+  await expect(page.getByText('One free trial per customer.')).toBeVisible();
 
   await page.getByRole('button', { name: 'Yearly' }).click();
   await page.getByRole('textbox', { name: 'E-mail' }).fill('ana@example.com');
@@ -51,4 +52,5 @@ test('speaks Portuguese', async ({ page, context, baseURL }) => {
   await expect(
     page.getByRole('heading', { level: 1, name: 'Comece o teste grátis' }),
   ).toBeVisible();
+  await expect(page.getByText('Um teste grátis por cliente.')).toBeVisible();
 });
