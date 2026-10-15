@@ -89,7 +89,8 @@ export function linkWith(href: string, parameters: Readonly<Record<string, strin
 }
 
 const SCREEN_PATH_SEGMENTS = 3;
-const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account']);
+export const CONNECT_PAGE = '/connect';
+const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account', CONNECT_PAGE]);
 
 function isScreenSlug(value: string | undefined): boolean {
   return SCREENS.some((screen) => screen.slug === value);
