@@ -37,6 +37,9 @@ export function demoProjectSettingsWire(projectId: string, now: Date) {
     first_event_at: DEMO_FIRST_EVENT_AT,
     last_event_at: now.toISOString(),
     event_retention_months: DEMO_EVENT_RETENTION_MONTHS,
+    ingestion_suspended_at: null,
+    ingestion_suspension_reason: null,
+    deletion_held_at: null,
     public_keys: [
       {
         id: demoKeyId(project, PUBLIC_KEY_ID_SUFFIX),

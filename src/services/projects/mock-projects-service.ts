@@ -16,6 +16,8 @@ export const DEMO_ME_RESPONSE = {
     first_event_at: DEMO_FIRST_EVENT_AT,
     last_event_at: new Date().toISOString(),
     icon_version: null,
+    ingestion_suspended_at: null,
+    ingestion_suspension_reason: null,
   })),
 };
 
