@@ -339,6 +339,13 @@ export const en = {
       open: 'Open billing',
     },
   },
+  accountSuspended: {
+    title: 'This account is suspended',
+    explanation:
+      'The account that holds this project is suspended, so its screens stay closed and its sites stopped being measured until the suspension is lifted.',
+    owner: "The account's owner finds the reason, and how to contest it, in Account and billing.",
+    open: 'Open Account and billing',
+  },
   billing: {
     manage: 'Manage billing',
     finish: 'Finish subscription',

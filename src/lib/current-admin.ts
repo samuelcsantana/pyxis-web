@@ -1,11 +1,12 @@
 import { notFound, redirect } from 'next/navigation';
 import { cache } from 'react';
 import { type Admin, findProject, type Project } from '@/domain/admin';
-import { ApiNotFoundError, UnauthenticatedError } from '@/domain/errors';
+import { ApiNotFoundError, isAccountSuspended, UnauthenticatedError } from '@/domain/errors';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { requestedScreenPath } from './requested-path';
 
 export const SESSION_EXPIRED_PATH = '/sign-in?expired=1';
+export const ACCOUNT_SUSPENDED_PATH = '/account-suspended';
 
 export function sessionExpiredPath(returnPath: string | undefined): string {
   return returnPath === undefined
@@ -22,6 +23,9 @@ export async function readOrSignIn<Value>(read: () => Promise<Value>): Promise<V
     }
     if (error instanceof ApiNotFoundError) {
       notFound();
+    }
+    if (isAccountSuspended(error)) {
+      redirect(ACCOUNT_SUSPENDED_PATH);
     }
     throw error;
   }

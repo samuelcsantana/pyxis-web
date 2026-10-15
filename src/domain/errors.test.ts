@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ApiRequestError,
   InvalidCodeError,
+  isAccountSuspended,
   RateLimitedError,
   UnauthenticatedError,
 } from './errors';
@@ -26,6 +27,16 @@ describe('domain errors', () => {
       status: 503,
       code: null,
     });
+  });
+
+  it('tells a suspended account from any other refusal', () => {
+    expect(
+      isAccountSuspended(new ApiRequestError('/v1/projects/p/overview', 403, 'account_suspended')),
+    ).toBe(true);
+    expect(
+      isAccountSuspended(new ApiRequestError('/v1/projects/p/overview', 403, 'forbidden')),
+    ).toBe(false);
+    expect(isAccountSuspended(new UnauthenticatedError())).toBe(false);
   });
 
   it('keeps the error code the API named', () => {

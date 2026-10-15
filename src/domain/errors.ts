@@ -1,3 +1,5 @@
+export const ACCOUNT_SUSPENDED_CODE = 'account_suspended';
+
 export class UnauthenticatedError extends Error {
   constructor() {
     super('The session is missing, expired or revoked.');
@@ -35,4 +37,8 @@ export class ApiRequestError extends Error {
     super(`The Pyxis API answered ${String(status)} to ${path}.`);
     this.name = 'ApiRequestError';
   }
+}
+
+export function isAccountSuspended(error: unknown): boolean {
+  return error instanceof ApiRequestError && error.code === ACCOUNT_SUSPENDED_CODE;
 }

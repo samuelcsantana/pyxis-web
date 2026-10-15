@@ -351,6 +351,13 @@ export const es = translation({
       open: 'Abrir la facturación',
     },
   },
+  accountSuspended: {
+    title: 'Esta cuenta está suspendida',
+    explanation:
+      'La cuenta de este proyecto está suspendida, así que sus pantallas quedan cerradas y sus sitios dejaron de medirse hasta que se levante la suspensión.',
+    owner: 'El dueño de la cuenta encuentra el motivo, y cómo impugnarla, en Cuenta y facturación.',
+    open: 'Abrir Cuenta y facturación',
+  },
   billing: {
     manage: 'Gestionar la facturación',
     finish: 'Terminar la suscripción',

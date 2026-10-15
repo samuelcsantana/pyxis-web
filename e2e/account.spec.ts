@@ -51,6 +51,19 @@ test('opens billing, which the demo keeps on this page, and goes back to the das
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview$`));
 });
 
+test('explains a suspended account and points to Account and billing', async ({ page }) => {
+  await page.goto('/account-suspended');
+
+  await expect(page).toHaveTitle('This account is suspended · Pyxis');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'This account is suspended' }),
+  ).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+
+  await page.getByRole('link', { name: 'Open Account and billing' }).click();
+  await expect(page).toHaveURL(/\/account$/);
+});
+
 test('speaks Portuguese', async ({ page, context, baseURL }) => {
   await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
