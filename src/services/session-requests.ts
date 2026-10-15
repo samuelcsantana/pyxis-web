@@ -12,6 +12,8 @@ const SESSION_PATH = /^\/v1\/me\/sessions\/[^/?]+/;
 const SESSION_PATH_TEMPLATE = '/v1/me/sessions/:sessionId';
 const ACCESS_TOKEN_PATH = /^\/v1\/me\/tokens\/[^/?]+/;
 const ACCESS_TOKEN_PATH_TEMPLATE = '/v1/me/tokens/:tokenId';
+const PROJECT_KEY_PATH = /\/keys\/[^/?]+/;
+const PROJECT_KEY_PATH_TEMPLATE = '/keys/:keyId';
 const JSON_ACCEPT = 'application/json';
 const IMAGE_ACCEPT = 'image/*';
 const UNKNOWN_CONTENT_TYPE = 'application/octet-stream';
@@ -31,13 +33,15 @@ export interface FetchedBytes {
 }
 
 export type OutgoingBody =
-  { readonly method: 'POST' | 'PUT'; readonly body: unknown } | { readonly method: 'DELETE' };
+  | { readonly method: 'POST' | 'PUT' | 'PATCH'; readonly body: unknown }
+  | { readonly method: 'DELETE' };
 
 export function pathTemplate(path: string): string {
   const queryStart = path.indexOf(QUERY_START);
   const route = queryStart === -1 ? path : path.slice(0, queryStart);
   return route
     .replace(PROJECT_PATH, PROJECT_PATH_TEMPLATE)
+    .replace(PROJECT_KEY_PATH, PROJECT_KEY_PATH_TEMPLATE)
     .replace(SESSION_PATH, SESSION_PATH_TEMPLATE)
     .replace(ACCESS_TOKEN_PATH, ACCESS_TOKEN_PATH_TEMPLATE);
 }
@@ -54,6 +58,21 @@ export function requestLogLine(
     status,
     duration_ms: Math.round(durationMs),
   });
+}
+
+function errorCodeOf(body: unknown): string | null {
+  if (typeof body !== 'object' || body === null || !('error' in body)) {
+    return null;
+  }
+  return typeof body.error === 'string' ? body.error : null;
+}
+
+async function readErrorCode(response: Response): Promise<string | null> {
+  try {
+    return errorCodeOf(await response.json());
+  } catch {
+    return null;
+  }
 }
 
 function writeToConsole(line: string): void {
@@ -112,7 +131,7 @@ export class SessionRequests {
   ): Promise<Value> {
     const token = await this.requiredToken();
     const origin = outgoing === undefined ? null : await this.origin();
-    const response = this.checked(
+    const response = await this.checked(
       path,
       await this.timedFetch(event, path, requestInit(token, origin, outgoing)),
     );
@@ -121,7 +140,7 @@ export class SessionRequests {
 
   async sendForBytes(event: RequestEvent, path: string): Promise<FetchedBytes> {
     const token = await this.requiredToken();
-    const response = this.checked(
+    const response = await this.checked(
       path,
       await this.timedFetch(event, path, requestInit(token, null, undefined, IMAGE_ACCEPT)),
     );
@@ -139,7 +158,7 @@ export class SessionRequests {
     return token;
   }
 
-  private checked(path: string, response: Response): Response {
+  private async checked(path: string, response: Response): Promise<Response> {
     if (response.status === STATUS_UNAUTHORIZED) {
       throw new UnauthenticatedError();
     }
@@ -147,7 +166,7 @@ export class SessionRequests {
       throw new ApiNotFoundError(path);
     }
     if (!response.ok) {
-      throw new ApiRequestError(path, response.status);
+      throw new ApiRequestError(path, response.status, await readErrorCode(response));
     }
     return response;
   }

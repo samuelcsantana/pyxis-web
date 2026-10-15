@@ -95,6 +95,63 @@ describe('ApiWriter', () => {
     ).rejects.toThrow(kind);
   });
 
+  it.each([
+    [
+      'the error code the API named',
+      { error: 'last_public_key', message: 'Keep one.' },
+      'last_public_key',
+    ],
+    ['no code when the body names none', { message: 'No code.' }, null],
+    ['no code when the error is not a string', { error: 409 }, null],
+    ['no code when the body is not an object', 'refused', null],
+  ])('keeps %s', async (_, body, code) => {
+    answer(409, body);
+
+    await expect(
+      new ApiWriter(
+        API,
+        () => Promise.resolve('token'),
+        () => undefined,
+      ).put(PATH, {}, schema),
+    ).rejects.toMatchObject({ status: 409, code });
+  });
+
+  it('keeps no code when the refusal has no JSON body', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>(() => Promise.resolve(new Response('<html>', { status: 502 }))),
+    );
+
+    await expect(
+      new ApiWriter(
+        API,
+        () => Promise.resolve('token'),
+        () => undefined,
+      ).put(PATH, {}, schema),
+    ).rejects.toMatchObject({ status: 502, code: null });
+  });
+
+  it('patches a JSON body and logs a key route of a project as a template', async () => {
+    const fetchMock = answer(200, { weekly_digest: true });
+    const lines: string[] = [];
+
+    await new ApiWriter(
+      API,
+      () => Promise.resolve('token'),
+      (line) => {
+        lines.push(line);
+      },
+    ).patch('/v1/projects/6f1d3c2a-8b4e/keys/9a8b7c6d', { name: 'Shop' }, schema);
+
+    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
+      method: 'PATCH',
+      body: '{"name":"Shop"}',
+    });
+    expect(JSON.parse(lines[0] ?? '{}')).toMatchObject({
+      path: '/v1/projects/:projectId/keys/:keyId',
+    });
+  });
+
   it('reads the session cookie of the request when built by the factory', async () => {
     cookieStore.value = 'from-the-request';
     vi.spyOn(console, 'info').mockImplementation(() => undefined);

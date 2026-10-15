@@ -30,6 +30,7 @@ export class ApiRequestError extends Error {
   constructor(
     readonly path: string,
     readonly status: number,
+    readonly code: string | null = null,
   ) {
     super(`The Pyxis API answered ${String(status)} to ${path}.`);
     this.name = 'ApiRequestError';
