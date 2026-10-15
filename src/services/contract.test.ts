@@ -33,6 +33,8 @@ import {
   demoCreatedAccessTokenWire,
 } from './access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
+import { projectChangesWire, projectDeletionWire } from '@/domain/project-management.schema';
+import { MockProjectManagementService } from './project-management/mock-project-management-service';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -297,6 +299,28 @@ describe('the API contract copied from pyxis-api', () => {
     expect(created(demoCreatedAccessTokenWire(request, NOW)), JSON.stringify(created.errors)).toBe(
       true,
     );
+  });
+
+  it('accepts the changes, keys and deletions the owner sends, and the keys the demo creates', async () => {
+    const changes = contractSchema('ProjectChanges');
+    const deletion = contractSchema('ProjectDeletion');
+    const newKey = contractSchema('NewProjectKey');
+    const createdKey = contractSchema('CreatedProjectKey');
+    const service = new MockProjectManagementService();
+    const body = projectChangesWire({
+      name: 'Shop',
+      allowedOrigins: ['https://shop.example.com'],
+      timezone: 'America/Sao_Paulo',
+      conversionEvent: null,
+    });
+
+    expect(changes(body), JSON.stringify(changes.errors)).toBe(true);
+    expect(deletion(projectDeletionWire('Shop')), JSON.stringify(deletion.errors)).toBe(true);
+    for (const kind of ['public', 'secret'] as const) {
+      const outcome = await service.createKey(DEMO_STORE.id, kind);
+      expect(newKey({ kind }), JSON.stringify(newKey.errors)).toBe(true);
+      expect(outcome.kind === 'created' && createdKey(outcome.key)).toBe(true);
+    }
   });
 
   it('accepts the bodies the sign-in form sends, and the answer it keeps a token from', async () => {

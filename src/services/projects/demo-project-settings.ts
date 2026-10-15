@@ -12,8 +12,15 @@ const KEY_LENGTH = 32;
 const STORE_ORIGINS = ['https://store.example.com', 'https://www.store.example.com'];
 const DOCS_ORIGINS = ['https://docs.example.com'];
 
+const PUBLIC_KEY_ID_SUFFIX = 'a1';
+const SECRET_KEY_ID_SUFFIX = 'b2';
+
 function demoKeyId(project: DemoProject, suffix: string): string {
   return `${project.id.slice(0, -suffix.length)}${suffix}`;
+}
+
+export function demoPublicKeyId(projectId: string): string {
+  return demoKeyId(demoProjectOf(projectId), PUBLIC_KEY_ID_SUFFIX);
 }
 
 export function demoProjectSettingsWire(projectId: string, now: Date) {
@@ -32,11 +39,13 @@ export function demoProjectSettingsWire(projectId: string, now: Date) {
     event_retention_months: DEMO_EVENT_RETENTION_MONTHS,
     public_keys: [
       {
-        id: demoKeyId(project, 'a1'),
+        id: demoKeyId(project, PUBLIC_KEY_ID_SUFFIX),
         key: `${PUBLIC_KEY_PREFIX}${project.id.replaceAll('-', '').slice(0, KEY_LENGTH)}`,
         created_at: DEMO_CREATED_AT,
       },
     ],
-    secret_keys: [{ id: demoKeyId(project, 'b2'), created_at: DEMO_SECRET_KEY_CREATED_AT }],
+    secret_keys: [
+      { id: demoKeyId(project, SECRET_KEY_ID_SUFFIX), created_at: DEMO_SECRET_KEY_CREATED_AT },
+    ],
   };
 }
