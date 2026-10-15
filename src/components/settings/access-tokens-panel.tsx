@@ -3,14 +3,14 @@ import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { type AccessToken, canCreateAccessToken } from '@/domain/access-tokens';
 import type { I18n } from '@/i18n/i18n';
 import { type CreateAccessToken, CreateAccessTokenForm } from './create-access-token-form';
-import { type RevokeAccessToken, RevokeAccessTokenButton } from './revoke-access-token-button';
+import { type Revoke, RevokeButton } from './revoke-button';
 
 export interface AccessTokensPanelProps {
   readonly tokens: readonly AccessToken[];
   readonly i18n: I18n;
   readonly when: (iso: string) => string;
   readonly create: CreateAccessToken;
-  readonly revoke: RevokeAccessToken;
+  readonly revoke: Revoke;
 }
 
 const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
@@ -36,7 +36,7 @@ interface TokenRowProps {
   readonly token: AccessToken;
   readonly i18n: I18n;
   readonly when: (iso: string) => string;
-  readonly revoke: RevokeAccessToken;
+  readonly revoke: Revoke;
 }
 
 export function accessTokenNameId(tokenId: string): string {
@@ -65,7 +65,7 @@ function TokenRow({ token, i18n, when, revoke }: TokenRowProps) {
           <Detail term={i18n.t('accessTokens.expires')} value={when(token.expiresAt)} />
         </dl>
       </div>
-      <RevokeAccessTokenButton tokenId={token.id} describedBy={nameId} revoke={revoke} />
+      <RevokeButton id={token.id} describedBy={nameId} revoke={revoke} texts="accessTokens" />
     </li>
   );
 }

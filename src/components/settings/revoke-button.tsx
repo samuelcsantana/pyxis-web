@@ -7,21 +7,19 @@ import { defer, type Subscription, tap } from 'rxjs';
 import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
 
-export type RevokeAccessToken = (tokenId: string) => Promise<void>;
+export type Revoke = (id: string) => Promise<void>;
+export type RevokeTexts = 'accessTokens';
 
-export interface RevokeAccessTokenButtonProps {
-  readonly tokenId: string;
+export interface RevokeButtonProps {
+  readonly id: string;
   readonly describedBy: string;
-  readonly revoke: RevokeAccessToken;
+  readonly revoke: Revoke;
+  readonly texts: RevokeTexts;
 }
 
-export const REVOKE_ACCESS_TOKEN_MIN_BUSY_MS = 400;
+export const REVOKE_MIN_BUSY_MS = 400;
 
-export function RevokeAccessTokenButton({
-  tokenId,
-  describedBy,
-  revoke,
-}: RevokeAccessTokenButtonProps) {
+export function RevokeButton({ id, describedBy, revoke, texts }: RevokeButtonProps) {
   const t = useT();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -34,14 +32,14 @@ export function RevokeAccessTokenButton({
   const revokeThis = () => {
     request.current?.unsubscribe();
     setError(null);
-    request.current = defer(() => revoke(tokenId))
+    request.current = defer(() => revoke(id))
       .pipe(
         tap(() => {
           setRevoked(true);
           router.refresh();
         }),
         catchToState(setError),
-        withSmoothLoading(setBusy, REVOKE_ACCESS_TOKEN_MIN_BUSY_MS),
+        withSmoothLoading(setBusy, REVOKE_MIN_BUSY_MS),
       )
       .subscribe();
   };
@@ -49,7 +47,7 @@ export function RevokeAccessTokenButton({
   if (revoked) {
     return (
       <p role="status" className="text-xs font-medium text-ok">
-        {t('accessTokens.revoked')}
+        {t(`${texts}.revoked`)}
       </p>
     );
   }
@@ -63,11 +61,11 @@ export function RevokeAccessTokenButton({
         aria-describedby={describedBy}
         className={`flex min-h-9 items-center rounded-input px-3 text-sm ${BUTTON_SECONDARY} ${CONTROL_BUSY}`}
       >
-        {busy ? t('accessTokens.revoking') : t('accessTokens.revoke')}
+        {busy ? t(`${texts}.revoking`) : t(`${texts}.revoke`)}
       </button>
       {error === null ? null : (
         <p role="alert" className="text-xs text-bad">
-          {t('accessTokens.revokeFailed')}
+          {t(`${texts}.revokeFailed`)}
         </p>
       )}
     </div>

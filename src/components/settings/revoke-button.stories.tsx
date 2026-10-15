@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import type { ReactNode } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import { DEMO_ACCESS_TOKEN_IDS } from '@/services/access-tokens/mock-access-tokens-service';
-import { RevokeAccessTokenButton } from './revoke-access-token-button';
+import { RevokeButton } from './revoke-button';
 
 const SLOW_REVOKE_MS = 60_000;
 const NAME_ID = 'story-token-name';
@@ -18,10 +18,15 @@ const revokeSlowly = () =>
 const failToRevoke = () => Promise.reject(new Error('Pyxis API answered 503'));
 
 const meta = {
-  title: 'Settings/Revoke access token button',
-  component: RevokeAccessTokenButton,
+  title: 'Settings/Revoke button',
+  component: RevokeButton,
   tags: ['autodocs'],
-  args: { tokenId: DEMO_ACCESS_TOKEN_IDS.agent, describedBy: NAME_ID, revoke: revokeRightAway },
+  args: {
+    id: DEMO_ACCESS_TOKEN_IDS.agent,
+    describedBy: NAME_ID,
+    revoke: revokeRightAway,
+    texts: 'accessTokens',
+  },
   decorators: [
     (Story: () => ReactNode) => (
       <div className="flex items-center justify-between gap-4">
@@ -31,7 +36,7 @@ const meta = {
     ),
   ],
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
-} satisfies Meta<typeof RevokeAccessTokenButton>;
+} satisfies Meta<typeof RevokeButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
