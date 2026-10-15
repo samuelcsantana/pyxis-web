@@ -6,21 +6,20 @@ import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { BUTTON_DANGER, CONTROL_BUSY, FIELD } from '@/components/ui/control-classes';
 import type { CloseAccountOutcome } from '@/domain/accounts';
-import { useLocale, useT } from '@/i18n/messages-provider';
+import { useT } from '@/i18n/messages-provider';
 
 export type CloseAccount = (confirmEmail: string) => Promise<CloseAccountOutcome>;
+export type AccountClosed = Extract<CloseAccountOutcome, { readonly kind: 'closed' }>;
 
 export interface CloseAccountFormProps {
   readonly close: CloseAccount;
+  readonly onClosed: (closed: AccountClosed) => void;
 }
 
 type Refusal = 'confirmationMismatch' | 'alreadyEnded' | 'unavailable' | 'failed';
-type Closed = Extract<CloseAccountOutcome, { readonly kind: 'closed' }>;
 
 export const CLOSE_ACCOUNT_MIN_BUSY_MS = 400;
 
-const CENTAVOS_PER_REAL = 100;
-const CURRENCY = 'BRL';
 const INPUT = `min-h-11 w-full rounded-input px-3 text-base sm:text-sm ${FIELD}`;
 const REFUSALS = {
   confirmationMismatch: 'closeAccount.confirmationMismatch',
@@ -29,38 +28,19 @@ const REFUSALS = {
   failed: 'closeAccount.failed',
 } as const satisfies Record<Refusal, string>;
 
-export function CloseAccountForm({ close }: CloseAccountFormProps) {
+export function CloseAccountForm({ close, onClosed }: CloseAccountFormProps) {
   const t = useT();
-  const locale = useLocale();
   const router = useRouter();
   const ids = useId();
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
   const [refusal, setRefusal] = useState<Refusal | null>(null);
-  const [closed, setClosed] = useState<Closed | null>(null);
   const request = useRef<Subscription | undefined>(undefined);
 
   useEffect(() => () => request.current?.unsubscribe(), []);
 
   const fieldId = `${ids}-email`;
   const errorId = `${ids}-error`;
-
-  if (closed !== null) {
-    const day = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' });
-    const money = new Intl.NumberFormat(locale, { style: 'currency', currency: CURRENCY });
-    return (
-      <div role="status" className="flex flex-col gap-1 text-sm font-medium">
-        <p>{t('closeAccount.closed', { date: day.format(new Date(closed.deletionOn)) })}</p>
-        {closed.refundedAmount > 0 ? (
-          <p>
-            {t('closeAccount.refunded', {
-              amount: money.format(closed.refundedAmount / CENTAVOS_PER_REAL),
-            })}
-          </p>
-        ) : null}
-      </div>
-    );
-  }
 
   const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,7 +53,7 @@ export function CloseAccountForm({ close }: CloseAccountFormProps) {
             setRefusal(outcome.kind);
             return;
           }
-          setClosed(outcome);
+          onClosed(outcome);
           router.refresh();
         }),
         catchToState(() => {

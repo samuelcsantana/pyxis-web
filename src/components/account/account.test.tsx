@@ -11,6 +11,7 @@ import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { AccountNoticeBanner } from './account-notice-banner';
 import { AccountOverview } from './account-overview';
 import * as billing from './billing-actions';
+import { CLOSE_ACCOUNT_MIN_BUSY_MS } from './close-account-form';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ refresh: vi.fn() }),
@@ -129,6 +130,39 @@ describe('AccountOverview', () => {
 
     overview({ status: 'ended', accessEndsAt: '2026-11-10T00:00:00.000Z' });
     expect(screen.queryByRole('heading', { name: 'Close the account' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the closing confirmation when the refreshed page shows the account ended', async () => {
+    vi.useFakeTimers();
+    const closed: CloseAccountOutcome = {
+      kind: 'closed',
+      accessEndsAt: '2026-11-20T12:00:00.000Z',
+      deletionOn: '2026-12-20T12:00:00.000Z',
+      refundedAmount: 3900,
+    };
+    const props = { i18n: english, now: NOW, ...OPEN, close: () => Promise.resolve(closed) };
+    const view = renderWithMessages(<AccountOverview account={ACCOUNT} {...props} />);
+
+    fireEvent.change(screen.getByRole('textbox', { name: 'Type your e-mail address to confirm' }), {
+      target: { value: 'owner@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Close the account for good' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(CLOSE_ACCOUNT_MIN_BUSY_MS);
+    });
+    view.rerender(
+      <AccountOverview
+        account={{ ...ACCOUNT, status: 'ended', accessEndsAt: closed.accessEndsAt }}
+        {...props}
+      />,
+    );
+    vi.useRealTimers();
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'The account is closed. Everything is deleted on December 20, 2026.',
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('R$39.00 were refunded to your card.');
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
   it('says nothing about a pause already over', () => {
