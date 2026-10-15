@@ -50,7 +50,10 @@ describe('legal text', () => {
       '| Item | Limite |\n|---|---|\n| Sites | até 3 |\n\n7. sete\n8. oito\n\n[Anexo 2](/privacidade)',
     );
 
-    expect(html).toContain('<table>');
+    expect(html).toContain(
+      '<div class="legal-table" role="region" aria-label="Tabela" tabindex="0"><table>',
+    );
+    expect(html).toContain('</table></div>');
     expect(html).toContain('<td>até 3</td>');
     expect(html).toContain('<ol start="7">');
     expect(html).toContain('<a href="/privacidade">Anexo 2</a>');

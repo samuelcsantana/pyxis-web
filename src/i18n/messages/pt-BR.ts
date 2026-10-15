@@ -1612,4 +1612,11 @@ export const ptBR = translation({
       madeBy: 'Feito por Samuel Santana · Licença MIT',
     },
   },
+  legal: {
+    documentsLabel: 'Documentos do contrato',
+    terms: 'Termos de Uso',
+    privacy: 'Política de Privacidade',
+    agreement: 'Acordo de Tratamento de Dados',
+    metaDescription: '{document} do Pyxis hospedado, versão {version}.',
+  },
 });

@@ -55,6 +55,22 @@ describe('sitemap', () => {
     ]);
   });
 
+  it('adds the contract documents once the seller is configured', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    vi.stubEnv('SELLER_NAME', 'Ana Exemplo');
+    vi.stubEnv('SELLER_TAX_ID', '000.000.000-00');
+    vi.stubEnv('SELLER_ADDRESS', 'Rua das Flores, 10, Cidade/UF');
+    request.host = 'pyxis-analytics.dev';
+
+    const urls = (await sitemap()).map((entry) => entry.url);
+
+    expect(urls.slice(3)).toEqual([
+      'https://pyxis-analytics.dev/termos',
+      'https://pyxis-analytics.dev/privacidade',
+      'https://pyxis-analytics.dev/acordo-de-tratamento',
+    ]);
+  });
+
   it('lists nothing for a dashboard with a real API, which stays out of search', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     request.host = 'pyxis-analytics.dev';

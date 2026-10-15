@@ -1619,4 +1619,11 @@ export const es = translation({
       madeBy: 'Hecho por Samuel Santana · Licencia MIT',
     },
   },
+  legal: {
+    documentsLabel: 'Documentos del contrato',
+    terms: 'Términos de Uso',
+    privacy: 'Política de Privacidad',
+    agreement: 'Acuerdo de Tratamiento de Datos',
+    metaDescription: '{document} de Pyxis alojado, versión {version}.',
+  },
 });
