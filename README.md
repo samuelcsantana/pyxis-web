@@ -271,6 +271,12 @@ Shipping now:
   full), when each live secret key was created (never the key, which the API keeps only as a
   hash), how many months events are kept, and whether the project still waits for its first
   event
+- A first project for the owner of a hosted account: "Create your first project" on the empty
+  home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
+  browser's time zone, an optional conversion event; the plan's three projects). The new project
+  opens on `/[projectId]/install`: the npm and plain-HTML snippets with its public key and the
+  API's address, each with a copy button, then "Waiting for the first event…", checked again
+  every few seconds until it arrives and the dashboard opens
 - An Account and billing page (`/account`, from the account menu) for the owner of a hosted
   account: the plan and its state (free trial, active, payment failed, ending, ended with the
   deletion date, sign-up not finished), the events measured this month against the quota, the
@@ -408,6 +414,8 @@ origin the sign-in and sign-out calls carry.
 | `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
 | `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                                                                        |
 | `/[projectId]/exports/[exportId]`                | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
+| `/new-project`                                   | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
+| `/[projectId]/install`                           | The tracker's snippets with the project's key, and the wait for its first event                                                                                                                                                                                                              |
 | `/account`                                       | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
 | `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                                                              |
 | `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                                                              |
