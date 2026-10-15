@@ -15,6 +15,13 @@ type Story = StoryObj<typeof meta>;
 
 export const PaymentFailed: Story = {};
 
+export const Suspended: Story = { args: { notice: { kind: 'suspended' } } };
+
+export const SuspendedInPortuguese: Story = {
+  args: { notice: { kind: 'suspended' } },
+  globals: { locale: 'pt-BR' },
+};
+
 export const Ending: Story = {
   args: { notice: { kind: 'ending', accessEndsAt: '2026-12-01T00:00:00.000Z' } },
 };

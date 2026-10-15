@@ -330,6 +330,8 @@ export const ptBR = translation({
     paused: 'A medição está pausada até {date}: a conta usou 150% dos eventos do mês.',
     limits: 'Até {projects} projetos e {people} pessoas, contando com você.',
     notice: {
+      suspended: 'Esta conta está suspensa, então os projetos dela pararam de medir.',
+      why: 'Ver o motivo',
       paymentFailed: 'A última cobrança falhou. Atualize o cartão para continuar medindo.',
       ending: 'Sua assinatura termina em {date}.',
       ended: 'Sua assinatura terminou. Tudo é apagado em {date}.',

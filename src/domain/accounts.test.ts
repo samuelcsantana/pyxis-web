@@ -6,6 +6,8 @@ import {
   deletionDateOf,
   firstNotice,
   hasBillingPortal,
+  isDeletionHeld,
+  isSuspended,
   needsCheckout,
   ownedAccounts,
   quotaShare,
@@ -30,6 +32,9 @@ const ACCOUNT: Account = {
   currentPeriodEndsAt: '2026-12-01T00:00:00.000Z',
   accessEndsAt: null,
   ingestionPausedUntil: null,
+  suspendedAt: null,
+  suspensionReason: null,
+  deletionHeldAt: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -71,6 +76,22 @@ describe('accountNotice', () => {
   it('says nothing for a running account well under its quota', () => {
     expect(accountNotice(ACCOUNT, NOW)).toBeNull();
     expect(accountNotice({ ...ACCOUNT, eventsThisMonth: null }, NOW)).toBeNull();
+  });
+
+  it('says a suspended account is suspended before anything else', () => {
+    expect(
+      accountNotice(
+        { ...ACCOUNT, status: 'past_due', suspendedAt: '2026-11-19T10:00:00.000Z' },
+        NOW,
+      ),
+    ).toEqual({ kind: 'suspended' });
+  });
+
+  it('tells a suspension and a held deletion apart', () => {
+    expect(isSuspended(ACCOUNT)).toBe(false);
+    expect(isSuspended({ ...ACCOUNT, suspendedAt: '2026-11-19T10:00:00.000Z' })).toBe(true);
+    expect(isDeletionHeld(ACCOUNT)).toBe(false);
+    expect(isDeletionHeld({ ...ACCOUNT, deletionHeldAt: '2026-11-19T10:00:00.000Z' })).toBe(true);
   });
 
   it('warns about a failed payment first', () => {
@@ -150,6 +171,37 @@ describe('accounts on the wire', () => {
         ],
       }),
     ).toEqual([ACCOUNT]);
+  });
+
+  it('reads the suspension and the held deletion when the API sends them', () => {
+    const [account] = myAccountsResponseSchema.parse({
+      accounts: [
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'active',
+          billing_interval: 'month',
+          trial_ends_at: null,
+          current_period_ends_at: '2026-12-01T00:00:00.000Z',
+          access_ends_at: null,
+          ingestion_paused_until: null,
+          suspended_at: '2026-11-19T10:00:00.000Z',
+          suspension_reason: 'Events carried e-mail addresses.',
+          deletion_held_at: '2026-11-19T10:05:00.000Z',
+          month: '2026-11',
+          events_this_month: 10_000,
+          measured_at: '2026-11-20T03:00:00.000Z',
+          limits: { events_per_month: 100_000, projects: 3, people: 3 },
+        },
+      ],
+    });
+
+    expect(account).toEqual({
+      ...ACCOUNT,
+      suspendedAt: '2026-11-19T10:00:00.000Z',
+      suspensionReason: 'Events carried e-mail addresses.',
+      deletionHeldAt: '2026-11-19T10:05:00.000Z',
+    });
   });
 
   it('reads the address Stripe gives and writes the requests', () => {

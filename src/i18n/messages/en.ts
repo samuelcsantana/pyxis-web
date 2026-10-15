@@ -320,6 +320,8 @@ export const en = {
     paused: 'Measuring is paused until {date}: the account used 150% of its monthly events.',
     limits: 'Up to {projects} projects and {people} people, you included.',
     notice: {
+      suspended: 'This account is suspended, so its projects stopped measuring.',
+      why: 'See why',
       paymentFailed: 'The last charge failed. Update the card to keep measuring.',
       ending: 'Your subscription ends on {date}.',
       ended: 'Your subscription ended. Everything is deleted on {date}.',
