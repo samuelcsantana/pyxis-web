@@ -23,6 +23,7 @@ export const en = {
     closeMenu: 'Close menu',
     section: 'Analytics',
     switchProject: 'Switch project. Current project:',
+    newProject: 'New project',
     signOut: 'Sign out',
     signOutEverywhere: 'Sign out everywhere',
     signingOut: 'Signing out…',
@@ -129,6 +130,8 @@ export const en = {
     noProjects: {
       title: 'No projects yet',
       body: '<email/> can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your email.',
+      create: 'Create your first project',
+      bodyOwner: 'Your account is ready. Create a project for your site, then install the tracker.',
     },
   },
   demo: {
@@ -378,6 +381,53 @@ export const en = {
     unavailable:
       'Stripe could not cancel the subscription, so nothing was closed. Try again later.',
     failed: 'The account was not closed. Try again.',
+  },
+  newProject: {
+    title: 'New project',
+    intro:
+      'A project measures one site. Its address becomes the only origin allowed to send events; you can add others later in Settings.',
+    name: 'Project name',
+    namePlaceholder: 'My shop',
+    site: 'Site address',
+    sitePlaceholder: 'https://shop.example.com',
+    timezone: 'Time zone',
+    conversionEvent: 'Conversion event (optional)',
+    conversionEventPlaceholder: 'signup_completed',
+    create: 'Create project',
+    creating: 'Creating…',
+    nameMissing: 'Give the project a name.',
+    nameTooLong: 'Use at most {max} characters.',
+    siteMissing: 'Write the address of the site.',
+    siteInvalid: 'Write the address as scheme and host, like https://shop.example.com.',
+    timezoneInvalid: 'Choose a time zone from the list.',
+    conversionEventInvalid:
+      'Use lower-case letters, digits and underscores, starting with a letter.',
+    limitReached:
+      'The account already has its {max} projects. Delete one in its Settings to create another.',
+    subscriptionRequired: 'This account has no running subscription, so it cannot create projects.',
+    invalid: 'These settings were refused. Check the fields and try again.',
+    failed: 'The project was not created. Try again.',
+    noAccount: 'Only the owner of an account with a running subscription creates projects.',
+    back: 'Back to the dashboard',
+  },
+  install: {
+    title: 'Install',
+    subtitle: 'Send the first events of {project}.',
+    step1: '1. Add the tracker to your site',
+    npm: 'With a bundler (npm):',
+    script: 'Or in plain HTML, before the closing body tag:',
+    step2: '2. Open a page of your site',
+    step2Note:
+      'Page views from {origin} show up here within a minute. Ad blockers can stop them; try a private window.',
+    waiting: 'Waiting for the first event…',
+    waitingNote: 'This page checks again every few seconds.',
+    received: 'The first event arrived.',
+    open: 'Open the dashboard',
+    copy: 'Copy',
+    copied: 'Copied',
+    selected: 'Selected, press Ctrl+C',
+    privacy:
+      'Pyxis stores no cookie on your visitors, no IP address and no personal data. Say in your privacy policy that the site measures its use with Pyxis.',
   },
   emailPreferences: {
     heading: 'E-mail',

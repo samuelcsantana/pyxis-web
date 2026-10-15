@@ -172,6 +172,22 @@ describe('ProjectSwitcher', () => {
     );
   });
 
+  it('offers a new project only to the owner of an account that can create one', () => {
+    const { unmount } = renderWithMessages(
+      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
+    );
+    expect(screen.queryByRole('link', { name: 'New project' })).not.toBeInTheDocument();
+    unmount();
+
+    renderWithMessages(
+      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} canCreateProject />,
+    );
+    expect(screen.getByRole('link', { name: 'New project' })).toHaveAttribute(
+      'href',
+      '/new-project',
+    );
+  });
+
   it('marks the current project with a check and the current-item background, not by weight alone', () => {
     renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 

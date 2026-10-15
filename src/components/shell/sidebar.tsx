@@ -14,11 +14,19 @@ export interface SidebarProps {
   readonly theme?: Theme;
   readonly i18n: I18n;
   readonly chooseLocale: (form: FormData) => Promise<void>;
+  readonly canCreateProject?: boolean;
 }
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
 
-export function Sidebar({ admin, project, theme, i18n, chooseLocale }: SidebarProps) {
+export function Sidebar({
+  admin,
+  project,
+  theme,
+  i18n,
+  chooseLocale,
+  canCreateProject = false,
+}: SidebarProps) {
   return (
     <div className="flex min-h-full grow flex-col gap-4 bg-nav px-3.5 pt-4 pb-4 text-nav-text lg:gap-3">
       <div className="hidden lg:flex">
@@ -30,7 +38,11 @@ export function Sidebar({ admin, project, theme, i18n, chooseLocale }: SidebarPr
           <span className="text-xl font-bold tracking-tight">Pyxis</span>
         </Link>
       </div>
-      <ProjectSwitcher projects={admin.projects} currentProject={project} />
+      <ProjectSwitcher
+        projects={admin.projects}
+        currentProject={project}
+        canCreateProject={canCreateProject}
+      />
       <SidebarNav projectId={project.id} />
       <div className="mt-auto flex flex-col gap-3 border-t border-nav-line pt-3">
         <p className="flex items-center gap-2 rounded-input bg-nav-raised px-2.5 py-2 text-xs text-nav-text">

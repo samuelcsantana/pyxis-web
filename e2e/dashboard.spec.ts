@@ -176,7 +176,8 @@ test('closes the project switcher when the focus moves past it, leaving that foc
 
   await switcher.locator('summary').click();
   await expect(switcher).toHaveAttribute('open');
-  for (let press = 0; press < 3; press += 1) {
+  const itemsInside = await switcher.getByRole('link').count();
+  for (let press = 0; press <= itemsInside; press += 1) {
     await page.keyboard.press('Tab');
   }
 
