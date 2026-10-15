@@ -23,7 +23,16 @@ describe('HttpProjectsService', () => {
         new Response(
           JSON.stringify({
             email: 'ana@example.com',
-            projects: [{ id: 'p1', name: 'Shop', timezone: 'UTC', conversion_event: null }],
+            projects: [
+              {
+                id: 'p1',
+                name: 'Shop',
+                timezone: 'UTC',
+                conversion_event: null,
+                ingestion_suspended_at: null,
+                ingestion_suspension_reason: null,
+              },
+            ],
           }),
         ),
       ),
@@ -112,6 +121,7 @@ describe('HttpProjectsService', () => {
               { id: 'k1', key: 'pyxis_pk_abc', created_at: '2026-10-01T00:00:00.000Z' },
             ],
             secret_keys: [{ id: 'k2', created_at: '2026-10-02T00:00:00.000Z' }],
+            deletion_held_at: null,
           }),
         ),
       ),

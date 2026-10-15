@@ -16,6 +16,8 @@ const WIRE = {
       name: 'Demo Store',
       timezone: 'America/Sao_Paulo',
       conversion_event: 'signup_completed',
+      ingestion_suspended_at: null,
+      ingestion_suspension_reason: null,
     },
   ],
 };

@@ -184,6 +184,7 @@ describe('accounts on the wire', () => {
             suspended_at: null,
             suspension_reason: null,
             deletion_held_at: null,
+            quota_pause_exempt_until: null,
             month: '2026-11',
             events_this_month: 10_000,
             measured_at: '2026-11-20T03:00:00.000Z',
