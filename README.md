@@ -260,7 +260,11 @@ Shipping now:
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
   project with its name typed again. The People panel lists who opens the project; the owner
   adds an address (the person gets an invitation e-mail in the language of the page, and the
-  account has room for three people, the owner included) and removes anyone but the owner.
+  account has room for three people, the owner included) and removes anyone but the owner. The
+  owner also asks for an export of every event the project keeps: the API prepares a compressed
+  CSV in a few minutes and e-mails a link to the export's page
+  (`/[projectId]/exports/[exportId]`), which checks again on its own while the file is being
+  prepared and downloads through a route that asks the API for a fresh five-minute link each time.
   Someone the owner added sees the same settings read-only,
   and the operator's own projects (no account) still change through the API's command line.
   Read-only for everyone: the live public keys (a public key ships in the site, so it is shown in
@@ -273,7 +277,10 @@ Shipping now:
   limits, and a button to Stripe: "Finish subscription" with a monthly or yearly plan, or
   "Manage billing" for the customer portal. The dashboard warns, under the demo banner's place,
   when an owned account's payment failed, its access ends or ended, measuring is paused, or the
-  month reached 80% of its events; reading the accounts for that warning never blocks a page
+  month reached 80% of its events; reading the accounts for that warning never blocks a page.
+  The same page closes an account at once, with the owner's address typed again: the
+  subscription is cancelled, the keys are revoked, a first payment of the last seven days is
+  refunded, and the page says when everything is deleted
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
@@ -400,6 +407,7 @@ origin the sign-in and sign-out calls carry.
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
 | `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                                                                        |
+| `/[projectId]/exports/[exportId]`                | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
 | `/account`                                       | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
 | `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                                                              |
 | `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                                                              |
