@@ -53,6 +53,17 @@ export type RevokeProjectKeyOutcome =
   | { readonly kind: 'lastPublicKey' }
   | { readonly kind: 'subscriptionRequired' };
 
+export interface CreatedProject {
+  readonly projectId: string;
+  readonly publicKey: string;
+}
+
+export type CreateProjectOutcome =
+  | { readonly kind: 'created'; readonly project: CreatedProject }
+  | { readonly kind: 'limitReached' }
+  | { readonly kind: 'subscriptionRequired' }
+  | { readonly kind: 'invalid' };
+
 export type DeleteProjectOutcome = { readonly kind: 'deleted' } | { readonly kind: 'nameMismatch' };
 
 export function originOf(input: string): string | null {

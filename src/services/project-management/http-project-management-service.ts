@@ -1,6 +1,7 @@
 import { ApiNotFoundError, ApiRequestError } from '@/domain/errors';
 import type {
   CreateProjectKeyOutcome,
+  CreateProjectOutcome,
   DeleteProjectOutcome,
   ProjectChanges,
   ProjectKeyKind,
@@ -9,6 +10,8 @@ import type {
 } from '@/domain/project-management';
 import {
   createdProjectKeyResponseSchema,
+  createdProjectResponseSchema,
+  newProjectWire,
   deletedProjectResponseSchema,
   managedProjectResponseSchema,
   projectChangesWire,
@@ -23,6 +26,7 @@ export const API_ERROR_CODES = {
   keyLimitReached: 'key_limit_reached',
   lastPublicKey: 'last_public_key',
   nameMismatch: 'project_name_mismatch',
+  projectLimitReached: 'project_limit_reached',
 } as const;
 
 function projectPath(projectId: string): string {
@@ -35,6 +39,28 @@ function refusedWith(error: unknown, code: string): boolean {
 
 export class HttpProjectManagementService implements IProjectManagementService {
   constructor(private readonly writer: ApiWriter) {}
+
+  async create(accountId: string, changes: ProjectChanges): Promise<CreateProjectOutcome> {
+    try {
+      const project = await this.writer.post(
+        `/v1/accounts/${encodeURIComponent(accountId)}/projects`,
+        newProjectWire(changes),
+        createdProjectResponseSchema,
+      );
+      return { kind: 'created', project };
+    } catch (error) {
+      if (refusedWith(error, API_ERROR_CODES.projectLimitReached)) {
+        return { kind: 'limitReached' };
+      }
+      if (refusedWith(error, API_ERROR_CODES.subscriptionRequired)) {
+        return { kind: 'subscriptionRequired' };
+      }
+      if (refusedWith(error, API_ERROR_CODES.invalidSettings)) {
+        return { kind: 'invalid' };
+      }
+      throw error;
+    }
+  }
 
   async update(projectId: string, changes: ProjectChanges): Promise<SaveProjectOutcome> {
     try {

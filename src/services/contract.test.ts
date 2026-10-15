@@ -33,7 +33,11 @@ import {
   demoCreatedAccessTokenWire,
 } from './access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
-import { projectChangesWire, projectDeletionWire } from '@/domain/project-management.schema';
+import {
+  newProjectWire,
+  projectChangesWire,
+  projectDeletionWire,
+} from '@/domain/project-management.schema';
 import { MockProjectManagementService } from './project-management/mock-project-management-service';
 import { newPersonWire } from '@/domain/project-people.schema';
 import { demoPeopleWire } from './project-people/mock-project-people-service';
@@ -323,6 +327,16 @@ describe('the API contract copied from pyxis-api', () => {
 
     expect(changes(body), JSON.stringify(changes.errors)).toBe(true);
     expect(deletion(projectDeletionWire('Shop')), JSON.stringify(deletion.errors)).toBe(true);
+    const newProject = contractSchema('NewProject');
+    for (const conversionEvent of [null, 'signup_completed']) {
+      const created = newProjectWire({
+        name: 'Shop',
+        allowedOrigins: ['https://shop.example.com'],
+        timezone: 'America/Sao_Paulo',
+        conversionEvent,
+      });
+      expect(newProject(created), JSON.stringify(newProject.errors)).toBe(true);
+    }
     for (const kind of ['public', 'secret'] as const) {
       const outcome = await service.createKey(DEMO_STORE.id, kind);
       expect(newKey({ kind }), JSON.stringify(newKey.errors)).toBe(true);

@@ -29,6 +29,51 @@ function serviceWith(writer: Record<string, unknown>) {
   return new HttpProjectManagementService(writer as unknown as ApiWriter);
 }
 
+describe('HttpProjectManagementService create', () => {
+  it('creates a project in the account, sending the conversion event only when set', async () => {
+    const post = vi.fn<WriteMock>((_path, _body, schema) =>
+      Promise.resolve(
+        (schema as { parse(body: unknown): unknown }).parse({
+          project_id: 'p2',
+          public_key: { id: 'k1', key: 'pyxis_pk_new' },
+        }),
+      ),
+    );
+
+    await expect(serviceWith({ post }).create('a/1', CHANGES)).resolves.toEqual({
+      kind: 'created',
+      project: { projectId: 'p2', publicKey: 'pyxis_pk_new' },
+    });
+    expect(post.mock.calls[0]?.slice(0, 2)).toEqual([
+      '/v1/accounts/a%2F1/projects',
+      {
+        name: 'Shop',
+        allowed_origins: ['https://shop.example.com'],
+        timezone: 'America/Sao_Paulo',
+      },
+    ]);
+    await serviceWith({ post }).create('a1', { ...CHANGES, conversionEvent: 'signup_completed' });
+    expect(post.mock.calls[1]?.[1]).toMatchObject({ conversion_event: 'signup_completed' });
+  });
+
+  it.each([
+    [API_ERROR_CODES.projectLimitReached, 409, 'limitReached'],
+    [API_ERROR_CODES.subscriptionRequired, 409, 'subscriptionRequired'],
+    [API_ERROR_CODES.invalidSettings, 400, 'invalid'],
+  ])('answers the refusal %s as %s', async (code, status, kind) => {
+    const post = vi.fn(() => Promise.reject(refusal(code, status)));
+
+    await expect(serviceWith({ post }).create('a1', CHANGES)).resolves.toEqual({ kind });
+  });
+
+  it('lets any other failure through', async () => {
+    const failure = new UnauthenticatedError();
+    const post = vi.fn(() => Promise.reject(failure));
+
+    await expect(serviceWith({ post }).create('a1', CHANGES)).rejects.toBe(failure);
+  });
+});
+
 describe('HttpProjectManagementService update', () => {
   it('patches the project with the API field names', async () => {
     const patch = vi.fn<WriteMock>(() => Promise.resolve(undefined));
@@ -167,6 +212,13 @@ describe('MockProjectManagementService', () => {
 
   it('saves any change', async () => {
     await expect(service.update()).resolves.toEqual({ kind: 'saved' });
+  });
+
+  it('creates every new project as the demo store, so the demo can follow it', async () => {
+    await expect(service.create()).resolves.toEqual({
+      kind: 'created',
+      project: { projectId: DEMO_STORE.id, publicKey: DEMO_CREATED_KEYS.public },
+    });
   });
 
   it.each(['public', 'secret'] as const)('creates an invented %s key', async (kind) => {
