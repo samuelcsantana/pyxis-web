@@ -9,7 +9,8 @@ import {
 } from '@/domain/accounts';
 import type { I18n } from '@/i18n/i18n';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
-import { type CloseAccount, CloseAccountForm } from './close-account-form';
+import type { CloseAccount } from './close-account-form';
+import { CloseAccountSection } from './close-account-section';
 
 export interface AccountOverviewProps {
   readonly account: Account;
@@ -127,14 +128,7 @@ export function AccountOverview({
       </p>
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
       {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
-      {canClose(account) ? (
-        <div className="flex flex-col gap-2 border-t border-line pt-3">
-          <h3 className="text-sm font-semibold">{i18n.t('closeAccount.heading')}</h3>
-          <p className="text-sm">{i18n.t('closeAccount.note')}</p>
-          <p className={NOTE}>{i18n.t('closeAccount.refundNote')}</p>
-          <CloseAccountForm close={close} />
-        </div>
-      ) : null}
+      <CloseAccountSection open={canClose(account)} close={close} />
     </section>
   );
 }

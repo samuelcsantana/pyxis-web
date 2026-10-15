@@ -40,33 +40,20 @@ describe('CloseAccountForm', () => {
     vi.useRealTimers();
   });
 
-  it('closes with the trimmed address and says when everything is deleted', async () => {
+  it('closes with the trimmed address, hands the closure on and refreshes the page', async () => {
     const close = vi.fn<(email: string) => Promise<CloseAccountOutcome>>(() =>
       Promise.resolve(CLOSED),
     );
-    renderWithMessages(<CloseAccountForm close={close} />);
+    const onClosed = vi.fn();
+    renderWithMessages(<CloseAccountForm close={close} onClosed={onClosed} />);
 
     confirm('  owner@example.com ');
     expect(screen.getByRole('button', { name: 'Closing…' })).toBeDisabled();
     await settle();
 
     expect(close).toHaveBeenCalledWith('owner@example.com');
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'The account is closed. Everything is deleted on December 20, 2026.',
-    );
-    expect(screen.getByRole('status')).not.toHaveTextContent('refunded');
+    expect(onClosed).toHaveBeenCalledWith(CLOSED);
     expect(navigation.router.refresh).toHaveBeenCalledOnce();
-  });
-
-  it('says how much was refunded, in reais', async () => {
-    renderWithMessages(
-      <CloseAccountForm close={() => Promise.resolve({ ...CLOSED, refundedAmount: 3900 })} />,
-    );
-
-    confirm('owner@example.com');
-    await settle();
-
-    expect(screen.getByRole('status')).toHaveTextContent('R$39.00 were refunded to your card.');
   });
 
   it.each([
@@ -74,7 +61,10 @@ describe('CloseAccountForm', () => {
     ['alreadyEnded', 'This account has already ended.'],
     ['unavailable', 'Stripe could not cancel the subscription, so nothing was closed.'],
   ] as const)('explains a %s answer under the field', async (kind, text) => {
-    renderWithMessages(<CloseAccountForm close={() => Promise.resolve({ kind })} />);
+    const onClosed = vi.fn();
+    renderWithMessages(
+      <CloseAccountForm close={() => Promise.resolve({ kind })} onClosed={onClosed} />,
+    );
 
     confirm('someone@example.com');
     await settle();
@@ -83,10 +73,13 @@ describe('CloseAccountForm', () => {
       screen.getByRole('textbox', { name: 'Type your e-mail address to confirm' }),
     ).toHaveAccessibleDescription(expect.stringContaining(text) as string);
     expect(navigation.router.refresh).not.toHaveBeenCalled();
+    expect(onClosed).not.toHaveBeenCalled();
   });
 
   it('says the account was not closed when the call fails, and clears it as the owner types', async () => {
-    renderWithMessages(<CloseAccountForm close={() => Promise.reject(new Error('503'))} />);
+    renderWithMessages(
+      <CloseAccountForm close={() => Promise.reject(new Error('503'))} onClosed={vi.fn()} />,
+    );
 
     confirm('owner@example.com');
     await settle();
