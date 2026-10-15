@@ -296,3 +296,55 @@ test.describe('access tokens', () => {
     await expect(tokens.getByRole('listitem').nth(1)).toContainText('Nunca usado');
   });
 });
+
+test.describe('connected apps', () => {
+  test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
+
+  const CONNECTOR_URL = 'https://api.pyxis-analytics.dev/mcp';
+
+  test('lists the connected apps and copies the address to connect Claude', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/settings`);
+    const apps = page.getByRole('region', { name: 'Connected apps' });
+    const list = apps.getByRole('list', { name: 'Connected apps' });
+    await expect(list.getByRole('listitem')).toHaveCount(2);
+    await expect(list.getByRole('listitem').nth(0)).toContainText('Claude claude.ai');
+    await expect(list.getByRole('listitem').nth(1)).toContainText('Claude Code claude.ai');
+
+    const connect = apps.getByRole('group', { name: 'Connect Pyxis to Claude' });
+    await connect
+      .getByRole('button', { name: 'Copy', description: CONNECTOR_URL, exact: true })
+      .click();
+
+    await expect(
+      connect.getByRole('button', { name: 'Copied', description: CONNECTOR_URL, exact: true }),
+    ).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(CONNECTOR_URL);
+  });
+
+  test('revokes an app from its row', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/settings`);
+    const list = page
+      .getByRole('region', { name: 'Connected apps' })
+      .getByRole('list', { name: 'Connected apps' });
+
+    await list
+      .getByRole('listitem')
+      .filter({ hasText: 'Claude Code' })
+      .getByRole('button', { name: 'Revoke' })
+      .click();
+
+    await expect(list.getByRole('listitem').nth(1).getByRole('status')).toHaveText(
+      'App disconnected',
+    );
+  });
+
+  test('speaks Portuguese', async ({ page, context, baseURL }) => {
+    await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
+
+    await page.goto(`/${STORE_ID}/settings`);
+
+    const apps = page.getByRole('region', { name: 'Aplicativos conectados' });
+    await expect(apps.getByRole('group', { name: 'Conectar o Pyxis ao Claude' })).toBeVisible();
+    await expect(apps.getByRole('button', { name: 'Revogar' })).toHaveCount(2);
+  });
+});

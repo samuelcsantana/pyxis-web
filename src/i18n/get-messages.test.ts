@@ -41,6 +41,7 @@ describe('get-messages', () => {
       'chartPanel',
       'propertyBreakdown',
       'emailPreferences',
+      'connections',
       'sessions',
       'accessTokens',
       'consent',

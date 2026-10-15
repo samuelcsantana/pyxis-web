@@ -54,6 +54,8 @@ const EMAIL = {
   ],
   createAccessToken: () => Promise.resolve({ kind: 'tooMany' } as const),
   revokeAccessToken: () => Promise.resolve(),
+  connectedApps: { connectorUrl: null, connections: [] },
+  revokeConnection: () => Promise.resolve(),
   manage: {
     timezones: ['America/Sao_Paulo', 'UTC'],
     save: () => Promise.resolve({ kind: 'saved' } as const),

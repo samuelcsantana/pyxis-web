@@ -8,7 +8,7 @@ import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes'
 import { useT } from '@/i18n/messages-provider';
 
 export type Revoke = (id: string) => Promise<void>;
-export type RevokeTexts = 'accessTokens';
+export type RevokeTexts = 'accessTokens' | 'connections';
 
 export interface RevokeButtonProps {
   readonly id: string;

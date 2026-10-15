@@ -13,6 +13,7 @@ import {
   type ProjectSettings,
 } from '@/domain/project-settings';
 import type { AccessToken } from '@/domain/access-tokens';
+import type { ConnectedApps } from '@/domain/connections';
 import { EXPORT_FILE_DAYS, MAX_EXPORTS_PER_DAY } from '@/domain/exports';
 import type { ProjectPerson } from '@/domain/project-people';
 import type { EmailPreferences } from '@/domain/email-preferences';
@@ -20,6 +21,7 @@ import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { AccessTokensPanel } from './access-tokens-panel';
+import { ConnectedAppsPanel } from './connected-apps-panel';
 import type { CreateAccessToken } from './create-access-token-form';
 import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-key-button';
 import type { AddPerson } from './add-person-form';
@@ -56,6 +58,8 @@ export interface ProjectSettingsViewProps {
   readonly accessTokens: readonly AccessToken[];
   readonly createAccessToken: CreateAccessToken;
   readonly revokeAccessToken: Revoke;
+  readonly connectedApps: ConnectedApps;
+  readonly revokeConnection: Revoke;
   readonly manage: ProjectManagement;
   readonly people: readonly ProjectPerson[];
   readonly myEmail: string;
@@ -404,6 +408,8 @@ export function ProjectSettingsView({
   accessTokens,
   createAccessToken,
   revokeAccessToken,
+  connectedApps,
+  revokeConnection,
   manage,
   people,
   myEmail,
@@ -432,6 +438,14 @@ export function ProjectSettingsView({
           when={when}
           create={createAccessToken}
           revoke={revokeAccessToken}
+        />
+      </div>
+      <div className="lg:col-span-2">
+        <ConnectedAppsPanel
+          apps={connectedApps}
+          i18n={i18n}
+          when={when}
+          revoke={revokeConnection}
         />
       </div>
       {owner ? (
