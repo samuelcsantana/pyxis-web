@@ -8,6 +8,7 @@ import {
   hasBillingPortal,
   isDeletionHeld,
   needsCheckout,
+  quotaPauseExemptUntil,
   quotaShare,
   SUPPORT_EMAIL,
 } from '@/domain/accounts';
@@ -131,6 +132,7 @@ function UsageMeter({
     new Date(account.ingestionPausedUntil).getTime() > now.getTime()
       ? account.ingestionPausedUntil
       : null;
+  const exemptUntil = quotaPauseExemptUntil(account, now);
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -158,6 +160,11 @@ function UsageMeter({
       {pausedUntil === null ? null : (
         <p className="text-sm font-medium text-bad">
           {i18n.t('account.paused', { date: i18n.format.dayWithYear(new Date(pausedUntil)) })}
+        </p>
+      )}
+      {exemptUntil === null ? null : (
+        <p className={NOTE}>
+          {i18n.t('account.exempt', { date: i18n.format.dayWithYear(new Date(exemptUntil)) })}
         </p>
       )}
     </div>

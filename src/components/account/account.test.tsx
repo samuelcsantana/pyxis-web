@@ -240,6 +240,17 @@ describe('AccountOverview', () => {
     expect(screen.queryByRole('button', { name: 'Subscribe again' })).not.toBeInTheDocument();
   });
 
+  it('says until when measuring is not paused past the limit, while Pyxis exempts the account', () => {
+    const { unmount } = overview({ quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z' });
+    expect(
+      screen.getByText('Measuring is not paused past the monthly limit until Jan 1, 2027.'),
+    ).toBeInTheDocument();
+    unmount();
+
+    overview({ quotaPauseExemptUntil: '2026-11-01T00:00:00.000Z' });
+    expect(screen.queryByText(/not paused past the monthly limit/)).not.toBeInTheDocument();
+  });
+
   it('says nothing about a pause already over', () => {
     overview({ ingestionPausedUntil: '2026-11-01T00:00:00.000Z' });
 

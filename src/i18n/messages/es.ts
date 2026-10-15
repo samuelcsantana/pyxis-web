@@ -353,6 +353,7 @@ export const es = translation({
       'Suscríbete de nuevo antes del {date} para conservar los datos: no hay una nueva prueba gratis, el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
     resubscribeUndated:
       'Suscríbete de nuevo para conservar los datos: no hay una nueva prueba gratis, el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
+    exempt: 'La medición no se pausa después del límite del mes hasta el {date}.',
     notice: {
       suspended: 'Esta cuenta está suspendida, así que sus proyectos dejaron de medir.',
       why: 'Ver el motivo',
