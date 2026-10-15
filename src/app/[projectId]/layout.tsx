@@ -6,6 +6,8 @@ import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
 import { AccountNoticeBanner } from '@/components/account/account-notice-banner';
 import { DemoBanner } from '@/components/states/demo-banner';
+import { IngestionSuspendedBanner } from '@/components/states/ingestion-suspended-banner';
+import { ingestionSuspensionOf } from '@/domain/admin';
 import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
@@ -24,6 +26,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
     getI18n(),
     bestEffortAccountsInView(new Date()),
   ]);
+  const suspension = ingestionSuspensionOf(project);
   return (
     <NavigationPendingProvider>
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
@@ -42,6 +45,9 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
         <NavigationRegion className="flex min-w-0 flex-col">
           {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
           {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
+          {suspension === null ? null : (
+            <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
+          )}
           {children}
         </NavigationRegion>
       </div>

@@ -158,6 +158,31 @@ describe('ProjectLayout', () => {
     expect(screen.getByRole('link', { name: 'Open billing' })).toHaveAttribute('href', '/account');
   });
 
+  it('says a project whose event reception is suspended is not measuring, on every screen', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({
+        ...project,
+        ingestionSuspendedAt: '2026-11-19T10:00:00.000Z',
+        ingestionSuspensionReason: 'Events carried e-mail addresses.',
+      })),
+    };
+
+    renderWithMessages(
+      await ProjectLayout({
+        children: <p>screen</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    expect(screen.getByRole('note')).toHaveTextContent(
+      "Pyxis suspended this project's event reception on Nov 19, 2026",
+    );
+    expect(screen.getByRole('note')).toHaveTextContent('Reason: Events carried e-mail addresses.');
+    expect(screen.getByText('screen')).toBeInTheDocument();
+  });
+
   it('answers not found for a project the admin may not read', async () => {
     await expect(
       ProjectLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),
