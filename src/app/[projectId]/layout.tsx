@@ -4,10 +4,12 @@ import { MobileMenu } from '@/components/shell/mobile-menu';
 import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
+import { AccountNoticeBanner } from '@/components/account/account-notice-banner';
 import { DemoBanner } from '@/components/states/demo-banner';
 import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
+import { bestEffortAccountNotice } from '@/lib/account-notice';
 import { projectOrNotFound } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 
@@ -18,7 +20,7 @@ export interface ProjectLayoutProps {
 
 export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const i18n = await getI18n();
+  const [i18n, notice] = await Promise.all([getI18n(), bestEffortAccountNotice(new Date())]);
   return (
     <NavigationPendingProvider>
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
@@ -35,6 +37,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
         </MobileMenu>
         <NavigationRegion className="flex min-w-0 flex-col">
           {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
+          {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
           {children}
         </NavigationRegion>
       </div>

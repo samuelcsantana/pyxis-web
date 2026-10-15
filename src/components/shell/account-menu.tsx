@@ -1,6 +1,8 @@
+import Link from 'next/link';
+import { ACCOUNT_PAGE } from '@/components/account/account-notice-banner';
 import { LanguageMenu } from '@/components/language/language-menu';
 import { ThemeChoiceGroup } from '@/components/theme/theme-choice';
-import { NAV_CONTROL } from '@/components/ui/control-classes';
+import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
@@ -63,7 +65,13 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
           <span className={GROUP_LABEL}>{i18n.t('theme.label')}</span>
           <ThemeChoiceGroup initialTheme={theme} />
         </div>
-        <div className="border-t border-nav-line pt-2">
+        <div className="flex flex-col gap-1 border-t border-nav-line pt-2">
+          <Link
+            href={ACCOUNT_PAGE}
+            className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
+          >
+            {i18n.t('nav.billing')}
+          </Link>
           <SignOutButton />
         </div>
       </div>
