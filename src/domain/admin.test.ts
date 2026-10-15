@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { emailInitial, findProject, projectIconHref, projectInitials } from './admin';
+import {
+  emailInitial,
+  findProject,
+  ingestionSuspensionOf,
+  projectIconHref,
+  projectInitials,
+} from './admin';
 import { meResponseSchema } from './admin.schema';
 
 const WIRE = {
@@ -25,6 +31,8 @@ describe('meResponseSchema', () => {
           timezone: 'America/Sao_Paulo',
           conversionEvent: 'signup_completed',
           iconVersion: null,
+          ingestionSuspendedAt: null,
+          ingestionSuspensionReason: null,
         },
       ],
     });
@@ -65,6 +73,29 @@ describe('meResponseSchema', () => {
     expect(project?.lastEventAt).toBeUndefined();
   });
 
+  it('reads a suspended reception, with the reason the API gives the owner', () => {
+    const [owned, shared] = meResponseSchema.parse({
+      ...WIRE,
+      projects: [
+        {
+          ...WIRE.projects[0],
+          ingestion_suspended_at: '2026-11-19T10:00:00.000Z',
+          ingestion_suspension_reason: 'Events carried e-mail addresses.',
+        },
+        {
+          ...WIRE.projects[0],
+          id: 'shared',
+          ingestion_suspended_at: '2026-11-19T10:00:00.000Z',
+          ingestion_suspension_reason: null,
+        },
+      ],
+    }).projects;
+
+    expect(owned?.ingestionSuspendedAt).toBe('2026-11-19T10:00:00.000Z');
+    expect(owned?.ingestionSuspensionReason).toBe('Events carried e-mail addresses.');
+    expect(shared?.ingestionSuspensionReason).toBeNull();
+  });
+
   it('tolerates fields the API adds later', () => {
     expect(meResponseSchema.safeParse({ ...WIRE, role: 'owner' }).success).toBe(true);
   });
@@ -95,6 +126,28 @@ describe('projectInitials and emailInitial', () => {
 
   it('take the first letter of an email', () => {
     expect(emailInitial('owner@demo-store.example')).toBe('O');
+  });
+});
+
+describe('ingestionSuspensionOf', () => {
+  const project = { id: 'p1', name: 'Demo Store', timezone: 'UTC', conversionEvent: null };
+
+  it('says since when, and why when the API told the owner', () => {
+    expect(
+      ingestionSuspensionOf({
+        ...project,
+        ingestionSuspendedAt: '2026-11-19T10:00:00.000Z',
+        ingestionSuspensionReason: 'Events carried e-mail addresses.',
+      }),
+    ).toEqual({ since: '2026-11-19T10:00:00.000Z', reason: 'Events carried e-mail addresses.' });
+    expect(
+      ingestionSuspensionOf({ ...project, ingestionSuspendedAt: '2026-11-19T10:00:00.000Z' }),
+    ).toEqual({ since: '2026-11-19T10:00:00.000Z', reason: null });
+  });
+
+  it('is nothing while the project takes events', () => {
+    expect(ingestionSuspensionOf({ ...project, ingestionSuspendedAt: null })).toBeNull();
+    expect(ingestionSuspensionOf(project)).toBeNull();
   });
 });
 

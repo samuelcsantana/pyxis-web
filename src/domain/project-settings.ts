@@ -25,6 +25,7 @@ export interface ProjectSettings {
   readonly eventRetentionMonths: number;
   readonly publicKeys: readonly PublicKeySummary[];
   readonly secretKeys: readonly ProjectKeySummary[];
+  readonly deletionHeldAt: string | null;
 }
 
 export type ProjectActivity =
@@ -33,6 +34,14 @@ export type ProjectActivity =
 
 export function canManageProject(settings: ProjectSettings): boolean {
   return settings.role === 'owner';
+}
+
+export function hasLivePublicKey(settings: ProjectSettings): boolean {
+  return settings.publicKeys.length > 0;
+}
+
+export function isProjectDeletionHeld(settings: ProjectSettings): boolean {
+  return settings.deletionHeldAt !== null;
 }
 
 export function projectActivity(settings: ProjectSettings): ProjectActivity {

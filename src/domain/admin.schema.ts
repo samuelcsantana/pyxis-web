@@ -13,6 +13,8 @@ export const meResponseSchema = z
         first_event_at: z.string().nullable().optional(),
         last_event_at: z.string().nullable().optional(),
         icon_version: z.string().nullable().optional(),
+        ingestion_suspended_at: z.string().nullish(),
+        ingestion_suspension_reason: z.string().nullish(),
       }),
     ),
   })
@@ -26,5 +28,7 @@ export const meResponseSchema = z
       firstEventAt: project.first_event_at,
       lastEventAt: project.last_event_at,
       iconVersion: project.icon_version ?? null,
+      ingestionSuspendedAt: project.ingestion_suspended_at ?? null,
+      ingestionSuspensionReason: project.ingestion_suspension_reason ?? null,
     })),
   }));

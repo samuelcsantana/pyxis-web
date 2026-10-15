@@ -25,6 +25,7 @@ const SETTINGS: ProjectSettings = {
   eventRetentionMonths: 13,
   publicKeys: [{ id: 'k1', key: PUBLIC_KEY, createdAt: '2026-09-01T08:00:00.000Z' }],
   secretKeys: [{ id: 'k2', createdAt: '2026-09-03T12:00:00.000Z' }],
+  deletionHeldAt: null,
 };
 
 const EMAIL = {

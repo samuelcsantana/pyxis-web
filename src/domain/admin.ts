@@ -6,6 +6,20 @@ export interface Project {
   readonly firstEventAt?: string | null;
   readonly lastEventAt?: string | null;
   readonly iconVersion?: string | null;
+  readonly ingestionSuspendedAt?: string | null;
+  readonly ingestionSuspensionReason?: string | null;
+}
+
+export interface IngestionSuspension {
+  readonly since: string;
+  readonly reason: string | null;
+}
+
+export function ingestionSuspensionOf(project: Project): IngestionSuspension | null {
+  if (project.ingestionSuspendedAt === undefined || project.ingestionSuspendedAt === null) {
+    return null;
+  }
+  return { since: project.ingestionSuspendedAt, reason: project.ingestionSuspensionReason ?? null };
 }
 
 export interface ProjectIcon {
