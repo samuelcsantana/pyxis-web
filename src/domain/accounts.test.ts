@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   type Account,
   accountNotice,
+  canClose,
   deletionDateOf,
   firstNotice,
   hasBillingPortal,
@@ -12,6 +13,8 @@ import {
 import {
   billingRedirectResponseSchema,
   checkoutWire,
+  closeAccountWire,
+  closedAccountResponseSchema,
   myAccountsResponseSchema,
   portalWire,
 } from './accounts.schema';
@@ -155,5 +158,28 @@ describe('accounts on the wire', () => {
     );
     expect(checkoutWire('year', 'pt-BR')).toEqual({ interval: 'year', locale: 'pt-BR' });
     expect(portalWire('es')).toEqual({ locale: 'es' });
+  });
+});
+
+describe('closing an account', () => {
+  it('is for the owner of an account that has not ended', () => {
+    expect(canClose(ACCOUNT)).toBe(true);
+    expect(canClose({ ...ACCOUNT, role: 'member' })).toBe(false);
+    expect(canClose({ ...ACCOUNT, status: 'ended' })).toBe(false);
+  });
+
+  it('writes the confirmation and reads the answer', () => {
+    expect(closeAccountWire(' owner@example.com ')).toEqual({ confirm_email: 'owner@example.com' });
+    expect(
+      closedAccountResponseSchema.parse({
+        access_ends_at: '2026-11-20T12:00:00.000Z',
+        deletion_on: '2026-12-20T12:00:00.000Z',
+        refunded_amount: 0,
+      }),
+    ).toEqual({
+      accessEndsAt: '2026-11-20T12:00:00.000Z',
+      deletionOn: '2026-12-20T12:00:00.000Z',
+      refundedAmount: 0,
+    });
   });
 });

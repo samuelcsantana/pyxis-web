@@ -1,4 +1,9 @@
-import type { Account, BillingInterval, BillingRedirectOutcome } from '@/domain/accounts';
+import type {
+  Account,
+  BillingInterval,
+  BillingRedirectOutcome,
+  CloseAccountOutcome,
+} from '@/domain/accounts';
 
 export interface IAccountsService {
   list(): Promise<readonly Account[]>;
@@ -8,4 +13,5 @@ export interface IAccountsService {
     locale: string,
   ): Promise<BillingRedirectOutcome>;
   portal(accountId: string, locale: string): Promise<BillingRedirectOutcome>;
+  close(accountId: string, confirmEmail: string): Promise<CloseAccountOutcome>;
 }

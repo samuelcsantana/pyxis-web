@@ -39,6 +39,9 @@ import { newPersonWire } from '@/domain/project-people.schema';
 import { demoPeopleWire } from './project-people/mock-project-people-service';
 import { checkoutWire, portalWire } from '@/domain/accounts.schema';
 import { demoAccountsWire } from './accounts/mock-accounts-service';
+import { closeAccountWire } from '@/domain/accounts.schema';
+import { DEMO_EXPORT_FILE, demoExportWire } from './exports/mock-exports-service';
+import { LIVE_DEMO_URL } from '@/lib/site';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -346,6 +349,25 @@ describe('the API contract copied from pyxis-api', () => {
     expect(accounts(demoAccountsWire(NOW)), JSON.stringify(accounts.errors)).toBe(true);
     expect(checkout(checkoutWire('year', 'pt-BR')), JSON.stringify(checkout.errors)).toBe(true);
     expect(portal(portalWire('es')), JSON.stringify(portal.errors)).toBe(true);
+  });
+
+  it('accepts the demo exports and the closure the owner confirms', () => {
+    const projectExport = contractSchema('ProjectExport');
+    const closure = contractSchema('CloseAccountRequest');
+
+    const pending = demoExportWire(NOW, 'pending');
+    const done = demoExportWire(NOW, 'done');
+    const servedByTheDemo = {
+      ...done,
+      download_url: new URL(DEMO_EXPORT_FILE, LIVE_DEMO_URL).href,
+    };
+
+    expect(projectExport(pending), JSON.stringify(projectExport.errors)).toBe(true);
+    expect(projectExport(servedByTheDemo), JSON.stringify(projectExport.errors)).toBe(true);
+    expect(
+      closure(closeAccountWire(' owner@demo-store.example ')),
+      JSON.stringify(closure.errors),
+    ).toBe(true);
   });
 
   it('accepts the bodies the sign-in form sends, and the answer it keeps a token from', async () => {

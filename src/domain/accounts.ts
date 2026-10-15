@@ -59,6 +59,21 @@ export type BillingRedirectOutcome =
   | { readonly kind: 'subscriptionExists' }
   | { readonly kind: 'unavailable' };
 
+export type CloseAccountOutcome =
+  | {
+      readonly kind: 'closed';
+      readonly accessEndsAt: string;
+      readonly deletionOn: string;
+      readonly refundedAmount: number;
+    }
+  | { readonly kind: 'confirmationMismatch' }
+  | { readonly kind: 'alreadyEnded' }
+  | { readonly kind: 'unavailable' };
+
+export function canClose(account: Account): boolean {
+  return account.role === 'owner' && account.status !== 'ended';
+}
+
 export function ownedAccounts(accounts: readonly Account[]): readonly Account[] {
   return accounts.filter((account) => account.role === 'owner');
 }
