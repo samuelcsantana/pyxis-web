@@ -195,7 +195,13 @@ export const ptBR = translation({
       heading: 'Chaves',
       public: 'Chaves públicas',
       publicNote: 'A chave pública vai nas páginas do seu site, então não é um segredo.',
-      noPublicKey: 'Nenhuma chave pública ativa, então o site não consegue enviar eventos.',
+      noLiveKey: 'Este projeto não tem chave pública ativa, então não está medindo.',
+      revokedForGood:
+        'Uma chave revogada nunca volta a funcionar. Quando o acesso de uma conta termina, as chaves dela são revogadas, e continuam revogadas se a conta voltar.',
+      createBelow: 'Crie uma chave pública abaixo e troque a antiga por ela no seu site.',
+      createInSettings:
+        'Crie uma chave pública em <settings>Configurações</settings> e troque a antiga por ela no seu site.',
+      ownerOnly: 'Só o dono da conta pode criar uma.',
       secret: 'Chaves secretas',
       secretNote:
         'A chave secreta permite que o backend do seu site apague e exporte os dados de uma pessoa. Ela é guardada como hash e nunca aparece aqui.',

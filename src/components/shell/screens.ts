@@ -72,6 +72,12 @@ export function settingsHref(projectId: string): string {
   return `/${encodeURIComponent(projectId)}/${SETTINGS_SEGMENT}`;
 }
 
+export const SETTINGS_KEYS_PANEL = 'settings-keys';
+
+export function settingsKeysHref(projectId: string): string {
+  return `${settingsHref(projectId)}#${SETTINGS_KEYS_PANEL}-heading`;
+}
+
 const LINK_BASE = 'http://link.invalid';
 
 export function linkWith(href: string, parameters: Readonly<Record<string, string>>): string {
