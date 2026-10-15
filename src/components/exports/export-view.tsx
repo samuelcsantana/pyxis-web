@@ -4,7 +4,7 @@ import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
 import { exportDownloadHref, isDownloadable, type ProjectExport } from '@/domain/exports';
 import type { I18n } from '@/i18n/i18n';
-import { RefreshWhilePending } from './refresh-while-pending';
+import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
 
 export interface ExportViewProps {
   readonly projectId: string;
