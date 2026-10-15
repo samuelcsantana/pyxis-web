@@ -7,6 +7,8 @@ import type { LegalDocument } from './legal-documents';
 export const LEGAL_TEXT_FOLDER = path.join(process.cwd(), 'content', 'legal');
 export const OPEN_EFFECTIVE_DATE = 'da abertura do cadastro do Pyxis hospedado';
 
+const SCROLLABLE_TABLE = 'role="region" aria-label="Tabela" tabindex="0"';
+
 const LONG_DATE = new Intl.DateTimeFormat('pt-BR', {
   day: 'numeric',
   month: 'long',
@@ -46,7 +48,10 @@ export function legalTextOf(source: string, config: LegalConfig): string {
 }
 
 export function legalHtmlOf(text: string): string {
-  return markdown.parse(text, { async: false });
+  return markdown
+    .parse(text, { async: false })
+    .replaceAll('<table>', `<div class="legal-table" ${SCROLLABLE_TABLE}><table>`)
+    .replaceAll('</table>', '</table></div>');
 }
 
 export async function legalSourceOf(document: LegalDocument): Promise<string> {

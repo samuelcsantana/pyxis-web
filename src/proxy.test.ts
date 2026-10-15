@@ -192,6 +192,41 @@ describe('proxy', () => {
       );
     });
 
+    it('renders a contract document in Portuguese once the seller is configured', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      vi.stubEnv('SELLER_NAME', 'Ana Exemplo');
+      vi.stubEnv('SELLER_TAX_ID', '000.000.000-00');
+      vi.stubEnv('SELLER_ADDRESS', 'Rua das Flores, 10, Cidade/UF');
+
+      const response = visitAt('https://pyxis-analytics.dev/termos?utm_source=stripe');
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-analytics.dev/legal/termos?utm_source=stripe',
+      );
+      expect(response.headers.get(FORWARDED_LOCALE_HEADER)).toBe('pt-BR');
+      expect(response.headers.get('content-security-policy')).toContain("connect-src 'self';");
+    });
+
+    it('treats a contract document like any other address while the seller is missing', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+      const response = visitAt('https://pyxis-analytics.dev/privacidade');
+
+      expect(response.status).toBe(308);
+      expect(response.headers.get('location')).toBe('https://demo.pyxis-analytics.dev/privacidade');
+    });
+
+    it('sends the internal route of a contract document to its public address', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+      const response = visitAt('https://demo.pyxis-analytics.dev/legal/acordo-de-tratamento');
+
+      expect(response.status).toBe(308);
+      expect(response.headers.get('location')).toBe(
+        'https://pyxis-analytics.dev/acordo-de-tratamento',
+      );
+    });
+
     it('sends the internal route to its public address, from any host', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 

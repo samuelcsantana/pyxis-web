@@ -5,6 +5,13 @@ import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
 import { requestHostname } from '@/lib/host-name';
 import { landingIngestionUrl } from '@/lib/landing-measurement-config';
+import { legalConfig } from '@/lib/legal-config';
+import {
+  internalLegalPathOf,
+  legalDocumentAt,
+  legalDocumentOfInternalPath,
+  legalUrlOf,
+} from '@/lib/legal-documents';
 import { carriesPreferences, preferencesIn, withoutPreferences } from '@/lib/link-preferences';
 import {
   internalPathOf,
@@ -29,6 +36,7 @@ export const SIGN_UP_PATH = '/sign-up';
 export const RETURN_PARAMETER = 'next';
 
 const PERMANENT_REDIRECT = 308;
+const CONTRACT_LOCALE = 'pt-BR';
 const TEMPORARY_REDIRECT = 307;
 const ONE_YEAR_IN_SECONDS = 31_536_000;
 
@@ -110,9 +118,23 @@ function landingOrDemo(request: NextRequest): NextResponse {
       PERMANENT_REDIRECT,
     );
   }
+  const internalLegal = legalDocumentOfInternalPath(pathname);
+  if (internalLegal !== undefined) {
+    return NextResponse.redirect(legalUrlOf(internalLegal), PERMANENT_REDIRECT);
+  }
   const hostname = requestHostname(request.headers) ?? request.nextUrl.hostname;
   if (hostname !== LANDING_HOST) {
     return rememberLinkPreferences(request) ?? renderWith(request);
+  }
+  const legal = legalDocumentAt(pathname);
+  if (legal !== undefined && legalConfig() !== null) {
+    const internal = new URL(internalLegalPathOf(legal), request.url);
+    internal.search = search;
+    return renderWith(
+      request,
+      { [PATH_LOCALE_HEADER]: CONTRACT_LOCALE },
+      { to: internal, apiOrigin: undefined },
+    );
   }
   const page = landingPageAt(pathname);
   if (page === undefined) {

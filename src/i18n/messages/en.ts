@@ -1598,4 +1598,11 @@ export const en = {
       madeBy: 'Made by Samuel Santana · MIT License',
     },
   },
+  legal: {
+    documentsLabel: 'Contract documents',
+    terms: 'Terms of Use',
+    privacy: 'Privacy Policy',
+    agreement: 'Data Processing Agreement',
+    metaDescription: '{document} of the hosted Pyxis, version {version}.',
+  },
 } as const;
