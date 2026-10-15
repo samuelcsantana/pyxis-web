@@ -605,6 +605,36 @@ export const ptBR = translation({
     revoked: 'Token revogado',
     revokeFailed: 'O token não foi revogado. Tente de novo.',
   },
+  connect: {
+    title: 'Conectar um aplicativo',
+    heading: 'Conectar o {app} ao Pyxis?',
+    asks: 'O {app} ({host}) pede para ler os números dos seus projetos.',
+    signedInAs: 'Você entrou como {email}',
+    accessHeading: 'O que ele pode fazer',
+    access:
+      'Só ler: os mesmos números que você vê neste painel, de todos os projetos que você pode abrir. Ele nunca muda nada.',
+    projectsHeading: 'Seus projetos',
+    noProjects: 'Você ainda não tem projetos. Ele vai ler os que você puder abrir depois.',
+    returnHeading: 'Para onde esta janela vai depois',
+    returnTo: 'De volta para {host}.',
+    loopback:
+      'A resposta vai para um programa neste computador. Permita só se você começou a conexão no {app} neste computador agora há pouco.',
+    notYou: 'Se você não começou isso agora há pouco no {app}, clique em Cancelar.',
+    revokeLater: 'Você pode revogar a conexão quando quiser, em Configurações.',
+    goneHeading: 'Este pedido de conexão terminou',
+    back: 'Voltar ao painel',
+  },
+  consent: {
+    allow: 'Permitir',
+    allowing: 'Permitindo…',
+    cancel: 'Cancelar',
+    cancelling: 'Cancelando…',
+    leaving: 'Voltando para o {app}…',
+    tooMany:
+      'Você já tem {max} aplicativos conectados, o máximo. Revogue um em <settings>Configurações</settings> para conectar outro.',
+    failed: 'Nada foi enviado. Tente de novo.',
+    gone: 'Ele já foi respondido, ou passaram mais de {minutes} minutos. Volte ao Claude e conecte o Pyxis de novo.',
+  },
   chartPanel: {
     showAs: 'Mostrar como',
     chart: 'Gráfico',
