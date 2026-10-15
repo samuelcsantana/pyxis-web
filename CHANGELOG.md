@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.19.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.18.1...v0.19.0) (2026-10-15)
+
+
+### Features
+
+* **account:** add the account and billing page, and warn in the dashboard ([fce5e1b](https://github.com/samuelcsantana/pyxis-web/commit/fce5e1b7daf3af292aa35f7d30aa7461746e0a0e))
+* **account:** create a first project and follow it to its first event ([a7e379e](https://github.com/samuelcsantana/pyxis-web/commit/a7e379e3afc780eb8c907a0e89e568849a473251))
+* **account:** export a project's events and close an account from the dashboard ([a44c1d8](https://github.com/samuelcsantana/pyxis-web/commit/a44c1d801b6a203a7712a544ebb35d8562b99d74))
+* **landing:** serve llms.txt on the home page domain ([075e064](https://github.com/samuelcsantana/pyxis-web/commit/075e064ffb9324411fe4a4e1575d84787498cfa1))
+* **services:** ask for a project's export and close an account ([73afc40](https://github.com/samuelcsantana/pyxis-web/commit/73afc406b4db27caf1e1fb1c01825d1401c4c53f))
+* **services:** create a project in an account ([e94d5fd](https://github.com/samuelcsantana/pyxis-web/commit/e94d5fd90bd4780a44c215edf607948a9f5e6e90))
+* **services:** keep the API's error code and patch through the writer ([553db9a](https://github.com/samuelcsantana/pyxis-web/commit/553db9a2b4216c2be1077119b4c0ce067ee93b0e))
+* **services:** manage an owned project through the API ([fd9fca6](https://github.com/samuelcsantana/pyxis-web/commit/fd9fca67909cc4051e98580281c20f425c313900))
+* **services:** post JSON bodies and template token routes in logs ([225a6af](https://github.com/samuelcsantana/pyxis-web/commit/225a6afae6bc4fae411e83ec2ea0513b1876d2a1))
+* **services:** read and change the people of a project ([84cee3e](https://github.com/samuelcsantana/pyxis-web/commit/84cee3e95d5c6d346d031a9c6beb07af2cf19bd3))
+* **services:** read the admin's accounts and open Stripe from them ([eff33f1](https://github.com/samuelcsantana/pyxis-web/commit/eff33f1dbbf0985c4dd465a5b31bbc8f244d0dd4))
+* **services:** read whether sign-up is open and sign up with a code ([e026c14](https://github.com/samuelcsantana/pyxis-web/commit/e026c149237db1cdfe9777a4832c8a1a45fc5acc))
+* **settings:** add the access tokens panel ([0ccc346](https://github.com/samuelcsantana/pyxis-web/commit/0ccc3469e544fda96770f1a760e6df793ef1bd13))
+* **settings:** let the owner change a project, its keys and delete it ([73185f1](https://github.com/samuelcsantana/pyxis-web/commit/73185f1a819795929cdfbbe448e0e6a31b7a83b5))
+* **settings:** list the people of a project and let the owner add and remove them ([43b0e72](https://github.com/samuelcsantana/pyxis-web/commit/43b0e72d71941eb9902b56ae328a17b5021eae6a))
+* **settings:** read who may change a project from its settings ([65d70e7](https://github.com/samuelcsantana/pyxis-web/commit/65d70e770ccb39492b0d50345bf203693a0a3cf0))
+* **settings:** read, create and revoke access tokens through the API ([61b9ebf](https://github.com/samuelcsantana/pyxis-web/commit/61b9ebf96b028d40701b64bccfb3783861933b16))
+* **sign-up:** sign up with a plan, the terms and a code, then pay through Checkout ([70e4cbe](https://github.com/samuelcsantana/pyxis-web/commit/70e4cbe748a70cfa86d304c07f1d63cc9becb785))
+
+
+### Bug Fixes
+
+* **demo:** start the demo account's trial at its full length ([161236d](https://github.com/samuelcsantana/pyxis-web/commit/161236d4dfba5e958c7e984219dc436a28f21943))
+
+
+### Refactoring
+
+* **ui:** share the refresher that waits for pending work ([d81e73b](https://github.com/samuelcsantana/pyxis-web/commit/d81e73bdc8d39a074e340fc7dd57cfa8e21bde32))
+
+
+### Documentation
+
+* **readme:** describe creating a first project ([cb50256](https://github.com/samuelcsantana/pyxis-web/commit/cb50256a4a18544867a60c8b31c961da1337e689))
+* **readme:** describe exports and closing an account ([fd54527](https://github.com/samuelcsantana/pyxis-web/commit/fd545278f463153d9e3d85a5a4db91e93462b71d))
+* **readme:** describe the access tokens panel ([6f329e5](https://github.com/samuelcsantana/pyxis-web/commit/6f329e526e06b47acbc9dde01610ad4441234e4c))
+* **readme:** describe the account and billing page ([068d70d](https://github.com/samuelcsantana/pyxis-web/commit/068d70db5da75ed2fa89ae7af3e869c066d54790))
+* **readme:** describe the owner's project settings ([9cc7cc5](https://github.com/samuelcsantana/pyxis-web/commit/9cc7cc5a31a1ad665d3966bcbd89d85857b2d80e))
+* **readme:** describe the people panel ([b102ddf](https://github.com/samuelcsantana/pyxis-web/commit/b102ddfbf10ae95f1d100712dc24e8cad81d7bdf))
+* **readme:** describe the sign-up ([cce064d](https://github.com/samuelcsantana/pyxis-web/commit/cce064d8b465320e362f710a67d45351f8e20450))
+* **readme:** mention llms.txt on the home page ([b059d10](https://github.com/samuelcsantana/pyxis-web/commit/b059d103540fc29dc98f233abaf150e0da2cddc3))
+
 ## [0.18.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.18.0...v0.18.1) (2026-10-14)
 
 
