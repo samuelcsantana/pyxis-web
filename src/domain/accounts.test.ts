@@ -112,6 +112,20 @@ describe('accountNotice', () => {
     ).toEqual({ kind: 'ended', deletionOn: '2026-12-10T00:00:00.000Z' });
   });
 
+  it('says an ended account is held rather than when its data goes', () => {
+    expect(
+      accountNotice(
+        {
+          ...ACCOUNT,
+          status: 'ended',
+          accessEndsAt: '2026-11-10T00:00:00.000Z',
+          deletionHeldAt: '2026-11-12T00:00:00.000Z',
+        },
+        NOW,
+      ),
+    ).toEqual({ kind: 'endedHeld' });
+  });
+
   it('ignores an end without a date', () => {
     expect(accountNotice({ ...ACCOUNT, status: 'ending' }, NOW)).toBeNull();
     expect(accountNotice({ ...ACCOUNT, status: 'ended' }, NOW)).toBeNull();

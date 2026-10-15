@@ -312,6 +312,8 @@ export const en = {
         'Cancelled. Access continues until the end of the period, with no further charge.',
       endedUndated:
         'Ended. The projects stopped measuring, and everything is deleted thirty days after the end.',
+      endedHeld: 'Ended on {date}. The projects stopped measuring.',
+      endedHeldUndated: 'Ended. The projects stopped measuring.',
     },
     usage: 'Events this month',
     usageCount: '{count} of {limit}',
@@ -319,12 +321,19 @@ export const en = {
     notMeasured: 'Not measured yet this month.',
     paused: 'Measuring is paused until {date}: the account used 150% of its monthly events.',
     limits: 'Up to {projects} projects and {people} people, you included.',
+    suspended:
+      'Suspended on {date}. Its projects stopped measuring, and their screens stay closed until the suspension is lifted.',
+    suspensionReason: 'Reason: {reason}',
+    contest: 'To contest it, write to <mail>hello@pyxis-analytics.dev</mail>.',
+    deletionHeld:
+      'Deletion is on hold: nothing in this account is deleted until Pyxis lifts the hold.',
     notice: {
       suspended: 'This account is suspended, so its projects stopped measuring.',
       why: 'See why',
       paymentFailed: 'The last charge failed. Update the card to keep measuring.',
       ending: 'Your subscription ends on {date}.',
       ended: 'Your subscription ended. Everything is deleted on {date}.',
+      endedHeld: 'Your subscription ended. The deletion of its data is on hold.',
       paused: 'Measuring is paused until {date}: the account passed its monthly events.',
       nearQuota: 'This month the account has used {share} of its events.',
       open: 'Open billing',

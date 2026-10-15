@@ -323,6 +323,8 @@ export const es = translation({
       endingUndated: 'Cancelada. El acceso sigue hasta el fin del período, sin otro cobro.',
       endedUndated:
         'Terminó. Los proyectos dejaron de medir, y todo se borra treinta días después del fin.',
+      endedHeld: 'Terminó el {date}. Los proyectos dejaron de medir.',
+      endedHeldUndated: 'Terminó. Los proyectos dejaron de medir.',
     },
     usage: 'Eventos este mes',
     usageCount: '{count} de {limit}',
@@ -331,12 +333,19 @@ export const es = translation({
     paused:
       'La medición está en pausa hasta el {date}: la cuenta usó el 150 % de sus eventos del mes.',
     limits: 'Hasta {projects} proyectos y {people} personas, tú incluido.',
+    suspended:
+      'Suspendida el {date}. Sus proyectos dejaron de medir, y sus pantallas quedan cerradas hasta que se levante la suspensión.',
+    suspensionReason: 'Motivo: {reason}',
+    contest: 'Para impugnarla, escribe a <mail>hello@pyxis-analytics.dev</mail>.',
+    deletionHeld:
+      'El borrado está en espera: nada de esta cuenta se borra hasta que Pyxis lo libere.',
     notice: {
       suspended: 'Esta cuenta está suspendida, así que sus proyectos dejaron de medir.',
       why: 'Ver el motivo',
       paymentFailed: 'El último cobro falló. Actualiza la tarjeta para seguir midiendo.',
       ending: 'Tu suscripción termina el {date}.',
       ended: 'Tu suscripción terminó. Todo se borra el {date}.',
+      endedHeld: 'Tu suscripción terminó. El borrado de sus datos está en espera.',
       paused: 'La medición está en pausa hasta el {date}: la cuenta superó sus eventos del mes.',
       nearQuota: 'Este mes la cuenta ya usó {share} de sus eventos.',
       open: 'Abrir la facturación',

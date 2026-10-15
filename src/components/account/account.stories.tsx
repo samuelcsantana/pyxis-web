@@ -55,6 +55,43 @@ export const Ended: Story = {
   },
 };
 
+export const Suspended: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'active',
+      trialEndsAt: null,
+      suspendedAt: '2026-11-19T10:00:00.000Z',
+      suspensionReason: 'Events carried e-mail addresses.',
+    },
+  },
+};
+
+export const SuspendedInPortuguese: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'active',
+      trialEndsAt: null,
+      suspendedAt: '2026-11-19T10:00:00.000Z',
+      suspensionReason: 'Os eventos traziam endereços de e-mail.',
+    },
+  },
+  globals: { locale: 'pt-BR' },
+};
+
+export const EndedWithDeletionOnHold: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'ended',
+      accessEndsAt: '2026-11-10T00:00:00.000Z',
+      deletionHeldAt: '2026-11-12T00:00:00.000Z',
+      eventsThisMonth: 0,
+    },
+  },
+};
+
 export const SignUpNotFinished: Story = {
   args: {
     account: {

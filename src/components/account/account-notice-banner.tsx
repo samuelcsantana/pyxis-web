@@ -20,6 +20,8 @@ function noticeText(notice: AccountNotice, i18n: I18n): string {
       return i18n.t('account.notice.ending', { date: day(notice.accessEndsAt) });
     case 'ended':
       return i18n.t('account.notice.ended', { date: day(notice.deletionOn) });
+    case 'endedHeld':
+      return i18n.t('account.notice.endedHeld');
     case 'paused':
       return i18n.t('account.notice.paused', { date: day(notice.until) });
     case 'nearQuota':

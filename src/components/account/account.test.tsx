@@ -169,6 +169,45 @@ describe('AccountOverview', () => {
     expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
   });
 
+  it('shows a suspension with its date, the reason and where to contest it', () => {
+    overview({
+      suspendedAt: '2026-11-19T10:00:00.000Z',
+      suspensionReason: 'Events carried e-mail addresses.',
+    });
+
+    expect(screen.getByText(/^Suspended on Nov 19, 2026\./)).toBeInTheDocument();
+    expect(screen.getByText('Reason: Events carried e-mail addresses.')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'hello@pyxis-analytics.dev' })).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev',
+    );
+  });
+
+  it('shows a suspension without a reason', () => {
+    overview({ suspendedAt: '2026-11-19T10:00:00.000Z' });
+
+    expect(screen.getByText(/^Suspended on Nov 19, 2026\./)).toBeInTheDocument();
+    expect(screen.queryByText(/^Reason:/)).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['2026-11-10T00:00:00.000Z', 'Ended on Nov 10, 2026. The projects stopped measuring.'],
+    [null, 'Ended. The projects stopped measuring.'],
+  ] as const)(
+    'says a held deletion is on hold, with no deletion date for an end on %s',
+    (accessEndsAt, text) => {
+      overview({ status: 'ended', accessEndsAt, deletionHeldAt: '2026-11-12T00:00:00.000Z' });
+
+      expect(screen.getByText(text)).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Deletion is on hold: nothing in this account is deleted until Pyxis lifts the hold.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('region')).not.toHaveTextContent('deleted on');
+    },
+  );
+
   it('says nothing about a pause already over', () => {
     overview({ ingestionPausedUntil: '2026-11-01T00:00:00.000Z' });
 
@@ -272,6 +311,14 @@ describe('AccountNoticeBanner', () => {
 
     expect(screen.getByRole('note')).toHaveTextContent(text);
     expect(screen.getByRole('link', { name: 'Open billing' })).toHaveAttribute('href', '/account');
+  });
+
+  it('says an ended account keeps its data while the deletion is on hold', () => {
+    render(<AccountNoticeBanner notice={{ kind: 'endedHeld' }} i18n={english} />);
+
+    expect(screen.getByRole('note')).toHaveTextContent(
+      'Your subscription ended. The deletion of its data is on hold.',
+    );
   });
 
   it('says a suspended account stopped measuring and links to the reason', () => {

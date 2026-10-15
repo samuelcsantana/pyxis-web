@@ -1,13 +1,17 @@
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
   type Account,
   canClose,
   deletionDateOf,
   hasBillingPortal,
+  isDeletionHeld,
   needsCheckout,
   quotaShare,
+  SUPPORT_EMAIL,
 } from '@/domain/accounts';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
 import type { CloseAccount } from './close-account-form';
 import { CloseAccountSection } from './close-account-section';
@@ -44,17 +48,54 @@ function statusText(account: Account, i18n: I18n): string {
         ? i18n.t('account.status.endingUndated')
         : i18n.t('account.status.ending', { date: day(account.accessEndsAt) });
     case 'ended':
-      return account.accessEndsAt === null
-        ? i18n.t('account.status.endedUndated')
-        : i18n.t('account.status.ended', {
-            date: day(account.accessEndsAt),
-            deletion: day(deletionDateOf(account.accessEndsAt)),
-          });
+      return endedText(account, i18n);
     case 'incomplete':
       return i18n.t('account.status.incomplete');
     case 'comped':
       return i18n.t('account.status.comped');
   }
+}
+
+function endedText(account: Account, i18n: I18n): string {
+  const day = (iso: string) => i18n.format.dayWithYear(new Date(iso));
+  if (isDeletionHeld(account)) {
+    return account.accessEndsAt === null
+      ? i18n.t('account.status.endedHeldUndated')
+      : i18n.t('account.status.endedHeld', { date: day(account.accessEndsAt) });
+  }
+  return account.accessEndsAt === null
+    ? i18n.t('account.status.endedUndated')
+    : i18n.t('account.status.ended', {
+        date: day(account.accessEndsAt),
+        deletion: day(deletionDateOf(account.accessEndsAt)),
+      });
+}
+
+function Suspension({ account, i18n }: Pick<AccountOverviewProps, 'account' | 'i18n'>) {
+  if (account.suspendedAt === null) {
+    return null;
+  }
+  return (
+    <div className="flex flex-col gap-1 rounded-input bg-bad-soft px-3 py-2.5 text-sm text-bad">
+      <p className="font-medium">
+        {i18n.t('account.suspended', {
+          date: i18n.format.dayWithYear(new Date(account.suspendedAt)),
+        })}
+      </p>
+      {account.suspensionReason === null ? null : (
+        <p>{i18n.t('account.suspensionReason', { reason: account.suspensionReason })}</p>
+      )}
+      <p>
+        {rich(i18n.t('account.contest'), {
+          mail: (text) => (
+            <a href={`mailto:${SUPPORT_EMAIL}`} className={TEXT_LINK}>
+              {text}
+            </a>
+          ),
+        })}
+      </p>
+    </div>
+  );
 }
 
 function UsageMeter({
@@ -119,6 +160,10 @@ export function AccountOverview({
             })}
       </h2>
       <p className="text-sm">{statusText(account, i18n)}</p>
+      <Suspension account={account} i18n={i18n} />
+      {isDeletionHeld(account) ? (
+        <p className="text-sm font-medium">{i18n.t('account.deletionHeld')}</p>
+      ) : null}
       <UsageMeter account={account} i18n={i18n} now={now} />
       <p className={NOTE}>
         {i18n.t('account.limits', {
