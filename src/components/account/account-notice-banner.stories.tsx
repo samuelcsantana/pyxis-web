@@ -30,6 +30,8 @@ export const Ended: Story = {
   args: { notice: { kind: 'ended', deletionOn: '2026-12-10T00:00:00.000Z' } },
 };
 
+export const EndedWithDeletionOnHold: Story = { args: { notice: { kind: 'endedHeld' } } };
+
 export const Paused: Story = {
   args: { notice: { kind: 'paused', until: '2026-12-01T00:00:00.000Z' } },
 };

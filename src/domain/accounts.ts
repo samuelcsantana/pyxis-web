@@ -11,6 +11,7 @@ export const ACCOUNT_ROLES = ['owner', 'member'] as const;
 export const BILLING_INTERVALS = ['month', 'year'] as const;
 export const DELETION_GRACE_DAYS = 30;
 export const QUOTA_WARNING_RATIO = 0.8;
+export const SUPPORT_EMAIL = 'hello@pyxis-analytics.dev';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const STATUSES_WITH_A_SUBSCRIPTION: ReadonlySet<AccountStatus> = new Set([
@@ -53,6 +54,7 @@ export type AccountNotice =
   | { readonly kind: 'paymentFailed' }
   | { readonly kind: 'ending'; readonly accessEndsAt: string }
   | { readonly kind: 'ended'; readonly deletionOn: string }
+  | { readonly kind: 'endedHeld' }
   | { readonly kind: 'paused'; readonly until: string }
   | { readonly kind: 'nearQuota'; readonly share: number };
 
@@ -128,6 +130,9 @@ export function accountNotice(account: Account, now: Date): AccountNotice | null
   }
   if (account.status === 'ending' && account.accessEndsAt !== null) {
     return { kind: 'ending', accessEndsAt: account.accessEndsAt };
+  }
+  if (account.status === 'ended' && isDeletionHeld(account)) {
+    return { kind: 'endedHeld' };
   }
   if (account.status === 'ended' && account.accessEndsAt !== null) {
     return { kind: 'ended', deletionOn: deletionDateOf(account.accessEndsAt) };
