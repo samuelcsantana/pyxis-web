@@ -12,6 +12,8 @@ const SESSION_PATH = /^\/v1\/me\/sessions\/[^/?]+/;
 const SESSION_PATH_TEMPLATE = '/v1/me/sessions/:sessionId';
 const ACCESS_TOKEN_PATH = /^\/v1\/me\/tokens\/[^/?]+/;
 const ACCESS_TOKEN_PATH_TEMPLATE = '/v1/me/tokens/:tokenId';
+const CONNECTION_REQUEST_PATH = /^\/v1\/oauth\/requests\/[^/?]+/;
+const CONNECTION_REQUEST_PATH_TEMPLATE = '/v1/oauth/requests/:requestId';
 const PROJECT_KEY_PATH = /\/keys\/[^/?]+/;
 const PROJECT_KEY_PATH_TEMPLATE = '/keys/:keyId';
 const JSON_ACCEPT = 'application/json';
@@ -43,7 +45,8 @@ export function pathTemplate(path: string): string {
     .replace(PROJECT_PATH, PROJECT_PATH_TEMPLATE)
     .replace(PROJECT_KEY_PATH, PROJECT_KEY_PATH_TEMPLATE)
     .replace(SESSION_PATH, SESSION_PATH_TEMPLATE)
-    .replace(ACCESS_TOKEN_PATH, ACCESS_TOKEN_PATH_TEMPLATE);
+    .replace(ACCESS_TOKEN_PATH, ACCESS_TOKEN_PATH_TEMPLATE)
+    .replace(CONNECTION_REQUEST_PATH, CONNECTION_REQUEST_PATH_TEMPLATE);
 }
 
 export function requestLogLine(
