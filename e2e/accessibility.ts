@@ -2,6 +2,7 @@ import { expect, type Page } from '@playwright/test';
 import axe from 'axe-core';
 
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
+const RULES_CHECKED_BY_PLAYWRIGHT = { 'document-title': { enabled: false } };
 const ANY_TITLE = /\S/;
 
 async function finishedMoving(page: Page): Promise<void> {
@@ -32,13 +33,18 @@ export async function axeViolations(page: Page): Promise<string[]> {
   await expect(page).toHaveTitle(ANY_TITLE);
   await finishedMoving(page);
   await page.addScriptTag({ content: axe.source });
-  return page.evaluate(async (tags) => {
-    const runner = (window as unknown as { axe: typeof axe }).axe;
-    const results = await runner.run(document, { runOnly: { type: 'tag', values: tags } });
-    return results.violations.map(
-      (violation) => `${violation.id}: ${violation.nodes[0]?.html ?? '(no node)'}`,
-    );
-  }, AXE_TAGS);
+  const violations = await page.evaluate(
+    async ({ tags, rules }) => {
+      const runner = (window as unknown as { axe: typeof axe }).axe;
+      const results = await runner.run(document, { runOnly: { type: 'tag', values: tags }, rules });
+      return results.violations.map(
+        (violation) => `${violation.id}: ${violation.nodes[0]?.html ?? '(no node)'}`,
+      );
+    },
+    { tags: AXE_TAGS, rules: RULES_CHECKED_BY_PLAYWRIGHT },
+  );
+  await expect(page).toHaveTitle(ANY_TITLE);
+  return violations;
 }
 
 export async function focusedElementIsUncovered(page: Page): Promise<boolean> {
