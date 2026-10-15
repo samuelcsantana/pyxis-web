@@ -16,6 +16,8 @@ const CONNECTION_REQUEST_PATH = /^\/v1\/oauth\/requests\/[^/?]+/;
 const CONNECTION_REQUEST_PATH_TEMPLATE = '/v1/oauth/requests/:requestId';
 const PROJECT_KEY_PATH = /\/keys\/[^/?]+/;
 const PROJECT_KEY_PATH_TEMPLATE = '/keys/:keyId';
+const CONNECTION_PATH = /^\/v1\/me\/connections\/[^/?]+/;
+const CONNECTION_PATH_TEMPLATE = '/v1/me/connections/:connectionId';
 const JSON_ACCEPT = 'application/json';
 const IMAGE_ACCEPT = 'image/*';
 const UNKNOWN_CONTENT_TYPE = 'application/octet-stream';
@@ -44,6 +46,7 @@ export function pathTemplate(path: string): string {
   return route
     .replace(PROJECT_PATH, PROJECT_PATH_TEMPLATE)
     .replace(PROJECT_KEY_PATH, PROJECT_KEY_PATH_TEMPLATE)
+    .replace(CONNECTION_PATH, CONNECTION_PATH_TEMPLATE)
     .replace(SESSION_PATH, SESSION_PATH_TEMPLATE)
     .replace(ACCESS_TOKEN_PATH, ACCESS_TOKEN_PATH_TEMPLATE)
     .replace(CONNECTION_REQUEST_PATH, CONNECTION_REQUEST_PATH_TEMPLATE);
