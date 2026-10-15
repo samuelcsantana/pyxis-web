@@ -31,7 +31,7 @@ import { ProjectForm, type SaveProject } from './project-form';
 import type { RemovePerson } from './remove-person-button';
 import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-key-button';
 import type { EndSession } from './end-session-button';
-import type { RevokeAccessToken } from './revoke-access-token-button';
+import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
@@ -55,7 +55,7 @@ export interface ProjectSettingsViewProps {
   readonly endSession: EndSession;
   readonly accessTokens: readonly AccessToken[];
   readonly createAccessToken: CreateAccessToken;
-  readonly revokeAccessToken: RevokeAccessToken;
+  readonly revokeAccessToken: Revoke;
   readonly manage: ProjectManagement;
   readonly people: readonly ProjectPerson[];
   readonly myEmail: string;
