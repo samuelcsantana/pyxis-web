@@ -184,6 +184,10 @@ describe('the read log', () => {
 });
 
 describe('pathTemplate', () => {
+  it('drops the id of a connected app', () => {
+    expect(pathTemplate('/v1/me/connections/5e1a7c9d')).toBe('/v1/me/connections/:connectionId');
+  });
+
   it('drops the query and the project id, and keeps the rest of the route', () => {
     expect(pathTemplate('/v1/me')).toBe('/v1/me');
     expect(pathTemplate('/v1/projects/p%201/features/properties?name=cta_clicked')).toBe(

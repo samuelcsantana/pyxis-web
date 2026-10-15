@@ -46,6 +46,7 @@ import {
 import { MockProjectManagementService } from './project-management/mock-project-management-service';
 import { newPersonWire } from '@/domain/project-people.schema';
 import { demoPeopleWire } from './project-people/mock-project-people-service';
+import { demoConnectionsWire } from './connections/mock-connections-service';
 import { checkoutWire, portalWire } from '@/domain/accounts.schema';
 import { demoAccountsWire } from './accounts/mock-accounts-service';
 import { closeAccountWire } from '@/domain/accounts.schema';
@@ -370,6 +371,12 @@ describe('the API contract copied from pyxis-api', () => {
       newPerson(newPersonWire(' ana@example.com ', 'pt-BR')),
       JSON.stringify(newPerson.errors),
     ).toBe(true);
+  });
+
+  it('accepts the demo connected apps and the address to connect another', () => {
+    const connections = contractSchema('Connections');
+
+    expect(connections(demoConnectionsWire(NOW)), JSON.stringify(connections.errors)).toBe(true);
   });
 
   it('accepts the demo accounts and the Checkout and portal requests', () => {
