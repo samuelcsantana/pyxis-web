@@ -1,6 +1,10 @@
 import { LogoMark } from '@/components/brand/logo-mark';
 import type { ReactNode } from 'react';
+import { LEGAL_DOCUMENT_TITLES } from '@/components/legal/legal-titles';
+import { SellerLine } from '@/components/legal/seller-line';
 import type { I18n } from '@/i18n/i18n';
+import type { Seller } from '@/lib/legal-config';
+import { CONTRACT_LANGUAGE, LEGAL_DOCUMENTS } from '@/lib/legal-documents';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
@@ -9,11 +13,13 @@ import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 export interface LandingFooterProps {
   readonly i18n: I18n;
   readonly note?: ReactNode;
+  readonly seller?: Seller;
 }
 
 interface FooterLink {
   readonly href: string;
   readonly label: string;
+  readonly hrefLang?: string;
   readonly track?: Readonly<Record<string, string>>;
 }
 
@@ -24,9 +30,13 @@ function codeLink(href: string, label: string): FooterLink {
 interface FooterColumnProps {
   readonly title: string;
   readonly links: readonly FooterLink[];
+  readonly note?: string;
 }
 
-function FooterColumn({ title, links }: FooterColumnProps) {
+const THREE_COLUMNS = 'md:grid-cols-[1.4fr_repeat(3,minmax(0,1fr))]';
+const FOUR_COLUMNS = 'md:grid-cols-[1.4fr_repeat(4,minmax(0,1fr))]';
+
+function FooterColumn({ title, links, note }: FooterColumnProps) {
   return (
     <div>
       <h2 className="mb-2.5 text-micro font-semibold tracking-[0.08em] text-muted uppercase">
@@ -35,22 +45,31 @@ function FooterColumn({ title, links }: FooterColumnProps) {
       <ul className="grid gap-2 text-sm">
         {links.map((link) => (
           <li key={link.href}>
-            <a href={link.href} className={LINK_LIST} {...link.track}>
+            <a href={link.href} hrefLang={link.hrefLang} className={LINK_LIST} {...link.track}>
               {link.label}
             </a>
           </li>
         ))}
       </ul>
+      {note === undefined ? null : <p className="mt-2.5 text-caption text-muted">{note}</p>}
     </div>
   );
 }
 
-export function LandingFooter({ i18n, note }: LandingFooterProps) {
+function contractLinks(i18n: I18n): readonly FooterLink[] {
+  return LEGAL_DOCUMENTS.map((document) => ({
+    href: document.path,
+    label: i18n.t(LEGAL_DOCUMENT_TITLES[document.slug]),
+    hrefLang: CONTRACT_LANGUAGE,
+  }));
+}
+
+export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
   const { t } = i18n;
   return (
     <footer className="border-t border-line">
       <div
-        className={`${LANDING_WIDTH} grid gap-7 pt-10 pb-6 md:grid-cols-[1.4fr_repeat(3,minmax(0,1fr))]`}
+        className={`${LANDING_WIDTH} grid gap-7 pt-10 pb-6 ${seller === undefined ? THREE_COLUMNS : FOUR_COLUMNS}`}
       >
         <div className="flex flex-col gap-2.5">
           <p className="flex items-center gap-2 text-base font-bold tracking-tight">
@@ -85,12 +104,26 @@ export function LandingFooter({ i18n, note }: LandingFooterProps) {
           title={t('landing.footer.author')}
           links={[{ href: LANDING_LINKS.author, label: PROPER_NAMES.author }]}
         />
+        {seller === undefined ? null : (
+          <FooterColumn
+            title={t('landing.footer.contract')}
+            links={contractLinks(i18n)}
+            note={
+              i18n.locale === CONTRACT_LANGUAGE ? undefined : t('landing.footer.contractLanguage')
+            }
+          />
+        )}
       </div>
       <div className={`${LANDING_WIDTH} pb-24`}>
         <div className="flex flex-col gap-2 border-t border-line pt-5 lg:flex-row lg:items-center lg:justify-between">
           {note}
           <p className="text-caption text-muted">{t('landing.footer.madeBy')}</p>
         </div>
+        {seller === undefined ? null : (
+          <div className="pt-3">
+            <SellerLine i18n={i18n} seller={seller} />
+          </div>
+        )}
       </div>
     </footer>
   );

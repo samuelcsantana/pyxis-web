@@ -1596,6 +1596,8 @@ export const en = {
       apiReference: 'API reference',
       playground: 'SDK playground',
       madeBy: 'Made by Samuel Santana · MIT License',
+      contract: 'Contract',
+      contractLanguage: 'In Portuguese, the language of the contract.',
     },
   },
   legal: {
@@ -1604,5 +1606,6 @@ export const en = {
     privacy: 'Privacy Policy',
     agreement: 'Data Processing Agreement',
     metaDescription: '{document} of the hosted Pyxis, version {version}.',
+    seller: 'Sold by {name} · CPF {taxId} · {address} · {email}',
   },
 } as const;

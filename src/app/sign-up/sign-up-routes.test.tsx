@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Account } from '@/domain/accounts';
 import type { SignUpStatus } from '@/domain/sign-up';
@@ -128,6 +128,31 @@ describe('SignUpPage', () => {
     renderWithMessages(await SignUpPage());
 
     expect(screen.getByRole('button', { name: 'Send code' })).toBeInTheDocument();
+  });
+
+  it('links the contract and identifies the seller once configured', async () => {
+    vi.stubEnv('SELLER_NAME', 'Ana Exemplo');
+    vi.stubEnv('SELLER_TAX_ID', '000.000.000-00');
+    vi.stubEnv('SELLER_ADDRESS', 'Rua das Flores, 10, Cidade/UF');
+
+    renderWithMessages(await SignUpPage());
+
+    const contract = screen.getByRole('navigation', { name: 'Contract documents' });
+    expect(within(contract).getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/privacidade',
+    );
+    expect(
+      screen.getByText(
+        'Sold by Ana Exemplo · CPF 000.000.000-00 · Rua das Flores, 10, Cidade/UF · hello@pyxis-analytics.dev',
+      ),
+    ).toBeVisible();
+  });
+
+  it('shows neither while the seller is not configured', async () => {
+    renderWithMessages(await SignUpPage());
+
+    expect(screen.queryByRole('navigation', { name: 'Contract documents' })).toBeNull();
   });
 
   it('is titled after the page', async () => {

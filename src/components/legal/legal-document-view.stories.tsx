@@ -36,6 +36,7 @@ const meta = {
   title: 'Legal/LegalDocumentView',
   component: LegalDocumentView,
   parameters: { layout: 'fullscreen' },
+  globals: { locale: 'pt-BR' },
   args: { i18n: portuguese, current: TERMS_OF_USE, html: SAMPLE },
   decorators: [
     (Story) => (

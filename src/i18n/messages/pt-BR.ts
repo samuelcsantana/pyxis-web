@@ -1610,6 +1610,8 @@ export const ptBR = translation({
       apiReference: 'Documentação da API',
       playground: 'Playground do SDK',
       madeBy: 'Feito por Samuel Santana · Licença MIT',
+      contract: 'Contrato',
+      contractLanguage: 'Em português, a língua do contrato.',
     },
   },
   legal: {
@@ -1618,5 +1620,6 @@ export const ptBR = translation({
     privacy: 'Política de Privacidade',
     agreement: 'Acordo de Tratamento de Dados',
     metaDescription: '{document} do Pyxis hospedado, versão {version}.',
+    seller: 'Fornecedor: {name} · CPF {taxId} · {address} · {email}',
   },
 });
