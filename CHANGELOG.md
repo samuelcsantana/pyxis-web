@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.22.0...v0.23.0) (2026-10-15)
+
+
+### Features
+
+* **landing:** invite larger needs in pricing instead of the self-hosting card ([e78a5d6](https://github.com/samuelcsantana/pyxis-web/commit/e78a5d62b32613c27682313b36b0bd7b4c3b633d))
+
 ## [0.22.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.21.0...v0.22.0) (2026-10-15)
 
 
