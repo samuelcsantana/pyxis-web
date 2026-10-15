@@ -1,7 +1,14 @@
-import type { Account, BillingInterval, BillingRedirectOutcome } from '@/domain/accounts';
+import type {
+  Account,
+  BillingInterval,
+  BillingRedirectOutcome,
+  CloseAccountOutcome,
+} from '@/domain/accounts';
 import {
   billingRedirectResponseSchema,
   checkoutWire,
+  closeAccountWire,
+  closedAccountResponseSchema,
   myAccountsResponseSchema,
   portalWire,
 } from '@/domain/accounts.schema';
@@ -16,7 +23,15 @@ export const BILLING_ERROR_CODES = {
   noBillingYet: 'no_billing_yet',
   subscriptionExists: 'subscription_exists',
   unavailable: 'billing_unavailable',
+  confirmationMismatch: 'confirmation_mismatch',
+  accountEnded: 'account_ended',
 } as const;
+
+const CLOSURE_REFUSALS: ReadonlyMap<string, CloseAccountOutcome> = new Map([
+  [BILLING_ERROR_CODES.confirmationMismatch, { kind: 'confirmationMismatch' }],
+  [BILLING_ERROR_CODES.accountEnded, { kind: 'alreadyEnded' }],
+  [BILLING_ERROR_CODES.unavailable, { kind: 'unavailable' }],
+]);
 
 const REFUSALS: ReadonlyMap<string, BillingRedirectOutcome> = new Map([
   [BILLING_ERROR_CODES.noBillingYet, { kind: 'noBillingYet' }],
@@ -57,6 +72,26 @@ export class HttpAccountsService implements IAccountsService {
 
   portal(accountId: string, locale: string): Promise<BillingRedirectOutcome> {
     return this.redirect(`${accountPath(accountId)}/portal`, portalWire(locale));
+  }
+
+  async close(accountId: string, confirmEmail: string): Promise<CloseAccountOutcome> {
+    try {
+      const closed = await this.writer.post(
+        `${accountPath(accountId)}/close`,
+        closeAccountWire(confirmEmail),
+        closedAccountResponseSchema,
+      );
+      return { kind: 'closed', ...closed };
+    } catch (error) {
+      const refusal =
+        error instanceof ApiRequestError && error.code !== null
+          ? CLOSURE_REFUSALS.get(error.code)
+          : undefined;
+      if (refusal === undefined) {
+        throw error;
+      }
+      return refusal;
+    }
   }
 
   private async redirect(path: string, body: unknown): Promise<BillingRedirectOutcome> {

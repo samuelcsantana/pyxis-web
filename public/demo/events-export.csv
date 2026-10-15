@@ -1,0 +1,5 @@
+id,occurred_at,name,path,session_id,user_id,referrer_host,utm_source,utm_medium,utm_campaign,from_ad_click,channel,device_type,browser,os,country,region,region_name,properties
+0b7c1d2e-3f40-4a5b-8c6d-7e8f9a0b1c2d,2026-10-01T12:03:11.000Z,page_view,/,d1e2f3a4-b5c6-4d7e-8f90-a1b2c3d4e5f6,,www.google.com,,,,false,organic,desktop,chrome,windows,BR,BR-SP,São Paulo,{}
+1c8d2e3f-4051-4b6c-9d7e-8f9a0b1c2d3e,2026-10-01T12:03:42.000Z,page_view,/products/:slug,d1e2f3a4-b5c6-4d7e-8f90-a1b2c3d4e5f6,,,,,,false,organic,desktop,chrome,windows,BR,BR-SP,São Paulo,{}
+2d9e3f40-5162-4c7d-8e8f-9a0b1c2d3e4f,2026-10-01T12:05:09.000Z,checkout_completed,/checkout,d1e2f3a4-b5c6-4d7e-8f90-a1b2c3d4e5f6,,,,,,false,organic,desktop,chrome,windows,BR,BR-SP,São Paulo,"{""plan"":""yearly""}"
+3e0f4051-6273-4d8e-9f90-a0b1c2d3e4f5,2026-10-02T08:41:27.000Z,page_view,/pricing,e2f3a4b5-c6d7-4e8f-90a1-b2c3d4e5f6a7,,,newsletter,email,october,false,email,mobile,safari,ios,PT,PT-11,Lisboa,{}

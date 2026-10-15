@@ -59,6 +59,22 @@ export function checkoutWire(interval: BillingInterval, locale: string) {
   return { interval, locale };
 }
 
+export const closedAccountResponseSchema = z
+  .object({
+    access_ends_at: z.string(),
+    deletion_on: z.string(),
+    refunded_amount: z.number().int(),
+  })
+  .transform((body) => ({
+    accessEndsAt: body.access_ends_at,
+    deletionOn: body.deletion_on,
+    refundedAmount: body.refunded_amount,
+  }));
+
+export function closeAccountWire(confirmEmail: string) {
+  return { confirm_email: confirmEmail.trim() };
+}
+
 export function portalWire(locale: string) {
   return { locale };
 }
