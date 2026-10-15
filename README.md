@@ -293,7 +293,12 @@ Shipping now:
   month reached 80% of its events; reading the accounts for that warning never blocks a page.
   The same page closes an account at once, with the owner's address typed again: the
   subscription is cancelled, the keys are revoked, a first payment of the last seven days is
-  refunded, and the page says when everything is deleted
+  refunded, and the page says when everything is deleted (and keeps saying it after the page
+  refreshes to the ended account). An account Pyxis suspended shows the date, the reason and the
+  address to contest it, every dashboard screen of its owner carries a banner, and the screens of
+  its projects open `/account-suspended` instead of failing; an account whose deletion Pyxis holds
+  says so, names no deletion date, and its projects explain why they cannot be deleted. The
+  sign-up says the free trial is one per customer
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
@@ -426,6 +431,7 @@ origin the sign-in and sign-out calls carry.
 | `/new-project`                                   | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
 | `/[projectId]/install`                           | The tracker's snippets with the project's key, and the wait for its first event                                                                                                                                                                                                              |
 | `/account`                                       | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
+| `/account-suspended`                             | Where the screens of a suspended account's projects go: the account is suspended, and the owner finds the reason in Account and billing                                                                                                                                                      |
 | `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                                                              |
 | `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                                                              |
 | `/[projectId]/devices`                           | Device types, browsers, systems, conversion by device, countries and regions                                                                                                                                                                                                                 |
