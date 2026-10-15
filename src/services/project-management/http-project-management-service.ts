@@ -26,6 +26,7 @@ export const API_ERROR_CODES = {
   keyLimitReached: 'key_limit_reached',
   lastPublicKey: 'last_public_key',
   nameMismatch: 'project_name_mismatch',
+  deletionOnHold: 'deletion_on_hold',
   projectLimitReached: 'project_limit_reached',
 } as const;
 
@@ -129,6 +130,9 @@ export class HttpProjectManagementService implements IProjectManagementService {
     } catch (error) {
       if (refusedWith(error, API_ERROR_CODES.nameMismatch)) {
         return { kind: 'nameMismatch' };
+      }
+      if (refusedWith(error, API_ERROR_CODES.deletionOnHold)) {
+        return { kind: 'deletionOnHold' };
       }
       throw error;
     }

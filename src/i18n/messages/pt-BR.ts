@@ -270,6 +270,8 @@ export const ptBR = translation({
     deleting: 'Apagando…',
     nameMismatch: 'O nome digitado não é o nome deste projeto.',
     failed: 'O projeto não foi apagado. Tente de novo.',
+    deletionOnHold:
+      'Nada desta conta pode ser apagado enquanto o Pyxis mantém a exclusão em espera. Escreva para hello@pyxis-analytics.dev.',
   },
   people: {
     heading: 'Pessoas',

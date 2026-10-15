@@ -89,6 +89,24 @@ describe('DeleteProjectForm', () => {
     expect(navigation.router.push).not.toHaveBeenCalled();
   });
 
+  it('says nothing can be deleted while the account holds its deletion', async () => {
+    renderWithMessages(
+      <DeleteProjectForm
+        projectName="Shop"
+        remove={() => Promise.resolve({ kind: 'deletionOnHold' })}
+      />,
+    );
+
+    fireEvent.change(confirmField(), { target: { value: 'Shop' } });
+    fireEvent.click(deleteButton());
+    await settle();
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Nothing in this account can be deleted while Pyxis holds its deletion.',
+    );
+    expect(navigation.router.push).not.toHaveBeenCalled();
+  });
+
   it('says the project was not deleted when the call fails', async () => {
     renderWithMessages(
       <DeleteProjectForm projectName="Shop" remove={() => Promise.reject(new Error('503'))} />,

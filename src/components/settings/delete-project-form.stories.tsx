@@ -54,6 +54,16 @@ export const Failed: Story = {
   },
 };
 
+export const DeletionOnHold: Story = {
+  args: { remove: () => Promise.resolve({ kind: 'deletionOnHold' }) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox'), 'Demo Store');
+    await userEvent.click(canvas.getByRole('button', { name: 'Delete project for good' }));
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('holds its deletion');
+  },
+};
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
