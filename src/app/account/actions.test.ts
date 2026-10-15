@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IAccountsService } from '@/services/accounts/accounts-service.interface';
-import { openBillingPortal, openCheckout } from './actions';
+import { closeAccount, openBillingPortal, openCheckout } from './actions';
 
 const ACCOUNT_ID = '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f';
 
-const state = vi.hoisted<{ service: Pick<IAccountsService, 'checkout' | 'portal'> }>(() => ({
+const state = vi.hoisted<{
+  service: Pick<IAccountsService, 'checkout' | 'portal' | 'close'>;
+}>(() => ({
   service: {
     checkout: () => Promise.reject(new Error('checkout not set')),
     portal: () => Promise.reject(new Error('portal not set')),
+    close: () => Promise.reject(new Error('close not set')),
   },
 }));
 
@@ -17,6 +20,8 @@ vi.mock('@/services/accounts/accounts-service.factory', () => ({
     checkout: (accountId: string, interval: 'month' | 'year', locale: string) =>
       state.service.checkout(accountId, interval, locale),
     portal: (accountId: string, locale: string) => state.service.portal(accountId, locale),
+    close: (accountId: string, confirmEmail: string) =>
+      state.service.close(accountId, confirmEmail),
   }),
 }));
 
@@ -45,6 +50,7 @@ describe('billing actions', () => {
         Promise.resolve({ kind: 'redirect', url: 'https://checkout.stripe.com/c/x' }),
       ),
       portal: vi.fn<IAccountsService['portal']>(() => Promise.resolve({ kind: 'noBillingYet' })),
+      close: vi.fn<IAccountsService['close']>(() => Promise.resolve({ kind: 'alreadyEnded' })),
     };
   });
 
@@ -76,5 +82,21 @@ describe('billing actions', () => {
     state.service.portal = () => Promise.reject(new UnauthenticatedError());
 
     await expect(openBillingPortal(ACCOUNT_ID)).rejects.toThrow(/^redirect:\/sign-in\?expired=1/);
+  });
+});
+
+describe('closeAccount', () => {
+  it('closes with the address trimmed, and refuses one that is not an address before asking', async () => {
+    await expect(closeAccount(ACCOUNT_ID, ' owner@example.com ')).resolves.toEqual({
+      kind: 'alreadyEnded',
+    });
+    await expect(closeAccount(ACCOUNT_ID, 'owner@')).resolves.toEqual({
+      kind: 'confirmationMismatch',
+    });
+    await expect(closeAccount('not-an-account', 'owner@example.com')).rejects.toThrow(
+      'An account is named by its id.',
+    );
+    expect(state.service.close).toHaveBeenCalledTimes(1);
+    expect(state.service.close).toHaveBeenCalledWith(ACCOUNT_ID, 'owner@example.com');
   });
 });

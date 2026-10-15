@@ -8,6 +8,7 @@ import {
   type ProjectSettings,
 } from '@/domain/project-settings';
 import type { AccessToken } from '@/domain/access-tokens';
+import { EXPORT_FILE_DAYS, MAX_EXPORTS_PER_DAY } from '@/domain/exports';
 import type { ProjectPerson } from '@/domain/project-people';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { AdminSession } from '@/domain/sessions';
@@ -18,6 +19,7 @@ import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-
 import type { AddPerson } from './add-person-form';
 import { type DeleteProject, DeleteProjectForm } from './delete-project-form';
 import { PeoplePanel } from './people-panel';
+import { type RequestExport, RequestExportButton } from './request-export-button';
 import { ProjectForm, type SaveProject } from './project-form';
 import type { RemovePerson } from './remove-person-button';
 import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-key-button';
@@ -34,6 +36,7 @@ export interface ProjectManagement {
   readonly remove: DeleteProject;
   readonly addPerson: AddPerson;
   readonly removePerson: RemovePerson;
+  readonly requestExport: RequestExport;
 }
 
 export interface ProjectSettingsViewProps {
@@ -317,6 +320,20 @@ function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps)
   );
 }
 
+function ExportPanel({ settings, i18n, manage }: ManagedSectionProps) {
+  return (
+    <SettingsPanel id="settings-export" title={i18n.t('exportEvents.heading')}>
+      <p className={NOTE}>
+        {i18n.t('exportEvents.note', {
+          days: i18n.format.count(EXPORT_FILE_DAYS),
+          max: i18n.format.count(MAX_EXPORTS_PER_DAY),
+        })}
+      </p>
+      <RequestExportButton projectId={settings.id} request={manage.requestExport} />
+    </SettingsPanel>
+  );
+}
+
 function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
   return (
     <SettingsPanel id="settings-delete" title={i18n.t('deleteProject.heading')}>
@@ -416,6 +433,9 @@ export function ProjectSettingsView({
               when={when}
               manage={{ add: manage.addPerson, remove: manage.removePerson }}
             />
+          </div>
+          <div className="lg:col-span-2">
+            <ExportPanel {...section} manage={manage} />
           </div>
           <div className="lg:col-span-2">
             <DeletePanel {...section} manage={manage} />

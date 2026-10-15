@@ -70,6 +70,8 @@ describe('RootLayout', () => {
       'deleteProject',
       'people',
       'billing',
+      'exportEvents',
+      'closeAccount',
     ]);
   });
 

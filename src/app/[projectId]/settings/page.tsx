@@ -22,6 +22,7 @@ import {
   deleteProject,
   endSession,
   removeProjectPerson,
+  requestProjectExport,
   revokeAccessToken,
   revokeProjectKey,
   updateProject,
@@ -88,6 +89,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             remove: deleteProject.bind(null, project.id),
             addPerson: addProjectPerson.bind(null, project.id),
             removePerson: removeProjectPerson.bind(null, project.id),
+            requestExport: requestProjectExport.bind(null, project.id),
           }}
           people={people}
           myEmail={admin.email}

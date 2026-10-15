@@ -9,6 +9,7 @@ import type { IProjectManagementService } from '@/services/project-management/pr
 import type { IProjectPeopleService } from '@/services/project-people/project-people-service.interface';
 import type { ISessionsService } from '@/services/sessions/sessions-service.interface';
 import {
+  requestProjectExport,
   addProjectPerson,
   chooseEmailPreferences,
   createAccessToken,
@@ -45,6 +46,12 @@ const state = vi.hoisted<{
     add: () => Promise.reject(new Error('add not set')),
     remove: () => Promise.reject(new Error('remove not set')),
   },
+}));
+
+vi.mock('@/services/exports/exports-service.factory', () => ({
+  createExportsService: () => ({
+    request: (projectId: string) => Promise.resolve({ kind: 'unavailable', projectId }),
+  }),
 }));
 
 vi.mock('@/services/project-people/project-people-service.factory', () => ({
@@ -409,5 +416,15 @@ describe('the owner adding and removing people', () => {
     await expect(removeProjectPerson('p-other', PERSON_ID)).rejects.toThrow('not-found');
     expect(service.add).not.toHaveBeenCalled();
     expect(service.remove).not.toHaveBeenCalled();
+  });
+});
+
+describe('requestProjectExport', () => {
+  it('asks for an export of a project the admin can read, and not of another', async () => {
+    await expect(requestProjectExport('p-store')).resolves.toEqual({
+      kind: 'unavailable',
+      projectId: 'p-store',
+    });
+    await expect(requestProjectExport('p-other')).rejects.toThrow('not-found');
   });
 });

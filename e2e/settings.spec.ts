@@ -133,6 +133,24 @@ test('lists the people, adds an address with an e-mail and removes a member', as
   await expect(people.getByText('Removed')).toBeVisible();
 });
 
+test('asks for an export, opens it and downloads the file', async ({ page, request }) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const panel = page.getByRole('region', { name: 'Export events' });
+
+  await panel.getByRole('button', { name: 'Export events' }).click();
+  await expect(panel.getByRole('status')).toContainText('The file is being prepared.');
+  await panel.getByRole('link', { name: 'Open the export' }).click();
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
+  await expect(page.getByText(/12,480 events, ready until/)).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+  const href = await page.getByRole('link', { name: 'Download the file' }).getAttribute('href');
+  const file = await request.get(href ?? '');
+
+  expect(file.ok()).toBe(true);
+  expect(await file.text()).toMatch(/^id,occurred_at,name,path,/);
+});
+
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({
   page,
 }) => {

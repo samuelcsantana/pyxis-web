@@ -26,6 +26,8 @@ import { createProjectManagementService } from '@/services/project-management/pr
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { currentLocale } from '@/i18n/current-locale';
 import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
+import type { RequestExportOutcome } from '@/domain/exports';
+import { createExportsService } from '@/services/exports/exports-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
@@ -161,4 +163,9 @@ export async function removeProjectPerson(
     throw new Error('A person is removed by their id.');
   }
   return readOrSignIn(() => createProjectPeopleService().remove(project.id, parsed.data));
+}
+
+export async function requestProjectExport(projectId: string): Promise<RequestExportOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  return readOrSignIn(() => createExportsService().request(project.id));
 }

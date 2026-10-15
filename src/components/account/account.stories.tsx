@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import type { BillingRedirectOutcome } from '@/domain/accounts';
+import type { BillingRedirectOutcome, CloseAccountOutcome } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { demoAccountsWire } from '@/services/accounts/mock-accounts-service';
 import { english } from '@/test-utils/english';
@@ -11,12 +11,21 @@ if (DEMO === undefined) {
   throw new Error('The demo has an account.');
 }
 const stay = (): Promise<BillingRedirectOutcome> => Promise.resolve({ kind: 'noBillingYet' });
+const refuseToClose = (): Promise<CloseAccountOutcome> =>
+  Promise.resolve({ kind: 'confirmationMismatch' });
 
 const meta = {
   title: 'Account/Account overview',
   component: AccountOverview,
   tags: ['autodocs'],
-  args: { account: DEMO, i18n: english, now: STORY_NOW, openCheckout: stay, openPortal: stay },
+  args: {
+    account: DEMO,
+    i18n: english,
+    now: STORY_NOW,
+    openCheckout: stay,
+    openPortal: stay,
+    close: refuseToClose,
+  },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof AccountOverview>;
 

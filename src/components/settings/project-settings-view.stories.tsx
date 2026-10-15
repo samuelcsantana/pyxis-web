@@ -9,6 +9,7 @@ import {
 } from '@/services/access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
+import { MockExportsService } from '@/services/exports/mock-exports-service';
 import { MockProjectManagementService } from '@/services/project-management/mock-project-management-service';
 import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
 import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
@@ -31,6 +32,7 @@ function demoSettings(projectId: string) {
 const STORE = demoSettings(DEMO_STORE.id);
 const MANAGEMENT = new MockProjectManagementService();
 const PEOPLE = new MockProjectPeopleService(() => STORY_NOW);
+const EXPORTS = new MockExportsService(() => STORY_NOW);
 
 const meta = {
   title: 'Settings/Project settings',
@@ -65,6 +67,7 @@ const meta = {
       remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
       addPerson: (email) => PEOPLE.add(STORE.id, email),
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
+      requestExport: () => EXPORTS.request(),
     },
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
     myEmail: DEMO_ADMIN.email,
@@ -97,6 +100,7 @@ export const WithoutASubscription: Story = {
       remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
       addPerson: () => Promise.resolve({ kind: 'subscriptionRequired' }),
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
+      requestExport: () => Promise.resolve({ kind: 'limitReached' }),
     },
   },
 };
