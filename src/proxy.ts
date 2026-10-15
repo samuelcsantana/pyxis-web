@@ -25,6 +25,7 @@ import { LANDING_HOST, LIVE_DEMO_URL } from '@/lib/site';
 import { THEME_COOKIE_NAME } from '@/lib/theme';
 
 export const SIGN_IN_PATH = '/sign-in';
+export const SIGN_UP_PATH = '/sign-up';
 export const RETURN_PARAMETER = 'next';
 
 const PERMANENT_REDIRECT = 308;
@@ -140,8 +141,9 @@ export function proxy(request: NextRequest) {
   const { pathname, search, searchParams } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
   const onSignIn = pathname === SIGN_IN_PATH;
+  const onSignUp = pathname === SIGN_UP_PATH;
 
-  if (!hasSession && !onSignIn) {
+  if (!hasSession && !onSignIn && !onSignUp) {
     return NextResponse.redirect(signInUrl(request));
   }
   if (hasSession && onSignIn && !searchParams.has('expired')) {

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ACCOUNT_PAGE } from '@/components/account/account-notice-banner';
 import { NEW_PROJECT_PAGE } from '@/components/shell/project-switcher';
 import { SignOutButton } from '@/components/shell/sign-out-button';
 import { BUTTON_PRIMARY } from '@/components/ui/control-classes';
@@ -12,37 +13,54 @@ export interface NoProjectsYetProps {
   readonly authService?: IAuthService;
   readonly i18n: I18n;
   readonly canCreateProject?: boolean;
+  readonly hasUnfinishedSignUp?: boolean;
 }
 
-export function NoProjectsYet({
-  email,
-  authService,
-  i18n,
-  canCreateProject = false,
-}: NoProjectsYetProps) {
+const ACTION = `flex min-h-11 items-center self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY}`;
+
+function Body({ email, i18n, canCreateProject, hasUnfinishedSignUp }: NoProjectsYetProps) {
+  if (canCreateProject === true) {
+    return <p>{i18n.t('states.noProjects.bodyOwner')}</p>;
+  }
+  if (hasUnfinishedSignUp === true) {
+    return <p>{i18n.t('states.noProjects.bodyUnfinished')}</p>;
+  }
+  return (
+    <p>
+      {rich(i18n.t('states.noProjects.body'), {
+        email: () => <strong className="text-ink">{email}</strong>,
+        code: (text) => <code>{text}</code>,
+      })}
+    </p>
+  );
+}
+
+function NextStep({ i18n, canCreateProject, hasUnfinishedSignUp }: NoProjectsYetProps) {
+  if (canCreateProject === true) {
+    return (
+      <Link href={NEW_PROJECT_PAGE} className={ACTION}>
+        {i18n.t('states.noProjects.create')}
+      </Link>
+    );
+  }
+  if (hasUnfinishedSignUp === true) {
+    return (
+      <Link href={ACCOUNT_PAGE} className={ACTION}>
+        {i18n.t('states.noProjects.finish')}
+      </Link>
+    );
+  }
+  return null;
+}
+
+export function NoProjectsYet(props: NoProjectsYetProps) {
   return (
     <>
-      <EmptyState headingLevel="h1" title={i18n.t('states.noProjects.title')}>
-        {canCreateProject ? (
-          <p>{i18n.t('states.noProjects.bodyOwner')}</p>
-        ) : (
-          <p>
-            {rich(i18n.t('states.noProjects.body'), {
-              email: () => <strong className="text-ink">{email}</strong>,
-              code: (text) => <code>{text}</code>,
-            })}
-          </p>
-        )}
+      <EmptyState headingLevel="h1" title={props.i18n.t('states.noProjects.title')}>
+        <Body {...props} />
       </EmptyState>
-      {canCreateProject ? (
-        <Link
-          href={NEW_PROJECT_PAGE}
-          className={`flex min-h-11 items-center self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY}`}
-        >
-          {i18n.t('states.noProjects.create')}
-        </Link>
-      ) : null}
-      <SignOutButton variant="page" authService={authService} />
+      <NextStep {...props} />
+      <SignOutButton variant="page" authService={props.authService} />
     </>
   );
 }

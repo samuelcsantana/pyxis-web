@@ -9,7 +9,7 @@ import {
   HttpAccountsService,
   MY_ACCOUNTS_PATH,
 } from './http-accounts-service';
-import { DEMO_BILLING_URL, MockAccountsService } from './mock-accounts-service';
+import { DEMO_BILLING_URL, DEMO_WELCOME_URL, MockAccountsService } from './mock-accounts-service';
 
 const NOW = new Date('2026-11-20T12:00:00.000Z');
 
@@ -140,10 +140,11 @@ describe('MockAccountsService', () => {
     });
   });
 
-  it('sends Checkout and the portal back to the account page', async () => {
+  it('sends Checkout to the welcome page and the portal back to the account page', async () => {
     const service = new MockAccountsService();
 
-    await expect(service.checkout()).resolves.toEqual({ kind: 'redirect', url: DEMO_BILLING_URL });
+    await expect(service.checkout()).resolves.toEqual({ kind: 'redirect', url: DEMO_WELCOME_URL });
+    expect(DEMO_WELCOME_URL).toBe(`/welcome?account=${DEMO_ACCOUNT_ID}`);
     await expect(service.portal()).resolves.toEqual({ kind: 'redirect', url: DEMO_BILLING_URL });
   });
 

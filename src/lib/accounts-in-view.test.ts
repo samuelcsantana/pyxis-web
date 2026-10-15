@@ -32,6 +32,7 @@ describe('accountsInView', () => {
     expect(accountsInView([ENDING], NOW)).toEqual({
       notice: { kind: 'ending', accessEndsAt: '2026-12-01T00:00:00.000Z' },
       canCreateProject: true,
+      hasUnfinishedSignUp: false,
     });
   });
 
@@ -46,7 +47,20 @@ describe('accountsInView', () => {
   });
 
   it('shows nothing without accounts', () => {
-    expect(accountsInView([], NOW)).toEqual({ notice: null, canCreateProject: false });
+    expect(accountsInView([], NOW)).toEqual({
+      notice: null,
+      canCreateProject: false,
+      hasUnfinishedSignUp: false,
+    });
+  });
+
+  it('notices a sign-up the owner did not finish, and only theirs', () => {
+    const unfinished = { ...ENDING, status: 'incomplete', accessEndsAt: null } as const;
+
+    expect(accountsInView([unfinished], NOW).hasUnfinishedSignUp).toBe(true);
+    expect(accountsInView([{ ...unfinished, role: 'member' }], NOW).hasUnfinishedSignUp).toBe(
+      false,
+    );
   });
 });
 
@@ -61,6 +75,7 @@ describe('bestEffortAccountsInView', () => {
     await expect(bestEffortAccountsInView(NOW)).resolves.toEqual({
       notice: null,
       canCreateProject: true,
+      hasUnfinishedSignUp: false,
     });
   });
 
@@ -72,6 +87,7 @@ describe('bestEffortAccountsInView', () => {
     await expect(bestEffortAccountsInView(NOW)).resolves.toEqual({
       notice: null,
       canCreateProject: false,
+      hasUnfinishedSignUp: false,
     });
     expect(warn).toHaveBeenCalledWith(
       'accounts in view: could not read the accounts, showing none',

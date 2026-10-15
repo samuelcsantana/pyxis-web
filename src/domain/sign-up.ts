@@ -1,3 +1,5 @@
+export const TRIAL_DAYS = 14;
+
 export interface SignUpStatus {
   readonly open: boolean;
   readonly termsVersion: string | null;

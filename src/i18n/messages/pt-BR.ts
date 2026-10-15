@@ -142,6 +142,9 @@ export const ptBR = translation({
       create: 'Criar o primeiro projeto',
       bodyOwner:
         'Sua conta está pronta. Crie um projeto para o seu site e depois instale o rastreador.',
+      finish: 'Concluir a assinatura',
+      bodyUnfinished:
+        'Sua conta está esperando um plano. Conclua a assinatura para criar projetos.',
     },
   },
   demo: {
@@ -438,6 +441,66 @@ export const ptBR = translation({
     selected: 'Selecionado, aperte Ctrl+C',
     privacy:
       'O Pyxis não guarda cookie nos seus visitantes, nem endereço IP, nem dado pessoal. Diga na sua política de privacidade que o site mede o uso com o Pyxis.',
+  },
+  signUp: {
+    title: 'Comece o teste grátis',
+    intro:
+      '{days} dias grátis, depois o plano que você escolher. Nada é cobrado se você cancelar durante o teste.',
+    plan: 'Plano',
+    monthly: 'Mensal',
+    yearly: 'Anual',
+    email: 'E-mail',
+    emailPlaceholder: 'voce@empresa.com.br',
+    terms:
+      'Li e aceito os <link>Termos de Uso, o Acordo de Tratamento de Dados e a Política de Privacidade</link> (versão {version}).',
+    termsMissing: 'Aceite os termos para continuar.',
+    sendCode: 'Enviar código',
+    sending: 'Enviando…',
+    checkTitle: 'Confira seu e-mail',
+    checkBody: 'Enviamos um código de {digits} dígitos. Ele vale por 10 minutos.',
+    code: 'Código de {digits} dígitos',
+    change: 'Trocar',
+    changeEmail: 'Trocar o e-mail',
+    verify: 'Continuar',
+    verifying: 'Conferindo…',
+    resend: 'Enviar um código novo',
+    resendIn: 'Enviar um código novo em {time}',
+    resent: 'Um código novo está a caminho.',
+    preparing: 'Preparando o pagamento…',
+    invalidCode: 'Esse código está errado ou expirou. Confira, ou peça um novo.',
+    termsOutdated:
+      'Os termos mudaram enquanto esta página estava aberta. Leia a nova versão e aceite de novo.',
+    closed: 'O cadastro foi fechado enquanto esta página estava aberta.',
+    rateLimited: 'Muitas tentativas deste endereço. Espere alguns minutos e tente de novo.',
+    unreachable: 'Não deu para falar com o Pyxis. Tente de novo.',
+    checkoutFailed:
+      'Sua conta está pronta, mas a página de pagamento não abriu. Conclua em Conta e cobrança.',
+    openAccount: 'Abrir Conta e cobrança',
+    demoCode: 'Esta é a demonstração: o código é <code/>.',
+    demoFill: 'Usar {code}',
+    haveAccount: 'Já tem uma conta?',
+    signIn: 'Entrar',
+    finishTitle: 'Conclua a assinatura',
+    finishBody: 'Sua conta está esperando um plano. Escolha um para começar o teste grátis.',
+  },
+  signUpPage: {
+    title: 'Cadastro',
+    closedTitle: 'O cadastro ainda não está aberto',
+    closedBody:
+      'Por enquanto o Pyxis é por convite. Escreva para hello@pyxis-analytics.dev, ou experimente a demonstração ao vivo.',
+    demo: 'Abrir a demonstração ao vivo',
+    home: 'Voltar para a página inicial',
+  },
+  welcome: {
+    title: 'Boas-vindas ao Pyxis',
+    confirming: 'Confirmando sua assinatura…',
+    confirmingNote:
+      'Isso leva alguns segundos e a página confere de novo sozinha. Se demorar, você recebe um e-mail quando terminar.',
+    trial: 'Seu teste grátis começou. Ele vai até {date}.',
+    active: 'Sua assinatura está confirmada.',
+    next: 'Agora crie um projeto para o seu site e instale o rastreador.',
+    create: 'Criar o primeiro projeto',
+    dashboard: 'Abrir o painel',
   },
   emailPreferences: {
     heading: 'E-mail',

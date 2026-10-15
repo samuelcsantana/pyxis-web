@@ -3,20 +3,28 @@ import {
   type AccountNotice,
   canCreateProjects,
   firstNotice,
+  needsCheckout,
+  ownedAccounts,
 } from '@/domain/accounts';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 
 export interface AccountsInView {
   readonly notice: AccountNotice | null;
   readonly canCreateProject: boolean;
+  readonly hasUnfinishedSignUp: boolean;
 }
 
-const NOTHING_TO_SHOW: AccountsInView = { notice: null, canCreateProject: false };
+const NOTHING_TO_SHOW: AccountsInView = {
+  notice: null,
+  canCreateProject: false,
+  hasUnfinishedSignUp: false,
+};
 
 export function accountsInView(accounts: readonly Account[], now: Date): AccountsInView {
   return {
     notice: firstNotice(accounts, now)?.notice ?? null,
     canCreateProject: accounts.some(canCreateProjects),
+    hasUnfinishedSignUp: ownedAccounts(accounts).some(needsCheckout),
   };
 }
 
