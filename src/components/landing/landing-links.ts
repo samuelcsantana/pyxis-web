@@ -7,6 +7,7 @@ export const CONTACT_EMAIL = 'hello@pyxis-analytics.dev';
 export const LANDING_LINKS = {
   demo: LIVE_DEMO_URL,
   signIn: `${DASHBOARD_URL}/sign-in`,
+  signUp: `${DASHBOARD_URL}/sign-up`,
   api: `${GITHUB_PROFILE}/pyxis-api`,
   selfHost: `${GITHUB_PROFILE}/pyxis-api/blob/main/docs/RUNBOOK.md#first-time-setup`,
   sdk: `${GITHUB_PROFILE}/pyxis-sdk`,

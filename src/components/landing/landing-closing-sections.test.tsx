@@ -75,7 +75,7 @@ describe('ComparisonSection', () => {
 
 describe('FaqSection', () => {
   it('opens the first question and keeps the others folded', () => {
-    const { container } = render(<FaqSection i18n={english} />);
+    const { container } = render(<FaqSection i18n={english} signUpOpen={false} />);
 
     const items = container.querySelectorAll('details');
     expect(items).toHaveLength(11);
@@ -89,27 +89,45 @@ describe('FaqSection', () => {
   });
 
   it('answers what the hosted plan costs and how to leave it', () => {
-    render(<FaqSection i18n={english} />);
+    render(<FaqSection i18n={english} signUpOpen={false} />);
 
     expect(screen.getByText('How much does it cost?')).toBeInTheDocument();
     expect(screen.getByText(/R\$ 39 a month or R\$ 390 a year/)).toBeInTheDocument();
-    expect(screen.getByText(/deleted 30 days later/)).toBeInTheDocument();
+    expect(screen.getByText(/deleted 30 days after access ends/)).toBeInTheDocument();
     expect(screen.getByText(/request access at hello@pyxis-analytics\.dev/)).toBeInTheDocument();
   });
 
   it('sets the names of code in code type', () => {
-    render(<FaqSection i18n={english} />);
+    render(<FaqSection i18n={english} signUpOpen={false} />);
 
     expect(screen.getByText('sessionStorage').tagName).toBe('CODE');
     expect(screen.getByText('optOut()').tagName).toBe('CODE');
   });
 
   it('never says the dashboard has a single cookie', () => {
-    render(<FaqSection i18n={portuguese} />);
+    render(<FaqSection i18n={portuguese} signUpOpen={false} />);
 
     expect(screen.getByRole('region', { name: 'Perguntas frequentes' })).toHaveTextContent(
       'Cookies só existem no próprio painel do Pyxis',
     );
+  });
+
+  it('states the monthly limit as the terms do: warnings, then a pause, never a charge', () => {
+    render(<FaqSection i18n={english} signUpOpen={false} />);
+
+    expect(screen.getByText(/At 150%, the account stops taking events/)).toBeInTheDocument();
+    expect(screen.getByText(/Nothing is ever charged beyond the price/)).toBeInTheDocument();
+    expect(screen.getByText(/14 days without paying, once per customer/)).toBeInTheDocument();
+  });
+
+  it('invites anyone in Brazil to sign up and links the terms once sign-up is open', () => {
+    render(<FaqSection i18n={english} signUpOpen />);
+
+    expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
+    expect(screen.queryByText(/request access at hello@pyxis-analytics\.dev/)).toBeNull();
+    const terms = screen.getByRole('link', { name: 'Terms of Use' });
+    expect(terms).toHaveAttribute('href', 'https://pyxis-analytics.dev/termos');
+    expect(terms).toHaveAttribute('hreflang', 'pt-BR');
   });
 });
 

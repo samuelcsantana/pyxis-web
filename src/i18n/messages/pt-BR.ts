@@ -1583,6 +1583,9 @@ export const ptBR = translation({
       selfHost:
         'O código é aberto, com licença MIT. Você pode rodar o Pyxis na sua própria conta da AWS, do Neon e da Vercel, sem pagar nada ao Pyxis. O plano pago é para quem prefere não cuidar disso.',
       selfHostLink: 'Ver como rodar a API',
+      start: 'Começar o teste grátis',
+      openNote:
+        'Cadastre-se com um e-mail e um cartão; o painel abre assim que a assinatura é confirmada.',
     },
     faq: {
       eyebrow: 'Perguntas',
@@ -1617,6 +1620,8 @@ export const ptBR = translation({
           question: 'Posso usar no meu site?',
           answer:
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Para assinar, peça acesso em hello@pyxis-analytics.dev.',
+          answerOpen:
+            'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail e um cartão: 14 dias grátis, uma vez por cliente, e você cancela quando quiser.',
         },
         price: {
           question: 'Quanto custa?',
@@ -1626,17 +1631,19 @@ export const ptBR = translation({
         trial: {
           question: 'Como funciona o teste grátis?',
           answer:
-            'São 14 dias sem pagar. O cartão é pedido no começo e só é cobrado no 15º dia; se você cancelar antes, nada é cobrado.',
+            'São 14 dias sem pagar, uma vez por cliente. O cartão é pedido no começo e só é cobrado no 15º dia; se você cancelar antes, nada é cobrado.',
         },
         cancel: {
           question: 'Como eu cancelo?',
           answer:
-            'No portal da assinatura, a qualquer momento. O acesso continua até o fim do período pago, e os dados do seu projeto são apagados 30 dias depois. Se pedir em até 7 dias da primeira cobrança, o valor é devolvido inteiro.',
+            'A qualquer momento, de dois jeitos: cancelando no portal da assinatura, e o acesso continua até o fim do período pago; ou encerrando a conta no painel, e o acesso termina na hora. Em até 7 dias da primeira cobrança, encerrar a conta devolve essa cobrança inteira; depois disso, o período já pago não é devolvido. Os dados do projeto são apagados 30 dias depois do fim do acesso.',
+          answerOpen:
+            'A qualquer momento, de dois jeitos: cancelando no portal da assinatura, e o acesso continua até o fim do período pago; ou encerrando a conta no painel, e o acesso termina na hora. Em até 7 dias da primeira cobrança, encerrar a conta devolve essa cobrança inteira; depois disso, o período já pago não é devolvido. Os dados do projeto são apagados 30 dias depois do fim do acesso. Os detalhes estão nos <terms>Termos de Uso</terms>.',
         },
         limit: {
           question: 'E se eu passar de 100 mil eventos?',
           answer:
-            'Nesta fase, você recebe um aviso por e-mail e a gente conversa. Nada é cortado sem aviso.',
+            'Você recebe um e-mail a 80% e a 100% dos eventos do mês. A 150%, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Nada é cobrado além do preço.',
         },
         payment: {
           question: 'Tem Pix ou nota fiscal?',

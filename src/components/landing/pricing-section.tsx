@@ -8,6 +8,11 @@ import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface PricingSectionProps {
   readonly i18n: I18n;
+  readonly signUpOpen: boolean;
+}
+
+interface AskPanelProps {
+  readonly i18n: I18n;
 }
 
 export const PRICING_ID = 'pricing';
@@ -24,8 +29,14 @@ const PERIOD_OPTION = `relative flex cursor-pointer flex-wrap items-center gap-1
 const SHOW_WHEN_MONTHLY =
   'flex flex-col gap-1 group-has-[input[value=year]:checked]/pricing:hidden';
 const SHOW_WHEN_YEARLY = 'hidden flex-col gap-1 group-has-[input[value=year]:checked]/pricing:flex';
+const START_WHEN_MONTHLY = 'block group-has-[input[value=year]:checked]/pricing:hidden';
+const START_WHEN_YEARLY = 'hidden group-has-[input[value=year]:checked]/pricing:block';
 const PRICE = 'text-5xl leading-none font-semibold tracking-[-0.03em] tabular-nums';
 const NOTE = 'text-sm leading-relaxed text-muted';
+
+function signUpUrlOf(interval: typeof MONTHLY | typeof YEARLY): string {
+  return interval === YEARLY ? `${LANDING_LINKS.signUp}?interval=${YEARLY}` : LANDING_LINKS.signUp;
+}
 
 function mailtoOf(subject: string): string {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
@@ -50,7 +61,7 @@ function Price({ amount, period, note, className }: PriceProps) {
   );
 }
 
-function AskPanel({ i18n }: PricingSectionProps) {
+function AskPanel({ i18n }: AskPanelProps) {
   const { t } = i18n;
   return (
     <div className="mt-3 flex flex-col gap-3 rounded-card border border-dashed border-line-strong bg-soft p-4.5 text-base">
@@ -91,7 +102,41 @@ function AskPanel({ i18n }: PricingSectionProps) {
   );
 }
 
-export function PricingSection({ i18n }: PricingSectionProps) {
+function StartButtons({ i18n }: AskPanelProps) {
+  const { t } = i18n;
+  return (
+    <>
+      {(
+        [
+          { interval: MONTHLY, className: START_WHEN_MONTHLY },
+          { interval: YEARLY, className: START_WHEN_YEARLY },
+        ] as const
+      ).map(({ interval, className }) => (
+        <div key={interval} className={className}>
+          <a
+            href={signUpUrlOf(interval)}
+            className={LINK_PRIMARY}
+            {...trackAttributes(LANDING_EVENTS.signUpOpened, { from: PRICING_ID, interval })}
+          >
+            {t('landing.pricing.start')}
+            <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d={ARROW_ICON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+      ))}
+    </>
+  );
+}
+
+export function PricingSection({ i18n, signUpOpen }: PricingSectionProps) {
   const { t } = i18n;
   return (
     <LandingSection
@@ -167,35 +212,43 @@ export function PricingSection({ i18n }: PricingSectionProps) {
                 </li>
               ))}
             </ul>
-            <details className="group/ask">
-              <summary
-                className={`${LINK_PRIMARY} cursor-pointer list-none self-start [&::-webkit-details-marker]:hidden`}
-                {...trackAttributes(LANDING_EVENTS.accessRequested, { from: PRICING_ID })}
-              >
-                {t('landing.pricing.ask')}
-                <svg
-                  width={18}
-                  height={18}
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="transition-transform duration-200 group-open/ask:rotate-90 motion-reduce:transition-none"
+            {signUpOpen ? (
+              <StartButtons i18n={i18n} />
+            ) : (
+              <details className="group/ask">
+                <summary
+                  className={`${LINK_PRIMARY} cursor-pointer list-none self-start [&::-webkit-details-marker]:hidden`}
+                  {...trackAttributes(LANDING_EVENTS.accessRequested, { from: PRICING_ID })}
                 >
-                  <path
-                    d={ARROW_ICON}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </summary>
-              <AskPanel i18n={i18n} />
-            </details>
-            <p className={NOTE}>{t('landing.pricing.trial')}</p>
+                  {t('landing.pricing.ask')}
+                  <svg
+                    width={18}
+                    height={18}
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-open/ask:rotate-90 motion-reduce:transition-none"
+                  >
+                    <path
+                      d={ARROW_ICON}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <AskPanel i18n={i18n} />
+              </details>
+            )}
+            <p className={NOTE}>
+              {t('landing.pricing.trial')} {t('signUp.oneTrial')}
+            </p>
             <p className={NOTE}>{t('landing.pricing.availability')}</p>
           </div>
-          <p className={`max-w-2xl ${NOTE}`}>{t('landing.pricing.invite')}</p>
+          <p className={`max-w-2xl ${NOTE}`}>
+            {t(signUpOpen ? 'landing.pricing.openNote' : 'landing.pricing.invite')}
+          </p>
         </div>
         <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
           <h3 className="text-lg font-semibold">{t('landing.pricing.selfHostTitle')}</h3>

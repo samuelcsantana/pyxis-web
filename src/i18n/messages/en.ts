@@ -1569,6 +1569,9 @@ export const en = {
       selfHost:
         'The code is open source under the MIT license. You can run Pyxis on your own AWS, Neon and Vercel accounts without paying Pyxis anything. The paid plan is for people who would rather not look after that.',
       selfHostLink: 'See how to run the API',
+      start: 'Start your free trial',
+      openNote:
+        'Sign up with an e-mail and a card; the dashboard opens as soon as the subscription is confirmed.',
     },
     faq: {
       eyebrow: 'FAQ',
@@ -1603,6 +1606,8 @@ export const en = {
           question: 'Can I use it on my site?',
           answer:
             'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or subscribe to the hosted plan. To subscribe, request access at hello@pyxis-analytics.dev.',
+          answerOpen:
+            'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or subscribe to the hosted plan. Anyone in Brazil can sign up with an e-mail and a card: 14 days free, once per customer, and you cancel any time.',
         },
         price: {
           question: 'How much does it cost?',
@@ -1612,17 +1617,19 @@ export const en = {
         trial: {
           question: 'How does the free trial work?',
           answer:
-            'You get 14 days without paying. The card is asked for at the start and only charged on day 15; cancel before that and nothing is charged.',
+            'You get 14 days without paying, once per customer. The card is asked for at the start and only charged on day 15; cancel before that and nothing is charged.',
         },
         cancel: {
           question: 'How do I cancel?',
           answer:
-            'From the subscription portal, at any time. Access lasts until the end of the paid period, and your project’s data is deleted 30 days later. Ask within 7 days of the first charge and the whole amount is refunded.',
+            'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends.',
+          answerOpen:
+            'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends. The <terms>Terms of Use</terms> (in Portuguese) have the details.',
         },
         limit: {
           question: 'What if I go over 100,000 events?',
           answer:
-            'For now you get an e-mail and we talk it over. Nothing is cut off without notice.',
+            'You get an e-mail at 80% and at 100% of the month’s events. At 150%, the account stops taking events until the 1st of the next month, and events sent during the pause are lost. Nothing is ever charged beyond the price.',
         },
         payment: {
           question: 'Can I pay by Pix, and is there an invoice?',

@@ -1591,6 +1591,9 @@ export const es = translation({
       selfHost:
         'El código es abierto, con licencia MIT. Puedes ejecutar Pyxis en tus propias cuentas de AWS, Neon y Vercel, sin pagar nada a Pyxis. El plan de pago es para quien prefiere no ocuparse de eso.',
       selfHostLink: 'Ver cómo ejecutar la API',
+      start: 'Empieza tu prueba gratis',
+      openNote:
+        'Regístrate con un correo y una tarjeta; el panel se abre en cuanto se confirma la suscripción.',
     },
     faq: {
       eyebrow: 'Preguntas',
@@ -1625,6 +1628,8 @@ export const es = translation({
           question: '¿Puedo usarlo en mi sitio?',
           answer:
             'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Para suscribirte, pide acceso en hello@pyxis-analytics.dev.',
+          answerOpen:
+            'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Cualquier persona en Brasil puede registrarse con un correo y una tarjeta: 14 días gratis, una vez por cliente, y cancelas cuando quieras.',
         },
         price: {
           question: '¿Cuánto cuesta?',
@@ -1634,17 +1639,19 @@ export const es = translation({
         trial: {
           question: '¿Cómo funciona la prueba gratis?',
           answer:
-            'Son 14 días sin pagar. La tarjeta se pide al principio y solo se cobra el día 15; si cancelas antes, no se cobra nada.',
+            'Son 14 días sin pagar, una vez por cliente. La tarjeta se pide al principio y solo se cobra el día 15; si cancelas antes, no se cobra nada.',
         },
         cancel: {
           question: '¿Cómo cancelo?',
           answer:
-            'En el portal de la suscripción, en cualquier momento. El acceso sigue hasta el final del periodo pagado, y los datos de tu proyecto se borran 30 días después. Si lo pides dentro de los 7 días posteriores al primer cobro, se devuelve el importe completo.',
+            'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso.',
+          answerOpen:
+            'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso. Los detalles están en los <terms>Términos de Uso</terms> (en portugués).',
         },
         limit: {
           question: '¿Y si paso de 100 mil eventos?',
           answer:
-            'Por ahora, recibes un aviso por correo y lo conversamos. No se corta nada sin aviso.',
+            'Recibes un correo al 80% y al 100% de los eventos del mes. Al 150%, la cuenta deja de recibir eventos hasta el día 1 del mes siguiente, y los eventos enviados durante la pausa se pierden. No se cobra nada más allá del precio.',
         },
         payment: {
           question: '¿Hay Pix o factura?',
