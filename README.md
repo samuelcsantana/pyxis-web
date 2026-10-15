@@ -319,14 +319,16 @@ Shipping now:
   cookie (the theme choice stays in `localStorage`). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
   tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
-  plan's price (monthly or yearly, a CSS-only switch, and how to ask for access by e-mail while
-  access is by invitation), a FAQ and the introduction post. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document
+  plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
+  on the chosen interval while the API says sign-up is open, read on the server and cached for
+  five minutes, or how to ask for access by e-mail while it is closed), a FAQ and the introduction post. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document
   view transition between the languages) plus a count-up of the preview figures, and none of
   it runs under `prefers-reduced-motion`
 - The home page measures itself with this project's own tracker (`pyxis-analytics` from npm),
   only when `NEXT_PUBLIC_LANDING_PYXIS_KEY` is set: clicks on elements carrying `data-track`
   become named events (`demo_opened`, `code_opened`, `docs_opened`, `post_opened`,
-  `site_opened`, `snippet_copied`, `language_switched`, `pricing_opened`, `access_requested`), a button lists what this visit sent, live
+  `site_opened`, `snippet_copied`, `language_switched`, `pricing_opened`, `access_requested`,
+  `sign_up_opened`), a button lists what this visit sent, live
   (the SDK's `debug.onBatch`), and the footer says the page is measured, with a switch to stop
   measuring in this browser. The Content Security Policy lets the home page, and no other page,
   reach the ingestion API. Until the domain moves from the dashboard's Vercel project to the
