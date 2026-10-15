@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.22.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.21.0...v0.22.0) (2026-10-15)
+
+
+### Features
+
+* **landing:** add the hosted plan's price to the home page ([1134c56](https://github.com/samuelcsantana/pyxis-web/commit/1134c56b18d86ced35ca5239e2fd78a064482844))
+* **landing:** answer the price, trial, cancelling, limits and payment in the FAQ ([e74a045](https://github.com/samuelcsantana/pyxis-web/commit/e74a0456e8970f4752f2a420565e0dbae2d91a1d))
+* **landing:** lead to the pricing from the hero, the header and the footer ([fbb21ca](https://github.com/samuelcsantana/pyxis-web/commit/fbb21cac681486dba20c19fc6501072768f56196))
+* **landing:** let the copy button sit beside the text it copies ([ed81280](https://github.com/samuelcsantana/pyxis-web/commit/ed81280301e0bd3ca7be34495b13bb0567374ced))
+* **landing:** offer the free trial once sign-up is open, and answer as the terms do ([0a93519](https://github.com/samuelcsantana/pyxis-web/commit/0a93519388bc3b2f34ce6b3d8950f01106f64918))
+* **legal:** link the contract and identify the seller on the home page and at sign-up ([df3bd1a](https://github.com/samuelcsantana/pyxis-web/commit/df3bd1a20181e2a920a0d444a5d7cbccd7e41942))
+* **legal:** render the contract documents from their Markdown text ([a0cc2a6](https://github.com/samuelcsantana/pyxis-web/commit/a0cc2a6e1d7f7fb28f80c63773761e986967da24))
+* **legal:** serve the contract documents on the main domain ([f05d531](https://github.com/samuelcsantana/pyxis-web/commit/f05d531d384bee0b9fecb1d63d28270aec724a35))
+* **sign-up:** start on the billing interval the link asks for ([192f358](https://github.com/samuelcsantana/pyxis-web/commit/192f358f4b6db86a1167fa2da197aae30665d0fb))
+
+
+### Bug Fixes
+
+* **landing:** break a section title's word that is wider than the line ([ebd2a71](https://github.com/samuelcsantana/pyxis-web/commit/ebd2a71afc5431f4e7f0206ca1f7c2000fdb0173))
+* **legal:** give each scrollable table its own name ([de051f4](https://github.com/samuelcsantana/pyxis-web/commit/de051f47b79f9c5890c6ffd713946d7578761cb7))
+
+
+### Refactoring
+
+* **legal:** read the documents from disk apart from rendering them ([03a141e](https://github.com/samuelcsantana/pyxis-web/commit/03a141e845fc363bc7819ada209072bf8e0d5035))
+
+
+### Documentation
+
+* **readme:** describe the contract documents and the seller configuration ([b8b2baa](https://github.com/samuelcsantana/pyxis-web/commit/b8b2baa1038231b84089159e130dfb22b14279b1))
+* **readme:** describe the free trial button of the home page ([e768e6a](https://github.com/samuelcsantana/pyxis-web/commit/e768e6a489c13a67564a63cae900341b19ae5812))
+
 ## [0.21.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.20.0...v0.21.0) (2026-10-15)
 
 
