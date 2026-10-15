@@ -270,7 +270,12 @@ Shipping now:
   Read-only for everyone: the live public keys (a public key ships in the site, so it is shown in
   full), when each live secret key was created (never the key, which the API keeps only as a
   hash), how many months events are kept, and whether the project still waits for its first
-  event
+  event. Three states the operator sets show where they matter: a project with no live public
+  key (the operator revoked it, or the account's access ended, and a revoked key never works
+  again) says in Settings and on Install that it is not measuring and how the owner replaces the
+  key; a project whose event reception Pyxis suspended carries a banner on every screen (since
+  when, the reason for the owner, where to contest it) while its screens stay open; and a
+  project whose deletion Pyxis holds says so in place of the delete form
 - Sign-up for the hosted plan (`/sign-up`), shown only while the API keeps it open; otherwise a
   calm "not open yet" page with the live demo. A plan (monthly or yearly), an e-mail address and
   the terms of the version the API names, then the sign-in's code cells; the verified sign-up
