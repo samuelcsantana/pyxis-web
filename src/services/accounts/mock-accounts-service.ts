@@ -1,0 +1,50 @@
+import type { Account, BillingRedirectOutcome } from '@/domain/accounts';
+import { myAccountsResponseSchema } from '@/domain/accounts.schema';
+import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
+import type { IAccountsService } from './accounts-service.interface';
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const TRIAL_DAYS_LEFT = 9;
+const DEMO_EVENTS_THIS_MONTH = 41_230;
+const MEASURED_HOURS_AGO = 3;
+const HOUR_MS = 60 * 60 * 1000;
+
+export const DEMO_BILLING_URL = '/account';
+
+export function demoAccountsWire(now: Date) {
+  const trialEnd = new Date(now.getTime() + TRIAL_DAYS_LEFT * DAY_MS).toISOString();
+  return {
+    accounts: [
+      {
+        id: DEMO_ACCOUNT_ID,
+        role: 'owner',
+        status: 'trialing',
+        billing_interval: 'month',
+        trial_ends_at: trialEnd,
+        current_period_ends_at: trialEnd,
+        access_ends_at: null,
+        ingestion_paused_until: null,
+        month: now.toISOString().slice(0, 7),
+        events_this_month: DEMO_EVENTS_THIS_MONTH,
+        measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
+        limits: { events_per_month: 100_000, projects: 3, people: 3 },
+      },
+    ],
+  };
+}
+
+export class MockAccountsService implements IAccountsService {
+  constructor(private readonly now: () => Date = () => new Date()) {}
+
+  list(): Promise<readonly Account[]> {
+    return Promise.resolve(myAccountsResponseSchema.parse(demoAccountsWire(this.now())));
+  }
+
+  checkout(): Promise<BillingRedirectOutcome> {
+    return Promise.resolve({ kind: 'redirect', url: DEMO_BILLING_URL });
+  }
+
+  portal(): Promise<BillingRedirectOutcome> {
+    return Promise.resolve({ kind: 'redirect', url: DEMO_BILLING_URL });
+  }
+}

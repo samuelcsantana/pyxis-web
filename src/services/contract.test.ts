@@ -37,6 +37,8 @@ import { projectChangesWire, projectDeletionWire } from '@/domain/project-manage
 import { MockProjectManagementService } from './project-management/mock-project-management-service';
 import { newPersonWire } from '@/domain/project-people.schema';
 import { demoPeopleWire } from './project-people/mock-project-people-service';
+import { checkoutWire, portalWire } from '@/domain/accounts.schema';
+import { demoAccountsWire } from './accounts/mock-accounts-service';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -334,6 +336,16 @@ describe('the API contract copied from pyxis-api', () => {
       newPerson(newPersonWire(' ana@example.com ', 'pt-BR')),
       JSON.stringify(newPerson.errors),
     ).toBe(true);
+  });
+
+  it('accepts the demo accounts and the Checkout and portal requests', () => {
+    const accounts = contractSchema('MyAccounts');
+    const checkout = contractSchema('CheckoutRequest');
+    const portal = contractSchema('PortalRequest');
+
+    expect(accounts(demoAccountsWire(NOW)), JSON.stringify(accounts.errors)).toBe(true);
+    expect(checkout(checkoutWire('year', 'pt-BR')), JSON.stringify(checkout.errors)).toBe(true);
+    expect(portal(portalWire('es')), JSON.stringify(portal.errors)).toBe(true);
   });
 
   it('accepts the bodies the sign-in form sends, and the answer it keeps a token from', async () => {

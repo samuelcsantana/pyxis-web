@@ -1,0 +1,64 @@
+import { z } from 'zod';
+import {
+  ACCOUNT_ROLES,
+  ACCOUNT_STATUSES,
+  type Account,
+  BILLING_INTERVALS,
+  type BillingInterval,
+} from './accounts';
+
+const accountWireSchema = z.object({
+  id: z.string(),
+  role: z.enum(ACCOUNT_ROLES),
+  status: z.enum(ACCOUNT_STATUSES),
+  billing_interval: z.enum(BILLING_INTERVALS).nullable(),
+  trial_ends_at: z.string().nullable(),
+  current_period_ends_at: z.string().nullable(),
+  access_ends_at: z.string().nullable(),
+  ingestion_paused_until: z.string().nullable(),
+  month: z.string(),
+  events_this_month: z.number().int().nullable(),
+  measured_at: z.string().nullable(),
+  limits: z.object({
+    events_per_month: z.number().int(),
+    projects: z.number().int(),
+    people: z.number().int(),
+  }),
+});
+
+function fromWire(body: z.infer<typeof accountWireSchema>): Account {
+  return {
+    id: body.id,
+    role: body.role,
+    status: body.status,
+    billingInterval: body.billing_interval,
+    trialEndsAt: body.trial_ends_at,
+    currentPeriodEndsAt: body.current_period_ends_at,
+    accessEndsAt: body.access_ends_at,
+    ingestionPausedUntil: body.ingestion_paused_until,
+    month: body.month,
+    eventsThisMonth: body.events_this_month,
+    measuredAt: body.measured_at,
+    limits: {
+      eventsPerMonth: body.limits.events_per_month,
+      projects: body.limits.projects,
+      people: body.limits.people,
+    },
+  };
+}
+
+export const myAccountsResponseSchema = z
+  .object({ accounts: z.array(accountWireSchema) })
+  .transform((body): readonly Account[] => body.accounts.map(fromWire));
+
+export const billingRedirectResponseSchema = z
+  .object({ url: z.url() })
+  .transform((body) => body.url);
+
+export function checkoutWire(interval: BillingInterval, locale: string) {
+  return { interval, locale };
+}
+
+export function portalWire(locale: string) {
+  return { locale };
+}
