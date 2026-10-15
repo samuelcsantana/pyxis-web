@@ -1562,13 +1562,13 @@ export const en = {
       mailSubject: 'I would like to use Pyxis',
       trial: '14 days free. The card is only charged on day 15, and you can cancel any time.',
       availability:
-        'For now the hosted plan is sold in Brazil only, in reais. Anywhere else, you can host Pyxis yourself for free under the MIT license.',
+        'For now the hosted plan is sold in Brazil only, in reais. Anywhere else, you can <link>host Pyxis yourself</link> for free under the MIT license.',
       invite:
         'For now, access is by invitation: you ask, receive the payment link and, once subscribed, get access to the dashboard within 2 business days.',
-      selfHostTitle: 'Rather host it yourself?',
-      selfHost:
-        'The code is open source under the MIT license. You can run Pyxis on your own AWS, Neon and Vercel accounts without paying Pyxis anything. The paid plan is for people who would rather not look after that.',
-      selfHostLink: 'See how to run the API',
+      moreTitle: 'Need more?',
+      more: 'More than 3 sites, more than 100,000 events a month or more people in the dashboard? Tell us what you need at hello@pyxis-analytics.dev and we reply within 2 business days with a plan that fits.',
+      moreLink: 'Ask about a larger plan',
+      moreSubject: 'A larger Pyxis plan',
       start: 'Start your free trial',
       openNote:
         'Sign up with an e-mail and a card; the dashboard opens as soon as the subscription is confirmed.',

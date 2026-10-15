@@ -76,16 +76,37 @@ describe('PricingSection', () => {
     );
   });
 
-  it('points whoever would rather host it to the API runbook', () => {
+  it('links whoever would rather host it to the API runbook, from the sentence on availability', () => {
     render(<PricingSection i18n={english} signUpOpen={false} />);
 
-    const link = screen.getByRole('link', { name: 'See how to run the API' });
+    const link = screen.getByRole('link', { name: 'host Pyxis yourself' });
     expect(link).toHaveAttribute(
       'href',
       'https://github.com/samuelcsantana/pyxis-api/blob/main/docs/RUNBOOK.md#first-time-setup',
     );
     expect(link).toHaveAttribute('data-track', 'docs_opened');
     expect(link).toHaveAttribute('data-track-doc', 'self-host');
+    expect(screen.queryByRole('heading', { name: 'Rather host it yourself?' })).toBeNull();
+  });
+
+  it('invites whoever needs more than the plan to ask for a larger one, in their language', () => {
+    const { unmount } = render(<PricingSection i18n={english} signUpOpen />);
+
+    expect(screen.getByRole('heading', { name: 'Need more?' })).toBeVisible();
+    const ask = screen.getByRole('link', { name: 'Ask about a larger plan' });
+    expect(ask).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev?subject=A%20larger%20Pyxis%20plan',
+    );
+    expect(ask).toHaveAttribute('data-track', 'larger_plan_requested');
+    expect(ask).toHaveAttribute('data-track-from', 'pricing');
+    unmount();
+
+    render(<PricingSection i18n={portuguese} signUpOpen />);
+    expect(screen.getByRole('link', { name: 'Falar sobre um plano maior' })).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev?subject=Um%20plano%20maior%20do%20Pyxis',
+    );
   });
 
   it('writes the subject of the message in the visitor’s language', () => {

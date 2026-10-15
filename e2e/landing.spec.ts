@@ -235,11 +235,12 @@ test('opens the request for access with the address to write to', async ({ page 
   const pricing = page.getByRole('region', {
     name: 'One plan, in reais, with everything the demo shows',
   });
+  const address = pricing.getByText('hello@pyxis-analytics.dev', { exact: true });
 
-  await expect(pricing.getByText('hello@pyxis-analytics.dev')).toBeHidden();
+  await expect(address).toBeHidden();
   await pricing.getByText('Request access').click();
 
-  await expect(pricing.getByText('hello@pyxis-analytics.dev')).toBeVisible();
+  await expect(address).toBeVisible();
   await expect(pricing.getByRole('link', { name: 'Open in my e-mail app' })).toHaveAttribute(
     'href',
     'mailto:hello@pyxis-analytics.dev?subject=I%20would%20like%20to%20use%20Pyxis',

@@ -9,6 +9,7 @@ export const LANDING_EVENTS = {
   pricingOpened: 'pricing_opened',
   accessRequested: 'access_requested',
   signUpOpened: 'sign_up_opened',
+  largerPlanRequested: 'larger_plan_requested',
 } as const;
 
 export type LandingEvent = (typeof LANDING_EVENTS)[keyof typeof LANDING_EVENTS];

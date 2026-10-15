@@ -1576,13 +1576,13 @@ export const ptBR = translation({
       mailSubject: 'Quero usar o Pyxis',
       trial: '14 dias grátis. O cartão só é cobrado no 15º dia, e você cancela quando quiser.',
       availability:
-        'Por enquanto, o plano hospedado é vendido só no Brasil, em reais. Em qualquer outro lugar, você pode hospedar o Pyxis de graça, com a licença MIT.',
+        'Por enquanto, o plano hospedado é vendido só no Brasil, em reais. Em qualquer outro lugar, você pode <link>hospedar o Pyxis</link> de graça, com a licença MIT.',
       invite:
         'Nesta fase, o acesso é por convite: você pede, recebe o link de pagamento e, depois de assinar, o acesso ao painel chega em até 2 dias úteis.',
-      selfHostTitle: 'Prefere hospedar você mesmo?',
-      selfHost:
-        'O código é aberto, com licença MIT. Você pode rodar o Pyxis na sua própria conta da AWS, do Neon e da Vercel, sem pagar nada ao Pyxis. O plano pago é para quem prefere não cuidar disso.',
-      selfHostLink: 'Ver como rodar a API',
+      moreTitle: 'Precisa de mais?',
+      more: 'Mais de 3 sites, mais de 100 mil eventos por mês ou mais pessoas no painel? Conte o que você precisa em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
+      moreLink: 'Falar sobre um plano maior',
+      moreSubject: 'Um plano maior do Pyxis',
       start: 'Começar o teste grátis',
       openNote:
         'Cadastre-se com um e-mail e um cartão; o painel abre assim que a assinatura é confirmada.',
