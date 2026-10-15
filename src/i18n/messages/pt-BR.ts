@@ -349,6 +349,13 @@ export const ptBR = translation({
       open: 'Abrir a cobrança',
     },
   },
+  accountSuspended: {
+    title: 'Esta conta está suspensa',
+    explanation:
+      'A conta deste projeto está suspensa, então as telas dele ficam fechadas e os sites deixaram de ser medidos até a suspensão ser retirada.',
+    owner: 'O dono da conta encontra o motivo, e como contestar, em Conta e cobrança.',
+    open: 'Abrir Conta e cobrança',
+  },
   billing: {
     manage: 'Gerenciar cobrança',
     finish: 'Concluir a assinatura',

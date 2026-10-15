@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { UnauthenticatedError } from '@/domain/errors';
+import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import { readOrSignIn, sessionExpiredPath } from './current-admin';
 import { REQUESTED_PATH_HEADER } from './requested-path';
 
@@ -38,6 +38,20 @@ describe('readOrSignIn', () => {
     await expect(readOrSignIn(() => Promise.reject(new UnauthenticatedError()))).rejects.toThrow(
       'redirect:/sign-in?expired=1&next=%2Fp1%2Fvisits%3Frange%3D7d',
     );
+  });
+
+  it("sends a suspended account's screens to the page that explains the suspension", async () => {
+    await expect(
+      readOrSignIn(() =>
+        Promise.reject(new ApiRequestError('/v1/projects/p1/overview', 403, 'account_suspended')),
+      ),
+    ).rejects.toThrow('redirect:/account-suspended');
+  });
+
+  it('lets any other refusal through', async () => {
+    const refusal = new ApiRequestError('/v1/projects/p1/overview', 503);
+
+    await expect(readOrSignIn(() => Promise.reject(refusal))).rejects.toBe(refusal);
   });
 
   it('never sends anyone back to an address that is not a screen', async () => {
