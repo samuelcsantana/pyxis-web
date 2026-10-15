@@ -43,6 +43,7 @@ export interface SignUpFormProps {
   readonly openCheckout: OpenCheckoutFor;
   readonly signUpService?: ISignUpService;
   readonly demoCode?: string;
+  readonly initialInterval?: BillingInterval;
 }
 
 type Step = 'details' | 'code' | 'checkout';
@@ -101,13 +102,14 @@ export function SignUpForm({
   openCheckout,
   signUpService,
   demoCode,
+  initialInterval = 'month',
 }: SignUpFormProps) {
   const t = useT();
   const locale = useLocale();
   const router = useRouter();
   const service = useMemo(() => signUpService ?? createSignUpService(), [signUpService]);
   const [step, setStep] = useState<Step>('details');
-  const [interval, chooseInterval] = useState<BillingInterval>('month');
+  const [interval, chooseInterval] = useState<BillingInterval>(initialInterval);
   const [email, setEmail] = useState('');
   const [accepted, setAccepted] = useState(false);
   const [acceptedVersion, setAcceptedVersion] = useState('');

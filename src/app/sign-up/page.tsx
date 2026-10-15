@@ -5,7 +5,7 @@ import { AuthFrame } from '@/components/sign-up/auth-frame';
 import { SignUpForm } from '@/components/sign-up/sign-up-form';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { type Account, canCreateProjects, needsCheckout } from '@/domain/accounts';
-import { openSignUpOf } from '@/domain/sign-up';
+import { openSignUpOf, requestedIntervalOf } from '@/domain/sign-up';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { readOrSignIn } from '@/lib/current-admin';
@@ -38,12 +38,17 @@ async function ownedAccountsOfTheVisitor(): Promise<readonly Account[]> {
   return accounts.filter((account) => account.role === 'owner');
 }
 
-export default async function SignUpPage() {
-  const [owned, status, i18n, theme] = await Promise.all([
+export interface SignUpPageProps {
+  readonly searchParams?: Promise<{ readonly interval?: string | string[] }>;
+}
+
+export default async function SignUpPage({ searchParams }: SignUpPageProps = {}) {
+  const [owned, status, i18n, theme, query] = await Promise.all([
     ownedAccountsOfTheVisitor(),
     createSignUpService().status(),
     getI18n(),
     chosenTheme(),
+    searchParams,
   ]);
   if (owned.some(canCreateProjects)) {
     redirect(DASHBOARD_HOME);
@@ -74,6 +79,7 @@ export default async function SignUpPage() {
           unfinishedAccountId={unfinished?.id}
           openCheckout={openCheckout}
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
+          initialInterval={requestedIntervalOf(query?.interval)}
         />
       )}
       {seller === undefined ? null : <ContractNotice i18n={i18n} seller={seller} />}
