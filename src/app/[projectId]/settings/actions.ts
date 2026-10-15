@@ -23,6 +23,9 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
+import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
+import { currentLocale } from '@/i18n/current-locale';
+import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
@@ -41,6 +44,9 @@ const projectChangesSchema = z.strictObject({
 const projectKeyKindSchema = z.enum(PROJECT_KEY_KINDS);
 const projectKeyIdSchema = z.uuid();
 const confirmNameSchema = z.string().min(1).max(MAX_PROJECT_NAME_LENGTH);
+const MAX_EMAIL_LENGTH = 254;
+const personEmailSchema = z.email().max(MAX_EMAIL_LENGTH);
+const adminUserIdSchema = z.uuid();
 
 export async function chooseEmailPreferences(
   projectId: string,
@@ -130,4 +136,29 @@ export async function deleteProject(
     return { kind: 'nameMismatch' };
   }
   return readOrSignIn(() => createProjectManagementService().delete(project.id, parsed.data));
+}
+
+export async function addProjectPerson(
+  projectId: string,
+  email: string,
+): Promise<AddPersonOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = personEmailSchema.safeParse(email.trim());
+  if (!parsed.success) {
+    return { kind: 'invalidEmail' };
+  }
+  const locale = await currentLocale();
+  return readOrSignIn(() => createProjectPeopleService().add(project.id, parsed.data, locale));
+}
+
+export async function removeProjectPerson(
+  projectId: string,
+  adminUserId: string,
+): Promise<RemovePersonOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = adminUserIdSchema.safeParse(adminUserId);
+  if (!parsed.success) {
+    throw new Error('A person is removed by their id.');
+  }
+  return readOrSignIn(() => createProjectPeopleService().remove(project.id, parsed.data));
 }

@@ -8,14 +8,18 @@ import {
   type ProjectSettings,
 } from '@/domain/project-settings';
 import type { AccessToken } from '@/domain/access-tokens';
+import type { ProjectPerson } from '@/domain/project-people';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { AdminSession } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
 import { AccessTokensPanel } from './access-tokens-panel';
 import type { CreateAccessToken } from './create-access-token-form';
 import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-key-button';
+import type { AddPerson } from './add-person-form';
 import { type DeleteProject, DeleteProjectForm } from './delete-project-form';
+import { PeoplePanel } from './people-panel';
 import { ProjectForm, type SaveProject } from './project-form';
+import type { RemovePerson } from './remove-person-button';
 import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-key-button';
 import type { EndSession } from './end-session-button';
 import type { RevokeAccessToken } from './revoke-access-token-button';
@@ -28,6 +32,8 @@ export interface ProjectManagement {
   readonly createKey: CreateProjectKey;
   readonly revokeKey: RevokeProjectKey;
   readonly remove: DeleteProject;
+  readonly addPerson: AddPerson;
+  readonly removePerson: RemovePerson;
 }
 
 export interface ProjectSettingsViewProps {
@@ -41,6 +47,8 @@ export interface ProjectSettingsViewProps {
   readonly createAccessToken: CreateAccessToken;
   readonly revokeAccessToken: RevokeAccessToken;
   readonly manage: ProjectManagement;
+  readonly people: readonly ProjectPerson[];
+  readonly myEmail: string;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -361,6 +369,8 @@ export function ProjectSettingsView({
   createAccessToken,
   revokeAccessToken,
   manage,
+  people,
+  myEmail,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
@@ -399,6 +409,15 @@ export function ProjectSettingsView({
             <ManagedKeysPanel {...section} manage={manage} />
           </div>
           <div className="lg:col-span-2">
+            <PeoplePanel
+              people={people}
+              myEmail={myEmail}
+              i18n={i18n}
+              when={when}
+              manage={{ add: manage.addPerson, remove: manage.removePerson }}
+            />
+          </div>
+          <div className="lg:col-span-2">
             <DeletePanel {...section} manage={manage} />
           </div>
         </>
@@ -410,6 +429,9 @@ export function ProjectSettingsView({
           <RetentionPanel {...section} />
           <div className="lg:col-span-2">
             <KeysPanel {...section} />
+          </div>
+          <div className="lg:col-span-2">
+            <PeoplePanel people={people} myEmail={myEmail} i18n={i18n} when={when} manage={null} />
           </div>
         </>
       )}

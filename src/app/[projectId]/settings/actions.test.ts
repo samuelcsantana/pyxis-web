@@ -6,13 +6,16 @@ import { UnauthenticatedError } from '@/domain/errors';
 import type { IAccessTokensService } from '@/services/access-tokens/access-tokens-service.interface';
 import type { IEmailPreferencesService } from '@/services/preferences/email-preferences-service.interface';
 import type { IProjectManagementService } from '@/services/project-management/project-management-service.interface';
+import type { IProjectPeopleService } from '@/services/project-people/project-people-service.interface';
 import type { ISessionsService } from '@/services/sessions/sessions-service.interface';
 import {
+  addProjectPerson,
   chooseEmailPreferences,
   createAccessToken,
   createProjectKey,
   deleteProject,
   endSession,
+  removeProjectPerson,
   revokeAccessToken,
   revokeProjectKey,
   updateProject,
@@ -25,6 +28,7 @@ const state = vi.hoisted<{
   create: IAccessTokensService['create'];
   revoke: IAccessTokensService['revoke'];
   management: IProjectManagementService;
+  people: Pick<IProjectPeopleService, 'add' | 'remove'>;
 }>(() => ({
   admin: undefined,
   choose: () => Promise.reject(new Error('choose not set')),
@@ -37,6 +41,17 @@ const state = vi.hoisted<{
     revokeKey: () => Promise.reject(new Error('revokeKey not set')),
     delete: () => Promise.reject(new Error('delete not set')),
   },
+  people: {
+    add: () => Promise.reject(new Error('add not set')),
+    remove: () => Promise.reject(new Error('remove not set')),
+  },
+}));
+
+vi.mock('@/services/project-people/project-people-service.factory', () => ({
+  createProjectPeopleService: (): Pick<IProjectPeopleService, 'add' | 'remove'> => ({
+    add: (projectId, email, locale) => state.people.add(projectId, email, locale),
+    remove: (projectId, adminUserId) => state.people.remove(projectId, adminUserId),
+  }),
 }));
 
 vi.mock('@/services/project-management/project-management-service.factory', () => ({
@@ -357,5 +372,42 @@ describe('the owner managing a project', () => {
     await expect(updateProject('p-store', CHANGES)).rejects.toThrow(
       /^redirect:\/sign-in\?expired=1/,
     );
+  });
+});
+
+describe('the owner adding and removing people', () => {
+  const PERSON_ID = 'a03c5e7f-9b1d-4c4e-9f6a-8b0c2d4e6f8a';
+
+  function people() {
+    const mocks = {
+      add: vi.fn<IProjectPeopleService['add']>(() => Promise.resolve({ kind: 'limitReached' })),
+      remove: vi.fn<IProjectPeopleService['remove']>(() => Promise.resolve({ kind: 'removed' })),
+    };
+    state.people = { add: mocks.add, remove: mocks.remove };
+    return mocks;
+  }
+
+  it('adds a trimmed address with the language of the page, and removes someone by id', async () => {
+    const service = people();
+
+    await expect(addProjectPerson('p-store', ' ana@example.com ')).resolves.toEqual({
+      kind: 'limitReached',
+    });
+    await expect(removeProjectPerson('p-store', PERSON_ID)).resolves.toEqual({ kind: 'removed' });
+    expect(service.add).toHaveBeenCalledWith('p-store', 'ana@example.com', 'en');
+    expect(service.remove).toHaveBeenCalledWith('p-store', PERSON_ID);
+  });
+
+  it('refuses what the browser sent wrong, and projects the admin cannot read', async () => {
+    const service = people();
+
+    await expect(addProjectPerson('p-store', 'ana@')).resolves.toEqual({ kind: 'invalidEmail' });
+    await expect(removeProjectPerson('p-store', 'someone')).rejects.toThrow(
+      'A person is removed by their id.',
+    );
+    await expect(addProjectPerson('p-other', 'ana@example.com')).rejects.toThrow('not-found');
+    await expect(removeProjectPerson('p-other', PERSON_ID)).rejects.toThrow('not-found');
+    expect(service.add).not.toHaveBeenCalled();
+    expect(service.remove).not.toHaveBeenCalled();
   });
 });

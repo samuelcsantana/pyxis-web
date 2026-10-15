@@ -10,6 +10,12 @@ import {
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
 import { MockProjectManagementService } from '@/services/project-management/mock-project-management-service';
+import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
+import {
+  demoPeopleWire,
+  MockProjectPeopleService,
+} from '@/services/project-people/mock-project-people-service';
 import { demoSessionsWire } from '@/services/sessions/mock-sessions-service';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
@@ -24,6 +30,7 @@ function demoSettings(projectId: string) {
 
 const STORE = demoSettings(DEMO_STORE.id);
 const MANAGEMENT = new MockProjectManagementService();
+const PEOPLE = new MockProjectPeopleService(() => STORY_NOW);
 
 const meta = {
   title: 'Settings/Project settings',
@@ -56,7 +63,11 @@ const meta = {
       createKey: (kind) => MANAGEMENT.createKey(STORE.id, kind),
       revokeKey: (keyId) => MANAGEMENT.revokeKey(STORE.id, keyId),
       remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
+      addPerson: (email) => PEOPLE.add(STORE.id, email),
+      removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
     },
+    people: projectPeopleResponseSchema.parse(demoPeopleWire()),
+    myEmail: DEMO_ADMIN.email,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof ProjectSettingsView>;
@@ -84,6 +95,8 @@ export const WithoutASubscription: Story = {
       createKey: () => Promise.resolve({ kind: 'subscriptionRequired' }),
       revokeKey: () => Promise.resolve({ kind: 'subscriptionRequired' }),
       remove: (confirmName) => MANAGEMENT.delete(STORE.id, confirmName),
+      addPerson: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
     },
   },
 };
