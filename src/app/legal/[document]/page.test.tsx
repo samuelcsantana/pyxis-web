@@ -62,7 +62,8 @@ describe('a contract document on the main domain', () => {
 
     renderWithMessages(await LegalDocumentPage(atSlug('acordo-de-tratamento')), 'pt-BR');
 
-    expect(screen.getAllByRole('region', { name: 'Tabela' })[0]).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('region', { name: 'Tabela 1' })).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('region', { name: 'Tabela 2' })).toBeInTheDocument();
   });
 
   it('does not exist while the seller is missing, for an unknown document, or with an API', async () => {
