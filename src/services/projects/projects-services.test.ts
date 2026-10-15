@@ -37,7 +37,15 @@ describe('HttpProjectsService', () => {
     expect(admin).toEqual({
       email: 'ana@example.com',
       projects: [
-        { id: 'p1', name: 'Shop', timezone: 'UTC', conversionEvent: null, iconVersion: null },
+        {
+          id: 'p1',
+          name: 'Shop',
+          timezone: 'UTC',
+          conversionEvent: null,
+          iconVersion: null,
+          ingestionSuspendedAt: null,
+          ingestionSuspensionReason: null,
+        },
       ],
     });
     expect(fetchMock.mock.calls[0]?.[0]).toBe(`${API}/v1/me`);
@@ -129,6 +137,7 @@ describe('HttpProjectsService', () => {
       eventRetentionMonths: 13,
       publicKeys: [{ id: 'k1', key: 'pyxis_pk_abc', createdAt: '2026-10-01T00:00:00.000Z' }],
       secretKeys: [{ id: 'k2', createdAt: '2026-10-02T00:00:00.000Z' }],
+      deletionHeldAt: null,
     });
   });
 });

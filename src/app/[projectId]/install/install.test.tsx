@@ -21,6 +21,7 @@ const SETTINGS: ProjectSettings = {
   eventRetentionMonths: 13,
   publicKeys: [{ id: 'k1', key: 'pyxis_pk_store', createdAt: '2026-11-20T12:00:00.000Z' }],
   secretKeys: [],
+  deletionHeldAt: null,
 };
 
 const state = vi.hoisted<{ settings: () => Promise<ProjectSettings> }>(() => ({
