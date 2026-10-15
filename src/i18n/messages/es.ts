@@ -271,6 +271,8 @@ export const es = translation({
     deleting: 'Borrando…',
     nameMismatch: 'El nombre escrito no es el de este proyecto.',
     failed: 'El proyecto no se borró. Inténtalo de nuevo.',
+    deletionOnHold:
+      'Nada de esta cuenta se puede borrar mientras Pyxis mantiene el borrado en espera. Escribe a hello@pyxis-analytics.dev.',
   },
   people: {
     heading: 'Personas',

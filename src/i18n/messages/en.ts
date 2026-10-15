@@ -259,6 +259,8 @@ export const en = {
     deleting: 'Deleting…',
     nameMismatch: "The name typed is not this project's name.",
     failed: 'The project was not deleted. Try again.',
+    deletionOnHold:
+      'Nothing in this account can be deleted while Pyxis holds its deletion. Write to hello@pyxis-analytics.dev.',
   },
   people: {
     heading: 'People',

@@ -199,6 +199,14 @@ describe('HttpProjectManagementService delete', () => {
     });
   });
 
+  it('answers a project whose account holds its deletion', async () => {
+    const post = vi.fn(() => Promise.reject(refusal(API_ERROR_CODES.deletionOnHold)));
+
+    await expect(serviceWith({ post }).delete(PROJECT, 'Shop')).resolves.toEqual({
+      kind: 'deletionOnHold',
+    });
+  });
+
   it('lets any other failure through', async () => {
     const failure = new UnauthenticatedError();
     const post = vi.fn(() => Promise.reject(failure));

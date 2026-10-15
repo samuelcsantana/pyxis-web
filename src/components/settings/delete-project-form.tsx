@@ -15,7 +15,7 @@ export interface DeleteProjectFormProps {
   readonly remove: DeleteProject;
 }
 
-type Refusal = 'nameMismatch' | 'failed';
+type Refusal = 'nameMismatch' | 'deletionOnHold' | 'failed';
 
 export const DELETE_PROJECT_MIN_BUSY_MS = 400;
 export const PROJECTS_HOME = '/';
@@ -23,6 +23,7 @@ export const PROJECTS_HOME = '/';
 const INPUT = `min-h-11 w-full rounded-input px-3 text-base sm:text-sm ${FIELD}`;
 const REFUSALS = {
   nameMismatch: 'deleteProject.nameMismatch',
+  deletionOnHold: 'deleteProject.deletionOnHold',
   failed: 'deleteProject.failed',
 } as const satisfies Record<Refusal, string>;
 
@@ -52,8 +53,8 @@ export function DeleteProjectForm({ projectName, remove }: DeleteProjectFormProp
     request.current = defer(() => remove(typed.trim()))
       .pipe(
         tap((outcome) => {
-          if (outcome.kind === 'nameMismatch') {
-            setRefusal('nameMismatch');
+          if (outcome.kind !== 'deleted') {
+            setRefusal(outcome.kind);
             return;
           }
           router.push(PROJECTS_HOME);

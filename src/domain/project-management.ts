@@ -64,7 +64,10 @@ export type CreateProjectOutcome =
   | { readonly kind: 'subscriptionRequired' }
   | { readonly kind: 'invalid' };
 
-export type DeleteProjectOutcome = { readonly kind: 'deleted' } | { readonly kind: 'nameMismatch' };
+export type DeleteProjectOutcome =
+  | { readonly kind: 'deleted' }
+  | { readonly kind: 'nameMismatch' }
+  | { readonly kind: 'deletionOnHold' };
 
 export function originOf(input: string): string | null {
   const trimmed = input.trim();
