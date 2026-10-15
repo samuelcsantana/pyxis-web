@@ -36,6 +36,7 @@ import { createI18n, displayTag, type I18n } from '@/i18n/i18n';
 import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
 import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measurement-config';
+import { legalConfig } from '@/lib/legal-config';
 import {
   LANDING_PAGES,
   type LandingPage,
@@ -147,6 +148,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       </MainContent>
       <LandingFooter
         i18n={i18n}
+        seller={legalConfig()?.seller}
         note={
           trackingKey === undefined ? null : <MeasurementNote labels={measurementLabelsOf(i18n)} />
         }

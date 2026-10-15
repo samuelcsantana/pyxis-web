@@ -13,6 +13,8 @@ import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
+import { ContractNotice } from '@/components/legal/contract-notice';
+import { legalConfig } from '@/lib/legal-config';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
 import { sessionToken } from '@/services/session-token';
 import { createSignUpService } from '@/services/sign-up/sign-up-service.factory';
@@ -48,6 +50,7 @@ export default async function SignUpPage() {
   }
   const unfinished = owned.find(needsCheckout);
   const open = openSignUpOf(status);
+  const seller = legalConfig()?.seller;
   const { t } = i18n;
   return (
     <AuthFrame i18n={i18n} theme={theme}>
@@ -73,6 +76,7 @@ export default async function SignUpPage() {
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
         />
       )}
+      {seller === undefined ? null : <ContractNotice i18n={i18n} seller={seller} />}
     </AuthFrame>
   );
 }

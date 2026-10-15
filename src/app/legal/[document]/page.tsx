@@ -77,7 +77,7 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
       <MainContent className="grow">
         <LegalDocumentView i18n={i18n} current={document} html={html} />
       </MainContent>
-      <LandingFooter i18n={i18n} />
+      <LandingFooter i18n={i18n} seller={config.seller} />
       <PreferenceCarrier locale={CONTRACT_LANGUAGE} />
     </div>
   );
