@@ -35,6 +35,8 @@ import {
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 import { projectChangesWire, projectDeletionWire } from '@/domain/project-management.schema';
 import { MockProjectManagementService } from './project-management/mock-project-management-service';
+import { newPersonWire } from '@/domain/project-people.schema';
+import { demoPeopleWire } from './project-people/mock-project-people-service';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -321,6 +323,17 @@ describe('the API contract copied from pyxis-api', () => {
       expect(newKey({ kind }), JSON.stringify(newKey.errors)).toBe(true);
       expect(outcome.kind === 'created' && createdKey(outcome.key)).toBe(true);
     }
+  });
+
+  it('accepts the people the demo lists and the address the owner adds', () => {
+    const people = contractSchema('ProjectPeople');
+    const newPerson = contractSchema('NewProjectPerson');
+
+    expect(people(demoPeopleWire()), JSON.stringify(people.errors)).toBe(true);
+    expect(
+      newPerson(newPersonWire(' ana@example.com ', 'pt-BR')),
+      JSON.stringify(newPerson.errors),
+    ).toBe(true);
   });
 
   it('accepts the bodies the sign-in form sends, and the answer it keeps a token from', async () => {
