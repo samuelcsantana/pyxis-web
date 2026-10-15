@@ -1,11 +1,20 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Account, AccountNotice, BillingRedirectOutcome } from '@/domain/accounts';
+import type {
+  Account,
+  AccountNotice,
+  BillingRedirectOutcome,
+  CloseAccountOutcome,
+} from '@/domain/accounts';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { AccountNoticeBanner } from './account-notice-banner';
 import { AccountOverview } from './account-overview';
 import * as billing from './billing-actions';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
 
 const NOW = new Date('2026-11-20T12:00:00.000Z');
 
@@ -27,6 +36,7 @@ const ACCOUNT: Account = {
 const OPEN = {
   openCheckout: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
   openPortal: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
+  close: () => Promise.resolve<CloseAccountOutcome>({ kind: 'confirmationMismatch' }),
 };
 
 function overview(account: Partial<Account> = {}) {
@@ -109,6 +119,16 @@ describe('AccountOverview', () => {
 
     expect(screen.getByText(/Measuring is paused until Dec 1, 2026/)).toBeInTheDocument();
     expect(container.querySelector('.bg-bad')).toHaveStyle({ width: '100%' });
+  });
+
+  it('offers to close an account that has not ended, and not one that has', () => {
+    const { unmount } = overview();
+    expect(screen.getByRole('heading', { name: 'Close the account' })).toBeInTheDocument();
+    expect(screen.getByText(/refunded in full/)).toBeInTheDocument();
+    unmount();
+
+    overview({ status: 'ended', accessEndsAt: '2026-11-10T00:00:00.000Z' });
+    expect(screen.queryByRole('heading', { name: 'Close the account' })).not.toBeInTheDocument();
   });
 
   it('says nothing about a pause already over', () => {

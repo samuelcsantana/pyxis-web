@@ -59,3 +59,22 @@ test('speaks Portuguese', async ({ page, context, baseURL }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'Conta e cobrança' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Gerenciar cobrança' })).toBeVisible();
 });
+
+test('closes the account only with the owner address, saying when everything goes', async ({
+  page,
+}) => {
+  await page.goto('/account');
+  const field = page.getByRole('textbox', { name: 'Type your e-mail address to confirm' });
+
+  await field.fill('someone@example.com');
+  await page.getByRole('button', { name: 'Close the account for good' }).click();
+  await expect(page.getByRole('main').getByRole('alert')).toHaveText(
+    'That is not your e-mail address, so nothing was closed.',
+  );
+
+  await field.fill('owner@demo-store.example');
+  await page.getByRole('button', { name: 'Close the account for good' }).click();
+  await expect(page.getByRole('main').getByRole('status')).toContainText(
+    'The account is closed. Everything is deleted on',
+  );
+});

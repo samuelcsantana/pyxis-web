@@ -33,6 +33,7 @@ vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('not-found');
   },
+  useRouter: () => ({ refresh: vi.fn() }),
 }));
 
 describe('AccountPage', () => {
@@ -49,6 +50,7 @@ describe('AccountPage', () => {
     expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
     expect(screen.getByText(/Free trial until/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close the account for good' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to the dashboard' })).toHaveAttribute(
       'href',
       DASHBOARD_HOME,

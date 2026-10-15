@@ -334,6 +334,51 @@ export const en = {
     unavailable: 'Billing is not available right now. Try again later.',
     failed: 'Stripe could not be opened. Try again.',
   },
+  exportEvents: {
+    heading: 'Export events',
+    note: 'Every event this project keeps, in a compressed CSV file. It takes a few minutes: you get an e-mail with the link, and the file is kept for {days} days. Up to {max} exports a day.',
+    request: 'Export events',
+    requesting: 'Asking…',
+    requested: 'The file is being prepared. You will get an e-mail when it is ready.',
+    alreadyWaiting: 'An export of this project is already being prepared.',
+    open: 'Open the export',
+    limitReached:
+      'You asked for {max} exports of this project today, the most a day. Try again tomorrow.',
+    unavailable: 'Exports are not available right now. Try again later.',
+    failed: 'The export was not asked for. Try again.',
+  },
+  exportPage: {
+    title: 'Export',
+    subtitle: 'The events of {project}, in a compressed CSV file.',
+    pending: 'Preparing the file…',
+    pendingNote:
+      'This page checks again every few seconds, and you also get an e-mail when it is ready.',
+    done: '{count} events, ready until {date}.',
+    download: 'Download the file',
+    downloadNote: 'Each download asks for a fresh link, valid for five minutes.',
+    expired:
+      'The file was deleted on {date}, a week after it was ready. Ask for another one in Settings.',
+    gone: 'The file is no longer available. Ask for another one in Settings.',
+    failed: 'The export failed. Ask for another one in Settings.',
+    settings: 'Open Settings',
+    requestedAt: 'Asked for on {date}',
+  },
+  closeAccount: {
+    heading: 'Close the account',
+    note: 'Cancels the subscription now and revokes the keys of every project, so the sites stop sending events. Everything is deleted thirty days later; export what you need first.',
+    refundNote:
+      'A first payment made in the last seven days is refunded in full. Otherwise nothing is refunded.',
+    confirm: 'Type your e-mail address to confirm',
+    close: 'Close the account for good',
+    closing: 'Closing…',
+    closed: 'The account is closed. Everything is deleted on {date}.',
+    refunded: '{amount} were refunded to your card.',
+    confirmationMismatch: 'That is not your e-mail address, so nothing was closed.',
+    alreadyEnded: 'This account has already ended.',
+    unavailable:
+      'Stripe could not cancel the subscription, so nothing was closed. Try again later.',
+    failed: 'The account was not closed. Try again.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Weekly digest',

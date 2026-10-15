@@ -1,6 +1,7 @@
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
   type Account,
+  canClose,
   deletionDateOf,
   hasBillingPortal,
   needsCheckout,
@@ -8,6 +9,7 @@ import {
 } from '@/domain/accounts';
 import type { I18n } from '@/i18n/i18n';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
+import { type CloseAccount, CloseAccountForm } from './close-account-form';
 
 export interface AccountOverviewProps {
   readonly account: Account;
@@ -15,6 +17,7 @@ export interface AccountOverviewProps {
   readonly now: Date;
   readonly openCheckout: OpenCheckout;
   readonly openPortal: OpenBillingPortal;
+  readonly close: CloseAccount;
 }
 
 const NOTE = 'text-xs leading-[18px] text-muted';
@@ -57,7 +60,7 @@ function UsageMeter({
   account,
   i18n,
   now,
-}: Omit<AccountOverviewProps, 'openCheckout' | 'openPortal'>) {
+}: Pick<AccountOverviewProps, 'account' | 'i18n' | 'now'>) {
   const share = quotaShare(account);
   const pausedUntil =
     account.ingestionPausedUntil !== null &&
@@ -103,6 +106,7 @@ export function AccountOverview({
   now,
   openCheckout,
   openPortal,
+  close,
 }: AccountOverviewProps) {
   return (
     <section aria-labelledby={`account-${account.id}-heading`} className={PANEL}>
@@ -123,6 +127,14 @@ export function AccountOverview({
       </p>
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
       {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
+      {canClose(account) ? (
+        <div className="flex flex-col gap-2 border-t border-line pt-3">
+          <h3 className="text-sm font-semibold">{i18n.t('closeAccount.heading')}</h3>
+          <p className="text-sm">{i18n.t('closeAccount.note')}</p>
+          <p className={NOTE}>{i18n.t('closeAccount.refundNote')}</p>
+          <CloseAccountForm close={close} />
+        </div>
+      ) : null}
     </section>
   );
 }

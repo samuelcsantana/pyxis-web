@@ -61,6 +61,7 @@ const EMAIL = {
     remove: () => Promise.resolve({ kind: 'deleted' } as const),
     addPerson: () => Promise.resolve({ kind: 'limitReached' } as const),
     removePerson: () => Promise.resolve({ kind: 'removed' } as const),
+    requestExport: () => Promise.resolve({ kind: 'unavailable' } as const),
   },
   people: [
     {
@@ -198,6 +199,12 @@ describe('ProjectSettingsView', () => {
     expect(within(keys).getByRole('button', { name: 'New secret key' })).toBeInTheDocument();
     expect(
       within(panel('Delete project')).getByRole('textbox', { name: 'Type Shop to confirm' }),
+    ).toBeInTheDocument();
+    expect(panel('Export events')).toHaveTextContent(
+      'the file is kept for 7 days. Up to 3 exports a day.',
+    );
+    expect(
+      within(panel('Export events')).getByRole('button', { name: 'Export events' }),
     ).toBeInTheDocument();
   });
 

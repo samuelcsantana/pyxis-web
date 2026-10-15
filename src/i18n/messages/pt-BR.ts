@@ -343,6 +343,51 @@ export const ptBR = translation({
     unavailable: 'A cobrança não está disponível agora. Tente mais tarde.',
     failed: 'Não deu para abrir o Stripe. Tente de novo.',
   },
+  exportEvents: {
+    heading: 'Exportar eventos',
+    note: 'Todos os eventos que este projeto guarda, num arquivo CSV compactado. Leva alguns minutos: você recebe um e-mail com o link, e o arquivo fica guardado por {days} dias. Até {max} exportações por dia.',
+    request: 'Exportar eventos',
+    requesting: 'Pedindo…',
+    requested: 'O arquivo está sendo preparado. Você recebe um e-mail quando ficar pronto.',
+    alreadyWaiting: 'Uma exportação deste projeto já está sendo preparada.',
+    open: 'Abrir a exportação',
+    limitReached:
+      'Você já pediu {max} exportações deste projeto hoje, o máximo por dia. Tente de novo amanhã.',
+    unavailable: 'As exportações não estão disponíveis agora. Tente mais tarde.',
+    failed: 'A exportação não foi pedida. Tente de novo.',
+  },
+  exportPage: {
+    title: 'Exportação',
+    subtitle: 'Os eventos do {project}, num arquivo CSV compactado.',
+    pending: 'Preparando o arquivo…',
+    pendingNote:
+      'Esta página confere de novo a cada poucos segundos, e você também recebe um e-mail quando ficar pronto.',
+    done: '{count} eventos, disponível até {date}.',
+    download: 'Baixar o arquivo',
+    downloadNote: 'Cada download pede um link novo, válido por cinco minutos.',
+    expired:
+      'O arquivo foi apagado em {date}, uma semana depois de ficar pronto. Peça outro em Configurações.',
+    gone: 'O arquivo não está mais disponível. Peça outro em Configurações.',
+    failed: 'A exportação falhou. Peça outra em Configurações.',
+    settings: 'Abrir Configurações',
+    requestedAt: 'Pedida em {date}',
+  },
+  closeAccount: {
+    heading: 'Encerrar a conta',
+    note: 'Cancela a assinatura agora e revoga as chaves de todos os projetos, então os sites param de enviar eventos. Tudo é apagado trinta dias depois; exporte antes o que você precisar.',
+    refundNote:
+      'Um primeiro pagamento feito nos últimos sete dias é devolvido por inteiro. Fora isso, nada é devolvido.',
+    confirm: 'Digite seu e-mail para confirmar',
+    close: 'Encerrar a conta para sempre',
+    closing: 'Encerrando…',
+    closed: 'A conta está encerrada. Tudo é apagado em {date}.',
+    refunded: '{amount} foram devolvidos ao seu cartão.',
+    confirmationMismatch: 'Esse não é o seu e-mail, então nada foi encerrado.',
+    alreadyEnded: 'Esta conta já está encerrada.',
+    unavailable:
+      'O Stripe não conseguiu cancelar a assinatura, então nada foi encerrado. Tente mais tarde.',
+    failed: 'A conta não foi encerrada. Tente de novo.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Resumo semanal',
