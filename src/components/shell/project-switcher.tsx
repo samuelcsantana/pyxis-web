@@ -13,7 +13,11 @@ import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from '.
 export interface ProjectSwitcherProps {
   readonly projects: readonly Project[];
   readonly currentProject: Project;
+  readonly canCreateProject?: boolean;
 }
+
+export const NEW_PROJECT_PAGE = '/new-project';
+const PLUS_ICON = 'M12 5v14M5 12h14';
 
 function sameScreenIn(pathname: string) {
   const current = screenOf(pathname);
@@ -41,7 +45,11 @@ function CurrentCheck() {
   );
 }
 
-export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherProps) {
+export function ProjectSwitcher({
+  projects,
+  currentProject,
+  canCreateProject = false,
+}: ProjectSwitcherProps) {
   const t = useT();
   const pathname = usePathname();
   const query = periodParameters(useSearchParams());
@@ -100,6 +108,31 @@ export function ProjectSwitcher({ projects, currentProject }: ProjectSwitcherPro
             </li>
           );
         })}
+        {canCreateProject ? (
+          <li className="border-t border-nav-line pt-1">
+            <Link
+              href={NEW_PROJECT_PAGE}
+              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${NAV_ITEM_IDLE}`}
+            >
+              <svg
+                width={16}
+                height={16}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="shrink-0 text-nav-muted"
+              >
+                <path
+                  d={PLUS_ICON}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="min-w-0 grow">{t('nav.newProject')}</span>
+            </Link>
+          </li>
+        ) : null}
       </ul>
     </DismissableDetails>
   );

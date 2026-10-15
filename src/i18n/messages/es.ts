@@ -28,6 +28,7 @@ export const es = translation({
     closeMenu: 'Cerrar el menú',
     section: 'Analítica',
     switchProject: 'Cambiar de proyecto. Proyecto actual:',
+    newProject: 'Nuevo proyecto',
     signOut: 'Cerrar sesión',
     signOutEverywhere: 'Cerrar sesión en todos los dispositivos',
     signingOut: 'Cerrando sesión…',
@@ -138,6 +139,9 @@ export const es = translation({
     noProjects: {
       title: 'Todavía no hay proyectos',
       body: '<email/> puede iniciar sesión, pero todavía no tiene ningún proyecto asignado. Pide al operador de este Pyxis que ejecute <code>admin:grant</code> para tu correo.',
+      create: 'Crear el primer proyecto',
+      bodyOwner:
+        'Tu cuenta está lista. Crea un proyecto para tu sitio y luego instala el rastreador.',
     },
   },
   demo: {
@@ -389,6 +393,54 @@ export const es = translation({
     unavailable:
       'Stripe no pudo cancelar la suscripción, así que no se cerró nada. Inténtalo más tarde.',
     failed: 'La cuenta no se cerró. Inténtalo de nuevo.',
+  },
+  newProject: {
+    title: 'Nuevo proyecto',
+    intro:
+      'Un proyecto mide un sitio. Su dirección pasa a ser el único origen que puede enviar eventos; puedes añadir otros después en Configuración.',
+    name: 'Nombre del proyecto',
+    namePlaceholder: 'Mi tienda',
+    site: 'Dirección del sitio',
+    sitePlaceholder: 'https://tienda.ejemplo.com',
+    timezone: 'Zona horaria',
+    conversionEvent: 'Evento de conversión (opcional)',
+    conversionEventPlaceholder: 'signup_completed',
+    create: 'Crear proyecto',
+    creating: 'Creando…',
+    nameMissing: 'Ponle un nombre al proyecto.',
+    nameTooLong: 'Usa como máximo {max} caracteres.',
+    siteMissing: 'Escribe la dirección del sitio.',
+    siteInvalid: 'Escribe la dirección con esquema y host, como https://tienda.ejemplo.com.',
+    timezoneInvalid: 'Elige una zona horaria de la lista.',
+    conversionEventInvalid:
+      'Usa letras minúsculas, números y guiones bajos, empezando por una letra.',
+    limitReached:
+      'La cuenta ya tiene sus {max} proyectos. Borra uno en su Configuración para crear otro.',
+    subscriptionRequired:
+      'Esta cuenta no tiene una suscripción activa, así que no puede crear proyectos.',
+    invalid: 'Esta configuración fue rechazada. Revisa los campos e inténtalo de nuevo.',
+    failed: 'No se creó el proyecto. Inténtalo de nuevo.',
+    noAccount: 'Solo el dueño de una cuenta con suscripción activa crea proyectos.',
+    back: 'Volver al panel',
+  },
+  install: {
+    title: 'Instalación',
+    subtitle: 'Envía los primeros eventos de {project}.',
+    step1: '1. Añade el rastreador a tu sitio',
+    npm: 'Con un bundler (npm):',
+    script: 'O en HTML puro, antes del cierre del body:',
+    step2: '2. Abre una página de tu sitio',
+    step2Note:
+      'Las vistas de página de {origin} aparecen aquí en menos de un minuto. Los bloqueadores de anuncios pueden frenarlas; prueba una ventana privada.',
+    waiting: 'Esperando el primer evento…',
+    waitingNote: 'Esta página vuelve a comprobar cada pocos segundos.',
+    received: 'Llegó el primer evento.',
+    open: 'Abrir el panel',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    selected: 'Seleccionado, presiona Ctrl+C',
+    privacy:
+      'Pyxis no guarda cookies en tus visitantes, ni direcciones IP, ni datos personales. Indica en tu política de privacidad que el sitio mide su uso con Pyxis.',
   },
   emailPreferences: {
     heading: 'Correo electrónico',

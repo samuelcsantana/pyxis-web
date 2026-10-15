@@ -70,6 +70,18 @@ export type CloseAccountOutcome =
   | { readonly kind: 'alreadyEnded' }
   | { readonly kind: 'unavailable' };
 
+const STATUSES_THAT_CREATE: ReadonlySet<AccountStatus> = new Set([
+  'trialing',
+  'active',
+  'past_due',
+  'ending',
+  'comped',
+]);
+
+export function canCreateProjects(account: Account): boolean {
+  return account.role === 'owner' && STATUSES_THAT_CREATE.has(account.status);
+}
+
 export function canClose(account: Account): boolean {
   return account.role === 'owner' && account.status !== 'ended';
 }

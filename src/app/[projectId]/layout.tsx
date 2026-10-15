@@ -9,7 +9,7 @@ import { DemoBanner } from '@/components/states/demo-banner';
 import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
-import { bestEffortAccountNotice } from '@/lib/account-notice';
+import { bestEffortAccountsInView } from '@/lib/accounts-in-view';
 import { projectOrNotFound } from '@/lib/current-admin';
 import { chosenTheme } from '@/lib/theme-cookie';
 
@@ -20,7 +20,10 @@ export interface ProjectLayoutProps {
 
 export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [i18n, notice] = await Promise.all([getI18n(), bestEffortAccountNotice(new Date())]);
+  const [i18n, { notice, canCreateProject }] = await Promise.all([
+    getI18n(),
+    bestEffortAccountsInView(new Date()),
+  ]);
   return (
     <NavigationPendingProvider>
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
@@ -33,6 +36,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
             theme={await chosenTheme()}
             i18n={i18n}
             chooseLocale={chooseLocale}
+            canCreateProject={canCreateProject}
           />
         </MobileMenu>
         <NavigationRegion className="flex min-w-0 flex-col">

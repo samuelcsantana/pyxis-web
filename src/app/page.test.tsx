@@ -1,13 +1,24 @@
 import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
+import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import HomePage from './page';
 
-const state = vi.hoisted<{ admin: unknown; failure: Error | undefined }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  failure: Error | undefined;
+  accounts: () => Promise<readonly Account[]>;
+}>(() => ({
   admin: undefined,
   failure: undefined,
+  accounts: () => Promise.resolve([]),
+}));
+
+vi.mock('@/services/accounts/accounts-service.factory', () => ({
+  createAccountsService: () => ({ list: () => state.accounts() }),
 }));
 
 vi.mock('next/headers', () => ({
@@ -48,6 +59,7 @@ const ADMIN: Admin = {
 beforeEach(() => {
   state.admin = ADMIN;
   state.failure = undefined;
+  state.accounts = () => Promise.resolve([]);
 });
 
 describe('HomePage', () => {
@@ -66,6 +78,20 @@ describe('HomePage', () => {
     );
     expect(screen.getByText('admin:grant').tagName).toBe('CODE');
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
+  });
+
+  it('offers the owner of a running account to create the first project', async () => {
+    state.admin = { ...ADMIN, projects: [] };
+    state.accounts = () => new MockAccountsService().list();
+
+    renderWithMessages(await HomePage());
+
+    expect(screen.getByRole('main')).toHaveTextContent('Your account is ready.');
+    expect(screen.getByRole('link', { name: 'Create your first project' })).toHaveAttribute(
+      'href',
+      '/new-project',
+    );
+    expect(screen.queryByText('admin:grant')).not.toBeInTheDocument();
   });
 
   it('sends an ended session back to sign in, saying why', async () => {

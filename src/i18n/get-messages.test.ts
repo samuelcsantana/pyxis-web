@@ -50,6 +50,7 @@ describe('get-messages', () => {
       'billing',
       'exportEvents',
       'closeAccount',
+      'newProject',
     ]);
     expect(messages.funnelEditor.problems.pathStart).toBe('A page path starts with "/".');
   });
