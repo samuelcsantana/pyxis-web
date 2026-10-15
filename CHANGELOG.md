@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.21.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.20.0...v0.21.0) (2026-10-15)
+
+
+### Features
+
+* **account:** offer an ended account to subscribe again ([847e9c7](https://github.com/samuelcsantana/pyxis-web/commit/847e9c760ef760293c10595032b03d7f48194008))
+* **account:** say until when the account is exempt from the pause ([9d7d130](https://github.com/samuelcsantana/pyxis-web/commit/9d7d130df232af02e89823af2f1dafa5729909ab))
+* **accounts:** read the pause exemption and the stages of subscribing again ([d65dead](https://github.com/samuelcsantana/pyxis-web/commit/d65dead11e92d06adeb424680ea5a4042879ad64))
+* **projects:** read a suspended event reception and a held deletion ([efd5468](https://github.com/samuelcsantana/pyxis-web/commit/efd54687dc29ee3dacb13f7421a6586178399b0e))
+* **settings:** explain a project with no live public key and how to replace it ([f495c5e](https://github.com/samuelcsantana/pyxis-web/commit/f495c5e7e8a305b63ea9094c76cd55f300791d66))
+* **settings:** say a held deletion instead of offering to delete the project ([58a8e68](https://github.com/samuelcsantana/pyxis-web/commit/58a8e684b7f420e1915ae81d622e89f60bc91a57))
+* **shell:** say on every project screen that its event reception is suspended ([b5c9ce8](https://github.com/samuelcsantana/pyxis-web/commit/b5c9ce8577015f129980b46d9f0d7bdf55b31de5))
+* **welcome:** welcome back a subscription that is active again ([08b5d6f](https://github.com/samuelcsantana/pyxis-web/commit/08b5d6f46f0722aa07c00123bca046644d44276c))
+
+
+### Refactoring
+
+* **accounts:** read the operator fields as required ([496ac55](https://github.com/samuelcsantana/pyxis-web/commit/496ac55bf79854864ac2beec1cf349c0013e8d30))
+* **projects:** read the second round of operator fields as required ([eabd7a9](https://github.com/samuelcsantana/pyxis-web/commit/eabd7a9c0a5fccfc4680845049b9105d09635df8))
+
+
+### Documentation
+
+* **readme:** describe subscribing again and the pause exemption ([856c101](https://github.com/samuelcsantana/pyxis-web/commit/856c101ca56157d4b77fa117833b6a7b802ca57d))
+* **readme:** describe the suspended reception, the missing key and the held deletion ([a4dbeef](https://github.com/samuelcsantana/pyxis-web/commit/a4dbeef0dd93a7f9e62b63ea0867986d0e6a1fea))
+
 ## [0.20.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.19.0...v0.20.0) (2026-10-15)
 
 
