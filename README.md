@@ -271,6 +271,13 @@ Shipping now:
   full), when each live secret key was created (never the key, which the API keeps only as a
   hash), how many months events are kept, and whether the project still waits for its first
   event
+- Sign-up for the hosted plan (`/sign-up`), shown only while the API keeps it open; otherwise a
+  calm "not open yet" page with the live demo. A plan (monthly or yearly), an e-mail address and
+  the terms of the version the API names, then the sign-in's code cells; the verified sign-up
+  keeps its session through the same Server Action as signing in and goes straight to Stripe
+  Checkout. Stripe returns to `/welcome?account=<id>`, which waits for the confirmation (checked
+  every five seconds) and then offers the first project; leaving Checkout returns to
+  `/sign-up?step=plan`, which asks the owner to finish the subscription, as the empty home does
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; the plan's three projects). The new project
@@ -414,6 +421,8 @@ origin the sign-in and sign-out calls carry.
 | `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
 | `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                                                                        |
 | `/[projectId]/exports/[exportId]`                | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
+| `/sign-up`                                       | The sign-up (plan, e-mail, terms, code, then Checkout), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                                                                                                                    |
+| `/welcome?account=<id>`                          | Where Checkout returns: waits for Stripe's confirmation, then the trial's end and the first project                                                                                                                                                                                          |
 | `/new-project`                                   | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
 | `/[projectId]/install`                           | The tracker's snippets with the project's key, and the wait for its first event                                                                                                                                                                                                              |
 | `/account`                                       | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
