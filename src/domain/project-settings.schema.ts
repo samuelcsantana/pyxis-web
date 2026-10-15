@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import type { ProjectSettings } from './project-settings';
+import { PROJECT_ROLES, type ProjectSettings } from './project-settings';
 
 const keySchema = z.object({ id: z.string(), created_at: z.string() });
 
 export const projectSettingsResponseSchema = z
   .object({
     id: z.string(),
+    account_id: z.string().nullable(),
+    role: z.enum(PROJECT_ROLES).nullable(),
     name: z.string(),
     timezone: z.string(),
     conversion_event: z.string().nullable(),
@@ -19,6 +21,8 @@ export const projectSettingsResponseSchema = z
   })
   .transform((body): ProjectSettings => ({
     id: body.id,
+    accountId: body.account_id,
+    role: body.role,
     name: body.name,
     timezone: body.timezone,
     conversionEvent: body.conversion_event,

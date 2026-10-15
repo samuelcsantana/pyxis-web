@@ -2,6 +2,7 @@ import type { DemoProject } from '../demo/demo-catalog';
 import { DEMO_DOCS, demoProjectOf } from '../demo/demo-projects';
 
 export const DEMO_FIRST_EVENT_AT = '2025-01-06T09:00:00.000Z';
+export const DEMO_ACCOUNT_ID = '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f';
 
 const DEMO_CREATED_AT = '2025-01-06T08:00:00.000Z';
 const DEMO_SECRET_KEY_CREATED_AT = '2025-02-03T10:00:00.000Z';
@@ -19,6 +20,8 @@ export function demoProjectSettingsWire(projectId: string, now: Date) {
   const project = demoProjectOf(projectId);
   return {
     id: project.id,
+    account_id: DEMO_ACCOUNT_ID,
+    role: 'owner',
     name: project.name,
     timezone: project.timezone,
     conversion_event: project.conversionEvent,
