@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { signUpCodeWire, signUpVerifyWire } from '@/domain/sign-up.schema';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -381,6 +382,19 @@ describe('the API contract copied from pyxis-api', () => {
     expect(
       closure(closeAccountWire(' owner@demo-store.example ')),
       JSON.stringify(closure.errors),
+    ).toBe(true);
+  });
+
+  it('accepts the bodies the sign-up form sends', () => {
+    const code = contractSchema('SignUpCodeRequest');
+    const verify = contractSchema('SignUpRequest');
+
+    expect(code(signUpCodeWire(' ana@example.com ', 'pt-BR')), JSON.stringify(code.errors)).toBe(
+      true,
+    );
+    expect(
+      verify(signUpVerifyWire('ana@example.com', '123456', '2026-11-01')),
+      JSON.stringify(verify.errors),
     ).toBe(true);
   });
 
