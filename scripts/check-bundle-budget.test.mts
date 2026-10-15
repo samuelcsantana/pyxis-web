@@ -42,6 +42,8 @@ describe('routeClassOf', () => {
     assert.equal(routeClassOf('/sign-in'), 'entry');
     assert.equal(routeClassOf('/'), 'entry');
     assert.equal(routeClassOf('/_not-found'), 'entry');
+    assert.equal(routeClassOf('/sign-up'), 'signUp');
+    assert.equal(routeClassOf('/welcome'), 'entry');
   });
 });
 
