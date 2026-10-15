@@ -7,7 +7,7 @@ const meta = {
   title: 'Landing/PricingSection',
   component: PricingSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english },
+  args: { i18n: english, signUpOpen: false },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -49,3 +49,29 @@ export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const SignUpOpen: Story = {
+  args: { signUpOpen: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Start your free trial' })).toHaveAttribute(
+      'href',
+      'https://app.pyxis-analytics.dev/sign-up',
+    );
+    await userEvent.click(canvas.getByRole('radio', { name: /^Yearly/ }));
+    await expect(canvas.getByRole('link', { name: 'Start your free trial' })).toHaveAttribute(
+      'href',
+      'https://app.pyxis-analytics.dev/sign-up?interval=year',
+    );
+  },
+};
+
+export const SignUpOpenInPortuguese: Story = {
+  args: { signUpOpen: true },
+  globals: { locale: 'pt-BR' },
+};
+
+export const SignUpOpenOnAPhone: Story = {
+  args: { signUpOpen: true },
+  globals: { viewport: { value: 'mobile1' } },
+};

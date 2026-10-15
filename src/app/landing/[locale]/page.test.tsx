@@ -17,6 +17,12 @@ vi.mock('@/components/landing/measurement/measurement-note', () => ({
   MeasurementNote: () => <p data-testid="measurement-note" />,
 }));
 
+const signUp = vi.hoisted(() => ({ open: false }));
+
+vi.mock('@/lib/landing-sign-up', () => ({
+  bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
+}));
+
 vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('not-found');
@@ -128,6 +134,18 @@ describe('the home page on the main domain', () => {
       'faq',
       'story',
     ]);
+    expect(screen.getByText('Request access')).toBeInTheDocument();
+  });
+
+  it('offers the free trial once the API says sign-up is open', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    signUp.open = true;
+
+    renderWithMessages(await LandingHome(atSlug('en')));
+
+    expect(screen.getAllByRole('link', { name: 'Start your free trial' })).toHaveLength(2);
+    expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
+    signUp.open = false;
   });
 
   it('serves the Brazilian Portuguese page, marking it as the current language', async () => {

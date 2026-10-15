@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { english } from '@/test-utils/english';
 import { FaqSection } from './faq-section';
 
@@ -7,7 +7,7 @@ const meta = {
   title: 'Landing/FaqSection',
   component: FaqSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english },
+  args: { i18n: english, signUpOpen: false },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -31,3 +31,12 @@ export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const SignUpOpen: Story = {
+  args: { signUpOpen: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByText('How do I cancel?'));
+    await expect(canvas.getByRole('link', { name: 'Terms of Use' })).toBeVisible();
+  },
+};

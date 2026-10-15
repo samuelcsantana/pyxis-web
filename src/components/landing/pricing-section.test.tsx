@@ -8,7 +8,7 @@ import { CONTACT_EMAIL_ID, PRICING_ID, PricingSection } from './pricing-section'
 
 describe('PricingSection', () => {
   it('names the one plan with its monthly price chosen first', () => {
-    render(<PricingSection i18n={english} />);
+    render(<PricingSection i18n={english} signUpOpen={false} />);
 
     const section = screen.getByRole('region', {
       name: 'One plan, in reais, with everything the demo shows',
@@ -24,7 +24,7 @@ describe('PricingSection', () => {
   });
 
   it('switches the period without leaving the page', async () => {
-    render(<PricingSection i18n={english} />);
+    render(<PricingSection i18n={english} signUpOpen={false} />);
 
     await userEvent.click(screen.getByRole('radio', { name: /^Yearly/ }));
 
@@ -33,7 +33,7 @@ describe('PricingSection', () => {
   });
 
   it('lists what the plan includes, the trial and where it is sold', () => {
-    render(<PricingSection i18n={english} />);
+    render(<PricingSection i18n={english} signUpOpen={false} />);
 
     const included = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(included).toEqual(
@@ -52,7 +52,7 @@ describe('PricingSection', () => {
   });
 
   it('asks for access by e-mail, with what to write and a ready message', async () => {
-    render(<PricingSection i18n={english} />);
+    render(<PricingSection i18n={english} signUpOpen={false} />);
 
     const ask = screen.getByText('Request access');
     expect(ask).toHaveAttribute('data-track', 'access_requested');
@@ -77,7 +77,7 @@ describe('PricingSection', () => {
   });
 
   it('points whoever would rather host it to the API runbook', () => {
-    render(<PricingSection i18n={english} />);
+    render(<PricingSection i18n={english} signUpOpen={false} />);
 
     const link = screen.getByRole('link', { name: 'See how to run the API' });
     expect(link).toHaveAttribute(
@@ -89,7 +89,7 @@ describe('PricingSection', () => {
   });
 
   it('writes the subject of the message in the visitor’s language', () => {
-    const { unmount } = render(<PricingSection i18n={portuguese} />);
+    const { unmount } = render(<PricingSection i18n={portuguese} signUpOpen={false} />);
     expect(screen.getByRole('radio', { name: 'Mensal, R$ 39 por mês' })).toBeChecked();
     expect(screen.getByRole('link', { name: 'Abrir no meu programa de e-mail' })).toHaveAttribute(
       'href',
@@ -97,10 +97,50 @@ describe('PricingSection', () => {
     );
     unmount();
 
-    render(<PricingSection i18n={spanish} />);
+    render(<PricingSection i18n={spanish} signUpOpen={false} />);
     expect(screen.getByRole('link', { name: 'Abrir en mi programa de correo' })).toHaveAttribute(
       'href',
       'mailto:hello@pyxis-analytics.dev?subject=Quiero%20usar%20Pyxis',
     );
+  });
+
+  it('says the trial is one per customer', () => {
+    render(<PricingSection i18n={english} signUpOpen={false} />);
+
+    expect(
+      screen.getByText(
+        '14 days free. The card is only charged on day 15, and you can cancel any time. One free trial per customer.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  describe('once sign-up is open', () => {
+    it('starts the free trial on the plan of the chosen period instead of asking by e-mail', () => {
+      render(<PricingSection i18n={english} signUpOpen />);
+
+      const [monthly, yearly] = screen.getAllByRole('link', { name: 'Start your free trial' });
+      expect(monthly).toHaveAttribute('href', 'https://app.pyxis-analytics.dev/sign-up');
+      expect(monthly).toHaveAttribute('data-track', 'sign_up_opened');
+      expect(monthly).toHaveAttribute('data-track-interval', 'month');
+      expect(yearly).toHaveAttribute(
+        'href',
+        'https://app.pyxis-analytics.dev/sign-up?interval=year',
+      );
+      expect(yearly).toHaveAttribute('data-track-from', PRICING_ID);
+      expect(yearly?.parentElement).toHaveClass('hidden');
+      expect(screen.queryByText('Request access')).toBeNull();
+    });
+
+    it('explains how signing up works instead of the invitation', () => {
+      render(<PricingSection i18n={portuguese} signUpOpen />);
+
+      expect(screen.getAllByRole('link', { name: 'Começar o teste grátis' })).toHaveLength(2);
+      expect(
+        screen.getByText(
+          'Cadastre-se com um e-mail e um cartão; o painel abre assim que a assinatura é confirmada.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/acesso é por convite/)).toBeNull();
+    });
   });
 });

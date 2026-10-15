@@ -38,6 +38,7 @@ import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
 import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measurement-config';
 import { legalConfig } from '@/lib/legal-config';
+import { bestEffortSignUpIsOpen } from '@/lib/landing-sign-up';
 import {
   LANDING_PAGES,
   type LandingPage,
@@ -125,6 +126,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
   }
   const { page, i18n } = landing;
   const trackingKey = landingTrackingKey();
+  const signUpOpen = await bestEffortSignUpIsOpen();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
       <SkipLink i18n={i18n} />
@@ -144,8 +146,8 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <BuiltInPublicSection i18n={i18n} />
         <ArchitectureSection i18n={i18n} />
         <ComparisonSection i18n={i18n} />
-        <PricingSection i18n={i18n} />
-        <FaqSection i18n={i18n} />
+        <PricingSection i18n={i18n} signUpOpen={signUpOpen} />
+        <FaqSection i18n={i18n} signUpOpen={signUpOpen} />
         <StorySection i18n={i18n} />
       </MainContent>
       <LandingFooter
