@@ -116,6 +116,32 @@ export const MeasuringPaused: Story = {
   },
 };
 
+export const EndedSubscribeAgainInPortuguese: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'ended',
+      billingInterval: 'month',
+      accessEndsAt: '2026-11-10T00:00:00.000Z',
+      eventsThisMonth: 0,
+    },
+  },
+  globals: { locale: 'pt-BR' },
+};
+
+export const EndedSubscribeAgainInSpanish: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'ended',
+      billingInterval: 'month',
+      accessEndsAt: '2026-11-10T00:00:00.000Z',
+      eventsThisMonth: 0,
+    },
+  },
+  globals: { locale: 'es' },
+};
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };

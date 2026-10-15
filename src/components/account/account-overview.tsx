@@ -3,6 +3,7 @@ import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-c
 import {
   type Account,
   canClose,
+  canSubscribeAgain,
   deletionDateOf,
   hasBillingPortal,
   isDeletionHeld,
@@ -98,6 +99,27 @@ function Suspension({ account, i18n }: Pick<AccountOverviewProps, 'account' | 'i
   );
 }
 
+function resubscribeText(account: Account, i18n: I18n): string {
+  return account.accessEndsAt === null || isDeletionHeld(account)
+    ? i18n.t('account.resubscribeUndated')
+    : i18n.t('account.resubscribe', {
+        date: i18n.format.dayWithYear(new Date(deletionDateOf(account.accessEndsAt))),
+      });
+}
+
+function SubscribeAgain({
+  account,
+  i18n,
+  openCheckout,
+}: Pick<AccountOverviewProps, 'account' | 'i18n' | 'openCheckout'>) {
+  return (
+    <div className="flex flex-col gap-3 border-t border-line pt-3">
+      <p className="text-sm">{resubscribeText(account, i18n)}</p>
+      <BillingActions kind="resubscribe" open={openCheckout} />
+    </div>
+  );
+}
+
 function UsageMeter({
   account,
   i18n,
@@ -172,6 +194,9 @@ export function AccountOverview({
         })}
       </p>
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
+      {canSubscribeAgain(account) ? (
+        <SubscribeAgain account={account} i18n={i18n} openCheckout={openCheckout} />
+      ) : null}
       {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
       <CloseAccountSection open={canClose(account)} close={close} />
     </section>
