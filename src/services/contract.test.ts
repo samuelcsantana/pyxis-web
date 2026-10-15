@@ -35,6 +35,10 @@ import {
 } from './access-tokens/mock-access-tokens-service';
 import { DEMO_DOCS, DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 import {
+  demoConnectionDecisionWire,
+  demoConnectionRequestWire,
+} from './connection-requests/mock-connection-requests-service';
+import {
   newProjectWire,
   projectChangesWire,
   projectDeletionWire,
@@ -311,6 +315,18 @@ describe('the API contract copied from pyxis-api', () => {
     expect(created(demoCreatedAccessTokenWire(request, NOW)), JSON.stringify(created.errors)).toBe(
       true,
     );
+  });
+
+  it('accepts the demo connection request and where each answer sends the browser', () => {
+    const request = contractSchema('AuthorizationRequest');
+    const decision = contractSchema('AuthorizationDecision');
+
+    expect(request(demoConnectionRequestWire(NOW)), JSON.stringify(request.errors)).toBe(true);
+    for (const answer of ['approve', 'deny'] as const) {
+      expect(decision(demoConnectionDecisionWire(answer)), JSON.stringify(decision.errors)).toBe(
+        true,
+      );
+    }
   });
 
   it('accepts the changes, keys and deletions the owner sends, and the keys the demo creates', async () => {

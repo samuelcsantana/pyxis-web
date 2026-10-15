@@ -191,4 +191,11 @@ describe('pathTemplate', () => {
     );
     expect(pathTemplate('/v1/projects/p1?x=1')).toBe('/v1/projects/:projectId');
   });
+
+  it('drops the id of a connection request, and keeps its decision', () => {
+    expect(pathTemplate('/v1/oauth/requests/4d0f6b8c')).toBe('/v1/oauth/requests/:requestId');
+    expect(pathTemplate('/v1/oauth/requests/4d0f6b8c/approve')).toBe(
+      '/v1/oauth/requests/:requestId/approve',
+    );
+  });
 });
