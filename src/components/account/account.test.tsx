@@ -163,6 +163,7 @@ describe('AccountOverview', () => {
     );
     expect(screen.getByRole('status')).toHaveTextContent('R$39.00 were refunded to your card.');
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
   });
 
   it('says nothing about a pause already over', () => {

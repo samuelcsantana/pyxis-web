@@ -56,7 +56,7 @@ describe('accounts', () => {
     ['active', true, false],
     ['past_due', true, false],
     ['ending', true, false],
-    ['ended', true, false],
+    ['ended', false, false],
     ['comped', false, false],
   ] as const)(
     'a %s account has a billing portal: %s, needs Checkout: %s',

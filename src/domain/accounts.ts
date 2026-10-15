@@ -13,12 +13,11 @@ export const DELETION_GRACE_DAYS = 30;
 export const QUOTA_WARNING_RATIO = 0.8;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const STATUSES_WITH_A_CUSTOMER: ReadonlySet<AccountStatus> = new Set([
+const STATUSES_WITH_A_SUBSCRIPTION: ReadonlySet<AccountStatus> = new Set([
   'trialing',
   'active',
   'past_due',
   'ending',
-  'ended',
 ]);
 
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
@@ -101,7 +100,7 @@ export function deletionDateOf(accessEndsAt: string): string {
 }
 
 export function hasBillingPortal(account: Account): boolean {
-  return STATUSES_WITH_A_CUSTOMER.has(account.status);
+  return STATUSES_WITH_A_SUBSCRIPTION.has(account.status);
 }
 
 export function needsCheckout(account: Account): boolean {
