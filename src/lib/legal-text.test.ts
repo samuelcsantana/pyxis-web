@@ -52,7 +52,7 @@ describe('legal text', () => {
     );
 
     expect(html).toContain(
-      '<div class="legal-table" role="region" aria-label="Tabela" tabindex="0"><table>',
+      '<div class="legal-table" role="region" tabindex="0" aria-label="Tabela 1"><table>',
     );
     expect(html).toContain('</table></div>');
     expect(html).toContain('<td>até 3</td>');
