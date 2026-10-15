@@ -177,6 +177,9 @@ describe('accounts on the wire', () => {
             current_period_ends_at: '2026-12-01T00:00:00.000Z',
             access_ends_at: null,
             ingestion_paused_until: null,
+            suspended_at: null,
+            suspension_reason: null,
+            deletion_held_at: null,
             month: '2026-11',
             events_this_month: 10_000,
             measured_at: '2026-11-20T03:00:00.000Z',
@@ -187,7 +190,7 @@ describe('accounts on the wire', () => {
     ).toEqual([ACCOUNT]);
   });
 
-  it('reads the suspension and the held deletion when the API sends them', () => {
+  it('reads the suspension and the held deletion', () => {
     const [account] = myAccountsResponseSchema.parse({
       accounts: [
         {
