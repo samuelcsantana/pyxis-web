@@ -6,7 +6,8 @@ import {
   PRIVACY_POLICY,
   TERMS_OF_USE,
 } from './legal-documents';
-import { legalHtmlOf, legalSourceOf, legalTextOf, OPEN_EFFECTIVE_DATE } from './legal-text';
+import { legalSourceOf } from './legal-source';
+import { legalHtmlOf, legalTextOf, OPEN_EFFECTIVE_DATE } from './legal-text';
 
 const CONFIG: LegalConfig = {
   seller: {

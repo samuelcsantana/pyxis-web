@@ -10,11 +10,11 @@ import { SkipLink } from '@/components/shell/skip-link';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { loadMessages } from '@/i18n/get-messages';
 import { createI18n, type I18n } from '@/i18n/i18n';
-import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
 import { type LegalConfig, legalConfig, TERMS_VERSION } from '@/lib/legal-config';
-import { type LegalDocument, legalDocumentOfSlug } from '@/lib/legal-documents';
-import { legalHtmlOf, legalSourceOf, legalTextOf } from '@/lib/legal-text';
+import { CONTRACT_LANGUAGE, type LegalDocument, legalDocumentOfSlug } from '@/lib/legal-documents';
+import { legalSourceOf } from '@/lib/legal-source';
+import { legalHtmlOf, legalTextOf } from '@/lib/legal-text';
 import { landingPageOfLocale } from '@/lib/landing-pages';
 import { LANDING_ORIGIN } from '@/lib/site';
 import './legal.css';
@@ -29,8 +29,6 @@ interface LegalPage {
   readonly i18n: I18n;
 }
 
-const CONTRACT_LOCALE: Locale = 'pt-BR';
-
 async function legalPageOf(params: LegalPageProps['params']): Promise<LegalPage | undefined> {
   const document = legalDocumentOfSlug((await params).document);
   const config = legalConfig();
@@ -40,7 +38,7 @@ async function legalPageOf(params: LegalPageProps['params']): Promise<LegalPage 
   return {
     document,
     config,
-    i18n: createI18n(CONTRACT_LOCALE, await loadMessages(CONTRACT_LOCALE)),
+    i18n: createI18n(CONTRACT_LANGUAGE, await loadMessages(CONTRACT_LANGUAGE)),
   };
 }
 
@@ -71,7 +69,7 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
       <SkipLink i18n={i18n} />
       <SiteHeader
         i18n={i18n}
-        homeHref={landingPageOfLocale(CONTRACT_LOCALE).path}
+        homeHref={landingPageOfLocale(CONTRACT_LANGUAGE).path}
         language={null}
         theme={<ThemeToggle remember="device" />}
         withSignIn
@@ -80,7 +78,7 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
         <LegalDocumentView i18n={i18n} current={document} html={html} />
       </MainContent>
       <LandingFooter i18n={i18n} />
-      <PreferenceCarrier locale={CONTRACT_LOCALE} />
+      <PreferenceCarrier locale={CONTRACT_LANGUAGE} />
     </div>
   );
 }

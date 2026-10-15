@@ -7,6 +7,7 @@ import { requestHostname } from '@/lib/host-name';
 import { landingIngestionUrl } from '@/lib/landing-measurement-config';
 import { legalConfig } from '@/lib/legal-config';
 import {
+  CONTRACT_LANGUAGE,
   internalLegalPathOf,
   legalDocumentAt,
   legalDocumentOfInternalPath,
@@ -36,7 +37,6 @@ export const SIGN_UP_PATH = '/sign-up';
 export const RETURN_PARAMETER = 'next';
 
 const PERMANENT_REDIRECT = 308;
-const CONTRACT_LOCALE = 'pt-BR';
 const TEMPORARY_REDIRECT = 307;
 const ONE_YEAR_IN_SECONDS = 31_536_000;
 
@@ -132,7 +132,7 @@ function landingOrDemo(request: NextRequest): NextResponse {
     internal.search = search;
     return renderWith(
       request,
-      { [PATH_LOCALE_HEADER]: CONTRACT_LOCALE },
+      { [PATH_LOCALE_HEADER]: CONTRACT_LANGUAGE },
       { to: internal, apiOrigin: undefined },
     );
   }
