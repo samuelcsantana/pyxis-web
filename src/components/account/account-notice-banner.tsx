@@ -12,6 +12,8 @@ export const ACCOUNT_PAGE = '/account';
 function noticeText(notice: AccountNotice, i18n: I18n): string {
   const day = (iso: string) => i18n.format.dayWithYear(new Date(iso));
   switch (notice.kind) {
+    case 'suspended':
+      return i18n.t('account.notice.suspended');
     case 'paymentFailed':
       return i18n.t('account.notice.paymentFailed');
     case 'ending':
@@ -38,7 +40,9 @@ export function AccountNoticeBanner({ notice, i18n }: AccountNoticeBannerProps) 
           href={ACCOUNT_PAGE}
           className="font-semibold underline underline-offset-2 hover:decoration-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
-          {i18n.t('account.notice.open')}
+          {notice.kind === 'suspended'
+            ? i18n.t('account.notice.why')
+            : i18n.t('account.notice.open')}
         </Link>
       </p>
     </aside>

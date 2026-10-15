@@ -28,6 +28,9 @@ const ACCOUNT: Account = {
   currentPeriodEndsAt: '2026-12-01T00:00:00.000Z',
   accessEndsAt: null,
   ingestionPausedUntil: null,
+  suspendedAt: null,
+  suspensionReason: null,
+  deletionHeldAt: null,
   month: '2026-11',
   eventsThisMonth: 41_230,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -269,5 +272,14 @@ describe('AccountNoticeBanner', () => {
 
     expect(screen.getByRole('note')).toHaveTextContent(text);
     expect(screen.getByRole('link', { name: 'Open billing' })).toHaveAttribute('href', '/account');
+  });
+
+  it('says a suspended account stopped measuring and links to the reason', () => {
+    render(<AccountNoticeBanner notice={{ kind: 'suspended' }} i18n={english} />);
+
+    expect(screen.getByRole('note')).toHaveTextContent(
+      'This account is suspended, so its projects stopped measuring.',
+    );
+    expect(screen.getByRole('link', { name: 'See why' })).toHaveAttribute('href', '/account');
   });
 });

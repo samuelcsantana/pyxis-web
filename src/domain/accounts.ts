@@ -39,6 +39,9 @@ export interface Account {
   readonly currentPeriodEndsAt: string | null;
   readonly accessEndsAt: string | null;
   readonly ingestionPausedUntil: string | null;
+  readonly suspendedAt: string | null;
+  readonly suspensionReason: string | null;
+  readonly deletionHeldAt: string | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
@@ -46,6 +49,7 @@ export interface Account {
 }
 
 export type AccountNotice =
+  | { readonly kind: 'suspended' }
   | { readonly kind: 'paymentFailed' }
   | { readonly kind: 'ending'; readonly accessEndsAt: string }
   | { readonly kind: 'ended'; readonly deletionOn: string }
@@ -107,7 +111,18 @@ export function needsCheckout(account: Account): boolean {
   return account.status === 'incomplete';
 }
 
+export function isSuspended(account: Account): boolean {
+  return account.suspendedAt !== null;
+}
+
+export function isDeletionHeld(account: Account): boolean {
+  return account.deletionHeldAt !== null;
+}
+
 export function accountNotice(account: Account, now: Date): AccountNotice | null {
+  if (isSuspended(account)) {
+    return { kind: 'suspended' };
+  }
   if (account.status === 'past_due') {
     return { kind: 'paymentFailed' };
   }
