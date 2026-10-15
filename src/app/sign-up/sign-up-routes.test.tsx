@@ -154,12 +154,35 @@ describe('WelcomePage', () => {
     );
   });
 
-  it('confirms an account that is already active', async () => {
-    state.accounts = () => demoAccount({ status: 'active', trialEndsAt: null });
+  it('confirms a trial whose end it does not know yet', async () => {
+    state.accounts = () => demoAccount({ status: 'trialing', trialEndsAt: null });
 
     renderWithMessages(await welcome());
 
     expect(screen.getByRole('status')).toHaveTextContent('Your subscription is confirmed.');
+    expect(screen.getByRole('link', { name: 'Create your first project' })).toBeInTheDocument();
+  });
+
+  it('welcomes back an account that subscribed again, sending it to its projects', async () => {
+    state.accounts = () => demoAccount({ status: 'active', trialEndsAt: null });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your subscription is active again.');
+    expect(screen.getByText(/create one in each project's Settings/)).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: 'Open the dashboard' })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Open the dashboard' })).toHaveAttribute('href', '/');
+    expect(
+      screen.queryByRole('link', { name: 'Create your first project' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('waits for Stripe while an ended account that subscribed again is still ended', async () => {
+    state.accounts = () => demoAccount({ status: 'ended', trialEndsAt: null });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Confirming your subscription…');
   });
 
   it('waits while Stripe has not confirmed the subscription yet', async () => {

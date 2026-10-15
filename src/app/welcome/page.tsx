@@ -6,8 +6,9 @@ import { NEW_PROJECT_PAGE } from '@/components/shell/project-switcher';
 import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
 import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
-import { needsCheckout } from '@/domain/accounts';
+import { type Account, welcomeStage } from '@/domain/accounts';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
+import type { I18n } from '@/i18n/i18n';
 import { readOrSignIn } from '@/lib/current-admin';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 
@@ -18,6 +19,40 @@ export interface WelcomePageProps {
 }
 
 const NOTE = 'text-xs leading-[18px] text-muted';
+
+const PRIMARY_LINK = `flex min-h-11 items-center self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY}`;
+
+function FirstSubscription({ account, i18n }: { readonly account: Account; readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <>
+      <p role="status" className="text-sm font-semibold">
+        {account.trialEndsAt === null
+          ? t('welcome.active')
+          : t('welcome.trial', { date: i18n.format.dayWithYear(new Date(account.trialEndsAt)) })}
+      </p>
+      <p className="text-sm">{t('welcome.next')}</p>
+      <Link href={NEW_PROJECT_PAGE} className={PRIMARY_LINK}>
+        {t('welcome.create')}
+      </Link>
+    </>
+  );
+}
+
+function SubscriptionBack({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <>
+      <p role="status" className="text-sm font-semibold">
+        {t('welcome.activeAgain')}
+      </p>
+      <p className="text-sm">{t('welcome.nextAgain')}</p>
+      <Link href={DASHBOARD_HOME} className={PRIMARY_LINK}>
+        {t('welcome.dashboard')}
+      </Link>
+    </>
+  );
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();
@@ -35,41 +70,28 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
   }
   const i18n = await getI18n();
   const { t } = i18n;
-  const confirming = needsCheckout(account);
+  const stage = welcomeStage(account);
   return (
     <BrandedPage>
       <h1 className="text-2xl font-bold tracking-tight">{t('welcome.title')}</h1>
       <section className={PANEL}>
-        {confirming ? (
+        {stage === 'confirming' ? (
           <>
             <p role="status" className="text-sm font-semibold">
               {t('welcome.confirming')}
             </p>
             <p className={NOTE}>{t('welcome.confirmingNote')}</p>
           </>
-        ) : (
-          <>
-            <p role="status" className="text-sm font-semibold">
-              {account.status === 'trialing' && account.trialEndsAt !== null
-                ? t('welcome.trial', {
-                    date: i18n.format.dayWithYear(new Date(account.trialEndsAt)),
-                  })
-                : t('welcome.active')}
-            </p>
-            <p className="text-sm">{t('welcome.next')}</p>
-            <Link
-              href={NEW_PROJECT_PAGE}
-              className={`flex min-h-11 items-center self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY}`}
-            >
-              {t('welcome.create')}
-            </Link>
-          </>
-        )}
-        <RefreshWhilePending pending={confirming} />
+        ) : null}
+        {stage === 'firstSubscription' ? <FirstSubscription account={account} i18n={i18n} /> : null}
+        {stage === 'subscriptionBack' ? <SubscriptionBack i18n={i18n} /> : null}
+        <RefreshWhilePending pending={stage === 'confirming'} />
       </section>
-      <Link href={DASHBOARD_HOME} className={`self-start text-sm ${TEXT_LINK}`}>
-        {t('welcome.dashboard')}
-      </Link>
+      {stage === 'subscriptionBack' ? null : (
+        <Link href={DASHBOARD_HOME} className={`self-start text-sm ${TEXT_LINK}`}>
+          {t('welcome.dashboard')}
+        </Link>
+      )}
     </BrandedPage>
   );
 }
