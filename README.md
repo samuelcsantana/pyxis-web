@@ -267,6 +267,13 @@ Shipping now:
   full), when each live secret key was created (never the key, which the API keeps only as a
   hash), how many months events are kept, and whether the project still waits for its first
   event
+- An Account and billing page (`/account`, from the account menu) for the owner of a hosted
+  account: the plan and its state (free trial, active, payment failed, ending, ended with the
+  deletion date, sign-up not finished), the events measured this month against the quota, the
+  limits, and a button to Stripe: "Finish subscription" with a monthly or yearly plan, or
+  "Manage billing" for the customer portal. The dashboard warns, under the demo banner's place,
+  when an owned account's payment failed, its access ends or ended, measuring is paused, or the
+  month reached 80% of its events; reading the accounts for that warning never blocks a page
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
@@ -393,6 +400,7 @@ origin the sign-in and sign-out calls carry.
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
 | `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                                                                        |
+| `/account`                                       | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
 | `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                                                              |
 | `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                                                              |
 | `/[projectId]/devices`                           | Device types, browsers, systems, conversion by device, countries and regions                                                                                                                                                                                                                 |
