@@ -540,6 +540,9 @@ export const es = translation({
     home: 'Volver a la página de inicio',
   },
   welcome: {
+    activeAgain: 'Tu suscripción está activa de nuevo.',
+    nextAgain:
+      'Los proyectos vuelven a medir cuando sus sitios usen una clave pública nueva: crea una en la Configuración de cada proyecto.',
     title: 'Te damos la bienvenida a Pyxis',
     confirming: 'Confirmando tu suscripción…',
     confirmingNote:

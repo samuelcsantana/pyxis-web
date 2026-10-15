@@ -524,6 +524,9 @@ export const en = {
     home: 'Back to the home page',
   },
   welcome: {
+    activeAgain: 'Your subscription is active again.',
+    nextAgain:
+      "Your projects measure again once their sites use a new public key: create one in each project's Settings.",
     title: 'Welcome to Pyxis',
     confirming: 'Confirming your subscription…',
     confirmingNote:

@@ -535,6 +535,9 @@ export const ptBR = translation({
     home: 'Voltar para a página inicial',
   },
   welcome: {
+    activeAgain: 'Sua assinatura está ativa de novo.',
+    nextAgain:
+      'Os projetos voltam a medir quando os sites deles usarem uma chave pública nova: crie uma nas Configurações de cada projeto.',
     title: 'Boas-vindas ao Pyxis',
     confirming: 'Confirmando sua assinatura…',
     confirmingNote:
