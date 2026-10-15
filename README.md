@@ -302,8 +302,11 @@ Shipping now:
   refreshes to the ended account). An account Pyxis suspended shows the date, the reason and the
   address to contest it, every dashboard screen of its owner carries a banner, and the screens of
   its projects open `/account-suspended` instead of failing; an account whose deletion Pyxis holds
-  says so, names no deletion date, and its projects explain why they cannot be deleted. The
-  sign-up says the free trial is one per customer
+  says so, names no deletion date, and its projects explain why they cannot be deleted. An
+  ended account not deleted yet subscribes again from the same page (monthly or yearly, no new
+  free trial, billing from that day, new keys to create), and the welcome page tells a returning
+  subscriber that the subscription is active again; an account Pyxis exempted from the pause
+  shows until when. The sign-up says the free trial is one per customer
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
