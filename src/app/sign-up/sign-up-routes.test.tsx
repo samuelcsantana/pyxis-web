@@ -79,6 +79,13 @@ describe('SignUpPage', () => {
       screen.getByRole('heading', { level: 1, name: 'Start your free trial' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/version 2026-11-01/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Monthly' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('starts on the yearly plan when the home page link asks for it', async () => {
+    renderWithMessages(await SignUpPage({ searchParams: Promise.resolve({ interval: 'year' }) }));
+
+    expect(screen.getByRole('button', { name: 'Yearly' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('gives no demo code with a real API', async () => {

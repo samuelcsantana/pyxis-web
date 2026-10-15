@@ -1,3 +1,5 @@
+import type { BillingInterval } from './accounts';
+
 export const TRIAL_DAYS = 14;
 
 export interface SignUpStatus {
@@ -21,4 +23,12 @@ export function openSignUpOf(status: SignUpStatus): OpenSignUp | null {
   return status.open && status.termsVersion !== null && status.termsUrl !== null
     ? { termsVersion: status.termsVersion, termsUrl: status.termsUrl }
     : null;
+}
+
+const YEARLY: BillingInterval = 'year';
+
+export function requestedIntervalOf(
+  value: string | readonly string[] | undefined,
+): BillingInterval {
+  return value === YEARLY ? YEARLY : 'month';
 }
