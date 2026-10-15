@@ -74,6 +74,20 @@ describe('proxy', () => {
       expect(visit('/').headers.get('location')).toBe('https://pyxis.example.com/sign-in');
     });
 
+    it('sends a visitor without a session to sign in first, then back to the consent page', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      expect(visit('/connect?request=4d0f6b8c').headers.get('location')).toBe(
+        'https://pyxis.example.com/sign-in?next=%2Fconnect%3Frequest%3D4d0f6b8c',
+      );
+      expect(
+        visit(
+          '/sign-in?next=%2Fconnect%3Frequest%3D4d0f6b8c',
+          '__Host-pyxis_session=token',
+        ).headers.get('location'),
+      ).toBe('https://pyxis.example.com/connect?request=4d0f6b8c');
+    });
+
     it('lets a visitor without a session reach the sign-in page', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 

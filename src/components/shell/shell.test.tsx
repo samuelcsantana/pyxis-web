@@ -73,6 +73,7 @@ describe('screens helpers', () => {
     expect(returnPathOf('/p1/requests?show=failing')).toBe('/p1/requests?show=failing');
     expect(returnPathOf('/p1/overview')).toBe('/p1/overview');
     expect(returnPathOf('/account')).toBe('/account');
+    expect(returnPathOf('/connect?request=4d0f6b8c')).toBe('/connect?request=4d0f6b8c');
   });
 
   it('refuse any other return path', () => {
