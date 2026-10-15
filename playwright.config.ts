@@ -39,6 +39,10 @@ export default defineConfig({
       NEXT_PUBLIC_LANDING_PYXIS_KEY: 'pyxis_pk_e2e_local',
       NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT: BASE_URL,
       NEXT_TELEMETRY_DISABLED: '1',
+      SELLER_NAME: 'Ana Exemplo',
+      SELLER_TAX_ID: '000.000.000-00',
+      SELLER_ADDRESS: 'Rua das Flores, 10, Centro, Cidade/UF, CEP 00000-000',
+      TERMS_EFFECTIVE_DATE: '2026-10-20',
     },
   },
 });
