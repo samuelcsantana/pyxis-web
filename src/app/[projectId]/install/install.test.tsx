@@ -121,7 +121,7 @@ describe('InstallGuide', () => {
     );
   });
 
-  it('writes no key and no origin when the project has none', () => {
+  it('sends the owner of a project without a live key to Settings instead of a snippet', () => {
     render(
       <InstallGuide
         settings={{ ...SETTINGS, publicKeys: [], allowedOrigins: [] }}
@@ -130,6 +130,30 @@ describe('InstallGuide', () => {
       />,
     );
 
-    expect(screen.getAllByText(/key: ''/).length).toBeGreaterThan(0);
+    const first = screen.getByRole('region', { name: '1. Add the tracker to your site' });
+    expect(first).toHaveTextContent('This project has no live public key, so it is not measuring.');
+    expect(first).toHaveTextContent('A revoked key never works again.');
+    expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings#settings-keys-heading',
+    );
+    expect(screen.queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
+    expect(screen.getByRole('region', { name: '2. Open a page of your site' })).toHaveTextContent(
+      'Page views from show up here',
+    );
+  });
+
+  it("tells someone else that only the account's owner creates a key", () => {
+    render(
+      <InstallGuide
+        settings={{ ...SETTINGS, role: 'member', publicKeys: [] }}
+        endpoint="https://api.example.com"
+        i18n={english}
+      />,
+    );
+
+    const first = screen.getByRole('region', { name: '1. Add the tracker to your site' });
+    expect(first).toHaveTextContent("Only the account's owner can create one.");
+    expect(within(first).queryByRole('link')).not.toBeInTheDocument();
   });
 });

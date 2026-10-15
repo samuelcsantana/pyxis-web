@@ -174,8 +174,10 @@ describe('ProjectSettingsView', () => {
     expect(panel('Project')).toHaveTextContent('None, so conversions are not shown');
     expect(panel('Activity')).toHaveTextContent('Waiting for the first event');
     expect(panel('Allowed origins')).toHaveTextContent('No origin is allowed yet');
-    expect(panel('Keys')).toHaveTextContent('No live public key');
-    expect(panel('Keys')).toHaveTextContent('No live secret key.');
+    const keys = panel('Keys');
+    expect(keys).toHaveTextContent('This project has no live public key, so it is not measuring.');
+    expect(keys).toHaveTextContent("Only the account's owner can create one.");
+    expect(keys).toHaveTextContent('No live secret key.');
   });
 
   it('lets the owner edit the project, its origins and its keys, and delete it', () => {
@@ -229,7 +231,13 @@ describe('ProjectSettingsView', () => {
       <ProjectSettingsView settings={{ ...OWNED, publicKeys: [] }} i18n={english} {...EMAIL} />,
     );
 
-    expect(panel('Keys')).toHaveTextContent('No live public key');
+    const keys = panel('Keys');
+    expect(keys).toHaveTextContent('This project has no live public key, so it is not measuring.');
+    expect(keys).toHaveTextContent(
+      "When an account's access ends, its keys are revoked, and they stay revoked if the account comes back.",
+    );
+    expect(keys).toHaveTextContent('Create a public key below');
+    expect(within(keys).getByRole('button', { name: 'New public key' })).toBeInTheDocument();
   });
 
   it('shows someone the owner added the project as it is, without changing it', () => {

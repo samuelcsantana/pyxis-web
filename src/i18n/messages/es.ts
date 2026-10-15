@@ -195,7 +195,13 @@ export const es = translation({
       heading: 'Claves',
       public: 'Claves públicas',
       publicNote: 'Una clave pública va en las páginas de tu sitio, así que no es secreta.',
-      noPublicKey: 'No hay ninguna clave pública activa, así que el sitio no puede enviar eventos.',
+      noLiveKey: 'Este proyecto no tiene ninguna clave pública activa, así que no está midiendo.',
+      revokedForGood:
+        'Una clave revocada nunca vuelve a funcionar. Cuando termina el acceso de una cuenta, sus claves se revocan, y siguen revocadas si la cuenta vuelve.',
+      createBelow: 'Crea una clave pública abajo y cambia la antigua por ella en tu sitio.',
+      createInSettings:
+        'Crea una clave pública en <settings>Configuración</settings> y cambia la antigua por ella en tu sitio.',
+      ownerOnly: 'Solo el dueño de la cuenta puede crear una.',
       secret: 'Claves secretas',
       secretNote:
         'Una clave secreta permite que el backend de tu sitio borre y exporte los datos de una persona. Se guarda como hash y nunca se muestra aquí.',

@@ -184,7 +184,13 @@ export const en = {
       heading: 'Keys',
       public: 'Public keys',
       publicNote: "A public key goes in your site's pages, so it is not a secret.",
-      noPublicKey: 'No live public key, so the site cannot send events.',
+      noLiveKey: 'This project has no live public key, so it is not measuring.',
+      revokedForGood:
+        "A revoked key never works again. When an account's access ends, its keys are revoked, and they stay revoked if the account comes back.",
+      createBelow: 'Create a public key below, then put it in place of the old one on your site.',
+      createInSettings:
+        'Create a public key in <settings>Settings</settings>, then put it in place of the old one on your site.',
+      ownerOnly: "Only the account's owner can create one.",
       secret: 'Secret keys',
       secretNote:
         "A secret key lets your site's backend erase and export a person's data. It is stored as a hash and never shown here.",

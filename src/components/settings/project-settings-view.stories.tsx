@@ -119,8 +119,23 @@ export const WaitingForTheFirstEvent: Story = {
   },
 };
 
+export const NoLivePublicKey: Story = { args: { settings: { ...STORE, publicKeys: [] } } };
+
+export const NoLivePublicKeyForSomeoneTheOwnerAdded: Story = {
+  args: { settings: { ...STORE, role: 'member', publicKeys: [] } },
+};
+
+export const NoLivePublicKeyInPortuguese: Story = {
+  args: { settings: { ...STORE, publicKeys: [] }, i18n: portuguese },
+};
+
 export const InPortuguese: Story = { args: { i18n: portuguese } };
 
 export const InSpanish: Story = { args: { i18n: spanish } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const NoLivePublicKeyDarkTheme: Story = {
+  args: { settings: { ...STORE, publicKeys: [] } },
+  globals: { theme: 'dark' },
+};

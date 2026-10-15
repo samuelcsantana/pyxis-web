@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
+import { SETTINGS_KEYS_PANEL } from '@/components/shell/screens';
 import { Breakable } from '@/components/ui/breakable';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
   canManageProject,
+  hasLivePublicKey,
   projectActivity,
   type ProjectKeySummary,
   type ProjectSettings,
@@ -18,6 +20,7 @@ import type { CreateAccessToken } from './create-access-token-form';
 import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-key-button';
 import type { AddPerson } from './add-person-form';
 import { type DeleteProject, DeleteProjectForm } from './delete-project-form';
+import { NoLiveKeyNotice } from './no-live-key-notice';
 import { PeoplePanel } from './people-panel';
 import { type RequestExport, RequestExportButton } from './request-export-button';
 import { ProjectForm, type SaveProject } from './project-form';
@@ -153,13 +156,13 @@ function OriginsPanel({ settings, i18n }: SectionProps) {
 
 interface KeyListProps<Key extends ProjectKeySummary> {
   readonly keys: readonly Key[];
-  readonly empty: string;
+  readonly empty: ReactNode;
   readonly describe: (key: Key) => ReactNode;
 }
 
 function KeyList<Key extends ProjectKeySummary>({ keys, empty, describe }: KeyListProps<Key>) {
   return keys.length === 0 ? (
-    <p className="text-sm">{empty}</p>
+    empty
   ) : (
     <ul className={ITEM_LIST}>
       {keys.map((key) => (
@@ -178,12 +181,12 @@ function KeysPanel({ settings, i18n, when }: SectionProps) {
     </span>
   );
   return (
-    <SettingsPanel id="settings-keys" title={i18n.t('settings.keys.heading')}>
+    <SettingsPanel id={SETTINGS_KEYS_PANEL} title={i18n.t('settings.keys.heading')}>
       <div className="flex flex-col gap-2">
         <h3 className={SUBHEADING}>{i18n.t('settings.keys.public')}</h3>
         <KeyList
           keys={settings.publicKeys}
-          empty={i18n.t('settings.keys.noPublicKey')}
+          empty={<NoLiveKeyNotice step={{ kind: 'ownerOnly' }} i18n={i18n} />}
           describe={(key) => (
             <>
               <code className={CODE}>
@@ -199,7 +202,7 @@ function KeysPanel({ settings, i18n, when }: SectionProps) {
         <h3 className={SUBHEADING}>{i18n.t('settings.keys.secret')}</h3>
         <KeyList
           keys={settings.secretKeys}
-          empty={i18n.t('settings.keys.noSecretKey')}
+          empty={<p className="text-sm">{i18n.t('settings.keys.noSecretKey')}</p>}
           describe={created}
         />
         <p className={NOTE}>{i18n.t('settings.keys.secretNote')}</p>
@@ -268,12 +271,10 @@ function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps)
     />
   );
   return (
-    <SettingsPanel id="settings-keys" title={i18n.t('settings.keys.heading')}>
+    <SettingsPanel id={SETTINGS_KEYS_PANEL} title={i18n.t('settings.keys.heading')}>
       <div className="flex flex-col gap-2">
         <h3 className={SUBHEADING}>{i18n.t('settings.keys.public')}</h3>
-        {settings.publicKeys.length === 0 ? (
-          <p className="text-sm">{i18n.t('settings.keys.noPublicKey')}</p>
-        ) : (
+        {hasLivePublicKey(settings) ? (
           <ul className="flex flex-col divide-y divide-line">
             {settings.publicKeys.map((key) => (
               <ManagedKeyRow
@@ -296,6 +297,8 @@ function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps)
               </ManagedKeyRow>
             ))}
           </ul>
+        ) : (
+          <NoLiveKeyNotice step={{ kind: 'createBelow' }} i18n={i18n} />
         )}
         <p className={NOTE}>{i18n.t('settings.keys.publicNote')}</p>
         <CreateProjectKeyButton kind="public" create={manage.createKey} />

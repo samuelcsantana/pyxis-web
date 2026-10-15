@@ -30,6 +30,27 @@ export const WaitingForTheFirstEvent: Story = {};
 
 export const FirstEventArrived: Story = { args: { settings: RECEIVING } };
 
+export const NoLivePublicKey: Story = {
+  args: { settings: { ...RECEIVING, firstEventAt: null, lastEventAt: null, publicKeys: [] } },
+};
+
+export const NoLivePublicKeyForSomeoneTheOwnerAdded: Story = {
+  args: {
+    settings: {
+      ...RECEIVING,
+      role: 'member',
+      firstEventAt: null,
+      lastEventAt: null,
+      publicKeys: [],
+    },
+  },
+};
+
+export const NoLivePublicKeyInSpanish: Story = {
+  args: { settings: { ...RECEIVING, firstEventAt: null, lastEventAt: null, publicKeys: [] } },
+  globals: { locale: 'es' },
+};
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };

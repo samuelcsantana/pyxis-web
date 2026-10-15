@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { type CopyCodeLabels, CopyCodeButton } from '@/components/landing/copy-code-button';
-import { FIRST_SCREEN, screenHref } from '@/components/shell/screens';
+import { NoLiveKeyNotice } from '@/components/settings/no-live-key-notice';
+import { FIRST_SCREEN, screenHref, settingsKeysHref } from '@/components/shell/screens';
 import { BUTTON_PRIMARY } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
 import { installCommand, moduleSnippet, scriptSnippet } from '@/domain/install';
-import { projectActivity, type ProjectSettings } from '@/domain/project-settings';
+import { canManageProject, projectActivity, type ProjectSettings } from '@/domain/project-settings';
 import type { I18n } from '@/i18n/i18n';
 
 export interface InstallGuideProps {
@@ -34,7 +35,7 @@ function CodeBlock({ id, code, labels }: CodeBlockProps) {
 }
 
 export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
-  const key = settings.publicKeys[0]?.key ?? '';
+  const key = settings.publicKeys[0]?.key;
   const origin = settings.allowedOrigins[0] ?? '';
   const labels = {
     copy: i18n.t('install.copy'),
@@ -48,11 +49,24 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
         <h2 id="install-step-1" className={PANEL_TITLE}>
           {i18n.t('install.step1')}
         </h2>
-        <p className="text-sm">{i18n.t('install.npm')}</p>
-        <CodeBlock id="install-command" code={installCommand()} labels={labels} />
-        <CodeBlock id="install-module" code={moduleSnippet(key, endpoint)} labels={labels} />
-        <p className="text-sm">{i18n.t('install.script')}</p>
-        <CodeBlock id="install-script" code={scriptSnippet(key, endpoint)} labels={labels} />
+        {key === undefined ? (
+          <NoLiveKeyNotice
+            step={
+              canManageProject(settings)
+                ? { kind: 'createInSettings', keysHref: settingsKeysHref(settings.id) }
+                : { kind: 'ownerOnly' }
+            }
+            i18n={i18n}
+          />
+        ) : (
+          <>
+            <p className="text-sm">{i18n.t('install.npm')}</p>
+            <CodeBlock id="install-command" code={installCommand()} labels={labels} />
+            <CodeBlock id="install-module" code={moduleSnippet(key, endpoint)} labels={labels} />
+            <p className="text-sm">{i18n.t('install.script')}</p>
+            <CodeBlock id="install-script" code={scriptSnippet(key, endpoint)} labels={labels} />
+          </>
+        )}
         <p className={NOTE}>{i18n.t('install.privacy')}</p>
       </section>
       <section aria-labelledby="install-step-2" className={PANEL}>
