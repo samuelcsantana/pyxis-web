@@ -341,6 +341,7 @@ export const en = {
       'Subscribe again before {date} to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
     resubscribeUndated:
       'Subscribe again to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+    exempt: 'Measuring is not paused past the monthly limit until {date}.',
     notice: {
       suspended: 'This account is suspended, so its projects stopped measuring.',
       why: 'See why',

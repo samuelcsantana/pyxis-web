@@ -142,6 +142,18 @@ export const EndedSubscribeAgainInSpanish: Story = {
   globals: { locale: 'es' },
 };
 
+export const ExemptFromThePause: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'active',
+      trialEndsAt: null,
+      eventsThisMonth: 160_000,
+      quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z',
+    },
+  },
+};
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };

@@ -351,6 +351,7 @@ export const ptBR = translation({
       'Assine de novo antes de {date} para manter os dados: não há novo teste grátis, o plano é cobrado a partir de hoje, e as chaves antigas continuam revogadas, então cada projeto precisa de uma chave pública nova.',
     resubscribeUndated:
       'Assine de novo para manter os dados: não há novo teste grátis, o plano é cobrado a partir de hoje, e as chaves antigas continuam revogadas, então cada projeto precisa de uma chave pública nova.',
+    exempt: 'A medição não é pausada depois do limite do mês até {date}.',
     notice: {
       suspended: 'Esta conta está suspensa, então os projetos dela pararam de medir.',
       why: 'Ver o motivo',
