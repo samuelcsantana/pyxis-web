@@ -13,6 +13,8 @@ const PUBLIC_KEY = `pyxis_pk_${'a'.repeat(32)}`;
 
 const SETTINGS: ProjectSettings = {
   id: 'p1',
+  accountId: null,
+  role: null,
   name: 'Shop',
   timezone: 'UTC',
   conversionEvent: 'signup_completed',

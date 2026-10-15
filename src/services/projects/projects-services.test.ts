@@ -3,6 +3,7 @@ import { ApiReader } from '../api-reader';
 import { HttpProjectsService } from './http-projects-service';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { DEMO_ADMIN, MockProjectsService } from './mock-projects-service';
+import { DEMO_ACCOUNT_ID } from './demo-project-settings';
 import { createProjectsService } from './projects-service.factory';
 
 const API = 'https://api.pyxis.example.com';
@@ -89,6 +90,8 @@ describe('HttpProjectsService', () => {
         new Response(
           JSON.stringify({
             id: 'p1',
+            account_id: 'a1',
+            role: 'member',
             name: 'Shop',
             timezone: 'UTC',
             conversion_event: null,
@@ -114,6 +117,8 @@ describe('HttpProjectsService', () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe(`${API}/v1/projects/p%201/settings`);
     expect(settings).toEqual({
       id: 'p1',
+      accountId: 'a1',
+      role: 'member',
       name: 'Shop',
       timezone: 'UTC',
       conversionEvent: null,
@@ -152,6 +157,8 @@ describe('MockProjectsService', () => {
 
     expect(store).toMatchObject({
       id: DEMO_STORE.id,
+      accountId: DEMO_ACCOUNT_ID,
+      role: 'owner',
       name: DEMO_STORE.name,
       allowedOrigins: ['https://store.example.com', 'https://www.store.example.com'],
       lastEventAt: '2026-10-08T12:00:00.000Z',
