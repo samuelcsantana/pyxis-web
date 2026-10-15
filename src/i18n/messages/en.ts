@@ -348,6 +348,13 @@ export const en = {
     owner: "The account's owner finds the reason, and how to contest it, in Account and billing.",
     open: 'Open Account and billing',
   },
+  projectIngestion: {
+    label: 'Project status',
+    suspended:
+      "Pyxis suspended this project's event reception on {date}, so it is not measuring. Its screens stay open.",
+    reason: 'Reason: {reason}',
+    contest: "To contest it, the account's owner writes to <mail>hello@pyxis-analytics.dev</mail>.",
+  },
   billing: {
     manage: 'Manage billing',
     finish: 'Finish subscription',

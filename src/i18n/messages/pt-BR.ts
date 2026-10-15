@@ -358,6 +358,13 @@ export const ptBR = translation({
     owner: 'O dono da conta encontra o motivo, e como contestar, em Conta e cobrança.',
     open: 'Abrir Conta e cobrança',
   },
+  projectIngestion: {
+    label: 'Situação do projeto',
+    suspended:
+      'O Pyxis suspendeu a recepção de eventos deste projeto em {date}, então ele não está medindo. As telas continuam abertas.',
+    reason: 'Motivo: {reason}',
+    contest: 'Para contestar, o dono da conta escreve para <mail>hello@pyxis-analytics.dev</mail>.',
+  },
   billing: {
     manage: 'Gerenciar cobrança',
     finish: 'Concluir a assinatura',

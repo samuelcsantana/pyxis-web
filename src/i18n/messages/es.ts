@@ -360,6 +360,14 @@ export const es = translation({
     owner: 'El dueño de la cuenta encuentra el motivo, y cómo impugnarla, en Cuenta y facturación.',
     open: 'Abrir Cuenta y facturación',
   },
+  projectIngestion: {
+    label: 'Estado del proyecto',
+    suspended:
+      'Pyxis suspendió la recepción de eventos de este proyecto el {date}, así que no está midiendo. Sus pantallas siguen abiertas.',
+    reason: 'Motivo: {reason}',
+    contest:
+      'Para impugnarla, el dueño de la cuenta escribe a <mail>hello@pyxis-analytics.dev</mail>.',
+  },
   billing: {
     manage: 'Gestionar la facturación',
     finish: 'Terminar la suscripción',
