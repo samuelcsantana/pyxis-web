@@ -29,6 +29,10 @@ export class ApiWriter {
     return this.requests.send('api_write', path, schema, { method: 'PUT', body });
   }
 
+  patch<Value>(path: string, body: unknown, schema: ResponseSchema<Value>): Promise<Value> {
+    return this.requests.send('api_write', path, schema, { method: 'PATCH', body });
+  }
+
   delete(path: string): Promise<void> {
     return this.requests.send('api_write', path, NO_CONTENT, { method: 'DELETE' });
   }
