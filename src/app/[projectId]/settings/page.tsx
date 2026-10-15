@@ -10,6 +10,7 @@ import type { ScreenMetadataProps } from '@/lib/screen-metadata';
 import { timeZoneChoices } from '@/domain/project-management';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
+import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
@@ -24,6 +25,7 @@ import {
   removeProjectPerson,
   requestProjectExport,
   revokeAccessToken,
+  revokeConnection,
   revokeProjectKey,
   updateProject,
 } from './actions';
@@ -56,13 +58,15 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences, sessions, accessTokens, people] = await Promise.all([
-    readOrSignIn(() => createProjectsService().settings(project.id)),
-    readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
-    readOrSignIn(() => createSessionsService().list()),
-    readOrSignIn(() => createAccessTokensService().list()),
-    readOrSignIn(() => createProjectPeopleService().list(project.id)),
-  ]);
+  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people] =
+    await Promise.all([
+      readOrSignIn(() => createProjectsService().settings(project.id)),
+      readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
+      readOrSignIn(() => createSessionsService().list()),
+      readOrSignIn(() => createAccessTokensService().list()),
+      readOrSignIn(() => createConnectionsService().list()),
+      readOrSignIn(() => createProjectPeopleService().list(project.id)),
+    ]);
   const i18n = await getI18n();
   return (
     <>
@@ -81,6 +85,8 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           accessTokens={accessTokens}
           createAccessToken={createAccessToken.bind(null, project.id)}
           revokeAccessToken={revokeAccessToken.bind(null, project.id)}
+          connectedApps={connectedApps}
+          revokeConnection={revokeConnection.bind(null, project.id)}
           manage={{
             timezones: timeZoneChoices(settings.timezone),
             save: updateProject.bind(null, project.id),

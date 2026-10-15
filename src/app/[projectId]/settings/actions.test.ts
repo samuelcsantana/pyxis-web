@@ -4,6 +4,7 @@ import type { Admin } from '@/domain/admin';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IAccessTokensService } from '@/services/access-tokens/access-tokens-service.interface';
+import type { IConnectionsService } from '@/services/connections/connections-service.interface';
 import type { IEmailPreferencesService } from '@/services/preferences/email-preferences-service.interface';
 import type { IProjectManagementService } from '@/services/project-management/project-management-service.interface';
 import type { IProjectPeopleService } from '@/services/project-people/project-people-service.interface';
@@ -18,6 +19,7 @@ import {
   endSession,
   removeProjectPerson,
   revokeAccessToken,
+  revokeConnection,
   revokeProjectKey,
   updateProject,
 } from './actions';
@@ -28,6 +30,7 @@ const state = vi.hoisted<{
   end: ISessionsService['end'];
   create: IAccessTokensService['create'];
   revoke: IAccessTokensService['revoke'];
+  disconnect: IConnectionsService['revoke'];
   management: Omit<IProjectManagementService, 'create'>;
   people: Pick<IProjectPeopleService, 'add' | 'remove'>;
 }>(() => ({
@@ -36,6 +39,7 @@ const state = vi.hoisted<{
   end: () => Promise.reject(new Error('end not set')),
   create: () => Promise.reject(new Error('create not set')),
   revoke: () => Promise.reject(new Error('revoke not set')),
+  disconnect: () => Promise.reject(new Error('disconnect not set')),
   management: {
     update: () => Promise.reject(new Error('update not set')),
     createKey: () => Promise.reject(new Error('createKey not set')),
@@ -74,6 +78,12 @@ vi.mock('@/services/access-tokens/access-tokens-service.factory', () => ({
   createAccessTokensService: (): Pick<IAccessTokensService, 'create' | 'revoke'> => ({
     create: (request) => state.create(request),
     revoke: (tokenId) => state.revoke(tokenId),
+  }),
+}));
+
+vi.mock('@/services/connections/connections-service.factory', () => ({
+  createConnectionsService: (): Pick<IConnectionsService, 'revoke'> => ({
+    revoke: (connectionId) => state.disconnect(connectionId),
   }),
 }));
 
@@ -292,6 +302,44 @@ describe('revokeAccessToken', () => {
     state.revoke = () => Promise.reject(new UnauthenticatedError());
 
     await expect(revokeAccessToken('p-store', TOKEN_ID)).rejects.toThrow(
+      /^redirect:\/sign-in\?expired=1/,
+    );
+  });
+});
+
+describe('revokeConnection', () => {
+  const CONNECTION_ID = '5e1a7c9d-6f8b-4a0c-9d5e-7f9a1b3c5d6e';
+
+  it('revokes the connected app for an admin who can read the project', async () => {
+    const disconnect = vi.fn<IConnectionsService['revoke']>(() => Promise.resolve());
+    state.disconnect = disconnect;
+
+    await expect(revokeConnection('p-store', CONNECTION_ID)).resolves.toBeUndefined();
+    expect(disconnect).toHaveBeenCalledWith(CONNECTION_ID);
+  });
+
+  it('answers not found for a project the admin cannot read, without revoking anything', async () => {
+    const disconnect = vi.fn<IConnectionsService['revoke']>();
+    state.disconnect = disconnect;
+
+    await expect(revokeConnection('p-other', CONNECTION_ID)).rejects.toThrow('not-found');
+    expect(disconnect).not.toHaveBeenCalled();
+  });
+
+  it('refuses an id that is not a UUID, since it comes from the browser', async () => {
+    const disconnect = vi.fn<IConnectionsService['revoke']>();
+    state.disconnect = disconnect;
+
+    await expect(revokeConnection('p-store', '../tokens')).rejects.toThrow(
+      'A connected app is revoked by its id.',
+    );
+    expect(disconnect).not.toHaveBeenCalled();
+  });
+
+  it('sends an expired session back to sign-in', async () => {
+    state.disconnect = () => Promise.reject(new UnauthenticatedError());
+
+    await expect(revokeConnection('p-store', CONNECTION_ID)).rejects.toThrow(
       /^redirect:\/sign-in\?expired=1/,
     );
   });

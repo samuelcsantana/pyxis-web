@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { accessTokensResponseSchema } from '@/domain/access-tokens.schema';
+import { connectedAppsResponseSchema } from '@/domain/connections.schema';
 import { timeZoneChoices } from '@/domain/project-management';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { sessionsResponseSchema } from '@/domain/sessions.schema';
@@ -7,6 +8,7 @@ import {
   DEMO_CREATED_ACCESS_TOKEN,
   demoAccessTokensWire,
 } from '@/services/access-tokens/mock-access-tokens-service';
+import { demoConnectionsWire } from '@/services/connections/mock-connections-service';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
 import { MockExportsService } from '@/services/exports/mock-exports-service';
@@ -59,6 +61,8 @@ const meta = {
         },
       }),
     revokeAccessToken: () => Promise.resolve(),
+    connectedApps: connectedAppsResponseSchema.parse(demoConnectionsWire(STORY_NOW)),
+    revokeConnection: () => Promise.resolve(),
     manage: {
       timezones: timeZoneChoices(STORE.timezone),
       save: () => MANAGEMENT.update(),

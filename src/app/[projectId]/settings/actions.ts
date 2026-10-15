@@ -21,6 +21,7 @@ import {
 } from '@/domain/project-management';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
+import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
@@ -37,6 +38,7 @@ const newAccessTokenSchema = z.strictObject({
   lifetimeDays: z.literal([...ACCESS_TOKEN_LIFETIMES]),
 });
 const accessTokenIdSchema = z.uuid();
+const connectionIdSchema = z.uuid();
 const projectChangesSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_PROJECT_NAME_LENGTH),
   allowedOrigins: z.array(z.string().min(1)).min(1).max(MAX_ALLOWED_ORIGINS),
@@ -90,6 +92,15 @@ export async function revokeAccessToken(projectId: string, tokenId: string): Pro
     throw new Error('An access token is revoked by its id.');
   }
   await readOrSignIn(() => createAccessTokensService().revoke(parsed.data));
+}
+
+export async function revokeConnection(projectId: string, connectionId: string): Promise<void> {
+  await projectOrNotFound(projectId);
+  const parsed = connectionIdSchema.safeParse(connectionId);
+  if (!parsed.success) {
+    throw new Error('A connected app is revoked by its id.');
+  }
+  await readOrSignIn(() => createConnectionsService().revoke(parsed.data));
 }
 
 export async function updateProject(
