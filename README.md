@@ -253,7 +253,13 @@ Shipping now:
   everywhere" below the list. Then the admin's access tokens, for an AI agent or a script that
   reads the same numbers: each with its name, creation, last use and expiry, and a button to
   revoke it; a form creates one with a name and a lifetime (30, 90 or 365 days) and shows the
-  token once, with a copy button and how to send it, and offers no new one past ten. Below it,
+  token once, with a copy button and how to send it, and offers no new one past ten. Then the
+  apps the admin connected through the Claude connector (Claude, Claude Code): each with its
+  host, when it was connected and last used, and a button to revoke it, after which the app asks
+  to connect again. While the API keeps the connector open, a box shows how to connect Claude:
+  the three steps in Claude, the connector's address and the Claude Code command, each with a copy
+  button; while it is closed the box is hidden, so the page never shows an address that answers
+  404, and the list still shows. Below it,
   the project. The owner of its account edits it: name, up to five allowed origins (typed as
   `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
   problem named under its field before anything is sent; creates a public key or a secret key
@@ -463,7 +469,7 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/funnel`                                                          | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                                                                                                                                                          |
 | `/[projectId]/timeline`                                                        | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                                                                                                                                                             |
 | `/[projectId]/visits`                                                          | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                                                                                                                                                                      |
-| `/[projectId]/settings`                                                        | The weekly digest switch, the sessions list (end one, or sign out everywhere), the access tokens (create, revoke), then the project (edited by its owner), keys (created and revoked by the owner), retention, events, the people (added and removed by the owner), and deleting the project |
+| `/[projectId]/settings`                                                        | The weekly digest switch, sessions (end one or all), access tokens (create, revoke), connected apps (revoke or connect Claude), the project (edited by its owner), keys (created and revoked by the owner), retention, events, people (added and removed by the owner), deleting the project |
 | `/[projectId]/overview/export`                                                 | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                                                                                                                                                                     |
 | `/[projectId]/requests/export`                                                 | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                                                                                                                                                             |
 | `/[projectId]/features/export`                                                 | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                                                                                                                                                         |
@@ -660,6 +666,10 @@ docs/adr/           architecture decision records
   validate what the browser sent; the API decides who owns the project and answers its refusals
   by code (no subscription, the last public key, the key limit, a name typed wrong), which the
   screens explain. A new secret key travels to the browser once, like an access token
+- A connected app is revoked by a Server Action that re-checks access and validates the id. The
+  panel shows the app's name, its host and two dates, never a token (the API keeps a
+  connection's tokens only as hashes), and the connector's address only when it is an `http` or
+  `https` address the API says is open
 - A CSV export is a Route Handler next to its screen that reads through the same service, with
   the same session cookie, as the page: it holds nothing the screen does not show, answers
   `Cache-Control: private, no-store`, and a 404 for a table the screen does not have. The Visits
