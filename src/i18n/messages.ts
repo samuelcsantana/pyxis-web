@@ -18,6 +18,7 @@ export const CLIENT_NAMESPACES = [
   'emailPreferences',
   'sessions',
   'accessTokens',
+  'consent',
   'projectForm',
   'projectKeys',
   'deleteProject',

@@ -43,6 +43,7 @@ describe('get-messages', () => {
       'emailPreferences',
       'sessions',
       'accessTokens',
+      'consent',
       'projectForm',
       'projectKeys',
       'deleteProject',

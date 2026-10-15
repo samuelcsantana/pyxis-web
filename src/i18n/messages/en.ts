@@ -594,6 +594,36 @@ export const en = {
     revoked: 'Token revoked',
     revokeFailed: 'The token was not revoked. Try again.',
   },
+  connect: {
+    title: 'Connect an app',
+    heading: 'Connect {app} to Pyxis?',
+    asks: '{app} ({host}) asks to read the numbers of your projects.',
+    signedInAs: 'Signed in as {email}',
+    accessHeading: 'What it can do',
+    access:
+      'Only read: the same numbers you see in this dashboard, from every project you can open. It never changes anything.',
+    projectsHeading: 'Your projects',
+    noProjects: 'You have no projects yet. It will read the ones you can open later.',
+    returnHeading: 'Where this window goes next',
+    returnTo: 'Back to {host}.',
+    loopback:
+      'The answer goes to a program on this computer. Allow only if you started the connection in {app} on this computer just now.',
+    notYou: 'If you did not start this just now in {app}, choose Cancel.',
+    revokeLater: 'You can revoke the connection at any time in Settings.',
+    goneHeading: 'This connection request has ended',
+    back: 'Back to the dashboard',
+  },
+  consent: {
+    allow: 'Allow',
+    allowing: 'Allowing…',
+    cancel: 'Cancel',
+    cancelling: 'Cancelling…',
+    leaving: 'Going back to {app}…',
+    tooMany:
+      'You already have {max} connected apps, the most you can keep. Revoke one in <settings>Settings</settings> to connect another.',
+    failed: 'Nothing was sent. Try again.',
+    gone: 'It was already answered, or more than {minutes} minutes went by. Go back to Claude and connect Pyxis again.',
+  },
   chartPanel: {
     showAs: 'Show as',
     chart: 'Chart',
