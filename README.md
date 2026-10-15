@@ -254,11 +254,16 @@ Shipping now:
   reads the same numbers: each with its name, creation, last use and expiry, and a button to
   revoke it; a form creates one with a name and a lifetime (30, 90 or 365 days) and shows the
   token once, with a copy button and how to send it, and offers no new one past ten. Below it,
-  read-only: time
-  zone, conversion event, allowed origins, the live public keys (a public key ships in the site,
-  so it is shown in full), when each live secret key was created (never the key, which the API
-  keeps only as a hash), how many months events are kept, and whether the project still waits
-  for its first event. Project settings change through the API's command line
+  the project. The owner of its account edits it: name, up to five allowed origins (typed as
+  `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
+  problem named under its field before anything is sent; creates a public key or a secret key
+  (shown once, with a copy button) and revokes any key but the only public one; and deletes the
+  project with its name typed again. Someone the owner added sees the same settings read-only,
+  and the operator's own projects (no account) still change through the API's command line.
+  Read-only for everyone: the live public keys (a public key ships in the site, so it is shown in
+  full), when each live secret key was created (never the key, which the API keeps only as a
+  hash), how many months events are kept, and whether the project still waits for its first
+  event
 - The interface in English, Brazilian Portuguese and Spanish (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
@@ -381,27 +386,27 @@ origin the sign-in and sign-out calls carry.
 
 ### Routes
 
-| Route                                            | What it shows                                                                                                                                            |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                    |
-| `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                    |
-| `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                          |
-| `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                          |
-| `/[projectId]/devices`                           | Device types, browsers, systems, conversion by device, countries and regions                                                                             |
-| `/[projectId]/acquisition`                       | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                               |
-| `/[projectId]/features`                          | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                        |
-| `/[projectId]/requests`                          | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                    |
-| `/[projectId]/funnel`                            | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                      |
-| `/[projectId]/timeline`                          | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                         |
-| `/[projectId]/visits`                            | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                                  |
-| `/[projectId]/settings`                          | The weekly digest switch, the sessions list (end one, or sign out everywhere), the access tokens (create, revoke), then origins, keys, retention, events |
-| `/[projectId]/overview/export`                   | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                                 |
-| `/[projectId]/requests/export`                   | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                         |
-| `/[projectId]/features/export`                   | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                     |
-| `/[projectId]/acquisition/export`                | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                           |
-| `/[projectId]/devices/export`                    | A CSV file of every breakdown of the Devices screen, for its period                                                                                      |
-| `/[projectId]/visits/export`                     | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                    |
-| `/[projectId]/icon`                              | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                     |
+| Route                                            | What it shows                                                                                                                                                                                                                                   |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                              | Opens the first project the admin may read, or explains there is none                                                                                                                                                                           |
+| `/`, `/pt-br` and `/es` on `pyxis-analytics.dev` | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                           |
+| `/sign-in`                                       | Email, then code; `?expired=1` explains that the session ended; `?next=` returns to that screen                                                                                                                                                 |
+| `/[projectId]/overview`                          | The overview of a project; `?range=today\|7d\|30d` or `?from=…&to=…`; `?metric=` plots a figure                                                                                                                                                 |
+| `/[projectId]/devices`                           | Device types, browsers, systems, conversion by device, countries and regions                                                                                                                                                                    |
+| `/[projectId]/acquisition`                       | Visits by channel per day, paid visits, the sources and the campaigns and their conversion                                                                                                                                                      |
+| `/[projectId]/features`                          | Events (or `?kind=screens`) ranked by use; `?q=` searches by name                                                                                                                                                                               |
+| `/[projectId]/requests`                          | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                                                                                                           |
+| `/[projectId]/funnel`                            | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                                                                                                             |
+| `/[projectId]/timeline`                          | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                                                                                                                |
+| `/[projectId]/visits`                            | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                                                                                                                         |
+| `/[projectId]/settings`                          | The weekly digest switch, the sessions list (end one, or sign out everywhere), the access tokens (create, revoke), then the project (edited by its owner), keys (created and revoked by the owner), retention, events, and deleting the project |
+| `/[projectId]/overview/export`                   | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                                                                                                                        |
+| `/[projectId]/requests/export`                   | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                                                                                                                |
+| `/[projectId]/features/export`                   | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                                                                                                            |
+| `/[projectId]/acquisition/export`                | A CSV file: `?table=sources\|campaigns\|channels` (default `sources`), for the screen's period                                                                                                                                                  |
+| `/[projectId]/devices/export`                    | A CSV file of every breakdown of the Devices screen, for its period                                                                                                                                                                             |
+| `/[projectId]/visits/export`                     | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                                                                                                           |
+| `/[projectId]/icon`                              | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                                                                                                            |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
@@ -563,6 +568,10 @@ docs/adr/           architecture decision records
   name, the lifetime and the id; the new token travels to the browser once, in the action's answer,
   is kept only in the component's state until "Done", and is never written to a cookie, storage or
   the page's HTML. The list shows names and dates, never a token
+- A project's settings, keys and deletion go through Server Actions that re-check access and
+  validate what the browser sent; the API decides who owns the project and answers its refusals
+  by code (no subscription, the last public key, the key limit, a name typed wrong), which the
+  screens explain. A new secret key travels to the browser once, like an access token
 - A CSV export is a Route Handler next to its screen that reads through the same service, with
   the same session cookie, as the page: it holds nothing the screen does not show, answers
   `Cache-Control: private, no-store`, and a 404 for a table the screen does not have. The Visits
