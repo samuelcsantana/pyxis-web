@@ -18,7 +18,7 @@ export const projectSettingsResponseSchema = z
     event_retention_months: z.number().int(),
     public_keys: z.array(keySchema.extend({ key: z.string() })),
     secret_keys: z.array(keySchema),
-    deletion_held_at: z.string().nullish(),
+    deletion_held_at: z.string().nullable(),
   })
   .transform((body): ProjectSettings => ({
     id: body.id,
@@ -38,5 +38,5 @@ export const projectSettingsResponseSchema = z
       createdAt: key.created_at,
     })),
     secretKeys: body.secret_keys.map((key) => ({ id: key.id, createdAt: key.created_at })),
-    deletionHeldAt: body.deletion_held_at ?? null,
+    deletionHeldAt: body.deletion_held_at,
   }));

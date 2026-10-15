@@ -97,6 +97,7 @@ describe('projectSettingsResponseSchema', () => {
     event_retention_months: 13,
     public_keys: [],
     secret_keys: [],
+    deletion_held_at: null,
   };
 
   it('reads when Pyxis began holding the deletion of the project', () => {
@@ -106,10 +107,7 @@ describe('projectSettingsResponseSchema', () => {
     ).toBe('2026-10-04T00:00:00.000Z');
   });
 
-  it('reads no hold when the API does not send one', () => {
+  it('reads no hold when the project has none', () => {
     expect(projectSettingsResponseSchema.parse(WIRE).deletionHeldAt).toBeNull();
-    expect(
-      projectSettingsResponseSchema.parse({ ...WIRE, deletion_held_at: null }).deletionHeldAt,
-    ).toBeNull();
   });
 });
