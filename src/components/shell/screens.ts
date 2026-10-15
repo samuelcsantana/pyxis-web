@@ -83,6 +83,7 @@ export function linkWith(href: string, parameters: Readonly<Record<string, strin
 }
 
 const SCREEN_PATH_SEGMENTS = 3;
+const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account']);
 
 function isScreenSlug(value: string | undefined): boolean {
   return SCREENS.some((screen) => screen.slug === value);
@@ -95,11 +96,10 @@ export function returnPathOf(value: string | null | undefined): string | undefin
   const url = new URL(value, LINK_BASE);
   const segments = url.pathname.split('/');
   const isScreen =
-    url.origin === LINK_BASE &&
-    segments.length === SCREEN_PATH_SEGMENTS &&
-    segments[1] !== '' &&
-    isScreenSlug(segments[2]);
-  return isScreen ? `${url.pathname}${url.search}` : undefined;
+    segments.length === SCREEN_PATH_SEGMENTS && segments[1] !== '' && isScreenSlug(segments[2]);
+  return url.origin === LINK_BASE && (isScreen || ACCOUNT_LEVEL_PATHS.has(url.pathname))
+    ? `${url.pathname}${url.search}`
+    : undefined;
 }
 
 export function screenOf(pathname: string): string | undefined {

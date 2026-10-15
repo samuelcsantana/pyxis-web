@@ -31,6 +31,7 @@ export const en = {
     settings: 'Settings',
     account: 'Account and preferences',
     language: 'Language',
+    billing: 'Account and billing',
   },
   theme: {
     switch: 'Switch theme',
@@ -279,6 +280,59 @@ export const en = {
     removed: 'Removed',
     ownerStays: 'The owner keeps access to every project of the account.',
     removeFailed: 'That person was not removed. Try again.',
+  },
+  account: {
+    title: 'Account and billing',
+    back: 'Back to the dashboard',
+    noAccount:
+      'You do not own a Pyxis account. The billing of the projects you open belongs to their owner.',
+    plan: 'Plan',
+    planWithInterval: 'Plan: {interval}',
+    monthly: 'Monthly',
+    yearly: 'Yearly',
+    status: {
+      trialing: 'Free trial until {date}. Then the plan is charged, unless you cancel.',
+      active: 'Active. It renews on {date}.',
+      past_due:
+        'The last charge failed. Stripe tries again over the next days; update the card to keep measuring.',
+      ending: 'Cancelled. Access continues until {date}, with no further charge.',
+      ended:
+        'Ended on {date}. The projects stopped measuring, and everything is deleted on {deletion}.',
+      incomplete: 'The subscription was not finished. Choose a plan to start the free trial.',
+      comped: 'A free account, given by Pyxis.',
+      trialingUndated: 'Free trial. Then the plan is charged, unless you cancel.',
+      activeUndated: 'Active.',
+      endingUndated:
+        'Cancelled. Access continues until the end of the period, with no further charge.',
+      endedUndated:
+        'Ended. The projects stopped measuring, and everything is deleted thirty days after the end.',
+    },
+    usage: 'Events this month',
+    usageCount: '{count} of {limit}',
+    measured: 'Measured {date}.',
+    notMeasured: 'Not measured yet this month.',
+    paused: 'Measuring is paused until {date}: the account used 150% of its monthly events.',
+    limits: 'Up to {projects} projects and {people} people, you included.',
+    notice: {
+      paymentFailed: 'The last charge failed. Update the card to keep measuring.',
+      ending: 'Your subscription ends on {date}.',
+      ended: 'Your subscription ended. Everything is deleted on {date}.',
+      paused: 'Measuring is paused until {date}: the account passed its monthly events.',
+      nearQuota: 'This month the account has used {share} of its events.',
+      open: 'Open billing',
+    },
+  },
+  billing: {
+    manage: 'Manage billing',
+    finish: 'Finish subscription',
+    opening: 'Opening Stripe…',
+    interval: 'Billing',
+    monthly: 'Monthly',
+    yearly: 'Yearly',
+    noBillingYet: 'There is no billing to manage yet.',
+    subscriptionExists: 'This account already has a subscription. Reload the page.',
+    unavailable: 'Billing is not available right now. Try again later.',
+    failed: 'Stripe could not be opened. Try again.',
   },
   emailPreferences: {
     heading: 'E-mail',

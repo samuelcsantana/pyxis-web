@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import type { OverviewReport } from '@/domain/overview';
@@ -14,10 +15,16 @@ const state = vi.hoisted<{
   admin: unknown;
   failure: Error | undefined;
   overview: IOverviewService['overview'];
+  accounts: () => Promise<readonly Account[]>;
 }>(() => ({
   admin: undefined,
   failure: undefined,
   overview: () => Promise.reject(new Error('overview not set')),
+  accounts: () => Promise.resolve([]),
+}));
+
+vi.mock('@/services/accounts/accounts-service.factory', () => ({
+  createAccountsService: () => ({ list: () => state.accounts() }),
 }));
 
 vi.mock('next/headers', () => ({
@@ -67,6 +74,7 @@ beforeEach(() => {
   state.admin = ADMIN;
   state.failure = undefined;
   state.overview = (projectId, range) => new MockOverviewService().overview(projectId, range);
+  state.accounts = () => Promise.resolve([]);
 });
 
 const LATE_EVENING_IN_SAO_PAULO = new Date('2026-10-06T02:30:00.000Z');
@@ -114,6 +122,37 @@ describe('ProjectLayout', () => {
     );
 
     expect(screen.queryByRole('note')).not.toBeInTheDocument();
+  });
+
+  it("warns about an owned account's failed payment, linking to billing", async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    state.accounts = () =>
+      Promise.resolve([
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'past_due',
+          billingInterval: 'month',
+          trialEndsAt: null,
+          currentPeriodEndsAt: null,
+          accessEndsAt: null,
+          ingestionPausedUntil: null,
+          month: '2026-10',
+          eventsThisMonth: 10,
+          measuredAt: null,
+          limits: { eventsPerMonth: 100_000, projects: 3, people: 3 },
+        },
+      ]);
+
+    renderWithMessages(
+      await ProjectLayout({
+        children: <p>screen</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    expect(screen.getByRole('note')).toHaveTextContent('The last charge failed.');
+    expect(screen.getByRole('link', { name: 'Open billing' })).toHaveAttribute('href', '/account');
   });
 
   it('answers not found for a project the admin may not read', async () => {

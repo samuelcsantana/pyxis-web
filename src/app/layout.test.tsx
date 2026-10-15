@@ -69,6 +69,7 @@ describe('RootLayout', () => {
       'projectKeys',
       'deleteProject',
       'people',
+      'billing',
     ]);
   });
 

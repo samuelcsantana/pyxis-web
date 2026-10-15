@@ -72,6 +72,7 @@ describe('screens helpers', () => {
   it('accept as a return path only a screen of this site, with its query', () => {
     expect(returnPathOf('/p1/requests?show=failing')).toBe('/p1/requests?show=failing');
     expect(returnPathOf('/p1/overview')).toBe('/p1/overview');
+    expect(returnPathOf('/account')).toBe('/account');
   });
 
   it('refuse any other return path', () => {
@@ -88,6 +89,8 @@ describe('screens helpers', () => {
       '/sign-in',
       '/p1/unknown',
       '/p1/overview/extra',
+      '/\\evil.example/account',
+      '/account/extra',
     ]) {
       expect(returnPathOf(value)).toBeUndefined();
     }

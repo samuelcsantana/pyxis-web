@@ -22,6 +22,7 @@ export const CLIENT_NAMESPACES = [
   'projectKeys',
   'deleteProject',
   'people',
+  'billing',
 ] as const satisfies readonly (keyof Messages)[];
 export type ClientNamespace = (typeof CLIENT_NAMESPACES)[number];
 export type ClientSourceMessages = {
