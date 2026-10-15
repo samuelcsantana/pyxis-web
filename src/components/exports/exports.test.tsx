@@ -6,10 +6,10 @@ import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { REQUEST_EXPORT_MIN_BUSY_MS, RequestExportButton } from '../settings/request-export-button';
 import { ExportView } from './export-view';
 import {
-  EXPORT_REFRESH_LIMIT,
-  EXPORT_REFRESH_MS,
+  PENDING_REFRESH_LIMIT,
+  PENDING_REFRESH_MS,
   RefreshWhilePending,
-} from './refresh-while-pending';
+} from '@/components/ui/refresh-while-pending';
 
 const navigation = vi.hoisted(() => ({ router: { refresh: vi.fn() } }));
 
@@ -112,7 +112,7 @@ describe('ExportView', () => {
 
     expect(screen.getByRole('status')).toHaveTextContent('Preparing the file…');
     expect(screen.getByText('Asked for on Nov 20, 2026')).toBeInTheDocument();
-    await settle(EXPORT_REFRESH_MS);
+    await settle(PENDING_REFRESH_MS);
     expect(navigation.router.refresh).toHaveBeenCalledOnce();
   });
 
@@ -124,7 +124,7 @@ describe('ExportView', () => {
       'href',
       '/p1/exports/e1/download',
     );
-    await settle(EXPORT_REFRESH_MS);
+    await settle(PENDING_REFRESH_MS);
     expect(navigation.router.refresh).not.toHaveBeenCalled();
   });
 
@@ -196,13 +196,13 @@ describe('RefreshWhilePending', () => {
   it('gives up after its limit, and stops when it goes away', async () => {
     const { unmount } = render(<RefreshWhilePending pending />);
 
-    await settle(EXPORT_REFRESH_MS * (EXPORT_REFRESH_LIMIT + 2));
-    expect(navigation.router.refresh).toHaveBeenCalledTimes(EXPORT_REFRESH_LIMIT);
+    await settle(PENDING_REFRESH_MS * (PENDING_REFRESH_LIMIT + 2));
+    expect(navigation.router.refresh).toHaveBeenCalledTimes(PENDING_REFRESH_LIMIT);
 
     unmount();
     const second = render(<RefreshWhilePending pending />);
     second.unmount();
-    await settle(EXPORT_REFRESH_MS * 2);
-    expect(navigation.router.refresh).toHaveBeenCalledTimes(EXPORT_REFRESH_LIMIT);
+    await settle(PENDING_REFRESH_MS * 2);
+    expect(navigation.router.refresh).toHaveBeenCalledTimes(PENDING_REFRESH_LIMIT);
   });
 });
