@@ -126,14 +126,14 @@ describe('HttpAccountsService close', () => {
 });
 
 describe('MockAccountsService', () => {
-  it('lists the demo account in its free trial, owned by the demo admin', async () => {
+  it('lists the demo account at the start of its free trial, owned by the demo admin', async () => {
     const [account] = await new MockAccountsService(() => NOW).list();
 
     expect(account).toMatchObject({
       id: DEMO_ACCOUNT_ID,
       role: 'owner',
       status: 'trialing',
-      trialEndsAt: '2026-11-29T12:00:00.000Z',
+      trialEndsAt: '2026-12-04T12:00:00.000Z',
       month: '2026-11',
       eventsThisMonth: 41_230,
       measuredAt: '2026-11-20T09:00:00.000Z',

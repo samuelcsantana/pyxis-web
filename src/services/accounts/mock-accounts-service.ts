@@ -5,12 +5,12 @@ import {
   deletionDateOf,
 } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
+import { TRIAL_DAYS } from '@/domain/sign-up';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
 import { DEMO_ME_RESPONSE } from '../projects/mock-projects-service';
 import type { IAccountsService } from './accounts-service.interface';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const TRIAL_DAYS_LEFT = 9;
 const DEMO_EVENTS_THIS_MONTH = 41_230;
 const MEASURED_HOURS_AGO = 3;
 const HOUR_MS = 60 * 60 * 1000;
@@ -20,7 +20,7 @@ export const DEMO_WELCOME_URL = `/welcome?account=${DEMO_ACCOUNT_ID}`;
 const DEMO_OWNER_EMAIL = DEMO_ME_RESPONSE.email;
 
 export function demoAccountsWire(now: Date) {
-  const trialEnd = new Date(now.getTime() + TRIAL_DAYS_LEFT * DAY_MS).toISOString();
+  const trialEnd = new Date(now.getTime() + TRIAL_DAYS * DAY_MS).toISOString();
   return {
     accounts: [
       {
