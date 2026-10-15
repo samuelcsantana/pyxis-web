@@ -28,7 +28,7 @@ const state = vi.hoisted<{
   end: ISessionsService['end'];
   create: IAccessTokensService['create'];
   revoke: IAccessTokensService['revoke'];
-  management: IProjectManagementService;
+  management: Omit<IProjectManagementService, 'create'>;
   people: Pick<IProjectPeopleService, 'add' | 'remove'>;
 }>(() => ({
   admin: undefined,
@@ -62,7 +62,7 @@ vi.mock('@/services/project-people/project-people-service.factory', () => ({
 }));
 
 vi.mock('@/services/project-management/project-management-service.factory', () => ({
-  createProjectManagementService: (): IProjectManagementService => ({
+  createProjectManagementService: (): Omit<IProjectManagementService, 'create'> => ({
     update: (projectId, changes) => state.management.update(projectId, changes),
     createKey: (projectId, kind) => state.management.createKey(projectId, kind),
     revokeKey: (projectId, keyId) => state.management.revokeKey(projectId, keyId),

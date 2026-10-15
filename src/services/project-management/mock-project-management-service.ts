@@ -1,11 +1,12 @@
 import type {
   CreateProjectKeyOutcome,
+  CreateProjectOutcome,
   DeleteProjectOutcome,
   ProjectKeyKind,
   RevokeProjectKeyOutcome,
   SaveProjectOutcome,
 } from '@/domain/project-management';
-import { demoProjectOf } from '../demo/demo-projects';
+import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';
 import { demoPublicKeyId } from '../projects/demo-project-settings';
 import type { IProjectManagementService } from './project-management-service.interface';
 
@@ -17,6 +18,13 @@ export const DEMO_CREATED_KEYS: Readonly<Record<ProjectKeyKind, string>> = {
 };
 
 export class MockProjectManagementService implements IProjectManagementService {
+  create(): Promise<CreateProjectOutcome> {
+    return Promise.resolve({
+      kind: 'created',
+      project: { projectId: DEMO_STORE.id, publicKey: DEMO_CREATED_KEYS.public },
+    });
+  }
+
   update(): Promise<SaveProjectOutcome> {
     return Promise.resolve({ kind: 'saved' });
   }
