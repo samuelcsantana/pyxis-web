@@ -1584,13 +1584,13 @@ export const es = translation({
       trial:
         '14 días gratis. La tarjeta solo se cobra el día 15, y puedes cancelar cuando quieras.',
       availability:
-        'Por ahora, el plan alojado se vende solo en Brasil, en reales. En cualquier otro lugar, puedes alojar Pyxis gratis, con la licencia MIT.',
+        'Por ahora, el plan alojado se vende solo en Brasil, en reales. En cualquier otro lugar, puedes <link>alojar Pyxis</link> gratis, con la licencia MIT.',
       invite:
         'Por ahora, el acceso es por invitación: lo pides, recibes el enlace de pago y, después de suscribirte, el acceso al panel llega en hasta 2 días hábiles.',
-      selfHostTitle: '¿Prefieres alojarlo tú mismo?',
-      selfHost:
-        'El código es abierto, con licencia MIT. Puedes ejecutar Pyxis en tus propias cuentas de AWS, Neon y Vercel, sin pagar nada a Pyxis. El plan de pago es para quien prefiere no ocuparse de eso.',
-      selfHostLink: 'Ver cómo ejecutar la API',
+      moreTitle: '¿Necesitas más?',
+      more: '¿Más de 3 sitios, más de 100.000 eventos al mes o más personas en el panel? Cuéntanos qué necesitas en hello@pyxis-analytics.dev y te respondemos en hasta 2 días hábiles con un plan a medida.',
+      moreLink: 'Hablar de un plan mayor',
+      moreSubject: 'Un plan mayor de Pyxis',
       start: 'Empieza tu prueba gratis',
       openNote:
         'Regístrate con un correo y una tarjeta; el panel se abre en cuanto se confirma la suscripción.',

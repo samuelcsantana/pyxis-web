@@ -1,5 +1,6 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
 import { CONTACT_EMAIL, LANDING_LINKS } from './landing-links';
@@ -244,21 +245,33 @@ export function PricingSection({ i18n, signUpOpen }: PricingSectionProps) {
             <p className={NOTE}>
               {t('landing.pricing.trial')} {t('signUp.oneTrial')}
             </p>
-            <p className={NOTE}>{t('landing.pricing.availability')}</p>
+            <p className={NOTE}>
+              {rich(t('landing.pricing.availability'), {
+                link: (text) => (
+                  <a
+                    href={LANDING_LINKS.selfHost}
+                    className={`underline underline-offset-4 hover:text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+                    {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'self-host' })}
+                  >
+                    {text}
+                  </a>
+                ),
+              })}
+            </p>
           </div>
           <p className={`max-w-2xl ${NOTE}`}>
             {t(signUpOpen ? 'landing.pricing.openNote' : 'landing.pricing.invite')}
           </p>
         </div>
         <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
-          <h3 className="text-lg font-semibold">{t('landing.pricing.selfHostTitle')}</h3>
-          <p className="text-base leading-relaxed text-muted">{t('landing.pricing.selfHost')}</p>
+          <h3 className="text-lg font-semibold">{t('landing.pricing.moreTitle')}</h3>
+          <p className="text-base leading-relaxed text-muted">{t('landing.pricing.more')}</p>
           <a
-            href={LANDING_LINKS.selfHost}
+            href={mailtoOf(t('landing.pricing.moreSubject'))}
             className={`self-start font-semibold text-ink underline underline-offset-4 ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-            {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'self-host' })}
+            {...trackAttributes(LANDING_EVENTS.largerPlanRequested, { from: PRICING_ID })}
           >
-            {t('landing.pricing.selfHostLink')}
+            {t('landing.pricing.moreLink')}
           </a>
         </div>
       </div>
