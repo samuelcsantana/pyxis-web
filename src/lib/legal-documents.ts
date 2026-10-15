@@ -1,6 +1,8 @@
+import type { Locale } from '@/i18n/locales';
 import { LANDING_ORIGIN } from './site';
 
 export const LEGAL_DOCUMENT_SLUGS = ['termos', 'privacidade', 'acordo-de-tratamento'] as const;
+export const CONTRACT_LANGUAGE: Locale = 'pt-BR';
 
 export type LegalDocumentSlug = (typeof LEGAL_DOCUMENT_SLUGS)[number];
 

@@ -1,10 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { Marked } from 'marked';
 import { type LegalConfig, TERMS_VERSION } from './legal-config';
-import type { LegalDocument } from './legal-documents';
 
-export const LEGAL_TEXT_FOLDER = path.join(process.cwd(), 'content', 'legal');
 export const OPEN_EFFECTIVE_DATE = 'da abertura do cadastro do Pyxis hospedado';
 
 const SCROLLABLE_TABLE = 'role="region" aria-label="Tabela" tabindex="0"';
@@ -52,8 +48,4 @@ export function legalHtmlOf(text: string): string {
     .parse(text, { async: false })
     .replaceAll('<table>', `<div class="legal-table" ${SCROLLABLE_TABLE}><table>`)
     .replaceAll('</table>', '</table></div>');
-}
-
-export async function legalSourceOf(document: LegalDocument): Promise<string> {
-  return readFile(path.join(LEGAL_TEXT_FOLDER, document.file), 'utf8');
 }
