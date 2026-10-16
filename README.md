@@ -165,7 +165,8 @@ Shipping now:
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
-  that came from an ad click; each source opens its visits, and its channel the visits from
+  that came from an ad click (an ad click that arrives with no campaign source and no referring
+  site is a source of its own, "(ad click)"); each source opens its visits, and its channel the visits from
   that channel; the campaigns (`utm_campaign`) that brought the most visits, up to 20, each with
   the source that carried it, its conversion rate and its ad click visits, open the visits of
   that campaign from that source
