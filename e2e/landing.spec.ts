@@ -287,22 +287,32 @@ test('leads from the hero to asking Claude, and copies the connector address', a
   );
 });
 
-test('floats a nudge to the Claude connector, which leads to it and stays dismissed', async ({
+test('the mascot arrives on its own, tells tips, and leaves only when dismissed', async ({
   page,
+  context,
 }) => {
   await page.goto('/');
   const nudge = page.getByRole('complementary', { name: 'News: Pyxis in Claude' });
-  await expect(nudge).toBeHidden();
-
-  await page.getByRole('region', { name: 'Built in public' }).scrollIntoViewIfNeeded();
   await expect(nudge).toBeVisible();
-  await nudge.getByRole('link', { name: 'See how to connect' }).click();
+  await expect(nudge).toContainText('MCP access is here!');
 
+  await nudge.getByRole('button', { name: 'Another tip' }).click();
+  await expect(nudge).toContainText('Ask “how did last week go?” and Claude reads your numbers.');
+  await nudge.getByRole('link', { name: 'See how to connect' }).click();
   await expect(page).toHaveURL(/#ask-claude$/);
+  await expect(nudge).toBeVisible();
+
+  await nudge.getByRole('button', { name: 'Dismiss' }).click();
   await expect(nudge).toHaveCount(0);
   await page.reload();
-  await page.getByRole('region', { name: 'Built in public' }).scrollIntoViewIfNeeded();
+  await page.waitForTimeout(2_000);
   await expect(page.getByRole('complementary', { name: 'News: Pyxis in Claude' })).toHaveCount(0);
+
+  const nextVisit = await context.newPage();
+  await nextVisit.goto('/');
+  await expect(
+    nextVisit.getByRole('complementary', { name: 'News: Pyxis in Claude' }),
+  ).toBeVisible();
 });
 
 test('copies the install command', async ({ page, context, browserName }) => {

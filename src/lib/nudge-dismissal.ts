@@ -3,14 +3,14 @@ import type { DeviceStore } from './device-theme';
 export const NUDGE_DISMISSED_KEY = 'pyxis:ask-claude-nudge';
 const DISMISSED = 'dismissed';
 
-const browserDeviceStore = (): DeviceStore => window.localStorage;
+const browserVisitStore = (): DeviceStore => window.sessionStorage;
 
 function warn(action: string, error: unknown): void {
-  console.warn(`nudge: could not ${action} its dismissal on this device`, error);
+  console.warn(`nudge: could not ${action} its dismissal in this visit`, error);
 }
 
 export function bestEffortReadNudgeDismissed(
-  store: () => DeviceStore = browserDeviceStore,
+  store: () => DeviceStore = browserVisitStore,
 ): boolean {
   try {
     return store().getItem(NUDGE_DISMISSED_KEY) === DISMISSED;
@@ -21,7 +21,7 @@ export function bestEffortReadNudgeDismissed(
 }
 
 export function bestEffortRememberNudgeDismissed(
-  store: () => DeviceStore = browserDeviceStore,
+  store: () => DeviceStore = browserVisitStore,
 ): void {
   try {
     store().setItem(NUDGE_DISMISSED_KEY, DISMISSED);

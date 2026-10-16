@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
-import { LogoMark } from '@/components/brand/logo-mark';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { DeviceStore } from '@/lib/device-theme';
 import {
@@ -10,10 +9,14 @@ import {
 } from '@/lib/nudge-dismissal';
 import { ASK_CLAUDE_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
+import { NudgeRobot } from './nudge-robot';
 
 export interface AskClaudeNudgeLabels {
   readonly label: string;
-  readonly message: string;
+  readonly badge: string;
+  readonly title: string;
+  readonly tips: readonly string[];
+  readonly another: string;
   readonly cta: string;
   readonly dismiss: string;
 }
@@ -21,101 +24,168 @@ export interface AskClaudeNudgeLabels {
 export interface AskClaudeNudgeProps {
   readonly labels: AskClaudeNudgeLabels;
   readonly store?: () => DeviceStore;
-  readonly revealAfterScroll?: number;
+  readonly arriveAfterMs?: number;
 }
 
-export const NUDGE_REVEAL_AFTER_SCROLL_PX = 600;
+type Phase = 'waiting' | 'here' | 'leaving' | 'gone';
+
+export const NUDGE_ARRIVES_AFTER_MS = 1_200;
+export const NUDGE_TYPE_MS = 18;
+export const NUDGE_LEAVE_MS = 1_150;
+const PARTICLES = 8;
+const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 const CLOSE_ICON = 'M18 6 6 18 M6 6l12 12';
-const NUDGE_TRANSITION =
-  'transition-[opacity,translate,visibility] duration-300 motion-reduce:transition-none';
 
 const noSubscription = () => () => undefined;
 const hiddenOnTheServer = () => true;
-const awayOnTheServer = () => false;
 
-function subscribeToViewport(onChange: () => void): () => void {
-  window.addEventListener('scroll', onChange, { passive: true });
-  window.addEventListener('resize', onChange);
-  return () => {
-    window.removeEventListener('scroll', onChange);
-    window.removeEventListener('resize', onChange);
-  };
-}
-
-export function awayFromTheSection(revealAfterScroll: number): boolean {
-  if (window.scrollY < revealAfterScroll) {
-    return false;
-  }
-  const section = document.getElementById(ASK_CLAUDE_ID);
-  if (section === null) {
-    return true;
-  }
-  const box = section.getBoundingClientRect();
-  return box.bottom <= 0 || box.top >= window.innerHeight;
-}
+const reducedMotion = (): boolean => window.matchMedia(REDUCED_MOTION).matches;
 
 export function AskClaudeNudge({
   labels,
   store,
-  revealAfterScroll = NUDGE_REVEAL_AFTER_SCROLL_PX,
+  arriveAfterMs = NUDGE_ARRIVES_AFTER_MS,
 }: AskClaudeNudgeProps) {
-  const [dismissedNow, setDismissedNow] = useState(false);
+  const [phase, setPhase] = useState<Phase>('waiting');
+  const [tip, setTip] = useState(0);
+  const [typed, setTyped] = useState(0);
   const remembered = useSyncExternalStore(
     noSubscription,
     () => bestEffortReadNudgeDismissed(store),
     hiddenOnTheServer,
   );
-  const away = useSyncExternalStore(
-    subscribeToViewport,
-    () => awayFromTheSection(revealAfterScroll),
-    awayOnTheServer,
-  );
-  if (remembered || dismissedNow) {
+  const shownTip = tip % labels.tips.length;
+  const text = labels.tips.filter((_, index) => index === shownTip).join('');
+
+  useEffect(() => {
+    if (remembered) {
+      return;
+    }
+    const arrival = window.setTimeout(() => {
+      setPhase('here');
+    }, arriveAfterMs);
+    return () => {
+      window.clearTimeout(arrival);
+    };
+  }, [remembered, arriveAfterMs]);
+
+  useEffect(() => {
+    if (phase !== 'here') {
+      return;
+    }
+    const step = reducedMotion() ? text.length : 1;
+    const typing = window.setInterval(() => {
+      setTyped((count) => {
+        const next = Math.min(text.length, count + step);
+        if (next === text.length) {
+          window.clearInterval(typing);
+        }
+        return next;
+      });
+    }, NUDGE_TYPE_MS);
+    return () => {
+      window.clearInterval(typing);
+    };
+  }, [phase, text]);
+
+  useEffect(() => {
+    if (phase !== 'leaving') {
+      return;
+    }
+    const departure = window.setTimeout(
+      () => {
+        setPhase('gone');
+      },
+      reducedMotion() ? 0 : NUDGE_LEAVE_MS,
+    );
+    return () => {
+      window.clearTimeout(departure);
+    };
+  }, [phase]);
+
+  if (phase === 'waiting' || phase === 'gone') {
     return null;
   }
+  const nextTip = () => {
+    setTyped(0);
+    setTip((current) => current + 1);
+  };
   const dismiss = () => {
     bestEffortRememberNudgeDismissed(store);
-    setDismissedNow(true);
+    setPhase('leaving');
   };
   return (
     <aside
       aria-label={labels.label}
-      className={`fixed right-4 bottom-18 z-30 flex w-[min(22rem,calc(100%-2rem))] items-start gap-3 rounded-panel border border-line-strong bg-card p-3.5 pr-2.5 text-ink shadow-raised sm:bottom-4 ${NUDGE_TRANSITION} ${away ? '' : 'invisible translate-y-3 opacity-0'}`}
+      data-phase={phase}
+      className="landing-nudge fixed right-3 bottom-16 z-30 flex items-center gap-1 sm:right-7 sm:bottom-6 sm:gap-3"
     >
-      <span
-        aria-hidden="true"
-        className="landing-nudge-mascot grid size-11 shrink-0 place-items-center rounded-pill bg-soft"
-      >
-        <LogoMark size={30} />
-      </span>
-      <div className="flex min-w-0 grow flex-col gap-1.5">
-        <p className="text-sm leading-snug font-semibold text-pretty">{labels.message}</p>
-        <a
-          href={`#${ASK_CLAUDE_ID}`}
+      <div className="landing-nudge-bubble relative flex w-[min(18rem,calc(100vw-8.5rem))] flex-col gap-2 rounded-panel border border-accent/35 bg-nav/95 p-3.5 text-nav-strong shadow-raised backdrop-blur-md sm:w-72 sm:p-5">
+        <button
+          type="button"
+          aria-label={labels.dismiss}
           onClick={dismiss}
-          className={`self-start rounded-control text-sm font-semibold text-sky-ink underline-offset-4 hover:underline ${FOCUS_RING}`}
-          {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'mascot' })}
+          className={`absolute top-3 right-3 grid size-8 place-items-center rounded-control border border-nav-line bg-nav-raised text-nav-muted hover:border-bad hover:bg-bad/20 hover:text-nav-strong ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+          {...trackAttributes(LANDING_EVENTS.nudgeDismissed)}
         >
-          {labels.cta}
-          <span aria-hidden="true">{' →'}</span>
-        </a>
+          <svg width={14} height={14} viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d={CLOSE_ICON}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+        <p className="flex w-fit items-center gap-2 rounded-pill border border-nav-line bg-nav-raised px-2.5 py-1 font-mono text-micro font-semibold tracking-[0.06em] text-nav-text uppercase">
+          <span aria-hidden="true" className="landing-nudge-dot size-2 rounded-pill bg-accent" />
+          {labels.badge}
+        </p>
+        <p className="pr-8 text-base leading-tight font-bold tracking-[-0.01em] text-balance sm:text-lg">
+          {labels.title}
+        </p>
+        <p aria-hidden="true" className="hidden text-sm leading-normal text-nav-text sm:block">
+          <span>{text.slice(0, typed)}</span>
+          <span className="invisible">{text.slice(typed)}</span>
+        </p>
+        <p aria-live="polite" className="sr-only">
+          {text}
+        </p>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <a
+            href={`#${ASK_CLAUDE_ID}`}
+            className={`landing-nudge-cta rounded-control text-sm font-semibold text-accent ${FOCUS_RING}`}
+            {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'mascot' })}
+          >
+            {labels.cta}
+            <span aria-hidden="true">{' →'}</span>
+          </a>
+          <span aria-hidden="true" className="hidden gap-1 sm:flex">
+            {labels.tips.map((each, index) => (
+              <span
+                key={each}
+                className={`size-1.5 rounded-pill ${index === shownTip ? 'bg-accent' : 'bg-nav-line'}`}
+              />
+            ))}
+          </span>
+        </div>
       </div>
       <button
         type="button"
-        aria-label={labels.dismiss}
-        onClick={dismiss}
-        className={`grid size-8 shrink-0 place-items-center rounded-control text-muted hover:bg-soft hover:text-ink active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-        {...trackAttributes(LANDING_EVENTS.nudgeDismissed)}
+        aria-label={labels.another}
+        title={labels.another}
+        onClick={nextTip}
+        className={`landing-robot relative flex shrink-0 flex-col items-center rounded-panel ${FOCUS_RING}`}
       >
-        <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d={CLOSE_ICON}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.8}
-            strokeLinecap="round"
-          />
-        </svg>
+        <span aria-hidden="true" className="landing-robot-ring" />
+        {Array.from({ length: PARTICLES }, (_, index) => (
+          <span key={index} aria-hidden="true" className="landing-robot-particle" />
+        ))}
+        <span key={tip} className={tip === 0 ? 'block' : 'landing-robot-cheer block'}>
+          <NudgeRobot />
+        </span>
+        <span aria-hidden="true" className="landing-robot-shadow" />
       </button>
     </aside>
   );

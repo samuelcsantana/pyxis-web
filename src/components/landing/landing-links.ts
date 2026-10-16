@@ -13,7 +13,6 @@ export const LANDING_LINKS = {
   signIn: `${DASHBOARD_URL}/sign-in`,
   signUp: `${DASHBOARD_URL}/sign-up`,
   api: `${GITHUB_PROFILE}/pyxis-api`,
-  selfHost: `${GITHUB_PROFILE}/pyxis-api/blob/main/docs/RUNBOOK.md#first-time-setup`,
   sdk: `${GITHUB_PROFILE}/pyxis-sdk`,
   web: `${GITHUB_PROFILE}/pyxis-web`,
   mcp: `${GITHUB_PROFILE}/pyxis-mcp`,

@@ -26,7 +26,7 @@ describe('SiteHeader', () => {
     window.localStorage.clear();
   });
 
-  it('links the brand home and the main links to the demo, privacy, pricing and the code', () => {
+  it('links the brand home and the main links to the demo, privacy, Claude and pricing', () => {
     renderWithMessages(homeHeader());
 
     const banner = screen.getByRole('banner');
@@ -48,10 +48,7 @@ describe('SiteHeader', () => {
     expect(pricing).toHaveAttribute('href', '/#pricing');
     expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
     expect(pricing).toHaveAttribute('data-track-from', 'header');
-    expect(within(main).getByRole('link', { name: 'GitHub' })).toHaveAttribute(
-      'href',
-      'https://github.com/samuelcsantana/pyxis-api',
-    );
+    expect(within(main).queryByRole('link', { name: 'GitHub' })).not.toBeInTheDocument();
   });
 
   it('offers the dashboard sign-in on the home page', () => {

@@ -1548,7 +1548,16 @@ export const en = {
     },
     nudge: {
       label: 'News: Pyxis in Claude',
-      message: 'Pyxis now answers in Claude. Ask about your numbers.',
+      badge: 'New',
+      title: 'MCP access is here!',
+      tips: {
+        agents:
+          'Connect Claude and other AI agents to your Pyxis numbers, through the Model Context Protocol.',
+        ask: 'Ask “how did last week go?” and Claude reads your numbers.',
+        connect: 'One minute to connect. It only reads, and you revoke it any time.',
+        privacy: 'Claude sees the same numbers as your dashboard, and nothing personal.',
+      },
+      another: 'Another tip',
       cta: 'See how to connect',
       dismiss: 'Dismiss',
     },
@@ -1668,8 +1677,6 @@ export const en = {
       askMail: 'Open in my e-mail app',
       mailSubject: 'I would like to use Pyxis',
       trial: '14 days free. The card is only charged on day 15, and you can cancel any time.',
-      availability:
-        'For now the hosted plan is sold in Brazil only, in reais. Anywhere else, you can <link>host Pyxis yourself</link> for free under the MIT license.',
       invite:
         'For now, access is by invitation: you ask, receive the payment link and, once subscribed, get access to the dashboard within 2 business days.',
       moreTitle: 'Need more?',

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { NUDGE_DISMISSED_KEY } from '@/lib/nudge-dismissal';
-import { AskClaudeNudge } from './ask-claude-nudge';
+import { AskClaudeNudge, NUDGE_LEAVE_MS } from './ask-claude-nudge';
 
 const meta = {
   title: 'Landing/AskClaudeNudge',
@@ -10,14 +10,22 @@ const meta = {
   args: {
     labels: {
       label: 'News: Pyxis in Claude',
-      message: 'Pyxis now answers in Claude. Ask about your numbers.',
+      badge: 'New',
+      title: 'MCP access is here!',
+      tips: [
+        'Connect Claude and other AI agents to your Pyxis numbers, through the Model Context Protocol.',
+        'Ask “how did last week go?” and Claude reads your numbers.',
+        'One minute to connect. It only reads, and you revoke it any time.',
+        'Claude sees the same numbers as your dashboard, and nothing personal.',
+      ],
+      another: 'Another tip',
       cta: 'See how to connect',
       dismiss: 'Dismiss',
     },
-    revealAfterScroll: 0,
+    arriveAfterMs: 0,
   },
   beforeEach: () => {
-    window.localStorage.removeItem(NUDGE_DISMISSED_KEY);
+    window.sessionStorage.removeItem(NUDGE_DISMISSED_KEY);
   },
   decorators: [
     (Story) => (
@@ -35,7 +43,7 @@ export const Shown: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(
-      canvas.getByRole('complementary', { name: 'News: Pyxis in Claude' }),
+      await canvas.findByRole('complementary', { name: 'News: Pyxis in Claude' }),
     ).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'See how to connect' })).toBeVisible();
   },
@@ -44,8 +52,10 @@ export const Shown: Story = {
 export const Dismissed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'Dismiss' }));
-    await expect(canvas.queryByRole('complementary')).not.toBeInTheDocument();
+    await userEvent.click(await canvas.findByRole('button', { name: 'Dismiss' }));
+    await waitFor(() => expect(canvas.queryByRole('complementary')).not.toBeInTheDocument(), {
+      timeout: NUDGE_LEAVE_MS + 2_000,
+    });
   },
 };
 
@@ -53,9 +63,17 @@ export const Portuguese: Story = {
   args: {
     labels: {
       label: 'Novidade: o Pyxis no Claude',
-      message: 'Agora o Pyxis responde no Claude. Pergunte sobre seus números.',
+      badge: 'Novo recurso',
+      title: 'Acesso via MCP disponível!',
+      tips: [
+        'Agora você pode conectar o Claude e outros agentes de IA aos números do Pyxis, via Model Context Protocol.',
+        'Pergunte “como foi a semana passada?” e o Claude lê seus números.',
+        'Conecta em um minuto, só lê e você revoga quando quiser.',
+        'O Claude vê os mesmos números do seu painel, e nada pessoal.',
+      ],
+      another: 'Outra dica',
       cta: 'Ver como conectar',
-      dismiss: 'Dispensar',
+      dismiss: 'Fechar',
     },
   },
 };

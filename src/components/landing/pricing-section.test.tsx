@@ -47,7 +47,7 @@ describe('PricingSection', () => {
       ]),
     );
     expect(screen.getByText(/14 days free/)).toBeInTheDocument();
-    expect(screen.getByText(/sold in Brazil only/)).toBeInTheDocument();
+    expect(screen.queryByText(/sold in Brazil only/)).not.toBeInTheDocument();
     expect(screen.getByText(/access is by invitation/)).toBeInTheDocument();
   });
 
@@ -74,19 +74,6 @@ describe('PricingSection', () => {
       'href',
       'mailto:hello@pyxis-analytics.dev?subject=I%20would%20like%20to%20use%20Pyxis',
     );
-  });
-
-  it('links whoever would rather host it to the API runbook, from the sentence on availability', () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
-
-    const link = screen.getByRole('link', { name: 'host Pyxis yourself' });
-    expect(link).toHaveAttribute(
-      'href',
-      'https://github.com/samuelcsantana/pyxis-api/blob/main/docs/RUNBOOK.md#first-time-setup',
-    );
-    expect(link).toHaveAttribute('data-track', 'docs_opened');
-    expect(link).toHaveAttribute('data-track-doc', 'self-host');
-    expect(screen.queryByRole('heading', { name: 'Rather host it yourself?' })).toBeNull();
   });
 
   it('invites whoever needs more than the plan to ask for a larger one, in their language', () => {
