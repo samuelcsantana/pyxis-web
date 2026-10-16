@@ -80,6 +80,16 @@ describe('MockAcquisitionService', () => {
     );
   });
 
+  it('lists the ad clicks that came with no source as a paid source of their own', async () => {
+    const report = await new MockAcquisitionService().acquisition(DEMO_STORE.id, RANGE);
+    const adClicks = report.sources.find((source) => source.source === '(ad click)');
+
+    expect(adClicks).toMatchObject({ medium: null, channel: 'paid' });
+    expect(adClicks?.visits).toBeGreaterThan(0);
+    expect(adClicks?.fromAdClickVisits).toBe(adClicks?.visits);
+    expect(report.campaigns.some((campaign) => campaign.source === '(ad click)')).toBe(false);
+  });
+
   it('has no conversions for a project without a conversion event', async () => {
     const report = await new MockAcquisitionService().acquisition(DEMO_DOCS.id, RANGE);
 
