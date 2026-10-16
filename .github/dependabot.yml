@@ -11,6 +11,9 @@ updates:
       prefix-development: build
       include: scope
     groups:
+      next:
+        patterns: [next, eslint-config-next]
+        update-types: [minor, patch]
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
