@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.24.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.23.0...v0.24.0) (2026-10-16)
+
+
+### Features
+
+* **connect:** ask the admin to allow or cancel an app's connection ([9557adc](https://github.com/samuelcsantana/pyxis-web/commit/9557adcfb9aaa3ce1e9c3050624a343e47c8eecd))
+* **connect:** come back to the consent page after signing in ([c0e7483](https://github.com/samuelcsantana/pyxis-web/commit/c0e74836b527b23ed9cd0d8a757e743b4e2928a4))
+* **connect:** read and answer connection requests ([97b36fb](https://github.com/samuelcsantana/pyxis-web/commit/97b36fbdca1059bd3693ae51f5196ab6d33e9da4))
+* **connect:** say where the data goes before Allow ([7447d11](https://github.com/samuelcsantana/pyxis-web/commit/7447d116880de04a7496fdffc846be5815da8a45))
+* **landing:** point to the Claude connector and the open sign-up ([8da7b35](https://github.com/samuelcsantana/pyxis-web/commit/8da7b35ca267464f4de27401feed091ff9370296))
+* **legal:** publish version 1.2 of the contract documents ([a7bf910](https://github.com/samuelcsantana/pyxis-web/commit/a7bf910c727ca74bd3912b0d37a192581c35090f))
+* **llms:** tell agents how to reach the MCP server ([513aa39](https://github.com/samuelcsantana/pyxis-web/commit/513aa39a7a62a69392a00854ce1fd3aa0adf6489))
+* **settings:** read and revoke the admin's connected apps ([27c3f66](https://github.com/samuelcsantana/pyxis-web/commit/27c3f66a291d74cfa4dcaff9bc421b1403f1da7d))
+* **settings:** show connected apps and how to connect Claude ([fad3b7f](https://github.com/samuelcsantana/pyxis-web/commit/fad3b7f2434b8a0f068a0993e5bde726bbd259a5))
+
+
+### Refactoring
+
+* **settings:** share the revoke button between tokens and other rows ([7a7cd61](https://github.com/samuelcsantana/pyxis-web/commit/7a7cd614cda0230134f635154735bcdf94bd3817))
+
+
+### Documentation
+
+* **readme:** add pyxis-mcp to the ecosystem table ([a45b86a](https://github.com/samuelcsantana/pyxis-web/commit/a45b86a16d23786579c2f09b564be26310845b4b))
+* **readme:** describe the connected apps panel ([f21b6a1](https://github.com/samuelcsantana/pyxis-web/commit/f21b6a190f071e33fcf5ad10e01fa8302d341724))
+* **readme:** describe the consent page of the Claude connector ([35f6c1d](https://github.com/samuelcsantana/pyxis-web/commit/35f6c1de0875c7538aff3ee7186c10ad4597e287))
+
 ## [0.23.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.22.0...v0.23.0) (2026-10-15)
 
 
