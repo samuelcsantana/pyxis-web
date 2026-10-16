@@ -48,8 +48,8 @@ acordo. Nesse caso, nós atuamos como suboperador, e você repassa ao controlado
 deste acordo de que ele precisar.
 
 3.3. Em relação aos dados da sua conta (os e-mails de quem acessa o painel, a conta e a assinatura,
-o aceite dos termos, o histórico de cobrança, a prevenção de teste grátis repetido e as mensagens de
-suporte), **nós somos o controlador**. Esse tratamento está na
+o aceite dos termos, o histórico de cobrança, a prevenção de teste grátis repetido, os registros das
+conexões de aplicativos e as mensagens de suporte), **nós somos o controlador**. Esse tratamento está na
 **Política de Privacidade do Pyxis** (Anexo 2 dos Termos de Uso), não neste acordo.
 
 ## Cláusula 4 — O que tratamos, para quê e por quanto tempo
@@ -61,7 +61,8 @@ dados, o que **não** é guardado, onde os dados ficam e por quanto tempo.
 
 1. receber os eventos enviados pelo rastreador e guardá-los no seu projeto;
 2. mostrar a análise a você e às pessoas que você autorizou, no painel, na API de consulta, no
-   servidor MCP e no resumo semanal por e-mail;
+   servidor MCP (inclusive aos aplicativos que elas conectarem; Anexo I, item 10) e no resumo
+   semanal por e-mail;
 3. atender aos pedidos de exclusão e de cópia de dados de titulares (Cláusula 10);
 4. manter o serviço seguro e funcionando (limites contra abuso, correção de falhas, cópias de
    segurança dos provedores);
@@ -88,8 +89,9 @@ conferir a capacidade do serviço.
 3. o que o rastreador instalado no seu site envia (quais eventos, propriedades e se você usa a
    função `identify`);
 4. as ações do dono da conta no painel (por exemplo, exportar os eventos, apagar um projeto ou
-   encerrar a conta) e as chamadas que você faz à API com a sua chave secreta ou com um token de
-   acesso;
+   encerrar a conta), as chamadas que você faz à API com a sua chave secreta ou com um token de
+   acesso, e as conexões de aplicativos que as pessoas com acesso permitem no painel (Anexo I,
+   item 10);
 5. os pedidos que você nos manda por escrito, pelo e-mail hello@pyxis-analytics.dev.
 
 5.2. Se uma instrução sua nos parecer contrária à LGPD ou a outra lei, avisamos você por escrito e
@@ -202,7 +204,7 @@ Anexo III indica o contrato de cada um.
 dados da Neon, que roda na região de São Paulo da AWS, e processados pela API na região de São
 Paulo da AWS (sa-east-1).
 
-9.5. **Onde há elemento estrangeiro.** Mesmo com os dados guardados no Brasil, há três situações
+9.5. **Onde há elemento estrangeiro.** Mesmo com os dados guardados no Brasil, há quatro situações
 que você deve conhecer:
 
 1. **Rede de distribuição da AWS (CloudFront).** As requisições do navegador do visitante chegam
@@ -215,6 +217,9 @@ que você deve conhecer:
 3. **Painel.** As páginas do painel são montadas em funções da Vercel na região de São Paulo
    (gru1), mas a Vercel declara que o seu processamento principal fica nos EUA. Os registros
    técnicos das requisições ao painel ficam com a Vercel por 1 dia.
+4. **Aplicativos conectados.** Se uma pessoa com acesso conectar o Claude ou o Claude Code, os
+   dados que ela pedir ao aplicativo vão para a Anthropic, nos EUA, por instrução sua (Cláusula 5.1,
+   item 4, e Anexo I, item 10). A Anthropic não é nossa suboperadora.
 
 Os e-mails do serviço, inclusive o resumo semanal (que leva só números agregados do projeto, sem
 dados de visitantes identificáveis; Anexo I, item 6), saem pelo Amazon SES, na região de São Paulo
@@ -319,7 +324,8 @@ depois de um cancelamento, o encerramento da conta pelo painel, o fim da assinat
 pagamento ou o encerramento por nós; Termos de Uso, Cláusulas 2.10 e 11.4), uma rotina diária apaga
 definitivamente a conta, os projetos e tudo o que é deles: eventos, chaves, configurações, ícone do
 site, registros de envio do resumo semanal, pedidos de exportação e os acessos das pessoas aos
-projetos. Apagamos também o cadastro (e-mail, sessões e tokens) do dono da conta e das pessoas que só
+projetos. Apagamos também o cadastro (e-mail, sessões, tokens e aplicativos conectados) do dono da
+conta e das pessoas que só
 tinham acesso a projetos da sua conta. Se você apagar um projeto pelo painel antes disso, os eventos
 e tudo o que é dele são apagados na hora.
 
@@ -436,7 +442,8 @@ contagem), conversões, falhas de gravação, visitas por dia, páginas e evento
 rotas com mais falhas. O resumo não leva identificadores de visitantes nem de usuários.
 
 **7. Operações de tratamento.** Recepção, validação, classificação, armazenamento, consulta,
-agregação, exibição no painel, entrega pela API de consulta e pelo servidor MCP, envio do resumo
+agregação, exibição no painel, entrega pela API de consulta, pelo servidor MCP e aos aplicativos
+conectados, envio do resumo
 agregado por e-mail, cópia (exportação), suspensão da recepção (Cláusula 5.4) e eliminação.
 
 **8. Frequência e duração.** Contínua, enquanto o rastreador estiver instalado e o contrato
@@ -446,11 +453,31 @@ Cláusula 12.
 **9. Onde.** Banco de dados e API em São Paulo (Brasil). Painel em funções na região de São Paulo.
 Situações com elemento estrangeiro na Cláusula 9.5.
 
-**10. Acesso pelo servidor MCP e por tokens.** Quando uma pessoa com acesso ao painel cria um token
-de acesso e o usa no servidor MCP do Pyxis (`pyxis-mcp`) ou em outro programa, os números do painel
-vão para o computador dessa pessoa e para a ferramenta de inteligência artificial que ela escolheu.
-Esse envio é decidido por você e acontece fora do Pyxis: a ferramenta escolhida **não** é nossa
-suboperadora, e cabe a você avaliar o uso dela.
+**10. Acesso pelo servidor MCP, por tokens e por aplicativos conectados.** Os dados do painel saem
+do Pyxis por três caminhos, todos escolhidos por uma pessoa com acesso ao projeto, que os usa em nome
+próprio:
+
+1. **Token no servidor MCP local ou em outro programa:** a pessoa cria um token de acesso e o usa
+   no servidor MCP do Pyxis (`pyxis-mcp`), que roda no computador dela, ou em outro programa. Os
+   dados vão para esse computador e para a ferramenta de inteligência artificial que ela escolheu.
+2. **Token no endereço `https://api.pyxis-analytics.dev/mcp`:** o mesmo, com o servidor MCP
+   rodando dentro da nossa API; os dados vão para o programa que a pessoa configurou com o token.
+3. **Aplicativo conectado (conector do Claude):** a pessoa conecta o Claude ou o Claude Code, da
+   Anthropic, e permite a conexão numa página do painel (Termos de Uso, Cláusula 13.10). Os dados
+   que o aplicativo pedir vão da nossa API direto para os servidores da Anthropic, nos Estados
+   Unidos (Claude), ou para o computador da pessoa e dali para a Anthropic (Claude Code).
+
+Por qualquer desses caminhos, o aplicativo só lê, e só o que a pessoa vê no painel: os números
+agregados e também as listas de visitas e a linha do tempo de cada visita, com o identificador de
+usuário enviado pela função `identify` (item 3). Esse envio é uma instrução sua (Cláusula 5.1,
+item 4) e acontece a pedido da pessoa, dentro do aplicativo que ela escolheu: esse aplicativo,
+inclusive a Anthropic, **não** é nosso suboperador, trata os dados pelos termos que valem entre ele
+e quem o usa, e cabe a você avaliar o uso dele, inclusive se há transferência internacional e com
+que mecanismo (art. 4º do Regulamento aprovado pela Resolução CD/ANPD nº 19/2024), e o aviso aos
+visitantes (Cláusula 6.1, itens 2 e 8, e Anexo IV). Damos a você as informações de que dispusermos
+para essa avaliação (art. 4º, § 1º, do mesmo Regulamento; Cláusula 9.6). Cada pessoa revoga as suas conexões em
+Configurações → Aplicativos conectados, e o dono da conta pode tirar uma pessoa de um projeto
+(Termos de Uso, Cláusula 13.3).
 
 **11. Exportação dos eventos.** A pedido do dono da conta, uma rotina gera um arquivo CSV compactado
 com todos os eventos que o projeto guarda, com os campos do item 3. O arquivo fica num repositório
@@ -505,7 +532,18 @@ automáticos para isso.
   hash, comparada em tempo constante, revogável; limitada a 60 chamadas por minuto.
 - Tokens de acesso (para agentes e programas): **só leitura**; guardados só como hash; validade de
   30, 90 ou 365 dias; até 10 ativos por pessoa; revogáveis a qualquer momento no painel; limitados a
-  60 consultas por minuto. Não servem para login, para escrita nem para exclusão.
+  60 consultas por minuto e, no servidor MCP da API, a 120 mensagens por minuto. Não servem para
+  login, para escrita nem para exclusão.
+- Conexões de aplicativos (conector do Claude): só o Claude e o Claude Code, reconhecidos pelos
+  documentos de identificação que a Anthropic publica, com o endereço de retorno conferido com
+  esses documentos; consentimento explícito numa página do painel, que mostra o aplicativo, o
+  endereço de retorno e os projetos; código de uso único válido por 5 minutos e ligado a uma prova
+  criptográfica (PKCE, S256); credencial de acesso de 1 hora e credencial de renovação trocada a
+  cada uso, as duas guardadas só como hash; uma credencial de renovação reapresentada depois de
+  trocada encerra a conexão; **só leitura**, pelas mesmas consultas do painel; até 10 conexões
+  ativas por pessoa; fim depois de 90 dias sem uso; revogáveis a qualquer momento no painel;
+  limitadas a 120 mensagens por minuto no servidor MCP e a 60 consultas por minuto. Não servem para
+  login, para escrita nem para exclusão.
 
 **7. Proteção contra abuso.** Limite de envio de lotes por endereço de origem e por projeto; lote
 com no máximo 50 eventos e 32 KB; validação estrita de cada campo; eventos inválidos descartados;
@@ -518,7 +556,8 @@ estrutura do banco; as migrações usam um usuário separado. Cada função tem 
 permissões na AWS, com o mínimo necessário.
 
 **9. Registros (logs).** Os registros da API são estruturados e trazem um identificador da
-requisição, identificadores internos (do projeto e da pessoa do painel) e nomes de eventos; **não
+requisição, identificadores internos (do projeto, da pessoa do painel e da conexão), nomes de
+eventos e, nas conexões, qual aplicativo se conectou; **não
 trazem e-mail, IP, token, chave nem dados de visitantes**. Ficam 14 dias e somem.
 
 **10. Monitoramento.** Alarmes por e-mail para: muitas tentativas de login com código errado,
@@ -559,6 +598,12 @@ fazem está na Política de Privacidade do Pyxis):
 | **ImprovMX** (ImprovMX Incorporated, EUA) | Encaminha os e-mails enviados a hello@pyxis-analytics.dev | Recepção transitória na França; empresa nos EUA |
 | **Google** (Google LLC, EUA) | Caixa de e-mail onde ficam as mensagens de suporte (conta pessoal, sem contrato de operador: o Google trata as mensagens como controlador, conforme a própria política de privacidade) | EUA e outros países |
 
+**Aplicativos que as pessoas com acesso conectam** (não são suboperadores; Anexo I, item 10):
+
+| Aplicativo | Quem é | O que recebe | Onde |
+|---|---|---|---|
+| **Claude** e **Claude Code** | Anthropic, PBC (EUA) | Os dados que o aplicativo pedir, quando uma pessoa com acesso o conectou e o usa | EUA |
+
 Não mande dados de visitantes nas mensagens de suporte. Se precisar mostrar um caso, use o
 identificador da visita ou do usuário, nunca o nome ou o e-mail da pessoa.
 
@@ -582,6 +627,10 @@ envia. Ele não substitui a sua própria análise.
 > *(Inclua o parágrafo abaixo só se o seu site usar a função `identify`.)* Quando você entra na sua
 > conta, ligamos os eventos daquela visita ao número interno da sua conta, nunca ao seu nome ou
 > e-mail. Se você excluir a sua conta ou pedir, apagamos esses eventos.
+>
+> *(Opcional: inclua se a sua equipe conectar ferramentas de inteligência artificial ao Pyxis.)*
+> Podemos consultar esses números com ferramentas de inteligência artificial que escolhemos, como o
+> Claude, da Anthropic, que recebem só o que pedirmos a elas.
 >
 > Os dados ficam guardados no Brasil e são apagados depois de 13 meses. O Pyxis trata esses dados
 > por nossa conta, como operador. Se o seu navegador enviar o sinal Global Privacy Control ou "Do

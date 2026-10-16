@@ -45,8 +45,10 @@ nº 2/2022, art. 11, e Resolução CD/ANPD nº 18/2024, art. 3º, § 3º).
 | Códigos de login e de cadastro: e-mail, código guardado só como hash, finalidade (login ou cadastro), idioma, tentativas, horários | Permitir o login e o cadastro sem senha e impedir tentativas repetidas | Execução do contrato, procedimentos preliminares a ele e legítimo interesse em segurança (art. 7º, V e IX) | Valem 10 minutos; apagados pela rotina diária depois de vencidos |
 | Sessões: valor guardado só como hash, datas de início e de último uso, categoria do aparelho e família do navegador e do sistema (sem versão) | Manter você conectado e mostrar as suas sessões para você encerrá-las | Execução do contrato e legítimo interesse em segurança (art. 7º, V e IX) | No máximo 7 dias, ou 24 horas sem uso; apagadas pela rotina diária depois de encerradas |
 | Tokens de acesso: nome que você deu, valor guardado só como hash, datas de criação, último uso, validade e revogação | Permitir que programas e agentes leiam os seus números | Execução do contrato (art. 7º, V) | Até a exclusão do seu cadastro (um token vencido ou revogado para de funcionar na hora, mas o registro fica até lá) |
+| Aplicativos conectados (conector do Claude): o aplicativo (Claude ou Claude Code), as datas em que você conectou, do último uso (gravada no máximo a cada 5 minutos e a cada renovação) e da revogação; credenciais da conexão guardadas só como hash | Deixar o aplicativo que você conectou ler os seus números e mostrar as conexões para você revogá-las | Execução do contrato, para o dono da conta (art. 7º, V); legítimo interesse nosso e do cliente em dar esse recurso às pessoas que o dono convidou (art. 7º, IX) | Enquanto a conexão estiver ativa. A rotina diária apaga a conexão revogada ou parada há 90 dias, as credenciais vencidas e as de renovação já trocadas há mais de 30 dias |
+| Pedidos de conexão: o aplicativo, o endereço para onde a resposta volta, os dados técnicos que o aplicativo manda para proteger o pedido, os horários, a sua decisão (permitir ou cancelar), quem decidiu e o código de uso único guardado só como hash | Mostrar o pedido na página de consentimento e entregar a resposta só ao aplicativo que pediu | Execução do contrato, para o dono da conta, e legítimo interesse em segurança e em dar o recurso aos convidados (art. 7º, V e IX) | O pedido vale 10 minutos, e o código, 5. A rotina diária apaga o pedido 1 dia depois de vencido; depois disso, fica só a conexão da linha acima |
 | Registro de envio do resumo semanal (projeto, pessoa, semana, data de envio) | Não mandar o mesmo resumo duas vezes | Execução do contrato (art. 7º, V) | Até a exclusão do projeto ou do seu acesso |
-| Registros técnicos da API com o seu identificador interno (por exemplo, "entrou", "encerrou a sessão", "criou um token") | Segurança e investigação de falhas e incidentes | Legítimo interesse em segurança (art. 7º, IX) | 14 dias |
+| Registros técnicos da API com o seu identificador interno (por exemplo, "entrou", "encerrou a sessão", "criou um token", "conectou um aplicativo") | Segurança e investigação de falhas e incidentes | Legítimo interesse em segurança (art. 7º, IX) | 14 dias |
 
 **Endereço IP:** quando você pede um código ou entra no painel, o IP é usado só na memória do
 servidor para limitar tentativas (até 5 a cada 15 minutos) e some em no máximo 15 minutos. **Não é
@@ -183,13 +185,26 @@ por conta própria:
 de quem tem competência legal para fazê-la, e só o que for exigido.
 
 3.4. **Clientes e pessoas com acesso.** As pessoas com acesso a um projeto, inclusive o dono da
-conta, veem em Configurações a lista de e-mails de quem tem acesso a ele. Sessões, tokens e a
-escolha sobre o resumo semanal são individuais: ninguém vê os de outra pessoa. As pessoas com acesso
+conta, veem em Configurações a lista de e-mails de quem tem acesso a ele. Sessões, tokens,
+aplicativos conectados e a escolha sobre o resumo semanal são individuais: ninguém vê os de outra
+pessoa. As pessoas com acesso
 podem ver a situação da conta e o uso do mês (por exemplo, para entender uma pausa pela cota); só o
 dono da conta abre o portal de cobrança do Stripe.
 
 3.5. **Sucessão.** Se o serviço passar a ser prestado por uma empresa aberta pelo controlador ou por
 quem assumir o serviço, os dados passam a ela, com as mesmas regras desta política, e avisamos antes.
+
+3.6. **Aplicativos que você conecta.** Se você conectar o Claude ou o Claude Code ao Pyxis (Termos
+de Uso, Cláusula 13.10), ou usar um token de acesso num programa, os dados que o aplicativo pedir
+saem do Pyxis para ele, a seu pedido. Pelo conector do Claude, eles vão para a **Anthropic**
+(Anthropic, PBC, EUA): os números dos projetos que você pode abrir e, porque o aplicativo lê quem
+está conectado, **o seu e-mail de acesso**. A Anthropic **não é nossa operadora**: ela trata esses
+dados pelos termos e pela política de privacidade que valem entre ela e você. A página de
+consentimento diz, antes do **Permitir**, que esses dados vão para a Anthropic, nos Estados Unidos
+(item 4.4). Para reconhecer o
+Claude e o Claude Code, o Pyxis lê o documento público que a Anthropic publica sobre cada um; essa
+leitura não leva dados seus. Você vê e revoga as suas conexões em Configurações → Aplicativos
+conectados.
 
 ## 4. Transferência internacional
 
@@ -197,7 +212,9 @@ quem assumir o serviço, os dados passam a ela, com as mesmas regras desta polí
 Estados Unidos e tratam ou guardam parte dos dados lá: a Vercel (painel e página inicial), o Stripe
 (cobrança), o ImprovMX (encaminhamento de e-mail, com recepção transitória na França) e o Google
 (caixa de e-mail). Os e-mails que o serviço envia saem pela AWS em São Paulo. A Neon (Databricks) guarda os dados em São Paulo, mas é uma
-empresa dos EUA cujas equipes podem acessá-los de lá.
+empresa dos EUA cujas equipes podem acessá-los de lá. Se você conectar o Claude ou o Claude Code
+(item 3.6), os dados que o aplicativo pedir também vão para os Estados Unidos, para a Anthropic, por
+escolha sua.
 
 4.2. **Forma, finalidade e duração:** os dados vão a esses provedores para que eles prestem o
 serviço descrito no item 3, pelos prazos do item 2, ou pelos prazos dos registros de cada provedor
@@ -206,8 +223,13 @@ indicados no item 3.
 4.3. **Países de destino:** Estados Unidos; França (só a recepção transitória do ImprovMX); e outros
 países onde o Google mantém operações.
 
-4.4. **Base:** quando a transferência é necessária para executar o contrato com você (cobrança,
-login no painel e respostas às suas mensagens), ela se apoia no art. 33, IX, combinado com
+4.4. **Base:** o envio à Anthropic quando você conecta o Claude ou o Claude Code (item 3.6) se
+apoia no seu **consentimento específico e em destaque** (art. 33, VIII): a página de consentimento
+informa, antes do **Permitir**, que os dados que o aplicativo pedir, inclusive o seu e-mail, vão
+para a Anthropic, nos Estados Unidos, e a conexão só existe se você permitir; você retira o
+consentimento a qualquer momento revogando a conexão em Configurações → Aplicativos conectados.
+Quando a transferência é necessária para executar o contrato com você (cobrança, login no painel e
+respostas às suas mensagens), ela se apoia no art. 33, IX, combinado com
 o art. 7º, V, da LGPD. A França faz parte da União Europeia, reconhecida pela ANPD como de nível
 adequado de proteção (Resolução CD/ANPD nº 32/2026). Nos demais casos, os provedores se comprometem,
 nos seus contratos de tratamento de dados, a proteger os dados e a tratá-los só para prestar o
@@ -230,7 +252,8 @@ ANPD.
    dados, com verificação de certificado;
 2. dados do banco cifrados em repouso pelo provedor;
 3. login sem senha, por código de uso único válido por 10 minutos, com limite de tentativas;
-4. códigos, sessões, chaves secretas e tokens guardados só como hash;
+4. códigos, sessões, chaves secretas, tokens e credenciais dos aplicativos conectados guardados só
+   como hash;
 5. sessões com prazo máximo e encerramento depois de 24 horas sem uso; você vê e encerra as suas
    sessões em Configurações;
 6. registros técnicos sem e-mail, IP, token ou chave, guardados por 14 dias;

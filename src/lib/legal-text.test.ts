@@ -25,7 +25,7 @@ const SOURCE =
 describe('legal text', () => {
   it('fills the seller, the version and the effective date into the document', () => {
     expect(legalTextOf(SOURCE, CONFIG)).toBe(
-      '**Versão 1.1, vigente a partir de 20 de outubro de 2026.**\n\n' +
+      '**Versão 1.2, vigente a partir de 20 de outubro de 2026.**\n\n' +
         'Oferecido por **Ana Exemplo**, CPF 000.000.000-00, ' +
         'Rua das Flores, 10, Centro, Cidade/UF, CEP 00000-000.',
     );
@@ -66,7 +66,7 @@ describe('legal text', () => {
     for (const source of sources) {
       const text = legalTextOf(source, CONFIG);
       expect(text).not.toContain('{{');
-      expect(text).toContain('Versão 1.1');
+      expect(text).toContain('Versão 1.2');
       expect(text).toContain('Ana Exemplo');
     }
     expect(sources.map((source) => source.split('\n', 1)[0])).toEqual([

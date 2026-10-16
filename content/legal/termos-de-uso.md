@@ -41,7 +41,9 @@ Este resumo não substitui o texto completo, mas mostra o que mais importa antes
     encerrar o contrato. Em regra avisamos antes e damos prazo para corrigir; sempre dizemos o
     motivo e você pode contestar (Cláusula 18).
 11. **Dados pessoais:** você é o controlador dos dados dos visitantes do seu site; nós somos o
-    operador (Cláusula 14 e Acordo de Tratamento de Dados).
+    operador (Cláusula 14 e Acordo de Tratamento de Dados). Se uma pessoa com acesso conectar o
+    Claude ou o Claude Code ao Pyxis, os números que ela pedir vão para a Anthropic, que não é nossa
+    fornecedora (Cláusula 13.10).
 
 ---
 
@@ -59,7 +61,7 @@ uma suspensão e dados pessoais: **hello@pyxis-analytics.dev**.
 
 2.1. **Serviço:** o Pyxis hospedado por nós: a API que recebe e responde os dados
 (`api.pyxis-analytics.dev`), o painel (`app.pyxis-analytics.dev`), o resumo semanal por e-mail e o
-acesso por tokens, inclusive pelo servidor MCP.
+acesso por tokens e por aplicativos conectados, inclusive pelo servidor MCP.
 
 2.2. **Rastreador:** o pacote `pyxis-analytics` (código aberto) que você instala no seu site para
 enviar eventos ao serviço.
@@ -152,8 +154,10 @@ página está aberta, mas não quando a recepção está pausada).
    Configurações;
 2. **tokens de acesso só de leitura**, criados em Configurações, para programas e agentes de
    inteligência artificial consultarem os mesmos números do painel;
-3. o **servidor MCP** (`pyxis-mcp`), programa de código aberto que roda no seu computador e usa um
-   token de acesso;
+3. o **servidor MCP**, de dois jeitos: o programa de código aberto `pyxis-mcp`, que roda no seu
+   computador e usa um token de acesso; ou o endereço `https://api.pyxis-analytics.dev/mcp`, que o
+   Claude e o Claude Code usam como conector depois que uma pessoa com acesso permite a conexão
+   (Cláusula 13.10) e que outros programas usam com um token de acesso;
 4. as rotas da API para **excluir ou copiar os dados de uma pessoa identificada**, com a chave
    secreta do projeto;
 5. a **exportação de todos os eventos de um projeto** em arquivo, pelo painel (Cláusula 11.5).
@@ -216,7 +220,7 @@ explica a Política de Privacidade (item 2.7). O que acontece num teste repetido
 | Pessoas com acesso ao painel | até 3, contando com o dono da conta |
 | Histórico | 13 meses (eventos mais antigos são apagados todos os dias) |
 | Resumo semanal por e-mail | incluído |
-| Tokens de acesso e servidor MCP | incluídos |
+| Tokens de acesso, servidor MCP e conector do Claude | incluídos |
 | Exportação dos eventos de um projeto | pelo painel, até 3 por projeto por dia |
 | Suporte | por e-mail, resposta em até 2 dias úteis |
 
@@ -387,7 +391,7 @@ nada é encerrado e a tela avisa. Se mudar de ideia antes da exclusão, vale a C
 
 12.1. Você se compromete a usar o serviço de boa-fé, só para medir o uso dos seus sites. **É abuso**
 qualquer uma das condutas abaixo, praticada por você, pelas pessoas com acesso à sua conta ou por
-quem usar as suas chaves ou tokens com a sua permissão:
+quem usar as suas chaves, tokens ou conexões com a sua permissão:
 
 *Dados pessoais e privacidade*
 
@@ -412,7 +416,7 @@ quem usar as suas chaves ou tokens com a sua permissão:
    o serviço (testes razoáveis da sua própria instalação não são abuso);
 8. enviar eventos a partir de **sites que não são seus** nem de quem autorizou você, ou cadastrar
    como origem de um projeto um site alheio;
-9. usar a **chave pública, a chave secreta ou o token de outro cliente**;
+9. usar a **chave pública, a chave secreta, o token ou a conexão de outro cliente**;
 10. **atacar o serviço**, tentar acessar dados de outros clientes ou partes do serviço que não são
     suas, ou testar vulnerabilidades sem a nossa autorização por escrito (relatar de boa-fé uma falha
     de segurança a hello@pyxis-analytics.dev não é abuso);
@@ -475,13 +479,14 @@ Pessoas. A pessoa recebe um e-mail de convite e entra no painel com um código e
 dela, sem senha. O dono tira uma pessoa na mesma tela, a qualquer momento.
 
 13.2. As pessoas convidadas veem os números, as configurações e a lista de pessoas dos projetos para
-os quais foram convidadas, e cuidam das próprias sessões, tokens e resumo semanal. Só o dono muda
+os quais foram convidadas, e cuidam das próprias sessões, tokens, aplicativos conectados e resumo
+semanal. Só o dono muda
 projetos, chaves, pessoas e cobrança, e só ele exporta eventos ou encerra a conta.
 
 13.3. Quando o dono tira uma pessoa de um projeto, o acesso dela a esse projeto termina na hora,
-inclusive pelos tokens de acesso que ela criou. O que ela já tiver visto ou levado para outro
-programa por um token fica fora do nosso alcance. O cadastro dela segue a Política de Privacidade
-(item 2.1).
+inclusive pelos tokens de acesso que ela criou e pelos aplicativos que ela conectou. O que ela já
+tiver visto ou levado para outro programa por um token ou por um aplicativo conectado fica fora do
+nosso alcance. O cadastro dela segue a Política de Privacidade (item 2.1).
 
 13.4. Você é responsável por manter a lista de pessoas atualizada (por exemplo, tirar quem deixou a
 sua equipe) e pelo que as pessoas com acesso fazem no serviço. Ao convidar uma pessoa, você confirma
@@ -489,7 +494,8 @@ que ela sabe que receberá e-mails do Pyxis (convite, códigos de login e o resu
 conhece estes termos.
 
 13.5. Cada pessoa vê e encerra as próprias sessões em Configurações, inclusive "sair de todos os
-dispositivos".
+dispositivos". Sair de todos os dispositivos não revoga os tokens nem desconecta os aplicativos:
+cada um é revogado na própria lista (Cláusulas 13.8 e 13.10).
 
 13.6. **Chave pública:** vai no seu site e só identifica o projeto. O serviço só aceita eventos com
 essa chave vindos dos endereços cadastrados no projeto. O dono troca a chave pública em
@@ -503,13 +509,45 @@ crie outra.
 13.8. **Tokens de acesso:** só leem os números do painel e valem por 30, 90 ou 365 dias. Quem cria
 um token é responsável por guardá-lo e pode revogá-lo a qualquer momento em Configurações. Os dados
 que um token lê vão para o programa em que ele foi usado (por exemplo, uma ferramenta de
-inteligência artificial com o servidor MCP); **a escolha e o uso dessa ferramenta são de sua
-responsabilidade**.
+inteligência artificial com o servidor MCP, no seu computador ou pelo endereço da Cláusula 4.4,
+item 3); **a escolha e o uso dessa ferramenta são de sua responsabilidade**.
 
 13.9. Se uma chave vazar, o dono a revoga e cria outra na hora, em Configurações; se não conseguir,
 avise-nos: revogamos a chave em até 1 dia útil. Um token vazado pode ser revogado na hora, por quem o
 criou, em Configurações. Se encontrarmos uma chave secreta ou um token publicados, nós os revogamos
 na hora, para proteger você, mesmo sem abuso, e avisamos em seguida (Cláusula 18.4, item 4).
+
+13.10. **Aplicativos conectados (conector do Claude).**
+
+1. **Quais aplicativos.** Hoje, só o **Claude** e o **Claude Code**, da Anthropic, se conectam ao
+   Pyxis sem token, pelo endereço `https://api.pyxis-analytics.dev/mcp`. Reconhecemos cada um pelo
+   documento de identificação que a Anthropic publica e não aceitamos outros aplicativos por esse
+   caminho. Outros programas usam o mesmo endereço com um token de acesso (Cláusula 13.8).
+2. **Quem conecta.** Qualquer pessoa com acesso, em nome próprio. Quando o aplicativo pede a
+   conexão, a pessoa entra no painel e vê, numa página do Pyxis, o aplicativo, para onde a resposta
+   volta (com um aviso quando ela vai para um programa no próprio computador), o que ele poderá ler
+   e a lista dos projetos. A conexão só existe se a pessoa escolher **Permitir**; o pedido vale por
+   10 minutos.
+3. **O que o aplicativo lê.** **Só lê**, e só o que essa pessoa vê no painel, de todos os projetos
+   que ela pode abrir: os números, as listas de visitas e a linha do tempo de cada visita, com o
+   identificador interno que o seu site enviou pela função `identify`, e o e-mail de acesso da
+   própria pessoa. Nunca muda nada e nunca lê chaves secretas, tokens, sessões, a lista de pessoas
+   com acesso nem a cobrança.
+4. **Para onde os dados vão.** Os dados que o aplicativo pedir saem do Pyxis para a **Anthropic**,
+   nos Estados Unidos: no Claude, direto para os servidores dela; no Claude Code, primeiro para o
+   computador da pessoa e dali para a Anthropic. A página de consentimento avisa isso antes do
+   **Permitir**. **A Anthropic não é nossa fornecedora nem nossa suboperadora**: quem
+   escolhe conectar é a pessoa com acesso, e a Anthropic trata esses dados pelos termos e pela
+   política de privacidade que valem entre ela e quem usa o Claude. **A escolha e o uso desse
+   aplicativo são de sua responsabilidade**, como na Cláusula 13.8.
+5. **Quanto dura.** A conexão usa credenciais que o aplicativo renova sozinho (a de acesso vale
+   1 hora) e que guardamos só como hash. Ela termina quando a pessoa a revoga em Configurações →
+   Aplicativos conectados; depois de 90 dias sem uso; quando a pessoa perde o acesso (Cláusula
+   13.3) ou tem o acesso suspenso (Cláusula 18.2); quando a conta é apagada (Cláusula 11.4); ou
+   sozinha, quando uma credencial já trocada volta a ser usada, sinal de que pode ter sido copiada.
+   Depois disso, o aplicativo pede para conectar de novo.
+6. **Limites.** Até 10 aplicativos conectados ao mesmo tempo por pessoa, e os limites de consultas
+   por minuto do Anexo II do Acordo de Tratamento de Dados.
 
 ## Cláusula 14 — Dados pessoais
 
@@ -520,7 +558,8 @@ segurança, suboperadores, transferência internacional, pedidos de titulares, i
 do tratamento e exclusão.
 
 14.2. Em relação aos seus dados e aos das pessoas com acesso (e-mails, conta, aceite destes termos,
-sessões, cobrança, prevenção de teste repetido e suporte), **nós somos o controlador**, como explica
+sessões, aplicativos conectados, cobrança, prevenção de teste repetido e suporte), **nós somos o
+controlador**, como explica
 o **Anexo 2 — Política de Privacidade do Pyxis**.
 
 ## Cláusula 15 — Disponibilidade, interrupções e mudanças no serviço
@@ -592,9 +631,11 @@ mais forte só é usada quando a mais leve não basta, e toda medida vem com o m
 18.2. **Medidas possíveis**, da mais leve para a mais forte:
 
 1. aviso por e-mail, com prazo para corrigir;
-2. suspensão parcial: revogar uma chave ou um token; pausar a recepção de eventos de um projeto;
+2. suspensão parcial: revogar uma chave, um token ou a conexão de um aplicativo; pausar a recepção
+   de eventos de um projeto;
    suspender o acesso de uma pessoa ao painel;
-3. suspensão da conta inteira: recepção de eventos de todos os projetos, painel, chaves e tokens;
+3. suspensão da conta inteira: recepção de eventos de todos os projetos, painel, chaves, tokens e
+   aplicativos conectados;
 4. encerramento do contrato (Cláusula 18.7).
 
 18.3. **Aviso e prazo para corrigir.** Fora dos casos da Cláusula 18.4, antes de suspender avisamos
@@ -622,8 +663,9 @@ o motivo, o que foi suspenso, o que fazer para voltar e como contestar, salvo se
 ordem proibir o aviso.
 
 18.5. **Duração e volta.** A suspensão dura só o necessário. Quando o problema for corrigido ou a
-contestação for aceita, restabelecemos por inteiro, em até 1 dia útil, o que foi suspenso. Chaves e
-tokens revogados não voltam: você cria novos no painel.
+contestação for aceita, restabelecemos por inteiro, em até 1 dia útil, o que foi suspenso. Chaves,
+tokens e conexões revogados não voltam: você cria chaves e tokens novos no painel e conecta o
+aplicativo de novo.
 
 18.6. **Direito de resposta e de contestar.** Você pode responder a qualquer aviso e contestar
 qualquer medida por e-mail para hello@pyxis-analytics.dev, a partir do e-mail do dono da conta, em
