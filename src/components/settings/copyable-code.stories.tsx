@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, spyOn, userEvent, within } from 'storybook/test';
 import { DEMO_CONNECTOR_URL } from '@/services/connections/mock-connections-service';
 import { CopyableCode } from './copyable-code';
 
@@ -22,11 +22,12 @@ export const ACommand: Story = {
 
 export const Clicked: Story = {
   play: async ({ canvasElement }) => {
+    const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { description: DEMO_CONNECTOR_URL }));
-    await expect(
-      await canvas.findByRole('button', { name: /Copied|Selected, press Ctrl\+C/ }),
-    ).toBeInTheDocument();
+    await expect(await canvas.findByRole('button', { name: 'Copied' })).toBeInTheDocument();
+    await expect(writeText).toHaveBeenCalledWith(DEMO_CONNECTOR_URL);
+    writeText.mockRestore();
   },
 };
 
