@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.25.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.24.0...v0.25.0) (2026-10-16)
+
+
+### Features
+
+* **acquisition:** name the ad click that came with no source ([7c3a233](https://github.com/samuelcsantana/pyxis-web/commit/7c3a233c0d5b45f40f6f729895acc0471457f254))
+* **demo:** bring some of the store's ad clicks with no source ([5ce1af8](https://github.com/samuelcsantana/pyxis-web/commit/5ce1af8c8f237e79c252d177951fe8bcd09ffc31))
+
+
+### Documentation
+
+* **readme:** name the ad click that arrives with no source ([43ca454](https://github.com/samuelcsantana/pyxis-web/commit/43ca454c25823255b974f2c83e70ce6d497f717a))
+* **storybook:** show the sources table in Portuguese ([2b87827](https://github.com/samuelcsantana/pyxis-web/commit/2b87827d877a19b6be119e3c65666816c174aa49))
+
 ## [0.24.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.23.0...v0.24.0) (2026-10-16)
 
 
