@@ -107,6 +107,20 @@ describe('demoGeneratedVisits', () => {
     expect(STORE_WEEK.some((visit) => visit.fromAdClick)).toBe(true);
   });
 
+  it('names a paid visit "(ad click)" only when an ad click brought it with no source', () => {
+    const adClicks = STORE_WEEK.filter((visit) => visit.source === '(ad click)');
+
+    expect(adClicks.length).toBeGreaterThan(0);
+    for (const visit of adClicks) {
+      expect(visit).toMatchObject({
+        channel: 'paid',
+        medium: null,
+        campaign: null,
+        fromAdClick: true,
+      });
+    }
+  });
+
   it('names a person for every visit inside the app or that converts, and nobody else', () => {
     const people = new Set(demoPeople(DEMO_STORE));
     const insideTheApp = new Set(

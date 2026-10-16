@@ -268,6 +268,15 @@ describe('MockVisitsService', () => {
     expect(totalOf({ source: 'google', campaign: 'spring_sale' })).toBe(springSale?.visits);
   });
 
+  it('finds the ad clicks that came with no source as Acquisition names them', () => {
+    const adClicks = demoAcquisitionWire(STORE, RANGE, NOW).sources.find(
+      (source) => source.source === '(ad click)',
+    );
+
+    expect(adClicks?.visits).toBeGreaterThan(0);
+    expect(totalOf({ source: '(ad click)' })).toBe(adClicks?.visits);
+  });
+
   it('filters by region as Devices counts it, alone or with its country', () => {
     const { regions } = demoDevicesWire(STORE, RANGE, NOW);
     const saoPaulo = regions.find((share) => share.value === 'BR-SP');
