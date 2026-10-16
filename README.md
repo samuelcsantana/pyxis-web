@@ -347,7 +347,9 @@ Shipping now:
   `site_opened`, `snippet_copied`, `language_switched`, `pricing_opened`, `access_requested`,
   `sign_up_opened`), a button lists what this visit sent, live
   (the SDK's `debug.onBatch`), and the footer says the page is measured, with a switch to stop
-  measuring in this browser. The Content Security Policy lets the home page, and no other page,
+  measuring in this browser. A browser driven by automation (`navigator.webdriver`) is not
+  measured, so Playwright launches Chromium with `--disable-blink-features=AutomationControlled`
+  and a test checks the flag reached it. The Content Security Policy lets the home page, and no other page,
   reach the ingestion API. Until the domain moves from the dashboard's Vercel project to the
   demo's, `pyxis-analytics.dev` still redirects to the dashboard
 
