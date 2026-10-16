@@ -20,6 +20,7 @@ export function channelLabel(channel: Channel, i18n: I18n): string {
 }
 
 const DIRECT_SOURCE = '(direct)';
+const AD_CLICK_SOURCE = '(ad click)';
 
 export type ChannelDay = AcquisitionReport['days'][number];
 export type Source = AcquisitionReport['sources'][number];
@@ -124,7 +125,14 @@ export function topChannel(days: readonly ChannelDay[], i18n: I18n): ChannelFigu
 }
 
 export function sourceLabel(source: string, i18n: I18n): string {
-  return source === DIRECT_SOURCE ? i18n.t('acquisition.directSource') : source;
+  switch (source) {
+    case DIRECT_SOURCE:
+      return i18n.t('acquisition.directSource');
+    case AD_CLICK_SOURCE:
+      return i18n.t('acquisition.adClickSource');
+    default:
+      return source;
+  }
 }
 
 interface AttributedVisits {

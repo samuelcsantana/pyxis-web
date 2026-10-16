@@ -838,6 +838,7 @@ export const es = translation({
       direct: 'Directo',
     },
     directSource: 'Directo',
+    adClickSource: '(clic en anuncio)',
     topChannel: 'Canal principal',
     topUnpaidChannel: 'Canal gratuito principal',
     shareOfVisits: '{share} de {visits}',

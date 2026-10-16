@@ -833,6 +833,7 @@ export const ptBR = translation({
       direct: 'Direto',
     },
     directSource: 'Direto',
+    adClickSource: '(clique de anúncio)',
     topChannel: 'Principal canal',
     topUnpaidChannel: 'Principal canal não pago',
     shareOfVisits: '{share} de {visits}',

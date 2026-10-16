@@ -17,6 +17,7 @@ import { CampaignsTable } from './campaigns-table';
 import { ChannelChart } from './channel-chart';
 import { SourcesTable } from './sources-table';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -129,6 +130,23 @@ describe('SourcesTable', () => {
       'href',
       '/p1/visits?range=7d&channel=paid',
     );
+  });
+
+  it('names an ad click without a source in the language of the page, linking by its value', () => {
+    renderWithMessages(
+      <SourcesTable
+        i18n={portuguese}
+        rows={sourceRows([{ ...GOOGLE, source: '(ad click)', medium: null }], portuguese)}
+        channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: /^\(clique de anúncio\)/ })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=7d&source=(ad click)',
+    );
+    expect(screen.queryByText('(ad click)')).not.toBeInTheDocument();
   });
 
   it('keeps the totals beside the rate and the medium beside the channel on phones', () => {
