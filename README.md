@@ -41,11 +41,12 @@ configured. The tour was recorded from the [live demo](https://demo.pyxis-analyt
 
 ## Ecosystem
 
-| Repository                                               | Role                                                         |
-| -------------------------------------------------------- | ------------------------------------------------------------ |
-| [pyxis-api](https://github.com/samuelcsantana/pyxis-api) | Ingestion, dashboard sign-in and queries, erasure, retention |
-| [pyxis-sdk](https://github.com/samuelcsantana/pyxis-sdk) | Browser tracker published to npm as `pyxis-analytics`        |
-| **pyxis-web** (this one)                                 | The dashboard                                                |
+| Repository                                               | Role                                                             |
+| -------------------------------------------------------- | ---------------------------------------------------------------- |
+| [pyxis-api](https://github.com/samuelcsantana/pyxis-api) | Ingestion, dashboard sign-in and queries, erasure, retention     |
+| [pyxis-sdk](https://github.com/samuelcsantana/pyxis-sdk) | Browser tracker published to npm as `pyxis-analytics`            |
+| [pyxis-mcp](https://github.com/samuelcsantana/pyxis-mcp) | MCP server: Claude and other agents read the dashboard's numbers |
+| **pyxis-web** (this one)                                 | The dashboard                                                    |
 
 ## Why it exists
 
