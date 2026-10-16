@@ -1426,6 +1426,7 @@ export const en = {
       label: 'Main',
       demo: 'Live demo',
       privacy: 'Privacy',
+      claude: 'Ask Claude',
       pricing: 'Pricing',
       language: 'Language',
       signIn: 'Sign in',
@@ -1437,6 +1438,8 @@ export const en = {
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
+      claudeTag: 'New',
+      claude: 'Ask Claude about your numbers, via MCP',
     },
     preview: {
       label: 'Preview of the Overview screen',
@@ -1512,6 +1515,37 @@ export const en = {
         timeline: 'What did one visit, or one signed-in person, do, in order?',
       },
     },
+    askClaude: {
+      eyebrow: 'MCP connector',
+      title: 'Ask Claude instead of digging through charts',
+      lead: 'Connect Pyxis to Claude once and ask in your own words: how last week went, where the sign-up loses people, which route started failing. Claude reads the same numbers as the dashboard, through fifteen tools that only read. It comes with the plan, at no extra cost.',
+      connect: 'Connect in a minute',
+      example: {
+        label: 'An example conversation',
+        you: 'You',
+        claude: 'Claude',
+        question: 'How did last week go, and where does the sign-up lose people?',
+        used: 'Claude read:',
+        answer:
+          'Visits rose 12% against the week before, and conversions 8%. The sign-up loses the most people between the form and the e-mail code: 41% stop there, and on phones it is 52%. On a computer that step loses 23%.',
+        invented: 'Invented conversation and numbers, like the live demo.',
+      },
+      promises: {
+        reads: {
+          title: 'Only reads',
+          body: 'Each of the fifteen tools is one read of the Pyxis API. Claude can never change or delete anything.',
+        },
+        revoke: {
+          title: 'Yours to revoke',
+          body: 'Every connection is listed under Settings, Connected apps, and stops the moment you revoke it. Unused for 90 days, it ends on its own.',
+        },
+        personal: {
+          title: 'Nothing personal to hand over',
+          body: 'Events carry no cookie, no IP address and no user agent, so what Claude reads has none either.',
+        },
+      },
+      foot: 'What Claude asks for goes from the Pyxis API to Anthropic, which handles it under its own terms. Cursor and other MCP clients connect with an access token created in Settings. <link>The full guide</link>',
+    },
     install: {
       eyebrow: 'Install',
       title: 'What a site adds',
@@ -1584,6 +1618,11 @@ export const en = {
           pyxis: 'None',
           typical: 'Depends on the tool; sometimes an ad network',
         },
+        agents: {
+          aspect: 'Ask an AI agent about the numbers',
+          pyxis: 'Yes: a connector for Claude, only reading',
+          typical: 'Depends on the tool',
+        },
         source: { aspect: 'Source code', pyxis: 'MIT, on GitHub', typical: 'Varies' },
       },
       foot: '“Typical” describes a common setup, not any one product.',
@@ -1610,7 +1649,7 @@ export const en = {
         people: 'Up to 3 people in the dashboard',
         history: '13 months of history',
         digest: 'A weekly digest by e-mail',
-        agents: 'Access tokens and an MCP server for AI agents',
+        agents: 'The Claude connector (MCP) and access tokens for AI agents',
       },
       ask: 'Request access',
       askTitle: 'Write to',
@@ -1663,6 +1702,11 @@ export const en = {
           question: 'How long is data kept?',
           answer:
             'Thirteen months, then a daily job deletes it. A person’s events can be exported or erased from your backend at any time.',
+        },
+        claude: {
+          question: 'Can I ask Claude about my numbers?',
+          answer:
+            'Yes. In Claude, add a custom connector with the address <code>https://api.pyxis-analytics.dev/mcp</code>, or run <code>claude mcp add</code> in Claude Code, and sign in to Pyxis. Claude then reads the numbers of every project you can open, and changes nothing. You revoke it under Settings, Connected apps.',
         },
         use: {
           question: 'Can I use it on my site?',

@@ -43,7 +43,7 @@ describe('PricingSection', () => {
         'Up to 3 people in the dashboard',
         '13 months of history',
         'A weekly digest by e-mail',
-        'Access tokens and an MCP server for AI agents',
+        'The Claude connector (MCP) and access tokens for AI agents',
       ]),
     );
     expect(screen.getByText(/14 days free/)).toBeInTheDocument();

@@ -4,6 +4,7 @@ import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_QUIET, LINK_SMALL } from './landing-classes';
+import { ASK_CLAUDE_ID } from './ask-claude-section';
 import { LANDING_LINKS, PROPER_NAMES } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NEVER_STORED_ID } from './never-stored-section';
@@ -44,6 +45,13 @@ export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: Site
           </a>
           <a href={`${homeHref}#${NEVER_STORED_ID}`} className={LINK_QUIET}>
             {t('landing.nav.privacy')}
+          </a>
+          <a
+            href={`${homeHref}#${ASK_CLAUDE_ID}`}
+            className={LINK_QUIET}
+            {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'header' })}
+          >
+            {t('landing.nav.claude')}
           </a>
           <a
             href={`${homeHref}#${PRICING_ID}`}

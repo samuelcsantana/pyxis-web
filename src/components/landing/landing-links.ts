@@ -2,6 +2,8 @@ import { DASHBOARD_URL, LIVE_DEMO_URL } from '@/lib/site';
 
 const GITHUB_PROFILE = 'https://github.com/samuelcsantana';
 
+export const HOSTED_CONNECTOR_URL = 'https://api.pyxis-analytics.dev/mcp';
+
 export const CONTACT_EMAIL = 'hello@pyxis-analytics.dev';
 
 export const LANDING_LINKS = {

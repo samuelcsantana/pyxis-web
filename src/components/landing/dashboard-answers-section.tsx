@@ -5,7 +5,7 @@ import { rich } from '@/i18n/rich';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { REVEAL } from './landing-classes';
-import { LANDING_LINKS } from './landing-links';
+import { ASK_CLAUDE_ID } from './ask-claude-section';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { ScreenGlyph } from './screen-glyph';
@@ -64,7 +64,11 @@ export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) 
       <p className={`mt-6 text-sm text-muted ${REVEAL}`}>
         {rich(t('landing.answers.agent'), {
           link: (text) => (
-            <a href={LANDING_LINKS.connectClaude} className={TEXT_LINK}>
+            <a
+              href={`#${ASK_CLAUDE_ID}`}
+              className={TEXT_LINK}
+              {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'screens' })}
+            >
               {text}
             </a>
           ),

@@ -125,6 +125,7 @@ describe('the home page on the main domain', () => {
     ).toEqual([
       'never-stored',
       'dashboard',
+      'ask-claude',
       'install',
       'in-production',
       'built-in-public',

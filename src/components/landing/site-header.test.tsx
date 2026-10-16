@@ -40,6 +40,10 @@ describe('SiteHeader', () => {
       'href',
       '/#never-stored',
     );
+    const claude = within(main).getByRole('link', { name: 'Ask Claude' });
+    expect(claude).toHaveAttribute('href', '/#ask-claude');
+    expect(claude).toHaveAttribute('data-track', 'ask_claude_opened');
+    expect(claude).toHaveAttribute('data-track-from', 'header');
     const pricing = within(main).getByRole('link', { name: 'Pricing' });
     expect(pricing).toHaveAttribute('href', '/#pricing');
     expect(pricing).toHaveAttribute('data-track', 'pricing_opened');

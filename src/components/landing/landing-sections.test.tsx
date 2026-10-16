@@ -89,13 +89,13 @@ describe('DashboardAnswersSection', () => {
     ).toBeInTheDocument();
   });
 
-  it('points to connecting Pyxis to Claude, for those who would rather ask', () => {
+  it('points to asking Claude further down, for those who would rather ask', () => {
     render(<DashboardAnswersSection i18n={english} />);
 
-    expect(screen.getByRole('link', { name: 'How to connect' })).toHaveAttribute(
-      'href',
-      'https://github.com/samuelcsantana/pyxis-mcp#connect-from-claude',
-    );
+    const link = screen.getByRole('link', { name: 'How to connect' });
+    expect(link).toHaveAttribute('href', '#ask-claude');
+    expect(link).toHaveAttribute('data-track', 'ask_claude_opened');
+    expect(link).toHaveAttribute('data-track-from', 'screens');
   });
 });
 
