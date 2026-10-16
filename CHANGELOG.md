@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.25.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.25.0...v0.25.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **landing:** stop measuring browsers driven by automation ([ca5db56](https://github.com/samuelcsantana/pyxis-web/commit/ca5db56b7b22ee23035798f47349dcfe786e990e))
+
+
+### Documentation
+
+* **readme:** say that the home page does not measure a browser driven by automation ([d3524c3](https://github.com/samuelcsantana/pyxis-web/commit/d3524c3943118b23ec52d4f9067025f8ffdb700b))
+
 ## [0.25.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.24.0...v0.25.0) (2026-10-16)
 
 
