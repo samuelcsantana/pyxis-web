@@ -135,7 +135,8 @@ test('offers no live demo link inside the live demo', async ({ page }) => {
   await page.goto('/sign-in');
 
   await expect(page.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /See the live demo/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'open the demo' })).toHaveCount(0);
+  await expect(page.getByText(/No account yet/)).toHaveCount(0);
 });
 
 test('signs in with the demo code filled in from the hint', async ({ page }) => {

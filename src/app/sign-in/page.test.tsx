@@ -15,6 +15,23 @@ vi.mock('next/navigation', () => ({
   useRouter: () => router,
 }));
 
+const signUp = vi.hoisted(() => ({ open: false }));
+
+vi.mock('@/lib/landing-sign-up', () => ({
+  bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
+}));
+
+vi.mock('@/services/auth/auth-service.factory', async () => {
+  const { MockAuthService } = await import('@/services/auth/mock-auth-service');
+  return { createAuthService: () => new MockAuthService() };
+});
+
+async function askForACode() {
+  await userEvent.type(screen.getByLabelText('Email'), 'someone@example.com');
+  await userEvent.click(screen.getByRole('button', { name: 'Send code' }));
+  await screen.findByLabelText('6-digit code');
+}
+
 async function signInWithTheDemoCode() {
   await userEvent.type(screen.getByLabelText('Email'), 'owner@demo-store.example');
   await userEvent.click(screen.getByRole('button', { name: 'Send code' }));
@@ -73,14 +90,60 @@ describe('SignInPage', () => {
     expect(screen.getByRole('main')).toHaveClass('[&>section]:shadow-raised');
   });
 
-  it('offers the live demo to a visitor without access, in the language being read', async () => {
+  it('offers the plans and the live demo to a visitor without an account', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
     renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
-    expect(
-      screen.getByRole('link', { name: 'No access? See the live demo, with invented data' }),
-    ).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev/?lang=en');
+    expect(screen.getByText(/No account yet\?/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the plans' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/#pricing',
+    );
+    expect(screen.getByRole('link', { name: 'open the demo' })).toHaveAttribute(
+      'href',
+      'https://demo.pyxis-analytics.dev/?lang=en',
+    );
+  });
+
+  it('while the code is awaited, says the e-mail may have no account and leads to the plans', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    signUp.open = false;
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    await askForACode();
+
+    expect(screen.getByText('Nothing after a few minutes?')).toBeInTheDocument();
+    expect(screen.getByText(/may not have a Pyxis account yet/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the plans' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/#pricing',
+    );
+    expect(screen.queryByRole('link', { name: 'Try it free for 14 days' })).toBeNull();
+    expect(screen.queryByText(/No account yet\?/)).toBeNull();
+  });
+
+  it('also offers the free trial while the code is awaited, once sign-up is open', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    signUp.open = true;
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    await askForACode();
+
+    expect(screen.getByRole('link', { name: 'Try it free for 14 days' })).toHaveAttribute(
+      'href',
+      'https://app.pyxis-analytics.dev/sign-up',
+    );
+    signUp.open = false;
+  });
+
+  it('says nothing about accounts inside the live demo, where the code is shown', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    await askForACode();
+
+    expect(screen.queryByText('Nothing after a few minutes?')).toBeNull();
   });
 
   it('does not offer the live demo inside the live demo', async () => {
@@ -88,7 +151,7 @@ describe('SignInPage', () => {
 
     renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
-    expect(screen.queryByRole('link', { name: /See the live demo/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'open the demo' })).not.toBeInTheDocument();
   });
 
   it('says nothing about a session when the visitor simply arrives', async () => {

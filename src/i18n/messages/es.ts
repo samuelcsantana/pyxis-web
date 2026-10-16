@@ -106,7 +106,12 @@ export const es = translation({
     title: 'Iniciar sesión',
     privacy:
       'Analítica de producto que prioriza la privacidad · sin cookies para tus visitantes, sin datos personales',
-    demoLink: '¿No tienes acceso? Mira la demo en vivo, con datos inventados',
+    noAccount:
+      '¿Aún no tienes cuenta? <plans>Mira los planes</plans> o <demo>abre la demo</demo>, con datos inventados.',
+    noCode:
+      '<strong>¿No llegó nada en unos minutos?</strong> Puede que este correo aún no tenga cuenta en Pyxis.',
+    seePlans: 'Ver planes',
+    startTrial: 'Probar 14 días gratis',
   },
   errorPanel: {
     title: 'No se pudieron cargar estos datos',

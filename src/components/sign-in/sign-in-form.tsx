@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { InvalidCodeError, RateLimitedError } from '@/domain/errors';
@@ -54,6 +54,8 @@ export interface SignInFormProps {
   readonly sessionExpired?: boolean;
   readonly demoCode?: string;
   readonly returnPath?: string;
+  readonly noAccountHelp?: ReactNode;
+  readonly noCodeHelp?: ReactNode;
 }
 
 const PROBLEM_MESSAGES: Readonly<
@@ -97,6 +99,8 @@ export function SignInForm({
   sessionExpired = false,
   demoCode,
   returnPath = HOME_PATH,
+  noAccountHelp,
+  noCodeHelp,
 }: SignInFormProps) {
   const t = useT();
   const locale = useLocale();
@@ -321,6 +325,7 @@ export function SignInForm({
           <button type="submit" disabled={busy} aria-busy={busy} className={PRIMARY_BUTTON_CLASS}>
             {busy ? t('signIn.sending') : t('signIn.sendCode')}
           </button>
+          {noAccountHelp}
         </form>
       ) : (
         <form noValidate onSubmit={submitCode} className="flex flex-col gap-5">
@@ -412,6 +417,7 @@ export function SignInForm({
               {resent ? t('signIn.resent') : ''}
             </p>
           </div>
+          {noCodeHelp}
         </form>
       )}
     </section>
