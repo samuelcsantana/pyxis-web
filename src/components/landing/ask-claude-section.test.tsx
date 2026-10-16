@@ -24,18 +24,18 @@ describe('AskClaudeSection', () => {
     expect(section).toHaveTextContent('It comes with the plan, at no extra cost.');
   });
 
-  it('shows an invented conversation, the tools Claude read and who said what', () => {
+  it('plays an invented conversation, naming the tools Claude read', () => {
     render(<AskClaudeSection i18n={english} />);
 
     const example = screen.getByRole('figure', { name: 'An example conversation' });
-    const [question, answer] = within(example).getAllByRole('listitem');
-    expect(question).toHaveTextContent(
-      'You: How did last week go, and where does the sign-up lose people?',
+    expect(example).toHaveTextContent(
+      'How did last week go, and where does the sign-up lose people?',
     );
-    expect(answer).toHaveTextContent('Claude: Visits rose 12%');
-    expect([...example.querySelectorAll('code')].map((tool) => tool.textContent)).toEqual([
-      ...CONVERSATION_TOOLS,
-    ]);
+    expect(example).toHaveTextContent('MCP connected');
+    expect(within(example).getByRole('button', { name: 'Replay' })).toBeInTheDocument();
+    expect([...example.querySelectorAll('code')].map((tool) => tool.textContent)).toEqual(
+      CONVERSATION_TOOLS.map((tool) => tool),
+    );
     expect(example).toHaveTextContent('Invented conversation and numbers, like the live demo.');
   });
 
@@ -89,8 +89,8 @@ describe('AskClaudeSection', () => {
     expect(
       screen.getByRole('region', { name: 'Pergunte ao Claude em vez de garimpar gráficos' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('figure', { name: 'Um exemplo de conversa' })).toHaveTextContent(
-      'Você: Como foi a semana passada',
-    );
+    const example = screen.getByRole('figure', { name: 'Um exemplo de conversa' });
+    expect(example).toHaveTextContent('Como foi a semana passada');
+    expect(within(example).getByRole('button', { name: 'Repetir' })).toBeInTheDocument();
   });
 });

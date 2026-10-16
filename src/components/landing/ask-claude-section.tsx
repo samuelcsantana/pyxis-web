@@ -1,6 +1,7 @@
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { ConversationDemo } from './conversation-demo-card';
 import { CodeBlock, type CodeToken, keyword, plain } from './install-section';
 import { REVEAL } from './landing-classes';
 import { ASK_CLAUDE_ID, HOSTED_CONNECTOR_URL, LANDING_LINKS } from './landing-links';
@@ -23,45 +24,6 @@ export const CLAUDE_CODE_COMMAND: readonly CodeToken[] = [
 ];
 
 const CHECK_ICON = 'm5 12.5 4.5 4.5L19 7.5';
-const BUBBLE = 'max-w-[92%] rounded-card px-4 py-3 text-sm leading-relaxed';
-
-function Conversation({ i18n }: AskClaudeSectionProps) {
-  const { t } = i18n;
-  return (
-    <figure
-      aria-labelledby="ask-claude-example"
-      className={`flex flex-col gap-3 rounded-panel border border-line-strong bg-card p-4 shadow-sm sm:p-5 ${REVEAL}`}
-    >
-      <figcaption id="ask-claude-example" className="text-caption font-semibold text-muted">
-        {t('landing.askClaude.example.label')}
-      </figcaption>
-      <ol className="flex flex-col gap-3">
-        <li className={`${BUBBLE} self-end bg-soft text-ink`}>
-          <span className="sr-only">{t('landing.askClaude.example.you')}: </span>
-          {t('landing.askClaude.example.question')}
-        </li>
-        <li className="flex flex-col gap-2">
-          <p className="flex flex-wrap items-center gap-1.5 text-caption text-muted">
-            {t('landing.askClaude.example.used')}
-            {CONVERSATION_TOOLS.map((tool) => (
-              <code
-                key={tool}
-                className="rounded-chip border border-line bg-bg px-1.5 py-0.5 font-mono text-micro text-ink"
-              >
-                {tool}
-              </code>
-            ))}
-          </p>
-          <p className={`${BUBBLE} border border-line bg-bg text-ink`}>
-            <span className="sr-only">{t('landing.askClaude.example.claude')}: </span>
-            {t('landing.askClaude.example.answer')}
-          </p>
-        </li>
-      </ol>
-      <p className="text-caption text-muted">{t('landing.askClaude.example.invented')}</p>
-    </figure>
-  );
-}
 
 export function AskClaudeSection({ i18n }: AskClaudeSectionProps) {
   const { t } = i18n;
@@ -78,7 +40,22 @@ export function AskClaudeSection({ i18n }: AskClaudeSectionProps) {
       lead={t('landing.askClaude.lead')}
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start lg:gap-10">
-        <Conversation i18n={i18n} />
+        <div className={`min-w-0 ${REVEAL}`}>
+          <ConversationDemo
+            tools={CONVERSATION_TOOLS}
+            labels={{
+              label: t('landing.askClaude.example.label'),
+              connected: t('landing.askClaude.example.connected'),
+              replay: t('landing.askClaude.example.replay'),
+              you: t('landing.askClaude.example.you'),
+              claude: t('landing.askClaude.example.claude'),
+              question: t('landing.askClaude.example.question'),
+              used: t('landing.askClaude.example.used'),
+              answer: t('landing.askClaude.example.answer'),
+              invented: t('landing.askClaude.example.invented'),
+            }}
+          />
+        </div>
         <div className={`flex min-w-0 flex-col gap-4 ${REVEAL}`}>
           <h3 className="text-lg font-semibold">{t('landing.askClaude.connect')}</h3>
           <ol className="flex list-decimal flex-col gap-3 pl-5 text-sm leading-relaxed text-muted marker:font-mono marker:text-ink">
