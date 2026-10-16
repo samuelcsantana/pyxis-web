@@ -1531,6 +1531,8 @@ export const en = {
         claude: 'Claude',
         question: 'How did last week go, and where does the sign-up lose people?',
         used: 'Claude read:',
+        connected: 'MCP connected',
+        replay: 'Replay',
         answer:
           'Visits rose 12% against the week before, and conversions 8%. The sign-up loses the most people between the form and the e-mail code: 41% stop there, and on phones it is 52%. On a computer that step loses 23%.',
         invented: 'Invented conversation and numbers, like the live demo.',

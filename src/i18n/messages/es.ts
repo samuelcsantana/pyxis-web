@@ -1551,6 +1551,8 @@ export const es = translation({
         claude: 'Claude',
         question: '¿Cómo fue la semana pasada, y dónde pierde gente el registro?',
         used: 'Claude leyó:',
+        connected: 'MCP conectado',
+        replay: 'Repetir',
         answer:
           'Las visitas subieron un 12% respecto a la semana anterior, y las conversiones un 8%. El registro pierde más gente entre el formulario y el código por correo: el 41% se detiene ahí, y en el móvil es el 52%. En un ordenador, ese paso pierde el 23%.',
         invented: 'Conversación y números inventados, como en la demo en vivo.',
