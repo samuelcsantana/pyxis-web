@@ -7,7 +7,7 @@ const meta = {
   title: 'Landing/InstallSection',
   component: InstallSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english },
+  args: { i18n: english, signUpOpen: false },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -25,6 +25,8 @@ export const English: Story = {
     await expect(within(canvasElement).getByRole('region')).toBeVisible();
   },
 };
+
+export const SignUpOpen: Story = { args: { signUpOpen: true } };
 
 export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 

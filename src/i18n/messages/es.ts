@@ -1516,6 +1516,8 @@ export const es = translation({
       title: 'Lo que responde el panel',
       lead: 'Ocho pantallas, cada una construida en torno a una pregunta. Cada tarjeta abre esa pantalla en la demo en vivo.',
       open: 'Abrir en la demo',
+      agent:
+        '¿Prefieres preguntar? Conecta Pyxis a Claude y Claude lee los mismos números, solo lectura. <link>Cómo conectar</link>',
       questions: {
         overview:
           '¿Cuántas visitas, conversiones y escrituras fallidas hubo en este periodo, frente al anterior?',
@@ -1536,7 +1538,9 @@ export const es = translation({
       copy: 'Copiar',
       copied: 'Copiado',
       selected: 'Seleccionado, presiona Ctrl+C',
-      note: 'Las claves las emite quien opera la API, y hoy no hay registro abierto. Los tres repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
+      note: 'Las claves las emite quien opera la API, y hoy no hay registro abierto. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
+      noteOpen:
+        'Las claves vienen con tu cuenta: empieza la prueba gratis más abajo o ejecuta tu propio Pyxis. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
     },
     production: {
       eyebrow: 'En producción',
