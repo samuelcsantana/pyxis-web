@@ -79,6 +79,24 @@ test('opens the visits of a device type and of a channel', async ({ page }) => {
   await expect(visitRows(page).first()).toBeVisible();
 });
 
+test.describe('a browser that asks for Brazilian Portuguese', () => {
+  test.use({ locale: 'pt-BR' });
+
+  test('names the ad clicks that came with no source and opens their visits', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/acquisition?range=30d`);
+    await page.getByRole('link', { name: '(clique de anúncio): ver as visitas' }).click();
+
+    await expect(page).toHaveURL(/\/visits\?range=30d&source=%28ad\+click%29$/);
+    await expect(
+      page
+        .getByRole('search', { name: 'Filtrar as visitas' })
+        .getByRole('textbox', { name: /^Origem/ }),
+    ).toHaveValue('(ad click)');
+    await expect(page.getByText(/^\d+ visitas? encontradas?$/)).toBeVisible();
+    await expect(page.getByText(/^0 visitas? encontradas?$/)).toHaveCount(0);
+  });
+});
+
 test('opens the visits of a source, a country and a failing route', async ({ page }) => {
   await page.goto(`/${STORE_ID}/acquisition?range=30d`);
   await page.getByRole('link', { name: 'google: see its visits' }).click();
