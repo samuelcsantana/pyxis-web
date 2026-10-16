@@ -4,6 +4,7 @@ import { demoAcquisitionReport } from '@/services/acquisition/demo-acquisition';
 import { DEMO_DOCS } from '@/services/demo/demo-projects';
 import { SourcesTable } from './sources-table';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
 
@@ -49,6 +50,10 @@ export const WithoutConversionEvent: Story = {
 };
 
 export const Empty: Story = { args: { rows: [] } };
+
+export const InPortuguese: Story = {
+  args: { i18n: portuguese, rows: sourceRows(REPORT.sources, portuguese) },
+};
 
 export const OnAPhone: Story = {
   decorators: [
