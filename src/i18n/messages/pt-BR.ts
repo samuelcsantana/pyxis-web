@@ -1509,6 +1509,8 @@ export const ptBR = translation({
       title: 'O que o painel responde',
       lead: 'Oito telas, cada uma feita em torno de uma pergunta. Cada cartão abre essa tela na demonstração.',
       open: 'Abrir na demonstração',
+      agent:
+        'Prefere perguntar? Conecte o Pyxis ao Claude e ele lê os mesmos números, só para leitura. <link>Como conectar</link>',
       questions: {
         overview:
           'Quantas visitas, conversões e gravações com falha neste período, contra o anterior?',
@@ -1529,7 +1531,9 @@ export const ptBR = translation({
       copy: 'Copiar',
       copied: 'Copiado',
       selected: 'Selecionado, aperte Ctrl+C',
-      note: 'As chaves são criadas por quem opera a API, e hoje não há cadastro aberto. Os três repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
+      note: 'As chaves são criadas por quem opera a API, e hoje não há cadastro aberto. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
+      noteOpen:
+        'As chaves vêm com a sua conta: comece o teste grátis aqui embaixo, ou rode o seu próprio Pyxis. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
     },
     production: {
       eyebrow: 'Em produção',

@@ -6,6 +6,7 @@ import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface InstallSectionProps {
   readonly i18n: I18n;
+  readonly signUpOpen: boolean;
 }
 
 export const INSTALL_ID = 'install';
@@ -80,7 +81,7 @@ function CodeBlock({ id, tokens, labels }: CodeBlockProps) {
 
 const INFO_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 11v5.5 M12 7.5h.01';
 
-export function InstallSection({ i18n }: InstallSectionProps) {
+export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
   const { t } = i18n;
   const labels = {
     copy: t('landing.install.copy'),
@@ -118,7 +119,7 @@ export function InstallSection({ i18n }: InstallSectionProps) {
               strokeLinejoin="round"
             />
           </svg>
-          {t('landing.install.note')}
+          {signUpOpen ? t('landing.install.noteOpen') : t('landing.install.note')}
         </p>
       </div>
     </LandingSection>

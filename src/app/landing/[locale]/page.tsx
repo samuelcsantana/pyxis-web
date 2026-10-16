@@ -141,7 +141,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
         <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
-        <InstallSection i18n={i18n} />
+        <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
         <InProductionSection i18n={i18n} />
         <BuiltInPublicSection i18n={i18n} />
         <ArchitectureSection i18n={i18n} />

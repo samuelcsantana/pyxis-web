@@ -1,9 +1,11 @@
 import { type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
+import { CONTROL_TRANSITION, FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { REVEAL } from './landing-classes';
+import { LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { ScreenGlyph } from './screen-glyph';
@@ -59,6 +61,15 @@ export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) 
           </li>
         ))}
       </ul>
+      <p className={`mt-6 text-sm text-muted ${REVEAL}`}>
+        {rich(t('landing.answers.agent'), {
+          link: (text) => (
+            <a href={LANDING_LINKS.connectClaude} className={TEXT_LINK}>
+              {text}
+            </a>
+          ),
+        })}
+      </p>
     </LandingSection>
   );
 }

@@ -75,7 +75,8 @@ describe('DashboardAnswersSection', () => {
   it('opens each of the eight screens of the demo store from a card with its question', () => {
     render(<DashboardAnswersSection i18n={english} />);
 
-    const links = within(screen.getByRole('region', { name: 'What the dashboard answers' }))
+    const region = screen.getByRole('region', { name: 'What the dashboard answers' });
+    const links = within(within(region).getByRole('list'))
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'));
     expect(links).toEqual(SCREENS_SHOWN.map(demoScreenUrl));
@@ -87,11 +88,20 @@ describe('DashboardAnswersSection', () => {
       screen.getByText('Which routes of your API fail, how often and how slowly?'),
     ).toBeInTheDocument();
   });
+
+  it('points to connecting Pyxis to Claude, for those who would rather ask', () => {
+    render(<DashboardAnswersSection i18n={english} />);
+
+    expect(screen.getByRole('link', { name: 'How to connect' })).toHaveAttribute(
+      'href',
+      'https://github.com/samuelcsantana/pyxis-mcp#connect-from-claude',
+    );
+  });
 });
 
 describe('InstallSection', () => {
   it('shows the install command and the first lines, each with a copy button', () => {
-    render(<InstallSection i18n={english} />);
+    render(<InstallSection i18n={english} signUpOpen={false} />);
 
     const section = screen.getByRole('region', { name: 'What a site adds' });
     expect(within(section).getAllByRole('button', { name: 'Copy' })).toHaveLength(2);
@@ -102,6 +112,14 @@ describe('InstallSection', () => {
       "track('signup_completed', { method: 'email_code' });",
     );
     expect(section).toHaveTextContent('there is no public sign-up today');
+  });
+
+  it('says the keys come with an account once sign-up is open', () => {
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    expect(screen.getByRole('region', { name: 'What a site adds' })).toHaveTextContent(
+      'Your keys come with your account: start the free trial below, or run your own Pyxis.',
+    );
   });
 
   it('copies exactly the text it shows', () => {

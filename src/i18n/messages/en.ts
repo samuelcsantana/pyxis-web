@@ -1497,6 +1497,8 @@ export const en = {
       title: 'What the dashboard answers',
       lead: 'Eight screens, each built around one question. Every card opens that screen in the live demo.',
       open: 'Open in the demo',
+      agent:
+        'Prefer to ask? Connect Pyxis to Claude and it reads the same numbers, only reading. <link>How to connect</link>',
       questions: {
         overview:
           'How many visits, conversions and failed writes this period, against the one before?',
@@ -1516,7 +1518,9 @@ export const en = {
       copy: 'Copy',
       copied: 'Copied',
       selected: 'Selected, press Ctrl+C',
-      note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All three repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+      note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+      noteOpen:
+        'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
     },
     production: {
       eyebrow: 'In production',

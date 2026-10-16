@@ -250,11 +250,16 @@ test('opens the request for access with the address to write to', async ({ page 
 test('opens each dashboard screen of the demo store from its card', async ({ page }) => {
   await page.goto('/');
 
-  const cards = page.getByRole('region', { name: 'What the dashboard answers' }).getByRole('link');
+  const section = page.getByRole('region', { name: 'What the dashboard answers' });
+  const cards = section.getByRole('list').getByRole('link');
   await expect(cards).toHaveCount(8);
   await expect(cards.first()).toHaveAttribute(
     'href',
     'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview?lang=en',
+  );
+  await expect(section.getByRole('link', { name: 'How to connect' })).toHaveAttribute(
+    'href',
+    'https://github.com/samuelcsantana/pyxis-mcp#connect-from-claude',
   );
 });
 
