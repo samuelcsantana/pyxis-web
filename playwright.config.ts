@@ -7,6 +7,7 @@ const LANDING_SPECS = /landing.*\.spec\.ts/;
 const ON_THE_MAIN_DOMAIN = { extraHTTPHeaders: { 'x-forwarded-host': 'pyxis-analytics.dev' } };
 const DESKTOP = { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } };
 const MOBILE = { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } };
+const NAVIGATOR_WEBDRIVER_OFF = '--disable-blink-features=AutomationControlled';
 
 export default defineConfig({
   testDir: './e2e',
@@ -18,6 +19,7 @@ export default defineConfig({
     baseURL: BASE_URL,
     trace: 'on-first-retry',
     locale: 'en-US',
+    launchOptions: { args: [NAVIGATOR_WEBDRIVER_OFF] },
   },
   projects: [
     { name: 'desktop', testIgnore: LANDING_SPECS, use: DESKTOP },

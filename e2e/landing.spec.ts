@@ -302,6 +302,14 @@ test.describe('measuring itself', () => {
     await page.route('**/v1/batch', (route) => route.fulfill({ status: 202, body: '' }));
   });
 
+  test('runs in a Chromium that does not report automation, as a visitor browser does', async ({
+    page,
+  }) => {
+    await page.goto('/');
+
+    expect(await page.evaluate(() => navigator.webdriver)).toBe(false);
+  });
+
   test('lists what this visit sent, live, and what never leaves the browser', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'See what it recorded' }).click();
