@@ -3,15 +3,13 @@ import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { CodeBlock, type CodeToken, keyword, plain } from './install-section';
 import { REVEAL } from './landing-classes';
-import { HOSTED_CONNECTOR_URL, LANDING_LINKS } from './landing-links';
+import { ASK_CLAUDE_ID, HOSTED_CONNECTOR_URL, LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface AskClaudeSectionProps {
   readonly i18n: I18n;
 }
-
-export const ASK_CLAUDE_ID = 'ask-claude';
 
 export const CONVERSATION_TOOLS = ['overview', 'funnel', 'funnel_segments'] as const;
 

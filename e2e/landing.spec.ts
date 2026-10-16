@@ -287,6 +287,24 @@ test('leads from the hero to asking Claude, and copies the connector address', a
   );
 });
 
+test('floats a nudge to the Claude connector, which leads to it and stays dismissed', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const nudge = page.getByRole('complementary', { name: 'News: Pyxis in Claude' });
+  await expect(nudge).toBeHidden();
+
+  await page.getByRole('region', { name: 'Built in public' }).scrollIntoViewIfNeeded();
+  await expect(nudge).toBeVisible();
+  await nudge.getByRole('link', { name: 'See how to connect' }).click();
+
+  await expect(page).toHaveURL(/#ask-claude$/);
+  await expect(nudge).toHaveCount(0);
+  await page.reload();
+  await page.getByRole('region', { name: 'Built in public' }).scrollIntoViewIfNeeded();
+  await expect(page.getByRole('complementary', { name: 'News: Pyxis in Claude' })).toHaveCount(0);
+});
+
 test('copies the install command', async ({ page, context, browserName }) => {
   test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);

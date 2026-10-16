@@ -5,8 +5,8 @@ import { rich } from '@/i18n/rich';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { REVEAL } from './landing-classes';
-import { ASK_CLAUDE_ID } from './ask-claude-section';
 import { LandingSection } from './landing-section';
+import { ASK_CLAUDE_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { ScreenGlyph } from './screen-glyph';
 

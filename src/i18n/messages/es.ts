@@ -1566,6 +1566,12 @@ export const es = translation({
       },
       foot: 'Lo que Claude pide va de la API de Pyxis a Anthropic, que lo trata según sus propios términos. Cursor y otros clientes MCP se conectan con un token de acceso creado en Configuración. <link>La guía completa</link>',
     },
+    nudge: {
+      label: 'Novedad: Pyxis en Claude',
+      message: 'Ahora Pyxis responde en Claude. Pregunta por tus números.',
+      cta: 'Ver cómo conectar',
+      dismiss: 'Descartar',
+    },
     install: {
       eyebrow: 'Instalación',
       title: 'Lo que agrega un sitio',
