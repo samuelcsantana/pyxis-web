@@ -42,7 +42,7 @@ test('shows the terms in Portuguese with the seller, the version and the effecti
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   await expect(page).toHaveTitle('Termos de Uso · Pyxis');
   await expect(
-    page.getByText('Versão 1.1, vigente a partir de 20 de outubro de 2026.'),
+    page.getByText('Versão 1.2, vigente a partir de 20 de outubro de 2026.'),
   ).toBeVisible();
   await expect(page.getByText(/oferecido por Ana Exemplo, pessoa física/)).toBeVisible();
   await expect(page.getByText(SELLER_LINE)).toBeVisible();
