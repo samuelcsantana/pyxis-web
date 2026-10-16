@@ -1,6 +1,12 @@
 export const CONNECTION_REQUEST_MINUTES = 10;
 export const MAX_CONNECTED_APPS = 10;
 
+const COMPANIES_BY_CLIENT_HOST: Readonly<Record<string, string>> = { 'claude.ai': 'Anthropic' };
+
+export function clientCompanyOf(host: string): string | null {
+  return COMPANIES_BY_CLIENT_HOST[host] ?? null;
+}
+
 export interface ConnectionRequestProject {
   readonly id: string;
   readonly name: string;

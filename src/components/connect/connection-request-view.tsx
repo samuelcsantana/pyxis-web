@@ -4,7 +4,11 @@ import { settingsHref } from '@/components/shell/screens';
 import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
-import { CONNECTION_REQUEST_MINUTES, type ConnectionRequest } from '@/domain/connection-requests';
+import {
+  clientCompanyOf,
+  CONNECTION_REQUEST_MINUTES,
+  type ConnectionRequest,
+} from '@/domain/connection-requests';
 import type { I18n } from '@/i18n/i18n';
 import { type AllowConnection, ConsentButtons, type DenyConnection } from './consent-buttons';
 
@@ -46,6 +50,7 @@ export function ConnectionRequestView({
   const { t } = i18n;
   const app = request.client.name;
   const [firstProject] = request.projects;
+  const company = clientCompanyOf(request.client.host);
   return (
     <>
       <div className="flex flex-col gap-1">
@@ -73,6 +78,13 @@ export function ConnectionRequestView({
               ))}
             </ul>
           )}
+        </Part>
+        <Part heading={t('connect.dataHeading')}>
+          <p className="rounded-input border border-line bg-soft px-3 py-2.5 text-sm font-medium text-ink">
+            {company === null
+              ? t('connect.dataToApp', { app, host: request.client.host })
+              : t('connect.dataToCompany', { app, company })}
+          </p>
         </Part>
         <Part heading={t('connect.returnHeading')}>
           <p className="text-sm">{t('connect.returnTo', { host: request.redirect.host })}</p>

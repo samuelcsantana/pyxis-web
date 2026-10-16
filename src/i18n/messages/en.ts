@@ -626,6 +626,11 @@ export const en = {
       'Only read: the same numbers you see in this dashboard, from every project you can open. It never changes anything.',
     projectsHeading: 'Your projects',
     noProjects: 'You have no projects yet. It will read the ones you can open later.',
+    dataHeading: 'Where the data goes',
+    dataToCompany:
+      'The data {app} asks for, your e-mail included, goes to {company}, in the United States, which handles it under its own terms. Allow only if you agree.',
+    dataToApp:
+      'The data {app} asks for, your e-mail included, goes to the company behind it ({host}), which handles it under its own terms. Allow only if you agree.',
     returnHeading: 'Where this window goes next',
     returnTo: 'Back to {host}.',
     loopback:

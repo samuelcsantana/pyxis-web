@@ -72,6 +72,11 @@ describe('ConnectionRequestView', () => {
       'Demo Store',
       'Demo Docs',
     ]);
+    expect(
+      screen.getByText(
+        'The data Claude Code asks for, your e-mail included, goes to Anthropic, in the United States, which handles it under its own terms. Allow only if you agree.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText('Back to localhost.')).toBeInTheDocument();
     expect(screen.getByText(/The answer goes to a program on this computer/)).toBeInTheDocument();
     expect(
@@ -93,6 +98,24 @@ describe('ConnectionRequestView', () => {
 
     expect(screen.getByText('Back to claude.ai.')).toBeInTheDocument();
     expect(screen.queryByText(/a program on this computer/)).not.toBeInTheDocument();
+  });
+
+  it('names the company behind an app it does not know by its host, with no country', () => {
+    renderWithMessages(
+      <ConnectionRequestView
+        request={{ ...CLAUDE_REQUEST, client: { name: 'Other', host: 'other.example' } }}
+        email="owner@demo-store.example"
+        i18n={english}
+        allow={allowNever}
+        deny={denyNever}
+      />,
+    );
+
+    expect(
+      screen.getByText(
+        'The data Other asks for, your e-mail included, goes to the company behind it (other.example), which handles it under its own terms. Allow only if you agree.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('says the app will read later projects when the admin has none yet', () => {
