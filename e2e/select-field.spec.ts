@@ -39,6 +39,8 @@ for (const colorScheme of ['light', 'dark'] as const) {
       isMobile,
     }) => {
       await openVisitFilters(page, isMobile);
+      const card = await tokenColor(page, '--color-card');
+      const soft = await tokenColor(page, '--color-soft');
       const channel = page.getByRole('combobox', { name: 'Channel' });
       await expect(channel).toHaveCSS('appearance', 'base-select');
 
@@ -47,8 +49,8 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(paid).toBeVisible();
       await paid.hover();
 
-      expect(await pickerBackgroundOf(channel)).toBe(await tokenColor(page, '--color-card'));
-      expect(await backgroundOf(paid)).toBe(await tokenColor(page, '--color-soft'));
+      await expect.poll(() => pickerBackgroundOf(channel)).toBe(card);
+      await expect.poll(() => backgroundOf(paid)).toBe(soft);
       await expect(page.locator('.select-chevron').first()).toHaveCSS('rotate', '180deg');
     });
   });
