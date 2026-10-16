@@ -820,6 +820,7 @@ export const en = {
       direct: 'Direct',
     },
     directSource: 'Direct',
+    adClickSource: '(ad click)',
     topChannel: 'Top channel',
     topUnpaidChannel: 'Top unpaid channel',
     shareOfVisits: '{share} of {visits}',

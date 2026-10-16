@@ -271,8 +271,22 @@ describe('sourceRows', () => {
     expect(row?.conversionRate).toBe('—');
   });
 
-  it('names a source as it came, except the direct one', () => {
+  it('names a source as it came, except the direct one and the ad click without a source', () => {
     expect(sourceLabel('blog.example.com', english)).toBe('blog.example.com');
     expect(sourceLabel('(direct)', english)).toBe('Direct');
+    expect(sourceLabel('(ad click)', english)).toBe('(ad click)');
+  });
+
+  it('translates the ad click without a source', () => {
+    expect(sourceLabel('(ad click)', portuguese)).toBe('(clique de anúncio)');
+    expect(sourceLabel('(ad click)', spanish)).toBe('(clic en anuncio)');
+  });
+
+  it('labels the sources and campaigns that came from an ad click without a source', () => {
+    const [source] = sourceRows([{ ...GOOGLE, source: '(ad click)', medium: null }], portuguese);
+    const [campaign] = campaignRows([{ ...SPRING_SALE, source: '(ad click)' }], portuguese);
+
+    expect(source).toMatchObject({ source: '(ad click)', label: '(clique de anúncio)' });
+    expect(campaign).toMatchObject({ source: '(ad click)', sourceLabel: '(clique de anúncio)' });
   });
 });
