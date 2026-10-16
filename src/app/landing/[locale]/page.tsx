@@ -22,6 +22,7 @@ import {
 import { MeasurementNote } from '@/components/landing/measurement/measurement-note';
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
 import { PricingSection } from '@/components/landing/pricing-section';
+import { SectionHashSync } from '@/components/landing/section-hash-sync';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
 import { LinkPreferencesReceiver } from '@/components/preferences/link-preferences-receiver';
@@ -161,6 +162,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
           trackingKey === undefined ? null : <MeasurementNote labels={measurementLabelsOf(i18n)} />
         }
       />
+      <SectionHashSync />
       <AskClaudeNudge
         labels={{
           label: i18n.t('landing.nudge.label'),
