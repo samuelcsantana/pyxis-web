@@ -97,3 +97,19 @@
     transition: none;
   }
 }
+
+@keyframes landing-float {
+  50% {
+    translate: 0 -3px;
+  }
+}
+
+.landing-nudge-mascot {
+  animation: landing-float 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-nudge-mascot {
+    animation: none;
+  }
+}

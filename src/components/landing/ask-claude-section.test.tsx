@@ -4,7 +4,6 @@ import { claudeCodeCommand } from '@/domain/connections';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import {
-  ASK_CLAUDE_ID,
   AskClaudeSection,
   CLAUDE_CODE_COMMAND,
   CONNECTOR_ADDRESS,
@@ -12,7 +11,7 @@ import {
   PROMISES,
 } from './ask-claude-section';
 import { codeTextOf } from './install-section';
-import { HOSTED_CONNECTOR_URL } from './landing-links';
+import { ASK_CLAUDE_ID, HOSTED_CONNECTOR_URL } from './landing-links';
 
 describe('AskClaudeSection', () => {
   it('names itself by its title, under the ask-claude anchor', () => {
