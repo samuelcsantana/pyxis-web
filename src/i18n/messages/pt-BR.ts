@@ -637,6 +637,11 @@ export const ptBR = translation({
       'Só ler: os mesmos números que você vê neste painel, de todos os projetos que você pode abrir. Ele nunca muda nada.',
     projectsHeading: 'Seus projetos',
     noProjects: 'Você ainda não tem projetos. Ele vai ler os que você puder abrir depois.',
+    dataHeading: 'Para onde vão os dados',
+    dataToCompany:
+      'Os dados que o {app} pedir, inclusive o seu e-mail, vão para a {company}, nos Estados Unidos, que os trata pelos termos dela. Permita só se concordar.',
+    dataToApp:
+      'Os dados que o {app} pedir, inclusive o seu e-mail, vão para a empresa por trás dele ({host}), que os trata pelos termos dela. Permita só se concordar.',
     returnHeading: 'Para onde esta janela vai depois',
     returnTo: 'De volta para {host}.',
     loopback:

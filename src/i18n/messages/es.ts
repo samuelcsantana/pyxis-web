@@ -642,6 +642,11 @@ export const es = translation({
       'Solo leer: los mismos números que ves en este panel, de todos los proyectos que puedes abrir. Nunca cambia nada.',
     projectsHeading: 'Tus proyectos',
     noProjects: 'Todavía no tienes proyectos. Leerá los que puedas abrir más adelante.',
+    dataHeading: 'Adónde van los datos',
+    dataToCompany:
+      'Los datos que pida {app}, incluido tu correo, van a {company}, en Estados Unidos, que los trata según sus propios términos. Permite solo si estás de acuerdo.',
+    dataToApp:
+      'Los datos que pida {app}, incluido tu correo, van a la empresa detrás de la aplicación ({host}), que los trata según sus propios términos. Permite solo si estás de acuerdo.',
     returnHeading: 'Adónde va esta ventana después',
     returnTo: 'De vuelta a {host}.',
     loopback:
