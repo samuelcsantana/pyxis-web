@@ -97,7 +97,12 @@ export const en = {
   signInPage: {
     title: 'Sign in',
     privacy: 'Privacy-first product analytics · no cookies on your visitors, no personal data',
-    demoLink: 'No access? See the live demo, with invented data',
+    noAccount:
+      'No account yet? <plans>See the plans</plans> or <demo>open the demo</demo>, with invented data.',
+    noCode:
+      '<strong>Nothing after a few minutes?</strong> This e-mail may not have a Pyxis account yet.',
+    seePlans: 'See the plans',
+    startTrial: 'Try it free for 14 days',
   },
   errorPanel: {
     title: 'Could not load this data',

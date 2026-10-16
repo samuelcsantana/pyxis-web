@@ -106,7 +106,12 @@ export const ptBR = translation({
     title: 'Entrar',
     privacy:
       'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem dados pessoais',
-    demoLink: 'Sem acesso? Veja a demonstração, com dados inventados',
+    noAccount:
+      'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados inventados.',
+    noCode:
+      '<strong>Não chegou nada em alguns minutos?</strong> Talvez este e-mail ainda não tenha conta no Pyxis.',
+    seePlans: 'Ver planos',
+    startTrial: 'Testar 14 dias grátis',
   },
   errorPanel: {
     title: 'Não foi possível carregar estes dados',
