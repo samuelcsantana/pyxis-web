@@ -17,6 +17,12 @@ function innerScroll(table: Locator): Promise<number> {
   });
 }
 
+async function backToTheTop(page: Page) {
+  await page.evaluate(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+}
+
 async function openFiltersOnAPhone(page: Page, isMobile: boolean) {
   if (isMobile) {
     await page.getByRole('button', { name: 'Filters' }).click();
@@ -38,6 +44,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
       await page.getByRole('button', { name: 'Load older visits' }).click();
       await expect(visitRows(page)).toHaveCount(16);
+      await backToTheTop(page);
       expect(await axeViolations(page)).toEqual([]);
 
       await page.goto(`/${STORE_ID}/visits?property=plan%3Dpro`);
