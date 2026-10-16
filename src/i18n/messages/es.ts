@@ -1444,6 +1444,7 @@ export const es = translation({
       label: 'Principal',
       demo: 'Demo en vivo',
       privacy: 'Privacidad',
+      claude: 'Pregunta a Claude',
       pricing: 'Precio',
       language: 'Idioma',
       signIn: 'Entrar',
@@ -1455,6 +1456,8 @@ export const es = translation({
       openDemo: 'Abrir la demo en vivo',
       seePricing: 'Ver precio',
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',
+      claudeTag: 'Nuevo',
+      claude: 'Pregunta a Claude por tus números, vía MCP',
     },
     preview: {
       label: 'Vista previa de la pantalla Vista general',
@@ -1532,6 +1535,37 @@ export const es = translation({
         timeline: '¿Qué hizo una visita, o una persona con sesión iniciada, en orden?',
       },
     },
+    askClaude: {
+      eyebrow: 'Conector MCP',
+      title: 'Pregunta a Claude en lugar de rebuscar en gráficos',
+      lead: 'Conecta Pyxis a Claude una vez y pregunta con tus palabras: cómo fue la semana pasada, dónde el registro pierde gente, qué ruta empezó a fallar. Claude lee los mismos números que el panel, con quince herramientas que solo leen. Viene con el plan, sin costo extra.',
+      connect: 'Conéctalo en un minuto',
+      example: {
+        label: 'Un ejemplo de conversación',
+        you: 'Tú',
+        claude: 'Claude',
+        question: '¿Cómo fue la semana pasada, y dónde pierde gente el registro?',
+        used: 'Claude leyó:',
+        answer:
+          'Las visitas subieron un 12% respecto a la semana anterior, y las conversiones un 8%. El registro pierde más gente entre el formulario y el código por correo: el 41% se detiene ahí, y en el móvil es el 52%. En un ordenador, ese paso pierde el 23%.',
+        invented: 'Conversación y números inventados, como en la demo en vivo.',
+      },
+      promises: {
+        reads: {
+          title: 'Solo lectura',
+          body: 'Cada una de las quince herramientas es una lectura de la API de Pyxis. Claude nunca puede cambiar ni borrar nada.',
+        },
+        revoke: {
+          title: 'Lo revocas cuando quieras',
+          body: 'Cada conexión aparece en Configuración, Aplicaciones conectadas, y se detiene en cuanto la revocas. Sin uso durante 90 días, termina sola.',
+        },
+        personal: {
+          title: 'Nada personal que entregar',
+          body: 'Los eventos no llevan cookie, dirección IP ni user agent, así que lo que lee Claude tampoco.',
+        },
+      },
+      foot: 'Lo que Claude pide va de la API de Pyxis a Anthropic, que lo trata según sus propios términos. Cursor y otros clientes MCP se conectan con un token de acceso creado en Configuración. <link>La guía completa</link>',
+    },
     install: {
       eyebrow: 'Instalación',
       title: 'Lo que agrega un sitio',
@@ -1605,6 +1639,11 @@ export const es = translation({
           pyxis: 'Ninguno',
           typical: 'Depende de la herramienta; a veces una red publicitaria',
         },
+        agents: {
+          aspect: 'Preguntar a un agente de IA por los números',
+          pyxis: 'Sí: un conector para Claude, solo lectura',
+          typical: 'Depende de la herramienta',
+        },
         source: { aspect: 'Código fuente', pyxis: 'MIT, en GitHub', typical: 'Varía' },
       },
       foot: '“Típica” describe una configuración común, no un producto concreto.',
@@ -1631,7 +1670,7 @@ export const es = translation({
         people: 'Hasta 3 personas en el panel',
         history: '13 meses de historial',
         digest: 'Resumen semanal por correo',
-        agents: 'Tokens de acceso y servidor MCP para agentes de IA',
+        agents: 'El conector de Claude (MCP) y tokens de acceso para agentes de IA',
       },
       ask: 'Pedir acceso',
       askTitle: 'Escribe a',
@@ -1685,6 +1724,11 @@ export const es = translation({
           question: '¿Durante cuánto tiempo se guardan los datos?',
           answer:
             'Trece meses; después, una tarea diaria los borra. Los eventos de una persona se pueden exportar o borrar desde tu backend en cualquier momento.',
+        },
+        claude: {
+          question: '¿Puedo preguntar a Claude por mis números?',
+          answer:
+            'Sí. En Claude, añade un conector personalizado con la dirección <code>https://api.pyxis-analytics.dev/mcp</code>, o ejecuta <code>claude mcp add</code> en Claude Code, e inicia sesión en Pyxis. Claude lee entonces los números de todos los proyectos que puedes abrir, y no cambia nada. Lo revocas en Configuración, Aplicaciones conectadas.',
         },
         use: {
           question: '¿Puedo usarlo en mi sitio?',

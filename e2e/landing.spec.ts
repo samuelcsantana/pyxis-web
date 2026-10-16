@@ -164,6 +164,7 @@ test('shows the sections in order', async ({ page }) => {
   expect(await sections.evaluateAll((all) => all.map((section) => section.id))).toEqual([
     'never-stored',
     'dashboard',
+    'ask-claude',
     'install',
     'in-production',
     'built-in-public',
@@ -259,7 +260,30 @@ test('opens each dashboard screen of the demo store from its card', async ({ pag
   );
   await expect(section.getByRole('link', { name: 'How to connect' })).toHaveAttribute(
     'href',
-    'https://github.com/samuelcsantana/pyxis-mcp#connect-from-claude',
+    '#ask-claude',
+  );
+});
+
+test('leads from the hero to asking Claude, and copies the connector address', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/');
+
+  await page.getByRole('link', { name: /Ask Claude about your numbers/ }).click();
+
+  await expect(page).toHaveURL(/#ask-claude$/);
+  const section = page.getByRole('region', {
+    name: 'Ask Claude instead of digging through charts',
+  });
+  await expect(section).toBeInViewport();
+  await section.getByRole('button', { name: 'Copy' }).first().click();
+  await expect(section.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    'https://api.pyxis-analytics.dev/mcp',
   );
 });
 

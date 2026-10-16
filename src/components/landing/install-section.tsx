@@ -13,7 +13,7 @@ export const INSTALL_ID = 'install';
 
 type TokenKind = 'plain' | 'keyword' | 'string';
 
-interface CodeToken {
+export interface CodeToken {
   readonly kind: TokenKind;
   readonly text: string;
 }
@@ -24,9 +24,9 @@ const TOKEN_CLASSES: Readonly<Record<TokenKind, string>> = {
   string: 'text-nav-text',
 };
 
-const plain = (text: string): CodeToken => ({ kind: 'plain', text });
-const keyword = (text: string): CodeToken => ({ kind: 'keyword', text });
-const quoted = (text: string): CodeToken => ({ kind: 'string', text: `'${text}'` });
+export const plain = (text: string): CodeToken => ({ kind: 'plain', text });
+export const keyword = (text: string): CodeToken => ({ kind: 'keyword', text });
+export const quoted = (text: string): CodeToken => ({ kind: 'string', text: `'${text}'` });
 
 export const INSTALL_COMMAND: readonly CodeToken[] = [plain('npm install pyxis-analytics')];
 
@@ -51,16 +51,17 @@ export function codeTextOf(tokens: readonly CodeToken[]): string {
   return tokens.map((token) => token.text).join('');
 }
 
-interface CodeBlockProps {
+export interface CodeBlockProps {
   readonly id: string;
   readonly tokens: readonly CodeToken[];
   readonly labels: CopyCodeLabels;
+  readonly wrap?: boolean;
 }
 
-function CodeBlock({ id, tokens, labels }: CodeBlockProps) {
+export function CodeBlock({ id, tokens, labels, wrap = false }: CodeBlockProps) {
   return (
     <div className="relative overflow-x-auto rounded-card bg-nav py-4.5 pr-24 pl-5 font-mono text-sm leading-7">
-      <pre id={id} className="m-0">
+      <pre id={id} className={wrap ? 'm-0 break-all whitespace-pre-wrap' : 'm-0'}>
         <code>
           {tokens.map((token, index) => (
             <span key={`${String(index)}-${token.text}`} className={TOKEN_CLASSES[token.kind]}>

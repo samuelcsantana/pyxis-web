@@ -1,6 +1,8 @@
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import type { LandingPreviewView } from '@/domain/landing-preview';
+import { FOCUS_RING, CONTROL_TRANSITION } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { ASK_CLAUDE_ID } from './ask-claude-section';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
 import { LANDING_LINKS } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
@@ -62,6 +64,19 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
               </a>
             </div>
             <p className="text-caption text-muted">{t('landing.hero.note')}</p>
+            <a
+              href={`#${ASK_CLAUDE_ID}`}
+              className={`mt-1 inline-flex w-fit max-w-full items-center gap-2.5 rounded-pill border border-line-strong bg-card py-1.5 pr-4 pl-1.5 text-sm text-ink hover:border-muted hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+              {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'hero' })}
+            >
+              <span className="shrink-0 rounded-pill bg-accent px-2 py-0.5 text-caption font-semibold text-accent-ink">
+                {t('landing.hero.claudeTag')}
+              </span>{' '}
+              <span className="min-w-0">
+                {t('landing.hero.claude')}
+                <span aria-hidden="true">{'\u00a0→'}</span>
+              </span>
+            </a>
           </div>
           <LandingPreview view={preview} i18n={i18n} />
         </div>

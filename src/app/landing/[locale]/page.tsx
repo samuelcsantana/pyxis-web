@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArchitectureSection } from '@/components/landing/architecture-section';
+import { AskClaudeSection } from '@/components/landing/ask-claude-section';
 import { BuiltInPublicSection } from '@/components/landing/built-in-public-section';
 import { ComparisonSection } from '@/components/landing/comparison-section';
 import { DashboardAnswersSection } from '@/components/landing/dashboard-answers-section';
@@ -141,6 +142,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
         <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
+        <AskClaudeSection i18n={i18n} />
         <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
         <InProductionSection i18n={i18n} />
         <BuiltInPublicSection i18n={i18n} />

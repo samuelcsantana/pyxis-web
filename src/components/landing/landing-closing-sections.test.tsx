@@ -63,7 +63,9 @@ describe('ComparisonSection', () => {
         .getAllByRole('cell')
         .map((cell) => cell.textContent),
     ).toEqual(['None', 'An id cookie, usually kept for months']);
-    expect(screen.getAllByRole('rowheader')).toHaveLength(5);
+    expect(screen.getAllByRole('rowheader')).toHaveLength(6);
+    const agentsRow = screen.getByRole('row', { name: /Ask an AI agent about the numbers/ });
+    expect(agentsRow).toHaveTextContent('Yes: a connector for Claude, only reading');
     expect(screen.getByText(/not any one product/)).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Comparison table' })).toHaveAttribute(
       'tabindex',
@@ -78,10 +80,10 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} signUpOpen={false} />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(11);
+    expect(items).toHaveLength(12);
     expect([...items].map((item) => item.open)).toEqual([
       true,
-      ...Array.from({ length: 10 }, () => false),
+      ...Array.from({ length: 11 }, () => false),
     ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');

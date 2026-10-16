@@ -10,7 +10,7 @@ export interface ComparisonSectionProps {
 
 export const COMPARISON_ID = 'comparison';
 
-const ROWS = ['cookie', 'address', 'linking', 'thirdParties', 'source'] as const;
+const ROWS = ['cookie', 'address', 'linking', 'thirdParties', 'agents', 'source'] as const;
 const HEADER_CELL =
   'px-4 py-3 text-left text-xs font-semibold tracking-[0.06em] text-muted uppercase';
 const CELL = 'border-t border-line px-4 py-3 text-left align-top';

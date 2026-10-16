@@ -18,6 +18,7 @@ const QUESTIONS = [
   'people',
   'optOut',
   'retention',
+  'claude',
   'use',
   'price',
   'trial',
