@@ -195,6 +195,19 @@ describe('proxy', () => {
       expect(byForwardedHost.headers.get(FORWARDED_LOCALE_HEADER)).toBe('en');
     });
 
+    it('serves the home page on its own address in a preview deployment', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      vi.stubEnv('VERCEL_ENV', 'preview');
+      vi.stubEnv('VERCEL_BRANCH_URL', 'pyxis-demo-git-feat-x-team.vercel.app');
+      const response = visitAt('https://pyxis-demo-git-feat-x-team.vercel.app/pt-br', {
+        host: 'pyxis-demo-git-feat-x-team.vercel.app',
+      });
+
+      expect(response.headers.get('x-middleware-rewrite')).toBe(
+        'https://pyxis-demo-git-feat-x-team.vercel.app/landing/pt-br',
+      );
+    });
+
     it('sends any other address on the main domain to the same address in the demo', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 

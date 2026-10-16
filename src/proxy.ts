@@ -4,6 +4,7 @@ import { LOCALE_COOKIE_NAME } from '@/i18n/locales';
 import { PATH_LOCALE_HEADER } from '@/i18n/path-locale';
 import { apiBaseUrl, isDemoMode } from '@/lib/api-config';
 import { requestHostname } from '@/lib/host-name';
+import { isLandingHostname } from '@/lib/landing-host';
 import { landingIngestionUrl } from '@/lib/landing-measurement-config';
 import { legalConfig } from '@/lib/legal-config';
 import {
@@ -29,7 +30,7 @@ import {
   CONTENT_SECURITY_POLICY_HEADER,
   createNonce,
 } from '@/lib/security-headers';
-import { LANDING_HOST, LIVE_DEMO_URL } from '@/lib/site';
+import { LIVE_DEMO_URL } from '@/lib/site';
 import { THEME_COOKIE_NAME } from '@/lib/theme';
 
 export const SIGN_IN_PATH = '/sign-in';
@@ -123,7 +124,7 @@ function landingOrDemo(request: NextRequest): NextResponse {
     return NextResponse.redirect(legalUrlOf(internalLegal), PERMANENT_REDIRECT);
   }
   const hostname = requestHostname(request.headers) ?? request.nextUrl.hostname;
-  if (hostname !== LANDING_HOST) {
+  if (!isLandingHostname(hostname)) {
     return rememberLinkPreferences(request) ?? renderWith(request);
   }
   const legal = legalDocumentAt(pathname);
