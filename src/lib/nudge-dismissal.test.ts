@@ -12,21 +12,22 @@ function blockedStore(): DeviceStore {
 
 describe('nudge dismissal', () => {
   afterEach(() => {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
   });
 
-  it('remembers on this device that the nudge was dismissed, with no cookie', () => {
+  it('remembers for this visit only that the nudge was dismissed, with no cookie', () => {
     expect(bestEffortReadNudgeDismissed()).toBe(false);
 
     bestEffortRememberNudgeDismissed();
 
-    expect(window.localStorage.getItem(NUDGE_DISMISSED_KEY)).toBe('dismissed');
+    expect(window.sessionStorage.getItem(NUDGE_DISMISSED_KEY)).toBe('dismissed');
     expect(bestEffortReadNudgeDismissed()).toBe(true);
+    expect(window.localStorage.getItem(NUDGE_DISMISSED_KEY)).toBeNull();
     expect(document.cookie).toBe('');
   });
 
   it('ignores a stored value it did not write', () => {
-    window.localStorage.setItem(NUDGE_DISMISSED_KEY, 'maybe');
+    window.sessionStorage.setItem(NUDGE_DISMISSED_KEY, 'maybe');
 
     expect(bestEffortReadNudgeDismissed()).toBe(false);
   });
@@ -38,11 +39,11 @@ describe('nudge dismissal', () => {
     bestEffortRememberNudgeDismissed(blockedStore);
 
     expect(warn).toHaveBeenCalledWith(
-      'nudge: could not read its dismissal on this device',
+      'nudge: could not read its dismissal in this visit',
       expect.any(DOMException),
     );
     expect(warn).toHaveBeenCalledWith(
-      'nudge: could not remember its dismissal on this device',
+      'nudge: could not remember its dismissal in this visit',
       expect.any(DOMException),
     );
   });

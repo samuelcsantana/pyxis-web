@@ -1561,9 +1561,18 @@ export const ptBR = translation({
     },
     nudge: {
       label: 'Novidade: o Pyxis no Claude',
-      message: 'Agora o Pyxis responde no Claude. Pergunte sobre seus números.',
+      badge: 'Novo recurso',
+      title: 'Acesso via MCP disponível!',
+      tips: {
+        agents:
+          'Agora você pode conectar o Claude e outros agentes de IA aos números do Pyxis, via Model Context Protocol.',
+        ask: 'Pergunte “como foi a semana passada?” e o Claude lê seus números.',
+        connect: 'Conecta em um minuto, só lê e você revoga quando quiser.',
+        privacy: 'O Claude vê os mesmos números do seu painel, e nada pessoal.',
+      },
+      another: 'Outra dica',
       cta: 'Ver como conectar',
-      dismiss: 'Dispensar',
+      dismiss: 'Fechar',
     },
     install: {
       eyebrow: 'Instalação',
@@ -1682,8 +1691,6 @@ export const ptBR = translation({
       askMail: 'Abrir no meu programa de e-mail',
       mailSubject: 'Quero usar o Pyxis',
       trial: '14 dias grátis. O cartão só é cobrado no 15º dia, e você cancela quando quiser.',
-      availability:
-        'Por enquanto, o plano hospedado é vendido só no Brasil, em reais. Em qualquer outro lugar, você pode <link>hospedar o Pyxis</link> de graça, com a licença MIT.',
       invite:
         'Nesta fase, o acesso é por convite: você pede, recebe o link de pagamento e, depois de assinar, o acesso ao painel chega em até 2 dias úteis.',
       moreTitle: 'Precisa de mais?',

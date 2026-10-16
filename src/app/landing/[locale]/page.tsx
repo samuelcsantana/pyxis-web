@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArchitectureSection } from '@/components/landing/architecture-section';
 import { AskClaudeNudge } from '@/components/landing/ask-claude-nudge';
+import { NUDGE_TIPS } from '@/components/landing/nudge-tips';
 import { AskClaudeSection } from '@/components/landing/ask-claude-section';
 import { BuiltInPublicSection } from '@/components/landing/built-in-public-section';
 import { ComparisonSection } from '@/components/landing/comparison-section';
@@ -163,7 +164,10 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       <AskClaudeNudge
         labels={{
           label: i18n.t('landing.nudge.label'),
-          message: i18n.t('landing.nudge.message'),
+          badge: i18n.t('landing.nudge.badge'),
+          title: i18n.t('landing.nudge.title'),
+          tips: NUDGE_TIPS.map((tip) => i18n.t(`landing.nudge.tips.${tip}`)),
+          another: i18n.t('landing.nudge.another'),
           cta: i18n.t('landing.nudge.cta'),
           dismiss: i18n.t('landing.nudge.dismiss'),
         }}

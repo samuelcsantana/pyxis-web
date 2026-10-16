@@ -1,6 +1,5 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
-import { rich } from '@/i18n/rich';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
 import { CONTACT_EMAIL, LANDING_LINKS } from './landing-links';
@@ -244,19 +243,6 @@ export function PricingSection({ i18n, signUpOpen }: PricingSectionProps) {
             )}
             <p className={NOTE}>
               {t('landing.pricing.trial')} {t('signUp.oneTrial')}
-            </p>
-            <p className={NOTE}>
-              {rich(t('landing.pricing.availability'), {
-                link: (text) => (
-                  <a
-                    href={LANDING_LINKS.selfHost}
-                    className={`underline underline-offset-4 hover:text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-                    {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'self-host' })}
-                  >
-                    {text}
-                  </a>
-                ),
-              })}
             </p>
           </div>
           <p className={`max-w-2xl ${NOTE}`}>

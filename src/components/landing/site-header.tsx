@@ -4,7 +4,7 @@ import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_QUIET, LINK_SMALL } from './landing-classes';
-import { ASK_CLAUDE_ID, LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { ASK_CLAUDE_ID, LANDING_LINKS } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NEVER_STORED_ID } from './never-stored-section';
 import { PRICING_ID } from './pricing-section';
@@ -58,13 +58,6 @@ export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: Site
             {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'header' })}
           >
             {t('landing.nav.pricing')}
-          </a>
-          <a
-            href={LANDING_LINKS.api}
-            className={LINK_QUIET}
-            {...trackAttributes(LANDING_EVENTS.codeOpened, { repo: PROPER_NAMES.api })}
-          >
-            {PROPER_NAMES.gitHub}
           </a>
         </nav>
         <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
