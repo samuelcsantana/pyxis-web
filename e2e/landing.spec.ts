@@ -315,6 +315,24 @@ test('the mascot arrives on its own, tells tips, and leaves only when dismissed'
   ).toBeVisible();
 });
 
+test('keeps the address on the section being read, and clean at the top', async ({ page }) => {
+  await page.goto('/');
+
+  await page
+    .getByRole('region', { name: 'One plan, in reais, with everything the demo shows' })
+    .scrollIntoViewIfNeeded();
+  await expect(page).toHaveURL(/\/#pricing$/);
+  await page.getByRole('region', { name: 'Questions people ask' }).scrollIntoViewIfNeeded();
+  await expect(page).toHaveURL(/\/#faq$/);
+
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+  });
+  await expect(page).toHaveURL(/\/$/);
+  await page.reload();
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+});
+
 test('copies the install command', async ({ page, context, browserName }) => {
   test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
