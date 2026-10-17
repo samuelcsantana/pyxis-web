@@ -25,6 +25,7 @@ export function demoTimelineWire(projectId: string, lookup: Lookup, now: Date): 
       .map(demoVisitRecordWire)
       .toSorted(byKeys((visit) => [-new Date(visit.started_at).getTime(), visit.session_id])),
     next_before: null,
+    timezone: demoProjectOf(projectId).timezone,
   };
 }
 
@@ -38,13 +39,13 @@ export function demoTimelinePage(
   now: Date,
   before: string | null,
 ): TimelineReport {
-  const older = demoTimelineWire(projectId, lookup, now).visits.filter(
-    (visit) => before === null || visit.started_at < before,
-  );
+  const wire = demoTimelineWire(projectId, lookup, now);
+  const older = wire.visits.filter((visit) => before === null || visit.started_at < before);
   const page = older.slice(0, DEMO_PAGE_SIZE);
   const last = page.at(-1);
   return timelineResponseSchema.parse({
     visits: page,
     next_before: older.length > DEMO_PAGE_SIZE && last !== undefined ? last.started_at : null,
+    timezone: wire.timezone,
   });
 }

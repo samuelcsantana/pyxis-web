@@ -12,8 +12,9 @@ export function showcaseVisitsReport(
   cursor: string | null,
   now: Date,
 ): VisitsReport {
-  const visits = demoShowcaseVisits(demoProjectOf(projectId), now).filter(
+  const project = demoProjectOf(projectId);
+  const visits = demoShowcaseVisits(project, now).filter(
     (visit) => range.from <= visitDate(visit) && visitDate(visit) <= range.to,
   );
-  return visitsResponseSchema.parse(demoVisitsPage(visits, filters, cursor));
+  return visitsResponseSchema.parse(demoVisitsPage(visits, filters, cursor, project.timezone));
 }

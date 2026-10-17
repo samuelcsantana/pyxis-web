@@ -64,6 +64,7 @@ export const funnelSubjectsResponseSchema = z
   .object({
     subjects: z.array(z.object({ id: z.string(), last_step_at: z.iso.datetime() })),
     next_cursor: z.string().nullable(),
+    timezone: z.string(),
   })
   .transform((body) => ({
     subjects: body.subjects.map((subject) => ({

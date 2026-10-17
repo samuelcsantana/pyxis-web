@@ -5,6 +5,7 @@ export const REQUEST_KINDS = ['writes', 'reads'] as const;
 export const requestsResponseSchema = z
   .object({
     kind: z.enum(REQUEST_KINDS).optional(),
+    timezone: z.string(),
     routes: z.array(
       z.object({
         method: z.string(),

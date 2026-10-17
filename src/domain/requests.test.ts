@@ -61,6 +61,7 @@ const WIRE: RequestsWire = {
       recent_failures: [],
     },
   ],
+  timezone: 'America/Sao_Paulo',
 };
 
 const ROUTES = requestsResponseSchema.parse(WIRE).routes;

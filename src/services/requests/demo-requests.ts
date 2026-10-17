@@ -157,6 +157,7 @@ function requestsWire(
   kind: RequestKind,
   range: DateRange,
   route: DemoRouteKey | null,
+  timezone: string,
 ): RequestsWire {
   const byDate = groupedBy(calls, (call) => call.event.date);
   return {
@@ -170,6 +171,7 @@ function requestsWire(
       by_status_class: statusClasses(groupOf(byDate, date)),
     })),
     route_days: route === null ? null : routeDays(calls, range, route),
+    timezone,
   };
 }
 
@@ -180,7 +182,13 @@ export function demoRequestsWire(
   now: Date,
   route: DemoRouteKey | null,
 ): RequestsWire {
-  return requestsWire(callsOf(projectId, range, 'writes', screen, now), 'writes', range, route);
+  return requestsWire(
+    callsOf(projectId, range, 'writes', screen, now),
+    'writes',
+    range,
+    route,
+    demoProjectOf(projectId).timezone,
+  );
 }
 
 export function demoFailedReadsWire(
@@ -190,7 +198,13 @@ export function demoFailedReadsWire(
   now: Date,
   route: DemoRouteKey | null,
 ): RequestsWire {
-  return requestsWire(callsOf(projectId, range, 'reads', screen, now), 'reads', range, route);
+  return requestsWire(
+    callsOf(projectId, range, 'reads', screen, now),
+    'reads',
+    range,
+    route,
+    demoProjectOf(projectId).timezone,
+  );
 }
 
 function routeKeyOf(route: string): DemoRouteKey {
@@ -206,7 +220,13 @@ export function demoRouteRequestsWire(
   route: string,
   now: Date,
 ): RequestsWire {
-  return requestsWire(callsOf(projectId, range, kind, screen, now), kind, range, routeKeyOf(route));
+  return requestsWire(
+    callsOf(projectId, range, kind, screen, now),
+    kind,
+    range,
+    routeKeyOf(route),
+    demoProjectOf(projectId).timezone,
+  );
 }
 
 export function demoRequestsReport(

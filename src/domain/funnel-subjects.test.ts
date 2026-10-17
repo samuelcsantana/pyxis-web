@@ -192,6 +192,7 @@ describe('funnelSubjectsResponseSchema', () => {
       funnelSubjectsResponseSchema.parse({
         subjects: [{ id: 's1', last_step_at: '2026-10-04T15:20:00.000Z' }],
         next_cursor: 'c2',
+        timezone: 'America/Sao_Paulo',
       }),
     ).toEqual({
       subjects: [{ id: 's1', lastStepAt: '2026-10-04T15:20:00.000Z' }],

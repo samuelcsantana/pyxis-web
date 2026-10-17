@@ -223,5 +223,6 @@ export function demoFunnelSubjectsWire(
       ranked.length > FUNNEL_SUBJECTS_PER_PAGE
         ? cursorOf(itemAt(page, FUNNEL_SUBJECTS_PER_PAGE - 1))
         : null,
+    timezone: demoProjectOf(projectId).timezone,
   };
 }

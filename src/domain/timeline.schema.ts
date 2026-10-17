@@ -30,6 +30,7 @@ export const timelineResponseSchema = z
       }),
     ),
     next_before: z.string().nullable(),
+    timezone: z.string(),
   })
   .transform((body) => ({
     visits: body.visits.map((visit) => ({

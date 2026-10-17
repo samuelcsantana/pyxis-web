@@ -123,6 +123,7 @@ export function demoVisitsPage(
   visits: readonly DemoVisitRecord[],
   filters: VisitFilters,
   cursor: string | null,
+  timezone: string,
 ): VisitsWire {
   const matching = visits
     .filter(matcherOf(filters))
@@ -138,6 +139,7 @@ export function demoVisitsPage(
     visits: page.map(({ visit }) => demoVisitSummary(visit)),
     next_cursor: last === undefined ? null : last.cursor,
     total: matching.length,
+    timezone,
   };
 }
 
@@ -148,10 +150,12 @@ export function demoVisitsWire(
   cursor: string | null,
   now: Date,
 ): VisitsWire {
+  const project = demoProjectOf(projectId);
   return demoVisitsPage(
-    demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now)),
+    demoVisitsIn(project, demoScopeOf(range, now)),
     filters,
     cursor,
+    project.timezone,
   );
 }
 
