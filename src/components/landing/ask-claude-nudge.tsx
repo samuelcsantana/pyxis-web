@@ -10,6 +10,7 @@ import {
 import { ASK_CLAUDE_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NudgeRobot } from './nudge-robot';
+import { READING_LINE } from './section-hash-sync';
 
 export interface AskClaudeNudgeLabels {
   readonly label: string;
@@ -35,6 +36,15 @@ export const NUDGE_LEAVE_MS = 1_150;
 const PARTICLES = 8;
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 const CLOSE_ICON = 'M18 6 6 18 M6 6l12 12';
+const PERCENT = 100;
+export const READING_BAND = `0px 0px -${String(Math.round((1 - READING_LINE) * PERCENT))}% 0px`;
+
+const LEAVING_FROM: Readonly<Record<Phase, Phase>> = {
+  waiting: 'gone',
+  here: 'leaving',
+  leaving: 'leaving',
+  gone: 'gone',
+};
 
 const noSubscription = () => () => undefined;
 const hiddenOnTheServer = () => true;
@@ -62,12 +72,33 @@ export function AskClaudeNudge({
       return;
     }
     const arrival = window.setTimeout(() => {
-      setPhase('here');
+      setPhase((current) => (current === 'waiting' ? 'here' : current));
     }, arriveAfterMs);
     return () => {
       window.clearTimeout(arrival);
     };
   }, [remembered, arriveAfterMs]);
+
+  useEffect(() => {
+    const section = document.getElementById(ASK_CLAUDE_ID);
+    if (remembered || section === null || typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+    const watcher = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          watcher.disconnect();
+          bestEffortRememberNudgeDismissed(store);
+          setPhase((current) => LEAVING_FROM[current]);
+        }
+      },
+      { rootMargin: READING_BAND },
+    );
+    watcher.observe(section);
+    return () => {
+      watcher.disconnect();
+    };
+  }, [remembered, store]);
 
   useEffect(() => {
     if (phase !== 'here') {
