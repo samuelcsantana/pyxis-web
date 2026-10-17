@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_LANDING_PAGE, landingPageOfLocale } from '@/lib/landing-pages';
+import { DEFAULT_LANDING_PAGE, LANDING_PAGES, landingPageOfLocale } from '@/lib/landing-pages';
 import { LanguageLinks } from './language-links';
+import { SECTION_KEEPING_LINKS } from './section-hash-sync';
 
 describe('LanguageLinks', () => {
   it('links to each language at its own address, in its own language', () => {
@@ -14,6 +15,14 @@ describe('LanguageLinks', () => {
     expect(english).toHaveAttribute('hreflang', 'en');
     expect(portuguese).toHaveAttribute('href', '/pt-br');
     expect(portuguese).toHaveAttribute('lang', 'pt-BR');
+  });
+
+  it('marks every language link as one that carries the section being read', () => {
+    render(<LanguageLinks current={DEFAULT_LANDING_PAGE} label="Language" />);
+
+    const links = within(screen.getByRole('navigation', { name: 'Language' })).getAllByRole('link');
+    expect(links).toHaveLength(LANDING_PAGES.length);
+    expect(links.every((link) => link.matches(SECTION_KEEPING_LINKS))).toBe(true);
   });
 
   it('marks the language of the page as the current one', () => {

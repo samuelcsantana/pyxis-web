@@ -4,6 +4,7 @@ import { ArchitectureSection } from '@/components/landing/architecture-section';
 import { AskClaudeNudge } from '@/components/landing/ask-claude-nudge';
 import { NUDGE_TIPS } from '@/components/landing/nudge-tips';
 import { AskClaudeSection } from '@/components/landing/ask-claude-section';
+import { CarriedSectionScript } from '@/components/landing/carried-section-script';
 import { BuiltInPublicSection } from '@/components/landing/built-in-public-section';
 import { ComparisonSection } from '@/components/landing/comparison-section';
 import { DashboardAnswersSection } from '@/components/landing/dashboard-answers-section';
@@ -134,8 +135,10 @@ export default async function LandingHome({ params }: LandingHomeProps) {
   const { page, i18n } = landing;
   const trackingKey = landingTrackingKey();
   const signUpOpen = await bestEffortSignUpIsOpen();
+  const nonce = await requestNonce();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
+      <CarriedSectionScript nonce={nonce} />
       <SkipLink i18n={i18n} />
       <SiteHeader
         i18n={i18n}
@@ -187,7 +190,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         />
       )}
       <LandingStructuredData i18n={i18n} page={page} />
-      <LanguagePrefetch current={page} nonce={await requestNonce()} />
+      <LanguagePrefetch current={page} nonce={nonce} />
       <PreferenceCarrier locale={page.locale} />
       <LinkPreferencesReceiver />
     </div>

@@ -136,6 +136,35 @@ test('opens the other language from what the page fetched ahead of the click', a
   ).toEqual(['navigational-prefetch']);
 });
 
+test('switches language on the section being read, from what the page fetched ahead', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'speculation rules are a Chromium feature');
+  await page.goto('/');
+  await page
+    .getByRole('region', { name: 'One plan, in reais, with everything the demo shows' })
+    .scrollIntoViewIfNeeded();
+  await expect(page).toHaveURL(/\/#pricing$/);
+
+  await page
+    .getByRole('navigation', { name: 'Language' })
+    .getByRole('link', { name: 'Português (Brasil)' })
+    .click();
+
+  await expect(page).toHaveURL(/\/pt-br#pricing$/);
+  await expect(
+    page.getByRole('region', { name: 'Um plano, em reais, com tudo o que a demonstração mostra' }),
+  ).toBeInViewport();
+  expect(
+    await page.evaluate((): unknown[] =>
+      performance
+        .getEntriesByType('navigation')
+        .map((entry): unknown => Reflect.get(entry, 'deliveryType')),
+    ),
+  ).toEqual(['navigational-prefetch']);
+});
+
 test('opens an address with a section already on it, without gliding from the top', async ({
   page,
 }) => {
