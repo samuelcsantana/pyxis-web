@@ -331,10 +331,15 @@ Shipping now:
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
   models and coding agents what Pyxis is, how to install the tracker and the rules an
-  integration must follow (404 on the demo and the dashboard). Its language comes from the address, never
-  from a cookie or the browser, so crawlers and visitors read the same page; the page sets no
-  cookie (the theme choice stays in `localStorage`; the robot's dismissal and the section carried
-  to another language stay in `sessionStorage`, for the tab). Its sections: what never gets stored, what
+  integration must follow (404 on the demo and the dashboard). `/pt-br` and `/es` always open in
+  their language; `/`, which names none, opens before its first paint the language chosen before
+  in the header's language select, then the first language the browser asks for that the page
+  ships (unless the visitor came from a Pyxis page), and otherwise stays in English, so crawlers
+  read the same English page as before ([ADR 0010](docs/adr/0010-home-page-language-kept-on-the-device.md)).
+  The page sets no cookie (the language and the theme chosen stay in `localStorage`, applied by
+  an inline script before the first paint; the robot's dismissal, the section carried to another
+  language and the mark that skips the hero's entrance after a switch stay in `sessionStorage`,
+  for the tab). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
   tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
@@ -372,12 +377,13 @@ Spain's conventions (`es`).
   English. The address never changes, so links, bookmarks and the demo links work in every
   language.
 - **The menu:** each language named in itself (English, Português (Brasil), Español). On the
-  sign-in page it sits in the top bar beside the theme toggle; in the dashboard it is in the
-  account menu at the foot of the sidebar. It posts to a Server Action and the screen changes
-  language in place, keeping its address, its query and what was typed. The fill slides to the
-  chosen language on the click, before the page in that language arrives, and the content comes
-  in with the short reveal of a screen change when it does (still, when the system asks for
-  reduced motion).
+  home page, the sign-in and the sign-up pages it is a dropdown in the top bar beside the theme
+  toggle, showing the flag and the name of the language in use (the flag alone on phones); in the
+  dashboard it is in the account menu at the foot of the sidebar. On the sign-in, the sign-up and
+  the dashboard it posts to a Server Action and the screen changes language in place, keeping its
+  address, its query and what was typed. The choice shows on the click, before the page in that
+  language arrives, and the content comes in with the short reveal of a screen change when it
+  does (still, when the system asks for reduced motion).
 - **Numbers, dates and lists** go through `Intl` in the reader's language and the project's time
   zone: `2.789`, `62,3%`, `9 de set.` in Portuguese, `2789`, `62,3 %`, `9 sept` in Spanish, and
   lists joined with the language's own "and" (`a, b e c`). Plurals follow CLDR, with a zero form
@@ -719,6 +725,7 @@ docs/adr/           architecture decision records
 | [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)    | Interface languages with typed dictionaries, a cookie and Intl    |
 | [0008](docs/adr/0008-host-only-session-cookie.md)                  | Keep the session in a host-only cookie set by a Server Action     |
 | [0009](docs/adr/0009-csp-with-nonces.md)                           | A Content Security Policy with a nonce per request                |
+| [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)     | Home page language kept on the device, and the browser's at `/`   |
 
 ## Roadmap
 
