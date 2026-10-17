@@ -380,7 +380,7 @@ test('glides to a section of the page instead of jumping to it', async ({ page }
   await expect(page).toHaveURL(/#ask-claude$/);
 });
 
-test('the mascot arrives on its own, tells tips, and leaves only when dismissed', async ({
+test('the mascot arrives on its own, tells tips, and flies off once it has led there', async ({
   page,
   context,
 }) => {
@@ -393,18 +393,36 @@ test('the mascot arrives on its own, tells tips, and leaves only when dismissed'
   await expect(nudge).toContainText('Ask “how did last week go?” and Claude reads your numbers.');
   await nudge.getByRole('link', { name: 'See how to connect' }).click();
   await expect(page).toHaveURL(/#ask-claude$/);
-  await expect(nudge).toBeVisible();
-
-  await nudge.getByRole('button', { name: 'Dismiss' }).click();
   await expect(nudge).toHaveCount(0);
-  await page.reload();
+  await page.goto('/');
   await page.waitForTimeout(2_000);
   await expect(page.getByRole('complementary', { name: 'News: Pyxis in Claude' })).toHaveCount(0);
 
   const nextVisit = await context.newPage();
   await nextVisit.goto('/');
+  const nextNudge = nextVisit.getByRole('complementary', { name: 'News: Pyxis in Claude' });
+  await expect(nextNudge).toBeVisible();
+  await nextNudge.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(nextNudge).toHaveCount(0);
+  await nextVisit.reload();
+  await nextVisit.waitForTimeout(2_000);
+  await expect(nextVisit.getByRole('complementary', { name: 'News: Pyxis in Claude' })).toHaveCount(
+    0,
+  );
+});
+
+test('keeps the mascot away from a page opened on the section it leads to', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/#ask-claude');
+  await page.waitForTimeout(2_000);
+  await expect(page.getByRole('complementary', { name: 'News: Pyxis in Claude' })).toHaveCount(0);
+
+  const atTheTop = await context.newPage();
+  await atTheTop.goto('/');
   await expect(
-    nextVisit.getByRole('complementary', { name: 'News: Pyxis in Claude' }),
+    atTheTop.getByRole('complementary', { name: 'News: Pyxis in Claude' }),
   ).toBeVisible();
 });
 

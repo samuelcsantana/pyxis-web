@@ -9,6 +9,7 @@ import {
   NUDGE_ARRIVES_AFTER_MS,
   NUDGE_LEAVE_MS,
   NUDGE_TYPE_MS,
+  READING_BAND,
 } from './ask-claude-nudge';
 
 const LABELS: AskClaudeNudgeLabels = {
@@ -33,6 +34,55 @@ function memoryStore(): { readonly store: () => DeviceStore; readonly items: Map
     },
   };
   return { store: () => device, items };
+}
+
+type Watch = (entries: readonly { readonly isIntersecting: boolean }[]) => void;
+
+interface Viewport {
+  readonly reach: () => void;
+  readonly watched: () => readonly Element[];
+  readonly band: () => string | undefined;
+  readonly stopped: () => boolean;
+}
+
+function watchTheViewport(): Viewport {
+  let callback: Watch = () => undefined;
+  let rootMargin: string | undefined;
+  const watched: Element[] = [];
+  let disconnected = false;
+  vi.stubGlobal(
+    'IntersectionObserver',
+    class {
+      constructor(watch: Watch, options?: IntersectionObserverInit) {
+        callback = watch;
+        rootMargin = options?.rootMargin;
+      }
+      observe(target: Element): void {
+        watched.push(target);
+      }
+      disconnect(): void {
+        disconnected = true;
+      }
+    },
+  );
+  return {
+    reach: () => {
+      act(() => {
+        callback([{ isIntersecting: false }]);
+        callback([{ isIntersecting: true }]);
+      });
+    },
+    watched: () => watched,
+    band: () => rootMargin,
+    stopped: () => disconnected,
+  };
+}
+
+function askClaudeSection(): HTMLElement {
+  const section = document.createElement('section');
+  section.id = 'ask-claude';
+  document.body.append(section);
+  return section;
 }
 
 function wait(ms: number): void {
@@ -61,6 +111,8 @@ describe('AskClaudeNudge', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    document.getElementById('ask-claude')?.remove();
   });
 
   it('arrives on its own a moment after the page opens, with no scrolling', () => {
@@ -131,8 +183,8 @@ describe('AskClaudeNudge', () => {
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
   });
 
-  it('leads to the Ask Claude section, counting where the click came from, and stays', () => {
-    const { store, items } = memoryStore();
+  it('leads to the Ask Claude section, counting where the click came from', () => {
+    const { store } = memoryStore();
     render(<AskClaudeNudge labels={LABELS} store={store} arriveAfterMs={0} />);
     wait(0);
 
@@ -140,10 +192,85 @@ describe('AskClaudeNudge', () => {
     expect(cta).toHaveAttribute('href', '#ask-claude');
     expect(cta).toHaveAttribute('data-track', 'ask_claude_opened');
     expect(cta).toHaveAttribute('data-track-from', 'mascot');
-    fireEvent.click(cta);
+  });
 
-    expect(screen.getByRole('complementary')).toBeInTheDocument();
-    expect(items.has(NUDGE_DISMISSED_KEY)).toBe(false);
+  it('flies off once the reader reaches the Ask Claude section, and stays away for the visit', () => {
+    const viewport = watchTheViewport();
+    const section = askClaudeSection();
+    const { store, items } = memoryStore();
+    render(<AskClaudeNudge labels={LABELS} store={store} arriveAfterMs={0} />);
+    wait(0);
+
+    expect(viewport.watched()).toEqual([section]);
+    expect(viewport.band()).toBe(READING_BAND);
+    expect(READING_BAND).toBe('0px 0px -65% 0px');
+    viewport.reach();
+
+    expect(screen.getByRole('complementary')).toHaveAttribute('data-phase', 'leaving');
+    expect(items.get(NUDGE_DISMISSED_KEY)).toBe('dismissed');
+    expect(viewport.stopped()).toBe(true);
+    wait(NUDGE_LEAVE_MS);
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
+  });
+
+  it('never arrives on a page that opened on the Ask Claude section', () => {
+    const viewport = watchTheViewport();
+    askClaudeSection();
+    const { store, items } = memoryStore();
+    render(<AskClaudeNudge labels={LABELS} store={store} />);
+
+    viewport.reach();
+    wait(NUDGE_ARRIVES_AFTER_MS);
+
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
+    expect(items.get(NUDGE_DISMISSED_KEY)).toBe('dismissed');
+  });
+
+  it('never arrives there either where the browser cannot remember it', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const viewport = watchTheViewport();
+    askClaudeSection();
+    const forgetful: DeviceStore = {
+      getItem: () => null,
+      setItem: () => {
+        throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+      },
+    };
+    render(<AskClaudeNudge labels={LABELS} store={() => forgetful} />);
+
+    viewport.reach();
+    wait(NUDGE_ARRIVES_AFTER_MS);
+
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
+  });
+
+  it('waits for a dismissal where the page has no such section, or cannot tell what is on screen', () => {
+    const viewport = watchTheViewport();
+    const { store } = memoryStore();
+    const withoutSection = render(
+      <AskClaudeNudge labels={LABELS} store={store} arriveAfterMs={0} />,
+    );
+    wait(0);
+    expect(viewport.watched()).toEqual([]);
+    withoutSection.unmount();
+
+    vi.stubGlobal('IntersectionObserver', undefined);
+    askClaudeSection();
+    render(<AskClaudeNudge labels={LABELS} store={store} arriveAfterMs={0} />);
+    wait(NUDGE_LEAVE_MS);
+
+    expect(screen.getByRole('complementary')).toHaveAttribute('data-phase', 'here');
+  });
+
+  it('stops watching for the section when the page goes away', () => {
+    const viewport = watchTheViewport();
+    askClaudeSection();
+    const { store } = memoryStore();
+    const { unmount } = render(<AskClaudeNudge labels={LABELS} store={store} />);
+
+    unmount();
+
+    expect(viewport.stopped()).toBe(true);
   });
 
   it('flies off when dismissed, and stays away for the rest of the visit', () => {
