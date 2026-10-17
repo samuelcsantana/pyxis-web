@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArchitectureSection } from '@/components/landing/architecture-section';
-import { AskClaudeNudge } from '@/components/landing/ask-claude-nudge';
+import { LazyAskClaudeNudge } from '@/components/landing/lazy-ask-claude-nudge';
 import { NUDGE_TIPS } from '@/components/landing/nudge-tips';
 import { AskClaudeSection } from '@/components/landing/ask-claude-section';
 import { CarriedSectionScript } from '@/components/landing/carried-section-script';
@@ -170,7 +170,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       />
       <SectionHashSync />
       <SectionGlide />
-      <AskClaudeNudge
+      <LazyAskClaudeNudge
         labels={{
           label: i18n.t('landing.nudge.label'),
           badge: i18n.t('landing.nudge.badge'),
