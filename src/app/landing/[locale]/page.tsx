@@ -23,6 +23,7 @@ import {
 import { MeasurementNote } from '@/components/landing/measurement/measurement-note';
 import { NeverStoredSection } from '@/components/landing/never-stored-section';
 import { PricingSection } from '@/components/landing/pricing-section';
+import { SectionGlide } from '@/components/landing/section-glide';
 import { SectionHashSync } from '@/components/landing/section-hash-sync';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
@@ -165,6 +166,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         }
       />
       <SectionHashSync />
+      <SectionGlide />
       <AskClaudeNudge
         labels={{
           label: i18n.t('landing.nudge.label'),

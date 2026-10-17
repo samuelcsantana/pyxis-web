@@ -64,6 +64,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  html[data-gliding] {
+    scroll-behavior: smooth;
+  }
+
   @supports (animation-timeline: view()) {
     .landing-reveal {
       animation: landing-rise linear both;
