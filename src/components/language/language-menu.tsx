@@ -77,7 +77,7 @@ function revealContent(): void {
   content.animate(REVEAL_FRAMES, { duration: REVEAL_MS, easing: 'ease-out' });
 }
 
-function useRevealWhenTheLanguageArrives(locale: Locale): void {
+export function useRevealWhenTheLanguageArrives(locale: Locale): void {
   const shownLocale = useRef(locale);
   useEffect(() => {
     if (shownLocale.current === locale) {
