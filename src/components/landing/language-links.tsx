@@ -23,6 +23,7 @@ export function LanguageLinks({ current, label }: LanguageLinksProps) {
                 hrefLang={page.locale}
                 lang={page.locale}
                 aria-current={isCurrent ? 'page' : undefined}
+                data-keeps-section=""
                 {...trackAttributes(LANDING_EVENTS.languageSwitched, { to: page.locale })}
                 className={`isolate h-8 px-2 sm:px-2.5 ${SEGMENTED_OPTION} ${isCurrent ? 'text-card' : SEGMENTED_IDLE}`}
               >

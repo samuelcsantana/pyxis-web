@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { carriedSectionScript } from '@/lib/carried-section';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import LandingHome, { generateMetadata } from './page';
 
@@ -229,6 +230,19 @@ describe('the home page on the main domain', () => {
     expect(JSON.parse(rules?.textContent ?? '{}')).toEqual({
       prefetch: [{ urls: ['/', '/es'], eagerness: 'immediate' }],
     });
+  });
+
+  it('opens on the section carried from the other language before the page is read', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const { container } = renderWithMessages(await LandingHome(atSlug('es')));
+    const opening = container.querySelector('script:not([type])');
+
+    expect(opening).toHaveAttribute('nonce', 'dGVzdC1ub25jZQ==');
+    expect(opening?.textContent).toBe(carriedSectionScript());
+    expect(opening?.compareDocumentPosition(container.querySelector('main') ?? container)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
   });
 
   it('does not exist for a language it does not ship, or outside demo mode', async () => {
