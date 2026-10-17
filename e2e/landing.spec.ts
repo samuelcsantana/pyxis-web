@@ -446,8 +446,9 @@ test('sends any other address on the main domain to the demo', async ({ request 
 });
 
 test('gives crawlers of the main domain their own robots.txt and sitemap', async ({ request }) => {
-  const robots = await (await request.get('/robots.txt')).text();
-  const sitemap = await (await request.get('/sitemap.xml')).text();
+  const headers = { 'x-forwarded-host': 'pyxis-analytics.dev' };
+  const robots = await (await request.get('/robots.txt', { headers })).text();
+  const sitemap = await (await request.get('/sitemap.xml', { headers })).text();
 
   expect(robots).toContain(`Sitemap: ${MAIN_DOMAIN}/sitemap.xml`);
   expect(sitemap).toContain(`<loc>${MAIN_DOMAIN}/</loc>`);
