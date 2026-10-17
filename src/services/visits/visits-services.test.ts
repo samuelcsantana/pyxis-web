@@ -85,7 +85,7 @@ describe('HttpVisitsService', () => {
   });
 
   it('sends every filter, one path parameter per page, and the cursor', async () => {
-    const fetchMock = answering({ visits: [], next_cursor: null });
+    const fetchMock = answering({ visits: [], next_cursor: null, timezone: 'America/Sao_Paulo' });
 
     await service().visits(
       'p1',

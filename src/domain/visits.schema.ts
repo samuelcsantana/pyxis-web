@@ -26,6 +26,7 @@ export const visitsResponseSchema = z
     ),
     next_cursor: z.string().nullable(),
     total: z.number().optional(),
+    timezone: z.string(),
   })
   .transform((body) => ({
     visits: body.visits.map((visit) => ({

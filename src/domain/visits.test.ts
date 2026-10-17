@@ -53,6 +53,7 @@ const WIRE: VisitsWire = {
     },
   ],
   next_cursor: '2026-10-05T03:05:00.000Z~9d8e7f6a-0000-4000-8000-000000000002',
+  timezone: 'America/Sao_Paulo',
 };
 
 describe('visitsResponseSchema', () => {

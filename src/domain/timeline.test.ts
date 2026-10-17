@@ -92,6 +92,7 @@ const WIRE: TimelineWire = {
     },
   ],
   next_before: null,
+  timezone: 'America/Sao_Paulo',
 };
 
 const REPORT = timelineResponseSchema.parse(WIRE);
