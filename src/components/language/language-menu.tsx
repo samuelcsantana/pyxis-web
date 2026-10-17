@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { CONTENT_ID } from '@/components/shell/content-id';
 import {
   NAV_CONTROL,
   NAV_ITEM_CURRENT,
@@ -17,6 +15,7 @@ import { SlidingIndicator } from '@/components/ui/sliding-indicator';
 import { useChoiceAhead } from '@/components/ui/use-choice-ahead';
 import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
 import { type Locale, LOCALES, localeName } from '@/i18n/locales';
+import { useRevealWhenTheLanguageArrives } from './use-reveal-when-the-language-arrives';
 
 export type LanguageMenuSurface = 'page' | 'nav';
 export type LanguageMenuLayout = 'row' | 'column';
@@ -56,35 +55,6 @@ const SURFACES: Readonly<Record<LanguageMenuSurface, SurfaceClasses>> = {
     thumb: `rounded-control bg-nav-active ${SLIDING_INDICATOR}`,
   },
 };
-
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
-const REVEAL_MS = 180;
-const REVEAL_FRAMES: Keyframe[] = [
-  { opacity: 0, translate: '0 0.25rem' },
-  { opacity: 1, translate: '0 0' },
-];
-
-function revealContent(): void {
-  const content = document.getElementById(CONTENT_ID);
-  if (content === null || content.getAnimations().length > 0) {
-    return;
-  }
-  if (window.matchMedia(REDUCED_MOTION).matches) {
-    return;
-  }
-  content.animate(REVEAL_FRAMES, { duration: REVEAL_MS, easing: 'ease-out' });
-}
-
-export function useRevealWhenTheLanguageArrives(locale: Locale): void {
-  const shownLocale = useRef(locale);
-  useEffect(() => {
-    if (shownLocale.current === locale) {
-      return;
-    }
-    shownLocale.current = locale;
-    revealContent();
-  }, [locale]);
-}
 
 export function LanguageMenu({
   locale,

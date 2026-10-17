@@ -3,7 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { LocaleFlag } from './locale-flag';
 import { LanguageFormSelect } from './language-form-select';
-import { closeLanguageSelect, LanguageOptionLabel, LanguageSelect } from './language-select';
+import { closeLanguageSelect } from './close-language-select';
+import { LanguageOptionLabel, LanguageSelect } from './language-select';
 
 function chooser() {
   return vi.fn<(form: FormData) => Promise<void>>(() => Promise.resolve());

@@ -2,13 +2,9 @@
 
 import { useChoiceAhead } from '@/components/ui/use-choice-ahead';
 import { type Locale, LOCALES } from '@/i18n/locales';
-import { useRevealWhenTheLanguageArrives } from './language-menu';
-import {
-  closeLanguageSelect,
-  LANGUAGE_OPTION,
-  LanguageOptionLabel,
-  LanguageSelect,
-} from './language-select';
+import { closeLanguageSelect } from './close-language-select';
+import { LANGUAGE_OPTION, LanguageOptionLabel, LanguageSelect } from './language-select';
+import { useRevealWhenTheLanguageArrives } from './use-reveal-when-the-language-arrives';
 
 export interface LanguageFormSelectProps {
   readonly locale: Locale;

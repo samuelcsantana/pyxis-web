@@ -16,6 +16,7 @@ import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
 import { LandingLanguageSelect } from '@/components/landing/landing-language-select';
+import { LanguageChoiceKeeper } from '@/components/landing/language-choice-keeper';
 import { LanguagePrefetch } from '@/components/landing/language-prefetch';
 import { LandingMeasurementBoot } from '@/components/landing/measurement/landing-measurement-boot';
 import {
@@ -171,6 +172,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         }
       />
       <SectionHashSync />
+      <LanguageChoiceKeeper />
       <SectionGlide />
       <LazyAskClaudeNudge
         labels={{

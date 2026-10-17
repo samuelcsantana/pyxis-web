@@ -1,16 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { DeviceStore } from './device-theme';
 import { DEVICE_THEME_KEY } from './device-theme';
+import { bestEffortBootLanding, landingBootScript, landingBootSettings } from './landing-boot';
 import {
-  bestEffortBootLanding,
-  bestEffortMarkLanguageSwitch,
-  bestEffortRememberLanguageChoice,
   DEVICE_LOCALE_KEY,
   LANGUAGE_SWITCH_KEY,
   LANGUAGE_SWITCHED_ATTRIBUTE,
-  landingBootScript,
-  landingBootSettings,
-} from './landing-boot';
+} from './language-choice';
 
 const replace = vi.fn<(address: string) => void>();
 
@@ -28,10 +23,6 @@ function speak(...languages: string[]): void {
 
 function boot(): void {
   bestEffortBootLanding(landingBootSettings());
-}
-
-function blockedStore(): DeviceStore {
-  throw new DOMException('The operation is insecure.', 'SecurityError');
 }
 
 describe('landing boot', () => {
@@ -204,35 +195,5 @@ describe('landing boot', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
     expect(document.documentElement).toHaveAttribute(LANGUAGE_SWITCHED_ATTRIBUTE, '');
     window.history.replaceState(null, '', '/');
-  });
-});
-
-describe('the language choice', () => {
-  afterEach(() => {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-  });
-
-  it('is kept on this device only, with no cookie', () => {
-    bestEffortRememberLanguageChoice('pt-BR');
-
-    expect(window.localStorage.getItem(DEVICE_LOCALE_KEY)).toBe('pt-BR');
-    expect(document.cookie).toBe('');
-  });
-
-  it('marks the next page of this tab as reached by a switch', () => {
-    bestEffortMarkLanguageSwitch();
-
-    expect(window.sessionStorage.getItem(LANGUAGE_SWITCH_KEY)).not.toBeNull();
-    expect(window.localStorage.getItem(LANGUAGE_SWITCH_KEY)).toBeNull();
-  });
-
-  it('still lets the visitor switch when the browser blocks storage, saying why', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-
-    bestEffortRememberLanguageChoice('es', blockedStore);
-    bestEffortMarkLanguageSwitch(blockedStore);
-
-    expect(warn).toHaveBeenCalledTimes(2);
   });
 });

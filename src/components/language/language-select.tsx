@@ -1,5 +1,3 @@
-'use client';
-
 import type { ReactNode } from 'react';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
@@ -16,13 +14,6 @@ const CHEVRON = 'M6 9l6 6 6-6';
 const CHECK = 'M5 12.5l4.5 4.5L19 7.5';
 
 export const LANGUAGE_OPTION = `flex min-h-10 w-full items-center gap-2.5 rounded-control px-2.5 text-left text-sm text-ink hover:bg-soft active:bg-line aria-[current=page]:font-semibold aria-pressed:font-semibold ${FOCUS_RING} ${CONTROL_TRANSITION}`;
-
-export function closeLanguageSelect(inside: Element): void {
-  const details = inside.closest('details');
-  if (details !== null) {
-    details.open = false;
-  }
-}
 
 export interface LanguageOptionLabelProps {
   readonly locale: Locale;
