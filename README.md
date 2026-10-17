@@ -333,14 +333,18 @@ Shipping now:
   models and coding agents what Pyxis is, how to install the tracker and the rules an
   integration must follow (404 on the demo and the dashboard). Its language comes from the address, never
   from a cookie or the browser, so crawlers and visitors read the same page; the page sets no
-  cookie (the theme choice stays in `localStorage`). Its sections: what never gets stored, what
+  cookie (the theme choice stays in `localStorage`; the robot's dismissal and the section carried
+  to another language stay in `sessionStorage`, for the tab). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
   tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
   on the chosen interval while the API says sign-up is open, read on the server and cached for
-  five minutes, or how to ask for access by e-mail while it is closed), a FAQ and the introduction post. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document
-  view transition between the languages) plus a count-up of the preview figures, and none of
-  it runs under `prefers-reduced-motion`
+  five minutes, or how to ask for access by e-mail while it is closed), a FAQ and the introduction post. The address follows the section being read, and switching language opens the
+  other page on that section, still from the copy the speculation rules fetched ahead. A robot
+  points to the Claude connector section and flies off once the reader gets there or dismisses
+  it. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document view transition
+  between the languages, a glide to the section a link of the page points to) plus a count-up of
+  the preview figures, and none of it runs under `prefers-reduced-motion`
 - The home page measures itself with this project's own tracker (`pyxis-analytics` from npm),
   only when `NEXT_PUBLIC_LANDING_PYXIS_KEY` is set: clicks on elements carrying `data-track`
   become named events (`demo_opened`, `code_opened`, `docs_opened`, `post_opened`,
