@@ -14,6 +14,7 @@ import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
 import { LanguageLinks } from '@/components/landing/language-links';
+import { LanguagePrefetch } from '@/components/landing/language-prefetch';
 import { LandingMeasurementBoot } from '@/components/landing/measurement/landing-measurement-boot';
 import {
   measurementLabelsOf,
@@ -42,6 +43,7 @@ import type { Locale } from '@/i18n/locales';
 import { isDemoMode } from '@/lib/api-config';
 import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measurement-config';
 import { legalConfig } from '@/lib/legal-config';
+import { requestNonce } from '@/lib/request-nonce';
 import { bestEffortSignUpIsOpen } from '@/lib/landing-sign-up';
 import {
   LANDING_PAGES,
@@ -183,6 +185,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         />
       )}
       <LandingStructuredData i18n={i18n} page={page} />
+      <LanguagePrefetch current={page} nonce={await requestNonce()} />
       <PreferenceCarrier locale={page.locale} />
       <LinkPreferencesReceiver />
     </div>

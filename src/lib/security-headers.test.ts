@@ -4,6 +4,7 @@ import {
   buildContentSecurityPolicy,
   buildSecurityHeaders,
   createNonce,
+  nonceOf,
 } from './security-headers';
 
 const NONCE = 'dGVzdC1ub25jZS12YWx1ZQ==';
@@ -33,6 +34,21 @@ describe('createNonce', () => {
     expect(first).toMatch(BASE64_OF_16_BYTES);
     expect(second).toMatch(BASE64_OF_16_BYTES);
     expect(first).not.toBe(second);
+  });
+});
+
+describe('nonceOf', () => {
+  it('reads the nonce back from the policy the proxy wrote', () => {
+    const policy = buildContentSecurityPolicy({ isDev: false, nonce: NONCE });
+
+    expect(nonceOf(policy)).toBe(NONCE);
+  });
+
+  it.each([
+    ['no policy', null],
+    ['a policy without a nonce', "default-src 'self'"],
+  ])('returns nothing for %s', (_label, policy) => {
+    expect(nonceOf(policy)).toBeUndefined();
   });
 });
 
