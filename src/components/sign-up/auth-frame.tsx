@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import { RAISED_CARDS } from '@/components/brand/raised-cards';
-import { LanguageMenu } from '@/components/language/language-menu';
+import { LanguageFormSelect } from '@/components/language/language-form-select';
 import { SiteHeader } from '@/components/landing/site-header';
 import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { MainContent } from '@/components/shell/main-content';
@@ -26,11 +26,10 @@ export function AuthFrame({ i18n, theme, children }: AuthFrameProps) {
         i18n={i18n}
         homeHref={landingUrlOf(landingPageOfLocale(i18n.locale))}
         language={
-          <LanguageMenu
+          <LanguageFormSelect
             locale={i18n.locale}
             label={i18n.t('language.label')}
             choose={chooseLocale}
-            compactOnPhones
           />
         }
         theme={<ThemeToggle initialTheme={theme} />}

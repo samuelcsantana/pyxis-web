@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { languageTrigger } from './language-select';
 import { parseCount } from './locale-numbers';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -66,10 +67,7 @@ test.describe('a browser that asks for Brazilian Portuguese', () => {
 
     await expect(page).toHaveTitle('Entrar · Pyxis');
     await expect(page.getByRole('heading', { name: 'Entrar no Pyxis' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    await expect(languageTrigger(page, 'Idioma')).toHaveText('Idioma: Português (Brasil)');
     expect(await axeViolations(page)).toEqual([]);
     expect(await sidewaysOverflow(page)).toBe(0);
   });
@@ -152,10 +150,7 @@ test.describe('a browser that asks for Spanish', () => {
     await expect(page).toHaveTitle('Iniciar sesión · Pyxis');
     await expect(page.getByRole('heading', { name: 'Iniciar sesión en Pyxis' })).toBeVisible();
     expect((await page.getByRole('banner').boundingBox())?.height).toBeLessThan(ONE_ROW_HEADER_PX);
-    await expect(page.getByRole('button', { name: 'Español' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    await expect(languageTrigger(page, 'Idioma')).toHaveText('Idioma: Español');
     expect(await axeViolations(page)).toEqual([]);
     expect(await sidewaysOverflow(page)).toBe(0);
   });

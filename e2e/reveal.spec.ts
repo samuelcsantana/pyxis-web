@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { chooseLanguage } from './language-select';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const STILL = 'none';
@@ -27,7 +28,7 @@ test('brings the sign-in page in when its new language arrives, keeping the emai
   await page.goto('/sign-in');
   await page.getByLabel('Email').fill('owner@demo-store.example');
 
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
   await expect(page.getByRole('heading', { name: 'Entrar no Pyxis' })).toBeVisible();
   const animatedIds = await page.evaluate(
