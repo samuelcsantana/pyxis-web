@@ -4,7 +4,8 @@ const PORT = 3101;
 const BASE_URL = `http://localhost:${String(PORT)}`;
 const isCi = process.env.CI !== undefined;
 const LANDING_SPECS = /landing.*\.spec\.ts/;
-const ON_THE_MAIN_DOMAIN = { extraHTTPHeaders: { 'x-forwarded-host': 'pyxis-analytics.dev' } };
+const LANDING_HOST = '127.0.0.1';
+const ON_THE_MAIN_DOMAIN = { baseURL: `http://${LANDING_HOST}:${String(PORT)}` };
 const DESKTOP = { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } };
 const MOBILE = { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } };
 const NAVIGATOR_WEBDRIVER_OFF = '--disable-blink-features=AutomationControlled';
@@ -41,6 +42,8 @@ export default defineConfig({
       NEXT_PUBLIC_LANDING_PYXIS_KEY: 'pyxis_pk_e2e_local',
       NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT: BASE_URL,
       NEXT_TELEMETRY_DISABLED: '1',
+      VERCEL_ENV: 'preview',
+      VERCEL_BRANCH_URL: LANDING_HOST,
       SELLER_NAME: 'Ana Exemplo',
       SELLER_TAX_ID: '000.000.000-00',
       SELLER_ADDRESS: 'Rua das Flores, 10, Centro, Cidade/UF, CEP 00000-000',
