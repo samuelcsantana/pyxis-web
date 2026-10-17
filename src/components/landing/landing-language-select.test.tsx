@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import { DEVICE_LOCALE_KEY, LANGUAGE_SWITCH_KEY } from '@/lib/landing-boot';
+import { DEVICE_LOCALE_KEY, LANGUAGE_SWITCH_KEY } from '@/lib/language-choice';
 import { DEFAULT_LANDING_PAGE, LANDING_PAGES, landingPageOfLocale } from '@/lib/landing-pages';
+import { LanguageChoiceKeeper } from './language-choice-keeper';
 import { LandingLanguageSelect } from './landing-language-select';
 import { SECTION_KEEPING_LINKS } from './section-hash-sync';
 
@@ -50,7 +51,12 @@ describe('LandingLanguageSelect', () => {
   });
 
   it('remembers the language chosen and marks the switch for the next page', () => {
-    render(<LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />);
+    render(
+      <>
+        <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />
+        <LanguageChoiceKeeper />
+      </>,
+    );
 
     let followed = false;
     const stayOnThePage = (event: MouseEvent) => {
@@ -68,7 +74,12 @@ describe('LandingLanguageSelect', () => {
   });
 
   it('only closes, remembering the choice, when the language of the page is chosen again', () => {
-    render(<LandingLanguageSelect current={landingPageOfLocale('es')} label="Idioma" />);
+    render(
+      <>
+        <LandingLanguageSelect current={landingPageOfLocale('es')} label="Idioma" />
+        <LanguageChoiceKeeper />
+      </>,
+    );
     const details = document.querySelector('details');
     details?.setAttribute('open', '');
 
@@ -77,6 +88,37 @@ describe('LandingLanguageSelect', () => {
     expect(followed).toBe(false);
     expect(details).not.toHaveAttribute('open');
     expect(window.localStorage.getItem(DEVICE_LOCALE_KEY)).toBe('es');
+    expect(window.sessionStorage.getItem(LANGUAGE_SWITCH_KEY)).toBeNull();
+  });
+
+  it('keeps nothing for a click elsewhere, nor once the page has gone', () => {
+    const { unmount } = render(
+      <>
+        <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />
+        <a href="https://pyxis-analytics.dev/es" data-language-choice="fr">
+          Français
+        </a>
+        <p>Elsewhere</p>
+        <LanguageChoiceKeeper />
+      </>,
+    );
+    const stayOnThePage = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+    document.addEventListener('click', stayOnThePage);
+
+    fireEvent.click(screen.getByText('Elsewhere'));
+    document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fireEvent.click(screen.getByRole('link', { name: 'Français' }));
+    expect(window.localStorage.getItem(DEVICE_LOCALE_KEY)).toBeNull();
+
+    window.sessionStorage.clear();
+    const english = languages().getByRole('link', { name: 'English' });
+    unmount();
+    fireEvent.click(english);
+    document.removeEventListener('click', stayOnThePage);
+
+    expect(window.localStorage.getItem(DEVICE_LOCALE_KEY)).toBeNull();
     expect(window.sessionStorage.getItem(LANGUAGE_SWITCH_KEY)).toBeNull();
   });
 });
