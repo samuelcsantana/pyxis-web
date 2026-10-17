@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.26.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.25.1...v0.26.0) (2026-10-17)
+
+
+### Features
+
+* **landing:** float a nudge to the Claude connector ([b2af0a7](https://github.com/samuelcsantana/pyxis-web/commit/b2af0a745070221762296a6be76847d52f153000))
+* **landing:** give the Claude connector its own section ([6f1e77d](https://github.com/samuelcsantana/pyxis-web/commit/6f1e77d707ad329a1de7310a5125e844b6471ce7))
+* **landing:** glide to a section when a link of the page points to it ([6d27e75](https://github.com/samuelcsantana/pyxis-web/commit/6d27e756f4077c9d820ff51b653732cd5b98f85c))
+* **landing:** keep the address on the section being read ([61fcfc0](https://github.com/samuelcsantana/pyxis-web/commit/61fcfc01bf8c0d7e222fdde9bd7c827817019cc6))
+* **landing:** play the example conversation as it comes into view ([5a05c64](https://github.com/samuelcsantana/pyxis-web/commit/5a05c648eb01b0bd18d22153107450160eb453d6))
+* **landing:** send the robot off once the reader reaches its section ([c3243c0](https://github.com/samuelcsantana/pyxis-web/commit/c3243c019400c39eb60e17650ab679116ccfabd1))
+* **landing:** switch language on the section being read ([d1d8f77](https://github.com/samuelcsantana/pyxis-web/commit/d1d8f77378813f49baa097838ec218b714db9e62))
+* **landing:** turn the nudge into a robot, drop the Brazil note and GitHub link ([a7abb9d](https://github.com/samuelcsantana/pyxis-web/commit/a7abb9dbdd3b20f4205b7e93d12a98274c9099be))
+* **proxy:** serve the home page on preview deployments of the demo ([09e828e](https://github.com/samuelcsantana/pyxis-web/commit/09e828e27f1d8128709e77862f82a08431016548))
+* **sign-in:** point visitors without an account to the plans ([5da2fb6](https://github.com/samuelcsantana/pyxis-web/commit/5da2fb6a757688549e3e6c185a2ec4d5f5b776f5))
+
+
+### Bug Fixes
+
+* **contract:** carry the project time zone the API now sends with times ([fc53568](https://github.com/samuelcsantana/pyxis-web/commit/fc53568d98cf651f41250c23be0b28ee1d5c9e22))
+
+
+### Performance
+
+* **landing:** fetch the other languages before the visitor picks one ([183edf2](https://github.com/samuelcsantana/pyxis-web/commit/183edf2eb5650a58fe2cadc6a703298d0074ebd8))
+* **landing:** fetch the robot after the page, not with it ([b8f181a](https://github.com/samuelcsantana/pyxis-web/commit/b8f181a6f36ef7738b1866c9e624a931048ea293))
+
+
+### Documentation
+
+* **readme:** describe how the home page keeps and reaches its sections ([72c60fa](https://github.com/samuelcsantana/pyxis-web/commit/72c60fae89ae4656ad724014f2b616963367bf51))
+
 ## [0.25.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.25.0...v0.25.1) (2026-10-16)
 
 
