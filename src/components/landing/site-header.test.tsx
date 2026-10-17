@@ -5,7 +5,7 @@ import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { DEFAULT_LANDING_PAGE } from '@/lib/landing-pages';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
-import { LanguageLinks } from './language-links';
+import { LandingLanguageSelect } from './landing-language-select';
 import { SiteHeader } from './site-header';
 
 function homeHeader() {
@@ -13,7 +13,7 @@ function homeHeader() {
     <SiteHeader
       i18n={english}
       homeHref="/"
-      language={<LanguageLinks current={DEFAULT_LANDING_PAGE} label="Language" />}
+      language={<LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />}
       theme={<ThemeToggle remember="device" />}
       withSignIn
     />
