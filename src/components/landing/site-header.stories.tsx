@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, within } from 'storybook/test';
-import { LanguageMenu } from '@/components/language/language-menu';
+import { LanguageFormSelect } from '@/components/language/language-form-select';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { DEFAULT_LANDING_PAGE, landingPageOfLocale } from '@/lib/landing-pages';
 import { english } from '@/test-utils/english';
-import { LanguageLinks } from './language-links';
+import { LandingLanguageSelect } from './landing-language-select';
 import { SiteHeader } from './site-header';
 
 const meta = {
@@ -14,7 +14,7 @@ const meta = {
   args: {
     i18n: english,
     homeHref: '/',
-    language: <LanguageLinks current={DEFAULT_LANDING_PAGE} label="Language" />,
+    language: <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />,
     theme: <ThemeToggle remember="device" />,
     withSignIn: true,
   },
@@ -34,6 +34,7 @@ export const OnTheHomePage: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('link', { current: 'page' })).toHaveAccessibleName('English');
+    await expect(canvas.getByText('English', { selector: 'summary span' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Sign in' })).toBeVisible();
   },
 };
@@ -41,7 +42,7 @@ export const OnTheHomePage: Story = {
 export const OnTheHomePageInPortuguese: Story = {
   args: {
     homeHref: '/pt-br',
-    language: <LanguageLinks current={landingPageOfLocale('pt-BR')} label="Idioma" />,
+    language: <LandingLanguageSelect current={landingPageOfLocale('pt-BR')} label="Idioma" />,
   },
   globals: { locale: 'pt-BR' },
 };
@@ -50,12 +51,7 @@ export const OnTheSignInPage: Story = {
   args: {
     homeHref: 'https://pyxis-analytics.dev/',
     language: (
-      <LanguageMenu
-        locale="en"
-        label="Language"
-        choose={fn(() => Promise.resolve())}
-        compactOnPhones
-      />
+      <LanguageFormSelect locale="en" label="Language" choose={fn(() => Promise.resolve())} />
     ),
     theme: <ThemeToggle />,
     withSignIn: false,

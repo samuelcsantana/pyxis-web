@@ -1,18 +1,11 @@
 import type { Metadata } from 'next';
-import { BrandBackdrop } from '@/components/brand/brand-backdrop';
-import { RAISED_CARDS } from '@/components/brand/raised-cards';
 import { LANDING_LINKS } from '@/components/landing/landing-links';
 import { PRICING_ID } from '@/components/landing/pricing-section';
-import { SiteHeader } from '@/components/landing/site-header';
-import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
-import { LanguageMenu } from '@/components/language/language-menu';
-import { MainContent } from '@/components/shell/main-content';
 import { returnPathOf } from '@/components/shell/screens';
 import { NoCodeHelp } from '@/components/sign-in/no-code-help';
+import { AuthFrame } from '@/components/sign-up/auth-frame';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { TEXT_LINK } from '@/components/ui/control-classes';
-import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { rich } from '@/i18n/rich';
 import { isDemoMode } from '@/lib/api-config';
@@ -40,76 +33,56 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const demo = isDemoMode();
   const plansHref = `${landingUrlOf(landingPageOfLocale(locale))}#${PRICING_ID}`;
   return (
-    <div className="relative isolate flex min-h-dvh flex-col bg-bg text-ink">
-      <BrandBackdrop />
-      <PreferenceCarrier locale={locale} />
-      <SiteHeader
-        i18n={i18n}
-        homeHref={landingUrlOf(landingPageOfLocale(locale))}
-        language={
-          <LanguageMenu
-            locale={locale}
-            label={t('language.label')}
-            choose={chooseLocale}
-            compactOnPhones
-          />
+    <AuthFrame i18n={i18n} theme={await chosenTheme()}>
+      <SignInForm
+        sessionExpired={expired === '1'}
+        demoCode={demo ? DEMO_SIGN_IN_CODE : undefined}
+        returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
+        noAccountHelp={
+          demo ? undefined : (
+            <p className="border-t border-line pt-4 text-sm leading-5 text-muted">
+              {rich(t('signInPage.noAccount'), {
+                plans: (text) => (
+                  <a href={plansHref} className={TEXT_LINK}>
+                    {text}
+                  </a>
+                ),
+                demo: (text) => (
+                  <a href={LIVE_DEMO_URL} className={TEXT_LINK}>
+                    {text}
+                  </a>
+                ),
+              })}
+            </p>
+          )
         }
-        theme={<ThemeToggle initialTheme={await chosenTheme()} />}
-        withSignIn={false}
-      />
-      <MainContent
-        className={`flex w-full grow flex-col items-center justify-start gap-7 px-4 pt-5 pb-10 sm:justify-center sm:py-8 ${RAISED_CARDS}`}
-      >
-        <SignInForm
-          sessionExpired={expired === '1'}
-          demoCode={demo ? DEMO_SIGN_IN_CODE : undefined}
-          returnPath={returnPathOf(typeof next === 'string' ? next : undefined)}
-          noAccountHelp={
-            demo ? undefined : (
-              <p className="border-t border-line pt-4 text-sm leading-5 text-muted">
-                {rich(t('signInPage.noAccount'), {
-                  plans: (text) => (
-                    <a href={plansHref} className={TEXT_LINK}>
-                      {text}
-                    </a>
-                  ),
-                  demo: (text) => (
-                    <a href={LIVE_DEMO_URL} className={TEXT_LINK}>
-                      {text}
-                    </a>
-                  ),
-                })}
-              </p>
-            )
-          }
-          noCodeHelp={
-            demo ? undefined : (
-              <NoCodeHelp
-                message={t('signInPage.noCode')}
-                plans={{ label: t('signInPage.seePlans'), href: plansHref }}
-                trial={
-                  (await bestEffortSignUpIsOpen())
-                    ? { label: t('signInPage.startTrial'), href: LANDING_LINKS.signUp }
-                    : undefined
-                }
-              />
-            )
-          }
-        />
-        <p className="flex items-center gap-2 text-center text-caption text-muted">
-          <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
-            <path
-              d={SHIELD_ICON}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        noCodeHelp={
+          demo ? undefined : (
+            <NoCodeHelp
+              message={t('signInPage.noCode')}
+              plans={{ label: t('signInPage.seePlans'), href: plansHref }}
+              trial={
+                (await bestEffortSignUpIsOpen())
+                  ? { label: t('signInPage.startTrial'), href: LANDING_LINKS.signUp }
+                  : undefined
+              }
             />
-          </svg>
-          {t('signInPage.privacy')}
-        </p>
-      </MainContent>
-    </div>
+          )
+        }
+      />
+      <p className="flex items-center gap-2 text-center text-caption text-muted">
+        <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+          <path
+            d={SHIELD_ICON}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {t('signInPage.privacy')}
+      </p>
+    </AuthFrame>
   );
 }

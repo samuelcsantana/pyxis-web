@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { chooseLanguage } from './language-select';
 
 const STORE_OVERVIEW = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
 
@@ -21,7 +22,7 @@ test('leads back to the home page in the language chosen on the sign-in page', a
   const home = page.getByRole('banner').getByRole('link', { name: 'Pyxis' });
   await expect(home).toHaveAttribute('href', 'https://pyxis-analytics.dev/');
 
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
   await expect(home).toHaveAttribute('href', 'https://pyxis-analytics.dev/pt-br');
   await page.getByRole('button', { name: /tema|theme/i }).click();

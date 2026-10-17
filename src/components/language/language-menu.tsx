@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { CONTENT_ID } from '@/components/shell/content-id';
 import {
   NAV_CONTROL,
   NAV_ITEM_CURRENT,
@@ -16,7 +14,8 @@ import {
 import { SlidingIndicator } from '@/components/ui/sliding-indicator';
 import { useChoiceAhead } from '@/components/ui/use-choice-ahead';
 import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
-import { type Locale, LOCALES, localeCode, localeName } from '@/i18n/locales';
+import { type Locale, LOCALES, localeName } from '@/i18n/locales';
+import { useRevealWhenTheLanguageArrives } from './use-reveal-when-the-language-arrives';
 
 export type LanguageMenuSurface = 'page' | 'nav';
 export type LanguageMenuLayout = 'row' | 'column';
@@ -27,7 +26,6 @@ export interface LanguageMenuProps {
   readonly choose: (form: FormData) => Promise<void>;
   readonly surface?: LanguageMenuSurface;
   readonly layout?: LanguageMenuLayout;
-  readonly compactOnPhones?: boolean;
 }
 
 interface SurfaceClasses {
@@ -58,43 +56,12 @@ const SURFACES: Readonly<Record<LanguageMenuSurface, SurfaceClasses>> = {
   },
 };
 
-const COMPACT_OPTION = 'max-sm:px-2';
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
-const REVEAL_MS = 180;
-const REVEAL_FRAMES: Keyframe[] = [
-  { opacity: 0, translate: '0 0.25rem' },
-  { opacity: 1, translate: '0 0' },
-];
-
-function revealContent(): void {
-  const content = document.getElementById(CONTENT_ID);
-  if (content === null || content.getAnimations().length > 0) {
-    return;
-  }
-  if (window.matchMedia(REDUCED_MOTION).matches) {
-    return;
-  }
-  content.animate(REVEAL_FRAMES, { duration: REVEAL_MS, easing: 'ease-out' });
-}
-
-function useRevealWhenTheLanguageArrives(locale: Locale): void {
-  const shownLocale = useRef(locale);
-  useEffect(() => {
-    if (shownLocale.current === locale) {
-      return;
-    }
-    shownLocale.current = locale;
-    revealContent();
-  }, [locale]);
-}
-
 export function LanguageMenu({
   locale,
   label,
   choose,
   surface = 'page',
   layout = 'row',
-  compactOnPhones = false,
 }: LanguageMenuProps) {
   const classes = SURFACES[surface];
   const [shown, chooseAhead] = useChoiceAhead(locale);
@@ -122,18 +89,9 @@ export function LanguageMenu({
             onClick={() => {
               chooseAhead(each);
             }}
-            className={`${classes.option} ${compactOnPhones ? COMPACT_OPTION : ''} ${each === shown ? classes.current : classes.other}`}
+            className={`${classes.option} ${each === shown ? classes.current : classes.other}`}
           >
-            {compactOnPhones ? (
-              <>
-                <span className="sr-only sm:not-sr-only">{localeName(each)}</span>
-                <span aria-hidden="true" className="sm:hidden">
-                  {localeCode(each)}
-                </span>
-              </>
-            ) : (
-              localeName(each)
-            )}
+            {localeName(each)}
           </button>
         ))}
       </div>

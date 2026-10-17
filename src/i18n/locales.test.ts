@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_LOCALE, LOCALES, localeCode, localeName, parseLocale } from './locales';
+import { DEFAULT_LOCALE, LOCALES, localeName, parseLocale } from './locales';
 
 describe('locales', () => {
   it('ships English as the default, then Brazilian Portuguese and Spanish', () => {
@@ -15,10 +15,6 @@ describe('locales', () => {
     expect(parseLocale('pt')).toBeUndefined();
     expect(parseLocale('fr')).toBeUndefined();
     expect(parseLocale(undefined)).toBeUndefined();
-  });
-
-  it('gives each language a two-letter code for narrow screens', () => {
-    expect(LOCALES.map(localeCode)).toEqual(['EN', 'PT', 'ES']);
   });
 
   it('names each language in itself, capitalised the way the language does', () => {

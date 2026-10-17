@@ -51,7 +51,7 @@ describe('SignInPage', () => {
     expect(screen.getByRole('heading', { name: 'Sign in to Pyxis' })).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('Your session ended');
     expect(screen.getByRole('button', { name: 'Switch theme' })).toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Language' })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Language' })).toBeInTheDocument();
   });
 
   it('names Pyxis once, small, at the start of the header', async () => {

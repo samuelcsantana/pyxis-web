@@ -1,5 +1,6 @@
 import { expect, type Locator, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { chooseLanguage } from './language-select';
 
 const ONE_ROW_HEADER_PX = 72;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
@@ -85,10 +86,7 @@ test('serves each language at its own address, with the tags search engines read
     '"@type":"SoftwareApplication"',
   );
 
-  await page
-    .getByRole('navigation', { name: 'Language' })
-    .getByRole('link', { name: 'Português (Brasil)' })
-    .click();
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
   await expect(page).toHaveURL(/\/pt-br$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
@@ -100,10 +98,7 @@ test('serves each language at its own address, with the tags search engines read
     `${MAIN_DOMAIN}/pt-br`,
   );
 
-  await page
-    .getByRole('navigation', { name: 'Idioma' })
-    .getByRole('link', { name: 'Español' })
-    .click();
+  await chooseLanguage(page, 'Idioma', 'Español');
 
   await expect(page).toHaveURL(/\/es$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
@@ -121,10 +116,7 @@ test('opens the other language from what the page fetched ahead of the click', a
   test.skip(browserName !== 'chromium', 'speculation rules are a Chromium feature');
   await page.goto('/');
 
-  await page
-    .getByRole('navigation', { name: 'Language' })
-    .getByRole('link', { name: 'Português (Brasil)' })
-    .click();
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   expect(
@@ -147,10 +139,7 @@ test('switches language on the section being read, from what the page fetched ah
     .scrollIntoViewIfNeeded();
   await expect(page).toHaveURL(/\/#pricing$/);
 
-  await page
-    .getByRole('navigation', { name: 'Language' })
-    .getByRole('link', { name: 'Português (Brasil)' })
-    .click();
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
   await expect(page).toHaveURL(/\/pt-br#pricing$/);
   await expect(
@@ -163,6 +152,74 @@ test('switches language on the section being read, from what the page fetched ah
         .map((entry): unknown => Reflect.get(entry, 'deliveryType')),
     ),
   ).toEqual(['navigational-prefetch']);
+});
+
+test('opens the language chosen before when the address names none, with no cookie', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/');
+  await chooseLanguage(page, 'Language', 'Español');
+  await expect(page).toHaveURL(/\/es$/);
+
+  await page.goto('/');
+
+  await expect(page).toHaveURL(/\/es$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  expect(await context.cookies()).toEqual([]);
+
+  await chooseLanguage(page, 'Idioma', 'English');
+  await page.goto('/');
+
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+});
+
+test.describe('a browser that asks for Brazilian Portuguese', () => {
+  test.use({ locale: 'pt-BR' });
+
+  test('opens the Portuguese page from the address that names no language', async ({ page }) => {
+    await page.goto('/?utm_source=post');
+
+    await expect(page).toHaveURL(/\/pt-br\?utm_source=post$/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
+    );
+  });
+
+  test('keeps the language an address names', async ({ page }) => {
+    await page.goto('/es');
+
+    await expect(page).toHaveURL(/\/es$/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+  });
+});
+
+test('wears the theme kept on the device before any script of the page loads', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    window.localStorage.setItem('pyxis:theme', 'dark');
+  });
+  await page.route('**/_next/static/**/*.js', (route) => route.abort());
+
+  await page.goto('/pt-br');
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
+
+test('opens the other language still, without playing the entrance again', async ({ page }) => {
+  await page.goto('/');
+  const preview = page.locator('.landing-preview');
+  await expect(preview).not.toHaveCSS('animation-name', 'none');
+
+  await chooseLanguage(page, 'Language', 'Português (Brasil)');
+
+  await expect(page.locator('html')).toHaveAttribute('data-language-switched', '');
+  await expect(preview).toHaveCSS('animation-name', 'none');
+
+  await page.reload();
+
+  await expect(page.locator('html')).not.toHaveAttribute('data-language-switched');
 });
 
 test('opens an address with a section already on it, without gliding from the top', async ({
