@@ -23,6 +23,10 @@ vi.mock('@/lib/landing-sign-up', () => ({
   bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
 }));
 
+vi.mock('@/lib/request-nonce', () => ({
+  requestNonce: () => Promise.resolve('dGVzdC1ub25jZQ=='),
+}));
+
 vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('not-found');
@@ -212,6 +216,18 @@ describe('the home page on the main domain', () => {
       '@type': 'SoftwareApplication',
       name: 'Pyxis',
       url: 'https://pyxis-analytics.dev/',
+    });
+  });
+
+  it('fetches the other languages ahead of the click, under the nonce of the response', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const { container } = renderWithMessages(await LandingHome(atSlug('pt-br')));
+    const rules = container.querySelector('script[type="speculationrules"]');
+
+    expect(rules).toHaveAttribute('nonce', 'dGVzdC1ub25jZQ==');
+    expect(JSON.parse(rules?.textContent ?? '{}')).toEqual({
+      prefetch: [{ urls: ['/', '/es'], eagerness: 'immediate' }],
     });
   });
 

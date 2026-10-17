@@ -29,6 +29,12 @@ export function createNonce(): string {
   return btoa(String.fromCharCode(...bytes));
 }
 
+const NONCE_SOURCE = /'nonce-([^']+)'/;
+
+export function nonceOf(policy: string | null): string | undefined {
+  return policy === null ? undefined : NONCE_SOURCE.exec(policy)?.[1];
+}
+
 export function buildContentSecurityPolicy({ apiOrigin, isDev, nonce }: CspOptions): string {
   const self = "'self'";
   const api = apiOrigin ? ` ${apiOrigin}` : '';

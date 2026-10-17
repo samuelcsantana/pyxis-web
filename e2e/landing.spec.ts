@@ -100,6 +100,28 @@ test('serves each language at its own address, with the tags search engines read
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${MAIN_DOMAIN}/es`);
 });
 
+test('opens the other language from what the page fetched ahead of the click', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'speculation rules are a Chromium feature');
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Language' })
+    .getByRole('link', { name: 'Português (Brasil)' })
+    .click();
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
+  expect(
+    await page.evaluate((): unknown[] =>
+      performance
+        .getEntriesByType('navigation')
+        .map((entry): unknown => Reflect.get(entry, 'deliveryType')),
+    ),
+  ).toEqual(['navigational-prefetch']);
+});
+
 test('keeps the chosen theme in both languages without setting a cookie', async ({
   page,
   context,
