@@ -1,9 +1,23 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Locator, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
 const ONE_ROW_HEADER_PX = 72;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
 const DEMO_SCREEN = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
+const FRAMES_AFTER_CLICK = 5;
+const ARRIVAL_TOLERANCE_PX = 2;
+
+async function scrollAfterFollowing(link: Locator): Promise<readonly number[]> {
+  return link.evaluate(async (anchor: HTMLElement, frames: number) => {
+    anchor.click();
+    const seen: number[] = [];
+    for (let frame = 0; frame < frames; frame += 1) {
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      seen.push(window.scrollY);
+    }
+    return seen;
+  }, FRAMES_AFTER_CLICK);
+}
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`home page, ${colorScheme} theme`, () => {
@@ -120,6 +134,20 @@ test('opens the other language from what the page fetched ahead of the click', a
         .map((entry): unknown => Reflect.get(entry, 'deliveryType')),
     ),
   ).toEqual(['navigational-prefetch']);
+});
+
+test('opens an address with a section already on it, without gliding from the top', async ({
+  page,
+}) => {
+  await page.goto('/pt-br#pricing');
+
+  const { opened, settled } = await page.evaluate(() => {
+    const scrolled = window.scrollY;
+    document.getElementById('pricing')?.scrollIntoView();
+    return { opened: scrolled, settled: window.scrollY };
+  });
+  expect(opened).toBeGreaterThan(0);
+  expect(Math.abs(opened - settled)).toBeLessThanOrEqual(ARRIVAL_TOLERANCE_PX);
 });
 
 test('keeps the chosen theme in both languages without setting a cookie', async ({
@@ -309,6 +337,20 @@ test('leads from the hero to asking Claude, and copies the connector address', a
   );
 });
 
+test('glides to a section of the page instead of jumping to it', async ({ page }) => {
+  await page.goto('/');
+
+  const path = await scrollAfterFollowing(
+    page.getByRole('link', { name: /Ask Claude about your numbers/ }),
+  );
+  await page.waitForFunction(() => !document.documentElement.hasAttribute('data-gliding'));
+
+  const landed = await page.evaluate(() => window.scrollY);
+  expect(path[0]).toBeLessThan(landed);
+  expect(new Set(path).size).toBeGreaterThan(1);
+  await expect(page).toHaveURL(/#ask-claude$/);
+});
+
 test('the mascot arrives on its own, tells tips, and leaves only when dismissed', async ({
   page,
   context,
@@ -377,6 +419,19 @@ test.describe('with reduced motion', () => {
     await page.mouse.wheel(0, 2_000);
 
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+  });
+
+  test('jumps straight to a section of the page', async ({ page }) => {
+    await page.goto('/');
+
+    const path = await scrollAfterFollowing(
+      page.getByRole('link', { name: /Ask Claude about your numbers/ }),
+    );
+
+    expect(new Set(path).size).toBe(1);
+    await expect(
+      page.getByRole('region', { name: 'Ask Claude instead of digging through charts' }),
+    ).toBeInViewport();
   });
 });
 
