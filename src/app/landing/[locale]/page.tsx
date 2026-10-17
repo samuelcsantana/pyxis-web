@@ -5,6 +5,7 @@ import { LazyAskClaudeNudge } from '@/components/landing/lazy-ask-claude-nudge';
 import { NUDGE_TIPS } from '@/components/landing/nudge-tips';
 import { AskClaudeSection } from '@/components/landing/ask-claude-section';
 import { CarriedSectionScript } from '@/components/landing/carried-section-script';
+import { LandingBootScript } from '@/components/landing/landing-boot-script';
 import { BuiltInPublicSection } from '@/components/landing/built-in-public-section';
 import { ComparisonSection } from '@/components/landing/comparison-section';
 import { DashboardAnswersSection } from '@/components/landing/dashboard-answers-section';
@@ -14,7 +15,7 @@ import { InstallSection } from '@/components/landing/install-section';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHero } from '@/components/landing/landing-hero';
 import { LandingStructuredData } from '@/components/landing/landing-structured-data';
-import { LanguageLinks } from '@/components/landing/language-links';
+import { LandingLanguageSelect } from '@/components/landing/landing-language-select';
 import { LanguagePrefetch } from '@/components/landing/language-prefetch';
 import { LandingMeasurementBoot } from '@/components/landing/measurement/landing-measurement-boot';
 import {
@@ -138,12 +139,13 @@ export default async function LandingHome({ params }: LandingHomeProps) {
   const nonce = await requestNonce();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
+      <LandingBootScript nonce={nonce} />
       <CarriedSectionScript nonce={nonce} />
       <SkipLink i18n={i18n} />
       <SiteHeader
         i18n={i18n}
         homeHref={page.path}
-        language={<LanguageLinks current={page} label={i18n.t('landing.nav.language')} />}
+        language={<LandingLanguageSelect current={page} label={i18n.t('landing.nav.language')} />}
         theme={<ThemeToggle remember="device" />}
         withSignIn
       />

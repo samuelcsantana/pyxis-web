@@ -13,15 +13,6 @@
   animation-duration: 180ms;
 }
 
-.landing-language-thumb {
-  view-transition-name: landing-language-thumb;
-}
-
-::view-transition-group(landing-language-thumb) {
-  animation-duration: 220ms;
-  animation-timing-function: ease-out;
-}
-
 @keyframes landing-rise {
   from {
     opacity: 0;
@@ -76,21 +67,21 @@
     }
   }
 
-  .landing-preview {
+  html:not([data-language-switched]) .landing-preview {
     animation: landing-rise 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  .landing-preview-line {
+  html:not([data-language-switched]) .landing-preview-line {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     animation: landing-draw 1300ms 250ms ease-out forwards;
   }
 
-  .landing-preview-late {
+  html:not([data-language-switched]) .landing-preview-late {
     animation: landing-fade 500ms 1200ms ease-out both;
   }
 
-  .landing-preview-bar {
+  html:not([data-language-switched]) .landing-preview-bar {
     transform-origin: left center;
     animation: landing-grow 900ms 400ms ease-out both;
   }

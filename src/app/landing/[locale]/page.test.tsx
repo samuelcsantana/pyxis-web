@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { carriedSectionScript } from '@/lib/carried-section';
+import { landingBootScript } from '@/lib/landing-boot';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import LandingHome, { generateMetadata } from './page';
 
@@ -162,7 +163,7 @@ describe('the home page on the main domain', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
     );
-    const languages = screen.getByRole('navigation', { name: 'Idioma' });
+    const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute(
       'href',
       '/pt-br',
@@ -177,7 +178,7 @@ describe('the home page on the main domain', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Analítica de producto sin cookies, sin IP y sin datos personales.',
     );
-    const languages = screen.getByRole('navigation', { name: 'Idioma' });
+    const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute('href', '/es');
     expect(screen.getByRole('link', { name: /Leer el artículo/ })).toHaveAttribute(
       'href',
@@ -232,12 +233,14 @@ describe('the home page on the main domain', () => {
     });
   });
 
-  it('opens on the section carried from the other language before the page is read', async () => {
+  it('applies the device preferences, then opens on the carried section, before the page is read', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
     const { container } = renderWithMessages(await LandingHome(atSlug('es')));
-    const opening = container.querySelector('script:not([type])');
+    const [boot, opening] = container.querySelectorAll('script:not([type])');
 
+    expect(boot).toHaveAttribute('nonce', 'dGVzdC1ub25jZQ==');
+    expect(boot?.textContent).toBe(landingBootScript());
     expect(opening).toHaveAttribute('nonce', 'dGVzdC1ub25jZQ==');
     expect(opening?.textContent).toBe(carriedSectionScript());
     expect(opening?.compareDocumentPosition(container.querySelector('main') ?? container)).toBe(

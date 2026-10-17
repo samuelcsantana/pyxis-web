@@ -41,7 +41,12 @@ export async function generateViewport(): Promise<Viewport> {
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const locale = await currentLocale();
   return (
-    <html lang={locale} data-theme={await chosenTheme()} className={DOCUMENT_FONT_CLASSES}>
+    <html
+      lang={locale}
+      data-theme={await chosenTheme()}
+      className={DOCUMENT_FONT_CLASSES}
+      suppressHydrationWarning
+    >
       <body>
         <MessagesProvider locale={locale} messages={await clientMessages(locale)}>
           {children}
