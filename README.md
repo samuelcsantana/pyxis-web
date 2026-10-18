@@ -332,14 +332,15 @@ Shipping now:
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
   models and coding agents what Pyxis is, how to install the tracker and the rules an
   integration must follow (404 on the demo and the dashboard). `/pt-br` and `/es` always open in
-  their language; `/`, which names none, opens before its first paint the language chosen before
-  in the header's language select, then the first language the browser asks for that the page
-  ships (unless the visitor came from a Pyxis page), and otherwise stays in English, so crawlers
-  read the same English page as before ([ADR 0010](docs/adr/0010-home-page-language-kept-on-the-device.md)).
+  their language; `/`, which names none, opens before any of its content paints the language
+  chosen before in the header's language select, then the first language the browser asks for
+  that the page ships (unless the visitor came from a Pyxis page), and otherwise stays in English,
+  so crawlers read the same English page as before; the page it opens keeps the site the visitor
+  came from as the visit's source ([ADR 0010](docs/adr/0010-home-page-language-kept-on-the-device.md)).
   The page sets no cookie (the language and the theme chosen stay in `localStorage`, applied by
   an inline script before the first paint; the robot's dismissal, the section carried to another
-  language and the mark that skips the hero's entrance after a switch stay in `sessionStorage`,
-  for the tab). Its sections: what never gets stored, what
+  language, the mark that skips the hero's entrance after a switch and the referrer carried from
+  `/` to the language it opens stay in `sessionStorage`, for the tab). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
   tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`

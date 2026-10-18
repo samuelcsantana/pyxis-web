@@ -4,7 +4,8 @@ Date: 2026-10-17
 
 ## Status
 
-Accepted. Changes the home page part of ADR 0007.
+Accepted. ADR 0007 covers the dashboard's languages and is unchanged; this replaces the home page
+rule the README stated.
 
 ## Context
 
@@ -34,7 +35,7 @@ What the choice has to respect:
 
 - **The language chosen in the select is kept in `localStorage`** (`pyxis:locale`), next to the
   theme (`pyxis:theme`). No cookie.
-- **Only `/` moves, and only before the first paint.** An inline script, the first element of the
+- **Only `/` moves, and before any of its content paints.** An inline script, the first element of the
   page and under the response's nonce (ADR 0009), runs before anything is drawn. At `/` it opens:
   1. the language kept on the device, when there is one;
   2. otherwise, the first language of `navigator.languages` the home page ships, matched like
@@ -45,6 +46,15 @@ What the choice has to respect:
 
   It keeps the query and the section (`location.replace`, so the back button skips `/`).
   `/pt-br` and `/es` never move.
+
+- **The move keeps the site the visitor came from.** The page that `location.replace` opens has
+  `/` as its `document.referrer`, which the tracker drops as the site's own host, so a visitor
+  from LinkedIn or a search engine would count as direct. Before moving, the script keeps
+  `document.referrer` in `sessionStorage` (`pyxis:carried-referrer`, empty for a direct visit);
+  the page it opens takes it once and hands it to the tracker as the `referrer` option of
+  `pyxis-analytics` 0.4.0, which uses it for the visit's first page view. The campaign tags
+  already survived in the query. Carrying it is best effort: if it cannot be kept, the page still
+  moves.
 
 - **The same script applies the theme kept on the device**, so the first paint has it, and marks
   a page reached through the language select (a `sessionStorage` flag set on the click) with
@@ -60,6 +70,10 @@ What the choice has to respect:
 - `/` now means "no language stated" rather than "English". A visitor whose browser asks for
   Portuguese, following a link to `/` from another site, lands on `/pt-br`. Choosing English in
   the select keeps `en` on the device, and that visitor is never moved again.
+- The move costs one more request before the first content (the `/` document, then the page in
+  the visitor's language), during which the screen shows only the background, in the kept theme.
+  The visit is measured once, on the page it lands on, with the source and the campaign it
+  arrived with.
 - Crawlers are unaffected: they keep nothing on the device and ask for English, so they read `/`
   in English, and every page keeps its canonical address and `hreflang` alternates.
 - A browser that blocks storage gets the page the address names, in the system theme, with a
