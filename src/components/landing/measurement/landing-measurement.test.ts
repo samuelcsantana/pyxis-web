@@ -39,6 +39,24 @@ describe('createMeasurement', () => {
     expect(listener).toHaveBeenCalledOnce();
   });
 
+  it('starts with the referrer carried from the page that moved the visitor here', () => {
+    const sdk = fakeSdk();
+    const measurement = createMeasurement(sdk, () => 'https://www.linkedin.com/');
+
+    measurement.start('pyxis_pk_home', 'https://api.pyxis-analytics.dev');
+
+    expect(sdk.calls.init[0]).toMatchObject({ referrer: 'https://www.linkedin.com/' });
+  });
+
+  it("leaves the document's referrer to the tracker when nothing was carried", () => {
+    const sdk = fakeSdk();
+    const measurement = createMeasurement(sdk, () => undefined);
+
+    measurement.start('pyxis_pk_home', 'https://api.pyxis-analytics.dev');
+
+    expect(sdk.calls.init[0]).not.toHaveProperty('referrer');
+  });
+
   it('keeps every event the tracker sends, newest first', () => {
     const sdk = fakeSdk();
     const measurement = startedMeasurement(sdk);

@@ -9,6 +9,7 @@ import {
   trackingStatus,
   type TrackingStatus,
 } from 'pyxis-analytics';
+import { bestEffortTakeCarriedReferrer } from '@/lib/carried-referrer';
 
 export interface RecordedEvent {
   readonly id: string;
@@ -55,7 +56,10 @@ export function recordedEventOf(event: BatchEvent): RecordedEvent {
   };
 }
 
-export function createMeasurement(sdk: PyxisSdk): Measurement {
+export function createMeasurement(
+  sdk: PyxisSdk,
+  takeCarriedReferrer: () => string | undefined = bestEffortTakeCarriedReferrer,
+): Measurement {
   let started = false;
   let events: readonly RecordedEvent[] = [];
   let status: TrackingStatus | null = null;
@@ -80,7 +84,13 @@ export function createMeasurement(sdk: PyxisSdk): Measurement {
         return;
       }
       started = true;
-      sdk.init({ key, endpoint, debug: { onBatch: remember } });
+      const referrer = takeCarriedReferrer();
+      sdk.init({
+        key,
+        endpoint,
+        ...(referrer === undefined ? {} : { referrer }),
+        debug: { onBatch: remember },
+      });
       refreshStatus();
     },
     events: () => events,

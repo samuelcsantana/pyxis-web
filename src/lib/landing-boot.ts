@@ -1,3 +1,4 @@
+import { CARRIED_REFERRER_KEY } from './carried-referrer';
 import { DEVICE_THEME_KEY } from './device-theme';
 import {
   DEVICE_LOCALE_KEY,
@@ -14,6 +15,7 @@ export interface LandingBootSettings {
   readonly localeKey: string;
   readonly switchKey: string;
   readonly switchedAttribute: string;
+  readonly referrerKey: string;
   readonly undecidedPath: string;
   readonly pyxisHost: string;
   readonly pages: readonly { readonly locale: string; readonly path: string }[];
@@ -53,6 +55,14 @@ export function bestEffortBootLanding(settings: LandingBootSettings): void {
     if (page === undefined || page.path === settings.undecidedPath) {
       return;
     }
+    try {
+      window.sessionStorage.setItem(settings.referrerKey, document.referrer);
+    } catch (error) {
+      console.warn(
+        'landing: could not carry the referrer to the page in the other language',
+        error,
+      );
+    }
     const { search, hash } = window.location;
     window.location.replace(`${page.path}${search}${hash}`);
   } catch (error) {
@@ -67,6 +77,7 @@ export function landingBootSettings(): LandingBootSettings {
     localeKey: DEVICE_LOCALE_KEY,
     switchKey: LANGUAGE_SWITCH_KEY,
     switchedAttribute: LANGUAGE_SWITCHED_ATTRIBUTE,
+    referrerKey: CARRIED_REFERRER_KEY,
     undecidedPath: DEFAULT_LANDING_PAGE.path,
     pyxisHost: LANDING_HOST,
     pages: LANDING_PAGES.map(({ locale, path }) => ({ locale, path })),
