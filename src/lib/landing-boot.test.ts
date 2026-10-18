@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { CARRIED_REFERRER_KEY } from './carried-referrer';
 import { DEVICE_THEME_KEY } from './device-theme';
 import { bestEffortBootLanding, landingBootScript, landingBootSettings } from './landing-boot';
 import {
@@ -157,6 +158,48 @@ describe('landing boot', () => {
       boot();
 
       expect(replace).toHaveBeenCalledExactlyOnceWith('/es');
+    });
+  });
+
+  describe('the site the visitor came from', () => {
+    it('is carried to the page it opens, so the visit keeps its source', () => {
+      arriveFrom('https://www.linkedin.com/feed/');
+      speak('pt-BR');
+
+      boot();
+
+      expect(window.sessionStorage.getItem(CARRIED_REFERRER_KEY)).toBe(
+        'https://www.linkedin.com/feed/',
+      );
+    });
+
+    it('is carried as empty for a direct visit, so it stays direct', () => {
+      speak('pt-BR');
+
+      boot();
+
+      expect(window.sessionStorage.getItem(CARRIED_REFERRER_KEY)).toBe('');
+    });
+
+    it('is not carried when the page stays where it is', () => {
+      arriveFrom('https://www.linkedin.com/feed/');
+
+      boot();
+
+      expect(window.sessionStorage.getItem(CARRIED_REFERRER_KEY)).toBeNull();
+    });
+
+    it('does not keep the page from opening when it cannot be carried, saying why', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+      });
+      speak('es');
+
+      boot();
+
+      expect(replace).toHaveBeenCalledExactlyOnceWith('/es');
+      expect(warn).toHaveBeenCalledOnce();
     });
   });
 

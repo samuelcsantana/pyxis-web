@@ -187,6 +187,15 @@ test.describe('a browser that asks for Brazilian Portuguese', () => {
     );
   });
 
+  test('keeps the site the visitor came from as the source of the visit', async ({ page }) => {
+    await page.goto('/', { referer: 'https://www.linkedin.com/' });
+
+    await expect(page).toHaveURL(/\/pt-br$/);
+    await page.getByRole('button', { name: 'Ver o que foi registrado' }).click();
+    const recorded = page.getByRole('region', { name: 'O que esta página registrou' });
+    await expect(recorded).toContainText('origem: linkedin.com', { timeout: 10_000 });
+  });
+
   test('keeps the language an address names', async ({ page }) => {
     await page.goto('/es');
 
