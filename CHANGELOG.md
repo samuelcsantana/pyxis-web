@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.27.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.26.0...v0.27.0) (2026-10-18)
+
+
+### Features
+
+* **landing:** keep the visit's source when / opens another language ([3612e1d](https://github.com/samuelcsantana/pyxis-web/commit/3612e1da7784dbb6244b652e450f67e98a17bf8b))
+* **landing:** remember the language and open it before the first paint ([157d3d7](https://github.com/samuelcsantana/pyxis-web/commit/157d3d7e0fcc177be2baca84106898b1b64d83be))
+* **language:** add a language select with each language's flag ([b377ac3](https://github.com/samuelcsantana/pyxis-web/commit/b377ac3ccb568d268cfd1bb92c757f4e89f2c367))
+* **sign-in:** share one header with sign-up, with the language select ([3be4ae6](https://github.com/samuelcsantana/pyxis-web/commit/3be4ae6918ec31107c2e392dfa47e1262fbf044f))
+
+
+### Performance
+
+* **language:** draw the language select on the server ([a60d018](https://github.com/samuelcsantana/pyxis-web/commit/a60d01876f0c348691d5fe273c400ac8e306d617))
+
+
+### Documentation
+
+* **adr:** record how the move from / keeps the visit's source ([28148d8](https://github.com/samuelcsantana/pyxis-web/commit/28148d801162fd46cd16184adfe188088caa49ad))
+* record how the home page picks its language ([1d05bee](https://github.com/samuelcsantana/pyxis-web/commit/1d05bee25d3df26481c0553730ea9d1c4bc23c54))
+
 ## [0.26.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.25.1...v0.26.0) (2026-10-17)
 
 
