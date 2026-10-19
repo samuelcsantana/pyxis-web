@@ -35,9 +35,10 @@ per-person timelines of a product, measured without cookies or personal data.**
 The tour and the screenshots show invented demo data: the dashboard runs on it when no API is
 configured. The tour was recorded from the [live demo](https://demo.pyxis-analytics.dev).
 
-> **Status:** in production since 2026-10-06 at `app.pyxis-analytics.dev` for the projects'
-> admins; the same screens run on invented data in the public
-> [live demo](https://demo.pyxis-analytics.dev).
+> **Status:** in production since 2026-10-06 at `app.pyxis-analytics.dev`, open to sign-up for
+> the hosted plan since 2026-10-15, in seven languages, with the home page at
+> [pyxis-analytics.dev](https://pyxis-analytics.dev); the same screens run on invented data in the
+> public [live demo](https://demo.pyxis-analytics.dev).
 
 ## Ecosystem
 
@@ -767,6 +768,15 @@ docs/adr/           architecture decision records
 - [x] Production domain
 - [x] Live demo with invented data
 - [x] Property breakdown of each event on Features
+- [x] CSV export of what each screen shows
+- [x] Settings: weekly digest, sessions, access tokens for agents
+- [x] Home page at `pyxis-analytics.dev`, measured by its own tracker
+- [x] Sign-up for the hosted plan, Stripe Checkout and the Account and billing page
+- [x] Projects, keys and people managed by the owner of their account; exports by e-mail
+- [x] Consent page and connected apps for the Claude connector
+- [x] The interface and the home page in seven languages
+- [x] The contract in Portuguese, with courtesy translations in the other six languages
+- [x] An approximate price in the reader's currency
 
 ## Contributing and license
 
