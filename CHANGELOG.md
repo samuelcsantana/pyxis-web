@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.29.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.28.0...v0.29.0) (2026-10-19)
+
+
+### Features
+
+* **landing:** convert the plan price into the reader's currency ([2ef88f4](https://github.com/samuelcsantana/pyxis-web/commit/2ef88f45e55bddf45f15c9ac8077a8835de15c72))
+* **landing:** read the euro reference rates on the server, best effort ([9731b1c](https://github.com/samuelcsantana/pyxis-web/commit/9731b1c9847bbf1fe325be76a58dc6edec4a08ab))
+* **landing:** show the plan price in the reader's currency, approximately ([2fb353c](https://github.com/samuelcsantana/pyxis-web/commit/2fb353c3a88e5ae150f4582d5408db3e72d80998))
+
+
+### Bug Fixes
+
+* **landing:** keep the billing period switch on one row on a phone ([7988c26](https://github.com/samuelcsantana/pyxis-web/commit/7988c2605d93440d5f422f350796fd2d26eee3fd))
+
+
+### Documentation
+
+* **readme:** describe the approximate price and its exchange rates ([0efc90c](https://github.com/samuelcsantana/pyxis-web/commit/0efc90c2f504e3b6f9aca14261b374c6abf9e206))
+
 ## [0.28.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.27.0...v0.28.0) (2026-10-19)
 
 
