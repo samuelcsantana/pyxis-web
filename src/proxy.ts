@@ -8,7 +8,6 @@ import { isLandingHostname } from '@/lib/landing-host';
 import { landingIngestionUrl } from '@/lib/landing-measurement-config';
 import { legalConfig } from '@/lib/legal-config';
 import {
-  CONTRACT_LANGUAGE,
   internalLegalPathOf,
   legalDocumentAt,
   legalDocumentOfInternalPath,
@@ -133,7 +132,7 @@ function landingOrDemo(request: NextRequest): NextResponse {
     internal.search = search;
     return renderWith(
       request,
-      { [PATH_LOCALE_HEADER]: CONTRACT_LANGUAGE },
+      { [PATH_LOCALE_HEADER]: legal.locale },
       { to: internal, apiOrigin: undefined },
     );
   }

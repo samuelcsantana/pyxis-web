@@ -473,7 +473,7 @@ origin the sign-in and sign-out calls carry.
 | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                                                            | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
 | `/` and `/pt-br`, `/es`, `/de`, `/fr`, `/it`, `/nl` on `pyxis-analytics.dev`   | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and so on; asking for those directly answers 308                                                                                                                                                                |
-| `/termos`, `/privacidade` and `/acordo-de-tratamento` on `pyxis-analytics.dev` | The contract documents in Portuguese (demo mode, once the seller is configured), rewritten to `/legal/<document>`; asking for those directly answers 308                                                                                                                                     |
+| `/termos`, `/privacidade` and `/acordo-de-tratamento` on `pyxis-analytics.dev` | The contract documents in Portuguese, and `/<language>/terms`, `/privacy`, `/dpa` their courtesy translations (demo mode, once the seller is configured), rewritten to `/legal/<document>`; asking for those directly answers 308                                                            |
 | `/[projectId]/exports/[exportId]`                                              | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
 | `/sign-up`                                                                     | The sign-up (plan, e-mail, terms, code, then Checkout), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                                                                                                                    |
 | `/welcome?account=<id>`                                                        | Where Checkout returns: waits for Stripe's confirmation, then the trial's end and the first project                                                                                                                                                                                          |
@@ -540,7 +540,11 @@ batches itself).
 
 The contract of the hosted service (terms of use, privacy policy and data processing agreement,
 in Portuguese, the language of the contract) lives in `content/legal` as Markdown and is served by
-the demo's project at `/termos`, `/privacidade` and `/acordo-de-tratamento` on the main domain. The
+the demo's project at `/termos`, `/privacidade` and `/acordo-de-tratamento` on the main domain.
+Courtesy translations in the six other interface languages live in `content/legal/<language>/`
+and are served at `/<language>/terms`, `/<language>/privacy` and `/<language>/dpa` (`en`, `es`,
+`de`, `fr`, `it`, `nl`); each says the Portuguese text prevails and links it
+([ADR 0011](docs/adr/0011-courtesy-translations-of-the-contract.md)). The
 seller is configuration, not code, so this public repository never holds a person's tax id or
 address: `SELLER_NAME`, `SELLER_TAX_ID` and `SELLER_ADDRESS` (server-only, set on **both**
 projects, since the sign-up page on `app.` shows the same identification) fill the documents and
@@ -735,6 +739,7 @@ docs/adr/           architecture decision records
 | [0008](docs/adr/0008-host-only-session-cookie.md)                  | Keep the session in a host-only cookie set by a Server Action     |
 | [0009](docs/adr/0009-csp-with-nonces.md)                           | A Content Security Policy with a nonce per request                |
 | [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)     | Home page language kept on the device, and the browser's at `/`   |
+| [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)     | Courtesy translations of the contract, the Portuguese prevailing  |
 
 ## Roadmap
 

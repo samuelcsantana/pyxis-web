@@ -12,7 +12,12 @@ import { loadMessages } from '@/i18n/get-messages';
 import { createI18n, type I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { type LegalConfig, legalConfig, TERMS_VERSION } from '@/lib/legal-config';
-import { CONTRACT_LANGUAGE, type LegalDocument, legalDocumentOfSlug } from '@/lib/legal-documents';
+import {
+  type LegalDocument,
+  legalDocumentOfSlug,
+  legalUrlOf,
+  versionsOf,
+} from '@/lib/legal-documents';
 import { legalSourceOf } from '@/lib/legal-source';
 import { legalHtmlOf, legalTextOf } from '@/lib/legal-text';
 import { landingPageOfLocale } from '@/lib/landing-pages';
@@ -38,7 +43,7 @@ async function legalPageOf(params: LegalPageProps['params']): Promise<LegalPage 
   return {
     document,
     config,
-    i18n: createI18n(CONTRACT_LANGUAGE, await loadMessages(CONTRACT_LANGUAGE)),
+    i18n: createI18n(document.locale, await loadMessages(document.locale)),
   };
 }
 
@@ -48,12 +53,17 @@ export async function generateMetadata({ params }: LegalPageProps): Promise<Meta
     return {};
   }
   const { document, i18n } = page;
-  const title = i18n.t(LEGAL_DOCUMENT_TITLES[document.slug]);
+  const title = i18n.t(LEGAL_DOCUMENT_TITLES[document.kind]);
   return {
     metadataBase: new URL(LANDING_ORIGIN),
     title,
     description: i18n.t('legal.metaDescription', { document: title, version: TERMS_VERSION }),
-    alternates: { canonical: document.path },
+    alternates: {
+      canonical: document.path,
+      languages: Object.fromEntries(
+        versionsOf(document).map((version) => [version.locale, legalUrlOf(version)]),
+      ),
+    },
   };
 }
 
@@ -63,13 +73,16 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
     notFound();
   }
   const { document, config, i18n } = page;
-  const html = legalHtmlOf(legalTextOf(await legalSourceOf(document), config));
+  const html = legalHtmlOf(
+    legalTextOf(await legalSourceOf(document), config, document.locale),
+    document.locale,
+  );
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
       <SkipLink i18n={i18n} />
       <SiteHeader
         i18n={i18n}
-        homeHref={landingPageOfLocale(CONTRACT_LANGUAGE).path}
+        homeHref={landingPageOfLocale(document.locale).path}
         language={null}
         theme={<ThemeToggle remember="device" />}
         withSignIn
@@ -78,7 +91,7 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
         <LegalDocumentView i18n={i18n} current={document} html={html} />
       </MainContent>
       <LandingFooter i18n={i18n} seller={config.seller} />
-      <PreferenceCarrier locale={CONTRACT_LANGUAGE} />
+      <PreferenceCarrier locale={document.locale} />
     </div>
   );
 }

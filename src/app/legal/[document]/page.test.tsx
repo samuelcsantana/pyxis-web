@@ -27,7 +27,61 @@ describe('a contract document on the main domain', () => {
     expect(metadata.title).toBe('Política de Privacidade');
     expect(metadata.description).toBe('Política de Privacidade do Pyxis hospedado, versão 1.2.');
     expect(metadata.metadataBase?.toString()).toBe('https://pyxis-analytics.dev/');
-    expect(metadata.alternates).toEqual({ canonical: '/privacidade' });
+    expect(metadata.alternates).toEqual({
+      canonical: '/privacidade',
+      languages: {
+        'pt-BR': 'https://pyxis-analytics.dev/privacidade',
+        en: 'https://pyxis-analytics.dev/en/privacy',
+        es: 'https://pyxis-analytics.dev/es/privacy',
+        de: 'https://pyxis-analytics.dev/de/privacy',
+        fr: 'https://pyxis-analytics.dev/fr/privacy',
+        it: 'https://pyxis-analytics.dev/it/privacy',
+        nl: 'https://pyxis-analytics.dev/nl/privacy',
+      },
+    });
+  });
+
+  it('names a translation in its own language, on its own address', async () => {
+    configureSeller();
+
+    const metadata = await generateMetadata(atSlug('fr-terms'));
+
+    expect(metadata.title).toBe('Conditions d’utilisation');
+    expect(metadata.alternates?.canonical).toBe('/fr/terms');
+  });
+
+  it('shows a translation in its language, deferring to the Portuguese text', async () => {
+    configureSeller();
+    vi.stubEnv('TERMS_EFFECTIVE_DATE', '2026-10-20');
+
+    renderWithMessages(await LegalDocumentPage(atSlug('de-terms')), 'de');
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Nutzungsbedingungen von Pyxis' }),
+    ).toBeVisible();
+    expect(screen.getByText('Version 1.2, gültig ab 20. Oktober 2026.')).toBeVisible();
+    expect(screen.getAllByRole('link', { name: 'Português' })[0]).toHaveAttribute(
+      'href',
+      '/termos',
+    );
+    const documents = within(screen.getByRole('navigation', { name: 'Vertragsdokumente' }));
+    expect(documents.getByRole('link', { name: 'Datenschutzerklärung' })).toHaveAttribute(
+      'href',
+      '/de/privacy',
+    );
+    const versions = within(
+      screen.getByRole('navigation', { name: 'Dieses Dokument in anderen Sprachen' }),
+    );
+    expect(versions.getByRole('link', { name: 'Deutsch' })).toHaveAttribute('aria-current', 'page');
+    expect(versions.getByRole('link', { name: 'Português (Brasil)' })).toHaveAttribute(
+      'href',
+      '/termos',
+    );
+    expect(versions.getByRole('link', { name: 'Português (Brasil)' })).toHaveAttribute(
+      'hreflang',
+      'pt-BR',
+    );
+    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute('href', '/de');
   });
 
   it('shows the terms with the seller filled in and links to the other two documents', async () => {
@@ -64,6 +118,14 @@ describe('a contract document on the main domain', () => {
 
     expect(screen.getByRole('region', { name: 'Tabela 1' })).toHaveAttribute('tabindex', '0');
     expect(screen.getByRole('region', { name: 'Tabela 2' })).toBeInTheDocument();
+  });
+
+  it('names the tables in the language of a translation', async () => {
+    configureSeller();
+
+    renderWithMessages(await LegalDocumentPage(atSlug('nl-dpa')), 'nl');
+
+    expect(screen.getByRole('region', { name: 'Tabel 1' })).toHaveAttribute('tabindex', '0');
   });
 
   it('does not exist while the seller is missing, for an unknown document, or with an API', async () => {

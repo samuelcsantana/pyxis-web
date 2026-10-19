@@ -11,6 +11,24 @@ const DOCUMENTS = [
     path: '/acordo-de-tratamento',
     title: 'Acordo de Tratamento de Dados Pessoais do Pyxis',
   },
+  { path: '/en/terms', title: 'Pyxis Terms of Use' },
+  { path: '/en/privacy', title: 'Pyxis Privacy Policy' },
+  { path: '/en/dpa', title: 'Pyxis Personal Data Processing Agreement' },
+  { path: '/es/terms', title: 'Términos de Uso de Pyxis' },
+  { path: '/es/privacy', title: 'Política de Privacidad de Pyxis' },
+  { path: '/es/dpa', title: 'Acuerdo de Tratamiento de Datos Personales de Pyxis' },
+  { path: '/de/terms', title: 'Nutzungsbedingungen von Pyxis' },
+  { path: '/de/privacy', title: 'Datenschutzerklärung von Pyxis' },
+  { path: '/de/dpa', title: 'Auftragsverarbeitungsvertrag von Pyxis' },
+  { path: '/fr/terms', title: 'Conditions d’utilisation de Pyxis' },
+  { path: '/fr/privacy', title: 'Politique de confidentialité de Pyxis' },
+  { path: '/fr/dpa', title: 'Accord de traitement des données personnelles de Pyxis' },
+  { path: '/it/terms', title: 'Termini di utilizzo di Pyxis' },
+  { path: '/it/privacy', title: 'Informativa sulla privacy di Pyxis' },
+  { path: '/it/dpa', title: 'Accordo sul trattamento dei dati personali di Pyxis' },
+  { path: '/nl/terms', title: 'Gebruiksvoorwaarden van Pyxis' },
+  { path: '/nl/privacy', title: 'Privacybeleid van Pyxis' },
+  { path: '/nl/dpa', title: 'Verwerkersovereenkomst van Pyxis' },
 ] as const;
 
 const SELLER_LINE =
@@ -71,16 +89,39 @@ test('lets a keyboard reach a wide table and scroll it on a small screen', async
   expect(await table.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
 });
 
-test('links the contract from the home page footer, marked as Portuguese', async ({ page }) => {
+test('links the contract in the page language from the home page footer', async ({ page }) => {
   await page.goto('/');
 
   const footer = page.getByRole('contentinfo');
-  await expect(footer.getByText('In Portuguese, the language of the contract.')).toBeVisible();
+  await expect(
+    footer.getByText('Courtesy translations; the Portuguese text prevails.'),
+  ).toBeVisible();
   await expect(footer.getByText(/^Sold by Ana Exemplo · CPF 000\.000\.000-00/)).toBeVisible();
 
   await footer.getByRole('link', { name: 'Terms of Use' }).click();
 
+  await expect(page).toHaveURL(/\/en\/terms$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+});
+
+test('shows a translation in its language and leads to the Portuguese text that prevails', async ({
+  page,
+}) => {
+  await page.goto('/de/terms');
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  await expect(page).toHaveTitle('Nutzungsbedingungen · Pyxis');
+  await expect(page.getByText('Version 1.2, gültig ab 20. Oktober 2026.')).toBeVisible();
+  const versions = page.getByRole('navigation', { name: 'Dieses Dokument in anderen Sprachen' });
+  await expect(versions.getByRole('link', { name: 'Deutsch' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+
+  await page.getByRole('link', { name: 'Português', exact: true }).first().click();
+
   await expect(page).toHaveURL(/\/termos$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 });
 
 test('sends the internal address of a document to its public one', async ({ request }) => {

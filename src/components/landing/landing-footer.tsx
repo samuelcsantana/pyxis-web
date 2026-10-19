@@ -4,7 +4,7 @@ import { LEGAL_DOCUMENT_TITLES } from '@/components/legal/legal-titles';
 import { SellerLine } from '@/components/legal/seller-line';
 import type { I18n } from '@/i18n/i18n';
 import type { Seller } from '@/lib/legal-config';
-import { CONTRACT_LANGUAGE, LEGAL_DOCUMENTS } from '@/lib/legal-documents';
+import { CONTRACT_LANGUAGE, legalDocumentsIn } from '@/lib/legal-documents';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
 import { CONTACT_EMAIL, LANDING_LINKS, PROPER_NAMES } from './landing-links';
@@ -39,11 +39,11 @@ const FOUR_COLUMNS = 'md:grid-cols-[1.4fr_repeat(4,minmax(0,1fr))]';
 
 function FooterColumn({ title, links, note }: FooterColumnProps) {
   return (
-    <div>
+    <div className="hyphens-auto wrap-anywhere">
       <h2 className="mb-2.5 text-micro font-semibold tracking-[0.08em] text-muted uppercase">
         {title}
       </h2>
-      <ul className="grid gap-2 text-sm hyphens-auto wrap-anywhere">
+      <ul className="grid gap-2 text-sm">
         {links.map((link) => (
           <li key={link.href}>
             <a href={link.href} hrefLang={link.hrefLang} className={LINK_LIST} {...link.track}>
@@ -58,10 +58,10 @@ function FooterColumn({ title, links, note }: FooterColumnProps) {
 }
 
 function contractLinks(i18n: I18n): readonly FooterLink[] {
-  return LEGAL_DOCUMENTS.map((document) => ({
+  return legalDocumentsIn(i18n.locale).map((document) => ({
     href: document.path,
-    label: i18n.t(LEGAL_DOCUMENT_TITLES[document.slug]),
-    hrefLang: CONTRACT_LANGUAGE,
+    label: i18n.t(LEGAL_DOCUMENT_TITLES[document.kind]),
+    hrefLang: document.locale,
   }));
 }
 

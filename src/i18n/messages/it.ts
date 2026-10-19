@@ -1791,7 +1791,7 @@ export const it = translation({
           answer:
             'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso.',
           answerOpen:
-            'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso. I <terms>Termini di utilizzo</terms> (in portoghese) contengono i dettagli.',
+            'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
         },
         limit: {
           question: 'E se supero i 100.000 eventi?',
@@ -1843,15 +1843,16 @@ export const it = translation({
       playground: 'Playground dell’SDK',
       madeBy: 'Realizzato da Samuel Santana · Licenza MIT',
       contract: 'Contratto',
-      contractLanguage: 'In portoghese, la lingua del contratto.',
+      contractLanguage: 'Traduzioni di cortesia; prevale il testo portoghese.',
     },
   },
   legal: {
     documentsLabel: 'Documenti contrattuali',
+    versionsLabel: 'Questo documento in altre lingue',
     terms: 'Termini di utilizzo',
     privacy: 'Informativa sulla privacy',
     agreement: 'Accordo sul trattamento dei dati',
-    metaDescription: '{document} di Pyxis in hosting, versione {version}.',
+    metaDescription: '{document} del Pyxis ospitato, versione {version}.',
     seller: 'Venduto da {name} · CPF {taxId} · {address} · {email}',
   },
 });

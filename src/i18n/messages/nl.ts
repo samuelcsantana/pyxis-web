@@ -1787,9 +1787,9 @@ export const nl = translation({
         cancel: {
           question: 'Hoe zeg ik op?',
           answer:
-            'Altijd, op twee manieren: zeg op in het abonnementsportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd.',
+            'Altijd, op twee manieren: zeg op in het facturatieportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd.',
           answerOpen:
-            'Altijd, op twee manieren: zeg op in het abonnementsportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd. De details staan in de <terms>Gebruiksvoorwaarden</terms> (in het Portugees).',
+            'Altijd, op twee manieren: zeg op in het facturatieportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
         },
         limit: {
           question: 'Wat als ik over de 100.000 events ga?',
@@ -1840,11 +1840,12 @@ export const nl = translation({
       playground: 'SDK-playground',
       madeBy: 'Gemaakt door Samuel Santana · MIT-licentie',
       contract: 'Contract',
-      contractLanguage: 'In het Portugees, de taal van het contract.',
+      contractLanguage: 'Niet-bindende vertalingen; de Portugese tekst gaat voor.',
     },
   },
   legal: {
     documentsLabel: 'Contractdocumenten',
+    versionsLabel: 'Dit document in andere talen',
     terms: 'Gebruiksvoorwaarden',
     privacy: 'Privacybeleid',
     agreement: 'Verwerkersovereenkomst',

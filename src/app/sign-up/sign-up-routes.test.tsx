@@ -147,7 +147,7 @@ describe('SignUpPage', () => {
     const contract = screen.getByRole('navigation', { name: 'Contract documents' });
     expect(within(contract).getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
       'href',
-      'https://pyxis-analytics.dev/privacidade',
+      'https://pyxis-analytics.dev/en/privacy',
     );
     expect(
       screen.getByText(

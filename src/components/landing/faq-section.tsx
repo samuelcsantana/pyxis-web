@@ -1,7 +1,7 @@
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
-import { CONTRACT_LANGUAGE, legalUrlOf, TERMS_OF_USE } from '@/lib/legal-documents';
+import { legalDocumentOf, legalUrlOf } from '@/lib/legal-documents';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
@@ -28,7 +28,6 @@ const QUESTIONS = [
 ] as const;
 const ANSWERED_DIFFERENTLY_WHEN_OPEN = ['use', 'cancel'] as const;
 const FIRST_OPEN = 'cookies';
-const TERMS_URL = legalUrlOf(TERMS_OF_USE);
 
 type Question = (typeof QUESTIONS)[number];
 type AnsweredDifferentlyWhenOpen = (typeof ANSWERED_DIFFERENTLY_WHEN_OPEN)[number];
@@ -42,6 +41,7 @@ const FAQ_MOTION = 'landing-faq';
 
 export function FaqSection({ i18n, signUpOpen }: FaqSectionProps) {
   const { t } = i18n;
+  const terms = legalDocumentOf('terms', i18n.locale);
   return (
     <LandingSection id={FAQ_ID} eyebrow={t('landing.faq.eyebrow')} title={t('landing.faq.title')}>
       <div className={`grid max-w-3xl gap-2 hyphens-auto wrap-anywhere ${FAQ_MOTION}`}>
@@ -71,8 +71,8 @@ export function FaqSection({ i18n, signUpOpen }: FaqSectionProps) {
                   code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
                   terms: (text) => (
                     <a
-                      href={TERMS_URL}
-                      hrefLang={CONTRACT_LANGUAGE}
+                      href={legalUrlOf(terms)}
+                      hrefLang={terms.locale}
                       className="text-ink underline underline-offset-4"
                     >
                       {text}
