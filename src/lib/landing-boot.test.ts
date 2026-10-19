@@ -99,7 +99,7 @@ describe('landing boot', () => {
     });
 
     it('opens the language the browser asks for first, matching on the language', () => {
-      speak('fr-FR', 'es-MX', 'pt-BR');
+      speak('ja-JP', 'es-MX', 'pt-BR');
 
       boot();
 
@@ -115,7 +115,7 @@ describe('landing boot', () => {
     });
 
     it('stays in English when the browser asks only for languages it does not ship', () => {
-      speak('fr-FR', 'de');
+      speak('ja-JP', 'pl');
 
       boot();
 
@@ -123,7 +123,7 @@ describe('landing boot', () => {
     });
 
     it('ignores a kept language it does not ship, and asks the browser instead', () => {
-      window.localStorage.setItem(DEVICE_LOCALE_KEY, 'fr');
+      window.localStorage.setItem(DEVICE_LOCALE_KEY, 'ja');
       speak('es');
 
       boot();

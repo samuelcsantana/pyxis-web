@@ -50,14 +50,23 @@ describe('the home page on the main domain', () => {
       expect(metadata.metadataBase?.toString()).toBe('https://pyxis-analytics.dev/');
       expect(metadata.alternates).toEqual({
         canonical: '/',
-        languages: { en: '/', 'pt-BR': '/pt-br', es: '/es', 'x-default': '/' },
+        languages: {
+          en: '/',
+          'pt-BR': '/pt-br',
+          es: '/es',
+          de: '/de',
+          fr: '/fr',
+          it: '/it',
+          nl: '/nl',
+          'x-default': '/',
+        },
       });
       expect(metadata.openGraph).toMatchObject({
         type: 'website',
         siteName: 'Pyxis',
         url: '/',
         locale: 'en_US',
-        alternateLocale: ['pt_BR', 'es_ES'],
+        alternateLocale: ['pt_BR', 'es_ES', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL'],
       });
       expect(metadata.twitter).toMatchObject({ card: 'summary_large_image' });
     });
@@ -72,7 +81,7 @@ describe('the home page on the main domain', () => {
       expect(metadata.alternates?.canonical).toBe('/pt-br');
       expect(metadata.openGraph).toMatchObject({
         locale: 'pt_BR',
-        alternateLocale: ['en_US', 'es_ES'],
+        alternateLocale: ['en_US', 'es_ES', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL'],
       });
     });
 
@@ -86,13 +95,13 @@ describe('the home page on the main domain', () => {
       expect(metadata.alternates?.canonical).toBe('/es');
       expect(metadata.openGraph).toMatchObject({
         locale: 'es_ES',
-        alternateLocale: ['en_US', 'pt_BR'],
+        alternateLocale: ['en_US', 'pt_BR', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL'],
       });
     });
 
     it('describes nothing for a language it does not ship, or outside demo mode', async () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-      await expect(generateMetadata(atSlug('fr'))).resolves.toEqual({});
+      await expect(generateMetadata(atSlug('ja'))).resolves.toEqual({});
 
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
       await expect(generateMetadata(atSlug('en'))).resolves.toEqual({});
@@ -229,7 +238,7 @@ describe('the home page on the main domain', () => {
 
     expect(rules).toHaveAttribute('nonce', 'dGVzdC1ub25jZQ==');
     expect(JSON.parse(rules?.textContent ?? '{}')).toEqual({
-      prefetch: [{ urls: ['/', '/es'], eagerness: 'immediate' }],
+      prefetch: [{ urls: ['/', '/es', '/de', '/fr', '/it', '/nl'], eagerness: 'immediate' }],
     });
   });
 
@@ -250,7 +259,7 @@ describe('the home page on the main domain', () => {
 
   it('does not exist for a language it does not ship, or outside demo mode', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
-    await expect(LandingHome(atSlug('fr'))).rejects.toThrow('not-found');
+    await expect(LandingHome(atSlug('ja'))).rejects.toThrow('not-found');
 
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     await expect(LandingHome(atSlug('en'))).rejects.toThrow('not-found');

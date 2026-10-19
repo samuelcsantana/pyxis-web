@@ -10,18 +10,30 @@ export interface LandingPage {
 const ENGLISH: LandingPage = { locale: 'en', path: '/', slug: 'en' };
 const BRAZILIAN_PORTUGUESE: LandingPage = { locale: 'pt-BR', path: '/pt-br', slug: 'pt-br' };
 const SPANISH: LandingPage = { locale: 'es', path: '/es', slug: 'es' };
+const GERMAN: LandingPage = { locale: 'de', path: '/de', slug: 'de' };
+const FRENCH: LandingPage = { locale: 'fr', path: '/fr', slug: 'fr' };
+const ITALIAN: LandingPage = { locale: 'it', path: '/it', slug: 'it' };
+const DUTCH: LandingPage = { locale: 'nl', path: '/nl', slug: 'nl' };
 
 export const DEFAULT_LANDING_PAGE = ENGLISH;
-export const LANDING_PAGES: readonly LandingPage[] = [ENGLISH, BRAZILIAN_PORTUGUESE, SPANISH];
+export const LANDING_PAGES: readonly LandingPage[] = [
+  ENGLISH,
+  BRAZILIAN_PORTUGUESE,
+  SPANISH,
+  GERMAN,
+  FRENCH,
+  ITALIAN,
+  DUTCH,
+];
 
 const LANDING_PAGE_OF_LOCALE: Readonly<Record<Locale, LandingPage>> = {
   en: ENGLISH,
   'pt-BR': BRAZILIAN_PORTUGUESE,
   es: SPANISH,
-  de: ENGLISH,
-  fr: ENGLISH,
-  it: ENGLISH,
-  nl: ENGLISH,
+  de: GERMAN,
+  fr: FRENCH,
+  it: ITALIAN,
+  nl: DUTCH,
 };
 
 const INTERNAL_PREFIX = '/landing';
