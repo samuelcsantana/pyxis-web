@@ -90,6 +90,20 @@ export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
+export const LongestWordsOnAPhone: Story = {
+  globals: { locale: 'nl', viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const options = within(canvas.getByRole('group', { name: 'Factuurperiode' })).getAllByText(
+      /^(Maandelijks|Jaarlijks)$/,
+    );
+    const tops = new Set(options.map((option) => Math.round(option.getBoundingClientRect().top)));
+    await expect(tops.size).toBe(1);
+    await userEvent.click(canvas.getByText('2 maanden gratis'));
+    await expect(canvas.getByRole('radio', { name: /^Jaarlijks/ })).toBeChecked();
+  },
+};
+
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
 export const SignUpOpen: Story = {

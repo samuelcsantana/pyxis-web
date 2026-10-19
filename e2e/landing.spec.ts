@@ -3,6 +3,8 @@ import { axeViolations, sidewaysOverflow } from './accessibility';
 import { chooseLanguage } from './language-select';
 
 const ONE_ROW_HEADER_PX = 72;
+const NARROW_PHONE_WIDTHS = [320, 360, 390];
+const PHONE_HEIGHT = 844;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
 const DEMO_SCREEN = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
 const FRAMES_AFTER_CLICK = 5;
@@ -65,6 +67,27 @@ test('keeps the header on one row on a phone, in every language', async ({ page,
 
     const header = await page.getByRole('banner').boundingBox();
     expect(header?.height).toBeLessThan(ONE_ROW_HEADER_PX);
+  }
+});
+
+test('keeps the billing period switch on one row on a phone, in every language', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'Only a phone is narrow enough to wrap the switch.');
+  for (const width of NARROW_PHONE_WIDTHS) {
+    await page.setViewportSize({ width, height: PHONE_HEIGHT });
+    for (const path of HOME_PATHS) {
+      await page.goto(path);
+
+      const optionTops = await page
+        .locator('#pricing fieldset label')
+        .evaluateAll((options) =>
+          options.map((option) => Math.round(option.getBoundingClientRect().top)),
+        );
+      expect(new Set(optionTops).size, `${path} at ${String(width)}px`).toBe(1);
+      expect(await sidewaysOverflow(page)).toBe(0);
+    }
   }
 });
 
