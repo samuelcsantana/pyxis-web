@@ -44,7 +44,7 @@ export function FaqSection({ i18n, signUpOpen }: FaqSectionProps) {
   const { t } = i18n;
   return (
     <LandingSection id={FAQ_ID} eyebrow={t('landing.faq.eyebrow')} title={t('landing.faq.title')}>
-      <div className={`grid max-w-3xl gap-2 ${FAQ_MOTION}`}>
+      <div className={`grid max-w-3xl gap-2 hyphens-auto wrap-anywhere ${FAQ_MOTION}`}>
         {QUESTIONS.map((question) => (
           <details
             key={question}
