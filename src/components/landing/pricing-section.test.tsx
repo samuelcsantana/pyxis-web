@@ -122,6 +122,45 @@ describe('PricingSection', () => {
     ).toBeInTheDocument();
   });
 
+  describe('the price in the reader’s currency', () => {
+    const RATES = { BRL: 5.7197, USD: 1.1253 };
+
+    it('adds an approximate price in dollars under each period on the English page', () => {
+      render(<PricingSection i18n={english} signUpOpen={false} euroRates={RATES} />);
+
+      expect(
+        screen.getByText(
+          'Priced in reais: about US$8 a month. The payment page shows the exact amount in your currency.',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Priced in reais: about US$77 a year. The payment page shows the exact amount in your currency.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it('offers dollars or euros on the Spanish page', () => {
+      render(<PricingSection i18n={spanish} signUpOpen={false} euroRates={RATES} />);
+
+      expect(
+        screen.getByText(/^Precio en reales: unos 8\sUS\$ o 7\s€ al mes\./),
+      ).toBeInTheDocument();
+    });
+
+    it('adds nothing on the Portuguese page, already in reais', () => {
+      render(<PricingSection i18n={portuguese} signUpOpen={false} euroRates={RATES} />);
+
+      expect(screen.queryByText(/Preço em reais: cerca de/)).toBeNull();
+    });
+
+    it('adds nothing while the exchange rates are unknown', () => {
+      render(<PricingSection i18n={english} signUpOpen={false} />);
+
+      expect(screen.queryByText(/Priced in reais/)).toBeNull();
+    });
+  });
+
   describe('once sign-up is open', () => {
     it('starts the free trial on the plan of the chosen period instead of asking by e-mail', () => {
       render(<PricingSection i18n={english} signUpOpen />);

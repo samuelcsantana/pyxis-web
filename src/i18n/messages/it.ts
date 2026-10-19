@@ -1705,6 +1705,10 @@ export const it = translation({
       yearlyPrice: 'R$ 390',
       perYear: 'all’anno',
       yearlyNote: 'cioè R$ 32,50 al mese',
+      approximateMonthly:
+        'Prezzo in real brasiliani: circa {amount} al mese. La pagina di pagamento mostra l’importo esatto nella tua valuta.',
+      approximateYearly:
+        'Prezzo in real brasiliani: circa {amount} all’anno. La pagina di pagamento mostra l’importo esatto nella tua valuta.',
       included: {
         events: 'Fino a 100.000 eventi al mese',
         sites: 'Fino a 3 siti',

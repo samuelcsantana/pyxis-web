@@ -1665,6 +1665,10 @@ export const en = {
       yearlyPrice: 'R$ 390',
       perYear: 'a year',
       yearlyNote: 'that is R$ 32.50 a month',
+      approximateMonthly:
+        'Priced in reais: about {amount} a month. The payment page shows the exact amount in your currency.',
+      approximateYearly:
+        'Priced in reais: about {amount} a year. The payment page shows the exact amount in your currency.',
       included: {
         events: 'Up to 100,000 events a month',
         sites: 'Up to 3 sites',

@@ -1704,6 +1704,10 @@ export const nl = translation({
       yearlyPrice: 'R$ 390',
       perYear: 'per jaar',
       yearlyNote: 'dat is R$ 32,50 per maand',
+      approximateMonthly:
+        'Prijs in reais: ongeveer {amount} per maand. De betaalpagina toont het exacte bedrag in je eigen valuta.',
+      approximateYearly:
+        'Prijs in reais: ongeveer {amount} per jaar. De betaalpagina toont het exacte bedrag in je eigen valuta.',
       included: {
         events: 'Tot 100.000 events per maand',
         sites: 'Tot 3 sites',

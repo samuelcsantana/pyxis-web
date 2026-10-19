@@ -1718,6 +1718,10 @@ export const fr = translation({
       yearlyPrice: '390 R$',
       perYear: 'par an',
       yearlyNote: 'soit 32,50 R$ par mois',
+      approximateMonthly:
+        'Prix en reais : environ {amount} par mois. La page de paiement affiche le montant exact dans votre devise.',
+      approximateYearly:
+        'Prix en reais : environ {amount} par an. La page de paiement affiche le montant exact dans votre devise.',
       included: {
         events: 'Jusqu’à 100 000 événements par mois',
         sites: 'Jusqu’à 3 sites',
