@@ -47,6 +47,22 @@ describe('ShareDonut', () => {
     expect(within(table).queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
   });
 
+  it('lets the keyboard reach and scroll the table when its words make it wider than the panel', () => {
+    render(
+      <ShareDonut
+        id="browser"
+        title="Besturingssysteem"
+        rows={shareRows(BROWSERS, browserLabel, english)}
+        i18n={english}
+      />,
+    );
+
+    const region = screen.getByRole('region', { name: 'Besturingssysteem · Table' });
+    expect(region).toHaveAttribute('tabindex', '0');
+    expect(region).toHaveClass('overflow-x-auto');
+    expect(within(region).getByRole('table', { name: 'Besturingssysteem' })).toBeInTheDocument();
+  });
+
   it('links the values it is given a link for, by their visible name', () => {
     render(
       <ShareDonut

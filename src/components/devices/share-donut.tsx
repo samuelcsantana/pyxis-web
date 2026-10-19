@@ -1,6 +1,7 @@
 import { countsConversions, OTHER_VALUE, type ShareRow } from '@/domain/devices';
 import { withDonutSegments } from '@/domain/donut';
 import type { I18n } from '@/i18n/i18n';
+import { FOCUS_RING } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
@@ -96,7 +97,12 @@ export function ShareDonut({
             />
           ))}
         </svg>
-        <div className="relative -my-1 -mr-1 min-w-0 flex-1 basis-full overflow-x-auto py-1 pr-1">
+        <div
+          role="region"
+          aria-label={`${title} · ${i18n.t('chartPanel.table')}`}
+          tabIndex={0}
+          className={`relative -my-1 -mr-1 min-w-0 flex-1 basis-full overflow-x-auto py-1 pr-1 ${FOCUS_RING}`}
+        >
           <table
             aria-labelledby={headingId}
             className="w-full border-collapse text-caption tabular-nums"

@@ -361,8 +361,8 @@ for (const width of TABLET_WIDTHS) {
 
     test('give the last donut the whole row', async ({ page }) => {
       await page.goto(`/${STORE_ID}/devices`);
-      const first = page.getByRole('region', { name: 'Device type' });
-      const last = page.getByRole('region', { name: 'Operating system' });
+      const first = page.getByRole('region', { name: 'Device type', exact: true });
+      const last = page.getByRole('region', { name: 'Operating system', exact: true });
       await expect(last).toBeVisible();
 
       const [firstBox, lastBox] = await Promise.all([first.boundingBox(), last.boundingBox()]);
