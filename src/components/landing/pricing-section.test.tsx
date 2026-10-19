@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { spanish } from '@/test-utils/spanish';
-import { CONTACT_EMAIL_ID, PRICING_ID, PricingSection } from './pricing-section';
+import { CONTACT_EMAIL_ID, PRICING_ID, PricingSection, YEARLY_OPTION_ID } from './pricing-section';
 
 describe('PricingSection', () => {
   it('names the one plan with its monthly price chosen first', () => {
@@ -30,6 +30,19 @@ describe('PricingSection', () => {
 
     expect(screen.getByRole('radio', { name: /^Yearly/ })).toBeChecked();
     expect(screen.getByRole('radio', { name: /^Monthly/ })).not.toBeChecked();
+  });
+
+  it('shows the yearly saving beside the switch, and picks the yearly plan when it is clicked', async () => {
+    render(<PricingSection i18n={english} signUpOpen={false} />);
+
+    const period = screen.getByRole('group', { name: 'Billing period' });
+    const saving = screen.getByText('2 months free');
+    expect(within(period).queryByText('2 months free')).toBeNull();
+    expect(saving).toHaveAttribute('for', YEARLY_OPTION_ID);
+
+    await userEvent.click(saving);
+
+    expect(within(period).getByRole('radio', { name: /^Yearly/ })).toBeChecked();
   });
 
   it('lists what the plan includes, the trial and where it is sold', () => {

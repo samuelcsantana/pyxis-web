@@ -19,6 +19,7 @@ interface AskPanelProps {
 
 export const PRICING_ID = 'pricing';
 export const CONTACT_EMAIL_ID = 'pricing-contact-email';
+export const YEARLY_OPTION_ID = 'pricing-yearly';
 
 const INCLUDED = ['events', 'sites', 'people', 'history', 'digest', 'agents'] as const;
 const PERIOD_FIELD = 'pricing-period';
@@ -27,7 +28,7 @@ const MONTHLY = 'month';
 const CHECK_ICON = 'm5 12.5 4.5 4.5L19 7.5';
 const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';
 
-const PERIOD_OPTION = `relative flex cursor-pointer flex-wrap items-center gap-1.5 rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:bg-card has-checked:text-ink has-checked:shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
+const PERIOD_OPTION = `relative flex cursor-pointer items-center rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:bg-card has-checked:text-ink has-checked:shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
 const SHOW_WHEN_MONTHLY =
   'flex flex-col gap-1 group-has-[input[value=year]:checked]/pricing:hidden';
 const SHOW_WHEN_YEARLY = 'hidden flex-col gap-1 group-has-[input[value=year]:checked]/pricing:flex';
@@ -156,33 +157,39 @@ export function PricingSection({ i18n, signUpOpen, euroRates }: PricingSectionPr
           <div
             className={`group/pricing flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}
           >
-            <fieldset className="inline-flex max-w-full flex-wrap gap-0.5 self-start rounded-pill border border-line bg-soft p-[3px]">
-              <legend className="sr-only">{t('landing.pricing.period')}</legend>
-              <label className={PERIOD_OPTION}>
-                <input
-                  type="radio"
-                  name={PERIOD_FIELD}
-                  value={MONTHLY}
-                  defaultChecked
-                  aria-label={t('landing.pricing.monthlyLabel')}
-                  className="sr-only"
-                />
-                {t('landing.pricing.monthly')}
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
+              <fieldset className="inline-flex max-w-full flex-wrap gap-0.5 rounded-pill border border-line bg-soft p-[3px]">
+                <legend className="sr-only">{t('landing.pricing.period')}</legend>
+                <label className={PERIOD_OPTION}>
+                  <input
+                    type="radio"
+                    name={PERIOD_FIELD}
+                    value={MONTHLY}
+                    defaultChecked
+                    aria-label={t('landing.pricing.monthlyLabel')}
+                    className="sr-only"
+                  />
+                  {t('landing.pricing.monthly')}
+                </label>
+                <label className={PERIOD_OPTION}>
+                  <input
+                    id={YEARLY_OPTION_ID}
+                    type="radio"
+                    name={PERIOD_FIELD}
+                    value={YEARLY}
+                    aria-label={t('landing.pricing.yearlyLabel')}
+                    className="sr-only"
+                  />
+                  {t('landing.pricing.yearly')}
+                </label>
+              </fieldset>
+              <label
+                htmlFor={YEARLY_OPTION_ID}
+                className="cursor-pointer rounded-pill bg-accent px-2 py-0.5 font-mono text-caption font-medium text-accent-ink"
+              >
+                {t('landing.pricing.saving')}
               </label>
-              <label className={PERIOD_OPTION}>
-                <input
-                  type="radio"
-                  name={PERIOD_FIELD}
-                  value={YEARLY}
-                  aria-label={t('landing.pricing.yearlyLabel')}
-                  className="sr-only"
-                />
-                {t('landing.pricing.yearly')}
-                <span className="rounded-pill bg-accent px-2 py-0.5 font-mono text-caption font-medium text-accent-ink">
-                  {t('landing.pricing.saving')}
-                </span>
-              </label>
-            </fieldset>
+            </div>
             <Price
               amount={t('landing.pricing.monthlyPrice')}
               period={t('landing.pricing.perMonth')}
