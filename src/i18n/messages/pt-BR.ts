@@ -1679,6 +1679,10 @@ export const ptBR = translation({
       yearlyPrice: 'R$ 390',
       perYear: 'por ano',
       yearlyNote: 'equivale a R$ 32,50 por mês',
+      approximateMonthly:
+        'Preço em reais: cerca de {amount} por mês. A página de pagamento mostra o valor exato na sua moeda.',
+      approximateYearly:
+        'Preço em reais: cerca de {amount} por ano. A página de pagamento mostra o valor exato na sua moeda.',
       included: {
         events: 'Até 100 mil eventos por mês',
         sites: 'Até 3 sites',

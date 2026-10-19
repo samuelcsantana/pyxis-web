@@ -1722,6 +1722,10 @@ export const de = translation({
       yearlyPrice: 'R$ 390',
       perYear: 'pro Jahr',
       yearlyNote: 'das sind R$ 32,50 pro Monat',
+      approximateMonthly:
+        'Preis in Real: etwa {amount} pro Monat. Die Zahlungsseite zeigt den genauen Betrag in deiner Währung.',
+      approximateYearly:
+        'Preis in Real: etwa {amount} pro Jahr. Die Zahlungsseite zeigt den genauen Betrag in deiner Währung.',
       included: {
         events: 'Bis zu 100.000 Ereignisse pro Monat',
         sites: 'Bis zu 3 Websites',

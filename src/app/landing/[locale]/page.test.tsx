@@ -25,6 +25,14 @@ vi.mock('@/lib/landing-sign-up', () => ({
   bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
 }));
 
+const exchange = vi.hoisted(() => ({
+  rates: undefined as { readonly BRL: number; readonly USD: number } | undefined,
+}));
+
+vi.mock('@/lib/landing-exchange-rates', () => ({
+  bestEffortEuroRates: () => Promise.resolve(exchange.rates),
+}));
+
 vi.mock('@/lib/request-nonce', () => ({
   requestNonce: () => Promise.resolve('dGVzdC1ub25jZQ=='),
 }));
@@ -162,6 +170,25 @@ describe('the home page on the main domain', () => {
     expect(screen.getAllByRole('link', { name: 'Start your free trial' })).toHaveLength(2);
     expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
     signUp.open = false;
+  });
+
+  it('shows the price in reais alone while the exchange rates are unknown', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await LandingHome(atSlug('de')), 'de');
+
+    expect(screen.queryByText(/Preis in Real/)).not.toBeInTheDocument();
+  });
+
+  it('adds the price in euros on the German page once the exchange rates are known', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    exchange.rates = { BRL: 5.7197, USD: 1.1253 };
+
+    renderWithMessages(await LandingHome(atSlug('de')), 'de');
+
+    expect(screen.getByText(/^Preis in Real: etwa 7\s€ pro Monat\./)).toBeInTheDocument();
+    expect(screen.getByText(/^Preis in Real: etwa 68\s€ pro Jahr\./)).toBeInTheDocument();
+    exchange.rates = undefined;
   });
 
   it('serves the Brazilian Portuguese page, marking it as the current language', async () => {

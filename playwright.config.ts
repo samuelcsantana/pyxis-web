@@ -41,6 +41,7 @@ export default defineConfig({
       NEXT_PUBLIC_PYXIS_API_URL: '',
       NEXT_PUBLIC_LANDING_PYXIS_KEY: 'pyxis_pk_e2e_local',
       NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT: BASE_URL,
+      EXCHANGE_RATES_URL: `${BASE_URL}/no-exchange-rates`,
       NEXT_TELEMETRY_DISABLED: '1',
       VERCEL_ENV: 'preview',
       VERCEL_BRANCH_URL: LANDING_HOST,

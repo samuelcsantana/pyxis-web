@@ -1,4 +1,5 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
+import { approximatePricesOf, type EuroRates } from '@/domain/approximate-price';
 import type { I18n } from '@/i18n/i18n';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
@@ -9,6 +10,7 @@ import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 export interface PricingSectionProps {
   readonly i18n: I18n;
   readonly signUpOpen: boolean;
+  readonly euroRates?: EuroRates | undefined;
 }
 
 interface AskPanelProps {
@@ -46,10 +48,11 @@ interface PriceProps {
   readonly amount: string;
   readonly period: string;
   readonly note: string;
+  readonly approximation: string | undefined;
   readonly className: string;
 }
 
-function Price({ amount, period, note, className }: PriceProps) {
+function Price({ amount, period, note, approximation, className }: PriceProps) {
   return (
     <div className={className}>
       <p className="flex flex-wrap items-baseline gap-2.5">
@@ -57,6 +60,7 @@ function Price({ amount, period, note, className }: PriceProps) {
         <span className="text-base text-muted">{period}</span>
       </p>
       <p className={NOTE}>{note}</p>
+      {approximation === undefined ? null : <p className={NOTE}>{approximation}</p>}
     </div>
   );
 }
@@ -136,8 +140,10 @@ function StartButtons({ i18n }: AskPanelProps) {
   );
 }
 
-export function PricingSection({ i18n, signUpOpen }: PricingSectionProps) {
+export function PricingSection({ i18n, signUpOpen, euroRates }: PricingSectionProps) {
   const { t } = i18n;
+  const approximate =
+    euroRates === undefined ? undefined : approximatePricesOf(i18n.locale, euroRates);
   return (
     <LandingSection
       id={PRICING_ID}
@@ -181,12 +187,22 @@ export function PricingSection({ i18n, signUpOpen }: PricingSectionProps) {
               amount={t('landing.pricing.monthlyPrice')}
               period={t('landing.pricing.perMonth')}
               note={t('landing.pricing.monthlyNote')}
+              approximation={
+                approximate === undefined
+                  ? undefined
+                  : t('landing.pricing.approximateMonthly', { amount: approximate.month })
+              }
               className={SHOW_WHEN_MONTHLY}
             />
             <Price
               amount={t('landing.pricing.yearlyPrice')}
               period={t('landing.pricing.perYear')}
               note={t('landing.pricing.yearlyNote')}
+              approximation={
+                approximate === undefined
+                  ? undefined
+                  : t('landing.pricing.approximateYearly', { amount: approximate.year })
+              }
               className={SHOW_WHEN_YEARLY}
             />
             <ul className="grid gap-2.5 text-base">

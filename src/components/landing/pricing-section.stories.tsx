@@ -44,6 +44,48 @@ export const AccessRequested: Story = {
   },
 };
 
+const EURO_RATES = { BRL: 5.7197, USD: 1.1253 };
+
+export const WithApproximatePrice: Story = {
+  args: { euroRates: EURO_RATES },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText(/^Priced in reais: about US\$8 a month\./)).toBeVisible();
+    await userEvent.click(canvas.getByRole('radio', { name: /^Yearly/ }));
+    await expect(canvas.getByText(/^Priced in reais: about US\$77 a year\./)).toBeVisible();
+  },
+};
+
+export const WithApproximatePriceInGerman: Story = {
+  args: { euroRates: EURO_RATES },
+  globals: { locale: 'de' },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByText(/^Preis in Real: etwa 7\s€ pro Monat\./),
+    ).toBeVisible();
+  },
+};
+
+export const WithApproximatePriceInSpanish: Story = {
+  args: { euroRates: EURO_RATES },
+  globals: { locale: 'es' },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByText(/^Precio en reales: unos 8\sUS\$ o 7\s€ al mes\./),
+    ).toBeVisible();
+  },
+};
+
+export const WithApproximatePriceOnAPhone: Story = {
+  args: { euroRates: EURO_RATES },
+  globals: { locale: 'de', viewport: { value: 'mobile1' } },
+};
+
+export const WithApproximatePriceInTheDarkTheme: Story = {
+  args: { euroRates: EURO_RATES },
+  globals: { locale: 'fr', theme: 'dark' },
+};
+
 export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
