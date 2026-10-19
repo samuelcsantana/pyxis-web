@@ -71,16 +71,16 @@ describe('LandingFooter', () => {
     expect(screen.getByRole('contentinfo')).not.toHaveTextContent('CPF');
   });
 
-  it('links the contract in Portuguese and identifies the seller once configured', () => {
+  it('links the contract in the page language, says the Portuguese prevails, and names the seller', () => {
     render(<LandingFooter i18n={english} seller={SELLER} />);
 
     expect(linksUnder('Contract')).toEqual([
-      ['Terms of Use', '/termos'],
-      ['Privacy Policy', '/privacidade'],
-      ['Data Processing Agreement', '/acordo-de-tratamento'],
+      ['Terms of Use', '/en/terms'],
+      ['Privacy Policy', '/en/privacy'],
+      ['Data Processing Agreement', '/en/dpa'],
     ]);
-    expect(screen.getByRole('link', { name: 'Terms of Use' })).toHaveAttribute('hreflang', 'pt-BR');
-    expect(screen.getByText('In Portuguese, the language of the contract.')).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Terms of Use' })).toHaveAttribute('hreflang', 'en');
+    expect(screen.getByText('Courtesy translations; the Portuguese text prevails.')).toBeVisible();
     expect(
       screen.getByText(
         'Sold by Ana Exemplo · CPF 000.000.000-00 · Rua das Flores, 10, Cidade/UF · hello@pyxis-analytics.dev',
@@ -92,7 +92,7 @@ describe('LandingFooter', () => {
     render(<LandingFooter i18n={portuguese} seller={SELLER} />);
 
     expect(linksUnder('Contrato')[0]).toEqual(['Termos de Uso', '/termos']);
-    expect(screen.queryByText('Em português, a língua do contrato.')).toBeNull();
+    expect(screen.queryByText('Traduções de cortesia; vale o texto em português.')).toBeNull();
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Fornecedor: Ana Exemplo');
   });
 });

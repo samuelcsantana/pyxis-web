@@ -1804,7 +1804,7 @@ export const fr = translation({
           answer:
             'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès.',
           answerOpen:
-            'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès. Les <terms>Conditions d’utilisation</terms> (en portugais) donnent tous les détails.',
+            'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
         },
         limit: {
           question: 'Et si je dépasse 100 000 événements ?',
@@ -1856,15 +1856,16 @@ export const fr = translation({
       playground: 'Bac à sable du SDK',
       madeBy: 'Réalisé par Samuel Santana · Licence MIT',
       contract: 'Contrat',
-      contractLanguage: 'En portugais, la langue du contrat.',
+      contractLanguage: 'Traductions de courtoisie ; le texte portugais fait foi.',
     },
   },
   legal: {
     documentsLabel: 'Documents contractuels',
+    versionsLabel: 'Ce document dans d’autres langues',
     terms: 'Conditions d’utilisation',
     privacy: 'Politique de confidentialité',
     agreement: 'Accord de traitement des données',
-    metaDescription: '{document} de Pyxis hébergé, version {version}.',
+    metaDescription: '{document} de l’offre hébergée de Pyxis, version {version}.',
     seller: 'Vendu par {name} · CPF {taxId} · {address} · {email}',
   },
 });

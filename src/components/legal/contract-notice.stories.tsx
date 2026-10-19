@@ -29,14 +29,26 @@ type Story = StoryObj<typeof meta>;
 export const English: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('link', { name: 'Data Processing Agreement' })).toHaveAttribute(
-      'href',
-      'https://pyxis-analytics.dev/acordo-de-tratamento',
-    );
+    const agreement = canvas.getByRole('link', { name: 'Data Processing Agreement' });
+    await expect(agreement).toHaveAttribute('href', 'https://pyxis-analytics.dev/en/dpa');
+    await expect(agreement).toHaveAttribute('hreflang', 'en');
   },
 };
 
-export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
+export const Portuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const agreement = canvas.getByRole('link', { name: 'Acordo de Tratamento de Dados' });
+    await expect(agreement).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/acordo-de-tratamento',
+    );
+    await expect(agreement).toHaveAttribute('hreflang', 'pt-BR');
+  },
+};
+
+export const German: Story = { globals: { locale: 'de' } };
 
 export const Spanish: Story = { globals: { locale: 'es' } };
 

@@ -72,11 +72,20 @@ describe('sitemap', () => {
 
     const urls = (await sitemap()).map((entry) => entry.url);
 
-    expect(urls.slice(7)).toEqual([
+    expect(urls.slice(7, 13)).toEqual([
       'https://pyxis-analytics.dev/termos',
       'https://pyxis-analytics.dev/privacidade',
       'https://pyxis-analytics.dev/acordo-de-tratamento',
+      'https://pyxis-analytics.dev/en/terms',
+      'https://pyxis-analytics.dev/en/privacy',
+      'https://pyxis-analytics.dev/en/dpa',
     ]);
+    expect(urls).toHaveLength(7 + 21);
+    const terms = (await sitemap()).find((entry) => entry.url.endsWith('/termos'));
+    expect(terms?.alternates?.languages).toMatchObject({
+      'pt-BR': 'https://pyxis-analytics.dev/termos',
+      de: 'https://pyxis-analytics.dev/de/terms',
+    });
   });
 
   it('lists nothing for a dashboard with a real API, which stays out of search', async () => {

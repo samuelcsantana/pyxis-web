@@ -1815,11 +1815,12 @@ export const ptBR = translation({
       playground: 'Playground do SDK',
       madeBy: 'Feito por Samuel Santana · Licença MIT',
       contract: 'Contrato',
-      contractLanguage: 'Em português, a língua do contrato.',
+      contractLanguage: 'Traduções de cortesia; vale o texto em português.',
     },
   },
   legal: {
     documentsLabel: 'Documentos do contrato',
+    versionsLabel: 'Este documento em outros idiomas',
     terms: 'Termos de Uso',
     privacy: 'Política de Privacidade',
     agreement: 'Acordo de Tratamento de Dados',

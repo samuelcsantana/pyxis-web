@@ -30,6 +30,7 @@ const SAMPLE = legalHtmlOf(
     '',
     '> **Medição de uso do site** — modelo de aviso.',
   ].join('\n'),
+  'pt-BR',
 );
 
 const meta = {

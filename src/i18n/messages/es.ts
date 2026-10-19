@@ -1772,7 +1772,7 @@ export const es = translation({
           answer:
             'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso.',
           answerOpen:
-            'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso. Los detalles están en los <terms>Términos de Uso</terms> (en portugués).',
+            'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso. Los detalles están en los <terms>Términos de Uso</terms>.',
         },
         limit: {
           question: '¿Y si paso de 100 mil eventos?',
@@ -1823,11 +1823,12 @@ export const es = translation({
       playground: 'Playground del SDK',
       madeBy: 'Hecho por Samuel Santana · Licencia MIT',
       contract: 'Contrato',
-      contractLanguage: 'En portugués, el idioma del contrato.',
+      contractLanguage: 'Traducciones de cortesía; prevalece el texto en portugués.',
     },
   },
   legal: {
     documentsLabel: 'Documentos del contrato',
+    versionsLabel: 'Este documento en otros idiomas',
     terms: 'Términos de Uso',
     privacy: 'Política de Privacidad',
     agreement: 'Acuerdo de Tratamiento de Datos',

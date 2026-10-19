@@ -1750,7 +1750,7 @@ export const en = {
           answer:
             'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends.',
           answerOpen:
-            'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends. The <terms>Terms of Use</terms> (in Portuguese) have the details.',
+            'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends. The <terms>Terms of Use</terms> have the details.',
         },
         limit: {
           question: 'What if I go over 100,000 events?',
@@ -1801,11 +1801,12 @@ export const en = {
       playground: 'SDK playground',
       madeBy: 'Made by Samuel Santana · MIT License',
       contract: 'Contract',
-      contractLanguage: 'In Portuguese, the language of the contract.',
+      contractLanguage: 'Courtesy translations; the Portuguese text prevails.',
     },
   },
   legal: {
     documentsLabel: 'Contract documents',
+    versionsLabel: 'This document in other languages',
     terms: 'Terms of Use',
     privacy: 'Privacy Policy',
     agreement: 'Data Processing Agreement',

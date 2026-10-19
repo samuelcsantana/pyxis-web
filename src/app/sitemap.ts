@@ -4,7 +4,7 @@ import { isDemoMode } from '@/lib/api-config';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
 import { LANDING_PAGES, landingUrlOf, languageAlternatesOf } from '@/lib/landing-pages';
 import { legalConfig } from '@/lib/legal-config';
-import { LEGAL_DOCUMENTS, legalUrlOf } from '@/lib/legal-documents';
+import { LEGAL_DOCUMENTS, legalUrlOf, versionsOf } from '@/lib/legal-documents';
 import { isOnLandingHost } from '@/lib/request-host';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 
@@ -21,7 +21,14 @@ function landingSitemap(): MetadataRoute.Sitemap {
   const legalPages =
     legalConfig() === null
       ? []
-      : LEGAL_DOCUMENTS.map((document) => ({ url: legalUrlOf(document) }));
+      : LEGAL_DOCUMENTS.map((document) => ({
+          url: legalUrlOf(document),
+          alternates: {
+            languages: Object.fromEntries(
+              versionsOf(document).map((version) => [version.locale, legalUrlOf(version)]),
+            ),
+          },
+        }));
   return [...homePages, ...legalPages];
 }
 

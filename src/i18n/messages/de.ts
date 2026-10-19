@@ -1806,9 +1806,9 @@ export const de = translation({
         cancel: {
           question: 'Wie kündige ich?',
           answer:
-            'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugangs gelöscht.',
+            'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugriffs gelöscht.',
           answerOpen:
-            'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugangs gelöscht. Die Details stehen in den <terms>Nutzungsbedingungen</terms> (auf Portugiesisch).',
+            'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugriffs gelöscht. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
         },
         limit: {
           question: 'Was passiert, wenn ich über 100.000 Ereignisse komme?',
@@ -1861,11 +1861,12 @@ export const de = translation({
       playground: 'SDK-Playground',
       madeBy: 'Von Samuel Santana · MIT-Lizenz',
       contract: 'Vertrag',
-      contractLanguage: 'Auf Portugiesisch, der Vertragssprache.',
+      contractLanguage: 'Höflichkeitsübersetzungen; maßgeblich ist der portugiesische Text.',
     },
   },
   legal: {
     documentsLabel: 'Vertragsdokumente',
+    versionsLabel: 'Dieses Dokument in anderen Sprachen',
     terms: 'Nutzungsbedingungen',
     privacy: 'Datenschutzerklärung',
     agreement: 'Auftragsverarbeitungsvertrag',

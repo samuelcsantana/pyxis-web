@@ -128,8 +128,8 @@ describe('FaqSection', () => {
     expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
     expect(screen.queryByText(/request access at hello@pyxis-analytics\.dev/)).toBeNull();
     const terms = screen.getByRole('link', { name: 'Terms of Use' });
-    expect(terms).toHaveAttribute('href', 'https://pyxis-analytics.dev/termos');
-    expect(terms).toHaveAttribute('hreflang', 'pt-BR');
+    expect(terms).toHaveAttribute('href', 'https://pyxis-analytics.dev/en/terms');
+    expect(terms).toHaveAttribute('hreflang', 'en');
   });
 });
 
