@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.28.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.27.0...v0.28.0) (2026-10-19)
+
+
+### Features
+
+* **i18n:** ship the dashboard in German, French, Italian and Dutch ([4020452](https://github.com/samuelcsantana/pyxis-web/commit/40204525f5482e0b2f31393563dfe6393886e8e2))
+* **i18n:** translate the dictionary into German, French, Italian and Dutch ([cc06788](https://github.com/samuelcsantana/pyxis-web/commit/cc06788f733e40df35d0e7cf161c28094337b2ed))
+* **landing:** serve the home page in German, French, Italian and Dutch ([f83207d](https://github.com/samuelcsantana/pyxis-web/commit/f83207d1e98a92468a9d134a4681840cad209a20))
+* **legal:** add courtesy translations of the contract documents ([21928d7](https://github.com/samuelcsantana/pyxis-web/commit/21928d7d0779d16cdd14fd900e09ab970bc99de5))
+* **legal:** serve each translation of the contract in its language ([a8bfea6](https://github.com/samuelcsantana/pyxis-web/commit/a8bfea6caf7d1205720b4447fbb9a28e2bcb2699))
+
+
+### Bug Fixes
+
+* **devices:** let the keyboard reach a share table that scrolls sideways ([ceaeeb8](https://github.com/samuelcsantana/pyxis-web/commit/ceaeeb82c8038dbaa182cfd6c6188e9e4f4e9762))
+* **landing:** let long German and Dutch words wrap at large text sizes ([e9c18be](https://github.com/samuelcsantana/pyxis-web/commit/e9c18be44f69fd06f10cf94fe080644291c461fc))
+
 ## [0.27.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.26.0...v0.27.0) (2026-10-18)
 
 
