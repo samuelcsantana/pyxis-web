@@ -98,11 +98,23 @@ describe('LocaleFlag', () => {
         <LocaleFlag locale="en" />
         <LocaleFlag locale="pt-BR" />
         <LocaleFlag locale="es" />
+        <LocaleFlag locale="de" />
+        <LocaleFlag locale="fr" />
+        <LocaleFlag locale="it" />
+        <LocaleFlag locale="nl" />
       </>,
     );
 
     const flags = [...container.querySelectorAll('svg')];
-    expect(flags.map((flag) => flag.dataset.flag)).toEqual(['en', 'pt-BR', 'es']);
+    expect(flags.map((flag) => flag.dataset.flag)).toEqual([
+      'en',
+      'pt-BR',
+      'es',
+      'de',
+      'fr',
+      'it',
+      'nl',
+    ]);
     expect(flags.every((flag) => flag.getAttribute('aria-hidden') === 'true')).toBe(true);
     expect(flags.every((flag) => flag.childElementCount > 1)).toBe(true);
   });
@@ -115,7 +127,15 @@ describe('LanguageFormSelect', () => {
     await userEvent.click(trigger());
 
     const options = within(screen.getByRole('list', { name: 'Language' })).getAllByRole('button');
-    expect(options.map((option) => option.getAttribute('lang'))).toEqual(['en', 'pt-BR', 'es']);
+    expect(options.map((option) => option.getAttribute('lang'))).toEqual([
+      'en',
+      'pt-BR',
+      'es',
+      'de',
+      'fr',
+      'it',
+      'nl',
+    ]);
     expect(screen.getByRole('button', { name: 'English' })).toHaveAttribute('aria-pressed', 'true');
 
     await userEvent.click(screen.getByRole('button', { name: 'Español' }));

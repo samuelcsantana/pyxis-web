@@ -336,7 +336,7 @@ describe('proxy', () => {
 
     it('drops values it does not know without remembering them', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-      const response = visit('/sign-in?lang=fr&theme=neon');
+      const response = visit('/sign-in?lang=ja&theme=neon');
 
       expect(response.headers.get('location')).toBe('https://pyxis.example.com/sign-in');
       expect(response.cookies.get('pyxis_locale')).toBeUndefined();

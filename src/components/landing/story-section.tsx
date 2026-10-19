@@ -10,10 +10,17 @@ export interface StorySectionProps {
 
 export const STORY_ID = 'story';
 
+const ENGLISH_INTRODUCTION_POST =
+  'https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data';
+
 export const INTRODUCTION_POSTS: Readonly<Record<Locale, string>> = {
-  en: 'https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data',
+  en: ENGLISH_INTRODUCTION_POST,
   'pt-BR': 'https://www.samuelsantana.dev/blog/pyxis-analytics-sem-cookie-sem-ip-sem-dado-pessoal',
   es: 'https://www.samuelsantana.dev/es/blog/pyxis-analytics-sin-cookies-sin-ip-sin-datos-personales',
+  de: ENGLISH_INTRODUCTION_POST,
+  fr: ENGLISH_INTRODUCTION_POST,
+  it: ENGLISH_INTRODUCTION_POST,
+  nl: ENGLISH_INTRODUCTION_POST,
 };
 
 const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';

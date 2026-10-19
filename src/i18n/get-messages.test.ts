@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { APP_DESCRIPTION } from '@/lib/site';
 import { clientMessages, getI18n, getTranslator, loadMessages } from './get-messages';
+import { de } from './messages/de';
 import { en } from './messages/en';
 import { es } from './messages/es';
+import { fr } from './messages/fr';
+import { it as italian } from './messages/it';
+import { nl } from './messages/nl';
 import { ptBR } from './messages/pt-BR';
 
 describe('get-messages', () => {
@@ -10,6 +14,10 @@ describe('get-messages', () => {
     await expect(loadMessages('en')).resolves.toBe(en);
     await expect(loadMessages('pt-BR')).resolves.toBe(ptBR);
     await expect(loadMessages('es')).resolves.toBe(es);
+    await expect(loadMessages('de')).resolves.toBe(de);
+    await expect(loadMessages('fr')).resolves.toBe(fr);
+    await expect(loadMessages('it')).resolves.toBe(italian);
+    await expect(loadMessages('nl')).resolves.toBe(nl);
   });
 
   it('translates in the language of the request', async () => {

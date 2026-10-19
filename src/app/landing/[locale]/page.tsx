@@ -73,6 +73,10 @@ const OPEN_GRAPH_LOCALES: Readonly<Record<Locale, string>> = {
   en: 'en_US',
   'pt-BR': 'pt_BR',
   es: 'es_ES',
+  de: 'de_DE',
+  fr: 'fr_FR',
+  it: 'it_IT',
+  nl: 'nl_NL',
 };
 
 const pathOf = (page: LandingPage): string => page.path;

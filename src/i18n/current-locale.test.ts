@@ -39,7 +39,7 @@ describe('currentLocale', () => {
 
   it('follows the language the admin chose over the browser languages', async () => {
     request.cookie = 'en';
-    request.acceptLanguage = 'fr';
+    request.acceptLanguage = 'ja';
 
     await expect(currentLocale()).resolves.toBe('en');
   });
@@ -52,7 +52,7 @@ describe('currentLocale', () => {
   });
 
   it('asks the browser when the cookie holds a language the dashboard does not ship', async () => {
-    request.cookie = 'fr';
+    request.cookie = 'ja';
     request.acceptLanguage = 'en-GB,en;q=0.9';
 
     await expect(currentLocale()).resolves.toBe('en');
@@ -98,7 +98,7 @@ describe('currentLocale', () => {
     });
 
     it('ignores a value that is not a language the dashboard ships', async () => {
-      request.pathLocale = 'fr';
+      request.pathLocale = 'ja';
       request.cookie = 'pt-BR';
 
       await expect(currentLocale()).resolves.toBe('pt-BR');

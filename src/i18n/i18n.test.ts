@@ -5,6 +5,12 @@ import { createI18n } from './i18n';
 import { en } from './messages/en';
 import { es } from './messages/es';
 import { ptBR } from './messages/pt-BR';
+import { dutch } from '@/test-utils/dutch';
+import { french } from '@/test-utils/french';
+import { german } from '@/test-utils/german';
+import { italian } from '@/test-utils/italian';
+
+const NARROW_NO_BREAK_SPACE = '\u202f';
 
 describe('createI18n', () => {
   it('translates and formats in the language it was made for', () => {
@@ -59,5 +65,27 @@ describe('createI18n', () => {
     expect(t('counts.visit', { count: 2 })).toBe('2 visitas');
     expect(new Intl.PluralRules('es').select(1_000_000)).toBe('many');
     expect(t('counts.visit', { count: 1_000_000 })).toBe('1.000.000 visitas');
+  });
+
+  it.each([
+    [german, 'de', '2.697', '12.345'],
+    [french, 'fr', `2${NARROW_NO_BREAK_SPACE}697`, `12${NARROW_NO_BREAK_SPACE}345`],
+    [italian, 'it', '2697', '12.345'],
+    [dutch, 'nl', '2.697', '12.345'],
+  ] as const)('formats numbers the %#th new language way (%s)', (i18n, tag, four, five) => {
+    expect(i18n.locale).toBe(tag);
+    expect(i18n.format).toBe(createFormats(tag));
+    expect(i18n.format.count(2697)).toBe(four);
+    expect(i18n.format.count(12_345)).toBe(five);
+  });
+
+  it.each([
+    [german, '1 Besuch', '2 Besuche'],
+    [french, '1 visite', '2 visites'],
+    [italian, '1 visita', '2 visite'],
+    [dutch, '1 bezoek', '2 bezoeken'],
+  ] as const)('counts visits in the singular and the plural (%#)', (i18n, one, two) => {
+    expect(i18n.t('counts.visit', { count: 1 })).toBe(one);
+    expect(i18n.t('counts.visit', { count: 2 })).toBe(two);
   });
 });

@@ -42,6 +42,8 @@ const BRAZIL_BAND = 'M10.6 9.2c3-.9 6.4-.5 8.9 1.2';
 const BRAZIL_BAND_WIDTH = 0.9;
 
 const SPAIN_BAND = { top: HEIGHT / 4, height: HEIGHT / 2 } as const;
+const THIRD_OF_WIDTH = WIDTH / 3;
+const THIRD_OF_HEIGHT = HEIGHT / 3;
 
 const COLORS = {
   unitedStatesRed: '#b22234',
@@ -52,6 +54,15 @@ const COLORS = {
   brazilBlue: '#002776',
   spainRed: '#c60b1e',
   spainYellow: '#ffc400',
+  germanyBlack: '#000000',
+  germanyRed: '#dd0000',
+  germanyGold: '#ffce00',
+  franceBlue: '#002654',
+  franceRed: '#ce1126',
+  italyGreen: '#009246',
+  italyRed: '#ce2b37',
+  netherlandsRed: '#ae1c28',
+  netherlandsBlue: '#21468b',
 } as const;
 
 function UnitedStates() {
@@ -105,10 +116,66 @@ function Spain() {
   );
 }
 
+function HorizontalTricolor({ colors }: { readonly colors: readonly [string, string, string] }) {
+  return (
+    <>
+      {colors.map((color, index) => (
+        <rect
+          key={color}
+          y={index * THIRD_OF_HEIGHT}
+          width={WIDTH}
+          height={THIRD_OF_HEIGHT}
+          fill={color}
+        />
+      ))}
+    </>
+  );
+}
+
+function VerticalTricolor({ colors }: { readonly colors: readonly [string, string, string] }) {
+  return (
+    <>
+      {colors.map((color, index) => (
+        <rect
+          key={color}
+          x={index * THIRD_OF_WIDTH}
+          width={THIRD_OF_WIDTH}
+          height={HEIGHT}
+          fill={color}
+        />
+      ))}
+    </>
+  );
+}
+
+function Germany() {
+  return (
+    <HorizontalTricolor colors={[COLORS.germanyBlack, COLORS.germanyRed, COLORS.germanyGold]} />
+  );
+}
+
+function France() {
+  return <VerticalTricolor colors={[COLORS.franceBlue, COLORS.white, COLORS.franceRed]} />;
+}
+
+function Italy() {
+  return <VerticalTricolor colors={[COLORS.italyGreen, COLORS.white, COLORS.italyRed]} />;
+}
+
+function Netherlands() {
+  return (
+    <HorizontalTricolor colors={[COLORS.netherlandsRed, COLORS.white, COLORS.netherlandsBlue]} />
+  );
+}
+
 const FLAGS: Readonly<Record<Locale, () => JSX.Element>> = {
   en: UnitedStates,
   'pt-BR': Brazil,
   es: Spain,
+  de: Germany,
+  fr: France,
+  it: Italy,
+  nl: Netherlands,
 };
 
 export interface LocaleFlagProps {

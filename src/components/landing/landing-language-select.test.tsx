@@ -95,7 +95,7 @@ describe('LandingLanguageSelect', () => {
     const { unmount } = render(
       <>
         <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />
-        <a href="https://pyxis-analytics.dev/es" data-language-choice="fr">
+        <a href="https://pyxis-analytics.dev/es" data-language-choice="ja">
           Français
         </a>
         <p>Elsewhere</p>

@@ -1,4 +1,4 @@
-export const LOCALES = ['en', 'pt-BR', 'es'] as const;
+export const LOCALES = ['en', 'pt-BR', 'es', 'de', 'fr', 'it', 'nl'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'en';
 export const LOCALE_COOKIE_NAME = 'pyxis_locale';

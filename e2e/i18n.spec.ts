@@ -182,6 +182,106 @@ test.describe('a browser that asks for Spanish', () => {
   });
 });
 
+const MORE_LANGUAGES = [
+  {
+    locale: 'de',
+    browser: 'de-AT',
+    screens: [
+      ['overview', 'Übersicht'],
+      ['funnel', 'Funnel'],
+      ['features', 'Funktionen'],
+      ['requests', 'Anfragen'],
+      ['timeline', 'Zeitleiste'],
+      ['visits', 'Besuche'],
+      ['devices', 'Geräte'],
+      ['acquisition', 'Akquisition'],
+    ],
+  },
+  {
+    locale: 'fr',
+    browser: 'fr-CA',
+    screens: [
+      ['overview', 'Vue d’ensemble'],
+      ['funnel', 'Entonnoir'],
+      ['features', 'Fonctionnalités'],
+      ['requests', 'Requêtes'],
+      ['timeline', 'Chronologie'],
+      ['visits', 'Visites'],
+      ['devices', 'Appareils'],
+      ['acquisition', 'Acquisition'],
+    ],
+  },
+  {
+    locale: 'it',
+    browser: 'it-CH',
+    screens: [
+      ['overview', 'Panoramica'],
+      ['funnel', 'Funnel'],
+      ['features', 'Funzionalità'],
+      ['requests', 'Richieste'],
+      ['timeline', 'Cronologia'],
+      ['visits', 'Visite'],
+      ['devices', 'Dispositivi'],
+      ['acquisition', 'Acquisizione'],
+    ],
+  },
+  {
+    locale: 'nl',
+    browser: 'nl-BE',
+    screens: [
+      ['overview', 'Overzicht'],
+      ['funnel', 'Funnel'],
+      ['features', 'Functies'],
+      ['requests', 'Verzoeken'],
+      ['timeline', 'Tijdlijn'],
+      ['visits', 'Bezoeken'],
+      ['devices', 'Apparaten'],
+      ['acquisition', 'Acquisitie'],
+    ],
+  },
+] as const;
+
+for (const language of MORE_LANGUAGES) {
+  test.describe(`a browser that asks for ${language.browser}`, () => {
+    test.use({ locale: language.browser });
+
+    for (const [slug, heading] of language.screens) {
+      test(`reads ${slug} in ${language.locale}, accessible, without hydration errors or a sideways scroll`, async ({
+        page,
+      }) => {
+        const errors = watchConsoleErrors(page);
+
+        await page.goto(`/${STORE_ID}/${slug}`);
+
+        await expect(page.locator('html')).toHaveAttribute('lang', language.locale);
+        await expect(page.getByRole('heading', { level: 1, name: heading })).toBeVisible();
+        await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy', 'true');
+        expect(await axeViolations(page)).toEqual([]);
+        expect(await sidewaysOverflow(page)).toBe(0);
+        expect(errors).toEqual([]);
+      });
+    }
+  });
+}
+
+test('counts the same visits in French as in English, with a narrow space between thousands', async ({
+  browser,
+}) => {
+  const frenchContext = await browser.newContext({ locale: 'fr-FR' });
+  const frenchPage = await frenchContext.newPage();
+  await frenchPage.goto(`/${STORE_ID}/overview?range=30d`);
+  const french = await visitsFigure(frenchPage, 'Visites');
+  await frenchContext.close();
+  const englishContext = await browser.newContext({ locale: 'en-US' });
+  const englishPage = await englishContext.newPage();
+  await englishPage.goto(`/${STORE_ID}/overview?range=30d`);
+  const english = await visitsFigure(englishPage, 'Visits');
+  await englishContext.close();
+
+  expect(parseCount(french, 'fr')).toBe(parseCount(english, 'en-US'));
+  expect(parseCount(french, 'fr')).toBeGreaterThan(999);
+});
+
 test('serves Brazilian Portuguese to a browser that asks for European Portuguese', async ({
   browser,
 }) => {

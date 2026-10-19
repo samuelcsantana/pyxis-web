@@ -7,6 +7,10 @@ const DISPLAY_TAGS: Readonly<Record<Locale, string>> = {
   en: 'en-US',
   'pt-BR': 'pt-BR',
   es: 'es',
+  de: 'de',
+  fr: 'fr',
+  it: 'it',
+  nl: 'nl',
 };
 
 export function displayTag(locale: Locale): string {
