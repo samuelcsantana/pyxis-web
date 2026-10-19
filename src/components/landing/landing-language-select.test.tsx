@@ -96,7 +96,7 @@ describe('LandingLanguageSelect', () => {
       <>
         <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />
         <a href="https://pyxis-analytics.dev/es" data-language-choice="ja">
-          Français
+          日本語
         </a>
         <p>Elsewhere</p>
         <LanguageChoiceKeeper />
@@ -109,7 +109,7 @@ describe('LandingLanguageSelect', () => {
 
     fireEvent.click(screen.getByText('Elsewhere'));
     document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    fireEvent.click(screen.getByRole('link', { name: 'Français' }));
+    fireEvent.click(screen.getByRole('link', { name: '日本語' }));
     expect(window.localStorage.getItem(DEVICE_LOCALE_KEY)).toBeNull();
 
     window.sessionStorage.clear();

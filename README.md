@@ -327,12 +327,13 @@ Shipping now:
 - The interface in English, Brazilian Portuguese, Spanish, German, French, Italian and Dutch (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
-  that host: English at `/`, Brazilian Portuguese at `/pt-br`, Spanish at `/es`, each with its
+  that host: English at `/`, Brazilian Portuguese at `/pt-br`, Spanish at `/es`, German at `/de`,
+  French at `/fr`, Italian at `/it` and Dutch at `/nl`, each with its
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
   models and coding agents what Pyxis is, how to install the tracker and the rules an
-  integration must follow (404 on the demo and the dashboard). `/pt-br` and `/es` always open in
-  their language; `/`, which names none, opens before any of its content paints the language
+  integration must follow (404 on the demo and the dashboard). Every address that names a
+  language always opens in it; `/`, which names none, opens before any of its content paints the language
   chosen before in the header's language select, then the first language the browser asks for
   that the page ships (unless the visitor came from a Pyxis page), and otherwise stays in English,
   so crawlers read the same English page as before; the page it opens keeps the site the visitor
@@ -471,7 +472,7 @@ origin the sign-in and sign-out calls carry.
 | Route                                                                          | What it shows                                                                                                                                                                                                                                                                                |
 | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                                                            | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
-| `/`, `/pt-br` and `/es` on `pyxis-analytics.dev`                               | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and `/landing/es`; asking for those directly answers 308                                                                                                                                                        |
+| `/` and `/pt-br`, `/es`, `/de`, `/fr`, `/it`, `/nl` on `pyxis-analytics.dev`   | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and so on; asking for those directly answers 308                                                                                                                                                                |
 | `/termos`, `/privacidade` and `/acordo-de-tratamento` on `pyxis-analytics.dev` | The contract documents in Portuguese (demo mode, once the seller is configured), rewritten to `/legal/<document>`; asking for those directly answers 308                                                                                                                                     |
 | `/[projectId]/exports/[exportId]`                                              | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
 | `/sign-up`                                                                     | The sign-up (plan, e-mail, terms, code, then Checkout), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                                                                                                                    |
@@ -507,7 +508,7 @@ screen that was asked as `?next=`, and the sign-in form goes back to it; only a 
 `/<project>/<screen>` on this site is accepted, anything else goes to `/`.
 
 In demo mode the proxy looks at the host the visitor asked for (`x-forwarded-host`, then
-`Host`). On `pyxis-analytics.dev` only `/`, `/pt-br` and `/es` render, the home page, with the
+`Host`). On `pyxis-analytics.dev` only `/` and the language addresses (`/pt-br`, `/es`, `/de`, `/fr`, `/it`, `/nl`) render, the home page, with the
 language named in a request header that `currentLocale()` trusts over the cookie; any other
 address there answers 308 to the same address on the demo host, so the demo is never served
 twice. Every other request has that header removed. To try the home page locally, send the

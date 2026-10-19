@@ -20,11 +20,13 @@ async function scrollAfterFollowing(link: Locator): Promise<readonly number[]> {
   }, FRAMES_AFTER_CLICK);
 }
 
+const HOME_PATHS = ['/', '/pt-br', '/es', '/de', '/fr', '/it', '/nl'];
+
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`home page, ${colorScheme} theme`, () => {
     test.use({ colorScheme, reducedMotion: 'reduce' });
 
-    for (const path of ['/', '/pt-br', '/es']) {
+    for (const path of HOME_PATHS) {
       test(`has no WCAG 2.2 A or AA violation and no sideways scroll at ${path}`, async ({
         page,
       }) => {
@@ -37,7 +39,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-for (const path of ['/', '/pt-br', '/es']) {
+for (const path of HOME_PATHS) {
   test(`grows with the reader's text size and never scrolls sideways at ${path}`, async ({
     page,
   }) => {
@@ -58,7 +60,7 @@ for (const path of ['/', '/pt-br', '/es']) {
 
 test('keeps the header on one row on a phone, in every language', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'Only a phone is narrow enough to wrap the header.');
-  for (const path of ['/', '/pt-br', '/es']) {
+  for (const path of HOME_PATHS) {
     await page.goto(path);
 
     const header = await page.getByRole('banner').boundingBox();
@@ -82,6 +84,12 @@ test('serves each language at its own address, with the tags search engines read
     'href',
     `${MAIN_DOMAIN}/es`,
   );
+  for (const language of ['de', 'fr', 'it', 'nl']) {
+    await expect(page.locator(`link[rel="alternate"][hreflang="${language}"]`)).toHaveAttribute(
+      'href',
+      `${MAIN_DOMAIN}/${language}`,
+    );
+  }
   expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain(
     '"@type":"SoftwareApplication"',
   );
@@ -584,10 +592,10 @@ test.describe('measuring itself', () => {
   test('keeps the recorder toggle off the first screen until the visitor scrolls', async ({
     page,
   }) => {
-    for (const path of ['/', '/pt-br', '/es']) {
+    for (const path of HOME_PATHS) {
       await page.goto(path);
       const toggle = page.getByRole('button', {
-        name: /What this page recorded|O que esta página registrou|Lo que registró esta página/,
+        name: /What this page recorded|O que esta página registrou|Lo que registró esta página|Was diese Seite erfasst hat|Ce que cette page a enregistré|Cosa ha registrato questa pagina|Wat deze pagina vastlegde/,
         includeHidden: true,
       });
       await expect(toggle).toHaveCount(1);
@@ -605,7 +613,7 @@ test.describe('measuring itself', () => {
       await expect(toggle).toBeVisible();
       await expect(
         page.getByRole('region', {
-          name: /What this page recorded|O que esta página registrou|Lo que registró esta página/,
+          name: /What this page recorded|O que esta página registrou|Lo que registró esta página|Was diese Seite erfasst hat|Ce que cette page a enregistré|Cosa ha registrato questa pagina|Wat deze pagina vastlegde/,
         }),
       ).toBeVisible();
 

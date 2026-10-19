@@ -6,10 +6,10 @@ import { LanguagePrefetch, languagePrefetchRulesOf } from './language-prefetch';
 describe('languagePrefetchRulesOf', () => {
   it('fetches every other language as soon as the page loads, never the current one', () => {
     expect(languagePrefetchRulesOf(DEFAULT_LANDING_PAGE)).toEqual({
-      prefetch: [{ urls: ['/pt-br', '/es'], eagerness: 'immediate' }],
+      prefetch: [{ urls: ['/pt-br', '/es', '/de', '/fr', '/it', '/nl'], eagerness: 'immediate' }],
     });
     expect(languagePrefetchRulesOf(landingPageOfLocale('es'))).toEqual({
-      prefetch: [{ urls: ['/', '/pt-br'], eagerness: 'immediate' }],
+      prefetch: [{ urls: ['/', '/pt-br', '/de', '/fr', '/it', '/nl'], eagerness: 'immediate' }],
     });
   });
 });
