@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { de } from './messages/de';
 import { en } from './messages/en';
 import { es } from './messages/es';
+import { fr } from './messages/fr';
+import { it as italian } from './messages/it';
+import { nl } from './messages/nl';
 import { ptBR } from './messages/pt-BR';
 import { PLURAL_CATEGORIES, type PluralForms } from './plural';
 import type { Dictionary, Message } from './translate';
@@ -13,6 +17,10 @@ type Node = Message | Dictionary;
 const TRANSLATIONS: readonly (readonly [string, Dictionary])[] = [
   ['pt-BR', ptBR],
   ['es', es],
+  ['de', de],
+  ['fr', fr],
+  ['it', italian],
+  ['nl', nl],
 ];
 
 function isPluralForms(node: Node): node is PluralForms {
