@@ -324,7 +324,7 @@ Shipping now:
   admin's address. Allow sends the browser back with a one-time code; Cancel sends it back with
   the refusal. A request that ended (answered, or older than ten minutes) says so, and an admin
   who already keeps ten connected apps is pointed to Settings. The demo has no such page
-- The interface in English, Brazilian Portuguese and Spanish (see
+- The interface in English, Brazilian Portuguese, Spanish, German, French, Italian and Dutch (see
   [Internationalization](#internationalization))
 - A home page for `pyxis-analytics.dev`, built by the live demo's deployment and served only on
   that host: English at `/`, Brazilian Portuguese at `/pt-br`, Spanish at `/es`, each with its
@@ -367,17 +367,21 @@ Shipping now:
 
 <img alt="The Overview of the demo store in Brazilian Portuguese: Visão geral, its figures written as 2.764 and +3,6%, its dates as 9 de set. – 8 de out. de 2026, and the event names exactly as the site sent them" src=".github/assets/screenshots/overview-pt-br-light.png">
 
-The dashboard speaks English, Brazilian Portuguese and Spanish. English is the default and the
-source of every text; each other language is a typed translation of it. The Spanish is neutral
-(for Spain and Latin America) and addresses the reader as _tú_; its numbers and dates follow
-Spain's conventions (`es`).
+The dashboard speaks English, Brazilian Portuguese, Spanish, German, French, Italian and Dutch.
+English is the default and the source of every text; each other language is a typed translation
+of it. The Spanish is neutral (for Spain and Latin America) and addresses the reader as _tú_; the
+German uses _du_, the French _vous_, the Italian _tu_ and the Dutch _je_, the usual registers of
+software in each. Numbers and dates follow the conventions of Spain (`es`), Germany (`de`),
+France (`fr`), Italy (`it`) and the Netherlands (`nl`).
 
 - **Which language:** the one chosen in the language menu wins, kept in the functional
   `pyxis_locale` cookie; without a choice, the browser's `Accept-Language` decides, matching on
-  the language, so `pt-PT` gets Brazilian Portuguese and `es-MX` gets Spanish; otherwise
+  the language, so `pt-PT` gets Brazilian Portuguese, `es-MX` Spanish, `de-AT` German, `fr-CA`
+  French, `it-CH` Italian and `nl-BE` Dutch; otherwise
   English. The address never changes, so links, bookmarks and the demo links work in every
   language.
-- **The menu:** each language named in itself (English, Português (Brasil), Español). On the
+- **The menu:** each language named in itself (English, Português (Brasil), Español, Deutsch,
+  Français, Italiano, Nederlands), with its flag. On the
   home page, the sign-in and the sign-up pages it is a dropdown in the top bar beside the theme
   toggle, showing the flag and the name of the language in use (the flag alone on phones); in the
   dashboard it is in the account menu at the foot of the sidebar. On the sign-in, the sign-up and
@@ -386,7 +390,8 @@ Spain's conventions (`es`).
   language arrives, and the content comes in with the short reveal of a screen change when it
   does (still, when the system asks for reduced motion).
 - **Numbers, dates and lists** go through `Intl` in the reader's language and the project's time
-  zone: `2.789`, `62,3%`, `9 de set.` in Portuguese, `2789`, `62,3 %`, `9 sept` in Spanish, and
+  zone: `2.789`, `62,3%`, `9 de set.` in Portuguese, `2789`, `62,3 %`, `9 sept` in Spanish,
+  `2.789` in German and Dutch, `2 789` (a narrow no-break space) in French, `2789` in Italian, and
   lists joined with the language's own "and" (`a, b e c`). Plurals follow CLDR, with a zero form
   where the language needs one (Portuguese says "0 visitas").
 - **The sign-in email follows:** "Send code" passes the reader's language to the API
@@ -398,8 +403,9 @@ Spain's conventions (`es`).
 - **Checked, not trusted:** a translation that misses or adds a key, or drops or invents a
   placeholder, fails the typecheck; a test walks every translation for the same keys,
   placeholders, rich-text tags and plural categories; `e2e/i18n.spec.ts` opens every translated
-  screen in Portuguese and in Spanish with axe, at 1440 and 390px, and checks the language
-  switch round trip through the three languages.
+  screen in Portuguese, Spanish, German, French, Italian and Dutch with axe, at 1440 and 390px,
+  reads the French figures back through its narrow-space separator, and checks the language
+  switch round trip.
 
 ## Architecture
 
@@ -574,7 +580,8 @@ Tests run in English: the Vitest setup file replaces `currentLocale()`, the only
 the request's language, so a test never needs request headers to render a page. Domain functions
 and server components that write text take the request's `I18n` value (translator and formats)
 as an argument, and their tests pass the `english` one from `src/test-utils/english.ts`, or
-`portuguese` or `spanish` from `src/test-utils/` to check a sentence in another language. Client
+`portuguese`, `spanish`, `german`, `french`, `italian` or `dutch` from `src/test-utils/` to check a
+sentence in another language. Client
 Components read their text with `useT()` from the messages provider, so their tests, and the tests
 of any page that contains one, render through `renderWithMessages`, which wraps the tree in the
 provider with the English messages the browser receives. A Client Component that only shows words
@@ -648,7 +655,7 @@ src/
 ├── lib/            API configuration, theme, security headers, the current admin, CSV exports
 ├── services/       one interface per API area, with Http and Mock implementations
 ├── test-utils/     test helpers (rendering inside the messages provider, the English,
-│                   Portuguese and Spanish I18n)
+│                   Portuguese, Spanish, German, French, Italian and Dutch I18n)
 └── proxy.ts        sends a visitor without a session to sign in
 contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)

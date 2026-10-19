@@ -18,6 +18,10 @@ const LANDING_PAGE_OF_LOCALE: Readonly<Record<Locale, LandingPage>> = {
   en: ENGLISH,
   'pt-BR': BRAZILIAN_PORTUGUESE,
   es: SPANISH,
+  de: ENGLISH,
+  fr: ENGLISH,
+  it: ENGLISH,
+  nl: ENGLISH,
 };
 
 const INTERNAL_PREFIX = '/landing';

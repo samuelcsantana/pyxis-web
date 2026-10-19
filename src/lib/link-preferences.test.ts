@@ -12,7 +12,7 @@ describe('link preferences', () => {
       locale: 'pt-BR',
       theme: 'dark',
     });
-    expect(preferencesIn(new URLSearchParams('lang=fr&theme=neon'))).toEqual({
+    expect(preferencesIn(new URLSearchParams('lang=ja&theme=neon'))).toEqual({
       locale: undefined,
       theme: undefined,
     });
@@ -23,7 +23,7 @@ describe('link preferences', () => {
   });
 
   it('knows when a link carries either preference, valid or not', () => {
-    expect(carriesPreferences(new URLSearchParams('lang=fr'))).toBe(true);
+    expect(carriesPreferences(new URLSearchParams('lang=ja'))).toBe(true);
     expect(carriesPreferences(new URLSearchParams('theme=dark'))).toBe(true);
     expect(carriesPreferences(new URLSearchParams('next=%2Fp1%2Foverview'))).toBe(false);
   });

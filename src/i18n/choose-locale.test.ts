@@ -32,7 +32,7 @@ describe('chooseLocale', () => {
   });
 
   it.each([
-    ['a language the dashboard does not ship', formWith('fr')],
+    ['a language the dashboard does not ship', formWith('ja')],
     ['no language at all', formWith()],
     ['a file instead of a language', formWith(new Blob(['pt-BR']))],
   ])('leaves the cookie alone for %s', async (_case, form) => {

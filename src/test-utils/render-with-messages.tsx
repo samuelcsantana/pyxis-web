@@ -2,12 +2,24 @@ import { render, type RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import { DEFAULT_LOCALE, type Locale } from '@/i18n/locales';
 import { CLIENT_NAMESPACES, type Messages, pickNamespaces } from '@/i18n/messages';
+import { de } from '@/i18n/messages/de';
 import { en } from '@/i18n/messages/en';
 import { es } from '@/i18n/messages/es';
+import { fr } from '@/i18n/messages/fr';
+import { it } from '@/i18n/messages/it';
+import { nl } from '@/i18n/messages/nl';
 import { ptBR } from '@/i18n/messages/pt-BR';
 import { MessagesProvider } from '@/i18n/messages-provider';
 
-const MESSAGES: Readonly<Record<Locale, Messages>> = { en, 'pt-BR': ptBR, es };
+const MESSAGES: Readonly<Record<Locale, Messages>> = {
+  en,
+  'pt-BR': ptBR,
+  es,
+  de,
+  fr,
+  it,
+  nl,
+};
 
 export function renderWithMessages(
   ui: ReactElement,
