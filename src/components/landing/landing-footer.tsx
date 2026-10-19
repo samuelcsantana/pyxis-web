@@ -43,7 +43,7 @@ function FooterColumn({ title, links, note }: FooterColumnProps) {
       <h2 className="mb-2.5 text-micro font-semibold tracking-[0.08em] text-muted uppercase">
         {title}
       </h2>
-      <ul className="grid gap-2 text-sm">
+      <ul className="grid gap-2 text-sm hyphens-auto wrap-anywhere">
         {links.map((link) => (
           <li key={link.href}>
             <a href={link.href} hrefLang={link.hrefLang} className={LINK_LIST} {...link.track}>

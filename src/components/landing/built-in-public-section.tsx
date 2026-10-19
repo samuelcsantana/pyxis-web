@@ -59,7 +59,7 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
       title={t('landing.public.title')}
     >
       <div className="grid gap-7 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <ul className="grid gap-3.5">
+        <ul className="grid gap-3.5 hyphens-auto wrap-anywhere">
           {ITEMS.map((item) => (
             <li key={item} className={`flex gap-3 text-base leading-relaxed ${REVEAL}`}>
               <Icon path={CHECK_ICON} className="mt-1 shrink-0 text-ok" />
@@ -67,7 +67,7 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
             </li>
           ))}
         </ul>
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-2 hyphens-auto wrap-anywhere">
           {documents.map((document) => (
             <li key={document.href} className={`flex ${REVEAL}`}>
               <a
