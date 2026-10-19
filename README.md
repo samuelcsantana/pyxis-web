@@ -346,7 +346,11 @@ Shipping now:
   tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
   on the chosen interval while the API says sign-up is open, read on the server and cached for
-  five minutes, or how to ask for access by e-mail while it is closed), a FAQ and the introduction post. The address follows the section being read, and switching language opens the
+  five minutes, or how to ask for access by e-mail while it is closed; on a page in another
+  language than Portuguese, an approximate price in the reader's currency under the price in reais,
+  euros or US dollars by the page's language and both in Spanish, in whole units, from the European
+  Central Bank's daily reference rates, read on the server, cached for a day and left out when they
+  cannot be read), a FAQ and the introduction post. The address follows the section being read, and switching language opens the
   other page on that section, still from the copy the speculation rules fetched ahead. A robot
   points to the Claude connector section and flies off once the reader gets there or dismisses
   it. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document view transition
@@ -536,7 +540,10 @@ The demo's project also builds the home page. `NEXT_PUBLIC_LANDING_PYXIS_KEY` (t
 the Pyxis project that measures the home page) turns its measurement on;
 `NEXT_PUBLIC_LANDING_PYXIS_ENDPOINT` overrides the ingestion URL, which defaults to
 `https://api.pyxis-analytics.dev` (the e2e suite points it at the local server and answers the
-batches itself).
+batches itself). `EXCHANGE_RATES_URL` (server only) overrides where the pricing section reads the
+euro reference rates, by default the European Central Bank's daily file; the e2e suite points it
+at an address of the local server that answers 404, so the suite never reaches the bank and the
+approximate price stays hidden there.
 
 The contract of the hosted service (terms of use, privacy policy and data processing agreement,
 in Portuguese, the language of the contract) lives in `content/legal` as Markdown and is served by
@@ -716,6 +723,10 @@ docs/adr/           architecture decision records
   as `HttpOnly` because only the server reads it. Neither identifies anyone
 - The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data
+- The home page's approximate price comes from the European Central Bank's daily reference rates,
+  read by the server at the same address for every reader and cached for a day: nothing about the
+  visitor goes into that request, and the browser connects to nothing new, so the Content Security
+  Policy is unchanged
 - Each read of the API writes one JSON line to the server log, `api_read` with the route template
   (`/v1/projects/:projectId/overview`), the status and the duration in milliseconds: no project
   id, no query value, no cookie, nothing about the person signed in
