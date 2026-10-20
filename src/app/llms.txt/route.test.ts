@@ -22,6 +22,7 @@ describe('GET /llms.txt', () => {
     const text = await response.text();
     expect(text.startsWith('# Pyxis\n\n> Privacy-first product analytics.')).toBe(true);
     expect(text).toContain('npm install pyxis-analytics');
+    expect(text).toContain('\n## Install with an AI agent\n');
   });
 
   it('answers 404 on the live demo, which is not the home page', async () => {
