@@ -1,5 +1,18 @@
+import manifest from '../../package.json';
+
 export const TRACKER_PACKAGE = 'pyxis-analytics';
-export const TRACKER_VERSION = '0.2.1';
+
+const PINNABLE_RANGE = /^[\^~]?(\d+\.\d+\.\d+)$/;
+
+export function pinnedVersion(range: string): string {
+  const version = PINNABLE_RANGE.exec(range)?.[1];
+  if (version === undefined) {
+    throw new Error(`${TRACKER_PACKAGE} must be required as x.y.z, ^x.y.z or ~x.y.z, not ${range}`);
+  }
+  return version;
+}
+
+export const TRACKER_VERSION = pinnedVersion(manifest.dependencies[TRACKER_PACKAGE]);
 
 export function installCommand(): string {
   return `npm install ${TRACKER_PACKAGE}`;

@@ -297,7 +297,9 @@ Shipping now:
   browser's time zone, an optional conversion event; the plan's three projects). The new project
   opens on `/[projectId]/install`: the npm and plain-HTML snippets with its public key and the
   API's address, each with a copy button, then "Waiting for the first event…", checked again
-  every few seconds until it arrives and the dashboard opens
+  every few seconds until it arrives and the dashboard opens. The plain-HTML snippet loads the
+  exact `pyxis-analytics` version this repository depends on (read from `package.json`), so the
+  weekly Dependabot update of the tracker moves the snippet with it
 - An Account and billing page (`/account`, from the account menu) for the owner of a hosted
   account: the plan and its state (free trial, active, payment failed, ending, ended with the
   deletion date, sign-up not finished), the events measured this month against the quota, the
