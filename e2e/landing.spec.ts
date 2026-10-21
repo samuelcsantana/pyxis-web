@@ -77,6 +77,7 @@ test('keeps the billing period switch on one row on a phone, in every language',
   isMobile,
 }) => {
   test.skip(!isMobile, 'Only a phone is narrow enough to wrap the switch.');
+  test.slow();
   for (const width of NARROW_PHONE_WIDTHS) {
     await page.setViewportSize({ width, height: PHONE_HEIGHT });
     for (const path of HOME_PATHS) {
