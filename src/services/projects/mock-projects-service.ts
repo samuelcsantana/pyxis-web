@@ -7,7 +7,7 @@ import { DEMO_FIRST_EVENT_AT, demoProjectSettingsWire } from './demo-project-set
 import type { IProjectsService } from './projects-service.interface';
 
 export const DEMO_ME_RESPONSE = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: DEMO_PROJECTS.map((project) => ({
     id: project.id,
     name: project.name,

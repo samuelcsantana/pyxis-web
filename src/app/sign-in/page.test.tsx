@@ -33,7 +33,7 @@ async function askForACode() {
 }
 
 async function signInWithTheDemoCode() {
-  await userEvent.type(screen.getByLabelText('Email'), 'owner@demo-store.example');
+  await userEvent.type(screen.getByLabelText('Email'), 'owner@example.com');
   await userEvent.click(screen.getByRole('button', { name: 'Send code' }));
   await userEvent.type(await screen.findByLabelText('6-digit code'), '000000');
 }

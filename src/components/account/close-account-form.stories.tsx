@@ -26,7 +26,7 @@ export const Default: Story = {};
 export const HandsTheClosureOn: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.type(canvas.getByRole('textbox'), 'owner@demo-store.example');
+    await userEvent.type(canvas.getByRole('textbox'), 'owner@example.com');
     await userEvent.click(canvas.getByRole('button', { name: 'Close the account for good' }));
     await expect(args.onClosed).toHaveBeenCalled();
   },

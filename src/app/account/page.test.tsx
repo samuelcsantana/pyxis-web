@@ -17,7 +17,7 @@ vi.mock('@/services/accounts/accounts-service.factory', () => ({
 vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({
     currentAdmin: (): Promise<Admin> =>
-      Promise.resolve({ email: 'owner@demo-store.example', projects: [] }),
+      Promise.resolve({ email: 'owner@example.com', projects: [] }),
   }),
 }));
 
@@ -47,7 +47,7 @@ describe('AccountPage', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Account and billing' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getByText('owner@example.com')).toBeInTheDocument();
     expect(screen.getByText(/Free trial until/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close the account for good' })).toBeInTheDocument();

@@ -116,8 +116,8 @@ describe('MockProjectPeopleService', () => {
     const people = await service.list();
 
     expect(people.map((person) => [person.email, person.role])).toEqual([
-      ['owner@demo-store.example', 'owner'],
-      ['analyst@demo-store.example', 'member'],
+      ['owner@example.com', 'owner'],
+      ['analyst@example.com', 'member'],
     ]);
   });
 

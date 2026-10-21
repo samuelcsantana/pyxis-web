@@ -47,7 +47,7 @@ const STORE = {
   conversionEvent: 'signup_completed',
 };
 const DOCS = { id: 'p-docs', name: 'Demo Docs', timezone: 'UTC', conversionEvent: null };
-const ADMIN: Admin = { email: 'owner@demo-store.example', projects: [STORE, DOCS] };
+const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE, DOCS] };
 
 function renderDevices(projectId = 'p-store') {
   return DevicesPage({

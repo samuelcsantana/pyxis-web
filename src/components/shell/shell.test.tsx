@@ -31,7 +31,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [
     { id: 'p-store', name: 'Demo Store', timezone: 'America/Sao_Paulo', conversionEvent: null },
     { id: 'p-docs', name: 'Demo Docs', timezone: 'Europe/Lisbon', conversionEvent: 'signup' },
@@ -384,7 +384,7 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByText('Account and preferences')).toBeInTheDocument();
-    expect(screen.getByText('owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getByText('owner@example.com')).toBeInTheDocument();
     expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(1);
     expect(screen.getByRole('group', { name: 'Theme', hidden: true })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out', hidden: true })).toBeInTheDocument();

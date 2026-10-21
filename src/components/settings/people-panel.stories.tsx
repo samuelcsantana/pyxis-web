@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>;
 export const ForTheOwner: Story = {};
 
 export const ForSomeoneTheOwnerAdded: Story = {
-  args: { manage: null, myEmail: 'analyst@demo-store.example' },
+  args: { manage: null, myEmail: 'analyst@example.com' },
 };
 
 export const Invited: Story = {

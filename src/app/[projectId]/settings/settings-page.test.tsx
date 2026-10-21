@@ -51,7 +51,7 @@ const STORE = {
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
 };
-const ADMIN: Admin = { email: 'owner@demo-store.example', projects: [STORE] };
+const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE] };
 
 function renderSettings(projectId = DEMO_STORE.id) {
   return SettingsPage({ params: Promise.resolve({ projectId }) });

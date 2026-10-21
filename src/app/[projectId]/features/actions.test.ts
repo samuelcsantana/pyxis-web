@@ -35,7 +35,7 @@ vi.mock('@/services/features/features-service.factory', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [{ id: 'p-store', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
 };
 const RANGE = { from: '2026-09-29', to: '2026-10-05' };

@@ -50,7 +50,7 @@ type Story = StoryObj<typeof meta>;
 
 async function reachCodeStep(canvasElement: HTMLElement) {
   const canvas = within(canvasElement);
-  await userEvent.type(canvas.getByLabelText('Email'), 'owner@demo-store.example');
+  await userEvent.type(canvas.getByLabelText('Email'), 'owner@example.com');
   await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
   return canvas;
 }
@@ -74,7 +74,7 @@ export const RestoredAfterReload: Story = {
   beforeEach: () => {
     window.sessionStorage.setItem(
       PENDING_SIGN_IN_KEY,
-      JSON.stringify({ email: 'owner@demo-store.example', sentAt: Date.now() - 12_000 }),
+      JSON.stringify({ email: 'owner@example.com', sentAt: Date.now() - 12_000 }),
     );
     return () => {
       window.sessionStorage.removeItem(PENDING_SIGN_IN_KEY);

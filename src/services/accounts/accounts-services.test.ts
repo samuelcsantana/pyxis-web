@@ -151,7 +151,7 @@ describe('MockAccountsService', () => {
   it("closes the demo account only with the demo owner's address", async () => {
     const service = new MockAccountsService(() => NOW);
 
-    await expect(service.close(DEMO_ACCOUNT_ID, ' Owner@Demo-Store.example ')).resolves.toEqual({
+    await expect(service.close(DEMO_ACCOUNT_ID, ' Owner@Example.com ')).resolves.toEqual({
       kind: 'closed',
       accessEndsAt: NOW.toISOString(),
       deletionOn: '2026-12-20T12:00:00.000Z',

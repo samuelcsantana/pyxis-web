@@ -29,7 +29,7 @@ vi.mock('@/services/connection-requests/connection-requests-service.factory', ()
 vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({
     currentAdmin: (): Promise<Admin> =>
-      Promise.resolve({ email: 'owner@demo-store.example', projects: [] }),
+      Promise.resolve({ email: 'owner@example.com', projects: [] }),
   }),
 }));
 
@@ -81,7 +81,7 @@ describe('ConnectPage', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Connect Claude Code to Pyxis?' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Signed in as owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getByText('Signed in as owner@example.com')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Allow' })).toBeEnabled();
   });
 

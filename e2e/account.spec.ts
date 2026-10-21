@@ -85,7 +85,7 @@ test('closes the account only with the owner address, saying when everything goe
     'That is not your e-mail address, so nothing was closed.',
   );
 
-  await field.fill('owner@demo-store.example');
+  await field.fill('owner@example.com');
   await page.getByRole('button', { name: 'Close the account for good' }).click();
   await expect(page.getByRole('main').getByRole('status')).toContainText(
     'The account is closed. Everything is deleted on',

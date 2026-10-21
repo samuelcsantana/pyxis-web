@@ -8,7 +8,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
 }));
 
-const EMAIL = 'owner@demo-store.example';
+const EMAIL = 'owner@example.com';
 const chooseNothing = () => Promise.resolve();
 
 function renderMenu() {
@@ -22,7 +22,7 @@ describe('AccountMenu', () => {
     const { container } = renderMenu();
 
     const summary = container.querySelector('summary');
-    expect(summary).toHaveTextContent('OAccount and preferencesowner@demo-store.example');
+    expect(summary).toHaveTextContent('OAccount and preferencesowner@example.com');
     expect(container.querySelector('details')).not.toHaveAttribute('open');
   });
 

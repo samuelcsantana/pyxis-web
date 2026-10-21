@@ -36,7 +36,7 @@ vi.mock('@/services/requests/requests-service.factory', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [{ id: 'demo', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
 };
 const WRITES = { from: '2026-09-29', to: '2026-10-05', kind: 'writes', screen: null };

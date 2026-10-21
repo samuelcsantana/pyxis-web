@@ -36,7 +36,7 @@ vi.mock('@/services/timeline/timeline-service.factory', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [{ id: 'p-store', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
 };
 const NOW = new Date('2026-10-06T02:30:00.000Z');

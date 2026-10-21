@@ -43,7 +43,7 @@ vi.mock('@/services/acquisition/acquisition-service.factory', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [
     {
       id: 'p-store',
