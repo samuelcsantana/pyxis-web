@@ -1787,6 +1787,21 @@ export const ptBR = translation({
           answerOpen:
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail e um cartão: 14 dias grátis, uma vez por cliente, e você cancela quando quiser.',
         },
+        agency: {
+          question: 'Posso usar o Pyxis nos sites dos meus clientes?',
+          answer:
+            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
+        },
+        noCode: {
+          question: 'Não programo. Consigo instalar?',
+          answer:
+            'A instalação é um pacote e duas linhas no código do site, então alguém precisa mexer nesse código: você com um agente de IA, quem fez o seu site ou uma agência. Depois disso, o painel e o Claude não pedem código nenhum.',
+        },
+        aiInstall: {
+          question: 'Posso pedir para uma IA instalar?',
+          answer:
+            'Pode. Abra o repositório do site no Claude Code, no Cursor ou em outro agente e peça para instalar o Pyxis seguindo <code>https://pyxis-analytics.dev/llms.txt</code>, com a chave pública do seu projeto. O agente acrescenta o pacote, o <code>init</code> e os eventos. Depois, conecte o Claude ao Pyxis para conferir que os primeiros eventos chegaram.',
+        },
         price: {
           question: 'Quanto custa?',
           answer:
