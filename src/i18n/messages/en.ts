@@ -1725,10 +1725,10 @@ export const en = {
       trial: '14 days free. The card is only charged on day 15, and you can cancel any time.',
       invite:
         'For now, access is by invitation: you ask, receive the payment link and, once subscribed, get access to the dashboard within 2 business days.',
-      moreTitle: 'Need more?',
-      more: 'More than 3 sites, more than 100,000 events a month or more people in the dashboard? Tell us what you need at hello@pyxis-analytics.dev and we reply within 2 business days with a plan that fits.',
-      moreLink: 'Ask about a larger plan',
-      moreSubject: 'A larger Pyxis plan',
+      moreTitle: 'For agencies and developers',
+      more: 'Measure your clients’ sites: each client signs in with their own e-mail and sees only their project. The plan has up to 3 sites and 3 people, you included. For more clients, say how many sites and people at hello@pyxis-analytics.dev and we reply within 2 business days with a plan that fits.',
+      moreLink: 'Ask about a plan for agencies',
+      moreSubject: 'A Pyxis plan for an agency',
       start: 'Start your free trial',
       openNote:
         'Sign up with an e-mail and a card; the dashboard opens as soon as the subscription is confirmed.',

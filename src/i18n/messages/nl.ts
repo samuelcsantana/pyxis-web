@@ -1764,10 +1764,10 @@ export const nl = translation({
       trial: '14 dagen gratis. Je kaart wordt pas op dag 15 belast, en je kunt altijd opzeggen.',
       invite:
         'Voorlopig is toegang alleen op uitnodiging: je vraagt het aan, krijgt de betaallink en hebt na het abonneren binnen 2 werkdagen toegang tot het dashboard.',
-      moreTitle: 'Meer nodig?',
-      more: 'Meer dan 3 sites, meer dan 100.000 events per maand of meer personen in het dashboard? Vertel ons via hello@pyxis-analytics.dev wat je nodig hebt; we reageren binnen 2 werkdagen met een abonnement dat past.',
-      moreLink: 'Vraag naar een groter abonnement',
-      moreSubject: 'Een groter Pyxis-abonnement',
+      moreTitle: 'Voor bureaus en developers',
+      more: 'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
+      moreLink: 'Vraag naar een abonnement voor bureaus',
+      moreSubject: 'Een Pyxis-abonnement voor een bureau',
       start: 'Start je gratis proefperiode',
       openNote:
         'Registreer je met een e-mailadres en een kaart; het dashboard opent zodra het abonnement is bevestigd.',

@@ -1738,10 +1738,10 @@ export const ptBR = translation({
       trial: '14 dias grátis. O cartão só é cobrado no 15º dia, e você cancela quando quiser.',
       invite:
         'Nesta fase, o acesso é por convite: você pede, recebe o link de pagamento e, depois de assinar, o acesso ao painel chega em até 2 dias úteis.',
-      moreTitle: 'Precisa de mais?',
-      more: 'Mais de 3 sites, mais de 100 mil eventos por mês ou mais pessoas no painel? Conte o que você precisa em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
-      moreLink: 'Falar sobre um plano maior',
-      moreSubject: 'Um plano maior do Pyxis',
+      moreTitle: 'Para agências e devs',
+      more: 'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O plano tem até 3 sites e 3 pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
+      moreLink: 'Falar sobre um plano para agência',
+      moreSubject: 'Um plano do Pyxis para agência',
       start: 'Começar o teste grátis',
       openNote:
         'Cadastre-se com um e-mail e um cartão; o painel abre assim que a assinatura é confirmada.',
