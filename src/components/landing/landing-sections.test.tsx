@@ -4,7 +4,13 @@ import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
 import { InProductionSection } from './in-production-section';
-import { codeTextOf, FIRST_EVENT, INSTALL_COMMAND, InstallSection } from './install-section';
+import {
+  codeTextOf,
+  FIRST_EVENT,
+  INSTALL_COMMAND,
+  InstallSection,
+  START_STEPS,
+} from './install-section';
 import { LandingSection } from './landing-section';
 import { NeverStoredSection } from './never-stored-section';
 import { ScreenGlyph } from './screen-glyph';
@@ -120,6 +126,30 @@ describe('InstallSection', () => {
     expect(screen.getByRole('region', { name: 'What a site adds' })).toHaveTextContent(
       'Your keys come with your account: start the free trial below, or run your own Pyxis.',
     );
+  });
+
+  it('walks through the three steps to a first number before the code, once sign-up is open', () => {
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    const steps = screen.getByRole('list', { name: 'How to start, in 3 steps' });
+    const items = within(steps).getAllByRole('listitem');
+    expect(items.map((item) => within(item).getByRole('heading').textContent)).toEqual([
+      'Create the account and the project',
+      'Install it, yourself or with an AI agent',
+      'Ask',
+    ]);
+    expect(items).toHaveLength(START_STEPS.length);
+    expect(items[0]).toHaveTextContent('1Create the account and the project');
+    expect(items[0]).toHaveTextContent('14 days free');
+    expect(steps.compareDocumentPosition(screen.getByText('npm install pyxis-analytics'))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it('leaves the steps out while sign-up is closed, since the first one is signing up', () => {
+    render(<InstallSection i18n={english} signUpOpen={false} />);
+
+    expect(screen.queryByRole('list', { name: 'How to start, in 3 steps' })).toBeNull();
   });
 
   it('copies exactly the text it shows', () => {

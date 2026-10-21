@@ -82,6 +82,35 @@ export function CodeBlock({ id, tokens, labels, wrap = false }: CodeBlockProps) 
 
 const INFO_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 11v5.5 M12 7.5h.01';
 
+export const START_STEPS = ['account', 'install', 'ask'] as const;
+
+function StartSteps({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <ol aria-label={t('landing.install.steps.label')} className="mb-7 grid gap-3 md:grid-cols-3">
+      {START_STEPS.map((step, index) => (
+        <li
+          key={step}
+          className={`flex gap-3.5 rounded-card border border-line bg-card p-4 ${REVEAL}`}
+        >
+          <span
+            aria-hidden="true"
+            className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-accent font-mono font-semibold text-accent-ink"
+          >
+            {index + 1}
+          </span>
+          <div className="flex flex-col gap-1">
+            <h3 className="text-base font-semibold">{t(`landing.install.steps.${step}.title`)}</h3>
+            <p className="text-sm leading-normal text-muted">
+              {t(`landing.install.steps.${step}.body`)}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
   const { t } = i18n;
   const labels = {
@@ -96,6 +125,7 @@ export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
       title={t('landing.install.title')}
       lead={t('landing.install.lead')}
     >
+      {signUpOpen ? <StartSteps i18n={i18n} /> : null}
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
         <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
           <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />

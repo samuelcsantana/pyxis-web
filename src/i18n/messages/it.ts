@@ -1641,6 +1641,21 @@ export const it = translation({
       eyebrow: 'Installazione',
       title: 'Cosa aggiunge un sito',
       lead: 'Un pacchetto e due righe. Le visualizzazioni di pagina vengono registrate da sole; un evento con nome è una chiamata.',
+      steps: {
+        label: 'Come iniziare, in 3 passaggi',
+        account: {
+          title: 'Crea l’account e il progetto',
+          body: 'Nella dashboard, con un’e-mail e una carta: 14 giorni gratis. Il progetto arriva già con la sua chiave pubblica.',
+        },
+        install: {
+          title: 'Installalo, da solo o con un agente di IA',
+          body: 'Un pacchetto e due righe nel codice del sito, oppure una richiesta a Claude Code, a Cursor o a un altro agente.',
+        },
+        ask: {
+          title: 'Chiedi',
+          body: 'Apri la dashboard, oppure collega Claude e chiedi com’è andata la settimana e dove le persone si fermano.',
+        },
+      },
       copy: 'Copia',
       copied: 'Copiato',
       selected: 'Selezionato, premi Ctrl+C',

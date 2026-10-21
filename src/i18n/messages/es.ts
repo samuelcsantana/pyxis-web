@@ -1626,6 +1626,21 @@ export const es = translation({
       eyebrow: 'Instalación',
       title: 'Lo que agrega un sitio',
       lead: 'Un paquete y dos líneas. Las vistas de página se registran solas; un evento con nombre es una llamada.',
+      steps: {
+        label: 'Cómo empezar, en 3 pasos',
+        account: {
+          title: 'Crea la cuenta y el proyecto',
+          body: 'En el panel, con un correo y una tarjeta: 14 días gratis. El proyecto ya trae su clave pública.',
+        },
+        install: {
+          title: 'Instálalo, tú o un agente de IA',
+          body: 'Un paquete y dos líneas en el código del sitio, o un pedido a Claude Code, a Cursor o a otro agente.',
+        },
+        ask: {
+          title: 'Pregunta',
+          body: 'Abre el panel, o conecta Claude y pregunta cómo fue la semana y dónde se detiene la gente.',
+        },
+      },
       copy: 'Copiar',
       copied: 'Copiado',
       selected: 'Seleccionado, presiona Ctrl+C',

@@ -1607,6 +1607,21 @@ export const en = {
       eyebrow: 'Install',
       title: 'What a site adds',
       lead: 'One package and two lines. Page views are recorded on their own; a named event is one call.',
+      steps: {
+        label: 'How to start, in 3 steps',
+        account: {
+          title: 'Create the account and the project',
+          body: 'In the dashboard, with an e-mail and a card: 14 days free. The project comes with its public key.',
+        },
+        install: {
+          title: 'Install it, yourself or with an AI agent',
+          body: 'One package and two lines in the site’s code, or a request to Claude Code, Cursor or another agent.',
+        },
+        ask: {
+          title: 'Ask',
+          body: 'Open the dashboard, or connect Claude and ask how the week went and where people stop.',
+        },
+      },
       copy: 'Copy',
       copied: 'Copied',
       selected: 'Selected, press Ctrl+C',

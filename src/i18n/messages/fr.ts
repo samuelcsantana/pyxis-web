@@ -1655,6 +1655,21 @@ export const fr = translation({
       eyebrow: 'Installation',
       title: 'Ce qu’un site ajoute',
       lead: 'Un paquet et deux lignes. Les pages vues sont enregistrées automatiquement ; un événement nommé tient en un appel.',
+      steps: {
+        label: 'Pour commencer, en 3 étapes',
+        account: {
+          title: 'Créez le compte et le projet',
+          body: 'Dans le tableau de bord, avec une adresse e-mail et une carte : 14 jours gratuits. Le projet arrive avec sa clé publique.',
+        },
+        install: {
+          title: 'Installez-le, vous-même ou avec un agent d’IA',
+          body: 'Un paquet et deux lignes dans le code du site, ou une demande à Claude Code, à Cursor ou à un autre agent.',
+        },
+        ask: {
+          title: 'Posez vos questions',
+          body: 'Ouvrez le tableau de bord, ou connectez Claude et demandez comment s’est passée la semaine et où les gens s’arrêtent.',
+        },
+      },
       copy: 'Copier',
       copied: 'Copié',
       selected: 'Sélectionné, appuyez sur Ctrl+C',
