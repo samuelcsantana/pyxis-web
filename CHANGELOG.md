@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.30.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.29.0...v0.30.0) (2026-10-21)
+
+
+### Features
+
+* **demo:** give the demo people example.com addresses ([4951579](https://github.com/samuelcsantana/pyxis-web/commit/4951579028b4cba443728a9f720b0e6b34e53756))
+* **demo:** name the demo store "My site", in the reader's language ([bc47081](https://github.com/samuelcsantana/pyxis-web/commit/bc47081234f73605acf31dd58fffff51ed5450fc))
+* **landing:** add a section on who Pyxis is for ([3d64af1](https://github.com/samuelcsantana/pyxis-web/commit/3d64af14c621787ee59d95f0e8381db4e8afedd5))
+* **landing:** answer agencies, non-coders and AI installs in the FAQ ([bc4f09e](https://github.com/samuelcsantana/pyxis-web/commit/bc4f09ea61d89a6d5639814125aed0c01229e455))
+* **landing:** compare failed requests and tracker size ([24630ee](https://github.com/samuelcsantana/pyxis-web/commit/24630ee12fe3666dc3e6256acd1dd60a7b779518))
+* **landing:** fold the In production section into Built in public ([6a699ed](https://github.com/samuelcsantana/pyxis-web/commit/6a699ed51f15718f93495a586f9a4d3fe8d716f2))
+* **landing:** lead with what converts and what fails on your site ([2d64905](https://github.com/samuelcsantana/pyxis-web/commit/2d649050ab56637d05d65539b8837ac34ed4b491))
+* **landing:** make the free trial the hero's main button ([b44cdf5](https://github.com/samuelcsantana/pyxis-web/commit/b44cdf5ced3fa30aaceac510539a44e24dfea17c))
+* **landing:** put the dashboard, Claude and pricing before the engineering ([cbdadaa](https://github.com/samuelcsantana/pyxis-web/commit/cbdadaa250c14656e8773f03f01ba77617c40b05))
+* **landing:** say what converts and what fails in the search result ([e9e1b1d](https://github.com/samuelcsantana/pyxis-web/commit/e9e1b1d1396654c2036a4a83b4eb094c40286bd1))
+* **landing:** send people to Claude's connector directory first ([58a18fd](https://github.com/samuelcsantana/pyxis-web/commit/58a18fda2719ea0f152ce00e413b13fa44d1e8cd))
+* **landing:** show how to start, in three steps, before the code ([498ce0d](https://github.com/samuelcsantana/pyxis-web/commit/498ce0d662926175e857579d1386227b6bcd1d0d))
+* **landing:** show the biggest drop-off and the failing write on the preview ([2220305](https://github.com/samuelcsantana/pyxis-web/commit/22203058aa6c117d32c5560b2177c11c4bab9de1))
+* **landing:** show the weekly digest e-mail in a Reports section ([8b5e27d](https://github.com/samuelcsantana/pyxis-web/commit/8b5e27dfbc61c1d5cb4e63b10fd9e6bd09fac59d))
+* **landing:** turn the "Need more?" card into one for agencies ([3aff0e3](https://github.com/samuelcsantana/pyxis-web/commit/3aff0e383a0a362ad25c30ea2f14f926518eadcc))
+* **llms:** give coding agents the install recipe ([2506e2d](https://github.com/samuelcsantana/pyxis-web/commit/2506e2d742e66a1600ce23b6ec06af409562b64f))
+
+
+### Bug Fixes
+
+* **install:** load the plain-HTML snippet from jsDelivr ([ce70048](https://github.com/samuelcsantana/pyxis-web/commit/ce700483b395429d9f1f359d52e9071787d5b075))
+* **install:** pin the plain-HTML snippet to the tracker version installed here ([2dbb8d7](https://github.com/samuelcsantana/pyxis-web/commit/2dbb8d7c55c9d84dab740de1260d1094bc78362e))
+
+
+### Refactoring
+
+* **funnel:** name the worst transition of a funnel ([a58193a](https://github.com/samuelcsantana/pyxis-web/commit/a58193a9e0e8c02ac0d6170d038137a9f1a39931))
+
+
+### Documentation
+
+* **readme:** bring the status and the roadmap up to date ([8255f13](https://github.com/samuelcsantana/pyxis-web/commit/8255f1325d266db296ca5be4a2ee7f8104f6d82d))
+
 ## [0.29.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.28.0...v0.29.0) (2026-10-19)
 
 
