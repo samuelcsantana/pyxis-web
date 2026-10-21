@@ -1779,10 +1779,10 @@ export const fr = translation({
         '14 jours gratuits. La carte n’est débitée qu’au 15e jour, et vous pouvez résilier à tout moment.',
       invite:
         'Pour l’instant, l’accès se fait sur invitation : vous en faites la demande, recevez le lien de paiement et, une fois abonné, obtenez l’accès au tableau de bord sous 2 jours ouvrés.',
-      moreTitle: 'Besoin de plus ?',
-      more: 'Plus de 3 sites, plus de 100 000 événements par mois ou plus de personnes dans le tableau de bord ? Dites-nous ce dont vous avez besoin à hello@pyxis-analytics.dev : nous répondons sous 2 jours ouvrés avec une formule adaptée.',
-      moreLink: 'Demander une formule supérieure',
-      moreSubject: 'Une formule Pyxis supérieure',
+      moreTitle: 'Pour les agences et les développeurs',
+      more: 'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
+      moreLink: 'Demander une formule pour agence',
+      moreSubject: 'Une formule Pyxis pour agence',
       start: 'Démarrer votre essai gratuit',
       openNote:
         'Inscrivez-vous avec un e-mail et une carte ; le tableau de bord s’ouvre dès que l’abonnement est confirmé.',

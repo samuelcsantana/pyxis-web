@@ -1765,10 +1765,10 @@ export const it = translation({
         '14 giorni gratis. La carta viene addebitata solo il quindicesimo giorno, e puoi annullare quando vuoi.',
       invite:
         'Per ora l’accesso è su invito: lo richiedi, ricevi il link di pagamento e, dopo l’abbonamento, ottieni l’accesso alla dashboard entro 2 giorni lavorativi.',
-      moreTitle: 'Ti serve di più?',
-      more: 'Più di 3 siti, più di 100.000 eventi al mese o più persone nella dashboard? Scrivici di cosa hai bisogno a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
-      moreLink: 'Chiedi un piano più grande',
-      moreSubject: 'Un piano Pyxis più grande',
+      moreTitle: 'Per agenzie e sviluppatori',
+      more: 'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Il piano comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
+      moreLink: 'Chiedi un piano per agenzie',
+      moreSubject: 'Un piano Pyxis per agenzia',
       start: 'Inizia la prova gratuita',
       openNote:
         'Registrati con un’email e una carta; la dashboard si apre appena l’abbonamento è confermato.',

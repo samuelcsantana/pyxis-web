@@ -89,23 +89,26 @@ describe('PricingSection', () => {
     );
   });
 
-  it('invites whoever needs more than the plan to ask for a larger one, in their language', () => {
+  it('invites agencies to measure their clients’ sites and to ask for a plan that fits', () => {
     const { unmount } = render(<PricingSection i18n={english} signUpOpen />);
 
-    expect(screen.getByRole('heading', { name: 'Need more?' })).toBeVisible();
-    const ask = screen.getByRole('link', { name: 'Ask about a larger plan' });
+    expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
+    expect(
+      screen.getByText(/each client signs in with their own e-mail and sees only their project/),
+    ).toBeVisible();
+    const ask = screen.getByRole('link', { name: 'Ask about a plan for agencies' });
     expect(ask).toHaveAttribute(
       'href',
-      'mailto:hello@pyxis-analytics.dev?subject=A%20larger%20Pyxis%20plan',
+      'mailto:hello@pyxis-analytics.dev?subject=A%20Pyxis%20plan%20for%20an%20agency',
     );
     expect(ask).toHaveAttribute('data-track', 'larger_plan_requested');
     expect(ask).toHaveAttribute('data-track-from', 'pricing');
     unmount();
 
     render(<PricingSection i18n={portuguese} signUpOpen />);
-    expect(screen.getByRole('link', { name: 'Falar sobre um plano maior' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Falar sobre um plano para agência' })).toHaveAttribute(
       'href',
-      'mailto:hello@pyxis-analytics.dev?subject=Um%20plano%20maior%20do%20Pyxis',
+      'mailto:hello@pyxis-analytics.dev?subject=Um%20plano%20do%20Pyxis%20para%20ag%C3%AAncia',
     );
   });
 
