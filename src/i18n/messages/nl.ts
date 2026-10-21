@@ -1700,6 +1700,13 @@ export const nl = translation({
       note: 'Sleutels worden uitgegeven door wie de API draait, en er is momenteel geen openbare registratie. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
       noteOpen:
         'Je sleutels horen bij je account: start hieronder de gratis proefperiode, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
+      agent: {
+        title: 'Of vraag het je AI-agent',
+        lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere agent en plak:',
+        prompt:
+          'Installeer Pyxis op deze site volgens https://pyxis-analytics.dev/llms.txt. De publieke sleutel van mijn project is pyxis_pk_… en het endpoint is https://api.pyxis-analytics.dev. Meet de pagina’s en registreer bij elke stap van de bestelling een event, zonder persoonsgegevens.',
+        foot: 'De agent volgt de regels in <code>llms.txt</code>: geen persoonsgegevens, geldige eventnamen, het API-adres in de CSP. Koppel daarna Claude aan Pyxis om te controleren dat de eerste events zijn aangekomen.',
+      },
     },
     public: {
       eyebrow: 'Engineering',

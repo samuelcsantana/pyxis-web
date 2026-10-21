@@ -1684,6 +1684,13 @@ export const es = translation({
       note: 'Las claves las emite quien opera la API, y hoy no hay registro abierto. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
       noteOpen:
         'Las claves vienen con tu cuenta: empieza la prueba gratis más abajo o ejecuta tu propio Pyxis. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
+      agent: {
+        title: 'O pídeselo a tu agente de IA',
+        lead: 'Abre el repositorio del sitio en Claude Code, en Cursor o en otro agente y pega:',
+        prompt:
+          'Instala Pyxis en este sitio siguiendo https://pyxis-analytics.dev/llms.txt. La clave pública de mi proyecto es pyxis_pk_… y el endpoint es https://api.pyxis-analytics.dev. Mide las páginas y registra un evento en cada paso del pedido, sin ningún dato personal.',
+        foot: 'El agente sigue las reglas de <code>llms.txt</code>: ningún dato personal, nombres de evento válidos, la dirección de la API en la CSP. Después, conecta Claude a Pyxis para comprobar que llegaron los primeros eventos.',
+      },
     },
     public: {
       eyebrow: 'Ingeniería',

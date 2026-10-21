@@ -29,10 +29,15 @@ export const English: Story = {
 export const SignUpOpen: Story = {
   args: { signUpOpen: true },
   play: async ({ canvasElement }) => {
-    await expect(
-      within(canvasElement).getByRole('list', { name: 'How to start, in 3 steps' }),
-    ).toBeVisible();
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('list', { name: 'How to start, in 3 steps' })).toBeVisible();
+    await expect(canvas.getByRole('group', { name: 'Or ask your AI agent' })).toBeVisible();
   },
+};
+
+export const SignUpOpenInPortuguese: Story = {
+  args: { signUpOpen: true },
+  globals: { locale: 'pt-BR' },
 };
 
 export const SignUpOpenOnAPhone: Story = {

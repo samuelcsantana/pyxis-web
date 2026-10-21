@@ -1665,6 +1665,13 @@ export const en = {
       note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
       noteOpen:
         'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+      agent: {
+        title: 'Or ask your AI agent',
+        lead: 'Open the site’s repository in Claude Code, Cursor or another agent and paste:',
+        prompt:
+          'Install Pyxis on this site following https://pyxis-analytics.dev/llms.txt. My project’s public key is pyxis_pk_… and the endpoint is https://api.pyxis-analytics.dev. Measure the pages and record an event at each step of the order, with no personal data.',
+        foot: 'The agent follows the rules in <code>llms.txt</code>: no personal data, valid event names, the API address in the CSP. Then connect Claude to Pyxis to check that the first events arrived.',
+      },
     },
     public: {
       eyebrow: 'Engineering',

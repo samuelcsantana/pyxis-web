@@ -1,4 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
@@ -119,6 +120,40 @@ function StartSteps({ i18n }: { readonly i18n: I18n }) {
   );
 }
 
+export const AGENT_PROMPT_ID = 'install-agent-prompt';
+
+interface AgentPromptProps {
+  readonly i18n: I18n;
+  readonly labels: CopyCodeLabels;
+}
+
+function AgentPrompt({ i18n, labels }: AgentPromptProps) {
+  const { t } = i18n;
+  return (
+    <div
+      aria-labelledby="install-agent-title"
+      role="group"
+      className={`mt-7 flex flex-col gap-3 rounded-card border border-line bg-card p-5 ${REVEAL}`}
+    >
+      <h3 id="install-agent-title" className="text-lg font-semibold">
+        {t('landing.install.agent.title')}
+      </h3>
+      <p className="text-base leading-relaxed text-muted">{t('landing.install.agent.lead')}</p>
+      <CodeBlock
+        id={AGENT_PROMPT_ID}
+        tokens={[plain(t('landing.install.agent.prompt'))]}
+        labels={labels}
+        wrap="words"
+      />
+      <p className="text-sm leading-relaxed text-muted">
+        {rich(t('landing.install.agent.foot'), {
+          code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
+        })}
+      </p>
+    </div>
+  );
+}
+
 export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
   const { t } = i18n;
   const labels = {
@@ -161,6 +196,7 @@ export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
           {signUpOpen ? t('landing.install.noteOpen') : t('landing.install.note')}
         </p>
       </div>
+      {signUpOpen ? <AgentPrompt i18n={i18n} labels={labels} /> : null}
     </LandingSection>
   );
 }
