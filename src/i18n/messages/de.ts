@@ -1717,17 +1717,11 @@ export const de = translation({
       noteOpen:
         'Deine Schlüssel bekommst du mit deinem Konto: Starte unten die kostenlose Testphase oder betreibe dein eigenes Pyxis. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
     },
-    production: {
-      eyebrow: 'Im Einsatz',
-      title: 'Misst echte Websites seit Oktober 2026',
-      bolsoverde:
-        'Ein Tool, mit dem kleine Händler Verkäufe, Gebühren und Auszahlungen im Blick behalten',
-      blog: 'Der Blog des Autors',
-      foot: 'Keine der beiden Websites braucht ein Cookie, um gemessen zu werden.',
-    },
     public: {
       eyebrow: 'Engineering',
       title: 'Öffentlich entwickelt',
+      production:
+        'Misst seit Oktober 2026 echte Websites, <bolsoverde>bolsoverde.com</bolsoverde> und <blog>den Blog des Autors</blog>, beide ohne Cookie.',
       items: {
         coverage:
           '100\u00a0% der Anweisungen, Verzweigungen, Funktionen und Zeilen in allen drei Repositorys abgedeckt. Darunter schlägt die CI fehl.',

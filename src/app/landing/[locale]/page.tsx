@@ -10,7 +10,6 @@ import { BuiltInPublicSection } from '@/components/landing/built-in-public-secti
 import { ComparisonSection } from '@/components/landing/comparison-section';
 import { DashboardAnswersSection } from '@/components/landing/dashboard-answers-section';
 import { FaqSection } from '@/components/landing/faq-section';
-import { InProductionSection } from '@/components/landing/in-production-section';
 import { InstallSection } from '@/components/landing/install-section';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { LandingHero } from '@/components/landing/landing-hero';
@@ -193,7 +192,6 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <AskClaudeSection i18n={i18n} />
         <WeeklyReportSection i18n={i18n} digest={await demoDigestOf(i18n)} />
         <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
-        <InProductionSection i18n={i18n} />
         <BuiltInPublicSection i18n={i18n} />
         <ArchitectureSection i18n={i18n} />
         <ComparisonSection i18n={i18n} />

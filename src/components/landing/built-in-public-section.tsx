@@ -1,5 +1,6 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { rich } from '@/i18n/rich';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
@@ -14,6 +15,26 @@ export const BUILT_IN_PUBLIC_ID = 'built-in-public';
 const ITEMS = ['coverage', 'realServices', 'provenance', 'decisions', 'storybook'] as const;
 const CHECK_ICON = 'm5 12.5 4.5 4.5L19 7.5';
 const OUT_ICON = 'M14 4h6v6 M20 4 11 13 M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5';
+
+const MEASURED_SITES = {
+  bolsoverde: { domain: PROPER_NAMES.bolsoverde, href: LANDING_LINKS.bolsoverde },
+  blog: { domain: PROPER_NAMES.author, href: LANDING_LINKS.author },
+} as const;
+
+function siteLink(site: keyof typeof MEASURED_SITES) {
+  const { domain, href } = MEASURED_SITES[site];
+  return function SiteLink(text: string) {
+    return (
+      <a
+        href={href}
+        className="text-ink underline underline-offset-4"
+        {...trackAttributes(LANDING_EVENTS.siteOpened, { site: domain })}
+      >
+        {text}
+      </a>
+    );
+  };
+}
 
 function Icon({ path, className }: { readonly path: string; readonly className: string }) {
   return (
@@ -60,6 +81,15 @@ export function BuiltInPublicSection({ i18n }: BuiltInPublicSectionProps) {
     >
       <div className="grid gap-7 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <ul className="grid gap-3.5 hyphens-auto wrap-anywhere">
+          <li className={`flex gap-3 text-base leading-relaxed ${REVEAL}`}>
+            <Icon path={CHECK_ICON} className="mt-1 shrink-0 text-ok" />
+            <span>
+              {rich(t('landing.public.production'), {
+                bolsoverde: siteLink('bolsoverde'),
+                blog: siteLink('blog'),
+              })}
+            </span>
+          </li>
           {ITEMS.map((item) => (
             <li key={item} className={`flex gap-3 text-base leading-relaxed ${REVEAL}`}>
               <Icon path={CHECK_ICON} className="mt-1 shrink-0 text-ok" />

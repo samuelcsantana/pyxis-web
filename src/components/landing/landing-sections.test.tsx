@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
-import { InProductionSection } from './in-production-section';
 import {
   codeTextOf,
   FIRST_EVENT,
@@ -162,25 +161,5 @@ describe('InstallSection', () => {
         "track('signup_completed', { method: 'email_code' });",
       ].join('\n'),
     );
-  });
-});
-
-describe('InProductionSection', () => {
-  it('names the two sites Pyxis measures, by domain only', () => {
-    render(<InProductionSection i18n={english} />);
-
-    const section = screen.getByRole('region', { name: 'Measuring real sites since October 2026' });
-    expect(
-      within(section)
-        .getAllByRole('link')
-        .map((link) => [link.textContent, link.getAttribute('href')]),
-    ).toEqual([
-      [
-        'bolsoverde.comA sales, fees and payouts tracker for small sellers',
-        'https://bolsoverde.com',
-      ],
-      ['samuelsantana.devThe author’s blog', 'https://www.samuelsantana.dev'],
-    ]);
-    expect(section).toHaveTextContent('Neither site needs a cookie to be measured.');
   });
 });

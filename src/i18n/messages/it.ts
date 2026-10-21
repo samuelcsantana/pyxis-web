@@ -1701,16 +1701,11 @@ export const it = translation({
       noteOpen:
         'Le chiavi arrivano con il tuo account: inizia la prova gratuita qui sotto, oppure gestisci un tuo Pyxis. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
     },
-    production: {
-      eyebrow: 'In produzione',
-      title: 'Misura siti reali da ottobre 2026',
-      bolsoverde: 'Un gestionale di vendite, commissioni e incassi per piccoli venditori',
-      blog: 'Il blog dell’autore',
-      foot: 'Nessuno dei due siti ha bisogno di un cookie per essere misurato.',
-    },
     public: {
       eyebrow: 'Ingegneria',
       title: 'Costruito in pubblico',
+      production:
+        'Misura siti reali da ottobre 2026, <bolsoverde>bolsoverde.com</bolsoverde> e <blog>il blog dell’autore</blog>, senza cookie su nessuno dei due.',
       items: {
         coverage:
           '100% di istruzioni, rami, funzioni e righe coperte in tutti e tre i repository. La CI fallisce sotto quella soglia.',

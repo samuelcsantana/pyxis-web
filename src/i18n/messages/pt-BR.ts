@@ -1678,16 +1678,11 @@ export const ptBR = translation({
       noteOpen:
         'As chaves vêm com a sua conta: comece o teste grátis aqui embaixo, ou rode o seu próprio Pyxis. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
     },
-    production: {
-      eyebrow: 'Em produção',
-      title: 'Medindo sites de verdade desde outubro de 2026',
-      bolsoverde: 'Controle de vendas, taxas e repasses para pequenos vendedores',
-      blog: 'O blog do autor',
-      foot: 'Nenhum dos dois precisa de cookie para ser medido.',
-    },
     public: {
       eyebrow: 'Engenharia',
       title: 'Feito em público',
+      production:
+        'Medindo sites de verdade desde outubro de 2026, o <bolsoverde>bolsoverde.com</bolsoverde> e o <blog>blog do autor</blog>, sem cookie em nenhum dos dois.',
       items: {
         coverage:
           '100% das instruções, ramos, funções e linhas cobertos por testes nos três repositórios. O CI falha abaixo disso.',
