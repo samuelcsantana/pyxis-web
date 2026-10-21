@@ -192,7 +192,14 @@ export function overallConversion(
   };
 }
 
-export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): FunnelFigure {
+export interface FunnelTransition {
+  readonly position: number;
+  readonly from: FunnelStep;
+  readonly to: FunnelStep;
+  readonly continued: number | null;
+}
+
+export function worstTransition(counted: readonly CountedStep[]): FunnelTransition | undefined {
   const transitions = counted.flatMap((current, index) => {
     const previous = counted[index - 1];
     return previous === undefined
@@ -209,6 +216,11 @@ export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): Fun
   const [worst] = transitions.toSorted(
     (left, right) => (left.continued ?? 1) - (right.continued ?? 1),
   );
+  return worst;
+}
+
+export function biggestDropOff(counted: readonly CountedStep[], i18n: I18n): FunnelFigure {
+  const worst = worstTransition(counted);
   if (worst === undefined) {
     return { value: '—', note: i18n.t('funnel.noStepToCompare') };
   }
