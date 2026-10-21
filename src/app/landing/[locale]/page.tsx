@@ -39,6 +39,7 @@ import {
   type LandingPreviewView,
   landingPreviewOf,
 } from '@/domain/landing-preview';
+import { DEFAULT_FUNNEL_MODE } from '@/domain/funnel';
 import { resolvePeriod, todayIn } from '@/domain/period';
 import { SkipLink } from '@/components/shell/skip-link';
 import { loadMessages } from '@/i18n/get-messages';
@@ -59,7 +60,10 @@ import {
 import { APP_NAME, LANDING_ORIGIN } from '@/lib/site';
 import './landing.css';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
+import { createFunnelService } from '@/services/funnel/funnel-service.factory';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
+import { createRequestsService } from '@/services/requests/requests-service.factory';
 
 export interface LandingHomeProps {
   readonly params: Promise<{ readonly locale: string }>;
@@ -93,12 +97,14 @@ async function landingOf(params: LandingHomeProps['params']): Promise<Landing | 
 async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
   const now = new Date();
   const period = resolvePeriod({ range: LANDING_PREVIEW_RANGE }, DEMO_STORE.timezone, now);
-  const report = await createOverviewService().overview(DEMO_STORE.id, {
-    from: period.from,
-    to: period.to,
-  });
+  const range = { from: period.from, to: period.to };
+  const [overview, funnel, writes] = await Promise.all([
+    createOverviewService().overview(DEMO_STORE.id, range),
+    createFunnelService().funnel(DEMO_STORE.id, range, DEFAULT_FUNNEL_MODE, DEMO_FUNNEL_STEPS),
+    createRequestsService().requests(DEMO_STORE.id, range, null),
+  ]);
   return landingPreviewOf(
-    report,
+    { overview, funnelSteps: DEMO_FUNNEL_STEPS, funnel, writes },
     period,
     todayIn(DEMO_STORE.timezone, now),
     DEMO_STORE.conversionEvent,

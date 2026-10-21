@@ -1486,7 +1486,9 @@ export const nl = translation({
       range: 'Laatste 30 dagen',
       current: 'Deze periode',
       previous: 'Vorige periode',
-      topPages: 'Toppagina’s',
+      dropOff: 'Grootste uitval in de funnel',
+      failingWrite: 'Schrijfverzoek dat het vaakst mislukt',
+      failed: '{share} mislukt',
       invented: 'Verzonnen gegevens, net als de livedemo.',
     },
     proof: {

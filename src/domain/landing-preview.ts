@@ -1,15 +1,21 @@
 import type { I18n } from '@/i18n/i18n';
-import { formatCount } from './metrics';
+import {
+  countedSteps,
+  type FunnelReport,
+  type FunnelStep,
+  stepTarget,
+  worstTransition,
+} from './funnel';
+import { formatPercent } from './metrics';
 import { type KpiView, type OverviewReport, overviewKpis } from './overview';
 import { daysBetween, type Period } from './period';
+import type { RequestsReport, RouteReport } from './requests';
 
 export const LANDING_PREVIEW_RANGE = '30d';
-const TOP_PAGES_SHOWN = 3;
-const DECIMALS = 1;
 
-export interface LandingPreviewPage {
-  readonly path: string;
-  readonly views: string;
+export interface PreviewMeter {
+  readonly subject: string;
+  readonly value: string;
   readonly share: number;
 }
 
@@ -17,7 +23,15 @@ export interface LandingPreviewView {
   readonly kpis: readonly KpiView[];
   readonly current: readonly number[];
   readonly previous: readonly number[];
-  readonly topPages: readonly LandingPreviewPage[];
+  readonly dropOff: PreviewMeter | null;
+  readonly failingWrite: PreviewMeter | null;
+}
+
+export interface LandingPreviewReports {
+  readonly overview: OverviewReport;
+  readonly funnelSteps: readonly FunnelStep[];
+  readonly funnel: FunnelReport;
+  readonly writes: RequestsReport;
 }
 
 export interface PreviewChartBox {
@@ -38,25 +52,68 @@ export interface PreviewChart {
   readonly end: PreviewPoint | null;
 }
 
+const DECIMALS = 1;
+
+function dropOffOf(
+  steps: readonly FunnelStep[],
+  report: FunnelReport,
+  i18n: I18n,
+): PreviewMeter | null {
+  const worst = worstTransition(countedSteps(steps, report));
+  if (worst === undefined || worst.continued === null) {
+    return null;
+  }
+  return {
+    subject: `${stepTarget(worst.from)} → ${stepTarget(worst.to)}`,
+    value: i18n.t('funnel.continued', { share: formatPercent(worst.continued, i18n) }),
+    share: worst.continued,
+  };
+}
+
+function failureShare(route: RouteReport): number {
+  return route.failed / route.total;
+}
+
+export function mostFailingWrite(routes: readonly RouteReport[]): RouteReport | undefined {
+  const [most] = routes
+    .filter((route) => route.failed > 0)
+    .toSorted(
+      (left, right) =>
+        failureShare(right) - failureShare(left) ||
+        right.failed - left.failed ||
+        `${left.method} ${left.route}`.localeCompare(`${right.method} ${right.route}`),
+    );
+  return most;
+}
+
+function failingWriteOf(writes: RequestsReport, i18n: I18n): PreviewMeter | null {
+  const most = mostFailingWrite(writes.routes);
+  if (most === undefined) {
+    return null;
+  }
+  const share = failureShare(most);
+  return {
+    subject: `${most.method} ${most.route}`,
+    value: i18n.t('landing.preview.failed', { share: formatPercent(share, i18n) }),
+    share,
+  };
+}
+
 export function landingPreviewOf(
-  report: OverviewReport,
+  reports: LandingPreviewReports,
   period: Period,
   today: string,
   conversionEvent: string | null,
   i18n: I18n,
 ): LandingPreviewView {
+  const { overview } = reports;
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
-  const pages = report.topPages.slice(0, TOP_PAGES_SHOWN);
-  const most = Math.max(1, ...pages.map((page) => page.views));
   return {
-    kpis: overviewKpis(report, compared, conversionEvent, i18n),
-    current: report.kpis.visits.daily,
-    previous: report.previousDays?.map((day) => day.visits) ?? [],
-    topPages: pages.map((page) => ({
-      path: page.path,
-      views: formatCount(page.views, i18n),
-      share: page.views / most,
-    })),
+    kpis: overviewKpis(overview, compared, conversionEvent, i18n),
+    current: overview.kpis.visits.daily,
+    previous: overview.previousDays?.map((day) => day.visits) ?? [],
+    dropOff: dropOffOf(reports.funnelSteps, reports.funnel, i18n),
+    failingWrite: failingWriteOf(reports.writes, i18n),
   };
 }
 

@@ -1,5 +1,9 @@
 import { projectInitials } from '@/domain/admin';
-import { type LandingPreviewView, previewChartOf } from '@/domain/landing-preview';
+import {
+  type LandingPreviewView,
+  type PreviewMeter,
+  previewChartOf,
+} from '@/domain/landing-preview';
 import type { Tone } from '@/domain/metrics';
 import { displayTag, type I18n } from '@/i18n/i18n';
 import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
@@ -70,6 +74,39 @@ function PreviewChart({ view }: { readonly view: LandingPreviewView }) {
   );
 }
 
+function PreviewMeterRow({
+  label,
+  meter,
+}: {
+  readonly label: string;
+  readonly meter: PreviewMeter | null;
+}) {
+  if (meter === null) {
+    return null;
+  }
+  return (
+    <div className="flex flex-col gap-1.5">
+      <dt className="font-mono text-micro font-medium tracking-[0.08em] text-muted uppercase">
+        {label}
+      </dt>
+      <dd>
+        <code className="font-mono text-caption wrap-anywhere">{meter.subject}</code>
+      </dd>
+      <dd className="flex items-center gap-3">
+        <span aria-hidden="true" className="h-1.5 grow overflow-hidden rounded-pill bg-soft">
+          <span
+            className="landing-preview-bar block h-full rounded-pill bg-bad"
+            style={{ width: `${String(meter.share * PERCENT)}%` }}
+          />
+        </span>
+        <span className="font-mono text-caption whitespace-nowrap text-bad tabular-nums">
+          {meter.value}
+        </span>
+      </dd>
+    </div>
+  );
+}
+
 export function LandingPreview({ view, i18n }: LandingPreviewProps) {
   const { t } = i18n;
   const projectName = demoProjectNameOf(DEMO_STORE, t);
@@ -119,22 +156,10 @@ export function LandingPreview({ view, i18n }: LandingPreviewProps) {
             {t('landing.preview.previous')}
           </span>
         </div>
-        <p className="font-mono text-micro font-medium tracking-[0.08em] text-muted uppercase">
-          {t('landing.preview.topPages')}
-        </p>
-        <ul className="grid gap-1.5 text-sm">
-          {view.topPages.map((page) => (
-            <li key={page.path} className="relative flex justify-between gap-2 px-2 py-1">
-              <span
-                aria-hidden="true"
-                className="landing-preview-bar absolute inset-y-0 left-0 rounded-chip bg-soft"
-                style={{ width: `${String(page.share * PERCENT)}%` }}
-              />
-              <code className="relative font-mono text-caption">{page.path}</code>
-              <span className="relative font-mono tabular-nums">{page.views}</span>
-            </li>
-          ))}
-        </ul>
+        <dl className="grid gap-3.5">
+          <PreviewMeterRow label={t('landing.preview.dropOff')} meter={view.dropOff} />
+          <PreviewMeterRow label={t('landing.preview.failingWrite')} meter={view.failingWrite} />
+        </dl>
         <figcaption className="text-xs text-muted">{t('landing.preview.invented')}</figcaption>
       </figure>
       <PreviewCountUp targetId={PREVIEW_ID} locale={displayTag(i18n.locale)} />

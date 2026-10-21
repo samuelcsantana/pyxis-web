@@ -1465,7 +1465,9 @@ export const ptBR = translation({
       range: 'Últimos 30 dias',
       current: 'Este período',
       previous: 'Período anterior',
-      topPages: 'Páginas mais vistas',
+      dropOff: 'Maior abandono no funil',
+      failingWrite: 'Gravação que mais falha',
+      failed: '{share} falharam',
       invented: 'Dados inventados, como na demonstração.',
     },
     proof: {

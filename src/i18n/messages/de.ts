@@ -1501,7 +1501,9 @@ export const de = translation({
       range: 'Letzte 30 Tage',
       current: 'Dieser Zeitraum',
       previous: 'Vorheriger Zeitraum',
-      topPages: 'Top-Seiten',
+      dropOff: 'Größter Absprung im Funnel',
+      failingWrite: 'Schreibzugriff, der am häufigsten fehlschlägt',
+      failed: '{share} fehlgeschlagen',
       invented: 'Erfundene Daten, wie in der Live-Demo.',
     },
     proof: {

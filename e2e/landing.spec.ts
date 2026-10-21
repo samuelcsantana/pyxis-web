@@ -6,7 +6,9 @@ const ONE_ROW_HEADER_PX = 72;
 const NARROW_PHONE_WIDTHS = [320, 360, 390];
 const PHONE_HEIGHT = 844;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
-const DEMO_SCREEN = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/overview';
+const DEMO_PROJECT = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const DEMO_SCREEN = `${DEMO_PROJECT}/overview`;
+const DEMO_ORIGIN = 'http://localhost:3101';
 const FRAMES_AFTER_CLICK = 5;
 const ARRIVAL_TOLERANCE_PX = 2;
 
@@ -247,6 +249,28 @@ test('wears the theme kept on the device before any script of the page loads', a
   await page.goto('/pt-br');
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
+
+test('shows on the preview card the drop-off and the failing write the demo screens show', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const facts = page.locator('#landing-preview dl').last();
+  const [dropOff, failingWrite] = await facts.locator('dd code').allTextContents();
+  const [continued, failed] = await facts.locator('dd .text-bad').allTextContents();
+  const failedShare = failed?.replace(' failed', '') ?? '';
+
+  await page.goto(`${DEMO_ORIGIN}${DEMO_PROJECT}/funnel?range=30d`);
+  await expect(page.getByText(`· ${continued ?? ''}`, { exact: false }).first()).toBeVisible();
+  expect(dropOff).toMatch(/ → /);
+
+  await page.goto(`${DEMO_ORIGIN}${DEMO_PROJECT}/requests?range=30d`);
+  await expect(
+    page
+      .getByRole('row')
+      .filter({ hasText: failingWrite ?? '' })
+      .first(),
+  ).toContainText(`${failedShare} errors`);
 });
 
 test('opens the other language still, without playing the entrance again', async ({ page }) => {
