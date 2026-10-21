@@ -17,6 +17,7 @@ export const LANDING_LINKS = {
   web: `${GITHUB_PROFILE}/pyxis-web`,
   mcp: `${GITHUB_PROFILE}/pyxis-mcp`,
   connectClaude: `${GITHUB_PROFILE}/pyxis-mcp#connect-from-claude`,
+  claudeDirectory: 'https://claude.ai/directory/pyxis',
   npm: 'https://www.npmjs.com/package/pyxis-analytics',
   sdkPackage: `${GITHUB_PROFILE}/pyxis-sdk/blob/main/package.json`,
   coverage: 'https://app.codecov.io/gh/samuelcsantana',

@@ -1445,8 +1445,8 @@ export const en = {
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
-      claudeTag: 'New',
-      claude: 'Ask Claude about your numbers, via MCP',
+      claudeTag: 'In Claude’s directory',
+      claude: 'Ask Claude about your numbers',
     },
     preview: {
       label: 'Preview of the Overview screen',
@@ -1529,6 +1529,13 @@ export const en = {
       title: 'Ask Claude instead of digging through charts',
       lead: 'Connect Pyxis to Claude once and ask in your own words: how last week went, where the sign-up loses people, which route started failing. Claude reads the same numbers as the dashboard, through fifteen tools that only read. It comes with the plan, at no extra cost.',
       connect: 'Connect in a minute',
+      directory: {
+        badge: 'New',
+        title: 'Pyxis is in Claude’s connector directory',
+        body: 'Open Pyxis’s page in the directory, choose Connect and sign in to Pyxis in the window that opens. It works in Claude on the web, on your computer and on your phone.',
+        open: 'Open in Claude’s directory',
+        or: 'Or add it as a custom connector:',
+      },
       example: {
         label: 'An example conversation',
         you: 'You',
@@ -1734,7 +1741,7 @@ export const en = {
         claude: {
           question: 'Can I ask Claude about my numbers?',
           answer:
-            'Yes. In Claude, add a custom connector with the address <code>https://api.pyxis-analytics.dev/mcp</code>, or run <code>claude mcp add</code> in Claude Code, and sign in to Pyxis. Claude then reads the numbers of every project you can open, and changes nothing. You revoke it under Settings, Connected apps.',
+            'Yes. Pyxis is in Claude’s connector directory: open <code>claude.ai/directory/pyxis</code>, choose Connect and sign in to Pyxis. In Claude Code, run <code>claude mcp add</code> with the address <code>https://api.pyxis-analytics.dev/mcp</code>. Claude then reads the numbers of every project you can open, and changes nothing. You revoke it under Settings, Connected apps.',
         },
         use: {
           question: 'Can I use it on my site?',

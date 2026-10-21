@@ -1488,8 +1488,8 @@ export const fr = translation({
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
-      claudeTag: 'Nouveau',
-      claude: 'Interrogez Claude sur vos chiffres, via MCP',
+      claudeTag: 'Dans l’annuaire de Claude',
+      claude: 'Interrogez Claude sur vos chiffres',
     },
     preview: {
       label: 'Aperçu de l’écran Vue d’ensemble',
@@ -1576,6 +1576,13 @@ export const fr = translation({
       title: 'Interrogez Claude au lieu de fouiller dans les graphiques',
       lead: 'Connectez Pyxis à Claude une fois et posez vos questions avec vos mots : comment s’est passée la semaine dernière, où l’inscription perd des gens, quelle route a commencé à échouer. Claude lit les mêmes chiffres que le tableau de bord, grâce à quinze outils en lecture seule. C’est inclus dans la formule, sans surcoût.',
       connect: 'Connecter Pyxis en une minute',
+      directory: {
+        badge: 'Nouveau',
+        title: 'Pyxis est dans l’annuaire des connecteurs de Claude',
+        body: 'Ouvrez la page de Pyxis dans l’annuaire, choisissez Connect et connectez-vous à Pyxis dans la fenêtre qui s’ouvre. Cela fonctionne dans Claude sur le web, sur votre ordinateur et sur votre téléphone.',
+        open: 'Ouvrir dans l’annuaire de Claude',
+        or: 'Ou ajoutez-le comme connecteur personnalisé :',
+      },
       example: {
         label: 'Un exemple de conversation',
         you: 'Vous',
@@ -1788,7 +1795,7 @@ export const fr = translation({
         claude: {
           question: 'Puis-je interroger Claude sur mes chiffres ?',
           answer:
-            'Oui. Dans Claude, ajoutez un connecteur personnalisé avec l’adresse <code>https://api.pyxis-analytics.dev/mcp</code>, ou exécutez <code>claude mcp add</code> dans Claude Code, puis connectez-vous à Pyxis. Claude lit alors les chiffres de tous les projets que vous pouvez ouvrir, sans rien modifier. Vous le révoquez dans Paramètres, Applications connectées.',
+            'Oui. Pyxis est dans l’annuaire des connecteurs de Claude : ouvrez <code>claude.ai/directory/pyxis</code>, choisissez Connect et connectez-vous à Pyxis. Dans Claude Code, exécutez <code>claude mcp add</code> avec l’adresse <code>https://api.pyxis-analytics.dev/mcp</code>. Claude lit alors les chiffres de tous les projets que vous pouvez ouvrir, sans rien modifier. Vous le révoquez dans Paramètres, Applications connectées.',
         },
         use: {
           question: 'Puis-je l’utiliser sur mon site ?',

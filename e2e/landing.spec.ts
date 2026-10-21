@@ -466,7 +466,7 @@ test('opens each dashboard screen of the demo store from its card', async ({ pag
   );
 });
 
-test('leads from the hero to asking Claude, and copies the connector address', async ({
+test('leads from the hero to asking Claude, its directory page and the connector address', async ({
   page,
   context,
   browserName,
@@ -482,6 +482,10 @@ test('leads from the hero to asking Claude, and copies the connector address', a
     name: 'Ask Claude instead of digging through charts',
   });
   await expect(section).toBeInViewport();
+  await expect(section.getByRole('link', { name: 'Open in Claude’s directory' })).toHaveAttribute(
+    'href',
+    'https://claude.ai/directory/pyxis',
+  );
   await section.getByRole('button', { name: 'Copy' }).first().click();
   await expect(section.getByRole('button', { name: 'Copied' })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(

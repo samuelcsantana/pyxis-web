@@ -37,11 +37,11 @@ describe('LandingHero', () => {
     expect(screen.getByText(/No sign-up\. Invented data\./)).toBeInTheDocument();
   });
 
-  it('announces the Claude connector, leading to its section', () => {
+  it('announces the connector in Claude’s directory, leading to its section', () => {
     render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
 
     const claude = screen.getByRole('link', {
-      name: 'New Ask Claude about your numbers, via MCP',
+      name: 'In Claude’s directory Ask Claude about your numbers',
     });
     expect(claude).toHaveAttribute('href', '#ask-claude');
     expect(claude).toHaveAttribute('data-track', 'ask_claude_opened');
