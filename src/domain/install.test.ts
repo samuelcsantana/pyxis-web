@@ -33,7 +33,9 @@ describe('install snippets', () => {
     const snippet = scriptSnippet(KEY, ENDPOINT);
 
     expect(installed).toMatchObject({ version: TRACKER_VERSION });
-    expect(snippet).toContain(`https://unpkg.com/pyxis-analytics@${TRACKER_VERSION}/dist/index.js`);
+    expect(snippet).toContain(
+      `https://cdn.jsdelivr.net/npm/pyxis-analytics@${TRACKER_VERSION}/dist/index.js`,
+    );
     expect(snippet).toMatch(/pyxis-analytics@\d+\.\d+\.\d+\/dist\/index\.js/);
     expect(snippet.split('\n')).toHaveLength(4);
     expect(snippet).toContain(INIT_LINE);

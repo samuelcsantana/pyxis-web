@@ -29,7 +29,7 @@ export function moduleSnippet(key: string, endpoint: string): string {
 export function scriptSnippet(key: string, endpoint: string): string {
   return [
     '<script type="module">',
-    `  import { init } from 'https://unpkg.com/${TRACKER_PACKAGE}@${TRACKER_VERSION}/dist/index.js';`,
+    `  import { init } from 'https://cdn.jsdelivr.net/npm/${TRACKER_PACKAGE}@${TRACKER_VERSION}/dist/index.js';`,
     `  init({ key: '${key}', endpoint: '${endpoint}' });`,
     '</script>',
   ].join('\n');
