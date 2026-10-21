@@ -1456,9 +1456,9 @@ export const es = translation({
       signIn: 'Entrar',
     },
     hero: {
-      eyebrow: 'Analítica de producto de código abierto',
-      title: 'Analítica de producto sin cookies, sin IP y sin datos personales.',
-      lead: 'Pyxis muestra qué funcionalidades se usan, dónde un registro pierde gente y qué solicitudes fallan. No guarda cookies, direcciones IP, user agent ni nada personal, y cada una de esas reglas está en el código, cubierta por pruebas.',
+      eyebrow: 'Sin cookies · sin IP · conector para Claude',
+      title: 'Descubre qué convierte y qué falla en tu sitio, sin recopilar datos personales.',
+      lead: 'Pyxis muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron en cada visita. Míralo en el panel o pregúntale a Claude.',
       openDemo: 'Abrir la demo en vivo',
       seePricing: 'Ver precio',
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',

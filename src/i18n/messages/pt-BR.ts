@@ -1451,9 +1451,9 @@ export const ptBR = translation({
       signIn: 'Entrar',
     },
     hero: {
-      eyebrow: 'Análise de produto de código aberto',
-      title: 'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
-      lead: 'O Pyxis mostra quais funcionalidades são usadas, onde um cadastro perde gente e quais requisições falham. Ele não guarda cookie, endereço IP, user agent nem nada pessoal, e cada uma dessas regras está no código, coberta por testes.',
+      eyebrow: 'Sem cookie · sem IP · conector para o Claude',
+      title: 'Descubra o que converte e o que falha no seu site, sem coletar dados pessoais.',
+      lead: 'O Pyxis mostra em que passo do funil as pessoas param e quais requisições do seu site falharam em cada visita. Veja no painel ou pergunte ao Claude.',
       openDemo: 'Abrir a demonstração',
       seePricing: 'Ver preço',
       note: 'Sem cadastro. Dados inventados. Abre direto no painel.',

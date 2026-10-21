@@ -1471,9 +1471,10 @@ export const nl = translation({
       signIn: 'Inloggen',
     },
     hero: {
-      eyebrow: 'Open-source productanalyse',
-      title: 'Productanalyse zonder cookies, IP-adressen of persoonsgegevens.',
-      lead: 'Pyxis laat zien welke functies worden gebruikt, waar een registratie mensen verliest en welke verzoeken mislukken. Het slaat geen cookie, geen IP-adres, geen user agent en niets persoonlijks op, en elk van die regels zit in de code, gedekt door tests.',
+      eyebrow: 'Geen cookies · geen IP · connector voor Claude',
+      title:
+        'Ontdek wat converteert en wat mislukt op je site, zonder persoonsgegevens te verzamelen.',
+      lead: 'Pyxis laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site bij elk bezoek mislukten. Bekijk het in het dashboard of vraag het aan Claude.',
       openDemo: 'Open de livedemo',
       seePricing: 'Bekijk de prijzen',
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',

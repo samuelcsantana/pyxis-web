@@ -124,7 +124,7 @@ describe('the home page on the main domain', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: 'Product analytics without cookies, IP addresses or personal data.',
+        name: 'Find out what converts and what fails on your site, without collecting personal data.',
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
@@ -197,7 +197,7 @@ describe('the home page on the main domain', () => {
     renderWithMessages(await LandingHome(atSlug('pt-br')), 'pt-BR');
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Análise de uso de produto sem cookie, sem IP e sem dado pessoal.',
+      'Descubra o que converte e o que falha no seu site, sem coletar dados pessoais.',
     );
     const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute(
@@ -212,7 +212,7 @@ describe('the home page on the main domain', () => {
     renderWithMessages(await LandingHome(atSlug('es')), 'es');
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Analítica de producto sin cookies, sin IP y sin datos personales.',
+      'Descubre qué convierte y qué falla en tu sitio, sin recopilar datos personales.',
     );
     const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute('href', '/es');

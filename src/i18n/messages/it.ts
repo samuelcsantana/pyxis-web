@@ -1471,9 +1471,9 @@ export const it = translation({
       signIn: 'Accedi',
     },
     hero: {
-      eyebrow: 'Analisi di prodotto open source',
-      title: 'Analisi di prodotto senza cookie, indirizzi IP né dati personali.',
-      lead: 'Pyxis mostra quali funzionalità vengono usate, dove una registrazione perde persone e quali richieste falliscono. Non salva nessun cookie, nessun indirizzo IP, nessuno user agent e niente di personale, e ognuna di queste regole vive nel codice, coperta da test.',
+      eyebrow: 'Senza cookie · senza IP · connettore per Claude',
+      title: 'Scopri cosa converte e cosa fallisce sul tuo sito, senza raccogliere dati personali.',
+      lead: 'Pyxis mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite in ogni visita. Guardalo nella dashboard o chiedi a Claude.',
       openDemo: 'Apri la demo live',
       seePricing: 'Guarda i prezzi',
       note: 'Nessuna registrazione. Dati inventati. Si apre direttamente sulla dashboard.',

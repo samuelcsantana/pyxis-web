@@ -1486,9 +1486,10 @@ export const de = translation({
       signIn: 'Anmelden',
     },
     hero: {
-      eyebrow: 'Open-Source-Produktanalyse',
-      title: 'Produktanalyse ohne Cookies, IP-Adressen oder personenbezogene Daten.',
-      lead: 'Pyxis zeigt, welche Funktionen genutzt werden, wo eine Registrierung Menschen verliert und welche Anfragen fehlschlagen. Es speichert kein Cookie, keine IP-Adresse, keinen User-Agent und nichts Persönliches, und jede dieser Regeln steckt im Code, abgedeckt durch Tests.',
+      eyebrow: 'Ohne Cookies · ohne IP · Connector für Claude',
+      title:
+        'Finde heraus, was auf deiner Website konvertiert und was fehlschlägt, ohne personenbezogene Daten zu erheben.',
+      lead: 'Pyxis zeigt, bei welchem Schritt im Funnel Menschen aufhören und welche Anfragen deiner Website bei jedem Besuch fehlgeschlagen sind. Sieh es dir im Dashboard an oder frag Claude.',
       openDemo: 'Live-Demo öffnen',
       seePricing: 'Preise ansehen',
       note: 'Ohne Registrierung. Erfundene Daten. Öffnet direkt das Dashboard.',
