@@ -97,7 +97,9 @@ test('serves each language at its own address, with the tags search engines read
   await page.goto('/');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page).toHaveTitle('Product analytics without cookies or personal data · Pyxis');
+  await expect(page).toHaveTitle(
+    'What converts and what fails on your site, without cookies · Pyxis',
+  );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', MAIN_DOMAIN);
   await expect(page.locator('link[rel="alternate"][hreflang="pt-BR"]')).toHaveAttribute(
     'href',
@@ -133,7 +135,7 @@ test('serves each language at its own address, with the tags search engines read
 
   await expect(page).toHaveURL(/\/es$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  await expect(page).toHaveTitle('Analítica de producto sin cookies ni datos personales · Pyxis');
+  await expect(page).toHaveTitle('Qué convierte y qué falla en tu sitio, sin cookies · Pyxis');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'Analítica de producto sin cookies, sin IP y sin datos personales.',
   );

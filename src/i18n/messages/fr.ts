@@ -1467,9 +1467,9 @@ export const fr = translation({
   },
   landing: {
     meta: {
-      title: 'Analytique produit sans cookies ni données personnelles · Pyxis',
+      title: 'Ce qui convertit et ce qui échoue sur votre site, sans cookies · Pyxis',
       description:
-        'Analytique produit open source qui ne stocke ni cookie, ni adresse IP, ni donnée personnelle. Entonnoirs, requêtes en échec et visites, avec une démo en direct.',
+        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies, sans IP, sans données personnelles. 14 jours gratuits.',
     },
     nav: {
       label: 'Principale',

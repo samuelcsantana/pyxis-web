@@ -1457,9 +1457,9 @@ export const nl = translation({
   },
   landing: {
     meta: {
-      title: 'Productanalyse zonder cookies of persoonsgegevens · Pyxis',
+      title: 'Wat converteert en wat mislukt op je site, zonder cookies · Pyxis',
       description:
-        'Open-source productanalyse die geen cookie, geen IP-adres en geen persoonsgegevens opslaat. Funnels, mislukte verzoeken en bezoeken, met een livedemo.',
+        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies, geen IP, geen persoonsgegevens. 14 dagen gratis.',
     },
     nav: {
       label: 'Hoofdmenu',

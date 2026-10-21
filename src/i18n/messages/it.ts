@@ -1457,9 +1457,9 @@ export const it = translation({
   },
   landing: {
     meta: {
-      title: 'Analisi di prodotto senza cookie né dati personali · Pyxis',
+      title: 'Cosa converte e cosa fallisce sul tuo sito, senza cookie · Pyxis',
       description:
-        'Analisi di prodotto open source che non salva nessun cookie, nessun indirizzo IP e nessun dato personale. Funnel, richieste fallite e visite, con una demo live.',
+        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie, senza IP, senza dati personali. 14 giorni gratis.',
     },
     nav: {
       label: 'Principale',

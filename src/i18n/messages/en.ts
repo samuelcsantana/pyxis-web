@@ -1424,9 +1424,9 @@ export const en = {
   },
   landing: {
     meta: {
-      title: 'Product analytics without cookies or personal data · Pyxis',
+      title: 'What converts and what fails on your site, without cookies · Pyxis',
       description:
-        'Open-source product analytics that stores no cookie, no IP address and no personal data. Funnels, failing requests and visits, with a live demo.',
+        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies, no IP, no personal data. 14 days free.',
     },
     nav: {
       label: 'Main',
