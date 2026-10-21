@@ -51,17 +51,25 @@ export function codeTextOf(tokens: readonly CodeToken[]): string {
   return tokens.map((token) => token.text).join('');
 }
 
+export type CodeWrap = 'none' | 'anywhere' | 'words';
+
+const WRAP_CLASSES: Readonly<Record<CodeWrap, string>> = {
+  none: 'm-0',
+  anywhere: 'm-0 break-all whitespace-pre-wrap',
+  words: 'm-0 whitespace-pre-wrap wrap-anywhere',
+};
+
 export interface CodeBlockProps {
   readonly id: string;
   readonly tokens: readonly CodeToken[];
   readonly labels: CopyCodeLabels;
-  readonly wrap?: boolean;
+  readonly wrap?: CodeWrap;
 }
 
-export function CodeBlock({ id, tokens, labels, wrap = false }: CodeBlockProps) {
+export function CodeBlock({ id, tokens, labels, wrap = 'none' }: CodeBlockProps) {
   return (
     <div className="relative overflow-x-auto rounded-card bg-nav py-4.5 pr-24 pl-5 font-mono text-sm leading-7">
-      <pre id={id} className={wrap ? 'm-0 break-all whitespace-pre-wrap' : 'm-0'}>
+      <pre id={id} className={WRAP_CLASSES[wrap]}>
         <code>
           {tokens.map((token, index) => (
             <span key={`${String(index)}-${token.text}`} className={TOKEN_CLASSES[token.kind]}>

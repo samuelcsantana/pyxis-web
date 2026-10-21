@@ -90,14 +90,19 @@ export function AskClaudeSection({ i18n }: AskClaudeSectionProps) {
                   id="ask-claude-address"
                   tokens={CONNECTOR_ADDRESS}
                   labels={labels}
-                  wrap
+                  wrap="anywhere"
                 />
               </div>
             </li>
             <li>{t('connectedApps.stepAllow')}</li>
           </ol>
           <p className="text-sm text-muted">{t('connectedApps.claudeCode')}</p>
-          <CodeBlock id="ask-claude-command" tokens={CLAUDE_CODE_COMMAND} labels={labels} wrap />
+          <CodeBlock
+            id="ask-claude-command"
+            tokens={CLAUDE_CODE_COMMAND}
+            labels={labels}
+            wrap="anywhere"
+          />
         </div>
       </div>
       <ul className="mt-8 grid gap-3 md:grid-cols-3">
