@@ -1442,9 +1442,9 @@ export const es = translation({
   },
   landing: {
     meta: {
-      title: 'Analítica de producto sin cookies ni datos personales · Pyxis',
+      title: 'Qué convierte y qué falla en tu sitio, sin cookies · Pyxis',
       description:
-        'Analítica de producto de código abierto que no guarda cookies, direcciones IP ni datos personales. Embudos, solicitudes fallidas y visitas, con una demo en vivo.',
+        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies, sin IP y sin datos personales. 14 días gratis.',
     },
     nav: {
       label: 'Principal',

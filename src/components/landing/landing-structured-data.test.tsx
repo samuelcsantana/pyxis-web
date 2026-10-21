@@ -35,7 +35,7 @@ describe('LandingStructuredData', () => {
 
     expect(data.url).toBe('https://pyxis-analytics.dev/pt-br');
     expect(data.inLanguage).toBe('pt-BR');
-    expect(data.description).toContain('código aberto');
+    expect(data.description).toContain('sem dado pessoal');
   });
 
   it('never lets a value close the script it is written into', () => {
