@@ -1747,6 +1747,16 @@ export const es = translation({
           pyxis: 'Sí: un conector para Claude, solo lectura',
           typical: 'Depende de la herramienta',
         },
+        failedRequests: {
+          aspect: 'Las solicitudes del sitio que fallaron, en cada visita',
+          pyxis: 'Sí: ruta, estado y duración',
+          typical: 'Depende de la herramienta',
+        },
+        trackerSize: {
+          aspect: 'Tamaño del rastreador, con gzip',
+          pyxis: 'Menos de 5 KB',
+          typical: 'Por lo general, de 30 a 150 KB',
+        },
         source: { aspect: 'Código fuente', pyxis: 'MIT, en GitHub', typical: 'Varía' },
       },
       foot: '“Típica” describe una configuración común, no un producto concreto.',

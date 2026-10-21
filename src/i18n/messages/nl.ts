@@ -1766,6 +1766,16 @@ export const nl = translation({
           pyxis: 'Ja: een connector voor Claude, alleen lezend',
           typical: 'Hangt af van de tool',
         },
+        failedRequests: {
+          aspect: 'Mislukte verzoeken van de site, per bezoek',
+          pyxis: 'Ja: route, status en duur',
+          typical: 'Hangt af van de tool',
+        },
+        trackerSize: {
+          aspect: 'Grootte van de tracker, gzipped',
+          pyxis: 'Minder dan 5 KB',
+          typical: 'Meestal 30 tot 150 KB',
+        },
         source: { aspect: 'Broncode', pyxis: 'MIT, op GitHub', typical: 'Verschilt' },
       },
       foot: '“Typisch” beschrijft een gangbare opzet, niet één specifiek product.',

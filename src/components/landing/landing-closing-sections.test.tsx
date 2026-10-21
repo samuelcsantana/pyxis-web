@@ -86,7 +86,7 @@ describe('ComparisonSection', () => {
         .getAllByRole('cell')
         .map((cell) => cell.textContent),
     ).toEqual(['None', 'An id cookie, usually kept for months']);
-    expect(screen.getAllByRole('rowheader')).toHaveLength(6);
+    expect(screen.getAllByRole('rowheader')).toHaveLength(8);
     const agentsRow = screen.getByRole('row', { name: /Ask an AI agent about the numbers/ });
     expect(agentsRow).toHaveTextContent('Yes: a connector for Claude, only reading');
     expect(screen.getByText(/not any one product/)).toBeInTheDocument();
@@ -95,6 +95,28 @@ describe('ComparisonSection', () => {
       '0',
     );
     expect(screen.getByRole('table')).toHaveAccessibleName('Pyxis and a typical cookie-based tag');
+  });
+});
+
+describe('ComparisonSection capabilities', () => {
+  it('compares the failed requests of each visit and the size of the tracker, before the code', () => {
+    render(<ComparisonSection i18n={english} />);
+
+    const aspects = screen.getAllByRole('rowheader').map((header) => header.textContent);
+    expect(aspects.slice(-3)).toEqual([
+      'The site’s requests that failed, in each visit',
+      'Size of the tracker, gzipped',
+      'Source code',
+    ]);
+    const cellsOf = (name: RegExp) =>
+      within(screen.getByRole('row', { name }))
+        .getAllByRole('cell')
+        .map((cell) => cell.textContent);
+    expect(cellsOf(/requests that failed/)).toEqual([
+      'Yes: route, status and duration',
+      'Depends on the tool',
+    ]);
+    expect(cellsOf(/Size of the tracker/)).toEqual(['Under 5 KB', 'Usually 30 to 150 KB']);
   });
 });
 

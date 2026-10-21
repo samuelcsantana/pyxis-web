@@ -1783,6 +1783,16 @@ export const de = translation({
           pyxis: 'Ja: ein Connector für Claude, nur lesend',
           typical: 'Hängt vom Tool ab',
         },
+        failedRequests: {
+          aspect: 'Fehlgeschlagene Anfragen der Website, bei jedem Besuch',
+          pyxis: 'Ja: Route, Status und Dauer',
+          typical: 'Hängt vom Tool ab',
+        },
+        trackerSize: {
+          aspect: 'Größe des Trackers, gzip-komprimiert',
+          pyxis: 'Unter 5 KB',
+          typical: 'Meist 30 bis 150 KB',
+        },
         source: { aspect: 'Quellcode', pyxis: 'MIT, auf GitHub', typical: 'Unterschiedlich' },
       },
       foot: '„Typisch“ beschreibt ein verbreitetes Setup, kein bestimmtes Produkt.',
