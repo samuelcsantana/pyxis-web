@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.31.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.30.0...v0.31.0) (2026-10-21)
+
+
+### Features
+
+* **landing:** offer a prompt to paste into an AI agent ([f781c2b](https://github.com/samuelcsantana/pyxis-web/commit/f781c2bf802d47f5eccab005744f1ac48a4492e3))
+* **llms:** add what the install rehearsal found missing to the recipe ([cf9879c](https://github.com/samuelcsantana/pyxis-web/commit/cf9879c54c2d4c845651d192194b4ec98327b070))
+
+
+### Bug Fixes
+
+* **landing:** give the agent prompt the full width on phones ([f188db2](https://github.com/samuelcsantana/pyxis-web/commit/f188db28c1ebab43dc8062f665a204b4d87dbc7e))
+
+
+### Refactoring
+
+* **landing:** name how a code block wraps its lines ([dd1e006](https://github.com/samuelcsantana/pyxis-web/commit/dd1e006d908e0001414842a3a22f86e45c957579))
+
 ## [0.30.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.29.0...v0.30.0) (2026-10-21)
 
 
