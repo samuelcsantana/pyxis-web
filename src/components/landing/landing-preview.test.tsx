@@ -18,16 +18,44 @@ describe('LandingPreview', () => {
     expect(within(preview).getByText(visits?.change ?? 'missing')).toHaveClass('text-ok');
   });
 
-  it('draws both periods with a legend, and the top pages sized against the first', () => {
+  it('draws both periods with a legend', () => {
     const { container } = render(<LandingPreview view={showcasePreview(english)} i18n={english} />);
 
     expect(container.querySelectorAll('polyline')).toHaveLength(2);
     expect(container.querySelector('circle')).not.toBeNull();
     expect(screen.getByText('This period')).toBeInTheDocument();
     expect(screen.getByText('Previous period')).toBeInTheDocument();
-    const pricing = screen.getByText('/pricing').closest('li');
-    expect(pricing?.querySelector('[aria-hidden="true"]')).toHaveStyle({ width: '100%' });
     expect(screen.getByText('Invented data, like the live demo.')).toBeInTheDocument();
+  });
+
+  it('puts the biggest drop-off of the funnel beside the write that fails most often', () => {
+    render(<LandingPreview view={showcasePreview(english)} i18n={english} />);
+
+    const facts = screen.getByRole('figure').querySelector('dl:last-of-type');
+    expect(facts).not.toBeNull();
+    const terms = within(facts as HTMLElement).getAllByRole('term');
+    expect(terms.map((term) => term.textContent)).toEqual([
+      'Biggest drop-off in the funnel',
+      'Write that fails most often',
+    ]);
+    expect(
+      within(facts as HTMLElement).getByText('signup_completed → order_created'),
+    ).toBeVisible();
+    expect(within(facts as HTMLElement).getByText('9.5% continued')).toHaveClass('text-bad');
+    expect(within(facts as HTMLElement).getByText('POST /payouts')).toBeVisible();
+    expect(within(facts as HTMLElement).getByText('10.2% failed')).toHaveClass('text-bad');
+    const fills = facts?.querySelectorAll('.landing-preview-bar');
+    expect(fills?.[0]).toHaveStyle({ width: `${String((4 / 42) * 100)}%` });
+    expect(fills?.[1]).toHaveStyle({ width: `${String((6 / 59) * 100)}%` });
+  });
+
+  it('leaves out a fact the demo has no data for', () => {
+    const view = { ...showcasePreview(english), dropOff: null, failingWrite: null };
+
+    render(<LandingPreview view={view} i18n={english} />);
+
+    expect(screen.queryByText('Biggest drop-off in the funnel')).not.toBeInTheDocument();
+    expect(screen.queryByText('Write that fails most often')).not.toBeInTheDocument();
   });
 
   it('marks the parts that move as the page opens, and the figures that count up', () => {
@@ -38,7 +66,7 @@ describe('LandingPreview', () => {
     expect(container.querySelectorAll('[data-count]')).toHaveLength(4);
     expect(container.querySelector('.landing-preview-line')).toHaveAttribute('pathLength', '1');
     expect(container.querySelectorAll('.landing-preview-late')).toHaveLength(2);
-    expect(container.querySelectorAll('.landing-preview-bar')).toHaveLength(3);
+    expect(container.querySelectorAll('.landing-preview-bar')).toHaveLength(2);
   });
 
   it('draws no end point for a period without visits', () => {

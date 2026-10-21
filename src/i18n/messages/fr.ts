@@ -1496,7 +1496,9 @@ export const fr = translation({
       range: '30 derniers jours',
       current: 'Cette période',
       previous: 'Période précédente',
-      topPages: 'Pages principales',
+      dropOff: 'Plus fort abandon dans l’entonnoir',
+      failingWrite: 'Écriture qui échoue le plus souvent',
+      failed: '{share} en échec',
       invented: 'Données inventées, comme dans la démo en direct.',
     },
     proof: {

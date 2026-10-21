@@ -1470,7 +1470,9 @@ export const es = translation({
       range: 'Últimos 30 días',
       current: 'Este periodo',
       previous: 'Periodo anterior',
-      topPages: 'Páginas más vistas',
+      dropOff: 'Mayor abandono en el embudo',
+      failingWrite: 'Escritura que más falla',
+      failed: '{share} fallaron',
       invented: 'Datos inventados, como en la demo en vivo.',
     },
     proof: {

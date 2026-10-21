@@ -1485,7 +1485,9 @@ export const it = translation({
       range: 'Ultimi 30 giorni',
       current: 'Questo periodo',
       previous: 'Periodo precedente',
-      topPages: 'Pagine principali',
+      dropOff: 'Abbandono maggiore nel funnel',
+      failingWrite: 'Scrittura che fallisce più spesso',
+      failed: '{share} fallite',
       invented: 'Dati inventati, come nella demo live.',
     },
     proof: {

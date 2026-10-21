@@ -1453,7 +1453,9 @@ export const en = {
       range: 'Last 30 days',
       current: 'This period',
       previous: 'Previous period',
-      topPages: 'Top pages',
+      dropOff: 'Biggest drop-off in the funnel',
+      failingWrite: 'Write that fails most often',
+      failed: '{share} failed',
       invented: 'Invented data, like the live demo.',
     },
     proof: {

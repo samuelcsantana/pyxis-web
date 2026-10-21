@@ -1,5 +1,7 @@
+import type { FunnelStep } from '@/domain/funnel';
 import { type LandingPreviewView, landingPreviewOf } from '@/domain/landing-preview';
 import type { OverviewReport } from '@/domain/overview';
+import type { RouteReport } from '@/domain/requests';
 import type { I18n } from '@/i18n/i18n';
 
 const DAYS = 30;
@@ -45,6 +47,45 @@ export const SHOWCASE_OVERVIEW: OverviewReport = {
   previousDays: wave(84, 0.6).map((visits) => ({ ...PREVIOUS_DAY, visits })),
 };
 
+const SHOWCASE_STEPS: readonly FunnelStep[] = [
+  { type: 'page', path: '/calculator' },
+  { type: 'page', path: '/sign-up' },
+  { type: 'event', name: 'signup_completed' },
+  { type: 'event', name: 'order_created' },
+];
+
+function write(path: string, total: number, failed: number): RouteReport {
+  return {
+    method: 'POST',
+    route: path,
+    total,
+    failed,
+    statuses: [],
+    medianDurationMs: 180,
+    p95DurationMs: null,
+    screens: [],
+    recentFailures: [],
+  };
+}
+
 export function showcasePreview(i18n: I18n): LandingPreviewView {
-  return landingPreviewOf(SHOWCASE_OVERVIEW, PERIOD, TODAY, 'signup_completed', i18n);
+  return landingPreviewOf(
+    {
+      overview: SHOWCASE_OVERVIEW,
+      funnelSteps: SHOWCASE_STEPS,
+      funnel: {
+        steps: [864, 113, 42, 4].map((count) => ({ count, medianSecondsFromPrevious: null })),
+        medianSecondsOverall: null,
+      },
+      writes: {
+        routes: [write('/orders', 640, 16), write('/payouts', 59, 6)],
+        days: [],
+        routeDays: null,
+      },
+    },
+    PERIOD,
+    TODAY,
+    'signup_completed',
+    i18n,
+  );
 }
