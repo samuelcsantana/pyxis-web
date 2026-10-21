@@ -147,16 +147,16 @@ describe('the home page on the main domain', () => {
         .filter((id) => id !== ''),
     ).toEqual([
       'for-whom',
-      'never-stored',
       'dashboard',
       'ask-claude',
       'weekly-report',
+      'never-stored',
       'install',
-      'built-in-public',
-      'architecture',
       'comparison',
       'pricing',
       'faq',
+      'built-in-public',
+      'architecture',
       'story',
     ]);
     expect(screen.getByText('Request access')).toBeInTheDocument();

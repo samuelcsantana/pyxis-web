@@ -390,16 +390,16 @@ test('shows the sections in order', async ({ page }) => {
   const sections = page.locator('main section[id]');
   expect(await sections.evaluateAll((all) => all.map((section) => section.id))).toEqual([
     'for-whom',
-    'never-stored',
     'dashboard',
     'ask-claude',
     'weekly-report',
+    'never-stored',
     'install',
-    'built-in-public',
-    'architecture',
     'comparison',
     'pricing',
     'faq',
+    'built-in-public',
+    'architecture',
     'story',
   ]);
 });
