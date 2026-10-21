@@ -1658,6 +1658,21 @@ export const de = translation({
       eyebrow: 'Installation',
       title: 'Was eine Website hinzufügt',
       lead: 'Ein Paket und zwei Zeilen. Seitenaufrufe werden automatisch erfasst; ein benanntes Ereignis ist ein Aufruf.',
+      steps: {
+        label: 'So fängst du an, in 3 Schritten',
+        account: {
+          title: 'Konto und Projekt anlegen',
+          body: 'Im Dashboard, mit einer E-Mail und einer Karte: 14 Tage kostenlos. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
+        },
+        install: {
+          title: 'Installieren, selbst oder mit einem KI-Agenten',
+          body: 'Ein Paket und zwei Zeilen im Code der Website, oder eine Bitte an Claude Code, Cursor oder einen anderen Agenten.',
+        },
+        ask: {
+          title: 'Fragen',
+          body: 'Öffne das Dashboard, oder verbinde Claude und frag, wie die Woche lief und wo Menschen aufhören.',
+        },
+      },
       copy: 'Kopieren',
       copied: 'Kopiert',
       selected: 'Markiert, drück Strg+C',

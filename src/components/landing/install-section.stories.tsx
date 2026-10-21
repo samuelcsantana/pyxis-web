@@ -26,7 +26,19 @@ export const English: Story = {
   },
 };
 
-export const SignUpOpen: Story = { args: { signUpOpen: true } };
+export const SignUpOpen: Story = {
+  args: { signUpOpen: true },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByRole('list', { name: 'How to start, in 3 steps' }),
+    ).toBeVisible();
+  },
+};
+
+export const SignUpOpenOnAPhone: Story = {
+  args: { signUpOpen: true },
+  globals: { viewport: { value: 'mobile1' } },
+};
 
 export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 

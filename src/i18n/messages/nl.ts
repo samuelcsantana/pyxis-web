@@ -1642,6 +1642,21 @@ export const nl = translation({
       eyebrow: 'Installeren',
       title: 'Wat een site toevoegt',
       lead: 'Eén pakket en twee regels. Paginaweergaven worden vanzelf vastgelegd; een benoemd event is één aanroep.',
+      steps: {
+        label: 'Zo begin je, in 3 stappen',
+        account: {
+          title: 'Maak het account en het project aan',
+          body: 'In het dashboard, met een e-mailadres en een kaart: 14 dagen gratis. Het project krijgt meteen zijn publieke sleutel.',
+        },
+        install: {
+          title: 'Installeer het, zelf of met een AI-agent',
+          body: 'Eén pakket en twee regels in de code van de site, of een verzoek aan Claude Code, Cursor of een andere agent.',
+        },
+        ask: {
+          title: 'Vraag het',
+          body: 'Open het dashboard, of koppel Claude en vraag hoe de week ging en waar mensen afhaken.',
+        },
+      },
       copy: 'Kopiëren',
       copied: 'Gekopieerd',
       selected: 'Geselecteerd, druk op Ctrl+C',
