@@ -8,8 +8,14 @@ const meta = {
   title: 'Landing/LandingHero',
   component: LandingHero,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english, preview: showcasePreview(english) },
-  render: (args) => <LandingHero i18n={args.i18n} preview={showcasePreview(args.i18n)} />,
+  args: { i18n: english, preview: showcasePreview(english), signUpOpen: true },
+  render: (args) => (
+    <LandingHero
+      i18n={args.i18n}
+      preview={showcasePreview(args.i18n)}
+      signUpOpen={args.signUpOpen}
+    />
+  ),
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -25,8 +31,18 @@ type Story = StoryObj<typeof meta>;
 export const English: Story = {
   play: async ({ canvasElement }) => {
     await expect(
+      within(canvasElement).getByRole('link', { name: 'Start your free trial' }),
+    ).toBeVisible();
+    await expect(
       within(canvasElement).getByRole('link', { name: 'Open the live demo' }),
     ).toBeVisible();
+  },
+};
+
+export const SignUpClosed: Story = {
+  args: { signUpOpen: false },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('link', { name: 'See pricing' })).toBeVisible();
   },
 };
 

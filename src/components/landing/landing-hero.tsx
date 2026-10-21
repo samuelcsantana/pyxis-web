@@ -13,12 +13,80 @@ import { PRICING_ID } from './pricing-section';
 export interface LandingHeroProps {
   readonly i18n: I18n;
   readonly preview: LandingPreviewView;
+  readonly signUpOpen: boolean;
 }
 
 export const HERO_TITLE_ID = 'landing-title';
 const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';
 
-export function LandingHero({ i18n, preview }: LandingHeroProps) {
+function ArrowIcon() {
+  return (
+    <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d={ARROW_ICON}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function TrialFirst({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <>
+      <div className="mt-1 flex flex-wrap gap-2.5">
+        <a
+          href={LANDING_LINKS.signUp}
+          className={LINK_PRIMARY}
+          {...trackAttributes(LANDING_EVENTS.signUpOpened, { from: 'hero' })}
+        >
+          {t('landing.pricing.start')}
+          <ArrowIcon />
+        </a>
+        <a
+          href={LANDING_LINKS.demo}
+          className={LINK_SECONDARY}
+          {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
+        >
+          {t('landing.hero.openDemo')}
+        </a>
+      </div>
+      <p className="text-caption text-muted">{t('landing.hero.trialNote')}</p>
+    </>
+  );
+}
+
+function DemoFirst({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <>
+      <div className="mt-1 flex flex-wrap gap-2.5">
+        <a
+          href={LANDING_LINKS.demo}
+          className={LINK_PRIMARY}
+          {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
+        >
+          {t('landing.hero.openDemo')}
+          <ArrowIcon />
+        </a>
+        <a
+          href={`#${PRICING_ID}`}
+          className={LINK_SECONDARY}
+          {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'hero' })}
+        >
+          {t('landing.hero.seePricing')}
+        </a>
+      </div>
+      <p className="text-caption text-muted">{t('landing.hero.note')}</p>
+    </>
+  );
+}
+
+export function LandingHero({ i18n, preview, signUpOpen }: LandingHeroProps) {
   const { t } = i18n;
   return (
     <section aria-labelledby={HERO_TITLE_ID} className="relative isolate overflow-hidden">
@@ -36,33 +104,7 @@ export function LandingHero({ i18n, preview }: LandingHeroProps) {
             <p className="max-w-xl text-lg leading-relaxed text-pretty text-muted">
               {t('landing.hero.lead')}
             </p>
-            <div className="mt-1 flex flex-wrap gap-2.5">
-              <a
-                href={LANDING_LINKS.demo}
-                className={LINK_PRIMARY}
-                {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
-              >
-                {t('landing.hero.openDemo')}
-                <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d={ARROW_ICON}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.8}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </a>
-              <a
-                href={`#${PRICING_ID}`}
-                className={LINK_SECONDARY}
-                {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'hero' })}
-              >
-                {t('landing.hero.seePricing')}
-              </a>
-            </div>
-            <p className="text-caption text-muted">{t('landing.hero.note')}</p>
+            {signUpOpen ? <TrialFirst i18n={i18n} /> : <DemoFirst i18n={i18n} />}
             <a
               href={`#${ASK_CLAUDE_ID}`}
               className={`mt-1 inline-flex w-fit max-w-full items-center gap-2.5 rounded-pill border border-line-strong bg-card py-1.5 pr-4 pl-1.5 text-sm text-ink hover:border-muted hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}

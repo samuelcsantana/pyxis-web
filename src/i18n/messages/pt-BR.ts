@@ -1457,6 +1457,8 @@ export const ptBR = translation({
       openDemo: 'Abrir a demonstração',
       seePricing: 'Ver preço',
       note: 'Sem cadastro. Dados inventados. Abre direto no painel.',
+      trialNote:
+        '14 dias grátis; o cartão só é cobrado no 15º dia. A demonstração abre sem cadastro.',
       claudeTag: 'No diretório do Claude',
       claude: 'Pergunte ao Claude sobre seus números',
     },

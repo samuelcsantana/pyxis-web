@@ -167,7 +167,9 @@ describe('the home page on the main domain', () => {
 
     renderWithMessages(await LandingHome(atSlug('en')));
 
-    expect(screen.getAllByRole('link', { name: 'Start your free trial' })).toHaveLength(2);
+    const trials = screen.getAllByRole('link', { name: 'Start your free trial' });
+    expect(trials).toHaveLength(3);
+    expect(trials[0]).toHaveAttribute('data-track-from', 'hero');
     expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
     signUp.open = false;
   });

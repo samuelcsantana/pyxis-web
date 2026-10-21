@@ -1445,6 +1445,8 @@ export const en = {
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
+      trialNote:
+        '14 days free; the card is only charged on day 15. The demo opens without signing up.',
       claudeTag: 'In Claude’s directory',
       claude: 'Ask Claude about your numbers',
     },

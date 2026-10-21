@@ -165,7 +165,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         withSignIn
       />
       <MainContent className="grow">
-        <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} />
+        <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} signUpOpen={signUpOpen} />
         <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
         <AskClaudeSection i18n={i18n} />
