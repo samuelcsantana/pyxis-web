@@ -9,6 +9,17 @@ const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
 const DEMO_PROJECT = '/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEMO_SCREEN = `${DEMO_PROJECT}/overview`;
 const DEMO_ORIGIN = 'http://localhost:3101';
+const DEMO_TIME_ZONE = 'America/Sao_Paulo';
+const DAY_MS = 86_400_000;
+const DAYS_IN_A_WEEK = 7;
+
+function lastClosedWeekOf(today: string): { readonly from: string; readonly to: string } {
+  const day = new Date(`${today}T00:00:00.000Z`);
+  const isoWeekday = day.getUTCDay() === 0 ? DAYS_IN_A_WEEK : day.getUTCDay();
+  const lastSunday = new Date(day.getTime() - isoWeekday * DAY_MS);
+  const monday = new Date(lastSunday.getTime() - (DAYS_IN_A_WEEK - 1) * DAY_MS);
+  return { from: monday.toISOString().slice(0, 10), to: lastSunday.toISOString().slice(0, 10) };
+}
 const FRAMES_AFTER_CLICK = 5;
 const ARRIVAL_TOLERANCE_PX = 2;
 
@@ -274,6 +285,19 @@ test('shows on the preview card the drop-off and the failing write the demo scre
   ).toContainText(`${failedShare} errors`);
 });
 
+test('shows in the weekly digest the visits the demo counts for that week', async ({ page }) => {
+  await page.goto('/');
+  const mail = page.getByRole('figure', { name: 'An example of the weekly digest e-mail' });
+  const visits = await mail.getByRole('definition').first().textContent();
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: DEMO_TIME_ZONE }).format(new Date());
+  const { from, to } = lastClosedWeekOf(today);
+
+  await page.goto(`${DEMO_ORIGIN}${DEMO_PROJECT}/overview?from=${from}&to=${to}`);
+  await expect(
+    page.getByRole('group', { name: 'Visits', exact: true }).locator('p').first(),
+  ).toHaveText(visits ?? '');
+});
+
 test('opens the other language still, without playing the entrance again', async ({ page }) => {
   await page.goto('/');
   const preview = page.locator('.landing-preview');
@@ -369,6 +393,7 @@ test('shows the sections in order', async ({ page }) => {
     'never-stored',
     'dashboard',
     'ask-claude',
+    'weekly-report',
     'install',
     'in-production',
     'built-in-public',

@@ -1622,6 +1622,44 @@ export const it = translation({
       },
       foot: 'Ciò che Claude richiede passa dall’API di Pyxis ad Anthropic, che lo tratta secondo i propri termini. Cursor e gli altri client MCP si collegano con un token di accesso creato nelle Impostazioni. <link>La guida completa</link>',
     },
+    report: {
+      eyebrow: 'Report',
+      title: 'Ogni lunedì, la settimana nella tua e-mail',
+      lead: 'Visite, conversioni e scritture fallite rispetto alla settimana precedente, le pagine principali e le rotte che hanno fallito di più. Senza aprire la dashboard e senza chiedere a nessuno.',
+      items: {
+        digest: {
+          title: 'Attivo per ogni admin del progetto',
+          body: 'Arriva ogni lunedì, con la settimana chiusa nel fuso orario del tuo progetto e nella lingua in cui usi la dashboard. Contiene solo numeri sommati, niente di personale. Arriva anche una settimana senza visite, con la data dell’ultimo evento: è così che un’installazione rotta si nota senza aprire la dashboard. Si disattiva in Impostazioni.',
+        },
+        csv: {
+          title: 'Un CSV per ogni schermata',
+          body: 'Panoramica, Acquisizione, Dispositivi, Funzionalità, Richieste e Visite scaricano in CSV quello che mostrano, nel periodo scelto.',
+        },
+        export: {
+          title: 'Tutti gli eventi, in un file',
+          body: 'L’esportazione del progetto raccoglie tutto ciò che conserva in un CSV compresso. Il link arriva via e-mail in pochi minuti.',
+        },
+      },
+      mail: {
+        label: 'Un esempio dell’e-mail del riepilogo settimanale',
+        kicker: 'Riepilogo settimanale',
+        visits: 'Visite',
+        identifiedUsers: 'Utenti identificati',
+        convertingVisits: 'Visite con conversione',
+        failedWrites: 'Scritture fallite',
+        visitsPerDay: 'Visite al giorno',
+        failingRoutes: 'Rotte con errori',
+        openWeek: 'Apri la settimana nella dashboard',
+        versusWeekBefore: '{change} rispetto alla settimana precedente ({previous})',
+        unchangedFromWeekBefore:
+          'nessuna variazione rispetto alla settimana precedente ({previous})',
+        weekBeforeOnly: '{previous} la settimana precedente',
+        shareOfVisits: '{share} delle visite',
+        ofWrites: 'su {writes} scritture, {rate}',
+        noWrites: 'nessuna scrittura',
+        failedOf: 'fallite: {failed} su {total}',
+      },
+    },
     nudge: {
       label: 'Novità: Pyxis in Claude',
       badge: 'Novità',

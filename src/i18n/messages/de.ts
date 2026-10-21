@@ -1639,6 +1639,43 @@ export const de = translation({
       },
       foot: 'Was Claude anfragt, geht von der Pyxis-API an Anthropic, das es nach eigenen Bedingungen verarbeitet. Cursor und andere MCP-Clients verbinden sich mit einem Zugriffstoken, das du in den Einstellungen erstellst. <link>Die vollständige Anleitung</link>',
     },
+    report: {
+      eyebrow: 'Berichte',
+      title: 'Jeden Montag die Woche in deinem Postfach',
+      lead: 'Besuche, Conversions und fehlgeschlagene Schreibzugriffe im Vergleich zur Vorwoche, die Top-Seiten und die Routen mit den meisten Fehlern. Ohne das Dashboard zu öffnen und ohne jemanden zu fragen.',
+      items: {
+        digest: {
+          title: 'Für jeden Admin des Projekts eingeschaltet',
+          body: 'Er kommt jeden Montag, mit der Woche abgeschlossen in der Zeitzone deines Projekts und in der Sprache, in der du das Dashboard nutzt. Er enthält nur Summen, nichts Persönliches. Auch eine Woche ohne Besuche kommt an, mit dem Datum des letzten Ereignisses: So fällt eine kaputte Installation auf, ohne dass du das Dashboard öffnest. Ausschalten in den Einstellungen.',
+        },
+        csv: {
+          title: 'Eine CSV-Datei pro Ansicht',
+          body: 'Übersicht, Akquisition, Geräte, Funktionen, Anfragen und Besuche laden als CSV herunter, was sie zeigen, für den gewählten Zeitraum.',
+        },
+        export: {
+          title: 'Alle Ereignisse in einer Datei',
+          body: 'Der Projektexport fasst alles, was das Projekt speichert, in einer komprimierten CSV-Datei zusammen. Der Link kommt in wenigen Minuten per E-Mail.',
+        },
+      },
+      mail: {
+        label: 'Ein Beispiel der E-Mail mit dem Wochenbericht',
+        kicker: 'Wochenbericht',
+        visits: 'Besuche',
+        identifiedUsers: 'Identifizierte Nutzer',
+        convertingVisits: 'Besuche mit Conversion',
+        failedWrites: 'Fehlgeschlagene Schreibzugriffe',
+        visitsPerDay: 'Besuche pro Tag',
+        failingRoutes: 'Fehlerhafte Routen',
+        openWeek: 'Woche im Dashboard öffnen',
+        versusWeekBefore: '{change} ggü. der Vorwoche ({previous})',
+        unchangedFromWeekBefore: 'keine Veränderung ggü. der Vorwoche ({previous})',
+        weekBeforeOnly: '{previous} in der Vorwoche',
+        shareOfVisits: '{share} der Besuche',
+        ofWrites: 'von {writes} Schreibzugriffen, {rate}',
+        noWrites: 'keine Schreibzugriffe',
+        failedOf: '{failed} von {total} fehlgeschlagen',
+      },
+    },
     nudge: {
       label: 'Neu: Pyxis in Claude',
       badge: 'Neu',

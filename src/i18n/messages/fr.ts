@@ -1636,6 +1636,44 @@ export const fr = translation({
       },
       foot: 'Ce que demande Claude va de l’API Pyxis à Anthropic, qui le traite selon ses propres conditions. Cursor et les autres clients MCP se connectent avec un jeton d’accès créé dans les Paramètres. <link>Le guide complet</link>',
     },
+    report: {
+      eyebrow: 'Rapports',
+      title: 'Chaque lundi, la semaine dans votre boîte mail',
+      lead: 'Visites, conversions et écritures en échec par rapport à la semaine précédente, les pages principales et les routes qui ont le plus échoué. Sans ouvrir le tableau de bord et sans rien demander à personne.',
+      items: {
+        digest: {
+          title: 'Activé pour chaque admin du projet',
+          body: 'Il arrive chaque lundi, avec la semaine close dans le fuseau horaire de votre projet et dans la langue dans laquelle vous utilisez le tableau de bord. Il ne contient que des totaux, rien de personnel. Une semaine sans visites arrive aussi, avec la date du dernier événement : c’est ainsi qu’une installation cassée se voit sans ouvrir le tableau de bord. Il se désactive dans Paramètres.',
+        },
+        csv: {
+          title: 'Un CSV pour chaque écran',
+          body: 'Vue d’ensemble, Acquisition, Appareils, Fonctionnalités, Requêtes et Visites téléchargent en CSV ce qu’ils affichent, pour la période choisie.',
+        },
+        export: {
+          title: 'Tous les événements, dans un fichier',
+          body: 'L’export du projet réunit tout ce qu’il conserve dans un CSV compressé. Le lien arrive par e-mail en quelques minutes.',
+        },
+      },
+      mail: {
+        label: 'Un exemple de l’e-mail du récapitulatif hebdomadaire',
+        kicker: 'Récapitulatif hebdomadaire',
+        visits: 'Visites',
+        identifiedUsers: 'Utilisateurs identifiés',
+        convertingVisits: 'Visites avec conversion',
+        failedWrites: 'Écritures en échec',
+        visitsPerDay: 'Visites par jour',
+        failingRoutes: 'Routes en échec',
+        openWeek: 'Ouvrir la semaine dans le tableau de bord',
+        versusWeekBefore: '{change} par rapport à la semaine précédente ({previous})',
+        unchangedFromWeekBefore:
+          'aucune variation par rapport à la semaine précédente ({previous})',
+        weekBeforeOnly: '{previous} la semaine précédente',
+        shareOfVisits: '{share} des visites',
+        ofWrites: 'sur {writes} écritures, {rate}',
+        noWrites: 'aucune écriture',
+        failedOf: '{failed} sur {total} en échec',
+      },
+    },
     nudge: {
       label: 'Nouveauté : Pyxis dans Claude',
       badge: 'Nouveau',

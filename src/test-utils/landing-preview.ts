@@ -1,3 +1,4 @@
+import { type DigestPreviewView, digestPreviewOf } from '@/domain/digest-preview';
 import type { FunnelStep } from '@/domain/funnel';
 import { type LandingPreviewView, landingPreviewOf } from '@/domain/landing-preview';
 import type { OverviewReport } from '@/domain/overview';
@@ -86,6 +87,38 @@ export function showcasePreview(i18n: I18n): LandingPreviewView {
     PERIOD,
     TODAY,
     'signup_completed',
+    i18n,
+  );
+}
+
+const DIGEST_WEEK = { from: '2026-10-12', to: '2026-10-18' } as const;
+
+export function showcaseDigest(i18n: I18n): DigestPreviewView {
+  return digestPreviewOf(
+    {
+      project: i18n.t('demo.projectNames.store'),
+      timeZone: 'America/Sao_Paulo',
+      week: DIGEST_WEEK,
+      overview: {
+        ...SHOWCASE_OVERVIEW,
+        kpis: {
+          ...SHOWCASE_OVERVIEW.kpis,
+          visits: { current: 642, previous: 617, daily: [98, 104, 96, 91, 87, 79, 87] },
+          identifiedUsers: { current: 84, previous: 78, daily: [] },
+          convertingVisits: { current: 29, previous: 27, daily: [] },
+          writeErrors: {
+            current: { failed: 9, total: 447 },
+            previous: { failed: 6, total: 430 },
+            daily: [],
+          },
+        },
+      },
+      writes: {
+        routes: [write('/orders', 162, 4), write('/payouts', 14, 3), write('/auth/sign-up', 59, 2)],
+        days: [],
+        routeDays: null,
+      },
+    },
     i18n,
   );
 }

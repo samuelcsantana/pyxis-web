@@ -1623,6 +1623,43 @@ export const nl = translation({
       },
       foot: 'Wat Claude opvraagt, gaat van de Pyxis-API naar Anthropic, dat het verwerkt volgens zijn eigen voorwaarden. Cursor en andere MCP-clients koppelen met een toegangstoken dat je aanmaakt in Instellingen. <link>De volledige handleiding</link>',
     },
+    report: {
+      eyebrow: 'Rapporten',
+      title: 'Elke maandag de week in je mailbox',
+      lead: 'Bezoeken, conversies en mislukte schrijfverzoeken vergeleken met de week ervoor, de toppagina’s en de routes die het vaakst mislukten. Zonder het dashboard te openen en zonder iemand iets te vragen.',
+      items: {
+        digest: {
+          title: 'Aan voor elke admin van het project',
+          body: 'Hij komt elke maandag, met de week afgesloten in de tijdzone van je project en in de taal waarin je het dashboard gebruikt. Hij bevat alleen opgetelde cijfers, niets persoonlijks. Ook een week zonder bezoeken komt binnen, met de datum van het laatste event: zo valt een kapotte installatie op zonder dat je het dashboard opent. Uitzetten kan bij Instellingen.',
+        },
+        csv: {
+          title: 'Een CSV van elk scherm',
+          body: 'Overzicht, Acquisitie, Apparaten, Functies, Verzoeken en Bezoeken downloaden als CSV wat ze tonen, voor de gekozen periode.',
+        },
+        export: {
+          title: 'Alle events in één bestand',
+          body: 'De projectexport bundelt alles wat het project bewaart in een gecomprimeerde CSV. De link komt binnen een paar minuten per e-mail.',
+        },
+      },
+      mail: {
+        label: 'Een voorbeeld van de e-mail met de wekelijkse samenvatting',
+        kicker: 'Wekelijkse samenvatting',
+        visits: 'Bezoeken',
+        identifiedUsers: 'Geïdentificeerde gebruikers',
+        convertingVisits: 'Bezoeken met conversie',
+        failedWrites: 'Mislukte schrijfverzoeken',
+        visitsPerDay: 'Bezoeken per dag',
+        failingRoutes: 'Routes met fouten',
+        openWeek: 'De week openen in het dashboard',
+        versusWeekBefore: '{change} vs. de week ervoor ({previous})',
+        unchangedFromWeekBefore: 'geen verandering vs. de week ervoor ({previous})',
+        weekBeforeOnly: '{previous} de week ervoor',
+        shareOfVisits: '{share} van de bezoeken',
+        ofWrites: 'van {writes} schrijfverzoeken, {rate}',
+        noWrites: 'geen schrijfverzoeken',
+        failedOf: '{failed} van {total} mislukt',
+      },
+    },
     nudge: {
       label: 'Nieuws: Pyxis in Claude',
       badge: 'Nieuw',
