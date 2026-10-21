@@ -1493,6 +1493,8 @@ export const de = translation({
       openDemo: 'Live-Demo öffnen',
       seePricing: 'Preise ansehen',
       note: 'Ohne Registrierung. Erfundene Daten. Öffnet direkt das Dashboard.',
+      trialNote:
+        '14 Tage kostenlos; die Karte wird erst am 15. Tag belastet. Die Demo öffnet ohne Registrierung.',
       claudeTag: 'Im Verzeichnis von Claude',
       claude: 'Frag Claude nach deinen Zahlen',
     },

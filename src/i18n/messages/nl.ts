@@ -1478,6 +1478,8 @@ export const nl = translation({
       openDemo: 'Open de livedemo',
       seePricing: 'Bekijk de prijzen',
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',
+      trialNote:
+        '14 dagen gratis; je kaart wordt pas op dag 15 belast. De demo opent zonder registratie.',
       claudeTag: 'In de directory van Claude',
       claude: 'Vraag Claude naar je cijfers',
     },

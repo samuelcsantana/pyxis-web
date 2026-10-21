@@ -7,7 +7,7 @@ import { LandingHero } from './landing-hero';
 
 describe('LandingHero', () => {
   it('states what Pyxis finds out in the page title, over the brand backdrop', () => {
-    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} signUpOpen />);
 
     expect(
       screen.getByRole('region', {
@@ -23,8 +23,25 @@ describe('LandingHero', () => {
     ).toBeInTheDocument();
   });
 
-  it('leads to the live demo first and to the pricing second, promising no sign-up', () => {
-    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
+  it('leads to the free trial first and to the live demo second, while sign-up is open', () => {
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} signUpOpen />);
+
+    const hero = screen.getByRole('region');
+    const [trial, demo] = within(hero).getAllByRole('link');
+    expect(trial).toHaveAccessibleName('Start your free trial');
+    expect(trial).toHaveAttribute('href', 'https://app.pyxis-analytics.dev/sign-up');
+    expect(trial).toHaveAttribute('data-track', 'sign_up_opened');
+    expect(trial).toHaveAttribute('data-track-from', 'hero');
+    expect(demo).toHaveAccessibleName('Open the live demo');
+    expect(demo).toHaveAttribute('href', 'https://demo.pyxis-analytics.dev');
+    expect(demo).toHaveAttribute('data-track', 'demo_opened');
+    expect(demo).toHaveAttribute('data-track-from', 'hero');
+    expect(screen.getByText(/the card is only charged on day 15\. The demo opens/)).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'See pricing' })).not.toBeInTheDocument();
+  });
+
+  it('leads to the live demo first and to the pricing second while sign-up is closed', () => {
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} signUpOpen={false} />);
 
     const hero = screen.getByRole('region');
     const [demo, pricing] = within(hero).getAllByRole('link');
@@ -35,10 +52,11 @@ describe('LandingHero', () => {
     expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
     expect(pricing).toHaveAttribute('data-track-from', 'hero');
     expect(screen.getByText(/No sign-up\. Invented data\./)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Start your free trial' })).not.toBeInTheDocument();
   });
 
   it('announces the connector in Claude’s directory, leading to its section', () => {
-    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} signUpOpen />);
 
     const claude = screen.getByRole('link', {
       name: 'In Claude’s directory Ask Claude about your numbers',
@@ -49,7 +67,7 @@ describe('LandingHero', () => {
   });
 
   it('shows the product beside the title and the checkable numbers below', () => {
-    render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} signUpOpen />);
 
     expect(
       screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
@@ -58,9 +76,10 @@ describe('LandingHero', () => {
   });
 
   it('speaks Brazilian Portuguese on the Portuguese page', () => {
-    render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} />);
+    render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} signUpOpen />);
 
+    expect(screen.getByRole('link', { name: 'Começar o teste grátis' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Abrir a demonstração' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ver preço' })).toBeInTheDocument();
+    expect(screen.getByText(/o cartão só é cobrado no 15º dia/)).toBeInTheDocument();
   });
 });

@@ -1488,6 +1488,8 @@ export const fr = translation({
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
+      trialNote:
+        '14 jours gratuits ; la carte n’est débitée qu’au 15e jour. La démo s’ouvre sans inscription.',
       claudeTag: 'Dans l’annuaire de Claude',
       claude: 'Interrogez Claude sur vos chiffres',
     },

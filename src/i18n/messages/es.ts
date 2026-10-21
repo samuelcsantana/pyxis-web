@@ -1462,6 +1462,8 @@ export const es = translation({
       openDemo: 'Abrir la demo en vivo',
       seePricing: 'Ver precio',
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',
+      trialNote:
+        '14 días gratis; la tarjeta solo se cobra el día 15. La demo se abre sin registro.',
       claudeTag: 'En el directorio de Claude',
       claude: 'Pregunta a Claude por tus números',
     },
