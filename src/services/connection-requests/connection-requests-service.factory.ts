@@ -1,3 +1,4 @@
+import { getTranslator } from '@/i18n/get-messages';
 import { apiBaseUrl } from '@/lib/api-config';
 import { createApiReader } from '../api-reader.factory';
 import { createApiWriter } from '../api-writer.factory';
@@ -8,6 +9,6 @@ import { MockConnectionRequestsService } from './mock-connection-requests-servic
 export function createConnectionRequestsService(): IConnectionRequestsService {
   const baseUrl = apiBaseUrl();
   return baseUrl === undefined
-    ? new MockConnectionRequestsService()
+    ? new MockConnectionRequestsService(getTranslator)
     : new HttpConnectionRequestsService(createApiReader(baseUrl), createApiWriter(baseUrl));
 }

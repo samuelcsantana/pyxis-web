@@ -113,7 +113,7 @@ test('draws the initials of a demo project, which has no site icon to serve', as
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
-  await expect(page.getByText('DS', { exact: true }).first()).toBeAttached();
+  await expect(page.getByText('MS', { exact: true }).first()).toBeAttached();
   await expect(page.getByTestId('project-icon')).toHaveCount(0);
   expect((await request.get(`/${STORE_ID}/icon?v=0123456789abcdef`)).status()).toBe(404);
 });

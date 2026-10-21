@@ -62,6 +62,13 @@ test.describe('a browser that asks for Brazilian Portuguese', () => {
     });
   }
 
+  test('names the demo store as the reader’s own site, in Portuguese', async ({ page }) => {
+    await page.goto(`/${STORE_ID}/overview`);
+
+    await expect(page).toHaveTitle('Visão geral · Meu site · Pyxis');
+    await expect(page.getByText('MS', { exact: true }).first()).toBeAttached();
+  });
+
   test('signs in in Portuguese', async ({ page }) => {
     await page.goto('/sign-in');
 

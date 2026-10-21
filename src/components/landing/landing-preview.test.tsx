@@ -10,7 +10,7 @@ describe('LandingPreview', () => {
     render(<LandingPreview view={showcasePreview(english)} i18n={english} />);
 
     const preview = screen.getByRole('figure', { name: 'Preview of the Overview screen' });
-    expect(preview).toHaveTextContent('Demo Store');
+    expect(preview).toHaveTextContent('MSMy site');
     expect(preview).toHaveTextContent('Last 30 days');
     expect(within(preview).getByText('Visits').nextElementSibling).toHaveTextContent('3,214');
     expect(within(preview).getByText('Write error rate')).toBeInTheDocument();
@@ -52,9 +52,9 @@ describe('LandingPreview', () => {
   it('speaks Brazilian Portuguese on the Portuguese page', () => {
     render(<LandingPreview view={showcasePreview(portuguese)} i18n={portuguese} />);
 
-    expect(screen.getByRole('figure', { name: 'Prévia da tela Visão geral' })).toHaveTextContent(
-      'Últimos 30 dias',
-    );
+    const preview = screen.getByRole('figure', { name: 'Prévia da tela Visão geral' });
+    expect(preview).toHaveTextContent('MSMeu site');
+    expect(preview).toHaveTextContent('Últimos 30 dias');
     expect(screen.getByText('Visitas').nextElementSibling).toHaveTextContent('3.214');
   });
 });

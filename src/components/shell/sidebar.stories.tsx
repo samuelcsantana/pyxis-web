@@ -2,12 +2,13 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { demoAdminOf } from '@/services/projects/mock-projects-service';
 import { english } from '@/test-utils/english';
 import { MobileMenu } from './mobile-menu';
 import { Sidebar } from './sidebar';
 import { SignOutButton } from './sign-out-button';
 
+const DEMO_ADMIN = demoAdminOf(english.t, new Date('2026-10-06T02:30:00.000Z'));
 const [STORE] = DEMO_ADMIN.projects;
 if (STORE === undefined) {
   throw new Error('The demo admin has no project.');

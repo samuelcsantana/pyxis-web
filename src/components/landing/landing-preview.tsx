@@ -2,7 +2,7 @@ import { projectInitials } from '@/domain/admin';
 import { type LandingPreviewView, previewChartOf } from '@/domain/landing-preview';
 import type { Tone } from '@/domain/metrics';
 import { displayTag, type I18n } from '@/i18n/i18n';
-import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
 import { PreviewCountUp } from './preview-count-up';
 
 export interface LandingPreviewProps {
@@ -72,6 +72,7 @@ function PreviewChart({ view }: { readonly view: LandingPreviewView }) {
 
 export function LandingPreview({ view, i18n }: LandingPreviewProps) {
   const { t } = i18n;
+  const projectName = demoProjectNameOf(DEMO_STORE, t);
   return (
     <>
       <figure
@@ -85,9 +86,9 @@ export function LandingPreview({ view, i18n }: LandingPreviewProps) {
               aria-hidden="true"
               className="flex size-5.5 items-center justify-center rounded-chip bg-ink text-micro font-bold text-card"
             >
-              {projectInitials(DEMO_STORE.name)}
+              {projectInitials(projectName)}
             </span>
-            {DEMO_STORE.name}
+            {projectName}
           </span>
           <span className="ml-auto rounded-control border border-line px-2 py-0.5 text-xs">
             {t('landing.preview.range')}

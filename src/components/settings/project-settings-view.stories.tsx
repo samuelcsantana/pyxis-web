@@ -9,11 +9,16 @@ import {
   demoAccessTokensWire,
 } from '@/services/access-tokens/mock-access-tokens-service';
 import { demoConnectionsWire } from '@/services/connections/mock-connections-service';
-import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
+import {
+  DEMO_DOCS,
+  DEMO_STORE,
+  demoProjectNameOf,
+  demoProjectOf,
+} from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
 import { MockExportsService } from '@/services/exports/mock-exports-service';
 import { MockProjectManagementService } from '@/services/project-management/mock-project-management-service';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { DEMO_OWNER_EMAIL } from '@/services/projects/mock-projects-service';
 import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
 import {
   demoPeopleWire,
@@ -28,11 +33,12 @@ import { ProjectSettingsView } from './project-settings-view';
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
 
 function demoSettings(projectId: string) {
-  return projectSettingsResponseSchema.parse(demoProjectSettingsWire(projectId, STORY_NOW));
+  const name = demoProjectNameOf(demoProjectOf(projectId), english.t);
+  return projectSettingsResponseSchema.parse(demoProjectSettingsWire(projectId, STORY_NOW, name));
 }
 
 const STORE = demoSettings(DEMO_STORE.id);
-const MANAGEMENT = new MockProjectManagementService();
+const MANAGEMENT = new MockProjectManagementService(() => Promise.resolve(english.t));
 const PEOPLE = new MockProjectPeopleService(() => STORY_NOW);
 const EXPORTS = new MockExportsService(() => STORY_NOW);
 
@@ -74,7 +80,7 @@ const meta = {
       requestExport: () => EXPORTS.request(),
     },
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
-    myEmail: DEMO_ADMIN.email,
+    myEmail: DEMO_OWNER_EMAIL,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof ProjectSettingsView>;

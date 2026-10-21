@@ -1,3 +1,4 @@
+import { english, englishTranslator } from '@/test-utils/english';
 import { readFileSync } from 'node:fs';
 import { signUpCodeWire, signUpVerifyWire } from '@/domain/sign-up.schema';
 import Ajv2020 from 'ajv/dist/2020';
@@ -25,7 +26,7 @@ import { demoVisitsWire } from './visits/demo-visit-list';
 import { demoOverviewWire } from './overview/demo-overview';
 import { demoProjectSettingsWire } from './projects/demo-project-settings';
 import { demoTimeOfDayWire } from './overview/demo-time-of-day';
-import { DEMO_ME_RESPONSE } from './projects/mock-projects-service';
+import { demoMeResponse } from './projects/mock-projects-service';
 import { DEMO_EMAIL_PREFERENCES_WIRE } from './preferences/mock-email-preferences-service';
 import { emailPreferencesWire } from '@/domain/email-preferences';
 import { newAccessTokenWire } from '@/domain/access-tokens.schema';
@@ -101,14 +102,14 @@ describe('the API contract copied from pyxis-api', () => {
   it('accepts the demo answer of /v1/me, so demo mode shows what the API sends', () => {
     const validate = contractSchema('Me');
 
-    expect(validate(DEMO_ME_RESPONSE), JSON.stringify(validate.errors)).toBe(true);
+    expect(validate(demoMeResponse(english.t, NOW)), JSON.stringify(validate.errors)).toBe(true);
   });
 
   it('accepts the demo settings of each demo project', () => {
     const validate = contractSchema('ProjectSettings');
 
     for (const project of DEMO_PROJECTS) {
-      const settings = demoProjectSettingsWire(project.id, NOW);
+      const settings = demoProjectSettingsWire(project.id, NOW, 'My site');
       expect(validate(settings), JSON.stringify(validate.errors)).toBe(true);
     }
   });
@@ -322,7 +323,9 @@ describe('the API contract copied from pyxis-api', () => {
     const request = contractSchema('AuthorizationRequest');
     const decision = contractSchema('AuthorizationDecision');
 
-    expect(request(demoConnectionRequestWire(NOW)), JSON.stringify(request.errors)).toBe(true);
+    expect(request(demoConnectionRequestWire(NOW, english.t)), JSON.stringify(request.errors)).toBe(
+      true,
+    );
     for (const answer of ['approve', 'deny'] as const) {
       expect(decision(demoConnectionDecisionWire(answer)), JSON.stringify(decision.errors)).toBe(
         true,
@@ -335,7 +338,7 @@ describe('the API contract copied from pyxis-api', () => {
     const deletion = contractSchema('ProjectDeletion');
     const newKey = contractSchema('NewProjectKey');
     const createdKey = contractSchema('CreatedProjectKey');
-    const service = new MockProjectManagementService();
+    const service = new MockProjectManagementService(englishTranslator);
     const body = projectChangesWire({
       name: 'Shop',
       allowedOrigins: ['https://shop.example.com'],

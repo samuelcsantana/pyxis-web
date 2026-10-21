@@ -260,7 +260,7 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     const switcher = page.locator('summary', { hasText: 'Switch project' });
     for (const text of [
       page.getByText('owner@example.com', { exact: true }),
-      switcher.getByText('Demo Store', { exact: true }),
+      switcher.getByText('My site', { exact: true }),
       switcher.getByText('America/Sao_Paulo', { exact: true }),
     ]) {
       const cut = await text.evaluate(

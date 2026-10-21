@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const English: Story = {
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByText('Demo Store')).toBeVisible();
+    await expect(within(canvasElement).getByText('My site')).toBeVisible();
   },
 };
 

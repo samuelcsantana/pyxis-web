@@ -139,7 +139,7 @@ describe('the home page on the main domain', () => {
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Made by Samuel Santana');
     expect(
       screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
-    ).toHaveTextContent('Demo Store');
+    ).toHaveTextContent('My site');
     expect(
       screen
         .getAllByRole('region')

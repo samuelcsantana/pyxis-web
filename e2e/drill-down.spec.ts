@@ -58,7 +58,7 @@ test('opens the visits of a screen and of a property value from Features', async
     'cta=create_account',
   );
   await expect(visitRows(page).first()).toBeVisible();
-  await expect(page).toHaveTitle('Visits · Demo Store · Pyxis');
+  await expect(page).toHaveTitle('Visits · My site · Pyxis');
   expect(await axeViolations(page)).toEqual([]);
 });
 

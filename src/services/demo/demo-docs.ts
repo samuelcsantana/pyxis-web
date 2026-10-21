@@ -107,7 +107,7 @@ const DOCS_VISITS: readonly DemoVisit[] = [
 
 export const DEMO_DOCS: DemoProject = {
   id: '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d',
-  name: 'Demo Docs',
+  nameKey: 'docs',
   timezone: 'Europe/Lisbon',
   conversionEvent: null,
   visitsPerPageView: 0.38,

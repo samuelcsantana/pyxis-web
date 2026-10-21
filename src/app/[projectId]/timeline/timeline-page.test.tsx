@@ -96,7 +96,7 @@ describe('TimelinePage', () => {
       projects: [
         {
           id: DEMO_DOCS.id,
-          name: DEMO_DOCS.name,
+          name: 'Demo Docs',
           timezone: DEMO_DOCS.timezone,
           conversionEvent: null,
         },

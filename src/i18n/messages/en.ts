@@ -147,6 +147,7 @@ export const en = {
     notice:
       'Demo data: invented numbers for two imaginary products. No real visitor is shown here.',
     homePage: 'What is Pyxis?',
+    projectNames: { store: 'My site', docs: 'Demo Docs' },
   },
   shell: {
     skipToContent: 'Skip to content',

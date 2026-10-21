@@ -43,7 +43,7 @@ test('opens the first project from the root, with the demo banner', async ({ pag
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview$`));
   await expect(page.getByRole('note')).toContainText('Demo data');
-  await expect(page).toHaveTitle('Overview · Demo Store · Pyxis');
+  await expect(page).toHaveTitle('Overview · My site · Pyxis');
 });
 
 test('writes the chosen period into the URL', async ({ page }) => {

@@ -6,7 +6,12 @@ import type {
   RevokeProjectKeyOutcome,
   SaveProjectOutcome,
 } from '@/domain/project-management';
-import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';
+import {
+  DEMO_STORE,
+  type DemoTranslator,
+  demoProjectNameOf,
+  demoProjectOf,
+} from '../demo/demo-projects';
 import { demoPublicKeyId } from '../projects/demo-project-settings';
 import type { IProjectManagementService } from './project-management-service.interface';
 
@@ -18,6 +23,8 @@ export const DEMO_CREATED_KEYS: Readonly<Record<ProjectKeyKind, string>> = {
 };
 
 export class MockProjectManagementService implements IProjectManagementService {
+  constructor(private readonly translator: DemoTranslator) {}
+
   create(): Promise<CreateProjectOutcome> {
     return Promise.resolve({
       kind: 'created',
@@ -42,11 +49,8 @@ export class MockProjectManagementService implements IProjectManagementService {
     );
   }
 
-  delete(projectId: string, confirmName: string): Promise<DeleteProjectOutcome> {
-    return Promise.resolve(
-      confirmName === demoProjectOf(projectId).name
-        ? { kind: 'deleted' }
-        : { kind: 'nameMismatch' },
-    );
+  async delete(projectId: string, confirmName: string): Promise<DeleteProjectOutcome> {
+    const name = demoProjectNameOf(demoProjectOf(projectId), await this.translator());
+    return confirmName === name ? { kind: 'deleted' } : { kind: 'nameMismatch' };
   }
 }

@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { demoAdminOf } from '@/services/projects/mock-projects-service';
+import { english } from '@/test-utils/english';
 import { ProjectMark } from './project-mark';
 
+const DEMO_ADMIN = demoAdminOf(english.t, new Date('2026-10-06T02:30:00.000Z'));
 const [STORE] = DEMO_ADMIN.projects;
 if (STORE === undefined) {
   throw new Error('The demo admin has no project.');
@@ -39,7 +41,7 @@ export const SiteIconInTheList: Story = { args: { size: 'small' } };
 export const Initials: Story = {
   args: { iconHref: null },
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getByText('DS')).toBeInTheDocument();
+    await expect(within(canvasElement).getByText('MS')).toBeInTheDocument();
   },
 };
 

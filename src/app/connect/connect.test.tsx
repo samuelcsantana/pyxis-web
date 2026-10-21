@@ -8,6 +8,7 @@ import {
   DEMO_CONNECTION_REQUEST_ID,
   MockConnectionRequestsService,
 } from '@/services/connection-requests/mock-connection-requests-service';
+import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { allowConnection, denyConnection } from './actions';
 import ConnectPage, { generateMetadata } from './page';
@@ -62,7 +63,7 @@ function visit(request?: string | string[]) {
 describe('ConnectPage', () => {
   beforeEach(() => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-    state.service = new MockConnectionRequestsService();
+    state.service = new MockConnectionRequestsService(englishTranslator);
   });
 
   afterEach(() => {
@@ -127,7 +128,7 @@ describe('ConnectPage', () => {
 
 describe('connect actions', () => {
   beforeEach(() => {
-    state.service = new MockConnectionRequestsService();
+    state.service = new MockConnectionRequestsService(englishTranslator);
   });
 
   it('allows and denies the request by its id', async () => {

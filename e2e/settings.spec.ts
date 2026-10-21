@@ -28,7 +28,7 @@ test('opens from the navigation and marks it current', async ({ page, isMobile }
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings$`));
   await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
-  await expect(page).toHaveTitle('Settings · Demo Store · Pyxis');
+  await expect(page).toHaveTitle('Settings · My site · Pyxis');
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
@@ -72,7 +72,7 @@ test('lets the owner change the project, with each problem named under its field
   await expect(name).toBeFocused();
   await expect(project.getByRole('alert')).toHaveText('Give the project a name.');
 
-  await name.fill('Demo Store BR');
+  await name.fill('My site BR');
   await project.getByRole('button', { name: 'Add an origin' }).click();
   await project.getByRole('textbox', { name: 'Origin 3' }).fill('shop.example.com');
   await project.getByRole('button', { name: 'Save changes' }).click();
@@ -100,14 +100,14 @@ test('creates a secret key, shows it once, and keeps the only public key', async
 test('deletes a project only with its name typed, then leaves its settings', async ({ page }) => {
   await page.goto(`/${STORE_ID}/settings`);
   const danger = page.getByRole('region', { name: 'Delete project' });
-  const confirm = danger.getByRole('textbox', { name: 'Type Demo Store to confirm' });
+  const confirm = danger.getByRole('textbox', { name: 'Type My site to confirm' });
 
   await confirm.fill('Demo');
   await danger.getByRole('button', { name: 'Delete project for good' }).click();
 
   await expect(danger.getByRole('alert')).toHaveText("The name typed is not this project's name.");
 
-  await confirm.fill('Demo Store');
+  await confirm.fill('My site');
   await danger.getByRole('button', { name: 'Delete project for good' }).click();
 
   await expect(page).not.toHaveURL(/\/settings$/);

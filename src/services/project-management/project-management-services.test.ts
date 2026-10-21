@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
+import { englishTranslator } from '@/test-utils/english';
 import type { ApiWriter } from '../api-writer';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoPublicKeyId } from '../projects/demo-project-settings';
@@ -216,7 +217,7 @@ describe('HttpProjectManagementService delete', () => {
 });
 
 describe('MockProjectManagementService', () => {
-  const service = new MockProjectManagementService();
+  const service = new MockProjectManagementService(englishTranslator);
 
   it('saves any change', async () => {
     await expect(service.update()).resolves.toEqual({ kind: 'saved' });
@@ -245,8 +246,8 @@ describe('MockProjectManagementService', () => {
     });
   });
 
-  it('deletes a demo project only when its name is typed', async () => {
-    await expect(service.delete(DEMO_STORE.id, DEMO_STORE.name)).resolves.toEqual({
+  it('deletes a demo project only when its name, in the reader’s language, is typed', async () => {
+    await expect(service.delete(DEMO_STORE.id, 'My site')).resolves.toEqual({
       kind: 'deleted',
     });
     await expect(service.delete(DEMO_STORE.id, 'Something else')).resolves.toEqual({

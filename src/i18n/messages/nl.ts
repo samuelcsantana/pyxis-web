@@ -158,6 +158,7 @@ export const nl = translation({
     notice:
       'Demogegevens: verzonnen cijfers voor twee denkbeeldige producten. Hier wordt geen echte bezoeker getoond.',
     homePage: 'Wat is Pyxis?',
+    projectNames: { store: 'Mijn site', docs: 'Demo Docs' },
   },
   shell: {
     skipToContent: 'Naar de inhoud',
