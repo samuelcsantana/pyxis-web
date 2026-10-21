@@ -23,7 +23,7 @@ export function demoPeopleWire() {
       },
       {
         admin_user_id: DEMO_PEOPLE_IDS.member,
-        email: 'analyst@demo-store.example',
+        email: 'analyst@example.com',
         role: 'member',
         added_at: MEMBER_ADDED_AT,
       },

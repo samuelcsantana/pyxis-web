@@ -14,7 +14,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({
     currentAdmin: () =>
       Promise.resolve({
-        email: 'owner@demo-store.example',
+        email: 'owner@example.com',
         projects: [
           {
             id: 'p-store',

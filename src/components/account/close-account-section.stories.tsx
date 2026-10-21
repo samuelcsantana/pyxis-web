@@ -8,7 +8,7 @@ import type { CloseAccount } from './close-account-form';
 import { CloseAccountSection } from './close-account-section';
 
 const ACCOUNTS = new MockAccountsService(() => new Date('2026-11-20T12:00:00.000Z'));
-const OWNER_EMAIL = 'owner@demo-store.example';
+const OWNER_EMAIL = 'owner@example.com';
 const REFUNDED: CloseAccountOutcome = {
   kind: 'closed',
   accessEndsAt: '2026-11-20T12:00:00.000Z',

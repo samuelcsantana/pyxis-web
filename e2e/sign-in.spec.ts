@@ -11,7 +11,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await page.goto('/sign-in?expired=1');
       expect(await axeViolations(page)).toEqual([]);
 
-      await page.getByLabel('Email').fill('owner@demo-store.example');
+      await page.getByLabel('Email').fill('owner@example.com');
       await page.getByRole('button', { name: 'Send code' }).click();
       await expect(page.getByLabel('6-digit code')).toBeFocused();
 
@@ -31,7 +31,7 @@ test('tells a visitor whose session ended why they are here', async ({ page }) =
 
 test('refuses a wrong code, then signs in with the demo code', async ({ page }) => {
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
 
   await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
@@ -55,7 +55,7 @@ test.describe('pasting the code', () => {
   for (const pasted of [' 000 000 ', '000-000', 'Code: 000000']) {
     test(`signs in with all six digits of "${pasted}"`, async ({ page }) => {
       await page.goto('/sign-in');
-      await page.getByLabel('Email').fill('owner@demo-store.example');
+      await page.getByLabel('Email').fill('owner@example.com');
       await page.getByRole('button', { name: 'Send code' }).click();
       await expect(page.getByLabel('6-digit code')).toBeFocused();
 
@@ -69,7 +69,7 @@ test.describe('pasting the code', () => {
 
 test('shows each typed digit in its own cell and waits for the sixth', async ({ page }) => {
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
   await expect(page.getByLabel('6-digit code')).toBeFocused();
 
@@ -91,7 +91,7 @@ test('explains a missing email and an incomplete code itself, not with the brows
   await page.getByRole('button', { name: 'Send code' }).click();
   await expect(page.locator('#sign-in-email-error')).toHaveText('Enter your email.');
 
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await expect(page.locator('#sign-in-email-error')).toHaveCount(0);
   await page.getByRole('button', { name: 'Send code' }).click();
   await expect(page.getByRole('button', { name: 'Verify and continue' })).toBeEnabled();
@@ -104,7 +104,7 @@ test('explains a missing email and an incomplete code itself, not with the brows
 
 test('goes back to change the email', async ({ page }) => {
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('typo@demo-store.example');
+  await page.getByLabel('Email').fill('typo@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
 
   await page.getByRole('button', { name: 'Change email' }).click();
@@ -115,14 +115,14 @@ test('goes back to change the email', async ({ page }) => {
 
 test('stays on the code step through a reload, until the email is changed', async ({ page }) => {
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
   await expect(page.getByRole('button', { name: /Send a new code in 0:[0-3]\d/ })).toBeDisabled();
 
   await page.reload();
 
   await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
-  await expect(page.getByText('owner@demo-store.example')).toBeVisible();
+  await expect(page.getByText('owner@example.com')).toBeVisible();
   await expect(page.getByLabel('6-digit code')).toBeFocused();
 
   await page.getByRole('button', { name: 'Change email' }).click();
@@ -141,7 +141,7 @@ test('offers no live demo link inside the live demo', async ({ page }) => {
 
 test('signs in with the demo code filled in from the hint', async ({ page }) => {
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
 
   await page.getByRole('button', { name: 'Fill in 000000' }).click();
@@ -197,7 +197,7 @@ test('leaves the focus alone when the page opens', async ({ page }) => {
 });
 
 async function signInWithTheDemoCode(page: Page) {
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
   await page.getByRole('button', { name: 'Send code' }).click();
   await page.getByLabel('6-digit code').fill('000000');
 }

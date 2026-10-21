@@ -6,7 +6,7 @@ import { DEMO_PEOPLE_IDS } from '@/services/project-people/mock-project-people-s
 import { RemovePersonButton } from './remove-person-button';
 
 const ROW_ID = 'story-person';
-const DESCRIBED = { description: 'analyst@demo-store.example' };
+const DESCRIBED = { description: 'analyst@example.com' };
 
 const meta = {
   title: 'Settings/Remove person button',
@@ -20,7 +20,7 @@ const meta = {
   decorators: [
     (Story: () => ReactNode) => (
       <div className="flex items-start justify-between gap-4">
-        <span id={ROW_ID}>analyst@demo-store.example</span>
+        <span id={ROW_ID}>analyst@example.com</span>
         <Story />
       </div>
     ),

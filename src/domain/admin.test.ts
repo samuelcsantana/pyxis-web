@@ -9,7 +9,7 @@ import {
 import { meResponseSchema } from './admin.schema';
 
 const WIRE = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [
     {
       id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
@@ -25,7 +25,7 @@ const WIRE = {
 describe('meResponseSchema', () => {
   it('maps the snake_case answer of /v1/me to the dashboard shape', () => {
     expect(meResponseSchema.parse(WIRE)).toEqual({
-      email: 'owner@demo-store.example',
+      email: 'owner@example.com',
       projects: [
         {
           id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
@@ -127,7 +127,7 @@ describe('projectInitials and emailInitial', () => {
   });
 
   it('take the first letter of an email', () => {
-    expect(emailInitial('owner@demo-store.example')).toBe('O');
+    expect(emailInitial('owner@example.com')).toBe('O');
   });
 });
 

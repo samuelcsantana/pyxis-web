@@ -23,7 +23,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     request: FROM_CLAUDE_CODE,
-    email: 'owner@demo-store.example',
+    email: 'owner@example.com',
     i18n: english,
     allow: () => new Promise(() => undefined),
     deny: () => new Promise(() => undefined),

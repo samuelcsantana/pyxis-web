@@ -32,7 +32,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({
     currentAdmin: (): Promise<Admin> =>
       Promise.resolve({
-        email: 'owner@demo-store.example',
+        email: 'owner@example.com',
         projects: [{ id: 'p-store', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
       }),
     settings: () => state.settings(),

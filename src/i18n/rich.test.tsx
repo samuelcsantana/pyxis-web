@@ -5,7 +5,7 @@ import { rich, type RichSlots } from './rich';
 const SLOTS: RichSlots = {
   code: (text) => <code>{text}</code>,
   strong: (text) => <strong>{text}</strong>,
-  email: () => <strong>owner@demo-store.example</strong>,
+  email: () => <strong>owner@example.com</strong>,
 };
 
 function html(template: string, slots: RichSlots = SLOTS): string {
@@ -28,16 +28,16 @@ describe('rich', () => {
 
   it('fills a closed tag with no text, so data never passes through the template', () => {
     expect(html('If <email/> can sign in, a code is on its way.')).toBe(
-      '<p>If <strong>owner@demo-store.example</strong> can sign in, a code is on its way.</p>',
+      '<p>If <strong>owner@example.com</strong> can sign in, a code is on its way.</p>',
     );
   });
 
   it('keeps the order of the message, so a language can move the element', () => {
     expect(html('<email/> can sign in.')).toBe(
-      '<p><strong>owner@demo-store.example</strong> can sign in.</p>',
+      '<p><strong>owner@example.com</strong> can sign in.</p>',
     );
     expect(html('Sign in as <email/>')).toBe(
-      '<p>Sign in as <strong>owner@demo-store.example</strong></p>',
+      '<p>Sign in as <strong>owner@example.com</strong></p>',
     );
     expect(html('<code>a</code><strong>b</strong>')).toBe(
       '<p><code>a</code><strong>b</strong></p>',

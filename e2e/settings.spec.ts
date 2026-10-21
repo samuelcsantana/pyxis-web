@@ -117,7 +117,7 @@ test('lists the people, adds an address with an e-mail and removes a member', as
   await page.goto(`/${STORE_ID}/settings`);
   const people = page.getByRole('region', { name: 'People' });
 
-  await expect(people).toContainText('owner@demo-store.example (you)');
+  await expect(people).toContainText('owner@example.com (you)');
   await people.getByRole('button', { name: 'Add person' }).click();
   await expect(people.getByRole('alert')).toHaveText(
     'Write the e-mail address of the person to add.',

@@ -26,7 +26,7 @@ test('brings the sign-in page in when its new language arrives, keeping the emai
 }) => {
   await page.addInitScript({ content: RECORD_ANIMATIONS });
   await page.goto('/sign-in');
-  await page.getByLabel('Email').fill('owner@demo-store.example');
+  await page.getByLabel('Email').fill('owner@example.com');
 
   await chooseLanguage(page, 'Language', 'Português (Brasil)');
 
@@ -35,7 +35,7 @@ test('brings the sign-in page in when its new language arrives, keeping the emai
     () => (window as unknown as { readonly animatedIds: readonly string[] }).animatedIds,
   );
   expect(animatedIds).toEqual(['content']);
-  await expect(page.getByLabel('E-mail')).toHaveValue('owner@demo-store.example');
+  await expect(page.getByLabel('E-mail')).toHaveValue('owner@example.com');
 });
 
 test('shows a chart panel still when the page opens, and brings the table in when chosen', async ({

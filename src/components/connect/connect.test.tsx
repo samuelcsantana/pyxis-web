@@ -54,7 +54,7 @@ describe('ConnectionRequestView', () => {
     renderWithMessages(
       <ConnectionRequestView
         request={REQUEST}
-        email="owner@demo-store.example"
+        email="owner@example.com"
         i18n={english}
         allow={allowNever}
         deny={denyNever}
@@ -64,7 +64,7 @@ describe('ConnectionRequestView', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Connect Claude Code to Pyxis?' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Signed in as owner@demo-store.example')).toBeInTheDocument();
+    expect(screen.getByText('Signed in as owner@example.com')).toBeInTheDocument();
     expect(
       screen.getByText('Claude Code (claude.ai) asks to read the numbers of your projects.'),
     ).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('ConnectionRequestView', () => {
     renderWithMessages(
       <ConnectionRequestView
         request={CLAUDE_REQUEST}
-        email="owner@demo-store.example"
+        email="owner@example.com"
         i18n={english}
         allow={allowNever}
         deny={denyNever}
@@ -104,7 +104,7 @@ describe('ConnectionRequestView', () => {
     renderWithMessages(
       <ConnectionRequestView
         request={{ ...CLAUDE_REQUEST, client: { name: 'Other', host: 'other.example' } }}
-        email="owner@demo-store.example"
+        email="owner@example.com"
         i18n={english}
         allow={allowNever}
         deny={denyNever}
@@ -139,7 +139,7 @@ describe('ConnectionRequestView', () => {
     renderWithMessages(
       <ConnectionRequestView
         request={{ ...REQUEST, connectionLimitReached: true }}
-        email="owner@demo-store.example"
+        email="owner@example.com"
         i18n={english}
         allow={allowNever}
         deny={denyNever}

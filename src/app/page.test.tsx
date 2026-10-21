@@ -45,7 +45,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 }));
 
 const ADMIN: Admin = {
-  email: 'owner@demo-store.example',
+  email: 'owner@example.com',
   projects: [
     {
       id: 'p-store',
@@ -74,7 +74,7 @@ describe('HomePage', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'No projects yet' })).toBeInTheDocument();
     expect(screen.getByRole('main')).toHaveTextContent(
-      'owner@demo-store.example can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run admin:grant for your email.',
+      'owner@example.com can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run admin:grant for your email.',
     );
     expect(screen.getByText('admin:grant').tagName).toBe('CODE');
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();

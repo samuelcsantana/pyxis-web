@@ -69,7 +69,7 @@ function contractSchema(name: string) {
   return validate;
 }
 
-const SIGNED_IN_ANSWER = { email: 'owner@demo-store.example', session_token: 'T'.repeat(43) };
+const SIGNED_IN_ANSWER = { email: 'owner@example.com', session_token: 'T'.repeat(43) };
 
 function sentBodies() {
   const fetchMock = vi.fn<typeof fetch>(() =>
@@ -402,10 +402,9 @@ describe('the API contract copied from pyxis-api', () => {
 
     expect(projectExport(pending), JSON.stringify(projectExport.errors)).toBe(true);
     expect(projectExport(servedByTheDemo), JSON.stringify(projectExport.errors)).toBe(true);
-    expect(
-      closure(closeAccountWire(' owner@demo-store.example ')),
-      JSON.stringify(closure.errors),
-    ).toBe(true);
+    expect(closure(closeAccountWire(' owner@example.com ')), JSON.stringify(closure.errors)).toBe(
+      true,
+    );
   });
 
   it('accepts the bodies the sign-up form sends', () => {
@@ -425,8 +424,8 @@ describe('the API contract copied from pyxis-api', () => {
     const bodies = sentBodies();
     const service = new HttpAuthService('https://api.pyxis.example.com', NO_SESSION_KEEPER);
 
-    await service.requestCode('owner@demo-store.example', 'pt-BR');
-    await service.verifyCode('owner@demo-store.example', '123456');
+    await service.requestCode('owner@example.com', 'pt-BR');
+    await service.verifyCode('owner@example.com', '123456');
     const [requestCode, verifyCode] = bodies();
 
     expect(contractSchema('RequestCodeRequest')(requestCode)).toBe(true);
