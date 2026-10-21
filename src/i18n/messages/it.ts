@@ -1482,6 +1482,28 @@ export const it = translation({
       claudeTag: 'Nella directory di Claude',
       claude: 'Chiedi a Claude dei tuoi numeri',
     },
+    forWhom: {
+      eyebrow: 'Per chi è',
+      title: 'Per chi ha bisogno di sapere dove le persone si fermano',
+      lead: 'La stessa dashboard, tre modi di usarla.',
+      store: {
+        title: 'Negozio o attività online',
+        body: 'Quante persone iniziano un ordine e a quale passaggio rinunciano: carrello, spedizione o pagamento. Diviso tra mobile e desktop, e per provenienza della visita.',
+        link: 'Vedi un funnel nella demo',
+      },
+      agency: {
+        title: 'Sviluppatore o agenzia',
+        body: 'Installalo sui siti dei tuoi clienti e dai a ogni cliente accesso solo al suo progetto, con un codice via e-mail per entrare. Fino a 3 siti e 3 persone per account; per averne di più, un piano su misura.',
+        link: 'Guarda i prezzi',
+      },
+      product: {
+        title: 'Prodotto o SaaS',
+        body: 'Quali funzionalità vengono usate, dove la registrazione perde persone e quali rotte della tua API falliscono, senza cookie sui tuoi utenti.',
+        link: 'Vedi le schermate della dashboard',
+      },
+      install:
+        'Non programmi? L’installazione può farla un agente di IA, chi ha creato il tuo sito o un’agenzia. <link>Come installare</link>',
+    },
     preview: {
       label: 'Anteprima della schermata Panoramica',
       range: 'Ultimi 30 giorni',

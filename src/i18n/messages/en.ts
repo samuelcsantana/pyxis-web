@@ -1450,6 +1450,28 @@ export const en = {
       claudeTag: 'In Claude’s directory',
       claude: 'Ask Claude about your numbers',
     },
+    forWhom: {
+      eyebrow: 'Who it is for',
+      title: 'For anyone who needs to know where people stop',
+      lead: 'The same dashboard, three ways to use it.',
+      store: {
+        title: 'An online shop or business',
+        body: 'How many people start an order and at which step they give up: cart, delivery or payment. Split by phone and computer, and by where the visit came from.',
+        link: 'See a funnel in the demo',
+      },
+      agency: {
+        title: 'A developer or an agency',
+        body: 'Install it on your clients’ sites and give each client access to their own project only, signing in with a code sent by e-mail. Up to 3 sites and 3 people per account; for more, a plan made to measure.',
+        link: 'See pricing',
+      },
+      product: {
+        title: 'A product or SaaS',
+        body: 'Which features get used, where the sign-up loses people and which routes of your API fail, without a cookie on your users.',
+        link: 'See the dashboard’s screens',
+      },
+      install:
+        'Don’t code? The install can be done by an AI agent, by whoever built your site or by an agency. <link>How to install</link>',
+    },
     preview: {
       label: 'Preview of the Overview screen',
       range: 'Last 30 days',

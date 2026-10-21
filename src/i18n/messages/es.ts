@@ -1467,6 +1467,28 @@ export const es = translation({
       claudeTag: 'En el directorio de Claude',
       claude: 'Pregunta a Claude por tus números',
     },
+    forWhom: {
+      eyebrow: 'Para quién es',
+      title: 'Para quien necesita saber dónde se detiene la gente',
+      lead: 'El mismo panel, tres formas de usarlo.',
+      store: {
+        title: 'Tienda o negocio en línea',
+        body: 'Cuántas personas empiezan un pedido y en qué paso abandonan: carrito, envío o pago. Por móvil y escritorio, y por el origen de la visita.',
+        link: 'Ver un embudo en la demo',
+      },
+      agency: {
+        title: 'Desarrollador o agencia',
+        body: 'Instálalo en los sitios de tus clientes y da a cada cliente acceso solo a su proyecto, con un código por correo para entrar. Hasta 3 sitios y 3 personas por cuenta; para más, un plan a medida.',
+        link: 'Ver precio',
+      },
+      product: {
+        title: 'Producto o SaaS',
+        body: 'Qué funcionalidades se usan, dónde el registro pierde gente y qué rutas de tu API fallan, sin cookies en tus usuarios.',
+        link: 'Ver las pantallas del panel',
+      },
+      install:
+        '¿No programas? La instalación la puede hacer un agente de IA, quien hizo tu sitio o una agencia. <link>Cómo instalar</link>',
+    },
     preview: {
       label: 'Vista previa de la pantalla Vista general',
       range: 'Últimos 30 días',
