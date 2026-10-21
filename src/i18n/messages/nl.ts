@@ -1813,6 +1813,21 @@ export const nl = translation({
           answerOpen:
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of neem een abonnement op de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres en een kaart: 14 dagen gratis, één keer per klant, en je kunt altijd opzeggen.',
         },
+        agency: {
+          question: 'Kan ik Pyxis gebruiken op de sites van mijn klanten?',
+          answer:
+            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
+        },
+        noCode: {
+          question: 'Ik programmeer niet. Kan ik het installeren?',
+          answer:
+            'De installatie is een pakket en twee regels in de code van de site, dus iemand moet aan die code zitten: jij met een AI-agent, wie je site heeft gebouwd of een bureau. Daarna vragen het dashboard en Claude geen enkele code meer.',
+        },
+        aiInstall: {
+          question: 'Kan ik een AI vragen het te installeren?',
+          answer:
+            'Ja. Open de repository van de site in Claude Code, in Cursor of in een andere agent en vraag die Pyxis te installeren volgens <code>https://pyxis-analytics.dev/llms.txt</code>, met de publieke sleutel van je project. De agent voegt het pakket, de <code>init</code>-aanroep en de events toe. Koppel daarna Claude aan Pyxis om te controleren dat de eerste events zijn aangekomen.',
+        },
         price: {
           question: 'Wat kost het?',
           answer:

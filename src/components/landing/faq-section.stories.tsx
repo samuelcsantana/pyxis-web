@@ -36,7 +36,12 @@ export const SignUpOpen: Story = {
   args: { signUpOpen: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByText('How do I cancel?'));
-    await expect(canvas.getByRole('link', { name: 'Terms of Use' })).toBeVisible();
+    const cancel = canvas.getByText('How do I cancel?');
+    await userEvent.click(cancel);
+    const answer = cancel.closest('details');
+    await expect(answer).not.toBeNull();
+    await expect(
+      within(answer as HTMLElement).getByRole('link', { name: 'Terms of Use' }),
+    ).toBeVisible();
   },
 };

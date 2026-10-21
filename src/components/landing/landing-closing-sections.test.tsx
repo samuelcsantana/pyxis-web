@@ -80,10 +80,10 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} signUpOpen={false} />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(12);
+    expect(items).toHaveLength(15);
     expect([...items].map((item) => item.open)).toEqual([
       true,
-      ...Array.from({ length: 11 }, () => false),
+      ...Array.from({ length: 14 }, () => false),
     ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');
@@ -97,6 +97,26 @@ describe('FaqSection', () => {
     expect(screen.getByText(/R\$ 39 a month or R\$ 390 a year/)).toBeInTheDocument();
     expect(screen.getByText(/deleted 30 days after access ends/)).toBeInTheDocument();
     expect(screen.getByText(/request access at hello@pyxis-analytics\.dev/)).toBeInTheDocument();
+  });
+
+  it('answers agencies, people who do not code and people who want an AI to install it', () => {
+    const { container } = render(<FaqSection i18n={english} signUpOpen={false} />);
+
+    const questions = [...container.querySelectorAll('summary')].map((summary) =>
+      summary.textContent.replace('+', ''),
+    );
+    const afterUse = questions.indexOf('Can I use it on my site?') + 1;
+    expect(questions.slice(afterUse, afterUse + 3)).toEqual([
+      'Can I use Pyxis on my clients’ sites?',
+      'I don’t code. Can I install it?',
+      'Can I ask an AI to install it?',
+    ]);
+    expect(screen.getByText(/is not reselling\./)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Terms of Use' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/en/terms',
+    );
+    expect(screen.getByText('https://pyxis-analytics.dev/llms.txt').tagName).toBe('CODE');
   });
 
   it('sets the names of code in code type', () => {
@@ -127,7 +147,8 @@ describe('FaqSection', () => {
 
     expect(screen.getByText(/Anyone in Brazil can sign up/)).toBeInTheDocument();
     expect(screen.queryByText(/request access at hello@pyxis-analytics\.dev/)).toBeNull();
-    const terms = screen.getByRole('link', { name: 'Terms of Use' });
+    const cancel = screen.getByText(/have the details\./);
+    const terms = within(cancel).getByRole('link', { name: 'Terms of Use' });
     expect(terms).toHaveAttribute('href', 'https://pyxis-analytics.dev/en/terms');
     expect(terms).toHaveAttribute('hreflang', 'en');
   });
