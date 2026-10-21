@@ -54,10 +54,18 @@ export function codeTextOf(tokens: readonly CodeToken[]): string {
 
 export type CodeWrap = 'none' | 'anywhere' | 'words';
 
-const WRAP_CLASSES: Readonly<Record<CodeWrap, string>> = {
-  none: 'm-0',
-  anywhere: 'm-0 break-all whitespace-pre-wrap',
-  words: 'm-0 whitespace-pre-wrap wrap-anywhere',
+interface CodeLayout {
+  readonly block: string;
+  readonly text: string;
+}
+
+const BESIDE_THE_COPY_BUTTON = 'py-4.5 pr-24';
+const BELOW_THE_COPY_BUTTON_ON_PHONES = 'pt-13 pb-4.5 pr-5 sm:pt-4.5 sm:pr-24';
+
+const CODE_LAYOUTS: Readonly<Record<CodeWrap, CodeLayout>> = {
+  none: { block: BESIDE_THE_COPY_BUTTON, text: 'm-0' },
+  anywhere: { block: BESIDE_THE_COPY_BUTTON, text: 'm-0 break-all whitespace-pre-wrap' },
+  words: { block: BELOW_THE_COPY_BUTTON_ON_PHONES, text: 'm-0 whitespace-pre-wrap wrap-anywhere' },
 };
 
 export interface CodeBlockProps {
@@ -68,9 +76,12 @@ export interface CodeBlockProps {
 }
 
 export function CodeBlock({ id, tokens, labels, wrap = 'none' }: CodeBlockProps) {
+  const layout = CODE_LAYOUTS[wrap];
   return (
-    <div className="relative overflow-x-auto rounded-card bg-nav py-4.5 pr-24 pl-5 font-mono text-sm leading-7">
-      <pre id={id} className={WRAP_CLASSES[wrap]}>
+    <div
+      className={`relative overflow-x-auto rounded-card bg-nav pl-5 font-mono text-sm leading-7 ${layout.block}`}
+    >
+      <pre id={id} className={layout.text}>
         <code>
           {tokens.map((token, index) => (
             <span key={`${String(index)}-${token.text}`} className={TOKEN_CLASSES[token.kind]}>
