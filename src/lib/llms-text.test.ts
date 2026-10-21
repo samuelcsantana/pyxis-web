@@ -40,12 +40,32 @@ describe('llmsText', () => {
     expect(text).toContain('https://api.pyxis-analytics.dev');
   });
 
-  it('gives a coding agent the install steps, ending with a check through the MCP server', () => {
+  it('gives a coding agent the install steps, with a check through the MCP server', () => {
     expect(text).toContain('No tool writes to Pyxis: a person creates the project first.');
     expect(text).toContain('`project_settings` returns both');
     expect(text).toContain('call `init` there, once, never on the server');
     expect(text).toContain('add the endpoint to `connect-src`');
+    expect(text).toContain('8. Check on the deployed site');
     expect(text).toContain('the project’s `first_event_at` is no longer null');
+  });
+
+  it('asks the agent to add the events and list them for the person to review', () => {
+    expect(text).toContain('add one `track` call for each');
+    expect(text).toContain('List them in the\n   reply, so the person can drop or rename any.');
+    expect(text).not.toContain('propose one `track` call');
+  });
+
+  it('tells the agent to report the site’s own API calls with trackRequest', () => {
+    expect(text).toContain('5. If the site calls its own API, wrap its HTTP client once with');
+    expect(text).toContain('`trackRequest({ method, url, status, durationMs })`');
+    expect(text).toContain('status `0` means no response arrived, and aborted requests stay out');
+    expect(text).toContain('never a body or an error message');
+  });
+
+  it('ends by having the person choose the conversion event, which no tool sets', () => {
+    expect(text).toContain('9. Tell the person which event means success on this site');
+    expect(text).toContain('chooses it as the conversion event in the dashboard’s Settings');
+    expect(text).toContain('No tool here sets it.');
   });
 
   it('names the traps that make the first check fail', () => {
