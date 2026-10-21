@@ -1498,6 +1498,28 @@ export const de = translation({
       claudeTag: 'Im Verzeichnis von Claude',
       claude: 'Frag Claude nach deinen Zahlen',
     },
+    forWhom: {
+      eyebrow: 'Für wen',
+      title: 'Für alle, die wissen müssen, wo Menschen aufhören',
+      lead: 'Dasselbe Dashboard, drei Arten, es zu nutzen.',
+      store: {
+        title: 'Onlineshop oder Onlinegeschäft',
+        body: 'Wie viele Menschen eine Bestellung beginnen und bei welchem Schritt sie aufgeben: Warenkorb, Versand oder Zahlung. Getrennt nach Smartphone und Computer und nach der Herkunft des Besuchs.',
+        link: 'Einen Funnel in der Demo ansehen',
+      },
+      agency: {
+        title: 'Entwickler oder Agentur',
+        body: 'Installiere es auf den Websites deiner Kunden und gib jedem Kunden nur Zugriff auf sein eigenes Projekt, mit Anmeldung per Code an die E-Mail. Bis zu 3 Websites und 3 Personen pro Konto; für mehr ein Plan nach Maß.',
+        link: 'Preise ansehen',
+      },
+      product: {
+        title: 'Produkt oder SaaS',
+        body: 'Welche Funktionen genutzt werden, wo die Registrierung Menschen verliert und welche Routen deiner API fehlschlagen, ohne Cookie bei deinen Nutzern.',
+        link: 'Die Ansichten des Dashboards ansehen',
+      },
+      install:
+        'Du programmierst nicht? Die Installation kann ein KI-Agent übernehmen, wer deine Website gebaut hat oder eine Agentur. <link>So wird installiert</link>',
+    },
     preview: {
       label: 'Vorschau der Übersicht',
       range: 'Letzte 30 Tage',

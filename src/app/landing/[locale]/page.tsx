@@ -30,6 +30,7 @@ import { SectionGlide } from '@/components/landing/section-glide';
 import { SectionHashSync } from '@/components/landing/section-hash-sync';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
+import { WhoItIsForSection } from '@/components/landing/who-it-is-for-section';
 import { LinkPreferencesReceiver } from '@/components/preferences/link-preferences-receiver';
 import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { MainContent } from '@/components/shell/main-content';
@@ -166,6 +167,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       />
       <MainContent className="grow">
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} signUpOpen={signUpOpen} />
+        <WhoItIsForSection i18n={i18n} />
         <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
         <AskClaudeSection i18n={i18n} />

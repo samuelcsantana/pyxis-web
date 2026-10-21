@@ -1483,6 +1483,28 @@ export const nl = translation({
       claudeTag: 'In de directory van Claude',
       claude: 'Vraag Claude naar je cijfers',
     },
+    forWhom: {
+      eyebrow: 'Voor wie',
+      title: 'Voor wie moet weten waar mensen afhaken',
+      lead: 'Hetzelfde dashboard, drie manieren om het te gebruiken.',
+      store: {
+        title: 'Webshop of online bedrijf',
+        body: 'Hoeveel mensen een bestelling beginnen en bij welke stap ze afhaken: winkelwagen, bezorging of betaling. Uitgesplitst naar telefoon en computer, en naar waar het bezoek vandaan kwam.',
+        link: 'Bekijk een funnel in de demo',
+      },
+      agency: {
+        title: 'Developer of bureau',
+        body: 'Installeer het op de sites van je klanten en geef elke klant alleen toegang tot zijn eigen project, met inloggen via een code per e-mail. Tot 3 sites en 3 personen per account; voor meer een plan op maat.',
+        link: 'Bekijk de prijzen',
+      },
+      product: {
+        title: 'Product of SaaS',
+        body: 'Welke functies worden gebruikt, waar de registratie mensen verliest en welke routes van je API mislukken, zonder cookie bij je gebruikers.',
+        link: 'Bekijk de schermen van het dashboard',
+      },
+      install:
+        'Programmeer je niet? De installatie kan een AI-agent doen, wie je site heeft gebouwd of een bureau. <link>Zo installeer je het</link>',
+    },
     preview: {
       label: 'Voorbeeld van het scherm Overzicht',
       range: 'Laatste 30 dagen',

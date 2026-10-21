@@ -146,6 +146,7 @@ describe('the home page on the main domain', () => {
         .map((region) => region.id)
         .filter((id) => id !== ''),
     ).toEqual([
+      'for-whom',
       'never-stored',
       'dashboard',
       'ask-claude',

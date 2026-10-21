@@ -1493,6 +1493,28 @@ export const fr = translation({
       claudeTag: 'Dans l’annuaire de Claude',
       claude: 'Interrogez Claude sur vos chiffres',
     },
+    forWhom: {
+      eyebrow: 'Pour qui',
+      title: 'Pour qui a besoin de savoir où les gens s’arrêtent',
+      lead: 'Le même tableau de bord, trois façons de l’utiliser.',
+      store: {
+        title: 'Boutique ou commerce en ligne',
+        body: 'Combien de personnes commencent une commande et à quelle étape elles abandonnent : panier, livraison ou paiement. Séparé entre mobile et ordinateur, et selon l’origine de la visite.',
+        link: 'Voir un entonnoir dans la démo',
+      },
+      agency: {
+        title: 'Développeur ou agence',
+        body: 'Installez-le sur les sites de vos clients et donnez à chaque client l’accès à son seul projet, avec un code reçu par e-mail pour se connecter. Jusqu’à 3 sites et 3 personnes par compte ; au-delà, une offre sur mesure.',
+        link: 'Voir les tarifs',
+      },
+      product: {
+        title: 'Produit ou SaaS',
+        body: 'Quelles fonctionnalités sont utilisées, où l’inscription perd des gens et quelles routes de votre API échouent, sans cookie chez vos utilisateurs.',
+        link: 'Voir les écrans du tableau de bord',
+      },
+      install:
+        'Vous ne codez pas ? L’installation peut être faite par un agent d’IA, par la personne qui a créé votre site ou par une agence. <link>Comment installer</link>',
+    },
     preview: {
       label: 'Aperçu de l’écran Vue d’ensemble',
       range: '30 derniers jours',

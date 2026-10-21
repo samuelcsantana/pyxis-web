@@ -364,6 +364,7 @@ test('shows the sections in order', async ({ page }) => {
 
   const sections = page.locator('main section[id]');
   expect(await sections.evaluateAll((all) => all.map((section) => section.id))).toEqual([
+    'for-whom',
     'never-stored',
     'dashboard',
     'ask-claude',
@@ -376,6 +377,22 @@ test('shows the sections in order', async ({ page }) => {
     'faq',
     'story',
   ]);
+});
+
+test('leads a shop from who it is for to the demo’s funnel', async ({ page }) => {
+  await page.goto('/');
+
+  const section = page.getByRole('region', {
+    name: 'For anyone who needs to know where people stop',
+  });
+  await section.scrollIntoViewIfNeeded();
+  const shop = section.getByRole('link', { name: /An online shop or business/ });
+  await expect(shop).toHaveAttribute(
+    'href',
+    'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/funnel?lang=en',
+  );
+  await section.getByRole('link', { name: 'How to install' }).click();
+  await expect(page).toHaveURL(/#install$/);
 });
 
 test('unfolds a question of the FAQ', async ({ page }) => {
