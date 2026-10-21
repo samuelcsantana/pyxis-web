@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
+import { english, englishTranslator } from '@/test-utils/english';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import type { ApiReader } from '../api-reader';
 import type { ApiWriter } from '../api-writer';
@@ -45,7 +46,7 @@ function refusing(failure: Error): Mock<Post> {
 describe('HttpConnectionRequestsService', () => {
   it('reads a waiting request by its id, escaped in the path', async () => {
     const get = vi.fn<Get>((_path, schema) =>
-      Promise.resolve(schema.parse(demoConnectionRequestWire(NOW))),
+      Promise.resolve(schema.parse(demoConnectionRequestWire(NOW, english.t))),
     );
 
     const found = await serviceWith({ get }).find('4d0f/odd');
@@ -57,8 +58,8 @@ describe('HttpConnectionRequestsService', () => {
       redirect: { host: 'localhost', loopback: true },
       expiresAt: '2026-10-15T23:10:00.000Z',
       projects: [
-        { id: DEMO_STORE.id, name: DEMO_STORE.name },
-        { id: DEMO_DOCS.id, name: DEMO_DOCS.name },
+        { id: DEMO_STORE.id, name: 'My site' },
+        { id: DEMO_DOCS.id, name: 'Demo Docs' },
       ],
       connectionLimitReached: false,
     });
@@ -66,7 +67,9 @@ describe('HttpConnectionRequestsService', () => {
 
   it('refuses a request whose scope is more than reading', async () => {
     const get = vi.fn<Get>((_path, schema) =>
-      Promise.resolve(schema.parse({ ...demoConnectionRequestWire(NOW), scope: 'write' })),
+      Promise.resolve(
+        schema.parse({ ...demoConnectionRequestWire(NOW, english.t), scope: 'write' }),
+      ),
     );
 
     await expect(serviceWith({ get }).find(REQUEST_ID)).rejects.toThrow();
@@ -139,7 +142,7 @@ describe('HttpConnectionRequestsService', () => {
 
 describe('MockConnectionRequestsService', () => {
   it('knows one invented request from Claude Code, back to this computer, for ten minutes', async () => {
-    const found = await new MockConnectionRequestsService(() => NOW).find(
+    const found = await new MockConnectionRequestsService(englishTranslator, () => NOW).find(
       DEMO_CONNECTION_REQUEST_ID,
     );
 
@@ -149,11 +152,13 @@ describe('MockConnectionRequestsService', () => {
   });
 
   it('knows no other request', async () => {
-    await expect(new MockConnectionRequestsService().find(REQUEST_ID)).resolves.toBeNull();
+    await expect(
+      new MockConnectionRequestsService(englishTranslator).find(REQUEST_ID),
+    ).resolves.toBeNull();
   });
 
   it('sends the browser back with a code when allowed, and with access_denied when denied', async () => {
-    const service = new MockConnectionRequestsService();
+    const service = new MockConnectionRequestsService(englishTranslator);
 
     await expect(service.allow(DEMO_CONNECTION_REQUEST_ID)).resolves.toEqual({
       kind: 'redirect',
@@ -166,7 +171,9 @@ describe('MockConnectionRequestsService', () => {
   });
 
   it.each(['allow', 'deny'] as const)('answers gone when %s gets another id', async (method) => {
-    await expect(new MockConnectionRequestsService()[method](REQUEST_ID)).resolves.toEqual({
+    await expect(
+      new MockConnectionRequestsService(englishTranslator)[method](REQUEST_ID),
+    ).resolves.toEqual({
       kind: 'gone',
     });
   });
@@ -175,7 +182,9 @@ describe('MockConnectionRequestsService', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(NOW);
 
-    const found = await new MockConnectionRequestsService().find(DEMO_CONNECTION_REQUEST_ID);
+    const found = await new MockConnectionRequestsService(englishTranslator).find(
+      DEMO_CONNECTION_REQUEST_ID,
+    );
 
     expect(found?.expiresAt).toBe('2026-10-15T23:10:00.000Z');
     vi.useRealTimers();

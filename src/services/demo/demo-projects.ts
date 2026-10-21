@@ -1,3 +1,5 @@
+import type { SourceMessages } from '@/i18n/messages';
+import type { Translator } from '@/i18n/translate';
 import type { DemoProject } from './demo-catalog';
 import { DEMO_DOCS } from './demo-docs';
 import { DEMO_STORE } from './demo-store';
@@ -10,6 +12,12 @@ export function demoProjectOf(projectId: string): DemoProject {
 
 export function demoPersonOf(projectId: string): string | null {
   return demoProjectOf(projectId).person;
+}
+
+export type DemoTranslator = () => Promise<Translator<SourceMessages>>;
+
+export function demoProjectNameOf(project: DemoProject, t: Translator<SourceMessages>): string {
+  return t(`demo.projectNames.${project.nameKey}`);
 }
 
 export { DEMO_DOCS, DEMO_STORE };

@@ -9,7 +9,7 @@ import { ConnectionRequestGone, ConnectionRequestView } from './connection-reque
 
 const STORY_NOW = new Date('2026-10-15T23:00:00.000Z');
 const FROM_CLAUDE_CODE = connectionRequestResponseSchema.parse(
-  demoConnectionRequestWire(STORY_NOW),
+  demoConnectionRequestWire(STORY_NOW, english.t),
 );
 const FROM_CLAUDE: ConnectionRequest = {
   ...FROM_CLAUDE_CODE,

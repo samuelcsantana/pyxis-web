@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { PYXIS_INGESTION_URL } from '@/lib/landing-measurement-config';
-import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
 import { demoProjectSettingsWire } from '@/services/projects/demo-project-settings';
 import { english } from '@/test-utils/english';
 import { InstallGuide } from './install-guide';
 
 const STORY_NOW = new Date('2026-11-20T12:00:00.000Z');
 const RECEIVING = projectSettingsResponseSchema.parse(
-  demoProjectSettingsWire(DEMO_STORE.id, STORY_NOW),
+  demoProjectSettingsWire(DEMO_STORE.id, STORY_NOW, demoProjectNameOf(DEMO_STORE, english.t)),
 );
 
 const meta = {

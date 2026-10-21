@@ -19,7 +19,7 @@ function signInMethods(emailCode: number, google: number, password: number) {
 
 export const DEMO_STORE: DemoProject = {
   id: '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d',
-  name: 'Demo Store',
+  nameKey: 'store',
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
   visitsPerPageView: 0.32,

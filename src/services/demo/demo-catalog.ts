@@ -1,5 +1,6 @@
 import type { Channel } from '@/domain/acquisition';
 import type { FunnelStep } from '@/domain/funnel';
+import type { SourceMessages } from '@/i18n/messages';
 import type { DemoVisit } from './demo-visits';
 
 export interface DemoPage {
@@ -61,9 +62,11 @@ export interface DemoSource {
   readonly campaigns: readonly (readonly [campaign: string, share: number])[];
 }
 
+export type DemoProjectNameKey = keyof SourceMessages['demo']['projectNames'];
+
 export interface DemoProject {
   readonly id: string;
-  readonly name: string;
+  readonly nameKey: DemoProjectNameKey;
   readonly timezone: string;
   readonly conversionEvent: string | null;
   readonly visitsPerPageView: number;

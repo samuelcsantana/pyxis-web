@@ -6,6 +6,7 @@ import type { ProjectSettings } from '@/domain/project-settings';
 import { MockProjectsService } from '@/services/projects/mock-projects-service';
 import { MockProjectPeopleService } from '@/services/project-people/mock-project-people-service';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import SettingsPage, { generateMetadata } from './page';
 
@@ -59,14 +60,16 @@ function renderSettings(projectId = DEMO_STORE.id) {
 
 beforeEach(() => {
   state.admin = ADMIN;
-  state.settings = (projectId) => new MockProjectsService().settings(projectId);
+  state.settings = (projectId) => new MockProjectsService(englishTranslator).settings(projectId);
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
 });
 
 describe('SettingsPage', () => {
   it('asks the settings of the project and shows them under the Settings title', async () => {
-    const settings = vi.fn((projectId: string) => new MockProjectsService().settings(projectId));
+    const settings = vi.fn((projectId: string) =>
+      new MockProjectsService(englishTranslator).settings(projectId),
+    );
     state.settings = settings;
 
     renderWithMessages(await renderSettings());
@@ -79,7 +82,7 @@ describe('SettingsPage', () => {
       within(screen.getByRole('region', { name: 'Project' })).getByRole('textbox', {
         name: 'Name',
       }),
-    ).toHaveValue(DEMO_STORE.name);
+    ).toHaveValue('My site');
   });
 
   it.each([
@@ -87,7 +90,7 @@ describe('SettingsPage', () => {
     ['the operator', null, /Project settings change through the command line/],
   ] as const)('tells %s who changes the project', async (_, role, subtitle) => {
     state.settings = async (projectId) => ({
-      ...(await new MockProjectsService().settings(projectId)),
+      ...(await new MockProjectsService(englishTranslator).settings(projectId)),
       role,
     });
 

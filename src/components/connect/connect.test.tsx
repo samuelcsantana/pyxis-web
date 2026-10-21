@@ -18,7 +18,7 @@ import {
 } from './connection-request-view';
 
 const NOW = new Date('2026-10-15T23:00:00.000Z');
-const REQUEST = connectionRequestResponseSchema.parse(demoConnectionRequestWire(NOW));
+const REQUEST = connectionRequestResponseSchema.parse(demoConnectionRequestWire(NOW, english.t));
 const CLAUDE_REQUEST: ConnectionRequest = {
   ...REQUEST,
   client: { name: 'Claude', host: 'claude.ai' },
@@ -69,7 +69,7 @@ describe('ConnectionRequestView', () => {
       screen.getByText('Claude Code (claude.ai) asks to read the numbers of your projects.'),
     ).toBeInTheDocument();
     expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
-      'Demo Store',
+      'My site',
       'Demo Docs',
     ]);
     expect(

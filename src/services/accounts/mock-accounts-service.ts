@@ -7,7 +7,7 @@ import {
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { TRIAL_DAYS } from '@/domain/sign-up';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
-import { DEMO_ME_RESPONSE } from '../projects/mock-projects-service';
+import { DEMO_OWNER_EMAIL } from '../projects/mock-projects-service';
 import type { IAccountsService } from './accounts-service.interface';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -17,7 +17,6 @@ const HOUR_MS = 60 * 60 * 1000;
 
 export const DEMO_BILLING_URL = '/account';
 export const DEMO_WELCOME_URL = `/welcome?account=${DEMO_ACCOUNT_ID}`;
-const DEMO_OWNER_EMAIL = DEMO_ME_RESPONSE.email;
 
 export function demoAccountsWire(now: Date) {
   const trialEnd = new Date(now.getTime() + TRIAL_DAYS * DAY_MS).toISOString();

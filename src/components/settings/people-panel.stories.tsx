@@ -6,7 +6,7 @@ import {
   demoPeopleWire,
   MockProjectPeopleService,
 } from '@/services/project-people/mock-project-people-service';
-import { DEMO_ADMIN } from '@/services/projects/mock-projects-service';
+import { DEMO_OWNER_EMAIL } from '@/services/projects/mock-projects-service';
 import { english } from '@/test-utils/english';
 import { PeoplePanel } from './people-panel';
 
@@ -21,7 +21,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
-    myEmail: DEMO_ADMIN.email,
+    myEmail: DEMO_OWNER_EMAIL,
     i18n: english,
     when: (iso: string) => format(new Date(iso)),
     manage: {

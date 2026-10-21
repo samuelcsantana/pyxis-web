@@ -1,8 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { projectInitials } from '@/domain/admin';
+import { dutch } from '@/test-utils/dutch';
+import { english, englishTranslator } from '@/test-utils/english';
+import { french } from '@/test-utils/french';
+import { german } from '@/test-utils/german';
+import { italian } from '@/test-utils/italian';
+import { portuguese } from '@/test-utils/portuguese';
+import { spanish } from '@/test-utils/spanish';
 import { ApiReader } from '../api-reader';
 import { HttpProjectsService } from './http-projects-service';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
-import { DEMO_ADMIN, MockProjectsService } from './mock-projects-service';
+import { MockProjectsService } from './mock-projects-service';
 import { DEMO_ACCOUNT_ID } from './demo-project-settings';
 import { createProjectsService } from './projects-service.factory';
 
@@ -10,6 +18,10 @@ const API = 'https://api.pyxis.example.com';
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+}));
+
+vi.mock('@/i18n/current-locale', () => ({
+  currentLocale: () => Promise.resolve('pt-BR'),
 }));
 
 describe('HttpProjectsService', () => {
@@ -154,21 +166,46 @@ describe('HttpProjectsService', () => {
 
 describe('MockProjectsService', () => {
   it('answers the demo admin with two projects', async () => {
-    const admin = await new MockProjectsService().currentAdmin();
+    const admin = await new MockProjectsService(englishTranslator).currentAdmin();
 
-    expect(admin).toBe(DEMO_ADMIN);
-    expect(admin.projects).toHaveLength(2);
+    expect(admin.email).toBe('owner@example.com');
+    expect(admin.projects.map((project) => project.name)).toEqual(['My site', 'Demo Docs']);
   });
 
+  it.each([
+    ['en', english, 'My site', 'MS'],
+    ['pt-BR', portuguese, 'Meu site', 'MS'],
+    ['es', spanish, 'Mi sitio', 'MS'],
+    ['de', german, 'Meine Website', 'MW'],
+    ['fr', french, 'Mon site', 'MS'],
+    ['it', italian, 'Il mio sito', 'IM'],
+    ['nl', dutch, 'Mijn site', 'MS'],
+  ] as const)(
+    'names the demo store in %s as the reader’s own site, and keeps Demo Docs as it is',
+    async (_locale, i18n, name, initials) => {
+      const service = new MockProjectsService(() => Promise.resolve(i18n.t));
+
+      const admin = await service.currentAdmin();
+      const settings = await service.settings(DEMO_STORE.id);
+
+      expect(admin.projects.map((project) => project.name)).toEqual([name, 'Demo Docs']);
+      expect(projectInitials(name)).toBe(initials);
+      expect(settings.name).toBe(name);
+    },
+  );
+
   it('has no icon for the invented projects, so the demo shows their initials', async () => {
-    await expect(new MockProjectsService().icon()).resolves.toBeNull();
-    expect(DEMO_ADMIN.projects.every((project) => project.iconVersion === null)).toBe(true);
+    const service = new MockProjectsService(englishTranslator);
+
+    await expect(service.icon()).resolves.toBeNull();
+    const admin = await service.currentAdmin();
+    expect(admin.projects.every((project) => project.iconVersion === null)).toBe(true);
   });
 
   it('answers invented settings for each demo project, with a public key and no secret one', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-10-08T12:00:00.000Z'));
-    const service = new MockProjectsService();
+    const service = new MockProjectsService(englishTranslator);
 
     const store = await service.settings(DEMO_STORE.id);
     const docs = await service.settings(DEMO_DOCS.id);
@@ -178,7 +215,7 @@ describe('MockProjectsService', () => {
       id: DEMO_STORE.id,
       accountId: DEMO_ACCOUNT_ID,
       role: 'owner',
-      name: DEMO_STORE.name,
+      name: 'My site',
       allowedOrigins: ['https://store.example.com', 'https://www.store.example.com'],
       lastEventAt: '2026-10-08T12:00:00.000Z',
       eventRetentionMonths: 13,
@@ -203,5 +240,13 @@ describe('createProjectsService', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
     expect(createProjectsService()).toBeInstanceOf(MockProjectsService);
+  });
+
+  it('names the demo projects in the language of the request', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const admin = await createProjectsService().currentAdmin();
+
+    expect(admin.projects.map((project) => project.name)).toEqual(['Meu site', 'Demo Docs']);
   });
 });

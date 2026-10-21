@@ -1,3 +1,4 @@
+import { getTranslator } from '@/i18n/get-messages';
 import { apiBaseUrl } from '@/lib/api-config';
 import { createApiWriter } from '../api-writer.factory';
 import { HttpProjectManagementService } from './http-project-management-service';
@@ -7,6 +8,6 @@ import type { IProjectManagementService } from './project-management-service.int
 export function createProjectManagementService(): IProjectManagementService {
   const baseUrl = apiBaseUrl();
   return baseUrl === undefined
-    ? new MockProjectManagementService()
+    ? new MockProjectManagementService(getTranslator)
     : new HttpProjectManagementService(createApiWriter(baseUrl));
 }

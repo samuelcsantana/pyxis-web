@@ -23,13 +23,13 @@ export function demoPublicKeyId(projectId: string): string {
   return demoKeyId(demoProjectOf(projectId), PUBLIC_KEY_ID_SUFFIX);
 }
 
-export function demoProjectSettingsWire(projectId: string, now: Date) {
+export function demoProjectSettingsWire(projectId: string, now: Date, name: string) {
   const project = demoProjectOf(projectId);
   return {
     id: project.id,
     account_id: DEMO_ACCOUNT_ID,
     role: 'owner',
-    name: project.name,
+    name,
     timezone: project.timezone,
     conversion_event: project.conversionEvent,
     allowed_origins: project.id === DEMO_DOCS.id ? DOCS_ORIGINS : STORE_ORIGINS,

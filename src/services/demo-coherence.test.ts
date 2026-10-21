@@ -52,7 +52,7 @@ describe('the demo screens', () => {
 
   for (const project of DEMO_PROJECTS) {
     for (const [period, days] of Object.entries(PERIOD_DAYS)) {
-      describe(`of ${project.name}, ${period}`, () => {
+      describe(`of the ${project.nameKey} project, ${period}`, () => {
         const range = periodEnding(project.timezone, days);
 
         it('count the same visits on Overview, Devices and Acquisition', async () => {

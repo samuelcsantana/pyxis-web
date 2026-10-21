@@ -8,7 +8,7 @@ const DARK_BACKGROUND = '#0a1220';
 
 test('names the screen and the project in the title of every screen', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await expect(page).toHaveTitle('Overview · Demo Store · Pyxis');
+  await expect(page).toHaveTitle('Overview · My site · Pyxis');
 
   await page.goto(`/${DOCS_ID}/requests`);
   await expect(page).toHaveTitle(`Requests · ${DOCS_NAME} · Pyxis`);

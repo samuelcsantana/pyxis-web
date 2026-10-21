@@ -37,7 +37,7 @@ describe('the demo visits behind every link into Visits', () => {
   });
 
   for (const project of DEMO_PROJECTS) {
-    describe(`of ${project.name}, in the default period`, () => {
+    describe(`of the ${project.nameKey} project, in the default period`, () => {
       const range = defaultPeriod(project.timezone);
       const visitsFound = async (filters: Partial<VisitFilters>) => {
         const report = await new MockVisitsService().visits(
@@ -174,7 +174,7 @@ describe('the demo visits behind every link into Visits', () => {
         { ...NO_VISIT_FILTERS, event: project.conversionEvent },
         null,
       );
-      expect(report.visits.length, project.name).toBeGreaterThan(0);
+      expect(report.visits.length, project.nameKey).toBeGreaterThan(0);
     }
   });
 });

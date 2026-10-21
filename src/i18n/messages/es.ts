@@ -157,6 +157,7 @@ export const es = translation({
     notice:
       'Datos de demostración: números inventados para dos productos imaginarios. Aquí no aparece ningún visitante real.',
     homePage: '¿Qué es Pyxis?',
+    projectNames: { store: 'Mi sitio', docs: 'Demo Docs' },
   },
   shell: {
     skipToContent: 'Saltar al contenido',

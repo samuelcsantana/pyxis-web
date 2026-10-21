@@ -1,6 +1,6 @@
 import type { AddPersonOutcome, ProjectPerson, RemovePersonOutcome } from '@/domain/project-people';
 import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
-import { DEMO_ME_RESPONSE } from '../projects/mock-projects-service';
+import { DEMO_OWNER_EMAIL } from '../projects/mock-projects-service';
 import type { IProjectPeopleService } from './project-people-service.interface';
 
 export const DEMO_PEOPLE_IDS = {
@@ -17,7 +17,7 @@ export function demoPeopleWire() {
     people: [
       {
         admin_user_id: DEMO_PEOPLE_IDS.owner,
-        email: DEMO_ME_RESPONSE.email,
+        email: DEMO_OWNER_EMAIL,
         role: 'owner',
         added_at: OWNER_ADDED_AT,
       },
