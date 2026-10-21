@@ -4,6 +4,7 @@ import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
 import {
+  AGENT_PROMPT_ID,
   codeTextOf,
   FIRST_EVENT,
   INSTALL_COMMAND,
@@ -149,6 +150,44 @@ describe('InstallSection', () => {
     render(<InstallSection i18n={english} signUpOpen={false} />);
 
     expect(screen.queryByRole('list', { name: 'How to start, in 3 steps' })).toBeNull();
+  });
+
+  it('offers a prompt to paste into an AI agent, after the code, once sign-up is open', () => {
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
+    const prompt = agent.querySelector(`#${AGENT_PROMPT_ID}`);
+    expect(agent).toHaveTextContent(
+      'Open the site’s repository in Claude Code, Cursor or another agent and paste:',
+    );
+    expect(prompt).toHaveTextContent(
+      'Install Pyxis on this site following https://pyxis-analytics.dev/llms.txt. My project’s public key is pyxis_pk_… and the endpoint is https://api.pyxis-analytics.dev. Measure the pages and record an event at each step of the order, with no personal data.',
+    );
+    expect(prompt).toHaveClass('whitespace-pre-wrap', 'wrap-anywhere');
+    expect(prompt).not.toHaveClass('break-all');
+    expect(within(agent).getByText('llms.txt').tagName).toBe('CODE');
+    expect(agent).toHaveTextContent('Then connect Claude to Pyxis to check');
+    expect(within(agent).getByRole('button', { name: 'Copy' })).toHaveAttribute(
+      'data-track-snippet',
+      AGENT_PROMPT_ID,
+    );
+    expect(screen.getByText('npm install pyxis-analytics').compareDocumentPosition(agent)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it('leaves the agent prompt out while sign-up is closed, since it needs a project key', () => {
+    render(<InstallSection i18n={english} signUpOpen={false} />);
+
+    expect(screen.queryByRole('group', { name: 'Or ask your AI agent' })).toBeNull();
+  });
+
+  it('writes the agent prompt in the reader’s language', () => {
+    render(<InstallSection i18n={portuguese} signUpOpen />);
+
+    expect(screen.getByRole('group', { name: 'Ou peça ao seu agente de IA' })).toHaveTextContent(
+      'Instale o Pyxis neste site seguindo https://pyxis-analytics.dev/llms.txt.',
+    );
   });
 
   it('copies exactly the text it shows', () => {
