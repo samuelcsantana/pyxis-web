@@ -6,16 +6,21 @@ import { portuguese } from '@/test-utils/portuguese';
 import { LandingHero } from './landing-hero';
 
 describe('LandingHero', () => {
-  it('states what Pyxis is in the page title, over the brand backdrop', () => {
+  it('states what Pyxis finds out in the page title, over the brand backdrop', () => {
     render(<LandingHero i18n={english} preview={showcasePreview(english)} />);
 
     expect(
       screen.getByRole('region', {
-        name: 'Product analytics without cookies, IP addresses or personal data.',
+        name: 'Find out what converts and what fails on your site, without collecting personal data.',
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();
-    expect(screen.getByText('Open-source product analytics')).toBeInTheDocument();
+    expect(screen.getByText('No cookies · no IP · a connector for Claude')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /the funnel step where people stop and which of your site’s requests failed/,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('leads to the live demo first and to the pricing second, promising no sign-up', () => {

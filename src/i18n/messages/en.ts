@@ -1438,9 +1438,10 @@ export const en = {
       signIn: 'Sign in',
     },
     hero: {
-      eyebrow: 'Open-source product analytics',
-      title: 'Product analytics without cookies, IP addresses or personal data.',
-      lead: 'Pyxis shows which features get used, where a sign-up loses people and which requests fail. It stores no cookie, no IP address, no user agent and nothing personal, and each of those rules lives in code, covered by tests.',
+      eyebrow: 'No cookies · no IP · a connector for Claude',
+      title:
+        'Find out what converts and what fails on your site, without collecting personal data.',
+      lead: 'Pyxis shows the funnel step where people stop and which of your site’s requests failed in each visit. See it on the dashboard or ask Claude.',
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',

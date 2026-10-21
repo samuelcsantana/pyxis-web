@@ -1481,9 +1481,10 @@ export const fr = translation({
       signIn: 'Connexion',
     },
     hero: {
-      eyebrow: 'Analytique produit open source',
-      title: 'L’analytique produit sans cookies, sans adresses IP et sans données personnelles.',
-      lead: 'Pyxis montre quelles fonctionnalités sont utilisées, où une inscription perd des gens et quelles requêtes échouent. Il ne stocke ni cookie, ni adresse IP, ni user agent, ni rien de personnel, et chacune de ces règles est inscrite dans le code, couverte par des tests.',
+      eyebrow: 'Sans cookies · sans IP · connecteur pour Claude',
+      title:
+        'Découvrez ce qui convertit et ce qui échoue sur votre site, sans collecter de données personnelles.',
+      lead: 'Pyxis montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué à chaque visite. Consultez-le sur le tableau de bord ou demandez à Claude.',
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
