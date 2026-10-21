@@ -11,6 +11,7 @@ export const LANDING_EVENTS = {
   signUpOpened: 'sign_up_opened',
   largerPlanRequested: 'larger_plan_requested',
   askClaudeOpened: 'ask_claude_opened',
+  claudeDirectoryOpened: 'claude_directory_opened',
   nudgeDismissed: 'nudge_dismissed',
 } as const;
 

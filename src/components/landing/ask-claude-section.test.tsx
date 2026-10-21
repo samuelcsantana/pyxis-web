@@ -6,6 +6,7 @@ import { portuguese } from '@/test-utils/portuguese';
 import {
   AskClaudeSection,
   CLAUDE_CODE_COMMAND,
+  CLAUDE_DIRECTORY_ID,
   CONNECTOR_ADDRESS,
   CONVERSATION_TOOLS,
   PROMISES,
@@ -37,6 +38,25 @@ describe('AskClaudeSection', () => {
       CONVERSATION_TOOLS.map((tool) => tool),
     );
     expect(example).toHaveTextContent('Invented conversation and numbers, like the live demo.');
+  });
+
+  it('leads with Claude’s connector directory, before the custom connector', () => {
+    const { container } = render(<AskClaudeSection i18n={english} />);
+
+    const directory = container.querySelector(`#${CLAUDE_DIRECTORY_ID}`);
+    expect(directory).toHaveTextContent('New Pyxis is in Claude’s connector directory');
+    expect(directory).toHaveTextContent(
+      'It works in Claude on the web, on your computer and on your phone.',
+    );
+    const open = within(directory as HTMLElement).getByRole('link', {
+      name: 'Open in Claude’s directory',
+    });
+    expect(open).toHaveAttribute('href', 'https://claude.ai/directory/pyxis');
+    expect(open).toHaveAttribute('data-track', 'claude_directory_opened');
+    expect(open).toHaveAttribute('data-track-from', 'ask-claude');
+    const custom = screen.getByText('Or add it as a custom connector:');
+    expect(directory?.compareDocumentPosition(custom)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getAllByText(/It works in Claude on the web/)).toHaveLength(1);
   });
 
   it('gives the steps of the dashboard, the address and the Claude Code command to copy', () => {
@@ -91,6 +111,7 @@ describe('AskClaudeSection', () => {
     ).toBeInTheDocument();
     const example = screen.getByRole('figure', { name: 'Um exemplo de conversa' });
     expect(example).toHaveTextContent('Como foi a semana passada');
+    expect(screen.getByRole('link', { name: 'Abrir no diretório do Claude' })).toBeInTheDocument();
     expect(within(example).getByRole('button', { name: 'Repetir' })).toBeInTheDocument();
   });
 });

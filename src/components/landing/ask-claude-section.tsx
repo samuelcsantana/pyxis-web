@@ -3,7 +3,7 @@ import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { ConversationDemo } from './conversation-demo-card';
 import { CodeBlock, type CodeToken, keyword, plain } from './install-section';
-import { REVEAL } from './landing-classes';
+import { LINK_PRIMARY, REVEAL } from './landing-classes';
 import { ASK_CLAUDE_ID, HOSTED_CONNECTOR_URL, LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
@@ -15,6 +15,8 @@ export interface AskClaudeSectionProps {
 export const CONVERSATION_TOOLS = ['overview', 'funnel', 'funnel_segments'] as const;
 
 export const PROMISES = ['reads', 'revoke', 'personal'] as const;
+
+export const CLAUDE_DIRECTORY_ID = 'ask-claude-directory';
 
 export const CONNECTOR_ADDRESS: readonly CodeToken[] = [plain(HOSTED_CONNECTOR_URL)];
 
@@ -58,6 +60,27 @@ export function AskClaudeSection({ i18n }: AskClaudeSectionProps) {
         </div>
         <div className={`flex min-w-0 flex-col gap-4 ${REVEAL}`}>
           <h3 className="text-lg font-semibold">{t('landing.askClaude.connect')}</h3>
+          <div
+            id={CLAUDE_DIRECTORY_ID}
+            className="flex flex-col gap-2.5 rounded-card border border-line-strong bg-card p-4 text-sm leading-relaxed text-muted"
+          >
+            <p className="flex flex-wrap items-center gap-2 text-base font-semibold text-ink">
+              <span className="rounded-pill bg-accent px-2 py-0.5 text-caption font-semibold text-accent-ink">
+                {t('landing.askClaude.directory.badge')}
+              </span>{' '}
+              {t('landing.askClaude.directory.title')}
+            </p>
+            <p>{t('landing.askClaude.directory.body')}</p>
+            <a
+              href={LANDING_LINKS.claudeDirectory}
+              className={`${LINK_PRIMARY} w-fit`}
+              {...trackAttributes(LANDING_EVENTS.claudeDirectoryOpened, { from: 'ask-claude' })}
+            >
+              {t('landing.askClaude.directory.open')}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <p className="text-sm font-semibold text-ink">{t('landing.askClaude.directory.or')}</p>
           <ol className="flex list-decimal flex-col gap-3 pl-5 text-sm leading-relaxed text-muted marker:font-mono marker:text-ink">
             <li>{t('connectedApps.stepOpen')}</li>
             <li>
@@ -73,7 +96,6 @@ export function AskClaudeSection({ i18n }: AskClaudeSectionProps) {
             </li>
             <li>{t('connectedApps.stepAllow')}</li>
           </ol>
-          <p className="text-sm text-muted">{t('connectedApps.everywhere')}</p>
           <p className="text-sm text-muted">{t('connectedApps.claudeCode')}</p>
           <CodeBlock id="ask-claude-command" tokens={CLAUDE_CODE_COMMAND} labels={labels} wrap />
         </div>
