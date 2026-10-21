@@ -395,7 +395,6 @@ test('shows the sections in order', async ({ page }) => {
     'ask-claude',
     'weekly-report',
     'install',
-    'in-production',
     'built-in-public',
     'architecture',
     'comparison',

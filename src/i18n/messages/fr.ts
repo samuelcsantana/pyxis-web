@@ -1715,17 +1715,11 @@ export const fr = translation({
       noteOpen:
         'Vos clés sont fournies avec votre compte : démarrez l’essai gratuit ci-dessous, ou hébergez votre propre Pyxis. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
     },
-    production: {
-      eyebrow: 'En production',
-      title: 'Mesure de vrais sites depuis octobre 2026',
-      bolsoverde:
-        'Un outil de suivi des ventes, des frais et des versements pour les petits vendeurs',
-      blog: 'Le blog de l’auteur',
-      foot: 'Aucun des deux sites n’a besoin d’un cookie pour être mesuré.',
-    },
     public: {
       eyebrow: 'Ingénierie',
       title: 'Construit en public',
+      production:
+        'Mesure de vrais sites depuis octobre 2026, <bolsoverde>bolsoverde.com</bolsoverde> et <blog>le blog de l’auteur</blog>, sans cookie sur aucun des deux.',
       items: {
         coverage:
           '100 % des instructions, branches, fonctions et lignes couvertes dans les trois dépôts. La CI échoue en dessous.',

@@ -15,7 +15,7 @@ describe('BuiltInPublicSection', () => {
     const section = screen.getByRole('region', { name: 'Built in public' });
     expect(section).toHaveAttribute('id', 'built-in-public');
     const [practices, documents] = within(section).getAllByRole('list');
-    expect(within(practices ?? section).getAllByRole('listitem')).toHaveLength(5);
+    expect(within(practices ?? section).getAllByRole('listitem')).toHaveLength(6);
     expect(practices).toHaveTextContent('CI fails below that.');
     expect(
       within(documents ?? section)
@@ -29,6 +29,29 @@ describe('BuiltInPublicSection', () => {
     expect(screen.getByRole('link', { name: /^API reference/ })).toHaveTextContent(
       'Generated from the routes’ own schemas',
     );
+  });
+
+  it('opens with the two real sites it measures, each a tracked link', () => {
+    render(<BuiltInPublicSection i18n={english} />);
+
+    const section = screen.getByRole('region');
+    const [practices] = within(section).getAllByRole('list');
+    const [first] = within(practices ?? section).getAllByRole('listitem');
+    expect(first).toHaveTextContent(
+      'Measuring real sites since October 2026, bolsoverde.com and the author’s blog, neither with a cookie.',
+    );
+    const sites = within(first ?? section).getAllByRole('link');
+    expect(
+      sites.map((site) => [
+        site.textContent,
+        site.getAttribute('href'),
+        site.getAttribute('data-track'),
+        site.getAttribute('data-track-site'),
+      ]),
+    ).toEqual([
+      ['bolsoverde.com', 'https://bolsoverde.com', 'site_opened', 'bolsoverde.com'],
+      ['the author’s blog', 'https://www.samuelsantana.dev', 'site_opened', 'samuelsantana.dev'],
+    ]);
   });
 });
 

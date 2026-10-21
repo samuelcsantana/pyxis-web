@@ -1666,16 +1666,11 @@ export const en = {
       noteOpen:
         'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
     },
-    production: {
-      eyebrow: 'In production',
-      title: 'Measuring real sites since October 2026',
-      bolsoverde: 'A sales, fees and payouts tracker for small sellers',
-      blog: 'The author’s blog',
-      foot: 'Neither site needs a cookie to be measured.',
-    },
     public: {
       eyebrow: 'Engineering',
       title: 'Built in public',
+      production:
+        'Measuring real sites since October 2026, <bolsoverde>bolsoverde.com</bolsoverde> and <blog>the author’s blog</blog>, neither with a cookie.',
       items: {
         coverage:
           '100% of statements, branches, functions and lines covered in all three repositories. CI fails below that.',

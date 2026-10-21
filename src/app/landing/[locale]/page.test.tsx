@@ -152,7 +152,6 @@ describe('the home page on the main domain', () => {
       'ask-claude',
       'weekly-report',
       'install',
-      'in-production',
       'built-in-public',
       'architecture',
       'comparison',

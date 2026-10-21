@@ -1701,16 +1701,11 @@ export const nl = translation({
       noteOpen:
         'Je sleutels horen bij je account: start hieronder de gratis proefperiode, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
     },
-    production: {
-      eyebrow: 'In productie',
-      title: 'Meet echte sites sinds oktober 2026',
-      bolsoverde: 'Administratie van verkopen, kosten en uitbetalingen voor kleine verkopers',
-      blog: 'De blog van de auteur',
-      foot: 'Geen van beide sites heeft een cookie nodig om gemeten te worden.',
-    },
     public: {
       eyebrow: 'Engineering',
       title: 'In het openbaar gebouwd',
+      production:
+        'Meet sinds oktober 2026 echte sites, <bolsoverde>bolsoverde.com</bolsoverde> en <blog>de blog van de auteur</blog>, op geen van beide met een cookie.',
       items: {
         coverage:
           '100% van de statements, branches, functies en regels gedekt in alle drie de repository’s. De CI faalt daaronder.',
