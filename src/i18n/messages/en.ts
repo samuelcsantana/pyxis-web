@@ -1727,6 +1727,16 @@ export const en = {
           pyxis: 'Yes: a connector for Claude, only reading',
           typical: 'Depends on the tool',
         },
+        failedRequests: {
+          aspect: 'The site’s requests that failed, in each visit',
+          pyxis: 'Yes: route, status and duration',
+          typical: 'Depends on the tool',
+        },
+        trackerSize: {
+          aspect: 'Size of the tracker, gzipped',
+          pyxis: 'Under 5 KB',
+          typical: 'Usually 30 to 150 KB',
+        },
         source: { aspect: 'Source code', pyxis: 'MIT, on GitHub', typical: 'Varies' },
       },
       foot: '“Typical” describes a common setup, not any one product.',

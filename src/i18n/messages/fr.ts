@@ -1780,6 +1780,16 @@ export const fr = translation({
           pyxis: 'Oui : un connecteur pour Claude, en lecture seule',
           typical: 'Dépend de l’outil',
         },
+        failedRequests: {
+          aspect: 'Les requêtes du site en échec, à chaque visite',
+          pyxis: 'Oui : route, statut et durée',
+          typical: 'Dépend de l’outil',
+        },
+        trackerSize: {
+          aspect: 'Taille du traceur, compressé en gzip',
+          pyxis: 'Moins de 5 Ko',
+          typical: 'En général, de 30 à 150 Ko',
+        },
         source: { aspect: 'Code source', pyxis: 'MIT, sur GitHub', typical: 'Variable' },
       },
       foot: '« Classique » décrit une configuration courante, pas un produit en particulier.',
