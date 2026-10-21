@@ -187,16 +187,16 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       <MainContent className="grow">
         <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} signUpOpen={signUpOpen} />
         <WhoItIsForSection i18n={i18n} />
-        <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
         <AskClaudeSection i18n={i18n} />
         <WeeklyReportSection i18n={i18n} digest={await demoDigestOf(i18n)} />
+        <NeverStoredSection i18n={i18n} />
         <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
-        <BuiltInPublicSection i18n={i18n} />
-        <ArchitectureSection i18n={i18n} />
         <ComparisonSection i18n={i18n} />
         <PricingSection i18n={i18n} signUpOpen={signUpOpen} euroRates={euroRates} />
         <FaqSection i18n={i18n} signUpOpen={signUpOpen} />
+        <BuiltInPublicSection i18n={i18n} />
+        <ArchitectureSection i18n={i18n} />
         <StorySection i18n={i18n} />
       </MainContent>
       <LandingFooter
