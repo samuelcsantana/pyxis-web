@@ -114,6 +114,7 @@ describe('InstallSection', () => {
     expect(section.querySelector('#install-command')).toHaveTextContent(
       'npm install pyxis-analytics',
     );
+    expect(section.querySelector('#install-command')?.parentElement).toHaveClass('py-4.5', 'pr-24');
     expect(section.querySelector('#install-first-event')).toHaveTextContent(
       "track('signup_completed', { method: 'email_code' });",
     );
@@ -165,6 +166,7 @@ describe('InstallSection', () => {
     );
     expect(prompt).toHaveClass('whitespace-pre-wrap', 'wrap-anywhere');
     expect(prompt).not.toHaveClass('break-all');
+    expect(prompt?.parentElement).toHaveClass('pt-13', 'pr-5', 'sm:pt-4.5', 'sm:pr-24');
     expect(within(agent).getByText('llms.txt').tagName).toBe('CODE');
     expect(agent).toHaveTextContent('Then connect Claude to Pyxis to check');
     expect(within(agent).getByRole('button', { name: 'Copy' })).toHaveAttribute(
