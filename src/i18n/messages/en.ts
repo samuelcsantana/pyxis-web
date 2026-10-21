@@ -1588,6 +1588,43 @@ export const en = {
       },
       foot: 'What Claude asks for goes from the Pyxis API to Anthropic, which handles it under its own terms. Cursor and other MCP clients connect with an access token created in Settings. <link>The full guide</link>',
     },
+    report: {
+      eyebrow: 'Reports',
+      title: 'Every Monday, the week in your inbox',
+      lead: 'Visits, conversions and failed writes against the week before, the top pages and the routes that failed most. Without opening the dashboard and without asking anyone.',
+      items: {
+        digest: {
+          title: 'On for every admin of the project',
+          body: 'It arrives every Monday, with the week closed in your project’s time zone and in the language you use the dashboard in. It carries only summed-up numbers, nothing personal. A week without visits arrives too, with the date of the last event: that is how a broken install shows up without you opening the dashboard. Turn it off in Settings.',
+        },
+        csv: {
+          title: 'A CSV of each screen',
+          body: 'Overview, Acquisition, Devices, Features, Requests and Visits download what they show as CSV, for the period you chose.',
+        },
+        export: {
+          title: 'Every event, in one file',
+          body: 'The project export gathers everything the project keeps into a compressed CSV. The link arrives by e-mail within a few minutes.',
+        },
+      },
+      mail: {
+        label: 'An example of the weekly digest e-mail',
+        kicker: 'Weekly digest',
+        visits: 'Visits',
+        identifiedUsers: 'Identified users',
+        convertingVisits: 'Converting visits',
+        failedWrites: 'Failed writes',
+        visitsPerDay: 'Visits per day',
+        failingRoutes: 'Failing routes',
+        openWeek: 'Open the week in the dashboard',
+        versusWeekBefore: '{change} vs. the week before ({previous})',
+        unchangedFromWeekBefore: 'no change vs. the week before ({previous})',
+        weekBeforeOnly: '{previous} the week before',
+        shareOfVisits: '{share} of visits',
+        ofWrites: 'of {writes} writes, {rate}',
+        noWrites: 'no writes',
+        failedOf: '{failed} of {total} failed',
+      },
+    },
     nudge: {
       label: 'News: Pyxis in Claude',
       badge: 'New',

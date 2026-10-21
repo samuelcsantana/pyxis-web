@@ -150,6 +150,7 @@ describe('the home page on the main domain', () => {
       'never-stored',
       'dashboard',
       'ask-claude',
+      'weekly-report',
       'install',
       'in-production',
       'built-in-public',

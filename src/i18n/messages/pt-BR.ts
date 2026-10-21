@@ -1600,6 +1600,43 @@ export const ptBR = translation({
       },
       foot: 'O que o Claude pede vai da API do Pyxis para a Anthropic, que trata esses dados pelos próprios termos. O Cursor e outros clientes MCP se conectam com um token de acesso criado em Configurações. <link>O guia completo</link>',
     },
+    report: {
+      eyebrow: 'Relatórios',
+      title: 'Toda segunda, a semana no seu e-mail',
+      lead: 'Visitas, conversões e gravações com falha contra a semana anterior, as páginas mais vistas e as rotas que mais falharam. Sem abrir o painel e sem perguntar a ninguém.',
+      items: {
+        digest: {
+          title: 'Ligado para todo admin do projeto',
+          body: 'Chega toda segunda, com a semana fechada no fuso do seu projeto e no idioma em que você usa o painel. Só leva números somados, nada pessoal. Uma semana sem visitas também chega, com a data do último evento: é assim que uma instalação quebrada aparece sem você abrir o painel. Desliga em Configurações.',
+        },
+        csv: {
+          title: 'CSV de cada tela',
+          body: 'Visão geral, Aquisição, Dispositivos, Funcionalidades, Requisições e Visitas baixam em CSV o que estão mostrando, no período escolhido.',
+        },
+        export: {
+          title: 'Todos os eventos, num arquivo',
+          body: 'A exportação do projeto junta tudo o que ele guarda num CSV compactado. O link chega por e-mail em alguns minutos.',
+        },
+      },
+      mail: {
+        label: 'Um exemplo do e-mail do resumo semanal',
+        kicker: 'Resumo semanal',
+        visits: 'Visitas',
+        identifiedUsers: 'Usuários identificados',
+        convertingVisits: 'Visitas com conversão',
+        failedWrites: 'Gravações com falha',
+        visitsPerDay: 'Visitas por dia',
+        failingRoutes: 'Rotas com falha',
+        openWeek: 'Abrir a semana no painel',
+        versusWeekBefore: '{change} vs. a semana anterior ({previous})',
+        unchangedFromWeekBefore: 'sem variação vs. a semana anterior ({previous})',
+        weekBeforeOnly: '{previous} na semana anterior',
+        shareOfVisits: '{share} das visitas',
+        ofWrites: 'de {writes} gravações, {rate}',
+        noWrites: 'nenhuma gravação',
+        failedOf: '{failed} de {total} falharam',
+      },
+    },
     nudge: {
       label: 'Novidade: o Pyxis no Claude',
       badge: 'Novo recurso',

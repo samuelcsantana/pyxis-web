@@ -30,6 +30,7 @@ import { SectionGlide } from '@/components/landing/section-glide';
 import { SectionHashSync } from '@/components/landing/section-hash-sync';
 import { SiteHeader } from '@/components/landing/site-header';
 import { StorySection } from '@/components/landing/story-section';
+import { WeeklyReportSection } from '@/components/landing/weekly-report-section';
 import { WhoItIsForSection } from '@/components/landing/who-it-is-for-section';
 import { LinkPreferencesReceiver } from '@/components/preferences/link-preferences-receiver';
 import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
@@ -40,6 +41,7 @@ import {
   type LandingPreviewView,
   landingPreviewOf,
 } from '@/domain/landing-preview';
+import { type DigestPreviewView, digestPreviewOf, lastClosedWeek } from '@/domain/digest-preview';
 import { DEFAULT_FUNNEL_MODE } from '@/domain/funnel';
 import { resolvePeriod, todayIn } from '@/domain/period';
 import { SkipLink } from '@/components/shell/skip-link';
@@ -60,7 +62,7 @@ import {
 } from '@/lib/landing-pages';
 import { APP_NAME, LANDING_ORIGIN } from '@/lib/site';
 import './landing.css';
-import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
 import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
 import { createFunnelService } from '@/services/funnel/funnel-service.factory';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
@@ -109,6 +111,24 @@ async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
     period,
     todayIn(DEMO_STORE.timezone, now),
     DEMO_STORE.conversionEvent,
+    i18n,
+  );
+}
+
+async function demoDigestOf(i18n: I18n): Promise<DigestPreviewView> {
+  const week = lastClosedWeek(todayIn(DEMO_STORE.timezone, new Date()));
+  const [overview, writes] = await Promise.all([
+    createOverviewService().overview(DEMO_STORE.id, week),
+    createRequestsService().requests(DEMO_STORE.id, week, null),
+  ]);
+  return digestPreviewOf(
+    {
+      project: demoProjectNameOf(DEMO_STORE, i18n.t),
+      timeZone: DEMO_STORE.timezone,
+      week,
+      overview,
+      writes,
+    },
     i18n,
   );
 }
@@ -171,6 +191,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         <NeverStoredSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
         <AskClaudeSection i18n={i18n} />
+        <WeeklyReportSection i18n={i18n} digest={await demoDigestOf(i18n)} />
         <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
         <InProductionSection i18n={i18n} />
         <BuiltInPublicSection i18n={i18n} />
