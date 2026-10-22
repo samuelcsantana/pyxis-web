@@ -1533,7 +1533,7 @@ export const de = translation({
     proof: {
       size: { value: 'unter 5 KB', label: 'Tracker, gzip-komprimiert' },
       dependencies: { value: '0', label: 'Laufzeit-Abhängigkeiten' },
-      coverage: { value: '100\u00a0%', label: 'Testabdeckung in allen drei Repositorys' },
+      coverage: { value: '100\u00a0%', label: 'Testabdeckung in allen vier Repositorys' },
       license: { value: 'MIT', label: 'Lizenz, Infrastruktur inklusive' },
     },
     never: {
@@ -1731,7 +1731,7 @@ export const de = translation({
         'Misst seit Oktober 2026 echte Websites, <bolsoverde>bolsoverde.com</bolsoverde> und <blog>den Blog des Autors</blog>, beide ohne Cookie.',
       items: {
         coverage:
-          '100\u00a0% der Anweisungen, Verzweigungen, Funktionen und Zeilen in allen drei Repositorys abgedeckt. Darunter schlägt die CI fehl.',
+          '100\u00a0% der Anweisungen, Verzweigungen, Funktionen und Zeilen in allen vier Repositorys abgedeckt. Darunter schlägt die CI fehl.',
         realServices:
           'Integrationstests gegen ein echtes Postgres und End-to-End-Tests in einem echten Browser mit axe-Barrierefreiheitsprüfungen.',
         provenance:

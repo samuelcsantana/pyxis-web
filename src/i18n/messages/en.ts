@@ -1485,7 +1485,7 @@ export const en = {
     proof: {
       size: { value: 'under 5 KB', label: 'tracker, gzipped' },
       dependencies: { value: '0', label: 'runtime dependencies' },
-      coverage: { value: '100%', label: 'test coverage in all three repositories' },
+      coverage: { value: '100%', label: 'test coverage in all four repositories' },
       license: { value: 'MIT', label: 'license, infrastructure included' },
     },
     never: {
@@ -1680,7 +1680,7 @@ export const en = {
         'Measuring real sites since October 2026, <bolsoverde>bolsoverde.com</bolsoverde> and <blog>the author’s blog</blog>, neither with a cookie.',
       items: {
         coverage:
-          '100% of statements, branches, functions and lines covered in all three repositories. CI fails below that.',
+          '100% of statements, branches, functions and lines covered in all four repositories. CI fails below that.',
         realServices:
           'Integration tests against a real Postgres, and end-to-end tests in a real browser with axe accessibility checks.',
         provenance: 'The tracker is published to npm from GitHub Actions, with provenance.',

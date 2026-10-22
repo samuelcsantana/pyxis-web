@@ -1518,7 +1518,7 @@ export const nl = translation({
     proof: {
       size: { value: 'minder dan 5 KB', label: 'tracker, gzipped' },
       dependencies: { value: '0', label: 'runtime-afhankelijkheden' },
-      coverage: { value: '100%', label: 'testdekking in alle drie de repository’s' },
+      coverage: { value: '100%', label: 'testdekking in alle vier de repository’s' },
       license: { value: 'MIT', label: 'licentie, infrastructuur inbegrepen' },
     },
     never: {
@@ -1715,7 +1715,7 @@ export const nl = translation({
         'Meet sinds oktober 2026 echte sites, <bolsoverde>bolsoverde.com</bolsoverde> en <blog>de blog van de auteur</blog>, op geen van beide met een cookie.',
       items: {
         coverage:
-          '100% van de statements, branches, functies en regels gedekt in alle drie de repository’s. De CI faalt daaronder.',
+          '100% van de statements, branches, functies en regels gedekt in alle vier de repository’s. De CI faalt daaronder.',
         realServices:
           'Integratietests tegen een echte Postgres, en end-to-endtests in een echte browser met toegankelijkheidscontroles van axe.',
         provenance:

@@ -1517,7 +1517,7 @@ export const it = translation({
     proof: {
       size: { value: 'meno di 5 KB', label: 'tracker, compresso con gzip' },
       dependencies: { value: '0', label: 'dipendenze a runtime' },
-      coverage: { value: '100%', label: 'copertura dei test in tutti e tre i repository' },
+      coverage: { value: '100%', label: 'copertura dei test in tutti e quattro i repository' },
       license: { value: 'MIT', label: 'licenza, infrastruttura inclusa' },
     },
     never: {
@@ -1715,7 +1715,7 @@ export const it = translation({
         'Misura siti reali da ottobre 2026, <bolsoverde>bolsoverde.com</bolsoverde> e <blog>il blog dell’autore</blog>, senza cookie su nessuno dei due.',
       items: {
         coverage:
-          '100% di istruzioni, rami, funzioni e righe coperte in tutti e tre i repository. La CI fallisce sotto quella soglia.',
+          '100% di istruzioni, rami, funzioni e righe coperte in tutti e quattro i repository. La CI fallisce sotto quella soglia.',
         realServices:
           'Test di integrazione su un Postgres reale, e test end-to-end in un browser reale con controlli di accessibilità axe.',
         provenance:

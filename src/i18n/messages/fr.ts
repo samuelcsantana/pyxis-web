@@ -1528,7 +1528,7 @@ export const fr = translation({
     proof: {
       size: { value: 'moins de 5 Ko', label: 'de traceur, compressé en gzip' },
       dependencies: { value: '0', label: 'dépendance d’exécution' },
-      coverage: { value: '100 %', label: 'de couverture de tests dans les trois dépôts' },
+      coverage: { value: '100 %', label: 'de couverture de tests dans les quatre dépôts' },
       license: { value: 'MIT', label: 'comme licence, infrastructure comprise' },
     },
     never: {
@@ -1729,7 +1729,7 @@ export const fr = translation({
         'Mesure de vrais sites depuis octobre 2026, <bolsoverde>bolsoverde.com</bolsoverde> et <blog>le blog de l’auteur</blog>, sans cookie sur aucun des deux.',
       items: {
         coverage:
-          '100 % des instructions, branches, fonctions et lignes couvertes dans les trois dépôts. La CI échoue en dessous.',
+          '100 % des instructions, branches, fonctions et lignes couvertes dans les quatre dépôts. La CI échoue en dessous.',
         realServices:
           'Des tests d’intégration sur un vrai Postgres, et des tests de bout en bout dans un vrai navigateur avec des contrôles d’accessibilité axe.',
         provenance: 'Le traceur est publié sur npm depuis GitHub Actions, avec provenance.',
