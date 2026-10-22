@@ -1503,7 +1503,7 @@ export const es = translation({
       size: { value: 'menos de 5 KB', label: 'de rastreador, con gzip' },
       dependencies: { value: '0', label: 'dependencias en ejecución' },
       coverage: { value: '100%', label: 'de cobertura de pruebas en los cuatro repositorios' },
-      license: { value: 'MIT', label: 'de licencia, infraestructura incluida' },
+      license: { value: 'Licencia MIT', label: 'código abierto, con la infraestructura' },
     },
     never: {
       eyebrow: 'Privacidad',

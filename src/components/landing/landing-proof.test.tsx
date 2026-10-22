@@ -31,4 +31,12 @@ describe('LandingProof', () => {
       'menos de 5 KB de rastreador, com gzip',
     );
   });
+
+  it('names the license before the caption where the language puts it first', () => {
+    render(<LandingProof i18n={portuguese} />);
+
+    expect(screen.getByRole('link', { name: /MIT/ })).toHaveAccessibleName(
+      'Licença MIT código aberto, com a infraestrutura',
+    );
+  });
 });
