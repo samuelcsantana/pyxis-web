@@ -1502,7 +1502,7 @@ export const es = translation({
     proof: {
       size: { value: 'menos de 5 KB', label: 'de rastreador, con gzip' },
       dependencies: { value: '0', label: 'dependencias en ejecución' },
-      coverage: { value: '100%', label: 'de cobertura de pruebas en los tres repositorios' },
+      coverage: { value: '100%', label: 'de cobertura de pruebas en los cuatro repositorios' },
       license: { value: 'MIT', label: 'de licencia, infraestructura incluida' },
     },
     never: {
@@ -1699,7 +1699,7 @@ export const es = translation({
         'Midiendo sitios reales desde octubre de 2026, <bolsoverde>bolsoverde.com</bolsoverde> y <blog>el blog del autor</blog>, sin cookies en ninguno de los dos.',
       items: {
         coverage:
-          '100% de sentencias, ramas, funciones y líneas cubiertas en los tres repositorios. El CI falla por debajo de eso.',
+          '100% de sentencias, ramas, funciones y líneas cubiertas en los cuatro repositorios. El CI falla por debajo de eso.',
         realServices:
           'Pruebas de integración contra un Postgres real, y pruebas de extremo a extremo en un navegador real con verificaciones de accesibilidad de axe.',
         provenance: 'El rastreador se publica en npm desde GitHub Actions, con procedencia.',

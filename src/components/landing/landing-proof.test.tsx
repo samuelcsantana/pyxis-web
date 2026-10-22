@@ -16,7 +16,7 @@ describe('LandingProof', () => {
         '0 runtime dependencies',
         'https://github.com/samuelcsantana/pyxis-sdk/blob/main/package.json',
       ],
-      ['100% test coverage in all three repositories', 'https://app.codecov.io/gh/samuelcsantana'],
+      ['100% test coverage in all four repositories', 'https://app.codecov.io/gh/samuelcsantana'],
       [
         'MIT license, infrastructure included',
         'https://github.com/samuelcsantana/pyxis-api/blob/main/LICENSE',

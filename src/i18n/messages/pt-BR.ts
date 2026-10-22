@@ -1497,7 +1497,7 @@ export const ptBR = translation({
     proof: {
       size: { value: 'menos de 5 KB', label: 'de rastreador, com gzip' },
       dependencies: { value: '0', label: 'dependências em execução' },
-      coverage: { value: '100%', label: 'de cobertura de testes nos três repositórios' },
+      coverage: { value: '100%', label: 'de cobertura de testes nos quatro repositórios' },
       license: { value: 'MIT', label: 'de licença, infraestrutura incluída' },
     },
     never: {
@@ -1692,7 +1692,7 @@ export const ptBR = translation({
         'Medindo sites de verdade desde outubro de 2026, o <bolsoverde>bolsoverde.com</bolsoverde> e o <blog>blog do autor</blog>, sem cookie em nenhum dos dois.',
       items: {
         coverage:
-          '100% das instruções, ramos, funções e linhas cobertos por testes nos três repositórios. O CI falha abaixo disso.',
+          '100% das instruções, ramos, funções e linhas cobertos por testes nos quatro repositórios. O CI falha abaixo disso.',
         realServices:
           'Testes de integração contra um Postgres de verdade, e testes de ponta a ponta num navegador de verdade, com verificação de acessibilidade pelo axe.',
         provenance: 'O rastreador é publicado no npm pelo GitHub Actions, com proveniência.',
