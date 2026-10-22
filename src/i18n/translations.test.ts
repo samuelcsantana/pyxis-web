@@ -81,3 +81,19 @@ describe.each(TRANSLATIONS)('the %s dictionary', (locale, dictionary) => {
     expect(incomplete).toEqual([]);
   });
 });
+
+describe('the Brazilian Portuguese glossary', () => {
+  const portuguese = leaves(ptBR).flatMap(([key, message]) =>
+    texts(message).map((text) => [key, text] as const),
+  );
+
+  it('calls a write an escrita, since gravação reads as a session recording', () => {
+    const recordings = portuguese.filter(([, text]) => /gravaç/i.test(text)).map(([key]) => key);
+
+    expect(recordings).toEqual([]);
+    expect(texts(ptBR.counts.write)).toEqual(
+      expect.arrayContaining(['{count} escrita', '{count} escritas']),
+    );
+    expect(ptBR.requests.page.kinds.writes).toBe('Escritas');
+  });
+});
