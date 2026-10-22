@@ -107,7 +107,7 @@ export const ptBR = translation({
     privacy:
       'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem dados pessoais',
     noAccount:
-      'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados inventados.',
+      'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados fictícios.',
     noCode:
       '<strong>Não chegou nada em alguns minutos?</strong> Talvez este e-mail ainda não tenha conta no Pyxis.',
     seePlans: 'Ver planos',
@@ -155,7 +155,7 @@ export const ptBR = translation({
   demo: {
     label: 'Aviso de demonstração',
     notice:
-      'Dados de demonstração: números inventados para dois produtos imaginários. Nenhum visitante real aparece aqui.',
+      'Dados de demonstração: números fictícios para dois produtos imaginários. Nenhum visitante real aparece aqui.',
     homePage: 'O que é o Pyxis?',
     projectNames: { store: 'Meu site', docs: 'Demo Docs' },
   },
@@ -1456,7 +1456,7 @@ export const ptBR = translation({
       lead: 'O Pyxis mostra em que passo do funil as pessoas param e quais requisições do seu site falharam em cada visita. Veja no painel ou pergunte ao Claude.',
       openDemo: 'Abrir a demonstração',
       seePricing: 'Ver preço',
-      note: 'Sem cadastro. Dados inventados. Abre direto no painel.',
+      note: 'Sem cadastro. Dados fictícios. Abre direto no painel.',
       trialNote:
         '14 dias grátis; o cartão só é cobrado no 15º dia. A demonstração abre sem cadastro.',
       claudeTag: 'No diretório do Claude',
@@ -1492,7 +1492,7 @@ export const ptBR = translation({
       dropOff: 'Maior abandono no funil',
       failingWrite: 'Gravação que mais falha',
       failed: '{share} falharam',
-      invented: 'Dados inventados, como na demonstração.',
+      invented: 'Dados fictícios, como na demonstração.',
     },
     proof: {
       size: { value: 'menos de 5 KB', label: 'de rastreador, com gzip' },
@@ -1582,7 +1582,7 @@ export const ptBR = translation({
         replay: 'Repetir',
         answer:
           'As visitas subiram 12% em relação à semana anterior, e as conversões, 8%. O cadastro perde mais gente entre o formulário e o código por e-mail: 41% param ali, e no celular são 52%. No computador, essa etapa perde 23%.',
-        invented: 'Conversa e números inventados, como na demonstração.',
+        invented: 'Conversa e números fictícios, como na demonstração.',
       },
       promises: {
         reads: {
