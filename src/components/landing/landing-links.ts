@@ -20,6 +20,7 @@ export const LANDING_LINKS = {
   claudeDirectory: 'https://claude.ai/directory/pyxis',
   npm: 'https://www.npmjs.com/package/pyxis-analytics',
   sdkPackage: `${GITHUB_PROFILE}/pyxis-sdk/blob/main/package.json`,
+  sdkApi: `${GITHUB_PROFILE}/pyxis-sdk#api`,
   coverage: 'https://app.codecov.io/gh/samuelcsantana',
   license: `${GITHUB_PROFILE}/pyxis-api/blob/main/LICENSE`,
   storybook: 'https://samuelcsantana.github.io/pyxis-web/',

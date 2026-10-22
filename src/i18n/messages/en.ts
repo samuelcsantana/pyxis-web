@@ -1665,6 +1665,8 @@ export const en = {
       note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
       noteOpen:
         'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+      requests:
+        'To see which calls to your API fail, wrap your HTTP client once with <code>trackRequest()</code>. <link>See the example</link>',
       agent: {
         title: 'Or ask your AI agent',
         lead: 'Open the site’s repository in Claude Code, Cursor or another agent and paste:',

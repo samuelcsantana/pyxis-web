@@ -1677,6 +1677,8 @@ export const ptBR = translation({
       note: 'As chaves são criadas por quem opera a API, e hoje não há cadastro aberto. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
       noteOpen:
         'As chaves vêm com a sua conta: comece o teste grátis aqui embaixo, ou rode o seu próprio Pyxis. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
+      requests:
+        'Para ver quais chamadas à sua API falham, envolva o seu cliente HTTP uma vez com <code>trackRequest()</code>. <link>Ver o exemplo</link>',
       agent: {
         title: 'Ou peça ao seu agente de IA',
         lead: 'Abra o repositório do site no Claude Code, no Cursor ou em outro agente e cole:',

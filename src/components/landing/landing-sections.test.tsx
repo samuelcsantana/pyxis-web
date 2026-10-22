@@ -192,6 +192,31 @@ describe('InstallSection', () => {
     );
   });
 
+  it('points to trackRequest under the code, so the failing calls the hero promises have a way in', () => {
+    render(<InstallSection i18n={english} signUpOpen={false} />);
+
+    const sentence = screen.getByText(/To see which calls to your API fail/);
+    const link = within(sentence).getByRole('link', { name: 'See the example' });
+    expect(sentence).toHaveTextContent(
+      'To see which calls to your API fail, wrap your HTTP client once with trackRequest(). See the example',
+    );
+    expect(within(sentence).getByText('trackRequest()').tagName).toBe('CODE');
+    expect(link).toHaveAttribute('href', 'https://github.com/samuelcsantana/pyxis-sdk#api');
+    expect(link).toHaveAttribute('data-track', 'docs_opened');
+    expect(link).toHaveAttribute('data-track-doc', 'track_request');
+    expect(screen.getByText('npm install pyxis-analytics').compareDocumentPosition(sentence)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it('points to trackRequest in the reader’s language', () => {
+    render(<InstallSection i18n={portuguese} signUpOpen />);
+
+    expect(screen.getByText(/Para ver quais chamadas à sua API falham/)).toHaveTextContent(
+      'Para ver quais chamadas à sua API falham, envolva o seu cliente HTTP uma vez com trackRequest(). Ver o exemplo',
+    );
+  });
+
   it('copies exactly the text it shows', () => {
     expect(codeTextOf(INSTALL_COMMAND)).toBe('npm install pyxis-analytics');
     expect(codeTextOf(FIRST_EVENT)).toBe(

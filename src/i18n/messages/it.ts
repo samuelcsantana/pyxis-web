@@ -1700,6 +1700,8 @@ export const it = translation({
       note: 'Le chiavi vengono rilasciate da chi gestisce l’API, e oggi non c’è una registrazione pubblica. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
       noteOpen:
         'Le chiavi arrivano con il tuo account: inizia la prova gratuita qui sotto, oppure gestisci un tuo Pyxis. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
+      requests:
+        'Per vedere quali chiamate alla tua API falliscono, avvolgi una volta il tuo client HTTP con <code>trackRequest()</code>. <link>Vedi l’esempio</link>',
       agent: {
         title: 'Oppure chiedilo al tuo agente di IA',
         lead: 'Apri il repository del sito in Claude Code, in Cursor o in un altro agente e incolla:',
