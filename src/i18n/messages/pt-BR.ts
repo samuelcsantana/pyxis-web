@@ -559,7 +559,7 @@ export const ptBR = translation({
     heading: 'E-mail',
     weeklyDigest: 'Resumo semanal',
     weeklyDigestNote:
-      'Toda segunda-feira, a semana que terminou no domingo em {timezone}: visitas, conversões, gravações com falha, páginas mais vistas e principais eventos. Cada admin escolhe o seu.',
+      'Toda segunda-feira, a semana que terminou no domingo em {timezone}: visitas, conversões, escritas com falha, páginas mais vistas e principais eventos. Cada admin escolhe o seu.',
     on: 'Ligado',
     off: 'Desligado',
     saving: 'Salvando…',
@@ -687,7 +687,7 @@ export const ptBR = translation({
     page: forms('{count} página', '{count} páginas'),
     event: forms('{count} evento', '{count} eventos'),
     item: forms('{count} item', '{count} itens'),
-    write: forms('{count} gravação', '{count} gravações'),
+    write: forms('{count} escrita', '{count} escritas'),
     request: forms('{count} requisição', '{count} requisições'),
     failure: forms('{count} falha', '{count} falhas'),
     failedRead: forms('{count} leitura com falha', '{count} leituras com falha'),
@@ -717,10 +717,10 @@ export const ptBR = translation({
       'Um usuário identificado é um id de usuário distinto que o site passou para identify(), normalmente quando alguém entra; uma visita sem esse id é anônima.',
     conversion:
       'Uma conversão é uma visita que enviou o evento de conversão do projeto pelo menos uma vez; os eventos de conversão contam cada vez que ele foi enviado.',
-    write: 'Uma gravação é um POST, PUT, PATCH ou DELETE enviado com trackRequest().',
+    write: 'Uma escrita é um POST, PUT, PATCH ou DELETE enviado com trackRequest().',
     failure: 'Uma falha é um status 400 ou acima, ou nenhuma resposta.',
     changeTone:
-      'Uma variação só fica verde ou vermelha quando o período anterior contou pelo menos {base} e ela mudou {change} ou mais ({points} pontos na taxa de erro nas gravações).',
+      'Uma variação só fica verde ou vermelha quando o período anterior contou pelo menos {base} e ela mudou {change} ou mais ({points} pontos na taxa de erro nas escritas).',
   },
   metrics: {
     noChange: 'sem variação',
@@ -746,7 +746,7 @@ export const ptBR = translation({
       visits: 'Visitas',
       identifiedUsers: 'Usuários identificados',
       conversions: 'Conversões',
-      writeErrorRate: 'Taxa de erro nas gravações',
+      writeErrorRate: 'Taxa de erro nas escritas',
     },
     notes: {
       identifiedUsers: 'entraram pelo menos uma vez',
@@ -787,7 +787,7 @@ export const ptBR = translation({
     metricTitle: '{metric} por dia',
     gaps: {
       noValue: 'sem valor',
-      noWrites: 'sem gravações',
+      noWrites: 'sem escritas',
     },
     statistics: {
       noneOnAnyDay: '{gap} em todos os dias',
@@ -902,8 +902,8 @@ export const ptBR = translation({
   requests: {
     noResponse: 'Sem resposta',
     figures: {
-      writes: 'Gravações',
-      errorRate: 'Taxa de erro nas gravações',
+      writes: 'Escritas',
+      errorRate: 'Taxa de erro nas escritas',
       slowestRoute: 'Rota mais lenta',
       failedReads: 'Leituras com falha',
       failingRoutes: 'Rotas com falha',
@@ -915,7 +915,7 @@ export const ptBR = translation({
       failed: '{failed} falharam: {kinds}',
       noFailedRead: 'Nenhuma leitura falhou neste período',
       mostFailing: 'Mais falhas: {route}, {failures}',
-      noWrites: 'Nenhuma gravação neste período',
+      noWrites: 'Nenhuma escrita neste período',
       slowestMedian: 'mediana de {route}',
     },
     duration: '{milliseconds} ms',
@@ -926,7 +926,7 @@ export const ptBR = translation({
     failureDays: {
       title: 'Falhas por dia',
       description: {
-        writes: 'Todas as gravações que falharam, pelo tipo de problema, {period}',
+        writes: 'Todas as escritas que falharam, pelo tipo de problema, {period}',
         reads: 'Todas as leituras que falharam, pelo tipo de problema, {period}',
       },
       classes: {
@@ -975,32 +975,32 @@ export const ptBR = translation({
     },
     page: {
       subtitle: {
-        writes: 'Todas as gravações que {project} fez, e como terminaram',
+        writes: 'Todas as escritas que {project} fez, e como terminaram',
         reads: 'As leituras que {project} fez e que falharam',
       },
       kinds: {
         label: 'Tipo de requisição',
-        writes: 'Gravações',
+        writes: 'Escritas',
         reads: 'Leituras com falha',
       },
       readsNeedApi: {
         title: 'As leituras com falha precisam de uma versão mais nova da API do Pyxis',
-        body: 'Esta API só informa gravações. Atualize a pyxis-api para listar as chamadas GET que falharam; as gravações estão na aba Gravações.',
+        body: 'Esta API só informa escritas. Atualize a pyxis-api para listar as chamadas GET que falharam; as escritas estão na aba Escritas.',
       },
       empty: {
         reads:
           'Nenhuma leitura falhou neste período. Chamadas GET enviadas com trackRequest() aparecem aqui quando falham.',
         readsFromScreen: 'Nenhuma leitura com falha em {screen} neste período.',
-        writesFromScreen: 'Nenhuma gravação em {screen} neste período.',
+        writesFromScreen: 'Nenhuma escrita em {screen} neste período.',
         failing: 'Nenhuma rota falhou neste período.',
         writes:
-          'Nenhuma gravação neste período. Chamadas enviadas com trackRequest() aparecem aqui.',
+          'Nenhuma escrita neste período. Chamadas enviadas com trackRequest() aparecem aqui.',
       },
       footnote: {
         ownTab:
-          'As leituras com falha têm uma aba própria; Visitas e a Linha do tempo contam leituras com falha e gravações juntas.',
+          'As leituras com falha têm uma aba própria; Visitas e a Linha do tempo contam leituras com falha e escritas juntas.',
         failedRead:
-          'Uma leitura com falha é um GET enviado com trackRequest() que respondeu 400 ou acima, ou nunca respondeu. Um site pode enviar as suas leituras só quando falham, então as leituras não têm taxa de erro. Visitas e a Linha do tempo contam leituras com falha e gravações juntas.',
+          'Uma leitura com falha é um GET enviado com trackRequest() que respondeu 400 ou acima, ou nunca respondeu. Um site pode enviar as suas leituras só quando falham, então as leituras não têm taxa de erro. Visitas e a Linha do tempo contam leituras com falha e escritas juntas.',
         source: 'Só o modelo da rota é guardado, nunca os valores da URL nem o corpo.',
       },
     },
@@ -1166,7 +1166,7 @@ export const ptBR = translation({
     page: {
       subtitle: 'Todas as visitas a {project} no período, das mais recentes para as mais antigas',
       footnote:
-        'Os destaques são os cinco primeiros eventos nomeados, em ordem. Uma requisição com falha é uma leitura ou gravação enviada com trackRequest() que respondeu 400 ou acima, ou nunca respondeu; Requisições lista as gravações e as leituras com falha em abas separadas.',
+        'Os destaques são os cinco primeiros eventos nomeados, em ordem. Uma requisição com falha é uma leitura ou escrita enviada com trackRequest() que respondeu 400 ou acima, ou nunca respondeu; Requisições lista as escritas e as leituras com falha em abas separadas.',
       empty: {
         filtered: 'Nenhuma visita corresponde a estes filtros neste período.',
         all: 'Nenhuma visita neste período. Uma visita aparece aqui assim que o seu site envia o primeiro evento.',
@@ -1430,7 +1430,7 @@ export const ptBR = translation({
       screens: 'Telas',
     },
     requests: {
-      writes: 'Gravações',
+      writes: 'Escritas',
       reads: 'Leituras com falha',
     },
     visits: 'As {visits} visitas mais recentes',
@@ -1490,7 +1490,7 @@ export const ptBR = translation({
       current: 'Este período',
       previous: 'Período anterior',
       dropOff: 'Maior abandono no funil',
-      failingWrite: 'Gravação que mais falha',
+      failingWrite: 'Escrita que mais falha',
       failed: '{share} falharam',
       invented: 'Dados fictícios, como na demonstração.',
     },
@@ -1549,7 +1549,7 @@ export const ptBR = translation({
         'Prefere perguntar? Conecte o Pyxis ao Claude e ele lê os mesmos números, só para leitura. <link>Como conectar</link>',
       questions: {
         overview:
-          'Quantas visitas, conversões e gravações com falha neste período, contra o anterior?',
+          'Quantas visitas, conversões e escritas com falha neste período, contra o anterior?',
         acquisition: 'Quais canais, origens e campanhas trazem visitas que convertem?',
         devices: 'De quais aparelhos, navegadores, países e estados vêm as visitas?',
         features: 'Quais eventos e telas são usados, e como uma propriedade se divide?',
@@ -1603,7 +1603,7 @@ export const ptBR = translation({
     report: {
       eyebrow: 'Relatórios',
       title: 'Toda segunda, a semana no seu e-mail',
-      lead: 'Visitas, conversões e gravações com falha contra a semana anterior, as páginas mais vistas e as rotas que mais falharam. Sem abrir o painel e sem perguntar a ninguém.',
+      lead: 'Visitas, conversões e escritas com falha contra a semana anterior, as páginas mais vistas e as rotas que mais falharam. Sem abrir o painel e sem perguntar a ninguém.',
       items: {
         digest: {
           title: 'Ligado para todo admin do projeto',
@@ -1624,7 +1624,7 @@ export const ptBR = translation({
         visits: 'Visitas',
         identifiedUsers: 'Usuários identificados',
         convertingVisits: 'Visitas com conversão',
-        failedWrites: 'Gravações com falha',
+        failedWrites: 'Escritas com falha',
         visitsPerDay: 'Visitas por dia',
         failingRoutes: 'Rotas com falha',
         openWeek: 'Abrir a semana no painel',
@@ -1632,8 +1632,8 @@ export const ptBR = translation({
         unchangedFromWeekBefore: 'sem variação vs. a semana anterior ({previous})',
         weekBeforeOnly: '{previous} na semana anterior',
         shareOfVisits: '{share} das visitas',
-        ofWrites: 'de {writes} gravações, {rate}',
-        noWrites: 'nenhuma gravação',
+        ofWrites: 'de {writes} escritas, {rate}',
+        noWrites: 'nenhuma escrita',
         failedOf: '{failed} de {total} falharam',
       },
     },
