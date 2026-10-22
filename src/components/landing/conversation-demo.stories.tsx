@@ -63,7 +63,7 @@ export const Portuguese: Story = {
       used: 'O Claude leu:',
       answer:
         'As visitas subiram 12% em relação à semana anterior, e as conversões, 8%. O cadastro perde mais gente entre o formulário e o código por e-mail: 41% param ali, e no celular são 52%. No computador, essa etapa perde 23%.',
-      invented: 'Conversa e números inventados, como na demonstração.',
+      invented: 'Conversa e números fictícios, como na demonstração.',
     },
   },
 };

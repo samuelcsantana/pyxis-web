@@ -84,5 +84,6 @@ describe('LandingPreview', () => {
     expect(preview).toHaveTextContent('MSMeu site');
     expect(preview).toHaveTextContent('Últimos 30 dias');
     expect(screen.getByText('Visitas').nextElementSibling).toHaveTextContent('3.214');
+    expect(preview).toHaveTextContent('Dados fictícios, como na demonstração.');
   });
 });
