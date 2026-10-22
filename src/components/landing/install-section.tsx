@@ -1,7 +1,9 @@
+import { TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
+import { LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
@@ -184,6 +186,20 @@ export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
         <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
           <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />
           <CodeBlock id="install-first-event" tokens={FIRST_EVENT} labels={labels} />
+          <p className="text-sm leading-relaxed text-muted">
+            {rich(t('landing.install.requests'), {
+              code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
+              link: (text) => (
+                <a
+                  href={LANDING_LINKS.sdkApi}
+                  className={TEXT_LINK}
+                  {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'track_request' })}
+                >
+                  {text}
+                </a>
+              ),
+            })}
+          </p>
         </div>
         <p
           className={`flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted ${REVEAL}`}

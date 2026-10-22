@@ -1700,6 +1700,8 @@ export const nl = translation({
       note: 'Sleutels worden uitgegeven door wie de API draait, en er is momenteel geen openbare registratie. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
       noteOpen:
         'Je sleutels horen bij je account: start hieronder de gratis proefperiode, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
+      requests:
+        'Om te zien welke aanroepen naar je API mislukken, wikkel je je HTTP-client één keer in <code>trackRequest()</code>. <link>Bekijk het voorbeeld</link>',
       agent: {
         title: 'Of vraag het je AI-agent',
         lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere agent en plak:',

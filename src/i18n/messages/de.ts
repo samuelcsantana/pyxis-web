@@ -1716,6 +1716,8 @@ export const de = translation({
       note: 'Schlüssel vergibt, wer die API betreibt, und eine öffentliche Registrierung gibt es derzeit nicht. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
       noteOpen:
         'Deine Schlüssel bekommst du mit deinem Konto: Starte unten die kostenlose Testphase oder betreibe dein eigenes Pyxis. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
+      requests:
+        'Um zu sehen, welche Aufrufe an deine API fehlschlagen, umschließe deinen HTTP-Client einmal mit <code>trackRequest()</code>. <link>Beispiel ansehen</link>',
       agent: {
         title: 'Oder bitte deinen KI-Agenten',
         lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Agenten und füge ein:',

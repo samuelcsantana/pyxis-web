@@ -1714,6 +1714,8 @@ export const fr = translation({
       note: 'Les clés sont délivrées par celui qui exploite l’API, et il n’y a pas d’inscription publique aujourd’hui. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
       noteOpen:
         'Vos clés sont fournies avec votre compte : démarrez l’essai gratuit ci-dessous, ou hébergez votre propre Pyxis. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
+      requests:
+        'Pour voir quels appels à votre API échouent, enveloppez une fois votre client HTTP avec <code>trackRequest()</code>. <link>Voir l’exemple</link>',
       agent: {
         title: 'Ou demandez à votre agent d’IA',
         lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent et collez :',
