@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.32.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.31.0...v0.32.0) (2026-10-22)
+
+
+### Features
+
+* **landing:** point to trackRequest under the install snippet ([b403b79](https://github.com/samuelcsantana/pyxis-web/commit/b403b795f10913787df02ca3fff756b9bb91d910))
+
+
+### Bug Fixes
+
+* **i18n:** call a write an escrita in Brazilian Portuguese ([ceed0d6](https://github.com/samuelcsantana/pyxis-web/commit/ceed0d6b920d779b8ed83d46217d6a7afb8fafc7))
+* **i18n:** call the demo data fictional in Brazilian Portuguese ([58e30fd](https://github.com/samuelcsantana/pyxis-web/commit/58e30fd012ff109db03238d60244121e39d01871))
+* **landing:** count four repositories in the coverage claims ([8945ede](https://github.com/samuelcsantana/pyxis-web/commit/8945edec993426ec3be17cbddd6f600ebb18857e))
+* **landing:** read the license tile naturally in Portuguese and Spanish ([6108b7f](https://github.com/samuelcsantana/pyxis-web/commit/6108b7fc9c064d698b9d9ff5a5262ba5474b8571))
+
 ## [0.31.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.30.0...v0.31.0) (2026-10-21)
 
 
