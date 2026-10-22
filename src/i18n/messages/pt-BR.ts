@@ -1498,7 +1498,7 @@ export const ptBR = translation({
       size: { value: 'menos de 5 KB', label: 'de rastreador, com gzip' },
       dependencies: { value: '0', label: 'dependências em execução' },
       coverage: { value: '100%', label: 'de cobertura de testes nos quatro repositórios' },
-      license: { value: 'MIT', label: 'de licença, infraestrutura incluída' },
+      license: { value: 'Licença MIT', label: 'código aberto, com a infraestrutura' },
     },
     never: {
       eyebrow: 'Privacidade',
