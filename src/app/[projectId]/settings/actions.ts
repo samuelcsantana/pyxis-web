@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import {
   ACCESS_TOKEN_LIFETIMES,
@@ -103,6 +104,8 @@ export async function revokeConnection(projectId: string, connectionId: string):
   await readOrSignIn(() => createConnectionsService().revoke(parsed.data));
 }
 
+const EVERY_PROJECT_SCREEN = '/[projectId]';
+
 export async function updateProject(
   projectId: string,
   changes: ProjectChanges,
@@ -112,7 +115,13 @@ export async function updateProject(
   if (!parsed.success) {
     return { kind: 'invalid' };
   }
-  return readOrSignIn(() => createProjectManagementService().update(project.id, parsed.data));
+  const outcome = await readOrSignIn(() =>
+    createProjectManagementService().update(project.id, parsed.data),
+  );
+  if (outcome.kind === 'saved') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
 }
 
 export async function createProjectKey(
@@ -148,7 +157,13 @@ export async function deleteProject(
   if (!parsed.success) {
     return { kind: 'nameMismatch' };
   }
-  return readOrSignIn(() => createProjectManagementService().delete(project.id, parsed.data));
+  const outcome = await readOrSignIn(() =>
+    createProjectManagementService().delete(project.id, parsed.data),
+  );
+  if (outcome.kind === 'deleted') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
 }
 
 export async function addProjectPerson(
