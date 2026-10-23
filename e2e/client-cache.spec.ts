@@ -1,7 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
+import { sawBusyContent, watchForBusyContent } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
-const BUSY_MARKER = 'pyxisE2eSawBusy';
 const JUST_PAST_THE_REFRESH_BOUND = '00:21';
 const JUST_PAST_THE_CLIENT_CACHE = '05:01';
 
@@ -19,21 +19,6 @@ async function goTo(page: Page, isMobile: boolean, screen: string): Promise<void
     .click();
   await expect(page.getByRole('heading', { level: 1, name: screen })).toBeVisible();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
-}
-
-async function watchForBusyContent(page: Page): Promise<void> {
-  await page.evaluate((name) => {
-    Reflect.set(window, name, false);
-    new MutationObserver(() => {
-      if (document.querySelector('main[aria-busy="true"]') !== null) {
-        Reflect.set(window, name, true);
-      }
-    }).observe(document.body, { subtree: true, childList: true, attributes: true });
-  }, BUSY_MARKER);
-}
-
-function sawBusyContent(page: Page): Promise<boolean> {
-  return page.evaluate((name) => Reflect.get(window, name) === true, BUSY_MARKER);
 }
 
 function readsOverview(page: Page) {
