@@ -35,6 +35,8 @@ export const SCREENS = [
 
 export type ScreenSlug = (typeof SCREENS)[number]['slug'];
 
+export const SCREENS_WITHOUT_PERIOD: ReadonlySet<ScreenSlug> = new Set(['timeline']);
+
 export function screenLabelKey(slug: ScreenSlug): `screens.${ScreenSlug}` {
   return `screens.${slug}`;
 }
@@ -94,8 +96,16 @@ const SCREEN_PATH_SEGMENTS = 3;
 export const CONNECT_PAGE = '/connect';
 const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account', CONNECT_PAGE]);
 
-function isScreenSlug(value: string | undefined): boolean {
+function isScreenSlug(value: string | undefined): value is ScreenSlug {
   return SCREENS.some((screen) => screen.slug === value);
+}
+
+export function screenSlugOf(pathname: string): ScreenSlug | undefined {
+  const segments = pathname.split('/');
+  const slug = segments[2];
+  return segments.length === SCREEN_PATH_SEGMENTS && segments[1] !== '' && isScreenSlug(slug)
+    ? slug
+    : undefined;
 }
 
 export function returnPathOf(value: string | null | undefined): string | undefined {
@@ -103,9 +113,7 @@ export function returnPathOf(value: string | null | undefined): string | undefin
     return undefined;
   }
   const url = new URL(value, LINK_BASE);
-  const segments = url.pathname.split('/');
-  const isScreen =
-    segments.length === SCREEN_PATH_SEGMENTS && segments[1] !== '' && isScreenSlug(segments[2]);
+  const isScreen = screenSlugOf(url.pathname) !== undefined;
   return url.origin === LINK_BASE && (isScreen || ACCOUNT_LEVEL_PATHS.has(url.pathname))
     ? `${url.pathname}${url.search}`
     : undefined;

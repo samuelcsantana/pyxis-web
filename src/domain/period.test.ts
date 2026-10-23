@@ -8,9 +8,10 @@ import {
   MAX_PERIOD_DAYS,
   periodQuery,
   periodSearchParameters,
-  rejectedRangeNotice,
   presetPeriod,
+  rangeProblemNotice,
   resolvePeriod,
+  resolvePeriodOn,
   todayIn,
 } from './period';
 import { english } from '@/test-utils/english';
@@ -52,6 +53,18 @@ describe('presetPeriod', () => {
     ['30d', '2026-09-06'],
   ] as const)('%s ends today and starts on %s', (preset, from) => {
     expect(presetPeriod(preset, '2026-10-05')).toEqual({ preset, from, to: '2026-10-05' });
+  });
+});
+
+describe('resolvePeriodOn', () => {
+  it('resolves the period from the calendar day it is given, with no clock', () => {
+    expect(resolvePeriodOn({ range: '7d' }, '2026-10-05')).toEqual(
+      presetPeriod('7d', '2026-10-05'),
+    );
+    expect(resolvePeriodOn({ from: '2026-10-01', to: '2026-10-06' }, '2026-10-05')).toEqual({
+      ...presetPeriod('30d', '2026-10-05'),
+      rejected: { from: '2026-10-01', to: '2026-10-06', problem: 'future' },
+    });
   });
 });
 
@@ -117,14 +130,14 @@ describe('resolvePeriod', () => {
   });
 });
 
-describe('rejectedRangeNotice', () => {
+describe('rangeProblemNotice', () => {
   it.each([
     ['not-a-date', 'one of its dates is not a calendar date'],
     ['inverted', 'it ends before it starts'],
     ['future', 'it ends after today'],
     ['too-long', 'it is longer than 400 days'],
   ] as const)('says why a %s range was not used', (problem, reason) => {
-    expect(rejectedRangeNotice({ from: '2026-09-02', to: '2026-09-01', problem }, english)).toBe(
+    expect(rangeProblemNotice(problem, english)).toBe(
       `That range was not used: ${reason}. Showing the last 30 days instead.`,
     );
   });
