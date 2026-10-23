@@ -1,0 +1,1 @@
+export const VISITED_SCREEN_CACHE_SECONDS = 300;
