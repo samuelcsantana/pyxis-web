@@ -1,4 +1,4 @@
-import type { Formats } from '@/i18n/formats';
+import type { DayFormats } from '@/i18n/day-formats';
 import type { I18n } from '@/i18n/i18n';
 
 export const PERIOD_PRESETS = ['today', '7d', '30d'] as const;
@@ -160,7 +160,7 @@ export function describePeriod(period: Period, i18n: I18n): string {
     : i18n.t(`period.presets.${period.preset}`);
 }
 
-export function formatDayRange(from: string, to: string, format: Formats): string {
+export function formatDayRange(from: string, to: string, format: DayFormats): string {
   const first = calendarDate(from);
   const last = calendarDate(to);
   if (from === to) {

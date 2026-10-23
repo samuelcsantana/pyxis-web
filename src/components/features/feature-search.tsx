@@ -1,6 +1,6 @@
 import Form from 'next/form';
 import Link from 'next/link';
-import type { KeptParameters } from '@/components/shell/period-selector';
+import type { KeptParameters } from '@/components/shell/kept-parameters';
 import {
   BUTTON_SECONDARY,
   FIELD_FOCUS_WITHIN_RING,

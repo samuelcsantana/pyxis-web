@@ -6,7 +6,7 @@ import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { VisitStartsPanel } from '@/components/overview/visit-starts-panel';
 import { MainContent } from '@/components/shell/main-content';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';

@@ -1,4 +1,5 @@
-import { displayTag, type I18n } from '@/i18n/i18n';
+import { displayTag } from '@/i18n/display-tag';
+import type { I18n } from '@/i18n/i18n';
 import type { Tone } from './metrics';
 import type { OverviewReport } from './overview';
 import { addDays } from './period';

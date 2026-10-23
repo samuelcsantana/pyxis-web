@@ -3,7 +3,7 @@ import { FeatureSearch } from '@/components/features/feature-search';
 import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
 import { MainContent } from '@/components/shell/main-content';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';

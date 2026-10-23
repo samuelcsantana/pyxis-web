@@ -2,7 +2,7 @@ import { CampaignsTable } from '@/components/acquisition/campaigns-table';
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { MainContent } from '@/components/shell/main-content';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { EmptyPeriod } from '@/components/states/empty-period';

@@ -5,7 +5,7 @@ import { FunnelSegmentsPanel } from '@/components/funnel/funnel-segments-panel';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
 import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
 import { MainContent } from '@/components/shell/main-content';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { StatCard } from '@/components/ui/stat-card';

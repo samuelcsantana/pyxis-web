@@ -17,7 +17,7 @@ import {
   type RouteRow,
 } from '@/domain/requests';
 import type { RouteDaysText } from '@/domain/route-days';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith } from '@/components/shell/screens';
 import {
   BODY_CELL,

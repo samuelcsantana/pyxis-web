@@ -5,7 +5,8 @@ import {
   previewChartOf,
 } from '@/domain/landing-preview';
 import type { Tone } from '@/domain/metrics';
-import { displayTag, type I18n } from '@/i18n/i18n';
+import { displayTag } from '@/i18n/display-tag';
+import type { I18n } from '@/i18n/i18n';
 import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
 import { PreviewCountUp } from './preview-count-up';
 

@@ -1,12 +1,12 @@
+import { createDayFormats, type DayFormats } from './day-formats';
+
 export type DateTimeStyle = 'clock' | 'visitStart' | 'failureTime' | 'eventTime';
 export type WeekdayWidth = 'narrow' | 'short' | 'long';
 
-export interface Formats {
+export interface Formats extends DayFormats {
   readonly count: (value: number) => string;
   readonly percent: (value: number) => string;
   readonly decimal: (value: number) => string;
-  readonly day: (date: Date) => string;
-  readonly dayWithYear: (date: Date) => string;
   readonly monthWithYear: (date: Date) => string;
   readonly fullDay: (date: Date) => string;
   readonly dateTime: (style: DateTimeStyle, timeZone: string) => (date: Date) => string;
@@ -40,13 +40,7 @@ function buildFormats(tag: string): Formats {
   const count = new Intl.NumberFormat(tag);
   const percent = new Intl.NumberFormat(tag, { style: 'percent', ...ONE_DECIMAL });
   const decimal = new Intl.NumberFormat(tag, ONE_DECIMAL);
-  const day = new Intl.DateTimeFormat(tag, { month: 'short', day: 'numeric', timeZone: 'UTC' });
-  const dayWithYear = new Intl.DateTimeFormat(tag, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
+  const { day, dayWithYear } = createDayFormats(tag);
   const monthWithYear = new Intl.DateTimeFormat(tag, {
     month: 'long',
     year: 'numeric',
@@ -70,8 +64,8 @@ function buildFormats(tag: string): Formats {
     count: (value) => count.format(value),
     percent: (value) => percent.format(value),
     decimal: (value) => decimal.format(value),
-    day: (date) => day.format(date),
-    dayWithYear: (date) => dayWithYear.format(date),
+    day,
+    dayWithYear,
     monthWithYear: (date) => monthWithYear.format(date),
     fullDay: (date) => fullDay.format(date),
     dateTime: (style, timeZone) => {

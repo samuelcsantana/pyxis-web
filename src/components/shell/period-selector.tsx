@@ -9,10 +9,9 @@ import {
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import type { Translator } from '@/i18n/translate';
+import { type KeptParameters, RANGE_NOTICE_ID, withKeptParameters } from './kept-parameters';
 import { LazyRangeCalendar } from './lazy-range-calendar';
 import { PeriodPresets } from './period-presets';
-
-export type KeptParameters = Readonly<Record<string, string>>;
 
 export interface PeriodSelectorProps {
   readonly basePath: string;
@@ -23,16 +22,6 @@ export interface PeriodSelectorProps {
 }
 
 const NOTHING_KEPT: KeptParameters = {};
-
-export const RANGE_NOTICE_ID = 'period-range-notice';
-
-export function withKeptParameters(query: string, keep: KeptParameters): string {
-  const parameters = new URLSearchParams(query);
-  for (const [name, value] of Object.entries(keep)) {
-    parameters.set(name, value);
-  }
-  return parameters.toString();
-}
 
 const PRESET_LABELS = {
   today: 'periodSelector.presets.today',
