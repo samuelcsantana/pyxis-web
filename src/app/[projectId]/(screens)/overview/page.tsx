@@ -5,10 +5,9 @@ import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
 import { VisitStartsPanel } from '@/components/overview/visit-starts-panel';
-import { MainContent } from '@/components/shell/main-content';
+import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
-import { linkWith, type ScreenSlug, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { Topbar } from '@/components/shell/topbar';
+import { linkWith, type ScreenSlug, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
@@ -21,7 +20,7 @@ import {
   type OverviewReport,
   overviewKpis,
 } from '@/domain/overview';
-import { type ChartMetric, chartMetric, keptMetric, overviewChart } from '@/domain/overview-chart';
+import { type ChartMetric, chartMetric, overviewChart } from '@/domain/overview-chart';
 import { OVERVIEW_TABLES, overviewTableLabel } from '@/domain/overview-export';
 import {
   daysBetween,
@@ -161,40 +160,29 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
     kpis.map((kpi) => kpi.id),
   );
   return (
-    <>
-      <Topbar
-        title={i18n.t(screenLabelKey('overview'))}
-        subtitle={i18n.t('overview.subtitle', { project: project.name })}
-        basePath={screenHref(project.id, 'overview')}
-        period={period}
-        today={today}
-        keep={keptMetric(metric)}
-        i18n={i18n}
-      />
-      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
-        {hasActivity(report) ? (
-          <OverviewReportView
-            report={report}
-            timeOfDay={timeOfDay}
-            kpis={kpis}
-            metric={metric}
-            conversionEvent={project.conversionEvent}
-            period={period}
-            filteredHref={(screen, filter) =>
-              linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
-            }
-            downloads={overviewDownloads(project.id, period, i18n)}
-            i18n={i18n}
-          />
-        ) : (
-          <EmptyPeriod
-            view={emptyPeriodView(project, period, i18n)}
-            widerPeriodHref={screenHref(project.id, 'overview', WIDER_PERIOD_QUERY)}
-            endpoint={apiBaseUrl()}
-            i18n={i18n}
-          />
-        )}
-      </MainContent>
-    </>
+    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
+      {hasActivity(report) ? (
+        <OverviewReportView
+          report={report}
+          timeOfDay={timeOfDay}
+          kpis={kpis}
+          metric={metric}
+          conversionEvent={project.conversionEvent}
+          period={period}
+          filteredHref={(screen, filter) =>
+            linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
+          }
+          downloads={overviewDownloads(project.id, period, i18n)}
+          i18n={i18n}
+        />
+      ) : (
+        <EmptyPeriod
+          view={emptyPeriodView(project, period, i18n)}
+          widerPeriodHref={screenHref(project.id, 'overview', WIDER_PERIOD_QUERY)}
+          endpoint={apiBaseUrl()}
+          i18n={i18n}
+        />
+      )}
+    </ScreenContent>
   );
 }

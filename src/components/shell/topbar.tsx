@@ -1,28 +1,12 @@
 import type { ReactNode } from 'react';
-import { formatDayRange, type Period, rangeProblemNotice } from '@/domain/period';
+import { formatDayRange, type Period } from '@/domain/period';
 import type { DayFormats } from '@/i18n/day-formats';
-import type { I18n } from '@/i18n/i18n';
-import { type KeptParameters, RANGE_NOTICE_ID } from './kept-parameters';
-import { PeriodSelector } from './period-selector';
+import { RANGE_NOTICE_ID } from './kept-parameters';
 
-interface TopbarBase {
+export interface TopbarProps {
   readonly title: string;
   readonly subtitle: string;
 }
-
-export interface TopbarWithPeriodProps extends TopbarBase {
-  readonly basePath: string;
-  readonly period: Period;
-  readonly today: string;
-  readonly keep?: KeptParameters;
-  readonly i18n: I18n;
-}
-
-interface WithoutPeriod extends TopbarBase {
-  readonly period?: undefined;
-}
-
-export type TopbarProps = TopbarWithPeriodProps | WithoutPeriod;
 
 const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
@@ -95,31 +79,6 @@ export function RangeNotice({ text }: RangeNoticeProps) {
   );
 }
 
-function rangeNoticeOf({ period, i18n }: TopbarWithPeriodProps): ReactNode {
-  return period.rejected === undefined ? undefined : (
-    <RangeNotice text={rangeProblemNotice(period.rejected.problem, i18n)} />
-  );
-}
-
-export function Topbar(props: TopbarProps) {
-  if (props.period === undefined) {
-    return <TopbarFrame title={props.title} subtitle={props.subtitle} controls={null} />;
-  }
-  return (
-    <TopbarFrame
-      title={props.title}
-      subtitle={props.subtitle}
-      context={<PeriodLabel period={props.period} format={props.i18n.format} />}
-      notice={rangeNoticeOf(props)}
-      controls={
-        <PeriodSelector
-          basePath={props.basePath}
-          period={props.period}
-          today={props.today}
-          keep={props.keep}
-          t={props.i18n.t}
-        />
-      }
-    />
-  );
+export function Topbar({ title, subtitle }: TopbarProps) {
+  return <TopbarFrame title={title} subtitle={subtitle} controls={null} />;
 }

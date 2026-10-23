@@ -91,7 +91,7 @@ describe('VisitsPage', () => {
       NO_VISIT_FILTERS,
       null,
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'Visits' })).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     const table = within(screen.getByRole('table', { name: 'Visits' }));
     expect(table.getAllByRole('row')).toHaveLength(9);
     expect(
@@ -136,10 +136,6 @@ describe('VisitsPage', () => {
       },
       null,
     );
-    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
-      'href',
-      '/p-store/visits?range=7d&path=%2Fcalculator&event=calculator_result_shown&property=calculator%3Dshipping&channel=paid&identity=identified',
-    );
     expect(screen.getByRole('link', { name: 'Clear filters' })).toHaveAttribute(
       'href',
       '/p-store/visits?range=30d',
@@ -180,10 +176,6 @@ describe('VisitsPage', () => {
         failed: true,
       },
       null,
-    );
-    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
-      'href',
-      '/p-store/visits?range=7d&country=PT&source=www.google.com&route=GET+%2Fplans&failed=true',
     );
     expect(screen.getByText('0 matching visits')).toBeInTheDocument();
   });

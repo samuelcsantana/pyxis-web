@@ -2,9 +2,8 @@ import { CountriesTable } from '@/components/devices/countries-table';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { RegionsTable } from '@/components/devices/regions-table';
 import { ShareDonut } from '@/components/devices/share-donut';
-import { MainContent } from '@/components/shell/main-content';
-import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { Topbar } from '@/components/shell/topbar';
+import { ScreenContent } from '@/components/shell/screen-content';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
@@ -21,7 +20,7 @@ import {
   shareRows,
 } from '@/domain/devices';
 import { devicesTableLabel } from '@/domain/devices-export';
-import { type PeriodSearch, periodQuery, resolvePeriod, todayIn } from '@/domain/period';
+import { type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
 import { countryFilterOf, deviceFilterOf } from '@/domain/visits';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
@@ -134,35 +133,25 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   };
   const regionVisitsHref = (region: string) => linkWith(visitsHref, { region });
   return (
-    <>
-      <Topbar
-        title={i18n.t(screenLabelKey('devices'))}
-        subtitle={i18n.t('devices.subtitle', { project: project.name })}
-        basePath={screenHref(project.id, 'devices')}
-        period={period}
-        today={todayIn(project.timezone, now)}
-        i18n={i18n}
-      />
-      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
-        {hasVisits(report) ? (
-          <DevicesReportView
-            report={report}
-            conversionEvent={project.conversionEvent}
-            exportPath={exportHref(project.id, 'devices', periodQuery(period))}
-            deviceVisitsHref={deviceVisitsHref}
-            i18n={i18n}
-            countryVisitsHref={countryVisitsHref}
-            regionVisitsHref={regionVisitsHref}
-          />
-        ) : (
-          <EmptyPeriod
-            view={emptyPeriodView(project, period, i18n)}
-            widerPeriodHref={screenHref(project.id, 'devices', WIDER_PERIOD_QUERY)}
-            endpoint={apiBaseUrl()}
-            i18n={i18n}
-          />
-        )}
-      </MainContent>
-    </>
+    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      {hasVisits(report) ? (
+        <DevicesReportView
+          report={report}
+          conversionEvent={project.conversionEvent}
+          exportPath={exportHref(project.id, 'devices', periodQuery(period))}
+          deviceVisitsHref={deviceVisitsHref}
+          i18n={i18n}
+          countryVisitsHref={countryVisitsHref}
+          regionVisitsHref={regionVisitsHref}
+        />
+      ) : (
+        <EmptyPeriod
+          view={emptyPeriodView(project, period, i18n)}
+          widerPeriodHref={screenHref(project.id, 'devices', WIDER_PERIOD_QUERY)}
+          endpoint={apiBaseUrl()}
+          i18n={i18n}
+        />
+      )}
+    </ScreenContent>
   );
 }

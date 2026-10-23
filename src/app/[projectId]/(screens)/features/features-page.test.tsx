@@ -83,7 +83,7 @@ describe('FeaturesPage', () => {
       { from: '2026-09-29', to: '2026-10-05' },
       'events',
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'Features' })).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     expect(screen.getByRole('table', { name: 'Most used events' })).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Properties of Calculator result shown' }),
@@ -93,26 +93,18 @@ describe('FeaturesPage', () => {
       'href',
       '/p-store/features?range=7d&kind=screens',
     );
-    expect(screen.getByRole('link', { name: 'Today' })).toHaveAttribute(
-      'href',
-      '/p-store/features?range=today&kind=events',
-    );
     expect(
       screen.getByRole('link', { name: 'Calculator result shown: see its visits' }),
     ).toHaveAttribute('href', '/p-store/visits?range=7d&event=calculator_result_shown');
   });
 
-  it('ranks the screens when asked, and keeps the search across periods', async () => {
+  it('ranks the screens when asked, and keeps the search in its links', async () => {
     renderWithMessages(await renderFeatures({ range: '30d', kind: 'screens', q: 'orders' }));
 
     const ranking = screen.getByRole('table', { name: 'Most visited screens' });
     expect(within(ranking).getAllByRole('row')).toHaveLength(4);
     expect(screen.queryByRole('button', { name: /^Properties of/ })).toBeNull();
     expect(screen.getByRole('searchbox', { name: 'Search screens' })).toHaveValue('orders');
-    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
-      'href',
-      '/p-store/features?range=7d&kind=screens&q=orders',
-    );
     expect(screen.getByRole('link', { name: 'Clear' })).toHaveAttribute(
       'href',
       '/p-store/features?range=30d&kind=screens',

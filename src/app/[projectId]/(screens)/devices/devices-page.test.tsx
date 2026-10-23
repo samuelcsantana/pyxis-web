@@ -73,8 +73,7 @@ describe('DevicesPage', () => {
     renderWithMessages(await renderDevices());
 
     expect(devices).toHaveBeenCalledWith('p-store', { from: '2026-09-06', to: '2026-10-05' });
-    expect(screen.getByRole('heading', { level: 1, name: 'Devices' })).toBeInTheDocument();
-    expect(screen.getByText('What people use to reach Demo Store')).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
   });
 
   it('shows the three donuts, conversion by device, the countries and the regions', async () => {

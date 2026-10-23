@@ -42,7 +42,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
             canCreateProject={canCreateProject}
           />
         </MobileMenu>
-        <NavigationRegion className="flex min-w-0 flex-col">
+        <NavigationRegion className="relative flex min-w-0 flex-col">
           {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
           {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
           {suspension === null ? null : (

@@ -95,7 +95,7 @@ describe('RequestsPage', () => {
       { from: '2026-09-29', to: '2026-10-05' },
       null,
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'Requests' })).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Write error rate' })).toHaveTextContent(/failed:/);
     expect(screen.getByRole('group', { name: 'Slowest route' })).toHaveTextContent(
       'median of POST /payouts',
@@ -152,7 +152,6 @@ describe('RequestsPage', () => {
       { from: '2026-09-06', to: '2026-10-05' },
       null,
     );
-    expect(screen.getByText('The reads Demo Store made that failed')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Failed reads' })).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Routes failing' })).toHaveTextContent(
       'Most: GET /orders/:id',
@@ -165,10 +164,6 @@ describe('RequestsPage', () => {
         name: 'Failed reads',
       }),
     ).toHaveAttribute('aria-current', 'page');
-    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
-      'href',
-      '/p-store/requests?range=7d&kind=reads',
-    );
     expect(screen.getByRole('link', { name: 'Writes' })).toHaveAttribute(
       'href',
       '/p-store/requests?range=30d',
@@ -229,10 +224,6 @@ describe('RequestsPage', () => {
     );
     expect(within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row')).toHaveLength(
       2,
-    );
-    expect(screen.getByRole('link', { name: '7 days' })).toHaveAttribute(
-      'href',
-      '/p-store/requests?range=7d&show=failing&screen=%2Forders',
     );
     expect(screen.getByRole('link', { name: 'All routes' })).toHaveAttribute(
       'href',

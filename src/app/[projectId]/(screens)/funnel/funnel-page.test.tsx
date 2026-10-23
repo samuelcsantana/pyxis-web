@@ -123,11 +123,6 @@ describe('FunnelPage', () => {
     expect(
       within(screen.getByRole('list', { name: 'Funnel' })).getAllByRole('listitem'),
     ).toHaveLength(6);
-    const sevenDays = new URL(
-      screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
-      'https://x',
-    );
-    expect(sevenDays.searchParams.get('steps')).toBe(STEPS);
   });
 
   it('counts the steps of the URL for the period and the mode', async () => {
@@ -158,12 +153,6 @@ describe('FunnelPage', () => {
     expect(
       editSteps.compareDocumentPosition(screen.getByRole('group', { name: 'Overall conversion' })),
     ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    const sevenDays = new URL(
-      screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
-      'https://x',
-    );
-    expect(sevenDays.searchParams.get('mode')).toBe('user');
-    expect(sevenDays.searchParams.get('steps')).toBe(STEPS);
   });
 
   it('times each step and the whole funnel, and leaves the time out when unmeasured', async () => {
@@ -238,12 +227,6 @@ describe('FunnelPage', () => {
     );
     const current = screen.getByRole('link', { name: /dropped, list who left before step 2$/ });
     expect(current).toHaveAttribute('aria-current', 'true');
-    const sevenDays = new URL(
-      screen.getByRole('link', { name: '7 days' }).getAttribute('href') ?? '',
-      'https://x',
-    );
-    expect(sevenDays.searchParams.get('step')).toBe('2');
-    expect(sevenDays.searchParams.get('cursor')).toBeNull();
   });
 
   it('lists the people of a step in person mode, back to the newest from an older page', async () => {
@@ -298,9 +281,6 @@ describe('FunnelPage', () => {
     expect(
       within(tabs).getByRole('link', { name: 'By device' }).getAttribute('href'),
     ).not.toContain('by=');
-    expect(screen.getByRole('link', { name: '7 days' }).getAttribute('href')).toContain(
-      'by=channel',
-    );
   });
 
   it('explains there is no split per person', async () => {

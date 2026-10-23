@@ -79,8 +79,7 @@ describe('AcquisitionPage', () => {
     renderWithMessages(await renderAcquisition());
 
     expect(acquisition).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
-    expect(screen.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeInTheDocument();
-    expect(screen.getByText('Where visits to Demo Store come from')).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
   });
 
   it('shows the paid visits, the top channel, the chart and the sources', async () => {
