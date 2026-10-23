@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.33.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.32.0...v0.33.0) (2026-10-23)
+
+
+### Features
+
+* **shell:** a screen top bar that reads the screen and the period from the URL ([8e4219c](https://github.com/samuelcsantana/pyxis-web/commit/8e4219c64b2d16babfe56a77534928ad37108459))
+* **shell:** anchor the project's day on the server clock in the browser ([208ac9b](https://github.com/samuelcsantana/pyxis-web/commit/208ac9b8db78bc5fe781eca0c73b02159295a3ea))
+* **shell:** fetch a screen when the pointer rests on its link ([711bb32](https://github.com/samuelcsantana/pyxis-web/commit/711bb32fa0a102e6e3c1ba89a4ff5f3bdc61e8b7))
+* **shell:** keep one top bar mounted across the eight screens ([f609e63](https://github.com/samuelcsantana/pyxis-web/commit/f609e631e82ad059243c6c3d2045ced70bcda8b4))
+* **shell:** read a screen again in place when it comes back stale from the cache ([1247647](https://github.com/samuelcsantana/pyxis-web/commit/1247647bff7fbbb6dd92f0768dee31154a5f6226))
+* **shell:** read the screen, the period and the carried filters from an address ([bb80bae](https://github.com/samuelcsantana/pyxis-web/commit/bb80bae8ca5cbd107aeafc5fae51c528a557db38))
+
+
+### Bug Fixes
+
+* **settings:** drop the cached screens when the project changes ([4125341](https://github.com/samuelcsantana/pyxis-web/commit/412534190624df15c219deb36ea76a804622db4b))
+
+
+### Refactoring
+
+* **shell:** give the period pieces texts and formats, not the server i18n ([aabddf9](https://github.com/samuelcsantana/pyxis-web/commit/aabddf933c5a62fc80c5a3eb1472e09508ffec81))
+* **shell:** give the small helpers the browser needs modules of their own ([b7d7f12](https://github.com/samuelcsantana/pyxis-web/commit/b7d7f12c37150b3bb598f571f512bce403a7f5c2))
+
+
+### Documentation
+
+* record why a visited screen comes back from the client cache ([be2a9d1](https://github.com/samuelcsantana/pyxis-web/commit/be2a9d18934c5c405235872eda38d9db25bf4e5b))
+* record why the top bar of the eight screens stays mounted ([8b309f9](https://github.com/samuelcsantana/pyxis-web/commit/8b309f9e3689482ecf91e95044fbc429f6e4f319))
+* say that resting the pointer on a screen fetches it ahead ([3f8b5d9](https://github.com/samuelcsantana/pyxis-web/commit/3f8b5d9edccde84e9bbe02e34e3bf5f0e5e1b273))
+
 ## [0.32.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.31.0...v0.32.0) (2026-10-22)
 
 
