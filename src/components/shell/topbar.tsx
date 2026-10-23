@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { formatDayRange, type Period, rejectedRangeNotice } from '@/domain/period';
+import { formatDayRange, type Period, rangeProblemNotice } from '@/domain/period';
 import type { Formats } from '@/i18n/formats';
 import type { I18n } from '@/i18n/i18n';
 import { type KeptParameters, RANGE_NOTICE_ID } from './kept-parameters';
@@ -95,7 +95,7 @@ export function RangeNotice({ text }: RangeNoticeProps) {
 
 function rangeNoticeOf({ period, i18n }: TopbarWithPeriodProps): ReactNode {
   return period.rejected === undefined ? undefined : (
-    <RangeNotice text={rejectedRangeNotice(period.rejected, i18n)} />
+    <RangeNotice text={rangeProblemNotice(period.rejected.problem, i18n)} />
   );
 }
 

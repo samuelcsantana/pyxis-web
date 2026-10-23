@@ -1,6 +1,10 @@
 import type { ReactNode } from 'react';
 import { MainContent } from '@/components/shell/main-content';
-import { type ScreenSlug, screenLabelKey } from '@/components/shell/screens';
+import {
+  SCREENS_WITHOUT_PERIOD,
+  type ScreenSlug,
+  screenLabelKey,
+} from '@/components/shell/screens';
 import { TopbarFrame } from '@/components/shell/topbar';
 import type { I18n } from '@/i18n/i18n';
 import {
@@ -12,8 +16,6 @@ import {
   SkeletonRows,
   SkeletonSteps,
 } from './screen-skeleton';
-
-const SCREENS_WITHOUT_PERIOD: ReadonlySet<ScreenSlug> = new Set(['timeline']);
 
 const SCREEN_SKELETONS: Readonly<Record<ScreenSlug, () => ReactNode>> = {
   overview: () => (

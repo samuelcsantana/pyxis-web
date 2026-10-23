@@ -105,7 +105,10 @@ function rangeProblem(from: string, to: string, today: string): RangeProblem | u
 }
 
 export function resolvePeriod(search: PeriodSearch, timeZone: string, now: Date): Period {
-  const today = todayIn(timeZone, now);
+  return resolvePeriodOn(search, todayIn(timeZone, now));
+}
+
+export function resolvePeriodOn(search: PeriodSearch, today: string): Period {
   const range = single(search.range);
   if (isPreset(range)) {
     return presetPeriod(range, today);
@@ -135,9 +138,9 @@ function rangeProblemText(problem: RangeProblem, i18n: I18n): string {
   }
 }
 
-export function rejectedRangeNotice(rejected: RejectedRange, i18n: I18n): string {
+export function rangeProblemNotice(problem: RangeProblem, i18n: I18n): string {
   return i18n.t('period.rejectedRange', {
-    problem: rangeProblemText(rejected.problem, i18n),
+    problem: rangeProblemText(problem, i18n),
     days: String(PRESET_DAYS[DEFAULT_PERIOD_PRESET]),
   });
 }

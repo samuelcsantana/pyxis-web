@@ -8,7 +8,14 @@ import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
-import { linkWith, periodParameters, returnPathOf, screenHref, screenOf } from './screens';
+import {
+  linkWith,
+  periodParameters,
+  returnPathOf,
+  screenHref,
+  screenOf,
+  screenSlugOf,
+} from './screens';
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
@@ -67,6 +74,14 @@ describe('screens helpers', () => {
     expect(linkWith('/p1/timeline?range=7d', { user: 'u_7f3a' })).toBe(
       '/p1/timeline?range=7d&user=u_7f3a',
     );
+  });
+
+  it('name the screen of a path only when the path is exactly a project and a screen', () => {
+    expect(screenSlugOf('/p1/overview')).toBe('overview');
+    expect(screenSlugOf('/p1/acquisition')).toBe('acquisition');
+    for (const path of ['/p1/settings', '/p1/overview/extra', '//overview', '/p1', '/']) {
+      expect(screenSlugOf(path)).toBeUndefined();
+    }
   });
 
   it('accept as a return path only a screen of this site, with its query', () => {
