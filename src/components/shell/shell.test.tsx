@@ -586,7 +586,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={presetPeriod('7d', today)}
         today={today}
-        i18n={english}
+        t={english.t}
       />,
     );
 
@@ -606,7 +606,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
         today={today}
-        i18n={english}
+        t={english.t}
       />,
     );
 
@@ -636,7 +636,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        i18n={english}
+        t={english.t}
       />,
     );
 
@@ -659,7 +659,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        i18n={english}
+        t={english.t}
       />,
     );
     const day = await screen.findByRole('button', { name: 'Monday, October 5, 2026' });
@@ -682,7 +682,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        i18n={english}
+        t={english.t}
       />,
     );
 
@@ -703,7 +703,7 @@ describe('PeriodSelector with parameters of the screen', () => {
         period={presetPeriod('7d', '2026-10-05')}
         today="2026-10-05"
         keep={{ kind: 'screens', q: 'order' }}
-        i18n={english}
+        t={english.t}
       />,
     );
 

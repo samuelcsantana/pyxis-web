@@ -7,7 +7,8 @@ import {
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
-import type { I18n } from '@/i18n/i18n';
+import type { ClientSourceMessages } from '@/i18n/messages';
+import type { Translator } from '@/i18n/translate';
 import { LazyRangeCalendar } from './lazy-range-calendar';
 import { PeriodPresets } from './period-presets';
 
@@ -18,7 +19,7 @@ export interface PeriodSelectorProps {
   readonly period: Period;
   readonly today: string;
   readonly keep?: KeptParameters;
-  readonly i18n: I18n;
+  readonly t: Translator<ClientSourceMessages>;
 }
 
 const NOTHING_KEPT: KeptParameters = {};
@@ -48,18 +49,18 @@ export function PeriodSelector({
   period,
   today,
   keep = NOTHING_KEPT,
-  i18n,
+  t,
 }: PeriodSelectorProps) {
   const custom = period.preset === 'custom';
   const shown = period.rejected ?? period;
   return (
     <div className="flex flex-wrap items-center gap-2">
       <PeriodPresets
-        label={i18n.t('periodSelector.label')}
+        label={t('periodSelector.label')}
         current={period.preset}
         links={PRESETS.map((preset) => ({
           preset,
-          label: i18n.t(PRESET_LABELS[preset]),
+          label: t(PRESET_LABELS[preset]),
           href: `${basePath}?${withKeptParameters(periodQuery(presetPeriod(preset, today)), keep)}`,
         }))}
       />
@@ -71,7 +72,7 @@ export function PeriodSelector({
         <summary
           className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SEGMENTED_SELECTED : `bg-soft ${SEGMENTED_IDLE}`}`}
         >
-          {i18n.t('periodSelector.custom')}
+          {t('periodSelector.custom')}
         </summary>
         <Form
           action={basePath}
