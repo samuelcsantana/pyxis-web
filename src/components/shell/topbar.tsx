@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { formatPeriod, type Period, rejectedRangeNotice } from '@/domain/period';
+import { formatDayRange, type Period, rejectedRangeNotice } from '@/domain/period';
+import type { Formats } from '@/i18n/formats';
 import type { I18n } from '@/i18n/i18n';
 import { type KeptParameters, PeriodSelector, RANGE_NOTICE_ID } from './period-selector';
 
@@ -24,7 +25,12 @@ export type TopbarProps = TopbarWithPeriodProps | WithoutPeriod;
 
 const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
-function PeriodLabel({ period, i18n }: { readonly period: Period; readonly i18n: I18n }) {
+export interface PeriodLabelProps {
+  readonly period: Period;
+  readonly format: Formats;
+}
+
+export function PeriodLabel({ period, format }: PeriodLabelProps) {
   return (
     <span className="inline-flex shrink-0 items-center gap-1.5">
       <svg width={16} height={16} viewBox="0 0 24 24" aria-hidden="true">
@@ -37,7 +43,7 @@ function PeriodLabel({ period, i18n }: { readonly period: Period; readonly i18n:
           strokeLinejoin="round"
         />
       </svg>
-      <span className="tabular-nums">{formatPeriod(period, i18n)}</span>
+      <span className="tabular-nums">{formatDayRange(period.from, period.to, format)}</span>
     </span>
   );
 }
@@ -70,43 +76,46 @@ export function TopbarFrame({ title, subtitle, context, controls, notice }: Topb
   );
 }
 
-function RangeNotice(props: TopbarProps) {
-  const rejected = props.period?.rejected;
-  if (props.period === undefined || rejected === undefined) {
-    return null;
-  }
+export interface RangeNoticeProps {
+  readonly text: string;
+}
+
+export function RangeNotice({ text }: RangeNoticeProps) {
   return (
     <p
       id={RANGE_NOTICE_ID}
       role="status"
       className="mt-1 rounded-input bg-bad-soft px-3 py-2 text-caption text-bad"
     >
-      {rejectedRangeNotice(rejected, props.i18n)}
+      {text}
     </p>
   );
 }
 
+function rangeNoticeOf({ period, i18n }: TopbarWithPeriodProps): ReactNode {
+  return period.rejected === undefined ? undefined : (
+    <RangeNotice text={rejectedRangeNotice(period.rejected, i18n)} />
+  );
+}
+
 export function Topbar(props: TopbarProps) {
+  if (props.period === undefined) {
+    return <TopbarFrame title={props.title} subtitle={props.subtitle} controls={null} />;
+  }
   return (
     <TopbarFrame
       title={props.title}
       subtitle={props.subtitle}
-      context={
-        props.period === undefined ? undefined : (
-          <PeriodLabel period={props.period} i18n={props.i18n} />
-        )
-      }
-      notice={<RangeNotice {...props} />}
+      context={<PeriodLabel period={props.period} format={props.i18n.format} />}
+      notice={rangeNoticeOf(props)}
       controls={
-        props.period === undefined ? null : (
-          <PeriodSelector
-            basePath={props.basePath}
-            period={props.period}
-            today={props.today}
-            keep={props.keep}
-            i18n={props.i18n}
-          />
-        )
+        <PeriodSelector
+          basePath={props.basePath}
+          period={props.period}
+          today={props.today}
+          keep={props.keep}
+          t={props.i18n.t}
+        />
       }
     />
   );
