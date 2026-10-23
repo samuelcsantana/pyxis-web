@@ -4,10 +4,9 @@ import { FunnelModes } from '@/components/funnel/funnel-modes';
 import { FunnelSegmentsPanel } from '@/components/funnel/funnel-segments-panel';
 import { FunnelSteps } from '@/components/funnel/funnel-steps';
 import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
-import { MainContent } from '@/components/shell/main-content';
+import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
-import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { Topbar } from '@/components/shell/topbar';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { StatCard } from '@/components/ui/stat-card';
 import {
   biggestDropOff,
@@ -39,13 +38,7 @@ import {
   funnelSegmentDimensionOf,
   SEGMENT_PARAMETER,
 } from '@/domain/funnel-segments';
-import {
-  describePeriod,
-  type PeriodSearch,
-  periodQuery,
-  resolvePeriod,
-  todayIn,
-} from '@/domain/period';
+import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
@@ -116,90 +109,79 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
     `${linkTo({ ...kept, ...parameters })}#${FUNNEL_SUBJECTS_ID}`;
   const i18n = await getI18n();
   return (
-    <>
-      <Topbar
-        title={i18n.t(screenLabelKey('funnel'))}
-        subtitle={i18n.t('funnel.page.subtitle', { project: project.name })}
-        basePath={basePath}
-        period={period}
-        today={todayIn(project.timezone, now)}
-        keep={{ ...kept, ...drillKept(drill) }}
-        i18n={i18n}
+    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <FunnelModes
+        current={mode}
+        label={i18n.t('funnel.page.countBy')}
+        links={FUNNEL_MODES.map((target) => ({
+          mode: target,
+          label: i18n.t(`funnel.page.modes.${target}`),
+          href: linkTo({ ...kept, mode: target, ...drillKept(drill) }),
+        }))}
       />
-      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
-        <FunnelModes
-          current={mode}
-          label={i18n.t('funnel.page.countBy')}
-          links={FUNNEL_MODES.map((target) => ({
-            mode: target,
-            label: i18n.t(`funnel.page.modes.${target}`),
-            href: linkTo({ ...kept, mode: target, ...drillKept(drill) }),
-          }))}
-        />
-        {steps === null || report === null ? (
-          <>
-            <BuildAFunnel
-              exampleHref={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
-              i18n={i18n}
-            />
-            <FunnelEditor initialSteps={NEW_FUNNEL} action={basePath} keep={editorKeep} startOpen />
-          </>
-        ) : (
-          <>
-            <FunnelReportView
-              counted={countedSteps(steps, report)}
-              secondsToFinish={report.medianSecondsOverall}
-              mode={mode}
-              i18n={i18n}
-              drill={drill}
-              drillHref={(step, outcome) => drillHref(drillParameters(step, outcome))}
-              subjects={
-                drilled === null ? null : (
-                  <FunnelSubjects
-                    view={funnelSubjectsView(
-                      drilled.page,
-                      drillHeading(
-                        countedSteps(steps, report).map((step) => step.count),
-                        drilled.drill,
-                        mode,
-                        i18n,
-                      ),
+      {steps === null || report === null ? (
+        <>
+          <BuildAFunnel
+            exampleHref={linkTo({ mode, steps: serializeSteps(DEMO_FUNNEL_STEPS) })}
+            i18n={i18n}
+          />
+          <FunnelEditor initialSteps={NEW_FUNNEL} action={basePath} keep={editorKeep} startOpen />
+        </>
+      ) : (
+        <>
+          <FunnelReportView
+            counted={countedSteps(steps, report)}
+            secondsToFinish={report.medianSecondsOverall}
+            mode={mode}
+            i18n={i18n}
+            drill={drill}
+            drillHref={(step, outcome) => drillHref(drillParameters(step, outcome))}
+            subjects={
+              drilled === null ? null : (
+                <FunnelSubjects
+                  view={funnelSubjectsView(
+                    drilled.page,
+                    drillHeading(
+                      countedSteps(steps, report).map((step) => step.count),
+                      drilled.drill,
                       mode,
-                      project.timezone,
-                      (lookup) =>
-                        linkWith(screenHref(project.id, 'timeline', periodQuery(period)), lookup),
                       i18n,
-                    )}
-                    olderHref={olderHref(drilled.page, drilled.drill, drillHref)}
-                    newestHref={newestHref(drilled.drill, drillHref)}
-                    closeHref={linkTo(kept)}
-                  />
-                )
-              }
-              editor={
-                <FunnelEditor
-                  key={serializeSteps(steps)}
-                  initialSteps={steps}
-                  action={basePath}
-                  keep={editorKeep}
-                  startOpen={false}
+                    ),
+                    mode,
+                    project.timezone,
+                    (lookup) =>
+                      linkWith(screenHref(project.id, 'timeline', periodQuery(period)), lookup),
+                    i18n,
+                  )}
+                  olderHref={olderHref(drilled.page, drilled.drill, drillHref)}
+                  newestHref={newestHref(drilled.drill, drillHref)}
+                  closeHref={linkTo(kept)}
                 />
-              }
-            />
-            <FunnelSegmentsPanel
-              by={by}
-              report={segments}
-              stepCount={steps.length}
-              periodLabel={describePeriod(period, i18n)}
-              hrefOf={(target) =>
-                `${linkTo({ mode, ...stepsParameter(steps), ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
-              }
-              i18n={i18n}
-            />
-          </>
-        )}
-      </MainContent>
-    </>
+              )
+            }
+            editor={
+              <FunnelEditor
+                key={serializeSteps(steps)}
+                initialSteps={steps}
+                action={basePath}
+                keep={editorKeep}
+                startOpen={false}
+              />
+            }
+          />
+          <FunnelSegmentsPanel
+            by={by}
+            report={segments}
+            stepCount={steps.length}
+            periodLabel={describePeriod(period, i18n)}
+            hrefOf={(target) =>
+              `${linkTo({ mode, ...stepsParameter(steps), ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
+            }
+            i18n={i18n}
+          />
+        </>
+      )}
+    </ScreenContent>
   );
 }
 

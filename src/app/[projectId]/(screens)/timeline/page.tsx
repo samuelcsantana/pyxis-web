@@ -1,6 +1,5 @@
-import { MainContent } from '@/components/shell/main-content';
-import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { Topbar } from '@/components/shell/topbar';
+import { ScreenContent } from '@/components/shell/screen-content';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { LookUpPrompt, NoVisitsFound } from '@/components/timeline/timeline-empty-states';
 import { TimelineFilters } from '@/components/timeline/timeline-filters';
 import { TimelineSearch } from '@/components/timeline/timeline-search';
@@ -134,38 +133,30 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
       ? null
       : await readOrSignIn(() => createTimelineService().timeline(project.id, lookup, null));
   return (
-    <>
-      <Topbar
-        title={i18n.t(screenLabelKey('timeline'))}
-        subtitle={i18n.t('timeline.page.subtitle', { project: project.name })}
+    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <TimelineSearch
+        key={searchKey(lookup, rejected)}
+        action={basePath}
+        lookup={lookup}
+        rejected={rejected}
+        hint={demoPerson === null ? null : i18n.t('timeline.page.tryPerson', { user: demoPerson })}
+        keep={keptPeriod}
+        text={timelineSearchText(i18n)}
       />
-      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
-        <TimelineSearch
-          key={searchKey(lookup, rejected)}
-          action={basePath}
+      {lookup === null || report === null ? (
+        <LookUpPrompt demoPerson={demoPersonLink} i18n={i18n} />
+      ) : (
+        <TimelineView
+          projectId={project.id}
           lookup={lookup}
-          rejected={rejected}
-          hint={
-            demoPerson === null ? null : i18n.t('timeline.page.tryPerson', { user: demoPerson })
-          }
-          keep={keptPeriod}
-          text={timelineSearchText(i18n)}
+          report={report}
+          filter={filter}
+          basePath={basePath}
+          timeZone={project.timezone}
+          keptPeriod={keptPeriod}
+          i18n={i18n}
         />
-        {lookup === null || report === null ? (
-          <LookUpPrompt demoPerson={demoPersonLink} i18n={i18n} />
-        ) : (
-          <TimelineView
-            projectId={project.id}
-            lookup={lookup}
-            report={report}
-            filter={filter}
-            basePath={basePath}
-            timeZone={project.timezone}
-            keptPeriod={keptPeriod}
-            i18n={i18n}
-          />
-        )}
-      </MainContent>
-    </>
+      )}
+    </ScreenContent>
   );
 }

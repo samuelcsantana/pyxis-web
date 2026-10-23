@@ -1,10 +1,9 @@
 import { CampaignsTable } from '@/components/acquisition/campaigns-table';
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
-import { MainContent } from '@/components/shell/main-content';
+import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
-import { linkWith, screenHref, screenLabelKey } from '@/components/shell/screens';
-import { Topbar } from '@/components/shell/topbar';
+import { linkWith, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
@@ -26,7 +25,6 @@ import {
   type PeriodSearch,
   periodQuery,
   resolvePeriod,
-  todayIn,
 } from '@/domain/period';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
@@ -118,37 +116,25 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
   const i18n = await getI18n();
   const visitsPath = screenHref(project.id, 'visits', periodQuery(period));
   return (
-    <>
-      <Topbar
-        title={i18n.t(screenLabelKey('acquisition'))}
-        subtitle={i18n.t('acquisition.subtitle', { project: project.name })}
-        basePath={screenHref(project.id, 'acquisition')}
-        period={period}
-        today={todayIn(project.timezone, now)}
-        i18n={i18n}
-      />
-      <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
-        {visitsTotal(report.days) > 0 ? (
-          <AcquisitionReportView
-            report={report}
-            period={period}
-            downloads={acquisitionDownloads(project.id, period, i18n)}
-            channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
-            sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
-            campaignVisitsHref={({ campaign, source }) =>
-              linkWith(visitsPath, { campaign, source })
-            }
-            i18n={i18n}
-          />
-        ) : (
-          <EmptyPeriod
-            view={emptyPeriodView(project, period, i18n)}
-            widerPeriodHref={screenHref(project.id, 'acquisition', WIDER_PERIOD_QUERY)}
-            endpoint={apiBaseUrl()}
-            i18n={i18n}
-          />
-        )}
-      </MainContent>
-    </>
+    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      {visitsTotal(report.days) > 0 ? (
+        <AcquisitionReportView
+          report={report}
+          period={period}
+          downloads={acquisitionDownloads(project.id, period, i18n)}
+          channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
+          sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
+          campaignVisitsHref={({ campaign, source }) => linkWith(visitsPath, { campaign, source })}
+          i18n={i18n}
+        />
+      ) : (
+        <EmptyPeriod
+          view={emptyPeriodView(project, period, i18n)}
+          widerPeriodHref={screenHref(project.id, 'acquisition', WIDER_PERIOD_QUERY)}
+          endpoint={apiBaseUrl()}
+          i18n={i18n}
+        />
+      )}
+    </ScreenContent>
   );
 }

@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react';
-import { MainContent } from '@/components/shell/main-content';
-import {
-  SCREENS_WITHOUT_PERIOD,
-  type ScreenSlug,
-  screenLabelKey,
-} from '@/components/shell/screens';
-import { TopbarFrame } from '@/components/shell/topbar';
+import { ScreenContent } from '@/components/shell/screen-content';
+import { type ScreenSlug, screenLabelKey } from '@/components/shell/screens';
 import type { I18n } from '@/i18n/i18n';
 import {
   SkeletonCards,
@@ -71,15 +66,6 @@ const SCREEN_SKELETONS: Readonly<Record<ScreenSlug, () => ReactNode>> = {
   ),
 };
 
-function PeriodPlaceholder() {
-  return (
-    <span
-      aria-hidden="true"
-      className="h-9 w-72 max-w-full rounded-pill bg-grid motion-safe:animate-pulse"
-    />
-  );
-}
-
 export interface ScreenLoadingProps {
   readonly screen: ScreenSlug;
   readonly i18n: I18n;
@@ -88,28 +74,16 @@ export interface ScreenLoadingProps {
 export function ScreenLoading({ screen, i18n }: ScreenLoadingProps) {
   const label = i18n.t(screenLabelKey(screen));
   return (
-    <>
-      <TopbarFrame
-        title={label}
-        subtitle={
-          <span
-            aria-hidden="true"
-            className="inline-block h-3 w-56 max-w-full rounded-chip bg-grid motion-safe:animate-pulse"
-          />
-        }
-        controls={<>{SCREENS_WITHOUT_PERIOD.has(screen) ? null : <PeriodPlaceholder />}</>}
-      />
-      <MainContent
-        aria-busy="true"
-        className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
-      >
-        <p role="status" className="text-sm text-muted">
-          {i18n.t('screens.loading', { screen: label })}
-        </p>
-        <div aria-hidden="true" className="flex flex-col gap-3.5 sm:gap-5">
-          {SCREEN_SKELETONS[screen]()}
-        </div>
-      </MainContent>
-    </>
+    <ScreenContent
+      aria-busy="true"
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+    >
+      <p role="status" className="text-sm text-muted">
+        {i18n.t('screens.loading', { screen: label })}
+      </p>
+      <div aria-hidden="true" className="flex flex-col gap-3.5 sm:gap-5">
+        {SCREEN_SKELETONS[screen]()}
+      </div>
+    </ScreenContent>
   );
 }

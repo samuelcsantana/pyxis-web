@@ -9,7 +9,8 @@ import type { IOverviewService } from '@/services/overview/overview-service.inte
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import ProjectError from './error';
 import ProjectLayout from './layout';
-import OverviewPage from './overview/page';
+import ScreensLayout from './(screens)/layout';
+import OverviewPage from './(screens)/overview/page';
 
 const state = vi.hoisted<{
   admin: unknown;
@@ -191,6 +192,33 @@ describe('ProjectLayout', () => {
   });
 });
 
+describe('ScreensLayout', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(LATE_EVENING_IN_SAO_PAULO);
+  });
+
+  it('puts the top bar of the screen above it, in the calendar of the project', async () => {
+    renderWithMessages(
+      await ScreensLayout({
+        children: <p>screen</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
+    expect(screen.getByText('How Demo Store was used in the period')).toBeInTheDocument();
+    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
+    expect(screen.getByText('screen')).toBeInTheDocument();
+  });
+
+  it('answers not found for a project the admin may not read', async () => {
+    await expect(
+      ScreensLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),
+    ).rejects.toThrow('not-found');
+  });
+});
+
 describe('OverviewPage', () => {
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ['Date'] });
@@ -206,8 +234,8 @@ describe('OverviewPage', () => {
     renderWithMessages(await renderOverview());
 
     expect(overview).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
-    expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
-    expect(screen.getByText('Sep 29 – Oct 5, 2026')).toBeInTheDocument();
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
   it('shows the figures, the daily chart and the top pages and events', async () => {
@@ -269,21 +297,16 @@ describe('OverviewPage', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('plots the figure the address names, and keeps it when the period changes', async () => {
+  it('plots the figure the address names', async () => {
     renderWithMessages(await renderOverview({ range: '7d', metric: 'visits' }));
 
     expect(screen.getByRole('region', { name: 'Visits per day' })).toHaveTextContent(
       'Visits, last 7 days',
     );
     expect(screen.getByRole('button', { name: 'Visits' })).toHaveAttribute('aria-pressed');
-    const periods = within(screen.getByRole('navigation', { name: 'Period' }));
-    expect(periods.getByRole('link', { name: '30 days' })).toHaveAttribute(
-      'href',
-      '/p-store/overview?range=30d&metric=visits',
-    );
   });
 
-  it('plots the activity and keeps no figure for a figure without a card', async () => {
+  it('plots the activity for a figure without a card', async () => {
     state.admin = {
       ...ADMIN,
       projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
@@ -292,11 +315,7 @@ describe('OverviewPage', () => {
     renderWithMessages(await renderOverview({ range: '7d', metric: 'conversions' }));
 
     expect(screen.getByRole('region', { name: 'Activity per day' })).toBeInTheDocument();
-    const periods = within(screen.getByRole('navigation', { name: 'Period' }));
-    expect(periods.getByRole('link', { name: '30 days' })).toHaveAttribute(
-      'href',
-      '/p-store/overview?range=30d',
-    );
+    expect(screen.queryByRole('region', { name: 'Conversions per day' })).not.toBeInTheDocument();
   });
 
   it('links the top pages and events to their visits in the same period', async () => {
