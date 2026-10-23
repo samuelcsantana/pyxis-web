@@ -1,7 +1,12 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PHONES_KEEP_ONLY_THEIR_MENU_BAR = 'On a phone the header scrolls away under the menu bar.';
+const ONLY_PHONES_HAVE_A_MENU_BAR = 'A desktop shows the sidebar instead of the menu bar.';
+const PHONE_VIEWPORT = { width: 390, height: 844 };
+const FAR_DOWN_PX = 900;
+const SCROLL_PLACES = ['inside the banner', 'inside the header', 'far down'] as const;
+type ScrollPlace = (typeof SCROLL_PLACES)[number];
 
 test.use({
   viewport: { width: 1280, height: 800 },
@@ -120,4 +125,56 @@ test('brings a control that takes the focus out from under the header', async ({
   const header = await page.getByRole('banner').boundingBox();
   const focused = await control.boundingBox();
   expect(focused?.y).toBeGreaterThanOrEqual((header?.y ?? 0) + (header?.height ?? 0));
+});
+
+function heightOf(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => element.getBoundingClientRect().height);
+}
+
+async function scrollOffsetOf(page: Page, place: ScrollPlace): Promise<number> {
+  const banner = await heightOf(page.getByRole('complementary', { name: 'Demo notice' }));
+  const header = await heightOf(page.getByRole('banner'));
+  switch (place) {
+    case 'inside the banner':
+      return Math.floor(banner / 2);
+    case 'inside the header':
+      return Math.floor(banner + header / 2);
+    case 'far down':
+      return FAR_DOWN_PX;
+  }
+}
+
+function bottomOf(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => element.getBoundingClientRect().bottom);
+}
+
+function topOf(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => element.getBoundingClientRect().top);
+}
+
+test.describe('on a phone', () => {
+  test.use({ viewport: PHONE_VIEWPORT });
+
+  for (const place of SCROLL_PLACES) {
+    test(`opens the next screen with its whole header below the menu bar, scrolled ${place}`, async ({
+      page,
+      isMobile,
+    }) => {
+      test.skip(!isMobile, ONLY_PHONES_HAVE_A_MENU_BAR);
+      await openScreen(page, 'overview');
+      const offset = await scrollOffsetOf(page, place);
+      await page.evaluate((top) => {
+        window.scrollTo({ top, behavior: 'instant' });
+      }, offset);
+      await expect.poll(() => pageScroll(page)).toBe(offset);
+
+      await page.getByRole('button', { name: 'Open menu' }).click();
+      await page.getByRole('link', { name: 'Acquisition', exact: true }).click();
+
+      await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
+      await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+      const menuBar = await bottomOf(page.getByRole('navigation', { name: 'Main navigation' }));
+      await expect.poll(() => topOf(page.getByRole('banner'))).toBeGreaterThanOrEqual(menuBar);
+    });
+  }
 });
