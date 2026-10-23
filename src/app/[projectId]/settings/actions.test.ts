@@ -93,6 +93,14 @@ vi.mock('@/services/sessions/sessions-service.factory', () => ({
   }),
 }));
 
+const revalidated = vi.hoisted(() => ({ paths: [] as (readonly [string, string | undefined])[] }));
+
+vi.mock('next/cache', () => ({
+  revalidatePath: (path: string, type?: string) => {
+    revalidated.paths.push([path, type]);
+  },
+}));
+
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
   headers: () => Promise.resolve(new Headers()),
@@ -371,10 +379,14 @@ describe('the owner managing a project', () => {
       update: overrides.update ?? mocks.update,
       createKey: mocks.createKey,
       revokeKey: mocks.revokeKey,
-      delete: mocks.delete,
+      delete: overrides.delete ?? mocks.delete,
     };
     return mocks;
   }
+
+  beforeEach(() => {
+    revalidated.paths.length = 0;
+  });
 
   it('passes each change of a readable project to the API', async () => {
     const service = management({});
@@ -387,6 +399,25 @@ describe('the owner managing a project', () => {
     expect(service.createKey).toHaveBeenCalledWith('p-store', 'secret');
     expect(service.revokeKey).toHaveBeenCalledWith('p-store', KEY_ID);
     expect(service.delete).toHaveBeenCalledWith('p-store', 'Demo Store');
+    expect(revalidated.paths).toEqual([
+      ['/[projectId]', 'layout'],
+      ['/[projectId]', 'layout'],
+    ]);
+  });
+
+  it('drops no visited screen when the API kept the project as it was', async () => {
+    management({
+      update: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      delete: () => Promise.resolve({ kind: 'deletionOnHold' }),
+    });
+
+    await expect(updateProject('p-store', CHANGES)).resolves.toEqual({
+      kind: 'subscriptionRequired',
+    });
+    await expect(deleteProject('p-store', 'Demo Store')).resolves.toEqual({
+      kind: 'deletionOnHold',
+    });
+    expect(revalidated.paths).toEqual([]);
   });
 
   it('answers not found for a project the admin cannot read, changing nothing', async () => {
