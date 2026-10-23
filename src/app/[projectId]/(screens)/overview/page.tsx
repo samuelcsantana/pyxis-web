@@ -160,7 +160,10 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
     kpis.map((kpi) => kpi.id),
   );
   return (
-    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12">
+    <ScreenContent
+      readAt={now.getTime()}
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12"
+    >
       {hasActivity(report) ? (
         <OverviewReportView
           report={report}

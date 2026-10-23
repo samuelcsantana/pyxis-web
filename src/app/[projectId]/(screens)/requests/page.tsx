@@ -115,7 +115,10 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
   const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
   const i18n = await getI18n();
   return (
-    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+    <ScreenContent
+      readAt={now.getTime()}
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+    >
       <LinkTabs
         label={i18n.t('requests.page.kinds.label')}
         current={kind}

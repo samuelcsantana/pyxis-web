@@ -53,7 +53,10 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
   const i18n = await getI18n();
   return (
-    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+    <ScreenContent
+      readAt={now.getTime()}
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+    >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <FeatureTabs
           current={kind}

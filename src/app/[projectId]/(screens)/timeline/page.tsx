@@ -115,6 +115,7 @@ function TimelineView({
 }
 
 export default async function TimelinePage({ params, searchParams }: TimelinePageProps) {
+  const readAt = new Date().getTime();
   const { project } = await projectOrNotFound((await params).projectId);
   const search = await searchParams;
   const i18n = await getI18n();
@@ -133,7 +134,10 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
       ? null
       : await readOrSignIn(() => createTimelineService().timeline(project.id, lookup, null));
   return (
-    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+    <ScreenContent
+      readAt={readAt}
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+    >
       <TimelineSearch
         key={searchKey(lookup, rejected)}
         action={basePath}
