@@ -226,7 +226,10 @@ Shipping now:
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
-  screen loads only its content shows a skeleton shaped like it; a change of period, tab, filter,
+  screen loads only its content shows a skeleton shaped like it; a screen visited in the last five
+  minutes comes back at once from the browser's cache, and is read again in place when it is more
+  than 20 seconds old ([ADR 0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md));
+  a change of period, tab, filter,
   screen or Overview chart figure marks the clicked link or KPI card with a bar from the first
   frame and the content busy
   (`aria-busy`, a thin bar along its top) until the server answers; the filter and search forms
@@ -656,7 +659,9 @@ layout ([ADR 0012](docs/adr/0012-persistent-screen-topbar.md)) put the period co
 in the browser: 166.0 KiB on Overview (0.3 KiB more than before it) and 168.8 KiB on Requests. In
 the same change the pages stopped importing the period selector's module for a URL helper, so
 the routes without a selector no longer load its client components (Settings 165.7 KiB, 2.4 KiB
-less).
+less). Keeping visited screens in the client cache and reading a stale one again
+([ADR 0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md)) took Overview to
+166.8 KiB and Requests to 169.6 KiB.
 
 ## Project structure
 
@@ -751,20 +756,21 @@ docs/adr/           architecture decision records
 
 ## Architecture decisions
 
-| ADR                                                                | Decision                                                          |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [0001](docs/adr/0001-record-architecture-decisions.md)             | Record architecture decisions                                     |
-| [0002](docs/adr/0002-server-components-and-services.md)            | Server Components reading through service interfaces              |
-| [0003](docs/adr/0003-csp-without-nonces.md)                        | A Content Security Policy without nonces                          |
-| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md) | Request state of Client Components with rx-state-bridge           |
-| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)     | Charts with Recharts, each with a table view (superseded by 0006) |
-| [0006](docs/adr/0006-server-rendered-svg-charts.md)                | Charts drawn as SVG on the server, each with a table view         |
-| [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)    | Interface languages with typed dictionaries, a cookie and Intl    |
-| [0008](docs/adr/0008-host-only-session-cookie.md)                  | Keep the session in a host-only cookie set by a Server Action     |
-| [0009](docs/adr/0009-csp-with-nonces.md)                           | A Content Security Policy with a nonce per request                |
-| [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)     | Home page language kept on the device, and the browser's at `/`   |
-| [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)     | Courtesy translations of the contract, the Portuguese prevailing  |
-| [0012](docs/adr/0012-persistent-screen-topbar.md)                  | The top bar of the eight screens stays mounted between them       |
+| ADR                                                                        | Decision                                                          |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [0001](docs/adr/0001-record-architecture-decisions.md)                     | Record architecture decisions                                     |
+| [0002](docs/adr/0002-server-components-and-services.md)                    | Server Components reading through service interfaces              |
+| [0003](docs/adr/0003-csp-without-nonces.md)                                | A Content Security Policy without nonces                          |
+| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md)         | Request state of Client Components with rx-state-bridge           |
+| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)             | Charts with Recharts, each with a table view (superseded by 0006) |
+| [0006](docs/adr/0006-server-rendered-svg-charts.md)                        | Charts drawn as SVG on the server, each with a table view         |
+| [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)            | Interface languages with typed dictionaries, a cookie and Intl    |
+| [0008](docs/adr/0008-host-only-session-cookie.md)                          | Keep the session in a host-only cookie set by a Server Action     |
+| [0009](docs/adr/0009-csp-with-nonces.md)                                   | A Content Security Policy with a nonce per request                |
+| [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)             | Home page language kept on the device, and the browser's at `/`   |
+| [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)             | Courtesy translations of the contract, the Portuguese prevailing  |
+| [0012](docs/adr/0012-persistent-screen-topbar.md)                          | The top bar of the eight screens stays mounted between them       |
+| [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
 
 ## Roadmap
 
