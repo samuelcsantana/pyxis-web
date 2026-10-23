@@ -133,7 +133,10 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   };
   const regionVisitsHref = (region: string) => linkWith(visitsHref, { region });
   return (
-    <ScreenContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+    <ScreenContent
+      readAt={now.getTime()}
+      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+    >
       {hasVisits(report) ? (
         <DevicesReportView
           report={report}
