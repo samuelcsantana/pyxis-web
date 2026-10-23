@@ -223,8 +223,10 @@ Shipping now:
   (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`), starts with a UTF-8 byte order mark so
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
-- Loading, empty and error states shared by every screen; while a screen loads, its top bar
-  already shows its title above a skeleton shaped like it; a change of period, tab, filter,
+- Loading, empty and error states shared by every screen; the top bar of the eight screens lives
+  in their layout and stays in place between them (the same element, with its title, subtitle,
+  period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
+  screen loads only its content shows a skeleton shaped like it; a change of period, tab, filter,
   screen or Overview chart figure marks the clicked link or KPI card with a bar from the first
   frame and the content busy
   (`aria-busy`, a thin bar along its top) until the server answers; the filter and search forms
@@ -429,7 +431,10 @@ flowchart LR
 Pages read data on the server through service interfaces; the browser calls the API only to ask
 for and verify a sign-in code, and hands the token it gets back to a Server Action that keeps it in
 a cookie of this host ([ADR 0002](docs/adr/0002-server-components-and-services.md),
-[ADR 0008](docs/adr/0008-host-only-session-cookie.md)).
+[ADR 0008](docs/adr/0008-host-only-session-cookie.md)). The eight screens of the menu share a
+layout, `src/app/[projectId]/(screens)/layout.tsx`, whose top bar is a Client Component that reads
+the URL and stays mounted from one screen to the next
+([ADR 0012](docs/adr/0012-persistent-screen-topbar.md)).
 
 ## Tech stack
 
@@ -646,7 +651,12 @@ cells, the terms and the Checkout step (its answers are read without a schema li
 sign-in's are, which took it down from 251 KiB). The chart budget went to 167 KiB in the same pull
 request: with the sign-up page sharing part of the dashboard's shell, the bundler split a shared
 chunk in two, and the two halves compress 1.1 KiB worse on every dashboard screen (166.6 KiB on
-Overview) without any code added to them.
+Overview) without any code added to them. Moving the top bar of the eight screens into their
+layout ([ADR 0012](docs/adr/0012-persistent-screen-topbar.md)) put the period code and the header
+in the browser: 166.0 KiB on Overview (0.3 KiB more than before it) and 168.8 KiB on Requests. In
+the same change the pages stopped importing the period selector's module for a URL helper, so
+the routes without a selector no longer load its client components (Settings 165.7 KiB, 2.4 KiB
+less).
 
 ## Project structure
 
@@ -754,6 +764,7 @@ docs/adr/           architecture decision records
 | [0009](docs/adr/0009-csp-with-nonces.md)                           | A Content Security Policy with a nonce per request                |
 | [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)     | Home page language kept on the device, and the browser's at `/`   |
 | [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)     | Courtesy translations of the contract, the Portuguese prevailing  |
+| [0012](docs/adr/0012-persistent-screen-topbar.md)                  | The top bar of the eight screens stays mounted between them       |
 
 ## Roadmap
 
