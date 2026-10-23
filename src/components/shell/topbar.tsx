@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { formatDayRange, type Period, rangeProblemNotice } from '@/domain/period';
-import type { Formats } from '@/i18n/formats';
+import type { DayFormats } from '@/i18n/day-formats';
 import type { I18n } from '@/i18n/i18n';
 import { type KeptParameters, RANGE_NOTICE_ID } from './kept-parameters';
 import { PeriodSelector } from './period-selector';
@@ -28,7 +28,7 @@ const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
 export interface PeriodLabelProps {
   readonly period: Period;
-  readonly format: Formats;
+  readonly format: DayFormats;
 }
 
 export function PeriodLabel({ period, format }: PeriodLabelProps) {
@@ -44,7 +44,9 @@ export function PeriodLabel({ period, format }: PeriodLabelProps) {
           strokeLinejoin="round"
         />
       </svg>
-      <span className="tabular-nums">{formatDayRange(period.from, period.to, format)}</span>
+      <span className="tabular-nums" suppressHydrationWarning>
+        {formatDayRange(period.from, period.to, format)}
+      </span>
     </span>
   );
 }

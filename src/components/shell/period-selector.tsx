@@ -54,7 +54,7 @@ export function PeriodSelector({
         }))}
       />
       <DismissableDetails
-        key={`${period.preset}:${shown.from}:${shown.to}`}
+        key={`${basePath}:${period.preset}:${shown.from}:${shown.to}`}
         defaultOpen={period.rejected !== undefined}
         className="group relative max-sm:open:basis-full"
       >
