@@ -1,5 +1,5 @@
 import { MainContent } from '@/components/shell/main-content';
-import { withKeptParameters } from '@/components/shell/period-selector';
+import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { screenHref, screenLabelKey } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { CsvDownloads } from '@/components/ui/csv-downloads';

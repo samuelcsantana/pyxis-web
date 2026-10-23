@@ -19,7 +19,7 @@ import {
   shownRange,
 } from '@/domain/range-calendar';
 import { createFormats } from '@/i18n/formats';
-import { displayTag } from '@/i18n/i18n';
+import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
 
 export interface RangeCalendarProps {

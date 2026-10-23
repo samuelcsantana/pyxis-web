@@ -1,5 +1,5 @@
 import { Marked } from 'marked';
-import { displayTag } from '@/i18n/i18n';
+import { displayTag } from '@/i18n/display-tag';
 import type { Locale } from '@/i18n/locales';
 import { type LegalConfig, TERMS_VERSION } from './legal-config';
 

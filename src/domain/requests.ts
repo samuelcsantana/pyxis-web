@@ -1,30 +1,24 @@
 import type { I18n } from '@/i18n/i18n';
 import { barWidth, formatCount, formatPercent, rate } from './metrics';
-import type { REQUEST_KINDS, RequestsReport, RequestsWire } from './requests.schema';
+import { FAILED_READS, type RequestKind, type RequestKindSearch } from './request-kind';
+import type { RequestsReport, RequestsWire } from './requests.schema';
 
 export type { RequestsReport, RequestsWire };
-
-export type RequestKind = (typeof REQUEST_KINDS)[number];
+export { FAILED_READS, requestKindOf, type RequestKind } from './request-kind';
 
 export type RouteReport = RequestsReport['routes'][number];
 
 export const MAX_SCREEN_LENGTH = 256;
 export const FAILING_ONLY = 'failing';
-export const FAILED_READS: RequestKind = 'reads';
 const VISIT_ID_LENGTH = 8;
 
-export interface RequestsSearch {
-  readonly kind?: string | string[];
+export interface RequestsSearch extends RequestKindSearch {
   readonly show?: string | string[];
   readonly screen?: string | string[];
 }
 
 function single(value: string | string[] | undefined): string | undefined {
   return typeof value === 'string' ? value : undefined;
-}
-
-export function requestKindOf(search: RequestsSearch): RequestKind {
-  return single(search.kind) === FAILED_READS ? FAILED_READS : 'writes';
 }
 
 export function failingOnlyOf(search: RequestsSearch): boolean {

@@ -12,7 +12,7 @@ import {
   stepProblem,
   stepTarget,
 } from '@/domain/funnel';
-import type { KeptParameters } from '@/components/shell/period-selector';
+import type { KeptParameters } from '@/components/shell/kept-parameters';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import {
   BUTTON_PRIMARY,
