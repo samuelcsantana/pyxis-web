@@ -27,6 +27,23 @@ export function documentMarker(page: Page): Promise<string> {
   return page.evaluate((name) => String(Reflect.get(window, name)), DOCUMENT_MARKER);
 }
 
+const BUSY_MARKER = 'pyxisE2eSawBusy';
+
+export async function watchForBusyContent(page: Page): Promise<void> {
+  await page.evaluate((name) => {
+    Reflect.set(window, name, false);
+    new MutationObserver(() => {
+      if (document.querySelector('main[aria-busy="true"]') !== null) {
+        Reflect.set(window, name, true);
+      }
+    }).observe(document.body, { subtree: true, childList: true, attributes: true });
+  }, BUSY_MARKER);
+}
+
+export function sawBusyContent(page: Page): Promise<boolean> {
+  return page.evaluate((name) => Reflect.get(window, name) === true, BUSY_MARKER);
+}
+
 export async function openAccountMenu(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
