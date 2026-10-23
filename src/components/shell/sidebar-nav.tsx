@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
+import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
   periodParameters,
   SCREENS,
@@ -64,7 +65,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
           const active = screen.slug === current;
           return (
             <li key={screen.slug}>
-              <Link
+              <IntentPrefetchLink
                 href={screenHref(projectId, screen.slug, query)}
                 aria-current={active ? 'page' : undefined}
                 className={`${ITEM} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
@@ -72,7 +73,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
                 <ScreenIcon path={screen.icon} active={active} />
                 <span>{t(screenLabelKey(screen.slug))}</span>
                 <PendingMark />
-              </Link>
+              </IntentPrefetchLink>
             </li>
           );
         })}
