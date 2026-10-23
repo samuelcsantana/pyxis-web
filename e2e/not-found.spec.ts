@@ -41,6 +41,17 @@ test('names a project the admin may not read as not found, not as its screen', a
   await expect(page.getByRole('navigation', { name: 'Main navigation' })).toHaveCount(0);
 });
 
+test('answers a path below a screen as not found, under one heading and no screen header', async ({
+  page,
+}) => {
+  const response = await page.goto(`/${STORE_ID}/overview/extra`);
+
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
+  await expect(page.getByRole('banner')).toHaveCount(0);
+});
+
 test('keeps the project shell around an unknown screen, and answers 404', async ({ page }) => {
   const response = await page.goto(`/${STORE_ID}/nope`);
 
