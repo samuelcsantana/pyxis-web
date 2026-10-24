@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.35.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.34.0...v0.35.0) (2026-10-24)
+
+
+### Features
+
+* **acquisition:** leave a fresh slot beside each source and campaign count ([1c7d1a6](https://github.com/samuelcsantana/pyxis-web/commit/1c7d1a6553e0a8275bc6e1eaa2b8dea63abdfca6))
+* **devices:** leave a fresh slot beside each device, country and region count ([44a33e4](https://github.com/samuelcsantana/pyxis-web/commit/44a33e4034c44382662425b586493b21154d606b))
+* **features:** leave a fresh slot beside each feature's count ([3e82815](https://github.com/samuelcsantana/pyxis-web/commit/3e82815f4086c0c1e8b8d21c40df5661d04340a7))
+* **funnel:** leave a fresh slot beside each step's count ([e11964b](https://github.com/samuelcsantana/pyxis-web/commit/e11964b80494923178b5c4092ff377ef75ebc27f))
+* **overview:** leave a fresh slot beside each count of Overview ([48d1ac5](https://github.com/samuelcsantana/pyxis-web/commit/48d1ac50db4a7bb916f5ee9c8e2bcbe0b2de5c53))
+* **requests:** leave a fresh slot beside each route's count ([9368a10](https://github.com/samuelcsantana/pyxis-web/commit/9368a10296140459d38b6d6e5dc8584b144fda87))
+* **shell:** count apart what arrived for the screen being shown ([c2f44ef](https://github.com/samuelcsantana/pyxis-web/commit/c2f44ef2ac963ac2ca0b6650bc0e2f3b4f021675))
+* **shell:** keep on the device the numbers each screen read showed ([51789ba](https://github.com/samuelcsantana/pyxis-web/commit/51789ba4cd7540ce13ed0bc2fc4e9940c2d7e2f1))
+* **shell:** mark on the content what went up since the last read ([2f29e5a](https://github.com/samuelcsantana/pyxis-web/commit/2f29e5a430de6ee33f6df3bb08b76d0ce8381fb7))
+* **shell:** note the address of each screen read ([e9d7afe](https://github.com/samuelcsantana/pyxis-web/commit/e9d7afefb7aae853e0831941beac569a72261921))
+* **shell:** offer to refresh the screen shown with what arrived for it ([8f65da5](https://github.com/samuelcsantana/pyxis-web/commit/8f65da5a1979d00378378a0f1ef9eedb4a2b63e0))
+* **shell:** publish the visits on the site now from each answer ([d93be03](https://github.com/samuelcsantana/pyxis-web/commit/d93be0302bd98e607bbb872f1573501a6f101391))
+* **shell:** show the visits on the site now beside the Overview title ([27b3987](https://github.com/samuelcsantana/pyxis-web/commit/27b3987296f22fc59f62100990b1cadf1687ad91))
+* **visits:** leave a fresh slot on each visit's start ([1dc30d2](https://github.com/samuelcsantana/pyxis-web/commit/1dc30d26bfe3ec00ea9a3856a9823c1113598af3))
+
+
+### Refactoring
+
+* **shell:** build the arrival stores from one small value store ([b1b97bc](https://github.com/samuelcsantana/pyxis-web/commit/b1b97bcdf68365efbe0d1566a0cb1e73754a11fd))
+
+
+### Documentation
+
+* describe the news bar of the screen being shown ([f884e65](https://github.com/samuelcsantana/pyxis-web/commit/f884e6530e3610cc66d7a64a18123d1c611eaede))
+* describe the visits on the site now ([1369742](https://github.com/samuelcsantana/pyxis-web/commit/136974272b51f41f814a11bdbb911b1fed7896f3))
+* record that what went up since the last read fills server-drawn slots ([e2c37bd](https://github.com/samuelcsantana/pyxis-web/commit/e2c37bd96d5f32b7207bab1751f278ea8117e284))
+* **shell:** show the fresh marks in Storybook ([24ec41b](https://github.com/samuelcsantana/pyxis-web/commit/24ec41b34038aa8727efcf7c7086b3679073ab70))
+
 ## [0.34.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.33.1...v0.34.0) (2026-10-24)
 
 
