@@ -10,6 +10,7 @@ export type RouteReport = RequestsReport['routes'][number];
 
 export const MAX_SCREEN_LENGTH = 256;
 export const FAILING_ONLY = 'failing';
+export const ROUTE_PARAMETER = 'route';
 const VISIT_ID_LENGTH = 8;
 
 export interface RequestsSearch extends RequestKindSearch {
