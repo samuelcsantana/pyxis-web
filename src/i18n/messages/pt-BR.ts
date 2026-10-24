@@ -40,6 +40,7 @@ export const ptBR = translation({
       manyFailedRequests: 'Mais de 99 novas requisições com falha',
       refresh: 'Atualizar',
       refreshing: 'Atualizando…',
+      onTheSiteNow: '{count} agora no site',
     },
     closeMenu: 'Fechar menu',
     section: 'Análises',

@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, screen, within } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
+import { publishActiveVisits } from './arrival-news';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
@@ -38,6 +39,42 @@ function periods() {
 
 beforeEach(() => {
   at('/p1/overview');
+});
+
+describe('ScreenTopbar visits on the site now', () => {
+  afterEach(() => {
+    cleanup();
+    publishActiveVisits(undefined);
+  });
+
+  it('sits beside the Overview title while the period includes today', () => {
+    renderWithMessages(topbar());
+
+    act(() => {
+      publishActiveVisits(4);
+    });
+
+    const heading = screen.getByRole('heading', { level: 1, name: 'Overview' });
+    expect(heading.parentElement).toContainElement(screen.getByText('4 on the site now'));
+  });
+
+  it('is left out of the other screens and of a period that ends before today', () => {
+    act(() => {
+      publishActiveVisits(4);
+    });
+    at('/p1/funnel');
+    renderWithMessages(topbar());
+    expect(screen.queryByText('4 on the site now')).not.toBeInTheDocument();
+    cleanup();
+
+    at('/p1/overview', 'from=2026-09-01&to=2026-09-30');
+    renderWithMessages(topbar());
+
+    expect(screen.queryByText('4 on the site now')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Overview' }).parentElement).toBe(
+      screen.getByRole('banner').firstElementChild,
+    );
+  });
 });
 
 describe('ScreenTopbar', () => {

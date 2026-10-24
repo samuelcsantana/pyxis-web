@@ -7,6 +7,7 @@ import { requestKindOf } from '@/domain/request-kind';
 import { createDayFormats } from '@/i18n/day-formats';
 import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
+import { ActiveVisits } from './active-visits';
 import { PeriodSelector } from './period-selector';
 import { carriedParameters, type ScreenSearch, screenSearchOf } from './screen-search';
 import type { ScreenTopbarTexts } from './screen-topbar-texts';
@@ -19,6 +20,8 @@ import {
 } from './screens';
 import { PeriodLabel, RangeNotice, TopbarFrame } from './topbar';
 import { useProjectToday } from './use-project-today';
+
+const ACTIVE_VISITS_SCREEN: ScreenSlug = 'overview';
 
 export interface ScreenTopbarProps {
   readonly projectId: string;
@@ -49,9 +52,11 @@ export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTo
     return <TopbarFrame title={title} subtitle={subtitle} controls={null} />;
   }
   const period = resolvePeriodOn(search, today);
+  const showsVisitsNow = screen === ACTIVE_VISITS_SCREEN && period.to >= today;
   return (
     <TopbarFrame
       title={title}
+      besideTitle={showsVisitsNow ? <ActiveVisits /> : undefined}
       subtitle={subtitle}
       context={<PeriodLabel period={period} format={formats} />}
       notice={

@@ -40,6 +40,7 @@ export const fr = translation({
       manyFailedRequests: 'Plus de 99 nouvelles requêtes en échec',
       refresh: 'Actualiser',
       refreshing: 'Actualisation…',
+      onTheSiteNow: '{count} sur le site en ce moment',
     },
     closeMenu: 'Fermer le menu',
     section: 'Analytique',

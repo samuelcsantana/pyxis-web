@@ -32,6 +32,7 @@ export const en = {
       manyFailedRequests: 'More than 99 new failed requests',
       refresh: 'Refresh',
       refreshing: 'Refreshing…',
+      onTheSiteNow: '{count} on the site now',
     },
     closeMenu: 'Close menu',
     section: 'Analytics',
