@@ -639,8 +639,8 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart                      | 170               |
-| Dashboard screens with a chart (Overview, Acquisition) | 167               |
+| Dashboard screens without a chart                      | 172               |
+| Dashboard screens with a chart (Overview, Acquisition) | 169               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -674,7 +674,10 @@ less). Keeping visited screens in the client cache and reading a stale one again
 166.8 KiB and Requests to 169.6 KiB. The menu's counts of what arrived
 ([ADR 0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)) load their watcher on demand,
 after the page is shown; what every screen loads to draw them took Overview to 167.6 KiB and
-Requests to 170.5 KiB.
+Requests to 170.5 KiB. For them the chart budget went to 169 KiB and the screen budget to 172 KiB,
+sized for the four tasks of that work (the counts, the "new · Refresh" bar, the visitors on the
+site now, the "+N" on the numbers), each of which draws its part from what the same watcher
+loads; every one still reports its first-load JavaScript.
 
 ## Project structure
 
