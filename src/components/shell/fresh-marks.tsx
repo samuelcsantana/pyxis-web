@@ -117,6 +117,7 @@ export function createFreshMarks(store: ShownNumbersStore): FreshMarks {
         readAt: note.readAt,
         values: Object.fromEntries(counts.map(([, item, value]) => [item, value])),
       },
+      visitStarts: visits.map(([, startedAt]) => startedAt),
       today,
     });
     return comparison === undefined ? NO_MARKS : marksOf(counts, visits, comparison);
