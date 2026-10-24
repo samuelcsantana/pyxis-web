@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { InstallGuide } from '@/components/install/install-guide';
 import type { Admin } from '@/domain/admin';
@@ -101,6 +102,53 @@ describe('InstallGuide', () => {
     expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(3);
   });
 
+  it('opens on installing it yourself, with the agent one tab away', () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
+    expect(within(first).getByRole('tablist', { name: 'How to install' })).toBeInTheDocument();
+    expect(within(first).getByRole('tab', { name: 'Yourself' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(within(first).getByRole('tabpanel', { name: 'Yourself' })).toHaveTextContent(
+      'npm install pyxis-analytics',
+    );
+    expect(within(first).queryByRole('tabpanel', { name: 'With an AI agent' })).toBeNull();
+  });
+
+  it("hands an AI agent a request with the project's key, API and site, and says what it changes", async () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'With an AI agent' }));
+
+    const agent = screen.getByRole('tabpanel', { name: 'With an AI agent' });
+    expect(document.getElementById('install-agent-prompt')).toHaveTextContent(
+      'Install Pyxis on this site following https://pyxis-analytics.dev/llms.txt. The project’s public key is pyxis_pk_store, the endpoint is https://api.example.com and the site is at https://store.example.com.',
+    );
+    expect(document.getElementById('install-agent-prompt')).toHaveTextContent(
+      'list the files you changed and each event you created, with its name and properties, for me to review.',
+    );
+    expect(
+      within(agent)
+        .getAllByRole('listitem')
+        .slice(0, 4)
+        .map((item) => item.textContent),
+    ).toEqual([
+      '1Open your site’s repository in Claude Code, Cursor or another coding agent.',
+      '2Paste the request above and let the agent work.',
+      '3Review what it changed: the package, the init and the events it lists. Remove or rename what you do not want.',
+      '4Publish the site and open one of its pages. Step 2, below, says when the first event arrives.',
+    ]);
+    const changes = within(agent).getByRole('group', { name: 'What the agent will change' });
+    expect(within(changes).getAllByRole('listitem')).toHaveLength(4);
+    expect(changes).toHaveTextContent(
+      'The agent only changes the site’s code. It writes nothing to Pyxis.',
+    );
+    expect(within(agent).getByText('llms.txt').tagName).toBe('CODE');
+    expect(within(agent).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+  });
+
   it('opens the dashboard once the first event arrived', () => {
     render(
       <InstallGuide
@@ -137,7 +185,8 @@ describe('InstallGuide', () => {
       'href',
       '/p-store/settings#settings-keys-heading',
     );
-    expect(screen.queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
+    expect(within(first).queryByRole('tablist')).not.toBeInTheDocument();
+    expect(within(first).queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: '2. Open a page of your site' })).toHaveTextContent(
       'Page views from show up here',
     );

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { PYXIS_INGESTION_URL } from '@/lib/landing-measurement-config';
 import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
@@ -27,6 +28,32 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const WaitingForTheFirstEvent: Story = {};
+
+export const WithAnAiAgent: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'With an AI agent' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'With an AI agent' })).toBeVisible();
+  },
+};
+
+export const WithAnAiAgentInPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Com um agente de IA' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Com um agente de IA' })).toBeVisible();
+  },
+};
+
+export const WithAnAiAgentInTheDarkTheme: Story = {
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'With an AI agent' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'With an AI agent' })).toBeVisible();
+  },
+};
 
 export const FirstEventArrived: Story = { args: { settings: RECEIVING } };
 
