@@ -166,7 +166,7 @@ export const ptBR = translation({
       body: '<email/> pode entrar, mas nenhum projeto foi liberado para esse e-mail ainda. Peça ao operador deste Pyxis para rodar <code>admin:grant</code> para o seu e-mail.',
       create: 'Criar o primeiro projeto',
       bodyOwner:
-        'Sua conta está pronta. Crie um projeto para o seu site e depois instale o rastreador.',
+        'Sua conta está pronta. Crie um projeto para o seu site e depois instale o Pyxis nele.',
       finish: 'Concluir a assinatura',
       bodyUnfinished:
         'Sua conta está esperando um plano. Conclua a assinatura para criar projetos.',
@@ -495,7 +495,7 @@ export const ptBR = translation({
   install: {
     title: 'Instalação',
     subtitle: 'Envie os primeiros eventos do {project}.',
-    step1: '1. Coloque o rastreador no seu site',
+    step1: '1. Instale o Pyxis no seu site',
     npm: 'Com um bundler (npm):',
     script: 'Ou em HTML puro, antes do fechamento do body:',
     step2: '2. Abra uma página do seu site',
@@ -571,7 +571,7 @@ export const ptBR = translation({
       'Isso leva alguns segundos e a página confere de novo sozinha. Se demorar, você recebe um e-mail quando terminar.',
     trial: 'Seu teste grátis começou. Ele vai até {date}.',
     active: 'Sua assinatura está confirmada.',
-    next: 'Agora crie um projeto para o seu site e instale o rastreador.',
+    next: 'Agora crie um projeto para o seu site e instale o Pyxis nele.',
     create: 'Criar o primeiro projeto',
     dashboard: 'Abrir o painel',
   },

@@ -161,8 +161,7 @@ export const it = translation({
       title: 'Ancora nessun progetto',
       body: '<email/> può accedere, ma a questo indirizzo non è stato ancora assegnato nessun progetto. Chiedi all’operatore di questo Pyxis di eseguire <code>admin:grant</code> per la tua email.',
       create: 'Crea il tuo primo progetto',
-      bodyOwner:
-        'Il tuo account è pronto. Crea un progetto per il tuo sito, poi installa il tracker.',
+      bodyOwner: 'Il tuo account è pronto. Crea un progetto per il tuo sito, poi installaci Pyxis.',
       finish: 'Completa l’abbonamento',
       bodyUnfinished:
         'Il tuo account aspetta un piano. Completa l’abbonamento per creare progetti.',
@@ -506,7 +505,7 @@ export const it = translation({
   install: {
     title: 'Installazione',
     subtitle: 'Invia i primi eventi di {project}.',
-    step1: '1. Aggiungi il tracker al tuo sito',
+    step1: '1. Installa Pyxis sul tuo sito',
     npm: 'Con un bundler (npm):',
     script: 'Oppure in HTML semplice, prima del tag di chiusura del body:',
     step2: '2. Apri una pagina del tuo sito',
@@ -582,7 +581,7 @@ export const it = translation({
       'Ci vuole qualche secondo e la pagina ricontrolla da sola. Se ci vuole di più, riceverai un’email quando sarà fatto.',
     trial: 'La tua prova gratuita è iniziata. Dura fino al giorno {date}.',
     active: 'Il tuo abbonamento è confermato.',
-    next: 'Ora crea un progetto per il tuo sito e installa il tracker.',
+    next: 'Ora crea un progetto per il tuo sito e installaci Pyxis.',
     create: 'Crea il tuo primo progetto',
     dashboard: 'Apri la dashboard',
   },

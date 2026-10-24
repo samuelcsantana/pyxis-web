@@ -130,7 +130,7 @@ describe('InstallGuide', () => {
       />,
     );
 
-    const first = screen.getByRole('region', { name: '1. Add the tracker to your site' });
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
     expect(first).toHaveTextContent('This project has no live public key, so it is not measuring.');
     expect(first).toHaveTextContent('A revoked key never works again.');
     expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -152,7 +152,7 @@ describe('InstallGuide', () => {
       />,
     );
 
-    const first = screen.getByRole('region', { name: '1. Add the tracker to your site' });
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
     expect(first).toHaveTextContent("Only the account's owner can create one.");
     expect(within(first).queryByRole('link')).not.toBeInTheDocument();
   });
