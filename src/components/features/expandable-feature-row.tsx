@@ -8,6 +8,7 @@ import type { PropertyKeyView } from '@/domain/property-breakdown';
 import { propertyFilterOf } from '@/domain/visit-property';
 import { linkWith } from '@/components/shell/screens';
 import { BUTTON_ICON } from '@/components/ui/control-classes';
+import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import { useT } from '@/i18n/messages-provider';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
@@ -76,7 +77,7 @@ export function ExpandableFeatureRow({
 
   return (
     <>
-      <tr className={open ? 'bg-soft' : undefined}>
+      <tr className={open ? `bg-soft ${FRESH_HIGHLIGHT}` : FRESH_HIGHLIGHT}>
         <FeatureRowCells
           kind="events"
           row={row}

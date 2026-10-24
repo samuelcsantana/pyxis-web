@@ -3,6 +3,7 @@ import type { FeatureKind, FeatureRow } from '@/domain/features';
 import { Sparkline } from '@/components/ui/sparkline';
 import { BAR_FILL, BAR_TRACK, BODY_CELL } from '@/components/ui/panel-classes';
 import { Breakable } from '@/components/ui/breakable';
+import { FreshCount } from '@/components/ui/fresh-slots';
 import { VisitsLink } from '@/components/ui/visits-link';
 
 const TREND_BOX = { width: 96, height: 28, inset: 3 } as const;
@@ -44,7 +45,10 @@ export function FeatureRowCells({
           </span>
         </span>
       </th>
-      <td className={`${BODY_CELL} text-right font-semibold`}>{row.count}</td>
+      <td className={`${BODY_CELL} text-right font-semibold`}>
+        <FreshCount item={`feature:${row.name}`} value={row.counted} className="mr-1.5" />
+        {row.count}
+      </td>
       <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>{row.visits}</td>
       <td className={`${BODY_CELL} hidden md:table-cell`}>
         <Sparkline
