@@ -1,4 +1,5 @@
 import { barWidth, formatCount, formatPercent, rate } from '@/domain/metrics';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import type { I18n } from '@/i18n/i18n';
 import type { OverviewReport } from '@/domain/overview';
 import {
@@ -55,7 +56,7 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
             </thead>
             <tbody>
               {pages.map((page) => (
-                <tr key={page.path}>
+                <tr key={page.path} className={FRESH_HIGHLIGHT}>
                   <th
                     scope="row"
                     className={`${BODY_CELL} pl-0 text-left font-mono text-xs font-normal wrap-anywhere`}
@@ -66,7 +67,10 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
                       purpose={i18n.t('visitsLink.purpose')}
                     />
                   </th>
-                  <td className={`${BODY_CELL} text-right`}>{formatCount(page.views, i18n)}</td>
+                  <td className={`${BODY_CELL} text-right`}>
+                    <FreshCount item={`page:${page.path}`} value={page.views} className="mr-1.5" />
+                    {formatCount(page.views, i18n)}
+                  </td>
                   <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>
                     {formatCount(page.visits, i18n)}
                   </td>
