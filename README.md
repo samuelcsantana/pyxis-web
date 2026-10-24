@@ -228,7 +228,8 @@ Shipping now:
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
-  screen loads only its content shows a skeleton shaped like it; a screen visited in the last five
+  screen loads only its content shows a skeleton shaped like it (or a generic one, drawn by the
+  layout, when the tap came before the screen's prefetch); a screen visited in the last five
   minutes comes back at once from the browser's cache, and is read again in place when it is more
   than 20 seconds old ([ADR 0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md));
   a change of period, tab, filter,
