@@ -38,6 +38,8 @@ export const it = translation({
       refresh: 'Aggiorna',
       refreshing: 'Aggiornamento…',
       onTheSiteNow: '{count} sul sito ora',
+      moreSinceLastRead: '{count} in più dall’ultima volta che hai guardato',
+      newVisit: 'Nuova',
     },
     closeMenu: 'Chiudi il menu',
     section: 'Analisi',

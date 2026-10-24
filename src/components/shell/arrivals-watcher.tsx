@@ -3,10 +3,11 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { type ArrivalsReport, isCappedArrivalCount } from '@/domain/arrivals';
-import { resolvePeriodOn } from '@/domain/period';
+import { resolvePeriodOn, todayIn } from '@/domain/period';
 import { useT } from '@/i18n/messages-provider';
 import { arrivalsHref, SINCE_PARAMETER } from '@/lib/arrivals-href';
 import { createSeenStore } from '@/lib/seen-store';
+import { createShownNumbersStore } from '@/lib/shown-numbers';
 import {
   type ArrivalLabel,
   type ArrivalNewsInput,
@@ -23,6 +24,7 @@ import {
   takeScreenReads,
 } from './arrival-news';
 import { readArrivalsAnswer } from './arrivals-answer';
+import { createFreshMarks, FreshMarksView } from './fresh-marks';
 import { type ArrivalsPoller, startArrivalsPoller } from './arrivals-poller';
 import { screenSearchOf } from './screen-search';
 import { screenSlugOf } from './screens';
@@ -75,6 +77,10 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
   const { from, to } = resolvePeriodOn(screenSearchOf(search), today);
   const includesToday = to >= today;
   const store = useMemo(() => createSeenStore(projectId), [projectId]);
+  const freshMarks = useMemo(
+    () => createFreshMarks(createShownNumbersStore(projectId)),
+    [projectId],
+  );
   const marksVersion = useSyncExternalStore(store.subscribe, store.version, onlyInTheBrowser);
   const [report, setReport] = useState<ArrivalsReport>();
   const period = useRef<PeriodDays>({ from, to });
@@ -88,16 +94,17 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
 
   useEffect(() => {
     const record = () => {
-      for (const { path, readAt } of takeScreenReads()) {
-        const screen = screenSlugOf(path);
+      for (const note of takeScreenReads()) {
+        const screen = screenSlugOf(note.path);
         if (screen !== undefined) {
-          store.record(screen, readAt, Date.now());
+          store.record(screen, note.readAt, Date.now());
         }
+        freshMarks.read(note, todayIn(timeZone, new Date()));
       }
     };
     record();
     return subscribeToScreenReads(record);
-  }, [store]);
+  }, [store, freshMarks, timeZone]);
 
   useEffect(() => {
     period.current = { from, to };
@@ -172,5 +179,5 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
     [],
   );
 
-  return null;
+  return <FreshMarksView source={freshMarks} />;
 }

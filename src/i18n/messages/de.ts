@@ -41,6 +41,8 @@ export const de = translation({
       refresh: 'Aktualisieren',
       refreshing: 'Wird aktualisiert…',
       onTheSiteNow: '{count} gerade auf der Website',
+      moreSinceLastRead: '{count} mehr als beim letzten Mal',
+      newVisit: 'Neu',
     },
     closeMenu: 'Menü schließen',
     section: 'Analyse',

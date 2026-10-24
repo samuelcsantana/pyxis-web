@@ -180,6 +180,14 @@
 @theme {
   --animate-reveal: reveal 180ms ease-out both;
   --animate-caret: caret 1.1s steps(1) infinite;
+  --animate-fresh: fresh 5s ease-out;
+
+  @keyframes fresh {
+    0%,
+    30% {
+      background-color: color-mix(in srgb, var(--color-accent) 24%, transparent);
+    }
+  }
 
   @keyframes reveal {
     from {
