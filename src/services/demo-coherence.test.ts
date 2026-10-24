@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { visitsTotal } from '@/domain/acquisition';
 import { addDays, todayIn } from '@/domain/period';
 import { MockAcquisitionService } from './acquisition/mock-acquisition-service';
+import { MockArrivalsService } from './arrivals/mock-arrivals-service';
 import type { DateRange } from './date-range';
 import { DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 import { MockDevicesService } from './devices/mock-devices-service';
@@ -18,6 +19,7 @@ import { NO_VISIT_FILTERS } from '@/domain/visits';
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const PERIOD_DAYS = { today: 1, '7d': 7, '30d': 30 } as const;
 const TOP_ITEMS = 10;
+const ARRIVALS_LOOK_BACK_MS = 3 * 60 * 60 * 1_000;
 
 function periodEnding(timeZone: string, days: number): DateRange {
   const today = todayIn(timeZone, NOW);
@@ -94,6 +96,22 @@ describe('the demo screens', () => {
           expect(conversions === null).toBe(project.conversionEvent === null);
           expect(eventCount).toBe(conversions);
           expect(breakdownTotals).toEqual(breakdownTotals.map(() => conversions));
+        });
+
+        it('never receive more visits or conversions than the screens count', async () => {
+          const { overview } = await screensOf(project.id, range);
+          const arrivals = await new MockArrivalsService().arrivals(
+            project.id,
+            range,
+            new Date(NOW.getTime() - ARRIVALS_LOOK_BACK_MS),
+          );
+
+          expect(arrivals.visits.more).toBe(false);
+          expect(arrivals.visits.times.length).toBeLessThanOrEqual(overview.kpis.visits.current);
+          expect(arrivals.conversions === null).toBe(project.conversionEvent === null);
+          expect(arrivals.conversions?.times.length ?? 0).toBeLessThanOrEqual(
+            overview.kpis.conversions?.current ?? 0,
+          );
         });
 
         it('never give a source fewer visits or conversions than its campaigns', async () => {
