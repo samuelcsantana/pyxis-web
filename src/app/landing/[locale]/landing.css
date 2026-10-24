@@ -93,6 +93,47 @@
   }
 }
 
+.landing-copy-prominent {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.875rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, var(--color-ink));
+  border-radius: var(--radius-input);
+  background: color-mix(in srgb, var(--color-accent) 80%, var(--color-card));
+  padding-inline: 1.125rem;
+  color: var(--color-accent-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition:
+    translate 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .landing-copy-prominent:hover {
+    background: color-mix(in srgb, var(--color-accent) 90%, var(--color-card));
+    translate: 0 -1px;
+    box-shadow: 0 6px 14px -10px rgb(5 10 20 / 0.55);
+  }
+}
+
+.landing-copy-prominent:active {
+  background: color-mix(in srgb, var(--color-accent-hover) 85%, var(--color-card));
+  translate: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-copy-prominent,
+  .landing-copy-prominent:hover {
+    translate: none;
+    transition: none;
+  }
+}
+
 .landing-nudge {
   --robot-metal-1: #4a658a;
   --robot-metal-2: #223147;
