@@ -11,6 +11,7 @@ import {
   NAV_ITEM_IDLE,
 } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
+import { bestEffortForgetSeenMarks } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { createAuthService } from '@/services/auth/auth-service.factory';
 
@@ -83,6 +84,7 @@ export function SignOutButton({
     )
       .pipe(
         tap(() => {
+          bestEffortForgetSeenMarks();
           router.replace('/sign-in');
           router.refresh();
         }),

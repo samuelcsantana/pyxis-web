@@ -2,6 +2,7 @@ import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { presetPeriod } from '@/domain/period';
+import { seenMarksKey } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { MobileMenu } from './mobile-menu';
@@ -366,6 +367,29 @@ describe('SignOutButton', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Could not sign out');
     expect(navigation.router.replace).not.toHaveBeenCalled();
+  });
+
+  it('forgets on this device which screens were seen, only once signed out', async () => {
+    window.localStorage.setItem(seenMarksKey('p-store'), '{"overview":1}');
+    const failing: IAuthService = {
+      requestCode: () => Promise.resolve(),
+      verifyCode: () => Promise.resolve(),
+      signOut: () => Promise.reject(new TypeError('Failed to fetch')),
+      signOutEverywhere: () => Promise.reject(new TypeError('Failed to fetch')),
+    };
+    const { unmount } = renderWithMessages(<SignOutButton authService={failing} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
+    await settle(SIGN_OUT_MIN_BUSY_MS);
+
+    expect(window.localStorage.getItem(seenMarksKey('p-store'))).toBe('{"overview":1}');
+
+    unmount();
+    renderWithMessages(<SignOutButton authService={new MockAuthService()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
+    await settle(SIGN_OUT_MIN_BUSY_MS);
+
+    expect(window.localStorage.getItem(seenMarksKey('p-store'))).toBeNull();
   });
 
   it('builds its own service when none is given', async () => {
