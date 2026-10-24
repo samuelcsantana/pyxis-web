@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.38.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.37.0...v0.38.0) (2026-10-24)
+
+
+### Features
+
+* **landing:** link the install section from the header ([210bc89](https://github.com/samuelcsantana/pyxis-web/commit/210bc89abb67657afaf09752cc919dde8b2268d7))
+
+
+### Bug Fixes
+
+* **landing:** keep the header's section links on the home page ([4b75ccf](https://github.com/samuelcsantana/pyxis-web/commit/4b75ccf848da6b9f80aee465d74995ef8cd9613a))
+
 ## [0.37.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.36.0...v0.37.0) (2026-10-24)
 
 
