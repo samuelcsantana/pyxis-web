@@ -1,5 +1,8 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
+import { sawBusyContent, watchForBusyContent } from './navigation';
+
+const CONTENT_ID = 'content';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const NEXT_QUESTION = '00:31';
@@ -77,6 +80,47 @@ test('counts on the menu what arrived after the first answer, never on the scree
   );
   await expect(menu(page).getByText('2', { exact: true })).toBeVisible();
   expect(await axeViolations(page)).toEqual([]);
+});
+
+test('refreshes the screen shown with what arrived for it, keeping its header and the focus', async ({
+  page,
+}) => {
+  let firstSince: number | undefined;
+  await page.route('**/arrivals?*', async (route) => {
+    const since = Date.parse(new URL(route.request().url()).searchParams.get('since') ?? '');
+    firstSince ??= since;
+    await route.fulfill({
+      json: answerAt(firstSince, { visits: { times: [firstSince + 1], more: false } }),
+      headers: { 'cache-control': 'private, no-store' },
+    });
+  });
+  await page.goto(`/${STORE_ID}/overview`);
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  const offer = page.getByRole('button', { name: /^1 new visit\s*,\s*Refresh$/ });
+  await expect(offer).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+  await page.getByRole('heading', { level: 1, name: 'Overview' }).evaluate((heading) => {
+    heading.dataset.e2eKept = 'yes';
+  });
+  await watchForBusyContent(page);
+  const read = page.waitForRequest(
+    (request) =>
+      request.url().includes(`/${STORE_ID}/overview`) &&
+      request.headers().rsc === '1' &&
+      request.headers()['next-router-prefetch'] === undefined,
+  );
+
+  await offer.focus();
+  await page.keyboard.press('Enter');
+
+  await read;
+  await expect(offer).toBeHidden();
+  await expect(page.locator(`#${CONTENT_ID}`)).toBeFocused();
+  await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toHaveAttribute(
+    'data-e2e-kept',
+    'yes',
+  );
+  expect(await sawBusyContent(page)).toBe(false);
 });
 
 test('asks nothing while the period does not include today', async ({ page }) => {
