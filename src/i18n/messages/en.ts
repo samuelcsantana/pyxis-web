@@ -33,6 +33,8 @@ export const en = {
       refresh: 'Refresh',
       refreshing: 'Refreshing…',
       onTheSiteNow: '{count} on the site now',
+      moreSinceLastRead: '{count} more since you last looked',
+      newVisit: 'New',
     },
     closeMenu: 'Close menu',
     section: 'Analytics',

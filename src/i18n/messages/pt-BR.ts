@@ -41,6 +41,8 @@ export const ptBR = translation({
       refresh: 'Atualizar',
       refreshing: 'Atualizando…',
       onTheSiteNow: '{count} agora no site',
+      moreSinceLastRead: '{count} a mais desde a última vez que você olhou',
+      newVisit: 'Nova',
     },
     closeMenu: 'Fechar menu',
     section: 'Análises',

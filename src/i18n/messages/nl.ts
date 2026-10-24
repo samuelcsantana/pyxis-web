@@ -38,6 +38,8 @@ export const nl = translation({
       refresh: 'Vernieuwen',
       refreshing: 'Vernieuwen…',
       onTheSiteNow: '{count} nu op de site',
+      moreSinceLastRead: '{count} meer sinds je laatst keek',
+      newVisit: 'Nieuw',
     },
     closeMenu: 'Menu sluiten',
     section: 'Analyse',
