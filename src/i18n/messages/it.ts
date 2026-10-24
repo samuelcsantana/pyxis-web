@@ -125,6 +125,7 @@ export const it = translation({
     toOverview: 'Apri la Panoramica',
   },
   states: {
+    loading: 'Caricamento…',
     emptyPeriod: {
       title: 'Niente in questo periodo',
       body: 'Nessun evento è arrivato in questo periodo.',

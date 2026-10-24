@@ -127,6 +127,7 @@ export const es = translation({
     toOverview: 'Abrir la Vista general',
   },
   states: {
+    loading: 'Cargando…',
     emptyPeriod: {
       title: 'Nada en este periodo',
       body: 'No llegó ningún evento en este periodo.',

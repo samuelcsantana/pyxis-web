@@ -128,6 +128,7 @@ export const de = translation({
     toOverview: 'Übersicht öffnen',
   },
   states: {
+    loading: 'Wird geladen…',
     emptyPeriod: {
       title: 'Nichts in diesem Zeitraum',
       body: 'In diesem Zeitraum ist kein Ereignis eingegangen.',
