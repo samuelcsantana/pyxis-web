@@ -135,7 +135,7 @@ describe('ArrivalsWatcher', () => {
     expect(openScreenNews()).toEqual({ screen: 'overview', shown: '1', label: '1 new visit' });
 
     act(() => {
-      noteScreenRead({ path: '/p-store/overview', readAt: NOW + ARRIVALS_POLL_MS });
+      noteScreenRead({ path: '/p-store/overview', search: '', readAt: NOW + ARRIVALS_POLL_MS });
     });
 
     expect(openScreenNews()).toBeUndefined();
@@ -154,14 +154,14 @@ describe('ArrivalsWatcher', () => {
   });
 
   it('keeps the reads of the screens as their marks, and asks since the oldest one', async () => {
-    noteScreenRead({ path: '/p-store/overview', readAt: NOW - 5 * MINUTE });
-    noteScreenRead({ path: '/p-store/settings', readAt: NOW - 10 * MINUTE });
+    noteScreenRead({ path: '/p-store/overview', search: '', readAt: NOW - 5 * MINUTE });
+    noteScreenRead({ path: '/p-store/settings', search: '', readAt: NOW - 10 * MINUTE });
     watch();
     await pass(0);
 
     expect(askedUrl(0).searchParams.get('since')).toBe(new Date(NOW - 5 * MINUTE).toISOString());
 
-    noteScreenRead({ path: '/p-store/funnel', readAt: NOW + SECOND });
+    noteScreenRead({ path: '/p-store/funnel', search: '', readAt: NOW + SECOND });
 
     expect(JSON.parse(window.localStorage.getItem(seenMarksKey('p-store')) ?? '{}')).toMatchObject({
       overview: NOW - 5 * MINUTE,

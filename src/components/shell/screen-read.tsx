@@ -9,7 +9,11 @@ export interface ScreenReadProps {
 
 export function ScreenRead({ readAt }: ScreenReadProps) {
   useEffect(() => {
-    noteScreenRead({ path: window.location.pathname, readAt });
+    noteScreenRead({
+      path: window.location.pathname,
+      search: window.location.search,
+      readAt,
+    });
   }, [readAt]);
   return null;
 }

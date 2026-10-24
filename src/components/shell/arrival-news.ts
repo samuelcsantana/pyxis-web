@@ -13,6 +13,7 @@ export interface OpenScreenNews extends ScreenNews {
 
 export interface ScreenReadNote {
   readonly path: string;
+  readonly search: string;
   readonly readAt: number;
 }
 

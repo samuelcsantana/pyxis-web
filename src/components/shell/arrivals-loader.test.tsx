@@ -24,14 +24,16 @@ describe('ArrivalsLoader', () => {
 });
 
 describe('ScreenRead', () => {
-  it('hands the moment the screen was read, with its path, to the watcher', () => {
+  it('hands the moment the screen was read, with its address, to the watcher', () => {
     takeScreenReads();
     window.history.replaceState(null, '', '/p-store/funnel?range=7d');
 
     render(<ScreenRead readAt={1_000} />);
 
-    expect(takeScreenReads()).toEqual([{ path: '/p-store/funnel', readAt: 1_000 }]);
-    noteScreenRead({ path: '/p-store/visits', readAt: 2_000 });
-    expect(takeScreenReads()).toEqual([{ path: '/p-store/visits', readAt: 2_000 }]);
+    expect(takeScreenReads()).toEqual([
+      { path: '/p-store/funnel', search: '?range=7d', readAt: 1_000 },
+    ]);
+    noteScreenRead({ path: '/p-store/visits', search: '', readAt: 2_000 });
+    expect(takeScreenReads()).toEqual([{ path: '/p-store/visits', search: '', readAt: 2_000 }]);
   });
 });
