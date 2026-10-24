@@ -32,6 +32,9 @@ export const SignUpOpen: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('list', { name: 'How to start, in 3 steps' })).toBeVisible();
     await expect(canvas.getByRole('group', { name: 'Or ask your AI agent' })).toBeVisible();
+    await expect(
+      canvas.getByText(/the dashboard’s Install screen has a request like this one ready/),
+    ).toBeVisible();
   },
 };
 
@@ -43,6 +46,11 @@ export const SignUpOpenInPortuguese: Story = {
 export const SignUpOpenOnAPhone: Story = {
   args: { signUpOpen: true },
   globals: { viewport: { value: 'mobile1' } },
+};
+
+export const SignUpOpenInTheDarkTheme: Story = {
+  args: { signUpOpen: true },
+  globals: { theme: 'dark' },
 };
 
 export const Portuguese: Story = { globals: { locale: 'pt-BR' } };

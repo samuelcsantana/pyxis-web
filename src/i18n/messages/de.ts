@@ -1789,6 +1789,8 @@ export const de = translation({
         lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Agenten und füge ein:',
         prompt:
           'Installiere Pyxis auf dieser Website nach https://pyxis-analytics.dev/llms.txt. Der öffentliche Schlüssel meines Projekts ist pyxis_pk_… und der Endpoint ist https://api.pyxis-analytics.dev. Miss die Seiten und erfasse bei jedem Schritt der Bestellung ein Ereignis, ohne personenbezogene Daten.',
+        ready:
+          'Sobald Konto und Projekt angelegt sind, steht eine Anfrage wie diese auf der Seite „Installieren“ im Dashboard fertig bereit, mit dem Schlüssel deines Projekts statt <code>pyxis_pk_…</code>.',
         foot: 'Der Agent hält sich an die Regeln in <code>llms.txt</code>: keine personenbezogenen Daten, gültige Ereignisnamen, die API-Adresse in der CSP. Verbinde danach Claude mit Pyxis, um zu prüfen, ob die ersten Ereignisse angekommen sind.',
       },
     },
