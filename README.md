@@ -243,8 +243,10 @@ Shipping now:
   motion is welcome
 - What went up since the last read: when a screen is read again for the same period and filters,
   each count that went up shows "+N" and each visit that started since shows "New", and their row
-  or card is lit for five seconds when motion is welcome; the numbers each read showed are kept
-  on the device ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md))
+  or card is lit for five seconds when motion is welcome; the marks stay while only the display
+  changes (the chart's metric, a step's list, a route's details) and nothing new arrives; the
+  numbers each read showed are kept on the device
+  ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md))
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
