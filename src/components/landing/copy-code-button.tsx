@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CONTROL_TRANSITION, NAV_FOCUS_RING } from '@/components/ui/control-classes';
+import { CONTROL_TRANSITION, FOCUS_RING, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 
 export interface CopyCodeLabels {
   readonly copy: string;
@@ -15,14 +15,27 @@ export interface CopyCodeButtonProps {
   readonly labels: CopyCodeLabels;
   readonly track?: Readonly<Record<string, string>>;
   readonly placement?: CopyButtonPlacement;
+  readonly appearance?: CopyButtonAppearance;
 }
 
 export type CopyButtonPlacement = 'corner' | 'inline';
+
+export type CopyButtonAppearance = 'quiet' | 'prominent';
 
 const PLACEMENT_CLASS: Readonly<Record<CopyButtonPlacement, string>> = {
   corner: 'absolute top-2.5 right-2.5',
   inline: 'shrink-0',
 };
+
+const APPEARANCE_CLASS: Readonly<Record<CopyButtonAppearance, string>> = {
+  quiet: `h-8 rounded-control border border-nav-border bg-nav-raised px-2.5 text-caption font-semibold text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_FOCUS_RING} ${CONTROL_TRANSITION}`,
+  prominent: `landing-copy-prominent ${FOCUS_RING}`,
+};
+
+const COPY_ICON =
+  'M9 11a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2z M5 15V5a2 2 0 0 1 2-2h10';
+
+export const CODE_COPIED_EVENT = 'pyxis:code-copied';
 
 type CopyState = 'idle' | 'copied' | 'selected';
 
@@ -50,6 +63,7 @@ export function CopyCodeButton({
   labels,
   track = {},
   placement = 'corner',
+  appearance = 'quiet',
 }: CopyCodeButtonProps) {
   const [state, setState] = useState<CopyState>('idle');
 
@@ -69,6 +83,7 @@ export function CopyCodeButton({
     try {
       await navigator.clipboard.writeText(code);
       setState('copied');
+      window.dispatchEvent(new CustomEvent(CODE_COPIED_EVENT, { detail: targetId }));
     } catch (error) {
       console.warn('install: could not copy the code, selecting it instead', error);
       selectContents(targetId);
@@ -83,8 +98,20 @@ export function CopyCodeButton({
       onClick={() => {
         void copy();
       }}
-      className={`${PLACEMENT_CLASS[placement]} h-8 rounded-control border border-nav-border bg-nav-raised px-2.5 text-caption font-semibold text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_FOCUS_RING} ${CONTROL_TRANSITION}`}
+      className={`${PLACEMENT_CLASS[placement]} ${APPEARANCE_CLASS[appearance]}`}
     >
+      {appearance === 'prominent' ? (
+        <svg width={17} height={17} viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d={COPY_ICON}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ) : null}
       <span aria-live="polite">{labelOf(state, labels)}</span>
     </button>
   );
