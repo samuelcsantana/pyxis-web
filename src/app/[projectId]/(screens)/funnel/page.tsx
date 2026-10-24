@@ -67,6 +67,10 @@ function stepsParameter(steps: readonly FunnelStep[] | null): Parameters {
   return steps === null ? {} : { steps: serializeSteps(steps) };
 }
 
+function modeKept(search: FunnelSearch, mode: FunnelMode): Parameters {
+  return search.mode === undefined ? {} : { mode };
+}
+
 function segmentKept(by: FunnelSegmentDimension): Parameters {
   return by === 'device' ? {} : { [SEGMENT_PARAMETER]: by };
 }
@@ -81,7 +85,8 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const mode = funnelModeOf(search);
-  const steps = funnelStepsOf(search) ?? (isDemoMode() ? demoExampleFunnel(project.id) : null);
+  const addressSteps = funnelStepsOf(search);
+  const steps = addressSteps ?? (isDemoMode() ? demoExampleFunnel(project.id) : null);
   const basePath = screenHref(project.id, 'funnel');
   const linkTo = (parameters: Readonly<Record<string, string>>) =>
     `${basePath}?${withKeptParameters(periodQuery(period), parameters)}`;
@@ -104,7 +109,8 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             ? readOrSignIn(() => service.segments(project.id, range, steps, by))
             : null,
         ]);
-  const kept = { mode, ...stepsParameter(steps), ...segmentKept(by) };
+  const funnelKept = { ...modeKept(search, mode), ...stepsParameter(addressSteps) };
+  const kept = { ...funnelKept, ...segmentKept(by) };
   const drillHref = (parameters: Parameters) =>
     `${linkTo({ ...kept, ...parameters })}#${FUNNEL_SUBJECTS_ID}`;
   const i18n = await getI18n();
@@ -178,7 +184,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             stepCount={steps.length}
             periodLabel={describePeriod(period, i18n)}
             hrefOf={(target) =>
-              `${linkTo({ mode, ...stepsParameter(steps), ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
+              `${linkTo({ ...funnelKept, ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
             }
             i18n={i18n}
           />

@@ -105,7 +105,7 @@ describe('FunnelPage', () => {
     );
   });
 
-  it('opens the demo on the example funnel of the project', async () => {
+  it('opens the demo on the example funnel of the project, its links keeping the address bare', async () => {
     const funnel = vi.fn<IFunnelService['funnel']>((projectId, range, mode, steps) =>
       new MockFunnelService().funnel(projectId, range, mode, steps),
     );
@@ -123,6 +123,13 @@ describe('FunnelPage', () => {
     expect(
       within(screen.getByRole('list', { name: 'Funnel' })).getAllByRole('listitem'),
     ).toHaveLength(6);
+    const dropped = new URL(
+      screen
+        .getByRole('link', { name: /dropped, list who left before step 2$/ })
+        .getAttribute('href') ?? '',
+      'https://x',
+    );
+    expect([...dropped.searchParams.keys()]).toEqual(['range', 'step', 'outcome']);
   });
 
   it('counts the steps of the URL for the period and the mode', async () => {
@@ -223,7 +230,7 @@ describe('FunnelPage', () => {
     ).not.toBeInTheDocument();
     expect(within(list).getByRole('link', { name: 'Close the list' })).toHaveAttribute(
       'href',
-      `/p-store/funnel?range=30d&mode=visit&steps=${encodeURIComponent(STEPS)}`,
+      `/p-store/funnel?range=30d&steps=${encodeURIComponent(STEPS)}`,
     );
     const current = screen.getByRole('link', { name: /dropped, list who left before step 2$/ });
     expect(current).toHaveAttribute('aria-current', 'true');
@@ -261,10 +268,9 @@ describe('FunnelPage', () => {
     expect(
       within(list).getByRole('link', { name: 'u_7f3a, open the timeline of this person' }),
     ).toHaveAttribute('href', '/p-store/timeline?range=30d&user=u_7f3a');
-    expect(within(list).getByRole('link', { name: 'Back to the newest' })).toHaveAttribute(
-      'href',
-      expect.not.stringContaining('cursor'),
-    );
+    const newest = within(list).getByRole('link', { name: 'Back to the newest' });
+    expect(newest).toHaveAttribute('href', expect.not.stringContaining('cursor'));
+    expect(newest).toHaveAttribute('href', expect.stringContaining('mode=user'));
     expect(within(list).queryByRole('link', { name: 'Show older' })).not.toBeInTheDocument();
   });
 
