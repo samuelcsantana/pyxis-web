@@ -1,5 +1,6 @@
 import { MainContent, type MainContentProps } from './main-content';
 import { RefreshWhenStale } from './refresh-when-stale';
+import { ScreenRead } from './screen-read';
 
 export const SCREEN_TOP_MARK = 'screen-top';
 
@@ -15,7 +16,12 @@ export function ScreenContent({ readAt, ...props }: ScreenContentProps) {
         data-testid={SCREEN_TOP_MARK}
         className="pointer-events-none absolute inset-x-0 top-0 block h-0"
       />
-      {readAt === undefined ? null : <RefreshWhenStale readAt={readAt} />}
+      {readAt === undefined ? null : (
+        <>
+          <ScreenRead readAt={readAt} />
+          <RefreshWhenStale readAt={readAt} />
+        </>
+      )}
       <MainContent {...props} />
     </>
   );

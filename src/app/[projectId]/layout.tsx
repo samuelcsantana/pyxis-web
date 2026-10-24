@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
+import { ArrivalsLoader } from '@/components/shell/arrivals-loader';
 import { MobileMenu } from '@/components/shell/mobile-menu';
 import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import { Sidebar } from '@/components/shell/sidebar';
@@ -32,6 +33,11 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
         <SkipLink i18n={i18n} />
         <PreferenceCarrier locale={i18n.locale} />
+        <ArrivalsLoader
+          projectId={project.id}
+          timeZone={project.timezone}
+          serverNow={new Date().getTime()}
+        />
         <MobileMenu>
           <Sidebar
             admin={admin}

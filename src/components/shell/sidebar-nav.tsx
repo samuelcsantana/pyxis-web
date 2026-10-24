@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
+import { ArrivalBadge } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
   periodParameters,
@@ -72,6 +73,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
               >
                 <ScreenIcon path={screen.icon} active={active} />
                 <span>{t(screenLabelKey(screen.slug))}</span>
+                <ArrivalBadge screen={screen.slug} active={active} />
                 <PendingMark />
               </IntentPrefetchLink>
             </li>

@@ -25,6 +25,20 @@ export const de = translation({
   nav: {
     label: 'Hauptnavigation',
     openMenu: 'Menü öffnen',
+    openMenuWithNews: 'Menü öffnen, es gibt Neues',
+    arrivals: {
+      visits: forms('{count} neuer Besuch', '{count} neue Besuche'),
+      conversions: forms('{count} neue Conversion', '{count} neue Conversions'),
+      namedEvents: forms('{count} neues Ereignis', '{count} neue Ereignisse'),
+      failedRequests: forms(
+        '{count} neue fehlgeschlagene Anfrage',
+        '{count} neue fehlgeschlagene Anfragen',
+      ),
+      manyVisits: 'Mehr als 99 neue Besuche',
+      manyConversions: 'Mehr als 99 neue Conversions',
+      manyNamedEvents: 'Mehr als 99 neue Ereignisse',
+      manyFailedRequests: 'Mehr als 99 neue fehlgeschlagene Anfragen',
+    },
     closeMenu: 'Menü schließen',
     section: 'Analyse',
     switchProject: 'Projekt wechseln. Aktuelles Projekt:',

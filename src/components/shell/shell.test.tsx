@@ -5,6 +5,7 @@ import { presetPeriod } from '@/domain/period';
 import { seenMarksKey } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
+import { publishArrivalNews } from './arrival-news';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
@@ -132,6 +133,24 @@ describe('SidebarNav', () => {
       '/p-store/devices?range=7d',
     );
     expect(screen.getByRole('link', { name: 'Devices' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('counts the news of each other screen inside its link', () => {
+    renderWithMessages(<SidebarNav projectId="p-store" />);
+
+    act(() => {
+      publishArrivalNews({
+        overview: { shown: '4', label: '4 new visits' },
+        funnel: { shown: '1', label: '1 new conversion' },
+      });
+    });
+
+    expect(screen.getByRole('link', { name: 'Funnel, 1 new conversion' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Overview' })).toHaveAttribute('aria-current', 'page');
+
+    act(() => {
+      publishArrivalNews({});
+    });
   });
 
   it('links every screen, then the project settings', () => {
@@ -447,6 +466,32 @@ describe('Sidebar', () => {
 });
 
 describe('MobileMenu', () => {
+  it('marks its button with a dot, and says so, when another screen has news', () => {
+    renderWithMessages(
+      <MobileMenu>
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(toggle.querySelector('.rounded-full')).toBeNull();
+
+    act(() => {
+      publishArrivalNews({ visits: { shown: '2', label: '2 new visits' } });
+    });
+
+    expect(screen.getByRole('button', { name: 'Open menu, there is news' })).toBe(toggle);
+    expect(toggle.querySelector('.rounded-full')).toHaveAttribute('aria-hidden', 'true');
+
+    fireEvent.click(toggle);
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toBe(toggle);
+    expect(toggle.querySelector('.rounded-full')).toBeNull();
+
+    act(() => {
+      publishArrivalNews({});
+    });
+  });
+
   it('opens and closes the navigation, and closes after a link is followed', () => {
     renderWithMessages(
       <MobileMenu>

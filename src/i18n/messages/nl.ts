@@ -25,6 +25,17 @@ export const nl = translation({
   nav: {
     label: 'Hoofdnavigatie',
     openMenu: 'Menu openen',
+    openMenuWithNews: 'Menu openen, er is nieuws',
+    arrivals: {
+      visits: forms('{count} nieuw bezoek', '{count} nieuwe bezoeken'),
+      conversions: forms('{count} nieuwe conversie', '{count} nieuwe conversies'),
+      namedEvents: forms('{count} nieuw event', '{count} nieuwe events'),
+      failedRequests: forms('{count} nieuw mislukt verzoek', '{count} nieuwe mislukte verzoeken'),
+      manyVisits: 'Meer dan 99 nieuwe bezoeken',
+      manyConversions: 'Meer dan 99 nieuwe conversies',
+      manyNamedEvents: 'Meer dan 99 nieuwe events',
+      manyFailedRequests: 'Meer dan 99 nieuwe mislukte verzoeken',
+    },
     closeMenu: 'Menu sluiten',
     section: 'Analyse',
     switchProject: 'Ander project kiezen. Huidig project:',
