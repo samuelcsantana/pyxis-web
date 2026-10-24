@@ -14,6 +14,7 @@ const meta = {
   args: {
     i18n: english,
     homeHref: '/',
+    onHomePage: true,
     language: <LandingLanguageSelect current={DEFAULT_LANDING_PAGE} label="Language" />,
     theme: <ThemeToggle remember="device" />,
     withSignIn: true,
@@ -50,6 +51,7 @@ export const OnTheHomePageInPortuguese: Story = {
 export const OnTheSignInPage: Story = {
   args: {
     homeHref: 'https://pyxis-analytics.dev/',
+    onHomePage: false,
     language: (
       <LanguageFormSelect locale="en" label="Language" choose={fn(() => Promise.resolve())} />
     ),

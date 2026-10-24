@@ -549,6 +549,26 @@ test('glides to a section of the page instead of jumping to it', async ({ page }
   await expect(page).toHaveURL(/#ask-claude$/);
 });
 
+test('glides from a header link to its section without leaving the page or its address', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'A phone hides the header links to sections.');
+  await page.goto('/?utm_source=post');
+  await page.evaluate(() => Object.defineProperty(window, 'openedOnce', { value: true }));
+
+  const path = await scrollAfterFollowing(
+    page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pricing' }),
+  );
+  await page.waitForFunction(() => !document.documentElement.hasAttribute('data-gliding'));
+
+  const landed = await page.evaluate(() => window.scrollY);
+  expect(path[0]).toBeLessThan(landed);
+  expect(new Set(path).size).toBeGreaterThan(1);
+  await expect(page).toHaveURL(/\/\?utm_source=post#pricing$/);
+  expect(await page.evaluate(() => 'openedOnce' in window)).toBe(true);
+});
+
 test('the mascot arrives on its own, tells tips, and flies off once it has led there', async ({
   page,
   context,

@@ -83,6 +83,7 @@ export default async function LegalDocumentPage({ params }: LegalPageProps) {
       <SiteHeader
         i18n={i18n}
         homeHref={landingPageOfLocale(document.locale).path}
+        onHomePage={false}
         language={null}
         theme={<ThemeToggle remember="device" />}
         withSignIn

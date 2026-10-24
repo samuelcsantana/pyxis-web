@@ -181,6 +181,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
       <SiteHeader
         i18n={i18n}
         homeHref={page.path}
+        onHomePage
         language={<LandingLanguageSelect current={page} label={i18n.t('landing.nav.language')} />}
         theme={<ThemeToggle remember="device" />}
         withSignIn
