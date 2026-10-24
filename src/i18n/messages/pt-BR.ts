@@ -1515,7 +1515,7 @@ export const ptBR = translation({
       invented: 'Dados fictícios, como na demonstração.',
     },
     proof: {
-      size: { value: 'menos de 5 KB', label: 'de rastreador, com gzip' },
+      size: { value: 'menos de 5 KB', label: 'de código do Pyxis, com gzip' },
       dependencies: { value: '0', label: 'dependências em execução' },
       coverage: { value: '100%', label: 'de cobertura de testes nos quatro repositórios' },
       license: { value: 'Licença MIT', label: 'código aberto, com a infraestrutura' },
@@ -1558,7 +1558,7 @@ export const ptBR = translation({
           kept: 'sessionStorage · acaba com a aba',
         },
       },
-      foot: 'Um navegador que pede para não ser rastreado (Global Privacy Control ou Do Not Track) desliga o rastreador antes de qualquer coisa entrar na fila. Os eventos são apagados depois de 13 meses.',
+      foot: 'Um navegador que pede para não ser rastreado (Global Privacy Control ou Do Not Track) desliga o Pyxis antes de qualquer coisa entrar na fila. Os eventos são apagados depois de 13 meses.',
     },
     answers: {
       eyebrow: 'Painel',
@@ -1717,14 +1717,15 @@ export const ptBR = translation({
           '100% das instruções, ramos, funções e linhas cobertos por testes nos quatro repositórios. O CI falha abaixo disso.',
         realServices:
           'Testes de integração contra um Postgres de verdade, e testes de ponta a ponta num navegador de verdade, com verificação de acessibilidade pelo axe.',
-        provenance: 'O rastreador é publicado no npm pelo GitHub Actions, com proveniência.',
+        provenance:
+          'O código do Pyxis que vai nos sites é publicado no npm pelo GitHub Actions, com proveniência.',
         decisions:
           'Decisões registradas como ADRs (registros de decisão de arquitetura) em cada repositório.',
         storybook: 'Um Storybook em que cada história também é um teste de acessibilidade.',
       },
       storybook: 'Cada componente do painel e os seus estados',
       apiReference: 'Gerada dos próprios esquemas das rotas',
-      playground: 'O rastreador de verdade, mostrando cada lote que enviaria',
+      playground: 'O código do Pyxis de verdade, mostrando cada lote que enviaria',
     },
     architecture: {
       eyebrow: 'Arquitetura',
@@ -1775,7 +1776,7 @@ export const ptBR = translation({
           typical: 'Depende da ferramenta',
         },
         trackerSize: {
-          aspect: 'Tamanho do rastreador, com gzip',
+          aspect: 'Tamanho do código que o site carrega, com gzip',
           pyxis: 'Menos de 5 KB',
           typical: 'Em geral, de 30 a 150 KB',
         },
@@ -1854,7 +1855,7 @@ export const ptBR = translation({
         optOut: {
           question: 'O visitante pode pedir para não ser medido?',
           answer:
-            'O Global Privacy Control e o Do Not Track desligam o rastreador, e o site pode oferecer a sua própria chave com <code>optOut()</code> e <code>trackingStatus()</code>.',
+            'O Global Privacy Control e o Do Not Track desligam o Pyxis, e o site pode oferecer a sua própria chave com <code>optOut()</code> e <code>trackingStatus()</code>.',
         },
         retention: {
           question: 'Por quanto tempo os dados ficam guardados?',

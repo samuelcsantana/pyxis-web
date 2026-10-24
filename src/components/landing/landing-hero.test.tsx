@@ -72,7 +72,9 @@ describe('LandingHero', () => {
     expect(
       screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'under 5 KB tracker, gzipped' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'under 5 KB of Pyxis code, gzipped' }),
+    ).toBeInTheDocument();
   });
 
   it('speaks Brazilian Portuguese on the Portuguese page', () => {

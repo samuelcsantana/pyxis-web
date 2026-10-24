@@ -1545,7 +1545,7 @@ export const fr = translation({
       invented: 'Données inventées, comme dans la démo en direct.',
     },
     proof: {
-      size: { value: 'moins de 5 Ko', label: 'de traceur, compressé en gzip' },
+      size: { value: 'moins de 5 Ko', label: 'de code Pyxis, compressé en gzip' },
       dependencies: { value: '0', label: 'dépendance d’exécution' },
       coverage: { value: '100 %', label: 'de couverture de tests dans les quatre dépôts' },
       license: { value: 'MIT', label: 'comme licence, infrastructure comprise' },
@@ -1590,7 +1590,7 @@ export const fr = translation({
           kept: 'sessionStorage · prend fin avec l’onglet',
         },
       },
-      foot: 'Un navigateur qui envoie « ne pas me suivre » (Global Privacy Control ou Do Not Track) désactive le traceur avant que quoi que ce soit ne soit mis en file d’attente. Les événements sont supprimés au bout de 13 mois.',
+      foot: 'Un navigateur qui envoie « ne pas me suivre » (Global Privacy Control ou Do Not Track) désactive Pyxis avant que quoi que ce soit ne soit mis en file d’attente. Les événements sont supprimés au bout de 13 mois.',
     },
     answers: {
       eyebrow: 'Tableau de bord',
@@ -1753,14 +1753,15 @@ export const fr = translation({
           '100 % des instructions, branches, fonctions et lignes couvertes dans les quatre dépôts. La CI échoue en dessous.',
         realServices:
           'Des tests d’intégration sur un vrai Postgres, et des tests de bout en bout dans un vrai navigateur avec des contrôles d’accessibilité axe.',
-        provenance: 'Le traceur est publié sur npm depuis GitHub Actions, avec provenance.',
+        provenance:
+          'Le code Pyxis qu’installent les sites est publié sur npm depuis GitHub Actions, avec provenance.',
         decisions:
           'Les décisions sont consignées sous forme d’ADR (architecture decision records) dans chaque dépôt.',
         storybook: 'Un Storybook où chaque story est aussi un test d’accessibilité.',
       },
       storybook: 'Chaque composant du tableau de bord et ses états',
       apiReference: 'Générée à partir des schémas des routes elles-mêmes',
-      playground: 'Le vrai traceur, qui montre chaque lot qu’il enverrait',
+      playground: 'Le vrai code Pyxis, qui montre chaque lot qu’il enverrait',
     },
     architecture: {
       eyebrow: 'Architecture',
@@ -1814,7 +1815,7 @@ export const fr = translation({
           typical: 'Dépend de l’outil',
         },
         trackerSize: {
-          aspect: 'Taille du traceur, compressé en gzip',
+          aspect: 'Taille du code que charge le site, compressé en gzip',
           pyxis: 'Moins de 5 Ko',
           typical: 'En général, de 30 à 150 Ko',
         },
@@ -1894,7 +1895,7 @@ export const fr = translation({
         optOut: {
           question: 'Un visiteur peut-il refuser d’être mesuré ?',
           answer:
-            'Global Privacy Control et Do Not Track désactivent le traceur, et un site peut proposer son propre interrupteur avec <code>optOut()</code> et <code>trackingStatus()</code>.',
+            'Global Privacy Control et Do Not Track désactivent Pyxis, et un site peut proposer son propre interrupteur avec <code>optOut()</code> et <code>trackingStatus()</code>.',
         },
         retention: {
           question: 'Combien de temps les données sont-elles conservées ?',

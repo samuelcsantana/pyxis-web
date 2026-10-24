@@ -1533,7 +1533,7 @@ export const nl = translation({
       invented: 'Verzonnen gegevens, net als de livedemo.',
     },
     proof: {
-      size: { value: 'minder dan 5 KB', label: 'tracker, gzipped' },
+      size: { value: 'minder dan 5 KB', label: 'Pyxis-code, gzipped' },
       dependencies: { value: '0', label: 'runtime-afhankelijkheden' },
       coverage: { value: '100%', label: 'testdekking in alle vier de repository’s' },
       license: { value: 'MIT', label: 'licentie, infrastructuur inbegrepen' },
@@ -1578,7 +1578,7 @@ export const nl = translation({
           kept: 'sessionStorage · eindigt met het tabblad',
         },
       },
-      foot: 'Een browser die “niet volgen” verstuurt (Global Privacy Control of Do Not Track) schakelt de tracker uit voordat er iets in de wachtrij komt. Events worden na 13 maanden verwijderd.',
+      foot: 'Een browser die “niet volgen” verstuurt (Global Privacy Control of Do Not Track) schakelt Pyxis uit voordat er iets in de wachtrij komt. Events worden na 13 maanden verwijderd.',
     },
     answers: {
       eyebrow: 'Dashboard',
@@ -1738,13 +1738,13 @@ export const nl = translation({
         realServices:
           'Integratietests tegen een echte Postgres, en end-to-endtests in een echte browser met toegankelijkheidscontroles van axe.',
         provenance:
-          'De tracker wordt vanuit GitHub Actions naar npm gepubliceerd, met herkomstbewijs (provenance).',
+          'De Pyxis-code die sites installeren wordt vanuit GitHub Actions naar npm gepubliceerd, met herkomstbewijs (provenance).',
         decisions: 'Beslissingen vastgelegd als architecture decision records in elke repository.',
         storybook: 'Een Storybook waarin elke story ook een toegankelijkheidstest is.',
       },
       storybook: 'Elk dashboardcomponent en zijn toestanden',
       apiReference: 'Gegenereerd uit de eigen schema’s van de routes',
-      playground: 'De echte tracker, met elke batch die hij zou versturen',
+      playground: 'De echte Pyxis-code, met elke batch die hij zou versturen',
     },
     architecture: {
       eyebrow: 'Architectuur',
@@ -1798,7 +1798,7 @@ export const nl = translation({
           typical: 'Hangt af van de tool',
         },
         trackerSize: {
-          aspect: 'Grootte van de tracker, gzipped',
+          aspect: 'Grootte van de code die de site laadt, gzipped',
           pyxis: 'Minder dan 5 KB',
           typical: 'Meestal 30 tot 150 KB',
         },
@@ -1877,7 +1877,7 @@ export const nl = translation({
         optOut: {
           question: 'Kan een bezoeker het meten uitzetten?',
           answer:
-            'Global Privacy Control en Do Not Track schakelen de tracker uit, en een site kan een eigen schakelaar aanbieden met <code>optOut()</code> en <code>trackingStatus()</code>.',
+            'Global Privacy Control en Do Not Track schakelen Pyxis uit, en een site kan een eigen schakelaar aanbieden met <code>optOut()</code> en <code>trackingStatus()</code>.',
         },
         retention: {
           question: 'Hoe lang worden gegevens bewaard?',
