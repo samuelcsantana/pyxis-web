@@ -153,7 +153,7 @@ export const en = {
       title: 'No projects yet',
       body: '<email/> can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your email.',
       create: 'Create your first project',
-      bodyOwner: 'Your account is ready. Create a project for your site, then install the tracker.',
+      bodyOwner: 'Your account is ready. Create a project for your site, then install Pyxis on it.',
       finish: 'Finish your subscription',
       bodyUnfinished:
         'Your account is waiting for a plan. Finish the subscription to create projects.',
@@ -482,7 +482,7 @@ export const en = {
   install: {
     title: 'Install',
     subtitle: 'Send the first events of {project}.',
-    step1: '1. Add the tracker to your site',
+    step1: '1. Install Pyxis on your site',
     npm: 'With a bundler (npm):',
     script: 'Or in plain HTML, before the closing body tag:',
     step2: '2. Open a page of your site',
@@ -557,7 +557,7 @@ export const en = {
       'This takes a few seconds and the page checks again on its own. If it takes longer, you will get an e-mail when it is done.',
     trial: 'Your free trial has started. It runs until {date}.',
     active: 'Your subscription is confirmed.',
-    next: 'Next, create a project for your site and install the tracker.',
+    next: 'Next, create a project for your site and install Pyxis on it.',
     create: 'Create your first project',
     dashboard: 'Open the dashboard',
   },

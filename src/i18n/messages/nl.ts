@@ -164,7 +164,7 @@ export const nl = translation({
       body: '<email/> kan inloggen, maar heeft nog geen toegang tot een project gekregen. Vraag wie deze Pyxis beheert om <code>admin:grant</code> uit te voeren voor je e-mailadres.',
       create: 'Je eerste project aanmaken',
       bodyOwner:
-        'Je account is klaar. Maak een project aan voor je site en installeer daarna de tracker.',
+        'Je account is klaar. Maak een project aan voor je site en installeer daarna Pyxis erop.',
       finish: 'Je abonnement afronden',
       bodyUnfinished:
         'Je account wacht op een abonnement. Rond het abonnement af om projecten aan te maken.',
@@ -507,7 +507,7 @@ export const nl = translation({
   install: {
     title: 'Installeren',
     subtitle: 'Verstuur de eerste events van {project}.',
-    step1: '1. Voeg de tracker toe aan je site',
+    step1: '1. Installeer Pyxis op je site',
     npm: 'Met een bundler (npm):',
     script: 'Of in gewone HTML, vóór de afsluitende body-tag:',
     step2: '2. Open een pagina van je site',
@@ -584,7 +584,7 @@ export const nl = translation({
       'Dit duurt een paar seconden en de pagina controleert vanzelf opnieuw. Duurt het langer, dan krijg je een e-mail zodra het klaar is.',
     trial: 'Je gratis proefperiode is gestart. Die loopt tot {date}.',
     active: 'Je abonnement is bevestigd.',
-    next: 'Maak nu een project aan voor je site en installeer de tracker.',
+    next: 'Maak nu een project aan voor je site en installeer Pyxis erop.',
     create: 'Je eerste project aanmaken',
     dashboard: 'Dashboard openen',
   },
