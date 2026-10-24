@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   TRACKER_VERSION,
   agentPrompt,
+  connectorUrlOf,
   installCommand,
   moduleSnippet,
   pinnedVersion,
@@ -84,5 +85,11 @@ describe('agentPrompt', () => {
     expect(agentPrompt(values, portuguese)).toMatch(
       /^Instale o Pyxis neste site seguindo https:\/\/pyxis-analytics\.dev\/llms\.txt\. A chave pública do projeto é pyxis_pk_abc, .* para eu revisar\.$/,
     );
+  });
+});
+
+describe('connectorUrlOf', () => {
+  it('reaches the MCP server of the API the snippets send to', () => {
+    expect(connectorUrlOf(ENDPOINT)).toBe('https://api.pyxis-analytics.dev/mcp');
   });
 });

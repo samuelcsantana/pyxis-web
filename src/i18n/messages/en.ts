@@ -526,6 +526,17 @@ export const en = {
       rules:
         'The agent follows the rules in <code>llms.txt</code>: no personal data, valid event names, the API address in the CSP.',
     },
+    step3: '3. Check with Claude (optional)',
+    claude: {
+      body: 'Connect Claude to Pyxis and ask whether the first events arrived. It reads the same numbers as this dashboard, never changes anything, and you revoke the connection whenever you want, in <settings>Settings</settings>.',
+      connect:
+        'In Claude, open <code>claude.ai/directory/pyxis</code> and choose Connect. In Claude Code, run this command, then /mcp to sign in:',
+      allow: 'When you connect, a Pyxis screen asks you to allow the connection.',
+    },
+    ask: {
+      lead: 'Already connected Claude? Ask it:',
+      question: 'How many visits did {project} get today, and where did they come from?',
+    },
   },
   signUp: {
     title: 'Start your free trial',

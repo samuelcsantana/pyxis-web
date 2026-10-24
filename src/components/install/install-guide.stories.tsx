@@ -57,6 +57,11 @@ export const WithAnAiAgentInTheDarkTheme: Story = {
 
 export const FirstEventArrived: Story = { args: { settings: RECEIVING } };
 
+export const FirstEventArrivedInPortuguese: Story = {
+  args: { settings: RECEIVING },
+  globals: { locale: 'pt-BR' },
+};
+
 export const NoLivePublicKey: Story = {
   args: { settings: { ...RECEIVING, firstEventAt: null, lastEventAt: null, publicKeys: [] } },
 };

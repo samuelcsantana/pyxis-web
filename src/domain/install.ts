@@ -4,6 +4,7 @@ import manifest from '../../package.json';
 
 export const TRACKER_PACKAGE = 'pyxis-analytics';
 export const AGENT_RECIPE_URL = `${LANDING_ORIGIN}/llms.txt`;
+const CONNECTOR_PATH = '/mcp';
 
 const PINNABLE_RANGE = /^[\^~]?(\d+\.\d+\.\d+)$/;
 
@@ -49,4 +50,8 @@ export function agentPrompt({ key, endpoint, origin }: AgentPromptValues, i18n: 
   return origin === undefined
     ? i18n.t('install.agent.promptAnySite', { recipe, key, endpoint })
     : i18n.t('install.agent.prompt', { recipe, key, endpoint, origin });
+}
+
+export function connectorUrlOf(endpoint: string): string {
+  return `${endpoint}${CONNECTOR_PATH}`;
 }

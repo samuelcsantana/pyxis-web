@@ -82,6 +82,10 @@ export function settingsKeysHref(projectId: string): string {
 
 export const SETTINGS_CONNECTIONS_PANEL = 'settings-connections';
 
+export function settingsConnectionsHref(projectId: string): string {
+  return `${settingsHref(projectId)}#${SETTINGS_CONNECTIONS_PANEL}-heading`;
+}
+
 const LINK_BASE = 'http://link.invalid';
 
 export function linkWith(href: string, parameters: Readonly<Record<string, string>>): string {
