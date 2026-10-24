@@ -1,10 +1,13 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
 import {
   AGENT_PROMPT_ID,
+  AGENT_ROBOT_ID_PREFIX,
+  CODING_AGENTS,
   codeTextOf,
   FIRST_EVENT,
   INSTALL_COMMAND,
@@ -201,6 +204,70 @@ describe('InstallSection', () => {
     expect(agent).toHaveTextContent(
       'Depois de criar a conta e o projeto, a tela Instalação do painel traz um pedido como este já pronto, com a chave do seu projeto no lugar de pyxis_pk_….',
     );
+    expect(within(agent).getByText('Instale sem escrever código')).toBeInTheDocument();
+    expect(
+      within(agent).getByRole('list', { name: 'Funciona com agentes de código como' }),
+    ).toHaveTextContent('e outros que leem o llms.txt');
+    expect(
+      within(agent).getByRole('button', { name: 'Copiar o pedido para o agente' }),
+    ).toBeInTheDocument();
+  });
+
+  it('highlights the agent card with a badge above its title and a robot in its corner', () => {
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
+    const badge = within(agent).getByText('Install without writing code');
+    const title = within(agent).getByRole('heading', { name: 'Or ask your AI agent' });
+    expect(agent).toHaveClass('landing-agent-card');
+    expect(badge).toHaveClass('landing-agent-badge');
+    expect(badge.compareDocumentPosition(title)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(title).toHaveClass('text-[1.6rem]', 'sm:text-[2rem]');
+    const robot = agent.querySelector('.landing-agent-robot');
+    expect(robot).toHaveAttribute('aria-hidden', 'true');
+    expect(robot?.querySelector(`#${AGENT_ROBOT_ID_PREFIX}-head`)).not.toBeNull();
+  });
+
+  it('names the coding agents it works with, in plain text with no brand logo', () => {
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    const agents = screen.getByRole('list', { name: 'Works with coding agents such as' });
+    const chips = within(agents).getAllByRole('listitem');
+    expect(chips.map((chip) => chip.textContent)).toEqual([
+      'Claude Code',
+      'Cursor',
+      'Codex',
+      'GitHub Copilot',
+      'Gemini CLI',
+      'Windsurf',
+      'and others that read llms.txt',
+    ]);
+    expect(chips).toHaveLength(CODING_AGENTS.length + 1);
+    expect(agents.querySelector('svg, img')).toBeNull();
+    expect(chips.at(-1)).toHaveClass('border-dashed');
+  });
+
+  it('copies the same request from a large button under it, counted apart', async () => {
+    const writeText = vi.fn(() => Promise.resolve());
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    render(<InstallSection i18n={english} signUpOpen />);
+
+    const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
+    const button = within(agent).getByRole('button', { name: 'Copy the request for your agent' });
+    expect(button).toHaveClass('landing-copy-prominent');
+    expect(button).toHaveAttribute('data-track', 'snippet_copied');
+    expect(button).toHaveAttribute('data-track-snippet', AGENT_PROMPT_ID);
+    expect(button).toHaveAttribute('data-track-button', 'prominent');
+    expect(agent.querySelector(`#${AGENT_PROMPT_ID}`)?.compareDocumentPosition(button)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+
+    await userEvent.click(button);
+
+    expect(writeText).toHaveBeenCalledWith(agent.querySelector(`#${AGENT_PROMPT_ID}`)?.textContent);
+    expect(
+      within(agent).getByRole('button', { name: 'Request copied. Paste it into your agent' }),
+    ).toBeInTheDocument();
   });
 
   it('points to trackRequest under the code, so the failing calls the hero promises have a way in', () => {

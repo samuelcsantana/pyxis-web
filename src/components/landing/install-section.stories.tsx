@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, within } from 'storybook/test';
+import { expect, spyOn, userEvent, within } from 'storybook/test';
 import { english } from '@/test-utils/english';
 import { InstallSection } from './install-section';
+import '@/app/landing/[locale]/landing.css';
+
+const RISEN_INTO_VIEW = '.landing-reveal { animation: none; }';
 
 const meta = {
   title: 'Landing/InstallSection',
@@ -11,6 +14,7 @@ const meta = {
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
+        <style>{RISEN_INTO_VIEW}</style>
         <Story />
       </div>
     ),
@@ -35,6 +39,28 @@ export const SignUpOpen: Story = {
     await expect(
       canvas.getByText(/the dashboard’s Install screen has a request like this one ready/),
     ).toBeVisible();
+    await expect(canvas.getByText('Install without writing code')).toBeVisible();
+    await expect(
+      within(canvas.getByRole('list', { name: 'Works with coding agents such as' })).getAllByRole(
+        'listitem',
+      ),
+    ).toHaveLength(7);
+    await expect(
+      canvas.getByRole('button', { name: 'Copy the request for your agent' }),
+    ).toBeVisible();
+  },
+};
+
+export const SignUpOpenRequestCopied: Story = {
+  args: { signUpOpen: true },
+  play: async ({ canvasElement }) => {
+    const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Copy the request for your agent' }));
+    await expect(
+      await canvas.findByRole('button', { name: 'Request copied. Paste it into your agent' }),
+    ).toBeVisible();
+    writeText.mockRestore();
   },
 };
 
@@ -51,6 +77,11 @@ export const SignUpOpenOnAPhone: Story = {
 export const SignUpOpenInTheDarkTheme: Story = {
   args: { signUpOpen: true },
   globals: { theme: 'dark' },
+};
+
+export const SignUpOpenOnAPhoneInTheDarkTheme: Story = {
+  args: { signUpOpen: true },
+  globals: { theme: 'dark', viewport: { value: 'mobile1' } },
 };
 
 export const Portuguese: Story = { globals: { locale: 'pt-BR' } };

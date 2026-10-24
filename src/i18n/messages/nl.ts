@@ -1772,6 +1772,11 @@ export const nl = translation({
         ready:
           'Zodra het account en het project zijn aangemaakt, staat een verzoek als dit klaar op het scherm Installeren van het dashboard, met de sleutel van je project in plaats van <code>pyxis_pk_…</code>.',
         foot: 'De agent volgt de regels in <code>llms.txt</code>: geen persoonsgegevens, geldige eventnamen, het API-adres in de CSP. Koppel daarna Claude aan Pyxis om te controleren dat de eerste events zijn aangekomen.',
+        badge: 'Installeer zonder code te schrijven',
+        agents: 'Werkt met coding-agents zoals',
+        others: 'en andere die llms.txt lezen',
+        copyRequest: 'Kopieer het verzoek voor de agent',
+        requestCopied: 'Verzoek gekopieerd. Plak het in je agent',
       },
     },
     public: {

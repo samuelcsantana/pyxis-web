@@ -1789,6 +1789,11 @@ export const fr = translation({
         ready:
           'Une fois le compte et le projet créés, l’écran Installation du tableau de bord propose une demande comme celle-ci, toute prête, avec la clé de votre projet à la place de <code>pyxis_pk_…</code>.',
         foot: 'L’agent suit les règles de <code>llms.txt</code> : aucune donnée personnelle, des noms d’événement valides, l’adresse de l’API dans la CSP. Connectez ensuite Claude à Pyxis pour vérifier que les premiers événements sont arrivés.',
+        badge: 'Installez sans écrire de code',
+        agents: 'Fonctionne avec des agents de code comme',
+        others: 'et d’autres qui lisent llms.txt',
+        copyRequest: 'Copier la demande pour l’agent',
+        requestCopied: 'Demande copiée. Collez-la dans votre agent',
       },
     },
     public: {

@@ -1760,6 +1760,11 @@ export const es = translation({
         ready:
           'Después de crear la cuenta y el proyecto, la pantalla Instalación del panel trae una petición como esta ya lista, con la clave de tu proyecto en lugar de <code>pyxis_pk_…</code>.',
         foot: 'El agente sigue las reglas de <code>llms.txt</code>: ningún dato personal, nombres de evento válidos, la dirección de la API en la CSP. Después, conecta Claude a Pyxis para comprobar que llegaron los primeros eventos.',
+        badge: 'Instálalo sin escribir código',
+        agents: 'Funciona con agentes de código como',
+        others: 'y otros que leen llms.txt',
+        copyRequest: 'Copiar la petición para el agente',
+        requestCopied: 'Petición copiada. Pégala en tu agente',
       },
     },
     public: {
