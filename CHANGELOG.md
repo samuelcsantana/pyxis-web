@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.34.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.33.1...v0.34.0) (2026-10-24)
+
+
+### Features
+
+* **arrivals:** answer the browser what reached the project ([48c5926](https://github.com/samuelcsantana/pyxis-web/commit/48c5926f66be817bd977d49e9cd8762619594138))
+* **arrivals:** read what reached a project since a moment ([f05ec08](https://github.com/samuelcsantana/pyxis-web/commit/f05ec081fdc4b3c0e4af432ae7ae65f2fba07d72))
+* **shell:** count arrivals per screen and pace the questions about them ([84f3dad](https://github.com/samuelcsantana/pyxis-web/commit/84f3dadfddc2e8b1a35d0d76f562e415cc5cb774))
+* **shell:** count on the menu what arrived since each screen was seen ([714514a](https://github.com/samuelcsantana/pyxis-web/commit/714514abca1a0f6dfffc9b3d11ee0fe2d7a6d409))
+* **shell:** keep on the device which screens of a project were seen ([fde9fc3](https://github.com/samuelcsantana/pyxis-web/commit/fde9fc354acfbae99f6fe3b7ab16a9ddab9afdf8))
+
+
+### Documentation
+
+* record that arrivals are polled and counted on the device ([18c2bf6](https://github.com/samuelcsantana/pyxis-web/commit/18c2bf68264cbcaa59908601eb225d1fa41dab08))
+
 ## [0.33.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.33.0...v0.33.1) (2026-10-24)
 
 
