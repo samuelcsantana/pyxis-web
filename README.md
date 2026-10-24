@@ -231,6 +231,12 @@ Shipping now:
   100 on, with the words for a screen reader; on a phone the menu button gets a dot. The dashboard
   asks every 30 seconds while the tab is visible and the period includes today, and stops after
   30 idle minutes ([ADR 0014](docs/adr/0014-arrivals-are-polled-not-streamed.md))
+- News on the screen being shown: when something of its kind arrived after that screen was read,
+  a "3 new visits · Refresh" button appears in its own row between the top bar and the content
+  (never over the content, where it would cover the cards' buttons), and stays under the top bar
+  while the page scrolls; it reads the screen again in place, without a skeleton and without
+  touching the top bar, says "Refreshing…" until the new read lands, then goes away and hands the
+  keyboard focus to the content if it had it
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
@@ -677,7 +683,8 @@ after the page is shown; what every screen loads to draw them took Overview to 1
 Requests to 170.5 KiB. For them the chart budget went to 169 KiB and the screen budget to 172 KiB,
 sized for the four tasks of that work (the counts, the "new · Refresh" bar, the visitors on the
 site now, the "+N" on the numbers), each of which draws its part from what the same watcher
-loads; every one still reports its first-load JavaScript.
+loads; every one still reports its first-load JavaScript. The "new · Refresh" bar took Overview to
+168.2 KiB and Requests to 171.0 KiB.
 
 ## Project structure
 
