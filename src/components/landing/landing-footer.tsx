@@ -7,9 +7,8 @@ import type { Seller } from '@/lib/legal-config';
 import { CONTRACT_LANGUAGE, legalDocumentsIn } from '@/lib/legal-documents';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
-import { CONTACT_EMAIL, LANDING_LINKS, PROPER_NAMES } from './landing-links';
+import { CONTACT_EMAIL, LANDING_LINKS, PRICING_ID, PROPER_NAMES } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
-import { PRICING_ID } from './pricing-section';
 
 export interface LandingFooterProps {
   readonly i18n: I18n;
