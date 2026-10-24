@@ -3,6 +3,8 @@ import { axeViolations, sidewaysOverflow } from './accessibility';
 import { chooseLanguage } from './language-select';
 
 const ONE_ROW_HEADER_PX = 72;
+const SMALL_LAPTOP = { width: 1024, height: 768 };
+const HEADER_LINKS = 5;
 const NARROW_PHONE_WIDTHS = [320, 360, 390];
 const PHONE_HEIGHT = 844;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
@@ -80,6 +82,21 @@ test('keeps the header on one row on a phone, in every language', async ({ page,
 
     const header = await page.getByRole('banner').boundingBox();
     expect(header?.height).toBeLessThan(ONE_ROW_HEADER_PX);
+  }
+});
+
+test('keeps the header and all its links on one row on a laptop, in every language', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'A phone hides the header links.');
+  await page.setViewportSize(SMALL_LAPTOP);
+  for (const path of HOME_PATHS) {
+    await page.goto(path);
+
+    const banner = page.getByRole('banner');
+    await expect(banner.getByRole('navigation').getByRole('link')).toHaveCount(HEADER_LINKS);
+    expect((await banner.boundingBox())?.height, path).toBeLessThan(ONE_ROW_HEADER_PX);
   }
 });
 
@@ -443,6 +460,19 @@ test('jumps to the privacy section from the header', async ({ page, isMobile }) 
 
   await expect(page).toHaveURL(/#never-stored$/);
   await expect(page.getByRole('heading', { name: 'What never gets stored' })).toBeInViewport();
+});
+
+test('jumps to the install section from the header', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'the header keeps only the essentials on a phone');
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link', { name: 'Install' })
+    .click();
+
+  await expect(page).toHaveURL(/#install$/);
+  await expect(page.getByRole('heading', { name: 'What a site adds' })).toBeInViewport();
 });
 
 test('jumps to the pricing from the header', async ({ page, isMobile }) => {

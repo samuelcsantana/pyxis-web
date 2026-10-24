@@ -45,11 +45,19 @@ describe('SiteHeader', () => {
     expect(claude).toHaveAttribute('href', '#ask-claude');
     expect(claude).toHaveAttribute('data-track', 'ask_claude_opened');
     expect(claude).toHaveAttribute('data-track-from', 'header');
+    const install = within(main).getByRole('link', { name: 'Install' });
+    expect(install).toHaveAttribute('href', '#install');
+    expect(install).toHaveAttribute('data-track', 'install_opened');
+    expect(install).toHaveAttribute('data-track-from', 'header');
     const pricing = within(main).getByRole('link', { name: 'Pricing' });
     expect(pricing).toHaveAttribute('href', '#pricing');
     expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
     expect(pricing).toHaveAttribute('data-track-from', 'header');
-    expect(within(main).queryByRole('link', { name: 'GitHub' })).not.toBeInTheDocument();
+    expect(
+      within(main)
+        .getAllByRole('link')
+        .map((link) => link.textContent),
+    ).toEqual(['Live demo', 'Privacy', 'Ask Claude', 'Install', 'Pricing']);
   });
 
   it('offers the dashboard sign-in on the home page', () => {
@@ -80,6 +88,10 @@ describe('SiteHeader', () => {
     expect(screen.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
       'href',
       'https://pyxis-analytics.dev/pt-br#never-stored',
+    );
+    expect(screen.getByRole('link', { name: 'Install' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/pt-br#install',
     );
     expect(screen.getByRole('link', { name: 'Pricing' })).toHaveAttribute(
       'href',

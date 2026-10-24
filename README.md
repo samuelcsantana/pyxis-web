@@ -405,8 +405,9 @@ Shipping now:
 - The home page measures itself with this project's own tracker (`pyxis-analytics` from npm),
   only when `NEXT_PUBLIC_LANDING_PYXIS_KEY` is set: clicks on elements carrying `data-track`
   become named events (`demo_opened`, `code_opened`, `docs_opened`, `post_opened`,
-  `site_opened`, `snippet_copied`, `language_switched`, `pricing_opened`, `access_requested`,
-  `sign_up_opened`), a button lists what this visit sent, live
+  `site_opened`, `snippet_copied`, `language_switched`, `install_opened`, `pricing_opened`,
+  `access_requested`, `sign_up_opened`, `larger_plan_requested`, `ask_claude_opened`,
+  `claude_directory_opened`, `nudge_dismissed`), a button lists what this visit sent, live
   (the SDK's `debug.onBatch`), and the footer says the page is measured, with a switch to stop
   measuring in this browser. A browser driven by automation (`navigator.webdriver`) is not
   measured, so Playwright launches Chromium with `--disable-blink-features=AutomationControlled`
