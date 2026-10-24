@@ -237,6 +237,10 @@ Shipping now:
   while the page scrolls; it reads the screen again in place, without a skeleton and without
   touching the top bar, says "Refreshing…" until the new read lands, then goes away and hands the
   keyboard focus to the content if it had it
+- Visits on the site now: beside the Overview title, while the period includes today, the visits
+  with an event received in the last five minutes ("4 on the site now"), updated by every answer
+  of the same 30-second question, with a green dot that pings only when someone is there and
+  motion is welcome
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
@@ -684,7 +688,8 @@ Requests to 170.5 KiB. For them the chart budget went to 169 KiB and the screen 
 sized for the four tasks of that work (the counts, the "new · Refresh" bar, the visitors on the
 site now, the "+N" on the numbers), each of which draws its part from what the same watcher
 loads; every one still reports its first-load JavaScript. The "new · Refresh" bar took Overview to
-168.2 KiB and Requests to 171.0 KiB.
+168.2 KiB and Requests to 171.0 KiB; the visits on the site now took them to 168.5 KiB and
+171.3 KiB.
 
 ## Project structure
 
