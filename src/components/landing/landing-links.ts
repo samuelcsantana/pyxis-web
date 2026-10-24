@@ -4,6 +4,8 @@ const GITHUB_PROFILE = 'https://github.com/samuelcsantana';
 
 export const ASK_CLAUDE_ID = 'ask-claude';
 
+export const PRICING_ID = 'pricing';
+
 export const HOSTED_CONNECTOR_URL = 'https://api.pyxis-analytics.dev/mcp';
 
 export const CONTACT_EMAIL = 'hello@pyxis-analytics.dev';

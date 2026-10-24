@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { COPY_STATE_MS, CopyCodeButton } from './copy-code-button';
+import { CODE_COPIED_EVENT, COPY_STATE_MS, CopyCodeButton } from './copy-code-button';
 
 const LABELS = { copy: 'Copy', copied: 'Copied', selected: 'Selected, press Ctrl+C' };
 
@@ -78,6 +78,60 @@ describe('CopyCodeButton', () => {
     render(<CopyCodeButton code="hello" targetId="code" labels={LABELS} placement="inline" />);
 
     expect(screen.getByRole('button', { name: 'Copy' })).not.toHaveClass('absolute');
+  });
+
+  it('tells the page which code it copied', async () => {
+    stubClipboard(() => Promise.resolve());
+    const heard = vi.fn();
+    const listen = (event: Event) => {
+      heard(event instanceof CustomEvent ? event.detail : null);
+    };
+    window.addEventListener(CODE_COPIED_EVENT, listen);
+    renderButton();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
+
+    window.removeEventListener(CODE_COPIED_EVENT, listen);
+    expect(heard).toHaveBeenCalledExactlyOnceWith('code');
+  });
+
+  it('tells the page nothing when it could only select the code', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    stubClipboard(() => Promise.reject(new Error('no clipboard')));
+    const heard = vi.fn();
+    window.addEventListener(CODE_COPIED_EVENT, heard);
+    renderButton();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
+
+    expect(
+      await screen.findByRole('button', { name: 'Selected, press Ctrl+C' }),
+    ).toBeInTheDocument();
+    window.removeEventListener(CODE_COPIED_EVENT, heard);
+    expect(heard).not.toHaveBeenCalled();
+  });
+
+  it('stands out with a copy icon when asked to look prominent, and stays quiet otherwise', () => {
+    const { unmount } = renderButton();
+    const quiet = screen.getByRole('button', { name: 'Copy' });
+    expect(quiet).toHaveClass('bg-nav-raised');
+    expect(quiet.querySelector('svg')).toBeNull();
+    unmount();
+
+    render(
+      <CopyCodeButton
+        code="hello"
+        targetId="code"
+        labels={LABELS}
+        placement="inline"
+        appearance="prominent"
+      />,
+    );
+
+    const prominent = screen.getByRole('button', { name: 'Copy' });
+    expect(prominent).toHaveClass('landing-copy-prominent');
+    expect(prominent).not.toHaveClass('bg-nav-raised', 'absolute');
+    expect(prominent.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('selects nothing when the code it names is not on the page', async () => {

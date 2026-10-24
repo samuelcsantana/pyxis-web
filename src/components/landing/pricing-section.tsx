@@ -3,7 +3,7 @@ import { approximatePricesOf, type EuroRates } from '@/domain/approximate-price'
 import type { I18n } from '@/i18n/i18n';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
-import { CONTACT_EMAIL, LANDING_LINKS } from './landing-links';
+import { CONTACT_EMAIL, LANDING_LINKS, PRICING_ID } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
@@ -17,7 +17,6 @@ interface AskPanelProps {
   readonly i18n: I18n;
 }
 
-export const PRICING_ID = 'pricing';
 export const CONTACT_EMAIL_ID = 'pricing-contact-email';
 export const YEARLY_OPTION_ID = 'pricing-yearly';
 

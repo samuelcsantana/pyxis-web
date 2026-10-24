@@ -1,5 +1,6 @@
-const ID = 'pyxis-robot';
-const url = (name: string): string => `url(#${ID}-${name})`;
+export const ROBOT_ID_PREFIX = 'pyxis-robot';
+
+type Paint = (name: string) => string;
 
 interface Stop {
   readonly offset: string;
@@ -12,9 +13,9 @@ function Stops({ stops }: { readonly stops: readonly Stop[] }) {
   ));
 }
 
-function Glow({ name, blur }: { readonly name: string; readonly blur: number }) {
+function Glow({ id, blur }: { readonly id: string; readonly blur: number }) {
   return (
-    <filter id={`${ID}-${name}`} x="-40%" y="-40%" width="180%" height="180%">
+    <filter id={id} x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation={blur} result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
@@ -24,7 +25,7 @@ function Glow({ name, blur }: { readonly name: string; readonly blur: number }) 
   );
 }
 
-function Fingers({ side }: { readonly side: 'left' | 'right' }) {
+function Fingers({ side, url }: { readonly side: 'left' | 'right'; readonly url: Paint }) {
   const paths =
     side === 'left'
       ? ['M31 200 C28 206, 30 212, 34 213', 'M38 201 C37 207, 39 213, 42 214']
@@ -41,7 +42,13 @@ function Fingers({ side }: { readonly side: 'left' | 'right' }) {
   );
 }
 
-export function NudgeRobot() {
+export interface NudgeRobotProps {
+  readonly idPrefix?: string;
+}
+
+export function NudgeRobot({ idPrefix = ROBOT_ID_PREFIX }: NudgeRobotProps) {
+  const id: Paint = (name) => `${idPrefix}-${name}`;
+  const url: Paint = (name) => `url(#${id(name)})`;
   return (
     <svg
       className="landing-robot-svg"
@@ -51,7 +58,7 @@ export function NudgeRobot() {
       focusable="false"
     >
       <defs>
-        <radialGradient id={`${ID}-head`} cx="35%" cy="22%" r="75%">
+        <radialGradient id={id('head')} cx="35%" cy="22%" r="75%">
           <Stops
             stops={[
               { offset: '0%', color: 'metal-1' },
@@ -61,7 +68,7 @@ export function NudgeRobot() {
             ]}
           />
         </radialGradient>
-        <radialGradient id={`${ID}-body`} cx="32%" cy="25%" r="75%">
+        <radialGradient id={id('body')} cx="32%" cy="25%" r="75%">
           <Stops
             stops={[
               { offset: '0%', color: 'metal-1' },
@@ -71,7 +78,7 @@ export function NudgeRobot() {
             ]}
           />
         </radialGradient>
-        <linearGradient id={`${ID}-gold`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={id('gold')} x1="0%" y1="0%" x2="100%" y2="100%">
           <Stops
             stops={[
               { offset: '0%', color: 'gold-1' },
@@ -82,7 +89,7 @@ export function NudgeRobot() {
             ]}
           />
         </linearGradient>
-        <radialGradient id={`${ID}-gold-orb`} cx="32%" cy="28%" r="70%">
+        <radialGradient id={id('gold-orb')} cx="32%" cy="28%" r="70%">
           <Stops
             stops={[
               { offset: '0%', color: 'gold-1' },
@@ -92,7 +99,7 @@ export function NudgeRobot() {
             ]}
           />
         </radialGradient>
-        <radialGradient id={`${ID}-silver-orb`} cx="30%" cy="28%" r="70%">
+        <radialGradient id={id('silver-orb')} cx="30%" cy="28%" r="70%">
           <Stops
             stops={[
               { offset: '0%', color: 'silver-1' },
@@ -102,7 +109,7 @@ export function NudgeRobot() {
             ]}
           />
         </radialGradient>
-        <linearGradient id={`${ID}-visor`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={id('visor')} x1="0%" y1="0%" x2="0%" y2="100%">
           <Stops
             stops={[
               { offset: '0%', color: 'visor-1' },
@@ -111,7 +118,7 @@ export function NudgeRobot() {
             ]}
           />
         </linearGradient>
-        <radialGradient id={`${ID}-led`} cx="50%" cy="50%" r="55%">
+        <radialGradient id={id('led')} cx="50%" cy="50%" r="55%">
           <Stops
             stops={[
               { offset: '0%', color: 'led-1' },
@@ -121,14 +128,14 @@ export function NudgeRobot() {
             ]}
           />
         </radialGradient>
-        <linearGradient id={`${ID}-flame`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={id('flame')} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="var(--robot-silver-1)" />
           <stop offset="35%" stopColor="var(--robot-led-2)" />
           <stop offset="75%" stopColor="var(--robot-gold-2)" />
           <stop offset="100%" stopColor="var(--robot-gold-2)" stopOpacity={0} />
         </linearGradient>
-        <Glow name="led-glow" blur={4.5} />
-        <Glow name="gold-glow" blur={3.5} />
+        <Glow id={id('led-glow')} blur={4.5} />
+        <Glow id={id('gold-glow')} blur={3.5} />
       </defs>
 
       <g className="landing-robot-flame" filter={url('led-glow')}>
@@ -177,7 +184,7 @@ export function NudgeRobot() {
           transform="rotate(8 39 193)"
           fill={url('gold')}
         />
-        <Fingers side="left" />
+        <Fingers side="left" url={url} />
       </g>
 
       <g className="landing-robot-arm-right">
@@ -210,7 +217,7 @@ export function NudgeRobot() {
           transform="rotate(-8 181 193)"
           fill={url('gold')}
         />
-        <Fingers side="right" />
+        <Fingers side="right" url={url} />
       </g>
 
       <ellipse

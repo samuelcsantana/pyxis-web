@@ -4,9 +4,9 @@ import { rich } from '@/i18n/rich';
 import { DASHBOARD_ANSWERS_ID, demoScreenUrl } from './dashboard-answers-section';
 import { INSTALL_ID } from './install-section';
 import { REVEAL } from './landing-classes';
+import { PRICING_ID } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
-import { PRICING_ID } from './pricing-section';
 
 export interface WhoItIsForSectionProps {
   readonly i18n: I18n;

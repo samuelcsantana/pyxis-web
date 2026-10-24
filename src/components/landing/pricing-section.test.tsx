@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { spanish } from '@/test-utils/spanish';
-import { CONTACT_EMAIL_ID, PRICING_ID, PricingSection, YEARLY_OPTION_ID } from './pricing-section';
+import { PRICING_ID } from './landing-links';
+import { CONTACT_EMAIL_ID, PricingSection, YEARLY_OPTION_ID } from './pricing-section';
 
 describe('PricingSection', () => {
   it('names the one plan with its monthly price chosen first', () => {

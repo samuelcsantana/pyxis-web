@@ -1772,6 +1772,11 @@ export const it = translation({
         ready:
           'Dopo aver creato l’account e il progetto, la schermata Installazione della dashboard ha una richiesta come questa già pronta, con la chiave del tuo progetto al posto di <code>pyxis_pk_…</code>.',
         foot: 'L’agente segue le regole di <code>llms.txt</code>: nessun dato personale, nomi di evento validi, l’indirizzo dell’API nella CSP. Poi collega Claude a Pyxis per verificare che i primi eventi siano arrivati.',
+        badge: 'Installa senza scrivere codice',
+        agents: 'Funziona con agenti di programmazione come',
+        others: 'e altri che leggono llms.txt',
+        copyRequest: 'Copia la richiesta per l’agente',
+        requestCopied: 'Richiesta copiata. Incollala nel tuo agente',
       },
     },
     public: {
