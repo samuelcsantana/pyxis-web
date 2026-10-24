@@ -144,6 +144,7 @@ interface AttributedVisits {
 
 export interface ConversionFigures {
   readonly visits: string;
+  readonly counted: number;
   readonly conversions: string | null;
   readonly conversionRate: string | null;
   readonly barWidth: string;
@@ -163,6 +164,7 @@ function withConversionFigures<Entry extends AttributedVisits, Row>(
   return rated.map(({ entry, converted, share }) => ({
     ...describe(entry),
     visits: formatCount(entry.visits, i18n),
+    counted: entry.visits,
     conversions: converted === null ? null : formatCount(converted, i18n),
     conversionRate: converted === null ? null : formatPercent(share, i18n),
     barWidth: barWidth(share ?? 0, best),

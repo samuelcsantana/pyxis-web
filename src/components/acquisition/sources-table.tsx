@@ -1,4 +1,5 @@
 import { type Channel, channelLabel, type SourceRow } from '@/domain/acquisition';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import type { I18n } from '@/i18n/i18n';
 import { NO_VALUE } from '@/domain/metrics';
 import {
@@ -58,7 +59,7 @@ export function SourcesTable({
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.key}>
+                <tr key={row.key} className={FRESH_HIGHLIGHT}>
                   <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
                     <span className="flex items-start gap-2.5">
                       <span
@@ -92,7 +93,10 @@ export function SourcesTable({
                   <td className={`${BODY_CELL} hidden font-mono text-xs text-muted sm:table-cell`}>
                     {row.medium ?? NO_VALUE}
                   </td>
-                  <td className={`${BODY_CELL} text-right font-semibold`}>{row.visits}</td>
+                  <td className={`${BODY_CELL} text-right font-semibold`}>
+                    <FreshCount item={`source:${row.key}`} value={row.counted} className="mr-1.5" />
+                    {row.visits}
+                  </td>
                   {countsConversions ? <ConversionCells row={row} i18n={i18n} /> : null}
                 </tr>
               ))}
