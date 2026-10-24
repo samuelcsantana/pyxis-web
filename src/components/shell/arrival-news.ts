@@ -18,13 +18,15 @@ export interface ScreenReadNote {
 
 type Listener = () => void;
 
+interface ValueStore<Value> {
+  readonly subscribe: (listener: Listener) => () => void;
+  readonly current: () => Value;
+  readonly publish: (next: Value) => void;
+}
+
 const NO_NEWS: ArrivalNews = {};
-const newsListeners = new Set<Listener>();
-const openNewsListeners = new Set<Listener>();
 const readListeners = new Set<Listener>();
 const pendingReads: ScreenReadNote[] = [];
-let news = NO_NEWS;
-let openNews: OpenScreenNews | undefined;
 
 function listenTo(listeners: Set<Listener>, listener: Listener): () => void {
   listeners.add(listener);
@@ -39,38 +41,36 @@ function notify(listeners: ReadonlySet<Listener>) {
   }
 }
 
-export function subscribeToArrivalNews(listener: Listener): () => void {
-  return listenTo(newsListeners, listener);
+function valueStore<Value>(initial: Value): ValueStore<Value> {
+  const listeners = new Set<Listener>();
+  let value = initial;
+  return {
+    subscribe: (listener) => listenTo(listeners, listener),
+    current: () => value,
+    publish: (next) => {
+      value = next;
+      notify(listeners);
+    },
+  };
 }
 
-export function arrivalNews(): ArrivalNews {
-  return news;
-}
+const newsStore = valueStore(NO_NEWS);
+const openNewsStore = valueStore<OpenScreenNews | undefined>(undefined);
+
+export const subscribeToArrivalNews = newsStore.subscribe;
+export const arrivalNews = newsStore.current;
+export const publishArrivalNews = newsStore.publish;
 
 export function noArrivalNews(): ArrivalNews {
   return NO_NEWS;
 }
 
-export function publishArrivalNews(next: ArrivalNews): void {
-  news = next;
-  notify(newsListeners);
-}
-
-export function subscribeToOpenScreenNews(listener: Listener): () => void {
-  return listenTo(openNewsListeners, listener);
-}
-
-export function openScreenNews(): OpenScreenNews | undefined {
-  return openNews;
-}
+export const subscribeToOpenScreenNews = openNewsStore.subscribe;
+export const openScreenNews = openNewsStore.current;
+export const publishOpenScreenNews = openNewsStore.publish;
 
 export function noOpenScreenNews(): undefined {
   return undefined;
-}
-
-export function publishOpenScreenNews(next: OpenScreenNews | undefined): void {
-  openNews = next;
-  notify(openNewsListeners);
 }
 
 export function noteScreenRead(note: ScreenReadNote): void {
