@@ -1528,6 +1528,7 @@ export const nl = translation({
       demo: 'Livedemo',
       privacy: 'Privacy',
       claude: 'Vraag het Claude',
+      install: 'Installeren',
       pricing: 'Prijzen',
       language: 'Taal',
       signIn: 'Inloggen',

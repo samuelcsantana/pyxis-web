@@ -6,6 +6,7 @@ export const LANDING_EVENTS = {
   siteOpened: 'site_opened',
   snippetCopied: 'snippet_copied',
   languageSwitched: 'language_switched',
+  installOpened: 'install_opened',
   pricingOpened: 'pricing_opened',
   accessRequested: 'access_requested',
   signUpOpened: 'sign_up_opened',

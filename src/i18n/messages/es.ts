@@ -1517,6 +1517,7 @@ export const es = translation({
       demo: 'Demo en vivo',
       privacy: 'Privacidad',
       claude: 'Pregunta a Claude',
+      install: 'Instalación',
       pricing: 'Precio',
       language: 'Idioma',
       signIn: 'Entrar',

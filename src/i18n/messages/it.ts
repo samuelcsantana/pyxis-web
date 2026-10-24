@@ -1528,6 +1528,7 @@ export const it = translation({
       demo: 'Demo live',
       privacy: 'Privacy',
       claude: 'Chiedi a Claude',
+      install: 'Installazione',
       pricing: 'Prezzi',
       language: 'Lingua',
       signIn: 'Accedi',

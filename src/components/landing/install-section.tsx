@@ -4,7 +4,7 @@ import { rich } from '@/i18n/rich';
 import { CheerOnCopy } from './cheer-on-copy';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
-import { LANDING_LINKS } from './landing-links';
+import { INSTALL_ID, LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NudgeRobot } from './nudge-robot';
@@ -13,8 +13,6 @@ export interface InstallSectionProps {
   readonly i18n: I18n;
   readonly signUpOpen: boolean;
 }
-
-export const INSTALL_ID = 'install';
 
 type TokenKind = 'plain' | 'keyword' | 'string';
 

@@ -1495,6 +1495,7 @@ export const en = {
       demo: 'Live demo',
       privacy: 'Privacy',
       claude: 'Ask Claude',
+      install: 'Install',
       pricing: 'Pricing',
       language: 'Language',
       signIn: 'Sign in',

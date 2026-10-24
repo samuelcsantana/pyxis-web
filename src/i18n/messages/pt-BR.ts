@@ -1511,6 +1511,7 @@ export const ptBR = translation({
       demo: 'Demonstração',
       privacy: 'Privacidade',
       claude: 'Pergunte ao Claude',
+      install: 'Instalação',
       pricing: 'Preço',
       language: 'Idioma',
       signIn: 'Entrar',

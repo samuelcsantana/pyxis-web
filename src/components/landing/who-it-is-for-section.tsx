@@ -2,9 +2,8 @@ import { CONTROL_TRANSITION, FOCUS_RING, TEXT_LINK } from '@/components/ui/contr
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { DASHBOARD_ANSWERS_ID, demoScreenUrl } from './dashboard-answers-section';
-import { INSTALL_ID } from './install-section';
 import { REVEAL } from './landing-classes';
-import { PRICING_ID } from './landing-links';
+import { INSTALL_ID, PRICING_ID } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 

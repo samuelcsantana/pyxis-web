@@ -1541,6 +1541,7 @@ export const fr = translation({
       demo: 'Démo en direct',
       privacy: 'Confidentialité',
       claude: 'Demander à Claude',
+      install: 'Installation',
       pricing: 'Tarifs',
       language: 'Langue',
       signIn: 'Connexion',

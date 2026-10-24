@@ -4,7 +4,7 @@ import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_QUIET, LINK_SMALL } from './landing-classes';
-import { ASK_CLAUDE_ID, LANDING_LINKS, PRICING_ID } from './landing-links';
+import { ASK_CLAUDE_ID, INSTALL_ID, LANDING_LINKS, PRICING_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NEVER_STORED_ID } from './never-stored-section';
 
@@ -30,7 +30,7 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-md">
       <div
-        className={`${LANDING_WIDTH} flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-2.5 sm:gap-x-5`}
+        className={`${LANDING_WIDTH} flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-2.5 sm:gap-x-4`}
       >
         <a
           href={homeHref}
@@ -41,7 +41,7 @@ export function SiteHeader({
         </a>
         <nav
           aria-label={t('landing.nav.label')}
-          className="ml-3 hidden items-center gap-5 text-sm md:flex"
+          className="ml-1 hidden items-center gap-4 text-sm md:flex"
         >
           <a
             href={LANDING_LINKS.demo}
@@ -59,6 +59,13 @@ export function SiteHeader({
             {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'header' })}
           >
             {t('landing.nav.claude')}
+          </a>
+          <a
+            href={sectionHref(INSTALL_ID)}
+            className={LINK_QUIET}
+            {...trackAttributes(LANDING_EVENTS.installOpened, { from: 'header' })}
+          >
+            {t('landing.nav.install')}
           </a>
           <a
             href={sectionHref(PRICING_ID)}
