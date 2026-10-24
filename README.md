@@ -325,11 +325,22 @@ Shipping now:
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; the plan's three projects). The new project
-  opens on `/[projectId]/install`: the npm and plain-HTML snippets with its public key and the
-  API's address, each with a copy button, then "Waiting for the first event…", checked again
-  every few seconds until it arrives and the dashboard opens. The plain-HTML snippet loads the
-  exact `pyxis-analytics` version this repository depends on (read from `package.json`), so the
-  weekly Dependabot update of the tracker moves the snippet with it
+  opens on `/[projectId]/install`. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
+  Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
+  the API's address, each with a copy button. "With an AI agent" holds a ready request for Claude
+  Code, Cursor or another coding agent, written in the dashboard's language with the project's
+  real public key, the API's address and its first allowed origin; it points the agent at the
+  home page's `llms.txt` and ends by asking for the list of files changed and events created, for
+  review. Under it, the four steps (open the repository, paste, review, publish) and what the
+  agent will change (`package.json`, the `init`, a `track` per important action, the CSP), with
+  "it writes nothing to Pyxis". Step 2, shared by both tabs, waits for the first event, checked
+  again every few seconds (the chosen tab survives each re-read); once it arrives, "Open the
+  dashboard" and a ready question for Claude about the project. Step 3, optional, connects Claude
+  through its connector directory or `claude mcp add` against the API's `/mcp`, read-only and
+  revocable in Settings. Below the `md` breakpoint a notice says installing happens on a computer
+  and copies this page's address to send it there. The plain-HTML snippet loads the exact
+  `pyxis-analytics` version this repository depends on (read from `package.json`), so the weekly
+  Dependabot update of the package moves the snippet with it
 - An Account and billing page (`/account`, from the account menu) for the owner of a hosted
   account: the plan and its state (free trial, active, payment failed, ending, ended with the
   deletion date, sign-up not finished), the events measured this month against the quota, the
@@ -518,7 +529,7 @@ origin the sign-in and sign-out calls carry.
 | `/sign-up`                                                                     | The sign-up (plan, e-mail, terms, code, then Checkout), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                                                                                                                    |
 | `/welcome?account=<id>`                                                        | Where Checkout returns: waits for Stripe's confirmation, then the trial's end and the first project                                                                                                                                                                                          |
 | `/new-project`                                                                 | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
-| `/[projectId]/install`                                                         | The tracker's snippets with the project's key, and the wait for its first event                                                                                                                                                                                                              |
+| `/[projectId]/install`                                                         | The snippets with the project's key or a ready request for an AI agent, and the wait for its first event                                                                                                                                                                                     |
 | `/account`                                                                     | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
 | `/connect?request=<id>`                                                        | The consent page of the Claude connector: allow or cancel an app's request to read the projects, or say that the request ended; not in the demo                                                                                                                                              |
 | `/account-suspended`                                                           | Where the screens of a suspended account's projects go: the account is suspended, and the owner finds the reason in Account and billing                                                                                                                                                      |
