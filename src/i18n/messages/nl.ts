@@ -127,6 +127,7 @@ export const nl = translation({
     toOverview: 'Overzicht openen',
   },
   states: {
+    loading: 'Laden…',
     emptyPeriod: {
       title: 'Niets in deze periode',
       body: 'Er is in deze periode geen event binnengekomen.',

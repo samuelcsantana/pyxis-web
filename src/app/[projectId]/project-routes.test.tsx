@@ -212,6 +212,20 @@ describe('ScreensLayout', () => {
     expect(screen.getByText('screen')).toBeInTheDocument();
   });
 
+  it('keeps a loading placeholder right before the screen, for a screen whose content has not arrived', async () => {
+    renderWithMessages(
+      await ScreensLayout({
+        children: <p>screen</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    const placeholder = screen.getByRole('status');
+    expect(placeholder).toHaveTextContent('Loading…');
+    expect(placeholder.parentElement).toHaveAttribute('aria-busy', 'true');
+    expect(placeholder.parentElement?.nextElementSibling).toBe(screen.getByText('screen'));
+  });
+
   it('answers not found for a project the admin may not read', async () => {
     await expect(
       ScreensLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),

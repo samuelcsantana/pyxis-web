@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ContentPlaceholder } from '@/components/shell/content-placeholder';
 import { ScreenTopbar } from '@/components/shell/screen-topbar';
 import { screenTopbarTexts } from '@/components/shell/screen-topbar-texts';
 import { getI18n } from '@/i18n/get-messages';
@@ -21,6 +22,7 @@ export default async function ScreensLayout({ children, params }: ScreensLayoutP
         serverNow={serverNow}
         texts={screenTopbarTexts(project.name, i18n)}
       />
+      <ContentPlaceholder label={i18n.t('states.loading')} />
       {children}
     </>
   );

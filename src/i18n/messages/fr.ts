@@ -128,6 +128,7 @@ export const fr = translation({
     toOverview: 'Ouvrir la vue d’ensemble',
   },
   states: {
+    loading: 'Chargement…',
     emptyPeriod: {
       title: 'Rien sur cette période',
       body: 'Aucun événement n’est arrivé sur cette période.',

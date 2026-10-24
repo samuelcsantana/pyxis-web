@@ -127,6 +127,7 @@ export const ptBR = translation({
     toOverview: 'Abrir a Visão geral',
   },
   states: {
+    loading: 'Carregando…',
     emptyPeriod: {
       title: 'Nada neste período',
       body: 'Nenhum evento chegou neste período.',

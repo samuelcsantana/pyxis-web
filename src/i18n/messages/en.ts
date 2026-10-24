@@ -118,6 +118,7 @@ export const en = {
     toOverview: 'Open the Overview',
   },
   states: {
+    loading: 'Loading…',
     emptyPeriod: {
       title: 'Nothing in this period',
       body: 'No event arrived in this period.',
