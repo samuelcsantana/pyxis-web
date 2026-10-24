@@ -73,6 +73,12 @@ export function noOpenScreenNews(): undefined {
   return undefined;
 }
 
+const activeVisitsStore = valueStore<number | undefined>(undefined);
+
+export const subscribeToActiveVisits = activeVisitsStore.subscribe;
+export const activeVisits = activeVisitsStore.current;
+export const publishActiveVisits = activeVisitsStore.publish;
+
 export function noteScreenRead(note: ScreenReadNote): void {
   pendingReads.push(note);
   notify(readListeners);

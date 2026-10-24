@@ -16,6 +16,7 @@ import {
   openScreenNewsOf,
 } from './arrival-counting';
 import {
+  publishActiveVisits,
   publishArrivalNews,
   publishOpenScreenNews,
   subscribeToScreenReads,
@@ -158,10 +159,15 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
     publishOpenScreenNews(counting === undefined ? undefined : openScreenNewsOf(counting));
   }, [report, marksVersion, current, includesToday, store, label]);
 
+  useEffect(() => {
+    publishActiveVisits(includesToday ? report?.activeVisits : undefined);
+  }, [report, includesToday]);
+
   useEffect(
     () => () => {
       publishArrivalNews(NO_NEWS);
       publishOpenScreenNews(undefined);
+      publishActiveVisits(undefined);
     },
     [],
   );

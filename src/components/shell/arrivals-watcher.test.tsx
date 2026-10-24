@@ -7,7 +7,7 @@ import { en } from '@/i18n/messages/en';
 import { MessagesProvider } from '@/i18n/messages-provider';
 import { seenMarksKey } from '@/lib/seen-marks';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
-import { arrivalNews, noteScreenRead, openScreenNews } from './arrival-news';
+import { activeVisits, arrivalNews, noteScreenRead, openScreenNews } from './arrival-news';
 import { ARRIVALS_POLL_MS, IDLE_STOP_MS, MIN_POLL_GAP_MS } from './arrivals-poller';
 import ArrivalsWatcher from './arrivals-watcher';
 
@@ -141,6 +141,18 @@ describe('ArrivalsWatcher', () => {
     expect(openScreenNews()).toBeUndefined();
   });
 
+  it('publishes the visits on the site now from each answer', async () => {
+    answers = [report(NOW), report(NOW + ARRIVALS_POLL_MS, { activeVisits: 3 })];
+    watch();
+    await pass(0);
+
+    expect(activeVisits()).toBe(1);
+
+    await pass(ARRIVALS_POLL_MS);
+
+    expect(activeVisits()).toBe(3);
+  });
+
   it('keeps the reads of the screens as their marks, and asks since the oldest one', async () => {
     noteScreenRead({ path: '/p-store/overview', readAt: NOW - 5 * MINUTE });
     noteScreenRead({ path: '/p-store/settings', readAt: NOW - 10 * MINUTE });
@@ -180,6 +192,7 @@ describe('ArrivalsWatcher', () => {
     expect(fetchMock).not.toHaveBeenCalled();
     expect(arrivalNews()).toEqual({});
     expect(openScreenNews()).toBeUndefined();
+    expect(activeVisits()).toBeUndefined();
   });
 
   it('asks nothing while the tab is hidden, and asks at once when it shows', async () => {
@@ -221,6 +234,7 @@ describe('ArrivalsWatcher', () => {
 
     expect(arrivalNews()).toEqual({});
     expect(openScreenNews()).toBeUndefined();
+    expect(activeVisits()).toBeUndefined();
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
