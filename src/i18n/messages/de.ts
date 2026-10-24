@@ -1792,6 +1792,11 @@ export const de = translation({
         ready:
           'Sobald Konto und Projekt angelegt sind, steht eine Anfrage wie diese auf der Seite „Installieren“ im Dashboard fertig bereit, mit dem Schlüssel deines Projekts statt <code>pyxis_pk_…</code>.',
         foot: 'Der Agent hält sich an die Regeln in <code>llms.txt</code>: keine personenbezogenen Daten, gültige Ereignisnamen, die API-Adresse in der CSP. Verbinde danach Claude mit Pyxis, um zu prüfen, ob die ersten Ereignisse angekommen sind.',
+        badge: 'Installieren, ohne Code zu schreiben',
+        agents: 'Funktioniert mit Coding-Agenten wie',
+        others: 'und anderen, die llms.txt lesen',
+        copyRequest: 'Anfrage für den Agenten kopieren',
+        requestCopied: 'Anfrage kopiert. Füge sie in deinen Agenten ein',
       },
     },
     public: {

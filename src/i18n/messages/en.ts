@@ -1737,6 +1737,11 @@ export const en = {
         ready:
           'After you create the account and the project, the dashboard’s Install screen has a request like this one ready, with your project’s key in place of <code>pyxis_pk_…</code>.',
         foot: 'The agent follows the rules in <code>llms.txt</code>: no personal data, valid event names, the API address in the CSP. Then connect Claude to Pyxis to check that the first events arrived.',
+        badge: 'Install without writing code',
+        agents: 'Works with coding agents such as',
+        others: 'and others that read llms.txt',
+        copyRequest: 'Copy the request for your agent',
+        requestCopied: 'Request copied. Paste it into your agent',
       },
     },
     public: {

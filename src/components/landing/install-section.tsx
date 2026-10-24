@@ -6,6 +6,7 @@ import { REVEAL } from './landing-classes';
 import { LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
+import { NudgeRobot } from './nudge-robot';
 
 export interface InstallSectionProps {
   readonly i18n: I18n;
@@ -140,24 +141,88 @@ interface AgentPromptProps {
   readonly labels: CopyCodeLabels;
 }
 
+export const AGENT_ROBOT_ID_PREFIX = 'install-robot';
+
+const SPARKLE_ICON =
+  'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M6 6l2.5 2.5 M15.5 15.5 18 18 M6 18l2.5-2.5 M15.5 8.5 18 6';
+
+export const CODING_AGENTS = [
+  'Claude Code',
+  'Cursor',
+  'Codex',
+  'GitHub Copilot',
+  'Gemini CLI',
+  'Windsurf',
+] as const;
+
+const AGENT_CHIP = 'rounded-pill border border-line bg-bg px-2.75 py-1.25 text-caption';
+
+function AgentChips({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <ul aria-label={t('landing.install.agent.agents')} className="flex flex-wrap gap-1.5">
+      {CODING_AGENTS.map((agent) => (
+        <li key={agent} className={`${AGENT_CHIP} font-medium text-ink`}>
+          {agent}
+        </li>
+      ))}
+      <li className={`${AGENT_CHIP} border-dashed text-muted`}>
+        {t('landing.install.agent.others')}
+      </li>
+    </ul>
+  );
+}
+
 function AgentPrompt({ i18n, labels }: AgentPromptProps) {
   const { t } = i18n;
+  const prompt = t('landing.install.agent.prompt');
   return (
     <div
       aria-labelledby="install-agent-title"
       role="group"
-      className={`mt-7 flex flex-col gap-3 rounded-card border border-line bg-card p-5 ${REVEAL}`}
+      className={`landing-agent-card relative mt-7 flex flex-col gap-3 rounded-card border py-7 pr-26 pl-5 sm:pr-36 sm:pl-8 ${REVEAL}`}
     >
-      <h3 id="install-agent-title" className="text-lg font-semibold">
+      <div aria-hidden="true" className="landing-agent-robot">
+        <NudgeRobot idPrefix={AGENT_ROBOT_ID_PREFIX} />
+      </div>
+      <p className="landing-agent-badge">
+        <svg width={13} height={13} viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d={SPARKLE_ICON}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+          />
+        </svg>
+        {t('landing.install.agent.badge')}
+      </p>
+      <h3
+        id="install-agent-title"
+        className="text-[1.6rem] leading-[1.2] font-semibold tracking-[-0.02em] sm:text-[2rem]"
+      >
         {t('landing.install.agent.title')}
       </h3>
       <p className="text-base leading-relaxed text-muted">{t('landing.install.agent.lead')}</p>
-      <CodeBlock
-        id={AGENT_PROMPT_ID}
-        tokens={[plain(t('landing.install.agent.prompt'))]}
-        labels={labels}
-        wrap="words"
-      />
+      <AgentChips i18n={i18n} />
+      <div className="-mr-20 flex flex-col gap-3 sm:-mr-28">
+        <CodeBlock id={AGENT_PROMPT_ID} tokens={[plain(prompt)]} labels={labels} wrap="words" />
+        <CopyCodeButton
+          code={prompt}
+          targetId={AGENT_PROMPT_ID}
+          labels={{
+            copy: t('landing.install.agent.copyRequest'),
+            copied: t('landing.install.agent.requestCopied'),
+            selected: labels.selected,
+          }}
+          track={trackAttributes(LANDING_EVENTS.snippetCopied, {
+            snippet: AGENT_PROMPT_ID,
+            button: 'prominent',
+          })}
+          placement="inline"
+          appearance="prominent"
+        />
+      </div>
       <p className="text-sm leading-relaxed text-ink">
         {rich(t('landing.install.agent.ready'), {
           code: (text) => <code className="font-mono text-sm">{text}</code>,

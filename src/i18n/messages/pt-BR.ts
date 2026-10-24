@@ -1752,6 +1752,11 @@ export const ptBR = translation({
         ready:
           'Depois de criar a conta e o projeto, a tela Instalação do painel traz um pedido como este já pronto, com a chave do seu projeto no lugar de <code>pyxis_pk_…</code>.',
         foot: 'O agente segue as regras do <code>llms.txt</code>: sem dado pessoal, nomes de evento válidos, o endereço da API na CSP. Depois, conecte o Claude ao Pyxis para conferir que os primeiros eventos chegaram.',
+        badge: 'Instale sem escrever código',
+        agents: 'Funciona com agentes de código como',
+        others: 'e outros que leem o llms.txt',
+        copyRequest: 'Copiar o pedido para o agente',
+        requestCopied: 'Pedido copiado. Cole no seu agente',
       },
     },
     public: {
