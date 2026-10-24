@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { sawBusyContent, watchForBusyContent } from './navigation';
+import { documentMarker, markTheDocument, sawBusyContent, watchForBusyContent } from './navigation';
 
 const CONTENT_ID = 'content';
 
@@ -132,4 +132,50 @@ test('asks nothing while the period does not include today', async ({ page }) =>
   await page.clock.fastForward(NEXT_QUESTION);
 
   expect(asked).toEqual([]);
+  await expect(page.getByText(/on the site now$/)).toHaveCount(0);
+});
+
+test('shows the visits on the site now beside the Overview title, new at each answer', async ({
+  page,
+}) => {
+  const start = Date.now();
+  const asked = await answerArrivals(page, [
+    answerAt(start, { activeVisits: 2 }),
+    answerAt(start + 30_000, { activeVisits: 3 }),
+  ]);
+  await page.clock.install({ time: start });
+  await page.goto(`/${STORE_ID}/overview`);
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  const title = page.getByRole('heading', { level: 1, name: 'Overview' });
+  await expect(title.locator('..').getByText('2 on the site now')).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+  await markTheDocument(page);
+
+  await page.clock.fastForward(NEXT_QUESTION);
+
+  await expect(title.locator('..').getByText('3 on the site now')).toBeVisible();
+  expect(await documentMarker(page)).toBe('kept');
+  expect(asked).toHaveLength(2);
+
+  await page.goto(`/${STORE_ID}/funnel`);
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  await expect.poll(() => asked.length).toBe(3);
+  await expect(page.getByText(/on the site now$/)).toHaveCount(0);
+});
+
+test.describe('with reduced motion', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('keeps the dot of the visits on the site now still', async ({ page }) => {
+    await answerArrivals(page, [answerAt(Date.now(), { activeVisits: 2 })]);
+    await page.goto(`/${STORE_ID}/overview`);
+    const visitsNow = page.getByText('2 on the site now');
+    await expect(visitsNow).toBeVisible();
+
+    const animations = await visitsNow.evaluate((pill) =>
+      [...pill.querySelectorAll('span')].map((part) => getComputedStyle(part).animationName),
+    );
+
+    expect(animations.every((name) => name === 'none')).toBe(true);
+  });
 });
