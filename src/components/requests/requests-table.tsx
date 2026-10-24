@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/panel-classes';
 import { Breakable } from '@/components/ui/breakable';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { FOCUSABLE_SELECTOR, wrappedFocus } from './focus-trap';
 import { ROUTE_HEADING_ID, RouteDetails } from './route-details';
 import { RouteDays } from './route-days';
@@ -184,7 +185,12 @@ export function RequestsTable({
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.key} className={row.key === selectedKey ? 'bg-soft' : undefined}>
+                <tr
+                  key={row.key}
+                  className={
+                    row.key === selectedKey ? `bg-soft ${FRESH_HIGHLIGHT}` : FRESH_HIGHLIGHT
+                  }
+                >
                   <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
                     <button
                       ref={rememberOpener(row.key)}
@@ -201,7 +207,10 @@ export function RequestsTable({
                       </span>
                     </button>
                   </th>
-                  <td className={`${BODY_CELL} text-right font-semibold`}>{row.total}</td>
+                  <td className={`${BODY_CELL} text-right font-semibold`}>
+                    <FreshCount item={`route:${row.key}`} value={row.counted} className="mr-1.5" />
+                    {row.total}
+                  </td>
                   {failuresOnly ? null : (
                     <td className={BODY_CELL}>
                       <span className="flex flex-col gap-1.5">

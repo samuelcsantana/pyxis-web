@@ -215,6 +215,7 @@ export interface RouteRow {
   readonly method: string;
   readonly route: string;
   readonly total: string;
+  readonly counted: number;
   readonly detailsLabel: string;
   readonly successNote: string;
   readonly errorNote: string;
@@ -263,6 +264,7 @@ export function routeRows(
       method: route.method,
       route: route.route,
       total: formatCount(route.total, i18n),
+      counted: route.total,
       detailsLabel: i18n.t('requests.table.showDetails', {
         route: `${route.method} ${route.route}`,
       }),

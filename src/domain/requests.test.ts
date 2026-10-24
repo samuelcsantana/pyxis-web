@@ -268,6 +268,7 @@ describe('routeRows', () => {
       method: 'POST',
       route: '/orders',
       total: '1,284',
+      counted: 1284,
       detailsLabel: 'POST /orders, show details',
       successNote: '98.1% ok',
       errorNote: '1.9% errors',
