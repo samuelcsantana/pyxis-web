@@ -3,7 +3,8 @@ import { axeViolations } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const RECORD_KEY = `pyxis:seen:numbers:${STORE_ID}`;
-const AN_HOUR = 60 * 60 * 1000;
+const A_MINUTE = 60 * 1000;
+const AN_HOUR = 60 * A_MINUTE;
 
 interface NumbersRead {
   readonly readAt: number;
@@ -28,9 +29,13 @@ async function readOnce(page: Page, path: string): Promise<void> {
   await expect.poll(async () => Object.keys(await keptReads(page)).length).toBeGreaterThan(0);
 }
 
-async function seemEarlierAndSmaller(page: Page): Promise<void> {
+async function latestReadAt(page: Page): Promise<number> {
+  return Math.max(0, ...Object.values(await keptReads(page)).map((read) => read.current.readAt));
+}
+
+async function seemEarlierAndSmaller(page: Page, earlierBy = AN_HOUR): Promise<void> {
   await page.evaluate(
-    ({ key, hour }) => {
+    ({ key, by }) => {
       const reads = JSON.parse(window.localStorage.getItem(key) ?? '{}') as Record<
         string,
         ShownRead
@@ -41,7 +46,7 @@ async function seemEarlierAndSmaller(page: Page): Promise<void> {
           {
             ...read,
             current: {
-              readAt: read.current.readAt - hour,
+              readAt: read.current.readAt - by,
               values: Object.fromEntries(
                 Object.entries(read.current.values).map(([item, value]) => [item, value - 1]),
               ),
@@ -51,7 +56,7 @@ async function seemEarlierAndSmaller(page: Page): Promise<void> {
       );
       window.localStorage.setItem(key, JSON.stringify(earlier));
     },
-    { key: RECORD_KEY, hour: AN_HOUR },
+    { key: RECORD_KEY, by: earlierBy },
   );
 }
 
@@ -150,6 +155,74 @@ test('shows the same marks, without lighting them, on a screen back from the cac
 
   await expect(page.locator('main [data-fresh-shown="kept"]').first()).toBeAttached();
   await expect(page.locator('main [data-fresh-shown="arrived"]')).toHaveCount(0);
+});
+
+async function lookWithMarks(page: Page, path: string): Promise<number> {
+  await readOnce(page, path);
+  await seemEarlierAndSmaller(page);
+  await page.reload();
+  await expect(page.locator('main [data-fresh-shown="arrived"]').first()).toBeAttached();
+  return page.locator('main [data-fresh-shown]').count();
+}
+
+async function expectTheSameLook(page: Page, marks: number, lookedAt: number): Promise<void> {
+  await expect.poll(() => latestReadAt(page)).toBeGreaterThan(lookedAt);
+  await expect(page.locator('main [data-fresh-shown="kept"]')).toHaveCount(marks);
+  await expect(page.locator('main [data-fresh-shown="arrived"]')).toHaveCount(0);
+}
+
+test('keeps the marks of a look when the chart shows another metric', async ({ page }) => {
+  const marks = await lookWithMarks(page, `/${STORE_ID}/overview`);
+  const lookedAt = await latestReadAt(page);
+
+  const visits = page.getByRole('group', { name: 'Visits', exact: true });
+  await visits.getByRole('button', { name: 'Visits', exact: true }).click();
+  await expect(page).toHaveURL(/metric=visits$/);
+
+  await expectTheSameLook(page, marks, lookedAt);
+});
+
+function droppedAtStepTwo(page: Page) {
+  return page
+    .getByRole('list', { name: 'Funnel' })
+    .getByRole('listitem')
+    .nth(1)
+    .getByRole('link', { name: /dropped, list who left before step 2$/ });
+}
+
+test('keeps the marks of a look when a step lists who left it', async ({ page }) => {
+  const marks = await lookWithMarks(page, `/${STORE_ID}/funnel?range=30d`);
+  const lookedAt = await latestReadAt(page);
+
+  await droppedAtStepTwo(page).click();
+  await expect(page).toHaveURL(/step=2&outcome=dropped/);
+
+  await expectTheSameLook(page, marks, lookedAt);
+});
+
+test("keeps the marks of a look when the screen is read again with a route's details open", async ({
+  page,
+}) => {
+  const marks = await lookWithMarks(page, `/${STORE_ID}/requests`);
+  const lookedAt = await latestReadAt(page);
+  await page.getByRole('button', { name: 'POST /orders, show details' }).click();
+  await expect(page).toHaveURL(/route=/);
+
+  await page.reload();
+
+  await expect(page.getByRole('dialog', { name: 'POST /orders' })).toBeVisible();
+  await expectTheSameLook(page, marks, lookedAt);
+});
+
+test('lights what went up since a read only a minute before', async ({ page }) => {
+  await readOnce(page, `/${STORE_ID}/overview`);
+  await seemEarlierAndSmaller(page, A_MINUTE);
+
+  await page.reload();
+
+  await expect(page.locator('main [data-fresh-item] [data-fresh-shown="arrived"]')).toHaveCount(
+    await slots(page).count(),
+  );
 });
 
 test.describe('with reduced motion', () => {
