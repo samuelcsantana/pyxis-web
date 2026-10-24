@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { LANDING_LINKS } from '@/components/landing/landing-links';
-import { PRICING_ID } from '@/components/landing/pricing-section';
+import { LANDING_LINKS, PRICING_ID } from '@/components/landing/landing-links';
 import { returnPathOf } from '@/components/shell/screens';
 import { NoCodeHelp } from '@/components/sign-in/no-code-help';
 import { AuthFrame } from '@/components/sign-up/auth-frame';

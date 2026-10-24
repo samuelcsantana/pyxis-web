@@ -3,12 +3,11 @@ import type { LandingPreviewView } from '@/domain/landing-preview';
 import { FOCUS_RING, CONTROL_TRANSITION } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
-import { ASK_CLAUDE_ID, LANDING_LINKS } from './landing-links';
+import { ASK_CLAUDE_ID, LANDING_LINKS, PRICING_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { LandingPreview } from './landing-preview';
 import { LandingProof } from './landing-proof';
 import { Eyebrow } from './landing-section';
-import { PRICING_ID } from './pricing-section';
 
 export interface LandingHeroProps {
   readonly i18n: I18n;
