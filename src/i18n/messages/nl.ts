@@ -35,6 +35,8 @@ export const nl = translation({
       manyConversions: 'Meer dan 99 nieuwe conversies',
       manyNamedEvents: 'Meer dan 99 nieuwe events',
       manyFailedRequests: 'Meer dan 99 nieuwe mislukte verzoeken',
+      refresh: 'Vernieuwen',
+      refreshing: 'Vernieuwen…',
     },
     closeMenu: 'Menu sluiten',
     section: 'Analyse',

@@ -56,8 +56,16 @@ export function publishArrivalNews(next: ArrivalNews): void {
   notify(newsListeners);
 }
 
+export function subscribeToOpenScreenNews(listener: Listener): () => void {
+  return listenTo(openNewsListeners, listener);
+}
+
 export function openScreenNews(): OpenScreenNews | undefined {
   return openNews;
+}
+
+export function noOpenScreenNews(): undefined {
+  return undefined;
 }
 
 export function publishOpenScreenNews(next: OpenScreenNews | undefined): void {

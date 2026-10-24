@@ -38,6 +38,8 @@ export const es = translation({
       manyConversions: 'Más de 99 conversiones nuevas',
       manyNamedEvents: 'Más de 99 eventos nuevos',
       manyFailedRequests: 'Más de 99 solicitudes fallidas nuevas',
+      refresh: 'Actualizar',
+      refreshing: 'Actualizando…',
     },
     closeMenu: 'Cerrar el menú',
     section: 'Analítica',
