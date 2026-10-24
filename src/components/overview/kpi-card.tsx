@@ -4,6 +4,7 @@ import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
 import type { SeriesColor } from '@/domain/overview-chart';
 import type { I18n } from '@/i18n/i18n';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { Sparkline } from '@/components/ui/sparkline';
 import { MetricToggle } from './metric-selection';
 
@@ -53,7 +54,7 @@ export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProp
     <div
       role="group"
       aria-labelledby={labelId}
-      className={toggleHint === null ? CARD : `${CARD} ${TOGGLE_CARD}`}
+      className={`${toggleHint === null ? CARD : `${CARD} ${TOGGLE_CARD}`} ${FRESH_HIGHLIGHT}`}
     >
       <h2 id={labelId} className="text-xs font-medium text-muted sm:text-caption">
         {toggleHint === null ? (
@@ -64,6 +65,9 @@ export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProp
       </h2>
       <p className="text-title leading-7 font-semibold tracking-tight tabular-nums sm:text-figure-lg sm:leading-9">
         {kpi.value}
+        {kpi.count === null ? null : (
+          <FreshCount item={`kpi:${kpi.id}`} value={kpi.count} className="ml-2" />
+        )}
       </p>
       <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
         <span

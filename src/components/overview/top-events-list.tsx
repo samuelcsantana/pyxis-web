@@ -2,6 +2,7 @@ import { barWidth, eventLabel, formatCount } from '@/domain/metrics';
 import type { OverviewReport } from '@/domain/overview';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 
@@ -27,7 +28,10 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
       ) : (
         <ul className="flex flex-col">
           {events.map((event) => (
-            <li key={event.name} className="flex flex-col gap-1.5 border-b border-line py-2.5">
+            <li
+              key={event.name}
+              className={`flex flex-col gap-1.5 border-b border-line py-2.5 ${FRESH_HIGHLIGHT}`}
+            >
               <span className="flex items-baseline justify-between gap-2 text-caption">
                 <span className="flex min-w-0 flex-col">
                   <VisitsLink
@@ -39,6 +43,7 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>
                 <span className="shrink-0 text-right font-semibold tabular-nums">
+                  <FreshCount item={`event:${event.name}`} value={event.count} className="mr-1.5" />
                   {formatCount(event.count, i18n)}{' '}
                   <span className="font-normal text-muted">
                     {i18n.t('overview.topEvents.inVisits', {

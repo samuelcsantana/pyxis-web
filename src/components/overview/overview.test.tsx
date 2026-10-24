@@ -389,6 +389,42 @@ describe('OverviewChartPanel', () => {
   });
 });
 
+describe('fresh slots on Overview', () => {
+  it('leaves a slot beside each count it may say went up, never beside a rate', () => {
+    const { container } = renderWithMessages(
+      <>
+        <KpiGrid
+          kpis={overviewKpis(REPORT, LAST_WEEK, null, english)}
+          drillDownHref={drillDownHref}
+          i18n={english}
+        />
+        <TopPagesTable
+          pages={[{ path: '/pricing', views: 100, visits: 90 }]}
+          totalPageViews={1000}
+          visitsHref={visitsHref}
+          i18n={english}
+        />
+        <TopEventsList
+          events={[{ name: 'order_created', count: 12, visits: 9 }]}
+          visitsHref={eventVisitsHref}
+          i18n={english}
+        />
+      </>,
+    );
+
+    const slots = [...container.querySelectorAll('[data-fresh-item]')].map((slot) => [
+      slot.getAttribute('data-fresh-item'),
+      slot.getAttribute('data-fresh-value'),
+    ]);
+    expect(slots).toEqual([
+      ['kpi:visits', String(REPORT.kpis.visits.current)],
+      ['kpi:identified-users', String(REPORT.kpis.identifiedUsers.current)],
+      ['page:/pricing', '100'],
+      ['event:order_created', '12'],
+    ]);
+  });
+});
+
 describe('TopPagesTable', () => {
   it('lists the pages with their views, visits and share of all views', () => {
     renderWithMessages(

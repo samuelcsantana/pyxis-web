@@ -67,6 +67,7 @@ export interface KpiView {
   readonly id: KpiId;
   readonly label: string;
   readonly value: string;
+  readonly count: number | null;
   readonly change: string;
   readonly tone: Tone;
   readonly comparison: string;
@@ -103,6 +104,7 @@ function countKpi(kpi: Kpi, text: KpiText, comparison: string, i18n: I18n): KpiV
   return {
     ...text,
     value: formatCount(kpi.current, i18n),
+    count: kpi.current,
     change: change.text,
     tone: toneOf(change.trend, 'up'),
     comparison,
@@ -131,6 +133,7 @@ function writeErrorsKpi(
     id: 'write-errors',
     label: i18n.t('overview.kpis.writeErrorRate'),
     value: formatPercent(current, i18n),
+    count: null,
     change: change.text,
     tone: toneOf(change.trend, 'down'),
     comparison,
