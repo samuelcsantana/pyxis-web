@@ -22,6 +22,7 @@ function row(position: number): FunnelRow {
     label: `Step ${String(position)}`,
     target: '/',
     count: '0',
+    reached: 0,
     barWidth: '0%',
     continued: '',
     tone: 'neutral',
