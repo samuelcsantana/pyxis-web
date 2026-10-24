@@ -25,6 +25,7 @@ export function AuthFrame({ i18n, theme, children }: AuthFrameProps) {
       <SiteHeader
         i18n={i18n}
         homeHref={landingUrlOf(landingPageOfLocale(i18n.locale))}
+        onHomePage={false}
         language={
           <LanguageFormSelect
             locale={i18n.locale}

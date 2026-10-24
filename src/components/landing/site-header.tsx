@@ -11,13 +11,22 @@ import { NEVER_STORED_ID } from './never-stored-section';
 export interface SiteHeaderProps {
   readonly i18n: I18n;
   readonly homeHref: string;
+  readonly onHomePage: boolean;
   readonly language: ReactNode;
   readonly theme: ReactNode;
   readonly withSignIn: boolean;
 }
 
-export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: SiteHeaderProps) {
+export function SiteHeader({
+  i18n,
+  homeHref,
+  onHomePage,
+  language,
+  theme,
+  withSignIn,
+}: SiteHeaderProps) {
   const { t } = i18n;
+  const sectionHref = (id: string): string => `${onHomePage ? '' : homeHref}#${id}`;
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur-md">
       <div
@@ -41,18 +50,18 @@ export function SiteHeader({ i18n, homeHref, language, theme, withSignIn }: Site
           >
             {t('landing.nav.demo')}
           </a>
-          <a href={`${homeHref}#${NEVER_STORED_ID}`} className={LINK_QUIET}>
+          <a href={sectionHref(NEVER_STORED_ID)} className={LINK_QUIET}>
             {t('landing.nav.privacy')}
           </a>
           <a
-            href={`${homeHref}#${ASK_CLAUDE_ID}`}
+            href={sectionHref(ASK_CLAUDE_ID)}
             className={LINK_QUIET}
             {...trackAttributes(LANDING_EVENTS.askClaudeOpened, { from: 'header' })}
           >
             {t('landing.nav.claude')}
           </a>
           <a
-            href={`${homeHref}#${PRICING_ID}`}
+            href={sectionHref(PRICING_ID)}
             className={LINK_QUIET}
             {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'header' })}
           >
