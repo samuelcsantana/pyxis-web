@@ -1,4 +1,5 @@
 import { countsConversions, type RegionRow } from '@/domain/devices';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import type { I18n } from '@/i18n/i18n';
 import {
   BODY_CELL,
@@ -66,7 +67,7 @@ export function RegionsTable({
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.key}>
+              <tr key={row.key} className={FRESH_HIGHLIGHT}>
                 <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
                   <span className="flex items-center gap-2.5">
                     <span
@@ -87,7 +88,10 @@ export function RegionsTable({
                     </span>
                   </span>
                 </th>
-                <td className={`${BODY_CELL} text-right`}>{row.visits}</td>
+                <td className={`${BODY_CELL} text-right`}>
+                  <FreshCount item={`region:${row.key}`} value={row.counted} className="mr-1.5" />
+                  {row.visits}
+                </td>
                 <td className={`${BODY_CELL} text-right text-muted last:pr-0`}>{row.share}</td>
                 {showsConversionRate ? (
                   <td className={`${BODY_CELL} pr-0 text-right`}>{row.conversionRate}</td>

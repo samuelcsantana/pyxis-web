@@ -96,6 +96,7 @@ export interface ShareRow {
   readonly value: string;
   readonly label: string;
   readonly visits: string;
+  readonly counted: number;
   readonly share: string;
   readonly fraction: number;
   readonly conversionRate: string | null;
@@ -124,6 +125,7 @@ export function shareRows(
       value: share.value,
       label: label(share.value, i18n),
       visits: formatCount(share.visits, i18n),
+      counted: share.visits,
       share: formatPercent(fraction, i18n),
       fraction: fraction ?? 0,
       conversionRate: conversionRateOf(share, i18n),
@@ -138,6 +140,7 @@ export interface RegionRow {
   readonly country: string | null;
   readonly filterValue: string | null;
   readonly visits: string;
+  readonly counted: number;
   readonly share: string;
   readonly fraction: number;
   readonly conversionRate: string | null;
@@ -174,6 +177,7 @@ export function regionRows(regions: readonly RegionShare[], i18n: I18n): readonl
       country: namesCountry && parts !== null ? countryLabel(parts.country, i18n) : null,
       filterValue: parts === null ? null : share.value,
       visits: formatCount(share.visits, i18n),
+      counted: share.visits,
       share: formatPercent(fraction, i18n),
       fraction: fraction ?? 0,
       conversionRate: conversionRateOf(share, i18n),

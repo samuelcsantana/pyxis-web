@@ -142,6 +142,7 @@ describe('ShareDonut', () => {
           value: 'other',
           label: 'Other',
           visits: '1',
+          counted: 1,
           share: '50.0%',
           fraction: 0.5,
           conversionRate: null,
