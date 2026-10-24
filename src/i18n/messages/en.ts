@@ -20,6 +20,17 @@ export const en = {
   nav: {
     label: 'Main navigation',
     openMenu: 'Open menu',
+    openMenuWithNews: 'Open menu, there is news',
+    arrivals: {
+      visits: { one: '{count} new visit', other: '{count} new visits' },
+      conversions: { one: '{count} new conversion', other: '{count} new conversions' },
+      namedEvents: { one: '{count} new event', other: '{count} new events' },
+      failedRequests: { one: '{count} new failed request', other: '{count} new failed requests' },
+      manyVisits: 'More than 99 new visits',
+      manyConversions: 'More than 99 new conversions',
+      manyNamedEvents: 'More than 99 new events',
+      manyFailedRequests: 'More than 99 new failed requests',
+    },
     closeMenu: 'Close menu',
     section: 'Analytics',
     switchProject: 'Switch project. Current project:',

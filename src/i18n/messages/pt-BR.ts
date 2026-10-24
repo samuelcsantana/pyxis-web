@@ -25,6 +25,20 @@ export const ptBR = translation({
   nav: {
     label: 'Navegação principal',
     openMenu: 'Abrir menu',
+    openMenuWithNews: 'Abrir menu, há novidades',
+    arrivals: {
+      visits: forms('{count} nova visita', '{count} novas visitas'),
+      conversions: forms('{count} nova conversão', '{count} novas conversões'),
+      namedEvents: forms('{count} novo evento', '{count} novos eventos'),
+      failedRequests: forms(
+        '{count} nova requisição com falha',
+        '{count} novas requisições com falha',
+      ),
+      manyVisits: 'Mais de 99 novas visitas',
+      manyConversions: 'Mais de 99 novas conversões',
+      manyNamedEvents: 'Mais de 99 novos eventos',
+      manyFailedRequests: 'Mais de 99 novas requisições com falha',
+    },
     closeMenu: 'Fechar menu',
     section: 'Análises',
     switchProject: 'Trocar de projeto. Projeto atual:',

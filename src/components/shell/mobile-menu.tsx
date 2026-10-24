@@ -6,6 +6,7 @@ import { type KeyboardEvent, type MouseEvent, type ReactNode, useRef, useState }
 import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
+import { useArrivalNews } from './arrival-badge';
 
 export interface MobileMenuProps {
   readonly children: ReactNode;
@@ -25,6 +26,8 @@ export function MobileMenu({ children }: MobileMenuProps) {
   const [openAt, setOpenAt] = useState<string>();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const open = openAt === location;
+  const hasNews = Object.keys(useArrivalNews()).length > 0;
+  const openLabel = hasNews ? t('nav.openMenuWithNews') : t('nav.openMenu');
 
   const closeAfterNavigation = (event: MouseEvent<HTMLDivElement>) => {
     if (event.target instanceof Element && event.target.closest('a') !== null) {
@@ -59,9 +62,15 @@ export function MobileMenu({ children }: MobileMenuProps) {
             onClick={() => {
               setOpenAt(open ? undefined : location);
             }}
-            className={`flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
+            className={`relative flex size-11 items-center justify-center rounded-input border border-nav-border text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL}`}
           >
-            <span className="sr-only">{open ? t('nav.closeMenu') : t('nav.openMenu')}</span>
+            <span className="sr-only">{open ? t('nav.closeMenu') : openLabel}</span>
+            {hasNews && !open ? (
+              <span
+                aria-hidden="true"
+                className="absolute top-1.5 right-1.5 size-2 rounded-full bg-accent"
+              />
+            ) : null}
             <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d={open ? CLOSE_ICON : OPEN_ICON}
