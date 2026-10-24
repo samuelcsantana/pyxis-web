@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.37.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.36.0...v0.37.0) (2026-10-24)
+
+
+### Features
+
+* **i18n:** name Pyxis instead of "the tracker" in the dashboard ([0fa3aed](https://github.com/samuelcsantana/pyxis-web/commit/0fa3aed69a5a01bbfe5c4e03db355ae50111d0bb))
+* **install:** add keyboard tabs for the ways to install ([9f64caf](https://github.com/samuelcsantana/pyxis-web/commit/9f64cafa799c361c507fc72e3126bfe19fd39380))
+* **install:** offer installing Pyxis with an AI agent ([74f2333](https://github.com/samuelcsantana/pyxis-web/commit/74f233358f14081fb6332b922aee7900c49d4ba4))
+* **install:** suggest checking the first events with Claude ([758d38d](https://github.com/samuelcsantana/pyxis-web/commit/758d38d1b41d00bfe3bae7c2cac159512b4e1ada))
+* **install:** tell a phone that installing happens on a computer ([13d8927](https://github.com/samuelcsantana/pyxis-web/commit/13d8927c7ebb06fd2aeb397fdea5e73049afd3d6))
+* **install:** write the request an AI agent needs to install Pyxis ([d139c1b](https://github.com/samuelcsantana/pyxis-web/commit/d139c1b56f88c3227e31d40ac9456c9720dab62d))
+* **landing:** say "the Pyxis code" instead of "the tracker" ([a1024b3](https://github.com/samuelcsantana/pyxis-web/commit/a1024b359faf3c03b87720d8b394ff632b7a1ebc))
+* **landing:** say the agent's request comes ready on the Install screen ([340401e](https://github.com/samuelcsantana/pyxis-web/commit/340401ea142eb7df444183acae5cad606383b4fb))
+
+
+### Documentation
+
+* describe installing with an AI agent in the README ([c57ab92](https://github.com/samuelcsantana/pyxis-web/commit/c57ab9252e74801a69b7738a7a8a8b468275a167))
+
 ## [0.36.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.35.0...v0.36.0) (2026-10-24)
 
 
