@@ -3,6 +3,7 @@ import { NO_VALUE } from '@/domain/metrics';
 import type { VisitAccount, VisitRow } from '@/domain/visits';
 import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { FreshVisit } from '@/components/ui/fresh-slots';
 import { linkWith } from '@/components/shell/screens';
 
 export const VISIT_CHIP = 'rounded-pill px-2 py-0.5 text-xs font-medium whitespace-nowrap';
@@ -14,13 +15,16 @@ function timelineHref(timelinePath: string, lookup: Record<string, string>): str
 
 export function VisitStartLink({ row, timelinePath }: { row: VisitRow; timelinePath: string }) {
   return (
-    <Link
-      href={timelineHref(timelinePath, { visit: row.key })}
-      aria-label={row.openLabel}
-      className={TEXT_LINK}
-    >
-      <time dateTime={row.startedAt}>{row.started}</time>
-    </Link>
+    <>
+      <Link
+        href={timelineHref(timelinePath, { visit: row.key })}
+        aria-label={row.openLabel}
+        className={TEXT_LINK}
+      >
+        <time dateTime={row.startedAt}>{row.started}</time>
+      </Link>
+      <FreshVisit startedAt={Date.parse(row.startedAt)} className="ml-1.5" />
+    </>
   );
 }
 

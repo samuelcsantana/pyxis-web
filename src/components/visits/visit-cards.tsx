@@ -1,4 +1,5 @@
 import type { VisitRow } from '@/domain/visits';
+import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import { AccountCell, EntryPath, FAILED_CHIP, Highlights, VisitStartLink } from './visit-cells';
 
 export interface VisitCardsProps {
@@ -30,7 +31,7 @@ function VisitCard({
   return (
     <li
       data-first-of-page={firstOfPage}
-      className="flex flex-col gap-2 border-b border-line py-3 first:pt-0 last:border-b-0"
+      className={`flex flex-col gap-2 border-b border-line py-3 first:pt-0 last:border-b-0 ${FRESH_HIGHLIGHT}`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <VisitStartLink row={row} timelinePath={timelinePath} />

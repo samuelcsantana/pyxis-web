@@ -14,6 +14,7 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
+import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import { VisitCards } from './visit-cards';
 import { AccountCell, EntryPath, FAILED_CHIP, Highlights, VisitStartLink } from './visit-cells';
 
@@ -45,7 +46,7 @@ function VisitTableRow({
   anonymous: string;
 }) {
   return (
-    <tr data-first-of-page={firstOfPage}>
+    <tr data-first-of-page={firstOfPage} className={FRESH_HIGHLIGHT}>
       <th scope="row" className={`${BODY_CELL} pl-0 text-left font-normal whitespace-nowrap`}>
         <VisitStartLink row={row} timelinePath={timelinePath} />
       </th>
