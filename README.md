@@ -225,6 +225,12 @@ Shipping now:
   (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`), starts with a UTF-8 byte order mark so
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
+- News on the menu: each screen's item counts what arrived since that screen was last read on this
+  device (visits on Overview, Visits, Devices and Acquisition; conversions on Funnel; named events
+  on Features; failed requests on Requests, in red), never on the screen being shown, `99+` from
+  100 on, with the words for a screen reader; on a phone the menu button gets a dot. The dashboard
+  asks every 30 seconds while the tab is visible and the period includes today, and stops after
+  30 idle minutes ([ADR 0014](docs/adr/0014-arrivals-are-polled-not-streamed.md))
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
@@ -517,6 +523,7 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/devices/export`                                                  | A CSV file of every breakdown of the Devices screen, for its period                                                                                                                                                                                                                          |
 | `/[projectId]/visits/export`                                                   | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                                                                                                                                                        |
 | `/[projectId]/icon`                                                            | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                                                                                                                                                         |
+| `/[projectId]/arrivals`                                                        | JSON for the menu's counts: what arrived in the period (`range` or `from`/`to`) since `?since=`, never cached; an expired session, an unknown project and the API's limit answer 401, 404 and 429                                                                                            |
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
@@ -664,7 +671,10 @@ the same change the pages stopped importing the period selector's module for a U
 the routes without a selector no longer load its client components (Settings 165.7 KiB, 2.4 KiB
 less). Keeping visited screens in the client cache and reading a stale one again
 ([ADR 0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md)) took Overview to
-166.8 KiB and Requests to 169.6 KiB.
+166.8 KiB and Requests to 169.6 KiB. The menu's counts of what arrived
+([ADR 0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)) load their watcher on demand,
+after the page is shown; what every screen loads to draw them took Overview to 167.6 KiB and
+Requests to 170.5 KiB.
 
 ## Project structure
 
@@ -774,6 +784,7 @@ docs/adr/           architecture decision records
 | [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)             | Courtesy translations of the contract, the Portuguese prevailing  |
 | [0012](docs/adr/0012-persistent-screen-topbar.md)                          | The top bar of the eight screens stays mounted between them       |
 | [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
+| [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
 
 ## Roadmap
 
