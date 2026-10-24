@@ -5,7 +5,7 @@ import {
   shownArrivalCount,
 } from '@/domain/arrivals';
 import type { SeenMarks } from '@/lib/seen-store';
-import type { ArrivalNews } from './arrival-news';
+import type { ArrivalNews, OpenScreenNews, ScreenNews } from './arrival-news';
 import { SCREENS, type ScreenSlug } from './screens';
 
 export const SCREEN_ARRIVAL_KINDS: Readonly<Record<ScreenSlug, ArrivalKind | null>> = {
@@ -45,17 +45,37 @@ export function oldestMark(marks: SeenMarks): number | undefined {
   return moments.length === 0 ? undefined : Math.min(...moments);
 }
 
-export function arrivalNewsOf({ report, marks, current, label }: ArrivalNewsInput): ArrivalNews {
+function screenNewsOf(
+  { report, marks, label }: ArrivalNewsInput,
+  screen: ScreenSlug,
+  kind: ArrivalKind,
+): ScreenNews | undefined {
+  const arrivals = report[kind];
+  const mark = marks[screen];
+  if (arrivals === null || mark === undefined) {
+    return undefined;
+  }
+  const count = countNewerThan(arrivals, mark);
+  return count === 0 ? undefined : { shown: shownArrivalCount(count), label: label(kind, count) };
+}
+
+export function arrivalNewsOf(input: ArrivalNewsInput): ArrivalNews {
   const news = COUNTED_KINDS.flatMap(([screen, kind]) => {
-    const arrivals = report[kind];
-    const mark = marks[screen];
-    if (screen === current || arrivals === null || mark === undefined) {
-      return [];
-    }
-    const count = countNewerThan(arrivals, mark);
-    return count === 0
-      ? []
-      : [[screen, { shown: shownArrivalCount(count), label: label(kind, count) }] as const];
+    const screenNews = screen === input.current ? undefined : screenNewsOf(input, screen, kind);
+    return screenNews === undefined ? [] : [[screen, screenNews] as const];
   });
   return Object.fromEntries(news);
+}
+
+export function openScreenNewsOf(input: ArrivalNewsInput): OpenScreenNews | undefined {
+  const screen = input.current;
+  if (screen === undefined) {
+    return undefined;
+  }
+  const kind = SCREEN_ARRIVAL_KINDS[screen];
+  if (kind === null) {
+    return undefined;
+  }
+  const news = screenNewsOf(input, screen, kind);
+  return news === undefined ? undefined : { screen, ...news };
 }
