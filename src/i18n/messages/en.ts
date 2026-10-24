@@ -537,6 +537,11 @@ export const en = {
       lead: 'Already connected Claude? Ask it:',
       question: 'How many visits did {project} get today, and where did they come from?',
     },
+    phone: {
+      copy: 'Copy the address',
+      title: 'Installing happens on a computer',
+      body: 'Pyxis goes into your site’s code. Open this page on a computer, or copy its address and send it to whoever looks after the site.',
+    },
   },
   signUp: {
     title: 'Start your free trial',

@@ -571,6 +571,11 @@ export const de = translation({
       lead: 'Claude schon verbunden? Frag:',
       question: 'Wie viele Besuche hatte {project} heute, und woher kamen sie?',
     },
+    phone: {
+      copy: 'Adresse kopieren',
+      title: 'Die Installation erfolgt am Computer',
+      body: 'Pyxis kommt in den Code deiner Website. Öffne diese Seite am Computer, oder kopiere ihre Adresse und schick sie der Person, die sich um die Website kümmert.',
+    },
   },
   signUp: {
     title: 'Starte deine kostenlose Testphase',
