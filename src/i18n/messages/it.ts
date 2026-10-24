@@ -37,6 +37,7 @@ export const it = translation({
       manyFailedRequests: 'Più di 99 nuove richieste fallite',
       refresh: 'Aggiorna',
       refreshing: 'Aggiornamento…',
+      onTheSiteNow: '{count} sul sito ora',
     },
     closeMenu: 'Chiudi il menu',
     section: 'Analisi',

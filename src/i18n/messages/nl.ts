@@ -37,6 +37,7 @@ export const nl = translation({
       manyFailedRequests: 'Meer dan 99 nieuwe mislukte verzoeken',
       refresh: 'Vernieuwen',
       refreshing: 'Vernieuwen…',
+      onTheSiteNow: '{count} nu op de site',
     },
     closeMenu: 'Menu sluiten',
     section: 'Analyse',

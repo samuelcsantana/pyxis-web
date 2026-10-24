@@ -79,6 +79,10 @@ export const subscribeToActiveVisits = activeVisitsStore.subscribe;
 export const activeVisits = activeVisitsStore.current;
 export const publishActiveVisits = activeVisitsStore.publish;
 
+export function noActiveVisits(): undefined {
+  return undefined;
+}
+
 export function noteScreenRead(note: ScreenReadNote): void {
   pendingReads.push(note);
   notify(readListeners);
