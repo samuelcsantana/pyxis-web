@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.33.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.33.0...v0.33.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* **shell:** show a loading placeholder while a screen has no content ([43d386d](https://github.com/samuelcsantana/pyxis-web/commit/43d386de2af2b0bb042c01b9d16311a39b698a5b))
+
+
+### Refactoring
+
+* **states:** name the layout of a screen's loading state ([dbe2e54](https://github.com/samuelcsantana/pyxis-web/commit/dbe2e54a5743fd52da4ff5e4fc99d34e5c29b495))
+
+
+### Documentation
+
+* record the loading placeholder for a screen opened before its prefetch ([83b506c](https://github.com/samuelcsantana/pyxis-web/commit/83b506c0aa7f2b03b80d6e5b34f111caf7a18d5b))
+
 ## [0.33.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.32.0...v0.33.0) (2026-10-23)
 
 
