@@ -387,7 +387,9 @@ Shipping now:
   language, the mark that skips the hero's entrance after a switch and the referrer carried from
   `/` to the language it opens stay in `sessionStorage`, for the tab). Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
-  tracker, the sites it measures, how it is built, the architecture, a comparison, the hosted
+  tracker (while sign-up is open, also a highlighted card with a ready request to paste into a
+  coding agent, the coding agents it works with by name, a large copy button and a second robot
+  that cheers when the request is copied), the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
   on the chosen interval while the API says sign-up is open, read on the server and cached for
   five minutes, or how to ask for access by e-mail while it is closed; on a page in another
