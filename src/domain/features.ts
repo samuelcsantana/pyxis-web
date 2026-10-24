@@ -37,6 +37,7 @@ export interface FeatureRow {
   readonly name: string;
   readonly label: string;
   readonly count: string;
+  readonly counted: number;
   readonly visits: string;
   readonly share: string;
   readonly barWidth: string;
@@ -68,6 +69,7 @@ export function featureRows(
     name: item.name,
     label: featureLabel(kind, item.name),
     count: formatCount(item.count, i18n),
+    counted: item.count,
     visits: formatCount(item.visits, i18n),
     share: formatPercent(rate(item.count, total), i18n),
     barWidth: barWidth(item.count, most),

@@ -1,5 +1,6 @@
 import type { FeatureKind, FeatureRow } from '@/domain/features';
 import type { I18n } from '@/i18n/i18n';
+import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/panel-classes';
 import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
@@ -39,7 +40,7 @@ function TableRow({ kind, row, visitsHref, visitsPurpose, loadProperties }: Tabl
     );
   }
   return (
-    <tr>
+    <tr className={FRESH_HIGHLIGHT}>
       <FeatureRowCells
         kind={kind}
         row={row}
