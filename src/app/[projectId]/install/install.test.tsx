@@ -164,6 +164,15 @@ describe('InstallGuide', () => {
     );
   });
 
+  it('tells someone on a phone that installing happens on a computer, with the address to send', () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    const notice = screen.getByRole('group', { name: 'Installing happens on a computer' });
+    expect(notice).toHaveClass('md:hidden');
+    expect(notice).toHaveTextContent(window.location.href);
+    expect(within(notice).getByRole('button', { name: 'Copy the address' })).toBeInTheDocument();
+  });
+
   it('opens the dashboard once the first event arrived', () => {
     render(
       <InstallGuide

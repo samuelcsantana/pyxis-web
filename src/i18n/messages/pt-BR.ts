@@ -550,6 +550,11 @@ export const ptBR = translation({
       lead: 'Já conectou o Claude? Pergunte a ele:',
       question: 'Quantas visitas o {project} teve hoje, e de onde vieram?',
     },
+    phone: {
+      copy: 'Copiar o endereço',
+      title: 'A instalação é feita no computador',
+      body: 'O Pyxis entra no código do seu site. Abra esta página no computador, ou copie o endereço e mande para quem cuida do site.',
+    },
   },
   signUp: {
     title: 'Comece o teste grátis',

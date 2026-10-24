@@ -570,6 +570,11 @@ export const fr = translation({
       lead: 'Vous avez déjà connecté Claude ? Demandez-lui :',
       question: 'Combien de visites sur {project} aujourd’hui, et d’où venaient-elles ?',
     },
+    phone: {
+      copy: 'Copier l’adresse',
+      title: 'L’installation se fait sur un ordinateur',
+      body: 'Pyxis s’ajoute au code de votre site. Ouvrez cette page sur un ordinateur, ou copiez son adresse et envoyez-la à la personne qui s’occupe du site.',
+    },
   },
   signUp: {
     title: 'Démarrez votre essai gratuit',

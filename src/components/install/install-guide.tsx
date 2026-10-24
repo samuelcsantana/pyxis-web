@@ -23,6 +23,7 @@ import { canManageProject, projectActivity, type ProjectSettings } from '@/domai
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { InstallTabs } from './install-tabs';
+import { PageAddress } from './page-address';
 
 export interface InstallGuideProps {
   readonly settings: ProjectSettings;
@@ -173,6 +174,25 @@ function WithAgent({ publicKey, endpoint, origin, labels, i18n }: WithAgentProps
   );
 }
 
+function PhoneNotice({ labels, i18n }: { readonly labels: CopyCodeLabels; readonly i18n: I18n }) {
+  return (
+    <div
+      role="group"
+      aria-labelledby="install-phone-title"
+      className="flex flex-col gap-2 rounded-card border border-warn/35 bg-warn-soft px-3.5 py-3 md:hidden"
+    >
+      <h2 id="install-phone-title" className="text-sm font-semibold">
+        {i18n.t('install.phone.title')}
+      </h2>
+      <p className="text-sm">{i18n.t('install.phone.body')}</p>
+      <PageAddress
+        id="install-page-address"
+        labels={{ ...labels, copy: i18n.t('install.phone.copy') }}
+      />
+    </div>
+  );
+}
+
 export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
   const { t } = i18n;
   const key = settings.publicKeys[0]?.key;
@@ -185,6 +205,7 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
   const receiving = projectActivity(settings).kind === 'receiving';
   return (
     <>
+      <PhoneNotice labels={labels} i18n={i18n} />
       <section aria-labelledby="install-step-1" className={PANEL}>
         <h2 id="install-step-1" className={PANEL_TITLE}>
           {t('install.step1')}

@@ -555,6 +555,11 @@ export const es = translation({
       lead: '¿Ya conectaste Claude? Pregúntale:',
       question: '¿Cuántas visitas tuvo {project} hoy, y de dónde vinieron?',
     },
+    phone: {
+      copy: 'Copiar la dirección',
+      title: 'La instalación se hace en el ordenador',
+      body: 'Pyxis va en el código de tu sitio. Abre esta página en el ordenador, o copia su dirección y envíala a quien se encarga del sitio.',
+    },
   },
   signUp: {
     title: 'Empieza tu prueba gratis',

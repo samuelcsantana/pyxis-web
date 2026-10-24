@@ -562,6 +562,11 @@ export const nl = translation({
       lead: 'Claude al gekoppeld? Vraag:',
       question: 'Hoeveel bezoeken had {project} vandaag, en waar kwamen ze vandaan?',
     },
+    phone: {
+      copy: 'Adres kopiëren',
+      title: 'Installeren doe je op een computer',
+      body: 'Pyxis komt in de code van je site. Open deze pagina op een computer, of kopieer het adres en stuur het naar wie de site beheert.',
+    },
   },
   signUp: {
     title: 'Start je gratis proefperiode',

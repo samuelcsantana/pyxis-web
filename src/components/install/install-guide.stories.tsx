@@ -55,6 +55,19 @@ export const WithAnAiAgentInTheDarkTheme: Story = {
   },
 };
 
+export const OnAPhone: Story = {
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByRole('group', { name: 'Installing happens on a computer' }),
+    ).toBeVisible();
+  },
+};
+
+export const OnAPhoneInTheDarkTheme: Story = {
+  globals: { viewport: { value: 'mobile1' }, theme: 'dark' },
+};
+
 export const FirstEventArrived: Story = { args: { settings: RECEIVING } };
 
 export const FirstEventArrivedInPortuguese: Story = {

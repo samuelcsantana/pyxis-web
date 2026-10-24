@@ -561,6 +561,11 @@ export const it = translation({
       lead: 'Hai già collegato Claude? Chiedigli:',
       question: 'Quante visite ha avuto {project} oggi, e da dove sono arrivate?',
     },
+    phone: {
+      copy: 'Copia l’indirizzo',
+      title: 'L’installazione si fa al computer',
+      body: 'Pyxis va nel codice del tuo sito. Apri questa pagina al computer, oppure copia il suo indirizzo e mandalo a chi si occupa del sito.',
+    },
   },
   signUp: {
     title: 'Inizia la prova gratuita',
