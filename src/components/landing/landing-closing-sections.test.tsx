@@ -99,13 +99,13 @@ describe('ComparisonSection', () => {
 });
 
 describe('ComparisonSection capabilities', () => {
-  it('compares the failed requests of each visit and the size of the tracker, before the code', () => {
+  it('compares the failed requests of each visit and the size of the code a site loads, before the source code', () => {
     render(<ComparisonSection i18n={english} />);
 
     const aspects = screen.getAllByRole('rowheader').map((header) => header.textContent);
     expect(aspects.slice(-3)).toEqual([
       'The site’s requests that failed, in each visit',
-      'Size of the tracker, gzipped',
+      'Size of the code the site loads, gzipped',
       'Source code',
     ]);
     const cellsOf = (name: RegExp) =>
@@ -116,7 +116,10 @@ describe('ComparisonSection capabilities', () => {
       'Yes: route, status and duration',
       'Depends on the tool',
     ]);
-    expect(cellsOf(/Size of the tracker/)).toEqual(['Under 5 KB', 'Usually 30 to 150 KB']);
+    expect(cellsOf(/Size of the code the site loads/)).toEqual([
+      'Under 5 KB',
+      'Usually 30 to 150 KB',
+    ]);
   });
 });
 

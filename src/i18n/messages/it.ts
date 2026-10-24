@@ -1531,7 +1531,7 @@ export const it = translation({
       invented: 'Dati inventati, come nella demo live.',
     },
     proof: {
-      size: { value: 'meno di 5 KB', label: 'tracker, compresso con gzip' },
+      size: { value: 'meno di 5 KB', label: 'di codice di Pyxis, compresso con gzip' },
       dependencies: { value: '0', label: 'dipendenze a runtime' },
       coverage: { value: '100%', label: 'copertura dei test in tutti e quattro i repository' },
       license: { value: 'MIT', label: 'licenza, infrastruttura inclusa' },
@@ -1576,7 +1576,7 @@ export const it = translation({
           kept: 'sessionStorage · finisce con la scheda',
         },
       },
-      foot: 'Un browser che chiede di non essere tracciato (Global Privacy Control o Do Not Track) spegne il tracker prima che qualcosa venga messo in coda. Gli eventi vengono eliminati dopo 13 mesi.',
+      foot: 'Un browser che chiede di non essere tracciato (Global Privacy Control o Do Not Track) spegne Pyxis prima che qualcosa venga messo in coda. Gli eventi vengono eliminati dopo 13 mesi.',
     },
     answers: {
       eyebrow: 'Dashboard',
@@ -1737,14 +1737,14 @@ export const it = translation({
         realServices:
           'Test di integrazione su un Postgres reale, e test end-to-end in un browser reale con controlli di accessibilità axe.',
         provenance:
-          'Il tracker è pubblicato su npm da GitHub Actions, con attestazione di provenienza.',
+          'Il codice di Pyxis che i siti installano è pubblicato su npm da GitHub Actions, con attestazione di provenienza.',
         decisions:
           'Decisioni messe per iscritto come architecture decision record in ogni repository.',
         storybook: 'Uno Storybook in cui ogni story è anche un test di accessibilità.',
       },
       storybook: 'Ogni componente della dashboard e i suoi stati',
       apiReference: 'Generato dagli schemi delle rotte stesse',
-      playground: 'Il tracker vero, che mostra ogni batch che invierebbe',
+      playground: 'Il vero codice di Pyxis, che mostra ogni batch che invierebbe',
     },
     architecture: {
       eyebrow: 'Architettura',
@@ -1798,7 +1798,7 @@ export const it = translation({
           typical: 'Dipende dallo strumento',
         },
         trackerSize: {
-          aspect: 'Dimensione del tracker, compresso con gzip',
+          aspect: 'Dimensione del codice che il sito carica, compresso con gzip',
           pyxis: 'Meno di 5 KB',
           typical: 'In genere da 30 a 150 KB',
         },
@@ -1878,7 +1878,7 @@ export const it = translation({
         optOut: {
           question: 'Un visitatore può rifiutare la misurazione?',
           answer:
-            'Global Privacy Control e Do Not Track spengono il tracker, e un sito può offrire un proprio interruttore con <code>optOut()</code> e <code>trackingStatus()</code>.',
+            'Global Privacy Control e Do Not Track spengono Pyxis, e un sito può offrire un proprio interruttore con <code>optOut()</code> e <code>trackingStatus()</code>.',
         },
         retention: {
           question: 'Per quanto tempo vengono conservati i dati?',

@@ -1500,7 +1500,7 @@ export const en = {
       invented: 'Invented data, like the live demo.',
     },
     proof: {
-      size: { value: 'under 5 KB', label: 'tracker, gzipped' },
+      size: { value: 'under 5 KB', label: 'of Pyxis code, gzipped' },
       dependencies: { value: '0', label: 'runtime dependencies' },
       coverage: { value: '100%', label: 'test coverage in all four repositories' },
       license: { value: 'MIT', label: 'license, infrastructure included' },
@@ -1544,7 +1544,7 @@ export const en = {
           kept: 'sessionStorage · ends with the tab',
         },
       },
-      foot: 'A browser that sends “do not track” (Global Privacy Control or Do Not Track) switches the tracker off before anything is queued. Events are deleted after 13 months.',
+      foot: 'A browser that sends “do not track” (Global Privacy Control or Do Not Track) switches Pyxis off before anything is queued. Events are deleted after 13 months.',
     },
     answers: {
       eyebrow: 'Dashboard',
@@ -1702,13 +1702,14 @@ export const en = {
           '100% of statements, branches, functions and lines covered in all four repositories. CI fails below that.',
         realServices:
           'Integration tests against a real Postgres, and end-to-end tests in a real browser with axe accessibility checks.',
-        provenance: 'The tracker is published to npm from GitHub Actions, with provenance.',
+        provenance:
+          'The Pyxis code that sites install is published to npm from GitHub Actions, with provenance.',
         decisions: 'Decisions written down as architecture decision records in each repository.',
         storybook: 'A Storybook where every story is also an accessibility test.',
       },
       storybook: 'Every dashboard component and its states',
       apiReference: 'Generated from the routes’ own schemas',
-      playground: 'The real tracker, showing every batch it would send',
+      playground: 'The real Pyxis code, showing every batch it would send',
     },
     architecture: {
       eyebrow: 'Architecture',
@@ -1759,7 +1760,7 @@ export const en = {
           typical: 'Depends on the tool',
         },
         trackerSize: {
-          aspect: 'Size of the tracker, gzipped',
+          aspect: 'Size of the code the site loads, gzipped',
           pyxis: 'Under 5 KB',
           typical: 'Usually 30 to 150 KB',
         },
@@ -1838,7 +1839,7 @@ export const en = {
         optOut: {
           question: 'Can a visitor opt out?',
           answer:
-            'Global Privacy Control and Do Not Track switch the tracker off, and a site can offer its own switch with <code>optOut()</code> and <code>trackingStatus()</code>.',
+            'Global Privacy Control and Do Not Track switch Pyxis off, and a site can offer its own switch with <code>optOut()</code> and <code>trackingStatus()</code>.',
         },
         retention: {
           question: 'How long is data kept?',
