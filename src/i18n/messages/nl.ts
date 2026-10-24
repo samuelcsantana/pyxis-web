@@ -522,6 +522,35 @@ export const nl = translation({
     selected: 'Geselecteerd, druk op Ctrl+C',
     privacy:
       'Pyxis plaatst geen cookie bij je bezoekers en slaat geen IP-adres of persoonsgegevens op. Vermeld in je privacybeleid dat de site het gebruik meet met Pyxis.',
+    how: 'Zo installeer je',
+    yourself: 'Zelf',
+    withAgent: 'Met een AI-agent',
+    agent: {
+      lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere coding-agent en plak dit verzoek. Het bevat al de publieke sleutel en het adres van dit project.',
+      prompt:
+        'Installeer Pyxis op deze site volgens {recipe}. De publieke sleutel van het project is {key}, het endpoint is {endpoint} en de site staat op {origin}. Meet de pagina’s en registreer bij elke belangrijke actie een event, zonder persoonsgegevens. Geef aan het eind een lijst van de bestanden die je hebt gewijzigd en van elk event dat je hebt aangemaakt, met naam en eigenschappen, zodat ik ze kan nakijken.',
+      promptAnySite:
+        'Installeer Pyxis op deze site volgens {recipe}. De publieke sleutel van het project is {key} en het endpoint is {endpoint}. Meet de pagina’s en registreer bij elke belangrijke actie een event, zonder persoonsgegevens. Geef aan het eind een lijst van de bestanden die je hebt gewijzigd en van elk event dat je hebt aangemaakt, met naam en eigenschappen, zodat ik ze kan nakijken.',
+      steps: {
+        open: 'Open de repository van je site in Claude Code, in Cursor of in een andere coding-agent.',
+        paste: 'Plak het verzoek hierboven en laat de agent zijn werk doen.',
+        review:
+          'Kijk na wat hij heeft gewijzigd: het pakket, de <code>init</code> en de events die hij opsomt. Haal weg of hernoem wat je niet wilt.',
+        publish:
+          'Publiceer de site en open een van de pagina’s. Stap 2, hieronder, laat weten wanneer het eerste event binnenkomt.',
+      },
+      changes: {
+        title: 'Wat de agent gaat wijzigen',
+        package:
+          '<code>package.json</code>: het pakket <code>pyxis-analytics</code>, zonder andere afhankelijkheid.',
+        init: 'Eén bestand dat op elke pagina in de browser draait: de <code>init</code> met je sleutel.',
+        track: 'Een <code>track</code>-aanroep bij elke belangrijke actie, nadat die gelukt is.',
+        csp: 'Het beveiligingsbeleid (CSP), als de site er een heeft, met het adres van de API.',
+        only: 'De agent wijzigt alleen de code van de site. Hij schrijft niets in Pyxis.',
+      },
+      rules:
+        'De agent volgt de regels in <code>llms.txt</code>: geen persoonsgegevens, geldige eventnamen, het adres van de API in de CSP.',
+    },
   },
   signUp: {
     title: 'Start je gratis proefperiode',

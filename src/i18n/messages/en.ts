@@ -497,6 +497,35 @@ export const en = {
     selected: 'Selected, press Ctrl+C',
     privacy:
       'Pyxis stores no cookie on your visitors, no IP address and no personal data. Say in your privacy policy that the site measures its use with Pyxis.',
+    how: 'How to install',
+    yourself: 'Yourself',
+    withAgent: 'With an AI agent',
+    agent: {
+      lead: 'Open your site’s repository in Claude Code, Cursor or another coding agent and paste this request. It already carries this project’s public key and address.',
+      prompt:
+        'Install Pyxis on this site following {recipe}. The project’s public key is {key}, the endpoint is {endpoint} and the site is at {origin}. Measure the pages and record an event at each important action, with no personal data. At the end, list the files you changed and each event you created, with its name and properties, for me to review.',
+      promptAnySite:
+        'Install Pyxis on this site following {recipe}. The project’s public key is {key} and the endpoint is {endpoint}. Measure the pages and record an event at each important action, with no personal data. At the end, list the files you changed and each event you created, with its name and properties, for me to review.',
+      steps: {
+        open: 'Open your site’s repository in Claude Code, Cursor or another coding agent.',
+        paste: 'Paste the request above and let the agent work.',
+        review:
+          'Review what it changed: the package, the <code>init</code> and the events it lists. Remove or rename what you do not want.',
+        publish:
+          'Publish the site and open one of its pages. Step 2, below, says when the first event arrives.',
+      },
+      changes: {
+        title: 'What the agent will change',
+        package:
+          '<code>package.json</code>: the <code>pyxis-analytics</code> package, with no other dependency.',
+        init: 'One file that runs in the browser on every page: the <code>init</code> with your key.',
+        track: 'A <code>track</code> call at each important action, after it succeeds.',
+        csp: 'The security policy (CSP), if the site has one, with the API address.',
+        only: 'The agent only changes the site’s code. It writes nothing to Pyxis.',
+      },
+      rules:
+        'The agent follows the rules in <code>llms.txt</code>: no personal data, valid event names, the API address in the CSP.',
+    },
   },
   signUp: {
     title: 'Start your free trial',
