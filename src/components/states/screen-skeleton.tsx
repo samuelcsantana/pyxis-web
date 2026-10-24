@@ -5,6 +5,10 @@ const ROW_WIDTHS = ['w-3/5', 'w-2/5', 'w-1/2', 'w-2/3', 'w-1/3'] as const;
 const STEP_WIDTHS = ['w-full', 'w-4/5', 'w-3/5', 'w-2/5'] as const;
 const CONTROL_WIDTHS = ['w-20', 'w-24', 'w-28'] as const;
 
+export const SKELETON_SCREEN =
+  'flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12';
+export const SKELETON_STACK = 'flex flex-col gap-3.5 sm:gap-5';
+
 function indexes(count: number): number[] {
   return Array.from({ length: count }, (_, index) => index);
 }

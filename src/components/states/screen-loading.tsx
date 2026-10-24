@@ -3,6 +3,8 @@ import { ScreenContent } from '@/components/shell/screen-content';
 import { type ScreenSlug, screenLabelKey } from '@/components/shell/screens';
 import type { I18n } from '@/i18n/i18n';
 import {
+  SKELETON_SCREEN,
+  SKELETON_STACK,
   SkeletonCards,
   SkeletonChart,
   SkeletonControls,
@@ -74,14 +76,11 @@ export interface ScreenLoadingProps {
 export function ScreenLoading({ screen, i18n }: ScreenLoadingProps) {
   const label = i18n.t(screenLabelKey(screen));
   return (
-    <ScreenContent
-      aria-busy="true"
-      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
-    >
+    <ScreenContent aria-busy="true" className={SKELETON_SCREEN}>
       <p role="status" className="text-sm text-muted">
         {i18n.t('screens.loading', { screen: label })}
       </p>
-      <div aria-hidden="true" className="flex flex-col gap-3.5 sm:gap-5">
+      <div aria-hidden="true" className={SKELETON_STACK}>
         {SCREEN_SKELETONS[screen]()}
       </div>
     </ScreenContent>
