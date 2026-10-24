@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.36.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.35.0...v0.36.0) (2026-10-24)
+
+
+### Features
+
+* **shell:** keep the look of a screen read again with nothing new ([f80f1b4](https://github.com/samuelcsantana/pyxis-web/commit/f80f1b4f137ad3679d36bbd6840df28628a7b802))
+* **shell:** leave display-only parameters out of a read's record ([d7db0ae](https://github.com/samuelcsantana/pyxis-web/commit/d7db0ae2f2b0d6dca0a838f307fde97dbf08ca8c))
+
+
+### Bug Fixes
+
+* **funnel:** keep the address's own mode and steps in the funnel's links ([7627cf9](https://github.com/samuelcsantana/pyxis-web/commit/7627cf92015ce6872ee5a3b51eaeeeaf29167577))
+
+
+### Refactoring
+
+* **requests:** name the route parameter in the requests domain ([5196630](https://github.com/samuelcsantana/pyxis-web/commit/519663028f638dde43ea54f1d972880327ce9858))
+
+
+### Documentation
+
+* record that a look keeps its marks across display-only re-reads ([92776dd](https://github.com/samuelcsantana/pyxis-web/commit/92776ddb905e96f0052fe38c0b33afc1aa9848e1))
+
 ## [0.35.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.34.0...v0.35.0) (2026-10-24)
 
 
