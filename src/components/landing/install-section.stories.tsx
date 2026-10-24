@@ -60,6 +60,9 @@ export const SignUpOpenRequestCopied: Story = {
     await expect(
       await canvas.findByRole('button', { name: 'Request copied. Paste it into your agent' }),
     ).toBeVisible();
+    await expect(canvasElement.querySelector('.landing-agent-robot > span')).toHaveClass(
+      'landing-robot-cheer',
+    );
     writeText.mockRestore();
   },
 };

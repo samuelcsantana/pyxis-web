@@ -247,6 +247,47 @@ describe('InstallSection', () => {
     expect(chips.at(-1)).toHaveClass('border-dashed');
   });
 
+  it('makes the robot cheer when either button copies the request', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: () => Promise.resolve() },
+      configurable: true,
+    });
+    render(<InstallSection i18n={english} signUpOpen />);
+    const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
+    const robotCheers = () =>
+      agent.querySelector('.landing-agent-robot > span')?.classList.contains('landing-robot-cheer');
+    expect(robotCheers()).toBe(false);
+
+    await userEvent.click(within(agent).getByRole('button', { name: 'Copy' }));
+    expect(robotCheers()).toBe(true);
+
+    await userEvent.click(
+      within(agent).getByRole('button', { name: 'Copy the request for your agent' }),
+    );
+    expect(robotCheers()).toBe(true);
+  });
+
+  it('keeps the robot still when another snippet is copied', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: () => Promise.resolve() },
+      configurable: true,
+    });
+    render(<InstallSection i18n={english} signUpOpen />);
+    const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
+    const otherSnippets = screen
+      .getAllByRole('button', { name: 'Copy' })
+      .filter((button) => !agent.contains(button));
+    expect(otherSnippets).toHaveLength(2);
+
+    for (const button of otherSnippets) {
+      await userEvent.click(button);
+    }
+
+    expect(agent.querySelector('.landing-agent-robot > span')).not.toHaveClass(
+      'landing-robot-cheer',
+    );
+  });
+
   it('copies the same request from a large button under it, counted apart', async () => {
     const writeText = vi.fn(() => Promise.resolve());
     Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });

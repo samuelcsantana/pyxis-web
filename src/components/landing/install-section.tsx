@@ -1,6 +1,7 @@
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { CheerOnCopy } from './cheer-on-copy';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
 import { LANDING_LINKS } from './landing-links';
@@ -183,7 +184,9 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
       className={`landing-agent-card relative mt-7 flex flex-col gap-3 rounded-card border py-7 pr-26 pl-5 sm:pr-36 sm:pl-8 ${REVEAL}`}
     >
       <div aria-hidden="true" className="landing-agent-robot">
-        <NudgeRobot idPrefix={AGENT_ROBOT_ID_PREFIX} />
+        <CheerOnCopy codeId={AGENT_PROMPT_ID}>
+          <NudgeRobot idPrefix={AGENT_ROBOT_ID_PREFIX} />
+        </CheerOnCopy>
       </div>
       <p className="landing-agent-badge">
         <svg width={13} height={13} viewBox="0 0 24 24" aria-hidden="true">
