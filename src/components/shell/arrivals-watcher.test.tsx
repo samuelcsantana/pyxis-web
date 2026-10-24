@@ -7,7 +7,7 @@ import { en } from '@/i18n/messages/en';
 import { MessagesProvider } from '@/i18n/messages-provider';
 import { seenMarksKey } from '@/lib/seen-marks';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
-import { arrivalNews, noteScreenRead } from './arrival-news';
+import { arrivalNews, noteScreenRead, openScreenNews } from './arrival-news';
 import { ARRIVALS_POLL_MS, IDLE_STOP_MS, MIN_POLL_GAP_MS } from './arrivals-poller';
 import ArrivalsWatcher from './arrivals-watcher';
 
@@ -114,6 +114,7 @@ describe('ArrivalsWatcher', () => {
     await pass(0);
 
     expect(arrivalNews()).toEqual({});
+    expect(openScreenNews()).toBeUndefined();
 
     await pass(ARRIVALS_POLL_MS);
 
@@ -124,6 +125,20 @@ describe('ArrivalsWatcher', () => {
       features: { shown: '1', label: '1 new event' },
       requests: { shown: '99+', label: 'More than 99 new failed requests' },
     });
+  });
+
+  it('counts apart what arrived for the screen being shown, until its next read', async () => {
+    answers = [report(NOW), LATER];
+    watch();
+    await pass(ARRIVALS_POLL_MS);
+
+    expect(openScreenNews()).toEqual({ screen: 'overview', shown: '1', label: '1 new visit' });
+
+    act(() => {
+      noteScreenRead({ path: '/p-store/overview', readAt: NOW + ARRIVALS_POLL_MS });
+    });
+
+    expect(openScreenNews()).toBeUndefined();
   });
 
   it('keeps the reads of the screens as their marks, and asks since the oldest one', async () => {
@@ -164,6 +179,7 @@ describe('ArrivalsWatcher', () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(arrivalNews()).toEqual({});
+    expect(openScreenNews()).toBeUndefined();
   });
 
   it('asks nothing while the tab is hidden, and asks at once when it shows', async () => {
@@ -197,12 +213,14 @@ describe('ArrivalsWatcher', () => {
     const view = watch();
     await pass(ARRIVALS_POLL_MS);
     expect(arrivalNews()).not.toEqual({});
+    expect(openScreenNews()).toBeDefined();
 
     view.unmount();
     document.dispatchEvent(new Event('visibilitychange'));
     await pass(ARRIVALS_POLL_MS * 2);
 
     expect(arrivalNews()).toEqual({});
+    expect(openScreenNews()).toBeUndefined();
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 

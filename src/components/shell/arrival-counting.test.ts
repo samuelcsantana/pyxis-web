@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ArrivalKind, ArrivalsReport } from '@/domain/arrivals';
-import { arrivalNewsOf, COUNTED_SCREENS, oldestMark } from './arrival-counting';
+import { arrivalNewsOf, COUNTED_SCREENS, oldestMark, openScreenNewsOf } from './arrival-counting';
 
 const AT_NOON = Date.parse('2026-10-23T12:00:00Z');
 const MINUTE = 60_000;
@@ -78,6 +78,46 @@ describe('arrivalNewsOf', () => {
     });
 
     expect(news.requests).toEqual({ shown: '2', label: '2 failedRequests' });
+  });
+});
+
+describe('openScreenNewsOf', () => {
+  it('counts for the screen being shown what arrived after its own mark', () => {
+    const news = openScreenNewsOf({
+      report: REPORT,
+      marks: { ...EVERY_SCREEN_EARLY, visits: AT_NOON - MINUTE },
+      current: 'visits',
+      label,
+    });
+
+    expect(news).toEqual({ screen: 'visits', shown: '1', label: '1 visits' });
+  });
+
+  it('has nothing when the screen shown counts no kind, or no screen is shown', () => {
+    const marks = { ...EVERY_SCREEN_EARLY, timeline: EARLY };
+
+    expect(openScreenNewsOf({ report: REPORT, marks, current: 'timeline', label })).toBeUndefined();
+    expect(openScreenNewsOf({ report: REPORT, marks, current: undefined, label })).toBeUndefined();
+  });
+
+  it('has nothing when nothing new arrived for the screen shown, or it has no mark yet', () => {
+    expect(
+      openScreenNewsOf({ report: REPORT, marks: EVERY_SCREEN_EARLY, current: 'requests', label }),
+    ).toBeUndefined();
+    expect(
+      openScreenNewsOf({ report: REPORT, marks: {}, current: 'overview', label }),
+    ).toBeUndefined();
+  });
+
+  it('has nothing on the funnel when the project has no conversion event', () => {
+    expect(
+      openScreenNewsOf({
+        report: { ...REPORT, conversions: null },
+        marks: EVERY_SCREEN_EARLY,
+        current: 'funnel',
+        label,
+      }),
+    ).toBeUndefined();
   });
 });
 

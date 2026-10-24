@@ -7,8 +7,20 @@ import { resolvePeriodOn } from '@/domain/period';
 import { useT } from '@/i18n/messages-provider';
 import { arrivalsHref, SINCE_PARAMETER } from '@/lib/arrivals-href';
 import { createSeenStore } from '@/lib/seen-store';
-import { type ArrivalLabel, arrivalNewsOf, COUNTED_SCREENS, oldestMark } from './arrival-counting';
-import { publishArrivalNews, subscribeToScreenReads, takeScreenReads } from './arrival-news';
+import {
+  type ArrivalLabel,
+  type ArrivalNewsInput,
+  arrivalNewsOf,
+  COUNTED_SCREENS,
+  oldestMark,
+  openScreenNewsOf,
+} from './arrival-counting';
+import {
+  publishArrivalNews,
+  publishOpenScreenNews,
+  subscribeToScreenReads,
+  takeScreenReads,
+} from './arrival-news';
 import { readArrivalsAnswer } from './arrivals-answer';
 import { type ArrivalsPoller, startArrivalsPoller } from './arrivals-poller';
 import { screenSearchOf } from './screen-search';
@@ -138,16 +150,18 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
   }, [projectId, store, includesToday]);
 
   useEffect(() => {
-    publishArrivalNews(
+    const counting: ArrivalNewsInput | undefined =
       includesToday && report !== undefined
-        ? arrivalNewsOf({ report, marks: store.marks(Date.now()), current, label })
-        : NO_NEWS,
-    );
+        ? { report, marks: store.marks(Date.now()), current, label }
+        : undefined;
+    publishArrivalNews(counting === undefined ? NO_NEWS : arrivalNewsOf(counting));
+    publishOpenScreenNews(counting === undefined ? undefined : openScreenNewsOf(counting));
   }, [report, marksVersion, current, includesToday, store, label]);
 
   useEffect(
     () => () => {
       publishArrivalNews(NO_NEWS);
+      publishOpenScreenNews(undefined);
     },
     [],
   );
