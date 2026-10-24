@@ -48,3 +48,19 @@ test('keeps the top bar with the destination title while a screen loads', async 
   await expect(page.getByText('What people use to reach My site')).toBeAttached();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 });
+
+test('shows the loading placeholder only while the screen has no content', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
+  const placeholder = page.getByText('Loading…', { exact: true });
+  await expect(placeholder).toBeHidden();
+
+  await page.getByRole('main').evaluate((main) => {
+    main.remove();
+  });
+
+  await expect(placeholder).toBeVisible();
+  await expect(placeholder.locator('..')).toHaveAttribute('aria-busy', 'true');
+  await expect(page.getByRole('status')).toHaveText('Loading…');
+  await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
+});
