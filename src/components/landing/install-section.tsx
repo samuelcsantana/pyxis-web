@@ -158,6 +158,11 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
         labels={labels}
         wrap="words"
       />
+      <p className="text-sm leading-relaxed text-ink">
+        {rich(t('landing.install.agent.ready'), {
+          code: (text) => <code className="font-mono text-sm">{text}</code>,
+        })}
+      </p>
       <p className="text-sm leading-relaxed text-muted">
         {rich(t('landing.install.agent.foot'), {
           code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,

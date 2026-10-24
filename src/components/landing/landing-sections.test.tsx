@@ -168,6 +168,13 @@ describe('InstallSection', () => {
     expect(prompt).not.toHaveClass('break-all');
     expect(prompt?.parentElement).toHaveClass('pt-13', 'pr-5', 'sm:pt-4.5', 'sm:pr-24');
     expect(within(agent).getByText('llms.txt').tagName).toBe('CODE');
+    expect(agent).toHaveTextContent(
+      'After you create the account and the project, the dashboard’s Install screen has a request like this one ready, with your project’s key in place of pyxis_pk_….',
+    );
+    expect(within(agent).getByText('pyxis_pk_…').tagName).toBe('CODE');
+    expect(prompt?.compareDocumentPosition(within(agent).getByText('pyxis_pk_…'))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
     expect(agent).toHaveTextContent('Then connect Claude to Pyxis to check');
     expect(within(agent).getByRole('button', { name: 'Copy' })).toHaveAttribute(
       'data-track-snippet',
@@ -187,8 +194,12 @@ describe('InstallSection', () => {
   it('writes the agent prompt in the reader’s language', () => {
     render(<InstallSection i18n={portuguese} signUpOpen />);
 
-    expect(screen.getByRole('group', { name: 'Ou peça ao seu agente de IA' })).toHaveTextContent(
+    const agent = screen.getByRole('group', { name: 'Ou peça ao seu agente de IA' });
+    expect(agent).toHaveTextContent(
       'Instale o Pyxis neste site seguindo https://pyxis-analytics.dev/llms.txt.',
+    );
+    expect(agent).toHaveTextContent(
+      'Depois de criar a conta e o projeto, a tela Instalação do painel traz um pedido como este já pronto, com a chave do seu projeto no lugar de pyxis_pk_….',
     );
   });
 
