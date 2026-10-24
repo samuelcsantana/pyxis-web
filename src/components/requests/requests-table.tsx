@@ -14,6 +14,7 @@ import {
   FAILED_READS,
   type RequestKind,
   type RequestsTableText,
+  ROUTE_PARAMETER,
   type RouteRow,
 } from '@/domain/requests';
 import type { RouteDaysText } from '@/domain/route-days';
@@ -50,7 +51,6 @@ export interface RequestsTableProps {
 }
 
 const CHIP = 'rounded-pill px-2 py-0.5 text-xs font-semibold whitespace-nowrap tabular-nums';
-export const ROUTE_PARAMETER = 'route';
 
 function showRouteInAddress(route: string | null) {
   const url = new URL(window.location.href);
