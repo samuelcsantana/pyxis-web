@@ -35,6 +35,8 @@ export const it = translation({
       manyConversions: 'Più di 99 nuove conversioni',
       manyNamedEvents: 'Più di 99 nuovi eventi',
       manyFailedRequests: 'Più di 99 nuove richieste fallite',
+      refresh: 'Aggiorna',
+      refreshing: 'Aggiornamento…',
     },
     closeMenu: 'Chiudi il menu',
     section: 'Analisi',

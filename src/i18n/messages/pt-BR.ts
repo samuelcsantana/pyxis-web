@@ -38,6 +38,8 @@ export const ptBR = translation({
       manyConversions: 'Mais de 99 novas conversões',
       manyNamedEvents: 'Mais de 99 novos eventos',
       manyFailedRequests: 'Mais de 99 novas requisições com falha',
+      refresh: 'Atualizar',
+      refreshing: 'Atualizando…',
     },
     closeMenu: 'Fechar menu',
     section: 'Análises',

@@ -30,6 +30,8 @@ export const en = {
       manyConversions: 'More than 99 new conversions',
       manyNamedEvents: 'More than 99 new events',
       manyFailedRequests: 'More than 99 new failed requests',
+      refresh: 'Refresh',
+      refreshing: 'Refreshing…',
     },
     closeMenu: 'Close menu',
     section: 'Analytics',
