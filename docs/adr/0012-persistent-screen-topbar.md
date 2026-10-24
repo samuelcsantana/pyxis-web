@@ -84,3 +84,13 @@ screen and period, which is what the sidebar already does.
   arrives; Settings has no loading state, so there is no placeholder in between.
 - Around midnight in the project's time zone, the header and the page compute "today" a few
   milliseconds apart and may disagree for that instant.
+- A tap on a screen whose prefetch had only partly arrived (on a phone, right after opening the
+  menu) let Next commit the new route with the page segment still missing and no loading boundary
+  known for it. The header already showed the destination and the area below it stayed empty
+  until the server answered (about a second on a slow connection); before this decision the old
+  screen stayed, with its busy bar. Since 2026-10-24 the layout renders a busy placeholder (a
+  status line and a generic skeleton) right before the page, hidden by a CSS rule whenever a
+  `<main>` follows it, so only that empty state shows it. It is markup and a class, so no route
+  ships more JavaScript. It is a `<div>`, not a second `<main>`: one would take the skip link's
+  target and the busy probes; while it shows, the page has no main landmark, as it had none in
+  the empty state before.
