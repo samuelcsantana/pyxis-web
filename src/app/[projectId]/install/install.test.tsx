@@ -99,7 +99,8 @@ describe('InstallGuide', () => {
     const second = screen.getByRole('region', { name: '2. Open a page of your site' });
     expect(second).toHaveTextContent('Page views from https://store.example.com show up here');
     expect(within(second).getByRole('status')).toHaveTextContent('Waiting for the first event…');
-    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(3);
+    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(4);
+    expect(screen.queryByText(/Already connected Claude/)).not.toBeInTheDocument();
   });
 
   it('opens on installing it yourself, with the agent one tab away', () => {
@@ -149,6 +150,20 @@ describe('InstallGuide', () => {
     expect(within(agent).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
   });
 
+  it('suggests checking the first events with Claude, read-only and revocable in Settings', () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
+    expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings#settings-connections-heading',
+    );
+    expect(within(third).getByText('claude.ai/directory/pyxis').tagName).toBe('CODE');
+    expect(document.getElementById('install-claude-code')).toHaveTextContent(
+      'claude mcp add --transport http pyxis https://api.example.com/mcp',
+    );
+  });
+
   it('opens the dashboard once the first event arrived', () => {
     render(
       <InstallGuide
@@ -166,6 +181,10 @@ describe('InstallGuide', () => {
     expect(screen.getByRole('link', { name: 'Open the dashboard' })).toHaveAttribute(
       'href',
       '/p-store/overview',
+    );
+    expect(screen.getByText('Already connected Claude? Ask it:')).toBeInTheDocument();
+    expect(document.getElementById('install-first-question')).toHaveTextContent(
+      'How many visits did Demo Store get today, and where did they come from?',
     );
   });
 

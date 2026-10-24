@@ -2,11 +2,23 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { type CopyCodeLabels, CopyCodeButton } from '@/components/landing/copy-code-button';
 import { NoLiveKeyNotice } from '@/components/settings/no-live-key-notice';
-import { FIRST_SCREEN, screenHref, settingsKeysHref } from '@/components/shell/screens';
-import { BUTTON_PRIMARY } from '@/components/ui/control-classes';
+import {
+  FIRST_SCREEN,
+  screenHref,
+  settingsConnectionsHref,
+  settingsKeysHref,
+} from '@/components/shell/screens';
+import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
-import { agentPrompt, installCommand, moduleSnippet, scriptSnippet } from '@/domain/install';
+import { claudeCodeCommand } from '@/domain/connections';
+import {
+  agentPrompt,
+  connectorUrlOf,
+  installCommand,
+  moduleSnippet,
+  scriptSnippet,
+} from '@/domain/install';
 import { canManageProject, projectActivity, type ProjectSettings } from '@/domain/project-settings';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
@@ -229,6 +241,15 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
             >
               {t('install.open')}
             </Link>
+            <div className="flex flex-col gap-2 rounded-card bg-soft px-3.5 py-3">
+              <p className="text-sm">{t('install.ask.lead')}</p>
+              <CodeBlock
+                id="install-first-question"
+                code={t('install.ask.question', { project: settings.name })}
+                labels={labels}
+                wrap="words"
+              />
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-1">
@@ -239,6 +260,27 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
           </div>
         )}
         <RefreshWhilePending pending={!receiving} />
+      </section>
+      <section aria-labelledby="install-step-3" className={PANEL}>
+        <h2 id="install-step-3" className={PANEL_TITLE}>
+          {t('install.step3')}
+        </h2>
+        <p className="text-sm">
+          {rich(t('install.claude.body'), {
+            settings: (text) => (
+              <Link href={settingsConnectionsHref(settings.id)} className={TEXT_LINK}>
+                {text}
+              </Link>
+            ),
+          })}
+        </p>
+        <p className="text-sm">{rich(t('install.claude.connect'), { code: codeText })}</p>
+        <CodeBlock
+          id="install-claude-code"
+          code={claudeCodeCommand(connectorUrlOf(endpoint))}
+          labels={labels}
+        />
+        <p className={NOTE}>{t('install.claude.allow')}</p>
       </section>
     </>
   );

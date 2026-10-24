@@ -544,6 +544,17 @@ export const es = translation({
       rules:
         'El agente sigue las reglas de <code>llms.txt</code>: ningún dato personal, nombres de evento válidos, la dirección de la API en la CSP.',
     },
+    step3: '3. Compruébalo con Claude (opcional)',
+    claude: {
+      body: 'Conecta Claude a Pyxis y pregúntale si llegaron los primeros eventos. Lee los mismos números que este panel, nunca cambia nada, y revocas la conexión cuando quieras, en <settings>Configuración</settings>.',
+      connect:
+        'En Claude, abre <code>claude.ai/directory/pyxis</code> y elige Connect. En Claude Code, ejecuta este comando y luego /mcp para iniciar sesión:',
+      allow: 'Al conectar, una pantalla de Pyxis te pide que permitas la conexión.',
+    },
+    ask: {
+      lead: '¿Ya conectaste Claude? Pregúntale:',
+      question: '¿Cuántas visitas tuvo {project} hoy, y de dónde vinieron?',
+    },
   },
   signUp: {
     title: 'Empieza tu prueba gratis',

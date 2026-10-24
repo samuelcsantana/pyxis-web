@@ -551,6 +551,17 @@ export const nl = translation({
       rules:
         'De agent volgt de regels in <code>llms.txt</code>: geen persoonsgegevens, geldige eventnamen, het adres van de API in de CSP.',
     },
+    step3: '3. Controleer het met Claude (optioneel)',
+    claude: {
+      body: 'Koppel Claude aan Pyxis en vraag of de eerste events zijn binnengekomen. Claude leest dezelfde cijfers als dit dashboard, wijzigt nooit iets, en je trekt de koppeling in wanneer je wilt, onder <settings>Instellingen</settings>.',
+      connect:
+        'Open in Claude <code>claude.ai/directory/pyxis</code> en kies Connect. Voer in Claude Code dit commando uit en daarna /mcp om in te loggen:',
+      allow: 'Bij het koppelen vraagt een scherm van Pyxis je om de koppeling toe te staan.',
+    },
+    ask: {
+      lead: 'Claude al gekoppeld? Vraag:',
+      question: 'Hoeveel bezoeken had {project} vandaag, en waar kwamen ze vandaan?',
+    },
   },
   signUp: {
     title: 'Start je gratis proefperiode',
