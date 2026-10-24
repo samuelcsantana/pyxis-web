@@ -6,13 +6,14 @@ import { FreshCount, FreshVisit } from '@/components/ui/fresh-slots';
 import { CLIENT_NAMESPACES, pickNamespaces } from '@/i18n/messages';
 import { en } from '@/i18n/messages/en';
 import { MessagesProvider } from '@/i18n/messages-provider';
-import { createShownNumbersStore } from '@/lib/shown-numbers';
+import { createShownNumbersStore, type ShownRequest, shownReadKey } from '@/lib/shown-numbers';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import type { ScreenReadNote } from './arrival-news';
 import { CONTENT_ID } from './content-id';
 import { createFreshMarks, type FreshMarks, FreshMarksView } from './fresh-marks';
 
 const TODAY = '2026-10-24';
+const FROM = '2026-09-25';
 const OVERVIEW = '/p-store/overview';
 const SEARCH = '?range=30d';
 
@@ -120,6 +121,38 @@ describe('createFreshMarks', () => {
     });
 
     expect(screen.getByText('+1,240').parentElement).toHaveAttribute('data-fresh-shown', 'kept');
+  });
+
+  it('names a read by what changes its numbers, leaving out what only changes the display', () => {
+    const asked: ShownRequest[] = [];
+    const recording = createFreshMarks({
+      compare(request) {
+        asked.push(request);
+        return undefined;
+      },
+    });
+    show(recording, <Content visits={10} pages={4} />);
+    const reads = [
+      ['/p-store/overview', '?range=30d&metric=visits'],
+      ['/p-store/funnel', '?range=30d&mode=user&by=channel&step=2&outcome=dropped&cursor=c1'],
+      ['/p-store/requests', '?range=30d&kind=writes&route=POST+%2Forders'],
+      ['/p-store/visits', '?range=30d&device=mobile'],
+    ] as const;
+
+    for (const [path, search] of reads) {
+      window.history.pushState(null, '', `${path}${search}`);
+      act(() => {
+        recording.read(note(1_000, path, search), TODAY);
+      });
+    }
+
+    expect(asked.map(({ key }) => key)).toEqual([
+      shownReadKey('overview', FROM, TODAY, 'range=30d'),
+      shownReadKey('funnel', FROM, TODAY, 'range=30d&mode=user'),
+      shownReadKey('requests', FROM, TODAY, 'range=30d&kind=writes'),
+      shownReadKey('visits', FROM, TODAY, 'range=30d&device=mobile'),
+    ]);
+    expect(asked[0]?.visitStarts).toEqual([500, 1_500]);
   });
 
   it('ignores a read of an address that is no longer shown', () => {

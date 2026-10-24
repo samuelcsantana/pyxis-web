@@ -9,7 +9,11 @@ import {
   FRESH_STARTED,
   FRESH_VALUE,
 } from '@/components/ui/fresh-slots';
+import { SEGMENT_PARAMETER } from '@/domain/funnel-segments';
+import type { FunnelDrillSearch } from '@/domain/funnel-subjects';
+import { METRIC_PARAMETER } from '@/domain/overview-chart';
 import { resolvePeriodOn } from '@/domain/period';
+import { ROUTE_PARAMETER } from '@/domain/requests';
 import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import {
@@ -22,7 +26,7 @@ import {
 import type { ScreenReadNote } from './arrival-news';
 import { CONTENT_ID } from './content-id';
 import { screenSearchOf } from './screen-search';
-import { screenSlugOf } from './screens';
+import { type ScreenSlug, screenSlugOf } from './screens';
 
 export type FreshMark =
   | {
@@ -41,6 +45,18 @@ export interface FreshMarks {
 
 type CountSlot = readonly [slot: Element, item: string, value: number];
 type VisitSlot = readonly [slot: Element, startedAt: number];
+
+const FUNNEL_DRILL = [
+  'step',
+  'outcome',
+  'cursor',
+] as const satisfies readonly (keyof FunnelDrillSearch)[];
+
+const DISPLAY_ONLY_PARAMETERS: Readonly<Partial<Record<ScreenSlug, readonly string[]>>> = {
+  overview: [METRIC_PARAMETER],
+  funnel: [SEGMENT_PARAMETER, ...FUNNEL_DRILL],
+  requests: [ROUTE_PARAMETER],
+};
 
 const NO_MARKS: readonly FreshMark[] = [];
 const CHIP =
@@ -86,6 +102,14 @@ function marksOf(
   ];
 }
 
+function numbersSearchOf(screen: ScreenSlug, search: URLSearchParams): string {
+  const numbers = new URLSearchParams(search);
+  for (const name of DISPLAY_ONLY_PARAMETERS[screen] ?? []) {
+    numbers.delete(name);
+  }
+  return numbers.toString();
+}
+
 function isShown(note: ScreenReadNote): boolean {
   return note.path === window.location.pathname && note.search === window.location.search;
 }
@@ -101,7 +125,7 @@ export function createFreshMarks(store: ShownNumbersStore): FreshMarks {
     }
   };
 
-  const compare = (note: ScreenReadNote, screen: string, today: string) => {
+  const compare = (note: ScreenReadNote, screen: ScreenSlug, today: string) => {
     const root = document.getElementById(CONTENT_ID);
     const counts = root === null ? [] : countSlotsIn(root);
     const visits = root === null ? [] : visitSlotsIn(root);
@@ -111,7 +135,7 @@ export function createFreshMarks(store: ShownNumbersStore): FreshMarks {
     const search = new URLSearchParams(note.search);
     const { from, to } = resolvePeriodOn(screenSearchOf(search), today);
     const comparison = store.compare({
-      key: shownReadKey(screen, from, to, note.search),
+      key: shownReadKey(screen, from, to, numbersSearchOf(screen, search)),
       to,
       read: {
         readAt: note.readAt,
