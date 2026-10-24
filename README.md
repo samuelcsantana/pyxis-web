@@ -241,6 +241,10 @@ Shipping now:
   with an event received in the last five minutes ("4 on the site now"), updated by every answer
   of the same 30-second question, with a green dot that pings only when someone is there and
   motion is welcome
+- What went up since the last read: when a screen is read again for the same period and filters,
+  each count that went up shows "+N" and each visit that started since shows "New", and their row
+  or card is lit for five seconds when motion is welcome; the numbers each read showed are kept
+  on the device ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md))
 - Loading, empty and error states shared by every screen; the top bar of the eight screens lives
   in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](docs/adr/0012-persistent-screen-topbar.md)), so while a
@@ -689,7 +693,10 @@ sized for the four tasks of that work (the counts, the "new · Refresh" bar, the
 site now, the "+N" on the numbers), each of which draws its part from what the same watcher
 loads; every one still reports its first-load JavaScript. The "new · Refresh" bar took Overview to
 168.2 KiB and Requests to 171.0 KiB; the visits on the site now took them to 168.5 KiB and
-171.3 KiB.
+171.3 KiB. The "+N" marks fill slots the server draws, from the watcher's chunk
+([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)): Overview stayed at
+168.5 KiB, and the two tables drawn in the browser carry the slot (Requests 171.6 KiB, Visits
+171.0 KiB).
 
 ## Project structure
 
@@ -800,6 +807,7 @@ docs/adr/           architecture decision records
 | [0012](docs/adr/0012-persistent-screen-topbar.md)                          | The top bar of the eight screens stays mounted between them       |
 | [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
 | [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
+| [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)             | What went up since the last read fills slots the server drew      |
 
 ## Roadmap
 
