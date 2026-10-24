@@ -127,6 +127,7 @@ describe('funnelRows', () => {
       label: 'Opened /calculator',
       target: '/calculator',
       count: '1,940',
+      reached: 1940,
       barWidth: '100.0%',
       continued: 'Start',
       tone: 'start',

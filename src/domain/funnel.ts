@@ -95,6 +95,7 @@ export interface FunnelRow {
   readonly label: string;
   readonly target: string;
   readonly count: string;
+  readonly reached: number;
   readonly barWidth: string;
   readonly continued: string;
   readonly tone: FunnelTone;
@@ -151,6 +152,7 @@ export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonl
       label: stepLabel(step, i18n),
       target: stepTarget(step),
       count: formatCount(count, i18n),
+      reached: count,
       barWidth: barWidth(count, first),
       time: medianTime(secondsFromPrevious, i18n),
       reachedLink: null,

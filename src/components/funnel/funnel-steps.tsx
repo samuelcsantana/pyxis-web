@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { DrillLink, FunnelMode, FunnelRow, FunnelTone } from '@/domain/funnel';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import type { I18n } from '@/i18n/i18n';
 
@@ -46,7 +47,7 @@ export function FunnelSteps({ rows, mode, i18n }: FunnelStepsProps) {
         {rows.map((row) => (
           <li
             key={row.key}
-            className="grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-line py-3 sm:grid-cols-[1.75rem_minmax(0,16rem)_minmax(0,1fr)_5rem_9rem] sm:gap-x-4"
+            className={`grid grid-cols-[1.75rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-line py-3 sm:grid-cols-[1.75rem_minmax(0,16rem)_minmax(0,1fr)_7rem_9rem] sm:gap-x-4 ${FRESH_HIGHLIGHT}`}
           >
             <span
               aria-hidden="true"
@@ -62,6 +63,7 @@ export function FunnelSteps({ rows, mode, i18n }: FunnelStepsProps) {
               <span className="block h-7 rounded-control bg-sky" style={{ width: row.barWidth }} />
             </span>
             <span className="text-right text-base font-semibold tabular-nums">
+              <FreshCount item={`step:${row.key}`} value={row.reached} className="mr-1.5" />
               <Drillable text={row.count} link={row.reachedLink} />
             </span>
             <span className="col-start-2 flex flex-col text-xs tabular-nums sm:col-start-auto sm:text-right">
