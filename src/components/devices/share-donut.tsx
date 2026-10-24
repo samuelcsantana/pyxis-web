@@ -1,4 +1,5 @@
 import { countsConversions, OTHER_VALUE, type ShareRow } from '@/domain/devices';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { withDonutSegments } from '@/domain/donut';
 import type { I18n } from '@/i18n/i18n';
 import { FOCUS_RING } from '@/components/ui/control-classes';
@@ -127,7 +128,7 @@ export function ShareDonut({
             </thead>
             <tbody>
               {drawn.map((row) => (
-                <tr key={row.value}>
+                <tr key={row.value} className={FRESH_HIGHLIGHT}>
                   <th scope="row" className="py-1 text-left font-normal">
                     <span className="flex items-center gap-2">
                       <span
@@ -141,7 +142,14 @@ export function ShareDonut({
                       />
                     </span>
                   </th>
-                  <td className="py-1 text-right text-muted">{row.visits}</td>
+                  <td className="py-1 text-right text-muted">
+                    <FreshCount
+                      item={`${id}:${row.value}`}
+                      value={row.counted}
+                      className="mr-1.5"
+                    />
+                    {row.visits}
+                  </td>
                   <td className="py-1 pl-3 text-right font-semibold">{row.share}</td>
                   {showsConversionRate ? (
                     <td className="py-1 pl-3 text-right">{row.conversionRate}</td>

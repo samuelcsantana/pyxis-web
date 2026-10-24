@@ -1,4 +1,5 @@
 import { countryCode, countsConversions, type ShareRow } from '@/domain/devices';
+import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import type { I18n } from '@/i18n/i18n';
 import {
   BODY_CELL,
@@ -65,7 +66,7 @@ export function CountriesTable({
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.value}>
+              <tr key={row.value} className={FRESH_HIGHLIGHT}>
                 <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
                   <span className="flex items-center gap-2.5">
                     <span
@@ -81,7 +82,14 @@ export function CountriesTable({
                     />
                   </span>
                 </th>
-                <td className={`${BODY_CELL} text-right`}>{row.visits}</td>
+                <td className={`${BODY_CELL} text-right`}>
+                  <FreshCount
+                    item={`country:${row.value}`}
+                    value={row.counted}
+                    className="mr-1.5"
+                  />
+                  {row.visits}
+                </td>
                 <td className={`${BODY_CELL} text-right text-muted last:pr-0`}>{row.share}</td>
                 {showsConversionRate ? (
                   <td className={`${BODY_CELL} pr-0 text-right`}>{row.conversionRate}</td>
