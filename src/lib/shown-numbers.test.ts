@@ -5,8 +5,11 @@ import {
   grewBy,
   MAX_SHOWN_READS,
   nextShownReads,
+  type NumbersRead,
   parsedShownReads,
+  SAME_LOOK_MS,
   type ShownReads,
+  type ShownRequest,
   shownNumbersKey,
   shownReadKey,
   startedAfter,
@@ -17,6 +20,10 @@ const TODAY = '2026-10-24';
 const KEY = shownReadKey('overview', '2026-09-25', TODAY, 'range=30d');
 const FIRST = { readAt: 1_000, values: { 'kpi:visits': 10, 'page:/a': 4 } };
 const SECOND = { readAt: 2_000, values: { 'kpi:visits': 13, 'page:/a': 4, 'page:/b': 7 } };
+
+function requestFor(read: NumbersRead, visitStarts: readonly number[] = []): ShownRequest {
+  return { key: KEY, to: TODAY, read, visitStarts, today: TODAY };
+}
 
 function blockedStorage(): SeenMarksStorage {
   throw new DOMException('The operation is insecure.', 'SecurityError');
@@ -38,7 +45,7 @@ describe('shownReadKey', () => {
 
 describe('nextShownReads', () => {
   it('compares nothing on the first read of a screen and period, and keeps it', () => {
-    const update = nextShownReads({}, { key: KEY, to: TODAY, read: FIRST, today: TODAY });
+    const update = nextShownReads({}, requestFor(FIRST));
 
     expect(update.comparison).toBeUndefined();
     expect(update.reads).toEqual({ [KEY]: { to: TODAY, current: FIRST } });
@@ -47,7 +54,7 @@ describe('nextShownReads', () => {
   it('compares a newer read with the one before it, as an arrival', () => {
     const reads = { [KEY]: { to: TODAY, current: FIRST } };
 
-    const update = nextShownReads(reads, { key: KEY, to: TODAY, read: SECOND, today: TODAY });
+    const update = nextShownReads(reads, requestFor(SECOND));
 
     expect(update.comparison).toEqual({ against: FIRST, arrived: true });
     expect(update.reads[KEY]).toEqual({ to: TODAY, current: SECOND, previous: FIRST });
@@ -56,7 +63,7 @@ describe('nextShownReads', () => {
   it('compares the same read shown again with the one before it, without an arrival', () => {
     const reads = { [KEY]: { to: TODAY, current: SECOND, previous: FIRST } };
 
-    const update = nextShownReads(reads, { key: KEY, to: TODAY, read: SECOND, today: TODAY });
+    const update = nextShownReads(reads, requestFor(SECOND));
 
     expect(update.comparison).toEqual({ against: FIRST, arrived: false });
     expect(update.reads).toEqual(reads);
@@ -66,12 +73,80 @@ describe('nextShownReads', () => {
     const rotated = { [KEY]: { to: TODAY, current: SECOND, previous: FIRST } };
     const first = { [KEY]: { to: TODAY, current: FIRST } };
 
-    expect(
-      nextShownReads(rotated, { key: KEY, to: TODAY, read: FIRST, today: TODAY }).comparison,
-    ).toBeUndefined();
-    expect(
-      nextShownReads(first, { key: KEY, to: TODAY, read: FIRST, today: TODAY }).comparison,
-    ).toBeUndefined();
+    expect(nextShownReads(rotated, requestFor(FIRST)).comparison).toBeUndefined();
+    expect(nextShownReads(first, requestFor(FIRST)).comparison).toBeUndefined();
+  });
+
+  it('keeps the look of a read with nothing new a few minutes later, against the read before it', () => {
+    const reads = { [KEY]: { to: TODAY, current: SECOND, previous: FIRST } };
+    const toggled = {
+      readAt: SECOND.readAt + SAME_LOOK_MS,
+      values: { 'kpi:visits': 13, 'event:signup': 2 },
+    };
+
+    const update = nextShownReads(reads, requestFor(toggled, [SECOND.readAt]));
+
+    expect(update.comparison).toEqual({ against: FIRST, arrived: false });
+    expect(update.reads[KEY]).toEqual({
+      to: TODAY,
+      current: { readAt: toggled.readAt, values: { ...SECOND.values, 'event:signup': 2 } },
+      previous: FIRST,
+    });
+  });
+
+  it('keeps a look with nothing to compare when no read came before it', () => {
+    const reads = { [KEY]: { to: TODAY, current: FIRST } };
+    const again = { readAt: FIRST.readAt + 1, values: FIRST.values };
+
+    const update = nextShownReads(reads, requestFor(again));
+
+    expect(update.comparison).toBeUndefined();
+    expect(update.reads[KEY]).toEqual({ to: TODAY, current: again });
+  });
+
+  it('starts a new look when a count went up, even a moment later', () => {
+    const reads = { [KEY]: { to: TODAY, current: SECOND, previous: FIRST } };
+    const grown = { readAt: SECOND.readAt + 1, values: { ...SECOND.values, 'page:/b': 8 } };
+
+    const update = nextShownReads(reads, requestFor(grown));
+
+    expect(update.comparison).toEqual({ against: SECOND, arrived: true });
+    expect(update.reads[KEY]).toEqual({ to: TODAY, current: grown, previous: SECOND });
+  });
+
+  it('starts a new look when a visit started after the last read, even with no count shown', () => {
+    const visits = { readAt: 2_000, values: {} };
+    const reads = { [KEY]: { to: TODAY, current: visits, previous: FIRST } };
+    const later = { readAt: 2_500, values: {} };
+
+    expect(nextShownReads(reads, requestFor(later, [1_500, 2_001])).comparison).toEqual({
+      against: visits,
+      arrived: true,
+    });
+    expect(nextShownReads(reads, requestFor(later, [1_500])).comparison).toEqual({
+      against: FIRST,
+      arrived: false,
+    });
+  });
+
+  it('starts a new look when the same numbers are read more than a few minutes later', () => {
+    const reads = { [KEY]: { to: TODAY, current: SECOND, previous: FIRST } };
+    const later = { readAt: SECOND.readAt + SAME_LOOK_MS + 1, values: SECOND.values };
+
+    const update = nextShownReads(reads, requestFor(later));
+
+    expect(update.comparison).toEqual({ against: SECOND, arrived: true });
+    expect(update.reads[KEY]).toEqual({ to: TODAY, current: later, previous: SECOND });
+  });
+
+  it('compares a read from earlier in the look, back from the cache, with the read before it', () => {
+    const look = { readAt: 3_000, values: SECOND.values };
+    const reads = { [KEY]: { to: TODAY, current: look, previous: FIRST } };
+
+    const update = nextShownReads(reads, requestFor(SECOND));
+
+    expect(update.comparison).toEqual({ against: FIRST, arrived: false });
+    expect(update.reads).toEqual(reads);
   });
 
   it('forgets the reads of periods that ended, and keeps only the newest reads', () => {
@@ -83,10 +158,7 @@ describe('nextShownReads', () => {
       ]),
     );
 
-    const update = nextShownReads(
-      { ...many, ended },
-      { key: KEY, to: TODAY, read: SECOND, today: TODAY },
-    );
+    const update = nextShownReads({ ...many, ended }, requestFor(SECOND));
 
     expect(update.reads.ended).toBeUndefined();
     expect(Object.keys(update.reads)).toHaveLength(MAX_SHOWN_READS + 1);
@@ -139,10 +211,11 @@ describe('createShownNumbersStore', () => {
   it('keeps the reads on this device, per project, and forgets them on sign-out', () => {
     const store = createShownNumbersStore(PROJECT);
 
-    expect(store.compare({ key: KEY, to: TODAY, read: FIRST, today: TODAY })).toBeUndefined();
-    expect(
-      createShownNumbersStore(PROJECT).compare({ key: KEY, to: TODAY, read: SECOND, today: TODAY }),
-    ).toEqual({ against: FIRST, arrived: true });
+    expect(store.compare(requestFor(FIRST))).toBeUndefined();
+    expect(createShownNumbersStore(PROJECT).compare(requestFor(SECOND))).toEqual({
+      against: FIRST,
+      arrived: true,
+    });
     expect(window.localStorage.getItem(shownNumbersKey('p-docs'))).toBeNull();
 
     bestEffortForgetSeenMarks();
@@ -154,9 +227,9 @@ describe('createShownNumbersStore', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const store = createShownNumbersStore(PROJECT, blockedStorage);
 
-    store.compare({ key: KEY, to: TODAY, read: FIRST, today: TODAY });
+    store.compare(requestFor(FIRST));
 
-    expect(store.compare({ key: KEY, to: TODAY, read: SECOND, today: TODAY })).toEqual({
+    expect(store.compare(requestFor(SECOND))).toEqual({
       against: FIRST,
       arrived: true,
     });

@@ -1,6 +1,7 @@
 import { browserSeenMarksStorage, SEEN_MARKS_PREFIX, type SeenMarksStorage } from './seen-marks';
 
 export const MAX_SHOWN_READS = 50;
+export const SAME_LOOK_MS = 5 * 60 * 1000;
 
 export type NumberValues = Readonly<Record<string, number>>;
 
@@ -31,6 +32,7 @@ export interface ShownRequest {
   readonly key: string;
   readonly to: string;
   readonly read: NumbersRead;
+  readonly visitStarts: readonly number[];
   readonly today: string;
 }
 
@@ -104,26 +106,6 @@ function liveReads(reads: ShownReads, today: string): ShownReads {
   return Object.fromEntries(live);
 }
 
-export function nextShownReads(reads: ShownReads, request: ShownRequest): ShownReadsUpdate {
-  const { key, to, read, today } = request;
-  const live = liveReads(reads, today);
-  const stored = live[key];
-  if (stored === undefined) {
-    return { reads: { ...live, [key]: { to, current: read } }, comparison: undefined };
-  }
-  if (read.readAt > stored.current.readAt) {
-    return {
-      reads: { ...live, [key]: { to, current: read, previous: stored.current } },
-      comparison: { against: stored.current, arrived: true },
-    };
-  }
-  const comparison =
-    read.readAt === stored.current.readAt && stored.previous !== undefined
-      ? { against: stored.previous, arrived: false }
-      : undefined;
-  return { reads: live, comparison };
-}
-
 export function grewBy(item: string, value: number, against: NumbersRead): number {
   const before = against.values[item];
   return before !== undefined && value > before ? value - before : 0;
@@ -131,6 +113,46 @@ export function grewBy(item: string, value: number, against: NumbersRead): numbe
 
 export function startedAfter(startedAt: number, against: NumbersRead): boolean {
   return startedAt > against.readAt;
+}
+
+function showsNewSince({ read, visitStarts }: ShownRequest, against: NumbersRead): boolean {
+  return (
+    Object.entries(read.values).some(([item, value]) => grewBy(item, value, against) > 0) ||
+    visitStarts.some((startedAt) => startedAfter(startedAt, against))
+  );
+}
+
+function isSameLook(request: ShownRequest, current: NumbersRead): boolean {
+  return request.read.readAt - current.readAt <= SAME_LOOK_MS && !showsNewSince(request, current);
+}
+
+function lookComparison(stored: ShownRead, readAt: number): Comparison | undefined {
+  return stored.previous !== undefined && readAt > stored.previous.readAt
+    ? { against: stored.previous, arrived: false }
+    : undefined;
+}
+
+export function nextShownReads(reads: ShownReads, request: ShownRequest): ShownReadsUpdate {
+  const { key, to, read, today } = request;
+  const live = liveReads(reads, today);
+  const stored = live[key];
+  if (stored === undefined) {
+    return { reads: { ...live, [key]: { to, current: read } }, comparison: undefined };
+  }
+  if (read.readAt <= stored.current.readAt) {
+    return { reads: live, comparison: lookComparison(stored, read.readAt) };
+  }
+  if (isSameLook(request, stored.current)) {
+    const current = { readAt: read.readAt, values: { ...stored.current.values, ...read.values } };
+    return {
+      reads: { ...live, [key]: { ...stored, current } },
+      comparison: lookComparison(stored, read.readAt),
+    };
+  }
+  return {
+    reads: { ...live, [key]: { to, current: read, previous: stored.current } },
+    comparison: { against: stored.current, arrived: true },
+  };
 }
 
 export function createShownNumbersStore(
