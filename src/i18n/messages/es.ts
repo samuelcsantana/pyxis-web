@@ -514,6 +514,36 @@ export const es = translation({
     selected: 'Seleccionado, presiona Ctrl+C',
     privacy:
       'Pyxis no guarda cookies en tus visitantes, ni direcciones IP, ni datos personales. Indica en tu política de privacidad que el sitio mide su uso con Pyxis.',
+    how: 'Cómo instalar',
+    yourself: 'Por tu cuenta',
+    withAgent: 'Con un agente de IA',
+    agent: {
+      lead: 'Abre el repositorio del sitio en Claude Code, en Cursor o en otro agente de código y pega esta petición. Ya incluye la clave pública y la dirección de este proyecto.',
+      prompt:
+        'Instala Pyxis en este sitio siguiendo {recipe}. La clave pública del proyecto es {key}, el endpoint es {endpoint} y el sitio está en {origin}. Mide las páginas y registra un evento en cada acción importante, sin ningún dato personal. Al final, enumera los archivos que cambiaste y cada evento que creaste, con su nombre y sus propiedades, para que yo los revise.',
+      promptAnySite:
+        'Instala Pyxis en este sitio siguiendo {recipe}. La clave pública del proyecto es {key} y el endpoint es {endpoint}. Mide las páginas y registra un evento en cada acción importante, sin ningún dato personal. Al final, enumera los archivos que cambiaste y cada evento que creaste, con su nombre y sus propiedades, para que yo los revise.',
+      steps: {
+        open: 'Abre el repositorio de tu sitio en Claude Code, en Cursor o en otro agente de código.',
+        paste: 'Pega la petición de arriba y deja que el agente trabaje.',
+        review:
+          'Revisa lo que cambió: el paquete, el <code>init</code> y los eventos que enumere. Quita o renombra lo que no quieras.',
+        publish:
+          'Publica el sitio y abre una de sus páginas. El paso 2, aquí abajo, avisa cuando llegue el primer evento.',
+      },
+      changes: {
+        title: 'Lo que el agente va a cambiar',
+        package:
+          '<code>package.json</code>: el paquete <code>pyxis-analytics</code>, sin ninguna otra dependencia.',
+        init: 'Un archivo que se ejecuta en el navegador en cada página: el <code>init</code> con tu clave.',
+        track:
+          'Una llamada a <code>track</code> en cada acción importante, después de que salga bien.',
+        csp: 'La política de seguridad (CSP), si el sitio tiene una, con la dirección de la API.',
+        only: 'El agente solo cambia el código del sitio. No escribe nada en Pyxis.',
+      },
+      rules:
+        'El agente sigue las reglas de <code>llms.txt</code>: ningún dato personal, nombres de evento válidos, la dirección de la API en la CSP.',
+    },
   },
   signUp: {
     title: 'Empieza tu prueba gratis',

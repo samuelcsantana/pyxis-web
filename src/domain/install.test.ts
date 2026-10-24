@@ -3,11 +3,14 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   TRACKER_VERSION,
+  agentPrompt,
   installCommand,
   moduleSnippet,
   pinnedVersion,
   scriptSnippet,
 } from './install';
+import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
 
 const KEY = 'pyxis_pk_abc';
 const ENDPOINT = 'https://api.pyxis-analytics.dev';
@@ -57,4 +60,29 @@ describe('pinnedVersion', () => {
       expect(() => pinnedVersion(range)).toThrow(`not ${range}`);
     },
   );
+});
+
+describe('agentPrompt', () => {
+  const values = { key: KEY, endpoint: ENDPOINT, origin: 'https://store.example.com' };
+
+  it('asks the agent to follow the recipe with the key, the endpoint and the site', () => {
+    expect(agentPrompt(values, english)).toBe(
+      'Install Pyxis on this site following https://pyxis-analytics.dev/llms.txt. The project’s public key is pyxis_pk_abc, the endpoint is https://api.pyxis-analytics.dev and the site is at https://store.example.com. Measure the pages and record an event at each important action, with no personal data. At the end, list the files you changed and each event you created, with its name and properties, for me to review.',
+    );
+  });
+
+  it('leaves the site out when the project allows no origin yet', () => {
+    const prompt = agentPrompt({ ...values, origin: undefined }, english);
+
+    expect(prompt).toContain(
+      'The project’s public key is pyxis_pk_abc and the endpoint is https://api.pyxis-analytics.dev. Measure',
+    );
+    expect(prompt).not.toContain('the site is at');
+  });
+
+  it('speaks the language of the dashboard', () => {
+    expect(agentPrompt(values, portuguese)).toMatch(
+      /^Instale o Pyxis neste site seguindo https:\/\/pyxis-analytics\.dev\/llms\.txt\. A chave pública do projeto é pyxis_pk_abc, .* para eu revisar\.$/,
+    );
+  });
 });

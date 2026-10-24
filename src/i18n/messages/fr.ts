@@ -529,6 +529,36 @@ export const fr = translation({
     selected: 'Sélectionné, appuyez sur Ctrl+C',
     privacy:
       'Pyxis ne dépose aucun cookie chez vos visiteurs et ne stocke ni adresse IP ni donnée personnelle. Indiquez dans votre politique de confidentialité que le site mesure son utilisation avec Pyxis.',
+    how: 'Comment installer',
+    yourself: 'Vous-même',
+    withAgent: 'Avec un agent IA',
+    agent: {
+      lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent de code et collez cette demande. Elle contient déjà la clé publique et l’adresse de ce projet.',
+      prompt:
+        'Installez Pyxis sur ce site en suivant {recipe}. La clé publique du projet est {key}, l’endpoint est {endpoint} et le site se trouve à l’adresse {origin}. Mesurez les pages et enregistrez un événement à chaque action importante, sans aucune donnée personnelle. À la fin, listez les fichiers que vous avez modifiés et chaque événement que vous avez créé, avec son nom et ses propriétés, pour que je les relise.',
+      promptAnySite:
+        'Installez Pyxis sur ce site en suivant {recipe}. La clé publique du projet est {key} et l’endpoint est {endpoint}. Mesurez les pages et enregistrez un événement à chaque action importante, sans aucune donnée personnelle. À la fin, listez les fichiers que vous avez modifiés et chaque événement que vous avez créé, avec son nom et ses propriétés, pour que je les relise.',
+      steps: {
+        open: 'Ouvrez le dépôt de votre site dans Claude Code, dans Cursor ou dans un autre agent de code.',
+        paste: 'Collez la demande ci-dessus et laissez l’agent travailler.',
+        review:
+          'Relisez ce qu’il a modifié : le paquet, l’<code>init</code> et les événements qu’il liste. Retirez ou renommez ce que vous ne voulez pas.',
+        publish:
+          'Publiez le site et ouvrez une de ses pages. L’étape 2, ci-dessous, indique quand le premier événement arrive.',
+      },
+      changes: {
+        title: 'Ce que l’agent va modifier',
+        package:
+          '<code>package.json</code> : le paquet <code>pyxis-analytics</code>, sans aucune autre dépendance.',
+        init: 'Un fichier qui s’exécute dans le navigateur sur chaque page : l’<code>init</code> avec votre clé.',
+        track:
+          'Un appel à <code>track</code> à chaque action importante, une fois qu’elle a réussi.',
+        csp: 'La politique de sécurité (CSP), si le site en a une, avec l’adresse de l’API.',
+        only: 'L’agent ne modifie que le code du site. Il n’écrit rien dans Pyxis.',
+      },
+      rules:
+        'L’agent suit les règles de <code>llms.txt</code> : aucune donnée personnelle, des noms d’événement valides, l’adresse de l’API dans la CSP.',
+    },
   },
   signUp: {
     title: 'Démarrez votre essai gratuit',
