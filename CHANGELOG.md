@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.38.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.38.0...v0.38.1) (2026-10-25)
+
+
+### Bug Fixes
+
+* **landing:** keep the header on one row on tablets ([e979d8c](https://github.com/samuelcsantana/pyxis-web/commit/e979d8c1f0310b827abb97e0f17dd02f473d55f0))
+
 ## [0.38.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.37.0...v0.38.0) (2026-10-24)
 
 
