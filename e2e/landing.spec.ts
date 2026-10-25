@@ -1,9 +1,11 @@
-import { expect, type Locator, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { chooseLanguage } from './language-select';
 
 const ONE_ROW_HEADER_PX = 72;
 const SMALL_LAPTOP = { width: 1024, height: 768 };
+const TABLET = { width: 768, height: 1024 };
+const TABLET_WIDTHS = [768, 820, 1023];
 const HEADER_LINKS = 5;
 const NARROW_PHONE_WIDTHS = [320, 360, 390];
 const PHONE_HEIGHT = 844;
@@ -38,6 +40,19 @@ async function scrollAfterFollowing(link: Locator): Promise<readonly number[]> {
 }
 
 const HOME_PATHS = ['/', '/pt-br', '/es', '/de', '/fr', '/it', '/nl'];
+const HOME_HEADERS = [
+  { path: '/', menu: 'Menu', links: 'Main' },
+  { path: '/pt-br', menu: 'Menu', links: 'Principal' },
+  { path: '/es', menu: 'Menú', links: 'Principal' },
+  { path: '/de', menu: 'Menü', links: 'Hauptmenü' },
+  { path: '/fr', menu: 'Menu', links: 'Principale' },
+  { path: '/it', menu: 'Menu', links: 'Principale' },
+  { path: '/nl', menu: 'Menu', links: 'Hoofdmenu' },
+] as const;
+
+function headerMenuButton(page: Page, label = 'Menu'): Locator {
+  return page.getByRole('banner').locator('summary', { hasText: label });
+}
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`home page, ${colorScheme} theme`, () => {
@@ -85,19 +100,49 @@ test('keeps the header on one row on a phone, in every language', async ({ page,
   }
 });
 
-test('keeps the header and all its links on one row on a laptop, in every language', async ({
+test('keeps the header on one row from a tablet to a laptop, every link in reach, in every language', async ({
   page,
   isMobile,
 }) => {
   test.skip(isMobile, 'A phone hides the header links.');
-  await page.setViewportSize(SMALL_LAPTOP);
-  for (const path of HOME_PATHS) {
+  for (const { path, menu, links } of HOME_HEADERS) {
+    await page.setViewportSize(SMALL_LAPTOP);
     await page.goto(path);
-
     const banner = page.getByRole('banner');
-    await expect(banner.getByRole('navigation').getByRole('link')).toHaveCount(HEADER_LINKS);
+    const menuButton = headerMenuButton(page, menu);
+    const headerLinks = banner.getByRole('navigation', { name: links }).getByRole('link');
+
+    await expect(headerLinks, path).toHaveCount(HEADER_LINKS);
+    await expect(menuButton, path).toBeHidden();
     expect((await banner.boundingBox())?.height, path).toBeLessThan(ONE_ROW_HEADER_PX);
+
+    for (const width of TABLET_WIDTHS) {
+      await page.setViewportSize({ width, height: SMALL_LAPTOP.height });
+      const where = `${path} at ${String(width)}px`;
+      await expect(headerLinks, where).toHaveCount(0);
+      expect((await banner.boundingBox())?.height, where).toBeLessThan(ONE_ROW_HEADER_PX);
+
+      await menuButton.click();
+      await expect(headerLinks, where).toHaveCount(HEADER_LINKS);
+      await menuButton.click();
+      await expect(headerLinks, where).toHaveCount(0);
+    }
   }
+});
+
+test('has no WCAG 2.2 A or AA violation with the header menu open on a tablet', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'A phone has no header menu.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize(TABLET);
+  await page.goto('/');
+
+  await headerMenuButton(page).click();
+
+  await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
 });
 
 test('keeps the billing period switch on one row on a phone, in every language', async ({
@@ -597,6 +642,29 @@ test('glides from a header link to its section without leaving the page or its a
   expect(new Set(path).size).toBeGreaterThan(1);
   await expect(page).toHaveURL(/\/\?utm_source=post#pricing$/);
   expect(await page.evaluate(() => 'openedOnce' in window)).toBe(true);
+});
+
+test('glides from a link in the header menu to its section, closing the menu and keeping the address', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'A phone has no header menu.');
+  await page.setViewportSize(TABLET);
+  await page.goto('/?utm_source=post');
+  await page.evaluate(() => Object.defineProperty(window, 'openedOnce', { value: true }));
+  await headerMenuButton(page).click();
+
+  const path = await scrollAfterFollowing(
+    page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Pricing' }),
+  );
+  await page.waitForFunction(() => !document.documentElement.hasAttribute('data-gliding'));
+
+  const landed = await page.evaluate(() => window.scrollY);
+  expect(path[0]).toBeLessThan(landed);
+  expect(new Set(path).size).toBeGreaterThan(1);
+  await expect(page).toHaveURL(/\/\?utm_source=post#pricing$/);
+  expect(await page.evaluate(() => 'openedOnce' in window)).toBe(true);
+  await expect(page.getByRole('banner').locator('details[open]')).toHaveCount(0);
 });
 
 test('the mascot arrives on its own, tells tips, and flies off once it has led there', async ({
