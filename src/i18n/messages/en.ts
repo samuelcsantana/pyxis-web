@@ -1492,6 +1492,7 @@ export const en = {
     },
     nav: {
       label: 'Main',
+      menu: 'Menu',
       demo: 'Live demo',
       privacy: 'Privacy',
       claude: 'Ask Claude',

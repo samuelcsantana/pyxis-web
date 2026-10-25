@@ -21,43 +21,82 @@ function homeHeader() {
   );
 }
 
+function headerNavigations(): { readonly row: HTMLElement; readonly menu: HTMLElement } {
+  const [row, menu] = within(screen.getByRole('banner')).getAllByRole('navigation', {
+    name: 'Main',
+  });
+  if (row === undefined || menu === undefined) {
+    throw new Error('the header lists its links once only');
+  }
+  return { row, menu };
+}
+
+function expectTheHomeLinksIn(navigation: HTMLElement) {
+  const links = within(navigation);
+  expect(links.getByRole('link', { name: 'Live demo' })).toHaveAttribute(
+    'href',
+    'https://demo.pyxis-analytics.dev',
+  );
+  expect(links.getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '#never-stored');
+  const claude = links.getByRole('link', { name: 'Ask Claude' });
+  expect(claude).toHaveAttribute('href', '#ask-claude');
+  expect(claude).toHaveAttribute('data-track', 'ask_claude_opened');
+  expect(claude).toHaveAttribute('data-track-from', 'header');
+  const install = links.getByRole('link', { name: 'Install' });
+  expect(install).toHaveAttribute('href', '#install');
+  expect(install).toHaveAttribute('data-track', 'install_opened');
+  expect(install).toHaveAttribute('data-track-from', 'header');
+  const pricing = links.getByRole('link', { name: 'Pricing' });
+  expect(pricing).toHaveAttribute('href', '#pricing');
+  expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
+  expect(pricing).toHaveAttribute('data-track-from', 'header');
+  expect(links.getAllByRole('link').map((link) => link.textContent)).toEqual([
+    'Live demo',
+    'Privacy',
+    'Ask Claude',
+    'Install',
+    'Pricing',
+  ]);
+}
+
 describe('SiteHeader', () => {
   afterEach(() => {
     delete document.documentElement.dataset.theme;
     window.localStorage.clear();
   });
 
-  it('links the brand home, the demo, and the sections of the home page in place', () => {
+  it('links the brand home, the demo, and the sections of the home page in place, in the row and in the menu', () => {
     renderWithMessages(homeHeader());
 
-    const banner = screen.getByRole('banner');
-    expect(within(banner).getByRole('link', { name: 'Pyxis' })).toHaveAttribute('href', '/');
-    const main = within(banner).getByRole('navigation', { name: 'Main' });
-    expect(within(main).getByRole('link', { name: 'Live demo' })).toHaveAttribute(
+    expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
       'href',
-      'https://demo.pyxis-analytics.dev',
+      '/',
     );
-    expect(within(main).getByRole('link', { name: 'Privacy' })).toHaveAttribute(
-      'href',
-      '#never-stored',
-    );
-    const claude = within(main).getByRole('link', { name: 'Ask Claude' });
-    expect(claude).toHaveAttribute('href', '#ask-claude');
-    expect(claude).toHaveAttribute('data-track', 'ask_claude_opened');
-    expect(claude).toHaveAttribute('data-track-from', 'header');
-    const install = within(main).getByRole('link', { name: 'Install' });
-    expect(install).toHaveAttribute('href', '#install');
-    expect(install).toHaveAttribute('data-track', 'install_opened');
-    expect(install).toHaveAttribute('data-track-from', 'header');
-    const pricing = within(main).getByRole('link', { name: 'Pricing' });
-    expect(pricing).toHaveAttribute('href', '#pricing');
-    expect(pricing).toHaveAttribute('data-track', 'pricing_opened');
-    expect(pricing).toHaveAttribute('data-track-from', 'header');
-    expect(
-      within(main)
-        .getAllByRole('link')
-        .map((link) => link.textContent),
-    ).toEqual(['Live demo', 'Privacy', 'Ask Claude', 'Install', 'Pricing']);
+    const { row, menu } = headerNavigations();
+    expectTheHomeLinksIn(row);
+    expectTheHomeLinksIn(menu);
+  });
+
+  it('shows the links in a row from a laptop, and in a menu on a tablet', () => {
+    renderWithMessages(homeHeader());
+
+    const { row, menu } = headerNavigations();
+    expect(row).toHaveClass('hidden', 'lg:flex');
+    const disclosure = menu.closest('details');
+    expect(disclosure).toHaveClass('hidden', 'md:block', 'lg:hidden');
+    expect(disclosure?.querySelector('summary')).toHaveTextContent('Menu');
+  });
+
+  it('closes the menu once one of its links is chosen', async () => {
+    renderWithMessages(homeHeader());
+    const { menu } = headerNavigations();
+    const disclosure = menu.closest('details');
+
+    await userEvent.click(within(screen.getByRole('banner')).getByText('Menu'));
+    expect(disclosure).toHaveAttribute('open');
+    await userEvent.click(within(menu).getByRole('link', { name: 'Pricing' }));
+
+    expect(disclosure).not.toHaveAttribute('open');
   });
 
   it('offers the dashboard sign-in on the home page', () => {
@@ -85,18 +124,22 @@ describe('SiteHeader', () => {
       'href',
       'https://pyxis-analytics.dev/pt-br',
     );
-    expect(screen.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
-      'href',
-      'https://pyxis-analytics.dev/pt-br#never-stored',
-    );
-    expect(screen.getByRole('link', { name: 'Install' })).toHaveAttribute(
-      'href',
-      'https://pyxis-analytics.dev/pt-br#install',
-    );
-    expect(screen.getByRole('link', { name: 'Pricing' })).toHaveAttribute(
-      'href',
-      'https://pyxis-analytics.dev/pt-br#pricing',
-    );
+    const { row, menu } = headerNavigations();
+    for (const navigation of [row, menu]) {
+      const links = within(navigation);
+      expect(links.getByRole('link', { name: 'Privacy' })).toHaveAttribute(
+        'href',
+        'https://pyxis-analytics.dev/pt-br#never-stored',
+      );
+      expect(links.getByRole('link', { name: 'Install' })).toHaveAttribute(
+        'href',
+        'https://pyxis-analytics.dev/pt-br#install',
+      );
+      expect(links.getByRole('link', { name: 'Pricing' })).toHaveAttribute(
+        'href',
+        'https://pyxis-analytics.dev/pt-br#pricing',
+      );
+    }
     expect(screen.queryByRole('link', { name: 'Sign in' })).toBeNull();
     expect(screen.getByRole('banner')).toHaveTextContent('languagestheme');
   });

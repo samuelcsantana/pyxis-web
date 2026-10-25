@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, fn, within } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { LanguageFormSelect } from '@/components/language/language-form-select';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { DEFAULT_LANDING_PAGE, landingPageOfLocale } from '@/lib/landing-pages';
@@ -66,5 +66,16 @@ export const OnTheSignInPage: Story = {
 };
 
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
+
+export const OnATablet: Story = {
+  globals: { viewport: { value: 'tablet' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByText('Menu'));
+    await expect(
+      within(canvas.getByRole('navigation', { name: 'Main' })).getAllByRole('link'),
+    ).toHaveLength(5);
+  },
+};
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
