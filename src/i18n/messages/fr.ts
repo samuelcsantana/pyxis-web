@@ -1538,6 +1538,7 @@ export const fr = translation({
     },
     nav: {
       label: 'Principale',
+      menu: 'Menu',
       demo: 'Démo en direct',
       privacy: 'Confidentialité',
       claude: 'Demander à Claude',

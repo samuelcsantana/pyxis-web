@@ -385,7 +385,11 @@ Shipping now:
   The page sets no cookie (the language and the theme chosen stay in `localStorage`, applied by
   an inline script before the first paint; the robot's dismissal, the section carried to another
   language, the mark that skips the hero's entrance after a switch and the referrer carried from
-  `/` to the language it opens stay in `sessionStorage`, for the tab). Its sections: what never gets stored, what
+  `/` to the language it opens stay in `sessionStorage`, for the tab). The header keeps one row
+  in every language on a 390px phone, on a tablet and from 1024px up (checked in
+  `e2e/landing.spec.ts`): the demo and four section links sit in a row from 1024px and
+  behind a menu button between 768 and 1023px (the menu closes once a link is chosen), and a
+  phone shows only the brand, the language, the theme and Sign in. Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
   tracker (while sign-up is open, also a highlighted card with a ready request to paste into a
   coding agent, the coding agents it works with by name, a large copy button and a second robot

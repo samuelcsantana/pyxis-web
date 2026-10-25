@@ -1508,6 +1508,7 @@ export const ptBR = translation({
     },
     nav: {
       label: 'Principal',
+      menu: 'Menu',
       demo: 'Demonstração',
       privacy: 'Privacidade',
       claude: 'Pergunte ao Claude',

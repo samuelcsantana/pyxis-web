@@ -1525,6 +1525,7 @@ export const it = translation({
     },
     nav: {
       label: 'Principale',
+      menu: 'Menu',
       demo: 'Demo live',
       privacy: 'Privacy',
       claude: 'Chiedi a Claude',

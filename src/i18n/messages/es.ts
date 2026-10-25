@@ -1514,6 +1514,7 @@ export const es = translation({
     },
     nav: {
       label: 'Principal',
+      menu: 'Menú',
       demo: 'Demo en vivo',
       privacy: 'Privacidad',
       claude: 'Pregunta a Claude',

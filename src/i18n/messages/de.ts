@@ -1544,6 +1544,7 @@ export const de = translation({
     },
     nav: {
       label: 'Hauptmenü',
+      menu: 'Menü',
       demo: 'Live-Demo',
       privacy: 'Datenschutz',
       claude: 'Claude fragen',

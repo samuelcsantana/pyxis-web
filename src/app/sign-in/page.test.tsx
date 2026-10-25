@@ -73,11 +73,10 @@ describe('SignInPage', () => {
       'href',
       'https://pyxis-analytics.dev/',
     );
-    expect(within(banner).getByRole('link', { name: 'Live demo' })).toBeInTheDocument();
-    expect(within(banner).getByRole('link', { name: 'Privacy' })).toHaveAttribute(
-      'href',
-      'https://pyxis-analytics.dev/#never-stored',
-    );
+    expect(within(banner).getAllByRole('link', { name: 'Live demo' })).toHaveLength(2);
+    for (const privacy of within(banner).getAllByRole('link', { name: 'Privacy' })) {
+      expect(privacy).toHaveAttribute('href', 'https://pyxis-analytics.dev/#never-stored');
+    }
     expect(within(banner).queryByRole('link', { name: 'Sign in' })).toBeNull();
   });
 
