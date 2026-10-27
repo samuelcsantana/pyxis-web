@@ -1940,6 +1940,8 @@ export const es = translation({
       invite:
         'Por ahora, el acceso es por invitación: lo pides, recibes el enlace de pago y, después de suscribirte, el acceso al panel llega en hasta 2 días hábiles.',
       moreTitle: 'Para agencias y desarrolladores',
+      moreFree:
+        'Mide los sitios de tus clientes: cada cliente entra con su propio correo y solo ve su proyecto. El plan de pago incluye hasta 3 sitios y 3 personas, tú incluido. Para más clientes, dinos cuántos sitios y personas en hello@pyxis-analytics.dev y te respondemos en hasta 2 días hábiles con un plan a medida.',
       more: 'Mide los sitios de tus clientes: cada cliente entra con su propio correo y solo ve su proyecto. El plan incluye hasta 3 sitios y 3 personas, tú incluido. Para más clientes, dinos cuántos sitios y personas en hello@pyxis-analytics.dev y te respondemos en hasta 2 días hábiles con un plan a medida.',
       moreLink: 'Hablar de un plan para agencias',
       moreSubject: 'Un plan de Pyxis para agencia',
@@ -1987,11 +1989,15 @@ export const es = translation({
             'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Para suscribirte, pide acceso en hello@pyxis-analytics.dev.',
           answerOpen:
             'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Cualquier persona en Brasil puede registrarse con un correo y una tarjeta: 14 días gratis, una vez por cliente, y cancelas cuando quieras.',
+          answerFree:
+            'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o usando el Pyxis alojado. Cualquier persona en Brasil puede registrarse con un correo, sin tarjeta, en el plan gratis, y suscribirse al plan de pago cuando el sitio necesite más.',
         },
         agency: {
           question: '¿Puedo usar Pyxis en los sitios de mis clientes?',
           answer:
             'Sí. Crea un proyecto por sitio y añade al cliente a las personas del proyecto: entra con un código por correo y solo ve ese proyecto. El plan incluye hasta 3 sitios y 3 personas, tú incluido; para más, escribe a hello@pyxis-analytics.dev. Los <terms>Términos de Uso</terms> lo contemplan: medir, como agencia, los sitios de clientes que lo autorizaron no es reventa.',
+          answerFree:
+            'Sí. Crea un proyecto por sitio y añade al cliente a las personas del proyecto: entra con un código por correo y solo ve ese proyecto. El plan gratis incluye un sitio y solo a ti; el plan de pago, hasta 3 sitios y 3 personas, tú incluido; para más, escribe a hello@pyxis-analytics.dev. Los <terms>Términos de Uso</terms> lo contemplan: medir, como agencia, los sitios de clientes que lo autorizaron no es reventa.',
         },
         noCode: {
           question: 'No programo. ¿Puedo instalarlo?',
@@ -2007,6 +2013,8 @@ export const es = translation({
           question: '¿Cuánto cuesta?',
           answer:
             'R$ 39 al mes o R$ 390 al año (dos meses gratis), con tarjeta. Incluye hasta 100 mil eventos al mes, 3 sitios, 3 personas en el panel, 13 meses de historial, el resumen semanal y el servidor MCP.',
+          answerFree:
+            'Los dos planes tienen todas las funciones: 13 meses de historial, el resumen semanal y el servidor MCP. El plan gratis no cuesta nada y recibe hasta {events} eventos al mes, en un sitio, solo contigo en el panel. El plan de pago cuesta R$ 39 al mes o R$ 390 al año (dos meses gratis), con tarjeta, con el cobro en el momento, y recibe hasta 100 mil eventos al mes, 3 sitios y 3 personas.',
         },
         trial: {
           question: '¿Cómo funciona la prueba gratis?',
@@ -2019,11 +2027,18 @@ export const es = translation({
             'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso.',
           answerOpen:
             'En cualquier momento, de dos formas: cancelando en el portal de la suscripción, y el acceso sigue hasta el final del periodo pagado; o cerrando la cuenta en el panel, y el acceso termina en el acto. Dentro de los 7 días posteriores al primer cobro, cerrar la cuenta devuelve ese cobro completo; después, el periodo ya pagado no se devuelve. Los datos del proyecto se borran 30 días después del fin del acceso. Los detalles están en los <terms>Términos de Uso</terms>.',
+          answerFree:
+            'En cualquier momento, en el portal de la suscripción: el plan de pago sigue hasta el final del periodo ya pagado y, después, una cuenta con un sitio y una persona vuelve al plan gratis; una mayor termina, y sus datos se borran 30 días después. Dentro de los 7 días posteriores al primer cobro puedes desistir: el cobro se devuelve completo y la cuenta vuelve al plan gratis cuando cabe en él. Cerrar la cuenta en el panel lo termina todo en el acto, en cualquier plan. Los detalles están en los <terms>Términos de Uso</terms>.',
         },
         limit: {
           question: '¿Y si paso de 100 mil eventos?',
           answer:
             'Recibes un correo al 80% y al 100% de los eventos del mes. Al 150%, la cuenta deja de recibir eventos hasta el día 1 del mes siguiente, y los eventos enviados durante la pausa se pierden. No se cobra nada más allá del precio.',
+        },
+        freeLimit: {
+          question: '¿Y si llego a {events} eventos en el plan gratis?',
+          answer:
+            'En el plan gratis, un correo avisa al 80% de los eventos del mes. A los {events}, la cuenta deja de recibir eventos hasta el día 1 del mes siguiente, y los eventos enviados durante la pausa se pierden. Suscribirte al plan de pago quita la pausa en menos de un minuto.',
         },
         payment: {
           question: '¿Hay Pix o factura?',

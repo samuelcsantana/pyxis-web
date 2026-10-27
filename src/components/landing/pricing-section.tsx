@@ -257,12 +257,14 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
   );
 }
 
-function AgenciesPanel({ i18n }: AskPanelProps) {
+function AgenciesPanel({ i18n, free }: AskPanelProps & { readonly free: boolean }) {
   const { t } = i18n;
   return (
     <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
       <h3 className="text-lg font-semibold">{t('landing.pricing.moreTitle')}</h3>
-      <p className="text-base leading-relaxed text-muted">{t('landing.pricing.more')}</p>
+      <p className="text-base leading-relaxed text-muted">
+        {t(free ? 'landing.pricing.moreFree' : 'landing.pricing.more')}
+      </p>
       <a
         href={mailtoOf(t('landing.pricing.moreSubject'))}
         className={`self-start font-semibold text-ink underline underline-offset-4 ${FOCUS_RING} ${CONTROL_TRANSITION}`}
@@ -327,7 +329,7 @@ function OnePlan({ i18n, offer, approximate }: PlansProps) {
             {t(signUpOpen ? 'landing.pricing.openNote' : 'landing.pricing.invite')}
           </p>
         </div>
-        <AgenciesPanel i18n={i18n} />
+        <AgenciesPanel i18n={i18n} free={false} />
       </div>
     </LandingSection>
   );
@@ -397,7 +399,7 @@ function TwoPlans({ i18n, offer, approximate }: PlansProps) {
         </div>
         <p className={`max-w-2xl ${NOTE} lg:col-span-2`}>{t('landing.pricing.freeOpenNote')}</p>
         <div className="lg:col-span-2">
-          <AgenciesPanel i18n={i18n} />
+          <AgenciesPanel i18n={i18n} free />
         </div>
       </div>
     </LandingSection>

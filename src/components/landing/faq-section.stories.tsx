@@ -45,3 +45,23 @@ export const SignUpOpen: Story = {
     ).toBeVisible();
   },
 };
+
+export const FreePlanOpen: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const limit = canvas.getByText('What happens at 10,000 events on the free plan?');
+    await userEvent.click(limit);
+    await expect(canvas.getByText(/^On the free plan, an e-mail warns at 80%/)).toBeVisible();
+  },
+};
+
+export const FreePlanOpenInPortuguese: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'pt-BR' },
+};
+
+export const FreePlanOpenInTheDarkTheme: Story = {
+  args: { offer: 'free' },
+  globals: { theme: 'dark' },
+};

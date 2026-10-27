@@ -1953,6 +1953,8 @@ export const nl = translation({
       invite:
         'Voorlopig is toegang alleen op uitnodiging: je vraagt het aan, krijgt de betaallink en hebt na het abonneren binnen 2 werkdagen toegang tot het dashboard.',
       moreTitle: 'Voor bureaus en developers',
+      moreFree:
+        'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het betaalde abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
       more: 'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
       moreLink: 'Vraag naar een abonnement voor bureaus',
       moreSubject: 'Een Pyxis-abonnement voor een bureau',
@@ -2000,11 +2002,15 @@ export const nl = translation({
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of neem een abonnement op de gehoste versie. Vraag daarvoor toegang aan via hello@pyxis-analytics.dev.',
           answerOpen:
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of neem een abonnement op de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres en een kaart: 14 dagen gratis, één keer per klant, en je kunt altijd opzeggen.',
+          answerFree:
+            'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of gebruik de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres, zonder kaart, op het gratis abonnement, en het betaalde abonnement nemen als de site meer nodig heeft.',
         },
         agency: {
           question: 'Kan ik Pyxis gebruiken op de sites van mijn klanten?',
           answer:
             'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
+          answerFree:
+            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het gratis abonnement omvat één site en alleen jou; het betaalde abonnement tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
         },
         noCode: {
           question: 'Ik programmeer niet. Kan ik het installeren?',
@@ -2020,6 +2026,8 @@ export const nl = translation({
           question: 'Wat kost het?',
           answer:
             'R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart. Inbegrepen: tot 100.000 events per maand, 3 sites, 3 personen in het dashboard, 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server.',
+          answerFree:
+            'Beide abonnementen hebben alle functies: 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server. Het gratis abonnement kost niets en neemt tot {events} events per maand aan, op één site, met alleen jou in het dashboard. Het betaalde abonnement kost R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart, direct afgerekend, en neemt tot 100.000 events per maand, 3 sites en 3 personen aan.',
         },
         trial: {
           question: 'Hoe werkt de gratis proefperiode?',
@@ -2032,11 +2040,18 @@ export const nl = translation({
             'Altijd, op twee manieren: zeg op in het facturatieportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd.',
           answerOpen:
             'Altijd, op twee manieren: zeg op in het facturatieportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
+          answerFree:
+            'Altijd, in het facturatieportaal: het betaalde abonnement loopt tot het einde van de al betaalde periode, daarna gaat een account met één site en één persoon terug naar het gratis abonnement; een groter account eindigt, en de gegevens worden 30 dagen later verwijderd. Binnen 7 dagen na de eerste betaling kun je herroepen: de betaling wordt volledig terugbetaald en het account gaat terug naar het gratis abonnement als het erin past. Hef je het account op in het dashboard, dan eindigt alles meteen, op elk abonnement. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
         },
         limit: {
           question: 'Wat als ik over de 100.000 events ga?',
           answer:
             'Je krijgt een e-mail bij 80% en bij 100% van de events van de maand. Bij 150% neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Er wordt nooit meer in rekening gebracht dan de prijs.',
+        },
+        freeLimit: {
+          question: 'Wat als ik op het gratis abonnement {events} events haal?',
+          answer:
+            'Op het gratis abonnement waarschuwt een e-mail bij 80% van de events van de maand. Bij {events} neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Met het betaalde abonnement is de pauze binnen een minuut voorbij.',
         },
         payment: {
           question: 'Kan ik met Pix betalen, en krijg ik een factuur?',

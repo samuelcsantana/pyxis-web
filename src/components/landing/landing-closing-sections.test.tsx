@@ -200,6 +200,62 @@ describe('FaqSection', () => {
     expect(terms).toHaveAttribute('href', 'https://pyxis-analytics.dev/en/terms');
     expect(terms).toHaveAttribute('hreflang', 'en');
   });
+
+  describe('once the free plan is open', () => {
+    function questionsOf(container: HTMLElement) {
+      return [...container.querySelectorAll('summary')].map((summary) =>
+        summary.textContent.replace('+', ''),
+      );
+    }
+
+    it.each(['free', 'freeFull'] as const)(
+      'asks what happens at 10,000 events instead of how the trial works (%s)',
+      (offer) => {
+        const { container } = render(<FaqSection i18n={english} offer={offer} />);
+
+        const questions = questionsOf(container);
+        expect(questions).toHaveLength(15);
+        expect(questions).not.toContain('How does the free trial work?');
+        const afterPrice = questions.indexOf('How much does it cost?') + 1;
+        expect(questions.slice(afterPrice, afterPrice + 2)).toEqual([
+          'What happens at 10,000 events on the free plan?',
+          'How do I cancel?',
+        ]);
+        expect(
+          screen.getByText(/^On the free plan, an e-mail warns at 80% of the month’s events\./),
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/14 days|free trial|day 15/)).toBeNull();
+      },
+    );
+
+    it('answers the price, the use, agencies and cancelling for two plans', () => {
+      render(<FaqSection i18n={english} offer="free" />);
+
+      expect(
+        screen.getByText(/The free plan costs nothing and takes up to 10,000 events a month/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/sign up with an e-mail, with no card, on the free plan/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/The free plan has one site and only you; the paid plan/),
+      ).toBeInTheDocument();
+      const cancel = screen.getByText(/goes back to the free plan; a larger one ends/);
+      expect(within(cancel).getByRole('link', { name: 'Terms of Use' })).toHaveAttribute(
+        'href',
+        'https://pyxis-analytics.dev/en/terms',
+      );
+      expect(screen.getByText(/At 150%, the account stops taking events/)).toBeInTheDocument();
+    });
+
+    it('asks in the visitor’s language, in its numbers', () => {
+      render(<FaqSection i18n={portuguese} offer="free" />);
+
+      expect(
+        screen.getByText('E se eu chegar a 10.000 eventos no plano grátis?'),
+      ).toBeInTheDocument();
+    });
+  });
 });
 
 describe('StorySection', () => {
