@@ -101,6 +101,7 @@ describe('AccountOverview', () => {
     expect(screen.getByRole('heading', { name: 'Plan' })).toBeInTheDocument();
     expect(screen.getByText('Free plan: up to 10,000 events a month.')).toBeInTheDocument();
     expect(screen.getByText('3,120 of 10,000')).toBeInTheDocument();
+    expect(screen.getByText('Up to 1 project and 1 person, you included.')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Finish subscription' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Subscribe again' })).not.toBeInTheDocument();

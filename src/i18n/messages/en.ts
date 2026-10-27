@@ -354,7 +354,7 @@ export const en = {
     measured: 'Measured {date}.',
     notMeasured: 'Not measured yet this month.',
     paused: 'Measuring is paused until {date}: the account used 150% of its monthly events.',
-    limits: 'Up to {projects} projects and {people} people, you included.',
+    limits: 'Up to {projects} and {people}, you included.',
     suspended:
       'Suspended on {date}. Its projects stopped measuring, and their screens stay closed until the suspension is lifted.',
     suspensionReason: 'Reason: {reason}',
@@ -735,6 +735,7 @@ export const en = {
     visit: { one: '{count} visit', other: '{count} visits' },
     matchingVisit: { one: '{count} matching visit', other: '{count} matching visits' },
     person: { one: '{count} person', other: '{count} people' },
+    project: { one: '{count} project', other: '{count} projects' },
     day: { one: '{count} day', other: '{count} days' },
     page: { one: '{count} page', other: '{count} pages' },
     event: { one: '{count} event', other: '{count} events' },

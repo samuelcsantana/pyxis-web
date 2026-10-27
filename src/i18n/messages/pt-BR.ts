@@ -367,7 +367,7 @@ export const ptBR = translation({
     measured: 'Medido em {date}.',
     notMeasured: 'Ainda não medido neste mês.',
     paused: 'A medição está pausada até {date}: a conta usou 150% dos eventos do mês.',
-    limits: 'Até {projects} projetos e {people} pessoas, contando com você.',
+    limits: 'Até {projects} e {people}, contando com você.',
     suspended:
       'Suspensa em {date}. Os projetos dela pararam de medir, e as telas deles ficam fechadas até a suspensão ser retirada.',
     suspensionReason: 'Motivo: {reason}',
@@ -749,6 +749,7 @@ export const ptBR = translation({
     visit: forms('{count} visita', '{count} visitas'),
     matchingVisit: forms('{count} visita encontrada', '{count} visitas encontradas'),
     person: forms('{count} pessoa', '{count} pessoas'),
+    project: forms('{count} projeto', '{count} projetos'),
     day: forms('{count} dia', '{count} dias'),
     page: forms('{count} página', '{count} páginas'),
     event: forms('{count} evento', '{count} eventos'),
