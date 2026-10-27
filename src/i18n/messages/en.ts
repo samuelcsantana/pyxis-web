@@ -340,7 +340,9 @@ export const en = {
       ended:
         'Ended on {date}. The projects stopped measuring, and everything is deleted on {deletion}.',
       incomplete: 'The subscription was not finished. Choose a plan to start the free trial.',
-      comped: 'A free account, given by Pyxis.',
+      incompleteFree:
+        'The subscription was not finished. Choose a plan to subscribe; it is charged from today.',
+      comped: 'A complimentary account, given by Pyxis.',
       free: 'Free plan: up to {events} events a month.',
       trialingUndated: 'Free trial. Then the plan is charged, unless you cancel.',
       activeUndated: 'Active.',
@@ -367,6 +369,10 @@ export const en = {
       'Subscribe again before {date} to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
     resubscribeUndated:
       'Subscribe again to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+    resubscribeFree:
+      'Subscribe again before {date} to keep the data: the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+    resubscribeFreeUndated:
+      'Subscribe again to keep the data: the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
     exempt: 'Measuring is not paused past the monthly limit until {date}.',
     freePause:
       'On the free plan, measuring pauses when the month reaches {events} events and comes back on the 1st.',

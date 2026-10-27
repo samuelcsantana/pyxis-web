@@ -115,6 +115,33 @@ export const SignUpNotFinished: Story = {
   },
 };
 
+export const SignUpNotFinishedWithTheFreePlanOn: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'incomplete',
+      billingInterval: null,
+      trialEndsAt: null,
+      eventsThisMonth: null,
+      measuredAt: null,
+    },
+    freePlan: 'full',
+  },
+};
+
+export const EndedSubscribeAgainWithTheFreePlanOn: Story = {
+  args: {
+    account: {
+      ...DEMO,
+      status: 'ended',
+      billingInterval: 'month',
+      accessEndsAt: '2026-11-10T00:00:00.000Z',
+      eventsThisMonth: 0,
+    },
+    freePlan: 'open',
+  },
+};
+
 export const MeasuringPaused: Story = {
   args: {
     account: {

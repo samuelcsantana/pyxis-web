@@ -355,7 +355,9 @@ export const es = translation({
       ending: 'Cancelada. El acceso sigue hasta el {date}, sin otro cobro.',
       ended: 'Terminó el {date}. Los proyectos dejaron de medir, y todo se borra el {deletion}.',
       incomplete: 'La suscripción no se terminó. Elige un plan para empezar la prueba gratis.',
-      comped: 'Una cuenta gratis, dada por Pyxis.',
+      incompleteFree:
+        'La suscripción no se terminó. Elige un plan para suscribirte; se cobra desde hoy.',
+      comped: 'Una cuenta de cortesía, dada por Pyxis.',
       free: 'Plan gratis: hasta {events} eventos al mes.',
       trialingUndated: 'Prueba gratis. Después se cobra el plan, salvo que canceles.',
       activeUndated: 'Activa.',
@@ -382,6 +384,10 @@ export const es = translation({
       'Suscríbete de nuevo antes del {date} para conservar los datos: no hay una nueva prueba gratis, el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
     resubscribeUndated:
       'Suscríbete de nuevo para conservar los datos: no hay una nueva prueba gratis, el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
+    resubscribeFree:
+      'Suscríbete de nuevo antes del {date} para conservar los datos: el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
+    resubscribeFreeUndated:
+      'Suscríbete de nuevo para conservar los datos: el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
     exempt: 'La medición no se pausa después del límite del mes hasta el {date}.',
     freePause:
       'En el plan gratis, la medición se pausa cuando el mes llega a {events} eventos y vuelve el día 1.',

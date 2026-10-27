@@ -91,7 +91,7 @@ describe('AccountOverview', () => {
       { status: 'ended', accessEndsAt: '2026-11-10T00:00:00.000Z' },
       'Ended on Nov 10, 2026. The projects stopped measuring, and everything is deleted on Dec 10, 2026.',
     ],
-    [{ status: 'comped', billingInterval: null }, 'A free account, given by Pyxis.'],
+    [{ status: 'comped', billingInterval: null }, 'A complimentary account, given by Pyxis.'],
   ] as const)('describes %o', (account, text) => {
     overview(account);
 
