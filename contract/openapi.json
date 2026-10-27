@@ -1990,6 +1990,19 @@
                   ],
                   "description": "Events counted by the last daily measurement; null before the first."
                 },
+                "free_waitlisted_at": {
+                  "anyOf": [
+                    {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$",
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Since when an unfinished account waits for a place on the free plan, which was full at sign-up; null when it does not wait. Its owner can subscribe in the meantime."
+                },
                 "id": {
                   "format": "uuid",
                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
@@ -2132,6 +2145,7 @@
                 "access_ends_at",
                 "ingestion_paused_until",
                 "quota_pause_exempt_until",
+                "free_waitlisted_at",
                 "suspended_at",
                 "suspension_reason",
                 "deletion_held_at",
@@ -3723,11 +3737,25 @@
       },
       "SignedUp": {
         "additionalProperties": false,
-        "description": "The new (or returning) owner, their session token, kept by the dashboard like a sign-in, and the account waiting for its subscription.",
+        "description": "The new (or returning) owner, their session token, kept by the dashboard like a sign-in, and their account: on the free plan, or waiting for its subscription.",
         "properties": {
           "account_id": {
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "type": "string"
+          },
+          "account_status": {
+            "description": "free when the owner starts on the free plan; incomplete when the account waits for its subscription (the free plan closed or full); another status when a returning owner gets an account that already runs.",
+            "enum": [
+              "incomplete",
+              "trialing",
+              "active",
+              "past_due",
+              "ending",
+              "ended",
+              "comped",
+              "free"
+            ],
             "type": "string"
           },
           "email": {
@@ -3743,7 +3771,8 @@
         "required": [
           "email",
           "session_token",
-          "account_id"
+          "account_id",
+          "account_status"
         ],
         "type": "object"
       },
@@ -3801,6 +3830,15 @@
         "additionalProperties": false,
         "description": "Whether anyone can create an account now.",
         "properties": {
+          "free_plan": {
+            "description": "open: a new owner starts on the free plan, with no card; full: the free plan holds its maximum of accounts, so a new owner subscribes or waits for a place; closed: sign-up goes through Checkout, as before the free plan.",
+            "enum": [
+              "open",
+              "full",
+              "closed"
+            ],
+            "type": "string"
+          },
           "open": {
             "type": "boolean"
           },
@@ -3827,7 +3865,8 @@
         "required": [
           "open",
           "terms_version",
-          "terms_url"
+          "terms_url",
+          "free_plan"
         ],
         "type": "object"
       },
@@ -5308,7 +5347,7 @@
             "description": ""
           }
         },
-        "summary": "Whether sign-up is open, and the version of the terms a new owner accepts",
+        "summary": "Whether sign-up is open, the version of the terms a new owner accepts, and whether the free plan takes new owners",
         "tags": [
           "sign-up"
         ]
@@ -5382,7 +5421,7 @@
     },
     "/v1/auth/sign-up/verify": {
       "post": {
-        "description": "Records the acceptance of the terms version given, which must be the current one (409 otherwise). An owner who already has a live account gets that account back.",
+        "description": "Records the acceptance of the terms version given, which must be the current one (409 otherwise). An owner who already has a live account gets that account back. While the free plan is open and has a place, the account starts on it; when it is full, the account waits for its subscription or for a place.",
         "operationId": "SignUpController_verify",
         "parameters": [],
         "requestBody": {
@@ -5457,7 +5496,7 @@
             "description": ""
           }
         },
-        "summary": "Exchange a sign-up code for a session and an account waiting for its subscription",
+        "summary": "Exchange a sign-up code for a session and an account",
         "tags": [
           "sign-up"
         ]

@@ -35,6 +35,7 @@ export function demoAccountsWire(now: Date) {
         suspension_reason: null,
         deletion_held_at: null,
         quota_pause_exempt_until: null,
+        free_waitlisted_at: null,
         month: now.toISOString().slice(0, 7),
         events_this_month: DEMO_EVENTS_THIS_MONTH,
         measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
