@@ -407,7 +407,13 @@ Shipping now:
   language than Portuguese, an approximate price in the reader's currency under the price in reais,
   euros or US dollars by the page's language and both in Spanish, in whole units, from the European
   Central Bank's daily reference rates, read on the server, cached for a day and left out when they
-  cannot be read), a FAQ and the introduction post. The address follows the section being read, and switching language opens the
+  cannot be read), a FAQ and the introduction post. Once the API says the free plan is open, the
+  same status turns the page to it: the hero leads with "Start free" and "See the paid plan",
+  pricing shows a Free and a Paid card with the same rows in the same order (the paid card has no
+  button: everyone starts free and subscribes in Account and billing), the FAQ answers for two
+  plans and asks what happens at 10,000 events instead of how the trial works, and the
+  description, the structured data and `llms.txt` name the free plan; while it is full, the hero
+  and the free card say so. The address follows the section being read, and switching language opens the
   other page on that section, still from the copy the speculation rules fetched ahead. A robot
   points to the Claude connector section and flies off once the reader gets there or dismisses
   it. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document view transition
