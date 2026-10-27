@@ -1,6 +1,39 @@
 import { describe, expect, it } from 'vitest';
 import { ACCOUNT_STATUSES } from './accounts';
-import { FREE_PLAN_STATES, requestedIntervalOf, stepAfterSignUp } from './sign-up';
+import {
+  FREE_PLAN_STATES,
+  offersSignUp,
+  offersTheFreePlan,
+  requestedIntervalOf,
+  signUpOfferOf,
+  stepAfterSignUp,
+} from './sign-up';
+
+describe('what the home page offers', () => {
+  const open = { termsVersion: '1.3', termsUrl: 'https://pyxis.example.com/termos' } as const;
+
+  it.each([
+    ['closed', 'trial'],
+    ['open', 'free'],
+    ['full', 'freeFull'],
+  ] as const)('offers, with the free plan %s, the %s sign-up', (freePlan, offer) => {
+    expect(signUpOfferOf({ ...open, freePlan })).toBe(offer);
+  });
+
+  it('offers access by invitation while sign-up is closed', () => {
+    expect(signUpOfferOf(null)).toBe('byInvitation');
+  });
+
+  it.each([
+    ['byInvitation', false, false],
+    ['trial', true, false],
+    ['free', true, true],
+    ['freeFull', true, true],
+  ] as const)('%s: offers sign-up %s, the free plan %s', (offer, signUp, freePlan) => {
+    expect(offersSignUp(offer)).toBe(signUp);
+    expect(offersTheFreePlan(offer)).toBe(freePlan);
+  });
+});
 
 describe('where a verified sign-up goes', () => {
   it.each(FREE_PLAN_STATES)('welcomes an owner who starts on the free plan (%s)', (freePlan) => {

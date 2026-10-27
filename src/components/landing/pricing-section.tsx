@@ -1,5 +1,6 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { approximatePricesOf, type EuroRates } from '@/domain/approximate-price';
+import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
@@ -9,7 +10,7 @@ import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 
 export interface PricingSectionProps {
   readonly i18n: I18n;
-  readonly signUpOpen: boolean;
+  readonly offer: SignUpOffer;
   readonly euroRates?: EuroRates | undefined;
 }
 
@@ -140,8 +141,9 @@ function StartButtons({ i18n }: AskPanelProps) {
   );
 }
 
-export function PricingSection({ i18n, signUpOpen, euroRates }: PricingSectionProps) {
+export function PricingSection({ i18n, offer, euroRates }: PricingSectionProps) {
   const { t } = i18n;
+  const signUpOpen = offersSignUp(offer);
   const approximate =
     euroRates === undefined ? undefined : approximatePricesOf(i18n.locale, euroRates);
   return (

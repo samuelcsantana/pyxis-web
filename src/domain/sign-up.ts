@@ -7,6 +7,13 @@ export const FREE_PLACE_WAIT_DAYS = 60;
 
 export type FreePlanState = (typeof FREE_PLAN_STATES)[number];
 export type StepAfterSignUp = 'welcome' | 'checkout' | 'waitForAFreePlace' | 'dashboard';
+export type SignUpOffer = 'byInvitation' | 'trial' | 'free' | 'freeFull';
+
+const OFFER_OF_THE_FREE_PLAN: Readonly<Record<FreePlanState, SignUpOffer>> = {
+  closed: 'trial',
+  open: 'free',
+  full: 'freeFull',
+};
 
 export interface SignUpStatus {
   readonly open: boolean;
@@ -35,6 +42,18 @@ export function openSignUpOf(status: SignUpStatus): OpenSignUp | null {
   return status.open && status.termsVersion !== null && status.termsUrl !== null
     ? { termsVersion: status.termsVersion, termsUrl: status.termsUrl, freePlan: status.freePlan }
     : null;
+}
+
+export function signUpOfferOf(openSignUp: OpenSignUp | null): SignUpOffer {
+  return openSignUp === null ? 'byInvitation' : OFFER_OF_THE_FREE_PLAN[openSignUp.freePlan];
+}
+
+export function offersSignUp(offer: SignUpOffer): boolean {
+  return offer !== 'byInvitation';
+}
+
+export function offersTheFreePlan(offer: SignUpOffer): boolean {
+  return offer === 'free' || offer === 'freeFull';
 }
 
 export function stepAfterSignUp(

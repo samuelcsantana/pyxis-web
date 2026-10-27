@@ -7,7 +7,7 @@ const meta = {
   title: 'Landing/FaqSection',
   component: FaqSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english, signUpOpen: false },
+  args: { i18n: english, offer: 'byInvitation' },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -33,7 +33,7 @@ export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
 export const SignUpOpen: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const cancel = canvas.getByText('How do I cancel?');

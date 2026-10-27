@@ -7,7 +7,7 @@ const meta = {
   title: 'Landing/PricingSection',
   component: PricingSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english, signUpOpen: false },
+  args: { i18n: english, offer: 'byInvitation' },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -107,7 +107,7 @@ export const LongestWordsOnAPhone: Story = {
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
 export const SignUpOpen: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('link', { name: 'Start your free trial' })).toHaveAttribute(
@@ -123,11 +123,11 @@ export const SignUpOpen: Story = {
 };
 
 export const SignUpOpenInPortuguese: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { locale: 'pt-BR' },
 };
 
 export const SignUpOpenOnAPhone: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { viewport: { value: 'mobile1' } },
 };
