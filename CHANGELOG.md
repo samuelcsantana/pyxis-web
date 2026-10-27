@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.39.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.38.1...v0.39.0) (2026-10-27)
+
+
+### Features
+
+* **accounts:** know the free plan status ([f123f8f](https://github.com/samuelcsantana/pyxis-web/commit/f123f8f7b7c48b5b4bc91b2304739f594799a5ef))
+* **accounts:** say at how many events measuring paused ([370498c](https://github.com/samuelcsantana/pyxis-web/commit/370498c45c396ed4ba20b7263b8473bfb729f1e7))
+
+
+### Bug Fixes
+
+* **account:** count one project and one person in the singular ([2b09944](https://github.com/samuelcsantana/pyxis-web/commit/2b09944753e48cae741a609ec231a81acf5b311a))
+
 ## [0.38.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.38.0...v0.38.1) (2026-10-25)
 
 
