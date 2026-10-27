@@ -23,6 +23,7 @@ const meta = {
     i18n: english,
     now: STORY_NOW,
     openCheckout: stay,
+    subscribe: stay,
     openPortal: stay,
     close: refuseToClose,
   },
@@ -161,6 +162,8 @@ const FREE_PLAN: Account = {
   trialEndsAt: null,
   currentPeriodEndsAt: null,
   eventsThisMonth: 3_120,
+  projectCount: 1,
+  peopleCount: 1,
   limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
 };
 
@@ -174,6 +177,33 @@ export const FreePlanPaused: Story = {
       ingestionPausedUntil: '2026-12-01T00:00:00.000Z',
     },
   },
+};
+
+export const FreePlanNearTheLimit: Story = {
+  args: { account: { ...FREE_PLAN, eventsThisMonth: 8_640 } },
+};
+
+export const FreePlanToFitAfterAWithdrawal: Story = {
+  args: {
+    account: {
+      ...FREE_PLAN,
+      freePlanFitDueAt: '2026-12-20T12:00:00.000Z',
+      projectCount: 3,
+      peopleCount: 2,
+    },
+  },
+};
+
+export const FreePlanToFitInPortuguese: Story = {
+  args: {
+    account: {
+      ...FREE_PLAN,
+      freePlanFitDueAt: '2026-12-20T12:00:00.000Z',
+      projectCount: 2,
+      peopleCount: 1,
+    },
+  },
+  globals: { locale: 'pt-BR' },
 };
 
 export const FreePlanInPortuguese: Story = {

@@ -7,7 +7,7 @@ import { ownedAccounts } from '@/domain/accounts';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { currentAdmin, readOrSignIn } from '@/lib/current-admin';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
-import { closeAccount, openBillingPortal, openCheckout } from './actions';
+import { closeAccount, openBillingPortal, openCheckout, subscribeFromFreePlan } from './actions';
 
 export const DASHBOARD_HOME = '/';
 
@@ -38,6 +38,7 @@ export default async function AccountPage() {
             i18n={i18n}
             now={now}
             openCheckout={openCheckout.bind(null, account.id)}
+            subscribe={subscribeFromFreePlan.bind(null, account.id)}
             openPortal={openBillingPortal.bind(null, account.id)}
             close={closeAccount.bind(null, account.id)}
           />

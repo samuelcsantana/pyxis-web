@@ -13,6 +13,7 @@ import {
   needsCheckout,
   waitsForAFreePlace,
   ownedAccounts,
+  pausedUntilOf,
   quotaPauseExemptUntil,
   quotaShare,
   welcomeStage,
@@ -400,6 +401,18 @@ describe('welcomeStage', () => {
   it('leads a paid account without a project to its first one, wherever it came from', () => {
     expect(welcomeStage({ ...ACCOUNT, projectCount: 0 })).toBe('firstSubscription');
     expect(welcomeStage({ ...ACCOUNT, projectCount: 0 }, true)).toBe('firstSubscription');
+  });
+});
+
+describe('pausedUntilOf', () => {
+  it('gives the end of a pause still ahead, and nothing for one over or none', () => {
+    expect(
+      pausedUntilOf({ ...ACCOUNT, ingestionPausedUntil: '2026-12-01T00:00:00.000Z' }, NOW),
+    ).toBe('2026-12-01T00:00:00.000Z');
+    expect(
+      pausedUntilOf({ ...ACCOUNT, ingestionPausedUntil: '2026-11-01T00:00:00.000Z' }, NOW),
+    ).toBeNull();
+    expect(pausedUntilOf(ACCOUNT, NOW)).toBeNull();
   });
 });
 

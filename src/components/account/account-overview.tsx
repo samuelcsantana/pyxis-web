@@ -8,6 +8,7 @@ import {
   hasBillingPortal,
   isDeletionHeld,
   needsCheckout,
+  pausedUntilOf,
   quotaPauseExemptUntil,
   quotaShare,
   SUPPORT_EMAIL,
@@ -17,12 +18,14 @@ import { rich } from '@/i18n/rich';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
 import type { CloseAccount } from './close-account-form';
 import { CloseAccountSection } from './close-account-section';
+import { FreePlanFit } from './free-plan-fit';
 
 export interface AccountOverviewProps {
   readonly account: Account;
   readonly i18n: I18n;
   readonly now: Date;
   readonly openCheckout: OpenCheckout;
+  readonly subscribe: OpenCheckout;
   readonly openPortal: OpenBillingPortal;
   readonly close: CloseAccount;
 }
@@ -131,11 +134,7 @@ function UsageMeter({
   now,
 }: Pick<AccountOverviewProps, 'account' | 'i18n' | 'now'>) {
   const share = quotaShare(account);
-  const pausedUntil =
-    account.ingestionPausedUntil !== null &&
-    new Date(account.ingestionPausedUntil).getTime() > now.getTime()
-      ? account.ingestionPausedUntil
-      : null;
+  const pausedUntil = pausedUntilOf(account, now);
   const exemptUntil = quotaPauseExemptUntil(account, now);
   return (
     <div className="flex flex-col gap-1.5">
@@ -169,6 +168,13 @@ function UsageMeter({
           })}
         </p>
       )}
+      {pausedUntil === null && account.status === 'free' ? (
+        <p className={NOTE}>
+          {i18n.t('account.freePause', {
+            events: i18n.format.count(account.limits.pauseAtEvents),
+          })}
+        </p>
+      ) : null}
       {exemptUntil === null ? null : (
         <p className={NOTE}>
           {i18n.t('account.exempt', { date: i18n.format.dayWithYear(new Date(exemptUntil)) })}
@@ -178,11 +184,30 @@ function UsageMeter({
   );
 }
 
+function SubscribeFromFreePlan({
+  account,
+  i18n,
+  now,
+  subscribe,
+}: Pick<AccountOverviewProps, 'account' | 'i18n' | 'now' | 'subscribe'>) {
+  return (
+    <div className="flex flex-col gap-3 border-t border-line pt-3">
+      <h3 className="text-sm font-semibold">{i18n.t('account.paidPlan.heading')}</h3>
+      <p className="text-sm">{i18n.t('account.paidPlan.offer')}</p>
+      {pausedUntilOf(account, now) === null ? null : (
+        <p className="text-sm font-medium">{i18n.t('account.paidPlan.resumes')}</p>
+      )}
+      <BillingActions kind="subscribe" open={subscribe} />
+    </div>
+  );
+}
+
 export function AccountOverview({
   account,
   i18n,
   now,
   openCheckout,
+  subscribe,
   openPortal,
   close,
 }: AccountOverviewProps) {
@@ -207,12 +232,20 @@ export function AccountOverview({
           people: i18n.t('counts.person', { count: account.limits.people }),
         })}
       </p>
+      <FreePlanFit account={account} i18n={i18n} />
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
       {canSubscribeAgain(account) ? (
         <SubscribeAgain account={account} i18n={i18n} openCheckout={openCheckout} />
       ) : null}
+      {account.status === 'free' ? (
+        <SubscribeFromFreePlan account={account} i18n={i18n} now={now} subscribe={subscribe} />
+      ) : null}
       {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
-      <CloseAccountSection open={canClose(account)} close={close} />
+      <CloseAccountSection
+        open={canClose(account)}
+        onFreePlan={account.status === 'free'}
+        close={close}
+      />
     </section>
   );
 }

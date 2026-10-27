@@ -388,6 +388,21 @@ export const nl = translation({
     resubscribeUndated:
       'Neem opnieuw een abonnement om de gegevens te behouden: er is geen nieuwe gratis proefperiode, het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
     exempt: 'Tot {date} wordt het meten niet gepauzeerd als de maandlimiet wordt overschreden.',
+    freePause:
+      'Met het gratis abonnement pauzeert het meten zodra de maand {events} events bereikt, en het gaat op de 1e weer verder.',
+    paidPlan: {
+      heading: 'Het betaalde abonnement',
+      offer:
+        'Tot 100.000 events per maand, 3 projecten en 3 personen, voor R$ 39 per maand of R$ 390 per jaar. Het wordt vandaag afgerekend en verlengt tot je opzegt.',
+      resumes: 'Het meten gaat binnen een minuut na het afsluiten weer verder.',
+    },
+    fit: {
+      dueBy:
+        'Dit account bevat meer dan het gratis abonnement toestaat. Zorg dat het uiterlijk {date} past, anders eindigt het account die dag:',
+      projects: 'Verwijder {count}: het gratis abonnement staat {limit} toe.',
+      people: 'Verwijder {count}: het gratis abonnement staat {limit} toe, jij meegerekend.',
+      where: 'Projecten en personen verwijder je in de Instellingen van elk project.',
+    },
     notice: {
       suspended: 'Dit account is geschorst, dus de projecten meten niet meer.',
       why: 'Bekijk waarom',
@@ -468,6 +483,8 @@ export const nl = translation({
     note: 'Zegt het abonnement nu op en trekt de sleutels van elk project in, zodat de sites geen events meer versturen. Alles wordt dertig dagen later verwijderd; exporteer eerst wat je nodig hebt.',
     refundNote:
       'Een eerste betaling van de afgelopen zeven dagen wordt volledig terugbetaald. Anders wordt er niets terugbetaald.',
+    freeNote:
+      'Trekt de sleutels van elk project in, zodat de sites geen events meer versturen. Alles wordt dertig dagen later verwijderd; exporteer eerst wat je nodig hebt.',
     confirm: 'Typ je e-mailadres om te bevestigen',
     close: 'Account definitief opheffen',
     closing: 'Opheffen…',

@@ -76,6 +76,8 @@ export const StaysAfterTheRefresh: Story = {
   },
 };
 
+export const OnTheFreePlan: Story = { args: { onFreePlan: true } };
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };

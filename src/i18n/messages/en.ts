@@ -368,6 +368,21 @@ export const en = {
     resubscribeUndated:
       'Subscribe again to keep the data: there is no new free trial, the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
     exempt: 'Measuring is not paused past the monthly limit until {date}.',
+    freePause:
+      'On the free plan, measuring pauses when the month reaches {events} events and comes back on the 1st.',
+    paidPlan: {
+      heading: 'The paid plan',
+      offer:
+        'Up to 100,000 events a month, 3 projects and 3 people, for R$ 39 a month or R$ 390 a year. It is charged today and renews until you cancel.',
+      resumes: 'Measuring resumes within a minute of subscribing.',
+    },
+    fit: {
+      dueBy:
+        'This account holds more than the free plan. Make it fit by {date}, or the account ends that day:',
+      projects: 'Delete {count}: the free plan holds {limit}.',
+      people: 'Remove {count}: the free plan holds {limit}, you included.',
+      where: "Projects are deleted, and people removed, in each project's Settings.",
+    },
     notice: {
       suspended: 'This account is suspended, so its projects stopped measuring.',
       why: 'See why',
@@ -444,6 +459,8 @@ export const en = {
     note: 'Cancels the subscription now and revokes the keys of every project, so the sites stop sending events. Everything is deleted thirty days later; export what you need first.',
     refundNote:
       'A first payment made in the last seven days is refunded in full. Otherwise nothing is refunded.',
+    freeNote:
+      'Revokes the keys of every project, so the sites stop sending events. Everything is deleted thirty days later; export what you need first.',
     confirm: 'Type your e-mail address to confirm',
     close: 'Close the account for good',
     closing: 'Closing…',

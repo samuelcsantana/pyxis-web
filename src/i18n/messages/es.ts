@@ -383,6 +383,22 @@ export const es = translation({
     resubscribeUndated:
       'Suscríbete de nuevo para conservar los datos: no hay una nueva prueba gratis, el plan se cobra desde hoy, y las claves antiguas siguen revocadas, así que cada proyecto necesita una clave pública nueva.',
     exempt: 'La medición no se pausa después del límite del mes hasta el {date}.',
+    freePause:
+      'En el plan gratis, la medición se pausa cuando el mes llega a {events} eventos y vuelve el día 1.',
+    paidPlan: {
+      heading: 'El plan de pago',
+      offer:
+        'Hasta 100 mil eventos al mes, 3 proyectos y 3 personas, por R$ 39 al mes o R$ 390 al año. Se cobra hoy y se renueva hasta que lo canceles.',
+      resumes: 'La medición vuelve en menos de un minuto después de suscribirte.',
+    },
+    fit: {
+      dueBy:
+        'Esta cuenta tiene más de lo que admite el plan gratis. Ajústala antes del {date}, o la cuenta termina ese día:',
+      projects: 'Borra {count}: el plan gratis admite {limit}.',
+      people: 'Quita {count}: el plan gratis admite {limit}, tú incluido.',
+      where:
+        'Los proyectos se borran, y las personas se quitan, en la Configuración de cada proyecto.',
+    },
     notice: {
       suspended: 'Esta cuenta está suspendida, así que sus proyectos dejaron de medir.',
       why: 'Ver el motivo',
@@ -460,6 +476,8 @@ export const es = translation({
     note: 'Cancela la suscripción ahora y revoca las claves de todos los proyectos, así que los sitios dejan de enviar eventos. Todo se borra treinta días después; exporta antes lo que necesites.',
     refundNote:
       'Un primer pago hecho en los últimos siete días se devuelve por completo. Si no, no se devuelve nada.',
+    freeNote:
+      'Revoca las claves de todos los proyectos, así que los sitios dejan de enviar eventos. Todo se borra treinta días después; exporta antes lo que necesites.',
     confirm: 'Escribe tu correo para confirmar',
     close: 'Cerrar la cuenta para siempre',
     closing: 'Cerrando…',
