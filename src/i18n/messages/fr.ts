@@ -363,6 +363,7 @@ export const fr = translation({
       incomplete:
         'L’abonnement n’a pas été finalisé. Choisissez une formule pour démarrer l’essai gratuit.',
       comped: 'Un compte gratuit, offert par Pyxis.',
+      free: 'Formule gratuite : jusqu’à {events} événements par mois.',
       trialingUndated: 'Essai gratuit. Ensuite, la formule est facturée, sauf si vous résiliez.',
       activeUndated: 'Actif.',
       endingUndated:

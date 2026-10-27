@@ -339,6 +339,7 @@ export const en = {
         'Ended on {date}. The projects stopped measuring, and everything is deleted on {deletion}.',
       incomplete: 'The subscription was not finished. Choose a plan to start the free trial.',
       comped: 'A free account, given by Pyxis.',
+      free: 'Free plan: up to {events} events a month.',
       trialingUndated: 'Free trial. Then the plan is charged, unless you cancel.',
       activeUndated: 'Active.',
       endingUndated:

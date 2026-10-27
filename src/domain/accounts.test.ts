@@ -3,6 +3,7 @@ import {
   type Account,
   accountNotice,
   canClose,
+  canCreateProjects,
   canSubscribeAgain,
   deletionDateOf,
   firstNotice,
@@ -67,6 +68,7 @@ describe('accounts', () => {
     ['ending', true, false],
     ['ended', false, false],
     ['comped', false, false],
+    ['free', false, false],
   ] as const)(
     'a %s account has a billing portal: %s, needs Checkout: %s',
     (status, portal, checkout) => {
@@ -74,6 +76,20 @@ describe('accounts', () => {
       expect(needsCheckout({ ...ACCOUNT, status })).toBe(checkout);
     },
   );
+
+  it.each([
+    ['incomplete', false],
+    ['trialing', true],
+    ['active', true],
+    ['past_due', true],
+    ['ending', true],
+    ['ended', false],
+    ['comped', true],
+    ['free', true],
+  ] as const)('the owner of a %s account can create projects: %s', (status, creates) => {
+    expect(canCreateProjects({ ...ACCOUNT, status })).toBe(creates);
+    expect(canCreateProjects({ ...ACCOUNT, status, role: 'member' })).toBe(false);
+  });
 });
 
 describe('accountNotice', () => {
@@ -228,6 +244,40 @@ describe('accounts on the wire', () => {
     });
   });
 
+  it('reads an account on the free plan, with its own limits', () => {
+    const [account] = myAccountsResponseSchema.parse({
+      accounts: [
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'free',
+          billing_interval: null,
+          trial_ends_at: null,
+          current_period_ends_at: null,
+          access_ends_at: null,
+          ingestion_paused_until: null,
+          suspended_at: null,
+          suspension_reason: null,
+          deletion_held_at: null,
+          quota_pause_exempt_until: null,
+          month: '2026-11',
+          events_this_month: 3_120,
+          measured_at: '2026-11-20T03:00:00.000Z',
+          limits: { events_per_month: 10_000, projects: 1, people: 1 },
+        },
+      ],
+    });
+
+    expect(account).toEqual({
+      ...ACCOUNT,
+      status: 'free',
+      billingInterval: null,
+      currentPeriodEndsAt: null,
+      eventsThisMonth: 3_120,
+      limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+    });
+  });
+
   it('reads the address Stripe gives and writes the requests', () => {
     expect(billingRedirectResponseSchema.parse({ url: 'https://billing.stripe.com/p/x' })).toBe(
       'https://billing.stripe.com/p/x',
@@ -243,6 +293,7 @@ describe('subscribing again', () => {
     expect(canSubscribeAgain({ ...ACCOUNT, status: 'ended', role: 'member' })).toBe(false);
     expect(canSubscribeAgain(ACCOUNT)).toBe(false);
     expect(canSubscribeAgain({ ...ACCOUNT, status: 'incomplete' })).toBe(false);
+    expect(canSubscribeAgain({ ...ACCOUNT, status: 'free' })).toBe(false);
   });
 });
 
@@ -253,6 +304,7 @@ describe('welcomeStage', () => {
     ['trialing', 'firstSubscription'],
     ['active', 'subscriptionBack'],
     ['past_due', 'subscriptionBack'],
+    ['free', 'subscriptionBack'],
   ] as const)('is %s → %s', (status, stage) => {
     expect(welcomeStage({ ...ACCOUNT, status })).toBe(stage);
   });

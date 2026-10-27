@@ -357,6 +357,7 @@ export const nl = translation({
       incomplete:
         'Het abonnement is niet afgerond. Kies een abonnement om de gratis proefperiode te starten.',
       comped: 'Een gratis account, aangeboden door Pyxis.',
+      free: 'Gratis abonnement: maximaal {events} events per maand.',
       trialingUndated:
         'Gratis proefperiode. Daarna wordt het abonnement in rekening gebracht, tenzij je opzegt.',
       activeUndated: 'Actief.',

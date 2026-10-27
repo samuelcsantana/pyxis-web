@@ -354,6 +354,7 @@ export const es = translation({
       ended: 'Terminó el {date}. Los proyectos dejaron de medir, y todo se borra el {deletion}.',
       incomplete: 'La suscripción no se terminó. Elige un plan para empezar la prueba gratis.',
       comped: 'Una cuenta gratis, dada por Pyxis.',
+      free: 'Plan gratis: hasta {events} eventos al mes.',
       trialingUndated: 'Prueba gratis. Después se cobra el plan, salvo que canceles.',
       activeUndated: 'Activa.',
       endingUndated: 'Cancelada. El acceso sigue hasta el fin del período, sin otro cobro.',

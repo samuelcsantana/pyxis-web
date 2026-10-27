@@ -353,6 +353,7 @@ export const ptBR = translation({
       ended: 'Encerrada em {date}. Os projetos pararam de medir, e tudo é apagado em {deletion}.',
       incomplete: 'A assinatura não foi concluída. Escolha um plano para começar o teste grátis.',
       comped: 'Uma conta gratuita, dada pelo Pyxis.',
+      free: 'Plano grátis: até {events} eventos por mês.',
       trialingUndated: 'Teste grátis. Depois, o plano é cobrado, a não ser que você cancele.',
       activeUndated: 'Ativa.',
       endingUndated: 'Cancelada. O acesso continua até o fim do período, sem nova cobrança.',
