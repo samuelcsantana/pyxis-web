@@ -11,7 +11,7 @@ import {
   SignUpForm,
 } from './sign-up-form';
 
-const navigation = vi.hoisted(() => ({ router: { refresh: vi.fn() } }));
+const navigation = vi.hoisted(() => ({ router: { refresh: vi.fn(), replace: vi.fn() } }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => navigation.router,
@@ -99,6 +99,7 @@ describe('SignUpForm', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     navigation.router.refresh.mockClear();
+    navigation.router.replace.mockClear();
     assign.mockClear();
     vi.stubGlobal('location', { assign });
   });
@@ -133,6 +134,100 @@ describe('SignUpForm', () => {
     expect(openCheckout).toHaveBeenCalledWith(ACCOUNT, 'year');
     expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/x');
     expect(screen.getByRole('status')).toHaveTextContent('Preparing the payment…');
+  });
+
+  it('starts a new owner on the free plan with no card, then welcomes them', async () => {
+    const signUp = service();
+    calls.verify.mockResolvedValue({ kind: 'verified', accountId: ACCOUNT, accountStatus: 'free' });
+    const openCheckout = vi.fn<OpenCheckout>();
+    renderWithMessages(
+      <SignUpForm
+        terms={{ ...TERMS, freePlan: 'open' }}
+        signUpService={signUp}
+        openCheckout={openCheckout}
+      />,
+    );
+
+    expect(screen.getByRole('heading', { name: 'Create your free account' })).toBeInTheDocument();
+    expect(
+      screen.getByText('Free: up to 10,000 events a month, on one site. No card.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('One free trial per customer.')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Yearly' })).not.toBeInTheDocument();
+    await reachTheCode();
+    typeCode('123456');
+    await settle();
+
+    expect(openCheckout).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('Opening your account…');
+    expect(navigation.router.replace).toHaveBeenCalledWith(`/welcome?account=${ACCOUNT}`);
+    expect(navigation.router.refresh).toHaveBeenCalledOnce();
+  });
+
+  it('writes the free plan in the numbers of the page language', () => {
+    renderWithMessages(
+      <SignUpForm
+        terms={{ ...TERMS, freePlan: 'open' }}
+        signUpService={service()}
+        openCheckout={vi.fn()}
+      />,
+      'pt-BR',
+    );
+
+    expect(
+      screen.getByText('Grátis: até 10.000 eventos por mês, em um site. Sem cartão.'),
+    ).toBeInTheDocument();
+  });
+
+  it('offers to wait for a free place, or subscribe now, when the free plan is full', async () => {
+    const signUp = service();
+    const openCheckout = vi.fn<OpenCheckout>(() =>
+      Promise.resolve({ kind: 'redirect', url: 'https://checkout.stripe.com/c/now' }),
+    );
+    renderWithMessages(
+      <SignUpForm
+        terms={{ ...TERMS, freePlan: 'full' }}
+        signUpService={signUp}
+        openCheckout={openCheckout}
+      />,
+    );
+
+    expect(screen.getByRole('heading', { name: 'Create your account' })).toBeInTheDocument();
+    expect(screen.getByText(/The free plan is full for now\. Create your account/)).toBeVisible();
+    expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
+    await reachTheCode();
+    typeCode('123456');
+    await settle();
+
+    expect(openCheckout).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole('heading', { name: 'The free plan is full for now' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/it waits up to 60 days/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Yearly' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Subscribe now' }));
+    await settle();
+
+    expect(openCheckout).toHaveBeenCalledWith(ACCOUNT, 'year');
+    expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/now');
+  });
+
+  it('sends a returning owner whose account already runs to the dashboard, not to Checkout', async () => {
+    const signUp = service();
+    calls.verify.mockResolvedValue({
+      kind: 'verified',
+      accountId: ACCOUNT,
+      accountStatus: 'active',
+    });
+    const openCheckout = vi.fn<OpenCheckout>();
+    renderForm(signUp, openCheckout);
+    await reachTheCode();
+    typeCode('123456');
+    await settle();
+
+    expect(openCheckout).not.toHaveBeenCalled();
+    expect(navigation.router.replace).toHaveBeenCalledWith('/');
+    expect(navigation.router.refresh).toHaveBeenCalledOnce();
   });
 
   it.each([
@@ -291,6 +386,31 @@ describe('SignUpForm', () => {
 
     expect(openCheckout).toHaveBeenCalledWith(UNFINISHED, 'month');
     expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/again');
+  });
+
+  it('offers an owner who waits for a free place to subscribe now, on a later visit', async () => {
+    const openCheckout = vi.fn<OpenCheckout>(() =>
+      Promise.resolve({ kind: 'redirect', url: 'https://checkout.stripe.com/c/later' }),
+    );
+    renderWithMessages(
+      <SignUpForm
+        terms={{ ...TERMS, freePlan: 'full' }}
+        unfinishedAccountId={UNFINISHED}
+        unfinishedWaitsForAFreePlace
+        signUpService={service()}
+        openCheckout={openCheckout}
+      />,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'The free plan is full for now' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Subscribe now' }));
+    await settle();
+
+    expect(openCheckout).toHaveBeenCalledWith(UNFINISHED, 'month');
+    expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/later');
   });
 
   it('keeps its Checkout going when the page learns of the new account', async () => {

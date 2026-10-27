@@ -422,6 +422,7 @@ export const nl = translation({
       'Opnieuw abonneren kan nog niet via het dashboard. Mail naar hello@pyxis-analytics.dev, dan activeren wij het abonnement weer.',
     manage: 'Facturatie beheren',
     finish: 'Abonnement afronden',
+    subscribe: 'Nu abonneren',
     opening: 'Stripe openen…',
     interval: 'Facturatie',
     monthly: 'Maandelijks',
@@ -611,6 +612,15 @@ export const nl = translation({
     finishTitle: 'Rond je abonnement af',
     finishBody:
       'Je account wacht op een abonnement. Kies er een om de gratis proefperiode te starten.',
+    freeTitle: 'Maak je gratis account aan',
+    freeIntro: 'Gratis: maximaal {events} events per maand, op één site. Zonder kaart.',
+    fullTitle: 'Maak je account aan',
+    fullIntro:
+      'Het gratis abonnement is op dit moment vol. Maak je account aan en het wacht op een plek, of neem direct daarna het betaalde abonnement.',
+    opening: 'Je account wordt geopend…',
+    waitTitle: 'Het gratis abonnement is op dit moment vol',
+    waitBody:
+      'Je account is klaar en wacht op een plek in het gratis abonnement: we mailen je zodra er een vrijkomt, en het wacht maximaal {days} dagen. Je kunt ook nu het betaalde abonnement nemen.',
   },
   signUpPage: {
     title: 'Registreren',

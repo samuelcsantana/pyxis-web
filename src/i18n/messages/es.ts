@@ -414,6 +414,7 @@ export const es = translation({
       'Suscribirse de nuevo aún no está abierto en el panel. Escribe a hello@pyxis-analytics.dev y reactivamos la suscripción.',
     manage: 'Gestionar la facturación',
     finish: 'Terminar la suscripción',
+    subscribe: 'Suscribirse ahora',
     opening: 'Abriendo Stripe…',
     interval: 'Facturación',
     monthly: 'Mensual',
@@ -604,6 +605,15 @@ export const es = translation({
     signIn: 'Entrar',
     finishTitle: 'Termina tu suscripción',
     finishBody: 'Tu cuenta está esperando un plan. Elige uno para empezar la prueba gratis.',
+    freeTitle: 'Crea tu cuenta gratis',
+    freeIntro: 'Gratis: hasta {events} eventos al mes, en un sitio. Sin tarjeta.',
+    fullTitle: 'Crea tu cuenta',
+    fullIntro:
+      'El plan gratis está lleno por ahora. Crea tu cuenta y esperará una plaza, o suscríbete al plan de pago justo después.',
+    opening: 'Abriendo tu cuenta…',
+    waitTitle: 'El plan gratis está lleno por ahora',
+    waitBody:
+      'Tu cuenta está lista y espera una plaza en el plan gratis: te avisamos por correo cuando se abra una, y espera hasta {days} días. También puedes suscribirte al plan de pago ahora.',
   },
   signUpPage: {
     title: 'Registro',

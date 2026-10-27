@@ -49,6 +49,8 @@ export const Unavailable: Story = {
   },
 };
 
+export const SubscribeNow: Story = { args: { kind: 'subscribe', open: slowly } };
+
 export const SubscribeAgain: Story = { args: { kind: 'resubscribe', open: slowly } };
 
 export const SubscribeAgainNotOpenYet: Story = {

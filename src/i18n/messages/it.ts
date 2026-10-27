@@ -420,6 +420,7 @@ export const it = translation({
       'Riabbonarsi dalla dashboard non è ancora possibile. Scrivi a hello@pyxis-analytics.dev e riattiviamo l’abbonamento.',
     manage: 'Gestisci la fatturazione',
     finish: 'Completa l’abbonamento',
+    subscribe: 'Abbonati ora',
     opening: 'Apertura di Stripe…',
     interval: 'Fatturazione',
     monthly: 'Mensile',
@@ -609,6 +610,15 @@ export const it = translation({
     signIn: 'Accedi',
     finishTitle: 'Completa l’abbonamento',
     finishBody: 'Il tuo account aspetta un piano. Scegline uno per iniziare la prova gratuita.',
+    freeTitle: 'Crea il tuo account gratuito',
+    freeIntro: 'Gratis: fino a {events} eventi al mese, su un sito. Senza carta.',
+    fullTitle: 'Crea il tuo account',
+    fullIntro:
+      'Il piano gratuito è pieno per ora. Crea il tuo account e aspetterà un posto, oppure abbonati al piano a pagamento subito dopo.',
+    opening: 'Apertura del tuo account…',
+    waitTitle: 'Il piano gratuito è pieno per ora',
+    waitBody:
+      'Il tuo account è pronto e aspetta un posto nel piano gratuito: ti scriviamo quando se ne libera uno, e aspetta fino a {days} giorni. Puoi anche abbonarti al piano a pagamento adesso.',
   },
   signUpPage: {
     title: 'Registrati',

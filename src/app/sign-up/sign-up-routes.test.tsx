@@ -124,6 +124,19 @@ describe('SignUpPage', () => {
     expect(screen.getByRole('button', { name: 'Finish subscription' })).toBeInTheDocument();
   });
 
+  it('tells an owner who waits for a free place that the account waits, and offers to subscribe', async () => {
+    state.token = 'session';
+    state.accounts = () =>
+      demoAccount({ status: 'incomplete', freeWaitlistedAt: '2026-11-20T10:00:00.000Z' });
+
+    renderWithMessages(await SignUpPage());
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'The free plan is full for now' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Subscribe now' })).toBeInTheDocument();
+  });
+
   it('sends an owner who already has access to the dashboard', async () => {
     state.token = 'session';
     state.accounts = () => demoAccount();

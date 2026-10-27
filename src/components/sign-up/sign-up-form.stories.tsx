@@ -63,6 +63,65 @@ export const FinishSubscription: Story = {
   args: { unfinishedAccountId: '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f' },
 };
 
+export const FreePlanOpen: Story = {
+  args: {
+    terms: { termsVersion: DEMO_TERMS_VERSION, termsUrl: DEMO_TERMS_URL, freePlan: 'open' },
+    signUpService: new MockSignUpService('open'),
+  },
+};
+
+export const FreePlanOpenOpeningTheAccount: Story = {
+  args: FreePlanOpen.args,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), 'ana@example.com');
+    await userEvent.click(canvas.getByRole('checkbox'));
+    await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
+    await userEvent.click(await canvas.findByRole('button', { name: `Use ${DEMO_SIGN_IN_CODE}` }));
+    await expect(await canvas.findByRole('status')).toHaveTextContent('Opening your account…');
+  },
+};
+
+export const FreePlanFull: Story = {
+  args: {
+    terms: { termsVersion: DEMO_TERMS_VERSION, termsUrl: DEMO_TERMS_URL, freePlan: 'full' },
+    signUpService: new MockSignUpService('full'),
+  },
+};
+
+export const FreePlanFullWaitingForAPlace: Story = {
+  args: FreePlanFull.args,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), 'ana@example.com');
+    await userEvent.click(canvas.getByRole('checkbox'));
+    await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
+    await userEvent.click(await canvas.findByRole('button', { name: `Use ${DEMO_SIGN_IN_CODE}` }));
+    await expect(
+      await canvas.findByRole('heading', { name: 'The free plan is full for now' }),
+    ).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Subscribe now' })).toBeVisible();
+  },
+};
+
+export const WaitingForAFreePlaceOnALaterVisit: Story = {
+  args: {
+    ...FreePlanFull.args,
+    unfinishedAccountId: '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f',
+    unfinishedWaitsForAFreePlace: true,
+  },
+};
+
+export const FreePlanOpenInPortuguese: Story = {
+  args: FreePlanOpen.args,
+  globals: { locale: 'pt-BR' },
+};
+
+export const FreePlanFullDarkTheme: Story = {
+  args: FreePlanFull.args,
+  globals: { theme: 'dark' },
+};
+
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
