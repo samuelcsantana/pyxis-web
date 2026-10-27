@@ -379,7 +379,7 @@ export const fr = translation({
     notMeasured: 'Pas encore mesuré ce mois-ci.',
     paused:
       'La mesure est en pause jusqu’au {date} : le compte a utilisé 150 % de ses événements mensuels.',
-    limits: 'Jusqu’à {projects} projets et {people} personnes, vous compris.',
+    limits: 'Jusqu’à {projects} et {people}, vous compris.',
     suspended:
       'Suspendu le {date}. Ses projets ne mesurent plus rien, et leurs écrans restent fermés jusqu’à la levée de la suspension.',
     suspensionReason: 'Motif : {reason}',
@@ -774,6 +774,7 @@ export const fr = translation({
     visit: forms('{count} visite', '{count} visites'),
     matchingVisit: forms('{count} visite correspondante', '{count} visites correspondantes'),
     person: forms('{count} personne', '{count} personnes'),
+    project: forms('{count} projet', '{count} projets'),
     day: forms('{count} jour', '{count} jours'),
     page: forms('{count} page', '{count} pages'),
     event: forms('{count} événement', '{count} événements'),

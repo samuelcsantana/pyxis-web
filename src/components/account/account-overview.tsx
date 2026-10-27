@@ -200,8 +200,8 @@ export function AccountOverview({
       <UsageMeter account={account} i18n={i18n} now={now} />
       <p className={NOTE}>
         {i18n.t('account.limits', {
-          projects: i18n.format.count(account.limits.projects),
-          people: i18n.format.count(account.limits.people),
+          projects: i18n.t('counts.project', { count: account.limits.projects }),
+          people: i18n.t('counts.person', { count: account.limits.people }),
         })}
       </p>
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}

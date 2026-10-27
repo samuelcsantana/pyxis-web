@@ -374,7 +374,7 @@ export const nl = translation({
     notMeasured: 'Deze maand nog niet gemeten.',
     paused:
       'Het meten is gepauzeerd tot {date}: het account heeft 150% van zijn maandelijkse events gebruikt.',
-    limits: 'Maximaal {projects} projecten en {people} personen, jij meegerekend.',
+    limits: 'Maximaal {projects} en {people}, jij meegerekend.',
     suspended:
       'Geschorst op {date}. De projecten meten niet meer, en hun schermen blijven gesloten tot de schorsing is opgeheven.',
     suspensionReason: 'Reden: {reason}',
@@ -764,6 +764,7 @@ export const nl = translation({
     visit: forms('{count} bezoek', '{count} bezoeken'),
     matchingVisit: forms('{count} gevonden bezoek', '{count} gevonden bezoeken'),
     person: forms('{count} persoon', '{count} personen'),
+    project: forms('{count} project', '{count} projecten'),
     day: forms('{count} dag', '{count} dagen'),
     page: forms('{count} pagina', '{count} pagina’s'),
     event: forms('{count} event', '{count} events'),
