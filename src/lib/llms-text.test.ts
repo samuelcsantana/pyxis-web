@@ -4,7 +4,7 @@ import { llmsText } from './llms-text';
 const LINK = /\]\(([^)]+)\)/g;
 
 describe('llmsText', () => {
-  const text = llmsText();
+  const text = llmsText('trial');
 
   it('follows the llms.txt shape: a title, a quoted summary, then sections of links', () => {
     const lines = text.split('\n');
@@ -38,6 +38,22 @@ describe('llmsText', () => {
   it('says where to sign up and where the hosted API is', () => {
     expect(text).toContain('https://app.pyxis-analytics.dev/sign-up (14-day free trial)');
     expect(text).toContain('https://api.pyxis-analytics.dev');
+  });
+
+  it.each(['free', 'freeFull'] as const)(
+    'names the free plan instead of the trial once it is open (%s)',
+    (offer) => {
+      const onTheFreePlan = llmsText(offer);
+
+      expect(onTheFreePlan).toContain(
+        'https://app.pyxis-analytics.dev/sign-up (free plan: 10,000 events a month on one site, no card).',
+      );
+      expect(onTheFreePlan).not.toContain('trial');
+    },
+  );
+
+  it('keeps the trial while sign-up is by invitation, as before the free plan', () => {
+    expect(llmsText('byInvitation')).toBe(text);
   });
 
   it('gives a coding agent the install steps, with a check through the MCP server', () => {
