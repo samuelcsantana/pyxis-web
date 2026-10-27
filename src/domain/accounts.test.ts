@@ -344,7 +344,7 @@ describe('welcomeStage', () => {
     ['trialing', 'firstSubscription'],
     ['active', 'subscriptionBack'],
     ['past_due', 'subscriptionBack'],
-    ['free', 'subscriptionBack'],
+    ['free', 'freePlan'],
   ] as const)('is %s → %s', (status, stage) => {
     expect(welcomeStage({ ...ACCOUNT, status })).toBe(stage);
   });

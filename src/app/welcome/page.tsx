@@ -6,6 +6,7 @@ import { NEW_PROJECT_PAGE } from '@/components/shell/project-switcher';
 import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
 import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
+import { FreePlanWelcome } from '@/components/welcome/free-plan-welcome';
 import { type Account, welcomeStage } from '@/domain/accounts';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
@@ -84,6 +85,7 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
           </>
         ) : null}
         {stage === 'firstSubscription' ? <FirstSubscription account={account} i18n={i18n} /> : null}
+        {stage === 'freePlan' ? <FreePlanWelcome limits={account.limits} i18n={i18n} /> : null}
         {stage === 'subscriptionBack' ? <SubscriptionBack i18n={i18n} /> : null}
         <RefreshWhilePending pending={stage === 'confirming'} />
       </section>
