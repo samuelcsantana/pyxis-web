@@ -37,6 +37,16 @@ test('opens from the account menu and shows the free trial with the month used',
   await expect(page.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
 });
 
+test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {
+  await page.goto('/account');
+
+  await expect(page.getByText(/Free trial until/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Withdrawal' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'The paid plan' })).toHaveCount(0);
+  await expect(page.getByText(/^If you cancel/)).toHaveCount(0);
+  await expect(page.getByText(/free plan/i)).toHaveCount(0);
+});
+
 test('opens billing, which the demo keeps on this page, and goes back to the dashboard', async ({
   page,
 }) => {
