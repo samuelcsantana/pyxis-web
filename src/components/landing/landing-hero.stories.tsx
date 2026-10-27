@@ -8,13 +8,9 @@ const meta = {
   title: 'Landing/LandingHero',
   component: LandingHero,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english, preview: showcasePreview(english), signUpOpen: true },
+  args: { i18n: english, preview: showcasePreview(english), offer: 'trial' },
   render: (args) => (
-    <LandingHero
-      i18n={args.i18n}
-      preview={showcasePreview(args.i18n)}
-      signUpOpen={args.signUpOpen}
-    />
+    <LandingHero i18n={args.i18n} preview={showcasePreview(args.i18n)} offer={args.offer} />
   ),
   decorators: [
     (Story) => (
@@ -40,7 +36,7 @@ export const English: Story = {
 };
 
 export const SignUpClosed: Story = {
-  args: { signUpOpen: false },
+  args: { offer: 'byInvitation' },
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByRole('link', { name: 'See pricing' })).toBeVisible();
   },

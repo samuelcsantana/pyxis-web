@@ -9,7 +9,7 @@ import { CONTACT_EMAIL_ID, PricingSection, YEARLY_OPTION_ID } from './pricing-se
 
 describe('PricingSection', () => {
   it('names the one plan with its monthly price chosen first', () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const section = screen.getByRole('region', {
       name: 'One plan, in reais, with everything the demo shows',
@@ -25,7 +25,7 @@ describe('PricingSection', () => {
   });
 
   it('switches the period without leaving the page', async () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     await userEvent.click(screen.getByRole('radio', { name: /^Yearly/ }));
 
@@ -34,7 +34,7 @@ describe('PricingSection', () => {
   });
 
   it('shows the yearly saving beside the switch, and picks the yearly plan when it is clicked', async () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const period = screen.getByRole('group', { name: 'Billing period' });
     const saving = screen.getByText('2 months free');
@@ -47,7 +47,7 @@ describe('PricingSection', () => {
   });
 
   it('lists what the plan includes, the trial and where it is sold', () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const included = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(included).toEqual(
@@ -66,7 +66,7 @@ describe('PricingSection', () => {
   });
 
   it('asks for access by e-mail, with what to write and a ready message', async () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const ask = screen.getByText('Request access');
     expect(ask).toHaveAttribute('data-track', 'access_requested');
@@ -91,7 +91,7 @@ describe('PricingSection', () => {
   });
 
   it('invites agencies to measure their clients’ sites and to ask for a plan that fits', () => {
-    const { unmount } = render(<PricingSection i18n={english} signUpOpen />);
+    const { unmount } = render(<PricingSection i18n={english} offer="trial" />);
 
     expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
     expect(
@@ -106,7 +106,7 @@ describe('PricingSection', () => {
     expect(ask).toHaveAttribute('data-track-from', 'pricing');
     unmount();
 
-    render(<PricingSection i18n={portuguese} signUpOpen />);
+    render(<PricingSection i18n={portuguese} offer="trial" />);
     expect(screen.getByRole('link', { name: 'Falar sobre um plano para agência' })).toHaveAttribute(
       'href',
       'mailto:hello@pyxis-analytics.dev?subject=Um%20plano%20do%20Pyxis%20para%20ag%C3%AAncia',
@@ -114,7 +114,7 @@ describe('PricingSection', () => {
   });
 
   it('writes the subject of the message in the visitor’s language', () => {
-    const { unmount } = render(<PricingSection i18n={portuguese} signUpOpen={false} />);
+    const { unmount } = render(<PricingSection i18n={portuguese} offer="byInvitation" />);
     expect(screen.getByRole('radio', { name: 'Mensal, R$ 39 por mês' })).toBeChecked();
     expect(screen.getByRole('link', { name: 'Abrir no meu programa de e-mail' })).toHaveAttribute(
       'href',
@@ -122,7 +122,7 @@ describe('PricingSection', () => {
     );
     unmount();
 
-    render(<PricingSection i18n={spanish} signUpOpen={false} />);
+    render(<PricingSection i18n={spanish} offer="byInvitation" />);
     expect(screen.getByRole('link', { name: 'Abrir en mi programa de correo' })).toHaveAttribute(
       'href',
       'mailto:hello@pyxis-analytics.dev?subject=Quiero%20usar%20Pyxis',
@@ -130,7 +130,7 @@ describe('PricingSection', () => {
   });
 
   it('says the trial is one per customer', () => {
-    render(<PricingSection i18n={english} signUpOpen={false} />);
+    render(<PricingSection i18n={english} offer="byInvitation" />);
 
     expect(
       screen.getByText(
@@ -143,7 +143,7 @@ describe('PricingSection', () => {
     const RATES = { BRL: 5.7197, USD: 1.1253 };
 
     it('adds an approximate price in dollars under each period on the English page', () => {
-      render(<PricingSection i18n={english} signUpOpen={false} euroRates={RATES} />);
+      render(<PricingSection i18n={english} offer="byInvitation" euroRates={RATES} />);
 
       expect(
         screen.getByText(
@@ -158,7 +158,7 @@ describe('PricingSection', () => {
     });
 
     it('offers dollars or euros on the Spanish page', () => {
-      render(<PricingSection i18n={spanish} signUpOpen={false} euroRates={RATES} />);
+      render(<PricingSection i18n={spanish} offer="byInvitation" euroRates={RATES} />);
 
       expect(
         screen.getByText(/^Precio en reales: unos 8\sUS\$ o 7\s€ al mes\./),
@@ -166,13 +166,13 @@ describe('PricingSection', () => {
     });
 
     it('adds nothing on the Portuguese page, already in reais', () => {
-      render(<PricingSection i18n={portuguese} signUpOpen={false} euroRates={RATES} />);
+      render(<PricingSection i18n={portuguese} offer="byInvitation" euroRates={RATES} />);
 
       expect(screen.queryByText(/Preço em reais: cerca de/)).toBeNull();
     });
 
     it('adds nothing while the exchange rates are unknown', () => {
-      render(<PricingSection i18n={english} signUpOpen={false} />);
+      render(<PricingSection i18n={english} offer="byInvitation" />);
 
       expect(screen.queryByText(/Priced in reais/)).toBeNull();
     });
@@ -180,7 +180,7 @@ describe('PricingSection', () => {
 
   describe('once sign-up is open', () => {
     it('starts the free trial on the plan of the chosen period instead of asking by e-mail', () => {
-      render(<PricingSection i18n={english} signUpOpen />);
+      render(<PricingSection i18n={english} offer="trial" />);
 
       const [monthly, yearly] = screen.getAllByRole('link', { name: 'Start your free trial' });
       expect(monthly).toHaveAttribute('href', 'https://app.pyxis-analytics.dev/sign-up');
@@ -196,7 +196,7 @@ describe('PricingSection', () => {
     });
 
     it('explains how signing up works instead of the invitation', () => {
-      render(<PricingSection i18n={portuguese} signUpOpen />);
+      render(<PricingSection i18n={portuguese} offer="trial" />);
 
       expect(screen.getAllByRole('link', { name: 'Começar o teste grátis' })).toHaveLength(2);
       expect(

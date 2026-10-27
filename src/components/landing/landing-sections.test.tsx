@@ -110,7 +110,7 @@ describe('DashboardAnswersSection', () => {
 
 describe('InstallSection', () => {
   it('shows the install command and the first lines, each with a copy button', () => {
-    render(<InstallSection i18n={english} signUpOpen={false} />);
+    render(<InstallSection i18n={english} offer="byInvitation" />);
 
     const section = screen.getByRole('region', { name: 'What a site adds' });
     expect(within(section).getAllByRole('button', { name: 'Copy' })).toHaveLength(2);
@@ -125,7 +125,7 @@ describe('InstallSection', () => {
   });
 
   it('says the keys come with an account once sign-up is open', () => {
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     expect(screen.getByRole('region', { name: 'What a site adds' })).toHaveTextContent(
       'Your keys come with your account: start the free trial below, or run your own Pyxis.',
@@ -133,7 +133,7 @@ describe('InstallSection', () => {
   });
 
   it('walks through the three steps to a first number before the code, once sign-up is open', () => {
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     const steps = screen.getByRole('list', { name: 'How to start, in 3 steps' });
     const items = within(steps).getAllByRole('listitem');
@@ -151,13 +151,13 @@ describe('InstallSection', () => {
   });
 
   it('leaves the steps out while sign-up is closed, since the first one is signing up', () => {
-    render(<InstallSection i18n={english} signUpOpen={false} />);
+    render(<InstallSection i18n={english} offer="byInvitation" />);
 
     expect(screen.queryByRole('list', { name: 'How to start, in 3 steps' })).toBeNull();
   });
 
   it('offers a prompt to paste into an AI agent, after the code, once sign-up is open', () => {
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
     const prompt = agent.querySelector(`#${AGENT_PROMPT_ID}`);
@@ -189,13 +189,13 @@ describe('InstallSection', () => {
   });
 
   it('leaves the agent prompt out while sign-up is closed, since it needs a project key', () => {
-    render(<InstallSection i18n={english} signUpOpen={false} />);
+    render(<InstallSection i18n={english} offer="byInvitation" />);
 
     expect(screen.queryByRole('group', { name: 'Or ask your AI agent' })).toBeNull();
   });
 
   it('writes the agent prompt in the reader’s language', () => {
-    render(<InstallSection i18n={portuguese} signUpOpen />);
+    render(<InstallSection i18n={portuguese} offer="trial" />);
 
     const agent = screen.getByRole('group', { name: 'Ou peça ao seu agente de IA' });
     expect(agent).toHaveTextContent(
@@ -214,7 +214,7 @@ describe('InstallSection', () => {
   });
 
   it('highlights the agent card with a badge above its title and a robot in its corner', () => {
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
     const badge = within(agent).getByText('Install without writing code');
@@ -229,7 +229,7 @@ describe('InstallSection', () => {
   });
 
   it('names the coding agents it works with, in plain text with no brand logo', () => {
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     const agents = screen.getByRole('list', { name: 'Works with coding agents such as' });
     const chips = within(agents).getAllByRole('listitem');
@@ -252,7 +252,7 @@ describe('InstallSection', () => {
       value: { writeText: () => Promise.resolve() },
       configurable: true,
     });
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
     const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
     const robotCheers = () =>
       agent.querySelector('.landing-agent-robot > span')?.classList.contains('landing-robot-cheer');
@@ -272,7 +272,7 @@ describe('InstallSection', () => {
       value: { writeText: () => Promise.resolve() },
       configurable: true,
     });
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
     const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
     const otherSnippets = screen
       .getAllByRole('button', { name: 'Copy' })
@@ -291,7 +291,7 @@ describe('InstallSection', () => {
   it('copies the same request from a large button under it, counted apart', async () => {
     const writeText = vi.fn(() => Promise.resolve());
     Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
-    render(<InstallSection i18n={english} signUpOpen />);
+    render(<InstallSection i18n={english} offer="trial" />);
 
     const agent = screen.getByRole('group', { name: 'Or ask your AI agent' });
     const button = within(agent).getByRole('button', { name: 'Copy the request for your agent' });
@@ -312,7 +312,7 @@ describe('InstallSection', () => {
   });
 
   it('points to trackRequest under the code, so the failing calls the hero promises have a way in', () => {
-    render(<InstallSection i18n={english} signUpOpen={false} />);
+    render(<InstallSection i18n={english} offer="byInvitation" />);
 
     const sentence = screen.getByText(/To see which calls to your API fail/);
     const link = within(sentence).getByRole('link', { name: 'See the example' });
@@ -329,7 +329,7 @@ describe('InstallSection', () => {
   });
 
   it('points to trackRequest in the reader’s language', () => {
-    render(<InstallSection i18n={portuguese} signUpOpen />);
+    render(<InstallSection i18n={portuguese} offer="trial" />);
 
     expect(screen.getByText(/Para ver quais chamadas à sua API falham/)).toHaveTextContent(
       'Para ver quais chamadas à sua API falham, envolva o seu cliente HTTP uma vez com trackRequest(). Ver o exemplo',

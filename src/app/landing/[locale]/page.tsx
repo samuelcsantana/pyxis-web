@@ -53,6 +53,7 @@ import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measureme
 import { legalConfig } from '@/lib/legal-config';
 import { requestNonce } from '@/lib/request-nonce';
 import { bestEffortEuroRates } from '@/lib/landing-exchange-rates';
+import { signUpOfferOf } from '@/domain/sign-up';
 import { bestEffortOpenSignUp } from '@/lib/landing-sign-up';
 import {
   LANDING_PAGES,
@@ -172,7 +173,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
     bestEffortOpenSignUp(),
     bestEffortEuroRates(),
   ]);
-  const signUpOpen = openSignUp !== null;
+  const offer = signUpOfferOf(openSignUp);
   const nonce = await requestNonce();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
@@ -188,16 +189,16 @@ export default async function LandingHome({ params }: LandingHomeProps) {
         withSignIn
       />
       <MainContent className="grow">
-        <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} signUpOpen={signUpOpen} />
+        <LandingHero i18n={i18n} preview={await demoPreviewOf(i18n)} offer={offer} />
         <WhoItIsForSection i18n={i18n} />
         <DashboardAnswersSection i18n={i18n} />
         <AskClaudeSection i18n={i18n} />
         <WeeklyReportSection i18n={i18n} digest={await demoDigestOf(i18n)} />
         <NeverStoredSection i18n={i18n} />
-        <InstallSection i18n={i18n} signUpOpen={signUpOpen} />
+        <InstallSection i18n={i18n} offer={offer} />
         <ComparisonSection i18n={i18n} />
-        <PricingSection i18n={i18n} signUpOpen={signUpOpen} euroRates={euroRates} />
-        <FaqSection i18n={i18n} signUpOpen={signUpOpen} />
+        <PricingSection i18n={i18n} offer={offer} euroRates={euroRates} />
+        <FaqSection i18n={i18n} offer={offer} />
         <BuiltInPublicSection i18n={i18n} />
         <ArchitectureSection i18n={i18n} />
         <StorySection i18n={i18n} />

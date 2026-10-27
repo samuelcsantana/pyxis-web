@@ -1,5 +1,6 @@
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import type { LandingPreviewView } from '@/domain/landing-preview';
+import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
 import { FOCUS_RING, CONTROL_TRANSITION } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
@@ -12,7 +13,7 @@ import { Eyebrow } from './landing-section';
 export interface LandingHeroProps {
   readonly i18n: I18n;
   readonly preview: LandingPreviewView;
-  readonly signUpOpen: boolean;
+  readonly offer: SignUpOffer;
 }
 
 export const HERO_TITLE_ID = 'landing-title';
@@ -85,7 +86,7 @@ function DemoFirst({ i18n }: { readonly i18n: I18n }) {
   );
 }
 
-export function LandingHero({ i18n, preview, signUpOpen }: LandingHeroProps) {
+export function LandingHero({ i18n, preview, offer }: LandingHeroProps) {
   const { t } = i18n;
   return (
     <section aria-labelledby={HERO_TITLE_ID} className="relative isolate overflow-hidden">
@@ -103,7 +104,7 @@ export function LandingHero({ i18n, preview, signUpOpen }: LandingHeroProps) {
             <p className="max-w-xl text-lg leading-relaxed text-pretty text-muted">
               {t('landing.hero.lead')}
             </p>
-            {signUpOpen ? <TrialFirst i18n={i18n} /> : <DemoFirst i18n={i18n} />}
+            {offersSignUp(offer) ? <TrialFirst i18n={i18n} /> : <DemoFirst i18n={i18n} />}
             <a
               href={`#${ASK_CLAUDE_ID}`}
               className={`mt-1 inline-flex w-fit max-w-full items-center gap-2.5 rounded-pill border border-line-strong bg-card py-1.5 pr-4 pl-1.5 text-sm text-ink hover:border-muted hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}

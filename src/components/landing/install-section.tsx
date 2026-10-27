@@ -1,4 +1,5 @@
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { CheerOnCopy } from './cheer-on-copy';
@@ -11,7 +12,7 @@ import { NudgeRobot } from './nudge-robot';
 
 export interface InstallSectionProps {
   readonly i18n: I18n;
-  readonly signUpOpen: boolean;
+  readonly offer: SignUpOffer;
 }
 
 type TokenKind = 'plain' | 'keyword' | 'string';
@@ -238,8 +239,9 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
   );
 }
 
-export function InstallSection({ i18n, signUpOpen }: InstallSectionProps) {
+export function InstallSection({ i18n, offer }: InstallSectionProps) {
   const { t } = i18n;
+  const signUpOpen = offersSignUp(offer);
   const labels = {
     copy: t('landing.install.copy'),
     copied: t('landing.install.copied'),

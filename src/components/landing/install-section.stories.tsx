@@ -10,7 +10,7 @@ const meta = {
   title: 'Landing/InstallSection',
   component: InstallSection,
   parameters: { layout: 'fullscreen' },
-  args: { i18n: english, signUpOpen: false },
+  args: { i18n: english, offer: 'byInvitation' },
   decorators: [
     (Story) => (
       <div className="bg-bg text-ink">
@@ -31,7 +31,7 @@ export const English: Story = {
 };
 
 export const SignUpOpen: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('list', { name: 'How to start, in 3 steps' })).toBeVisible();
@@ -52,7 +52,7 @@ export const SignUpOpen: Story = {
 };
 
 export const SignUpOpenRequestCopied: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   play: async ({ canvasElement }) => {
     const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
     const canvas = within(canvasElement);
@@ -68,22 +68,22 @@ export const SignUpOpenRequestCopied: Story = {
 };
 
 export const SignUpOpenInPortuguese: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { locale: 'pt-BR' },
 };
 
 export const SignUpOpenOnAPhone: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { viewport: { value: 'mobile1' } },
 };
 
 export const SignUpOpenInTheDarkTheme: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { theme: 'dark' },
 };
 
 export const SignUpOpenOnAPhoneInTheDarkTheme: Story = {
-  args: { signUpOpen: true },
+  args: { offer: 'trial' },
   globals: { theme: 'dark', viewport: { value: 'mobile1' } },
 };
 
