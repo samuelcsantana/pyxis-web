@@ -46,6 +46,7 @@ export interface Account {
   readonly suspensionReason: string | null;
   readonly deletionHeldAt: string | null;
   readonly quotaPauseExemptUntil: string | null;
+  readonly freeWaitlistedAt: string | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
@@ -115,6 +116,10 @@ export function hasBillingPortal(account: Account): boolean {
 
 export function needsCheckout(account: Account): boolean {
   return account.status === 'incomplete';
+}
+
+export function waitsForAFreePlace(account: Account): boolean {
+  return needsCheckout(account) && account.freeWaitlistedAt !== null;
 }
 
 export function canSubscribeAgain(account: Account): boolean {

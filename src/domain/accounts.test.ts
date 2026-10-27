@@ -11,6 +11,7 @@ import {
   isDeletionHeld,
   isSuspended,
   needsCheckout,
+  waitsForAFreePlace,
   ownedAccounts,
   quotaPauseExemptUntil,
   quotaShare,
@@ -40,6 +41,7 @@ const ACCOUNT: Account = {
   suspensionReason: null,
   deletionHeldAt: null,
   quotaPauseExemptUntil: null,
+  freeWaitlistedAt: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -89,6 +91,16 @@ describe('accounts', () => {
   ] as const)('the owner of a %s account can create projects: %s', (status, creates) => {
     expect(canCreateProjects({ ...ACCOUNT, status })).toBe(creates);
     expect(canCreateProjects({ ...ACCOUNT, status, role: 'member' })).toBe(false);
+  });
+
+  it('waits for a free place only while the sign-up is unfinished and the list holds it', () => {
+    const since = '2026-11-20T10:00:00.000Z';
+
+    expect(waitsForAFreePlace({ ...ACCOUNT, status: 'incomplete', freeWaitlistedAt: since })).toBe(
+      true,
+    );
+    expect(waitsForAFreePlace({ ...ACCOUNT, status: 'incomplete' })).toBe(false);
+    expect(waitsForAFreePlace({ ...ACCOUNT, status: 'free', freeWaitlistedAt: since })).toBe(false);
   });
 });
 
@@ -242,6 +254,34 @@ describe('accounts on the wire', () => {
       deletionHeldAt: '2026-11-19T10:05:00.000Z',
       quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z',
     });
+  });
+
+  it('reads since when an unfinished account waits for a place on the free plan', () => {
+    const [account] = myAccountsResponseSchema.parse({
+      accounts: [
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'incomplete',
+          billing_interval: null,
+          trial_ends_at: null,
+          current_period_ends_at: null,
+          access_ends_at: null,
+          ingestion_paused_until: null,
+          suspended_at: null,
+          suspension_reason: null,
+          deletion_held_at: null,
+          quota_pause_exempt_until: null,
+          free_waitlisted_at: '2026-11-20T10:00:00.000Z',
+          month: '2026-11',
+          events_this_month: null,
+          measured_at: null,
+          limits: { events_per_month: 100_000, projects: 3, people: 3, pause_at_events: 150_000 },
+        },
+      ],
+    });
+
+    expect(account?.freeWaitlistedAt).toBe('2026-11-20T10:00:00.000Z');
   });
 
   it('reads an account on the free plan, with its own limits', () => {
