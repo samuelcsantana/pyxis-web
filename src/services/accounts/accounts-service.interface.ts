@@ -3,6 +3,7 @@ import type {
   BillingInterval,
   BillingRedirectOutcome,
   CloseAccountOutcome,
+  WithdrawOutcome,
 } from '@/domain/accounts';
 
 export interface IAccountsService {
@@ -14,4 +15,5 @@ export interface IAccountsService {
   ): Promise<BillingRedirectOutcome>;
   portal(accountId: string, locale: string): Promise<BillingRedirectOutcome>;
   close(accountId: string, confirmEmail: string): Promise<CloseAccountOutcome>;
+  withdraw(accountId: string): Promise<WithdrawOutcome>;
 }

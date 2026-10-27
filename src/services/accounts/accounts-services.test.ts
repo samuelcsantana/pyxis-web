@@ -125,6 +125,56 @@ describe('HttpAccountsService close', () => {
   );
 });
 
+describe('HttpAccountsService withdraw', () => {
+  it('withdraws the account and reads the refund and the day it has to fit by', async () => {
+    const post = vi.fn<Post>((_path, _body, schema) =>
+      Promise.resolve(
+        (schema as { parse(body: unknown): unknown }).parse({
+          status: 'free',
+          refunded_amount: 3_900,
+          fit_by: '2026-12-20T12:00:00.000Z',
+        }),
+      ),
+    );
+
+    await expect(serviceWith({ post }).withdraw('a/1')).resolves.toEqual({
+      kind: 'withdrawn',
+      refundedAmount: 3_900,
+      fitBy: '2026-12-20T12:00:00.000Z',
+    });
+    expect(post.mock.calls[0]?.slice(0, 2)).toEqual(['/v1/accounts/a%2F1/withdraw', {}]);
+  });
+
+  it.each([
+    [BILLING_ERROR_CODES.freePlanClosed, 409, 'freePlanClosed'],
+    [BILLING_ERROR_CODES.withdrawalUnavailable, 409, 'noPaidSubscription'],
+    [BILLING_ERROR_CODES.withdrawalWindowClosed, 409, 'windowClosed'],
+    [BILLING_ERROR_CODES.unavailable, 503, 'unavailable'],
+  ])('answers the refusal %s as %s', async (code, status, kind) => {
+    const post = vi.fn(() =>
+      Promise.reject(new ApiRequestError('/v1/accounts/a1/withdraw', status, code)),
+    );
+
+    await expect(serviceWith({ post }).withdraw('a1')).resolves.toEqual({ kind });
+  });
+
+  it('answers unavailable when the API knows no withdrawal', async () => {
+    const post = vi.fn(() => Promise.reject(new ApiNotFoundError('/v1/accounts/a1/withdraw')));
+
+    await expect(serviceWith({ post }).withdraw('a1')).resolves.toEqual({ kind: 'unavailable' });
+  });
+
+  it.each([
+    [new ApiRequestError('/v1/accounts/a1/withdraw', 409, 'subscription_exists')],
+    [new ApiRequestError('/v1/accounts/a1/withdraw', 500)],
+    [new UnauthenticatedError()],
+  ])('lets %s through', async (failure) => {
+    const post = vi.fn(() => Promise.reject(failure));
+
+    await expect(serviceWith({ post }).withdraw('a1')).rejects.toBe(failure);
+  });
+});
+
 describe('MockAccountsService', () => {
   it('lists the demo account at the start of its free trial, owned by the demo admin', async () => {
     const [account] = await new MockAccountsService(() => NOW).list();
@@ -159,6 +209,12 @@ describe('MockAccountsService', () => {
     });
     await expect(service.close(DEMO_ACCOUNT_ID, 'someone@example.com')).resolves.toEqual({
       kind: 'confirmationMismatch',
+    });
+  });
+
+  it('answers, like the API while the free plan is closed, that there is nothing to withdraw to', async () => {
+    await expect(new MockAccountsService().withdraw()).resolves.toEqual({
+      kind: 'freePlanClosed',
     });
   });
 
