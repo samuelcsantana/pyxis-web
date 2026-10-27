@@ -403,6 +403,19 @@ export const nl = translation({
       people: 'Verwijder {count}: het gratis abonnement staat {limit} toe, jij meegerekend.',
       where: 'Projecten en personen verwijder je in de Instellingen van elk project.',
     },
+    afterCancel: {
+      backToFree:
+        'Als je opzegt, gaat het account aan het einde van de periode terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+      backToFreeOn:
+        'Op {date} gaat het account terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+      backToFreeAtTheEnd:
+        'Aan het einde van de periode gaat het account terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+      ends: 'Als je opzegt, eindigt het account aan het einde van de periode. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+      endsOn:
+        'Op {date} eindigt het account. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+      endsAtTheEnd:
+        'Aan het einde van de periode eindigt het account. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+    },
     notice: {
       suspended: 'Dit account is geschorst, dus de projecten meten niet meer.',
       why: 'Bekijk waarom',
@@ -495,6 +508,31 @@ export const nl = translation({
     unavailable:
       'Stripe kon het abonnement niet opzeggen, dus er is niets opgeheven. Probeer het later opnieuw.',
     failed: 'Het account is niet opgeheven. Probeer het opnieuw.',
+  },
+  withdrawal: {
+    heading: 'Herroeping',
+    note: 'Binnen 7 dagen na de eerste betaling kun je herroepen: het abonnement wordt meteen opgezegd, die betaling wordt volledig terugbetaald en het account gaat terug naar het gratis abonnement, met zijn projecten en gegevens.',
+    start: 'Abonnement herroepen',
+    question:
+      'Nu herroepen? Het abonnement stopt meteen en de eerste betaling gaat terug naar je kaart.',
+    confirm: 'Herroepen en terugbetaald krijgen',
+    keep: 'Abonnement houden',
+    withdrawing: 'Herroepen…',
+    done: 'Je hebt het abonnement herroepen. Het account is terug op het gratis abonnement.',
+    refunded: '{amount} is teruggestort op je kaart.',
+    refundByHand:
+      'De automatische terugbetaling is niet gelukt, dus Pyxis betaalt de eerste betaling met de hand terug.',
+    fitBy:
+      'Het account bevat meer dan het gratis abonnement toestaat: zorg dat het uiterlijk {date} past, anders eindigt het die dag.',
+    freePlanClosed:
+      'Het gratis abonnement is nu gesloten, dus er is geen abonnement om naar terug te gaan. Zeg op via Facturatie beheren om de verlenging te stoppen.',
+    noPaidSubscription:
+      'Dit account heeft geen betaald abonnement om te herroepen. Laad de pagina opnieuw.',
+    windowClosed:
+      'De 7 dagen om te herroepen zijn voorbij. Zeg op via Facturatie beheren om de verlenging te stoppen: het abonnement loopt door tot het einde van de periode.',
+    unavailable:
+      'Stripe kon het abonnement niet opzeggen, dus er is niets veranderd. Probeer het later opnieuw.',
+    failed: 'De herroeping is niet gelukt. Probeer het opnieuw.',
   },
   newProject: {
     title: 'Nieuw project',

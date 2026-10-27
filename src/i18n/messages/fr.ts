@@ -410,6 +410,19 @@ export const fr = translation({
       where:
         'Les projets se suppriment, et les personnes se retirent, dans les Paramètres de chaque projet.',
     },
+    afterCancel: {
+      backToFree:
+        'Si vous résiliez, le compte revient à la formule gratuite à la fin de la période, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+      backToFreeOn:
+        'Le {date}, le compte revient à la formule gratuite, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+      backToFreeAtTheEnd:
+        'À la fin de la période, le compte revient à la formule gratuite, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+      ends: 'Si vous résiliez, le compte prend fin à la fin de la période. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+      endsOn:
+        'Le {date}, le compte prend fin. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+      endsAtTheEnd:
+        'À la fin de la période, le compte prend fin. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+    },
     notice: {
       suspended: 'Ce compte est suspendu, donc ses projets ne mesurent plus rien.',
       why: 'Voir pourquoi',
@@ -502,6 +515,31 @@ export const fr = translation({
     unavailable:
       'Stripe n’a pas pu résilier l’abonnement, donc rien n’a été fermé. Réessayez plus tard.',
     failed: 'Le compte n’a pas été fermé. Réessayez.',
+  },
+  withdrawal: {
+    heading: 'Rétractation',
+    note: 'Dans les 7 jours qui suivent le premier paiement, vous pouvez vous rétracter : l’abonnement est résilié immédiatement, ce paiement est intégralement remboursé et le compte revient à la formule gratuite, avec ses projets et ses données.',
+    start: 'Se rétracter de l’abonnement',
+    question:
+      'Se rétracter maintenant ? L’abonnement prend fin immédiatement et le premier paiement revient sur votre carte.',
+    confirm: 'Se rétracter et être remboursé',
+    keep: 'Garder l’abonnement',
+    withdrawing: 'Rétractation…',
+    done: 'Vous vous êtes rétracté de l’abonnement. Le compte est revenu à la formule gratuite.',
+    refunded: '{amount} ont été remboursés sur votre carte.',
+    refundByHand:
+      'Le remboursement automatique n’a pas abouti : Pyxis rembourse le premier paiement manuellement.',
+    fitBy:
+      'Le compte dépasse ce que permet la formule gratuite : mettez-le en conformité d’ici le {date}, sinon il prend fin ce jour-là.',
+    freePlanClosed:
+      'La formule gratuite est fermée pour le moment, il n’y a donc pas de formule à laquelle revenir. Pour arrêter le renouvellement, résiliez dans Gérer la facturation.',
+    noPaidSubscription:
+      'Ce compte n’a pas d’abonnement payant dont se rétracter. Rechargez la page.',
+    windowClosed:
+      'Les 7 jours pour se rétracter sont passés. Pour arrêter le renouvellement, résiliez dans Gérer la facturation : la formule continue jusqu’à la fin de la période.',
+    unavailable:
+      'Stripe n’a pas pu résilier l’abonnement, donc rien n’a changé. Réessayez plus tard.',
+    failed: 'La rétractation n’a pas abouti. Réessayez.',
   },
   newProject: {
     title: 'Nouveau projet',

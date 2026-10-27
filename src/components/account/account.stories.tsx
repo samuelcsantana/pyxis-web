@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import type { Account, BillingRedirectOutcome, CloseAccountOutcome } from '@/domain/accounts';
+import type {
+  Account,
+  BillingRedirectOutcome,
+  CloseAccountOutcome,
+  WithdrawOutcome,
+} from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { demoAccountsWire } from '@/services/accounts/mock-accounts-service';
 import { english } from '@/test-utils/english';
@@ -13,6 +18,7 @@ if (DEMO === undefined) {
 const stay = (): Promise<BillingRedirectOutcome> => Promise.resolve({ kind: 'noBillingYet' });
 const refuseToClose = (): Promise<CloseAccountOutcome> =>
   Promise.resolve({ kind: 'confirmationMismatch' });
+const windowClosed = (): Promise<WithdrawOutcome> => Promise.resolve({ kind: 'windowClosed' });
 
 const meta = {
   title: 'Account/Account overview',
@@ -22,6 +28,9 @@ const meta = {
     account: DEMO,
     i18n: english,
     now: STORY_NOW,
+    freePlan: 'closed',
+    ownsAnotherFreeAccount: false,
+    withdraw: windowClosed,
     openCheckout: stay,
     subscribe: stay,
     openPortal: stay,
@@ -209,6 +218,40 @@ export const FreePlanToFitInPortuguese: Story = {
 export const FreePlanInPortuguese: Story = {
   args: { account: FREE_PLAN },
   globals: { locale: 'pt-BR' },
+};
+
+const PAID: Account = {
+  ...DEMO,
+  status: 'active',
+  trialEndsAt: null,
+  currentPeriodEndsAt: '2026-12-20T12:00:00.000Z',
+  projectCount: 1,
+  peopleCount: 1,
+};
+
+export const PaidThatFitsTheFreePlan: Story = { args: { account: PAID, freePlan: 'open' } };
+
+export const PaidThatDoesNotFitTheFreePlan: Story = {
+  args: { account: { ...PAID, projectCount: 3, peopleCount: 2 }, freePlan: 'open' },
+};
+
+export const PaidCancelledBackToTheFreePlan: Story = {
+  args: {
+    account: { ...PAID, status: 'ending', accessEndsAt: '2026-12-20T12:00:00.000Z' },
+    freePlan: 'open',
+  },
+};
+
+export const PaidWithTheFreePlanFull: Story = { args: { account: PAID, freePlan: 'full' } };
+
+export const PaidThatFitsInPortuguese: Story = {
+  args: { account: PAID, freePlan: 'open' },
+  globals: { locale: 'pt-BR' },
+};
+
+export const PaidThatDoesNotFitInGerman: Story = {
+  args: { account: { ...PAID, projectCount: 2, peopleCount: 3 }, freePlan: 'open' },
+  globals: { locale: 'de' },
 };
 
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };

@@ -74,6 +74,7 @@ describe('RootLayout', () => {
       'billing',
       'exportEvents',
       'closeAccount',
+      'withdrawal',
       'newProject',
       'signUp',
     ]);

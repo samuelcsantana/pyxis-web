@@ -1,6 +1,11 @@
 import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { Account, BillingRedirectOutcome, CloseAccountOutcome } from '@/domain/accounts';
+import type {
+  Account,
+  BillingRedirectOutcome,
+  CloseAccountOutcome,
+  WithdrawOutcome,
+} from '@/domain/accounts';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { AccountOverview, type AccountOverviewProps } from './account-overview';
@@ -43,6 +48,9 @@ function overview(account: Partial<Account> = {}, props: Partial<AccountOverview
       account={{ ...FREE, ...account }}
       i18n={english}
       now={NOW}
+      freePlan="open"
+      ownsAnotherFreeAccount={false}
+      withdraw={() => Promise.resolve<WithdrawOutcome>({ kind: 'noPaidSubscription' })}
       openCheckout={stay}
       subscribe={stay}
       openPortal={stay}
@@ -173,5 +181,91 @@ describe('AccountOverview on the free plan', () => {
     overview({ freePlanFitDueAt: '2026-12-20T12:00:00.000Z' });
 
     expect(screen.queryByText(/Make it fit by/)).not.toBeInTheDocument();
+  });
+});
+
+const PAID: Partial<Account> = {
+  status: 'active',
+  billingInterval: 'month',
+  currentPeriodEndsAt: '2026-12-01T00:00:00.000Z',
+  eventsThisMonth: 41_230,
+  limits: { eventsPerMonth: 100_000, projects: 3, people: 3, pauseAtEvents: 150_000 },
+};
+
+describe('AccountOverview of a paid account while the free plan is on', () => {
+  it('says cancelling takes an account that fits back to the free plan', () => {
+    overview(PAID);
+
+    expect(
+      screen.getByText(
+        'If you cancel, the account goes back to the free plan at the end of the period, with its projects and data: up to 10,000 events a month, and above that measuring pauses until the 1st.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
+  });
+
+  it('names the day a cancelled account goes back to the free plan', () => {
+    overview({ ...PAID, status: 'ending', accessEndsAt: '2026-12-01T00:00:00.000Z' });
+
+    expect(
+      screen.getByText(/^On Dec 1, 2026 the account goes back to the free plan/),
+    ).toBeInTheDocument();
+  });
+
+  it('says a cancelled account with no end date goes back at the end of the period', () => {
+    overview({ ...PAID, status: 'ending' });
+
+    expect(
+      screen.getByText(/^At the end of the period the account goes back to the free plan/),
+    ).toBeInTheDocument();
+  });
+
+  it('says what to remove for an account that does not fit, or it ends', () => {
+    overview({ ...PAID, projectCount: 3, peopleCount: 2 });
+
+    expect(
+      screen.getByText(
+        'If you cancel, the account ends at the end of the period. To keep it on the free plan instead, make it fit before then:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+      'Delete 2 projects: the free plan holds 1 project.',
+      'Remove 1 person: the free plan holds 1 person, you included.',
+    ]);
+  });
+
+  it.each([
+    [{ accessEndsAt: '2026-12-01T00:00:00.000Z' }, /^On Dec 1, 2026 the account ends\./],
+    [{}, /^At the end of the period the account ends\./],
+  ])('dates the end of a cancelled account that does not fit (%o)', (end, text) => {
+    overview({ ...PAID, status: 'ending', projectCount: 2, ...end });
+
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
+
+  it('promises nothing when the owner already has an account on the free plan', () => {
+    overview(PAID, { ownsAnotherFreeAccount: true });
+
+    expect(screen.queryByText(/^If you cancel/)).not.toBeInTheDocument();
+  });
+
+  it('offers to withdraw a paid account, and not one in its free trial', () => {
+    const { unmount } = overview(PAID);
+    expect(screen.getByRole('heading', { name: 'Withdrawal' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Withdraw from the subscription' }),
+    ).toBeInTheDocument();
+    unmount();
+
+    overview({ ...PAID, status: 'trialing', trialEndsAt: '2026-11-29T12:00:00.000Z' });
+    expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
+    expect(screen.getByText(/^If you cancel, the account goes back/)).toBeInTheDocument();
+  });
+
+  it('shows nothing new while the free plan is closed', () => {
+    overview(PAID, { freePlan: 'closed' });
+
+    expect(screen.queryByText(/free plan/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
   });
 });

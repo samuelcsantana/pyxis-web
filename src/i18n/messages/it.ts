@@ -402,6 +402,18 @@ export const it = translation({
       where:
         'I progetti si eliminano, e le persone si rimuovono, nelle Impostazioni di ciascun progetto.',
     },
+    afterCancel: {
+      backToFree:
+        'Se annulli, l’account torna al piano gratuito alla fine del periodo, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+      backToFreeOn:
+        'Il giorno {date} l’account torna al piano gratuito, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+      backToFreeAtTheEnd:
+        'Alla fine del periodo l’account torna al piano gratuito, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+      ends: 'Se annulli, l’account termina alla fine del periodo. Per tenerlo sul piano gratuito, adattalo prima:',
+      endsOn: 'Il giorno {date} l’account termina. Per tenerlo sul piano gratuito, adattalo prima:',
+      endsAtTheEnd:
+        'Alla fine del periodo l’account termina. Per tenerlo sul piano gratuito, adattalo prima:',
+    },
     notice: {
       suspended: 'Questo account è sospeso, quindi i suoi progetti hanno smesso di misurare.',
       why: 'Scopri perché',
@@ -494,6 +506,31 @@ export const it = translation({
     unavailable:
       'Stripe non è riuscito ad annullare l’abbonamento, quindi non è stato chiuso nulla. Riprova più tardi.',
     failed: 'L’account non è stato chiuso. Riprova.',
+  },
+  withdrawal: {
+    heading: 'Recesso',
+    note: 'Entro 7 giorni dal primo pagamento puoi recedere: l’abbonamento viene annullato subito, quel pagamento viene rimborsato per intero e l’account torna al piano gratuito, con i suoi progetti e i suoi dati.',
+    start: 'Recedi dall’abbonamento',
+    question:
+      'Recedere ora? L’abbonamento termina subito e il primo pagamento torna sulla tua carta.',
+    confirm: 'Recedi e ricevi il rimborso',
+    keep: 'Mantieni l’abbonamento',
+    withdrawing: 'Recesso in corso…',
+    done: 'Hai receduto dall’abbonamento. L’account è tornato al piano gratuito.',
+    refunded: '{amount} sono stati rimborsati sulla tua carta.',
+    refundByHand:
+      'Il rimborso automatico non è andato a buon fine, quindi Pyxis rimborsa il primo pagamento a mano.',
+    fitBy:
+      'L’account contiene più di quanto consente il piano gratuito: adattalo entro il giorno {date}, altrimenti termina quel giorno.',
+    freePlanClosed:
+      'Il piano gratuito è chiuso in questo momento, quindi non c’è un piano a cui tornare. Per fermare il rinnovo, annulla in Gestisci la fatturazione.',
+    noPaidSubscription:
+      'Questo account non ha un abbonamento a pagamento da cui recedere. Ricarica la pagina.',
+    windowClosed:
+      'I 7 giorni per recedere sono passati. Per fermare il rinnovo, annulla in Gestisci la fatturazione: il piano continua fino alla fine del periodo.',
+    unavailable:
+      'Stripe non è riuscito ad annullare l’abbonamento, quindi non è cambiato nulla. Riprova più tardi.',
+    failed: 'Il recesso non è andato a buon fine. Riprova.',
   },
   newProject: {
     title: 'Nuovo progetto',

@@ -412,6 +412,19 @@ export const de = translation({
       where:
         'Projekte löschst und Personen entfernst du in den Einstellungen des jeweiligen Projekts.',
     },
+    afterCancel: {
+      backToFree:
+        'Wenn du kündigst, kehrt das Konto am Ende des Zeitraums in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+      backToFreeOn:
+        'Am {date} kehrt das Konto in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+      backToFreeAtTheEnd:
+        'Am Ende des Zeitraums kehrt das Konto in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+      ends: 'Wenn du kündigst, endet das Konto am Ende des Zeitraums. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+      endsOn:
+        'Am {date} endet das Konto. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+      endsAtTheEnd:
+        'Am Ende des Zeitraums endet das Konto. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+    },
     notice: {
       suspended: 'Dieses Konto ist gesperrt, daher messen seine Projekte nicht mehr.',
       why: 'Grund ansehen',
@@ -504,6 +517,31 @@ export const de = translation({
     unavailable:
       'Stripe konnte das Abo nicht kündigen, daher wurde nichts geschlossen. Versuch es später erneut.',
     failed: 'Das Konto wurde nicht geschlossen. Versuch es erneut.',
+  },
+  withdrawal: {
+    heading: 'Widerruf',
+    note: 'Innerhalb von 7 Tagen nach der ersten Zahlung kannst du widerrufen: Das Abo wird sofort gekündigt, diese Zahlung wird vollständig erstattet, und das Konto kehrt mit seinen Projekten und Daten in den kostenlosen Plan zurück.',
+    start: 'Abo widerrufen',
+    question:
+      'Jetzt widerrufen? Das Abo endet sofort, und die erste Zahlung geht zurück auf deine Karte.',
+    confirm: 'Widerrufen und Erstattung erhalten',
+    keep: 'Abo behalten',
+    withdrawing: 'Wird widerrufen…',
+    done: 'Du hast das Abo widerrufen. Das Konto ist wieder im kostenlosen Plan.',
+    refunded: '{amount} wurden auf deine Karte erstattet.',
+    refundByHand:
+      'Die automatische Erstattung hat nicht geklappt, daher erstattet Pyxis die erste Zahlung von Hand.',
+    fitBy:
+      'Das Konto enthält mehr, als der kostenlose Plan erlaubt: Pass es bis {date} an, sonst endet es an diesem Tag.',
+    freePlanClosed:
+      'Der kostenlose Plan ist gerade geschlossen, daher gibt es keinen Plan, in den das Konto zurückkehren kann. Um die Verlängerung zu stoppen, kündige unter Abrechnung verwalten.',
+    noPaidSubscription:
+      'Dieses Konto hat kein bezahltes Abo, das widerrufen werden kann. Lade die Seite neu.',
+    windowClosed:
+      'Die 7 Tage für den Widerruf sind vorbei. Um die Verlängerung zu stoppen, kündige unter Abrechnung verwalten: Der Plan läuft bis zum Ende des Zeitraums.',
+    unavailable:
+      'Stripe konnte das Abo nicht kündigen, daher hat sich nichts geändert. Versuch es später erneut.',
+    failed: 'Der Widerruf hat nicht geklappt. Versuch es erneut.',
   },
   newProject: {
     title: 'Neues Projekt',

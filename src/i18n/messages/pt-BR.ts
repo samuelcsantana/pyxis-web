@@ -396,6 +396,18 @@ export const ptBR = translation({
       people: 'Remova {count}: o plano grátis comporta {limit}, contando com você.',
       where: 'Projetos são apagados, e pessoas removidas, nas Configurações de cada projeto.',
     },
+    afterCancel: {
+      backToFree:
+        'Se você cancelar, a conta volta para o plano grátis no fim do período, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+      backToFreeOn:
+        'Em {date} a conta volta para o plano grátis, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+      backToFreeAtTheEnd:
+        'No fim do período a conta volta para o plano grátis, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+      ends: 'Se você cancelar, a conta termina no fim do período. Para mantê-la no plano grátis, ajuste-a antes disso:',
+      endsOn: 'Em {date} a conta termina. Para mantê-la no plano grátis, ajuste-a antes disso:',
+      endsAtTheEnd:
+        'No fim do período a conta termina. Para mantê-la no plano grátis, ajuste-a antes disso:',
+    },
     notice: {
       suspended: 'Esta conta está suspensa, então os projetos dela pararam de medir.',
       why: 'Ver o motivo',
@@ -484,6 +496,31 @@ export const ptBR = translation({
     unavailable:
       'O Stripe não conseguiu cancelar a assinatura, então nada foi encerrado. Tente mais tarde.',
     failed: 'A conta não foi encerrada. Tente de novo.',
+  },
+  withdrawal: {
+    heading: 'Desistência',
+    note: 'Nos 7 dias depois do primeiro pagamento, você pode desistir: a assinatura é cancelada na hora, esse pagamento é devolvido por inteiro e a conta volta para o plano grátis, com os projetos e os dados.',
+    start: 'Desistir da assinatura',
+    question:
+      'Desistir agora? A assinatura termina na hora e o primeiro pagamento volta para o seu cartão.',
+    confirm: 'Desistir e receber o reembolso',
+    keep: 'Manter a assinatura',
+    withdrawing: 'Desistindo…',
+    done: 'Você desistiu da assinatura. A conta voltou para o plano grátis.',
+    refunded: '{amount} foram devolvidos ao seu cartão.',
+    refundByHand:
+      'O reembolso automático não deu certo, então o Pyxis devolve o primeiro pagamento manualmente.',
+    fitBy:
+      'A conta tem mais do que o plano grátis comporta: ajuste-a até {date}, ou ela termina nesse dia.',
+    freePlanClosed:
+      'O plano grátis está fechado agora, então não há plano para onde voltar. Para parar a renovação, cancele em Gerenciar cobrança.',
+    noPaidSubscription:
+      'Esta conta não tem uma assinatura paga da qual desistir. Recarregue a página.',
+    windowClosed:
+      'Os 7 dias para desistir já passaram. Para parar a renovação, cancele em Gerenciar cobrança: o plano continua até o fim do período.',
+    unavailable:
+      'O Stripe não conseguiu cancelar a assinatura, então nada mudou. Tente mais tarde.',
+    failed: 'A desistência não foi feita. Tente de novo.',
   },
   newProject: {
     title: 'Novo projeto',

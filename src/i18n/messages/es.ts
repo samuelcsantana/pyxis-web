@@ -399,6 +399,18 @@ export const es = translation({
       where:
         'Los proyectos se borran, y las personas se quitan, en la Configuración de cada proyecto.',
     },
+    afterCancel: {
+      backToFree:
+        'Si cancelas, la cuenta vuelve al plan gratis al final del período, con sus proyectos y datos: hasta {events} eventos al mes, y por encima de eso la medición se pausa hasta el día 1.',
+      backToFreeOn:
+        'El {date} la cuenta vuelve al plan gratis, con sus proyectos y datos: hasta {events} eventos al mes, y por encima de eso la medición se pausa hasta el día 1.',
+      backToFreeAtTheEnd:
+        'Al final del período la cuenta vuelve al plan gratis, con sus proyectos y datos: hasta {events} eventos al mes, y por encima de eso la medición se pausa hasta el día 1.',
+      ends: 'Si cancelas, la cuenta termina al final del período. Para mantenerla en el plan gratis, ajústala antes:',
+      endsOn: 'El {date} la cuenta termina. Para mantenerla en el plan gratis, ajústala antes:',
+      endsAtTheEnd:
+        'Al final del período la cuenta termina. Para mantenerla en el plan gratis, ajústala antes:',
+    },
     notice: {
       suspended: 'Esta cuenta está suspendida, así que sus proyectos dejaron de medir.',
       why: 'Ver el motivo',
@@ -488,6 +500,31 @@ export const es = translation({
     unavailable:
       'Stripe no pudo cancelar la suscripción, así que no se cerró nada. Inténtalo más tarde.',
     failed: 'La cuenta no se cerró. Inténtalo de nuevo.',
+  },
+  withdrawal: {
+    heading: 'Desistimiento',
+    note: 'En los 7 días siguientes al primer pago puedes desistir: la suscripción se cancela al instante, ese pago se devuelve por completo y la cuenta vuelve al plan gratis, con sus proyectos y datos.',
+    start: 'Desistir de la suscripción',
+    question:
+      '¿Desistir ahora? La suscripción termina al instante y el primer pago vuelve a tu tarjeta.',
+    confirm: 'Desistir y recibir el reembolso',
+    keep: 'Mantener la suscripción',
+    withdrawing: 'Desistiendo…',
+    done: 'Desististe de la suscripción. La cuenta volvió al plan gratis.',
+    refunded: 'Se devolvieron {amount} a tu tarjeta.',
+    refundByHand:
+      'El reembolso automático no se completó, así que Pyxis devuelve el primer pago a mano.',
+    fitBy:
+      'La cuenta tiene más de lo que admite el plan gratis: ajústala antes del {date}, o termina ese día.',
+    freePlanClosed:
+      'El plan gratis está cerrado ahora, así que no hay un plan al que volver. Para detener la renovación, cancela en Gestionar la facturación.',
+    noPaidSubscription:
+      'Esta cuenta no tiene una suscripción de pago de la que desistir. Recarga la página.',
+    windowClosed:
+      'Ya pasaron los 7 días para desistir. Para detener la renovación, cancela en Gestionar la facturación: el plan sigue hasta el final del período.',
+    unavailable:
+      'Stripe no pudo cancelar la suscripción, así que nada cambió. Inténtalo más tarde.',
+    failed: 'El desistimiento no se hizo. Inténtalo de nuevo.',
   },
   newProject: {
     title: 'Nuevo proyecto',

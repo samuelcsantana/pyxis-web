@@ -383,6 +383,19 @@ export const en = {
       people: 'Remove {count}: the free plan holds {limit}, you included.',
       where: "Projects are deleted, and people removed, in each project's Settings.",
     },
+    afterCancel: {
+      backToFree:
+        'If you cancel, the account goes back to the free plan at the end of the period, with its projects and data: up to {events} events a month, and above that measuring pauses until the 1st.',
+      backToFreeOn:
+        'On {date} the account goes back to the free plan, with its projects and data: up to {events} events a month, and above that measuring pauses until the 1st.',
+      backToFreeAtTheEnd:
+        'At the end of the period the account goes back to the free plan, with its projects and data: up to {events} events a month, and above that measuring pauses until the 1st.',
+      ends: 'If you cancel, the account ends at the end of the period. To keep it on the free plan instead, make it fit before then:',
+      endsOn:
+        'On {date} the account ends. To keep it on the free plan instead, make it fit before then:',
+      endsAtTheEnd:
+        'At the end of the period the account ends. To keep it on the free plan instead, make it fit before then:',
+    },
     notice: {
       suspended: 'This account is suspended, so its projects stopped measuring.',
       why: 'See why',
@@ -471,6 +484,28 @@ export const en = {
     unavailable:
       'Stripe could not cancel the subscription, so nothing was closed. Try again later.',
     failed: 'The account was not closed. Try again.',
+  },
+  withdrawal: {
+    heading: 'Withdrawal',
+    note: 'Within 7 days of the first payment you can withdraw: the subscription is cancelled now, that payment is refunded in full, and the account goes back to the free plan with its projects and data.',
+    start: 'Withdraw from the subscription',
+    question:
+      'Withdraw now? The subscription ends at once and the first payment goes back to your card.',
+    confirm: 'Withdraw and get the refund',
+    keep: 'Keep the subscription',
+    withdrawing: 'Withdrawing…',
+    done: 'You withdrew from the subscription. The account is back on the free plan.',
+    refunded: '{amount} were refunded to your card.',
+    refundByHand:
+      'The automatic refund did not go through, so Pyxis refunds the first payment by hand.',
+    fitBy: 'The account holds more than the free plan: make it fit by {date}, or it ends that day.',
+    freePlanClosed:
+      'The free plan is closed right now, so there is no plan to go back to. To stop the renewal, cancel in Manage billing.',
+    noPaidSubscription: 'This account has no paid subscription to withdraw from. Reload the page.',
+    windowClosed:
+      'The 7 days to withdraw are over. To stop the renewal, cancel in Manage billing: the plan runs until the end of the period.',
+    unavailable: 'Stripe could not cancel the subscription, so nothing changed. Try again later.',
+    failed: 'The withdrawal did not go through. Try again.',
   },
   newProject: {
     title: 'New project',

@@ -2,12 +2,21 @@ import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
+import type { FreePlanState } from '@/domain/sign-up';
 import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import AccountPage, { DASHBOARD_HOME, generateMetadata } from './page';
 
-const state = vi.hoisted<{ accounts: () => Promise<readonly Account[]> }>(() => ({
+const state = vi.hoisted<{
+  accounts: () => Promise<readonly Account[]>;
+  freePlan: FreePlanState;
+}>(() => ({
   accounts: () => Promise.resolve([]),
+  freePlan: 'closed',
+}));
+
+vi.mock('@/lib/free-plan-state', () => ({
+  bestEffortFreePlanState: () => Promise.resolve(state.freePlan),
 }));
 
 vi.mock('@/services/accounts/accounts-service.factory', () => ({
@@ -39,6 +48,7 @@ vi.mock('next/navigation', () => ({
 describe('AccountPage', () => {
   beforeEach(() => {
     state.accounts = () => new MockAccountsService().list();
+    state.freePlan = 'closed';
   });
 
   it("shows the admin's owned account with its billing, and the way back", async () => {
@@ -49,12 +59,51 @@ describe('AccountPage', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('owner@example.com')).toBeInTheDocument();
     expect(screen.getByText(/Free trial until/)).toBeInTheDocument();
+    expect(screen.queryByText(/free plan/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close the account for good' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to the dashboard' })).toHaveAttribute(
       'href',
       DASHBOARD_HOME,
     );
+  });
+
+  it('shows a paying owner, while the free plan is on, what cancelling does and the withdrawal', async () => {
+    state.freePlan = 'open';
+    state.accounts = async () =>
+      (await new MockAccountsService().list()).map((account) => ({
+        ...account,
+        status: 'active',
+        trialEndsAt: null,
+        projectCount: 1,
+        peopleCount: 1,
+      }));
+
+    renderWithMessages(await AccountPage());
+
+    expect(
+      screen.getByText(/^If you cancel, the account goes back to the free plan/),
+    ).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Withdraw from the subscription' })).toBeVisible();
+  });
+
+  it('promises no free plan to an owner who already has an account on it', async () => {
+    state.freePlan = 'open';
+    state.accounts = async () => {
+      const [paid] = await new MockAccountsService().list();
+      if (paid === undefined) {
+        throw new Error('The demo has an account.');
+      }
+      return [
+        { ...paid, status: 'active', trialEndsAt: null, projectCount: 1, peopleCount: 1 },
+        { ...paid, id: 'free-account', status: 'free', billingInterval: null },
+      ];
+    };
+
+    renderWithMessages(await AccountPage());
+
+    expect(screen.queryByText(/^If you cancel/)).not.toBeInTheDocument();
   });
 
   it('explains that billing belongs to the owner when the admin owns no account', async () => {

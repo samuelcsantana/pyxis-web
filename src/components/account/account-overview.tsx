@@ -13,20 +13,26 @@ import {
   quotaShare,
   SUPPORT_EMAIL,
 } from '@/domain/accounts';
+import { canWithdraw } from '@/domain/free-plan';
+import type { FreePlanState } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
 import type { CloseAccount } from './close-account-form';
 import { CloseAccountSection } from './close-account-section';
-import { FreePlanFit } from './free-plan-fit';
+import { AfterCancellingNote, FreePlanFit } from './free-plan-fit';
+import { type Withdraw, WithdrawSection } from './withdraw-section';
 
 export interface AccountOverviewProps {
   readonly account: Account;
   readonly i18n: I18n;
   readonly now: Date;
+  readonly freePlan: FreePlanState;
+  readonly ownsAnotherFreeAccount: boolean;
   readonly openCheckout: OpenCheckout;
   readonly subscribe: OpenCheckout;
   readonly openPortal: OpenBillingPortal;
+  readonly withdraw: Withdraw;
   readonly close: CloseAccount;
 }
 
@@ -206,9 +212,12 @@ export function AccountOverview({
   account,
   i18n,
   now,
+  freePlan,
+  ownsAnotherFreeAccount,
   openCheckout,
   subscribe,
   openPortal,
+  withdraw,
   close,
 }: AccountOverviewProps) {
   return (
@@ -241,6 +250,13 @@ export function AccountOverview({
         <SubscribeFromFreePlan account={account} i18n={i18n} now={now} subscribe={subscribe} />
       ) : null}
       {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
+      <AfterCancellingNote
+        account={account}
+        i18n={i18n}
+        freePlan={freePlan}
+        ownsAnotherFreeAccount={ownsAnotherFreeAccount}
+      />
+      <WithdrawSection open={canWithdraw(account, freePlan)} withdraw={withdraw} />
       <CloseAccountSection
         open={canClose(account)}
         onFreePlan={account.status === 'free'}

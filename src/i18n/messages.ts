@@ -27,6 +27,7 @@ export const CLIENT_NAMESPACES = [
   'billing',
   'exportEvents',
   'closeAccount',
+  'withdrawal',
   'newProject',
   'signUp',
 ] as const satisfies readonly (keyof Messages)[];
