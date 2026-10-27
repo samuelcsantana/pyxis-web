@@ -709,6 +709,8 @@ export const nl = translation({
     free: 'Je account staat op het gratis abonnement.',
     freeLimits:
       'Maximaal {events} events per maand, {projects} en {people}, met alle functies en zonder kaart. Het meten pauzeert wanneer de maand {pauseAt} events bereikt en gaat op de 1e weer verder.',
+    fromFreePlan:
+      'Het account neemt nu tot {events} events per maand aan, {projects} en {people}. Als het meten gepauzeerd was, gaat het binnen een minuut weer verder.',
     next: 'Maak nu een project aan voor je site en installeer Pyxis erop.',
     create: 'Je eerste project aanmaken',
     dashboard: 'Dashboard openen',

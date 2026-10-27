@@ -695,6 +695,8 @@ export const ptBR = translation({
     free: 'Sua conta está no plano grátis.',
     freeLimits:
       'Até {events} eventos por mês, {projects} e {people}, com todas as funções e sem cartão. A medição pausa quando o mês chega a {pauseAt} eventos e volta no dia 1º.',
+    fromFreePlan:
+      'Agora a conta recebe até {events} eventos por mês, {projects} e {people}. Se a medição estava pausada, ela volta em até um minuto.',
     next: 'Agora crie um projeto para o seu site e instale o Pyxis nele.',
     create: 'Criar o primeiro projeto',
     dashboard: 'Abrir o painel',

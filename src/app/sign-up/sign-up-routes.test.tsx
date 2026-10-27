@@ -10,10 +10,12 @@ import SignUpPage, { DASHBOARD_HOME, generateMetadata } from './page';
 
 const state = vi.hoisted<{
   token: string | undefined;
+  backFromFreePlanCheckout: string | undefined;
   accounts: () => Promise<readonly Account[]>;
   status: () => Promise<SignUpStatus>;
 }>(() => ({
   token: undefined,
+  backFromFreePlanCheckout: undefined,
   accounts: () => Promise.resolve([]),
   status: () =>
     Promise.resolve({
@@ -26,6 +28,11 @@ const state = vi.hoisted<{
 
 vi.mock('@/services/session-token', () => ({
   sessionToken: () => Promise.resolve(state.token),
+}));
+
+vi.mock('@/lib/free-plan-checkout', () => ({
+  isBackFromFreePlanCheckout: (accountId: string) =>
+    Promise.resolve(state.backFromFreePlanCheckout === accountId),
 }));
 
 vi.mock('@/services/accounts/accounts-service.factory', () => ({
@@ -184,6 +191,10 @@ describe('SignUpPage', () => {
 });
 
 describe('WelcomePage', () => {
+  beforeEach(() => {
+    state.backFromFreePlanCheckout = undefined;
+  });
+
   function welcome(account: string | undefined = DEMO_ACCOUNT_ID) {
     return WelcomePage({ searchParams: Promise.resolve({ account }) });
   }
@@ -249,6 +260,42 @@ describe('WelcomePage', () => {
     expect(
       screen.queryByRole('link', { name: 'Create your first project' }),
     ).not.toBeInTheDocument();
+  });
+
+  it('waits for Stripe while a free account back from its Checkout is still free', async () => {
+    state.backFromFreePlanCheckout = DEMO_ACCOUNT_ID;
+    state.accounts = () =>
+      demoAccount({ status: 'free', billingInterval: null, trialEndsAt: null });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Confirming your subscription…');
+    expect(screen.queryByText('Your account is on the free plan.')).not.toBeInTheDocument();
+  });
+
+  it('confirms the subscription of an account that left the free plan, with its new limits', async () => {
+    state.backFromFreePlanCheckout = DEMO_ACCOUNT_ID;
+    state.accounts = () => demoAccount({ status: 'active', trialEndsAt: null, projectCount: 1 });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your subscription is confirmed.');
+    expect(
+      screen.getByText(
+        'The account now takes up to 100,000 events a month, 3 projects and 3 people. If measuring was paused, it resumes within a minute.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/public key/)).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: 'Open the dashboard' })).toHaveLength(1);
+  });
+
+  it('leads a paid account without a project to its first one', async () => {
+    state.accounts = () => demoAccount({ status: 'active', trialEndsAt: null, projectCount: 0 });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your subscription is confirmed.');
+    expect(screen.getByRole('link', { name: 'Create your first project' })).toBeInTheDocument();
   });
 
   it('waits for Stripe while an ended account that subscribed again is still ended', async () => {

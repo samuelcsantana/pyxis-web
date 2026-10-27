@@ -707,6 +707,8 @@ export const it = translation({
     free: 'Il tuo account è nel piano gratuito.',
     freeLimits:
       'Fino a {events} eventi al mese, {projects} e {people}, con tutte le funzioni e senza carta. La misurazione va in pausa quando il mese arriva a {pauseAt} eventi e riprende il giorno 1.',
+    fromFreePlan:
+      'Ora l’account accetta fino a {events} eventi al mese, {projects} e {people}. Se la misurazione era in pausa, riprende entro un minuto.',
     next: 'Ora crea un progetto per il tuo sito e installaci Pyxis.',
     create: 'Crea il tuo primo progetto',
     dashboard: 'Apri la dashboard',
