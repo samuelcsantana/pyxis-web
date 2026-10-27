@@ -92,3 +92,22 @@ export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const FreePlanOpen: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByText(/start free below, or run your own Pyxis/),
+    ).toBeVisible();
+  },
+};
+
+export const FreePlanOpenInPortuguese: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'pt-BR' },
+};
+
+export const FreePlanOpenInTheDarkTheme: Story = {
+  args: { offer: 'free' },
+  globals: { theme: 'dark' },
+};

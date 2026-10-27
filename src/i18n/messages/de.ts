@@ -1556,6 +1556,8 @@ export const de = translation({
   landing: {
     meta: {
       title: 'Was auf deiner Website konvertiert und was fehlschlägt, ohne Cookies · Pyxis',
+      descriptionFree:
+        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies, ohne IP, ohne personenbezogene Daten. Kostenlos bis zu {events} Ereignisse im Monat.',
       description:
         'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies, ohne IP, ohne personenbezogene Daten. 14 Tage kostenlos.',
     },
@@ -1578,6 +1580,12 @@ export const de = translation({
       openDemo: 'Live-Demo öffnen',
       seePricing: 'Preise ansehen',
       note: 'Ohne Registrierung. Erfundene Daten. Öffnet direkt das Dashboard.',
+      startFree: 'Kostenlos starten',
+      seePaidPlan: 'Kostenpflichtigen Plan ansehen',
+      freeNote:
+        'Kostenlos bis zu {events} Ereignisse im Monat auf einer Website, ohne Karte. Die Demo öffnet ohne Registrierung.',
+      freeFullNote:
+        'Der kostenlose Plan ist gerade voll: Registriere dich, dann wartet dein Konto auf einen Platz, oder abonniere den kostenpflichtigen Plan.',
       trialNote:
         '14 Tage kostenlos; die Karte wird erst am 15. Tag belastet. Die Demo öffnet ohne Registrierung.',
       claudeTag: 'Im Verzeichnis von Claude',
@@ -1784,6 +1792,8 @@ export const de = translation({
         label: 'So fängst du an, in 3 Schritten',
         account: {
           title: 'Konto und Projekt anlegen',
+          bodyFree:
+            'Im Dashboard, mit einer E-Mail und ohne Karte: Der kostenlose Plan umfasst eine Website. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
           body: 'Im Dashboard, mit einer E-Mail und einer Karte: 14 Tage kostenlos. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
         },
         install: {
@@ -1799,6 +1809,8 @@ export const de = translation({
       copied: 'Kopiert',
       selected: 'Markiert, drück Strg+C',
       note: 'Schlüssel vergibt, wer die API betreibt, und eine öffentliche Registrierung gibt es derzeit nicht. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
+      noteFree:
+        'Deine Schlüssel bekommst du mit deinem Konto: Starte unten kostenlos oder betreibe dein eigenes Pyxis. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
       noteOpen:
         'Deine Schlüssel bekommst du mit deinem Konto: Starte unten die kostenlose Testphase oder betreibe dein eigenes Pyxis. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
       requests:

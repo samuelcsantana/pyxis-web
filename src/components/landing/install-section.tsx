@@ -1,5 +1,5 @@
 import { TEXT_LINK } from '@/components/ui/control-classes';
-import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
+import { offersSignUp, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { CheerOnCopy } from './cheer-on-copy';
@@ -107,7 +107,13 @@ const INFO_ICON = 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 11v5.5 M12 7.5h.01';
 
 export const START_STEPS = ['account', 'install', 'ask'] as const;
 
-function StartSteps({ i18n }: { readonly i18n: I18n }) {
+function stepBodyOf(step: (typeof START_STEPS)[number], free: boolean) {
+  return free && step === 'account'
+    ? 'landing.install.steps.account.bodyFree'
+    : (`landing.install.steps.${step}.body` as const);
+}
+
+function StartSteps({ i18n, free }: { readonly i18n: I18n; readonly free: boolean }) {
   const { t } = i18n;
   return (
     <ol aria-label={t('landing.install.steps.label')} className="mb-7 grid gap-3 md:grid-cols-3">
@@ -124,9 +130,7 @@ function StartSteps({ i18n }: { readonly i18n: I18n }) {
           </span>
           <div className="flex flex-col gap-1">
             <h3 className="text-base font-semibold">{t(`landing.install.steps.${step}.title`)}</h3>
-            <p className="text-sm leading-normal text-muted">
-              {t(`landing.install.steps.${step}.body`)}
-            </p>
+            <p className="text-sm leading-normal text-muted">{t(stepBodyOf(step, free))}</p>
           </div>
         </li>
       ))}
@@ -239,9 +243,17 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
   );
 }
 
+function installNote({ t }: I18n, offer: SignUpOffer): string {
+  if (offersTheFreePlan(offer)) {
+    return t('landing.install.noteFree');
+  }
+  return offersSignUp(offer) ? t('landing.install.noteOpen') : t('landing.install.note');
+}
+
 export function InstallSection({ i18n, offer }: InstallSectionProps) {
   const { t } = i18n;
   const signUpOpen = offersSignUp(offer);
+  const free = offersTheFreePlan(offer);
   const labels = {
     copy: t('landing.install.copy'),
     copied: t('landing.install.copied'),
@@ -254,7 +266,7 @@ export function InstallSection({ i18n, offer }: InstallSectionProps) {
       title={t('landing.install.title')}
       lead={t('landing.install.lead')}
     >
-      {signUpOpen ? <StartSteps i18n={i18n} /> : null}
+      {signUpOpen ? <StartSteps i18n={i18n} free={free} /> : null}
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
         <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
           <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />
@@ -293,7 +305,7 @@ export function InstallSection({ i18n, offer }: InstallSectionProps) {
               strokeLinejoin="round"
             />
           </svg>
-          {signUpOpen ? t('landing.install.noteOpen') : t('landing.install.note')}
+          {installNote(i18n, offer)}
         </p>
       </div>
       {signUpOpen ? <AgentPrompt i18n={i18n} labels={labels} /> : null}

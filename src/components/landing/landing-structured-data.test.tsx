@@ -11,7 +11,7 @@ import {
 
 describe('LandingStructuredData', () => {
   it('describes Pyxis as free, MIT-licensed web software with its repositories', () => {
-    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE)).toMatchObject({
+    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE, 'trial')).toMatchObject({
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: 'Pyxis',
@@ -31,11 +31,20 @@ describe('LandingStructuredData', () => {
   });
 
   it('describes the Portuguese page in Portuguese, at its own address', () => {
-    const data = softwareApplicationOf(portuguese, landingPageOfLocale('pt-BR'));
+    const data = softwareApplicationOf(portuguese, landingPageOfLocale('pt-BR'), 'byInvitation');
 
     expect(data.url).toBe('https://pyxis-analytics.dev/pt-br');
     expect(data.inLanguage).toBe('pt-BR');
     expect(data.description).toContain('sem dado pessoal');
+  });
+
+  it('describes the free plan instead of the trial once it is open', () => {
+    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE, 'trial').description).toMatch(
+      /14 days free\.$/,
+    );
+    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE, 'free').description).toMatch(
+      /Free up to 10,000 events a month\.$/,
+    );
   });
 
   it('never lets a value close the script it is written into', () => {
@@ -44,7 +53,7 @@ describe('LandingStructuredData', () => {
 
   it('writes the description into a structured-data script', () => {
     const { container } = render(
-      <LandingStructuredData i18n={english} page={DEFAULT_LANDING_PAGE} />,
+      <LandingStructuredData i18n={english} page={DEFAULT_LANDING_PAGE} offer="trial" />,
     );
 
     const script = container.querySelector('script');

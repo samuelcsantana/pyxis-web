@@ -1,6 +1,6 @@
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import type { LandingPreviewView } from '@/domain/landing-preview';
-import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
+import { FREE_PLAN_EVENTS_PER_MONTH, type SignUpOffer } from '@/domain/sign-up';
 import { FOCUS_RING, CONTROL_TRANSITION } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
@@ -60,6 +60,49 @@ function TrialFirst({ i18n }: { readonly i18n: I18n }) {
   );
 }
 
+function FreeFirst({ i18n, full }: { readonly i18n: I18n; readonly full: boolean }) {
+  const { t } = i18n;
+  return (
+    <>
+      <div className="mt-1 flex flex-wrap gap-2.5">
+        <a
+          href={LANDING_LINKS.signUp}
+          className={LINK_PRIMARY}
+          {...trackAttributes(LANDING_EVENTS.signUpOpened, { from: 'hero', plan: 'free' })}
+        >
+          {t('landing.hero.startFree')}
+          <ArrowIcon />
+        </a>
+        <a
+          href={`#${PRICING_ID}`}
+          className={LINK_SECONDARY}
+          {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'hero' })}
+        >
+          {t('landing.hero.seePaidPlan')}
+        </a>
+      </div>
+      <p className="text-caption text-muted">
+        {full
+          ? t('landing.hero.freeFullNote')
+          : t('landing.hero.freeNote', { events: i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH) })}
+      </p>
+    </>
+  );
+}
+
+function HeroActions({ i18n, offer }: { readonly i18n: I18n; readonly offer: SignUpOffer }) {
+  switch (offer) {
+    case 'byInvitation':
+      return <DemoFirst i18n={i18n} />;
+    case 'trial':
+      return <TrialFirst i18n={i18n} />;
+    case 'free':
+      return <FreeFirst i18n={i18n} full={false} />;
+    case 'freeFull':
+      return <FreeFirst i18n={i18n} full />;
+  }
+}
+
 function DemoFirst({ i18n }: { readonly i18n: I18n }) {
   const { t } = i18n;
   return (
@@ -104,7 +147,7 @@ export function LandingHero({ i18n, preview, offer }: LandingHeroProps) {
             <p className="max-w-xl text-lg leading-relaxed text-pretty text-muted">
               {t('landing.hero.lead')}
             </p>
-            {offersSignUp(offer) ? <TrialFirst i18n={i18n} /> : <DemoFirst i18n={i18n} />}
+            <HeroActions i18n={i18n} offer={offer} />
             <a
               href={`#${ASK_CLAUDE_ID}`}
               className={`mt-1 inline-flex w-fit max-w-full items-center gap-2.5 rounded-pill border border-line-strong bg-card py-1.5 pr-4 pl-1.5 text-sm text-ink hover:border-muted hover:bg-soft active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`}

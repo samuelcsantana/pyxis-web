@@ -55,6 +55,36 @@ describe('LandingHero', () => {
     expect(screen.queryByRole('link', { name: 'Start your free trial' })).not.toBeInTheDocument();
   });
 
+  it('leads to starting free first and to the paid plan second, while the free plan is open', () => {
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="free" />);
+
+    const hero = screen.getByRole('region');
+    const [start, paid] = within(hero).getAllByRole('link');
+    expect(start).toHaveAccessibleName('Start free');
+    expect(start).toHaveAttribute('href', 'https://app.pyxis-analytics.dev/sign-up');
+    expect(start).toHaveAttribute('data-track', 'sign_up_opened');
+    expect(start).toHaveAttribute('data-track-from', 'hero');
+    expect(start).toHaveAttribute('data-track-plan', 'free');
+    expect(paid).toHaveAccessibleName('See the paid plan');
+    expect(paid).toHaveAttribute('href', '#pricing');
+    expect(paid).toHaveAttribute('data-track', 'pricing_opened');
+    expect(
+      screen.getByText(
+        'Free up to 10,000 events a month on one site, with no card. The demo opens without signing up.',
+      ),
+    ).toBeVisible();
+    expect(screen.queryByText(/free trial|day 15/)).not.toBeInTheDocument();
+  });
+
+  it('says the free plan is full for now, still leading to sign-up', () => {
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="freeFull" />);
+
+    expect(screen.getByRole('link', { name: 'Start free' })).toBeInTheDocument();
+    expect(
+      screen.getByText(/The free plan is full for now: sign up and your account waits/),
+    ).toBeVisible();
+  });
+
   it('announces the connector in Claude’s directory, leading to its section', () => {
     render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="trial" />);
 
@@ -83,5 +113,15 @@ describe('LandingHero', () => {
     expect(screen.getByRole('link', { name: 'Começar o teste grátis' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Abrir a demonstração' })).toBeInTheDocument();
     expect(screen.getByText(/o cartão só é cobrado no 15º dia/)).toBeInTheDocument();
+  });
+
+  it('offers the free plan in Brazilian Portuguese, in its numbers', () => {
+    render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} offer="free" />);
+
+    expect(screen.getByRole('link', { name: 'Começar grátis' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ver o plano pago' })).toBeInTheDocument();
+    expect(
+      screen.getByText(/Grátis até 10\.000 eventos por mês em um site, sem cartão\./),
+    ).toBeVisible();
   });
 });

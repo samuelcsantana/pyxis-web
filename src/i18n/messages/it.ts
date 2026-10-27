@@ -1537,6 +1537,8 @@ export const it = translation({
   landing: {
     meta: {
       title: 'Cosa converte e cosa fallisce sul tuo sito, senza cookie · Pyxis',
+      descriptionFree:
+        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie, senza IP, senza dati personali. Gratis fino a {events} eventi al mese.',
       description:
         'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie, senza IP, senza dati personali. 14 giorni gratis.',
     },
@@ -1558,6 +1560,12 @@ export const it = translation({
       openDemo: 'Apri la demo live',
       seePricing: 'Guarda i prezzi',
       note: 'Nessuna registrazione. Dati inventati. Si apre direttamente sulla dashboard.',
+      startFree: 'Inizia gratis',
+      seePaidPlan: 'Vedi il piano a pagamento',
+      freeNote:
+        'Gratis fino a {events} eventi al mese su un sito, senza carta. La demo si apre senza registrazione.',
+      freeFullNote:
+        'Il piano gratuito è pieno per ora: registrati e il tuo account aspetta un posto, oppure abbonati al piano a pagamento.',
       trialNote:
         '14 giorni gratis; la carta viene addebitata solo il quindicesimo giorno. La demo si apre senza registrazione.',
       claudeTag: 'Nella directory di Claude',
@@ -1764,6 +1772,8 @@ export const it = translation({
         label: 'Come iniziare, in 3 passaggi',
         account: {
           title: 'Crea l’account e il progetto',
+          bodyFree:
+            'Nella dashboard, con un’e-mail e senza carta: il piano gratuito copre un sito. Il progetto arriva già con la sua chiave pubblica.',
           body: 'Nella dashboard, con un’e-mail e una carta: 14 giorni gratis. Il progetto arriva già con la sua chiave pubblica.',
         },
         install: {
@@ -1779,6 +1789,8 @@ export const it = translation({
       copied: 'Copiato',
       selected: 'Selezionato, premi Ctrl+C',
       note: 'Le chiavi vengono rilasciate da chi gestisce l’API, e oggi non c’è una registrazione pubblica. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
+      noteFree:
+        'Le chiavi arrivano con il tuo account: inizia gratis qui sotto, oppure gestisci un tuo Pyxis. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
       noteOpen:
         'Le chiavi arrivano con il tuo account: inizia la prova gratuita qui sotto, oppure gestisci un tuo Pyxis. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
       requests:

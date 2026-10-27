@@ -47,3 +47,30 @@ export const Portuguese: Story = { globals: { locale: 'pt-BR' } };
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
+
+export const FreePlanOpen: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('link', { name: 'Start free' })).toBeVisible();
+    await expect(
+      within(canvasElement).getByRole('link', { name: 'See the paid plan' }),
+    ).toBeVisible();
+  },
+};
+
+export const FreePlanFull: Story = { args: { offer: 'freeFull' } };
+
+export const FreePlanOpenInPortuguese: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'pt-BR' },
+};
+
+export const FreePlanOpenOnAPhone: Story = {
+  args: { offer: 'free' },
+  globals: { viewport: { value: 'mobile1' } },
+};
+
+export const FreePlanOpenInTheDarkTheme: Story = {
+  args: { offer: 'free' },
+  globals: { theme: 'dark' },
+};

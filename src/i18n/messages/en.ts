@@ -1504,6 +1504,8 @@ export const en = {
   landing: {
     meta: {
       title: 'What converts and what fails on your site, without cookies · Pyxis',
+      descriptionFree:
+        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies, no IP, no personal data. Free up to {events} events a month.',
       description:
         'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies, no IP, no personal data. 14 days free.',
     },
@@ -1526,6 +1528,12 @@ export const en = {
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
+      startFree: 'Start free',
+      seePaidPlan: 'See the paid plan',
+      freeNote:
+        'Free up to {events} events a month on one site, with no card. The demo opens without signing up.',
+      freeFullNote:
+        'The free plan is full for now: sign up and your account waits for a place, or subscribe to the paid plan.',
       trialNote:
         '14 days free; the card is only charged on day 15. The demo opens without signing up.',
       claudeTag: 'In Claude’s directory',
@@ -1729,6 +1737,8 @@ export const en = {
         label: 'How to start, in 3 steps',
         account: {
           title: 'Create the account and the project',
+          bodyFree:
+            'In the dashboard, with an e-mail and no card: the free plan takes one site. The project comes with its public key.',
           body: 'In the dashboard, with an e-mail and a card: 14 days free. The project comes with its public key.',
         },
         install: {
@@ -1744,6 +1754,8 @@ export const en = {
       copied: 'Copied',
       selected: 'Selected, press Ctrl+C',
       note: 'Keys are issued by whoever runs the API, and there is no public sign-up today. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
+      noteFree:
+        'Your keys come with your account: start free below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
       noteOpen:
         'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
       requests:
