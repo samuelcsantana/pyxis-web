@@ -26,11 +26,21 @@ import {
 } from '@/domain/accounts';
 import { RateLimitedError } from '@/domain/errors';
 import { countdownLabel, emailProblem } from '@/domain/sign-in';
-import { type OpenSignUp, TRIAL_DAYS, type VerifySignUpOutcome } from '@/domain/sign-up';
+import {
+  FREE_PLAN_EVENTS_PER_MONTH,
+  type FreePlanState,
+  type OpenSignUp,
+  type StepAfterSignUp,
+  stepAfterSignUp,
+  TRIAL_DAYS,
+  type VerifySignUpOutcome,
+} from '@/domain/sign-up';
+import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import { rich } from '@/i18n/rich';
 import type { ISignUpService } from '@/services/sign-up/sign-up-service.interface';
 import { createSignUpService } from '@/services/sign-up/sign-up-service.factory';
+import { FreePlaceWait } from './free-place-wait';
 
 export type OpenCheckoutFor = (
   accountId: string,
@@ -40,13 +50,14 @@ export type OpenCheckoutFor = (
 export interface SignUpFormProps {
   readonly terms: OpenSignUp | null;
   readonly unfinishedAccountId?: string;
+  readonly unfinishedWaitsForAFreePlace?: boolean;
   readonly openCheckout: OpenCheckoutFor;
   readonly signUpService?: ISignUpService;
   readonly demoCode?: string;
   readonly initialInterval?: BillingInterval;
 }
 
-type Step = 'details' | 'code' | 'checkout';
+type Step = 'details' | 'code' | 'checkout' | 'opening' | 'waiting';
 type Failure =
   | 'emailMissing'
   | 'emailMalformed'
@@ -64,6 +75,11 @@ export const SIGN_UP_RESEND_WAIT_MS = 30_000;
 export const SIGN_UP_RESENT_NOTICE_MS = 8_000;
 export const ACCOUNT_PAGE_PATH = '/account';
 export const SIGN_IN_PATH = '/sign-in';
+export const DASHBOARD_PATH = '/';
+
+export function welcomePathOf(accountId: string): string {
+  return `/welcome?account=${encodeURIComponent(accountId)}`;
+}
 
 const MAX_EMAIL_LENGTH = 254;
 const NOT_A_DIGIT = /[^0-9]/g;
@@ -72,10 +88,17 @@ const EMAIL_ID = 'sign-up-email';
 const TERMS_ID = 'sign-up-terms';
 const CODE_ID = 'sign-up-code';
 const ERROR_ID = 'sign-up-error';
+const CARD_CLASS =
+  'flex w-full max-w-[440px] flex-col gap-4 rounded-panel border border-line bg-card p-8 text-ink';
 const INPUT_CLASS = `min-h-11.5 w-full rounded-input px-3.5 text-base placeholder:text-muted sm:text-callout ${FIELD}`;
 const PRIMARY_BUTTON_CLASS = `min-h-11.5 rounded-input px-4 text-callout ${BUTTON_PRIMARY} ${CONTROL_BUSY}`;
 const LINK_BUTTON_CLASS = `self-start text-sm ${TEXT_LINK} ${CONTROL_DISABLED}`;
 const INTERVAL_LABELS = { month: 'signUp.monthly', year: 'signUp.yearly' } as const;
+const TITLES = {
+  closed: 'signUp.title',
+  open: 'signUp.freeTitle',
+  full: 'signUp.fullTitle',
+} as const satisfies Record<FreePlanState, string>;
 const FAILURE_TEXT = {
   emailMissing: 'signIn.validation.emailMissing',
   emailMalformed: 'signIn.validation.emailMalformed',
@@ -99,6 +122,7 @@ function failureOf(error: unknown): Failure {
 export function SignUpForm({
   terms,
   unfinishedAccountId,
+  unfinishedWaitsForAFreePlace = false,
   openCheckout,
   signUpService,
   demoCode,
@@ -113,6 +137,8 @@ export function SignUpForm({
   const [email, setEmail] = useState('');
   const [accepted, setAccepted] = useState(false);
   const [acceptedVersion, setAcceptedVersion] = useState('');
+  const [freePlanAtSignUp, setFreePlanAtSignUp] = useState<FreePlanState>('closed');
+  const [newAccountId, setNewAccountId] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<Failure | null>(null);
@@ -172,16 +198,38 @@ export function SignUpForm({
       .subscribe();
   };
 
+  const checkOut = async (accountId: string): Promise<void> => {
+    checkingOut.current = true;
+    setStep('checkout');
+    const checkout = await openCheckout(accountId, interval);
+    if (checkout.kind === 'redirect') {
+      window.location.assign(checkout.url);
+      return;
+    }
+    setFailure('checkoutFailed');
+  };
+
+  const continueAfterSignUp = async (accountId: string, next: StepAfterSignUp): Promise<void> => {
+    if (next === 'checkout') {
+      await checkOut(accountId);
+      return;
+    }
+    if (next === 'waitForAFreePlace') {
+      setNewAccountId(accountId);
+      setStep('waiting');
+      return;
+    }
+    setStep('opening');
+    router.replace(next === 'welcome' ? welcomePathOf(accountId) : DASHBOARD_PATH);
+    router.refresh();
+  };
+
   const afterVerify = async (outcome: VerifySignUpOutcome): Promise<void> => {
     if (outcome.kind === 'verified') {
-      checkingOut.current = true;
-      setStep('checkout');
-      const checkout = await openCheckout(outcome.accountId, interval);
-      if (checkout.kind === 'redirect') {
-        window.location.assign(checkout.url);
-        return;
-      }
-      setFailure('checkoutFailed');
+      await continueAfterSignUp(
+        outcome.accountId,
+        stepAfterSignUp(outcome.accountStatus, freePlanAtSignUp),
+      );
       return;
     }
     setFailure(outcome.kind);
@@ -212,7 +260,7 @@ export function SignUpForm({
       .subscribe();
   };
 
-  const submitDetails = (event: SubmitEvent<HTMLFormElement>, termsVersion: string) => {
+  const submitDetails = (event: SubmitEvent<HTMLFormElement>, openTerms: OpenSignUp) => {
     event.preventDefault();
     const problem = emailProblem(email);
     if (problem === 'emailMissing' || problem === 'emailMalformed') {
@@ -224,7 +272,8 @@ export function SignUpForm({
       setFailure('termsMissing');
       return;
     }
-    setAcceptedVersion(termsVersion);
+    setAcceptedVersion(openTerms.termsVersion);
+    setFreePlanAtSignUp(openTerms.freePlan);
     sendCode(false);
   };
 
@@ -247,13 +296,23 @@ export function SignUpForm({
   };
 
   const errorText = failure === null ? null : t(FAILURE_TEXT[failure]);
+  const freePlanEvents = new Intl.NumberFormat(displayTag(locale)).format(
+    FREE_PLAN_EVENTS_PER_MONTH,
+  );
   const digits = String(SIGN_UP_CODE_LENGTH);
   const waitLeft = Math.max(0, resendAt - now);
   const fieldFailure = failure === 'emailMissing' || failure === 'emailMalformed';
 
+  if (step === 'waiting') {
+    return <FreePlaceWait subscribe={(chosen) => openCheckout(newAccountId, chosen)} />;
+  }
+
   if (unfinishedAccountId !== undefined && step === 'details') {
+    if (unfinishedWaitsForAFreePlace) {
+      return <FreePlaceWait subscribe={(chosen) => openCheckout(unfinishedAccountId, chosen)} />;
+    }
     return (
-      <section className="flex w-full max-w-[440px] flex-col gap-4 rounded-panel border border-line bg-card p-8 text-ink">
+      <section className={CARD_CLASS}>
         <h1 className="text-title font-semibold">{t('signUp.finishTitle')}</h1>
         <p className="text-sm text-muted">{t('signUp.finishBody')}</p>
         <BillingActions
@@ -268,9 +327,19 @@ export function SignUpForm({
     return null;
   }
 
+  if (step === 'opening') {
+    return (
+      <section className={CARD_CLASS}>
+        <p role="status" className="text-sm font-semibold">
+          {t('signUp.opening')}
+        </p>
+      </section>
+    );
+  }
+
   if (step === 'checkout') {
     return (
-      <section className="flex w-full max-w-[440px] flex-col gap-4 rounded-panel border border-line bg-card p-8 text-ink">
+      <section className={CARD_CLASS}>
         {failure === 'checkoutFailed' ? (
           <>
             <FieldError id={ERROR_ID} text={t('signUp.checkoutFailed')} />
@@ -293,41 +362,53 @@ export function SignUpForm({
         <form
           noValidate
           onSubmit={(event) => {
-            submitDetails(event, terms.termsVersion);
+            submitDetails(event, terms);
           }}
           className="flex flex-col gap-5"
         >
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-title font-semibold">{t('signUp.title')}</h1>
-            <p className="text-sm leading-5 text-muted">
-              {t('signUp.intro', { days: String(TRIAL_DAYS) })}
-            </p>
-            <p className="text-sm leading-5 text-muted">{t('signUp.oneTrial')}</p>
+            <h1 className="text-title font-semibold">{t(TITLES[terms.freePlan])}</h1>
+            {terms.freePlan === 'closed' ? (
+              <>
+                <p className="text-sm leading-5 text-muted">
+                  {t('signUp.intro', { days: String(TRIAL_DAYS) })}
+                </p>
+                <p className="text-sm leading-5 text-muted">{t('signUp.oneTrial')}</p>
+              </>
+            ) : (
+              <p className="text-sm leading-5 text-muted">
+                {terms.freePlan === 'open'
+                  ? t('signUp.freeIntro', { events: freePlanEvents })
+                  : t('signUp.fullIntro')}
+              </p>
+            )}
           </div>
-          <div className="flex flex-col gap-1.5">
-            <span id="sign-up-plan" className="text-caption font-medium">
-              {t('signUp.plan')}
-            </span>
-            <div
-              role="group"
-              aria-labelledby="sign-up-plan"
-              className={`self-start ${SEGMENTED_GROUP}`}
-            >
-              {BILLING_INTERVALS.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  aria-pressed={interval === option}
-                  onClick={() => {
-                    chooseInterval(option);
-                  }}
-                  className={`min-h-9 px-3 ${SEGMENTED_OPTION} ${interval === option ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
-                >
-                  {t(INTERVAL_LABELS[option])}
-                </button>
-              ))}
+          {terms.freePlan === 'closed' ? (
+            <div className="flex flex-col gap-1.5">
+              <span id="sign-up-plan" className="text-caption font-medium">
+                {t('signUp.plan')}
+              </span>
+              <div
+                role="group"
+                aria-labelledby="sign-up-plan"
+                className={`self-start ${SEGMENTED_GROUP}`}
+              >
+                {BILLING_INTERVALS.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={interval === option}
+                    onClick={() => {
+                      chooseInterval(option);
+                    }}
+                    className={`min-h-9 px-3 ${SEGMENTED_OPTION} ${interval === option ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+                  >
+                    {t(INTERVAL_LABELS[option])}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
           <div className="flex flex-col gap-1.5">
             <label htmlFor={EMAIL_ID} className="text-caption font-medium">
               {t('signUp.email')}

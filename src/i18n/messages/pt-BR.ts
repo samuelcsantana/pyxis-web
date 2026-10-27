@@ -411,6 +411,7 @@ export const ptBR = translation({
       'Assinar de novo ainda não está aberto no painel. Escreva para hello@pyxis-analytics.dev e reativamos a assinatura.',
     manage: 'Gerenciar cobrança',
     finish: 'Concluir a assinatura',
+    subscribe: 'Assinar agora',
     opening: 'Abrindo o Stripe…',
     interval: 'Cobrança',
     monthly: 'Mensal',
@@ -598,6 +599,15 @@ export const ptBR = translation({
     signIn: 'Entrar',
     finishTitle: 'Conclua a assinatura',
     finishBody: 'Sua conta está esperando um plano. Escolha um para começar o teste grátis.',
+    freeTitle: 'Crie sua conta grátis',
+    freeIntro: 'Grátis: até {events} eventos por mês, em um site. Sem cartão.',
+    fullTitle: 'Crie sua conta',
+    fullIntro:
+      'O plano grátis está cheio por enquanto. Crie sua conta e ela espera uma vaga, ou assine o plano pago logo em seguida.',
+    opening: 'Abrindo sua conta…',
+    waitTitle: 'O plano grátis está cheio por enquanto',
+    waitBody:
+      'Sua conta está pronta e espera uma vaga no plano grátis: avisamos por e-mail quando uma abrir, e ela espera até {days} dias. Você também pode assinar o plano pago agora.',
   },
   signUpPage: {
     title: 'Cadastro',

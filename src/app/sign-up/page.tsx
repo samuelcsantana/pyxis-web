@@ -4,7 +4,12 @@ import { redirect } from 'next/navigation';
 import { AuthFrame } from '@/components/sign-up/auth-frame';
 import { SignUpForm } from '@/components/sign-up/sign-up-form';
 import { TEXT_LINK } from '@/components/ui/control-classes';
-import { type Account, canCreateProjects, needsCheckout } from '@/domain/accounts';
+import {
+  type Account,
+  canCreateProjects,
+  needsCheckout,
+  waitsForAFreePlace,
+} from '@/domain/accounts';
 import { openSignUpOf, requestedIntervalOf } from '@/domain/sign-up';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
@@ -77,6 +82,7 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps = {})
         <SignUpForm
           terms={open}
           unfinishedAccountId={unfinished?.id}
+          unfinishedWaitsForAFreePlace={owned.some(waitsForAFreePlace)}
           openCheckout={openCheckout}
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
           initialInterval={requestedIntervalOf(query?.interval)}

@@ -398,6 +398,7 @@ export const en = {
       'Subscribing again is not open in the dashboard yet. Write to hello@pyxis-analytics.dev and we reactivate the subscription.',
     manage: 'Manage billing',
     finish: 'Finish subscription',
+    subscribe: 'Subscribe now',
     opening: 'Opening Stripe…',
     interval: 'Billing',
     monthly: 'Monthly',
@@ -584,6 +585,15 @@ export const en = {
     signIn: 'Sign in',
     finishTitle: 'Finish your subscription',
     finishBody: 'Your account is waiting for a plan. Choose one to start the free trial.',
+    freeTitle: 'Create your free account',
+    freeIntro: 'Free: up to {events} events a month, on one site. No card.',
+    fullTitle: 'Create your account',
+    fullIntro:
+      'The free plan is full for now. Create your account and it waits for a place, or subscribe to the paid plan right after.',
+    opening: 'Opening your account…',
+    waitTitle: 'The free plan is full for now',
+    waitBody:
+      'Your account is ready and waits for a place on the free plan: we e-mail you when one opens, and it waits up to {days} days. You can also subscribe to the paid plan now.',
   },
   signUpPage: {
     title: 'Sign up',

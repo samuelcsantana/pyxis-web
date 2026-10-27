@@ -23,7 +23,7 @@ export type OpenCheckout = (interval: BillingInterval) => Promise<BillingRedirec
 export type OpenBillingPortal = () => Promise<BillingRedirectOutcome>;
 
 export type BillingActionsProps =
-  | { readonly kind: 'checkout' | 'resubscribe'; readonly open: OpenCheckout }
+  | { readonly kind: 'checkout' | 'subscribe' | 'resubscribe'; readonly open: OpenCheckout }
   | { readonly kind: 'portal'; readonly open: OpenBillingPortal };
 
 type Refusal = 'noBillingYet' | 'subscriptionExists' | 'unavailable' | 'failed';
@@ -39,6 +39,7 @@ const REFUSALS = {
 const INTERVAL_LABELS = { month: 'billing.monthly', year: 'billing.yearly' } as const;
 const ACTION_LABELS = {
   checkout: 'billing.finish',
+  subscribe: 'billing.subscribe',
   resubscribe: 'billing.subscribeAgain',
   portal: 'billing.manage',
 } as const satisfies Record<BillingActionsProps['kind'], string>;

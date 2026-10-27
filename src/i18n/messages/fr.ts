@@ -428,6 +428,7 @@ export const fr = translation({
       'Le réabonnement n’est pas encore ouvert dans le tableau de bord. Écrivez à hello@pyxis-analytics.dev et nous réactiverons l’abonnement.',
     manage: 'Gérer la facturation',
     finish: 'Finaliser l’abonnement',
+    subscribe: 'S’abonner maintenant',
     opening: 'Ouverture de Stripe…',
     interval: 'Facturation',
     monthly: 'Mensuelle',
@@ -619,6 +620,15 @@ export const fr = translation({
     signIn: 'Se connecter',
     finishTitle: 'Finalisez votre abonnement',
     finishBody: 'Votre compte attend une formule. Choisissez-en une pour démarrer l’essai gratuit.',
+    freeTitle: 'Créez votre compte gratuit',
+    freeIntro: 'Gratuit : jusqu’à {events} événements par mois, sur un site. Sans carte.',
+    fullTitle: 'Créez votre compte',
+    fullIntro:
+      'La formule gratuite est complète pour le moment. Créez votre compte et il attend une place, ou souscrivez à la formule payante juste après.',
+    opening: 'Ouverture de votre compte…',
+    waitTitle: 'La formule gratuite est complète pour le moment',
+    waitBody:
+      'Votre compte est prêt et attend une place dans la formule gratuite : nous vous écrivons dès qu’une place se libère, et il attend jusqu’à {days} jours. Vous pouvez aussi souscrire à la formule payante dès maintenant.',
   },
   signUpPage: {
     title: 'Inscription',

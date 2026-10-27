@@ -430,6 +430,7 @@ export const de = translation({
       'Ein erneutes Abo ist im Dashboard noch nicht möglich. Schreib an hello@pyxis-analytics.dev, dann aktivieren wir das Abo wieder.',
     manage: 'Abrechnung verwalten',
     finish: 'Abo abschließen',
+    subscribe: 'Jetzt abonnieren',
     opening: 'Stripe wird geöffnet…',
     interval: 'Abrechnungszeitraum',
     monthly: 'Monatlich',
@@ -621,6 +622,15 @@ export const de = translation({
     finishTitle: 'Abo abschließen',
     finishBody:
       'Dein Konto wartet auf einen Plan. Wähle einen, um die kostenlose Testphase zu starten.',
+    freeTitle: 'Erstelle dein kostenloses Konto',
+    freeIntro: 'Kostenlos: bis zu {events} Ereignisse im Monat, auf einer Website. Ohne Karte.',
+    fullTitle: 'Erstelle dein Konto',
+    fullIntro:
+      'Der kostenlose Plan ist gerade voll. Erstelle dein Konto, dann wartet es auf einen Platz, oder abonniere gleich danach den kostenpflichtigen Plan.',
+    opening: 'Dein Konto wird geöffnet…',
+    waitTitle: 'Der kostenlose Plan ist gerade voll',
+    waitBody:
+      'Dein Konto ist bereit und wartet auf einen Platz im kostenlosen Plan: Wir schreiben dir, sobald einer frei wird, und es wartet bis zu {days} Tage. Du kannst auch jetzt den kostenpflichtigen Plan abonnieren.',
   },
   signUpPage: {
     title: 'Registrieren',
