@@ -1,4 +1,4 @@
-import { openSignUpOf } from '@/domain/sign-up';
+import { type OpenSignUp, openSignUpOf } from '@/domain/sign-up';
 import { signUpStatusOf } from '@/domain/sign-up.schema';
 import { landingIngestionUrl } from './landing-measurement-config';
 
@@ -11,10 +11,10 @@ type Fetcher = (
   init: RequestInit & { next?: { revalidate: number } },
 ) => Promise<Response>;
 
-export async function bestEffortSignUpIsOpen(
+export async function bestEffortOpenSignUp(
   apiOrigin: string = landingIngestionUrl(),
   fetcher: Fetcher = fetch,
-): Promise<boolean> {
+): Promise<OpenSignUp | null> {
   try {
     const response = await fetcher(`${apiOrigin}${SIGN_UP_STATUS_PATH}`, {
       next: { revalidate: SIGN_UP_STATUS_REVALIDATE_SECONDS },
@@ -24,11 +24,11 @@ export async function bestEffortSignUpIsOpen(
       console.warn(
         `sign-up status: the API answered ${String(response.status)}, showing it closed`,
       );
-      return false;
+      return null;
     }
-    return openSignUpOf(signUpStatusOf(await response.json())) !== null;
+    return openSignUpOf(signUpStatusOf(await response.json()));
   } catch (error) {
     console.warn('sign-up status: could not read it, showing it closed', error);
-    return false;
+    return null;
   }
 }

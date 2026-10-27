@@ -131,6 +131,8 @@ export const fr = translation({
       '<strong>Rien après quelques minutes ?</strong> Cette adresse n’a peut-être pas encore de compte Pyxis.',
     seePlans: 'Voir les formules',
     startTrial: 'Essai gratuit de 14 jours',
+    startFree: 'Commencer gratuitement',
+    createAccount: 'Créer un compte',
   },
   errorPanel: {
     title: 'Impossible de charger ces données',

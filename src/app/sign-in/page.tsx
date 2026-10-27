@@ -5,11 +5,12 @@ import { NoCodeHelp } from '@/components/sign-in/no-code-help';
 import { AuthFrame } from '@/components/sign-up/auth-frame';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import type { FreePlanState } from '@/domain/sign-up';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { rich } from '@/i18n/rich';
 import { isDemoMode } from '@/lib/api-config';
 import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
-import { bestEffortSignUpIsOpen } from '@/lib/landing-sign-up';
+import { bestEffortOpenSignUp } from '@/lib/landing-sign-up';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
@@ -18,6 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();
   return { title: t('signInPage.title') };
 }
+
+const SIGN_UP_LINKS = {
+  closed: 'signInPage.startTrial',
+  open: 'signInPage.startFree',
+  full: 'signInPage.createAccount',
+} as const satisfies Record<FreePlanState, string>;
 
 const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4';
 
@@ -31,6 +38,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const { t, locale } = i18n;
   const demo = isDemoMode();
   const plansHref = `${landingUrlOf(landingPageOfLocale(locale))}#${PRICING_ID}`;
+  const openSignUp = demo ? null : await bestEffortOpenSignUp();
   return (
     <AuthFrame i18n={i18n} theme={await chosenTheme()}>
       <SignInForm
@@ -60,10 +68,10 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <NoCodeHelp
               message={t('signInPage.noCode')}
               plans={{ label: t('signInPage.seePlans'), href: plansHref }}
-              trial={
-                (await bestEffortSignUpIsOpen())
-                  ? { label: t('signInPage.startTrial'), href: LANDING_LINKS.signUp }
-                  : undefined
+              signUp={
+                openSignUp === null
+                  ? undefined
+                  : { label: t(SIGN_UP_LINKS[openSignUp.freePlan]), href: LANDING_LINKS.signUp }
               }
             />
           )

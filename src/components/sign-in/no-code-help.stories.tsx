@@ -29,7 +29,11 @@ export const SignUpClosed: Story = {
 };
 
 export const SignUpOpen: Story = {
-  args: { trial: { label: 'Try it free for 14 days', href: '/sign-up' } },
+  args: { signUp: { label: 'Try it free for 14 days', href: '/sign-up' } },
+};
+
+export const FreePlanOpen: Story = {
+  args: { signUp: { label: 'Start free', href: '/sign-up' } },
 };
 
 export const Portuguese: Story = {
@@ -37,7 +41,7 @@ export const Portuguese: Story = {
     message:
       '<strong>Não chegou nada em alguns minutos?</strong> Talvez este e-mail ainda não tenha conta no Pyxis.',
     plans: { label: 'Ver planos', href: 'https://pyxis-analytics.dev/pt-br#pricing' },
-    trial: { label: 'Testar 14 dias grátis', href: '/sign-up' },
+    signUp: { label: 'Testar 14 dias grátis', href: '/sign-up' },
   },
 };
 

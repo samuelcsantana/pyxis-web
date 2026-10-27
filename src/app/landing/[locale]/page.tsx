@@ -53,7 +53,7 @@ import { landingIngestionUrl, landingTrackingKey } from '@/lib/landing-measureme
 import { legalConfig } from '@/lib/legal-config';
 import { requestNonce } from '@/lib/request-nonce';
 import { bestEffortEuroRates } from '@/lib/landing-exchange-rates';
-import { bestEffortSignUpIsOpen } from '@/lib/landing-sign-up';
+import { bestEffortOpenSignUp } from '@/lib/landing-sign-up';
 import {
   LANDING_PAGES,
   type LandingPage,
@@ -168,10 +168,11 @@ export default async function LandingHome({ params }: LandingHomeProps) {
   }
   const { page, i18n } = landing;
   const trackingKey = landingTrackingKey();
-  const [signUpOpen, euroRates] = await Promise.all([
-    bestEffortSignUpIsOpen(),
+  const [openSignUp, euroRates] = await Promise.all([
+    bestEffortOpenSignUp(),
     bestEffortEuroRates(),
   ]);
+  const signUpOpen = openSignUp !== null;
   const nonce = await requestNonce();
   return (
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
