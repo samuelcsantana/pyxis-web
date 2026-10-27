@@ -163,7 +163,10 @@ function UsageMeter({
       </p>
       {pausedUntil === null ? null : (
         <p className="text-sm font-medium text-bad">
-          {i18n.t('account.paused', { date: i18n.format.dayWithYear(new Date(pausedUntil)) })}
+          {i18n.t('account.paused', {
+            date: i18n.format.dayWithYear(new Date(pausedUntil)),
+            events: i18n.format.count(account.limits.pauseAtEvents),
+          })}
         </p>
       )}
       {exemptUntil === null ? null : (

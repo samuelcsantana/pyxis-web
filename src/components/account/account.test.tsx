@@ -35,7 +35,7 @@ const ACCOUNT: Account = {
   month: '2026-11',
   eventsThisMonth: 41_230,
   measuredAt: '2026-11-20T03:00:00.000Z',
-  limits: { eventsPerMonth: 100_000, projects: 3, people: 3 },
+  limits: { eventsPerMonth: 100_000, projects: 3, people: 3, pauseAtEvents: 150_000 },
 };
 
 const OPEN = {
@@ -95,7 +95,7 @@ describe('AccountOverview', () => {
       billingInterval: null,
       currentPeriodEndsAt: null,
       eventsThisMonth: 3_120,
-      limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+      limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
     });
 
     expect(screen.getByRole('heading', { name: 'Plan' })).toBeInTheDocument();
@@ -141,8 +141,30 @@ describe('AccountOverview', () => {
       ingestionPausedUntil: '2026-12-01T00:00:00.000Z',
     });
 
-    expect(screen.getByText(/Measuring is paused until Dec 1, 2026/)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Measuring is paused until Dec 1, 2026: the account reached 150,000 events this month.',
+      ),
+    ).toBeInTheDocument();
     expect(container.querySelector('.bg-bad')).toHaveStyle({ width: '100%' });
+  });
+
+  it('says a free account paused at its monthly events, the pause point the API answers', () => {
+    overview({
+      status: 'free',
+      billingInterval: null,
+      currentPeriodEndsAt: null,
+      eventsThisMonth: 10_000,
+      ingestionPausedUntil: '2026-12-01T00:00:00.000Z',
+      limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
+    });
+
+    expect(screen.getByText('10,000 of 10,000')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Measuring is paused until Dec 1, 2026: the account reached 10,000 events this month.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('offers to close an account that has not ended, and not one that has', () => {

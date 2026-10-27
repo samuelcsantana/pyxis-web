@@ -145,7 +145,7 @@ describe('ProjectLayout', () => {
           month: '2026-10',
           eventsThisMonth: 10,
           measuredAt: null,
-          limits: { eventsPerMonth: 100_000, projects: 3, people: 3 },
+          limits: { eventsPerMonth: 100_000, projects: 3, people: 3, pauseAtEvents: 150_000 },
         },
       ]);
 

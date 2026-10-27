@@ -161,10 +161,20 @@ const FREE_PLAN: Account = {
   trialEndsAt: null,
   currentPeriodEndsAt: null,
   eventsThisMonth: 3_120,
-  limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+  limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
 };
 
 export const FreePlan: Story = { args: { account: FREE_PLAN } };
+
+export const FreePlanPaused: Story = {
+  args: {
+    account: {
+      ...FREE_PLAN,
+      eventsThisMonth: 10_000,
+      ingestionPausedUntil: '2026-12-01T00:00:00.000Z',
+    },
+  },
+};
 
 export const FreePlanInPortuguese: Story = {
   args: { account: FREE_PLAN },

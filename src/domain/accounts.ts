@@ -30,6 +30,7 @@ export interface AccountLimits {
   readonly eventsPerMonth: number;
   readonly projects: number;
   readonly people: number;
+  readonly pauseAtEvents: number;
 }
 
 export interface Account {

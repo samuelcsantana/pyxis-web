@@ -366,7 +366,7 @@ export const ptBR = translation({
     usageCount: '{count} de {limit}',
     measured: 'Medido em {date}.',
     notMeasured: 'Ainda não medido neste mês.',
-    paused: 'A medição está pausada até {date}: a conta usou 150% dos eventos do mês.',
+    paused: 'A medição está pausada até {date}: a conta chegou a {events} eventos neste mês.',
     limits: 'Até {projects} e {people}, contando com você.',
     suspended:
       'Suspensa em {date}. Os projetos dela pararam de medir, e as telas deles ficam fechadas até a suspensão ser retirada.',

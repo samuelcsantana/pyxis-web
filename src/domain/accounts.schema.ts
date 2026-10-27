@@ -27,6 +27,7 @@ const accountWireSchema = z.object({
     events_per_month: z.number().int(),
     projects: z.number().int(),
     people: z.number().int(),
+    pause_at_events: z.number().int(),
   }),
 });
 
@@ -51,6 +52,7 @@ function fromWire(body: z.infer<typeof accountWireSchema>): Account {
       eventsPerMonth: body.limits.events_per_month,
       projects: body.limits.projects,
       people: body.limits.people,
+      pauseAtEvents: body.limits.pause_at_events,
     },
   };
 }

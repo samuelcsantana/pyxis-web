@@ -43,7 +43,7 @@ const ACCOUNT: Account = {
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
-  limits: { eventsPerMonth: 100_000, projects: 3, people: 3 },
+  limits: { eventsPerMonth: 100_000, projects: 3, people: 3, pauseAtEvents: 150_000 },
 };
 
 describe('accounts', () => {
@@ -204,7 +204,7 @@ describe('accounts on the wire', () => {
             month: '2026-11',
             events_this_month: 10_000,
             measured_at: '2026-11-20T03:00:00.000Z',
-            limits: { events_per_month: 100_000, projects: 3, people: 3 },
+            limits: { events_per_month: 100_000, projects: 3, people: 3, pause_at_events: 150_000 },
           },
         ],
       }),
@@ -230,7 +230,7 @@ describe('accounts on the wire', () => {
           month: '2026-11',
           events_this_month: 10_000,
           measured_at: '2026-11-20T03:00:00.000Z',
-          limits: { events_per_month: 100_000, projects: 3, people: 3 },
+          limits: { events_per_month: 100_000, projects: 3, people: 3, pause_at_events: 150_000 },
         },
       ],
     });
@@ -263,7 +263,7 @@ describe('accounts on the wire', () => {
           month: '2026-11',
           events_this_month: 3_120,
           measured_at: '2026-11-20T03:00:00.000Z',
-          limits: { events_per_month: 10_000, projects: 1, people: 1 },
+          limits: { events_per_month: 10_000, projects: 1, people: 1, pause_at_events: 10_000 },
         },
       ],
     });
@@ -274,7 +274,7 @@ describe('accounts on the wire', () => {
       billingInterval: null,
       currentPeriodEndsAt: null,
       eventsThisMonth: 3_120,
-      limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+      limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
     });
   });
 
