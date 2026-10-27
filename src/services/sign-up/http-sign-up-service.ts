@@ -68,7 +68,11 @@ export class HttpSignUpService implements ISignUpService {
     }
     const signedUp = signedUpOf(await response.json());
     await this.keepSession(signedUp.sessionToken);
-    return { kind: 'verified', accountId: signedUp.accountId };
+    return {
+      kind: 'verified',
+      accountId: signedUp.accountId,
+      accountStatus: signedUp.accountStatus,
+    };
   }
 
   private async post(path: string, body: Readonly<Record<string, string>>): Promise<Response> {
