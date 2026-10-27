@@ -1915,6 +1915,8 @@ export const en = {
       invite:
         'For now, access is by invitation: you ask, receive the payment link and, once subscribed, get access to the dashboard within 2 business days.',
       moreTitle: 'For agencies and developers',
+      moreFree:
+        'Measure your clients’ sites: each client signs in with their own e-mail and sees only their project. The paid plan has up to 3 sites and 3 people, you included. For more clients, say how many sites and people at hello@pyxis-analytics.dev and we reply within 2 business days with a plan that fits.',
       more: 'Measure your clients’ sites: each client signs in with their own e-mail and sees only their project. The plan has up to 3 sites and 3 people, you included. For more clients, say how many sites and people at hello@pyxis-analytics.dev and we reply within 2 business days with a plan that fits.',
       moreLink: 'Ask about a plan for agencies',
       moreSubject: 'A Pyxis plan for an agency',
@@ -1962,11 +1964,15 @@ export const en = {
             'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or subscribe to the hosted plan. To subscribe, request access at hello@pyxis-analytics.dev.',
           answerOpen:
             'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or subscribe to the hosted plan. Anyone in Brazil can sign up with an e-mail and a card: 14 days free, once per customer, and you cancel any time.',
+          answerFree:
+            'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or use the hosted Pyxis. Anyone in Brazil can sign up with an e-mail, with no card, on the free plan, and subscribe to the paid plan when the site needs more.',
         },
         agency: {
           question: 'Can I use Pyxis on my clients’ sites?',
           answer:
             'Yes. Create one project per site and add the client to the project’s people: they sign in with a code sent by e-mail and see only that project. The plan has up to 3 sites and 3 people, you included; for more, write to hello@pyxis-analytics.dev. The <terms>Terms of Use</terms> cover it: measuring, as an agency, the sites of clients who have authorized it is not reselling.',
+          answerFree:
+            'Yes. Create one project per site and add the client to the project’s people: they sign in with a code sent by e-mail and see only that project. The free plan has one site and only you; the paid plan has up to 3 sites and 3 people, you included; for more, write to hello@pyxis-analytics.dev. The <terms>Terms of Use</terms> cover it: measuring, as an agency, the sites of clients who have authorized it is not reselling.',
         },
         noCode: {
           question: 'I don’t code. Can I install it?',
@@ -1982,6 +1988,8 @@ export const en = {
           question: 'How much does it cost?',
           answer:
             'R$ 39 a month or R$ 390 a year (two months free), by card. It includes up to 100,000 events a month, 3 sites, 3 people in the dashboard, 13 months of history, the weekly digest and the MCP server.',
+          answerFree:
+            'Both plans have every feature: 13 months of history, the weekly digest and the MCP server. The free plan costs nothing and takes up to {events} events a month, on one site, with only you in the dashboard. The paid plan is R$ 39 a month or R$ 390 a year (two months free), by card, charged at once, and takes up to 100,000 events a month, 3 sites and 3 people.',
         },
         trial: {
           question: 'How does the free trial work?',
@@ -1994,11 +2002,18 @@ export const en = {
             'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends.',
           answerOpen:
             'Any time, in two ways: cancel in the subscription portal, and access lasts until the end of the paid period; or close the account in the dashboard, and access ends at once. Within 7 days of the first charge, closing the account refunds that charge in full; after that, the period already paid is not refunded. The project’s data is deleted 30 days after access ends. The <terms>Terms of Use</terms> have the details.',
+          answerFree:
+            'Any time, in the subscription portal: the paid plan lasts until the end of the period already paid, and then an account with one site and one person goes back to the free plan; a larger one ends, and its data is deleted 30 days later. Within 7 days of the first charge you can withdraw: the charge is refunded in full and the account goes back to the free plan when it fits. Closing the account in the dashboard ends it at once, on either plan. The <terms>Terms of Use</terms> have the details.',
         },
         limit: {
           question: 'What if I go over 100,000 events?',
           answer:
             'You get an e-mail at 80% and at 100% of the month’s events. At 150%, the account stops taking events until the 1st of the next month, and events sent during the pause are lost. Nothing is ever charged beyond the price.',
+        },
+        freeLimit: {
+          question: 'What happens at {events} events on the free plan?',
+          answer:
+            'On the free plan, an e-mail warns at 80% of the month’s events. At {events}, the account stops taking events until the 1st of the next month, and events sent during the pause are lost. Subscribing to the paid plan lifts the pause within a minute.',
         },
         payment: {
           question: 'Can I pay by Pix, and is there an invoice?',

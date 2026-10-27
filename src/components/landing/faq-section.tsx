@@ -2,7 +2,12 @@ import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { legalDocumentOf, legalUrlOf } from '@/lib/legal-documents';
-import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
+import {
+  FREE_PLAN_EVENTS_PER_MONTH,
+  offersSignUp,
+  offersTheFreePlan,
+  type SignUpOffer,
+} from '@/domain/sign-up';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
 
@@ -30,27 +35,63 @@ const QUESTIONS = [
   'limit',
   'payment',
 ] as const;
+const FREE_PLAN_QUESTIONS = [
+  'cookies',
+  'address',
+  'people',
+  'optOut',
+  'retention',
+  'claude',
+  'use',
+  'agency',
+  'noCode',
+  'aiInstall',
+  'price',
+  'freeLimit',
+  'cancel',
+  'limit',
+  'payment',
+] as const;
 const ANSWERED_DIFFERENTLY_WHEN_OPEN = ['use', 'cancel'] as const;
+const ANSWERED_DIFFERENTLY_ON_THE_FREE_PLAN = ['use', 'agency', 'price', 'cancel'] as const;
 const FIRST_OPEN = 'cookies';
 
-type Question = (typeof QUESTIONS)[number];
+type Question = (typeof QUESTIONS)[number] | (typeof FREE_PLAN_QUESTIONS)[number];
 type AnsweredDifferentlyWhenOpen = (typeof ANSWERED_DIFFERENTLY_WHEN_OPEN)[number];
+type AnsweredDifferentlyOnTheFreePlan = (typeof ANSWERED_DIFFERENTLY_ON_THE_FREE_PLAN)[number];
 
 function isAnsweredDifferentlyWhenOpen(
   question: Question,
 ): question is AnsweredDifferentlyWhenOpen {
   return (ANSWERED_DIFFERENTLY_WHEN_OPEN as readonly Question[]).includes(question);
 }
+
+function isAnsweredDifferentlyOnTheFreePlan(
+  question: Question,
+): question is AnsweredDifferentlyOnTheFreePlan {
+  return (ANSWERED_DIFFERENTLY_ON_THE_FREE_PLAN as readonly Question[]).includes(question);
+}
+
+function answerKeyOf(question: Question, offer: SignUpOffer) {
+  if (offersTheFreePlan(offer) && isAnsweredDifferentlyOnTheFreePlan(question)) {
+    return `landing.faq.items.${question}.answerFree` as const;
+  }
+  if (offersSignUp(offer) && isAnsweredDifferentlyWhenOpen(question)) {
+    return `landing.faq.items.${question}.answerOpen` as const;
+  }
+  return `landing.faq.items.${question}.answer` as const;
+}
 const FAQ_MOTION = 'landing-faq';
 
 export function FaqSection({ i18n, offer }: FaqSectionProps) {
   const { t } = i18n;
-  const signUpOpen = offersSignUp(offer);
   const terms = legalDocumentOf('terms', i18n.locale);
+  const events = i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH);
+  const questions = offersTheFreePlan(offer) ? FREE_PLAN_QUESTIONS : QUESTIONS;
   return (
     <LandingSection id={FAQ_ID} eyebrow={t('landing.faq.eyebrow')} title={t('landing.faq.title')}>
       <div className={`grid max-w-3xl gap-2 hyphens-auto wrap-anywhere ${FAQ_MOTION}`}>
-        {QUESTIONS.map((question) => (
+        {questions.map((question) => (
           <details
             key={question}
             open={question === FIRST_OPEN}
@@ -59,7 +100,7 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
             <summary
               className={`flex cursor-pointer list-none items-center justify-between gap-3 rounded-card px-4 py-3.5 text-base font-semibold [&::-webkit-details-marker]:hidden ${FOCUS_RING}`}
             >
-              {t(`landing.faq.items.${question}.question`)}
+              {t(`landing.faq.items.${question}.question`, { events })}
               <span
                 aria-hidden="true"
                 className="font-mono text-lg font-normal text-muted transition-transform duration-300 group-open:rotate-45 motion-reduce:transition-none"
@@ -68,23 +109,18 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
               </span>
             </summary>
             <p className="px-4 pb-4 text-base leading-relaxed text-muted">
-              {rich(
-                signUpOpen && isAnsweredDifferentlyWhenOpen(question)
-                  ? t(`landing.faq.items.${question}.answerOpen`)
-                  : t(`landing.faq.items.${question}.answer`),
-                {
-                  code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
-                  terms: (text) => (
-                    <a
-                      href={legalUrlOf(terms)}
-                      hrefLang={terms.locale}
-                      className="text-ink underline underline-offset-4"
-                    >
-                      {text}
-                    </a>
-                  ),
-                },
-              )}
+              {rich(t(answerKeyOf(question, offer), { events }), {
+                code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
+                terms: (text) => (
+                  <a
+                    href={legalUrlOf(terms)}
+                    hrefLang={terms.locale}
+                    className="text-ink underline underline-offset-4"
+                  >
+                    {text}
+                  </a>
+                ),
+              })}
             </p>
           </details>
         ))}

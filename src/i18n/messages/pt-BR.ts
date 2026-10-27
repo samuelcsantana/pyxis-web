@@ -1931,6 +1931,8 @@ export const ptBR = translation({
       invite:
         'Nesta fase, o acesso é por convite: você pede, recebe o link de pagamento e, depois de assinar, o acesso ao painel chega em até 2 dias úteis.',
       moreTitle: 'Para agências e devs',
+      moreFree:
+        'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O plano pago tem até 3 sites e 3 pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
       more: 'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O plano tem até 3 sites e 3 pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
       moreLink: 'Falar sobre um plano para agência',
       moreSubject: 'Um plano do Pyxis para agência',
@@ -1978,11 +1980,15 @@ export const ptBR = translation({
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Para assinar, peça acesso em hello@pyxis-analytics.dev.',
           answerOpen:
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail e um cartão: 14 dias grátis, uma vez por cliente, e você cancela quando quiser.',
+          answerFree:
+            'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou usando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail, sem cartão, no plano grátis, e assina o plano pago quando o site precisar de mais.',
         },
         agency: {
           question: 'Posso usar o Pyxis nos sites dos meus clientes?',
           answer:
             'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
+          answerFree:
+            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano grátis tem um site e só você; o plano pago tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
         },
         noCode: {
           question: 'Não programo. Consigo instalar?',
@@ -1998,6 +2004,8 @@ export const ptBR = translation({
           question: 'Quanto custa?',
           answer:
             'R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão. Inclui até 100 mil eventos por mês, 3 sites, 3 pessoas no painel, 13 meses de histórico, o resumo semanal e o servidor MCP.',
+          answerFree:
+            'Os dois planos têm todas as funções: 13 meses de histórico, o resumo semanal e o servidor MCP. O plano grátis não custa nada e recebe até {events} eventos por mês, em um site, só com você no painel. O plano pago custa R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão, com cobrança na hora, e recebe até 100 mil eventos por mês, 3 sites e 3 pessoas.',
         },
         trial: {
           question: 'Como funciona o teste grátis?',
@@ -2010,11 +2018,18 @@ export const ptBR = translation({
             'A qualquer momento, de dois jeitos: cancelando no portal da assinatura, e o acesso continua até o fim do período pago; ou encerrando a conta no painel, e o acesso termina na hora. Em até 7 dias da primeira cobrança, encerrar a conta devolve essa cobrança inteira; depois disso, o período já pago não é devolvido. Os dados do projeto são apagados 30 dias depois do fim do acesso.',
           answerOpen:
             'A qualquer momento, de dois jeitos: cancelando no portal da assinatura, e o acesso continua até o fim do período pago; ou encerrando a conta no painel, e o acesso termina na hora. Em até 7 dias da primeira cobrança, encerrar a conta devolve essa cobrança inteira; depois disso, o período já pago não é devolvido. Os dados do projeto são apagados 30 dias depois do fim do acesso. Os detalhes estão nos <terms>Termos de Uso</terms>.',
+          answerFree:
+            'A qualquer momento, no portal da assinatura: o plano pago continua até o fim do período já pago e, depois, uma conta com um site e uma pessoa volta para o plano grátis; uma maior termina, e os dados são apagados 30 dias depois. Em até 7 dias da primeira cobrança, você pode desistir: a cobrança é devolvida inteira e a conta volta para o plano grátis quando couber nele. Encerrar a conta no painel termina tudo na hora, em qualquer plano. Os detalhes estão nos <terms>Termos de Uso</terms>.',
         },
         limit: {
           question: 'E se eu passar de 100 mil eventos?',
           answer:
             'Você recebe um e-mail a 80% e a 100% dos eventos do mês. A 150%, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Nada é cobrado além do preço.',
+        },
+        freeLimit: {
+          question: 'E se eu chegar a {events} eventos no plano grátis?',
+          answer:
+            'No plano grátis, um e-mail avisa aos 80% dos eventos do mês. Aos {events}, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Assinar o plano pago tira a pausa em até um minuto.',
         },
         payment: {
           question: 'Tem Pix ou nota fiscal?',

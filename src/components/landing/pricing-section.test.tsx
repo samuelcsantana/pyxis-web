@@ -271,6 +271,7 @@ describe('PricingSection', () => {
       ).toBeInTheDocument();
       expect(screen.queryByText(/free trial|day 15|Request access/)).toBeNull();
       expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
+      expect(screen.getByText(/The paid plan has up to 3 sites and 3 people/)).toBeInTheDocument();
     });
 
     it('says the free plan is full for now on its card, still leading to sign-up', () => {

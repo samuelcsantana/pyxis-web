@@ -1973,6 +1973,8 @@ export const fr = translation({
       invite:
         'Pour l’instant, l’accès se fait sur invitation : vous en faites la demande, recevez le lien de paiement et, une fois abonné, obtenez l’accès au tableau de bord sous 2 jours ouvrés.',
       moreTitle: 'Pour les agences et les développeurs',
+      moreFree:
+        'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule payante comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
       more: 'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
       moreLink: 'Demander une formule pour agence',
       moreSubject: 'Une formule Pyxis pour agence',
@@ -2020,11 +2022,15 @@ export const fr = translation({
             'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou abonnez-vous à la formule hébergée. Pour vous abonner, demandez un accès à hello@pyxis-analytics.dev.',
           answerOpen:
             'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou abonnez-vous à la formule hébergée. Toute personne au Brésil peut s’inscrire avec un e-mail et une carte : 14 jours gratuits, une fois par client, et vous résiliez à tout moment.',
+          answerFree:
+            'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou utilisez le Pyxis hébergé. Toute personne au Brésil peut s’inscrire avec un e-mail, sans carte, avec la formule gratuite, et souscrire à la formule payante quand le site en demande plus.',
         },
         agency: {
           question: 'Puis-je utiliser Pyxis sur les sites de mes clients ?',
           answer:
             'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
+          answerFree:
+            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule gratuite comprend un site et vous seul ; la formule payante, jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
         },
         noCode: {
           question: 'Je ne code pas. Puis-je l’installer ?',
@@ -2040,6 +2046,8 @@ export const fr = translation({
           question: 'Combien ça coûte ?',
           answer:
             '39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte. Cela comprend jusqu’à 100 000 événements par mois, 3 sites, 3 personnes dans le tableau de bord, 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP.',
+          answerFree:
+            'Les deux formules ont toutes les fonctions : 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP. La formule gratuite ne coûte rien et accepte jusqu’à {events} événements par mois, sur un site, avec vous seul dans le tableau de bord. La formule payante coûte 39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte, débitée aussitôt, et accepte jusqu’à 100 000 événements par mois, 3 sites et 3 personnes.',
         },
         trial: {
           question: 'Comment fonctionne l’essai gratuit ?',
@@ -2052,11 +2060,18 @@ export const fr = translation({
             'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès.',
           answerOpen:
             'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
+          answerFree:
+            'À tout moment, dans le portail d’abonnement : la formule payante dure jusqu’à la fin de la période déjà payée, puis un compte avec un site et une personne revient à la formule gratuite ; un compte plus grand prend fin, et ses données sont supprimées 30 jours plus tard. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter : le prélèvement est remboursé en totalité et le compte revient à la formule gratuite s’il y tient. Fermer le compte dans le tableau de bord met fin à tout immédiatement, quelle que soit la formule. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
         },
         limit: {
           question: 'Et si je dépasse 100 000 événements ?',
           answer:
             'Vous recevez un e-mail à 80 % et à 100 % des événements du mois. À 150 %, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Rien n’est jamais facturé au-delà du prix.',
+        },
+        freeLimit: {
+          question: 'Et si j’atteins {events} événements avec la formule gratuite ?',
+          answer:
+            'Avec la formule gratuite, un e-mail prévient à 80 % des événements du mois. À {events}, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Souscrire à la formule payante lève la pause en moins d’une minute.',
         },
         payment: {
           question: 'Puis-je payer par Pix, et y a-t-il une facture ?',

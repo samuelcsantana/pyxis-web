@@ -1956,6 +1956,8 @@ export const it = translation({
       invite:
         'Per ora l’accesso è su invito: lo richiedi, ricevi il link di pagamento e, dopo l’abbonamento, ottieni l’accesso alla dashboard entro 2 giorni lavorativi.',
       moreTitle: 'Per agenzie e sviluppatori',
+      moreFree:
+        'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Il piano a pagamento comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
       more: 'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Il piano comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
       moreLink: 'Chiedi un piano per agenzie',
       moreSubject: 'Un piano Pyxis per agenzia',
@@ -2003,11 +2005,15 @@ export const it = translation({
             'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure abbonati al Pyxis ospitato. Per abbonarti, richiedi l’accesso a hello@pyxis-analytics.dev.',
           answerOpen:
             'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure abbonati al Pyxis ospitato. Chiunque in Brasile può registrarsi con un’email e una carta: 14 giorni gratis, una volta per cliente, e annulli quando vuoi.',
+          answerFree:
+            'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure usa il Pyxis ospitato. Chiunque in Brasile può registrarsi con un’email, senza carta, sul piano gratuito, e abbonarsi al piano a pagamento quando il sito ha bisogno di più.',
         },
         agency: {
           question: 'Posso usare Pyxis sui siti dei miei clienti?',
           answer:
             'Sì. Crea un progetto per sito e aggiungi il cliente alle persone del progetto: entra con un codice via e-mail e vede solo quel progetto. Il piano comprende fino a 3 siti e 3 persone, tu incluso; per di più, scrivi a hello@pyxis-analytics.dev. I <terms>Termini di utilizzo</terms> lo prevedono: misurare, come agenzia, i siti di clienti che l’hanno autorizzato non è rivendita.',
+          answerFree:
+            'Sì. Crea un progetto per sito e aggiungi il cliente alle persone del progetto: entra con un codice via e-mail e vede solo quel progetto. Il piano gratuito comprende un sito e solo te; il piano a pagamento fino a 3 siti e 3 persone, tu incluso; per di più, scrivi a hello@pyxis-analytics.dev. I <terms>Termini di utilizzo</terms> lo prevedono: misurare, come agenzia, i siti di clienti che l’hanno autorizzato non è rivendita.',
         },
         noCode: {
           question: 'Non programmo. Posso installarlo?',
@@ -2023,6 +2029,8 @@ export const it = translation({
           question: 'Quanto costa?',
           answer:
             'R$ 39 al mese o R$ 390 all’anno (due mesi gratis), con carta. Include fino a 100.000 eventi al mese, 3 siti, 3 persone nella dashboard, 13 mesi di storico, il riepilogo settimanale e il server MCP.',
+          answerFree:
+            'Entrambi i piani hanno tutte le funzioni: 13 mesi di storico, il riepilogo settimanale e il server MCP. Il piano gratuito non costa nulla e accetta fino a {events} eventi al mese, su un sito, con te solo nella dashboard. Il piano a pagamento costa R$ 39 al mese o R$ 390 all’anno (due mesi gratis), con carta, con addebito immediato, e accetta fino a 100.000 eventi al mese, 3 siti e 3 persone.',
         },
         trial: {
           question: 'Come funziona la prova gratuita?',
@@ -2035,11 +2043,18 @@ export const it = translation({
             'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso.',
           answerOpen:
             'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
+          answerFree:
+            'In qualsiasi momento, nel portale dell’abbonamento: il piano a pagamento dura fino alla fine del periodo già pagato, poi un account con un sito e una persona torna al piano gratuito; uno più grande termina, e i suoi dati vengono eliminati 30 giorni dopo. Entro 7 giorni dal primo addebito puoi recedere: l’addebito viene rimborsato per intero e l’account torna al piano gratuito se ci sta. Chiudere l’account nella dashboard termina tutto subito, con qualsiasi piano. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
         },
         limit: {
           question: 'E se supero i 100.000 eventi?',
           answer:
             'Ricevi un’email all’80% e al 100% degli eventi del mese. Al 150%, l’account smette di accettare eventi fino al primo del mese successivo, e gli eventi inviati durante la pausa vanno persi. Non viene mai addebitato nulla oltre al prezzo.',
+        },
+        freeLimit: {
+          question: 'E se arrivo a {events} eventi sul piano gratuito?',
+          answer:
+            'Sul piano gratuito, un’email avvisa all’80% degli eventi del mese. A {events}, l’account smette di accettare eventi fino al primo del mese successivo, e gli eventi inviati durante la pausa vanno persi. Abbonarsi al piano a pagamento toglie la pausa entro un minuto.',
         },
         payment: {
           question: 'Posso pagare con Pix, e c’è una fattura?',

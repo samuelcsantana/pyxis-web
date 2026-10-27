@@ -1976,6 +1976,8 @@ export const de = translation({
       invite:
         'Derzeit gibt es Zugang nur auf Einladung: Du fragst an, bekommst den Zahlungslink und, sobald du abonniert hast, innerhalb von 2 Werktagen Zugang zum Dashboard.',
       moreTitle: 'Für Agenturen und Entwickler',
+      moreFree:
+        'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der kostenpflichtige Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
       more: 'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
       moreLink: 'Nach einem Plan für Agenturen fragen',
       moreSubject: 'Ein Pyxis-Plan für eine Agentur',
@@ -2023,11 +2025,15 @@ export const de = translation({
             'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder abonniere den gehosteten Plan. Für ein Abo fragst du unter hello@pyxis-analytics.dev nach Zugang.',
           answerOpen:
             'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder abonniere den gehosteten Plan. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse und einer Karte registrieren: 14 Tage kostenlos, einmal pro Kunde, und du kannst jederzeit kündigen.',
+          answerFree:
+            'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder nutze das gehostete Pyxis. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse ohne Karte im kostenlosen Plan registrieren und den kostenpflichtigen Plan abonnieren, wenn die Website mehr braucht.',
         },
         agency: {
           question: 'Kann ich Pyxis auf den Websites meiner Kunden nutzen?',
           answer:
             'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
+          answerFree:
+            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der kostenlose Plan umfasst eine Website und nur dich, der kostenpflichtige Plan bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
         },
         noCode: {
           question: 'Ich programmiere nicht. Kann ich es installieren?',
@@ -2043,6 +2049,8 @@ export const de = translation({
           question: 'Was kostet es?',
           answer:
             'R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte. Enthalten sind bis zu 100.000 Ereignisse pro Monat, 3 Websites, 3 Personen im Dashboard, 13 Monate Verlauf, der Wochenbericht und der MCP-Server.',
+          answerFree:
+            'Beide Pläne haben alle Funktionen: 13 Monate Verlauf, den Wochenbericht und den MCP-Server. Der kostenlose Plan kostet nichts und nimmt bis zu {events} Ereignisse pro Monat auf einer Website an, nur mit dir im Dashboard. Der kostenpflichtige Plan kostet R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte, sofort berechnet, und nimmt bis zu 100.000 Ereignisse pro Monat, 3 Websites und 3 Personen an.',
         },
         trial: {
           question: 'Wie funktioniert die kostenlose Testphase?',
@@ -2055,11 +2063,18 @@ export const de = translation({
             'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugriffs gelöscht.',
           answerOpen:
             'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugriffs gelöscht. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
+          answerFree:
+            'Jederzeit, im Abo-Portal: Der kostenpflichtige Plan läuft bis zum Ende des bereits bezahlten Zeitraums, danach kehrt ein Konto mit einer Website und einer Person in den kostenlosen Plan zurück; ein größeres endet, und seine Daten werden 30 Tage später gelöscht. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen: Die Abbuchung wird vollständig erstattet, und das Konto kehrt in den kostenlosen Plan zurück, wenn es hineinpasst. Wenn du das Konto im Dashboard schließt, endet alles sofort, in jedem Plan. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
         },
         limit: {
           question: 'Was passiert, wenn ich über 100.000 Ereignisse komme?',
           answer:
             'Du bekommst eine E-Mail bei 80\u00a0% und bei 100\u00a0% der Ereignisse des Monats. Bei 150\u00a0% nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Über den Preis hinaus wird nie etwas berechnet.',
+        },
+        freeLimit: {
+          question: 'Was passiert bei {events} Ereignissen im kostenlosen Plan?',
+          answer:
+            'Im kostenlosen Plan warnt eine E-Mail bei 80\u00a0% der Ereignisse des Monats. Bei {events} nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Ein Abo des kostenpflichtigen Plans hebt die Pause innerhalb einer Minute auf.',
         },
         payment: {
           question: 'Kann ich per Pix zahlen, und gibt es eine Rechnung?',
