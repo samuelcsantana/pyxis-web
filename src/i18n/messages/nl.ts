@@ -432,6 +432,9 @@ export const nl = translation({
       endedHeld: 'Je abonnement is beëindigd. De verwijdering van de gegevens is opgeschort.',
       paused:
         'Het meten is gepauzeerd tot {date}: het account is over zijn maandlimiet aan events gegaan.',
+      freePlanPaused:
+        'Het meten is gepauzeerd: het account heeft deze maand de {events} events van het gratis abonnement bereikt. Het gaat op {date} weer verder, of binnen een minuut na het afsluiten van een abonnement.',
+      subscribe: 'Nu abonneren',
       nearQuota: 'Deze maand heeft het account {share} van zijn events gebruikt.',
       open: 'Facturatie openen',
     },

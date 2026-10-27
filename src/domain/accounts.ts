@@ -63,6 +63,7 @@ export type AccountNotice =
   | { readonly kind: 'ended'; readonly deletionOn: string }
   | { readonly kind: 'endedHeld' }
   | { readonly kind: 'paused'; readonly until: string }
+  | { readonly kind: 'freePlanPaused'; readonly until: string; readonly events: number }
   | { readonly kind: 'nearQuota'; readonly share: number };
 
 export type BillingRedirectOutcome =
@@ -192,7 +193,9 @@ export function accountNotice(account: Account, now: Date): AccountNotice | null
   }
   const pausedUntil = pausedUntilOf(account, now);
   if (pausedUntil !== null) {
-    return { kind: 'paused', until: pausedUntil };
+    return account.status === 'free'
+      ? { kind: 'freePlanPaused', until: pausedUntil, events: account.limits.pauseAtEvents }
+      : { kind: 'paused', until: pausedUntil };
   }
   const share = quotaShare(account);
   return share !== null && share >= QUOTA_WARNING_RATIO ? { kind: 'nearQuota', share } : null;

@@ -439,6 +439,9 @@ export const fr = translation({
       endedHeld: 'Votre abonnement est terminé. La suppression de ses données est bloquée.',
       paused:
         'La mesure est en pause jusqu’au {date} : le compte a dépassé ses événements mensuels.',
+      freePlanPaused:
+        'La mesure est en pause : le compte a atteint ce mois-ci les {events} événements de la formule gratuite. Elle reprend le {date}, ou dans la minute qui suit l’abonnement.',
+      subscribe: 'S’abonner maintenant',
       nearQuota: 'Ce mois-ci, le compte a utilisé {share} de ses événements.',
       open: 'Ouvrir la facturation',
     },
