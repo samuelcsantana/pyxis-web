@@ -269,3 +269,52 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
     expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
   });
 });
+
+describe('AccountOverview without the free trial, while the free plan is on', () => {
+  it('asks an unfinished sign-up to subscribe, charged from today', () => {
+    overview({ status: 'incomplete', eventsThisMonth: null, measuredAt: null });
+
+    expect(
+      screen.getByText(
+        'The subscription was not finished. Choose a plan to subscribe; it is charged from today.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
+  });
+
+  it('asks an ended account to subscribe again without naming a trial', () => {
+    overview({
+      status: 'ended',
+      billingInterval: 'month',
+      accessEndsAt: '2026-11-10T00:00:00.000Z',
+    });
+
+    expect(
+      screen.getByText(
+        'Subscribe again before Dec 10, 2026 to keep the data: the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('asks an ended account with no end date, or a held deletion, to subscribe again', () => {
+    overview({ status: 'ended', billingInterval: 'month' });
+
+    expect(
+      screen.getByText(
+        'Subscribe again to keep the data: the plan is charged from today, and the old keys stay revoked, so each project needs a new public key.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the trial in both texts while the free plan is closed', () => {
+    const { unmount } = overview(
+      { status: 'incomplete', eventsThisMonth: null, measuredAt: null },
+      { freePlan: 'closed' },
+    );
+    expect(screen.getByText(/to start the free trial\.$/)).toBeInTheDocument();
+    unmount();
+
+    overview({ status: 'ended', billingInterval: 'month' }, { freePlan: 'closed' });
+    expect(screen.getByText(/there is no new free trial/)).toBeInTheDocument();
+  });
+});

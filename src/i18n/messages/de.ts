@@ -366,7 +366,9 @@ export const de = translation({
         'Beendet am {date}. Die Projekte messen nicht mehr, und am {deletion} wird alles gelöscht.',
       incomplete:
         'Das Abo wurde nicht abgeschlossen. Wähle einen Plan, um die kostenlose Testphase zu starten.',
-      comped: 'Ein kostenloses Konto, von Pyxis bereitgestellt.',
+      incompleteFree:
+        'Das Abo wurde nicht abgeschlossen. Wähle einen Plan, um es abzuschließen; abgebucht wird ab heute.',
+      comped: 'Ein Konto, das Pyxis dir schenkt.',
       free: 'Kostenloser Plan: bis zu {events} Ereignisse im Monat.',
       trialingUndated: 'Kostenlose Testphase. Danach wird der Plan berechnet, außer du kündigst.',
       activeUndated: 'Aktiv.',
@@ -394,6 +396,10 @@ export const de = translation({
       'Schließ vor dem {date} erneut ein Abo ab, um die Daten zu behalten: Es gibt keine neue kostenlose Testphase, der Plan wird ab heute berechnet, und die alten Schlüssel bleiben widerrufen, also braucht jedes Projekt einen neuen öffentlichen Schlüssel.',
     resubscribeUndated:
       'Schließ erneut ein Abo ab, um die Daten zu behalten: Es gibt keine neue kostenlose Testphase, der Plan wird ab heute berechnet, und die alten Schlüssel bleiben widerrufen, also braucht jedes Projekt einen neuen öffentlichen Schlüssel.',
+    resubscribeFree:
+      'Schließ vor dem {date} erneut ein Abo ab, um die Daten zu behalten: Der Plan wird ab heute berechnet, und die alten Schlüssel bleiben widerrufen, also braucht jedes Projekt einen neuen öffentlichen Schlüssel.',
+    resubscribeFreeUndated:
+      'Schließ erneut ein Abo ab, um die Daten zu behalten: Der Plan wird ab heute berechnet, und die alten Schlüssel bleiben widerrufen, also braucht jedes Projekt einen neuen öffentlichen Schlüssel.',
     exempt:
       'Die Messung wird bis {date} nicht pausiert, auch wenn das Monatslimit überschritten wird.',
     freePause:

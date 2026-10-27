@@ -364,7 +364,9 @@ export const fr = translation({
         'Terminé le {date}. Les projets ne mesurent plus rien, et tout sera supprimé le {deletion}.',
       incomplete:
         'L’abonnement n’a pas été finalisé. Choisissez une formule pour démarrer l’essai gratuit.',
-      comped: 'Un compte gratuit, offert par Pyxis.',
+      incompleteFree:
+        'L’abonnement n’a pas été finalisé. Choisissez une formule pour vous abonner ; elle est facturée dès aujourd’hui.',
+      comped: 'Un compte offert par Pyxis.',
       free: 'Formule gratuite : jusqu’à {events} événements par mois.',
       trialingUndated: 'Essai gratuit. Ensuite, la formule est facturée, sauf si vous résiliez.',
       activeUndated: 'Actif.',
@@ -392,6 +394,10 @@ export const fr = translation({
       'Abonnez-vous à nouveau avant le {date} pour garder les données : il n’y a pas de nouvel essai gratuit, la formule est facturée dès aujourd’hui et les anciennes clés restent révoquées, donc chaque projet a besoin d’une nouvelle clé publique.',
     resubscribeUndated:
       'Abonnez-vous à nouveau pour garder les données : il n’y a pas de nouvel essai gratuit, la formule est facturée dès aujourd’hui et les anciennes clés restent révoquées, donc chaque projet a besoin d’une nouvelle clé publique.',
+    resubscribeFree:
+      'Abonnez-vous à nouveau avant le {date} pour garder les données : la formule est facturée dès aujourd’hui et les anciennes clés restent révoquées, donc chaque projet a besoin d’une nouvelle clé publique.',
+    resubscribeFreeUndated:
+      'Abonnez-vous à nouveau pour garder les données : la formule est facturée dès aujourd’hui et les anciennes clés restent révoquées, donc chaque projet a besoin d’une nouvelle clé publique.',
     exempt:
       'Jusqu’au {date}, la mesure n’est pas mise en pause en cas de dépassement de la limite mensuelle.',
     freePause:

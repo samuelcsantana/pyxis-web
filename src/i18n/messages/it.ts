@@ -356,7 +356,9 @@ export const it = translation({
         'Terminato il giorno {date}. I progetti hanno smesso di misurare e tutto viene eliminato il giorno {deletion}.',
       incomplete:
         'L’abbonamento non è stato completato. Scegli un piano per iniziare la prova gratuita.',
-      comped: 'Un account gratuito, offerto da Pyxis.',
+      incompleteFree:
+        'L’abbonamento non è stato completato. Scegli un piano per abbonarti; l’addebito parte da oggi.',
+      comped: 'Un account offerto da Pyxis.',
       free: 'Piano gratuito: fino a {events} eventi al mese.',
       trialingUndated: 'Prova gratuita. Poi il piano viene addebitato, a meno che tu non annulli.',
       activeUndated: 'Attivo.',
@@ -384,6 +386,10 @@ export const it = translation({
       'Abbonati di nuovo prima del giorno {date} per conservare i dati: non c’è una nuova prova gratuita, il piano viene addebitato da oggi e le vecchie chiavi restano revocate, quindi ogni progetto ha bisogno di una nuova chiave pubblica.',
     resubscribeUndated:
       'Abbonati di nuovo per conservare i dati: non c’è una nuova prova gratuita, il piano viene addebitato da oggi e le vecchie chiavi restano revocate, quindi ogni progetto ha bisogno di una nuova chiave pubblica.',
+    resubscribeFree:
+      'Abbonati di nuovo prima del giorno {date} per conservare i dati: il piano viene addebitato da oggi e le vecchie chiavi restano revocate, quindi ogni progetto ha bisogno di una nuova chiave pubblica.',
+    resubscribeFreeUndated:
+      'Abbonati di nuovo per conservare i dati: il piano viene addebitato da oggi e le vecchie chiavi restano revocate, quindi ogni progetto ha bisogno di una nuova chiave pubblica.',
     exempt:
       'Fino al giorno {date} la misurazione non va in pausa anche se si supera il limite mensile.',
     freePause:

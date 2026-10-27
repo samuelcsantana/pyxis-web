@@ -13,7 +13,7 @@ import {
   quotaShare,
   SUPPORT_EMAIL,
 } from '@/domain/accounts';
-import { canWithdraw } from '@/domain/free-plan';
+import { canWithdraw, isFreePlanOn } from '@/domain/free-plan';
 import type { FreePlanState } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
@@ -41,7 +41,7 @@ const FULL_SHARE = 1;
 const PERCENT = 100;
 const INTERVAL_LABELS = { month: 'account.monthly', year: 'account.yearly' } as const;
 
-function statusText(account: Account, i18n: I18n): string {
+function statusText(account: Account, i18n: I18n, freePlan: FreePlanState): string {
   const day = (iso: string) => i18n.format.dayWithYear(new Date(iso));
   switch (account.status) {
     case 'trialing':
@@ -61,7 +61,9 @@ function statusText(account: Account, i18n: I18n): string {
     case 'ended':
       return endedText(account, i18n);
     case 'incomplete':
-      return i18n.t('account.status.incomplete');
+      return isFreePlanOn(freePlan)
+        ? i18n.t('account.status.incompleteFree')
+        : i18n.t('account.status.incomplete');
     case 'comped':
       return i18n.t('account.status.comped');
     case 'free':
@@ -113,22 +115,28 @@ function Suspension({ account, i18n }: Pick<AccountOverviewProps, 'account' | 'i
   );
 }
 
-function resubscribeText(account: Account, i18n: I18n): string {
-  return account.accessEndsAt === null || isDeletionHeld(account)
-    ? i18n.t('account.resubscribeUndated')
-    : i18n.t('account.resubscribe', {
-        date: i18n.format.dayWithYear(new Date(deletionDateOf(account.accessEndsAt))),
-      });
+function resubscribeText(account: Account, i18n: I18n, freePlan: FreePlanState): string {
+  const withoutTrial = isFreePlanOn(freePlan);
+  if (account.accessEndsAt === null || isDeletionHeld(account)) {
+    return withoutTrial
+      ? i18n.t('account.resubscribeFreeUndated')
+      : i18n.t('account.resubscribeUndated');
+  }
+  const date = i18n.format.dayWithYear(new Date(deletionDateOf(account.accessEndsAt)));
+  return withoutTrial
+    ? i18n.t('account.resubscribeFree', { date })
+    : i18n.t('account.resubscribe', { date });
 }
 
 function SubscribeAgain({
   account,
   i18n,
+  freePlan,
   openCheckout,
-}: Pick<AccountOverviewProps, 'account' | 'i18n' | 'openCheckout'>) {
+}: Pick<AccountOverviewProps, 'account' | 'i18n' | 'freePlan' | 'openCheckout'>) {
   return (
     <div className="flex flex-col gap-3 border-t border-line pt-3">
-      <p className="text-sm">{resubscribeText(account, i18n)}</p>
+      <p className="text-sm">{resubscribeText(account, i18n, freePlan)}</p>
       <BillingActions kind="resubscribe" open={openCheckout} />
     </div>
   );
@@ -229,7 +237,7 @@ export function AccountOverview({
               interval: i18n.t(INTERVAL_LABELS[account.billingInterval]),
             })}
       </h2>
-      <p className="text-sm">{statusText(account, i18n)}</p>
+      <p className="text-sm">{statusText(account, i18n, freePlan)}</p>
       <Suspension account={account} i18n={i18n} />
       {isDeletionHeld(account) ? (
         <p className="text-sm font-medium">{i18n.t('account.deletionHeld')}</p>
@@ -244,7 +252,12 @@ export function AccountOverview({
       <FreePlanFit account={account} i18n={i18n} />
       {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
       {canSubscribeAgain(account) ? (
-        <SubscribeAgain account={account} i18n={i18n} openCheckout={openCheckout} />
+        <SubscribeAgain
+          account={account}
+          i18n={i18n}
+          freePlan={freePlan}
+          openCheckout={openCheckout}
+        />
       ) : null}
       {account.status === 'free' ? (
         <SubscribeFromFreePlan account={account} i18n={i18n} now={now} subscribe={subscribe} />

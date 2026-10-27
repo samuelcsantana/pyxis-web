@@ -358,7 +358,9 @@ export const nl = translation({
         'Beëindigd op {date}. De projecten meten niet meer, en alles wordt verwijderd op {deletion}.',
       incomplete:
         'Het abonnement is niet afgerond. Kies een abonnement om de gratis proefperiode te starten.',
-      comped: 'Een gratis account, aangeboden door Pyxis.',
+      incompleteFree:
+        'Het abonnement is niet afgerond. Kies een abonnement om af te sluiten; het wordt vanaf vandaag in rekening gebracht.',
+      comped: 'Een account aangeboden door Pyxis.',
       free: 'Gratis abonnement: maximaal {events} events per maand.',
       trialingUndated:
         'Gratis proefperiode. Daarna wordt het abonnement in rekening gebracht, tenzij je opzegt.',
@@ -387,6 +389,10 @@ export const nl = translation({
       'Neem vóór {date} opnieuw een abonnement om de gegevens te behouden: er is geen nieuwe gratis proefperiode, het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
     resubscribeUndated:
       'Neem opnieuw een abonnement om de gegevens te behouden: er is geen nieuwe gratis proefperiode, het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
+    resubscribeFree:
+      'Neem vóór {date} opnieuw een abonnement om de gegevens te behouden: het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
+    resubscribeFreeUndated:
+      'Neem opnieuw een abonnement om de gegevens te behouden: het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
     exempt: 'Tot {date} wordt het meten niet gepauzeerd als de maandlimiet wordt overschreden.',
     freePause:
       'Met het gratis abonnement pauzeert het meten zodra de maand {events} events bereikt, en het gaat op de 1e weer verder.',
