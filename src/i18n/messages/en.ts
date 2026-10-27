@@ -613,6 +613,9 @@ export const en = {
       'This takes a few seconds and the page checks again on its own. If it takes longer, you will get an e-mail when it is done.',
     trial: 'Your free trial has started. It runs until {date}.',
     active: 'Your subscription is confirmed.',
+    free: 'Your account is on the free plan.',
+    freeLimits:
+      'Up to {events} events a month, {projects} and {people}, with every feature and no card. Measuring pauses when the month reaches {pauseAt} events and comes back on the 1st.',
     next: 'Next, create a project for your site and install Pyxis on it.',
     create: 'Create your first project',
     dashboard: 'Open the dashboard',

@@ -202,6 +202,32 @@ describe('WelcomePage', () => {
     );
   });
 
+  it('welcomes an owner on the free plan with its limits, and offers the first project', async () => {
+    state.accounts = () =>
+      demoAccount({
+        status: 'free',
+        billingInterval: null,
+        trialEndsAt: null,
+        currentPeriodEndsAt: null,
+        limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
+      });
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your account is on the free plan.');
+    expect(
+      screen.getByText(
+        'Up to 10,000 events a month, 1 project and 1 person, with every feature and no card. Measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/subscription/)).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Create your first project' })).toHaveAttribute(
+      'href',
+      '/new-project',
+    );
+    expect(screen.getByRole('link', { name: 'Open the dashboard' })).toBeInTheDocument();
+  });
+
   it('confirms a trial whose end it does not know yet', async () => {
     state.accounts = () => demoAccount({ status: 'trialing', trialEndsAt: null });
 

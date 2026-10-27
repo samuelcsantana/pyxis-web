@@ -126,11 +126,14 @@ export function canSubscribeAgain(account: Account): boolean {
   return account.role === 'owner' && account.status === 'ended';
 }
 
-export type WelcomeStage = 'confirming' | 'firstSubscription' | 'subscriptionBack';
+export type WelcomeStage = 'confirming' | 'firstSubscription' | 'freePlan' | 'subscriptionBack';
 
 export function welcomeStage(account: Account): WelcomeStage {
   if (account.status === 'incomplete' || account.status === 'ended') {
     return 'confirming';
+  }
+  if (account.status === 'free') {
+    return 'freePlan';
   }
   return account.status === 'trialing' ? 'firstSubscription' : 'subscriptionBack';
 }

@@ -640,6 +640,9 @@ export const nl = translation({
       'Dit duurt een paar seconden en de pagina controleert vanzelf opnieuw. Duurt het langer, dan krijg je een e-mail zodra het klaar is.',
     trial: 'Je gratis proefperiode is gestart. Die loopt tot {date}.',
     active: 'Je abonnement is bevestigd.',
+    free: 'Je account staat op het gratis abonnement.',
+    freeLimits:
+      'Maximaal {events} events per maand, {projects} en {people}, met alle functies en zonder kaart. Het meten pauzeert wanneer de maand {pauseAt} events bereikt en gaat op de 1e weer verder.',
     next: 'Maak nu een project aan voor je site en installeer Pyxis erop.',
     create: 'Je eerste project aanmaken',
     dashboard: 'Dashboard openen',

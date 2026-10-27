@@ -633,6 +633,9 @@ export const es = translation({
       'Tarda unos segundos y la página vuelve a comprobar sola. Si tarda más, recibirás un correo cuando termine.',
     trial: 'Tu prueba gratis empezó. Dura hasta el {date}.',
     active: 'Tu suscripción está confirmada.',
+    free: 'Tu cuenta está en el plan gratis.',
+    freeLimits:
+      'Hasta {events} eventos al mes, {projects} y {people}, con todas las funciones y sin tarjeta. La medición se pausa cuando el mes llega a {pauseAt} eventos y vuelve el día 1.',
     next: 'Ahora crea un proyecto para tu sitio e instala Pyxis en él.',
     create: 'Crear el primer proyecto',
     dashboard: 'Abrir el panel',

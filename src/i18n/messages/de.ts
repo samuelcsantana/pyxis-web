@@ -650,6 +650,9 @@ export const de = translation({
       'Das dauert ein paar Sekunden, und die Seite prüft von selbst erneut. Dauert es länger, bekommst du eine E-Mail, sobald es erledigt ist.',
     trial: 'Deine kostenlose Testphase hat begonnen. Sie läuft bis {date}.',
     active: 'Dein Abo ist bestätigt.',
+    free: 'Dein Konto ist im kostenlosen Plan.',
+    freeLimits:
+      'Bis zu {events} Ereignisse im Monat, {projects} und {people}, mit allen Funktionen und ohne Karte. Die Messung pausiert, wenn der Monat {pauseAt} Ereignisse erreicht, und läuft am 1. wieder an.',
     next: 'Lege als Nächstes ein Projekt für deine Website an und installiere Pyxis darauf.',
     create: 'Erstes Projekt anlegen',
     dashboard: 'Dashboard öffnen',

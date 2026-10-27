@@ -627,6 +627,9 @@ export const ptBR = translation({
       'Isso leva alguns segundos e a página confere de novo sozinha. Se demorar, você recebe um e-mail quando terminar.',
     trial: 'Seu teste grátis começou. Ele vai até {date}.',
     active: 'Sua assinatura está confirmada.',
+    free: 'Sua conta está no plano grátis.',
+    freeLimits:
+      'Até {events} eventos por mês, {projects} e {people}, com todas as funções e sem cartão. A medição pausa quando o mês chega a {pauseAt} eventos e volta no dia 1º.',
     next: 'Agora crie um projeto para o seu site e instale o Pyxis nele.',
     create: 'Criar o primeiro projeto',
     dashboard: 'Abrir o painel',
