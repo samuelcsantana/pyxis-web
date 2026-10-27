@@ -3,6 +3,7 @@ import {
   type BillingRedirectOutcome,
   type CloseAccountOutcome,
   deletionDateOf,
+  type WithdrawOutcome,
 } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { TRIAL_DAYS } from '@/domain/sign-up';
@@ -76,5 +77,9 @@ export class MockAccountsService implements IAccountsService {
       deletionOn: deletionDateOf(accessEndsAt),
       refundedAmount: 0,
     });
+  }
+
+  withdraw(): Promise<WithdrawOutcome> {
+    return Promise.resolve({ kind: 'freePlanClosed' });
   }
 }

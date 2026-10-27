@@ -6,9 +6,11 @@ import {
   type BillingInterval,
   type BillingRedirectOutcome,
   type CloseAccountOutcome,
+  type WithdrawOutcome,
 } from '@/domain/accounts';
 import { currentLocale } from '@/i18n/current-locale';
 import { readOrSignIn } from '@/lib/current-admin';
+import { rememberFreePlanCheckout } from '@/lib/free-plan-checkout';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 
 const accountIdSchema = z.uuid();
@@ -37,6 +39,17 @@ export async function openCheckout(
   return readOrSignIn(() => createAccountsService().checkout(id, parsed.data, locale));
 }
 
+export async function subscribeFromFreePlan(
+  accountId: string,
+  interval: BillingInterval,
+): Promise<BillingRedirectOutcome> {
+  const outcome = await openCheckout(accountId, interval);
+  if (outcome.kind === 'redirect') {
+    await rememberFreePlanCheckout(accountIdOf(accountId));
+  }
+  return outcome;
+}
+
 export async function openBillingPortal(accountId: string): Promise<BillingRedirectOutcome> {
   const id = accountIdOf(accountId);
   const locale = await currentLocale();
@@ -53,4 +66,9 @@ export async function closeAccount(
     return { kind: 'confirmationMismatch' };
   }
   return readOrSignIn(() => createAccountsService().close(id, parsed.data));
+}
+
+export async function withdrawToFreePlan(accountId: string): Promise<WithdrawOutcome> {
+  const id = accountIdOf(accountId);
+  return readOrSignIn(() => createAccountsService().withdraw(id));
 }

@@ -3,6 +3,7 @@ import type {
   BillingInterval,
   BillingRedirectOutcome,
   CloseAccountOutcome,
+  WithdrawOutcome,
 } from '@/domain/accounts';
 import {
   billingRedirectResponseSchema,
@@ -11,6 +12,7 @@ import {
   closedAccountResponseSchema,
   myAccountsResponseSchema,
   portalWire,
+  withdrawnResponseSchema,
 } from '@/domain/accounts.schema';
 import { ApiNotFoundError, ApiRequestError } from '@/domain/errors';
 import type { ApiReader } from '../api-reader';
@@ -25,11 +27,23 @@ export const BILLING_ERROR_CODES = {
   unavailable: 'billing_unavailable',
   confirmationMismatch: 'confirmation_mismatch',
   accountEnded: 'account_ended',
+  freePlanClosed: 'free_plan_closed',
+  withdrawalUnavailable: 'withdrawal_unavailable',
+  withdrawalWindowClosed: 'withdrawal_window_closed',
 } as const;
+
+const NO_BODY = {};
 
 const CLOSURE_REFUSALS: ReadonlyMap<string, CloseAccountOutcome> = new Map([
   [BILLING_ERROR_CODES.confirmationMismatch, { kind: 'confirmationMismatch' }],
   [BILLING_ERROR_CODES.accountEnded, { kind: 'alreadyEnded' }],
+  [BILLING_ERROR_CODES.unavailable, { kind: 'unavailable' }],
+]);
+
+const WITHDRAWAL_REFUSALS: ReadonlyMap<string, WithdrawOutcome> = new Map([
+  [BILLING_ERROR_CODES.freePlanClosed, { kind: 'freePlanClosed' }],
+  [BILLING_ERROR_CODES.withdrawalUnavailable, { kind: 'noPaidSubscription' }],
+  [BILLING_ERROR_CODES.withdrawalWindowClosed, { kind: 'windowClosed' }],
   [BILLING_ERROR_CODES.unavailable, { kind: 'unavailable' }],
 ]);
 
@@ -43,12 +57,16 @@ function accountPath(accountId: string): string {
   return `/v1/accounts/${encodeURIComponent(accountId)}`;
 }
 
-function refusalOf(error: unknown): BillingRedirectOutcome | undefined {
+function refusalIn<Outcome>(
+  refusals: ReadonlyMap<string, Outcome>,
+  unknownRoute: Outcome,
+  error: unknown,
+): Outcome | undefined {
   if (error instanceof ApiNotFoundError) {
-    return { kind: 'unavailable' };
+    return unknownRoute;
   }
   return error instanceof ApiRequestError && error.code !== null
-    ? REFUSALS.get(error.code)
+    ? refusals.get(error.code)
     : undefined;
 }
 
@@ -94,12 +112,29 @@ export class HttpAccountsService implements IAccountsService {
     }
   }
 
+  async withdraw(accountId: string): Promise<WithdrawOutcome> {
+    try {
+      const withdrawn = await this.writer.post(
+        `${accountPath(accountId)}/withdraw`,
+        NO_BODY,
+        withdrawnResponseSchema,
+      );
+      return { kind: 'withdrawn', ...withdrawn };
+    } catch (error) {
+      const refusal = refusalIn(WITHDRAWAL_REFUSALS, { kind: 'unavailable' }, error);
+      if (refusal === undefined) {
+        throw error;
+      }
+      return refusal;
+    }
+  }
+
   private async redirect(path: string, body: unknown): Promise<BillingRedirectOutcome> {
     try {
       const url = await this.writer.post(path, body, billingRedirectResponseSchema);
       return { kind: 'redirect', url };
     } catch (error) {
-      const refusal = refusalOf(error);
+      const refusal = refusalIn(REFUSALS, { kind: 'unavailable' }, error);
       if (refusal === undefined) {
         throw error;
       }
