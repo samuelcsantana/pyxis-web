@@ -6,6 +6,8 @@ import {
 } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { TRIAL_DAYS } from '@/domain/sign-up';
+import { DEMO_PROJECTS } from '../demo/demo-projects';
+import { demoPeopleWire } from '../project-people/mock-project-people-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
 import { DEMO_OWNER_EMAIL } from '../projects/mock-projects-service';
 import type { IAccountsService } from './accounts-service.interface';
@@ -36,6 +38,9 @@ export function demoAccountsWire(now: Date) {
         deletion_held_at: null,
         quota_pause_exempt_until: null,
         free_waitlisted_at: null,
+        free_plan_fit_due_at: null,
+        project_count: DEMO_PROJECTS.length,
+        people_count: demoPeopleWire().people.length,
         month: now.toISOString().slice(0, 7),
         events_this_month: DEMO_EVENTS_THIS_MONTH,
         measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
