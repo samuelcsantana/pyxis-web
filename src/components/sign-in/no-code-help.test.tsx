@@ -14,7 +14,7 @@ describe('NoCodeHelp', () => {
     expect(screen.getByText(/may not have a Pyxis account yet/)).toBeInTheDocument();
   });
 
-  it('leads to the plans, and to the free trial only when sign-up is open', () => {
+  it('leads to the plans, and to sign-up only when it is open', () => {
     const { rerender } = render(<NoCodeHelp message={MESSAGE} plans={PLANS} />);
 
     expect(screen.getByRole('link', { name: 'See the plans' })).toHaveAttribute(
@@ -27,7 +27,7 @@ describe('NoCodeHelp', () => {
       <NoCodeHelp
         message={MESSAGE}
         plans={PLANS}
-        trial={{ label: 'Try it free for 14 days', href: '/sign-up' }}
+        signUp={{ label: 'Try it free for 14 days', href: '/sign-up' }}
       />,
     );
     expect(screen.getByRole('link', { name: 'Try it free for 14 days' })).toHaveAttribute(

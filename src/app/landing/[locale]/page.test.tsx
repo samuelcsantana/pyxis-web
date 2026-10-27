@@ -22,7 +22,16 @@ vi.mock('@/components/landing/measurement/measurement-note', () => ({
 const signUp = vi.hoisted(() => ({ open: false }));
 
 vi.mock('@/lib/landing-sign-up', () => ({
-  bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
+  bestEffortOpenSignUp: () =>
+    Promise.resolve(
+      signUp.open
+        ? {
+            termsVersion: '1.2',
+            termsUrl: 'https://pyxis-analytics.dev/termos',
+            freePlan: 'closed',
+          }
+        : null,
+    ),
 }));
 
 const exchange = vi.hoisted(() => ({

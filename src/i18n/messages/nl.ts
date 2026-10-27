@@ -128,6 +128,8 @@ export const nl = translation({
       '<strong>Na een paar minuten nog niets?</strong> Misschien heeft dit e-mailadres nog geen Pyxis-account.',
     seePlans: 'Bekijk de abonnementen',
     startTrial: '14 dagen gratis proberen',
+    startFree: 'Gratis beginnen',
+    createAccount: 'Account aanmaken',
   },
   errorPanel: {
     title: 'Deze gegevens konden niet worden geladen',

@@ -119,6 +119,8 @@ export const en = {
       '<strong>Nothing after a few minutes?</strong> This e-mail may not have a Pyxis account yet.',
     seePlans: 'See the plans',
     startTrial: 'Try it free for 14 days',
+    startFree: 'Start free',
+    createAccount: 'Create an account',
   },
   errorPanel: {
     title: 'Could not load this data',

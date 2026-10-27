@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import type { FreePlanState } from '@/domain/sign-up';
 import SignInPage, { generateMetadata } from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
@@ -15,10 +16,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => router,
 }));
 
-const signUp = vi.hoisted(() => ({ open: false }));
+const signUp = vi.hoisted(() => ({ freePlan: null as FreePlanState | null }));
 
 vi.mock('@/lib/landing-sign-up', () => ({
-  bestEffortSignUpIsOpen: () => Promise.resolve(signUp.open),
+  bestEffortOpenSignUp: () =>
+    Promise.resolve(
+      signUp.freePlan === null
+        ? null
+        : {
+            termsVersion: '1.2',
+            termsUrl: 'https://pyxis-analytics.dev/termos',
+            freePlan: signUp.freePlan,
+          },
+    ),
 }));
 
 vi.mock('@/services/auth/auth-service.factory', async () => {
@@ -107,7 +117,7 @@ describe('SignInPage', () => {
 
   it('while the code is awaited, says the e-mail may have no account and leads to the plans', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-    signUp.open = false;
+    signUp.freePlan = null;
     renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
     await askForACode();
@@ -122,19 +132,26 @@ describe('SignInPage', () => {
     expect(screen.queryByText(/No account yet\?/)).toBeNull();
   });
 
-  it('also offers the free trial while the code is awaited, once sign-up is open', async () => {
-    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
-    signUp.open = true;
-    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+  it.each([
+    ['closed', 'Try it free for 14 days'],
+    ['open', 'Start free'],
+    ['full', 'Create an account'],
+  ] as const)(
+    'also offers to sign up while the code is awaited, once sign-up is open: free plan %s, %s',
+    async (freePlan, label) => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+      signUp.freePlan = freePlan;
+      renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
 
-    await askForACode();
+      await askForACode();
 
-    expect(screen.getByRole('link', { name: 'Try it free for 14 days' })).toHaveAttribute(
-      'href',
-      'https://app.pyxis-analytics.dev/sign-up',
-    );
-    signUp.open = false;
-  });
+      expect(screen.getByRole('link', { name: label })).toHaveAttribute(
+        'href',
+        'https://app.pyxis-analytics.dev/sign-up',
+      );
+      signUp.freePlan = null;
+    },
+  );
 
   it('says nothing about accounts inside the live demo, where the code is shown', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');

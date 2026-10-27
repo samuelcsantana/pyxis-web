@@ -9,10 +9,10 @@ export interface HelpLink {
 export interface NoCodeHelpProps {
   readonly message: string;
   readonly plans: HelpLink;
-  readonly trial?: HelpLink;
+  readonly signUp?: HelpLink;
 }
 
-export function NoCodeHelp({ message, plans, trial }: NoCodeHelpProps) {
+export function NoCodeHelp({ message, plans, signUp }: NoCodeHelpProps) {
   return (
     <div className="flex flex-col gap-1.5 border-t border-line pt-4 text-sm leading-5 text-muted">
       <p>
@@ -24,9 +24,9 @@ export function NoCodeHelp({ message, plans, trial }: NoCodeHelpProps) {
         <a href={plans.href} className={TEXT_LINK}>
           {plans.label}
         </a>
-        {trial === undefined ? null : (
-          <a href={trial.href} className={TEXT_LINK}>
-            {trial.label}
+        {signUp === undefined ? null : (
+          <a href={signUp.href} className={TEXT_LINK}>
+            {signUp.label}
           </a>
         )}
       </p>

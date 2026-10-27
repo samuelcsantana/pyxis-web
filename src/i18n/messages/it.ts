@@ -126,6 +126,8 @@ export const it = translation({
       '<strong>Niente dopo qualche minuto?</strong> Forse a questo indirizzo non è ancora associato un account Pyxis.',
     seePlans: 'Guarda i piani',
     startTrial: 'Provalo gratis per 14 giorni',
+    startFree: 'Inizia gratis',
+    createAccount: 'Crea un account',
   },
   errorPanel: {
     title: 'Impossibile caricare questi dati',

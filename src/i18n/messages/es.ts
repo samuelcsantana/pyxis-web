@@ -131,6 +131,8 @@ export const es = translation({
       '<strong>¿No llegó nada en unos minutos?</strong> Puede que este correo aún no tenga cuenta en Pyxis.',
     seePlans: 'Ver planes',
     startTrial: 'Probar 14 días gratis',
+    startFree: 'Empezar gratis',
+    createAccount: 'Crear una cuenta',
   },
   errorPanel: {
     title: 'No se pudieron cargar estos datos',
