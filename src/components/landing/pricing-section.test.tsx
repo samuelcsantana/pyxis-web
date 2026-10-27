@@ -207,4 +207,86 @@ describe('PricingSection', () => {
       expect(screen.queryByText(/acesso é por convite/)).toBeNull();
     });
   });
+
+  describe('once the free plan is open', () => {
+    function plans() {
+      const section = screen.getByRole('region', {
+        name: 'Two plans, in reais, with everything the demo shows on both',
+      });
+      const [free, paid] = within(section).getAllByRole('heading', { level: 3 });
+      return { section, free, paid };
+    }
+
+    it('shows the free plan and the paid plan side by side, free first', () => {
+      render(<PricingSection i18n={english} offer="free" />);
+
+      const { section, free, paid } = plans();
+      expect(section).toHaveAttribute('id', PRICING_ID);
+      expect(free).toHaveTextContent('Free');
+      expect(paid).toHaveTextContent('Paid');
+      expect(within(section).getByText('R$ 0')).toBeInTheDocument();
+      expect(within(section).getByText('R$ 39')).toBeInTheDocument();
+      expect(within(section).getByRole('group', { name: 'Billing period' })).toBeInTheDocument();
+    });
+
+    it('lists the free plan in the same order as the paid one, with its pause and no card', () => {
+      render(<PricingSection i18n={english} offer="free" />);
+
+      const [free, paid] = within(plans().section)
+        .getAllByRole('list')
+        .map((list) =>
+          within(list)
+            .getAllByRole('listitem')
+            .map((item) => item.textContent),
+        );
+      expect(free).toEqual([
+        'Up to 10,000 events a month',
+        'One site',
+        'Only you in the dashboard',
+        '13 months of history',
+        'A weekly digest by e-mail',
+        'The Claude connector (MCP) and access tokens for AI agents',
+        'Measuring pauses at 10,000 events until the 1st, with an e-mail at 80%',
+        'No card',
+      ]);
+      expect(paid?.[0]).toBe('Up to 100,000 events a month');
+    });
+
+    it('starts free from the free card and says how to subscribe from the paid one', () => {
+      render(<PricingSection i18n={english} offer="free" />);
+
+      const start = screen.getByRole('link', { name: 'Start free' });
+      expect(start).toHaveAttribute('href', 'https://app.pyxis-analytics.dev/sign-up');
+      expect(start).toHaveAttribute('data-track', 'sign_up_opened');
+      expect(start).toHaveAttribute('data-track-from', PRICING_ID);
+      expect(start).toHaveAttribute('data-track-plan', 'free');
+      expect(screen.getAllByRole('link', { name: /Start/ })).toHaveLength(1);
+      expect(
+        screen.getByText(/^Everyone starts on the free plan: subscribe in Account and billing/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Sign up with an e-mail and no card: the dashboard opens at once, on the free plan.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/free trial|day 15|Request access/)).toBeNull();
+      expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
+    });
+
+    it('says the free plan is full for now on its card, still leading to sign-up', () => {
+      render(<PricingSection i18n={english} offer="freeFull" />);
+
+      expect(screen.getByRole('link', { name: 'Start free' })).toBeInTheDocument();
+      expect(screen.getByText(/^The free plan is full for now: sign up/)).toBeInTheDocument();
+    });
+
+    it('speaks the visitor’s language, in its numbers', () => {
+      render(<PricingSection i18n={portuguese} offer="free" />);
+
+      expect(screen.getByRole('heading', { name: 'Grátis' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Pago' })).toBeInTheDocument();
+      expect(screen.getByText('Até 10.000 eventos por mês')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Começar grátis' })).toBeInTheDocument();
+    });
+  });
 });

@@ -1913,6 +1913,29 @@ export const de = translation({
     pricing: {
       eyebrow: 'Preise',
       title: 'Ein Plan, in Real, mit allem, was die Demo zeigt',
+      titleFree: 'Zwei Pläne, in Real, beide mit allem, was die Demo zeigt',
+      paidName: 'Kostenpflichtig',
+      paidHow:
+        'Alle starten im kostenlosen Plan: Abonniere unter Konto und Abrechnung, monatlich oder jährlich, sofort berechnet. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen und bekommst den Betrag vollständig zurück.',
+      freeOpenNote:
+        'Registriere dich mit einer E-Mail und ohne Karte: Das Dashboard öffnet sofort, im kostenlosen Plan.',
+      free: {
+        name: 'Kostenlos',
+        price: 'R$ 0',
+        note: 'Ohne Enddatum, solange die Website hineinpasst.',
+        start: 'Kostenlos starten',
+        included: {
+          events: 'Bis zu {events} Ereignisse pro Monat',
+          sites: 'Eine Website',
+          people: 'Nur du im Dashboard',
+          history: '13 Monate Verlauf',
+          digest: 'Ein Wochenbericht per E-Mail',
+          agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
+          pause:
+            'Die Messung pausiert bei {events} Ereignissen bis zum 1., mit einer E-Mail bei 80\u00a0%',
+          card: 'Ohne Karte',
+        },
+      },
       lead: 'Keine Kosten pro Besucher, pro Funktion oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und es werden keine personenbezogenen Daten erhoben.',
       period: 'Abrechnungszeitraum',
       monthly: 'Monatlich',

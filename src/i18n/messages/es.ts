@@ -1878,6 +1878,28 @@ export const es = translation({
     pricing: {
       eyebrow: 'Precio',
       title: 'Un plan, en reales, con todo lo que muestra la demostración',
+      titleFree: 'Dos planes, en reales, con todo lo que muestra la demostración en los dos',
+      paidName: 'De pago',
+      paidHow:
+        'Todo el mundo empieza en el plan gratis: suscríbete en Cuenta y facturación, al mes o al año, con el cobro en el momento. En los 7 días siguientes al primer cobro puedes desistir y recibir el importe completo de vuelta.',
+      freeOpenNote:
+        'Regístrate con un correo y sin tarjeta: el panel se abre en el momento, en el plan gratis.',
+      free: {
+        name: 'Gratis',
+        price: 'R$ 0',
+        note: 'Sin fecha de fin, mientras el sitio quepa.',
+        start: 'Empezar gratis',
+        included: {
+          events: 'Hasta {events} eventos al mes',
+          sites: 'Un sitio',
+          people: 'Solo tú en el panel',
+          history: '13 meses de historial',
+          digest: 'Resumen semanal por correo',
+          agents: 'El conector de Claude (MCP) y tokens de acceso para agentes de IA',
+          pause: 'La medición se pausa en {events} eventos hasta el día 1, con un correo al 80%',
+          card: 'Sin tarjeta',
+        },
+      },
       lead: 'Sin cobro por visitante, por funcionalidad ni por persona identificada. Tus visitantes siguen sin cookie y sin datos personales.',
       period: 'Periodo de cobro',
       monthly: 'Mensual',
