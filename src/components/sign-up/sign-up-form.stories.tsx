@@ -14,7 +14,7 @@ const meta = {
   component: SignUpForm,
   tags: ['autodocs'],
   args: {
-    terms: { termsVersion: DEMO_TERMS_VERSION, termsUrl: DEMO_TERMS_URL },
+    terms: { termsVersion: DEMO_TERMS_VERSION, termsUrl: DEMO_TERMS_URL, freePlan: 'closed' },
     signUpService: new MockSignUpService(),
     openCheckout: (): Promise<BillingRedirectOutcome> => Promise.resolve({ kind: 'unavailable' }),
     demoCode: DEMO_SIGN_IN_CODE,

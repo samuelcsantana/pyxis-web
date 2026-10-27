@@ -18,7 +18,11 @@ vi.mock('next/navigation', () => ({
 }));
 
 const ACCOUNT = '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f';
-const TERMS = { termsVersion: '2026-11-01', termsUrl: 'https://pyxis.example.com/terms' };
+const TERMS = {
+  termsVersion: '2026-11-01',
+  termsUrl: 'https://pyxis.example.com/terms',
+  freePlan: 'closed',
+} as const;
 const UNFINISHED = '9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d';
 
 const calls = {
@@ -28,7 +32,11 @@ const calls = {
 
 function service(overrides: Partial<ISignUpService> = {}): ISignUpService {
   calls.requestCode.mockReset().mockResolvedValue(undefined);
-  calls.verify.mockReset().mockResolvedValue({ kind: 'verified', accountId: ACCOUNT });
+  calls.verify.mockReset().mockResolvedValue({
+    kind: 'verified',
+    accountId: ACCOUNT,
+    accountStatus: 'incomplete',
+  });
   return {
     status: () => Promise.reject(new Error('status is read by the page')),
     requestCode: calls.requestCode,

@@ -20,6 +20,7 @@ const state = vi.hoisted<{
       open: true,
       termsVersion: '2026-11-01',
       termsUrl: 'https://pyxis.example.com/terms',
+      freePlan: 'closed',
     }),
 }));
 
@@ -69,6 +70,7 @@ describe('SignUpPage', () => {
         open: true,
         termsVersion: '2026-11-01',
         termsUrl: 'https://pyxis.example.com/terms',
+        freePlan: 'closed',
       });
   });
 
@@ -98,7 +100,8 @@ describe('SignUpPage', () => {
   });
 
   it('says sign-up is not open yet, with the demo and the home page', async () => {
-    state.status = () => Promise.resolve({ open: false, termsVersion: null, termsUrl: null });
+    state.status = () =>
+      Promise.resolve({ open: false, termsVersion: null, termsUrl: null, freePlan: 'closed' });
 
     renderWithMessages(await SignUpPage());
 

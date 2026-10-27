@@ -36,12 +36,14 @@ describe('HttpSignUpService', () => {
       open: true,
       terms_version: '2026-11-01',
       terms_url: 'https://pyxis.example.com/terms',
+      free_plan: 'open',
     });
 
     await expect(new HttpSignUpService(API, vi.fn()).status()).resolves.toEqual({
       open: true,
       termsVersion: '2026-11-01',
       termsUrl: 'https://pyxis.example.com/terms',
+      freePlan: 'open',
     });
     expect(fetchMock).toHaveBeenCalledWith(`${API}${SIGN_UP_PATH}`, { cache: 'no-store' });
   });
@@ -80,12 +82,13 @@ describe('HttpSignUpService', () => {
       email: 'ana@example.com',
       session_token: TOKEN,
       account_id: ACCOUNT,
+      account_status: 'free',
     });
     const keep = vi.fn(() => Promise.resolve());
 
     await expect(
       new HttpSignUpService(API, keep).verify('ana@example.com', '123456', '2026-11-01'),
-    ).resolves.toEqual({ kind: 'verified', accountId: ACCOUNT });
+    ).resolves.toEqual({ kind: 'verified', accountId: ACCOUNT, accountStatus: 'free' });
     expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(
       '{"email":"ana@example.com","code":"123456","terms_version":"2026-11-01"}',
     );
@@ -123,32 +126,59 @@ describe('HttpSignUpService', () => {
 describe('MockSignUpService', () => {
   const service = new MockSignUpService();
 
-  it('is open with invented terms, sends nothing, and takes the demo code', async () => {
+  it('is open with invented terms and the free plan closed, sends nothing, and takes the demo code', async () => {
     await expect(service.status()).resolves.toEqual({
       open: true,
       termsVersion: DEMO_TERMS_VERSION,
       termsUrl: DEMO_TERMS_URL,
+      freePlan: 'closed',
     });
     await expect(service.requestCode()).resolves.toBeUndefined();
     await expect(service.verify('x@example.com', DEMO_SIGN_IN_CODE)).resolves.toEqual({
       kind: 'verified',
       accountId: DEMO_ACCOUNT_ID,
+      accountStatus: 'incomplete',
     });
     await expect(service.verify('x@example.com', '123456')).resolves.toEqual({
       kind: 'invalidCode',
     });
   });
+
+  it.each([
+    ['open', 'free'],
+    ['full', 'incomplete'],
+  ] as const)(
+    'starts the account as the API does with the free plan %s: %s',
+    async (freePlan, accountStatus) => {
+      const withTheFreePlan = new MockSignUpService(freePlan);
+
+      await expect(withTheFreePlan.status()).resolves.toMatchObject({ freePlan });
+      await expect(withTheFreePlan.verify('x@example.com', DEMO_SIGN_IN_CODE)).resolves.toEqual({
+        kind: 'verified',
+        accountId: DEMO_ACCOUNT_ID,
+        accountStatus,
+      });
+    },
+  );
 });
 
 describe('openSignUpOf', () => {
   it('opens only with a terms version and an address', () => {
-    expect(openSignUpOf({ open: true, termsVersion: 'v', termsUrl: 'https://t' })).toEqual({
+    const open = {
+      open: true,
       termsVersion: 'v',
       termsUrl: 'https://t',
+      freePlan: 'full',
+    } as const;
+
+    expect(openSignUpOf(open)).toEqual({
+      termsVersion: 'v',
+      termsUrl: 'https://t',
+      freePlan: 'full',
     });
-    expect(openSignUpOf({ open: false, termsVersion: 'v', termsUrl: 'https://t' })).toBeNull();
-    expect(openSignUpOf({ open: true, termsVersion: null, termsUrl: 'https://t' })).toBeNull();
-    expect(openSignUpOf({ open: true, termsVersion: 'v', termsUrl: null })).toBeNull();
+    expect(openSignUpOf({ ...open, open: false })).toBeNull();
+    expect(openSignUpOf({ ...open, termsVersion: null })).toBeNull();
+    expect(openSignUpOf({ ...open, termsUrl: null })).toBeNull();
   });
 });
 

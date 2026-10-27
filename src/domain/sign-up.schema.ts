@@ -1,5 +1,6 @@
+import { ACCOUNT_STATUSES, type AccountStatus } from './accounts';
 import { isSessionToken } from './session-token';
-import type { SignUpStatus } from './sign-up';
+import { FREE_PLAN_STATES, type FreePlanState, type SignUpStatus } from './sign-up';
 
 export class MalformedSignUpAnswerError extends Error {
   constructor() {
@@ -11,7 +12,11 @@ export class MalformedSignUpAnswerError extends Error {
 export interface SignedUp {
   readonly accountId: string;
   readonly sessionToken: string;
+  readonly accountStatus: AccountStatus;
 }
+
+const FREE_PLAN_OF_AN_API_WITHOUT_ONE: FreePlanState = 'closed';
+const STATUS_OF_AN_ACCOUNT_BEFORE_THE_FREE_PLAN: AccountStatus = 'incomplete';
 
 function recordOf(body: unknown): Readonly<Record<string, unknown>> {
   if (typeof body !== 'object' || body === null) {
@@ -27,6 +32,21 @@ function nullableText(value: unknown): string | null {
   throw new MalformedSignUpAnswerError();
 }
 
+function oneOf<const Value extends string>(
+  values: readonly Value[],
+  value: unknown,
+  absent: Value,
+): Value {
+  if (value === undefined) {
+    return absent;
+  }
+  const known = values.find((candidate) => candidate === value);
+  if (known === undefined) {
+    throw new MalformedSignUpAnswerError();
+  }
+  return known;
+}
+
 export function signUpStatusOf(body: unknown): SignUpStatus {
   const record = recordOf(body);
   if (typeof record.open !== 'boolean') {
@@ -36,6 +56,7 @@ export function signUpStatusOf(body: unknown): SignUpStatus {
     open: record.open,
     termsVersion: nullableText(record.terms_version),
     termsUrl: nullableText(record.terms_url),
+    freePlan: oneOf(FREE_PLAN_STATES, record.free_plan, FREE_PLAN_OF_AN_API_WITHOUT_ONE),
   };
 }
 
@@ -44,7 +65,15 @@ export function signedUpOf(body: unknown): SignedUp {
   if (typeof record.account_id !== 'string' || !isSessionToken(record.session_token)) {
     throw new MalformedSignUpAnswerError();
   }
-  return { accountId: record.account_id, sessionToken: record.session_token };
+  return {
+    accountId: record.account_id,
+    sessionToken: record.session_token,
+    accountStatus: oneOf(
+      ACCOUNT_STATUSES,
+      record.account_status,
+      STATUS_OF_AN_ACCOUNT_BEFORE_THE_FREE_PLAN,
+    ),
+  };
 }
 
 export function signUpCodeWire(email: string, locale: string) {

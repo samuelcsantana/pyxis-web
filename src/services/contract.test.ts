@@ -1,6 +1,11 @@
 import { english, englishTranslator } from '@/test-utils/english';
 import { readFileSync } from 'node:fs';
-import { signUpCodeWire, signUpVerifyWire } from '@/domain/sign-up.schema';
+import {
+  signedUpOf,
+  signUpCodeWire,
+  signUpStatusOf,
+  signUpVerifyWire,
+} from '@/domain/sign-up.schema';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -408,6 +413,28 @@ describe('the API contract copied from pyxis-api', () => {
     expect(closure(closeAccountWire(' owner@example.com ')), JSON.stringify(closure.errors)).toBe(
       true,
     );
+  });
+
+  it('documents the sign-up answers the dashboard reads', () => {
+    const status = contractSchema('SignUpStatus');
+    const signedUp = contractSchema('SignedUp');
+    const openToFreeOwners = {
+      open: true,
+      terms_version: '1.3',
+      terms_url: 'https://pyxis.example.com/termos',
+      free_plan: 'open',
+    };
+    const startedFree = {
+      email: 'ana@example.com',
+      session_token: 'T'.repeat(43),
+      account_id: '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f',
+      account_status: 'free',
+    };
+
+    expect(status(openToFreeOwners), JSON.stringify(status.errors)).toBe(true);
+    expect(signUpStatusOf(openToFreeOwners).freePlan).toBe('open');
+    expect(signedUp(startedFree), JSON.stringify(signedUp.errors)).toBe(true);
+    expect(signedUpOf(startedFree).accountStatus).toBe('free');
   });
 
   it('accepts the bodies the sign-up form sends', () => {
