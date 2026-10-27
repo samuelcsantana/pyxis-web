@@ -1550,6 +1550,8 @@ export const fr = translation({
   landing: {
     meta: {
       title: 'Ce qui convertit et ce qui échoue sur votre site, sans cookies · Pyxis',
+      descriptionFree:
+        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies, sans IP, sans données personnelles. Gratuit jusqu’à {events} événements par mois.',
       description:
         'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies, sans IP, sans données personnelles. 14 jours gratuits.',
     },
@@ -1572,6 +1574,12 @@ export const fr = translation({
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
+      startFree: 'Commencer gratuitement',
+      seePaidPlan: 'Voir la formule payante',
+      freeNote:
+        'Gratuit jusqu’à {events} événements par mois sur un site, sans carte. La démo s’ouvre sans inscription.',
+      freeFullNote:
+        'La formule gratuite est complète pour le moment : inscrivez-vous et votre compte attend une place, ou souscrivez à la formule payante.',
       trialNote:
         '14 jours gratuits ; la carte n’est débitée qu’au 15e jour. La démo s’ouvre sans inscription.',
       claudeTag: 'Dans l’annuaire de Claude',
@@ -1781,6 +1789,8 @@ export const fr = translation({
         label: 'Pour commencer, en 3 étapes',
         account: {
           title: 'Créez le compte et le projet',
+          bodyFree:
+            'Dans le tableau de bord, avec une adresse e-mail et sans carte : la formule gratuite couvre un site. Le projet arrive avec sa clé publique.',
           body: 'Dans le tableau de bord, avec une adresse e-mail et une carte : 14 jours gratuits. Le projet arrive avec sa clé publique.',
         },
         install: {
@@ -1796,6 +1806,8 @@ export const fr = translation({
       copied: 'Copié',
       selected: 'Sélectionné, appuyez sur Ctrl+C',
       note: 'Les clés sont délivrées par celui qui exploite l’API, et il n’y a pas d’inscription publique aujourd’hui. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
+      noteFree:
+        'Vos clés sont fournies avec votre compte : commencez gratuitement ci-dessous, ou hébergez votre propre Pyxis. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
       noteOpen:
         'Vos clés sont fournies avec votre compte : démarrez l’essai gratuit ci-dessous, ou hébergez votre propre Pyxis. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
       requests:

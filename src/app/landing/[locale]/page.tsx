@@ -54,6 +54,7 @@ import { legalConfig } from '@/lib/legal-config';
 import { requestNonce } from '@/lib/request-nonce';
 import { bestEffortEuroRates } from '@/lib/landing-exchange-rates';
 import { signUpOfferOf } from '@/domain/sign-up';
+import { landingDescriptionOf } from '@/lib/landing-description';
 import { bestEffortOpenSignUp } from '@/lib/landing-sign-up';
 import {
   LANDING_PAGES,
@@ -141,7 +142,7 @@ export async function generateMetadata({ params }: LandingHomeProps): Promise<Me
   }
   const { page, i18n } = landing;
   const title = i18n.t('landing.meta.title');
-  const description = i18n.t('landing.meta.description');
+  const description = landingDescriptionOf(i18n, signUpOfferOf(await bestEffortOpenSignUp()));
   return {
     metadataBase: new URL(LANDING_ORIGIN),
     title: { absolute: title },
@@ -232,7 +233,7 @@ export default async function LandingHome({ params }: LandingHomeProps) {
           locale={displayTag(page.locale)}
         />
       )}
-      <LandingStructuredData i18n={i18n} page={page} />
+      <LandingStructuredData i18n={i18n} page={page} offer={offer} />
       <LanguagePrefetch current={page} nonce={nonce} />
       <PreferenceCarrier locale={page.locale} />
       <LinkPreferencesReceiver />

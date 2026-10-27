@@ -1526,6 +1526,8 @@ export const es = translation({
   landing: {
     meta: {
       title: 'Qué convierte y qué falla en tu sitio, sin cookies · Pyxis',
+      descriptionFree:
+        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies, sin IP y sin datos personales. Gratis hasta {events} eventos al mes.',
       description:
         'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies, sin IP y sin datos personales. 14 días gratis.',
     },
@@ -1547,6 +1549,12 @@ export const es = translation({
       openDemo: 'Abrir la demo en vivo',
       seePricing: 'Ver precio',
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',
+      startFree: 'Empezar gratis',
+      seePaidPlan: 'Ver el plan de pago',
+      freeNote:
+        'Gratis hasta {events} eventos al mes en un sitio, sin tarjeta. La demo se abre sin registro.',
+      freeFullNote:
+        'El plan gratis está lleno por ahora: regístrate y tu cuenta espera una plaza, o suscríbete al plan de pago.',
       trialNote:
         '14 días gratis; la tarjeta solo se cobra el día 15. La demo se abre sin registro.',
       claudeTag: 'En el directorio de Claude',
@@ -1752,6 +1760,8 @@ export const es = translation({
         label: 'Cómo empezar, en 3 pasos',
         account: {
           title: 'Crea la cuenta y el proyecto',
+          bodyFree:
+            'En el panel, con un correo y sin tarjeta: el plan gratis cubre un sitio. El proyecto ya trae su clave pública.',
           body: 'En el panel, con un correo y una tarjeta: 14 días gratis. El proyecto ya trae su clave pública.',
         },
         install: {
@@ -1767,6 +1777,8 @@ export const es = translation({
       copied: 'Copiado',
       selected: 'Seleccionado, presiona Ctrl+C',
       note: 'Las claves las emite quien opera la API, y hoy no hay registro abierto. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
+      noteFree:
+        'Las claves vienen con tu cuenta: empieza gratis más abajo o ejecuta tu propio Pyxis. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
       noteOpen:
         'Las claves vienen con tu cuenta: empieza la prueba gratis más abajo o ejecuta tu propio Pyxis. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
       requests:

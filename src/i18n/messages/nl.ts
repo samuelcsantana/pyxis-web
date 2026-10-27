@@ -1537,6 +1537,8 @@ export const nl = translation({
   landing: {
     meta: {
       title: 'Wat converteert en wat mislukt op je site, zonder cookies · Pyxis',
+      descriptionFree:
+        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies, geen IP, geen persoonsgegevens. Gratis tot {events} events per maand.',
       description:
         'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies, geen IP, geen persoonsgegevens. 14 dagen gratis.',
     },
@@ -1559,6 +1561,12 @@ export const nl = translation({
       openDemo: 'Open de livedemo',
       seePricing: 'Bekijk de prijzen',
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',
+      startFree: 'Gratis beginnen',
+      seePaidPlan: 'Bekijk het betaalde abonnement',
+      freeNote:
+        'Gratis voor maximaal {events} events per maand op één site, zonder kaart. De demo opent zonder registratie.',
+      freeFullNote:
+        'Het gratis abonnement is op dit moment vol: registreer je en je account wacht op een plek, of neem het betaalde abonnement.',
       trialNote:
         '14 dagen gratis; je kaart wordt pas op dag 15 belast. De demo opent zonder registratie.',
       claudeTag: 'In de directory van Claude',
@@ -1764,6 +1772,8 @@ export const nl = translation({
         label: 'Zo begin je, in 3 stappen',
         account: {
           title: 'Maak het account en het project aan',
+          bodyFree:
+            'In het dashboard, met een e-mailadres en zonder kaart: het gratis abonnement dekt één site. Het project krijgt meteen zijn publieke sleutel.',
           body: 'In het dashboard, met een e-mailadres en een kaart: 14 dagen gratis. Het project krijgt meteen zijn publieke sleutel.',
         },
         install: {
@@ -1779,6 +1789,8 @@ export const nl = translation({
       copied: 'Gekopieerd',
       selected: 'Geselecteerd, druk op Ctrl+C',
       note: 'Sleutels worden uitgegeven door wie de API draait, en er is momenteel geen openbare registratie. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
+      noteFree:
+        'Je sleutels horen bij je account: begin hieronder gratis, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
       noteOpen:
         'Je sleutels horen bij je account: start hieronder de gratis proefperiode, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
       requests:

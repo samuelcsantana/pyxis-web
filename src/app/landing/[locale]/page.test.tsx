@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import type { FreePlanState } from '@/domain/sign-up';
 import { carriedSectionScript } from '@/lib/carried-section';
 import { landingBootScript } from '@/lib/landing-boot';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -19,7 +20,10 @@ vi.mock('@/components/landing/measurement/measurement-note', () => ({
   MeasurementNote: () => <p data-testid="measurement-note" />,
 }));
 
-const signUp = vi.hoisted(() => ({ open: false }));
+const signUp = vi.hoisted<{ open: boolean; freePlan: FreePlanState }>(() => ({
+  open: false,
+  freePlan: 'closed',
+}));
 
 vi.mock('@/lib/landing-sign-up', () => ({
   bestEffortOpenSignUp: () =>
@@ -28,7 +32,7 @@ vi.mock('@/lib/landing-sign-up', () => ({
         ? {
             termsVersion: '1.2',
             termsUrl: 'https://pyxis-analytics.dev/termos',
-            freePlan: 'closed',
+            freePlan: signUp.freePlan,
           }
         : null,
     ),
@@ -114,6 +118,22 @@ describe('the home page on the main domain', () => {
         locale: 'es_ES',
         alternateLocale: ['en_US', 'pt_BR', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL'],
       });
+    });
+
+    it('describes the free plan once it is open, or full', async () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+      signUp.open = true;
+
+      for (const freePlan of ['open', 'full'] as const) {
+        signUp.freePlan = freePlan;
+        const metadata = await generateMetadata(atSlug('en'));
+
+        expect(metadata.description).toMatch(/Free up to 10,000 events a month\.$/);
+        expect(metadata.openGraph?.description).toBe(metadata.description);
+      }
+      signUp.freePlan = 'closed';
+      expect((await generateMetadata(atSlug('en'))).description).toMatch(/14 days free\.$/);
+      signUp.open = false;
     });
 
     it('describes nothing for a language it does not ship, or outside demo mode', async () => {
