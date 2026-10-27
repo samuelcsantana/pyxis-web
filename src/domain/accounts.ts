@@ -47,6 +47,9 @@ export interface Account {
   readonly deletionHeldAt: string | null;
   readonly quotaPauseExemptUntil: string | null;
   readonly freeWaitlistedAt: string | null;
+  readonly freePlanFitDueAt: string | null;
+  readonly projectCount: number | null;
+  readonly peopleCount: number | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
@@ -77,6 +80,13 @@ export type CloseAccountOutcome =
     }
   | { readonly kind: 'confirmationMismatch' }
   | { readonly kind: 'alreadyEnded' }
+  | { readonly kind: 'unavailable' };
+
+export type WithdrawOutcome =
+  | { readonly kind: 'withdrawn'; readonly refundedAmount: number; readonly fitBy: string | null }
+  | { readonly kind: 'freePlanClosed' }
+  | { readonly kind: 'noPaidSubscription' }
+  | { readonly kind: 'windowClosed' }
   | { readonly kind: 'unavailable' };
 
 const STATUSES_THAT_CREATE: ReadonlySet<AccountStatus> = new Set([
@@ -126,16 +136,20 @@ export function canSubscribeAgain(account: Account): boolean {
   return account.role === 'owner' && account.status === 'ended';
 }
 
-export type WelcomeStage = 'confirming' | 'firstSubscription' | 'freePlan' | 'subscriptionBack';
+export type WelcomeStage =
+  'confirming' | 'firstSubscription' | 'freePlan' | 'subscribedFromFreePlan' | 'subscriptionBack';
 
-export function welcomeStage(account: Account): WelcomeStage {
+export function welcomeStage(account: Account, backFromFreePlanCheckout = false): WelcomeStage {
   if (account.status === 'incomplete' || account.status === 'ended') {
     return 'confirming';
   }
   if (account.status === 'free') {
-    return 'freePlan';
+    return backFromFreePlanCheckout ? 'confirming' : 'freePlan';
   }
-  return account.status === 'trialing' ? 'firstSubscription' : 'subscriptionBack';
+  if (account.status === 'trialing' || account.projectCount === 0) {
+    return 'firstSubscription';
+  }
+  return backFromFreePlanCheckout ? 'subscribedFromFreePlan' : 'subscriptionBack';
 }
 
 export function quotaPauseExemptUntil(account: Account, now: Date): string | null {

@@ -24,6 +24,7 @@ import {
   closedAccountResponseSchema,
   myAccountsResponseSchema,
   portalWire,
+  withdrawnResponseSchema,
 } from './accounts.schema';
 
 const NOW = new Date('2026-11-20T12:00:00.000Z');
@@ -42,6 +43,9 @@ const ACCOUNT: Account = {
   deletionHeldAt: null,
   quotaPauseExemptUntil: null,
   freeWaitlistedAt: null,
+  freePlanFitDueAt: null,
+  projectCount: null,
+  peopleCount: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -318,6 +322,41 @@ describe('accounts on the wire', () => {
     });
   });
 
+  it('reads what the owner holds and until when a withdrawn account has to fit', () => {
+    const [account] = myAccountsResponseSchema.parse({
+      accounts: [
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'free',
+          billing_interval: null,
+          trial_ends_at: null,
+          current_period_ends_at: null,
+          access_ends_at: null,
+          ingestion_paused_until: null,
+          suspended_at: null,
+          suspension_reason: null,
+          deletion_held_at: null,
+          quota_pause_exempt_until: null,
+          free_waitlisted_at: null,
+          free_plan_fit_due_at: '2026-12-20T12:00:00.000Z',
+          project_count: 3,
+          people_count: 2,
+          month: '2026-11',
+          events_this_month: 3_120,
+          measured_at: '2026-11-20T03:00:00.000Z',
+          limits: { events_per_month: 10_000, projects: 1, people: 1, pause_at_events: 10_000 },
+        },
+      ],
+    });
+
+    expect(account).toMatchObject({
+      freePlanFitDueAt: '2026-12-20T12:00:00.000Z',
+      projectCount: 3,
+      peopleCount: 2,
+    });
+  });
+
   it('reads the address Stripe gives and writes the requests', () => {
     expect(billingRedirectResponseSchema.parse({ url: 'https://billing.stripe.com/p/x' })).toBe(
       'https://billing.stripe.com/p/x',
@@ -348,6 +387,20 @@ describe('welcomeStage', () => {
   ] as const)('is %s → %s', (status, stage) => {
     expect(welcomeStage({ ...ACCOUNT, status })).toBe(stage);
   });
+
+  it('waits for the payment of a free account that comes back from its Checkout', () => {
+    expect(welcomeStage({ ...ACCOUNT, status: 'free' }, true)).toBe('confirming');
+  });
+
+  it('confirms the subscription of an account that left the free plan', () => {
+    expect(welcomeStage({ ...ACCOUNT, projectCount: 1 }, true)).toBe('subscribedFromFreePlan');
+    expect(welcomeStage({ ...ACCOUNT, projectCount: 1 })).toBe('subscriptionBack');
+  });
+
+  it('leads a paid account without a project to its first one, wherever it came from', () => {
+    expect(welcomeStage({ ...ACCOUNT, projectCount: 0 })).toBe('firstSubscription');
+    expect(welcomeStage({ ...ACCOUNT, projectCount: 0 }, true)).toBe('firstSubscription');
+  });
 });
 
 describe('quotaPauseExemptUntil', () => {
@@ -362,6 +415,21 @@ describe('quotaPauseExemptUntil', () => {
       quotaPauseExemptUntil({ ...ACCOUNT, quotaPauseExemptUntil: '2026-11-01T00:00:00.000Z' }, NOW),
     ).toBeNull();
     expect(quotaPauseExemptUntil(ACCOUNT, NOW)).toBeNull();
+  });
+});
+
+describe('withdrawing', () => {
+  it('reads the refund and the day a withdrawn account has to fit by', () => {
+    expect(
+      withdrawnResponseSchema.parse({
+        status: 'free',
+        refunded_amount: 3_900,
+        fit_by: '2026-12-20T12:00:00.000Z',
+      }),
+    ).toEqual({ refundedAmount: 3_900, fitBy: '2026-12-20T12:00:00.000Z' });
+    expect(
+      withdrawnResponseSchema.parse({ status: 'free', refunded_amount: 0, fit_by: null }),
+    ).toEqual({ refundedAmount: 0, fitBy: null });
   });
 });
 
