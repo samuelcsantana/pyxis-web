@@ -60,6 +60,7 @@ describe('get-messages', () => {
       'billing',
       'exportEvents',
       'closeAccount',
+      'withdrawal',
       'newProject',
       'signUp',
     ]);

@@ -5,6 +5,7 @@ import type {
   AccountNotice,
   BillingRedirectOutcome,
   CloseAccountOutcome,
+  WithdrawOutcome,
 } from '@/domain/accounts';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -43,6 +44,9 @@ const ACCOUNT: Account = {
 };
 
 const OPEN = {
+  freePlan: 'closed' as const,
+  ownsAnotherFreeAccount: false,
+  withdraw: () => Promise.resolve<WithdrawOutcome>({ kind: 'freePlanClosed' }),
   openCheckout: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
   subscribe: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
   openPortal: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),

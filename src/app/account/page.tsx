@@ -4,10 +4,18 @@ import { AccountOverview } from '@/components/account/account-overview';
 import { BrandedPage } from '@/components/brand/branded-page';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { ownedAccounts } from '@/domain/accounts';
+import { ownsAnotherFreeAccount } from '@/domain/free-plan';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { currentAdmin, readOrSignIn } from '@/lib/current-admin';
+import { bestEffortFreePlanState } from '@/lib/free-plan-state';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
-import { closeAccount, openBillingPortal, openCheckout, subscribeFromFreePlan } from './actions';
+import {
+  closeAccount,
+  openBillingPortal,
+  openCheckout,
+  subscribeFromFreePlan,
+  withdrawToFreePlan,
+} from './actions';
 
 export const DASHBOARD_HOME = '/';
 
@@ -17,8 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AccountPage() {
-  const admin = await currentAdmin();
-  const accounts = await readOrSignIn(() => createAccountsService().list());
+  const [admin, accounts, freePlan] = await Promise.all([
+    currentAdmin(),
+    readOrSignIn(() => createAccountsService().list()),
+    bestEffortFreePlanState(),
+  ]);
   const owned = ownedAccounts(accounts);
   const i18n = await getI18n();
   const now = new Date();
@@ -37,9 +48,12 @@ export default async function AccountPage() {
             account={account}
             i18n={i18n}
             now={now}
+            freePlan={freePlan}
+            ownsAnotherFreeAccount={ownsAnotherFreeAccount(account, owned)}
             openCheckout={openCheckout.bind(null, account.id)}
             subscribe={subscribeFromFreePlan.bind(null, account.id)}
             openPortal={openBillingPortal.bind(null, account.id)}
+            withdraw={withdrawToFreePlan.bind(null, account.id)}
             close={closeAccount.bind(null, account.id)}
           />
         ))
