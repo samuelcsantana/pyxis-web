@@ -373,7 +373,7 @@ export const nl = translation({
     measured: 'Gemeten op {date}.',
     notMeasured: 'Deze maand nog niet gemeten.',
     paused:
-      'Het meten is gepauzeerd tot {date}: het account heeft 150% van zijn maandelijkse events gebruikt.',
+      'Het meten is gepauzeerd tot {date}: het account heeft deze maand {events} events bereikt.',
     limits: 'Maximaal {projects} en {people}, jij meegerekend.',
     suspended:
       'Geschorst op {date}. De projecten meten niet meer, en hun schermen blijven gesloten tot de schorsing is opgeheven.',

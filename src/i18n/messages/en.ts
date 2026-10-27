@@ -353,7 +353,7 @@ export const en = {
     usageCount: '{count} of {limit}',
     measured: 'Measured {date}.',
     notMeasured: 'Not measured yet this month.',
-    paused: 'Measuring is paused until {date}: the account used 150% of its monthly events.',
+    paused: 'Measuring is paused until {date}: the account reached {events} events this month.',
     limits: 'Up to {projects} and {people}, you included.',
     suspended:
       'Suspended on {date}. Its projects stopped measuring, and their screens stay closed until the suspension is lifted.',

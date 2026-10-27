@@ -380,7 +380,7 @@ export const de = translation({
     measured: 'Stand: {date}.',
     notMeasured: 'In diesem Monat noch nicht gezählt.',
     paused:
-      'Die Messung ist bis {date} pausiert: Das Konto hat 150\u00a0% seiner monatlichen Ereignisse verbraucht.',
+      'Die Messung ist bis {date} pausiert: Das Konto hat diesen Monat {events} Ereignisse erreicht.',
     limits: 'Bis zu {projects} und {people}, dich eingeschlossen.',
     suspended:
       'Gesperrt am {date}. Seine Projekte messen nicht mehr, und ihre Ansichten bleiben geschlossen, bis die Sperre aufgehoben wird.',

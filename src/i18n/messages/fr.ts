@@ -378,7 +378,7 @@ export const fr = translation({
     measured: 'Mesuré le {date}.',
     notMeasured: 'Pas encore mesuré ce mois-ci.',
     paused:
-      'La mesure est en pause jusqu’au {date} : le compte a utilisé 150 % de ses événements mensuels.',
+      'La mesure est en pause jusqu’au {date} : le compte a atteint {events} événements ce mois-ci.',
     limits: 'Jusqu’à {projects} et {people}, vous compris.',
     suspended:
       'Suspendu le {date}. Ses projets ne mesurent plus rien, et leurs écrans restent fermés jusqu’à la levée de la suspension.',
