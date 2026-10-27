@@ -21,6 +21,9 @@ const accountWireSchema = z.object({
   deletion_held_at: z.string().nullable(),
   quota_pause_exempt_until: z.string().nullable(),
   free_waitlisted_at: z.string().nullable().default(null),
+  free_plan_fit_due_at: z.string().nullable().default(null),
+  project_count: z.number().int().nullable().default(null),
+  people_count: z.number().int().nullable().default(null),
   month: z.string(),
   events_this_month: z.number().int().nullable(),
   measured_at: z.string().nullable(),
@@ -47,6 +50,9 @@ function fromWire(body: z.infer<typeof accountWireSchema>): Account {
     deletionHeldAt: body.deletion_held_at,
     quotaPauseExemptUntil: body.quota_pause_exempt_until,
     freeWaitlistedAt: body.free_waitlisted_at,
+    freePlanFitDueAt: body.free_plan_fit_due_at,
+    projectCount: body.project_count,
+    peopleCount: body.people_count,
     month: body.month,
     eventsThisMonth: body.events_this_month,
     measuredAt: body.measured_at,
@@ -82,6 +88,14 @@ export const closedAccountResponseSchema = z
     deletionOn: body.deletion_on,
     refundedAmount: body.refunded_amount,
   }));
+
+export const withdrawnResponseSchema = z
+  .object({
+    status: z.literal('free'),
+    refunded_amount: z.number().int(),
+    fit_by: z.string().nullable(),
+  })
+  .transform((body) => ({ refundedAmount: body.refunded_amount, fitBy: body.fit_by }));
 
 export function closeAccountWire(confirmEmail: string) {
   return { confirm_email: confirmEmail.trim() };
