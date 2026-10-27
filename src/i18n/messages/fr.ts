@@ -1910,6 +1910,29 @@ export const fr = translation({
     pricing: {
       eyebrow: 'Tarifs',
       title: 'Une seule formule, en reais, avec tout ce que montre la démo',
+      titleFree: 'Deux formules, en reais, avec tout ce que montre la démo dans les deux',
+      paidName: 'Payante',
+      paidHow:
+        'Tout le monde commence avec la formule gratuite : souscrivez dans Compte et facturation, au mois ou à l’année, débité aussitôt. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter et être remboursé en totalité.',
+      freeOpenNote:
+        'Inscrivez-vous avec une adresse e-mail et sans carte : le tableau de bord s’ouvre aussitôt, avec la formule gratuite.',
+      free: {
+        name: 'Gratuite',
+        price: '0 R$',
+        note: 'Sans date de fin, tant que le site y tient.',
+        start: 'Commencer gratuitement',
+        included: {
+          events: 'Jusqu’à {events} événements par mois',
+          sites: 'Un site',
+          people: 'Vous seul dans le tableau de bord',
+          history: '13 mois d’historique',
+          digest: 'Un récapitulatif hebdomadaire par e-mail',
+          agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
+          pause:
+            'La mesure se met en pause à {events} événements jusqu’au 1er, avec un e-mail à 80 %',
+          card: 'Sans carte',
+        },
+      },
       lead: 'Rien à payer par visiteur, par fonctionnalité ni par personne identifiée. Et toujours aucun cookie ni aucune donnée personnelle collectée chez vos visiteurs.',
       period: 'Période de facturation',
       monthly: 'Mensuelle',

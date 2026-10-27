@@ -131,3 +131,74 @@ export const SignUpOpenOnAPhone: Story = {
   args: { offer: 'trial' },
   globals: { viewport: { value: 'mobile1' } },
 };
+
+async function showsTwoPlans(canvasElement: HTMLElement) {
+  const section = within(canvasElement).getByRole('region');
+  await expect(within(section).getAllByRole('heading', { level: 3 }).slice(0, 2)).toHaveLength(2);
+  await expect(within(section).getByText(/^(R\$\s0|0\sR\$)$/)).toBeVisible();
+}
+
+export const FreePlanOpen: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    await showsTwoPlans(canvasElement);
+    await expect(within(canvasElement).getByRole('link', { name: 'Start free' })).toBeVisible();
+  },
+};
+
+export const FreePlanOpenYearly: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('radio', { name: /^Yearly/ }));
+    await expect(canvas.getByText('R$ 390')).toBeVisible();
+  },
+};
+
+export const FreePlanFull: Story = { args: { offer: 'freeFull' } };
+
+export const FreePlanOpenInPortuguese: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenInSpanish: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'es' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenInGerman: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'de' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenInFrench: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'fr' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenInItalian: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'it' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenInDutch: Story = {
+  args: { offer: 'free' },
+  globals: { locale: 'nl' },
+  play: async ({ canvasElement }) => showsTwoPlans(canvasElement),
+};
+
+export const FreePlanOpenOnAPhone: Story = {
+  args: { offer: 'free' },
+  globals: { viewport: { value: 'mobile1' } },
+};
+
+export const FreePlanOpenInTheDarkTheme: Story = {
+  args: { offer: 'free' },
+  globals: { theme: 'dark' },
+};

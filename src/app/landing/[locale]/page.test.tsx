@@ -204,6 +204,28 @@ describe('the home page on the main domain', () => {
     signUp.open = false;
   });
 
+  it('offers the free plan, beside the paid one, once the API says it is open', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    signUp.open = true;
+    signUp.freePlan = 'open';
+
+    renderWithMessages(await LandingHome(atSlug('en')));
+
+    const starts = screen.getAllByRole('link', { name: 'Start free' });
+    expect(starts.map((start) => start.getAttribute('data-track-from'))).toEqual([
+      'hero',
+      'pricing',
+    ]);
+    expect(
+      screen.getByRole('region', {
+        name: 'Two plans, in reais, with everything the demo shows on both',
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Start your free trial' })).toBeNull();
+    signUp.open = false;
+    signUp.freePlan = 'closed';
+  });
+
   it('shows the price in reais alone while the exchange rates are unknown', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 

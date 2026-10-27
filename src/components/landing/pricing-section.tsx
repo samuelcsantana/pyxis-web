@@ -1,6 +1,15 @@
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
-import { approximatePricesOf, type EuroRates } from '@/domain/approximate-price';
-import { offersSignUp, type SignUpOffer } from '@/domain/sign-up';
+import {
+  type ApproximatePrices,
+  approximatePricesOf,
+  type EuroRates,
+} from '@/domain/approximate-price';
+import {
+  FREE_PLAN_EVENTS_PER_MONTH,
+  offersSignUp,
+  offersTheFreePlan,
+  type SignUpOffer,
+} from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
@@ -22,6 +31,16 @@ export const CONTACT_EMAIL_ID = 'pricing-contact-email';
 export const YEARLY_OPTION_ID = 'pricing-yearly';
 
 const INCLUDED = ['events', 'sites', 'people', 'history', 'digest', 'agents'] as const;
+const FREE_INCLUDED = [
+  'events',
+  'sites',
+  'people',
+  'history',
+  'digest',
+  'agents',
+  'pause',
+  'card',
+] as const;
 const PERIOD_FIELD = 'pricing-period';
 const YEARLY = 'year';
 const MONTHLY = 'month';
@@ -141,11 +160,123 @@ function StartButtons({ i18n }: AskPanelProps) {
   );
 }
 
-export function PricingSection({ i18n, offer, euroRates }: PricingSectionProps) {
+function IncludedList({ items }: { readonly items: readonly string[] }) {
+  return (
+    <ul className="grid gap-2.5 text-base">
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2.5">
+          <svg
+            width={16}
+            height={16}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="mt-1 shrink-0 text-accent"
+          >
+            <path
+              d={CHECK_ICON}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface PaidPlanTermsProps {
+  readonly i18n: I18n;
+  readonly approximate: ApproximatePrices | undefined;
+}
+
+function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
+  const { t } = i18n;
+  return (
+    <>
+      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
+        <fieldset className="inline-flex max-w-full flex-wrap gap-0.5 rounded-pill border border-line bg-soft p-[3px]">
+          <legend className="sr-only">{t('landing.pricing.period')}</legend>
+          <label className={PERIOD_OPTION}>
+            <input
+              type="radio"
+              name={PERIOD_FIELD}
+              value={MONTHLY}
+              defaultChecked
+              aria-label={t('landing.pricing.monthlyLabel')}
+              className="sr-only"
+            />
+            {t('landing.pricing.monthly')}
+          </label>
+          <label className={PERIOD_OPTION}>
+            <input
+              id={YEARLY_OPTION_ID}
+              type="radio"
+              name={PERIOD_FIELD}
+              value={YEARLY}
+              aria-label={t('landing.pricing.yearlyLabel')}
+              className="sr-only"
+            />
+            {t('landing.pricing.yearly')}
+          </label>
+        </fieldset>
+        <label
+          htmlFor={YEARLY_OPTION_ID}
+          className="cursor-pointer rounded-pill bg-accent px-2 py-0.5 font-mono text-caption font-medium text-accent-ink"
+        >
+          {t('landing.pricing.saving')}
+        </label>
+      </div>
+      <Price
+        amount={t('landing.pricing.monthlyPrice')}
+        period={t('landing.pricing.perMonth')}
+        note={t('landing.pricing.monthlyNote')}
+        approximation={
+          approximate === undefined
+            ? undefined
+            : t('landing.pricing.approximateMonthly', { amount: approximate.month })
+        }
+        className={SHOW_WHEN_MONTHLY}
+      />
+      <Price
+        amount={t('landing.pricing.yearlyPrice')}
+        period={t('landing.pricing.perYear')}
+        note={t('landing.pricing.yearlyNote')}
+        approximation={
+          approximate === undefined
+            ? undefined
+            : t('landing.pricing.approximateYearly', { amount: approximate.year })
+        }
+        className={SHOW_WHEN_YEARLY}
+      />
+      <IncludedList items={INCLUDED.map((item) => t(`landing.pricing.included.${item}`))} />
+    </>
+  );
+}
+
+function AgenciesPanel({ i18n }: AskPanelProps) {
+  const { t } = i18n;
+  return (
+    <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
+      <h3 className="text-lg font-semibold">{t('landing.pricing.moreTitle')}</h3>
+      <p className="text-base leading-relaxed text-muted">{t('landing.pricing.more')}</p>
+      <a
+        href={mailtoOf(t('landing.pricing.moreSubject'))}
+        className={`self-start font-semibold text-ink underline underline-offset-4 ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+        {...trackAttributes(LANDING_EVENTS.largerPlanRequested, { from: PRICING_ID })}
+      >
+        {t('landing.pricing.moreLink')}
+      </a>
+    </div>
+  );
+}
+
+function OnePlan({ i18n, offer, approximate }: PlansProps) {
   const { t } = i18n;
   const signUpOpen = offersSignUp(offer);
-  const approximate =
-    euroRates === undefined ? undefined : approximatePricesOf(i18n.locale, euroRates);
   return (
     <LandingSection
       id={PRICING_ID}
@@ -158,84 +289,7 @@ export function PricingSection({ i18n, offer, euroRates }: PricingSectionProps) 
           <div
             className={`group/pricing flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}
           >
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
-              <fieldset className="inline-flex max-w-full flex-wrap gap-0.5 rounded-pill border border-line bg-soft p-[3px]">
-                <legend className="sr-only">{t('landing.pricing.period')}</legend>
-                <label className={PERIOD_OPTION}>
-                  <input
-                    type="radio"
-                    name={PERIOD_FIELD}
-                    value={MONTHLY}
-                    defaultChecked
-                    aria-label={t('landing.pricing.monthlyLabel')}
-                    className="sr-only"
-                  />
-                  {t('landing.pricing.monthly')}
-                </label>
-                <label className={PERIOD_OPTION}>
-                  <input
-                    id={YEARLY_OPTION_ID}
-                    type="radio"
-                    name={PERIOD_FIELD}
-                    value={YEARLY}
-                    aria-label={t('landing.pricing.yearlyLabel')}
-                    className="sr-only"
-                  />
-                  {t('landing.pricing.yearly')}
-                </label>
-              </fieldset>
-              <label
-                htmlFor={YEARLY_OPTION_ID}
-                className="cursor-pointer rounded-pill bg-accent px-2 py-0.5 font-mono text-caption font-medium text-accent-ink"
-              >
-                {t('landing.pricing.saving')}
-              </label>
-            </div>
-            <Price
-              amount={t('landing.pricing.monthlyPrice')}
-              period={t('landing.pricing.perMonth')}
-              note={t('landing.pricing.monthlyNote')}
-              approximation={
-                approximate === undefined
-                  ? undefined
-                  : t('landing.pricing.approximateMonthly', { amount: approximate.month })
-              }
-              className={SHOW_WHEN_MONTHLY}
-            />
-            <Price
-              amount={t('landing.pricing.yearlyPrice')}
-              period={t('landing.pricing.perYear')}
-              note={t('landing.pricing.yearlyNote')}
-              approximation={
-                approximate === undefined
-                  ? undefined
-                  : t('landing.pricing.approximateYearly', { amount: approximate.year })
-              }
-              className={SHOW_WHEN_YEARLY}
-            />
-            <ul className="grid gap-2.5 text-base">
-              {INCLUDED.map((item) => (
-                <li key={item} className="flex items-start gap-2.5">
-                  <svg
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    className="mt-1 shrink-0 text-accent"
-                  >
-                    <path
-                      d={CHECK_ICON}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2.2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  {t(`landing.pricing.included.${item}`)}
-                </li>
-              ))}
-            </ul>
+            <PaidPlanTerms i18n={i18n} approximate={approximate} />
             {signUpOpen ? (
               <StartButtons i18n={i18n} />
             ) : (
@@ -273,18 +327,89 @@ export function PricingSection({ i18n, offer, euroRates }: PricingSectionProps) 
             {t(signUpOpen ? 'landing.pricing.openNote' : 'landing.pricing.invite')}
           </p>
         </div>
-        <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
-          <h3 className="text-lg font-semibold">{t('landing.pricing.moreTitle')}</h3>
-          <p className="text-base leading-relaxed text-muted">{t('landing.pricing.more')}</p>
-          <a
-            href={mailtoOf(t('landing.pricing.moreSubject'))}
-            className={`self-start font-semibold text-ink underline underline-offset-4 ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-            {...trackAttributes(LANDING_EVENTS.largerPlanRequested, { from: PRICING_ID })}
-          >
-            {t('landing.pricing.moreLink')}
-          </a>
+        <AgenciesPanel i18n={i18n} />
+      </div>
+    </LandingSection>
+  );
+}
+
+interface PlansProps {
+  readonly i18n: I18n;
+  readonly offer: SignUpOffer;
+  readonly approximate: ApproximatePrices | undefined;
+}
+
+function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: boolean }) {
+  const { t } = i18n;
+  const events = i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH);
+  return (
+    <div className={`flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}>
+      <h3 className="text-lg font-semibold">{t('landing.pricing.free.name')}</h3>
+      <Price
+        amount={t('landing.pricing.free.price')}
+        period={t('landing.pricing.perMonth')}
+        note={t('landing.pricing.free.note')}
+        approximation={undefined}
+        className="flex flex-col gap-1"
+      />
+      <IncludedList
+        items={FREE_INCLUDED.map((item) => t(`landing.pricing.free.included.${item}`, { events }))}
+      />
+      <a
+        href={LANDING_LINKS.signUp}
+        className={`${LINK_PRIMARY} self-start`}
+        {...trackAttributes(LANDING_EVENTS.signUpOpened, { from: PRICING_ID, plan: 'free' })}
+      >
+        {t('landing.pricing.free.start')}
+        <svg width={18} height={18} viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d={ARROW_ICON}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </a>
+      {full ? <p className={NOTE}>{t('landing.hero.freeFullNote')}</p> : null}
+    </div>
+  );
+}
+
+function TwoPlans({ i18n, offer, approximate }: PlansProps) {
+  const { t } = i18n;
+  return (
+    <LandingSection
+      id={PRICING_ID}
+      eyebrow={t('landing.pricing.eyebrow')}
+      title={t('landing.pricing.titleFree')}
+      lead={t('landing.pricing.lead')}
+    >
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2 lg:items-start">
+        <FreePlanCard i18n={i18n} full={offer === 'freeFull'} />
+        <div
+          className={`group/pricing flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}
+        >
+          <h3 className="text-lg font-semibold">{t('landing.pricing.paidName')}</h3>
+          <PaidPlanTerms i18n={i18n} approximate={approximate} />
+          <p className={NOTE}>{t('landing.pricing.paidHow')}</p>
+        </div>
+        <p className={`max-w-2xl ${NOTE} lg:col-span-2`}>{t('landing.pricing.freeOpenNote')}</p>
+        <div className="lg:col-span-2">
+          <AgenciesPanel i18n={i18n} />
         </div>
       </div>
     </LandingSection>
+  );
+}
+
+export function PricingSection({ i18n, offer, euroRates }: PricingSectionProps) {
+  const approximate =
+    euroRates === undefined ? undefined : approximatePricesOf(i18n.locale, euroRates);
+  return offersTheFreePlan(offer) ? (
+    <TwoPlans i18n={i18n} offer={offer} approximate={approximate} />
+  ) : (
+    <OnePlan i18n={i18n} offer={offer} approximate={approximate} />
   );
 }

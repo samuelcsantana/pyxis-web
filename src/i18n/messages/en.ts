@@ -1854,6 +1854,28 @@ export const en = {
     pricing: {
       eyebrow: 'Pricing',
       title: 'One plan, in reais, with everything the demo shows',
+      titleFree: 'Two plans, in reais, with everything the demo shows on both',
+      paidName: 'Paid',
+      paidHow:
+        'Everyone starts on the free plan: subscribe in Account and billing, monthly or yearly, charged at once. Within 7 days of the first charge you can withdraw and get it back in full.',
+      freeOpenNote:
+        'Sign up with an e-mail and no card: the dashboard opens at once, on the free plan.',
+      free: {
+        name: 'Free',
+        price: 'R$ 0',
+        note: 'No end date, for as long as the site fits.',
+        start: 'Start free',
+        included: {
+          events: 'Up to {events} events a month',
+          sites: 'One site',
+          people: 'Only you in the dashboard',
+          history: '13 months of history',
+          digest: 'A weekly digest by e-mail',
+          agents: 'The Claude connector (MCP) and access tokens for AI agents',
+          pause: 'Measuring pauses at {events} events until the 1st, with an e-mail at 80%',
+          card: 'No card',
+        },
+      },
       lead: 'No charge per visitor, per feature or per identified person. Your visitors still get no cookie and no personal data collected.',
       period: 'Billing period',
       monthly: 'Monthly',

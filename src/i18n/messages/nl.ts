@@ -1892,6 +1892,28 @@ export const nl = translation({
     pricing: {
       eyebrow: 'Prijzen',
       title: 'Eén abonnement, in reais, met alles wat de demo laat zien',
+      titleFree: 'Twee abonnementen, in reais, allebei met alles wat de demo laat zien',
+      paidName: 'Betaald',
+      paidHow:
+        'Iedereen begint op het gratis abonnement: neem het betaalde onder Account en facturering, per maand of per jaar, direct afgerekend. Binnen 7 dagen na de eerste betaling kun je herroepen en krijg je het volledige bedrag terug.',
+      freeOpenNote:
+        'Registreer je met een e-mailadres en zonder kaart: het dashboard opent meteen, op het gratis abonnement.',
+      free: {
+        name: 'Gratis',
+        price: 'R$ 0',
+        note: 'Zonder einddatum, zolang de site erin past.',
+        start: 'Gratis beginnen',
+        included: {
+          events: 'Tot {events} events per maand',
+          sites: 'Eén site',
+          people: 'Alleen jij in het dashboard',
+          history: '13 maanden geschiedenis',
+          digest: 'Een wekelijkse samenvatting per e-mail',
+          agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
+          pause: 'Het meten pauzeert bij {events} events tot de 1e, met een e-mail bij 80%',
+          card: 'Zonder kaart',
+        },
+      },
       lead: 'Geen kosten per bezoeker, per functie of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en er worden geen persoonsgegevens verzameld.',
       period: 'Factuurperiode',
       monthly: 'Maandelijks',

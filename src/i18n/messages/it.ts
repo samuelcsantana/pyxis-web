@@ -1893,6 +1893,29 @@ export const it = translation({
     pricing: {
       eyebrow: 'Prezzi',
       title: 'Un solo piano, in real brasiliani, con tutto ciò che mostra la demo',
+      titleFree: 'Due piani, in real brasiliani, con tutto ciò che mostra la demo in entrambi',
+      paidName: 'A pagamento',
+      paidHow:
+        'Tutti iniziano dal piano gratuito: abbonati in Account e fatturazione, al mese o all’anno, con addebito immediato. Entro 7 giorni dal primo addebito puoi recedere e riavere l’intero importo.',
+      freeOpenNote:
+        'Registrati con un’e-mail e senza carta: la dashboard si apre subito, sul piano gratuito.',
+      free: {
+        name: 'Gratuito',
+        price: 'R$ 0',
+        note: 'Senza scadenza, finché il sito ci sta.',
+        start: 'Inizia gratis',
+        included: {
+          events: 'Fino a {events} eventi al mese',
+          sites: 'Un sito',
+          people: 'Solo tu nella dashboard',
+          history: '13 mesi di storico',
+          digest: 'Un riepilogo settimanale via email',
+          agents: 'Il connettore per Claude (MCP) e i token di accesso per agenti AI',
+          pause:
+            'La misurazione va in pausa a {events} eventi fino al giorno 1, con un’email all’80%',
+          card: 'Senza carta',
+        },
+      },
       lead: 'Nessun costo per visitatore, per funzionalità o per persona identificata. Per i tuoi visitatori non cambia nulla: nessun cookie e nessun dato personale raccolto.',
       period: 'Periodo di fatturazione',
       monthly: 'Mensile',
