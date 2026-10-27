@@ -33,15 +33,15 @@ class ResizeObserverForTests implements ResizeObserver {
 
 globalThis.ResizeObserver = ResizeObserverForTests;
 
-function noMediaQueryMatches(query: string): MediaQueryList {
+type CurrentMediaQueryList = Omit<MediaQueryList, 'addListener' | 'removeListener'>;
+
+function noMediaQueryMatches(query: string): CurrentMediaQueryList {
   return {
     matches: false,
     media: query,
     onchange: null,
     addEventListener: () => undefined,
     removeEventListener: () => undefined,
-    addListener: () => undefined,
-    removeListener: () => undefined,
     dispatchEvent: () => false,
   };
 }
