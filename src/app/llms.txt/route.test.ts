@@ -1,5 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { FreePlanState } from '@/domain/sign-up';
 import { GET } from './route';
+
+const signUp = vi.hoisted<{ freePlan: FreePlanState }>(() => ({ freePlan: 'closed' }));
+
+vi.mock('@/lib/landing-sign-up', () => ({
+  bestEffortOpenSignUp: () =>
+    Promise.resolve({
+      termsVersion: '1.3',
+      termsUrl: 'https://pyxis-analytics.dev/termos',
+      freePlan: signUp.freePlan,
+    }),
+}));
 
 const request = vi.hoisted(() => ({ host: 'pyxis-analytics.dev' }));
 
@@ -23,6 +35,17 @@ describe('GET /llms.txt', () => {
     expect(text.startsWith('# Pyxis\n\n> Privacy-first product analytics.')).toBe(true);
     expect(text).toContain('npm install pyxis-analytics');
     expect(text).toContain('\n## Install with an AI agent\n');
+    expect(text).toContain('(14-day free trial)');
+  });
+
+  it('names the free plan once the API says it is open', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+    signUp.freePlan = 'open';
+
+    const text = await (await GET()).text();
+
+    expect(text).toContain('(free plan: 10,000 events a month on one site, no card)');
+    signUp.freePlan = 'closed';
   });
 
   it('answers 404 on the live demo, which is not the home page', async () => {

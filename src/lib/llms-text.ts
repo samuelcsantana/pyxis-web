@@ -1,4 +1,5 @@
 import { LANDING_LINKS } from '@/components/landing/landing-links';
+import { FREE_PLAN_EVENTS_PER_MONTH, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import { LANDING_ORIGIN } from './site';
 
 export const LLMS_TEXT_CONTENT_TYPE = 'text/plain; charset=utf-8';
@@ -7,8 +8,15 @@ const HOSTED_API_URL = 'https://api.pyxis-analytics.dev';
 const INTRODUCTION_POST =
   'https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data';
 const RUNBOOK = `${LANDING_LINKS.api}/blob/main/docs/RUNBOOK.md`;
+const FREE_PLAN_EVENTS = new Intl.NumberFormat('en-US').format(FREE_PLAN_EVENTS_PER_MONTH);
 
-export function llmsText(): string {
+function hostedPlanOf(offer: SignUpOffer): string {
+  return offersTheFreePlan(offer)
+    ? `free plan: ${FREE_PLAN_EVENTS} events a month on one site, no card`
+    : '14-day free trial';
+}
+
+export function llmsText(offer: SignUpOffer): string {
   return [
     '# Pyxis',
     '',
@@ -29,7 +37,7 @@ export function llmsText(): string {
     "- Call `init({ key: 'pyxis_pk_…', endpoint })` once in the browser; every page and every",
     '  History API route change becomes a `page_view`. Without a key every function is a no-op.',
     `- The hosted endpoint is ${HOSTED_API_URL}. Its keys come with an account: sign up at`,
-    `  ${LANDING_LINKS.signUp} (14-day free trial).`,
+    `  ${LANDING_LINKS.signUp} (${hostedPlanOf(offer)}).`,
     `  Anyone can [run their own](${RUNBOOK}).`,
     `- [SDK README](${LANDING_LINKS.sdk}#readme): \`track\`, \`identify\`, \`reset\`,`,
     '  `trackRequest`, `optOut`, `optIn`, `trackingStatus` and every option.',
