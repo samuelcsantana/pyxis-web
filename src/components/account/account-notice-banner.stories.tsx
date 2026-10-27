@@ -36,6 +36,19 @@ export const Paused: Story = {
   args: { notice: { kind: 'paused', until: '2026-12-01T00:00:00.000Z' } },
 };
 
+export const FreePlanPaused: Story = {
+  args: {
+    notice: { kind: 'freePlanPaused', until: '2026-12-01T00:00:00.000Z', events: 10_000 },
+  },
+};
+
+export const FreePlanPausedInPortuguese: Story = {
+  args: {
+    notice: { kind: 'freePlanPaused', until: '2026-12-01T00:00:00.000Z', events: 10_000 },
+  },
+  globals: { locale: 'pt-BR' },
+};
+
 export const NearQuota: Story = { args: { notice: { kind: 'nearQuota', share: 0.86 } } };
 
 export const InSpanish: Story = { globals: { locale: 'es' } };

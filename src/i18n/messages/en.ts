@@ -410,6 +410,9 @@ export const en = {
       ended: 'Your subscription ended. Everything is deleted on {date}.',
       endedHeld: 'Your subscription ended. The deletion of its data is on hold.',
       paused: 'Measuring is paused until {date}: the account passed its monthly events.',
+      freePlanPaused:
+        "Measuring is paused: the account reached the free plan's {events} events this month. It comes back on {date}, or within a minute of subscribing.",
+      subscribe: 'Subscribe now',
       nearQuota: 'This month the account has used {share} of its events.',
       open: 'Open billing',
     },

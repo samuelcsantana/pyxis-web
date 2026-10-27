@@ -425,6 +425,9 @@ export const es = translation({
       ended: 'Tu suscripción terminó. Todo se borra el {date}.',
       endedHeld: 'Tu suscripción terminó. El borrado de sus datos está en espera.',
       paused: 'La medición está en pausa hasta el {date}: la cuenta superó sus eventos del mes.',
+      freePlanPaused:
+        'La medición está en pausa: la cuenta llegó a los {events} eventos del plan gratis este mes. Vuelve el {date}, o en menos de un minuto después de suscribirte.',
+      subscribe: 'Suscribirse ahora',
       nearQuota: 'Este mes la cuenta ya usó {share} de sus eventos.',
       open: 'Abrir la facturación',
     },

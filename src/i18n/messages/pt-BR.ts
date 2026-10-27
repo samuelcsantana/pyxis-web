@@ -422,6 +422,9 @@ export const ptBR = translation({
       ended: 'Sua assinatura terminou. Tudo é apagado em {date}.',
       endedHeld: 'Sua assinatura terminou. A exclusão dos dados está em espera.',
       paused: 'A medição está pausada até {date}: a conta passou dos eventos do mês.',
+      freePlanPaused:
+        'A medição está pausada: a conta chegou aos {events} eventos do plano grátis neste mês. Ela volta em {date}, ou em até um minuto depois da assinatura.',
+      subscribe: 'Assinar agora',
       nearQuota: 'Neste mês a conta já usou {share} dos eventos.',
       open: 'Abrir a cobrança',
     },

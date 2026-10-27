@@ -460,6 +460,20 @@ describe('AccountNoticeBanner', () => {
     );
   });
 
+  it('says a free account comes back on the 1st or once subscribed, and links to subscribe', () => {
+    render(
+      <AccountNoticeBanner
+        notice={{ kind: 'freePlanPaused', until: '2026-12-01T00:00:00.000Z', events: 10_000 }}
+        i18n={english}
+      />,
+    );
+
+    expect(screen.getByRole('note')).toHaveTextContent(
+      "Measuring is paused: the account reached the free plan's 10,000 events this month. It comes back on Dec 1, 2026, or within a minute of subscribing.",
+    );
+    expect(screen.getByRole('link', { name: 'Subscribe now' })).toHaveAttribute('href', '/account');
+  });
+
   it('says a suspended account stopped measuring and links to the reason', () => {
     render(<AccountNoticeBanner notice={{ kind: 'suspended' }} i18n={english} />);
 

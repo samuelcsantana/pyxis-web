@@ -430,6 +430,9 @@ export const it = translation({
       endedHeld: 'Il tuo abbonamento è terminato. L’eliminazione dei suoi dati è sospesa.',
       paused:
         'La misurazione è in pausa fino al giorno {date}: l’account ha superato i suoi eventi mensili.',
+      freePlanPaused:
+        'La misurazione è in pausa: l’account ha raggiunto questo mese i {events} eventi del piano gratuito. Riprende il giorno {date}, o entro un minuto dall’abbonamento.',
+      subscribe: 'Abbonati ora',
       nearQuota: 'Eventi usati dall’account questo mese: {share}.',
       open: 'Apri la fatturazione',
     },

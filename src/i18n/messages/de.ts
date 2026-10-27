@@ -441,6 +441,9 @@ export const de = translation({
       endedHeld: 'Dein Abo ist beendet. Die Löschung der Daten ist zurückgestellt.',
       paused:
         'Die Messung ist bis {date} pausiert: Das Konto hat seine monatlichen Ereignisse überschritten.',
+      freePlanPaused:
+        'Die Messung ist pausiert: Das Konto hat diesen Monat die {events} Ereignisse des kostenlosen Plans erreicht. Sie läuft am {date} wieder an, oder innerhalb einer Minute nach dem Abschluss eines Abos.',
+      subscribe: 'Jetzt abonnieren',
       nearQuota: 'In diesem Monat hat das Konto {share} seiner Ereignisse verbraucht.',
       open: 'Abrechnung öffnen',
     },

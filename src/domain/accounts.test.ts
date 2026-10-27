@@ -177,6 +177,20 @@ describe('accountNotice', () => {
     ).toBeNull();
   });
 
+  it('says a free account is paused at the free plan, with the events it reached', () => {
+    expect(
+      accountNotice(
+        {
+          ...ACCOUNT,
+          status: 'free',
+          ingestionPausedUntil: '2026-12-01T00:00:00.000Z',
+          limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
+        },
+        NOW,
+      ),
+    ).toEqual({ kind: 'freePlanPaused', until: '2026-12-01T00:00:00.000Z', events: 10_000 });
+  });
+
   it('warns from 80% of the quota', () => {
     expect(accountNotice({ ...ACCOUNT, eventsThisMonth: 79_999 }, NOW)).toBeNull();
     expect(accountNotice({ ...ACCOUNT, eventsThisMonth: 80_000 }, NOW)).toEqual({
