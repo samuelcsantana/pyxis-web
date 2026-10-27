@@ -89,6 +89,24 @@ describe('AccountOverview', () => {
     expect(screen.getByRole('region')).toHaveTextContent(text);
   });
 
+  it('describes the free plan with the limits the API answers, with no billing to manage', () => {
+    overview({
+      status: 'free',
+      billingInterval: null,
+      currentPeriodEndsAt: null,
+      eventsThisMonth: 3_120,
+      limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+    });
+
+    expect(screen.getByRole('heading', { name: 'Plan' })).toBeInTheDocument();
+    expect(screen.getByText('Free plan: up to 10,000 events a month.')).toBeInTheDocument();
+    expect(screen.getByText('3,120 of 10,000')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Finish subscription' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Subscribe again' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Close the account' })).toBeInTheDocument();
+  });
+
   it('offers Checkout with a plan choice to an unfinished sign-up, and no portal', () => {
     overview({
       status: 'incomplete',

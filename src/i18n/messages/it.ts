@@ -355,6 +355,7 @@ export const it = translation({
       incomplete:
         'L’abbonamento non è stato completato. Scegli un piano per iniziare la prova gratuita.',
       comped: 'Un account gratuito, offerto da Pyxis.',
+      free: 'Piano gratuito: fino a {events} eventi al mese.',
       trialingUndated: 'Prova gratuita. Poi il piano viene addebitato, a meno che tu non annulli.',
       activeUndated: 'Attivo.',
       endingUndated:

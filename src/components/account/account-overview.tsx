@@ -55,6 +55,10 @@ function statusText(account: Account, i18n: I18n): string {
       return i18n.t('account.status.incomplete');
     case 'comped':
       return i18n.t('account.status.comped');
+    case 'free':
+      return i18n.t('account.status.free', {
+        events: i18n.format.count(account.limits.eventsPerMonth),
+      });
   }
 }
 

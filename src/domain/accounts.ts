@@ -6,6 +6,7 @@ export const ACCOUNT_STATUSES = [
   'ending',
   'ended',
   'comped',
+  'free',
 ] as const;
 export const ACCOUNT_ROLES = ['owner', 'member'] as const;
 export const BILLING_INTERVALS = ['month', 'year'] as const;
@@ -82,6 +83,7 @@ const STATUSES_THAT_CREATE: ReadonlySet<AccountStatus> = new Set([
   'past_due',
   'ending',
   'comped',
+  'free',
 ]);
 
 export function canCreateProjects(account: Account): boolean {

@@ -365,6 +365,7 @@ export const de = translation({
       incomplete:
         'Das Abo wurde nicht abgeschlossen. Wähle einen Plan, um die kostenlose Testphase zu starten.',
       comped: 'Ein kostenloses Konto, von Pyxis bereitgestellt.',
+      free: 'Kostenloser Plan: bis zu {events} Ereignisse im Monat.',
       trialingUndated: 'Kostenlose Testphase. Danach wird der Plan berechnet, außer du kündigst.',
       activeUndated: 'Aktiv.',
       endingUndated:

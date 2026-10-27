@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import type { BillingRedirectOutcome, CloseAccountOutcome } from '@/domain/accounts';
+import type { Account, BillingRedirectOutcome, CloseAccountOutcome } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { demoAccountsWire } from '@/services/accounts/mock-accounts-service';
 import { english } from '@/test-utils/english';
@@ -152,6 +152,23 @@ export const ExemptFromThePause: Story = {
       quotaPauseExemptUntil: '2027-01-01T00:00:00.000Z',
     },
   },
+};
+
+const FREE_PLAN: Account = {
+  ...DEMO,
+  status: 'free',
+  billingInterval: null,
+  trialEndsAt: null,
+  currentPeriodEndsAt: null,
+  eventsThisMonth: 3_120,
+  limits: { eventsPerMonth: 10_000, projects: 1, people: 1 },
+};
+
+export const FreePlan: Story = { args: { account: FREE_PLAN } };
+
+export const FreePlanInPortuguese: Story = {
+  args: { account: FREE_PLAN },
+  globals: { locale: 'pt-BR' },
 };
 
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
