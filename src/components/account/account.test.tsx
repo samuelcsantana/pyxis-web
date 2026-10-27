@@ -44,6 +44,7 @@ const ACCOUNT: Account = {
 
 const OPEN = {
   openCheckout: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
+  subscribe: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
   openPortal: () => Promise.resolve<BillingRedirectOutcome>({ kind: 'noBillingYet' }),
   close: () => Promise.resolve<CloseAccountOutcome>({ kind: 'confirmationMismatch' }),
 };

@@ -394,6 +394,22 @@ export const fr = translation({
       'Abonnez-vous à nouveau pour garder les données : il n’y a pas de nouvel essai gratuit, la formule est facturée dès aujourd’hui et les anciennes clés restent révoquées, donc chaque projet a besoin d’une nouvelle clé publique.',
     exempt:
       'Jusqu’au {date}, la mesure n’est pas mise en pause en cas de dépassement de la limite mensuelle.',
+    freePause:
+      'Avec la formule gratuite, la mesure se met en pause quand le mois atteint {events} événements et reprend le 1er.',
+    paidPlan: {
+      heading: 'La formule payante',
+      offer:
+        'Jusqu’à 100 000 événements par mois, 3 projets et 3 personnes, pour 39 R$ par mois ou 390 R$ par an. Le paiement est débité aujourd’hui et se renouvelle jusqu’à ce que vous résiliiez.',
+      resumes: 'La mesure reprend dans la minute qui suit l’abonnement.',
+    },
+    fit: {
+      dueBy:
+        'Ce compte dépasse ce que permet la formule gratuite. Mettez-le en conformité d’ici le {date}, sinon le compte prend fin ce jour-là :',
+      projects: 'Supprimez {count} : la formule gratuite permet {limit}.',
+      people: 'Retirez {count} : la formule gratuite permet {limit}, vous compris.',
+      where:
+        'Les projets se suppriment, et les personnes se retirent, dans les Paramètres de chaque projet.',
+    },
     notice: {
       suspended: 'Ce compte est suspendu, donc ses projets ne mesurent plus rien.',
       why: 'Voir pourquoi',
@@ -474,6 +490,8 @@ export const fr = translation({
     note: 'Résilie l’abonnement immédiatement et révoque les clés de tous les projets : les sites cessent d’envoyer des événements. Tout est supprimé trente jours plus tard ; exportez d’abord ce dont vous avez besoin.',
     refundNote:
       'Un premier paiement effectué au cours des sept derniers jours est intégralement remboursé. Sinon, rien n’est remboursé.',
+    freeNote:
+      'Révoque les clés de tous les projets : les sites cessent d’envoyer des événements. Tout est supprimé trente jours plus tard ; exportez d’abord ce dont vous avez besoin.',
     confirm: 'Tapez votre adresse e-mail pour confirmer',
     close: 'Fermer définitivement le compte',
     closing: 'Fermeture…',

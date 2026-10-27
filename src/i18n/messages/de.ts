@@ -396,6 +396,22 @@ export const de = translation({
       'Schließ erneut ein Abo ab, um die Daten zu behalten: Es gibt keine neue kostenlose Testphase, der Plan wird ab heute berechnet, und die alten Schlüssel bleiben widerrufen, also braucht jedes Projekt einen neuen öffentlichen Schlüssel.',
     exempt:
       'Die Messung wird bis {date} nicht pausiert, auch wenn das Monatslimit überschritten wird.',
+    freePause:
+      'Im kostenlosen Plan pausiert die Messung, sobald der Monat {events} Ereignisse erreicht, und läuft am 1. wieder an.',
+    paidPlan: {
+      heading: 'Der kostenpflichtige Plan',
+      offer:
+        'Bis zu 100.000 Ereignisse pro Monat, 3 Projekte und 3 Personen, für R$ 39 pro Monat oder R$ 390 pro Jahr. Abgebucht wird heute, und das Abo verlängert sich, bis du kündigst.',
+      resumes: 'Die Messung läuft innerhalb einer Minute nach dem Abschluss wieder an.',
+    },
+    fit: {
+      dueBy:
+        'Dieses Konto enthält mehr, als der kostenlose Plan erlaubt. Pass es bis {date} an, sonst endet das Konto an diesem Tag:',
+      projects: 'Lösche {count}: Der kostenlose Plan erlaubt {limit}.',
+      people: 'Entferne {count}: Der kostenlose Plan erlaubt {limit}, dich eingeschlossen.',
+      where:
+        'Projekte löschst und Personen entfernst du in den Einstellungen des jeweiligen Projekts.',
+    },
     notice: {
       suspended: 'Dieses Konto ist gesperrt, daher messen seine Projekte nicht mehr.',
       why: 'Grund ansehen',
@@ -476,6 +492,8 @@ export const de = translation({
     note: 'Kündigt das Abo sofort und widerruft die Schlüssel aller Projekte, sodass die Websites keine Ereignisse mehr senden. Dreißig Tage später wird alles gelöscht; exportiere vorher, was du brauchst.',
     refundNote:
       'Eine erste Zahlung aus den letzten sieben Tagen wird vollständig erstattet. Sonst wird nichts erstattet.',
+    freeNote:
+      'Widerruft die Schlüssel aller Projekte, sodass die Websites keine Ereignisse mehr senden. Dreißig Tage später wird alles gelöscht; exportiere vorher, was du brauchst.',
     confirm: 'Gib zur Bestätigung deine E-Mail-Adresse ein',
     close: 'Konto endgültig schließen',
     closing: 'Wird geschlossen…',

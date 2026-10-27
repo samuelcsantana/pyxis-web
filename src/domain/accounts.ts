@@ -152,6 +152,13 @@ export function welcomeStage(account: Account, backFromFreePlanCheckout = false)
   return backFromFreePlanCheckout ? 'subscribedFromFreePlan' : 'subscriptionBack';
 }
 
+export function pausedUntilOf(account: Account, now: Date): string | null {
+  return account.ingestionPausedUntil !== null &&
+    new Date(account.ingestionPausedUntil).getTime() > now.getTime()
+    ? account.ingestionPausedUntil
+    : null;
+}
+
 export function quotaPauseExemptUntil(account: Account, now: Date): string | null {
   return account.quotaPauseExemptUntil !== null &&
     new Date(account.quotaPauseExemptUntil).getTime() > now.getTime()
@@ -183,11 +190,9 @@ export function accountNotice(account: Account, now: Date): AccountNotice | null
   if (account.status === 'ended' && account.accessEndsAt !== null) {
     return { kind: 'ended', deletionOn: deletionDateOf(account.accessEndsAt) };
   }
-  if (
-    account.ingestionPausedUntil !== null &&
-    new Date(account.ingestionPausedUntil).getTime() > now.getTime()
-  ) {
-    return { kind: 'paused', until: account.ingestionPausedUntil };
+  const pausedUntil = pausedUntilOf(account, now);
+  if (pausedUntil !== null) {
+    return { kind: 'paused', until: pausedUntil };
   }
   const share = quotaShare(account);
   return share !== null && share >= QUOTA_WARNING_RATIO ? { kind: 'nearQuota', share } : null;

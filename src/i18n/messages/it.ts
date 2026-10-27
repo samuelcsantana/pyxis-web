@@ -386,6 +386,22 @@ export const it = translation({
       'Abbonati di nuovo per conservare i dati: non c’è una nuova prova gratuita, il piano viene addebitato da oggi e le vecchie chiavi restano revocate, quindi ogni progetto ha bisogno di una nuova chiave pubblica.',
     exempt:
       'Fino al giorno {date} la misurazione non va in pausa anche se si supera il limite mensile.',
+    freePause:
+      'Con il piano gratuito, la misurazione va in pausa quando il mese raggiunge {events} eventi e riprende il giorno 1.',
+    paidPlan: {
+      heading: 'Il piano a pagamento',
+      offer:
+        'Fino a 100.000 eventi al mese, 3 progetti e 3 persone, a R$ 39 al mese o R$ 390 all’anno. L’addebito avviene oggi e si rinnova finché non annulli.',
+      resumes: 'La misurazione riprende entro un minuto dall’abbonamento.',
+    },
+    fit: {
+      dueBy:
+        'Questo account contiene più di quanto consente il piano gratuito. Adattalo entro il giorno {date}, altrimenti l’account termina quel giorno:',
+      projects: 'Elimina {count}: il piano gratuito consente {limit}.',
+      people: 'Rimuovi {count}: il piano gratuito consente {limit}, contando anche te.',
+      where:
+        'I progetti si eliminano, e le persone si rimuovono, nelle Impostazioni di ciascun progetto.',
+    },
     notice: {
       suspended: 'Questo account è sospeso, quindi i suoi progetti hanno smesso di misurare.',
       why: 'Scopri perché',
@@ -466,6 +482,8 @@ export const it = translation({
     note: 'Annulla subito l’abbonamento e revoca le chiavi di tutti i progetti, così i siti smettono di inviare eventi. Tutto viene eliminato trenta giorni dopo; prima esporta quello che ti serve.',
     refundNote:
       'Un primo pagamento fatto negli ultimi sette giorni viene rimborsato per intero. Altrimenti non viene rimborsato nulla.',
+    freeNote:
+      'Revoca le chiavi di tutti i progetti, così i siti smettono di inviare eventi. Tutto viene eliminato trenta giorni dopo; prima esporta quello che ti serve.',
     confirm: 'Scrivi il tuo indirizzo email per confermare',
     close: 'Chiudi l’account per sempre',
     closing: 'Chiusura…',
