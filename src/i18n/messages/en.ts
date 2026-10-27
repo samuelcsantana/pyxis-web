@@ -679,6 +679,8 @@ export const en = {
     free: 'Your account is on the free plan.',
     freeLimits:
       'Up to {events} events a month, {projects} and {people}, with every feature and no card. Measuring pauses when the month reaches {pauseAt} events and comes back on the 1st.',
+    fromFreePlan:
+      'The account now takes up to {events} events a month, {projects} and {people}. If measuring was paused, it resumes within a minute.',
     next: 'Next, create a project for your site and install Pyxis on it.',
     create: 'Create your first project',
     dashboard: 'Open the dashboard',

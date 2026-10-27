@@ -718,6 +718,8 @@ export const fr = translation({
     free: 'Votre compte est sur la formule gratuite.',
     freeLimits:
       'Jusqu’à {events} événements par mois, {projects} et {people}, avec toutes les fonctions et sans carte. La mesure se met en pause quand le mois atteint {pauseAt} événements et reprend le 1er.',
+    fromFreePlan:
+      'Le compte accepte désormais jusqu’à {events} événements par mois, {projects} et {people}. Si la mesure était en pause, elle reprend dans la minute.',
     next: 'Ensuite, créez un projet pour votre site et installez-y Pyxis.',
     create: 'Créer votre premier projet',
     dashboard: 'Ouvrir le tableau de bord',

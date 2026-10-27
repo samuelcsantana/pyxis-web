@@ -11,6 +11,7 @@ import { type Account, welcomeStage } from '@/domain/accounts';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { readOrSignIn } from '@/lib/current-admin';
+import { isBackFromFreePlanCheckout } from '@/lib/free-plan-checkout';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 
 export const DASHBOARD_HOME = '/';
@@ -55,6 +56,33 @@ function SubscriptionBack({ i18n }: { readonly i18n: I18n }) {
   );
 }
 
+function SubscribedFromFreePlan({
+  account,
+  i18n,
+}: {
+  readonly account: Account;
+  readonly i18n: I18n;
+}) {
+  const { t } = i18n;
+  return (
+    <>
+      <p role="status" className="text-sm font-semibold">
+        {t('welcome.active')}
+      </p>
+      <p className="text-sm">
+        {t('welcome.fromFreePlan', {
+          events: i18n.format.count(account.limits.eventsPerMonth),
+          projects: t('counts.project', { count: account.limits.projects }),
+          people: t('counts.person', { count: account.limits.people }),
+        })}
+      </p>
+      <Link href={DASHBOARD_HOME} className={PRIMARY_LINK}>
+        {t('welcome.dashboard')}
+      </Link>
+    </>
+  );
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();
   return { title: t('welcome.title') };
@@ -71,7 +99,7 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
   }
   const i18n = await getI18n();
   const { t } = i18n;
-  const stage = welcomeStage(account);
+  const stage = welcomeStage(account, await isBackFromFreePlanCheckout(account.id));
   return (
     <BrandedPage>
       <h1 className="text-2xl font-bold tracking-tight">{t('welcome.title')}</h1>
@@ -87,9 +115,12 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
         {stage === 'firstSubscription' ? <FirstSubscription account={account} i18n={i18n} /> : null}
         {stage === 'freePlan' ? <FreePlanWelcome limits={account.limits} i18n={i18n} /> : null}
         {stage === 'subscriptionBack' ? <SubscriptionBack i18n={i18n} /> : null}
+        {stage === 'subscribedFromFreePlan' ? (
+          <SubscribedFromFreePlan account={account} i18n={i18n} />
+        ) : null}
         <RefreshWhilePending pending={stage === 'confirming'} />
       </section>
-      {stage === 'subscriptionBack' ? null : (
+      {stage === 'subscriptionBack' || stage === 'subscribedFromFreePlan' ? null : (
         <Link href={DASHBOARD_HOME} className={`self-start text-sm ${TEXT_LINK}`}>
           {t('welcome.dashboard')}
         </Link>

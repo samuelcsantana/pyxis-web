@@ -720,6 +720,8 @@ export const de = translation({
     free: 'Dein Konto ist im kostenlosen Plan.',
     freeLimits:
       'Bis zu {events} Ereignisse im Monat, {projects} und {people}, mit allen Funktionen und ohne Karte. Die Messung pausiert, wenn der Monat {pauseAt} Ereignisse erreicht, und läuft am 1. wieder an.',
+    fromFreePlan:
+      'Das Konto nimmt jetzt bis zu {events} Ereignisse im Monat an, {projects} und {people}. War die Messung pausiert, läuft sie innerhalb einer Minute wieder an.',
     next: 'Lege als Nächstes ein Projekt für deine Website an und installiere Pyxis darauf.',
     create: 'Erstes Projekt anlegen',
     dashboard: 'Dashboard öffnen',
