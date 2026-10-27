@@ -321,7 +321,14 @@ Shipping now:
   keeps its session through the same Server Action as signing in and goes straight to Stripe
   Checkout. Stripe returns to `/welcome?account=<id>`, which waits for the confirmation (checked
   every five seconds) and then offers the first project; leaving Checkout returns to
-  `/sign-up?step=plan`, which asks the owner to finish the subscription, as the empty home does
+  `/sign-up?step=plan`, which asks the owner to finish the subscription, as the empty home does.
+  The free plan follows the API's answer (`free_plan`), never a build flag: while it is closed
+  the sign-up is the one above; while it is open the form says "Free: up to 10,000 events a month,
+  on one site. No card.", has no plan to choose, and the verified owner, whose account is already
+  free, goes to `/welcome?account=<id>` (the free plan's limits from the account, then the first
+  project); while it is full the account is created and waits for a place, and the form offers to
+  subscribe now, also on a later visit. Where a verified owner goes follows the account status
+  the API answers, so a returning owner whose account runs goes to the dashboard
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; the plan's three projects). The new project
@@ -533,8 +540,8 @@ origin the sign-in and sign-out calls carry.
 | `/` and `/pt-br`, `/es`, `/de`, `/fr`, `/it`, `/nl` on `pyxis-analytics.dev`   | The home page (demo mode only), rewritten to `/landing/en`, `/landing/pt-br` and so on; asking for those directly answers 308                                                                                                                                                                |
 | `/termos`, `/privacidade` and `/acordo-de-tratamento` on `pyxis-analytics.dev` | The contract documents in Portuguese, and `/<language>/terms`, `/privacy`, `/dpa` their courtesy translations (demo mode, once the seller is configured), rewritten to `/legal/<document>`; asking for those directly answers 308                                                            |
 | `/[projectId]/exports/[exportId]`                                              | An export of the project's events: being prepared (checked again every few seconds), ready with its download, deleted after a week, or failed                                                                                                                                                |
-| `/sign-up`                                                                     | The sign-up (plan, e-mail, terms, code, then Checkout), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                                                                                                                    |
-| `/welcome?account=<id>`                                                        | Where Checkout returns: waits for Stripe's confirmation, then the trial's end and the first project                                                                                                                                                                                          |
+| `/sign-up`                                                                     | The sign-up (plan, e-mail, terms, code, then Checkout; on the free plan, no plan and no Checkout, or the wait for a free place when it is full), "not open yet" while the API keeps it closed, or the unfinished subscription of a signed-in owner                                           |
+| `/welcome?account=<id>`                                                        | Where Checkout returns: waits for Stripe's confirmation, then the trial's end and the first project; an account on the free plan gets its limits and the first project                                                                                                                       |
 | `/new-project`                                                                 | A project in the owner's account: name, site address, time zone, conversion event                                                                                                                                                                                                            |
 | `/[projectId]/install`                                                         | The snippets with the project's key or a ready request for an AI agent, and the wait for its first event                                                                                                                                                                                     |
 | `/account`                                                                     | The owner's accounts: plan, state, events this month against the quota, limits, and Checkout or the billing portal through Stripe; `?next=/account` survives a sign-in                                                                                                                       |
