@@ -365,7 +365,19 @@ Shipping now:
   ended account not deleted yet subscribes again from the same page (monthly or yearly, no new
   free trial, billing from that day, new keys to create), and the welcome page tells a returning
   subscriber that the subscription is active again; an account Pyxis exempted from the pause
-  shows until when. The sign-up says the free trial is one per customer
+  shows until when. The sign-up says the free trial is one per customer. On the free plan the
+  page shows the month against the free plan's events and where measuring pauses, the paid plan
+  with "Subscribe now" (monthly or yearly, charged that day, no trial), and, after a withdrawal
+  that left the account with more projects or people than the free plan holds, the day it has
+  to fit by and what to delete or remove; the banner of a paused free account says measuring
+  comes back on the 1st or within a minute of subscribing, and the welcome page waits for the
+  payment and then confirms the subscription (a cookie set when that Checkout opens tells this
+  return from a new free account's welcome). While the API says the free plan is open or full,
+  a subscribed account learns what cancelling does (back to the free plan with its projects and
+  data when it holds one project and one person, otherwise what to remove or the account ends),
+  a paid one can withdraw within 7 days of its first payment (refunded, back on the free plan;
+  the API answers when the 7 days are over), and the texts name no free trial. While the free
+  plan is closed, or its state cannot be read, the page is as before
 - A consent page for the Claude connector (`/connect?request=<id>`), where the API's OAuth
   server sends the browser when Claude or Claude Code asks to connect. A visitor without a session
   signs in first and comes back to the same request. The page names the app by the API's own name
