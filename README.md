@@ -20,7 +20,7 @@ per-person timelines of a product, measured without cookies or personal data.**
 [![Storybook](https://img.shields.io/badge/Storybook-components-FF4785?logo=storybook&logoColor=white)](https://samuelcsantana.github.io/pyxis-web/)
 [![Live demo](https://img.shields.io/badge/Live%20demo-invented%20data-F5B83D?logo=vercel&logoColor=white)](https://demo.pyxis-analytics.dev)
 
-**[Live demo](https://demo.pyxis-analytics.dev)** ·
+**[Pyxis](https://pyxis-analytics.dev)** · **[Live demo](https://demo.pyxis-analytics.dev)** ·
 **[Storybook](https://samuelcsantana.github.io/pyxis-web/)** ·
 **[API reference](https://samuelcsantana.github.io/pyxis-api/)** ·
 **[SDK playground](https://samuelcsantana.github.io/pyxis-sdk/)**
@@ -37,25 +37,26 @@ The tour and the screenshots show invented demo data: the dashboard runs on it w
 configured. The tour was recorded from the [live demo](https://demo.pyxis-analytics.dev).
 
 > **Status:** in production since 2026-10-06 at `app.pyxis-analytics.dev`, open to sign-up for
-> the hosted plan since 2026-10-15, in seven languages, with the home page at
+> the hosted plan since 2026-10-15 and starting every new account on the free plan, without a
+> card, since 2026-10-28, in seven languages, with the home page at
 > [pyxis-analytics.dev](https://pyxis-analytics.dev); the same screens run on invented data in the
 > public [live demo](https://demo.pyxis-analytics.dev).
 
 ## Ecosystem
 
-| Repository                                               | Role                                                             |
-| -------------------------------------------------------- | ---------------------------------------------------------------- |
-| [pyxis-api](https://github.com/samuelcsantana/pyxis-api) | Ingestion, dashboard sign-in and queries, erasure, retention     |
-| [pyxis-sdk](https://github.com/samuelcsantana/pyxis-sdk) | Browser tracker published to npm as `pyxis-analytics`            |
-| [pyxis-mcp](https://github.com/samuelcsantana/pyxis-mcp) | MCP server: Claude and other agents read the dashboard's numbers |
-| **pyxis-web** (this one)                                 | The dashboard                                                    |
+| Repository                                               | Role                                                                                   |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [pyxis-api](https://github.com/samuelcsantana/pyxis-api) | Ingestion, sign-in, dashboard queries, accounts and billing, erasure, the MCP endpoint |
+| [pyxis-sdk](https://github.com/samuelcsantana/pyxis-sdk) | Browser tracker published to npm as `pyxis-analytics`                                  |
+| **pyxis-web** (this one)                                 | The dashboard and the home page                                                        |
+| [pyxis-mcp](https://github.com/samuelcsantana/pyxis-mcp) | MCP server: Claude and other agents read the dashboard's numbers                       |
 
 ## Why it exists
 
 A product team wants to know which features are used, where requests fail, where a sign-up funnel
 loses people and what one person did, in order. Pyxis answers those questions from events that
 carry no cookie, no IP address and no personal data. This dashboard is where the answers are read:
-one admin, one email code to sign in, and a design that puts the number that matters first.
+an e-mailed code to sign in, no password, and a design that puts the number that matters first.
 
 Read more: [why Pyxis was built and what it never stores][post], the introduction post on the
 author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
@@ -95,9 +96,9 @@ Shipping now:
   (each one replaces the last, and the API sends at most five an hour), and survives a reload of
   the tab for the ten minutes a code lives (the address and the time it was sent stay in
   `sessionStorage`, forgotten on sign-in or on Change). The page names Pyxis once, in its header,
-  and starts the card right under it on a phone; outside the demo it links to the live demo for
-  visitors without access, and in the demo a button fills in the demo code. The sign-in page and
-  the other standalone pages (page not found, the error screen, no projects yet) share the
+  and starts the card right under it on a phone; outside the demo it links visitors without
+  access to the plans and the live demo, and in the demo a button fills in the demo code. The
+  sign-in page and the other standalone pages (page not found, the error screen, no projects yet) share the
   GitHub cover's backdrop, star dust and the faint brand mark, behind one raised card
 - The app shell: sidebar with the screens (resting the pointer on one, or reaching it with the
   keyboard, fetches that screen ahead, so the click opens it without a skeleton even the first
@@ -321,7 +322,8 @@ Shipping now:
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
   project with its name typed again. The People panel lists who opens the project; the owner
   adds an address (the person gets an invitation e-mail in the language of the page, and the
-  account has room for three people, the owner included) and removes anyone but the owner. The
+  account has room for three people on the paid plan and one on the free plan, the owner
+  included) and removes anyone but the owner. The
   owner also asks for an export of every event the project keeps: the API prepares a compressed
   CSV in a few minutes and e-mails a link to the export's page
   (`/[projectId]/exports/[exportId]`), which checks again on its own while the file is being
@@ -353,7 +355,8 @@ Shipping now:
   the API answers, so a returning owner whose account runs goes to the dashboard
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
-  browser's time zone, an optional conversion event; the plan's three projects). The new project
+  browser's time zone, an optional conversion event; three projects on the paid plan, one on the
+  free plan). The new project
   opens on `/[projectId]/install`. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
   Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
   the API's address, each with a copy button. "With an AI agent" holds a ready request for Claude
@@ -471,8 +474,7 @@ Shipping now:
   measuring in this browser. A browser driven by automation (`navigator.webdriver`) is not
   measured, so Playwright launches Chromium with `--disable-blink-features=AutomationControlled`
   and a test checks the flag reached it. The Content Security Policy lets the home page, and no other page,
-  reach the ingestion API. Until the domain moves from the dashboard's Vercel project to the
-  demo's, `pyxis-analytics.dev` still redirects to the dashboard
+  reach the ingestion API
 
 ## Internationalization
 
@@ -603,7 +605,7 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/requests`                                                        | Writes by route; `?show=failing` and `?screen=/path` filter them; `?route=` opens one                                                                                                                                                                                                        |
 | `/[projectId]/funnel`                                                          | `?steps=<json>`, `?mode=visit\|user`; `?step=&outcome=` lists who; none: the editor                                                                                                                                                                                                          |
 | `/[projectId]/timeline`                                                        | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                                                                                                                                                             |
-| `/[projectId]/visits`                                                          | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                                                                                                                                                                      |
+| `/[projectId]/visits`                                                          | The visits of the period, with the dashboard filters below plus `route=` (`POST /orders/:id`), a request the visit made                                                                                                                                                                      |
 | `/[projectId]/settings`                                                        | The weekly digest switch, sessions (end one or all), access tokens (create, revoke), connected apps (revoke or connect Claude), the project (edited by its owner), keys (created and revoked by the owner), retention, events, people (added and removed by the owner), deleting the project |
 | `/[projectId]/help`                                                            | The support address, the reply time of the reader's plan, the installation and question links and the private security report                                                                                                                                                                |
 | `/[projectId]/overview/export`                                                 | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                                                                                                                                                                     |
@@ -614,6 +616,9 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/visits/export`                                                   | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                                                                                                                                                        |
 | `/[projectId]/icon`                                                            | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                                                                                                                                                         |
 | `/[projectId]/arrivals`                                                        | JSON for the menu's counts: what arrived in the period (`range` or `from`/`to`) since `?since=`, never cached; an expired session, an unknown project and the API's limit answer 401, 404 and 429                                                                                            |
+| `/[projectId]/exports/[exportId]/download`                                     | Redirects to the file through a five-minute link the API signs on each request, or back to the export's page when it is not ready                                                                                                                                                            |
+| `/manifest.webmanifest`                                                        | The dashboard's web app manifest; 404 in demo mode                                                                                                                                                                                                                                           |
+| `/llms.txt` on `pyxis-analytics.dev`                                           | What Pyxis is and how to install the tracker, for language models and coding agents                                                                                                                                                                                                          |
 
 Every screen route but the Timeline also reads the dashboard filters (`path`, `path2`, `path3`,
 `event`, `property`, `channel`, `device`, `browser`, `os`, `identity`, `country`, `region`,
@@ -677,7 +682,7 @@ neither the home page footer nor the sign-up page links them. A change to these 
 redeploy.
 
 Only `main` deploys: `vercel.json` turns Git deployments off for every other branch, so pull
-requests get no preview deployment and spend none of the Hobby plan's build quota. Check a change
+requests get no preview deployment and spend no build minutes. Check a change
 locally instead (`npm run dev`, or the e2e suite on a production build). `vercel.json` also runs
 the functions in `gru1` (São Paulo), the city of the API, because every page reads it on the
 server.
@@ -738,7 +743,7 @@ that says why:
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
-the two screens load 154.1 KiB, down from about 256 KiB with Recharts. The budget went from 162 to 163 KiB
+the two screens loaded 154.1 KiB when that change landed, down from about 256 KiB with Recharts. The budget went from 162 to 163 KiB
 with the sliding period presets, a client component of about 1 KiB that moves the indicator on
 the click, before the next page arrives, and to 165 KiB with the sliding indicators of the other
 switches, the tabs and the theme choice (about 1.4 KiB on these two screens: a hook that measures
@@ -783,7 +788,8 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 ```text
 src/
 ├── app/            routes, the root layout, design tokens (globals.css), icons
-├── components/     UI components, each with its stories (overview, shell, sign-in, states, theme)
+├── components/     UI components by screen and area (shell, overview, visits, settings, account,
+│                   sign-up, landing, legal…), each with its stories
 ├── design/         the design tokens page
 ├── domain/         pure types and rules: the admin and projects, periods, overview figures,
 │                   rates and changes, sparklines, chart scales, day labels, lines and
@@ -806,7 +812,7 @@ contract/           the API contract copied from pyxis-api
 public/email/       the raster logo the API's sign-in email loads (PNG, 1x and 2x)
 e2e/                Playwright specs and the axe helper
 .storybook/         Storybook configuration
-eslint-rules/       the local ESLint rules: no comments, no font sizes in px
+eslint-rules/       the local ESLint rules: no comments, no literal text in JSX, no font sizes in px
 scripts/            the comment check for files ESLint does not read
 docs/adr/           architecture decision records
 ```
@@ -875,7 +881,7 @@ docs/adr/           architecture decision records
 | -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | [0001](docs/adr/0001-record-architecture-decisions.md)                     | Record architecture decisions                                     |
 | [0002](docs/adr/0002-server-components-and-services.md)                    | Server Components reading through service interfaces              |
-| [0003](docs/adr/0003-csp-without-nonces.md)                                | A Content Security Policy without nonces                          |
+| [0003](docs/adr/0003-csp-without-nonces.md)                                | A Content Security Policy without nonces (superseded by 0009)     |
 | [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md)         | Request state of Client Components with rx-state-bridge           |
 | [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)             | Charts with Recharts, each with a table view (superseded by 0006) |
 | [0006](docs/adr/0006-server-rendered-svg-charts.md)                        | Charts drawn as SVG on the server, each with a table view         |
