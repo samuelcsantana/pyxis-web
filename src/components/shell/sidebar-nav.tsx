@@ -13,11 +13,11 @@ import { useT } from '@/i18n/messages-provider';
 import { ArrivalBadge } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
-  periodParameters,
   SCREENS,
   screenHref,
   screenLabelKey,
   screenOf,
+  screenParameters,
   SETTINGS_ICON,
   settingsHref,
 } from './screens';
@@ -54,7 +54,7 @@ function ScreenIcon({ path, active }: { readonly path: string; readonly active: 
 export function SidebarNav({ projectId }: SidebarNavProps) {
   const t = useT();
   const pathname = usePathname();
-  const query = periodParameters(useSearchParams());
+  const search = useSearchParams();
   const current = screenOf(pathname);
   const settingsCurrent = pathname === settingsHref(projectId);
 
@@ -67,7 +67,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
           return (
             <li key={screen.slug}>
               <IntentPrefetchLink
-                href={screenHref(projectId, screen.slug, query)}
+                href={screenHref(projectId, screen.slug, screenParameters(search, screen.slug))}
                 aria-current={active ? 'page' : undefined}
                 className={`${ITEM} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
               >

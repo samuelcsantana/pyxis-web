@@ -1,4 +1,4 @@
-import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filters';
+import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
 import type { RequestsSearch } from '@/domain/requests';
 import type { VisitsSearch } from '@/domain/visits';
 import type { KeptParameters } from './kept-parameters';
@@ -33,14 +33,14 @@ const VISITS_CARRIED = [
 ] as const satisfies readonly (keyof VisitsSearch)[];
 
 export const CARRIED_PARAMETERS: Readonly<Record<ScreenSlug, readonly string[]>> = {
-  overview: ['metric'],
-  funnel: ['mode', 'steps', 'by', 'step', 'outcome'],
-  features: ['kind', 'q'],
-  requests: REQUESTS_CARRIED,
+  overview: ['metric', ...DASHBOARD_FILTER_PARAMETERS],
+  funnel: ['mode', 'steps', 'by', 'step', 'outcome', ...DASHBOARD_FILTER_PARAMETERS],
+  features: ['kind', 'q', ...DASHBOARD_FILTER_PARAMETERS],
+  requests: [...REQUESTS_CARRIED, ...DASHBOARD_FILTER_PARAMETERS],
   timeline: [],
   visits: VISITS_CARRIED,
-  devices: [],
-  acquisition: [],
+  devices: DASHBOARD_FILTER_PARAMETERS,
+  acquisition: DASHBOARD_FILTER_PARAMETERS,
 };
 
 export function carriedParameters(screen: ScreenSlug, search: ScreenSearch): KeptParameters {

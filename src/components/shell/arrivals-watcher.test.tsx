@@ -141,6 +141,17 @@ describe('ArrivalsWatcher', () => {
     expect(openScreenNews()).toBeUndefined();
   });
 
+  it('pauses the news of the screen being shown while a dashboard filter is on', async () => {
+    navigation.search = 'range=7d&device=mobile';
+    answers = [report(NOW), LATER];
+    watch();
+    await pass(ARRIVALS_POLL_MS);
+
+    expect(openScreenNews()).toBeUndefined();
+    expect(arrivalNews().features).toEqual({ shown: '1', label: '1 new event' });
+    expect(activeVisits()).toBe(1);
+  });
+
   it('publishes the visits on the site now from each answer', async () => {
     answers = [report(NOW), report(NOW + ARRIVALS_POLL_MS, { activeVisits: 3 })];
     watch();

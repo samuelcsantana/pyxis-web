@@ -6,9 +6,10 @@ export const SCREEN_TOP_MARK = 'screen-top';
 
 export interface ScreenContentProps extends MainContentProps {
   readonly readAt?: number;
+  readonly filtered?: boolean;
 }
 
-export function ScreenContent({ readAt, ...props }: ScreenContentProps) {
+export function ScreenContent({ readAt, filtered = false, ...props }: ScreenContentProps) {
   return (
     <>
       <span
@@ -18,7 +19,7 @@ export function ScreenContent({ readAt, ...props }: ScreenContentProps) {
       />
       {readAt === undefined ? null : (
         <>
-          <ScreenRead readAt={readAt} />
+          {filtered ? null : <ScreenRead readAt={readAt} />}
           <RefreshWhenStale readAt={readAt} />
         </>
       )}

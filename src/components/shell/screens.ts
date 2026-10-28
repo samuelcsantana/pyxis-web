@@ -1,3 +1,5 @@
+import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
+
 export const SCREENS = [
   {
     slug: 'overview',
@@ -37,6 +39,8 @@ export type ScreenSlug = (typeof SCREENS)[number]['slug'];
 
 export const SCREENS_WITHOUT_PERIOD: ReadonlySet<ScreenSlug> = new Set(['timeline']);
 
+export const SCREENS_WITHOUT_FILTERS: ReadonlySet<ScreenSlug> = new Set(['timeline']);
+
 export function screenLabelKey(slug: ScreenSlug): `screens.${ScreenSlug}` {
   return `screens.${slug}`;
 }
@@ -54,6 +58,20 @@ export function periodParameters(search: SearchReader): string {
   for (const name of PERIOD_PARAMETERS) {
     const value = search.get(name);
     if (value !== null) {
+      kept.set(name, value);
+    }
+  }
+  return kept.toString();
+}
+
+export function screenParameters(search: SearchReader, slug: ScreenSlug): string {
+  const kept = new URLSearchParams(periodParameters(search));
+  if (SCREENS_WITHOUT_FILTERS.has(slug)) {
+    return kept.toString();
+  }
+  for (const name of DASHBOARD_FILTER_PARAMETERS) {
+    const value = search.get(name);
+    if (value !== null && value !== '') {
       kept.set(name, value);
     }
   }
