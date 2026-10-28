@@ -6,12 +6,8 @@ import { MessagesProvider } from '@/i18n/messages-provider';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CreateProjectOutcome, ProjectChanges } from '@/domain/project-management';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
-import {
-  CREATE_PROJECT_MIN_BUSY_MS,
-  FALLBACK_TIME_ZONE,
-  installHref,
-  NewProjectForm,
-} from './new-project-form';
+import { installHref } from '@/components/shell/screens';
+import { CREATE_PROJECT_MIN_BUSY_MS, FALLBACK_TIME_ZONE, NewProjectForm } from './new-project-form';
 
 const navigation = vi.hoisted(() => ({ router: { push: vi.fn() } }));
 
