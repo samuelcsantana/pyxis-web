@@ -421,8 +421,10 @@ Shipping now:
   French at `/fr`, Italian at `/it` and Dutch at `/nl`, each with its
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
-  models and coding agents what Pyxis is, how to install the tracker and the rules an
-  integration must follow (404 on the demo and the dashboard). Every address that names a
+  models and coding agents what Pyxis is, how to install the tracker, the rules an
+  integration must follow and where to send a person who needs support (404 on the demo and
+  the dashboard). The footer's Support column and the last FAQ answer give the support address
+  and the reply times. Every address that names a
   language always opens in it; `/`, which names none, opens before any of its content paints the language
   chosen before in the header's language select, then the first language the browser asks for
   that the page ships (unless the visitor came from a Pyxis page), and otherwise stays in English,
