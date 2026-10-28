@@ -1,5 +1,12 @@
 import { LANDING_LINKS } from '@/components/landing/landing-links';
+import { SUPPORT_EMAIL } from '@/domain/accounts';
 import { FREE_PLAN_EVENTS_PER_MONTH, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
+import {
+  FREE_REPLY_DAYS,
+  PAID_REPLY_BUSINESS_DAYS,
+  QUESTION_FORM_URL,
+  SECURITY_REPORT_URL,
+} from '@/domain/support';
 import { LANDING_ORIGIN } from './site';
 
 export const LLMS_TEXT_CONTENT_TYPE = 'text/plain; charset=utf-8';
@@ -119,6 +126,15 @@ export function llmsText(offer: SignUpOffer): string {
     '  Terraform.',
     `- [pyxis-web](${LANDING_LINKS.web}): the dashboard, Next.js.`,
     `- [Live demo](${LANDING_LINKS.demo}): the dashboard with invented data, no sign-in.`,
+    '',
+    '## Support',
+    '',
+    `- An account, the plan, its limits or billing: e-mail ${SUPPORT_EMAIL} from the`,
+    `  account's e-mail address. Paid plan: a reply within ${String(PAID_REPLY_BUSINESS_DAYS)} business days; free plan:`,
+    `  within ${String(FREE_REPLY_DAYS)} days.`,
+    `- [Ask a question on GitHub](${QUESTION_FORM_URL}): installation and usage questions on the`,
+    '  free plan. Questions are public: never paste keys or personal data.',
+    `- [Report a vulnerability privately](${SECURITY_REPORT_URL}), never in a public issue.`,
     '',
     '## Optional',
     '',
