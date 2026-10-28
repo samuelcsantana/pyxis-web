@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AccountOverview } from '@/components/account/account-overview';
+import { AccountSupport } from '@/components/account/account-support';
 import { BrandedPage } from '@/components/brand/branded-page';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { ownedAccounts } from '@/domain/accounts';
 import { ownsAnotherFreeAccount } from '@/domain/free-plan';
+import { supportPlanOf } from '@/domain/support';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { currentAdmin, readOrSignIn } from '@/lib/current-admin';
 import { bestEffortFreePlanState } from '@/lib/free-plan-state';
@@ -58,6 +60,7 @@ export default async function AccountPage() {
           />
         ))
       )}
+      <AccountSupport email={admin.email} plan={supportPlanOf(accounts)} i18n={i18n} />
       <Link href={DASHBOARD_HOME} className={`self-start text-sm ${TEXT_LINK}`}>
         {i18n.t('account.back')}
       </Link>
