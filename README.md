@@ -369,6 +369,11 @@ Shipping now:
   and copies this page's address to send it there. The plain-HTML snippet loads the exact
   `pyxis-analytics` version this repository depends on (read from `package.json`), so the weekly
   Dependabot update of the package moves the snippet with it
+- A Help and support page (`/[projectId]/help`, from the account menu): the support address with
+  a copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
+  the free plan, as the Terms of Use set), the installation links, the GitHub question form and
+  the private security report. Account and billing ends with the same address and reply time,
+  and the code step of sign-in and sign-up names it for a code that does not arrive
 - An Account and billing page (`/account`, from the account menu) for the owner of a hosted
   account: the plan and its state (free trial, active, payment failed, ending, ended with the
   deletion date, sign-up not finished), the events measured this month against the quota, the
@@ -597,6 +602,7 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/timeline`                                                        | `?user=<id>` or `?visit=<uuid>`, `?show=` to filter the items; keeps the period for the way back                                                                                                                                                                                             |
 | `/[projectId]/visits`                                                          | `?path=`, `path2=`, `path3=`, `event=`, `property=`, `channel=`, `device=`, `identity=`                                                                                                                                                                                                      |
 | `/[projectId]/settings`                                                        | The weekly digest switch, sessions (end one or all), access tokens (create, revoke), connected apps (revoke or connect Claude), the project (edited by its owner), keys (created and revoked by the owner), retention, events, people (added and removed by the owner), deleting the project |
+| `/[projectId]/help`                                                            | The support address, the reply time of the reader's plan, the installation and question links and the private security report                                                                                                                                                                |
 | `/[projectId]/overview/export`                                                 | A CSV file: `?table=daily\|pages\|events` (`daily` when absent), for the screen's period                                                                                                                                                                                                     |
 | `/[projectId]/requests/export`                                                 | A CSV file of the routes the Requests screen shows, with its period, `kind`, `show` and `screen`                                                                                                                                                                                             |
 | `/[projectId]/features/export`                                                 | A CSV file of the ranking the Features screen shows, with its period, `kind` and `q`                                                                                                                                                                                                         |
