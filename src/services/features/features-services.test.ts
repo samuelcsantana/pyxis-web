@@ -5,7 +5,11 @@ import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { MockOverviewService } from '../overview/mock-overview-service';
 import { demoEngagementWire } from './demo-engagement';
 import { demoFeaturesWire } from './demo-features';
-import { demoPropertyBreakdownWire } from './demo-properties';
+import {
+  demoPropertyBreakdownWire,
+  demoPropertySummaryWire,
+  SUMMARY_GROUPS,
+} from './demo-properties';
 import { createFeaturesService } from './features-service.factory';
 import { HttpFeaturesService } from './http-features-service';
 import { MockFeaturesService } from './mock-features-service';
@@ -40,6 +44,45 @@ describe('HttpFeaturesService', () => {
       `${API}/v1/projects/p%201/features?from=2026-09-22&to=2026-10-05&kind=screens`,
     );
     expect(report.items[0]?.name).toBe('/dashboard');
+  });
+
+  it('asks the median of one property, split by another, and parses it', async () => {
+    const request = { name: 'product_created', key: 'price', by: 'category' };
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(demoPropertySummaryWire('demo', RANGE, request, NOW))),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const report = await new HttpFeaturesService(
+      new ApiReader(API, () => Promise.resolve('token')),
+    ).summary('p 1', RANGE, request);
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p%201/features/properties/summary?from=2026-09-22&to=2026-10-05&name=product_created&key=price&by=category`,
+    );
+    expect(report.overall.events).toBeGreaterThan(0);
+  });
+
+  it('asks the median of one property without a split', async () => {
+    const request = { name: 'product_created', key: 'price', by: null };
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(
+        new Response(JSON.stringify(demoPropertySummaryWire('demo', RANGE, request, NOW))),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await new HttpFeaturesService(new ApiReader(API, () => Promise.resolve('token'))).summary(
+      'p 1',
+      RANGE,
+      request,
+    );
+
+    expect(fetchMock.mock.calls[0]?.[0]).toBe(
+      `${API}/v1/projects/p%201/features/properties/summary?from=2026-09-22&to=2026-10-05&name=product_created&key=price`,
+    );
   });
 
   it('asks the property breakdown of one event for the range and parses it', async () => {
@@ -209,10 +252,20 @@ describe('MockFeaturesService properties', () => {
     expect(report.keys[0]?.events).toBeLessThan(report.events);
   });
 
-  it('answers no keys for an event without properties or one the demo never sends', async () => {
+  it('carries a price and a category on the products created, the price a number', async () => {
+    const report = await new MockFeaturesService().properties('demo', RANGE, 'product_created');
+
+    expect(report.keys.map((key) => key.key).toSorted()).toEqual(['category', 'price']);
+    expect(
+      report.keys
+        .find((key) => key.key === 'price')
+        ?.values.every((value) => Number.isFinite(Number(value.value))),
+    ).toBe(true);
+  });
+
+  it('answers no keys for an event the demo never sends', async () => {
     const service = new MockFeaturesService();
 
-    expect((await service.properties('demo', RANGE, 'product_created')).keys).toEqual([]);
     expect(await service.properties('demo', RANGE, 'never_sent')).toEqual({
       name: 'never_sent',
       events: 0,
@@ -238,5 +291,59 @@ describe('createFeaturesService', () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
     expect(createFeaturesService()).toBeInstanceOf(MockFeaturesService);
+  });
+});
+
+describe('MockFeaturesService summary', () => {
+  it('sums up the demo prices of the products created, split by category', async () => {
+    const report = await new MockFeaturesService().summary('demo', RANGE, {
+      name: 'product_created',
+      key: 'price',
+      by: 'category',
+    });
+
+    expect(report.overall.events).toBeGreaterThan(0);
+    expect(report.overall.median).toBeGreaterThan(0);
+    expect(report.groups.map((group) => group.value).toSorted()).toEqual([
+      'combos',
+      'desserts',
+      'drinks',
+      'food',
+    ]);
+    expect(report.groups.reduce((sum, group) => sum + group.events, 0)).toBe(report.overall.events);
+    expect(report.otherCount).toBe(0);
+  });
+
+  it('answers no figures for a property that is never a number, and keeps the top groups', () => {
+    const text = demoPropertySummaryWire(
+      'demo',
+      RANGE,
+      { name: 'cta_clicked', key: 'cta', by: null },
+      NOW,
+    );
+    const many = demoPropertySummaryWire(
+      'demo',
+      RANGE,
+      { name: 'product_created', key: 'price', by: 'price' },
+      NOW,
+    );
+
+    expect(text.overall).toEqual({ events: 0, median: null, p25: null, p75: null });
+    expect(many.groups.length).toBeLessThanOrEqual(SUMMARY_GROUPS);
+    expect(many.other_count).toBe(
+      many.overall.events - many.groups.reduce((sum, group) => sum + group.events, 0),
+    );
+  });
+
+  it('leaves out of the groups an event without the property it splits by', () => {
+    const wire = demoPropertySummaryWire(
+      'demo',
+      RANGE,
+      { name: 'product_created', key: 'price', by: 'never_sent' },
+      NOW,
+    );
+
+    expect(wire.groups).toEqual([]);
+    expect(wire.other_count).toBe(0);
   });
 });

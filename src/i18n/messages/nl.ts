@@ -953,6 +953,22 @@ export const nl = translation({
     title: 'Alle schermen filteren op {value}',
     remove: 'Filter {value} verwijderen',
   },
+  propertySummary: {
+    median: 'Mediaan',
+    middleHalf: 'Middelste helft',
+    range: '{low} tot {high}',
+    splitBy: 'Splitsen op',
+    noSplit: 'Niet splitsen',
+    loading: 'Mediaan van {key} lezen…',
+    failed: 'Kon de mediaan van {key} niet lezen.',
+    otherValues: 'Andere waarden',
+    columns: {
+      value: 'Waarde',
+      median: 'Mediaan',
+      middleHalf: 'Middelste helft',
+      events: 'Events',
+    },
+  },
   dashboardFilters: {
     label: 'Filters',
     removeAll: 'Filters verwijderen',

@@ -1,5 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import { barWidth, formatCount, formatPercent, NO_VALUE, rate } from './metrics';
+import { isNumericKey } from './property-summary';
 import type { PropertyBreakdownReport, PropertyBreakdownWire } from './property-breakdown.schema';
 
 export type { PropertyBreakdownReport, PropertyBreakdownWire };
@@ -17,6 +18,7 @@ export interface PropertyKeyView {
   readonly carriedBy: string;
   readonly rows: readonly PropertyValueRow[];
   readonly other: PropertyValueRow | null;
+  readonly numeric: boolean;
 }
 
 function valueRow(value: string, count: number, visits: string, keyEvents: number, i18n: I18n) {
@@ -43,5 +45,6 @@ export function propertyKeyViews(
       key.otherCount === 0
         ? null
         : valueRow(i18n.t('properties.otherValues'), key.otherCount, NO_VALUE, key.events, i18n),
+    numeric: isNumericKey(key.values.map((value) => value.value)),
   }));
 }

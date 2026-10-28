@@ -935,6 +935,22 @@ export const ptBR = translation({
     title: 'Filtrar todas as telas por {value}',
     remove: 'Remover filtro {value}',
   },
+  propertySummary: {
+    median: 'Mediana',
+    middleHalf: 'Metade do meio',
+    range: '{low} a {high}',
+    splitBy: 'Dividir por',
+    noSplit: 'Sem divisão',
+    loading: 'Lendo a mediana de {key}…',
+    failed: 'Não foi possível ler a mediana de {key}.',
+    otherValues: 'Outros valores',
+    columns: {
+      value: 'Valor',
+      median: 'Mediana',
+      middleHalf: 'Metade do meio',
+      events: 'Eventos',
+    },
+  },
   dashboardFilters: {
     label: 'Filtros',
     removeAll: 'Remover filtros',

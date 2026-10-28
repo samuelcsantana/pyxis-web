@@ -22,7 +22,13 @@ export interface DemoEvent {
   readonly perDay: number;
   readonly visitsPerCount: number;
   readonly properties: readonly DemoProperty[];
+  readonly derived?: readonly DemoDerivedProperty[];
   readonly after?: string;
+}
+
+export interface DemoDerivedProperty {
+  readonly key: string;
+  readonly values: readonly (string | number)[];
 }
 
 export type DemoStatusShare = readonly [status: number, share: number, errorCode?: string];

@@ -123,7 +123,17 @@ export const DEMO_STORE: DemoProject = {
       after: 'signup_submitted',
       properties: [{ key: 'method', carriedShare: 1, values: signInMethods(0.58, 0.3, 0.12) }],
     },
-    { name: 'product_created', page: '/products', perDay: 4, visitsPerCount: 0.46, properties: [] },
+    {
+      name: 'product_created',
+      page: '/products',
+      perDay: 4,
+      visitsPerCount: 0.46,
+      properties: [],
+      derived: [
+        { key: 'price', values: [19.9, 29.9, 39, 49.9, 49.9, 59, 79.9, 99, 129, 199] },
+        { key: 'category', values: ['food', 'food', 'drinks', 'desserts', 'combos'] },
+      ],
+    },
     {
       name: 'report_exported',
       page: '/reports',

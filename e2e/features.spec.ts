@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`features, ${colorScheme} theme`, () => {
@@ -48,12 +49,12 @@ test('opens and closes the properties of an event from the keyboard', async ({ p
 });
 
 test('says when an event carried no properties', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/features`);
+  await page.goto(`/${DOCS_ID}/features?range=30d`);
 
-  await page.getByRole('button', { name: 'Properties of Product created' }).click();
+  await page.getByRole('button', { name: 'Properties of Newsletter subscribed' }).click();
 
   await expect(
-    page.getByText('Product created carried no properties in this period.'),
+    page.getByText('Newsletter subscribed carried no properties in this period.'),
   ).toBeVisible();
 });
 
