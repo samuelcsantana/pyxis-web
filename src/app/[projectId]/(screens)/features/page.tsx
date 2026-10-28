@@ -33,7 +33,7 @@ import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { createFeaturesService } from '@/services/features/features-service.factory';
-import { loadPropertyBreakdown } from './actions';
+import { loadPropertyBreakdown, loadPropertySummary } from './actions';
 
 export const generateMetadata = screenMetadata('features');
 
@@ -109,6 +109,16 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           loadProperties={
             kind === 'events'
               ? loadPropertyBreakdown.bind(
+                  null,
+                  project.id,
+                  { from: period.from, to: period.to },
+                  dashboardFilterParameters(filters),
+                )
+              : undefined
+          }
+          loadSummary={
+            kind === 'events'
+              ? loadPropertySummary.bind(
                   null,
                   project.id,
                   { from: period.from, to: period.to },

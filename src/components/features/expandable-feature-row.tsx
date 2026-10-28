@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import type { FeatureRow } from '@/domain/features';
@@ -13,10 +13,17 @@ import type { RowFilter } from '@/components/ui/row-filter-link';
 import { useT } from '@/i18n/messages-provider';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
+import type { PropertySummaryView } from '@/domain/property-summary';
 
 const SMOOTH_LOADING_MS = 400;
 
 export type LoadProperties = (name: string) => Promise<readonly PropertyKeyView[]>;
+
+export type LoadEventSummary = (
+  name: string,
+  key: string,
+  by: string | null,
+) => Promise<PropertySummaryView>;
 
 export interface ExpandableFeatureRowProps {
   readonly row: FeatureRow;
@@ -24,6 +31,7 @@ export interface ExpandableFeatureRowProps {
   readonly visitsPurpose: string;
   readonly filter?: RowFilter | null;
   readonly loadProperties: LoadProperties;
+  readonly loadSummary?: LoadEventSummary;
 }
 
 function breakdownState(
@@ -42,9 +50,17 @@ export function ExpandableFeatureRow({
   visitsPurpose,
   filter = null,
   loadProperties,
+  loadSummary,
 }: ExpandableFeatureRowProps) {
   const t = useT();
   const [open, setOpen] = useState(false);
+  const summaryOf = useMemo(
+    () =>
+      loadSummary === undefined
+        ? undefined
+        : (key: string, by: string | null) => loadSummary(row.name, key, by),
+    [loadSummary, row.name],
+  );
   const [keys, setKeys] = useState<readonly PropertyKeyView[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
@@ -124,6 +140,7 @@ export function ExpandableFeatureRow({
             state={breakdownState(error, keys)}
             onRetry={load}
             valueHref={valueHref}
+            loadSummary={summaryOf}
           />
         </td>
       </tr>
