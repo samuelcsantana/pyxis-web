@@ -55,10 +55,10 @@ const ADMIN: Admin = {
   ],
 };
 
-function renderAcquisition() {
+function renderAcquisition(search: Readonly<Record<string, string>> = {}) {
   return AcquisitionPage({
     params: Promise.resolve({ projectId: 'p-store' }),
-    searchParams: Promise.resolve({ range: '7d' }),
+    searchParams: Promise.resolve({ range: '7d', ...search }),
   });
 }
 
@@ -133,6 +133,42 @@ describe('AcquisitionPage', () => {
       'href',
       '/p-store/acquisition/export?range=7d&table=campaigns',
     );
+  });
+
+  it('says no visit matches the filters when a filtered period is empty', async () => {
+    const NONE = { paid: 0, email: 0, social: 0, campaign: 0, organic: 0, referral: 0, direct: 0 };
+    state.acquisition = (): Promise<AcquisitionReport> =>
+      Promise.resolve({
+        days: [{ date: '2026-10-05', byChannel: NONE }],
+        sources: [],
+        campaigns: [],
+      });
+
+    renderWithMessages(await renderAcquisition({ country: 'PT' }));
+
+    expect(
+      screen.getByRole('heading', { name: 'No visits match these filters' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Remove filters' })).toHaveAttribute(
+      'href',
+      '/p-store/acquisition?range=7d',
+    );
+  });
+
+  it('keeps the filters in its links to Visits and in its files', async () => {
+    renderWithMessages(await renderAcquisition({ device: 'mobile' }));
+
+    for (const link of screen.getAllByRole('link', { name: /as CSV$/ })) {
+      expect(link.getAttribute('href')).toContain('device=mobile');
+    }
+    expect(
+      screen.getAllByRole('link').filter((link) => link.getAttribute('href')?.includes('/visits?')),
+    ).not.toHaveLength(0);
+    for (const link of screen
+      .getAllByRole('link')
+      .filter((found) => found.getAttribute('href')?.includes('/visits?'))) {
+      expect(link.getAttribute('href')).toContain('device=mobile');
+    }
   });
 
   it('shows how to install the SDK when nobody visited in the period', async () => {

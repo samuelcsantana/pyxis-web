@@ -23,7 +23,7 @@ describe('ProjectNotFound', () => {
       'href',
       '/p-store/overview',
     );
-    expect((await generateMetadata()).title).toBe('Page not found');
+    expect((await generateMetadata()).title).toEqual({ absolute: 'Page not found · Pyxis' });
   });
 });
 

@@ -164,18 +164,27 @@ export function spokenTone(tone: Tone, i18n: I18n): string {
 export interface ComparedPeriod {
   readonly days: number;
   readonly endsToday: boolean;
+  readonly filtered?: boolean;
 }
 
-function wholeDaysNote(days: number, i18n: I18n): string {
-  return days === 1
-    ? i18n.t('overview.comparison.dayBefore')
-    : i18n.t('overview.comparison.previousDays', { days: formatCount(days, i18n) });
+type ComparisonTexts = 'comparison' | 'comparisonFiltered';
+
+function textsOf(period: ComparedPeriod): ComparisonTexts {
+  return period.filtered === true ? 'comparisonFiltered' : 'comparison';
 }
 
-function unfinishedTodayNote(days: number, i18n: I18n): string {
-  return days === 1
-    ? i18n.t('overview.comparison.soFarToday')
-    : i18n.t('overview.comparison.previousFullDays', { days: formatCount(days, i18n) });
+function wholeDaysNote(period: ComparedPeriod, i18n: I18n): string {
+  const texts = textsOf(period);
+  return period.days === 1
+    ? i18n.t(`overview.${texts}.dayBefore`)
+    : i18n.t(`overview.${texts}.previousDays`, { days: formatCount(period.days, i18n) });
+}
+
+function unfinishedTodayNote(period: ComparedPeriod, i18n: I18n): string {
+  const texts = textsOf(period);
+  return period.days === 1
+    ? i18n.t(`overview.${texts}.soFarToday`)
+    : i18n.t(`overview.${texts}.previousFullDays`, { days: formatCount(period.days, i18n) });
 }
 
 export function previousPeriodNote(
@@ -183,20 +192,19 @@ export function previousPeriodNote(
   period: ComparedPeriod,
   i18n: I18n,
 ): string {
+  const texts = textsOf(period);
   switch (comparison.kind) {
     case 'same-time':
       return period.days === 1
-        ? i18n.t('overview.comparison.yesterdayUntil', { time: comparison.until })
-        : i18n.t('overview.comparison.previousDaysUntil', {
+        ? i18n.t(`overview.${texts}.yesterdayUntil`, { time: comparison.until })
+        : i18n.t(`overview.${texts}.previousDaysUntil`, {
             days: formatCount(period.days, i18n),
             time: comparison.until,
           });
     case 'whole-days':
-      return wholeDaysNote(period.days, i18n);
+      return wholeDaysNote(period, i18n);
     case 'unknown':
-      return period.endsToday
-        ? unfinishedTodayNote(period.days, i18n)
-        : wholeDaysNote(period.days, i18n);
+      return period.endsToday ? unfinishedTodayNote(period, i18n) : wholeDaysNote(period, i18n);
   }
 }
 

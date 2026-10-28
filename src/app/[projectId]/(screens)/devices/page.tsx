@@ -5,6 +5,7 @@ import { ShareDonut } from '@/components/devices/share-donut';
 import { ScreenContent } from '@/components/shell/screen-content';
 import { linkWith, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { FilteredPeriodEmpty } from '@/components/states/filtered-period-empty';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
@@ -20,9 +21,14 @@ import {
   shareRows,
 } from '@/domain/devices';
 import { devicesTableLabel } from '@/domain/devices-export';
-import { type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
+import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
 import { countryFilterOf, deviceFilterOf } from '@/domain/visits';
-import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
+import {
+  type DashboardSearch,
+  dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -125,7 +131,9 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   const report = await readOrSignIn(() =>
     createDevicesService().devices(project.id, { from: period.from, to: period.to, filters }),
   );
-  const visitsHref = screenHref(project.id, 'visits', periodQuery(period));
+  const filtered = hasDashboardFilters(filters);
+  const query = withDashboardFilters(periodQuery(period), filters);
+  const visitsHref = screenHref(project.id, 'visits', query);
   const deviceVisitsHref = (deviceType: string) => {
     const device = deviceFilterOf(deviceType);
     return device === null ? null : linkWith(visitsHref, { device });
@@ -138,17 +146,24 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={filtered}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
     >
       {hasVisits(report) ? (
         <DevicesReportView
           report={report}
           conversionEvent={project.conversionEvent}
-          exportPath={exportHref(project.id, 'devices', periodQuery(period))}
+          exportPath={exportHref(project.id, 'devices', query)}
           deviceVisitsHref={deviceVisitsHref}
           i18n={i18n}
           countryVisitsHref={countryVisitsHref}
           regionVisitsHref={regionVisitsHref}
+        />
+      ) : filtered ? (
+        <FilteredPeriodEmpty
+          periodLabel={describePeriod(period, i18n)}
+          removeFiltersHref={screenHref(project.id, 'devices', periodQuery(period))}
+          i18n={i18n}
         />
       ) : (
         <EmptyPeriod

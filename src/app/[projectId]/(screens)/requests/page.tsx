@@ -7,13 +7,7 @@ import { EmptyState } from '@/components/states/empty-state';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { LinkTabs } from '@/components/ui/link-tabs';
 import { StatCard } from '@/components/ui/stat-card';
-import {
-  describePeriod,
-  type Period,
-  type PeriodSearch,
-  periodQuery,
-  resolvePeriod,
-} from '@/domain/period';
+import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
 import {
   FAILED_READS,
   FAILING_ONLY,
@@ -29,10 +23,13 @@ import {
 } from '@/domain/requests';
 import { requestsTableLabel } from '@/domain/requests-export';
 import { routeDaysText } from '@/domain/route-days';
+import { filteredPeriodLabel } from '@/domain/applied-visit-filters';
 import {
   dashboardFilterParameters,
   type DashboardSearch,
   dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
@@ -80,8 +77,8 @@ function filterParameters(filter: RequestFilter): Readonly<Record<string, string
   };
 }
 
-function filterQuery(period: Period, filter: RequestFilter): string {
-  const query = new URLSearchParams(periodQuery(period));
+function filterQuery(baseQuery: string, filter: RequestFilter): string {
+  const query = new URLSearchParams(baseQuery);
   for (const [name, value] of Object.entries(filterParameters(filter))) {
     query.set(name, value);
   }
@@ -124,10 +121,12 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
     ),
   );
   const basePath = screenHref(project.id, 'requests');
-  const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
+  const filteredQuery = withDashboardFilters(periodQuery(period), filters);
+  const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(filteredQuery, target)}`;
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={hasDashboardFilters(filters)}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
     >
       <LinkTabs
@@ -163,7 +162,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 description={i18n.t(`requests.failureDays.description.${kind}`, {
                   period: describePeriod(period, i18n),
                 })}
-                periodLabel={describePeriod(period, i18n)}
+                periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
                 i18n={i18n}
               />
             )}
@@ -186,9 +185,9 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                   i18n,
                 )}
                 basePath={basePath}
-                query={filterQuery(period, { ...filter, screen: null })}
+                query={filterQuery(filteredQuery, { ...filter, screen: null })}
                 timelinePath={screenHref(project.id, 'timeline', periodQuery(period))}
-                visitsPath={screenHref(project.id, 'visits', periodQuery(period))}
+                visitsPath={screenHref(project.id, 'visits', filteredQuery)}
                 emptyMessage={emptyMessage(filter, i18n)}
                 loadRouteDays={loadRouteDays.bind(null, project.id, {
                   from: period.from,
@@ -205,7 +204,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
               downloads={[
                 {
                   label: requestsTableLabel(kind, i18n),
-                  href: exportHref(project.id, 'requests', filterQuery(period, filter)),
+                  href: exportHref(project.id, 'requests', filterQuery(filteredQuery, filter)),
                 },
               ]}
               i18n={i18n}

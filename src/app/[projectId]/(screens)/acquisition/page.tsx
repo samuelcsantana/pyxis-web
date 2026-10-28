@@ -5,6 +5,7 @@ import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { FilteredPeriodEmpty } from '@/components/states/filtered-period-empty';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { StatCard } from '@/components/ui/stat-card';
@@ -19,14 +20,14 @@ import {
   visitsTotal,
 } from '@/domain/acquisition';
 import { ACQUISITION_TABLES, acquisitionTableLabel } from '@/domain/acquisition-export';
+import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
+import { filteredPeriodLabel } from '@/domain/applied-visit-filters';
 import {
-  describePeriod,
-  type Period,
-  type PeriodSearch,
-  periodQuery,
-  resolvePeriod,
-} from '@/domain/period';
-import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
+  type DashboardSearch,
+  dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -44,7 +45,7 @@ export interface AcquisitionPageProps {
 
 interface AcquisitionReportViewProps {
   readonly report: AcquisitionReport;
-  readonly period: Period;
+  readonly periodLabel: string;
   readonly downloads: readonly CsvDownload[];
   readonly channelVisitsHref: (channel: Channel) => string;
   readonly campaignVisitsHref: (row: CampaignRow) => string;
@@ -54,7 +55,7 @@ interface AcquisitionReportViewProps {
 
 function acquisitionDownloads(
   projectId: string,
-  period: Period,
+  query: string,
   i18n: I18n,
 ): readonly CsvDownload[] {
   return ACQUISITION_TABLES.map((table) => ({
@@ -62,14 +63,14 @@ function acquisitionDownloads(
     href: exportHref(
       projectId,
       'acquisition',
-      withKeptParameters(periodQuery(period), { [TABLE_PARAMETER]: table }),
+      withKeptParameters(query, { [TABLE_PARAMETER]: table }),
     ),
   }));
 }
 
 function AcquisitionReportView({
   report,
-  period,
+  periodLabel,
   downloads,
   channelVisitsHref,
   campaignVisitsHref,
@@ -89,7 +90,7 @@ function AcquisitionReportView({
         />
         <StatCard id="top-channel" label={top.label} value={top.value} note={top.note} />
       </div>
-      <ChannelChart days={report.days} periodLabel={describePeriod(period, i18n)} i18n={i18n} />
+      <ChannelChart days={report.days} periodLabel={periodLabel} i18n={i18n} />
       <SourcesTable
         rows={sourceRows(report.sources, i18n)}
         channelVisitsHref={channelVisitsHref}
@@ -121,20 +122,29 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
       filters,
     }),
   );
-  const visitsPath = screenHref(project.id, 'visits', periodQuery(period));
+  const filtered = hasDashboardFilters(filters);
+  const query = withDashboardFilters(periodQuery(period), filters);
+  const visitsPath = screenHref(project.id, 'visits', query);
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={filtered}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
     >
       {visitsTotal(report.days) > 0 ? (
         <AcquisitionReportView
           report={report}
-          period={period}
-          downloads={acquisitionDownloads(project.id, period, i18n)}
+          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+          downloads={acquisitionDownloads(project.id, query, i18n)}
           channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
           sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
           campaignVisitsHref={({ campaign, source }) => linkWith(visitsPath, { campaign, source })}
+          i18n={i18n}
+        />
+      ) : filtered ? (
+        <FilteredPeriodEmpty
+          periodLabel={describePeriod(period, i18n)}
+          removeFiltersHref={screenHref(project.id, 'acquisition', periodQuery(period))}
           i18n={i18n}
         />
       ) : (

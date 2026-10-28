@@ -904,6 +904,24 @@ export const en = {
       yesterdayUntil: 'vs. yesterday until {time}',
       previousDaysUntil: 'vs. previous {days} days, until {time}',
     },
+    comparisonFiltered: {
+      dayBefore: 'vs. the day before, same filters',
+      previousDays: 'vs. previous {days} days, same filters',
+      soFarToday: 'so far today vs. all of yesterday, same filters',
+      previousFullDays: 'vs. previous {days} full days, same filters',
+      yesterdayUntil: 'vs. yesterday, same filters, until {time}',
+      previousDaysUntil: 'vs. previous {days} days, same filters, until {time}',
+    },
+  },
+  dashboardFilters: {
+    label: 'Filters',
+    removeAll: 'Remove filters',
+    newsPaused: 'New arrivals are paused while filters are on.',
+    empty: {
+      title: 'No visits match these filters',
+      body: 'Nothing in {period} matches every filter above. Remove one of them, or all of them.',
+    },
+    periodFiltered: '{period}, filtered to {filters}',
   },
   overviewChart: {
     activityTitle: 'Activity per day',

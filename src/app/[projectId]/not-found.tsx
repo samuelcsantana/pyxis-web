@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import { MainContent } from '@/components/shell/main-content';
 import { ProjectNotFoundPanel } from '@/components/states/project-not-found-panel';
 import { getTranslator } from '@/i18n/get-messages';
+import { brandedTitle } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();
-  return { title: t('notFound.title') };
+  return { title: { absolute: brandedTitle(t('notFound.title')) } };
 }
 
 export default function ProjectNotFound() {

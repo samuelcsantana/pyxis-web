@@ -4,7 +4,7 @@ import { currentLocale } from '@/i18n/current-locale';
 import { clientMessages, getTranslator } from '@/i18n/get-messages';
 import { MessagesProvider } from '@/i18n/messages-provider';
 import { isDemoMode } from '@/lib/api-config';
-import { APP_NAME } from '@/lib/site';
+import { APP_NAME, TITLE_TEMPLATE } from '@/lib/site';
 import { themeColorFor } from '@/lib/theme';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { WEB_APP_MANIFEST_PATH } from '@/lib/web-app-manifest';
@@ -12,7 +12,6 @@ import { DOCUMENT_FONT_CLASSES } from './fonts';
 import './globals.css';
 
 const NOT_INDEXED: Metadata['robots'] = { index: false, follow: false };
-const TITLE_TEMPLATE = `%s · ${APP_NAME}`;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator();

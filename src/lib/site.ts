@@ -1,4 +1,9 @@
 export const APP_NAME = 'Pyxis';
+export const TITLE_TEMPLATE = `%s · ${APP_NAME}`;
+
+export function brandedTitle(title: string): string {
+  return TITLE_TEMPLATE.replace('%s', title);
+}
 export const LIVE_DEMO_URL = 'https://demo.pyxis-analytics.dev';
 export const DASHBOARD_URL = 'https://app.pyxis-analytics.dev';
 export const LANDING_HOST = 'pyxis-analytics.dev';

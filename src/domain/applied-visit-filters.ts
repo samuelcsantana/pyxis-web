@@ -1,6 +1,7 @@
 import type { I18n } from '@/i18n/i18n';
 import { channelLabel } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
+import type { DashboardFilters } from './dashboard-filters';
 import { PAGE_FILTER_PARAMETERS, type VisitFilters } from './visits';
 
 export interface AppliedVisitFilter {
@@ -155,4 +156,29 @@ export function changedVisitFilterFields(
   return VISIT_FILTER_FIELDS.filter(
     (field) => entered(field, form[field] ?? '') !== (applied[field] ?? ''),
   );
+}
+
+const VALUE_TAG = '<value/>';
+const LIST_SEPARATOR = ', ';
+
+export function filteredPeriodLabel(
+  periodLabel: string,
+  filters: DashboardFilters,
+  i18n: I18n,
+): string {
+  const applied = appliedVisitFilters({ ...filters, route: null }, i18n);
+  if (applied.length === 0) {
+    return periodLabel;
+  }
+  const named = applied.map((filter) =>
+    filter.value === null
+      ? filter.label
+      : i18n
+          .t('visits.filters.applied.item', { filter: filter.label })
+          .replace(VALUE_TAG, filter.value),
+  );
+  return i18n.t('dashboardFilters.periodFiltered', {
+    period: periodLabel,
+    filters: named.join(LIST_SEPARATOR),
+  });
 }

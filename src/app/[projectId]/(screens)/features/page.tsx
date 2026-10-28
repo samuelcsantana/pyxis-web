@@ -16,10 +16,13 @@ import {
 } from '@/domain/features';
 import { featuresTableLabel } from '@/domain/features-export';
 import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
+import { filteredPeriodLabel } from '@/domain/applied-visit-filters';
 import {
   dashboardFilterParameters,
   type DashboardSearch,
   dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import { SECTION_STACK } from '@/components/ui/panel-classes';
@@ -54,13 +57,15 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
       kind === 'screens' ? service.engagement(project.id, scope) : Promise.resolve(null),
     ]);
   });
+  const filteredQuery = withDashboardFilters(periodQuery(period), filters);
   const basePath = screenHref(project.id, 'features');
   const kindHref = (target: FeatureKind) =>
-    `${basePath}?${withKeptParameters(periodQuery(period), { kind: target })}`;
+    `${basePath}?${withKeptParameters(filteredQuery, { kind: target })}`;
   const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={hasDashboardFilters(filters)}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -75,7 +80,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         />
         <FeatureSearch
           action={basePath}
-          keep={{ ...Object.fromEntries(new URLSearchParams(periodQuery(period))), kind }}
+          keep={{ ...Object.fromEntries(new URLSearchParams(filteredQuery)), kind }}
           query={query}
           label={i18n.t(`features.search.${kind}`)}
           clearHref={kindHref(kind)}
@@ -89,7 +94,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           query={query}
           visitsHref={(name) =>
             linkWith(
-              screenHref(project.id, 'visits', periodQuery(period)),
+              screenHref(project.id, 'visits', filteredQuery),
               kind === 'events' ? { event: name } : { path: name },
             )
           }
@@ -108,7 +113,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         {engagement === null ? null : (
           <EngagementPanels
             report={engagement}
-            periodLabel={describePeriod(period, i18n)}
+            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
             i18n={i18n}
           />
         )}
@@ -117,7 +122,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         downloads={[
           {
             label: featuresTableLabel(kind, i18n),
-            href: exportHref(project.id, 'features', withKeptParameters(periodQuery(period), kept)),
+            href: exportHref(project.id, 'features', withKeptParameters(filteredQuery, kept)),
           },
         ]}
         i18n={i18n}

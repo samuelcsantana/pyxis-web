@@ -207,6 +207,7 @@ describe('ScreensLayout', () => {
   it('puts the top bar of the screen above it, in the calendar of the project', async () => {
     renderWithMessages(
       await ScreensLayout({
+        filters: null,
         children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
@@ -221,6 +222,7 @@ describe('ScreensLayout', () => {
   it('keeps a loading placeholder right before the screen, for a screen whose content has not arrived', async () => {
     renderWithMessages(
       await ScreensLayout({
+        filters: null,
         children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
@@ -234,7 +236,11 @@ describe('ScreensLayout', () => {
 
   it('answers not found for a project the admin may not read', async () => {
     await expect(
-      ScreensLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),
+      ScreensLayout({
+        children: null,
+        filters: null,
+        params: Promise.resolve({ projectId: 'p-other' }),
+      }),
     ).rejects.toThrow('not-found');
   });
 });
@@ -392,6 +398,39 @@ describe('OverviewPage', () => {
       screen.getByRole('heading', { name: 'No events in this period yet' }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Visits' })).not.toBeInTheDocument();
+  });
+
+  it('says no visit matches the filters when a filtered period is empty', async () => {
+    const empty = await new MockOverviewService().overview('p-store', {
+      from: '2026-10-05',
+      to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
+    });
+    state.overview = (): Promise<OverviewReport> =>
+      Promise.resolve({
+        ...empty,
+        days: empty.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
+      });
+
+    renderWithMessages(await renderOverview({ range: 'today', identity: 'identified' }));
+
+    expect(
+      screen.getByRole('heading', { name: 'No visits match these filters' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Remove filters' })).toHaveAttribute(
+      'href',
+      '/p-store/overview?range=today',
+    );
+  });
+
+  it('compares with the previous period under the same filters, and keeps them in its links', async () => {
+    renderWithMessages(await renderOverview({ range: '7d', os: 'android' }));
+
+    expect(screen.getAllByText(/same filters/).length).toBeGreaterThan(0);
+    for (const link of screen.getAllByRole('link', { name: /as CSV$/ })) {
+      expect(link.getAttribute('href')).toContain('os=android');
+    }
+    expect(screen.getAllByText(/filtered to System: Android/).length).toBeGreaterThan(0);
   });
 
   it('calls an empty period quiet once the project has received events', async () => {

@@ -8,6 +8,7 @@ import {
   type DashboardFilters,
   hasDashboardFilters,
   NO_DASHBOARD_FILTERS,
+  withDashboardFilters,
 } from './dashboard-filters';
 
 const EVERY_FILTER: DashboardFilters = {
@@ -145,5 +146,16 @@ describe('dashboardFilterQuery', () => {
 
   it('is empty without filters', () => {
     expect(dashboardFilterQuery(NO_DASHBOARD_FILTERS).toString()).toBe('');
+  });
+});
+
+describe('withDashboardFilters', () => {
+  it('replaces the filters of a query and keeps everything else', () => {
+    expect(
+      withDashboardFilters('range=7d&metric=visits&device=mobile&path2=%2Fa', {
+        ...NO_DASHBOARD_FILTERS,
+        os: 'ios',
+      }),
+    ).toBe('range=7d&metric=visits&os=ios');
   });
 });
