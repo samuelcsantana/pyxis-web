@@ -37,3 +37,11 @@ test('opens from the account menu with the support address and the reply time of
   await page.getByRole('link', { name: 'How to install' }).click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install$`));
 });
+
+test('closes Account and billing with the support address', async ({ page }) => {
+  await page.goto('/account');
+
+  const support = page.getByRole('region', { name: 'Support' });
+  await expect(support.getByText('hello@pyxis-analytics.dev')).toBeVisible();
+  await expect(support.getByRole('button', { name: 'Copy' })).toBeVisible();
+});

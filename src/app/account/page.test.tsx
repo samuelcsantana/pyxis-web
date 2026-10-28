@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
@@ -113,7 +113,20 @@ describe('AccountPage', () => {
     renderWithMessages(await AccountPage());
 
     expect(screen.getByText(/You do not own a Pyxis account/)).toBeInTheDocument();
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button').map((button) => button.textContent)).toEqual(['Copy']);
+  });
+
+  it('closes with the support address and the reply time of the plan, for the account’s e-mail', async () => {
+    renderWithMessages(await AccountPage());
+
+    const support = screen.getByRole('region', { name: 'Support' });
+    expect(within(support).getByText('hello@pyxis-analytics.dev')).toBeInTheDocument();
+    expect(within(support).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+    expect(support).toHaveTextContent(
+      'On the paid plan, we confirm that your message arrived and reply within 2 business days.',
+    );
+    expect(support).toHaveTextContent('Write from owner@example.com, so we know which account');
+    expect(support).not.toHaveTextContent('On the free plan');
   });
 
   it('is titled after the page', async () => {
