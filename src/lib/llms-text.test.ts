@@ -16,8 +16,20 @@ describe('llmsText', () => {
       '## Install with an AI agent',
       '## Read the numbers from an AI agent',
       '## API and dashboard',
+      '## Support',
       '## Optional',
     ]);
+  });
+
+  it('tells an agent where to send a person who needs help', () => {
+    expect(text).toContain('e-mail hello@pyxis-analytics.dev from the');
+    expect(text).toContain('Paid plan: a reply within 2 business days; free plan:');
+    expect(text).toContain(
+      '[Ask a question on GitHub](https://github.com/samuelcsantana/pyxis-sdk/issues/new?template=question.yml)',
+    );
+    expect(text).toContain(
+      '[Report a vulnerability privately](https://github.com/samuelcsantana/pyxis-api/security/advisories/new)',
+    );
   });
 
   it('links only to absolute https addresses', () => {
