@@ -11,6 +11,7 @@ per-person timelines of a product, measured without cookies or personal data.**
 [![CI](https://github.com/samuelcsantana/pyxis-web/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/samuelcsantana/pyxis-web/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/samuelcsantana/pyxis-web/graph/badge.svg)](https://codecov.io/gh/samuelcsantana/pyxis-web)
 [![CodeQL](https://github.com/samuelcsantana/pyxis-web/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/samuelcsantana/pyxis-web/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/samuelcsantana/pyxis-web/badge)](https://scorecard.dev/viewer/?uri=github.com/samuelcsantana/pyxis-web)
 <br>
 [![License: MIT](https://img.shields.io/github/license/samuelcsantana/pyxis-web)](LICENSE)
 [![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](tsconfig.json)
@@ -544,7 +545,7 @@ Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 �
 with RxJS for the few requests a Client Component starts · charts drawn as SVG on the server, each with a
 table view ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)) · Vitest
 and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
-CodeQL, Dependabot, Codecov and release-please.
+CodeQL, OpenSSF Scorecard, Dependabot, Codecov and release-please.
 
 ## Getting started
 
