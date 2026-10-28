@@ -22,7 +22,8 @@ des personnes physiques au Brésil) sous le nº {{seller.taxId}}, domicilié à
 
 1.2. **Vous :** la personne ou l’entreprise qui a souscrit à Pyxis hébergé, en acceptant les
 Conditions d’utilisation, représentée sur le tableau de bord par le propriétaire du compte (Conditions
-d’utilisation, Clause 2.9).
+d’utilisation, Clause 2.9). Le présent accord s’applique de la même manière au forfait gratuit et au
+forfait payant (Conditions d’utilisation, Clause 7.1).
 
 ## Clause 2 — Termes utilisés dans le présent accord
 
@@ -91,8 +92,9 @@ pas, ne les louons pas, ne les utilisons pas pour la publicité, ne les utilison
 modèles d’intelligence artificielle et ne les combinons pas avec des données d’autres clients. Les
 seuls chiffres que nous tirons de vos projets pour notre propre usage sont des comptages
 d’exploitation, comme le nombre d’événements par mois de chaque compte et la taille de la base,
-utilisés pour appliquer la limite mensuelle du forfait (Conditions d’utilisation, Clause 7.2) et
-vérifier la capacité du service.
+utilisés pour appliquer la limite mensuelle du forfait (Conditions d’utilisation, Clause 7.2), savoir
+si un compte du forfait gratuit est resté sans recevoir d’événements (Conditions d’utilisation,
+Clause 7.6) et vérifier la capacité du service.
 
 ## Clause 5 — Vos instructions
 
@@ -357,10 +359,11 @@ le service dès que le risque est passé.
 12.1. **Pendant le contrat.** Les événements sont conservés pendant **13 mois**. Une routine
 quotidienne supprime les événements de plus de 13 mois, dans tous les projets.
 
-12.2. **Fin du contrat.** **30 jours après la fin de l’accès** (la fin de la période payée ou de
-l’essai après une résiliation, la clôture du compte depuis le tableau de bord, la fin de l’abonnement
-pour défaut de paiement ou la clôture par nous ; Conditions d’utilisation, Clauses 2.10 et 11.4), une
-routine quotidienne supprime définitivement le compte, les projets et tout ce qui leur appartient :
+12.2. **Fin du contrat.** **30 jours après la fin de l’accès** (la fin de la période payée après une
+résiliation ou la fin de l’abonnement pour défaut de paiement, lorsque le compte ne revient pas au
+forfait gratuit ; la clôture du compte depuis le tableau de bord ; la fin du forfait gratuit ; ou la
+clôture par nous ; Conditions d’utilisation, Clauses 2.10 et 11.4), une routine quotidienne
+supprime définitivement le compte, les projets et tout ce qui leur appartient :
 événements, clés, configurations, icône du site, traces d’envoi du récapitulatif hebdomadaire, demandes
 d’exportation et accès des personnes aux projets. Nous supprimons également l’inscription (e-mail,
 sessions, jetons et applications connectées) du propriétaire du compte et des personnes qui
@@ -391,6 +394,15 @@ autorité compétente nous y oblige, ou lorsqu’elles sont nécessaires pour un
 administrative ou arbitrale (LGPD, arts. 7º, VI, et 16, I). Dans ce cas, nous ne préservons que les
 données concernées, sans aucun autre usage, pendant la durée exigée, puis nous les supprimons ; nous
 vous prévenons, sauf si la loi ou l’ordre interdit cet avertissement.
+
+12.7. **Compte du forfait gratuit sans événements.** Un compte du forfait gratuit qui ne reçoit aucun
+événement dans les 30 jours suivant sa création, ou qui reste 90 jours consécutifs sans recevoir
+d’événements, est supprimé comme l’indique la Clause 7.6 des Conditions d’utilisation : le
+propriétaire du compte reçoit un avis par e-mail et, si le compte reste sans événements 7 jours plus
+tard, une routine quotidienne supprime le compte, les projets et tout ce qui leur appartient, comme au
+point 12.2, sans le délai de 30 jours de ce point. D’ici là, le propriétaire du compte peut exporter
+les événements (point 12.3). Les points 12.4 (copies des prestataires), 12.5 (confirmation par
+e-mail) et 12.6 (préservation en vertu de la loi ou d’un ordre) s’appliquent également.
 
 ## Clause 13 — Informations et audit
 
@@ -604,9 +616,9 @@ automatiques le vérifient.
 
 **7. Protection contre les abus.** Limite d’envoi de lots par adresse d’origine et par projet ; lot de
 50 événements et 32 Ko au maximum ; validation stricte de chaque champ ; événements invalides écartés ;
-réception mise en pause lorsque le compte atteint 150 % de la limite mensuelle d’événements ; les
-journaux techniques indiquent quand un événement ou une propriété a été refusé et par quelle règle,
-sans conserver la valeur refusée.
+réception mise en pause lorsque le compte atteint 150 % de la limite mensuelle d’événements sur le
+forfait payant, ou 100 % sur le forfait gratuit ; les journaux techniques indiquent quand un
+événement ou une propriété a été refusé et par quelle règle, sans conserver la valeur refusée.
 
 **8. Infrastructure.** La fonction de l’API refuse les appels qui ne passent pas par le réseau de
 distribution (secret de périphérie vérifié en temps constant). L’utilisateur de base de données de

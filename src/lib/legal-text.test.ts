@@ -23,7 +23,7 @@ const TRANSLATIONS = ['en', 'es', 'de', 'fr', 'it', 'nl'] as const satisfies rea
 describe('legal text', () => {
   it('fills the seller, the version and the effective date into the document', () => {
     expect(legalTextOf(SOURCE, CONFIG, 'pt-BR')).toBe(
-      '**Versão 1.2, vigente a partir de 20 de outubro de 2026.**\n\n' +
+      '**Versão 1.3, vigente a partir de 20 de outubro de 2026.**\n\n' +
         'Oferecido por **Ana Exemplo**, CPF 000.000.000-00, ' +
         'Rua das Flores, 10, Centro, Cidade/UF, CEP 00000-000.',
     );
@@ -91,7 +91,7 @@ describe('legal text', () => {
 
     for (const text of texts) {
       expect(text).not.toContain('{{');
-      expect(text).toContain('1.2');
+      expect(text).toContain('1.3');
       expect(text).toContain('Ana Exemplo');
     }
     expect(texts.map((text) => text.split('\n', 1)[0])).toEqual([

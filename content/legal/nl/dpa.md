@@ -23,7 +23,8 @@ Físicas; Braziliaans fiscaal nummer van een natuurlijk persoon) {{seller.taxId}
 
 1.2. **Jij:** de persoon of de onderneming die het gehoste Pyxis heeft afgenomen door de
 Gebruiksvoorwaarden te aanvaarden, in het dashboard vertegenwoordigd door de accounteigenaar
-(Gebruiksvoorwaarden, Artikel 2.9).
+(Gebruiksvoorwaarden, Artikel 2.9). Deze overeenkomst geldt op dezelfde manier bij het gratis en bij
+het betaalde abonnement (Gebruiksvoorwaarden, Artikel 7.1).
 
 ## Artikel 2 — Begrippen in deze overeenkomst
 
@@ -89,8 +90,9 @@ verhuren ze niet, gebruiken ze niet voor reclame, gebruiken ze niet om modellen 
 intelligentie te trainen en combineren ze niet met gegevens van andere klanten. De enige cijfers die
 we voor eigen gebruik uit je projecten halen, zijn operationele tellingen, zoals het aantal events
 per maand van elk account en de omvang van de database, die worden gebruikt om de maandlimiet van
-het abonnement toe te passen (Gebruiksvoorwaarden, Artikel 7.2) en de capaciteit van de dienst te
-controleren.
+het abonnement toe te passen (Gebruiksvoorwaarden, Artikel 7.2), om na te gaan of een account op het
+gratis abonnement geen events meer ontvangt (Gebruiksvoorwaarden, Artikel 7.6) en om de capaciteit
+van de dienst te controleren.
 
 ## Artikel 5 — Jouw instructies
 
@@ -359,9 +361,10 @@ herstellen het zodra het risico voorbij is.
 verwijdert de events ouder dan 13 maanden, van alle projecten.
 
 12.2. **Einde van de overeenkomst.** **30 dagen na het einde van de toegang** (het einde van de
-betaalde periode of van de proefperiode na een opzegging, de opheffing van het account via het
-dashboard, het einde van het abonnement wegens niet-betaling of de beëindiging door ons;
-Gebruiksvoorwaarden, Artikelen 2.10 en 11.4) verwijdert een dagelijkse routine definitief het
+betaalde periode na een opzegging of het einde van het abonnement wegens niet-betaling, wanneer het
+account niet teruggaat naar het gratis abonnement; de opheffing van het account via het dashboard;
+het einde van het gratis abonnement; of de beëindiging door ons; Gebruiksvoorwaarden, Artikelen 2.10
+en 11.4) verwijdert een dagelijkse routine definitief het
 account, de projecten en alles wat daarbij hoort: events, sleutels, configuraties, icoon van de
 website, verzendlogs van de wekelijkse samenvatting, exportverzoeken en de toegang van de personen
 tot de projecten. We verwijderen ook de registratie (e-mailadres, sessies, tokens en gekoppelde apps)
@@ -393,6 +396,15 @@ bevoegde autoriteit ons daartoe verplicht, of wanneer ze nodig zijn voor een ger
 bestuursrechtelijke of arbitrale procedure (LGPD, arts. 7, VI, en 16, I). In dat geval bewaren we
 alleen de betrokken gegevens, zonder enig ander gebruik, zo lang als vereist, en verwijderen we ze
 daarna; we laten het je weten, tenzij de wet of het bevel die mededeling verbiedt.
+
+12.7. **Account op het gratis abonnement zonder events.** Een account op het gratis abonnement dat in
+de 30 dagen na het aanmaken geen enkel event ontvangt, of dat 90 dagen achter elkaar geen events
+ontvangt, wordt verwijderd zoals bepaald in Artikel 7.6 van de Gebruiksvoorwaarden: de
+accounteigenaar ontvangt een kennisgeving per e-mail en, als het account 7 dagen later nog steeds
+zonder events is, verwijdert een dagelijkse routine het account, de projecten en alles wat daarbij
+hoort, zoals in punt 12.2, zonder de termijn van 30 dagen van dat punt. Tot dan kan de
+accounteigenaar de events exporteren (punt 12.3). Ook de punten 12.4 (kopieën van de providers), 12.5
+(bevestiging per e-mail) en 12.6 (bewaring op grond van wet of bevel) zijn van toepassing.
 
 ## Artikel 13 — Informatie en audit
 
@@ -601,8 +613,8 @@ niet bestaat. Daarvoor zijn er geautomatiseerde tests.
 
 **7. Bescherming tegen misbruik.** Limiet op het verzenden van batches per herkomstadres en per
 project; batch met maximaal 50 events en 32 KB; strikte validatie van elk veld; ongeldige events
-weggegooid; ontvangst gepauzeerd wanneer het account 150% van de maandelijkse eventlimiet bereikt; de
-technische logs vermelden wanneer een event of een eigenschap is geweigerd en op grond van welke
+weggegooid; ontvangst gepauzeerd wanneer het account 150% van de maandelijkse eventlimiet bereikt bij
+het betaalde abonnement, of 100% bij het gratis abonnement; de technische logs vermelden wanneer een event of een eigenschap is geweigerd en op grond van welke
 regel, zonder de geweigerde waarde te bewaren.
 
 **8. Infrastructuur.** De API-functie weigert aanroepen die niet via het distributienetwerk komen

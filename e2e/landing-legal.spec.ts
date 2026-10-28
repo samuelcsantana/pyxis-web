@@ -60,7 +60,7 @@ test('shows the terms in Portuguese with the seller, the version and the effecti
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   await expect(page).toHaveTitle('Termos de Uso · Pyxis');
   await expect(
-    page.getByText('Versão 1.2, vigente a partir de 20 de outubro de 2026.'),
+    page.getByText('Versão 1.3, vigente a partir de 20 de outubro de 2026.'),
   ).toBeVisible();
   await expect(page.getByText(/oferecido por Ana Exemplo, pessoa física/)).toBeVisible();
   await expect(page.getByText(SELLER_LINE)).toBeVisible();
@@ -111,7 +111,7 @@ test('shows a translation in its language and leads to the Portuguese text that 
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'de');
   await expect(page).toHaveTitle('Nutzungsbedingungen · Pyxis');
-  await expect(page.getByText('Version 1.2, gültig ab 20. Oktober 2026.')).toBeVisible();
+  await expect(page.getByText('Version 1.3, gültig ab 20. Oktober 2026.')).toBeVisible();
   const versions = page.getByRole('navigation', { name: 'Dieses Dokument in anderen Sprachen' });
   await expect(versions.getByRole('link', { name: 'Deutsch' })).toHaveAttribute(
     'aria-current',

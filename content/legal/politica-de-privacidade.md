@@ -40,7 +40,7 @@ nº 2/2022, art. 11, e Resolução CD/ANPD nº 18/2024, art. 3º, § 3º).
 
 | Dado | Para quê | Base legal (LGPD) | Por quanto tempo |
 |---|---|---|---|
-| E-mail, idioma dos e-mails (o da tela em que você entrou ou se cadastrou), projetos a que você tem acesso, se você é o dono da conta ou convidado, escolha sobre o resumo semanal, data de cadastro | Mandar o código de login e os e-mails do serviço, mostrar os seus projetos e mandar o resumo semanal no seu idioma | Execução do contrato, para o dono da conta (art. 7º, V); legítimo interesse nosso e do cliente em dar acesso às pessoas que o dono convidou (art. 7º, IX) | Enquanto você tiver acesso a algum projeto ou for dono de uma conta. Quando o dono tira você de um projeto, o acesso a ele termina na hora; se você ficar sem acesso a nenhum projeto, apagamos o seu cadastro em até 30 dias. Em todo caso, o cadastro é apagado junto com a conta, 30 dias depois do fim do acesso dela |
+| E-mail, idioma dos e-mails (o da tela em que você entrou ou se cadastrou), projetos a que você tem acesso, se você é o dono da conta ou convidado, escolha sobre o resumo semanal, data de cadastro | Mandar o código de login e os e-mails do serviço, mostrar os seus projetos e mandar o resumo semanal no seu idioma | Execução do contrato, para o dono da conta (art. 7º, V); legítimo interesse nosso e do cliente em dar acesso às pessoas que o dono convidou (art. 7º, IX) | Enquanto você tiver acesso a algum projeto ou for dono de uma conta. Quando o dono tira você de um projeto, o acesso a ele termina na hora; se você ficar sem acesso a nenhum projeto, apagamos o seu cadastro em até 30 dias. Em todo caso, o cadastro é apagado junto com a conta (item 2.2) |
 | Convite: o seu e-mail, o nome do projeto e o e-mail de quem convidou, no e-mail de convite | Avisar você do acesso e de quem o deu | Legítimo interesse nosso e do cliente (art. 7º, IX) | O convite em si não fica no nosso banco (só o cadastro da linha acima); o registro do envio fica com o provedor de e-mail pelo prazo dele (item 3) |
 | Códigos de login e de cadastro: e-mail, código guardado só como hash, finalidade (login ou cadastro), idioma, tentativas, horários | Permitir o login e o cadastro sem senha e impedir tentativas repetidas | Execução do contrato, procedimentos preliminares a ele e legítimo interesse em segurança (art. 7º, V e IX) | Valem 10 minutos; apagados pela rotina diária depois de vencidos |
 | Sessões: valor guardado só como hash, datas de início e de último uso, categoria do aparelho e família do navegador e do sistema (sem versão) | Manter você conectado e mostrar as suas sessões para você encerrá-las | Execução do contrato e legítimo interesse em segurança (art. 7º, V e IX) | No máximo 7 dias, ou 24 horas sem uso; apagadas pela rotina diária depois de encerradas |
@@ -59,14 +59,14 @@ o IP e o navegador de quem acessa e os guarda nos registros técnicos dela por 1
 
 | Dado | Para quê | Base legal (LGPD) | Por quanto tempo |
 |---|---|---|---|
-| Conta: dono, situação da assinatura, plano e periodicidade, identificadores do cliente e da assinatura no Stripe, datas (fim do teste, do período, do acesso, dos avisos enviados), uso mensal de eventos e avisos de cota enviados | Prestar o serviço, aplicar o limite mensal, ligar e desligar o acesso conforme a assinatura, avisar o fim da conta | Execução do contrato (art. 7º, V) | Até a exclusão da conta, 30 dias depois do fim do acesso. Cadastro que não concluiu a página de pagamento: apagado 7 dias depois |
-| Aceite dos termos: versão aceita, data e hora, conta e pessoa que aceitou (sem IP) | Saber qual versão vale para você e provar o aceite | Execução do contrato e exercício regular de direitos (art. 7º, V e VI) | Até a exclusão da conta. O Stripe guarda, como controlador, o registro do aceite feito na página de pagamento dele |
-| Dados de cobrança, recebidos pelo Stripe: nome, e-mail, endereço de cobrança, CPF ou CNPJ (se informado), bandeira, final e validade do cartão, histórico de pagamentos, reembolsos e contestações | Cobrar a assinatura, enviar recibos, tratar arrependimento, reembolsos e contestações, cumprir obrigações fiscais | Execução do contrato (art. 7º, V) e cumprimento de obrigação legal (art. 7º, II) | Durante o contrato e por 5 anos contados do ano seguinte ao de cada cobrança (prazo de guarda fiscal) |
-| Configuração dos projetos: nome, endereços dos sites, fuso horário, evento de conversão, chave pública, chave secreta guardada só como hash, ícone copiado do próprio site | Prestar o serviço | Execução do contrato (art. 7º, V) | Até a exclusão do projeto pelo dono ou da conta (30 dias depois do fim do acesso) |
+| Conta: dono, plano (grátis ou pago), situação da assinatura, periodicidade, identificadores do cliente e da assinatura no Stripe (só no plano pago), datas (fim do teste, do período, do acesso, dos avisos enviados), uso mensal de eventos e avisos de cota e de conta sem eventos enviados | Prestar o serviço, aplicar os limites do plano, ligar e desligar o acesso conforme o plano e a assinatura, avisar e apagar a conta do plano grátis sem eventos, avisar o fim da conta | Execução do contrato (art. 7º, V) | Até a exclusão da conta: 30 dias depois do fim do acesso ou, numa conta do plano grátis sem eventos, 7 dias depois do aviso (Termos de Uso, Cláusula 7.6) |
+| Aceite dos termos: versão aceita, data e hora, conta e pessoa que aceitou (sem IP) | Saber qual versão vale para você e provar o aceite | Execução do contrato e exercício regular de direitos (art. 7º, V e VI) | Até a exclusão da conta. Quando você assina o plano pago, o Stripe guarda, como controlador, o registro do aceite feito na página de pagamento dele |
+| Dados de cobrança, só de quem assina o plano pago, recebidos pelo Stripe: nome, e-mail, endereço de cobrança, CPF ou CNPJ (se informado), bandeira, final e validade do cartão, histórico de pagamentos, reembolsos e contestações | Cobrar a assinatura, enviar recibos, tratar arrependimento, reembolsos e contestações, cumprir obrigações fiscais | Execução do contrato (art. 7º, V) e cumprimento de obrigação legal (art. 7º, II) | Durante o contrato e por 5 anos contados do ano seguinte ao de cada cobrança (prazo de guarda fiscal) |
+| Configuração dos projetos: nome, endereços dos sites, fuso horário, evento de conversão, chave pública, chave secreta guardada só como hash, ícone copiado do próprio site | Prestar o serviço | Execução do contrato (art. 7º, V) | Até a exclusão do projeto pelo dono ou da conta (linha "Conta" acima) |
 | Pedidos de exportação: quem pediu, quando, situação e quantidade de eventos | Gerar e entregar o arquivo de exportação ao dono da conta | Execução do contrato (art. 7º, V) | Até a exclusão do projeto. O arquivo em si é apagado 7 dias depois de pronto |
 
-**Não recebemos nem guardamos o número do cartão.** Ele fica com o Stripe. Guardamos só a impressão
-do cartão do item 2.7.
+**No plano grátis, não pedimos cartão nem dados de cobrança.** No plano pago, **não recebemos nem
+guardamos o número do cartão**: ele fica com o Stripe. Guardamos só a impressão do cartão do item 2.7.
 
 ### 2.3. Quem nos escreve
 
@@ -107,17 +107,23 @@ sociais, e o painel não mede o uso das pessoas que entram nele.
 ### 2.6. E-mails que enviamos
 
 Mandamos só e-mails ligados ao serviço: códigos de login e de cadastro; convite para um projeto;
-boas-vindas, com a versão dos termos aceita; avisos de uso a 80%, a 100% e da pausa a 150%; aviso de
+boas-vindas, com a versão dos termos aceita; avisos de uso a 80%, a 100% e da pausa a 150%, no plano
+pago, e a 80% e da pausa a 100%, no plano grátis; aviso de conta do plano grátis sem eventos; aviso de
 fim do acesso, lembrete 7 dias antes da exclusão e aviso de exclusão feita; aviso de exportação
 pronta; o resumo semanal (que cada pessoa pode desligar em Configurações); e comunicações sobre o
 contrato, inclusive avisos de abuso e de suspensão. Os e-mails de cobrança são enviados pelo próprio
-Stripe: lembrete 7 dias antes do fim do teste grátis, recibos de pagamentos e de reembolsos, aviso de
+Stripe: lembrete 7 dias antes do fim do teste grátis (nos testes começados antes da versão 1.3 dos
+Termos de Uso), recibos de pagamentos e de reembolsos, aviso de
 pagamento recusado, pedido de confirmação do pagamento (3D Secure) e aviso de cartão perto de vencer. **Os nossos e-mails
 não têm rastreamento de abertura nem de cliques.** Não mandamos publicidade.
 
 ### 2.7. Prevenção de teste grátis repetido
 
-O teste grátis vale uma vez por cliente (Termos de Uso, Cláusula 6.4). Para perceber quando o mesmo
+**Desde a versão 1.3 dos Termos de Uso não há teste grátis** (Termos de Uso, Cláusula 8.3), e não
+registramos impressões de cartão novas. Este item trata dos registros dos testes começados antes, que
+seguem o prazo da tabela abaixo e somem, no máximo, 12 meses depois do início do último desses testes.
+
+O teste grátis valia uma vez por cliente (Termos de Uso, Cláusula 8.3). Para perceber quando o mesmo
 cartão começa um segundo teste em outra conta, quando registramos uma assinatura com teste grátis
 (na prática, quando o teste começa) lemos no Stripe a **impressão do cartão** (*fingerprint*) da
 assinatura: um código que o Stripe calcula a partir do número do cartão e que se repete sempre que o
@@ -310,8 +316,10 @@ avaliam a sua pessoa:
 
 1. de segurança: depois de tentativas demais, um pedido de código ou de login é recusado por alguns
    minutos;
-2. do contrato: a recepção de eventos pausa quando a conta chega a 150% do limite mensal, e o
-   acesso acompanha a situação da assinatura no Stripe (Termos de Uso, Cláusulas 7.2 e 9).
+2. do contrato: a recepção de eventos pausa quando a conta chega a 150% do limite mensal no plano
+   pago, ou a 100% no plano grátis; o acesso acompanha o plano e a situação da assinatura no Stripe;
+   e a conta do plano grátis sem eventos é apagada depois do aviso (Termos de Uso, Cláusulas 7.2,
+   7.6 e 9).
 
 A coincidência de impressão de cartão (item 2.7) e as medidas por abuso (Termos de Uso,
 Cláusula 18) são sempre decididas por uma pessoa. Se algo disso atrapalhar você, fale conosco.

@@ -49,7 +49,7 @@ Dados, brasilianische nationale Datenschutzbehörde).
 
 | Datenfeld | Wofür | Rechtsgrundlage (LGPD) | Wie lange |
 |---|---|---|---|
-| E-Mail-Adresse, Sprache der E-Mails (die des Bildschirms, auf dem du dich angemeldet oder registriert hast), Projekte, auf die du Zugriff hast, ob du Kontoinhaber oder Eingeladener bist, Entscheidung über die wöchentliche Zusammenfassung, Registrierungsdatum | Den Anmeldecode und die E-Mails des Dienstes senden, deine Projekte anzeigen und die wöchentliche Zusammenfassung in deiner Sprache senden | Vertragserfüllung, für den Kontoinhaber (Art. 7 V); berechtigtes Interesse von uns und dem Kunden, den vom Inhaber eingeladenen Personen Zugriff zu geben (Art. 7 IX) | Solange du Zugriff auf irgendein Projekt hast oder Inhaber eines Kontos bist. Wenn der Inhaber dich aus einem Projekt entfernt, endet der Zugriff darauf sofort; hast du auf kein Projekt mehr Zugriff, löschen wir deine Registrierung innerhalb von 30 Tagen. In jedem Fall wird die Registrierung zusammen mit dem Konto gelöscht, 30 Tage nach dem Ende von dessen Zugriff |
+| E-Mail-Adresse, Sprache der E-Mails (die des Bildschirms, auf dem du dich angemeldet oder registriert hast), Projekte, auf die du Zugriff hast, ob du Kontoinhaber oder Eingeladener bist, Entscheidung über die wöchentliche Zusammenfassung, Registrierungsdatum | Den Anmeldecode und die E-Mails des Dienstes senden, deine Projekte anzeigen und die wöchentliche Zusammenfassung in deiner Sprache senden | Vertragserfüllung, für den Kontoinhaber (Art. 7 V); berechtigtes Interesse von uns und dem Kunden, den vom Inhaber eingeladenen Personen Zugriff zu geben (Art. 7 IX) | Solange du Zugriff auf irgendein Projekt hast oder Inhaber eines Kontos bist. Wenn der Inhaber dich aus einem Projekt entfernt, endet der Zugriff darauf sofort; hast du auf kein Projekt mehr Zugriff, löschen wir deine Registrierung innerhalb von 30 Tagen. In jedem Fall wird die Registrierung zusammen mit dem Konto gelöscht (Punkt 2.2) |
 | Einladung: deine E-Mail-Adresse, der Name des Projekts und die E-Mail-Adresse der einladenden Person, in der Einladungs-E-Mail | Dich über den Zugriff informieren und darüber, wer ihn gewährt hat | Berechtigtes Interesse von uns und dem Kunden (Art. 7 IX) | Die Einladung selbst bleibt nicht in unserer Datenbank (nur die Registrierung aus der Zeile oben); der Versandeintrag bleibt beim E-Mail-Anbieter für dessen Frist (Punkt 3) |
 | Anmelde- und Registrierungscodes: E-Mail-Adresse, nur als Hash gespeicherter Code, Zweck (Anmeldung oder Registrierung), Sprache, Versuche, Uhrzeiten | Die Anmeldung und die Registrierung ohne Passwort ermöglichen und wiederholte Versuche verhindern | Vertragserfüllung, vorvertragliche Maßnahmen und berechtigtes Interesse an Sicherheit (Art. 7 V und IX) | Gelten 10 Minuten; werden nach Ablauf vom täglichen Vorgang gelöscht |
 | Sitzungen: nur als Hash gespeicherter Wert, Datum des Beginns und der letzten Nutzung, Gerätekategorie und Familie des Browsers und des Betriebssystems (ohne Version) | Dich angemeldet halten und dir deine Sitzungen anzeigen, damit du sie beenden kannst | Vertragserfüllung und berechtigtes Interesse an Sicherheit (Art. 7 V und IX) | Höchstens 7 Tage oder 24 Stunden ohne Nutzung; werden nach ihrem Ende vom täglichen Vorgang gelöscht |
@@ -69,14 +69,15 @@ Zugreifenden und speichert sie 1 Tag lang in seinen technischen Protokollen (Pun
 
 | Datenfeld | Wofür | Rechtsgrundlage (LGPD) | Wie lange |
 |---|---|---|---|
-| Konto: Inhaber, Status des Abonnements, Tarif und Abrechnungsintervall, Kennungen des Kunden und des Abonnements bei Stripe, Daten (Ende der Testphase, des Zeitraums, des Zugriffs, der versandten Hinweise), monatliche Ereignisnutzung und versandte Kontingenthinweise | Den Dienst erbringen, die Monatsgrenze anwenden, den Zugriff entsprechend dem Abonnement ein- und ausschalten, über das Ende des Kontos informieren | Vertragserfüllung (Art. 7 V) | Bis zur Löschung des Kontos, 30 Tage nach dem Ende des Zugriffs. Registrierung, bei der die Zahlungsseite nicht abgeschlossen wurde: 7 Tage danach gelöscht |
-| Annahme der Bedingungen: angenommene Version, Datum und Uhrzeit, Konto und annehmende Person (ohne IP) | Wissen, welche Version für dich gilt, und die Annahme nachweisen | Vertragserfüllung und regelmäßige Ausübung von Rechten (Art. 7 V und VI) | Bis zur Löschung des Kontos. Stripe speichert als Verantwortlicher den Eintrag der auf seiner Zahlungsseite erfolgten Annahme |
-| Abrechnungsdaten, von Stripe erhalten: Name, E-Mail-Adresse, Rechnungsanschrift, CPF oder CNPJ (Cadastro Nacional da Pessoa Jurídica; brasilianische Steuernummer für Unternehmen; falls angegeben), Kartenmarke, Endziffern und Ablaufdatum der Karte, Zahlungsverlauf, Erstattungen und Rückbuchungsanträge | Das Abonnement abrechnen, Quittungen senden, Widerruf, Erstattungen und Rückbuchungsanträge bearbeiten, steuerliche Pflichten erfüllen | Vertragserfüllung (Art. 7 V) und Erfüllung einer rechtlichen Verpflichtung (Art. 7 II) | Während des Vertrags und 5 Jahre lang, gerechnet ab dem Jahr nach dem jeweiligen Belastungsjahr (steuerliche Aufbewahrungsfrist) |
-| Konfiguration der Projekte: Name, Adressen der Websites, Zeitzone, Conversion-Ereignis, öffentlicher Schlüssel, nur als Hash gespeicherter geheimer Schlüssel, von der Website selbst kopiertes Icon | Den Dienst erbringen | Vertragserfüllung (Art. 7 V) | Bis zur Löschung des Projekts durch den Inhaber oder des Kontos (30 Tage nach dem Ende des Zugriffs) |
+| Konto: Inhaber, Tarif (kostenlos oder kostenpflichtig), Status des Abonnements, Abrechnungsintervall, Kennungen des Kunden und des Abonnements bei Stripe (nur im kostenpflichtigen Tarif), Daten (Ende der Testphase, des Zeitraums, des Zugriffs, der versandten Hinweise), monatliche Ereignisnutzung und versandte Hinweise zum Kontingent und zu Konten ohne Ereignisse | Den Dienst erbringen, die Grenzen des Tarifs anwenden, den Zugriff entsprechend dem Tarif und dem Abonnement ein- und ausschalten, Konten des kostenlosen Tarifs ohne Ereignisse benachrichtigen und löschen, über das Ende des Kontos informieren | Vertragserfüllung (Art. 7 V) | Bis zur Löschung des Kontos: 30 Tage nach dem Ende des Zugriffs oder, bei einem Konto des kostenlosen Tarifs ohne Ereignisse, 7 Tage nach der Benachrichtigung (Nutzungsbedingungen, Klausel 7.6) |
+| Annahme der Bedingungen: angenommene Version, Datum und Uhrzeit, Konto und annehmende Person (ohne IP) | Wissen, welche Version für dich gilt, und die Annahme nachweisen | Vertragserfüllung und regelmäßige Ausübung von Rechten (Art. 7 V und VI) | Bis zur Löschung des Kontos. Wenn du den kostenpflichtigen Tarif abonnierst, speichert Stripe als Verantwortlicher den Eintrag der auf seiner Zahlungsseite erfolgten Annahme |
+| Abrechnungsdaten, nur von denjenigen, die den kostenpflichtigen Tarif abonnieren, von Stripe erhalten: Name, E-Mail-Adresse, Rechnungsanschrift, CPF oder CNPJ (Cadastro Nacional da Pessoa Jurídica; brasilianische Steuernummer für Unternehmen; falls angegeben), Kartenmarke, Endziffern und Ablaufdatum der Karte, Zahlungsverlauf, Erstattungen und Rückbuchungsanträge | Das Abonnement abrechnen, Quittungen senden, Widerruf, Erstattungen und Rückbuchungsanträge bearbeiten, steuerliche Pflichten erfüllen | Vertragserfüllung (Art. 7 V) und Erfüllung einer rechtlichen Verpflichtung (Art. 7 II) | Während des Vertrags und 5 Jahre lang, gerechnet ab dem Jahr nach dem jeweiligen Belastungsjahr (steuerliche Aufbewahrungsfrist) |
+| Konfiguration der Projekte: Name, Adressen der Websites, Zeitzone, Conversion-Ereignis, öffentlicher Schlüssel, nur als Hash gespeicherter geheimer Schlüssel, von der Website selbst kopiertes Icon | Den Dienst erbringen | Vertragserfüllung (Art. 7 V) | Bis zur Löschung des Projekts durch den Inhaber oder des Kontos (Zeile „Konto“ oben) |
 | Exportanfragen: wer angefragt hat, wann, Status und Anzahl der Ereignisse | Die Exportdatei erzeugen und dem Kontoinhaber liefern | Vertragserfüllung (Art. 7 V) | Bis zur Löschung des Projekts. Die Datei selbst wird 7 Tage nach ihrer Fertigstellung gelöscht |
 
-**Wir empfangen und speichern die Kartennummer nicht.** Sie bleibt bei Stripe. Wir speichern nur den
-Kartenfingerabdruck aus Punkt 2.7.
+**Im kostenlosen Tarif verlangen wir weder eine Karte noch Abrechnungsdaten.** Im kostenpflichtigen
+Tarif **empfangen und speichern wir die Kartennummer nicht**: sie bleibt bei Stripe. Wir speichern nur
+den Kartenfingerabdruck aus Punkt 2.7.
 
 ### 2.3. Personen, die uns schreiben
 
@@ -118,18 +119,26 @@ sozialen Netzwerken, und das Dashboard misst nicht die Nutzung der Personen, die
 
 Wir senden nur E-Mails im Zusammenhang mit dem Dienst: Anmelde- und Registrierungscodes; Einladung zu
 einem Projekt; Willkommens-E-Mail mit der angenommenen Version der Bedingungen; Nutzungshinweise bei 80 %,
-bei 100 % und zur Pause bei 150 %; Hinweis auf das Ende des Zugriffs, Erinnerung 7 Tage vor der
+bei 100 % und zur Pause bei 150 % im kostenpflichtigen Tarif und bei 80 % und zur Pause bei 100 % im
+kostenlosen Tarif; Hinweis auf ein Konto des kostenlosen Tarifs ohne Ereignisse; Hinweis auf das Ende
+des Zugriffs, Erinnerung 7 Tage vor der
 Löschung und Hinweis auf die erfolgte Löschung; Hinweis auf einen fertigen Export; die wöchentliche
 Zusammenfassung (die jede Person in den Einstellungen unter „Wochenbericht“ abschalten kann); und Mitteilungen zum Vertrag,
 einschließlich Hinweisen zu Missbrauch und Sperrung. Die Abrechnungs-E-Mails werden von Stripe selbst
-gesendet: Erinnerung 7 Tage vor dem Ende der kostenlosen Testphase, Quittungen über Zahlungen und
+gesendet: Erinnerung 7 Tage vor dem Ende der kostenlosen Testphase (bei Testphasen, die vor der
+Version 1.3 der Nutzungsbedingungen begonnen haben), Quittungen über Zahlungen und
 Erstattungen, Hinweis auf abgelehnte Zahlung, Aufforderung zur Bestätigung der Zahlung (3D Secure) und
 Hinweis auf eine bald ablaufende Karte. **Unsere E-Mails enthalten keine Öffnungs- oder
 Klickverfolgung.** Wir senden keine Werbung.
 
 ### 2.7. Verhinderung wiederholter kostenloser Testphasen
 
-Die kostenlose Testphase gilt einmal pro Kunde (Nutzungsbedingungen, Klausel 6.4). Um zu erkennen,
+**Seit der Version 1.3 der Nutzungsbedingungen gibt es keine kostenlose Testphase**
+(Nutzungsbedingungen, Klausel 8.3), und wir erfassen keine neuen Kartenfingerabdrücke. Dieser Punkt
+betrifft die Einträge der zuvor begonnenen Testphasen, die der Frist aus der Tabelle unten folgen und
+spätestens 12 Monate nach dem Beginn der letzten dieser Testphasen verschwinden.
+
+Die kostenlose Testphase galt einmal pro Kunde (Nutzungsbedingungen, Klausel 8.3). Um zu erkennen,
 wenn dieselbe Karte eine zweite Testphase in einem anderen Konto beginnt, lesen wir, wenn wir ein
 Abonnement mit kostenloser Testphase erfassen (in der Praxis, wenn die Testphase beginnt), bei Stripe
 den **Kartenfingerabdruck** (*Fingerprint*) des Abonnements: einen Code, den Stripe aus der
@@ -333,9 +342,10 @@ Wirkungen des Dienstes sind Regeln, die für alle gleich sind und deine Person n
 
 1. zur Sicherheit: nach zu vielen Versuchen wird eine Code- oder Anmeldeanfrage für einige Minuten
    abgelehnt;
-2. aus dem Vertrag: der Ereignisempfang wird pausiert, wenn das Konto 150 % der Monatsgrenze erreicht,
-   und der Zugriff folgt dem Status des Abonnements bei Stripe (Nutzungsbedingungen, Klauseln 7.2
-   und 9).
+2. aus dem Vertrag: der Ereignisempfang wird pausiert, wenn das Konto 150 % der Monatsgrenze im
+   kostenpflichtigen Tarif oder 100 % im kostenlosen Tarif erreicht; der Zugriff folgt dem Tarif und
+   dem Status des Abonnements bei Stripe; und das Konto des kostenlosen Tarifs ohne Ereignisse wird
+   nach der Benachrichtigung gelöscht (Nutzungsbedingungen, Klauseln 7.2, 7.6 und 9).
 
 Die Übereinstimmung eines Kartenfingerabdrucks (Punkt 2.7) und die Maßnahmen wegen Missbrauchs
 (Nutzungsbedingungen, Klausel 18) werden immer von einem Menschen entschieden. Wenn dich etwas davon

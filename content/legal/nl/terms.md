@@ -16,38 +16,57 @@ Deze samenvatting vervangt de volledige tekst niet, maar laat zien wat het belan
 je de overeenkomst sluit.
 
 1. **Wie de dienst aanbiedt:** {{seller.name}}, natuurlijk persoon, CPF {{seller.taxId}} (Artikel 1).
-2. **Prijs:** R$ 39,00 per maand of R$ 390,00 per jaar, met creditcard, via Stripe, met
-   **automatische verlenging** totdat je opzegt (Artikel 8).
-3. **Gratis proefperiode:** 14 dagen, één keer per klant. De kaart wordt bij het begin gevraagd, en
-   Stripe stuurt 7 dagen voor het einde een herinnering. **Als je niet opzegt vóór het einde van de
-   proefperiode, vindt de eerste afschrijving plaats op de 15e dag** (Artikelen 6.4 en 8.3).
-4. **Limieten van het abonnement:** tot 100.000 events per maand, tot 3 websites, tot 3 personen in
-   het dashboard (jijzelf meegerekend) en 13 maanden historie. We waarschuwen je wanneer het account
-   80% en 100% van de events van de maand bereikt. **Let op: bij 150% wordt de ontvangst van events
-   gepauzeerd tot de 1e van de volgende maand**, en de events die tijdens de pauze worden verzonden,
-   gaan verloren. Er wordt niets in rekening gebracht boven de prijs (Artikel 7).
-5. **Herroeping:** volledige terugbetaling als je binnen 7 dagen na de eerste afschrijving afziet van
-   de overeenkomst. Hef je binnen die termijn je account in het dashboard op, dan gebeurt de
-   terugboeking automatisch (Artikel 10).
-6. **Opzegging:** op elk moment, op twee manieren. Via het Stripe-portaal loopt de toegang door tot
-   het einde van de betaalde periode. Hef je het account in het dashboard op, dan **eindigt de
-   toegang direct**. **Let op: na de 7 dagen van het herroepingsrecht is er geen evenredige
-   terugbetaling van de al betaalde periode**, bij geen van beide manieren (Artikel 11).
+2. **Abonnementen en prijs:** er zijn twee abonnementen. Het **gratis abonnement** kost niets en
+   vraagt geen kaart. Het **betaalde abonnement** kost R$ 39,00 per maand of R$ 390,00 per jaar, met
+   creditcard, via Stripe, **afgeschreven bij het afsluiten**, met **automatische verlenging** totdat
+   je opzegt (Artikelen 7 en 8).
+3. **Gratis abonnement:** elke registratie begint daarop, zonder kaart en zonder tijdslimiet, met één
+   account op het gratis abonnement per persoon. **Er is geen gratis proefperiode van 14 dagen
+   meer:** voor de hogere limieten sluit je in het dashboard het betaalde abonnement af, wanneer je
+   wilt (Artikelen 6 en 8.3). **Let op: het gratis abonnement kan worden gewijzigd of beëindigd, met
+   een kennisgeving per e-mail van ten minste 30 dagen van tevoren**, en je kunt je events daarvoor
+   exporteren (Artikel 7.5).
+4. **Limieten:** bij het gratis abonnement tot 10.000 events per maand, 1 website en 1 persoon in het
+   dashboard (alleen jij); bij het betaalde abonnement tot 100.000 events per maand, tot 3 websites
+   en tot 3 personen in het dashboard (jijzelf meegerekend). Beide hebben 13 maanden historie en alle
+   functies. **Let op: bij het gratis abonnement wordt de ontvangst van events, wanneer de maand
+   10.000 events bereikt, gepauzeerd tot de 1e van de volgende maand**: een account dat de limiet op
+   de 3e bereikt, ontvangt tot de 1e niets. We waarschuwen vooraf, bij 80%. Bij het betaalde
+   abonnement waarschuwen we bij 80% en bij 100%, en **komt de pauze bij 150%**. De events die
+   tijdens de pauze worden verzonden, gaan verloren. Er wordt niets in rekening gebracht boven de
+   prijs (Artikel 7).
+5. **Herroeping (betaald abonnement):** volledige terugbetaling als je binnen 7 dagen na de eerste
+   afschrijving van elk abonnement afziet van de overeenkomst. **Het betaalde abonnement herroepen
+   heft je account niet op:** het gaat terug naar het gratis abonnement, met je project, en als het
+   daar niet in past, kies je wat je verwijdert. Wil je definitief vertrekken, dan kun je het hele
+   account opheffen (Artikel 10).
+6. **Opzegging:** op elk moment, op twee manieren. Via het Stripe-portaal loopt het betaalde
+   abonnement door tot het einde van de betaalde periode en **gaat het account daarna terug naar het
+   gratis abonnement als het daarin past** (1 website en 1 persoon); past het niet, dan eindigt de
+   toegang. Hef je het account in het dashboard op, dan **eindigt de toegang direct**. **Let op: na
+   de 7 dagen van het herroepingsrecht is er geen evenredige terugbetaling van de al betaalde
+   periode**, bij geen van beide manieren (Artikel 11).
 7. **Verwijdering van de gegevens:** **30 dagen na het einde van de toegang worden het account, de
    projecten en alle events definitief verwijderd.** Tot dan kun je de events via het dashboard
    exporteren (Artikel 11).
+   **Let op: een account op het gratis abonnement dat in de 30 dagen na het aanmaken geen enkel event
+   ontvangt, of dat 90 dagen achter elkaar zonder events blijft, wordt definitief verwijderd als het
+   7 dagen na een kennisgeving per e-mail nog steeds zonder events is** (Artikel 7.6).
 8. **Beschikbaarheid:** **Let op: er is geen beschikbaarheidsgarantie (SLA)**; we doen ons best om
-   de dienst online te houden (Artikel 15). Support per e-mail, met antwoord binnen 2 werkdagen
-   (Artikel 16).
+   de dienst online te houden (Artikel 15). Bij het betaalde abonnement support per e-mail, met
+   antwoord binnen 2 werkdagen. Bij het gratis abonnement worden technische vragen over gebruik en
+   installatie afgehandeld via de documentatie en via GitHub; klachten, vragen over de overeenkomst
+   en de facturering, opzegging, herroeping, persoonsgegevens en de kennisgevingen op grond van de
+   overeenkomst blijven per e-mail lopen, met antwoord binnen 5 dagen (Artikel 16).
 9. **Je belangrijkste verplichtingen:** **geen persoonsgegevens in de events verzenden** (naam,
    e-mailadres, CPF, telefoonnummer enz.), de bezoekers van je website over de meting informeren en
    geen misbruik van de dienst maken (Artikel 12).
 10. **Let op: opschorting en beëindiging wegens misbruik.** Bij misbruik (bijvoorbeeld
     persoonsgegevens in de events, het meten van wie heeft gevraagd niet gemeten te worden, vervalst
-    verkeer, een aanval, fraude of een herhaalde gratis proefperiode) kunnen we het getroffen deel
-    van de dienst opschorten en, in ernstige of herhaalde gevallen, de overeenkomst beëindigen. In de
-    regel waarschuwen we vooraf en geven we een termijn om het te herstellen; we vermelden altijd de
-    reden en je kunt bezwaar maken (Artikel 18).
+    verkeer, een aanval, fraude of meerdere accounts op het gratis abonnement) kunnen we het
+    getroffen deel van de dienst opschorten en, in ernstige of herhaalde gevallen, de overeenkomst
+    beëindigen. In de regel waarschuwen we vooraf en geven we een termijn om het te herstellen; we
+    vermelden altijd de reden en je kunt bezwaar maken (Artikel 18).
 11. **Persoonsgegevens:** jij bent de verwerkingsverantwoordelijke voor de gegevens van de bezoekers
     van je website; wij zijn de verwerker (Artikel 14 en Verwerkersovereenkomst). Als een persoon met
     toegang Claude of Claude Code aan Pyxis koppelt, gaan de cijfers die die persoon opvraagt naar
@@ -63,7 +82,9 @@ persoon) **{{seller.taxId}}**, met adres te **{{seller.address}}** ("wij"). **Py
 de dienst.
 
 1.2. Contact voor elk onderwerp, ook opzegging, herroeping, support, bezwaar tegen een opschorting
-en persoonsgegevens: **hello@pyxis-analytics.dev**.
+en persoonsgegevens: **hello@pyxis-analytics.dev**. Bij het gratis abonnement lopen technische vragen
+over gebruik en installatie via de documentatie en via GitHub; de rest blijft via dit e-mailadres
+lopen (Artikel 16.5).
 
 1.3. "Jij" is de natuurlijke persoon of rechtspersoon die de dienst afneemt om een of meer websites
 te meten.
@@ -91,17 +112,25 @@ te gebruiken.
 2.7. **Consument:** wie de dienst afneemt als eindafnemer, in de zin van art. 2 van het Código de
 Defesa do Consumidor (Braziliaanse consumentenbeschermingswet; Lei nº 8.078/1990).
 
-2.8. **Account:** de registratie van de afnemer, waartoe het abonnement, de projecten en de personen
-met toegang behoren.
+2.8. **Account:** de registratie van de afnemer, waartoe het abonnement, de afsluiting van het
+betaalde abonnement (als die er is), de projecten en de personen met toegang behoren.
 
 2.9. **Accounteigenaar:** de persoon die de registratie heeft gedaan (of die je hebt aangewezen
 toen wij het account op je verzoek aanmaakten) en die namens jou projecten, sleutels, personen,
 exports en facturering beheert.
 
 2.10. **Einde van de toegang:** de datum waarop het account geen events meer ontvangt en de
-projecten niet meer kan wijzigen: het einde van de betaalde periode of van de proefperiode na een
-opzegging (Artikel 11.2), de opheffing van het account (Artikelen 11.6 en 18.7) of het einde van het
-abonnement wegens niet-betaling (Artikel 9.2).
+projecten niet meer kan wijzigen: het einde van de betaalde periode na een opzegging, wanneer het
+account niet teruggaat naar het gratis abonnement (Artikel 11.2), de opheffing van het account
+(Artikelen 11.6 en 18.7), het einde van het abonnement wegens niet-betaling, wanneer het account
+niet teruggaat naar het gratis abonnement (Artikel 9.2), of het einde van het gratis abonnement voor
+het account dat het betaalde abonnement niet heeft afgesloten (Artikel 7.5). De verwijdering van
+een account op het gratis abonnement zonder events is geen einde van de toegang: daarvoor geldt
+alleen Artikel 7.6.
+
+2.11. **Gratis abonnement en betaald abonnement:** de twee abonnementen van de dienst, met de
+limieten van Artikel 7.1. Het gratis abonnement heeft geen prijs en hoeft niet te worden afgesloten;
+het betaalde abonnement is het maand- of jaarabonnement van Artikel 8.
 
 ## Artikel 3 — Aanvaarding, wie de overeenkomst kan sluiten en contractdocumenten
 
@@ -110,8 +139,9 @@ abonnement wegens niet-betaling (Artikel 9.2).
 1. **bij de registratie via het dashboard** (`app.pyxis-analytics.dev/sign-up`), door het
    aanvinkvakje voor aanvaarding van de Gebruiksvoorwaarden, de Verwerkersovereenkomst en het
    Privacybeleid aan te vinken, waarbij het versienummer wordt getoond. We bewaren de aanvaarde
-   versie en de datum en het tijdstip van aanvaarding (zonder je IP-adres te bewaren). De
-   betaalpagina van Stripe vraagt vóór het abonnement opnieuw om aanvaarding;
+   versie en de datum en het tijdstip van aanvaarding (zonder je IP-adres te bewaren). Wanneer je
+   het betaalde abonnement afsluit, vraagt de betaalpagina van Stripe vóór het afsluiten opnieuw om
+   aanvaarding;
 2. **wanneer wij het account op je verzoek aanmaken** (Artikel 6.2), door op onze e-mail te
    antwoorden met de bevestiging dat je de daarin vermelde versie aanvaardt, voordat wij de toegang
    vrijgeven.
@@ -164,7 +194,7 @@ verschijnen niet, en events die worden verzonden terwijl de dienst offline is of
 gepauzeerd (Artikelen 7.2, 15 en 18), gaan verloren (de tracker probeert het enkele seconden opnieuw
 zolang de pagina open is, maar niet wanneer de ontvangst is gepauzeerd).
 
-4.4. Ook onderdeel van het abonnement zijn:
+4.4. Ook onderdeel van beide abonnementen (Artikel 7.1) zijn:
 
 1. de **wekelijkse samenvatting per e-mail**, elke maandag, die elke persoon met toegang kan
    uitschakelen in Instellingen;
@@ -192,19 +222,16 @@ van toepassing op die installatie.
 
 6.1. **Registratie via het dashboard.**
 
-1. Op `app.pyxis-analytics.dev/sign-up` kies je het abonnement (maandelijks of jaarlijks), vul je je
-   e-mailadres in, aanvaard je de voorwaarden (Artikel 3.1) en bevestig je het e-mailadres met een
-   code van 6 cijfers die naar dat adres wordt gestuurd.
-2. Vervolgens vul je je kaart in op de betaalpagina van Stripe, waarmee de gratis proefperiode
-   begint (Artikel 8.3).
-3. Zodra Stripe het abonnement heeft bevestigd, is het account klaar: je maakt je projecten aan in
-   het dashboard (tot 3), met het adres van de website, de tijdzone en, als je wilt, het
-   conversie-event, en je ontvangt de publieke sleutel en het installatiefragment. Wie de
-   registratie heeft gedaan, is de accounteigenaar.
-
-Als je de betaalpagina van Stripe niet afrondt, blijft het account onvolledig, zonder projecten, en
-wordt het 7 dagen na de registratie verwijderd. Tot dan kun je het abonnement afronden door opnieuw
-in te loggen op het dashboard.
+1. Op `app.pyxis-analytics.dev/sign-up` vul je je e-mailadres in, aanvaard je de voorwaarden
+   (Artikel 3.1) en bevestig je het e-mailadres met een code van 6 cijfers die naar dat adres wordt
+   gestuurd. **Voor de registratie is geen kaart nodig.**
+2. Zodra de code is bevestigd, ontstaat het account op het **gratis abonnement** (Artikel 7.1),
+   behalve wanneer de registratie op het gratis abonnement gesloten is (Artikel 6.5), en is het
+   klaar: je maakt je project aan in het dashboard, met het adres van de website, de tijdzone en, als
+   je wilt, het conversie-event, en je ontvangt de publieke sleutel en het installatiefragment. Wie
+   de registratie heeft gedaan, is de accounteigenaar.
+3. Voor de limieten van het betaalde abonnement sluit de accounteigenaar het betaalde abonnement af
+   in het dashboard, wanneer hij wil (Artikel 8.3).
 
 6.2. **Account op verzoek aangemaakt.** We kunnen het account ook voor je aanmaken, op een verzoek
 via hello@pyxis-analytics.dev, bijvoorbeeld wanneer het niet mogelijk is de registratie via het
@@ -213,36 +240,50 @@ e-mail het abonnement en de betaalwijze af, volgt de aanvaarding Artikel 3.1, pu
 toegang vrij binnen 2 werkdagen na de aanvaarding en, als er kosten zijn, na het afsluiten van het
 abonnement. Bij een gratis account wordt niets in rekening gebracht; de rest van deze voorwaarden
 geldt onverkort, en we kunnen de kosteloosheid beëindigen met een kennisgeving van 30 dagen,
-waarna je het abonnement kunt afsluiten of kunt vertrekken.
+waarna je het betaalde abonnement kunt afsluiten of kunt vertrekken. Dat gratis account, per geval
+per e-mail afgesproken, is iets anders dan het gratis abonnement van Artikel 7.1.
 
 6.3. We kunnen een registratie of een verzoek om een account alleen om een objectieve reden
 weigeren: (a) de website is niet verenigbaar met aanvaardbaar gebruik (Artikel 12); (b) het verwachte
 volume ligt ver boven de limieten van het abonnement; (c) dezelfde persoon of onderneming heeft in de
-voorafgaande 12 maanden een account gehad dat wegens ernstig misbruik is beëindigd (Artikel 18.7); of
-(d) een herhaalde gratis proefperiode (Artikel 6.4). Als we weigeren nadat er een afschrijving heeft
-plaatsgevonden, betalen we het volledige bedrag terug.
+voorafgaande 12 maanden een account gehad dat wegens ernstig misbruik is beëindigd (Artikel 18.7);
+(d) bij een registratie op het gratis abonnement heeft dezelfde persoon of onderneming al een account
+op het gratis abonnement (Artikel 6.4); of (e) de registratie op het gratis abonnement is gesloten
+(Artikel 6.5). Als we weigeren nadat er een afschrijving heeft plaatsgevonden, betalen we het
+volledige bedrag terug.
 
-6.4. **De gratis proefperiode geldt één keer per klant:** één keer per account (een account dat al
-een abonnement heeft gehad, krijgt geen nieuwe proefperiode bij een nieuw abonnement) en één keer per
-persoon of onderneming, ook in een ander account, met een ander e-mailadres of een andere kaart. Om
-een herhaalde proefperiode met dezelfde kaart op te merken, bewaren we gedurende 12 maanden de door
-Stripe berekende "kaartvingerafdruk", nooit het kaartnummer, zoals uitgelegd in het
-Privacybeleid (punt 2.7). Wat er bij een herhaalde proefperiode gebeurt, staat in Artikel 18.11.
+6.4. **Eén account op het gratis abonnement per persoon:** elke persoon of onderneming mag maar één
+account op het gratis abonnement hebben, en de dienst laat dezelfde eigenaar geen tweede openen. Een
+ander account aanmaken, met een andere persoon of een ander e-mailadres, om meer dan één account op
+het gratis abonnement te hebben of om de limieten ervan op te tellen, is misbruik (Artikel 12.1,
+punt 14).
+
+6.5. **Plekken in het gratis abonnement.** We kunnen het aantal accounts op het gratis abonnement
+beperken en de nieuwe registraties op het gratis abonnement op elk moment sluiten, bijvoorbeeld om de
+capaciteit van de dienst te beschermen. Zolang de registratie gesloten is, kan die een wachtlijst en
+het betaalde abonnement aanbieden. Het sluiten van de nieuwe registraties verandert niets voor de
+accounts die al op het gratis abonnement zitten; voor het wijzigen of beëindigen van hun abonnement
+geldt Artikel 7.5.
 
 ## Artikel 7 — Abonnement en limieten
 
-7.1. Het abonnement omvat:
+7.1. De dienst heeft twee abonnementen (Artikel 2.11):
 
-| Onderdeel | Limiet |
-|---|---|
-| Ontvangen events per maand, opgeteld over alle projecten van het account | tot 100.000 |
-| Websites (projecten) | tot 3 |
-| Personen met toegang tot het dashboard | tot 3, de accounteigenaar meegerekend |
-| Historie | 13 maanden (oudere events worden dagelijks verwijderd) |
-| Wekelijkse samenvatting per e-mail | inbegrepen |
-| Toegangstokens, MCP-server en Claude-connector | inbegrepen |
-| Export van de events van een project | via het dashboard, tot 3 per project per dag |
-| Support | per e-mail, antwoord binnen 2 werkdagen |
+| Onderdeel | Gratis abonnement | Betaald abonnement |
+|---|---|---|
+| Prijs | geen, zonder kaart | R$ 39,00 per maand of R$ 390,00 per jaar (Artikel 8) |
+| Ontvangen events per maand, opgeteld over alle projecten van het account | tot 10.000 | tot 100.000 |
+| Websites (projecten) | 1 | tot 3 |
+| Personen met toegang tot het dashboard | 1, alleen de accounteigenaar | tot 3, de accounteigenaar meegerekend |
+| Historie | 13 maanden (oudere events worden dagelijks verwijderd) | 13 maanden (oudere events worden dagelijks verwijderd) |
+| Pauze van de ontvangst wegens het quotum (Artikel 7.2) | bij het bereiken van 100% van de limiet | bij het bereiken van 150% van de limiet |
+| Wekelijkse samenvatting per e-mail | inbegrepen | inbegrepen |
+| Toegangstokens, MCP-server en Claude-connector | inbegrepen | inbegrepen |
+| Export van de events van een project | via het dashboard, tot 3 per project per dag | via het dashboard, tot 3 per project per dag |
+| Support | via de documentatie en via GitHub; e-mail alleen in de gevallen van Artikel 16.5 | per e-mail, antwoord binnen 2 werkdagen |
+
+Beide abonnementen hebben alle schermen en functies van de dienst; wat tussen hen verschilt, is het
+volume.
 
 7.2. **Let op: gebruik boven de limiet.**
 
@@ -252,12 +293,12 @@ Privacybeleid (punt 2.7). Wat er bij een herhaalde proefperiode gebeurt, staat i
    maand.
 2. De dienst meet het gebruik één keer per dag, 's nachts. Het gemeten gebruik verschijnt in
    Account en facturatie, in het dashboard.
-3. Wanneer de dagelijkse meting 80% en daarna 100% van de limiet vaststelt (80.000 en 100.000
-   events), waarschuwen we de accounteigenaar per e-mail, één keer per niveau per maand. **Tot 150%
-   wordt er niets geblokkeerd.**
-4. **Wanneer de dagelijkse meting 150% van de limiet vaststelt (150.000 events), wordt de ontvangst
-   van events van alle projecten van het account gepauzeerd tot de 1e van de volgende maand**, en
-   waarschuwen we per e-mail. Tijdens de pauze weigert de dienst de events (antwoord
+3. Wanneer de dagelijkse meting bij het betaalde abonnement 80% en daarna 100% van de limiet
+   vaststelt (80.000 en 100.000 events), waarschuwen we de accounteigenaar per e-mail, één keer per
+   niveau per maand. **Tot 150% wordt er niets geblokkeerd.**
+4. **Wanneer de dagelijkse meting bij het betaalde abonnement 150% van de limiet vaststelt (150.000
+   events), wordt de ontvangst van events van alle projecten van het account gepauzeerd tot de 1e
+   van de volgende maand**, en waarschuwen we per e-mail. Tijdens de pauze weigert de dienst de events (antwoord
    `403 quota_exceeded`), die **niet worden opgeslagen en niet kunnen worden hersteld**. Het
    dashboard blijft de al opgeslagen gegevens tonen. De ontvangst wordt aan het begin van de
    volgende maand vanzelf hervat. Omdat de meting dagelijks is, kan het account iets boven 150%
@@ -265,6 +306,18 @@ Privacybeleid (punt 2.7). Wat er bij een herhaalde proefperiode gebeurt, staat i
 5. **We brengen niets in rekening boven de prijs van het abonnement** voor gebruik boven de limiet.
 6. Als het account vaak boven de limiet uitkomt, kunnen we per e-mail een abonnement of een prijs
    voorstellen die bij het volume past. Aanvaarden is optioneel.
+7. **Bij het gratis abonnement komt de pauze bij 100% van de limiet.** Wanneer de dagelijkse meting
+   80% van de limiet vaststelt (8.000 events), waarschuwen we de accounteigenaar per e-mail.
+   **Wanneer de dagelijkse meting 100% van de limiet vaststelt (10.000 events), wordt de ontvangst
+   van events gepauzeerd tot de 1e van de volgende maand**, onder dezelfde voorwaarden als in punt 4,
+   en waarschuwen we per e-mail. Omdat de meting dagelijks is, kan het account op de dag waarop het
+   de limiet bereikt iets boven 10.000 events uitkomen, en die events blijven opgeslagen. **Let op:
+   de pauze geldt tot de 1e van de volgende maand, ongeacht de dag waarop ze is begonnen: een account
+   dat de limiet op de 3e bereikt, ontvangt tot de 1e geen enkel event**, en de events die tijdens de
+   pauze worden verzonden, worden niet opgeslagen en kunnen niet worden hersteld.
+8. **Afsluiten heft de pauze op.** Als de accounteigenaar tijdens de pauze van het gratis abonnement
+   het betaalde abonnement afsluit (Artikel 8.3), wordt de ontvangst ongeveer een minuut na de
+   bevestiging van het afsluiten hervat, al met de limieten van het betaalde abonnement.
 
 7.3. De dienst heeft technische limieten tegen misbruik, zoals het aantal batches van events per
 minuut per adres en per project en de grootte van elke batch. Die limieten kunnen veranderen om de
@@ -273,24 +326,54 @@ dienst te beschermen, zonder de maandelijkse eventlimiet van je abonnement te ve
 7.4. De verwijdering van events ouder dan 13 maanden is automatisch en maakt deel uit van de dienst:
 **we bewaren geen oudere historie**.
 
-## Artikel 8 — Prijs, gratis proefperiode en facturering
+7.5. **Let op: wijziging of einde van het gratis abonnement.** We kunnen de limieten van het gratis
+abonnement op elk moment verhogen of er functies aan toevoegen. Elke andere wijziging van het gratis
+abonnement, ook het verlagen van de limieten of het beëindigen van het abonnement, geldt pas na een
+kennisgeving per e-mail aan de eigenaar van elk account op het gratis abonnement **ten minste 30
+dagen van tevoren**, met uitleg van wat er verandert (Artikel 21.1). Omdat het gratis abonnement
+geen verlenging kent, geldt de wijziging voor jouw account aan het einde van die termijn. Tijdens de
+termijn kun je alle events exporteren (Artikel 11.5), het betaalde abonnement afsluiten
+(Artikel 8.3) of het account opheffen (Artikel 11.6). Als het gratis abonnement wordt beëindigd en
+je account niet is overgegaan op het betaalde abonnement, is het einde van de termijn het einde van
+de toegang (Artikel 2.10), en voor de gegevens gelden de Artikelen 11.4 en 11.5.
 
-8.1. **Prijs:** R$ 39,00 per maand of R$ 390,00 per jaar. Er zijn geen installatiekosten of andere
-kosten.
+7.6. **Let op: account op het gratis abonnement zonder events.** We sturen een kennisgeving per
+e-mail aan de eigenaar van een account op het gratis abonnement dat **in de 30 dagen na het aanmaken
+van het account geen enkel event ontvangt** of dat **90 dagen achter elkaar geen enkel event
+ontvangt**. **Als het account 7 dagen na de kennisgeving nog steeds zonder events is, wordt het
+definitief verwijderd**: het account, de projecten en alle events, zonder de termijn van 30 dagen
+van Artikel 11.4, zoals beschreven in Artikel 12.7 van Bijlage 1; we sturen een e-mail ter
+bevestiging van de verwijdering. In die 7 dagen kun je de events exporteren (Artikel 11.5), en
+wordt er niets verwijderd als het account een event ontvangt of overgaat op het betaalde abonnement:
+accounts op het betaalde abonnement worden nooit wegens het ontbreken van events verwijderd. Na de
+verwijdering is er geen manier om de gegevens te herstellen; alleen de records waarvoor Artikel 11.4
+een uitzondering maakt, blijven bewaard.
+
+## Artikel 8 — Prijs, abonnement en facturering
+
+8.1. **Prijs van het betaalde abonnement:** R$ 39,00 per maand of R$ 390,00 per jaar. Het gratis
+abonnement heeft geen prijs en vraagt geen kaart. Er zijn geen installatiekosten of andere kosten.
 
 8.2. **Betaalwijze:** creditcard, verwerkt door Stripe. **Wij zien en bewaren het nummer van je kaart
 niet.** Op dit moment accepteren we geen Pix of boleto.
 
-8.3. **Gratis proefperiode:** 14 dagen, te rekenen vanaf de bevestiging van het abonnement op de
-betaalpagina van Stripe, één keer per klant (Artikel 6.4). De kaart is bij het begin verplicht, en
-tijdens de proefperiode wordt niets in rekening gebracht. Stripe stuurt 7 dagen voor het einde van de
-proefperiode een herinnering per e-mail, met de link om op te zeggen. **Als je niet opzegt vóór het
-einde van de proefperiode (via het Stripe-portaal of door het account in het dashboard op te
-heffen), vindt de eerste afschrijving plaats op de 15e dag** en daarna bij elke nieuwe periode; op
-het afschrift van je kaart wordt die eerste afschrijving aangeduid als einde van de proefperiode.
-Zeg je tijdens de proefperiode op, dan wordt niets in rekening gebracht. Een account dat al een
-abonnement heeft gehad, krijgt geen nieuwe proefperiode bij een nieuw abonnement: de facturering
-begint op de dag van het nieuwe abonnement.
+8.3. **Afsluiten, zonder gratis proefperiode.** De accounteigenaar sluit het betaalde abonnement af
+in Account en facturatie, in het dashboard, door het maand- of het jaarabonnement te kiezen en de
+kaart in te vullen op de betaalpagina van Stripe. **Er is geen gratis proefperiode: de eerste
+afschrijving vindt plaats bij het afsluiten** en daarna bij elke nieuwe periode. Zodra het afsluiten
+is bevestigd, krijgt het account direct de limieten van het betaalde abonnement, en eindigt een
+pauze van het gratis abonnement zoals bepaald in Artikel 7.2, punt 8. Als je de betaalpagina verlaat
+zonder af te ronden, wordt niets in rekening gebracht en blijft het account op het gratis
+abonnement. Opnieuw afsluiten, na een eerder abonnement, wordt ook direct in rekening gebracht.
+
+**Proefperiodes die al zijn begonnen.** Tot versie 1.2 van deze voorwaarden begon het abonnement met
+een gratis proefperiode van 14 dagen, met de kaart bij het begin ingevuld, één keer per klant. Een
+account dat zo'n proefperiode vóór versie 1.3 is begonnen, maakt die af zoals ze is overeengekomen:
+tijdens de proefperiode wordt niets in rekening gebracht, Stripe stuurt 7 dagen voor het einde een
+herinnering per e-mail, en **als je niet opzegt vóór het einde van de proefperiode (via het
+Stripe-portaal of door het account in het dashboard op te heffen), vindt de eerste afschrijving
+plaats op de 15e dag**; op het afschrift van je kaart wordt die aangeduid als einde van de
+proefperiode. Voor een herhaalde proefperiode geldt Artikel 18.11.
 
 8.4. **Automatische verlenging:** het abonnement wordt aan het einde van elke periode automatisch
 verlengd, met afschrijving van dezelfde kaart, totdat je opzegt (Artikel 11). De datum van de
@@ -316,18 +399,22 @@ werken.
 
 9.2. Als de betaling na die pogingen niet is gedaan (tot 2 weken na de eerste mislukking), of als
 de door de bank gevraagde bevestiging niet binnen 15 dagen is gegeven, beëindigt Stripe het
-abonnement, en dat is het einde van de toegang: uiterlijk de volgende dag worden de sleutels van de
-projecten ingetrokken en sturen de websites geen events meer; het dashboard blijft tot de
-verwijdering alleen beschikbaar voor raadpleging en export.
+abonnement. Als het account in het gratis abonnement past (1 project en 1 persoon met toegang), gaat
+het terug naar het gratis abonnement, zoals in Artikel 11.2, punt 1. Past het niet, dan is dat het
+einde van de toegang: uiterlijk de volgende dag worden de sleutels van de projecten ingetrokken en
+sturen de websites geen events meer; het dashboard blijft tot de verwijdering alleen beschikbaar
+voor raadpleging en export.
 
-9.3. De gegevens worden 30 dagen na het einde van de toegang verwijderd (Artikel 11.4). Tot dan kun
-je terugkomen zoals bepaald in Artikel 11.5, punt 3, zonder gegevens te verliezen.
+9.3. Als er een einde van de toegang is, worden de gegevens 30 dagen daarna verwijderd
+(Artikel 11.4). Tot dan kun je terugkomen zoals bepaald in Artikel 11.5, punt 3, zonder gegevens te
+verliezen.
 
 ## Artikel 10 — Herroepingsrecht
 
 10.1. Omdat de overeenkomst via internet wordt gesloten, kan de consument binnen 7 dagen na het
-sluiten van de overeenkomst daarvan afzien (Código de Defesa do Consumidor, art. 49). Tijdens de
-gratis proefperiode wordt niets in rekening gebracht: opzeggen volstaat.
+sluiten van de overeenkomst daarvan afzien (Código de Defesa do Consumidor, art. 49). Bij het
+gratis abonnement wordt niets in rekening gebracht: het account opheffen volstaat (Artikel 11.6). De
+terugbetaling van dit artikel geldt voor het betaalde abonnement.
 
 10.2. **We breiden dit recht uit tot alle klanten:** als je binnen **7 dagen na de eerste
 afschrijving** (van het maand- of het jaarabonnement) afziet van de overeenkomst, betalen we **het
@@ -335,15 +422,17 @@ volledige bedrag** van die afschrijving terug, zonder dat je een reden hoeft op 
 
 10.3. Om dit recht uit te oefenen, gebruik je een van deze middelen:
 
-1. **hef het account op in het dashboard** (Account en facturatie → Account opheffen), hetzelfde
-   kanaal waarmee je de overeenkomst hebt gesloten. Binnen de termijn wordt de terugboeking van het
-   volledige bedrag automatisch bij Stripe aangevraagd, en het scherm toont het terugbetaalde
+1. **in het dashboard**, in Account en facturatie → Abonnement herroepen, dezelfde plek waar je het
+   abonnement hebt afgesloten: het abonnement wordt direct opgezegd, de terugboeking van het
+   volledige bedrag wordt automatisch bij Stripe aangevraagd, en het scherm toont het terugbetaalde
    bedrag;
-2. of stuur een e-mail naar hello@pyxis-analytics.dev, vanaf het e-mailadres van de
-   accounteigenaar, met het woord "arrependimento" (herroeping).
+2. per e-mail naar hello@pyxis-analytics.dev, vanaf het e-mailadres van de accounteigenaar, met het
+   woord "arrependimento" (herroeping);
+3. als je ook de dienst wilt verlaten, door **het account op te heffen in het dashboard** (Account en
+   facturatie → Account opheffen), met de automatische terugboeking van Artikel 11.6, punt 5.
 
 Alleen het opzeggen van het abonnement in het Stripe-portaal leidt niet tot de terugboeking: gebruik
-een van de twee middelen hierboven.
+een van de middelen hierboven.
 
 10.4. Via het dashboard verschijnt de bevestiging direct op het scherm, en ook per e-mail. Via
 e-mail bevestigen we de ontvangst langs dezelfde weg en vragen we de terugboeking binnen 2 werkdagen
@@ -351,28 +440,50 @@ bij Stripe aan. Als de automatische terugboeking mislukt, vragen wij die binnen 
 handmatig aan en laten we het je weten. Stripe meldt de terugboeking aan de kaartuitgever; de termijn
 waarbinnen die op het afschrift verschijnt, hangt af van de kaartuitgever.
 
-10.5. Bij herroeping wordt het account opgeheven zoals in Artikel 11.6: de toegang eindigt direct en
-voor de gegevens geldt Artikel 11.4.
+10.5. Bij herroeping via de middelen 1 en 2 van Artikel 10.3 wordt het abonnement direct opgezegd en
+**gaat het account terug naar het gratis abonnement**, met het project en de gegevens die het heeft,
+als het daarin past (1 project en 1 persoon met toegang, Artikel 7.1). Past het niet, dan toont het
+dashboard wat je moet verwijderen, en heb je 30 dagen om te kiezen, waarbij je eerst kunt exporteren
+wat je wilt (Artikel 11.5); als het account binnen die termijn niet in het gratis abonnement gaat
+passen, geldt Artikel 11.2, punt 2. De terugboeking hangt niet af van die keuze. Als de maand al
+boven 10.000 events is uitgekomen, geldt de pauze van Artikel 7.2, punt 7. Via middel 3 wordt het
+account opgeheven zoals in Artikel 11.6.
 
 ## Artikel 11 — Opzegging en opheffing van het account door jou
 
 11.1. Je kunt op elk moment vertrekken, op twee manieren, met verschillende gevolgen:
 
 1. **het abonnement opzeggen in het Stripe-portaal** (Account en facturatie → Facturatie beheren,
-   of via de link in de e-mails van Stripe): dit gaat in aan het einde van de betaalde periode of
-   van de proefperiode (Artikel 11.2);
+   of via de link in de e-mails van Stripe): dit gaat in aan het einde van de betaalde periode, en
+   het account gaat terug naar het gratis abonnement als het daarin past (Artikel 11.2);
 2. **het account opheffen in het dashboard** (Account en facturatie → Account opheffen): dit gaat
    direct in (Artikel 11.6).
 
+Bij het gratis abonnement valt er niets op te zeggen: om te vertrekken hef je het account op in het
+dashboard (punt 2).
+
 Als je dat liever doet, vraag het dan per e-mail aan hello@pyxis-analytics.dev, vanaf het
 e-mailadres van de accounteigenaar, met vermelding van welke van de twee je wilt. Zonder die
-vermelding voeren we de opzegging van punt 1 uit. We bevestigen de ontvangst langs dezelfde weg.
+vermelding voeren we de opzegging van punt 1 uit (bij het gratis abonnement de opheffing van
+punt 2). We bevestigen de ontvangst langs dezelfde weg.
 
-11.2. **Opzegging in het Stripe-portaal:** de toegang loopt door tot het einde van de betaalde
-periode (of van de proefperiode) en **er volgt geen nieuwe afschrijving**. Uiterlijk de dag na het
-einde van de toegang worden de sleutels van de projecten ingetrokken en sturen de websites geen
-events meer; het dashboard blijft tot de verwijdering alleen beschikbaar voor raadpleging en
-export.
+11.2. **Opzegging in het Stripe-portaal:** het betaalde abonnement loopt door tot het einde van de
+betaalde periode en **er volgt geen nieuwe afschrijving**. Aan het einde van de periode:
+
+1. **als het account in het gratis abonnement past** (1 project en 1 persoon met toegang,
+   Artikel 7.1), **gaat het terug naar het gratis abonnement**, met het project en de gegevens die
+   het heeft, en blijft het events ontvangen, met de limieten van het gratis abonnement; als de
+   maand al 10.000 events heeft bereikt, wordt de ontvangst gepauzeerd tot de 1e van de volgende
+   maand, zoals bij het gratis abonnement (Artikel 7.2, punt 7). Als je liever wilt dat het account
+   eindigt, hef het dan op in het dashboard (Artikel 11.6);
+2. als het account niet in het gratis abonnement past, is dat het einde van de toegang: uiterlijk de
+   volgende dag worden de sleutels van de projecten ingetrokken en sturen de websites geen events
+   meer; het dashboard blijft tot de verwijdering alleen beschikbaar voor raadpleging en export.
+
+Het dashboard geeft in Account en facturatie aan wat je moet verwijderen (projecten of personen)
+zodat het account vóór het einde van de periode in het gratis abonnement past. **Let op:** het
+verwijderen van een project verwijdert direct de events ervan (Artikel 12.2 van Bijlage 1);
+exporteer ze eerst (Artikel 11.5).
 
 11.3. **Let op: buiten het herroepingsrecht (Artikel 10) is er geen evenredige terugbetaling van de
 al betaalde periode,** noch bij het maand- noch bij het jaarabonnement, bij geen van beide manieren
@@ -387,7 +498,9 @@ per e-mail bij het einde van de toegang, 7 dagen vóór de verwijdering en wanne
 Daarna **is er geen manier om de gegevens te herstellen**. Alleen bewaard blijven de
 factureringsgegevens die de wet voorschrijft te bewaren, het register ter voorkoming van herhaalde
 gratis proefperiodes (Privacybeleid, punten 2.2 en 2.7) en wat een wet of een bevel van een
-autoriteit voorschrijft te bewaren (Artikel 12.6 van Bijlage 1).
+autoriteit voorschrijft te bewaren (Artikel 12.6 van Bijlage 1). Voor een account op het gratis
+abonnement dat wordt verwijderd omdat het geen events ontvangt, geldt Artikel 7.6, zonder die termijn
+van 30 dagen.
 
 11.5. **De events exporteren en terugkomen.**
 
@@ -403,15 +516,17 @@ autoriteit voorschrijft te bewaren (Artikel 12.6 van Bijlage 1).
    kopie hebben geleverd.
 3. Vóór de verwijdering kun je **terugkomen** zonder gegevens te verliezen: kies in Account en
    facturatie "Opnieuw abonneren", of schrijf naar hello@pyxis-analytics.dev en wij activeren het
-   abonnement opnieuw. Langs beide wegen is er geen nieuwe gratis proefperiode en begint de
-   facturering bij de heractivering. De ingetrokken sleutels komen niet terug: je maakt nieuwe
+   abonnement opnieuw. Langs beide wegen begint de facturering bij de heractivering, zonder gratis
+   proefperiode. De ingetrokken sleutels komen niet terug: je maakt nieuwe
    sleutels aan in het dashboard en vervangt ze op je website.
 
 11.6. **Het account opheffen via het dashboard.** Alleen de accounteigenaar heft het account op, in
 Account en facturatie, door ter bevestiging zijn e-mailadres in te typen. **Let op: de opheffing
-gaat direct in en kan niet via het dashboard ongedaan worden gemaakt:**
+gaat direct in en kan niet via het dashboard ongedaan worden gemaakt** (om alleen het betaalde
+abonnement te herroepen en op het gratis abonnement te blijven, gebruik je Artikel 10.3):
 
-1. het abonnement wordt onmiddellijk bij Stripe opgezegd, zonder nieuwe afschrijvingen;
+1. het betaalde abonnement wordt, als dat er is, onmiddellijk bij Stripe opgezegd, zonder nieuwe
+   afschrijvingen;
 2. de sleutels van alle projecten worden direct ingetrokken, en de websites sturen geen events meer;
 3. het dashboard blijft tot de verwijdering alleen beschikbaar voor raadpleging en export
    (Artikel 11.5);
@@ -422,7 +537,7 @@ gaat direct in en kan niet via het dashboard ongedaan worden gemaakt:**
 6. het scherm bevestigt de opheffing, de datum van verwijdering en het teruggeboekte bedrag, en we
    sturen de bevestiging per e-mail.
 
-Opheffen tijdens de gratis proefperiode leidt niet tot een afschrijving. Als Stripe het abonnement
+Het opheffen van een account op het gratis abonnement leidt niet tot een afschrijving. Als Stripe het abonnement
 niet kan opzeggen, wordt niets opgeheven en waarschuwt het scherm je. Als je van gedachten verandert
 vóór de verwijdering, geldt Artikel 11.5, punt 3.
 
@@ -480,8 +595,8 @@ toestemming gebruikt:
     schriftelijke overeenkomst met ons (als bureau websites meten van je klanten die daarmee hebben
     ingestemd, binnen de limieten van het abonnement, is geen doorverkoop; Artikel 3.2 van Bijlage 1);
 14. meer dan één account aanmaken, of een andere persoon, een ander e-mailadres of een andere kaart
-    gebruiken, om **de gratis proefperiode te herhalen** of om aan een limiet of een afschrijving te
-    ontkomen;
+    gebruiken, om **meer dan één account op het gratis abonnement te hebben** (Artikel 6.4) of om aan
+    een limiet of een afschrijving te ontkomen;
 15. **betalingsfraude**: een kaart gebruiken zonder toestemming van de kaarthouder of valse
     factuurgegevens, of te kwader trouw een afschrijving betwisten bij de kaartuitgever,
     bijvoorbeeld door te zeggen dat je een afschrijving niet herkent die je hebt toegestaan en
@@ -525,8 +640,9 @@ browseridentificatie, en gaat die ook niet bewaren om misbruik te onderzoeken.**
 
 ## Artikel 13 — Personen met toegang, sleutels en tokens
 
-13.1. **Personen met toegang.** Het account heeft tot 3 personen met toegang tot het dashboard, de
-eigenaar meegerekend. De eigenaar nodigt een persoon uit via diens e-mailadres, voor een of meer
+13.1. **Personen met toegang.** Bij het betaalde abonnement heeft het account tot 3 personen met
+toegang tot het dashboard, de eigenaar meegerekend; bij het gratis abonnement alleen de eigenaar, die
+geen andere personen uitnodigt (Artikel 7.1). De eigenaar nodigt een persoon uit via diens e-mailadres, voor een of meer
 projecten van het account, in Instellingen → Personen. De persoon ontvangt een uitnodigingsmail en
 logt in op het dashboard met een code die naar diens e-mailadres wordt gestuurd, zonder
 wachtwoord. De eigenaar verwijdert een persoon op hetzelfde scherm, op elk moment.
@@ -600,7 +716,7 @@ in, om je te beschermen, ook zonder misbruik, en waarschuwen we je daarna (Artik
    toegang is 1 uur geldig) en die wij alleen als hash bewaren. Ze eindigt wanneer de persoon haar
    intrekt in Instellingen → Gekoppelde apps; na 90 dagen zonder gebruik; wanneer de persoon de
    toegang verliest (Artikel 13.3) of de toegang wordt opgeschort (Artikel 18.2); wanneer het
-   account wordt verwijderd (Artikel 11.4); of vanzelf, wanneer al vervangen inloggegevens
+   account wordt verwijderd (Artikelen 7.6 en 11.4); of vanzelf, wanneer al vervangen inloggegevens
    opnieuw worden gebruikt, een teken dat ze mogelijk zijn gekopieerd. Daarna vraagt de app opnieuw om
    te koppelen.
 6. **Limieten.** Tot 10 gelijktijdig gekoppelde apps per persoon, en de limieten voor het aantal
@@ -644,7 +760,8 @@ art. 52). We voldoen alleen aan wat wordt vereist en laten het je weten, tenzij 
 mededeling verbiedt.
 
 15.5. **Pauze wegens het quotum.** Voor de pauze van de ontvangst van events bij het bereiken van
-150% van de maandlimiet geldt Artikel 7.2.
+150% van de maandlimiet bij het betaalde abonnement, of van 100% bij het gratis abonnement, geldt
+Artikel 7.2.
 
 15.6. Als je consument bent, blijven je rechten uit art. 20 van het Código de Defesa do Consumidor
 gelden: bij een tekortkoming van de dienst, ook een opschorting die onterecht blijkt
@@ -656,12 +773,13 @@ periode verwijderen we de in Artikel 7.1 genoemde functies niet en verslechteren
 privacytoezeggingen van Artikel 4.2 niet. Als een wijziging van dat soort onvermijdelijk is
 (bijvoorbeeld door de wet of omdat een provider iets niet langer aanbiedt), kondigen we die 30 dagen
 van tevoren aan, en kun je de overeenkomst beëindigen met evenredige terugbetaling van de betaalde en
-niet-gebruikte periode.
+niet-gebruikte periode. Voor wijzigingen van het gratis abonnement geldt Artikel 7.5.
 
 ## Artikel 16 — Support en klantenservice
 
 16.1. De klantenservice verloopt per e-mail, via hello@pyxis-analytics.dev, voor vragen, klachten,
-support, bezwaar tegen een opschorting, opschorting en opzegging.
+support, bezwaar tegen een opschorting, opschorting en opzegging. Bij het gratis abonnement geldt
+voor technische vragen over gebruik en installatie Artikel 16.5.
 
 16.2. We bevestigen de ontvangst van je bericht via hetzelfde e-mailadres en antwoorden **binnen 2
 werkdagen** (werkdagen van maandag tot en met vrijdag, met uitzondering van nationale feestdagen).
@@ -671,6 +789,30 @@ geen ontwikkeling op je website en geen support voor eigen installaties van de o
 
 16.4. Stuur in berichten geen persoonsgegevens van bezoekers. Gebruik de identificatie van het
 bezoek of van de gebruiker om een geval te tonen.
+
+16.5. **Support bij het gratis abonnement.** Bij het gratis abonnement worden technische vragen over
+gebruik en installatie (Artikel 16.3) afgehandeld via de openbare documentatie van Pyxis en via de
+*issues* van de openbare repositories op GitHub (Artikel 5.1), zonder de termijn van Artikel 16.2.
+De *issues* zijn openbaar: publiceer daarin geen sleutels, tokens of persoonsgegevens. Het
+e-mailadres hello@pyxis-analytics.dev blijft bij het gratis abonnement gelden, met bevestiging van
+de ontvangst langs dezelfde weg en antwoord per e-mail **binnen 5 dagen**, voor:
+
+1. informatie en vragen over de overeenkomst, het abonnement, de limieten en de facturering, ook
+   over het afsluiten van het betaalde abonnement;
+2. klachten over de dienst, ook over tekortkomingen (Artikel 15.6);
+3. opschorting, opzegging, opheffing van het account en herroeping (Artikelen 10, 11 en 18), ook het
+   reageren op een waarschuwing of het maken van bezwaar tegen een maatregel (Artikel 18.6);
+4. de verzoeken over persoonsgegevens: die over jezelf en over de personen met toegang, binnen de
+   termijnen van het Privacybeleid (punt 6), en je verzoeken als verwerkingsverantwoordelijke,
+   binnen de termijnen van Bijlage 1 (Artikel 10);
+5. de overige onderwerpen die volgens deze voorwaarden per e-mail worden afgehandeld, zoals het
+   melden van een gelekte sleutel (Artikel 13.9), het melden van een beveiligingsfout (Artikel 12.1,
+   punt 10) en het aanvragen van de kopie van de events wanneer de export via het dashboard mislukt
+   (Artikel 11.5, punt 2).
+
+Als je consument bent en GitHub niet kunt of wilt gebruiken, kun je je vraag over het gebruik ook
+per e-mail sturen; we antwoorden binnen 5 dagen, en het antwoord kan verwijzen naar het deel van de
+documentatie dat het geval oplost.
 
 ## Artikel 17 — Intellectuele eigendom en jouw gegevens
 
@@ -795,22 +937,12 @@ het aantal dagen dat het account was opgeschort, naast je rechten uit Artikel 15
 4. De terugbetaling gaat via Stripe naar de kaart waarmee is betaald, binnen 5 werkdagen na de
    beëindiging.
 
-18.11. **Herhaalde gratis proefperiode.** Wanneer de dienst aangeeft dat de gebruikte kaart in de
-voorafgaande 12 maanden al een gratis proefperiode in een ander account is begonnen (Privacybeleid,
-punt 2.7), of er een andere objectieve aanwijzing is van een herhaalde proefperiode door dezelfde
-persoon of onderneming (Artikel 6.4):
-
-1. gebeurt er niets automatisch: de dienst registreert alleen de match en waarschuwt ons;
-   geen afschrijving en geen opzegging;
-2. onderzoeken we het geval en vragen we het je zo nodig, met de termijn van Artikel 18.3. Een
-   bedrijfskaart die door verschillende personen wordt gebruikt, of een bureau dat voor
-   verschillende klanten contracteert, is geen herhaalde proefperiode;
-3. als we de herhaalde proefperiode bevestigen, kunnen we het nieuwe account vóór het einde van de
-   proefperiode beëindigen, door het abonnement bij Stripe op te zeggen zonder enige afschrijving,
-   met kennisgeving en opgave van reden; je kunt bezwaar maken (Artikel 18.6) en je kunt per e-mail
-   een abonnement zonder gratis proefperiode afsluiten, met facturering vanaf het nieuwe abonnement;
-4. **brengen we nooit iets in rekening vóór de datum die op de betaalpagina van Stripe wordt
-   getoond**, en verkorten we de proefperiode nooit om eerder af te schrijven.
+18.11. **Herhaalde gratis proefperiode.** De gratis proefperiode is met versie 1.3 van deze
+voorwaarden beëindigd (Artikel 8.3). Voor het vermoeden dat een proefperiode die daarvóór is begonnen
+een eerdere proefperiode herhaalde (Privacybeleid, punt 2.7), geldt Artikel 18.11 van de versie
+waarin die proefperiode is begonnen: er gebeurt niets automatisch, je wordt met opgave van reden
+gewaarschuwd en gehoord vóór elke maatregel, je kunt bezwaar maken (Artikel 18.6) en **er wordt nooit
+iets in rekening gebracht vóór de datum die op de betaalpagina van Stripe wordt getoond**.
 
 18.12. **Betwisting van een afschrijving op de kaart.** Een afschrijving betwisten bij de
 kaartuitgever is je recht; we vragen je eerst contact met ons op te nemen (Artikelen 10 en 16). Als
@@ -820,10 +952,12 @@ en kunnen we die behandelen als niet-betaling, door het abonnement met kennisgev
 behandeld.
 
 18.13. **Beëindiging zonder misbruik.** Buiten misbruik beëindigen we de overeenkomst alleen in de
-gevallen van de Artikelen 6.2 (einde van de kosteloosheid), 20 (einde van de gehoste dienst),
-21.3 (een door de wet vereiste wijziging die je niet aanvaardt) en 22.1 (een overdracht die je niet
-aanvaardt), en betalen we altijd het bedrag terug dat evenredig is aan de betaalde en
-niet-gebruikte periode; voor de gegevens gelden de Artikelen 11.4 en 11.5.
+gevallen van de Artikelen 6.2 (einde van de kosteloosheid), 7.5 (einde van het gratis abonnement),
+7.6 (account op het gratis abonnement zonder events), 20 (einde van de gehoste dienst), 21.3 (een
+door de wet vereiste wijziging die je niet aanvaardt) en 22.1 (een overdracht die je niet
+aanvaardt), en betalen we, als er een betaalde periode is, altijd het bedrag terug dat evenredig is
+aan de betaalde en niet-gebruikte periode; voor de gegevens gelden de Artikelen 11.4 en 11.5,
+behalve bij Artikel 7.6, dat eigen termijnen heeft.
 
 ## Artikel 19 — Aansprakelijkheid
 

@@ -48,7 +48,7 @@ per la protezione dei dati).
 
 | Dato | Per quale scopo | Base giuridica (LGPD) | Per quanto tempo |
 |---|---|---|---|
-| E-mail, lingua delle e-mail (quella della schermata in cui hai effettuato l'accesso o la registrazione), progetti a cui hai accesso, se sei il proprietario dell'account o un invitato, scelta sul riepilogo settimanale, data di registrazione | Inviare il codice di accesso e le e-mail del servizio, mostrare i tuoi progetti e inviare il riepilogo settimanale nella tua lingua | Esecuzione del contratto, per il proprietario dell'account (art. 7, V); legittimo interesse nostro e del cliente a dare accesso alle persone invitate dal proprietario (art. 7, IX) | Finché hai accesso a qualche progetto o sei proprietario di un account. Quando il proprietario ti rimuove da un progetto, l'accesso a quel progetto termina subito; se resti senza accesso ad alcun progetto, cancelliamo la tua registrazione entro 30 giorni. In ogni caso, la registrazione viene cancellata insieme all'account, 30 giorni dopo la fine del suo accesso |
+| E-mail, lingua delle e-mail (quella della schermata in cui hai effettuato l'accesso o la registrazione), progetti a cui hai accesso, se sei il proprietario dell'account o un invitato, scelta sul riepilogo settimanale, data di registrazione | Inviare il codice di accesso e le e-mail del servizio, mostrare i tuoi progetti e inviare il riepilogo settimanale nella tua lingua | Esecuzione del contratto, per il proprietario dell'account (art. 7, V); legittimo interesse nostro e del cliente a dare accesso alle persone invitate dal proprietario (art. 7, IX) | Finché hai accesso a qualche progetto o sei proprietario di un account. Quando il proprietario ti rimuove da un progetto, l'accesso a quel progetto termina subito; se resti senza accesso ad alcun progetto, cancelliamo la tua registrazione entro 30 giorni. In ogni caso, la registrazione viene cancellata insieme all'account (punto 2.2) |
 | Invito: la tua e-mail, il nome del progetto e l'e-mail di chi ti ha invitato, nell'e-mail di invito | Avvisarti dell'accesso e di chi te lo ha dato | Legittimo interesse nostro e del cliente (art. 7, IX) | L'invito in sé non resta nel nostro database (solo la registrazione della riga precedente); il registro dell'invio resta presso il fornitore di e-mail per il tempo da esso previsto (punto 3) |
 | Codici di accesso e di registrazione: e-mail, codice conservato solo come hash, finalità (accesso o registrazione), lingua, tentativi, orari | Consentire l'accesso e la registrazione senza password e impedire tentativi ripetuti | Esecuzione del contratto, misure precontrattuali e legittimo interesse alla sicurezza (art. 7, V e IX) | Valgono 10 minuti; cancellati dalla procedura giornaliera dopo la scadenza |
 | Sessioni: valore conservato solo come hash, date di inizio e di ultimo utilizzo, categoria del dispositivo e famiglia del browser e del sistema (senza versione) | Mantenerti connesso e mostrarti le tue sessioni perché tu possa chiuderle | Esecuzione del contratto e legittimo interesse alla sicurezza (art. 7, V e IX) | Al massimo 7 giorni, o 24 ore di inutilizzo; cancellate dalla procedura giornaliera dopo la chiusura |
@@ -68,14 +68,15 @@ riceve l'IP e il browser di chi accede e li conserva nei propri registri tecnici
 
 | Dato | Per quale scopo | Base giuridica (LGPD) | Per quanto tempo |
 |---|---|---|---|
-| Account: proprietario, stato dell'abbonamento, piano e periodicità, identificativi del cliente e dell'abbonamento su Stripe, date (fine della prova, del periodo, dell'accesso, degli avvisi inviati), uso mensile di eventi e avvisi di quota inviati | Prestare il servizio, applicare il limite mensile, attivare e disattivare l'accesso in base all'abbonamento, comunicare la fine dell'account | Esecuzione del contratto (art. 7, V) | Fino all'eliminazione dell'account, 30 giorni dopo la fine dell'accesso. Registrazione che non ha completato la pagina di pagamento: cancellata 7 giorni dopo |
-| Accettazione dei termini: versione accettata, data e ora, account e persona che ha accettato (senza IP) | Sapere quale versione vale per te e provare l'accettazione | Esecuzione del contratto ed esercizio regolare dei diritti (art. 7, V e VI) | Fino all'eliminazione dell'account. Stripe conserva, in qualità di titolare del trattamento, il registro dell'accettazione effettuata nella sua pagina di pagamento |
-| Dati di fatturazione, ricevuti da Stripe: nome, e-mail, indirizzo di fatturazione, CPF o CNPJ (codice fiscale brasiliano delle persone giuridiche; se indicato), circuito, ultime cifre e scadenza della carta, storico dei pagamenti, rimborsi e contestazioni | Addebitare l'abbonamento, inviare ricevute, gestire ripensamento, rimborsi e contestazioni, adempiere agli obblighi fiscali | Esecuzione del contratto (art. 7, V) e adempimento di un obbligo di legge (art. 7, II) | Per la durata del contratto e per 5 anni a partire dall'anno successivo a quello di ciascun addebito (termine di conservazione fiscale) |
-| Configurazione dei progetti: nome, indirizzi dei siti, fuso orario, evento di conversione, chiave pubblica, chiave segreta conservata solo come hash, icona copiata dal sito stesso | Prestare il servizio | Esecuzione del contratto (art. 7, V) | Fino all'eliminazione del progetto da parte del proprietario o dell'account (30 giorni dopo la fine dell'accesso) |
+| Account: proprietario, piano (gratuito o a pagamento), stato dell'abbonamento, periodicità, identificativi del cliente e dell'abbonamento su Stripe (solo nel piano a pagamento), date (fine della prova, del periodo, dell'accesso, degli avvisi inviati), uso mensile di eventi e avvisi di quota e di account senza eventi inviati | Prestare il servizio, applicare i limiti del piano, attivare e disattivare l'accesso in base al piano e all'abbonamento, avvisare e cancellare l'account del piano gratuito senza eventi, comunicare la fine dell'account | Esecuzione del contratto (art. 7, V) | Fino all'eliminazione dell'account: 30 giorni dopo la fine dell'accesso o, per un account del piano gratuito senza eventi, 7 giorni dopo l'avviso (Termini di utilizzo, Clausola 7.6) |
+| Accettazione dei termini: versione accettata, data e ora, account e persona che ha accettato (senza IP) | Sapere quale versione vale per te e provare l'accettazione | Esecuzione del contratto ed esercizio regolare dei diritti (art. 7, V e VI) | Fino all'eliminazione dell'account. Quando ti abboni al piano a pagamento, Stripe conserva, in qualità di titolare del trattamento, il registro dell'accettazione effettuata nella sua pagina di pagamento |
+| Dati di fatturazione, solo di chi si abbona al piano a pagamento, ricevuti da Stripe: nome, e-mail, indirizzo di fatturazione, CPF o CNPJ (codice fiscale brasiliano delle persone giuridiche; se indicato), circuito, ultime cifre e scadenza della carta, storico dei pagamenti, rimborsi e contestazioni | Addebitare l'abbonamento, inviare ricevute, gestire ripensamento, rimborsi e contestazioni, adempiere agli obblighi fiscali | Esecuzione del contratto (art. 7, V) e adempimento di un obbligo di legge (art. 7, II) | Per la durata del contratto e per 5 anni a partire dall'anno successivo a quello di ciascun addebito (termine di conservazione fiscale) |
+| Configurazione dei progetti: nome, indirizzi dei siti, fuso orario, evento di conversione, chiave pubblica, chiave segreta conservata solo come hash, icona copiata dal sito stesso | Prestare il servizio | Esecuzione del contratto (art. 7, V) | Fino all'eliminazione del progetto da parte del proprietario o dell'account (riga "Account" sopra) |
 | Richieste di esportazione: chi l'ha richiesta, quando, stato e numero di eventi | Generare e consegnare il file di esportazione al proprietario dell'account | Esecuzione del contratto (art. 7, V) | Fino all'eliminazione del progetto. Il file in sé viene cancellato 7 giorni dopo essere stato pronto |
 
-**Non riceviamo né conserviamo il numero della carta.** Resta presso Stripe. Conserviamo solo
-l'impronta della carta di cui al punto 2.7.
+**Nel piano gratuito, non chiediamo la carta né dati di fatturazione.** Nel piano a pagamento, **non
+riceviamo né conserviamo il numero della carta**: resta presso Stripe. Conserviamo solo l'impronta
+della carta di cui al punto 2.7.
 
 ### 2.3. Chi ci scrive
 
@@ -117,17 +118,24 @@ network, e il pannello non misura l'uso delle persone che vi accedono.
 
 Inviamo solo e-mail legate al servizio: codici di accesso e di registrazione; invito a un progetto;
 benvenuto, con la versione dei termini accettata; avvisi di uso all'80%, al 100% e dell'interruzione
-al 150%; avviso di fine dell'accesso, promemoria 7 giorni prima dell'eliminazione e avviso di
-eliminazione effettuata; avviso di esportazione pronta; il riepilogo settimanale (che ciascuna persona
-può disattivare in Impostazioni); e comunicazioni sul contratto, compresi gli avvisi di abuso e di
-sospensione. Le e-mail di fatturazione sono inviate direttamente da Stripe: promemoria 7 giorni prima
-della fine della prova gratuita, ricevute di pagamenti e di rimborsi, avviso di pagamento rifiutato,
+al 150%, nel piano a pagamento, e all'80% e dell'interruzione al 100%, nel piano gratuito; avviso di
+account del piano gratuito senza eventi; avviso di fine dell'accesso, promemoria 7 giorni prima
+dell'eliminazione e avviso di eliminazione effettuata; avviso di esportazione pronta; il riepilogo
+settimanale (che ciascuna persona può disattivare in Impostazioni); e comunicazioni sul contratto,
+compresi gli avvisi di abuso e di sospensione. Le e-mail di fatturazione sono inviate direttamente da
+Stripe: promemoria 7 giorni prima della fine della prova gratuita (nelle prove iniziate prima della
+versione 1.3 dei Termini di utilizzo), ricevute di pagamenti e di rimborsi, avviso di pagamento rifiutato,
 richiesta di conferma del pagamento (3D Secure) e avviso di carta in scadenza. **Le nostre e-mail
 non tracciano aperture né clic.** Non inviamo pubblicità.
 
 ### 2.7. Prevenzione della prova gratuita ripetuta
 
-La prova gratuita vale una sola volta per cliente (Termini di utilizzo, Clausola 6.4). Per accorgerci
+**Dalla versione 1.3 dei Termini di utilizzo non c'è una prova gratuita** (Termini di utilizzo,
+Clausola 8.3), e non registriamo nuove impronte di carte. Questo punto riguarda i registri delle prove
+iniziate prima, che seguono il termine della tabella qui sotto e scompaiono, al massimo, 12 mesi dopo
+l'inizio dell'ultima di tali prove.
+
+La prova gratuita valeva una sola volta per cliente (Termini di utilizzo, Clausola 8.3). Per accorgerci
 di quando la stessa carta avvia una seconda prova in un altro account, quando registriamo un
 abbonamento con prova gratuita (in pratica, quando la prova inizia) leggiamo su Stripe l'**impronta
 della carta** (*fingerprint*) dell'abbonamento: un codice che Stripe calcola a partire dal numero della
@@ -326,8 +334,9 @@ tutti, che non valutano la tua persona:
 1. di sicurezza: dopo troppi tentativi, una richiesta di codice o di accesso viene rifiutata per
    qualche minuto;
 2. contrattuali: la ricezione degli eventi si interrompe quando l'account raggiunge il 150% del
-   limite mensile, e l'accesso segue lo stato dell'abbonamento su Stripe (Termini di utilizzo,
-   Clausole 7.2 e 9).
+   limite mensile nel piano a pagamento, o il 100% nel piano gratuito; l'accesso segue il piano e lo
+   stato dell'abbonamento su Stripe; e l'account del piano gratuito senza eventi viene cancellato
+   dopo l'avviso (Termini di utilizzo, Clausole 7.2, 7.6 e 9).
 
 La coincidenza di impronta della carta (punto 2.7) e le misure per abuso (Termini di utilizzo,
 Clausola 18) sono sempre decise da una persona. Se qualcosa di tutto ciò ti crea problemi, contattaci.

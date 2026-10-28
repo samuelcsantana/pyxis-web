@@ -20,7 +20,8 @@ no. {{seller.taxId}}, with address at {{seller.address}}, who offers the service
 **Pyxis**. Contact: **hello@pyxis-analytics.dev**.
 
 1.2. **You:** the person or company that subscribed to hosted Pyxis by accepting the Terms of Use,
-represented in the dashboard by the account owner (Terms of Use, Clause 2.9).
+represented in the dashboard by the account owner (Terms of Use, Clause 2.9). This agreement
+applies in the same way on the free plan and on the paid plan (Terms of Use, Clause 7.1).
 
 ## Clause 2 — Words used in this agreement
 
@@ -83,7 +84,8 @@ of data, what is **not** stored, where the data is kept and for how long.
 use it for advertising, use it to train artificial intelligence models or combine it with other
 customers' data. The only figures we take from your projects for our own use are operational
 counts, such as the number of events per month of each account and the size of the database, used
-to apply the plan's monthly limit (Terms of Use, Clause 7.2) and to check the capacity of the
+to apply the plan's monthly limit (Terms of Use, Clause 7.2), to know whether a free plan account
+has gone without receiving events (Terms of Use, Clause 7.6) and to check the capacity of the
 service.
 
 ## Clause 5 — Your instructions
@@ -326,10 +328,10 @@ we restore them as soon as the risk has passed.
 12.1. **During the agreement.** Events are stored for **13 months**. A daily routine deletes events
 older than 13 months, from all projects.
 
-12.2. **End of the agreement.** **30 days after the end of access** (the end of the paid period or of
-the trial after a cancellation, the closure of the account through the dashboard, the end of the
-subscription for non-payment or termination by us; Terms of Use, Clauses 2.10 and 11.4), a daily
-routine permanently deletes the account, the projects and everything belonging to them: events,
+12.2. **End of the agreement.** **30 days after the end of access** (the end of the paid period after
+a cancellation or the end of the subscription for non-payment, when the account does not go back to
+the free plan; the closure of the account through the dashboard; the end of the free plan; or
+termination by us; Terms of Use, Clauses 2.10 and 11.4), a daily routine permanently deletes the account, the projects and everything belonging to them: events,
 keys, settings, site icon, weekly digest sending records, export requests and people's access to the
 projects. We also delete the registration (email, sessions, tokens and connected apps) of the
 account owner and of the people who only had access to projects of your account. If you delete a
@@ -357,6 +359,14 @@ periods when a law, a court order or a request from a competent authority oblige
 data is needed for judicial, administrative or arbitral proceedings (LGPD, arts. 7, VI, and 16, I).
 In that case, we preserve only the data covered, without any other use, for the time required, and
 delete it afterwards; we notify you, unless the law or the order prohibits the notice.
+
+12.7. **Free plan account without events.** A free plan account that receives no event in the 30
+days after its creation, or that goes 90 consecutive days without receiving events, is deleted as
+stated in Clause 7.6 of the Terms of Use: the account owner receives a notice by email and, if the
+account is still without events 7 days later, a daily routine deletes the account, the projects and
+everything belonging to them, as in item 12.2, without the 30-day period of that item. Until then,
+the account owner can export the events (item 12.3). Items 12.4 (providers' copies), 12.5
+(confirmation by email) and 12.6 (preservation by law or order) also apply.
 
 ## Clause 13 — Information and audit
 
@@ -551,7 +561,8 @@ automated tests for this.
 
 **7. Protection against abuse.** Limit on sending batches per source address and per project; batch
 of at most 50 events and 32 KB; strict validation of each field; invalid events discarded; intake
-paused when the account reaches 150% of the monthly event limit; the technical logs state when an
+paused when the account reaches 150% of the monthly event limit on the paid plan, or 100% on the
+free plan; the technical logs state when an
 event or a property was refused and under which rule, without storing the refused value.
 
 **8. Infrastructure.** The API function refuses calls that do not pass through the content delivery

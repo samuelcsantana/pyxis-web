@@ -15,38 +15,58 @@ Ce résumé ne remplace pas le texte complet, mais il montre ce qui compte le pl
 
 1. **Qui propose le service :** {{seller.name}}, personne physique, CPF (numéro d’identification fiscale des personnes physiques au Brésil)
    {{seller.taxId}} (Clause 1).
-2. **Prix :** R$ 39,00 par mois ou R$ 390,00 par an, par carte de crédit, via Stripe, avec
-   **renouvellement automatique** jusqu’à ce que vous résiliiez (Clause 8).
-3. **Essai gratuit :** 14 jours, une fois par client. La carte est demandée au début, et Stripe envoie
-   un rappel 7 jours avant la fin. **Si vous ne résiliez pas avant la fin de l’essai, le premier
-   prélèvement a lieu le 15e jour** (Clauses 6.4 et 8.3).
-4. **Limites du forfait :** jusqu’à 100 000 événements par mois, jusqu’à 3 sites, jusqu’à 3 personnes
-   sur le tableau de bord (vous compris) et 13 mois d’historique. Nous vous prévenons lorsque le
-   compte atteint 80 % et 100 % des événements du mois. **Attention : à 150 %, la réception des
-   événements est mise en pause jusqu’au 1er du mois suivant**, et les événements envoyés pendant la
-   pause sont perdus. Rien n’est facturé au-delà du prix (Clause 7).
-5. **Rétractation :** remboursement intégral si vous renoncez dans les 7 jours suivant le premier
-   prélèvement. Si vous clôturez le compte sur le tableau de bord dans ce délai, le remboursement est
-   automatique (Clause 10).
-6. **Résiliation :** à tout moment, de deux façons. Sur le portail Stripe, l’accès continue jusqu’à
-   la fin de la période payée. En clôturant le compte sur le tableau de bord, **l’accès prend fin
-   immédiatement**. **Attention : après les 7 jours de rétractation, il n’y a pas de remboursement
-   au prorata de la période déjà payée**, dans aucun des deux cas (Clause 11).
+2. **Forfaits et prix :** il existe deux forfaits. Le **forfait gratuit** ne coûte rien et ne
+   demande pas de carte. Le **forfait payant** coûte R$ 39,00 par mois ou R$ 390,00 par an, par
+   carte de crédit, via Stripe, **prélevé au moment de l’abonnement**, avec **renouvellement
+   automatique** jusqu’à ce que vous résiliiez (Clauses 7 et 8).
+3. **Forfait gratuit :** toute inscription commence sur ce forfait, sans carte et sans limite de
+   durée, avec un compte sur le forfait gratuit par personne. **Il n’y a plus d’essai gratuit de
+   14 jours :** pour bénéficier des limites plus élevées, vous souscrivez au forfait payant sur le
+   tableau de bord, quand vous le souhaitez (Clauses 6 et 8.3). **Attention : le forfait gratuit peut
+   changer ou prendre fin, avec un préavis par e-mail d’au moins 30 jours**, et vous pouvez exporter
+   vos événements avant (Clause 7.5).
+4. **Limites :** sur le forfait gratuit, jusqu’à 10 000 événements par mois, 1 site et 1 personne
+   sur le tableau de bord (vous seul) ; sur le forfait payant, jusqu’à 100 000 événements par mois,
+   jusqu’à 3 sites et jusqu’à 3 personnes sur le tableau de bord (vous compris). Les deux ont
+   13 mois d’historique et toutes les fonctionnalités. **Attention : sur le forfait gratuit, lorsque
+   le mois atteint 10 000 événements, la réception des événements est mise en pause jusqu’au 1er du
+   mois suivant** : un compte qui atteint la limite le 3 ne reçoit rien jusqu’au 1er. Nous vous
+   prévenons avant, à 80 %. Sur le forfait payant, nous vous prévenons à 80 % et à 100 %, et **la
+   pause intervient à 150 %**. Les événements envoyés pendant la pause sont perdus. Rien n’est
+   facturé au-delà du prix (Clause 7).
+5. **Rétractation (forfait payant) :** remboursement intégral si vous renoncez dans les 7 jours
+   suivant le premier prélèvement de chaque abonnement. **Renoncer au forfait payant ne clôture pas
+   votre compte :** il revient au forfait gratuit, avec votre projet, et vous choisissez ce qu’il faut
+   retirer s’il n’entre pas dans les limites de ce forfait. Si vous voulez partir définitivement,
+   vous pouvez clôturer le compte entier (Clause 10).
+6. **Résiliation :** à tout moment, de deux façons. Sur le portail Stripe, le forfait payant continue
+   jusqu’à la fin de la période payée et, ensuite, **le compte revient au forfait gratuit s’il entre
+   dans ses limites** (1 site et 1 personne) ; s’il n’y entre pas, l’accès prend fin. En clôturant le
+   compte sur le tableau de bord, **l’accès prend fin immédiatement**. **Attention : après les 7 jours
+   de rétractation, il n’y a pas de remboursement au prorata de la période déjà payée**, dans aucun
+   des deux cas (Clause 11).
 7. **Suppression des données :** **30 jours après la fin de l’accès, le compte, les projets et tous
    les événements sont définitivement supprimés.** D’ici là, vous exportez les événements depuis le
    tableau de bord (Clause 11).
+   **Attention : un compte sur le forfait gratuit qui ne reçoit aucun événement dans les 30 jours
+   suivant sa création, ou qui reste 90 jours consécutifs sans événements, est définitivement supprimé
+   s’il reste sans événements 7 jours après un avis par e-mail** (Clause 7.6).
 8. **Disponibilité :** **Attention : il n’y a pas de garantie de disponibilité (SLA)** ; nous faisons
-   nos meilleurs efforts pour maintenir le service en ligne (Clause 15). Assistance par e-mail, avec
-   réponse sous 2 jours ouvrés au plus (Clause 16).
+   nos meilleurs efforts pour maintenir le service en ligne (Clause 15). Sur le forfait payant,
+   assistance par e-mail, avec réponse sous 2 jours ouvrés au plus. Sur le forfait gratuit, les
+   questions techniques d’utilisation et d’installation sont traitées par la documentation et par
+   GitHub ; les réclamations, les questions sur le contrat et la facturation, la résiliation, la
+   rétractation, les données personnelles et les avis liés au contrat continuent de passer par e-mail,
+   avec réponse sous 5 jours au plus (Clause 16).
 9. **Vos principales obligations :** **ne pas envoyer de données personnelles dans les événements**
    (nom, e-mail, CPF, téléphone, etc.), informer les visiteurs de votre site de la mesure et ne pas
    utiliser le service de manière abusive (Clause 12).
 10. **Attention : suspension et clôture pour abus.** En cas d’abus (par exemple, des données
     personnelles dans les événements, mesurer qui a demandé à ne pas être mesuré, trafic falsifié,
-    attaque, fraude ou essai gratuit répété), nous pouvons suspendre la partie concernée du service
-    et, en cas grave ou répété, mettre fin au contrat. En règle générale, nous vous prévenons
-    avant et vous donnons un délai pour corriger ; nous indiquons toujours le motif et vous pouvez
-    contester (Clause 18).
+    attaque, fraude ou plusieurs comptes sur le forfait gratuit), nous pouvons suspendre la partie
+    concernée du service et, en cas grave ou répété, mettre fin au contrat. En règle générale, nous
+    vous prévenons avant et vous donnons un délai pour corriger ; nous indiquons toujours le motif et
+    vous pouvez contester (Clause 18).
 11. **Données personnelles :** vous êtes le responsable du traitement des données des visiteurs de
     votre site ; nous sommes le sous-traitant (Clause 14 et Accord de traitement des données). Si une
     personne ayant accès connecte Claude ou Claude Code à Pyxis, les chiffres qu’elle demande sont
@@ -60,7 +80,9 @@ Ce résumé ne remplace pas le texte complet, mais il montre ce qui compte le pl
 à **{{seller.address}}** (« nous »). **Pyxis** est le nom du service.
 
 1.2. Contact pour tout sujet, y compris la résiliation, la rétractation, l’assistance, la contestation
-d’une suspension et les données personnelles : **hello@pyxis-analytics.dev**.
+d’une suspension et les données personnelles : **hello@pyxis-analytics.dev**. Sur le forfait
+gratuit, les questions techniques d’utilisation et d’installation passent par la documentation et par
+GitHub ; tout le reste continue de passer par cet e-mail (Clause 16.5).
 
 1.3. « Vous » désigne la personne physique ou morale qui souscrit au service pour mesurer un ou
 plusieurs sites.
@@ -89,17 +111,24 @@ connecter au tableau de bord.
 l’art. 2º du Código de Defesa do Consumidor (Code brésilien de protection du consommateur, Lei
 nº 8.078/1990).
 
-2.8. **Compte :** l’inscription de la personne qui souscrit, à laquelle appartiennent l’abonnement,
-les projets et les personnes ayant accès.
+2.8. **Compte :** l’inscription de la personne qui souscrit, à laquelle appartiennent le forfait,
+l’abonnement au forfait payant (le cas échéant), les projets et les personnes ayant accès.
 
 2.9. **Propriétaire du compte :** la personne qui a effectué l’inscription (ou que vous avez désignée
 lorsque nous avons créé le compte à votre demande) et qui, en votre nom, administre les projets, les
 clés, les personnes, les exportations et la facturation.
 
 2.10. **Fin de l’accès :** la date à laquelle le compte cesse de recevoir des événements et de pouvoir
-modifier les projets : la fin de la période payée ou de l’essai après une résiliation (Clause 11.2),
-la clôture du compte (Clauses 11.6 et 18.7) ou la fin de l’abonnement pour défaut de paiement
-(Clause 9.2).
+modifier les projets : la fin de la période payée après une résiliation, lorsque le compte ne revient
+pas au forfait gratuit (Clause 11.2), la clôture du compte (Clauses 11.6 et 18.7), la fin de
+l’abonnement pour défaut de paiement, lorsque le compte ne revient pas au forfait gratuit
+(Clause 9.2), ou la fin du forfait gratuit pour le compte qui n’a pas souscrit au forfait payant
+(Clause 7.5). La suppression d’un compte du forfait gratuit sans événements n’est pas une fin de
+l’accès : elle suit uniquement la Clause 7.6.
+
+2.11. **Forfait gratuit et forfait payant :** les deux forfaits du service, avec les limites de la
+Clause 7.1. Le forfait gratuit n’a ni prix ni abonnement ; le forfait payant est l’abonnement mensuel
+ou annuel de la Clause 8.
 
 ## Clause 3 — Acceptation, qui peut souscrire et documents du contrat
 
@@ -108,8 +137,9 @@ la clôture du compte (Clauses 11.6 et 18.7) ou la fin de l’abonnement pour d�
 1. **lors de l’inscription sur le tableau de bord** (`app.pyxis-analytics.dev/sign-up`), en cochant
    la case d’acceptation des Conditions d’utilisation, de l’Accord de traitement des données et de
    la Politique de confidentialité, qui indique le numéro de version. Nous conservons la version
-   acceptée ainsi que la date et l’heure de l’acceptation (sans conserver votre IP). La page de
-   paiement de Stripe demande à nouveau l’acceptation avant l’abonnement ;
+   acceptée ainsi que la date et l’heure de l’acceptation (sans conserver votre IP). Lorsque vous
+   souscrivez au forfait payant, la page de paiement de Stripe demande à nouveau l’acceptation avant
+   l’abonnement ;
 2. **lorsque nous créons le compte à votre demande** (Clause 6.2), en répondant à notre e-mail par la
    confirmation de l’acceptation de la version qui y est indiquée, avant que nous n’ouvrions l’accès.
 
@@ -162,7 +192,7 @@ est hors ligne ou que la réception est en pause (Clauses 7.2, 15 et 18) sont pe
 réessaie pendant quelques secondes tant que la page est ouverte, mais pas lorsque la réception est en
 pause).
 
-4.4. Font également partie du forfait :
+4.4. Font également partie des deux forfaits (Clause 7.1) :
 
 1. le **récapitulatif hebdomadaire par e-mail**, chaque lundi, que chaque personne ayant accès peut
    désactiver dans Paramètres ;
@@ -191,19 +221,16 @@ conditions ne s’appliquent pas à cette installation.
 
 6.1. **Inscription sur le tableau de bord.**
 
-1. Sur `app.pyxis-analytics.dev/sign-up`, vous choisissez le forfait (mensuel ou annuel), indiquez
-   votre e-mail, acceptez les conditions (Clause 3.1) et confirmez l’e-mail au moyen d’un code à
-   6 chiffres qui lui est envoyé.
-2. Ensuite, vous indiquez votre carte sur la page de paiement de Stripe, ce qui démarre l’essai
-   gratuit (Clause 8.3).
-3. Une fois l’abonnement confirmé par Stripe, le compte est prêt : vous créez vos projets sur le
-   tableau de bord (jusqu’à 3), avec l’adresse du site, le fuseau horaire et, si vous le souhaitez,
+1. Sur `app.pyxis-analytics.dev/sign-up`, vous indiquez votre e-mail, acceptez les conditions
+   (Clause 3.1) et confirmez l’e-mail au moyen d’un code à 6 chiffres qui lui est envoyé.
+   **L’inscription ne demande pas de carte.**
+2. Une fois le code confirmé, le compte est créé sur le **forfait gratuit** (Clause 7.1), sauf lorsque
+   les inscriptions au forfait gratuit sont fermées (Clause 6.5), et il est prêt : vous créez votre
+   projet sur le tableau de bord, avec l’adresse du site, le fuseau horaire et, si vous le souhaitez,
    l’événement de conversion, et vous recevez la clé publique et l’extrait d’installation. La
    personne qui a effectué l’inscription est le propriétaire du compte.
-
-Si vous ne terminez pas la page de paiement de Stripe, le compte reste incomplet, sans projets, et il
-est supprimé 7 jours après l’inscription. D’ici là, vous pouvez terminer l’abonnement en vous
-reconnectant au tableau de bord.
+3. Pour bénéficier des limites du forfait payant, le propriétaire du compte souscrit au forfait
+   payant sur le tableau de bord, quand il le souhaite (Clause 8.3).
 
 6.2. **Compte créé sur demande.** Nous pouvons aussi créer le compte pour vous, sur demande adressée
 à hello@pyxis-analytics.dev, par exemple lorsqu’il n’est pas possible de terminer l’inscription sur
@@ -212,35 +239,47 @@ e-mail du forfait et du mode de paiement, l’acceptation suit la Clause 3.1, po
 l’accès dans les 2 jours ouvrés suivant l’acceptation et, s’il y a facturation, l’abonnement. Pour un
 compte gratuit, il n’y a pas de facturation ; le reste des présentes conditions s’applique de la même
 manière, et nous pouvons mettre fin à la gratuité avec un préavis de 30 jours, après lequel vous
-pouvez souscrire au forfait ou partir.
+pouvez souscrire au forfait payant ou partir. Ce compte gratuit, convenu au cas par cas par e-mail, est
+distinct du forfait gratuit de la Clause 7.1.
 
 6.3. Nous ne pouvons refuser une inscription ou une demande de compte que pour un motif objectif :
 (a) le site n’est pas compatible avec l’utilisation acceptable (Clause 12) ; (b) le volume attendu
 dépasse largement les limites du forfait ; (c) la même personne ou entreprise a eu un compte clôturé
-pour abus grave (Clause 18.7) au cours des 12 mois précédents ; ou (d) essai gratuit répété
-(Clause 6.4). Si nous refusons après un prélèvement, nous remboursons le montant intégral.
+pour abus grave (Clause 18.7) au cours des 12 mois précédents ; (d) pour une inscription sur le
+forfait gratuit, la même personne ou entreprise a déjà un compte sur le forfait gratuit
+(Clause 6.4) ; ou (e) les inscriptions au forfait gratuit sont fermées (Clause 6.5). Si nous refusons
+après un prélèvement, nous remboursons le montant intégral.
 
-6.4. **L’essai gratuit vaut une fois par client :** une fois par compte (un compte qui a déjà eu un
-abonnement ne bénéficie pas d’un nouvel essai en se réabonnant) et une fois par personne ou
-entreprise, même sur un autre compte, avec un autre e-mail ou une autre carte. Pour détecter un essai
-répété avec la même carte, nous conservons pendant 12 mois l’« empreinte » de la carte calculée par
-Stripe, jamais le numéro de la carte, comme l’explique la Politique de confidentialité (point 2.7). Ce
-qui se passe en cas d’essai répété figure à la Clause 18.11.
+6.4. **Un compte sur le forfait gratuit par personne :** chaque personne ou entreprise ne peut avoir
+qu’un seul compte sur le forfait gratuit, et le service ne permet pas au même propriétaire d’en ouvrir
+un autre. Créer un autre compte, avec une autre personne ou un autre e-mail, pour avoir plus d’un
+compte sur le forfait gratuit ou pour cumuler ses limites constitue un abus (Clause 12.1, point 14).
+
+6.5. **Places sur le forfait gratuit.** Nous pouvons limiter le nombre de comptes sur le forfait
+gratuit et fermer, à tout moment, les nouvelles inscriptions au forfait gratuit, par exemple pour
+protéger la capacité du service. Tant qu’elles sont fermées, l’inscription peut proposer une liste
+d’attente et le forfait payant. Fermer les nouvelles inscriptions ne change rien pour les comptes qui
+sont déjà sur le forfait gratuit ; modifier leur forfait ou y mettre fin suit la Clause 7.5.
 
 ## Clause 7 — Forfait et limites
 
-7.1. Le forfait comprend :
+7.1. Le service comporte deux forfaits (Clause 2.11) :
 
-| Élément | Limite |
-|---|---|
-| Événements reçus par mois, tous les projets du compte confondus | jusqu’à 100 000 |
-| Sites (projets) | jusqu’à 3 |
-| Personnes ayant accès au tableau de bord | jusqu’à 3, propriétaire du compte compris |
-| Historique | 13 mois (les événements plus anciens sont supprimés chaque jour) |
-| Récapitulatif hebdomadaire par e-mail | inclus |
-| Jetons d’accès, serveur MCP et connecteur Claude | inclus |
-| Exportation des événements d’un projet | depuis le tableau de bord, jusqu’à 3 par projet et par jour |
-| Assistance | par e-mail, réponse sous 2 jours ouvrés au plus |
+| Élément | Forfait gratuit | Forfait payant |
+|---|---|---|
+| Prix | aucun, sans carte | R$ 39,00 par mois ou R$ 390,00 par an (Clause 8) |
+| Événements reçus par mois, tous les projets du compte confondus | jusqu’à 10 000 | jusqu’à 100 000 |
+| Sites (projets) | 1 | jusqu’à 3 |
+| Personnes ayant accès au tableau de bord | 1, uniquement le propriétaire du compte | jusqu’à 3, propriétaire du compte compris |
+| Historique | 13 mois (les événements plus anciens sont supprimés chaque jour) | 13 mois (les événements plus anciens sont supprimés chaque jour) |
+| Pause de la réception liée au quota (Clause 7.2) | lorsque 100 % de la limite est atteint | lorsque 150 % de la limite est atteint |
+| Récapitulatif hebdomadaire par e-mail | inclus | inclus |
+| Jetons d’accès, serveur MCP et connecteur Claude | inclus | inclus |
+| Exportation des événements d’un projet | depuis le tableau de bord, jusqu’à 3 par projet et par jour | depuis le tableau de bord, jusqu’à 3 par projet et par jour |
+| Assistance | par la documentation et par GitHub ; e-mail uniquement dans les cas de la Clause 16.5 | par e-mail, réponse sous 2 jours ouvrés au plus |
+
+Les deux forfaits disposent de tous les écrans et de toutes les fonctionnalités du service ; ce qui
+change entre eux, c’est le volume.
 
 7.2. **Attention : utilisation au-delà de la limite.**
 
@@ -249,19 +288,32 @@ qui se passe en cas d’essai répété figure à la Clause 18.11.
    Brasília, commence à 21 h le dernier jour du mois précédent.
 2. Le service mesure l’utilisation une fois par jour, pendant la nuit. L’utilisation mesurée apparaît
    dans Compte et facturation, sur le tableau de bord.
-3. Lorsque la mesure quotidienne constate 80 % puis 100 % de la limite (80 000 et 100 000
-   événements), nous prévenons le propriétaire du compte par e-mail, une fois par niveau et par mois.
-   **Jusqu’à 150 %, rien n’est coupé.**
-4. **Lorsque la mesure quotidienne constate 150 % de la limite (150 000 événements), la réception des
-   événements de tous les projets du compte est mise en pause jusqu’au 1er du mois suivant**, et nous
-   vous prévenons par e-mail. Pendant la pause, le service refuse les événements (réponse
-   `403 quota_exceeded`), qui **ne sont pas conservés et ne peuvent pas être récupérés**. Le tableau
+3. Sur le forfait payant, lorsque la mesure quotidienne constate 80 % puis 100 % de la limite
+   (80 000 et 100 000 événements), nous prévenons le propriétaire du compte par e-mail, une fois par
+   niveau et par mois. **Jusqu’à 150 %, rien n’est coupé.**
+4. **Sur le forfait payant, lorsque la mesure quotidienne constate 150 % de la limite
+   (150 000 événements), la réception des événements de tous les projets du compte est mise en pause
+   jusqu’au 1er du mois suivant**, et nous vous prévenons par e-mail. Pendant la pause, le service
+   refuse les événements (réponse `403 quota_exceeded`), qui **ne sont pas conservés et ne peuvent pas être récupérés**. Le tableau
    de bord continue d’afficher les données déjà conservées. La réception reprend d’elle-même au début
    du mois suivant. Comme la mesure est quotidienne, le compte peut dépasser légèrement 150 % avant le
    début de la pause.
 5. **Nous ne facturons rien au-delà du prix du forfait** pour l’utilisation au-delà de la limite.
 6. Si le compte dépasse fréquemment la limite, nous pouvons proposer par e-mail un forfait ou un prix
    adaptés au volume. L’acceptation est facultative.
+7. **Sur le forfait gratuit, la pause intervient à 100 % de la limite.** Lorsque la mesure
+   quotidienne constate 80 % de la limite (8 000 événements), nous prévenons le propriétaire du
+   compte par e-mail. **Lorsque la mesure quotidienne constate 100 % de la limite
+   (10 000 événements), la réception des événements est mise en pause jusqu’au 1er du mois
+   suivant**, dans les mêmes conditions qu’au point 4, et nous vous prévenons par e-mail. Comme la
+   mesure est quotidienne, le compte peut dépasser légèrement 10 000 événements le jour où il
+   atteint la limite, et ces événements restent conservés. **Attention : la pause vaut jusqu’au 1er du
+   mois suivant, quel que soit le jour où elle a commencé : un compte qui atteint la limite le 3 ne
+   reçoit aucun événement jusqu’au 1er**, et les événements envoyés pendant la pause ne sont pas
+   conservés et ne peuvent pas être récupérés.
+8. **S’abonner lève la pause.** Si le propriétaire du compte souscrit au forfait payant pendant la
+   pause du forfait gratuit (Clause 8.3), la réception reprend environ une minute après la
+   confirmation de l’abonnement, déjà avec les limites du forfait payant.
 
 7.3. Le service comporte des limites techniques contre les abus, comme le nombre de lots d’événements
 par minute par adresse et par projet et la taille de chaque lot. Ces limites peuvent changer pour
@@ -270,24 +322,53 @@ protéger le service, sans réduire la limite mensuelle d’événements de votr
 7.4. La suppression des événements de plus de 13 mois est automatique et fait partie du service :
 **nous ne conservons pas d’historique plus ancien**.
 
-## Clause 8 — Prix, essai gratuit et facturation
+7.5. **Attention : modification ou fin du forfait gratuit.** Nous pouvons augmenter les limites du
+forfait gratuit ou y ajouter des fonctionnalités à tout moment. Toute autre modification du forfait
+gratuit, y compris la réduction des limites ou la fin du forfait, ne s’applique qu’après un avis par
+e-mail au propriétaire de chaque compte sur le forfait gratuit **au moins 30 jours à l’avance**,
+expliquant ce qui change (Clause 21.1). Comme le forfait gratuit n’a pas de renouvellement, la
+modification s’applique à votre compte à la fin de ce délai. Pendant ce délai, vous pouvez exporter
+tous les événements (Clause 11.5), souscrire au forfait payant (Clause 8.3) ou clôturer le compte
+(Clause 11.6). Si le forfait gratuit prend fin et que votre compte n’est pas passé au forfait payant,
+la fin du délai constitue la fin de l’accès (Clause 2.10), et les données suivent les Clauses 11.4 et
+11.5.
 
-8.1. **Prix :** R$ 39,00 par mois ou R$ 390,00 par an. Il n’y a pas de frais d’installation ni
-d’autres frais.
+7.6. **Attention : compte du forfait gratuit sans événements.** Nous envoyons un avis par e-mail au
+propriétaire d’un compte sur le forfait gratuit qui **ne reçoit aucun événement dans les 30 jours
+suivant la création du compte** ou qui **reste 90 jours consécutifs sans recevoir aucun événement**.
+**Si, 7 jours après l’avis, le compte reste sans événements, il est définitivement supprimé** : le
+compte, les projets et tous les événements, sans le délai de 30 jours de la Clause 11.4, comme décrit à
+la Clause 12.7 de l’Annexe 1 ; nous envoyons un e-mail confirmant la suppression. Pendant ces 7 jours,
+vous pouvez exporter les événements (Clause 11.5), et rien n’est supprimé si le compte reçoit un
+événement ou passe au forfait payant : les comptes du forfait payant ne sont jamais supprimés faute
+d’événements. Après la suppression, il n’est plus possible de récupérer les données ; seuls restent
+conservés les enregistrements que la Clause 11.4 excepte de la suppression.
+
+## Clause 8 — Prix, abonnement et facturation
+
+8.1. **Prix du forfait payant :** R$ 39,00 par mois ou R$ 390,00 par an. Le forfait gratuit n’a
+pas de prix et ne demande pas de carte. Il n’y a pas de frais d’installation ni d’autres frais.
 
 8.2. **Mode de paiement :** carte de crédit, traitée par Stripe. **Nous ne voyons ni ne conservons le
 numéro de votre carte.** À ce jour, nous n’acceptons ni Pix (paiement instantané brésilien) ni boleto
 (bordereau de paiement bancaire brésilien).
 
-8.3. **Essai gratuit :** 14 jours, comptés à partir de la confirmation de l’abonnement sur la page de
-paiement de Stripe, une fois par client (Clause 6.4). La carte est obligatoire au début, et rien n’est
-prélevé pendant l’essai. Stripe envoie un rappel par e-mail 7 jours avant la fin de l’essai, avec le
-lien pour résilier. **Si vous ne résiliez pas avant la fin de l’essai (sur le portail Stripe ou en
-clôturant le compte sur le tableau de bord), le premier prélèvement a lieu le 15e jour** puis, à
-partir de là, à chaque nouvelle période ; sur le relevé de la carte, ce premier prélèvement est
-indiqué comme fin de l’essai. Si vous résiliez pendant l’essai, rien n’est prélevé. Un compte qui a
-déjà eu un abonnement n’a pas de nouvel essai en se
-réabonnant : la facturation commence le jour du nouvel abonnement.
+8.3. **Abonnement, sans essai gratuit.** Le propriétaire du compte souscrit au forfait payant dans
+Compte et facturation, sur le tableau de bord, en choisissant le forfait mensuel ou annuel et en
+indiquant sa carte sur la page de paiement de Stripe. **Il n’y a pas d’essai gratuit : le premier
+prélèvement a lieu au moment de l’abonnement** puis, à partir de là, à chaque nouvelle période. Une
+fois l’abonnement confirmé, le compte passe immédiatement aux limites du forfait payant, et une pause
+du forfait gratuit prend fin comme l’indique la Clause 7.2, point 8. Si vous quittez la page de
+paiement sans terminer, rien n’est prélevé et le compte reste sur le forfait gratuit. Un
+réabonnement, après un abonnement antérieur, est lui aussi prélevé immédiatement.
+
+**Essais déjà commencés.** Jusqu’à la version 1.2 des présentes conditions, l’abonnement commençait
+par un essai gratuit de 14 jours, avec la carte indiquée au début, une fois par client. Un compte qui
+a commencé cet essai avant la version 1.3 le termine tel qu’il a été souscrit : rien n’est prélevé
+pendant l’essai, Stripe envoie un rappel par e-mail 7 jours avant la fin et, **si vous ne résiliez pas
+avant la fin de l’essai (sur le portail Stripe ou en clôturant le compte sur le tableau de bord), le
+premier prélèvement a lieu le 15e jour** ; sur le relevé de la carte, il est indiqué comme fin de
+l’essai. Un essai répété suit la Clause 18.11.
 
 8.4. **Renouvellement automatique :** l’abonnement se renouvelle de lui-même à la fin de chaque
 période, avec prélèvement sur la même carte, jusqu’à ce que vous résiliiez (Clause 11). La date du
@@ -314,18 +395,22 @@ le service continue de fonctionner.
 
 9.2. Si le paiement n’est pas effectué après ces tentatives (jusqu’à 2 semaines après le premier
 échec), ou si la confirmation demandée par la banque n’est pas faite dans les 15 jours, Stripe met fin
-à l’abonnement, et c’est la fin de l’accès : au plus tard le lendemain, les clés des projets sont
-révoquées et les sites cessent d’envoyer des événements ; le tableau de bord reste disponible
-uniquement pour la consultation et l’exportation jusqu’à la suppression.
+à l’abonnement. Si le compte entre dans les limites du forfait gratuit (1 projet et 1 personne ayant
+accès), il revient au forfait gratuit, comme à la Clause 11.2, point 1. S’il n’y entre pas, c’est la
+fin de l’accès : au plus tard le lendemain, les clés des projets sont révoquées et les sites cessent
+d’envoyer des événements ; le tableau de bord reste disponible uniquement pour la consultation et
+l’exportation jusqu’à la suppression.
 
-9.3. Les données sont supprimées 30 jours après la fin de l’accès (Clause 11.4). D’ici là, vous
-pouvez revenir comme l’indique la Clause 11.5, point 3, sans perdre de données.
+9.3. Lorsqu’il y a fin de l’accès, les données sont supprimées 30 jours après celle-ci
+(Clause 11.4). D’ici là, vous pouvez revenir comme l’indique la Clause 11.5, point 3, sans perdre de
+données.
 
 ## Clause 10 — Droit de rétractation
 
 10.1. Comme la souscription se fait par internet, le consommateur peut renoncer au contrat dans les
-7 jours suivant la souscription (Código de Defesa do Consumidor, art. 49). Pendant l’essai gratuit,
-rien n’est prélevé : il suffit de résilier.
+7 jours suivant la souscription (Código de Defesa do Consumidor, art. 49). Sur le forfait gratuit,
+rien n’est prélevé : il suffit de clôturer le compte (Clause 11.6). Le remboursement prévu par la
+présente clause s’applique au forfait payant.
 
 10.2. **Nous étendons ce droit à tous les clients :** si vous renoncez dans les **7 jours suivant le
 premier prélèvement** (du forfait mensuel ou annuel), nous remboursons **le montant intégral** de ce
@@ -333,14 +418,17 @@ prélèvement, sans que vous ayez à en expliquer le motif.
 
 10.3. Pour l’exercer, utilisez l’un des moyens suivants :
 
-1. **clôturez le compte sur le tableau de bord** (Compte et facturation → Fermer le compte), le
-   même canal que celui utilisé pour souscrire. Dans le délai, le remboursement du montant intégral
-   est demandé automatiquement à Stripe, et l’écran affiche le montant remboursé ;
-2. ou envoyez un e-mail à hello@pyxis-analytics.dev, depuis l’e-mail du propriétaire du compte, avec
-   le mot « rétractation ».
+1. **sur le tableau de bord**, dans Compte et facturation → Se rétracter de l’abonnement, le même
+   endroit que celui où vous vous êtes abonné : l’abonnement est résilié immédiatement, le
+   remboursement du montant intégral est demandé automatiquement à Stripe, et l’écran affiche le
+   montant remboursé ;
+2. par e-mail à hello@pyxis-analytics.dev, depuis l’e-mail du propriétaire du compte, avec le mot
+   « rétractation » ;
+3. si vous voulez aussi quitter le service, **en clôturant le compte sur le tableau de bord** (Compte
+   et facturation → Fermer le compte), avec le remboursement automatique de la Clause 11.6, point 5.
 
 Résilier l’abonnement sur le portail Stripe, à lui seul, ne déclenche pas le remboursement : utilisez
-l’un des deux moyens ci-dessus.
+l’un des moyens ci-dessus.
 
 10.4. Par le tableau de bord, la confirmation apparaît immédiatement à l’écran, et aussi par e-mail.
 Par e-mail, nous accusons réception par la même voie et demandons le remboursement à Stripe dans les
@@ -348,27 +436,51 @@ Par e-mail, nous accusons réception par la même voie et demandons le rembourse
 2 jours ouvrés et vous en informons. Stripe communique le remboursement à l’émetteur de la carte ; le
 délai pour qu’il apparaisse sur le relevé dépend de l’émetteur.
 
-10.5. Avec la rétractation, le compte est clôturé comme à la Clause 11.6 : l’accès prend fin
-immédiatement et les données suivent la Clause 11.4.
+10.5. Avec la rétractation par les moyens 1 et 2 de la Clause 10.3, l’abonnement est résilié
+immédiatement et le compte **revient au forfait gratuit**, avec le projet et les données qu’il
+contient, s’il entre dans ses limites (1 projet et 1 personne ayant accès, Clause 7.1). S’il n’y
+entre pas, le tableau de bord indique ce qu’il faut retirer, et vous disposez de 30 jours pour
+choisir, en exportant d’abord ce que vous souhaitez (Clause 11.5) ; si, dans ce délai, le compte
+n’entre toujours pas dans les limites du forfait gratuit, il suit la Clause 11.2, point 2. Le
+remboursement ne dépend pas de ce choix. Si le mois a déjà dépassé 10 000 événements, la pause de la
+Clause 7.2, point 7, s’applique. Par le moyen 3, le compte est clôturé comme à la Clause 11.6.
 
 ## Clause 11 — Résiliation et clôture du compte par vous
 
 11.1. Vous pouvez partir à tout moment, de deux façons, aux effets différents :
 
 1. **résilier l’abonnement sur le portail Stripe** (Compte et facturation → Gérer la facturation, ou
-   par le lien des e-mails de Stripe) : prend effet à la fin de la période payée ou de l’essai
-   (Clause 11.2) ;
+   par le lien des e-mails de Stripe) : prend effet à la fin de la période payée, et le compte revient
+   au forfait gratuit s’il entre dans ses limites (Clause 11.2) ;
 2. **clôturer le compte sur le tableau de bord** (Compte et facturation → Fermer le compte) : prend
    effet immédiatement (Clause 11.6).
 
+Sur le forfait gratuit, il n’y a pas d’abonnement à résilier : pour partir, clôturez le compte sur le
+tableau de bord (point 2).
+
 Si vous préférez, faites la demande par e-mail à hello@pyxis-analytics.dev, depuis l’e-mail du
 propriétaire du compte, en indiquant laquelle des deux vous souhaitez. Sans cette indication, nous
-effectuons la résiliation du point 1. Nous accusons réception par la même voie.
+effectuons la résiliation du point 1 (sur le forfait gratuit, la clôture du point 2). Nous accusons
+réception par la même voie.
 
-11.2. **Résiliation sur le portail Stripe :** l’accès continue jusqu’à la fin de la période payée (ou
-de l’essai) et **il n’y a pas de nouveau prélèvement**. Au plus tard le lendemain de la fin de l’accès,
-les clés des projets sont révoquées et les sites cessent d’envoyer des événements ; le tableau de bord
-reste disponible uniquement pour la consultation et l’exportation jusqu’à la suppression.
+11.2. **Résiliation sur le portail Stripe :** le forfait payant continue jusqu’à la fin de la période
+payée et **il n’y a pas de nouveau prélèvement**. À la fin de la période :
+
+1. **si le compte entre dans les limites du forfait gratuit** (1 projet et 1 personne ayant accès,
+   Clause 7.1), **il revient au forfait gratuit**, avec le projet et les données qu’il contient, et
+   continue de recevoir des événements, avec les limites du forfait gratuit ; si le mois a déjà
+   atteint 10 000 événements, la réception est mise en pause jusqu’au 1er du mois suivant, comme sur
+   le forfait gratuit (Clause 7.2, point 7). Si vous préférez que le compte prenne fin, clôturez-le sur
+   le tableau de bord (Clause 11.6) ;
+2. si le compte n’entre pas dans les limites du forfait gratuit, c’est la fin de l’accès : au plus
+   tard le lendemain, les clés des projets sont révoquées et les sites cessent d’envoyer des
+   événements ; le tableau de bord reste disponible uniquement pour la consultation et l’exportation
+   jusqu’à la suppression.
+
+Le tableau de bord, dans Compte et facturation, indique ce qu’il faut retirer (projets ou personnes)
+pour que le compte entre dans les limites du forfait gratuit avant la fin de la période.
+**Attention :** supprimer un projet supprime immédiatement ses événements (Clause 12.2 de
+l’Annexe 1) ; exportez-les avant (Clause 11.5).
 
 11.3. **Attention : en dehors du droit de rétractation (Clause 10), il n’y a pas de remboursement au
 prorata de la période déjà payée,** ni pour le forfait mensuel ni pour l’annuel, dans aucune des deux
@@ -383,7 +495,8 @@ fin de l’accès, 7 jours avant la suppression et lorsqu’elle est effectuée.
 possible de récupérer les données**. Restent conservés uniquement les enregistrements de facturation
 que la loi impose de conserver, l’enregistrement de prévention de l’essai gratuit répété (Politique de
 confidentialité, points 2.2 et 2.7) et ce qu’une loi ou un ordre d’une autorité impose de préserver
-(Clause 12.6 de l’Annexe 1).
+(Clause 12.6 de l’Annexe 1). Le compte du forfait gratuit supprimé faute d’événements suit la
+Clause 7.6, sans ce délai de 30 jours.
 
 11.5. **Exporter les événements et revenir.**
 
@@ -399,15 +512,17 @@ confidentialité, points 2.2 et 2.7) et ce qu’une loi ou un ordre d’une auto
    remise de la copie.
 3. Avant la suppression, vous pouvez **revenir** sans perdre de données : dans Compte et facturation,
    choisissez « Se réabonner », ou écrivez à hello@pyxis-analytics.dev et nous réactivons
-   l’abonnement. Dans les deux cas, il n’y a pas de nouvel essai gratuit et la facturation commence à
-   la réactivation. Les clés révoquées ne reviennent pas : vous créez de nouvelles clés sur le tableau
+   l’abonnement. Dans les deux cas, la facturation commence à la réactivation, sans essai gratuit.
+   Les clés révoquées ne reviennent pas : vous créez de nouvelles clés sur le tableau
    de bord et les remplacez sur votre site.
 
 11.6. **Clôturer le compte depuis le tableau de bord.** Seul le propriétaire du compte peut le
 clôturer, dans Compte et facturation, en saisissant son e-mail pour confirmer. **Attention : la clôture
-prend effet immédiatement et ne peut pas être annulée depuis le tableau de bord :**
+prend effet immédiatement et ne peut pas être annulée depuis le tableau de bord** (pour renoncer
+uniquement au forfait payant et rester sur le forfait gratuit, utilisez la Clause 10.3) :
 
-1. l’abonnement est résilié immédiatement chez Stripe, sans nouveaux prélèvements ;
+1. l’abonnement au forfait payant, le cas échéant, est résilié immédiatement chez Stripe, sans
+   nouveaux prélèvements ;
 2. les clés de tous les projets sont révoquées immédiatement, et les sites cessent d’envoyer des
    événements ;
 3. le tableau de bord reste disponible uniquement pour la consultation et l’exportation (Clause 11.5)
@@ -419,7 +534,7 @@ prend effet immédiatement et ne peut pas être annulée depuis le tableau de bo
 6. l’écran confirme la clôture, la date de la suppression et le montant remboursé, et nous envoyons la
    confirmation par e-mail.
 
-Clôturer pendant l’essai gratuit n’entraîne aucun prélèvement. Si Stripe ne parvient pas à résilier
+Clôturer un compte sur le forfait gratuit n’entraîne aucun prélèvement. Si Stripe ne parvient pas à résilier
 l’abonnement, rien n’est clôturé et l’écran vous en avertit. Si vous changez d’avis avant la
 suppression, la Clause 11.5, point 3, s’applique.
 
@@ -475,7 +590,8 @@ votre permission :
     en tant qu’agence, les sites de vos clients qui l’ont autorisé, dans les limites du forfait, ne
     constitue pas une revente ; Clause 3.2 de l’Annexe 1) ;
 14. créer plus d’un compte, ou utiliser une autre personne, un autre e-mail ou une autre carte, pour
-    **répéter l’essai gratuit** ou pour échapper à une limite ou à un prélèvement ;
+    **avoir plus d’un compte sur le forfait gratuit** (Clause 6.4) ou pour échapper à une limite ou à
+    un prélèvement ;
 15. **fraude au paiement** : utiliser une carte sans l’autorisation de son titulaire ou de fausses
     données de facturation, ou contester de mauvaise foi un prélèvement auprès de l’émetteur de la
     carte, par exemple en déclarant ne pas reconnaître un prélèvement que vous avez autorisé et dont
@@ -520,9 +636,10 @@ ne commence pas à les conserver pour enquêter sur un abus.**
 
 ## Clause 13 — Personnes ayant accès, clés et jetons
 
-13.1. **Personnes ayant accès.** Le compte peut réunir jusqu’à 3 personnes ayant accès au tableau de bord,
-propriétaire compris. Le propriétaire invite une personne par son e-mail, pour un ou plusieurs projets
-du compte, dans Paramètres → Personnes. La personne reçoit un e-mail d’invitation et se connecte au
+13.1. **Personnes ayant accès.** Sur le forfait payant, le compte peut réunir jusqu’à 3 personnes ayant
+accès au tableau de bord, propriétaire compris ; sur le forfait gratuit, uniquement le propriétaire, qui
+n’invite pas d’autres personnes (Clause 7.1). Le propriétaire invite une personne par son e-mail,
+pour un ou plusieurs projets du compte, dans Paramètres → Personnes. La personne reçoit un e-mail d’invitation et se connecte au
 tableau de bord avec un code envoyé à son e-mail, sans mot de passe. Le propriétaire retire une
 personne sur le même écran, à tout moment.
 
@@ -600,8 +717,8 @@ pour vous protéger, même sans abus, et nous vous en informons ensuite (Clause 
    (l’identifiant d’accès est valable 1 heure) et que nous ne conservons que sous forme de hash. Elle
    prend fin lorsque la personne la révoque dans Paramètres → Applications connectées ; après 90 jours
    sans utilisation ; lorsque la personne perd l’accès (Clause 13.3) ou que son accès est suspendu
-   (Clause 18.2) ; lorsque le compte est supprimé (Clause 11.4) ; ou d’elle-même, lorsqu’un identifiant
-   déjà remplacé est réutilisé, signe qu’il a pu être copié. Après cela, l’application demande à se
+   (Clause 18.2) ; lorsque le compte est supprimé (Clauses 7.6 et 11.4) ; ou d’elle-même, lorsqu’un
+   identifiant déjà remplacé est réutilisé, signe qu’il a pu être copié. Après cela, l’application demande à se
    connecter de nouveau.
 6. **Limites.** Jusqu’à 10 applications connectées simultanément par personne, et les limites de
    requêtes par minute de l’Annexe II de l’Accord de traitement des données.
@@ -645,7 +762,7 @@ exemple, le blocage de données ou la suspension d’un traitement, LGPD, art. 5
 conformons qu’à ce qui est exigé et vous prévenons, sauf si l’ordre interdit de le faire.
 
 15.5. **Pause liée au quota.** La pause de la réception des événements lorsque 150 % de la limite
-mensuelle est atteint suit la Clause 7.2.
+mensuelle est atteint sur le forfait payant, ou 100 % sur le forfait gratuit, suit la Clause 7.2.
 
 15.6. Si vous êtes consommateur, vos droits prévus à l’art. 20 du Código de Defesa do Consumidor
 continuent de s’appliquer : face à une défaillance du service, y compris une suspension qui s’avère
@@ -657,12 +774,13 @@ retirons pas, pendant la période payée, les fonctionnalités énumérées à l
 pas les engagements de confidentialité de la Clause 4.2. Si un changement de ce type est inévitable
 (par exemple, en raison de la loi ou parce qu’un prestataire a cessé de proposer quelque chose), nous
 vous prévenons 30 jours à l’avance, et vous pouvez mettre fin au contrat avec remboursement au prorata
-de la période payée et non utilisée.
+de la période payée et non utilisée. Les modifications du forfait gratuit suivent la Clause 7.5.
 
 ## Clause 16 — Assistance et service client
 
 16.1. Le service client se fait par e-mail, à hello@pyxis-analytics.dev, pour les questions, les
-réclamations, l’assistance, la contestation d’une suspension, la suspension et la résiliation.
+réclamations, l’assistance, la contestation d’une suspension, la suspension et la résiliation. Sur le
+forfait gratuit, les questions techniques d’utilisation et d’installation suivent la Clause 16.5.
 
 16.2. Nous accusons réception de votre message par le même e-mail et répondons **dans les 2 jours
 ouvrés** (jours ouvrés du lundi au vendredi, hors jours fériés nationaux).
@@ -672,6 +790,29 @@ pas le développement sur votre site ni l’assistance aux installations propres
 
 16.4. Dans vos messages, n’envoyez pas de données personnelles de visiteurs. Pour montrer un cas,
 utilisez l’identifiant de la visite ou de l’utilisateur.
+
+16.5. **Assistance sur le forfait gratuit.** Sur le forfait gratuit, les questions techniques
+d’utilisation et d’installation (Clause 16.3) sont traitées par la documentation publique de Pyxis et
+par les *issues* des dépôts publics sur GitHub (Clause 5.1), sans le délai de la Clause 16.2. Les
+*issues* sont publiques : n’y publiez ni clés, ni jetons, ni données personnelles. L’e-mail
+hello@pyxis-analytics.dev reste valable sur le forfait gratuit, avec accusé de réception par la même
+voie et réponse par e-mail **dans les 5 jours**, pour :
+
+1. les informations et les questions sur le contrat, le forfait, les limites et la facturation, y
+   compris sur la souscription au forfait payant ;
+2. les réclamations concernant le service, y compris les défaillances (Clause 15.6) ;
+3. la suspension, la résiliation, la clôture du compte et la rétractation (Clauses 10, 11 et 18), y
+   compris pour répondre à un avertissement ou contester une mesure (Clause 18.6) ;
+4. les demandes relatives aux données personnelles : les vôtres et celles des personnes ayant accès,
+   dans les délais de la Politique de confidentialité (point 6), et vos demandes en tant que
+   responsable du traitement, dans les délais de l’Annexe 1 (Clause 10) ;
+5. les autres sujets que les présentes conditions prévoient de traiter par e-mail, comme signaler la
+   fuite d’une clé (Clause 13.9), signaler une faille de sécurité (Clause 12.1, point 10) et demander
+   la copie des événements lorsque l’exportation par le tableau de bord échoue (Clause 11.5, point 2).
+
+Si vous êtes consommateur et ne pouvez pas ou ne voulez pas utiliser GitHub, vous pouvez aussi envoyer
+votre question d’utilisation par e-mail ; nous répondons sous 5 jours au plus, et la réponse peut
+renvoyer à la partie de la documentation qui répond à la question.
 
 ## Clause 17 — Propriété intellectuelle et vos données
 
@@ -796,22 +937,12 @@ lesquels le compte a été suspendu, en plus de vos droits prévus à la Clause 
 4. Le remboursement est effectué, via Stripe, sur la carte utilisée pour le paiement, dans les 5 jours
    ouvrés suivant la clôture.
 
-18.11. **Essai gratuit répété.** Lorsque le service indique que la carte utilisée a déjà démarré un
-essai gratuit sur un autre compte au cours des 12 mois précédents (Politique de confidentialité,
-point 2.7), ou qu’il existe un autre indice objectif d’essai répété par la même personne ou
-entreprise (Clause 6.4) :
-
-1. rien ne se passe automatiquement : le service se contente d’enregistrer la coïncidence et de nous
-   prévenir ; aucun prélèvement et aucune résiliation ;
-2. nous examinons le cas et, si nécessaire, nous vous interrogeons, avec le délai de la Clause 18.3.
-   Une carte d’entreprise utilisée par des personnes différentes, ou une agence qui souscrit pour des
-   clients différents, ne constitue pas un essai répété ;
-3. si nous confirmons l’essai répété, nous pouvons clôturer le nouveau compte avant la fin de
-   l’essai, en résiliant l’abonnement chez Stripe sans aucun prélèvement, avec avertissement et motif ;
-   vous pouvez contester (Clause 18.6) et vous pouvez vous abonner sans essai gratuit, par e-mail, avec
-   facturation à partir du nouvel abonnement ;
-4. **nous ne prélevons jamais rien avant la date affichée sur la page de paiement de Stripe**, et nous
-   ne raccourcissons pas l’essai pour prélever plus tôt.
+18.11. **Essai gratuit répété.** L’essai gratuit a pris fin avec la version 1.3 des présentes
+conditions (Clause 8.3). Le soupçon qu’un essai commencé avant celle-ci a répété un essai antérieur
+(Politique de confidentialité, point 2.7) suit la Clause 18.11 de la version sous laquelle cet essai a
+commencé : rien ne se passe automatiquement, vous êtes averti avec le motif et entendu avant toute
+mesure, vous pouvez contester (Clause 18.6) et **rien ne vous est jamais prélevé avant la date
+affichée sur la page de paiement de Stripe**.
 
 18.12. **Contestation d’un prélèvement sur la carte.** Contester un prélèvement auprès de l’émetteur de
 la carte est votre droit ; nous vous demandons de nous contacter d’abord (Clauses 10 et 16). Si la
@@ -820,10 +951,11 @@ pouvons la traiter comme un défaut de paiement, en résiliant l’abonnement av
 (Clause 9.2). Seule la contestation de mauvaise foi (Clause 12.1, point 15) est traitée comme un abus.
 
 18.13. **Clôture sans abus.** En dehors de l’abus, nous ne mettons fin au contrat que dans les cas des
-Clauses 6.2 (fin d’une gratuité), 20 (fin du service hébergé), 21.3 (changement imposé par la loi que
-vous n’acceptez pas) et 22.1 (cession que vous n’acceptez pas), et nous remboursons toujours le
-montant proportionnel à la période payée et non utilisée ; les données suivent les Clauses 11.4 et
-11.5.
+Clauses 6.2 (fin d’une gratuité), 7.5 (fin du forfait gratuit), 7.6 (compte du forfait gratuit sans
+événements), 20 (fin du service hébergé), 21.3 (changement imposé par la loi que vous n’acceptez pas)
+et 22.1 (cession que vous n’acceptez pas), et, lorsqu’il y a une période payée, nous remboursons
+toujours le montant proportionnel à la période payée et non utilisée ; les données suivent les
+Clauses 11.4 et 11.5, sauf dans le cas de la Clause 7.6, qui a ses propres délais.
 
 ## Clause 19 — Responsabilité
 
