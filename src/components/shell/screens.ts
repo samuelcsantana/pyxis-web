@@ -98,6 +98,12 @@ export function installHref(projectId: string): string {
   return `/${encodeURIComponent(projectId)}/${INSTALL_SEGMENT}`;
 }
 
+export const HELP_SEGMENT = 'help';
+
+export function helpHref(projectId: string): string {
+  return `/${encodeURIComponent(projectId)}/${HELP_SEGMENT}`;
+}
+
 export const SETTINGS_KEYS_PANEL = 'settings-keys';
 
 export function settingsKeysHref(projectId: string): string {

@@ -11,6 +11,7 @@ import { SignOutButton } from './sign-out-button';
 
 export interface AccountMenuProps {
   readonly email: string;
+  readonly helpHref: string;
   readonly theme?: Theme;
   readonly i18n: I18n;
   readonly chooseLocale: (form: FormData) => Promise<void>;
@@ -19,7 +20,7 @@ export interface AccountMenuProps {
 const CHEVRON = 'M6 15l6-6 6 6';
 const GROUP_LABEL = 'px-1 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 
-export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuProps) {
+export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: AccountMenuProps) {
   return (
     <DismissableDetails className="group relative">
       <summary
@@ -71,6 +72,12 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
             className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
           >
             {i18n.t('nav.billing')}
+          </Link>
+          <Link
+            href={helpHref}
+            className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
+          >
+            {i18n.t('nav.help')}
           </Link>
           <SignOutButton />
         </div>

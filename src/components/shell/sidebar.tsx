@@ -6,6 +6,7 @@ import type { I18n } from '@/i18n/i18n';
 import type { Theme } from '@/lib/theme';
 import { AccountMenu } from './account-menu';
 import { ProjectSwitcher } from './project-switcher';
+import { helpHref } from './screens';
 import { SidebarNav } from './sidebar-nav';
 
 export interface SidebarProps {
@@ -64,7 +65,13 @@ export function Sidebar({
           </svg>
           {i18n.t('shell.privacy')}
         </p>
-        <AccountMenu email={admin.email} theme={theme} i18n={i18n} chooseLocale={chooseLocale} />
+        <AccountMenu
+          email={admin.email}
+          helpHref={helpHref(project.id)}
+          theme={theme}
+          i18n={i18n}
+          chooseLocale={chooseLocale}
+        />
       </div>
     </div>
   );

@@ -57,6 +57,7 @@ export const ptBR = translation({
     account: 'Conta e preferências',
     language: 'Idioma',
     billing: 'Conta e cobrança',
+    help: 'Ajuda e suporte',
   },
   theme: {
     switch: 'Trocar o tema',
@@ -428,6 +429,34 @@ export const ptBR = translation({
       nearQuota: 'Neste mês a conta já usou {share} dos eventos.',
       open: 'Abrir a cobrança',
     },
+  },
+  support: {
+    title: 'Ajuda e suporte',
+    subtitle: 'Fale com quem mantém o Pyxis ou encontre a resposta na documentação.',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    selected: 'Selecionado, aperte Ctrl+C',
+    writeHeading: 'Escrever para o suporte',
+    fromAccount: 'Escreva a partir de {email}, para sabermos de qual conta se trata.',
+    paidReply:
+      'No plano pago, confirmamos que a sua mensagem chegou e respondemos em até {days} dias úteis.',
+    freeReply:
+      'No plano grátis, respondemos por e-mail em até {days} dias sobre o contrato, o plano e os limites, a cobrança, o cancelamento e os dados pessoais. As dúvidas de instalação e de uso vão pelo GitHub.',
+    noPersonalData:
+      'Para mostrar um caso, mande o id da visita, nunca dados pessoais dos seus visitantes.',
+    docsHeading: 'Instalação e uso',
+    install: 'Como instalar',
+    installBody: 'O trecho com a sua chave, passo a passo.',
+    code: 'Documentação do código do Pyxis',
+    codeBody: 'track, identify, trackRequest e todas as opções.',
+    agents: 'Guia para agentes de IA',
+    agentsBody: 'O que o Claude Code, o Cursor ou outro agente leem antes de instalar o Pyxis.',
+    question: 'Perguntar no GitHub',
+    questionBody: 'As perguntas são públicas: nunca cole chaves nem dados pessoais.',
+    securityHeading: 'Encontrou uma falha de segurança?',
+    securityBody: 'Relate em particular pelo GitHub, nunca numa issue pública.',
+    securityLink: 'Relatar em particular',
+    accountHeading: 'Suporte',
   },
   accountSuspended: {
     title: 'Esta conta está suspensa',

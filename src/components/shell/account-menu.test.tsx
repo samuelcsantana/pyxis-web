@@ -13,7 +13,13 @@ const chooseNothing = () => Promise.resolve();
 
 function renderMenu() {
   return renderWithMessages(
-    <AccountMenu email={EMAIL} theme="dark" i18n={english} chooseLocale={chooseNothing} />,
+    <AccountMenu
+      email={EMAIL}
+      helpHref="/p-1/help"
+      theme="dark"
+      i18n={english}
+      chooseLocale={chooseNothing}
+    />,
   );
 }
 
@@ -44,6 +50,10 @@ describe('AccountMenu', () => {
     expect(screen.getByRole('link', { name: 'Account and billing' })).toHaveAttribute(
       'href',
       '/account',
+    );
+    expect(screen.getByRole('link', { name: 'Help and support' })).toHaveAttribute(
+      'href',
+      '/p-1/help',
     );
     expect(screen.queryByRole('button', { name: 'Sign out everywhere' })).not.toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Theme' }).closest('div.absolute')).toHaveClass(
