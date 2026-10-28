@@ -1783,7 +1783,7 @@ export const it = translation({
     askClaude: {
       eyebrow: 'Connettore MCP',
       title: 'Chiedi a Claude invece di scavare tra i grafici',
-      lead: 'Collega Pyxis a Claude una volta e chiedi con parole tue: com’è andata la settimana scorsa, dove la registrazione perde persone, quale rotta ha iniziato a fallire. Claude legge gli stessi numeri della dashboard, tramite quindici strumenti in sola lettura. È incluso nel piano, senza costi aggiuntivi.',
+      lead: 'Collega Pyxis a Claude una volta e chiedi con parole tue: com’è andata la settimana scorsa, dove la registrazione perde persone, quale rotta ha iniziato a fallire. Claude legge gli stessi numeri della dashboard, tramite sedici strumenti in sola lettura. È incluso nel piano, senza costi aggiuntivi.',
       connect: 'Collegalo in un minuto',
       directory: {
         badge: 'Novità',
@@ -1807,7 +1807,7 @@ export const it = translation({
       promises: {
         reads: {
           title: 'Solo lettura',
-          body: 'Ognuno dei quindici strumenti è una lettura dell’API di Pyxis. Claude non può mai modificare né eliminare nulla.',
+          body: 'Ognuno dei sedici strumenti è una lettura dell’API di Pyxis. Claude non può mai modificare né eliminare nulla.',
         },
         revoke: {
           title: 'Lo revochi tu',
