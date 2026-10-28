@@ -8,6 +8,7 @@ import {
   type DashboardFilters,
   hasDashboardFilters,
   NO_DASHBOARD_FILTERS,
+  toggledDashboardFilters,
   withDashboardFilters,
 } from './dashboard-filters';
 
@@ -157,5 +158,68 @@ describe('withDashboardFilters', () => {
         os: 'ios',
       }),
     ).toBe('range=7d&metric=visits&os=ios');
+  });
+});
+
+describe('toggledDashboardFilters', () => {
+  it('turns a filter on, an event dropping the property of the one before', () => {
+    expect(
+      toggledDashboardFilters(
+        { ...NO_DASHBOARD_FILTERS, event: 'signup', property: 'plan=pro' },
+        { event: 'cta_clicked' },
+      ),
+    ).toEqual({
+      active: false,
+      filters: { ...NO_DASHBOARD_FILTERS, event: 'cta_clicked', property: null },
+    });
+    expect(toggledDashboardFilters(NO_DASHBOARD_FILTERS, { os: 'ios' })).toEqual({
+      active: false,
+      filters: { ...NO_DASHBOARD_FILTERS, os: 'ios' },
+    });
+  });
+
+  it('turns a filter that is already on off, an event taking its property with it', () => {
+    expect(
+      toggledDashboardFilters(
+        { ...NO_DASHBOARD_FILTERS, event: 'signup', property: 'plan=pro', os: 'ios' },
+        { event: 'signup' },
+      ),
+    ).toEqual({ active: true, filters: { ...NO_DASHBOARD_FILTERS, os: 'ios' } });
+    expect(
+      toggledDashboardFilters({ ...NO_DASHBOARD_FILTERS, device: 'mobile' }, { device: 'mobile' }),
+    ).toEqual({ active: true, filters: NO_DASHBOARD_FILTERS });
+  });
+
+  it('adds a page to the pages already filtered, replacing the last one past three', () => {
+    expect(
+      toggledDashboardFilters({ ...NO_DASHBOARD_FILTERS, paths: ['/a'] }, { path: '/b' }).filters
+        .paths,
+    ).toEqual(['/a', '/b']);
+    expect(
+      toggledDashboardFilters(
+        { ...NO_DASHBOARD_FILTERS, paths: ['/a', '/b', '/c'] },
+        { path: '/d' },
+      ).filters.paths,
+    ).toEqual(['/a', '/b', '/d']);
+    expect(
+      toggledDashboardFilters({ ...NO_DASHBOARD_FILTERS, paths: ['/a', '/b'] }, { path: '/a' }),
+    ).toEqual({ active: true, filters: { ...NO_DASHBOARD_FILTERS, paths: ['/b'] } });
+  });
+
+  it('counts several values as on only when every one of them is', () => {
+    const campaign = { campaign: 'launch', source: 'newsletter' };
+
+    expect(
+      toggledDashboardFilters({ ...NO_DASHBOARD_FILTERS, campaign: 'launch' }, campaign),
+    ).toEqual({
+      active: false,
+      filters: { ...NO_DASHBOARD_FILTERS, campaign: 'launch', source: 'newsletter' },
+    });
+    expect(
+      toggledDashboardFilters(
+        { ...NO_DASHBOARD_FILTERS, campaign: 'launch', source: 'newsletter' },
+        campaign,
+      ),
+    ).toEqual({ active: true, filters: NO_DASHBOARD_FILTERS });
   });
 });

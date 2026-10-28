@@ -246,3 +246,84 @@ export function withDashboardFilters(query: string, filters: DashboardFilters): 
   }
   return parameters.toString();
 }
+
+export const ROW_FILTER_FIELDS = [
+  'path',
+  'event',
+  'channel',
+  'device',
+  'browser',
+  'os',
+  'country',
+  'region',
+  'source',
+  'campaign',
+] as const;
+
+export type RowFilterField = (typeof ROW_FILTER_FIELDS)[number];
+
+export type RowFilterValues = Readonly<Partial<Record<RowFilterField, string>>>;
+
+export interface ToggledFilters {
+  readonly filters: DashboardFilters;
+  readonly active: boolean;
+}
+
+const MAX_PAGE_FILTERS = PAGE_FILTER_PARAMETERS.length;
+
+function isOn(filters: DashboardFilters, field: RowFilterField, value: string): boolean {
+  return field === 'path' ? filters.paths.includes(value) : filters[field] === value;
+}
+
+function withPath(paths: readonly string[], path: string): readonly string[] {
+  return paths.length < MAX_PAGE_FILTERS ? [...paths, path] : [...paths.slice(0, -1), path];
+}
+
+function turnedOn(
+  filters: DashboardFilters,
+  field: RowFilterField,
+  value: string,
+): DashboardFilters {
+  switch (field) {
+    case 'path':
+      return { ...filters, paths: withPath(filters.paths, value) };
+    case 'event':
+      return { ...filters, event: value, property: null };
+    default:
+      return { ...filters, [field]: value };
+  }
+}
+
+function turnedOff(
+  filters: DashboardFilters,
+  field: RowFilterField,
+  value: string,
+): DashboardFilters {
+  switch (field) {
+    case 'path':
+      return { ...filters, paths: filters.paths.filter((path) => path !== value) };
+    case 'event':
+      return { ...filters, event: null, property: null };
+    default:
+      return { ...filters, [field]: null };
+  }
+}
+
+export function toggledDashboardFilters(
+  filters: DashboardFilters,
+  values: RowFilterValues,
+): ToggledFilters {
+  const entries = ROW_FILTER_FIELDS.flatMap((field) => {
+    const value = values[field];
+    return value === undefined ? [] : [[field, value] as const];
+  });
+  const active = entries.every(([field, value]) => isOn(filters, field, value));
+  return {
+    active,
+    filters: entries.reduce(
+      (kept, [field, value]) =>
+        active ? turnedOff(kept, field, value) : turnedOn(kept, field, value),
+      filters,
+    ),
+  };
+}
