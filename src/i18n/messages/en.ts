@@ -2156,7 +2156,12 @@ export const en = {
         payment: {
           question: 'Can I pay by Pix, and is there an invoice?',
           answer:
-            'For now, card only; Pix for the yearly plan depends on Stripe enabling it. Brazilian invoices (nota fiscal) are not issued yet: if you need one, write before subscribing.',
+            'For now, card only; Pix for the yearly plan depends on Stripe enabling it. Brazilian invoices (nota fiscal) are not issued yet: if you need one, write to {email} before subscribing.',
+        },
+        support: {
+          question: 'How do I reach support?',
+          answer:
+            'By e-mail, at {email}, preferably from your account’s e-mail. On the paid plan, we reply within {paidDays} business days. On the free plan, installation and usage questions go through the GitHub issues and the documentation; the contract, the plan, its limits, billing and personal data stay on e-mail, with a reply within {freeDays} days. To report a security flaw, use GitHub’s private report.',
         },
       },
     },
@@ -2191,7 +2196,11 @@ export const en = {
       product: 'Product',
       pricing: 'Pricing',
       code: 'Code',
-      author: 'Author',
+      support: 'Support',
+      supportReply: 'Replies within {days} business days on the paid plan.',
+      questions: 'Questions on GitHub',
+      securityReport: 'Report a security flaw',
+      author: 'Author: {site}',
       demo: 'Live demo',
       apiReference: 'API reference',
       playground: 'SDK playground',

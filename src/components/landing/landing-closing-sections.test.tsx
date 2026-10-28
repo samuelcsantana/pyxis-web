@@ -128,14 +128,26 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} offer="byInvitation" />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(15);
+    expect(items).toHaveLength(16);
     expect([...items].map((item) => item.open)).toEqual([
       true,
-      ...Array.from({ length: 14 }, () => false),
+      ...Array.from({ length: 15 }, () => false),
     ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');
     expect(items[0]).toHaveClass('landing-reveal');
+  });
+
+  it('tells how to reach support, with both reply times, and where to ask about an invoice', () => {
+    render(<FaqSection i18n={english} offer="free" />);
+
+    expect(screen.getByText('How do I reach support?')).toBeInTheDocument();
+    const answer = screen.getByText(/^By e-mail, at hello@pyxis-analytics\.dev/);
+    expect(answer).toHaveTextContent('On the paid plan, we reply within 2 business days.');
+    expect(answer).toHaveTextContent('with a reply within 5 days');
+    expect(
+      screen.getByText(/write to hello@pyxis-analytics\.dev before subscribing\.$/),
+    ).toBeInTheDocument();
   });
 
   it('answers what the hosted plan costs and how to leave it', () => {
@@ -214,7 +226,7 @@ describe('FaqSection', () => {
         const { container } = render(<FaqSection i18n={english} offer={offer} />);
 
         const questions = questionsOf(container);
-        expect(questions).toHaveLength(15);
+        expect(questions).toHaveLength(16);
         expect(questions).not.toContain('How does the free trial work?');
         const afterPrice = questions.indexOf('How much does it cost?') + 1;
         expect(questions.slice(afterPrice, afterPrice + 2)).toEqual([

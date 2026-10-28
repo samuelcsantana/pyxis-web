@@ -2175,7 +2175,12 @@ export const ptBR = translation({
         payment: {
           question: 'Tem Pix ou nota fiscal?',
           answer:
-            'Por enquanto, o pagamento é só no cartão; o Pix para o plano anual depende de liberação do Stripe. Ainda não há emissão de nota fiscal: se você precisa de nota, escreva antes de assinar.',
+            'Por enquanto, o pagamento é só no cartão; o Pix para o plano anual depende de liberação do Stripe. Ainda não há emissão de nota fiscal: se você precisa de nota, escreva para {email} antes de assinar.',
+        },
+        support: {
+          question: 'Como falo com o suporte?',
+          answer:
+            'Por e-mail, em {email}, de preferência a partir do e-mail da sua conta. No plano pago, respondemos em até {paidDays} dias úteis. No plano grátis, as dúvidas de instalação e de uso vão pelas issues do GitHub e pela documentação; contrato, plano, limites, cobrança e dados pessoais continuam pelo e-mail, com resposta em até {freeDays} dias. Para relatar uma falha de segurança, use o relato privado do GitHub.',
         },
       },
     },
@@ -2210,7 +2215,11 @@ export const ptBR = translation({
       product: 'Produto',
       pricing: 'Preço',
       code: 'Código',
-      author: 'Autor',
+      support: 'Suporte',
+      supportReply: 'Resposta em até {days} dias úteis no plano pago.',
+      questions: 'Perguntas no GitHub',
+      securityReport: 'Relatar falha de segurança',
+      author: 'Autor: {site}',
       demo: 'Demonstração',
       apiReference: 'Documentação da API',
       playground: 'Playground do SDK',

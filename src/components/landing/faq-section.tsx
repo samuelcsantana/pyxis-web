@@ -8,7 +8,9 @@ import {
   offersTheFreePlan,
   type SignUpOffer,
 } from '@/domain/sign-up';
+import { FREE_REPLY_DAYS, PAID_REPLY_BUSINESS_DAYS } from '@/domain/support';
 import { REVEAL } from './landing-classes';
+import { CONTACT_EMAIL } from './landing-links';
 import { LandingSection } from './landing-section';
 
 export interface FaqSectionProps {
@@ -34,6 +36,7 @@ const QUESTIONS = [
   'cancel',
   'limit',
   'payment',
+  'support',
 ] as const;
 const FREE_PLAN_QUESTIONS = [
   'cookies',
@@ -51,6 +54,7 @@ const FREE_PLAN_QUESTIONS = [
   'cancel',
   'limit',
   'payment',
+  'support',
 ] as const;
 const ANSWERED_DIFFERENTLY_WHEN_OPEN = ['use', 'cancel'] as const;
 const ANSWERED_DIFFERENTLY_ON_THE_FREE_PLAN = ['use', 'agency', 'price', 'cancel'] as const;
@@ -87,6 +91,12 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
   const { t } = i18n;
   const terms = legalDocumentOf('terms', i18n.locale);
   const events = i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH);
+  const answerValues = {
+    events,
+    email: CONTACT_EMAIL,
+    paidDays: i18n.format.count(PAID_REPLY_BUSINESS_DAYS),
+    freeDays: i18n.format.count(FREE_REPLY_DAYS),
+  };
   const questions = offersTheFreePlan(offer) ? FREE_PLAN_QUESTIONS : QUESTIONS;
   return (
     <LandingSection id={FAQ_ID} eyebrow={t('landing.faq.eyebrow')} title={t('landing.faq.title')}>
@@ -109,7 +119,7 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
               </span>
             </summary>
             <p className="px-4 pb-4 text-base leading-relaxed text-muted">
-              {rich(t(answerKeyOf(question, offer), { events }), {
+              {rich(t(answerKeyOf(question, offer), answerValues), {
                 code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
                 terms: (text) => (
                   <a

@@ -2,6 +2,7 @@ import { LogoMark } from '@/components/brand/logo-mark';
 import type { ReactNode } from 'react';
 import { LEGAL_DOCUMENT_TITLES } from '@/components/legal/legal-titles';
 import { SellerLine } from '@/components/legal/seller-line';
+import { PAID_REPLY_BUSINESS_DAYS, QUESTION_FORM_URL, SECURITY_REPORT_URL } from '@/domain/support';
 import type { I18n } from '@/i18n/i18n';
 import type { Seller } from '@/lib/legal-config';
 import { CONTRACT_LANGUAGE, legalDocumentsIn } from '@/lib/legal-documents';
@@ -106,11 +107,19 @@ export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
           ]}
         />
         <FooterColumn
-          title={t('landing.footer.author')}
+          title={t('landing.footer.support')}
           links={[
-            { href: LANDING_LINKS.author, label: PROPER_NAMES.author },
             { href: `mailto:${CONTACT_EMAIL}`, label: CONTACT_EMAIL },
+            { href: QUESTION_FORM_URL, label: t('landing.footer.questions') },
+            { href: SECURITY_REPORT_URL, label: t('landing.footer.securityReport') },
+            {
+              href: LANDING_LINKS.author,
+              label: t('landing.footer.author', { site: PROPER_NAMES.author }),
+            },
           ]}
+          note={t('landing.footer.supportReply', {
+            days: i18n.format.count(PAID_REPLY_BUSINESS_DAYS),
+          })}
         />
         {seller === undefined ? null : (
           <FooterColumn
