@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { type SubmitEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
+import { installHref } from '@/components/shell/screens';
 import { BUTTON_PRIMARY, CONTROL_BUSY, FIELD } from '@/components/ui/control-classes';
 import { SelectField } from '@/components/ui/select-field';
 import {
@@ -39,10 +40,6 @@ const SITE_PROBLEMS = {
   missing: 'newProject.siteMissing',
   invalid: 'newProject.siteInvalid',
 } as const;
-
-export function installHref(projectId: string): string {
-  return `/${encodeURIComponent(projectId)}/install`;
-}
 
 function browserTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
