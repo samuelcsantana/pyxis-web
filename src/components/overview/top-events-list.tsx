@@ -5,14 +5,23 @@ import { rich } from '@/i18n/rich';
 import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];
   readonly visitsHref: (name: string) => string;
+  readonly filterOf?: (name: string) => RowFilter | null;
   readonly i18n: I18n;
 }
 
-export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) {
+const NO_ROW_FILTER = () => null;
+
+export function TopEventsList({
+  events,
+  visitsHref,
+  filterOf = NO_ROW_FILTER,
+  i18n,
+}: TopEventsListProps) {
   const mostCounted = Math.max(0, ...events.map((event) => event.count));
   return (
     <section aria-labelledby="top-events-heading" className={PANEL}>
@@ -39,6 +48,7 @@ export function TopEventsList({ events, visitsHref, i18n }: TopEventsListProps) 
                     label={eventLabel(event.name)}
                     purpose={i18n.t('visitsLink.purpose')}
                     className="w-fit"
+                    filter={filterOf(event.name)}
                   />
                   <span className="font-mono text-xs text-muted wrap-anywhere">{event.name}</span>
                 </span>

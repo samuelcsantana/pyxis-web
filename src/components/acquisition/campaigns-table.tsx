@@ -10,22 +10,28 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 import { CHANNEL_COLORS } from './channel-colors';
 import { ConversionCells, ConversionColumns } from './conversion-columns';
 
 export interface CampaignsTableProps {
   readonly rows: readonly CampaignRow[];
   readonly campaignVisitsHref: (row: CampaignRow) => string;
+  readonly campaignFilterOf?: (row: CampaignRow) => RowFilter | null;
   readonly i18n: I18n;
 }
+
+const NO_ROW_FILTER = () => null;
 
 function CampaignCell({
   row,
   href,
+  filter,
   i18n,
 }: {
   readonly row: CampaignRow;
   readonly href: string;
+  readonly filter: RowFilter | null;
   readonly i18n: I18n;
 }) {
   return (
@@ -39,6 +45,7 @@ function CampaignCell({
           href={href}
           label={row.campaign}
           purpose={i18n.t('acquisition.campaigns.visitsLinkPurpose', { source: row.sourceLabel })}
+          filter={filter}
         />
         <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
           <span className="wrap-anywhere sm:hidden">{row.sourceLabel}</span>
@@ -54,7 +61,12 @@ function CampaignCell({
   );
 }
 
-export function CampaignsTable({ rows, campaignVisitsHref, i18n }: CampaignsTableProps) {
+export function CampaignsTable({
+  rows,
+  campaignVisitsHref,
+  campaignFilterOf = NO_ROW_FILTER,
+  i18n,
+}: CampaignsTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
   return (
     <section aria-labelledby="campaigns-heading" className={PANEL}>
@@ -90,7 +102,12 @@ export function CampaignsTable({ rows, campaignVisitsHref, i18n }: CampaignsTabl
               {rows.map((row) => (
                 <tr key={row.key} className={FRESH_HIGHLIGHT}>
                   <th scope="row" className={`${BODY_CELL} pl-0 text-left font-medium`}>
-                    <CampaignCell row={row} href={campaignVisitsHref(row)} i18n={i18n} />
+                    <CampaignCell
+                      row={row}
+                      href={campaignVisitsHref(row)}
+                      filter={campaignFilterOf(row)}
+                      i18n={i18n}
+                    />
                   </th>
                   <td className={`${BODY_CELL} hidden sm:table-cell`}>
                     <span className="flex flex-col gap-0.5">

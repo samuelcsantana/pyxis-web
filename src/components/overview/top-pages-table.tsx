@@ -12,15 +12,25 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
   readonly totalPageViews: number;
   readonly visitsHref: (path: string) => string;
+  readonly filterOf?: (path: string) => RowFilter | null;
   readonly i18n: I18n;
 }
 
-export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPagesTableProps) {
+const NO_ROW_FILTER = () => null;
+
+export function TopPagesTable({
+  pages,
+  totalPageViews,
+  visitsHref,
+  filterOf = NO_ROW_FILTER,
+  i18n,
+}: TopPagesTableProps) {
   const mostViews = Math.max(0, ...pages.map((page) => page.views));
   return (
     <section aria-labelledby="top-pages-heading" className={PANEL}>
@@ -65,6 +75,7 @@ export function TopPagesTable({ pages, totalPageViews, visitsHref, i18n }: TopPa
                       href={visitsHref(page.path)}
                       label={page.path}
                       purpose={i18n.t('visitsLink.purpose')}
+                      filter={filterOf(page.path)}
                     />
                   </th>
                   <td className={`${BODY_CELL} text-right`}>

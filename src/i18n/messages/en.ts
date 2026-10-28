@@ -913,6 +913,11 @@ export const en = {
       previousDaysUntil: 'vs. previous {days} days, same filters, until {time}',
     },
   },
+  rowFilter: {
+    add: 'Filter by {value}',
+    title: 'Filter every screen by {value}',
+    remove: 'Remove filter {value}',
+  },
   dashboardFilters: {
     label: 'Filters',
     removeAll: 'Remove filters',

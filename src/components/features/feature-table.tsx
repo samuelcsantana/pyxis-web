@@ -1,6 +1,7 @@
 import type { FeatureKind, FeatureRow } from '@/domain/features';
 import type { I18n } from '@/i18n/i18n';
 import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/panel-classes';
 import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
@@ -10,6 +11,7 @@ export interface FeatureTableProps {
   readonly rows: readonly FeatureRow[];
   readonly query: string;
   readonly visitsHref: (name: string) => string;
+  readonly filterOf?: (name: string) => RowFilter | null;
   readonly loadProperties?: LoadProperties;
   readonly i18n: I18n;
 }
@@ -25,16 +27,18 @@ interface TableRowProps {
   readonly row: FeatureRow;
   readonly visitsHref: string;
   readonly visitsPurpose: string;
+  readonly filter: RowFilter | null;
   readonly loadProperties: LoadProperties | undefined;
 }
 
-function TableRow({ kind, row, visitsHref, visitsPurpose, loadProperties }: TableRowProps) {
+function TableRow({ kind, row, visitsHref, visitsPurpose, filter, loadProperties }: TableRowProps) {
   if (kind === 'events' && loadProperties !== undefined) {
     return (
       <ExpandableFeatureRow
         row={row}
         visitsHref={visitsHref}
         visitsPurpose={visitsPurpose}
+        filter={filter}
         loadProperties={loadProperties}
       />
     );
@@ -46,16 +50,20 @@ function TableRow({ kind, row, visitsHref, visitsPurpose, loadProperties }: Tabl
         row={row}
         visitsHref={visitsHref}
         visitsPurpose={visitsPurpose}
+        filter={filter}
       />
     </tr>
   );
 }
+
+const NO_ROW_FILTER = () => null;
 
 export function FeatureTable({
   kind,
   rows,
   query,
   visitsHref,
+  filterOf = NO_ROW_FILTER,
   loadProperties,
   i18n,
 }: FeatureTableProps) {
@@ -98,6 +106,7 @@ export function FeatureTable({
                   kind={kind}
                   row={row}
                   visitsHref={visitsHref(row.name)}
+                  filter={filterOf(row.name)}
                   visitsPurpose={i18n.t('visitsLink.purpose')}
                   loadProperties={loadProperties}
                 />

@@ -1,4 +1,6 @@
 import { EngagementPanels } from '@/components/features/engagement-panels';
+import { screenRowFilters } from '@/lib/row-filters';
+import { eventLabel } from '@/domain/metrics';
 import { FeatureSearch } from '@/components/features/feature-search';
 import { FeatureTable } from '@/components/features/feature-table';
 import { FeatureTabs } from '@/components/features/feature-tabs';
@@ -58,6 +60,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
     ]);
   });
   const filteredQuery = withDashboardFilters(periodQuery(period), filters);
+  const rowFilter = screenRowFilters(project.id, 'features', search, filters, i18n);
   const basePath = screenHref(project.id, 'features');
   const kindHref = (target: FeatureKind) =>
     `${basePath}?${withKeptParameters(filteredQuery, { kind: target })}`;
@@ -97,6 +100,11 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
               screenHref(project.id, 'visits', filteredQuery),
               kind === 'events' ? { event: name } : { path: name },
             )
+          }
+          filterOf={(name) =>
+            kind === 'events'
+              ? rowFilter({ event: name }, eventLabel(name))
+              : rowFilter({ path: name }, name)
           }
           loadProperties={
             kind === 'events'

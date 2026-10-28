@@ -109,9 +109,49 @@ describe('DevicesPage', () => {
     expect(
       within(deviceTypes).getByRole('link', { name: 'Mobile: see its visits' }),
     ).toHaveAttribute('href', '/p-store/visits?range=30d&device=mobile');
-    expect(within(deviceTypes).getAllByRole('link')).toHaveLength(3);
+    expect(within(deviceTypes).getAllByRole('link', { name: /see its visits$/ })).toHaveLength(3);
+    expect(within(deviceTypes).getAllByRole('link', { name: /^Filter by / })).toHaveLength(3);
     expect(within(deviceTypes).getByRole('rowheader', { name: 'watch' })).toBeInTheDocument();
-    expect(within(screen.getByRole('table', { name: 'Browser' })).queryByRole('link')).toBeNull();
+  });
+
+  it('adds a filter button after each name, which filters every screen or removes it', async () => {
+    renderWithMessages(await renderDevices('p-store', { country: 'BR' }));
+
+    const browsers = screen.getByRole('table', { name: 'Browser' });
+    const safari = within(browsers).getByRole('link', { name: 'Filter by Safari' });
+    expect(safari).toHaveAttribute('href', '/p-store/devices?range=30d&browser=safari&country=BR');
+    expect(safari).toHaveAttribute('title', 'Filter every screen by Safari');
+    expect(within(browsers).getByRole('link', { name: 'Safari: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=30d&country=BR&browser=safari',
+    );
+    expect(
+      within(screen.getByRole('table', { name: 'Countries' })).getByRole('link', {
+        name: 'Remove filter Brazil',
+      }),
+    ).toHaveAttribute('href', '/p-store/devices?range=30d');
+  });
+
+  it('gives no button to an aggregate row', async () => {
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      const other = { value: 'other', visits: 1, conversions: 0, convertingVisits: 0 };
+      const unknown = { ...other, value: 'netscape' };
+      return {
+        ...report,
+        deviceTypes: [...report.deviceTypes, other],
+        browsers: [...report.browsers, other, unknown],
+        operatingSystems: [other],
+      };
+    };
+
+    renderWithMessages(await renderDevices());
+
+    expect(screen.queryByRole('link', { name: 'Filter by Other' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Filter by netscape' })).toBeNull();
+    expect(
+      within(screen.getByRole('table', { name: 'Operating system' })).queryByRole('link'),
+    ).toBeNull();
   });
 
   it('links each country to its visits, in the same period, and leaves the rest unlinked', async () => {

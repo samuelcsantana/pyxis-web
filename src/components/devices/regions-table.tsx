@@ -9,31 +9,46 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 export interface RegionsTableProps {
   readonly rows: readonly RegionRow[];
   readonly withConversionRate?: boolean;
   readonly visitsHref?: (region: string) => string | null;
+  readonly filterOf?: (region: string) => RowFilter | null;
   readonly i18n: I18n;
 }
 
 const NO_VISITS_LINK = () => null;
+const NO_ROW_FILTER = () => null;
 
 interface RegionNameProps {
   readonly row: RegionRow;
   readonly visitsHref: (region: string) => string | null;
+  readonly filterOf: (region: string) => RowFilter | null;
   readonly purpose: string;
 }
 
-function RegionName({ row, visitsHref, purpose }: RegionNameProps) {
+function RegionName({ row, visitsHref, filterOf, purpose }: RegionNameProps) {
   const href = row.filterValue === null ? null : visitsHref(row.filterValue);
-  return href === null ? row.label : <VisitsLink href={href} label={row.label} purpose={purpose} />;
+  if (href === null || row.filterValue === null) {
+    return row.label;
+  }
+  return (
+    <VisitsLink
+      href={href}
+      label={row.label}
+      purpose={purpose}
+      filter={filterOf(row.filterValue)}
+    />
+  );
 }
 
 export function RegionsTable({
   rows,
   withConversionRate = false,
   visitsHref = NO_VISITS_LINK,
+  filterOf = NO_ROW_FILTER,
   i18n,
 }: RegionsTableProps) {
   const showsConversionRate = withConversionRate && countsConversions(rows);
@@ -80,6 +95,7 @@ export function RegionsTable({
                       <RegionName
                         row={row}
                         visitsHref={visitsHref}
+                        filterOf={filterOf}
                         purpose={i18n.t('visitsLink.purpose')}
                       />
                       {row.country === null ? null : (

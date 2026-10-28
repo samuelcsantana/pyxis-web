@@ -9,6 +9,7 @@ import { propertyFilterOf } from '@/domain/visit-property';
 import { linkWith } from '@/components/shell/screens';
 import { BUTTON_ICON } from '@/components/ui/control-classes';
 import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 import { useT } from '@/i18n/messages-provider';
 import { FEATURE_COLUMNS, FeatureRowCells } from './feature-row-cells';
 import { PropertyBreakdown, type PropertyBreakdownState } from './property-breakdown';
@@ -21,6 +22,7 @@ export interface ExpandableFeatureRowProps {
   readonly row: FeatureRow;
   readonly visitsHref: string;
   readonly visitsPurpose: string;
+  readonly filter?: RowFilter | null;
   readonly loadProperties: LoadProperties;
 }
 
@@ -38,6 +40,7 @@ export function ExpandableFeatureRow({
   row,
   visitsHref,
   visitsPurpose,
+  filter = null,
   loadProperties,
 }: ExpandableFeatureRowProps) {
   const t = useT();
@@ -83,6 +86,7 @@ export function ExpandableFeatureRow({
           row={row}
           visitsHref={visitsHref}
           visitsPurpose={visitsPurpose}
+          filter={filter}
           disclosure={
             <button
               type="button"
