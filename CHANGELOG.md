@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.41.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.40.1...v0.41.0) (2026-10-28)
+
+
+### Features
+
+* **account:** close Account and billing with the support address ([2f3d0ed](https://github.com/samuelcsantana/pyxis-web/commit/2f3d0ede206a7a565a76cb1ddbe88c21e7b7e103))
+* **help:** add the Help and support page ([aaee1e0](https://github.com/samuelcsantana/pyxis-web/commit/aaee1e0f542dc88076fe5e7cccbb39a4dbe2b5c6))
+* **landing:** give the support address and reply times in the footer and the FAQ ([dbf45fd](https://github.com/samuelcsantana/pyxis-web/commit/dbf45fdb5fb69b1a7d4dd7773ad630a7496d3769))
+* **landing:** tell agents in llms.txt where to send a person who needs help ([59f8ff7](https://github.com/samuelcsantana/pyxis-web/commit/59f8ff7e45968b4c030e8f29b3808cc7abb5db77))
+* **sign-in:** name the support address when a code does not arrive ([96d945d](https://github.com/samuelcsantana/pyxis-web/commit/96d945d93ef19cc1eae65e845c1da525e1b81ab8))
+
+
+### Refactoring
+
+* **shell:** keep the install address with the other screen addresses ([5553999](https://github.com/samuelcsantana/pyxis-web/commit/55539991e8f658e6dc6babbddb994fee2f023a0f))
+
+
+### Documentation
+
+* **readme:** describe the help page and where the support address shows ([8a775f0](https://github.com/samuelcsantana/pyxis-web/commit/8a775f09208663db4549d38b6edb9b66a8bb9387))
+* **readme:** note the support channels on the home page and in llms.txt ([e19bbdb](https://github.com/samuelcsantana/pyxis-web/commit/e19bbdb48ee6f5be8b5db3a4615963ab6b85d76c))
+
 ## [0.40.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.40.0...v0.40.1) (2026-10-28)
 
 
