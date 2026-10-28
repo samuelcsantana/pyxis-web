@@ -210,19 +210,32 @@ Shipping now:
   count, first named events, failed requests (reads and writes), device and place (region and
   country, or the country alone), channel and account; filters for the pages it viewed (up to
   three, `*` matching any characters), an event with an optional `key=value` property, the
-  channel, the device, identified or anonymous visitors, the country, the region (`BR-SP`), the
+  channel, the device, the browser, the system, identified or anonymous visitors, the country,
+  the region (`BR-SP`), the
   source and campaign (as Acquisition names them), a request it made (`POST /orders/:id`) and
   whether it had a failed request, all kept in the URL, with the number
   of matching visits above the list; on a phone the filters fold behind a "Filters · 2 active"
   button, open when some are in use or were left out, and each visit is a card with every
   column; each row opens its visit, and an identified one its person, in the Timeline
+- Filters on every screen: the Visits filters but the request route, plus the browser and the
+  system, kept in the URL and sent to every report but the Timeline, each one selecting whole
+  visits (a visit that viewed `/pricing` counts with all its events); the sidebar, the period, the
+  tabs, the searches, the drill-downs into Visits and the CSV files keep them, and the Timeline
+  drops them. A filtered screen shows them as chips under the top bar ("Filters", each chip
+  removable, "Remove filters"), sticking with the top bar from `lg`; its KPI changes compare with
+  the previous period "same filters", its chart captions name the filters, an empty filtered
+  period says "No visits match these filters" instead of the install guide, and the news bar and
+  the "+N" and "New" marks pause while a filter is on ("N on the site now" and the menu counts
+  stay). The chips are a parallel route slot (`@filters`) of the screens layout, drawn on the
+  server, so they add no client code
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity
   per day (with every daily figure of its cards), top pages and top events; the routes of
   Requests (writes or failed reads); the Features ranking (events or screens, search kept); the
   Acquisition sources, campaigns and visits per day by channel; every Devices breakdown in one
   file, named in a `dimension` column; and the newest 1,000 visits matching the Visits filters, read page
   after page on the server. The file is named after the screen, the table and the dates
-  (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`), starts with a UTF-8 byte order mark so
+  (`pyxis-overview-pages-2026-09-08-2026-10-07.csv`, ending in `-filtered` under filters), starts
+  with a UTF-8 byte order mark so
   spreadsheets read accents, and keeps a spreadsheet from running a cell as a formula: a text cell
   that starts with `=`, `+`, `-`, `@`, a tab or a carriage return gets a leading apostrophe
 - News on the menu: each screen's item counts what arrived since that screen was last read on this
@@ -584,6 +597,10 @@ origin the sign-in and sign-out calls carry.
 | `/[projectId]/visits/export`                                                   | A CSV file of the newest 1,000 visits matching the Visits screen's period and filters                                                                                                                                                                                                        |
 | `/[projectId]/icon`                                                            | The icon of the project's site, cached privately for a day (`?v=` changes with the icon); 404 when the site has none                                                                                                                                                                         |
 | `/[projectId]/arrivals`                                                        | JSON for the menu's counts: what arrived in the period (`range` or `from`/`to`) since `?since=`, never cached; an expired session, an unknown project and the API's limit answer 401, 404 and 429                                                                                            |
+
+Every screen route but the Timeline also reads the dashboard filters (`path`, `path2`, `path3`,
+`event`, `property`, `channel`, `device`, `browser`, `os`, `identity`, `country`, `region`,
+`source`, `campaign`, `failed`) and sends them to the API's report, and so do their CSV exports.
 
 `src/proxy.ts` sends a visitor without a session cookie to `/sign-in`; the API still decides
 whether the session is valid, and a rejected one lands on `/sign-in?expired=1`. Static files never
