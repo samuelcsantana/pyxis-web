@@ -545,8 +545,8 @@ Next.js 16 (App Router) · React 19 · TypeScript 6 (strict) · Tailwind CSS 4 �
 `next/font` · Zod for API answers, on the server only (the schemas live in
 `src/domain/*.schema.ts`, and ESLint keeps Zod and those modules out of `src/components`) · [rx-state-bridge](https://github.com/samuelcsantana/rx-state-bridge)
 with RxJS for the few requests a Client Component starts · charts drawn as SVG on the server, each with a
-table view ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)) · Vitest
-and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
+table view ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)) · Vitest,
+fast-check and Testing Library · Playwright with axe-core · Storybook 10 · Vercel · GitHub Actions with
 CodeQL, OpenSSF Scorecard, Dependabot, Codecov and release-please.
 
 ## Getting started
@@ -707,6 +707,22 @@ below it. Excluded, and why:
 
 The root layout is covered too: its test calls the server component and checks the document it
 returns.
+
+Property-based tests, `src/domain/*.property.test.ts`, check the rules of pure domain functions
+over generated inputs with [fast-check](https://fast-check.dev/), next to the example-based tests
+of the same module:
+
+| Module                   | Rule checked over generated inputs                                                                                                                                                                 |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `csv.ts`                 | No text cell reaches a spreadsheet starting with `=`, `+`, `-`, `@`, a tab or a carriage return; every field reads back through a strict RFC 4180 reader; one record per row, one field per column |
+| `chart-scale.ts`         | The axis climbs from zero in at most five equal whole steps to the first step at or above the highest value; `plotY` keeps a value within the axis inside the plot, in order                       |
+| `donut.ts`               | The arcs go round the circle once, each starting where the previous one ended, to the hundredth they are written in                                                                                |
+| `identifier-segments.ts` | The segments join back into the text, none is empty, and every cut falls right after a separator                                                                                                   |
+
+They run with the unit tests, under one fixed seed and run count (`src/test-utils/property-run.ts`),
+so CI and the pre-commit hook see the same inputs; a failure prints the counterexample, shrunk to
+the smallest input that breaks the rule. fast-check is a dev dependency and never reaches the
+browser bundle.
 
 Tests run in English: the Vitest setup file replaces `currentLocale()`, the only code that reads
 the request's language, so a test never needs request headers to render a page. Domain functions
