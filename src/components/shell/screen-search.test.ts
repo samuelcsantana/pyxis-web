@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
 import type { FeatureSearch } from '@/domain/features';
 import type { FunnelSearch } from '@/domain/funnel';
 import { SEGMENT_PARAMETER } from '@/domain/funnel-segments';
@@ -7,7 +8,6 @@ import { METRIC_PARAMETER } from '@/domain/overview-chart';
 import type { RequestsSearch } from '@/domain/requests';
 import type { VisitsSearch } from '@/domain/visits';
 import { CARRIED_PARAMETERS, carriedParameters, screenSearchOf } from './screen-search';
-import { SCREENS } from './screens';
 
 function namesOf(search: object): ReadonlySet<string> {
   return new Set(Object.keys(search));
@@ -83,20 +83,35 @@ describe('carriedParameters', () => {
 });
 
 describe('the parameters each screen carries to another period', () => {
+  const dashboardFilters = new Set<string>(DASHBOARD_FILTER_PARAMETERS);
+
   it.each([
     ['overview', EVERY_OVERVIEW_FILTER],
     ['funnel', EVERY_FUNNEL_FILTER_A_PERIOD_KEEPS],
     ['features', EVERY_FEATURES_FILTER],
     ['requests', EVERY_REQUESTS_FILTER],
     ['visits', EVERY_VISITS_FILTER],
-  ] as const)('are every filter the %s page reads', (screen, filters) => {
-    expect(new Set(CARRIED_PARAMETERS[screen])).toEqual(namesOf(filters));
+  ] as const)(
+    'are every filter the %s page reads, the dashboard filters among them',
+    (screen, filters) => {
+      expect(new Set(CARRIED_PARAMETERS[screen])).toEqual(
+        new Set([...namesOf(filters), ...dashboardFilters]),
+      );
+    },
+  );
+
+  it('are the dashboard filters alone on Devices and Acquisition', () => {
+    expect(new Set(CARRIED_PARAMETERS.devices)).toEqual(dashboardFilters);
+    expect(new Set(CARRIED_PARAMETERS.acquisition)).toEqual(dashboardFilters);
   });
 
-  it('are none on the screens without filters', () => {
-    const withFilters = new Set(['overview', 'funnel', 'features', 'requests', 'visits']);
-    for (const { slug } of SCREENS.filter((screen) => !withFilters.has(screen.slug))) {
-      expect(CARRIED_PARAMETERS[slug]).toEqual([]);
-    }
+  it('are none on the timeline, which no filter selects', () => {
+    expect(CARRIED_PARAMETERS.timeline).toEqual([]);
+  });
+
+  it('keep a filter across a change of period', () => {
+    expect(
+      carriedParameters('devices', screenSearchOf(new URLSearchParams('range=7d&os=ios&q=x'))),
+    ).toEqual({ os: 'ios' });
   });
 });

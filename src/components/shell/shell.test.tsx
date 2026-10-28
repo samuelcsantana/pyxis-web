@@ -13,6 +13,7 @@ import { MainContent } from './main-content';
 import {
   linkWith,
   periodParameters,
+  screenParameters,
   returnPathOf,
   screenHref,
   screenOf,
@@ -64,6 +65,13 @@ describe('screens helpers', () => {
       'range=7d&from=a&to=b',
     );
     expect(periodParameters(new URLSearchParams('tab=x'))).toBe('');
+  });
+
+  it('keep the period and the dashboard filters for a screen, but no filter for the timeline', () => {
+    const search = new URLSearchParams('range=7d&device=mobile&path=%2Fa&metric=x&os=');
+
+    expect(screenParameters(search, 'devices')).toBe('range=7d&path=%2Fa&device=mobile');
+    expect(screenParameters(search, 'timeline')).toBe('range=7d');
   });
 
   it('build screen links with or without a query', () => {

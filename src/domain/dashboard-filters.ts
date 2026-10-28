@@ -1,4 +1,9 @@
 import type { I18n } from '@/i18n/i18n';
+import {
+  DASHBOARD_FILTER_PARAMETERS,
+  type DashboardFilterParameter,
+  PAGE_FILTER_PARAMETERS,
+} from './dashboard-filter-parameters';
 import { type Channel, CHANNELS } from './acquisition';
 import { isRegionCode } from './devices';
 import { stepProblem } from './funnel';
@@ -8,7 +13,6 @@ import {
   PROPERTY_SEPARATOR,
 } from './visit-property';
 
-export const PAGE_FILTER_PARAMETERS = ['path', 'path2', 'path3'] as const;
 export const VISIT_DEVICE_TYPES = ['mobile', 'tablet', 'desktop', 'other'] as const;
 export type VisitDeviceType = (typeof VISIT_DEVICE_TYPES)[number];
 export const VISIT_IDENTITIES = ['identified', 'anonymous'] as const;
@@ -33,28 +37,12 @@ export const OS_FAMILIES = [
   'other',
 ] as const;
 export type OsFamily = (typeof OS_FAMILIES)[number];
+export { DASHBOARD_FILTER_PARAMETERS, PAGE_FILTER_PARAMETERS };
+export type { DashboardFilterParameter };
 export const MAX_SOURCE_LENGTH = 128;
 export const MAX_CAMPAIGN_LENGTH = 64;
 export const COUNTRY_CODE_PATTERN = /^[A-Z]{2}$/;
 export const FAILED_ONLY = 'true';
-
-export const DASHBOARD_FILTER_PARAMETERS = [
-  ...PAGE_FILTER_PARAMETERS,
-  'event',
-  'property',
-  'channel',
-  'device',
-  'browser',
-  'os',
-  'identity',
-  'country',
-  'region',
-  'source',
-  'campaign',
-  'failed',
-] as const;
-
-export type DashboardFilterParameter = (typeof DASHBOARD_FILTER_PARAMETERS)[number];
 
 export type DashboardSearch = Readonly<
   Partial<Record<DashboardFilterParameter, string | string[]>>

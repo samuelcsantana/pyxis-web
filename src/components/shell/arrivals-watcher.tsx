@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { type ArrivalsReport, isCappedArrivalCount } from '@/domain/arrivals';
+import { hasDashboardFilterIn } from '@/domain/dashboard-filter-parameters';
 import { resolvePeriodOn, todayIn } from '@/domain/period';
 import { useT } from '@/i18n/messages-provider';
 import { arrivalsHref, SINCE_PARAMETER } from '@/lib/arrivals-href';
@@ -76,6 +77,7 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
   const current = screenSlugOf(pathname);
   const { from, to } = resolvePeriodOn(screenSearchOf(search), today);
   const includesToday = to >= today;
+  const filtered = hasDashboardFilterIn(search);
   const store = useMemo(() => createSeenStore(projectId), [projectId]);
   const freshMarks = useMemo(
     () => createFreshMarks(createShownNumbersStore(projectId)),
@@ -163,8 +165,10 @@ export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: Arri
         ? { report, marks: store.marks(Date.now()), current, label }
         : undefined;
     publishArrivalNews(counting === undefined ? NO_NEWS : arrivalNewsOf(counting));
-    publishOpenScreenNews(counting === undefined ? undefined : openScreenNewsOf(counting));
-  }, [report, marksVersion, current, includesToday, store, label]);
+    publishOpenScreenNews(
+      counting === undefined || filtered ? undefined : openScreenNewsOf(counting),
+    );
+  }, [report, marksVersion, current, includesToday, filtered, store, label]);
 
   useEffect(() => {
     publishActiveVisits(includesToday ? report?.activeVisits : undefined);
