@@ -2221,7 +2221,12 @@ export const fr = translation({
         payment: {
           question: 'Puis-je payer par Pix, et y a-t-il une facture ?',
           answer:
-            'Pour l’instant, uniquement par carte ; Pix pour la formule annuelle dépend de son activation par Stripe. Les factures brésiliennes (nota fiscal) ne sont pas encore émises : si vous en avez besoin, écrivez-nous avant de vous abonner.',
+            'Pour l’instant, uniquement par carte ; Pix pour la formule annuelle dépend de son activation par Stripe. Les factures brésiliennes (nota fiscal) ne sont pas encore émises : si vous en avez besoin, écrivez-nous à {email} avant de vous abonner.',
+        },
+        support: {
+          question: 'Comment contacter l’assistance ?',
+          answer:
+            'Par e-mail, à {email}, de préférence depuis l’e-mail de votre compte. Avec la formule payante, nous répondons sous {paidDays} jours ouvrés. Avec la formule gratuite, les questions d’installation et d’utilisation passent par les issues GitHub et la documentation ; le contrat, la formule, ses limites, la facturation et les données personnelles restent par e-mail, avec une réponse sous {freeDays} jours. Pour signaler une faille de sécurité, utilisez le signalement privé de GitHub.',
         },
       },
     },
@@ -2257,7 +2262,11 @@ export const fr = translation({
       product: 'Produit',
       pricing: 'Tarifs',
       code: 'Code',
-      author: 'Auteur',
+      support: 'Assistance',
+      supportReply: 'Réponse sous {days} jours ouvrés avec la formule payante.',
+      questions: 'Questions sur GitHub',
+      securityReport: 'Signaler une faille de sécurité',
+      author: 'Auteur : {site}',
       demo: 'Démo en direct',
       apiReference: 'Référence de l’API',
       playground: 'Bac à sable du SDK',

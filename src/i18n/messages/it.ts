@@ -2202,7 +2202,12 @@ export const it = translation({
         payment: {
           question: 'Posso pagare con Pix, e c’è una fattura?',
           answer:
-            'Per ora solo con carta; Pix per il piano annuale dipende dall’attivazione da parte di Stripe. Le fatture brasiliane (nota fiscal) non vengono ancora emesse: se te ne serve una, scrivici prima di abbonarti.',
+            'Per ora solo con carta; Pix per il piano annuale dipende dall’attivazione da parte di Stripe. Le fatture brasiliane (nota fiscal) non vengono ancora emesse: se te ne serve una, scrivici a {email} prima di abbonarti.',
+        },
+        support: {
+          question: 'Come contatto l’assistenza?',
+          answer:
+            'Via email, a {email}, preferibilmente dall’email del tuo account. Nel piano a pagamento rispondiamo entro {paidDays} giorni lavorativi. Nel piano gratuito, le domande su installazione e uso passano dalle issue di GitHub e dalla documentazione; contratto, piano, limiti, fatturazione e dati personali restano via email, con risposta entro {freeDays} giorni. Per segnalare una falla di sicurezza, usa la segnalazione privata di GitHub.',
         },
       },
     },
@@ -2238,7 +2243,11 @@ export const it = translation({
       product: 'Prodotto',
       pricing: 'Prezzi',
       code: 'Codice',
-      author: 'Autore',
+      support: 'Assistenza',
+      supportReply: 'Risposta entro {days} giorni lavorativi nel piano a pagamento.',
+      questions: 'Domande su GitHub',
+      securityReport: 'Segnala una falla di sicurezza',
+      author: 'Autore: {site}',
       demo: 'Demo live',
       apiReference: 'Riferimento API',
       playground: 'Playground dell’SDK',

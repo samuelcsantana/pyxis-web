@@ -2198,7 +2198,12 @@ export const nl = translation({
         payment: {
           question: 'Kan ik met Pix betalen, en krijg ik een factuur?',
           answer:
-            'Voorlopig alleen met een kaart; Pix voor het jaarabonnement hangt ervan af of Stripe het inschakelt. Braziliaanse facturen (nota fiscal) worden nog niet uitgegeven: heb je er een nodig, mail dan voordat je je abonneert.',
+            'Voorlopig alleen met een kaart; Pix voor het jaarabonnement hangt ervan af of Stripe het inschakelt. Braziliaanse facturen (nota fiscal) worden nog niet uitgegeven: heb je er een nodig, mail dan naar {email} voordat je je abonneert.',
+        },
+        support: {
+          question: 'Hoe bereik ik de support?',
+          answer:
+            'Per e-mail, via {email}, het liefst vanaf het e-mailadres van je account. Bij het betaalde abonnement antwoorden we binnen {paidDays} werkdagen. Bij het gratis abonnement lopen vragen over installatie en gebruik via de issues op GitHub en de documentatie; het contract, het abonnement, de limieten, facturatie en persoonsgegevens blijven per e-mail, met een antwoord binnen {freeDays} dagen. Meld een beveiligingslek vertrouwelijk via GitHub.',
         },
       },
     },
@@ -2233,7 +2238,11 @@ export const nl = translation({
       product: 'Product',
       pricing: 'Prijzen',
       code: 'Code',
-      author: 'Auteur',
+      support: 'Support',
+      supportReply: 'Antwoord binnen {days} werkdagen bij het betaalde abonnement.',
+      questions: 'Vragen op GitHub',
+      securityReport: 'Beveiligingslek melden',
+      author: 'Auteur: {site}',
       demo: 'Livedemo',
       apiReference: 'API-referentie',
       playground: 'SDK-playground',

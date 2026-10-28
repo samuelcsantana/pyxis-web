@@ -2222,7 +2222,12 @@ export const de = translation({
         payment: {
           question: 'Kann ich per Pix zahlen, und gibt es eine Rechnung?',
           answer:
-            'Derzeit nur per Karte; Pix für den Jahresplan hängt davon ab, dass Stripe es freischaltet. Brasilianische Rechnungen (Nota Fiscal) werden noch nicht ausgestellt: Wenn du eine brauchst, schreib uns vor dem Abschluss.',
+            'Derzeit nur per Karte; Pix für den Jahresplan hängt davon ab, dass Stripe es freischaltet. Brasilianische Rechnungen (Nota Fiscal) werden noch nicht ausgestellt: Wenn du eine brauchst, schreib uns vor dem Abschluss an {email}.',
+        },
+        support: {
+          question: 'Wie erreiche ich den Support?',
+          answer:
+            'Per E-Mail an {email}, am besten von der E-Mail-Adresse deines Kontos. Im kostenpflichtigen Tarif antworten wir innerhalb von {paidDays} Werktagen. Im kostenlosen Tarif laufen Fragen zu Installation und Nutzung über die GitHub-Issues und die Dokumentation; Vertrag, Tarif, Limits, Abrechnung und personenbezogene Daten bleiben bei der E-Mail, mit einer Antwort innerhalb von {freeDays} Tagen. Eine Sicherheitslücke meldest du vertraulich über GitHub.',
         },
       },
     },
@@ -2259,7 +2264,11 @@ export const de = translation({
       product: 'Produkt',
       pricing: 'Preise',
       code: 'Code',
-      author: 'Autor',
+      support: 'Support',
+      supportReply: 'Antwort innerhalb von {days} Werktagen im kostenpflichtigen Tarif.',
+      questions: 'Fragen auf GitHub',
+      securityReport: 'Sicherheitslücke melden',
+      author: 'Autor: {site}',
       demo: 'Live-Demo',
       apiReference: 'API-Referenz',
       playground: 'SDK-Playground',

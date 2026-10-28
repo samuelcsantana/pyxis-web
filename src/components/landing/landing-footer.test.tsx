@@ -18,7 +18,7 @@ const SELLER = {
 };
 
 describe('LandingFooter', () => {
-  it('lists the product, the code and the author, each with its address', () => {
+  it('lists the product, the code and the support, each with its address', () => {
     render(<LandingFooter i18n={english} />);
 
     expect(linksUnder('Product')).toEqual([
@@ -34,10 +34,21 @@ describe('LandingFooter', () => {
       ['pyxis-web', 'https://github.com/samuelcsantana/pyxis-web'],
       ['npm', 'https://www.npmjs.com/package/pyxis-analytics'],
     ]);
-    expect(linksUnder('Author')).toEqual([
-      ['samuelsantana.dev', 'https://www.samuelsantana.dev'],
+    expect(linksUnder('Support')).toEqual([
       ['hello@pyxis-analytics.dev', 'mailto:hello@pyxis-analytics.dev'],
+      [
+        'Questions on GitHub',
+        'https://github.com/samuelcsantana/pyxis-sdk/issues/new?template=question.yml',
+      ],
+      [
+        'Report a security flaw',
+        'https://github.com/samuelcsantana/pyxis-api/security/advisories/new',
+      ],
+      ['Author: samuelsantana.dev', 'https://www.samuelsantana.dev'],
     ]);
+    expect(
+      screen.getByText('Replies within 2 business days on the paid plan.'),
+    ).toBeInTheDocument();
   });
 
   it('shows the measurement note it is given beside the credits', () => {

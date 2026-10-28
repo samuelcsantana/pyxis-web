@@ -2185,7 +2185,12 @@ export const es = translation({
         payment: {
           question: '¿Hay Pix o factura?',
           answer:
-            'Por ahora, solo con tarjeta; el Pix para el plan anual depende de que Stripe lo habilite. Todavía no se emite factura brasileña (nota fiscal): si la necesitas, escribe antes de suscribirte.',
+            'Por ahora, solo con tarjeta; el Pix para el plan anual depende de que Stripe lo habilite. Todavía no se emite factura brasileña (nota fiscal): si la necesitas, escribe a {email} antes de suscribirte.',
+        },
+        support: {
+          question: '¿Cómo contacto con el soporte?',
+          answer:
+            'Por correo, en {email}, preferiblemente desde el correo de tu cuenta. En el plan de pago, respondemos en hasta {paidDays} días hábiles. En el plan gratis, las dudas de instalación y de uso van por las issues de GitHub y por la documentación; el contrato, el plan, sus límites, la facturación y los datos personales siguen por correo, con respuesta en hasta {freeDays} días. Para informar un fallo de seguridad, usa el informe privado de GitHub.',
         },
       },
     },
@@ -2220,7 +2225,11 @@ export const es = translation({
       product: 'Producto',
       pricing: 'Precio',
       code: 'Código',
-      author: 'Autor',
+      support: 'Soporte',
+      supportReply: 'Respuesta en hasta {days} días hábiles en el plan de pago.',
+      questions: 'Preguntas en GitHub',
+      securityReport: 'Informar un fallo de seguridad',
+      author: 'Autor: {site}',
       demo: 'Demo en vivo',
       apiReference: 'Referencia de la API',
       playground: 'Playground del SDK',
