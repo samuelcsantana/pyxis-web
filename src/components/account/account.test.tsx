@@ -37,6 +37,7 @@ const ACCOUNT: Account = {
   freePlanFitDueAt: null,
   projectCount: 1,
   peopleCount: 1,
+  boundByFreePlanTerms: true,
   month: '2026-11',
   eventsThisMonth: 41_230,
   measuredAt: '2026-11-20T03:00:00.000Z',

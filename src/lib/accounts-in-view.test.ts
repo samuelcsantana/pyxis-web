@@ -29,6 +29,7 @@ const ENDING: Account = {
   freePlanFitDueAt: null,
   projectCount: 1,
   peopleCount: 1,
+  boundByFreePlanTerms: true,
   month: '2026-11',
   eventsThisMonth: 10,
   measuredAt: null,

@@ -69,6 +69,7 @@ export function afterCancelling(
     account.role !== 'owner' ||
     !CANCELLABLE.has(account.status) ||
     !isFreePlanOn(freePlan) ||
+    account.boundByFreePlanTerms !== true ||
     ownsAnotherFreeAccount
   ) {
     return null;

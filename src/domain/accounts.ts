@@ -50,6 +50,7 @@ export interface Account {
   readonly freePlanFitDueAt: string | null;
   readonly projectCount: number | null;
   readonly peopleCount: number | null;
+  readonly boundByFreePlanTerms: boolean | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
