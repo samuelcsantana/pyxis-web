@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.40.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.40.0...v0.40.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* **landing:** count the sixteen tools of the Claude connector ([a9f9653](https://github.com/samuelcsantana/pyxis-web/commit/a9f9653bc10aff86881689d795116278d5c95d2f))
+
 ## [0.40.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.39.0...v0.40.0) (2026-10-28)
 
 
