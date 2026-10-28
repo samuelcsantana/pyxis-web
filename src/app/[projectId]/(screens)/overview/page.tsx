@@ -45,6 +45,8 @@ import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
+import { type RowFilterOf, screenRowFilters } from '@/lib/row-filters';
+import { eventLabel } from '@/domain/metrics';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
 
 export const generateMetadata = screenMetadata('overview');
@@ -78,6 +80,7 @@ interface OverviewReportViewProps {
   readonly periodLabel: string;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
+  readonly rowFilter: RowFilterOf;
   readonly i18n: I18n;
 }
 
@@ -101,6 +104,7 @@ function OverviewReportView({
   periodLabel,
   filteredHref,
   downloads,
+  rowFilter,
   i18n,
 }: OverviewReportViewProps) {
   const visitsHref = (filter: Readonly<Record<string, string>>) => filteredHref('visits', filter);
@@ -132,11 +136,13 @@ function OverviewReportView({
           pages={report.topPages}
           totalPageViews={activityTotals(report.days).pageViews}
           visitsHref={(path) => visitsHref({ path })}
+          filterOf={(path) => rowFilter({ path }, path)}
           i18n={i18n}
         />
         <TopEventsList
           events={report.topEvents}
           visitsHref={(name) => visitsHref({ event: name })}
+          filterOf={(name) => rowFilter({ event: name }, eventLabel(name))}
           i18n={i18n}
         />
       </div>
@@ -188,6 +194,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
           filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}
           downloads={overviewDownloads(project.id, query, i18n)}
+          rowFilter={screenRowFilters(project.id, 'overview', search, filters, i18n)}
           i18n={i18n}
         />
       ) : filtered ? (

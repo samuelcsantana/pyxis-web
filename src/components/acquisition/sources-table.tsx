@@ -10,6 +10,7 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 import { CHANNEL_COLORS } from './channel-colors';
 import { ConversionCells, ConversionColumns } from './conversion-columns';
 
@@ -18,12 +19,18 @@ export interface SourcesTableProps {
   readonly channelVisitsHref: (channel: Channel) => string;
   readonly i18n: I18n;
   readonly sourceVisitsHref: (source: string) => string;
+  readonly sourceFilterOf?: (row: SourceRow) => RowFilter | null;
+  readonly channelFilterOf?: (channel: Channel) => RowFilter | null;
 }
+
+const NO_ROW_FILTER = () => null;
 
 export function SourcesTable({
   rows,
   channelVisitsHref,
   sourceVisitsHref,
+  sourceFilterOf = NO_ROW_FILTER,
+  channelFilterOf = NO_ROW_FILTER,
   i18n,
 }: SourcesTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
@@ -71,12 +78,14 @@ export function SourcesTable({
                           href={sourceVisitsHref(row.source)}
                           label={row.label}
                           purpose={i18n.t('visitsLink.purpose')}
+                          filter={sourceFilterOf(row)}
                         />
                         <span className="flex flex-wrap items-center gap-1.5 text-xs font-normal text-muted">
                           <VisitsLink
                             href={channelVisitsHref(row.channel)}
                             label={channelLabel(row.channel, i18n)}
                             purpose={i18n.t('visitsLink.purpose')}
+                            filter={channelFilterOf(row.channel)}
                           />
                           {row.medium === null ? null : (
                             <span className="font-mono sm:hidden">{row.medium}</span>

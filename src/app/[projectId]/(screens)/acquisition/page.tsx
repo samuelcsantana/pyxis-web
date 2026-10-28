@@ -1,4 +1,5 @@
 import { CampaignsTable } from '@/components/acquisition/campaigns-table';
+import { type RowFilterOf, screenRowFilters } from '@/lib/row-filters';
 import { ChannelChart } from '@/components/acquisition/channel-chart';
 import { SourcesTable } from '@/components/acquisition/sources-table';
 import { ScreenContent } from '@/components/shell/screen-content';
@@ -14,6 +15,7 @@ import {
   type CampaignRow,
   campaignRows,
   type Channel,
+  channelLabel,
   paidVisits,
   sourceRows,
   topChannel,
@@ -51,6 +53,7 @@ interface AcquisitionReportViewProps {
   readonly campaignVisitsHref: (row: CampaignRow) => string;
   readonly i18n: I18n;
   readonly sourceVisitsHref: (source: string) => string;
+  readonly rowFilter: RowFilterOf;
 }
 
 function acquisitionDownloads(
@@ -76,6 +79,7 @@ function AcquisitionReportView({
   campaignVisitsHref,
   i18n,
   sourceVisitsHref,
+  rowFilter,
 }: AcquisitionReportViewProps) {
   const paid = paidVisits(report.days, i18n);
   const top = topChannel(report.days, i18n);
@@ -96,10 +100,15 @@ function AcquisitionReportView({
         channelVisitsHref={channelVisitsHref}
         i18n={i18n}
         sourceVisitsHref={sourceVisitsHref}
+        sourceFilterOf={(row) => rowFilter({ source: row.source }, row.label)}
+        channelFilterOf={(channel) => rowFilter({ channel }, channelLabel(channel, i18n))}
       />
       <CampaignsTable
         rows={campaignRows(report.campaigns, i18n)}
         campaignVisitsHref={campaignVisitsHref}
+        campaignFilterOf={(row) =>
+          rowFilter({ campaign: row.campaign, source: row.source }, row.campaign)
+        }
         i18n={i18n}
       />
       <CsvDownloads downloads={downloads} i18n={i18n} />
@@ -139,6 +148,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
           channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
           sourceVisitsHref={(source) => linkWith(visitsPath, { source })}
           campaignVisitsHref={({ campaign, source }) => linkWith(visitsPath, { campaign, source })}
+          rowFilter={screenRowFilters(project.id, 'acquisition', search, filters, i18n)}
           i18n={i18n}
         />
       ) : filtered ? (

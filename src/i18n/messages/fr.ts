@@ -958,6 +958,11 @@ export const fr = translation({
       previousDaysUntil: 'par rapport aux {days} jours précédents, mêmes filtres, jusqu’à {time}',
     },
   },
+  rowFilter: {
+    add: 'Filtrer par {value}',
+    title: 'Filtrer tous les écrans par {value}',
+    remove: 'Retirer le filtre {value}',
+  },
   dashboardFilters: {
     label: 'Filtres',
     removeAll: 'Retirer les filtres',

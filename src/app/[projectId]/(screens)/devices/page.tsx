@@ -1,4 +1,7 @@
 import { CountriesTable } from '@/components/devices/countries-table';
+import type { RowFilter } from '@/components/ui/row-filter-link';
+import { BROWSER_FAMILIES, OS_FAMILIES } from '@/domain/dashboard-filters';
+import { screenRowFilters } from '@/lib/row-filters';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
 import { RegionsTable } from '@/components/devices/regions-table';
 import { ShareDonut } from '@/components/devices/share-donut';
@@ -17,6 +20,7 @@ import {
   deviceTypeLabel,
   hasVisits,
   operatingSystemLabel,
+  OTHER_VALUE,
   regionRows,
   shareRows,
 } from '@/domain/devices';
@@ -39,6 +43,13 @@ import { createDevicesService } from '@/services/devices/devices-service.factory
 
 export const generateMetadata = screenMetadata('devices');
 
+function familyOf<Family extends string>(
+  families: readonly Family[],
+  value: string,
+): Family | null {
+  return value === OTHER_VALUE ? null : (families.find((family) => family === value) ?? null);
+}
+
 export interface DevicesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
   readonly searchParams: Promise<PeriodSearch & DashboardSearch>;
@@ -52,6 +63,17 @@ interface DevicesReportViewProps {
   readonly i18n: I18n;
   readonly countryVisitsHref: (country: string) => string | null;
   readonly regionVisitsHref: (region: string) => string | null;
+  readonly rows: DevicesRowLinks;
+}
+
+interface DevicesRowLinks {
+  readonly deviceFilter: (deviceType: string) => RowFilter | null;
+  readonly browserVisitsHref: (browser: string) => string | null;
+  readonly browserFilter: (browser: string) => RowFilter | null;
+  readonly osVisitsHref: (os: string) => string | null;
+  readonly osFilter: (os: string) => RowFilter | null;
+  readonly countryFilter: (country: string) => RowFilter | null;
+  readonly regionFilter: (region: string) => RowFilter;
 }
 
 function DevicesReportView({
@@ -62,6 +84,7 @@ function DevicesReportView({
   i18n,
   countryVisitsHref,
   regionVisitsHref,
+  rows,
 }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes, i18n);
   const showsConversions = conversionEvent !== null && conversions.length > 0;
@@ -73,6 +96,7 @@ function DevicesReportView({
           title={i18n.t('devices.panels.deviceType')}
           rows={shareRows(report.deviceTypes, deviceTypeLabel, i18n)}
           visitsHref={deviceVisitsHref}
+          filterOf={rows.deviceFilter}
           i18n={i18n}
         />
         <ShareDonut
@@ -80,6 +104,8 @@ function DevicesReportView({
           title={i18n.t('devices.panels.browser')}
           rows={shareRows(report.browsers, browserLabel, i18n)}
           withConversionRate={conversionEvent !== null}
+          visitsHref={rows.browserVisitsHref}
+          filterOf={rows.browserFilter}
           i18n={i18n}
         />
         <ShareDonut
@@ -87,6 +113,8 @@ function DevicesReportView({
           title={i18n.t('devices.panels.operatingSystem')}
           rows={shareRows(report.operatingSystems, operatingSystemLabel, i18n)}
           withConversionRate={conversionEvent !== null}
+          visitsHref={rows.osVisitsHref}
+          filterOf={rows.osFilter}
           i18n={i18n}
         />
       </div>
@@ -103,12 +131,14 @@ function DevicesReportView({
           rows={shareRows(report.countries, countryLabel, i18n)}
           withConversionRate={conversionEvent !== null}
           visitsHref={countryVisitsHref}
+          filterOf={rows.countryFilter}
           i18n={i18n}
         />
         <RegionsTable
           rows={regionRows(report.regions, i18n)}
           withConversionRate={conversionEvent !== null}
           visitsHref={regionVisitsHref}
+          filterOf={rows.regionFilter}
           i18n={i18n}
         />
       </div>
@@ -143,6 +173,36 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
     return country === null ? null : linkWith(visitsHref, { country });
   };
   const regionVisitsHref = (region: string) => linkWith(visitsHref, { region });
+  const rowFilter = screenRowFilters(project.id, 'devices', search, filters, i18n);
+  const browserOf = (value: string) => familyOf(BROWSER_FAMILIES, value);
+  const osOf = (value: string) => familyOf(OS_FAMILIES, value);
+  const rows: DevicesRowLinks = {
+    deviceFilter: (deviceType) => {
+      const device = deviceType === OTHER_VALUE ? null : deviceFilterOf(deviceType);
+      return device === null ? null : rowFilter({ device }, deviceTypeLabel(device, i18n));
+    },
+    browserVisitsHref: (value) => {
+      const browser = browserOf(value);
+      return browser === null ? null : linkWith(visitsHref, { browser });
+    },
+    browserFilter: (value) => {
+      const browser = browserOf(value);
+      return browser === null ? null : rowFilter({ browser }, browserLabel(browser, i18n));
+    },
+    osVisitsHref: (value) => {
+      const os = osOf(value);
+      return os === null ? null : linkWith(visitsHref, { os });
+    },
+    osFilter: (value) => {
+      const os = osOf(value);
+      return os === null ? null : rowFilter({ os }, operatingSystemLabel(os, i18n));
+    },
+    countryFilter: (value) => {
+      const country = countryFilterOf(value);
+      return country === null ? null : rowFilter({ country }, countryLabel(country, i18n));
+    },
+    regionFilter: (region) => rowFilter({ region }, region),
+  };
   return (
     <ScreenContent
       readAt={now.getTime()}
@@ -158,6 +218,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
           i18n={i18n}
           countryVisitsHref={countryVisitsHref}
           regionVisitsHref={regionVisitsHref}
+          rows={rows}
         />
       ) : filtered ? (
         <FilteredPeriodEmpty

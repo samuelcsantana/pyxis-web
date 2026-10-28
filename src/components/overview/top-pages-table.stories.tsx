@@ -3,6 +3,8 @@ import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { activityTotals } from '@/domain/overview';
 import { TopPagesTable } from './top-pages-table';
 import { english } from '@/test-utils/english';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
+import { rowFiltersOf } from '@/lib/row-filters';
 
 const STORY_PERIOD = { from: '2026-09-06', to: '2026-10-05' } as const;
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -65,3 +67,25 @@ export const RowLinkHovered: Story = {
 };
 
 export const RowLinkHoveredDark: Story = { ...RowLinkHovered, globals: { theme: 'dark' } };
+
+const FILTERED_PATH = STORY_REPORT.topPages[0]?.path ?? '/';
+const rowFilter = rowFiltersOf(
+  '/demo/overview',
+  'range=30d',
+  { ...NO_DASHBOARD_FILTERS, paths: [FILTERED_PATH] },
+  english,
+);
+
+export const WithRowFilters: Story = {
+  args: { filterOf: (path: string) => rowFilter({ path }, path) },
+};
+
+export const WithRowFiltersDarkTheme: Story = {
+  args: WithRowFilters.args,
+  globals: { theme: 'dark' },
+};
+
+export const WithRowFiltersOnAPhone: Story = {
+  args: WithRowFilters.args,
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+};

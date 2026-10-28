@@ -930,6 +930,11 @@ export const ptBR = translation({
       previousDaysUntil: 'vs. os {days} dias anteriores, mesmos filtros, até {time}',
     },
   },
+  rowFilter: {
+    add: 'Filtrar por {value}',
+    title: 'Filtrar todas as telas por {value}',
+    remove: 'Remover filtro {value}',
+  },
   dashboardFilters: {
     label: 'Filtros',
     removeAll: 'Remover filtros',

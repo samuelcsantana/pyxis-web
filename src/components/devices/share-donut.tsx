@@ -5,6 +5,7 @@ import type { I18n } from '@/i18n/i18n';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 const SEGMENT_COLORS = [
   { stroke: 'stroke-sky', swatch: 'bg-sky' },
@@ -33,19 +34,26 @@ export interface ShareDonutProps {
   readonly rows: readonly ShareRow[];
   readonly withConversionRate?: boolean;
   readonly visitsHref?: (value: string) => string | null;
+  readonly filterOf?: (value: string) => RowFilter | null;
   readonly i18n: I18n;
 }
 
 const NO_VISITS_LINK = () => null;
+const NO_ROW_FILTER = () => null;
 
 interface RowNameProps {
   readonly label: string;
   readonly href: string | null;
+  readonly filter: RowFilter | null;
   readonly purpose: string;
 }
 
-function RowName({ label, href, purpose }: RowNameProps) {
-  return href === null ? label : <VisitsLink href={href} label={label} purpose={purpose} />;
+function RowName({ label, href, filter, purpose }: RowNameProps) {
+  return href === null ? (
+    label
+  ) : (
+    <VisitsLink href={href} label={label} purpose={purpose} filter={filter} />
+  );
 }
 
 export function ShareDonut({
@@ -54,6 +62,7 @@ export function ShareDonut({
   rows,
   withConversionRate = false,
   visitsHref = NO_VISITS_LINK,
+  filterOf = NO_ROW_FILTER,
   i18n,
 }: ShareDonutProps) {
   const headingId = `${id}-heading`;
@@ -138,6 +147,7 @@ export function ShareDonut({
                       <RowName
                         label={row.label}
                         href={visitsHref(row.value)}
+                        filter={filterOf(row.value)}
                         purpose={i18n.t('visitsLink.purpose')}
                       />
                     </span>

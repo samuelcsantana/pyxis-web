@@ -5,6 +5,7 @@ import { BAR_FILL, BAR_TRACK, BODY_CELL } from '@/components/ui/panel-classes';
 import { Breakable } from '@/components/ui/breakable';
 import { FreshCount } from '@/components/ui/fresh-slots';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 const TREND_BOX = { width: 96, height: 28, inset: 3 } as const;
 
@@ -15,6 +16,7 @@ export interface FeatureRowCellsProps {
   readonly row: FeatureRow;
   readonly visitsHref: string;
   readonly visitsPurpose: string;
+  readonly filter?: RowFilter | null;
   readonly disclosure?: ReactNode;
 }
 
@@ -23,6 +25,7 @@ export function FeatureRowCells({
   row,
   visitsHref,
   visitsPurpose,
+  filter = null,
   disclosure,
 }: FeatureRowCellsProps) {
   return (
@@ -36,6 +39,7 @@ export function FeatureRowCells({
               label={row.label}
               purpose={visitsPurpose}
               className={`w-fit ${kind === 'screens' ? 'font-mono text-xs wrap-anywhere' : ''}`}
+              filter={filter}
             />
             {kind === 'events' ? (
               <span className="font-mono text-xs font-normal text-muted wrap-anywhere">

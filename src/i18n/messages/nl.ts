@@ -948,6 +948,11 @@ export const nl = translation({
       previousDaysUntil: 'vs. vorige {days} dagen, dezelfde filters, tot {time}',
     },
   },
+  rowFilter: {
+    add: 'Filteren op {value}',
+    title: 'Alle schermen filteren op {value}',
+    remove: 'Filter {value} verwijderen',
+  },
   dashboardFilters: {
     label: 'Filters',
     removeAll: 'Filters verwijderen',

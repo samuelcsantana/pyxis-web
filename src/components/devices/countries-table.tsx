@@ -9,30 +9,39 @@ import {
   TABLE_SCROLL,
 } from '@/components/ui/panel-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
+import type { RowFilter } from '@/components/ui/row-filter-link';
 
 export interface CountriesTableProps {
   readonly rows: readonly ShareRow[];
   readonly withConversionRate?: boolean;
   readonly visitsHref?: (country: string) => string | null;
+  readonly filterOf?: (country: string) => RowFilter | null;
   readonly i18n: I18n;
 }
 
 const NO_VISITS_LINK = () => null;
+const NO_ROW_FILTER = () => null;
 
 interface CountryNameProps {
   readonly label: string;
   readonly href: string | null;
+  readonly filter: RowFilter | null;
   readonly purpose: string;
 }
 
-function CountryName({ label, href, purpose }: CountryNameProps) {
-  return href === null ? label : <VisitsLink href={href} label={label} purpose={purpose} />;
+function CountryName({ label, href, filter, purpose }: CountryNameProps) {
+  return href === null ? (
+    label
+  ) : (
+    <VisitsLink href={href} label={label} purpose={purpose} filter={filter} />
+  );
 }
 
 export function CountriesTable({
   rows,
   withConversionRate = false,
   visitsHref = NO_VISITS_LINK,
+  filterOf = NO_ROW_FILTER,
   i18n,
 }: CountriesTableProps) {
   const showsConversionRate = withConversionRate && countsConversions(rows);
@@ -78,6 +87,7 @@ export function CountriesTable({
                     <CountryName
                       label={row.label}
                       href={visitsHref(row.value)}
+                      filter={filterOf(row.value)}
                       purpose={i18n.t('visitsLink.purpose')}
                     />
                   </span>
