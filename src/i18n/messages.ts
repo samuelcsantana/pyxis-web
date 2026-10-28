@@ -15,6 +15,7 @@ export const CLIENT_NAMESPACES = [
   'signIn',
   'chartPanel',
   'propertyBreakdown',
+  'propertySummary',
   'emailPreferences',
   'connections',
   'sessions',

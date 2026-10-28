@@ -3,7 +3,11 @@ import type { I18n } from '@/i18n/i18n';
 import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import type { RowFilter } from '@/components/ui/row-filter-link';
 import { HEADER_CELL, PANEL, PANEL_TITLE, TABLE_SCROLL } from '@/components/ui/panel-classes';
-import { ExpandableFeatureRow, type LoadProperties } from './expandable-feature-row';
+import {
+  ExpandableFeatureRow,
+  type LoadEventSummary,
+  type LoadProperties,
+} from './expandable-feature-row';
 import { FeatureRowCells } from './feature-row-cells';
 
 export interface FeatureTableProps {
@@ -13,6 +17,7 @@ export interface FeatureTableProps {
   readonly visitsHref: (name: string) => string;
   readonly filterOf?: (name: string) => RowFilter | null;
   readonly loadProperties?: LoadProperties;
+  readonly loadSummary?: LoadEventSummary;
   readonly i18n: I18n;
 }
 
@@ -29,9 +34,18 @@ interface TableRowProps {
   readonly visitsPurpose: string;
   readonly filter: RowFilter | null;
   readonly loadProperties: LoadProperties | undefined;
+  readonly loadSummary: LoadEventSummary | undefined;
 }
 
-function TableRow({ kind, row, visitsHref, visitsPurpose, filter, loadProperties }: TableRowProps) {
+function TableRow({
+  kind,
+  row,
+  visitsHref,
+  visitsPurpose,
+  filter,
+  loadProperties,
+  loadSummary,
+}: TableRowProps) {
   if (kind === 'events' && loadProperties !== undefined) {
     return (
       <ExpandableFeatureRow
@@ -40,6 +54,7 @@ function TableRow({ kind, row, visitsHref, visitsPurpose, filter, loadProperties
         visitsPurpose={visitsPurpose}
         filter={filter}
         loadProperties={loadProperties}
+        loadSummary={loadSummary}
       />
     );
   }
@@ -65,6 +80,7 @@ export function FeatureTable({
   visitsHref,
   filterOf = NO_ROW_FILTER,
   loadProperties,
+  loadSummary,
   i18n,
 }: FeatureTableProps) {
   return (
@@ -109,6 +125,7 @@ export function FeatureTable({
                   filter={filterOf(row.name)}
                   visitsPurpose={i18n.t('visitsLink.purpose')}
                   loadProperties={loadProperties}
+                  loadSummary={loadSummary}
                 />
               ))}
             </tbody>

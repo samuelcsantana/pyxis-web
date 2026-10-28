@@ -3,6 +3,7 @@ import { BAR_FILL, BAR_TRACK } from '@/components/ui/panel-classes';
 import { BUTTON_SECONDARY } from '@/components/ui/control-classes';
 import { VisitsLink } from '@/components/ui/visits-link';
 import { useT } from '@/i18n/messages-provider';
+import { type LoadSummary, NumericSummary } from './numeric-summary';
 
 export type PropertyBreakdownState =
   | { readonly status: 'loading' }
@@ -14,6 +15,7 @@ export interface PropertyBreakdownProps {
   readonly state: PropertyBreakdownState;
   readonly onRetry: () => void;
   readonly valueHref: ValueHref;
+  readonly loadSummary?: LoadSummary;
 }
 
 export type ValueHref = (key: string, value: string) => string | null;
@@ -61,6 +63,27 @@ function ValueRow({ row, other, propertyKey, href }: ValueRowProps) {
 }
 
 function PropertyKeyTable({
+  view,
+  valueHref,
+  otherKeys,
+  loadSummary,
+}: {
+  readonly view: PropertyKeyView;
+  readonly valueHref: ValueHref;
+  readonly otherKeys: readonly string[];
+  readonly loadSummary: LoadSummary | undefined;
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-2">
+      {view.numeric && loadSummary !== undefined ? (
+        <NumericSummary propertyKey={view.key} otherKeys={otherKeys} loadSummary={loadSummary} />
+      ) : null}
+      <PropertyValuesTable view={view} valueHref={valueHref} />
+    </div>
+  );
+}
+
+function PropertyValuesTable({
   view,
   valueHref,
 }: {
@@ -115,6 +138,7 @@ export function PropertyBreakdown({
   state,
   onRetry,
   valueHref,
+  loadSummary,
 }: PropertyBreakdownProps) {
   const t = useT();
   if (state.status === 'loading') {
@@ -145,7 +169,13 @@ export function PropertyBreakdown({
   ) : (
     <div className="grid items-start gap-5 py-1 lg:grid-cols-2">
       {state.keys.map((view) => (
-        <PropertyKeyTable key={view.key} view={view} valueHref={valueHref} />
+        <PropertyKeyTable
+          key={view.key}
+          view={view}
+          valueHref={valueHref}
+          otherKeys={state.keys.flatMap((other) => (other.key === view.key ? [] : [other.key]))}
+          loadSummary={loadSummary}
+        />
       ))}
     </div>
   );
