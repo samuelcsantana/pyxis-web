@@ -42,6 +42,7 @@ export function demoAccountsWire(now: Date) {
         free_plan_fit_due_at: null,
         project_count: DEMO_PROJECTS.length,
         people_count: demoPeopleWire().people.length,
+        bound_by_free_plan_terms: true,
         month: now.toISOString().slice(0, 7),
         events_this_month: DEMO_EVENTS_THIS_MONTH,
         measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
