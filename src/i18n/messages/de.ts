@@ -57,6 +57,7 @@ export const de = translation({
     account: 'Konto und Präferenzen',
     language: 'Sprache',
     billing: 'Konto und Abrechnung',
+    help: 'Hilfe und Support',
   },
   theme: {
     switch: 'Design wechseln',
@@ -447,6 +448,34 @@ export const de = translation({
       nearQuota: 'In diesem Monat hat das Konto {share} seiner Ereignisse verbraucht.',
       open: 'Abrechnung öffnen',
     },
+  },
+  support: {
+    title: 'Hilfe und Support',
+    subtitle: 'Sprich mit den Menschen hinter Pyxis oder finde die Antwort in der Dokumentation.',
+    copy: 'Kopieren',
+    copied: 'Kopiert',
+    selected: 'Markiert, drück Strg+C',
+    writeHeading: 'An den Support schreiben',
+    fromAccount: 'Schreib von {email}, damit wir wissen, um welches Konto es geht.',
+    paidReply:
+      'Im kostenpflichtigen Tarif bestätigen wir den Eingang deiner Nachricht und antworten innerhalb von {days} Werktagen.',
+    freeReply:
+      'Im kostenlosen Tarif antworten wir per E-Mail innerhalb von {days} Tagen zu Vertrag, Tarif und Limits, Abrechnung, Kündigung und personenbezogenen Daten. Fragen zu Installation und Nutzung laufen über GitHub.',
+    noPersonalData:
+      'Um einen Fall zu zeigen, schick die ID des Besuchs, nie personenbezogene Daten deiner Besucher.',
+    docsHeading: 'Installation und Nutzung',
+    install: 'So installierst du Pyxis',
+    installBody: 'Das Snippet mit deinem Schlüssel, Schritt für Schritt.',
+    code: 'Dokumentation des Pyxis-Codes',
+    codeBody: 'track, identify, trackRequest und alle Optionen.',
+    agents: 'Anleitung für KI-Agenten',
+    agentsBody: 'Was Claude Code, Cursor oder ein anderer Agent liest, bevor er Pyxis installiert.',
+    question: 'Auf GitHub fragen',
+    questionBody: 'Fragen sind öffentlich: Füge nie Schlüssel oder personenbezogene Daten ein.',
+    securityHeading: 'Eine Sicherheitslücke gefunden?',
+    securityBody: 'Melde sie vertraulich über GitHub, nie in einem öffentlichen Issue.',
+    securityLink: 'Vertraulich melden',
+    accountHeading: 'Support',
   },
   accountSuspended: {
     title: 'Dieses Konto ist gesperrt',

@@ -54,6 +54,7 @@ export const nl = translation({
     account: 'Account en voorkeuren',
     language: 'Taal',
     billing: 'Account en facturatie',
+    help: 'Hulp en support',
   },
   theme: {
     switch: 'Thema wisselen',
@@ -438,6 +439,34 @@ export const nl = translation({
       nearQuota: 'Deze maand heeft het account {share} van zijn events gebruikt.',
       open: 'Facturatie openen',
     },
+  },
+  support: {
+    title: 'Hulp en support',
+    subtitle: 'Praat met de mensen achter Pyxis of vind het antwoord in de documentatie.',
+    copy: 'Kopiëren',
+    copied: 'Gekopieerd',
+    selected: 'Geselecteerd, druk op Ctrl+C',
+    writeHeading: 'De support mailen',
+    fromAccount: 'Mail vanaf {email}, zodat we weten om welk account het gaat.',
+    paidReply:
+      'Bij het betaalde abonnement bevestigen we dat je bericht is aangekomen en antwoorden we binnen {days} werkdagen.',
+    freeReply:
+      'Bij het gratis abonnement antwoorden we per e-mail binnen {days} dagen over het contract, het abonnement en de limieten, facturatie, opzegging en persoonsgegevens. Vragen over installatie en gebruik lopen via GitHub.',
+    noPersonalData:
+      'Stuur om een geval te laten zien de ID van het bezoek, nooit persoonsgegevens van je bezoekers.',
+    docsHeading: 'Installatie en gebruik',
+    install: 'Zo installeer je Pyxis',
+    installBody: 'Het fragment met je sleutel, stap voor stap.',
+    code: 'Documentatie van de Pyxis-code',
+    codeBody: 'track, identify, trackRequest en alle opties.',
+    agents: 'Handleiding voor AI-agents',
+    agentsBody: 'Wat Claude Code, Cursor of een andere agent leest voordat die Pyxis installeert.',
+    question: 'Vraag het op GitHub',
+    questionBody: 'Vragen zijn openbaar: plak nooit sleutels of persoonsgegevens.',
+    securityHeading: 'Een beveiligingslek gevonden?',
+    securityBody: 'Meld het vertrouwelijk via GitHub, nooit in een openbare issue.',
+    securityLink: 'Vertrouwelijk melden',
+    accountHeading: 'Support',
   },
   accountSuspended: {
     title: 'Dit account is geschorst',

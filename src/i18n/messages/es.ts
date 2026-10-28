@@ -57,6 +57,7 @@ export const es = translation({
     account: 'Cuenta y preferencias',
     language: 'Idioma',
     billing: 'Cuenta y facturación',
+    help: 'Ayuda y soporte',
   },
   theme: {
     switch: 'Cambiar el tema',
@@ -431,6 +432,34 @@ export const es = translation({
       nearQuota: 'Este mes la cuenta ya usó {share} de sus eventos.',
       open: 'Abrir la facturación',
     },
+  },
+  support: {
+    title: 'Ayuda y soporte',
+    subtitle: 'Habla con quienes mantienen Pyxis o encuentra la respuesta en la documentación.',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    selected: 'Seleccionado, presiona Ctrl+C',
+    writeHeading: 'Escribir al soporte',
+    fromAccount: 'Escribe desde {email}, para que sepamos de qué cuenta se trata.',
+    paidReply:
+      'En el plan de pago, confirmamos que tu mensaje llegó y respondemos en hasta {days} días hábiles.',
+    freeReply:
+      'En el plan gratis, respondemos por correo en hasta {days} días sobre el contrato, el plan y sus límites, la facturación, la cancelación y los datos personales. Las dudas de instalación y de uso van por GitHub.',
+    noPersonalData:
+      'Para mostrar un caso, envía el id de la visita, nunca datos personales de tus visitantes.',
+    docsHeading: 'Instalación y uso',
+    install: 'Cómo instalar',
+    installBody: 'El fragmento con tu clave, paso a paso.',
+    code: 'Documentación del código de Pyxis',
+    codeBody: 'track, identify, trackRequest y todas las opciones.',
+    agents: 'Guía para agentes de IA',
+    agentsBody: 'Lo que Claude Code, Cursor u otro agente leen antes de instalar Pyxis.',
+    question: 'Preguntar en GitHub',
+    questionBody: 'Las preguntas son públicas: nunca pegues claves ni datos personales.',
+    securityHeading: '¿Encontraste un fallo de seguridad?',
+    securityBody: 'Infórmalo en privado por GitHub, nunca en una issue pública.',
+    securityLink: 'Informar en privado',
+    accountHeading: 'Soporte',
   },
   accountSuspended: {
     title: 'Esta cuenta está suspendida',

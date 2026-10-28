@@ -54,6 +54,7 @@ export const it = translation({
     account: 'Account e preferenze',
     language: 'Lingua',
     billing: 'Account e fatturazione',
+    help: 'Aiuto e assistenza',
   },
   theme: {
     switch: 'Cambia tema',
@@ -436,6 +437,35 @@ export const it = translation({
       nearQuota: 'Eventi usati dall’account questo mese: {share}.',
       open: 'Apri la fatturazione',
     },
+  },
+  support: {
+    title: 'Aiuto e assistenza',
+    subtitle: 'Parla con chi gestisce Pyxis o trova la risposta nella documentazione.',
+    copy: 'Copia',
+    copied: 'Copiato',
+    selected: 'Selezionato, premi Ctrl+C',
+    writeHeading: 'Scrivere all’assistenza',
+    fromAccount: 'Scrivi da {email}, così sappiamo di quale account si tratta.',
+    paidReply:
+      'Nel piano a pagamento confermiamo la ricezione del tuo messaggio e rispondiamo entro {days} giorni lavorativi.',
+    freeReply:
+      'Nel piano gratuito rispondiamo via email entro {days} giorni su contratto, piano e limiti, fatturazione, disdetta e dati personali. Le domande su installazione e uso passano da GitHub.',
+    noPersonalData:
+      'Per mostrare un caso, invia l’ID della visita, mai i dati personali dei tuoi visitatori.',
+    docsHeading: 'Installazione e uso',
+    install: 'Come installare',
+    installBody: 'Lo snippet con la tua chiave, passo dopo passo.',
+    code: 'Documentazione del codice di Pyxis',
+    codeBody: 'track, identify, trackRequest e tutte le opzioni.',
+    agents: 'Guida per gli agenti IA',
+    agentsBody:
+      'Quello che Claude Code, Cursor o un altro agente leggono prima di installare Pyxis.',
+    question: 'Chiedere su GitHub',
+    questionBody: 'Le domande sono pubbliche: non incollare mai chiavi o dati personali.',
+    securityHeading: 'Hai trovato una falla di sicurezza?',
+    securityBody: 'Segnalala in privato su GitHub, mai in una issue pubblica.',
+    securityLink: 'Segnala in privato',
+    accountHeading: 'Assistenza',
   },
   accountSuspended: {
     title: 'Questo account è sospeso',

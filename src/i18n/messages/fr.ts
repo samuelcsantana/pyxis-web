@@ -57,6 +57,7 @@ export const fr = translation({
     account: 'Compte et préférences',
     language: 'Langue',
     billing: 'Compte et facturation',
+    help: 'Aide et assistance',
   },
   theme: {
     switch: 'Changer de thème',
@@ -445,6 +446,36 @@ export const fr = translation({
       nearQuota: 'Ce mois-ci, le compte a utilisé {share} de ses événements.',
       open: 'Ouvrir la facturation',
     },
+  },
+  support: {
+    title: 'Aide et assistance',
+    subtitle:
+      'Parlez aux personnes qui font vivre Pyxis, ou trouvez la réponse dans la documentation.',
+    copy: 'Copier',
+    copied: 'Copié',
+    selected: 'Sélectionné, appuyez sur Ctrl+C',
+    writeHeading: 'Écrire à l’assistance',
+    fromAccount: 'Écrivez depuis {email}, pour que nous sachions de quel compte il s’agit.',
+    paidReply:
+      'Avec la formule payante, nous confirmons la réception de votre message et répondons sous {days} jours ouvrés.',
+    freeReply:
+      'Avec la formule gratuite, nous répondons par e-mail sous {days} jours sur le contrat, la formule et ses limites, la facturation, la résiliation et les données personnelles. Les questions d’installation et d’utilisation passent par GitHub.',
+    noPersonalData:
+      'Pour montrer un cas, envoyez l’identifiant de la visite, jamais les données personnelles de vos visiteurs.',
+    docsHeading: 'Installation et utilisation',
+    install: 'Comment installer',
+    installBody: 'L’extrait avec votre clé, étape par étape.',
+    code: 'Documentation du code Pyxis',
+    codeBody: 'track, identify, trackRequest et toutes les options.',
+    agents: 'Guide pour les agents IA',
+    agentsBody: 'Ce que Claude Code, Cursor ou un autre agent lit avant d’installer Pyxis.',
+    question: 'Poser une question sur GitHub',
+    questionBody:
+      'Les questions sont publiques : ne collez jamais de clés ni de données personnelles.',
+    securityHeading: 'Vous avez trouvé une faille de sécurité ?',
+    securityBody: 'Signalez-la en privé sur GitHub, jamais dans une issue publique.',
+    securityLink: 'Signaler en privé',
+    accountHeading: 'Assistance',
   },
   accountSuspended: {
     title: 'Ce compte est suspendu',
