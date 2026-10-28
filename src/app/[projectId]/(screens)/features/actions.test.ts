@@ -4,9 +4,14 @@ import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IFeaturesService } from '@/services/features/features-service.interface';
 import { MockFeaturesService } from '@/services/features/mock-features-service';
-import { loadPropertyBreakdown } from './actions';
+import { loadPropertyBreakdown, loadPropertySummary } from './actions';
 
-const state = vi.hoisted<{ admin: unknown; properties: IFeaturesService['properties'] }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  properties: IFeaturesService['properties'];
+  summary: IFeaturesService['summary'];
+}>(() => ({
+  summary: () => Promise.reject(new Error('summary not set')),
   admin: undefined,
   properties: () => Promise.reject(new Error('properties not set')),
 }));
@@ -30,8 +35,9 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
 }));
 
 vi.mock('@/services/features/features-service.factory', () => ({
-  createFeaturesService: (): Pick<IFeaturesService, 'properties'> => ({
+  createFeaturesService: (): Pick<IFeaturesService, 'properties' | 'summary'> => ({
     properties: (projectId, range, name) => state.properties(projectId, range, name),
+    summary: (projectId, range, request) => state.summary(projectId, range, request),
   }),
 }));
 
@@ -112,5 +118,47 @@ describe('loadPropertyBreakdown', () => {
     await expect(
       loadPropertyBreakdown('p-store', RANGE, {}, 'calculator_result_shown'),
     ).rejects.toThrow('redirect:/sign-in?expired=1');
+  });
+});
+
+describe('loadPropertySummary', () => {
+  it('reads the median of one property within the filters and shapes it for the screen', async () => {
+    const summary = vi.fn<IFeaturesService['summary']>((projectId, range, request) =>
+      new MockFeaturesService().summary(projectId, range, request),
+    );
+    state.summary = summary;
+
+    const view = await loadPropertySummary(
+      'p-store',
+      RANGE,
+      { device: 'mobile' },
+      'product_created',
+      'price',
+      'category',
+    );
+
+    expect(summary).toHaveBeenCalledWith(
+      'p-store',
+      { ...RANGE, filters: { ...NO_DASHBOARD_FILTERS, device: 'mobile' } },
+      { name: 'product_created', key: 'price', by: 'category' },
+    );
+    expect(view.groups.length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    ['a key that is not a property key', 'Price', null, {}],
+    ['a split that is not a property key', 'price', 'a b', {}],
+    ['filters that are not texts', 'price', null, { device: 1 }],
+  ])('refuses %s', async (_label, key, by, filters) => {
+    await expect(
+      loadPropertySummary(
+        'p-store',
+        RANGE,
+        filters as unknown as Readonly<Record<string, string>>,
+        'product_created',
+        key,
+        by,
+      ),
+    ).rejects.toThrow('A property summary needs a valid range, filters, event, key and split.');
   });
 });

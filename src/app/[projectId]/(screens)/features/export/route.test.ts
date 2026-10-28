@@ -27,6 +27,7 @@ vi.mock('@/services/features/features-service.factory', () => ({
   createFeaturesService: (): IFeaturesService => ({
     features: (projectId, range, kind) => state.features(projectId, range, kind),
     properties: () => Promise.reject(new Error('properties are not exported')),
+    summary: () => Promise.reject(new Error('summaries are not exported')),
     engagement: () => Promise.reject(new Error('engagement is not exported')),
   }),
 }));

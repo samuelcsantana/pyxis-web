@@ -918,6 +918,22 @@ export const en = {
     title: 'Filter every screen by {value}',
     remove: 'Remove filter {value}',
   },
+  propertySummary: {
+    median: 'Median',
+    middleHalf: 'Middle half',
+    range: '{low} to {high}',
+    splitBy: 'Split by',
+    noSplit: 'No split',
+    loading: 'Reading the median of {key}…',
+    failed: 'Could not read the median of {key}.',
+    otherValues: 'Other values',
+    columns: {
+      value: 'Value',
+      median: 'Median',
+      middleHalf: 'Middle half',
+      events: 'Events',
+    },
+  },
   dashboardFilters: {
     label: 'Filters',
     removeAll: 'Remove filters',

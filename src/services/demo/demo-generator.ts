@@ -31,7 +31,7 @@ import {
   weightedSample,
 } from './demo-random';
 import { demoPlaceFor } from './demo-regions';
-import { apportion, demoCount, textSalt } from './demo-series';
+import { apportion, demoCount, noise, textSalt } from './demo-series';
 import type { DemoRequest } from './demo-visits';
 
 type Screens = DemoRoute['screens'];
@@ -358,6 +358,17 @@ function propertyAssignments(
   );
 }
 
+function withDerived(event: DemoEvent, properties: DemoProperties, seed: string): DemoProperties {
+  const derived = (event.derived ?? []).map((property): readonly [string, string | number] => [
+    property.key,
+    itemAt(
+      property.values,
+      Math.floor(noise(seed, textSalt(`${event.name}:${property.key}`)) * property.values.length),
+    ),
+  ]);
+  return derived.length === 0 ? properties : { ...properties, ...Object.fromEntries(derived) };
+}
+
 function followUpOrder(events: readonly DemoEvent[]): readonly DemoEvent[] {
   return [
     ...events.filter((event) => event.after === undefined),
@@ -439,7 +450,11 @@ function eventsOfVisits(
         second: eventSecond(itemAt(visits, index).views, done, event, repeat, random),
         name: event.name,
         path: event.page,
-        properties: itemAt(properties, occurrence),
+        properties: withDerived(
+          event,
+          itemAt(properties, occurrence),
+          `${date}:${String(index)}:${String(occurrence)}`,
+        ),
         request: null,
       });
     });

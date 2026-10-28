@@ -4,9 +4,11 @@ import { type FeatureKind, type FeaturesReport } from '@/domain/features';
 import { featuresResponseSchema } from '@/domain/features.schema';
 import { type PropertyBreakdownReport } from '@/domain/property-breakdown';
 import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
+import type { PropertySummaryReport } from '@/domain/property-summary';
+import { propertySummaryResponseSchema } from '@/domain/property-summary.schema';
 import type { ApiReader } from '../api-reader';
 import { type ReportScope, reportQuery } from '../date-range';
-import type { IFeaturesService } from './features-service.interface';
+import type { IFeaturesService, PropertySummaryRequest } from './features-service.interface';
 
 export class HttpFeaturesService implements IFeaturesService {
   constructor(private readonly api: ApiReader) {}
@@ -30,6 +32,23 @@ export class HttpFeaturesService implements IFeaturesService {
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/features/properties?${query.toString()}`,
       propertyBreakdownResponseSchema,
+    );
+  }
+
+  summary(
+    projectId: string,
+    scope: ReportScope,
+    request: PropertySummaryRequest,
+  ): Promise<PropertySummaryReport> {
+    const query = new URLSearchParams(reportQuery(scope));
+    query.set('name', request.name);
+    query.set('key', request.key);
+    if (request.by !== null) {
+      query.set('by', request.by);
+    }
+    return this.api.get(
+      `/v1/projects/${encodeURIComponent(projectId)}/features/properties/summary?${query.toString()}`,
+      propertySummaryResponseSchema,
     );
   }
 

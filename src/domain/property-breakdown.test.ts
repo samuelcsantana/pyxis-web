@@ -47,6 +47,7 @@ describe('propertyKeyViews', () => {
         { value: 'margin', count: '475', visits: '410', share: '38.0%', barWidth: '38.0%' },
       ],
       other: null,
+      numeric: false,
     });
   });
 
@@ -61,5 +62,28 @@ describe('propertyKeyViews', () => {
       share: '100.0%',
       barWidth: '100.0%',
     });
+  });
+
+  it('calls a key numeric when every value it shows reads as a number', () => {
+    const [view] = propertyKeyViews(
+      propertyBreakdownResponseSchema.parse({
+        name: 'article_read_100',
+        events: 3,
+        keys: [
+          {
+            key: 'seconds',
+            events: 3,
+            values: [
+              { value: '12.5', count: 2, visits: 2 },
+              { value: '-3', count: 1, visits: 1 },
+            ],
+            other_count: 0,
+          },
+        ],
+      }),
+      english,
+    );
+
+    expect(view?.numeric).toBe(true);
   });
 });

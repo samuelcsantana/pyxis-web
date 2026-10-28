@@ -942,6 +942,22 @@ export const es = translation({
     title: 'Filtrar todas las pantallas por {value}',
     remove: 'Quitar el filtro {value}',
   },
+  propertySummary: {
+    median: 'Mediana',
+    middleHalf: 'Mitad central',
+    range: '{low} a {high}',
+    splitBy: 'Dividir por',
+    noSplit: 'Sin dividir',
+    loading: 'Leyendo la mediana de {key}…',
+    failed: 'No se pudo leer la mediana de {key}.',
+    otherValues: 'Otros valores',
+    columns: {
+      value: 'Valor',
+      median: 'Mediana',
+      middleHalf: 'Mitad central',
+      events: 'Eventos',
+    },
+  },
   dashboardFilters: {
     label: 'Filtros',
     removeAll: 'Quitar filtros',

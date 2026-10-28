@@ -963,6 +963,22 @@ export const fr = translation({
     title: 'Filtrer tous les écrans par {value}',
     remove: 'Retirer le filtre {value}',
   },
+  propertySummary: {
+    median: 'Médiane',
+    middleHalf: 'Moitié centrale',
+    range: '{low} à {high}',
+    splitBy: 'Répartir par',
+    noSplit: 'Sans répartition',
+    loading: 'Lecture de la médiane de {key}…',
+    failed: 'Impossible de lire la médiane de {key}.',
+    otherValues: 'Autres valeurs',
+    columns: {
+      value: 'Valeur',
+      median: 'Médiane',
+      middleHalf: 'Moitié centrale',
+      events: 'Événements',
+    },
+  },
   dashboardFilters: {
     label: 'Filtres',
     removeAll: 'Retirer les filtres',

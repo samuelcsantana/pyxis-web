@@ -967,6 +967,22 @@ export const de = translation({
     title: 'Alle Ansichten nach {value} filtern',
     remove: 'Filter {value} entfernen',
   },
+  propertySummary: {
+    median: 'Median',
+    middleHalf: 'Mittlere Hälfte',
+    range: '{low} bis {high}',
+    splitBy: 'Aufteilen nach',
+    noSplit: 'Nicht aufteilen',
+    loading: 'Median von {key} wird gelesen…',
+    failed: 'Der Median von {key} konnte nicht gelesen werden.',
+    otherValues: 'Andere Werte',
+    columns: {
+      value: 'Wert',
+      median: 'Median',
+      middleHalf: 'Mittlere Hälfte',
+      events: 'Ereignisse',
+    },
+  },
   dashboardFilters: {
     label: 'Filter',
     removeAll: 'Filter entfernen',
