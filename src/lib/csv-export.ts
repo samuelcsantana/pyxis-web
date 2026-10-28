@@ -2,16 +2,24 @@ import { notFound } from 'next/navigation';
 import type { NextRequest } from 'next/server';
 import { type ScreenSlug, screenHref } from '@/components/shell/screens';
 import type { Project } from '@/domain/admin';
+import {
+  type DashboardFilters,
+  dashboardFiltersOf,
+  hasDashboardFilters,
+} from '@/domain/dashboard-filters';
 import { type CsvFile, csvDocument, csvFileName } from '@/domain/csv';
 import { type Period, resolvePeriod } from '@/domain/period';
+import { getI18n } from '@/i18n/get-messages';
 import { projectOrNotFound, readOrSignIn } from './current-admin';
 
 export const EXPORT_SEGMENT = 'export';
 export const TABLE_PARAMETER = 'table';
+const FILTERED_NAME_PART = 'filtered';
 
 export interface CsvExportRequest {
   readonly project: Project;
   readonly period: Period;
+  readonly filters: DashboardFilters;
   readonly search: Readonly<Record<string, string>>;
 }
 
@@ -24,6 +32,13 @@ export interface CsvExportContext {
 export function exportHref(projectId: string, slug: ScreenSlug, query: string): string {
   const path = `${screenHref(projectId, slug)}/${EXPORT_SEGMENT}`;
   return query === '' ? path : `${path}?${query}`;
+}
+
+export function filteredNameParts(
+  nameParts: readonly string[],
+  filters: DashboardFilters,
+): readonly string[] {
+  return hasDashboardFilters(filters) ? [...nameParts, FILTERED_NAME_PART] : nameParts;
 }
 
 export function csvResponse(file: CsvFile): Response {
@@ -41,7 +56,8 @@ export function csvExport(read: CsvFileReader) {
     const { project } = await projectOrNotFound((await context.params).projectId);
     const search = Object.fromEntries(request.nextUrl.searchParams);
     const period = resolvePeriod(search, project.timezone, new Date());
-    const file = await readOrSignIn(() => read({ project, period, search }));
+    const { filters } = dashboardFiltersOf(search, await getI18n());
+    const file = await readOrSignIn(() => read({ project, period, filters, search }));
     if (file === null) {
       notFound();
     }

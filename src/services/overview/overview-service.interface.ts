@@ -1,8 +1,8 @@
 import type { OverviewReport } from '@/domain/overview';
 import type { TimeOfDayReport } from '@/domain/time-of-day';
-import type { DateRange } from '../date-range';
+import type { ReportScope } from '../date-range';
 
 export interface IOverviewService {
-  overview(projectId: string, range: DateRange): Promise<OverviewReport>;
-  timeOfDay(projectId: string, range: DateRange): Promise<TimeOfDayReport>;
+  overview(projectId: string, scope: ReportScope): Promise<OverviewReport>;
+  timeOfDay(projectId: string, scope: ReportScope): Promise<TimeOfDayReport>;
 }

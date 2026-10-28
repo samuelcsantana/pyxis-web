@@ -1,25 +1,25 @@
 import type { FunnelMode, FunnelReport, FunnelStep } from '@/domain/funnel';
 import type { FunnelSegmentDimension, FunnelSegmentsReport } from '@/domain/funnel-segments';
 import type { FunnelDrill, FunnelSubjectsPage } from '@/domain/funnel-subjects';
-import type { DateRange } from '../date-range';
+import type { ReportScope } from '../date-range';
 
 export interface IFunnelService {
   funnel(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     mode: FunnelMode,
     steps: readonly FunnelStep[],
   ): Promise<FunnelReport>;
   subjects(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     mode: FunnelMode,
     steps: readonly FunnelStep[],
     drill: FunnelDrill,
   ): Promise<FunnelSubjectsPage>;
   segments(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     steps: readonly FunnelStep[],
     by: FunnelSegmentDimension,
   ): Promise<FunnelSegmentsReport>;

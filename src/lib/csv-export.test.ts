@@ -1,8 +1,15 @@
 import { NextRequest } from 'next/server';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
-import { type CsvFileReader, csvExport, csvResponse, exportHref } from './csv-export';
+import {
+  type CsvFileReader,
+  csvExport,
+  csvResponse,
+  exportHref,
+  filteredNameParts,
+} from './csv-export';
 
 const state = vi.hoisted<{ admin: unknown }>(() => ({ admin: undefined }));
 
@@ -89,8 +96,23 @@ describe('csvExport', () => {
     expect(read).toHaveBeenCalledWith({
       project: ADMIN.projects[0],
       period: { preset: '7d', from: '2026-09-30', to: '2026-10-06' },
+      filters: NO_DASHBOARD_FILTERS,
       search: { range: '7d', table: 'pages' },
     });
+  });
+
+  it('reads the dashboard filters of the link and names the file as filtered', async () => {
+    const read = vi.fn<CsvFileReader>(({ filters }) =>
+      Promise.resolve({ ...FILE, nameParts: filteredNameParts(['overview'], filters) }),
+    );
+
+    const response = await download(
+      read,
+      '/p-store/overview/export?range=7d&device=mobile&os=beos',
+    );
+
+    expect(read.mock.calls[0]?.[0].filters).toEqual({ ...NO_DASHBOARD_FILTERS, device: 'mobile' });
+    expect(response.headers.get('content-disposition')).toContain('pyxis-overview-filtered.csv');
   });
 
   it('answers not found for a project the admin may not read', async () => {

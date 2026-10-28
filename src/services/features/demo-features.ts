@@ -1,6 +1,5 @@
 import { type FeatureKind, type FeaturesReport, type FeaturesWire } from '@/domain/features';
 import { featuresResponseSchema } from '@/domain/features.schema';
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord } from '../demo/demo-records';
 import {
@@ -11,6 +10,7 @@ import {
   groupOf,
   isNamedEvent,
   isPageView,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 import { demoDays } from '../demo/demo-series';
 
@@ -28,12 +28,12 @@ const FEATURE_EVENTS: Readonly<Record<FeatureKind, FeatureEvents>> = {
 
 export function demoFeaturesWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   kind: FeatureKind,
   now: Date,
 ): FeaturesWire {
   const { matches, nameOf } = FEATURE_EVENTS[kind];
-  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
   const byName = groupedBy(visits.flatMap((visit) => visit.events).filter(matches), nameOf);
   const days = demoDays(range);
   const daily = (name: string) => {
@@ -54,7 +54,7 @@ export function demoFeaturesWire(
 
 export function demoFeaturesReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   kind: FeatureKind,
   now: Date,
 ): FeaturesReport {

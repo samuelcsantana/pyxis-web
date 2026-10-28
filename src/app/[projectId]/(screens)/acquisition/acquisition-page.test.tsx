@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AcquisitionReport } from '@/domain/acquisition';
 import type { Admin } from '@/domain/admin';
@@ -78,7 +79,11 @@ describe('AcquisitionPage', () => {
 
     renderWithMessages(await renderAcquisition());
 
-    expect(acquisition).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
+    expect(acquisition).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-29',
+      to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
+    });
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
   });
 

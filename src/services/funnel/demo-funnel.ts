@@ -7,7 +7,6 @@ import {
 import type { FunnelSegmentDimension } from '@/domain/funnel-segments';
 import type { FunnelDrill } from '@/domain/funnel-subjects';
 import { type FunnelSubjectsWire, funnelResponseSchema } from '@/domain/funnel.schema';
-import type { DateRange } from '../date-range';
 import { DEMO_STORE, demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
 import { itemAt } from '../demo/demo-random';
@@ -19,6 +18,7 @@ import {
   isPageView,
   pathPattern,
   percentile,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 
 export const DEMO_FUNNEL_STEPS: readonly FunnelStep[] = DEMO_STORE.exampleFunnel;
@@ -74,13 +74,13 @@ function subjectsOf(
 
 export function demoFunnelSubjects(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   mode: FunnelMode,
   steps: readonly FunnelStep[],
   now: Date,
 ): readonly DemoFunnelSubject[] {
   const matchers = steps.map(matcherOf);
-  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
   return [...subjectsOf(visits, mode)].map(([id, owned]) => ({
     id,
     reached: stepTimes(
@@ -107,7 +107,7 @@ function gapsBetween(
 
 export function demoFunnelWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   mode: FunnelMode,
   steps: readonly FunnelStep[],
   now: Date,
@@ -130,13 +130,13 @@ function segmentOf(visits: readonly DemoVisitRecord[], by: FunnelSegmentDimensio
 
 export function demoFunnelSegmentsWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   steps: readonly FunnelStep[],
   by: FunnelSegmentDimension,
   now: Date,
 ) {
   const matchers = steps.map(matcherOf);
-  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
   const reached = [...groupedBy(visits, (visit) => visit.sessionId).values()]
     .map((owned) => ({
       segment: segmentOf(owned, by),
@@ -162,7 +162,7 @@ export function demoFunnelSegmentsWire(
 
 export function demoFunnelReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   mode: FunnelMode,
   steps: readonly FunnelStep[],
   now: Date,
@@ -202,7 +202,7 @@ function lastStepIndex(drill: FunnelDrill): number {
 
 export function demoFunnelSubjectsWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   mode: FunnelMode,
   steps: readonly FunnelStep[],
   drill: FunnelDrill,

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoTimelineReport } from '../timeline/demo-timeline';
@@ -13,7 +14,7 @@ import { MockRequestsService } from './mock-requests-service';
 import { createRequestsService } from './requests-service.factory';
 
 const API = 'https://api.pyxis.example.com';
-const RANGE = { from: '2026-09-22', to: '2026-10-05' };
+const RANGE = { from: '2026-09-22', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const STORE = DEMO_STORE.id;
 

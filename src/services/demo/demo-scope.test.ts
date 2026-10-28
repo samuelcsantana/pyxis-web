@@ -152,8 +152,9 @@ describe('demoVisitsIn', () => {
     const range = { from: TODAY, to: TODAY };
     const until = '12:00:00.000';
 
-    const cut = demoVisitsIn(DEMO_STORE, { range, now: NOW, until });
-    const whole = demoVisitsIn(DEMO_STORE, { range, now: NOW, until: null });
+    const filters = NO_DASHBOARD_FILTERS;
+    const cut = demoVisitsIn(DEMO_STORE, { range, filters, now: NOW, until });
+    const whole = demoVisitsIn(DEMO_STORE, { range, filters, now: NOW, until: null });
 
     expect(cut.flatMap((visit) => visit.events).every((found) => found.time < until)).toBe(true);
     expect(cut.length).toBeLessThan(whole.length);

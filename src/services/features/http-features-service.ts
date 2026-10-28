@@ -5,14 +5,14 @@ import { featuresResponseSchema } from '@/domain/features.schema';
 import { type PropertyBreakdownReport } from '@/domain/property-breakdown';
 import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
 import type { ApiReader } from '../api-reader';
-import { type DateRange, rangeQuery } from '../date-range';
+import { type ReportScope, reportQuery } from '../date-range';
 import type { IFeaturesService } from './features-service.interface';
 
 export class HttpFeaturesService implements IFeaturesService {
   constructor(private readonly api: ApiReader) {}
 
-  features(projectId: string, range: DateRange, kind: FeatureKind): Promise<FeaturesReport> {
-    const query = new URLSearchParams(rangeQuery(range));
+  features(projectId: string, scope: ReportScope, kind: FeatureKind): Promise<FeaturesReport> {
+    const query = new URLSearchParams(reportQuery(scope));
     query.set('kind', kind);
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/features?${query.toString()}`,
@@ -20,8 +20,12 @@ export class HttpFeaturesService implements IFeaturesService {
     );
   }
 
-  properties(projectId: string, range: DateRange, name: string): Promise<PropertyBreakdownReport> {
-    const query = new URLSearchParams(rangeQuery(range));
+  properties(
+    projectId: string,
+    scope: ReportScope,
+    name: string,
+  ): Promise<PropertyBreakdownReport> {
+    const query = new URLSearchParams(reportQuery(scope));
     query.set('name', name);
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/features/properties?${query.toString()}`,
@@ -29,9 +33,9 @@ export class HttpFeaturesService implements IFeaturesService {
     );
   }
 
-  engagement(projectId: string, range: DateRange): Promise<EngagementReport> {
+  engagement(projectId: string, scope: ReportScope): Promise<EngagementReport> {
     return this.api.get(
-      `/v1/projects/${encodeURIComponent(projectId)}/engagement?${rangeQuery(range)}`,
+      `/v1/projects/${encodeURIComponent(projectId)}/engagement?${reportQuery(scope)}`,
       engagementResponseSchema,
     );
   }

@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
@@ -252,7 +253,11 @@ describe('OverviewPage', () => {
 
     renderWithMessages(await renderOverview());
 
-    expect(overview).toHaveBeenCalledWith('p-store', { from: '2026-09-29', to: '2026-10-05' });
+    expect(overview).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-29',
+      to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
+    });
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
   });
@@ -373,6 +378,7 @@ describe('OverviewPage', () => {
     const empty = await new MockOverviewService().overview('p-store', {
       from: '2026-10-05',
       to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
     });
     state.overview = (): Promise<OverviewReport> =>
       Promise.resolve({
@@ -392,6 +398,7 @@ describe('OverviewPage', () => {
     const empty = await new MockOverviewService().overview('p-store', {
       from: '2026-10-05',
       to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
     });
     state.overview = (): Promise<OverviewReport> =>
       Promise.resolve({

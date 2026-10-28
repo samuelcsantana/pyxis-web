@@ -1,8 +1,7 @@
 import { HOURS_IN_A_DAY, WEEKDAYS } from '@/domain/time-of-day';
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord } from '../demo/demo-records';
-import { demoScopeOf, demoVisitsIn, isPageView } from '../demo/demo-scope';
+import { type DemoReportRange, demoScopeOf, demoVisitsIn, isPageView } from '../demo/demo-scope';
 
 const SUNDAY_FROM_DATE = 0;
 const HOUR_DIGITS = 2;
@@ -16,8 +15,8 @@ function startKey(event: DemoEventRecord): string {
   return `${String(isoWeekday(event.date))}:${String(Number(event.time.slice(0, HOUR_DIGITS)))}`;
 }
 
-export function demoTimeOfDayWire(projectId: string, range: DateRange, now: Date) {
-  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+export function demoTimeOfDayWire(projectId: string, range: DemoReportRange, now: Date) {
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
   const starts = visits.flatMap((visit) =>
     visit.events
       .filter(isPageView)

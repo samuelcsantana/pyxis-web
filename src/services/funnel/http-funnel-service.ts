@@ -9,11 +9,11 @@ import { funnelSegmentsResponseSchema } from '@/domain/funnel-segments.schema';
 import type { FunnelDrill, FunnelSubjectsPage } from '@/domain/funnel-subjects';
 import { funnelResponseSchema, funnelSubjectsResponseSchema } from '@/domain/funnel.schema';
 import type { ApiReader } from '../api-reader';
-import { type DateRange, rangeQuery } from '../date-range';
+import { type ReportScope, reportQuery } from '../date-range';
 import type { IFunnelService } from './funnel-service.interface';
 
-function funnelQuery(range: DateRange, mode: FunnelMode, steps: readonly FunnelStep[]) {
-  const query = new URLSearchParams(rangeQuery(range));
+function funnelQuery(scope: ReportScope, mode: FunnelMode, steps: readonly FunnelStep[]) {
+  const query = new URLSearchParams(reportQuery(scope));
   query.set('mode', mode);
   query.set('steps', serializeSteps(steps));
   return query;
@@ -24,11 +24,11 @@ export class HttpFunnelService implements IFunnelService {
 
   segments(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     steps: readonly FunnelStep[],
     by: FunnelSegmentDimension,
   ): Promise<FunnelSegmentsReport> {
-    const query = new URLSearchParams(rangeQuery(range));
+    const query = new URLSearchParams(reportQuery(scope));
     query.set('steps', serializeSteps(steps));
     query.set('by', by);
     return this.api.get(
@@ -39,11 +39,11 @@ export class HttpFunnelService implements IFunnelService {
 
   funnel(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     mode: FunnelMode,
     steps: readonly FunnelStep[],
   ): Promise<FunnelReport> {
-    const query = funnelQuery(range, mode, steps);
+    const query = funnelQuery(scope, mode, steps);
     return this.api.get(
       `/v1/projects/${encodeURIComponent(projectId)}/funnel?${query.toString()}`,
       funnelResponseSchema,
@@ -52,12 +52,12 @@ export class HttpFunnelService implements IFunnelService {
 
   subjects(
     projectId: string,
-    range: DateRange,
+    scope: ReportScope,
     mode: FunnelMode,
     steps: readonly FunnelStep[],
     drill: FunnelDrill,
   ): Promise<FunnelSubjectsPage> {
-    const query = funnelQuery(range, mode, steps);
+    const query = funnelQuery(scope, mode, steps);
     query.set('step', String(drill.step));
     query.set('outcome', drill.outcome);
     if (drill.cursor !== null) {

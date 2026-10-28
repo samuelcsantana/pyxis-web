@@ -1,4 +1,3 @@
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoVisitRecord } from '../demo/demo-records';
 import {
@@ -9,6 +8,7 @@ import {
   groupedBy,
   isPageView,
   roundedPercentile,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 
 const TOP_PAGES = 10;
@@ -46,8 +46,11 @@ function bucketOf(seconds: number): number {
   return countWhere(VISIT_LENGTH_BOUNDS_SECONDS, (bound) => seconds >= bound);
 }
 
-export function demoEngagementWire(projectId: string, range: DateRange, now: Date) {
-  const shapes = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now)).flatMap(shapeOf);
+export function demoEngagementWire(projectId: string, range: DemoReportRange, now: Date) {
+  const shapes = demoVisitsIn(
+    demoProjectOf(projectId),
+    demoScopeOf(range, now, range.filters),
+  ).flatMap(shapeOf);
   const isSinglePage = (shape: VisitShape) => shape.pageViews === 1;
   const byEntry = groupedBy(shapes, (shape) => shape.entryPath);
   const byExit = groupedBy(shapes, (shape) => shape.exitPath);

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { FunnelStep } from '@/domain/funnel';
 import { ApiReader } from '../api-reader';
 import { demoFeaturesWire } from '../features/demo-features';
@@ -16,7 +17,7 @@ import { MockFunnelService } from './mock-funnel-service';
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 const API = 'https://api.pyxis.example.com';
-const RANGE = { from: '2026-09-06', to: '2026-10-05' };
+const RANGE = { from: '2026-09-06', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS };
 const TWO: readonly FunnelStep[] = [
   { type: 'page', path: '/' },
   { type: 'event', name: 'cta_clicked' },

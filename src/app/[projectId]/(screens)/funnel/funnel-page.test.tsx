@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import type { Admin } from '@/domain/admin';
@@ -115,7 +116,7 @@ describe('FunnelPage', () => {
 
     expect(funnel).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-29', to: '2026-10-05' },
+      { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'visit',
       DEMO_FUNNEL_STEPS,
     );
@@ -142,7 +143,7 @@ describe('FunnelPage', () => {
 
     expect(funnel).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-06', to: '2026-10-05' },
+      { from: '2026-09-06', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'user',
       DEMO_FUNNEL_STEPS,
     );
@@ -258,7 +259,7 @@ describe('FunnelPage', () => {
 
     expect(subjects).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-06', to: '2026-10-05' },
+      { from: '2026-09-06', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'user',
       DEMO_FUNNEL_STEPS,
       { step: 1, outcome: 'reached', cursor: 'older' },

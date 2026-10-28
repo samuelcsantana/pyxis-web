@@ -22,6 +22,7 @@ import {
 import { devicesTableLabel } from '@/domain/devices-export';
 import { type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
 import { countryFilterOf, deviceFilterOf } from '@/domain/visits';
+import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -34,7 +35,7 @@ export const generateMetadata = screenMetadata('devices');
 
 export interface DevicesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch>;
+  readonly searchParams: Promise<PeriodSearch & DashboardSearch>;
 }
 
 interface DevicesReportViewProps {
@@ -116,17 +117,19 @@ function DevicesReportView({
 
 export default async function DevicesPage({ params, searchParams }: DevicesPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
+  const search = await searchParams;
   const now = new Date();
-  const period = resolvePeriod(await searchParams, project.timezone, now);
+  const period = resolvePeriod(search, project.timezone, now);
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
   const report = await readOrSignIn(() =>
-    createDevicesService().devices(project.id, { from: period.from, to: period.to }),
+    createDevicesService().devices(project.id, { from: period.from, to: period.to, filters }),
   );
   const visitsHref = screenHref(project.id, 'visits', periodQuery(period));
   const deviceVisitsHref = (deviceType: string) => {
     const device = deviceFilterOf(deviceType);
     return device === null ? null : linkWith(visitsHref, { device });
   };
-  const i18n = await getI18n();
   const countryVisitsHref = (value: string) => {
     const country = countryFilterOf(value);
     return country === null ? null : linkWith(visitsHref, { country });
