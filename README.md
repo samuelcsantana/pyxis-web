@@ -227,7 +227,11 @@ Shipping now:
   period says "No visits match these filters" instead of the install guide, and the news bar and
   the "+N" and "New" marks pause while a filter is on ("N on the site now" and the menu counts
   stay). The chips are a parallel route slot (`@filters`) of the screens layout, drawn on the
-  server, so they add no client code
+  server, so they add no client code. Each named row (device types, browsers, systems, countries,
+  regions, sources, channels, campaigns, events, screens, top pages and top events, never an
+  aggregate such as "Other") has a filter button right after its name: it adds that value to the
+  filters of every screen, shows a filled × once it is on and then removes it, while the name
+  still opens the row's visits
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity
   per day (with every daily figure of its cards), top pages and top events; the routes of
   Requests (writes or failed reads); the Features ranking (events or screens, search kept); the
