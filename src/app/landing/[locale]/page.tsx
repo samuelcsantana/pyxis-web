@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { notFound } from 'next/navigation';
 import { ArchitectureSection } from '@/components/landing/architecture-section';
 import { LazyAskClaudeNudge } from '@/components/landing/lazy-ask-claude-nudge';
@@ -102,7 +103,7 @@ async function landingOf(params: LandingHomeProps['params']): Promise<Landing | 
 async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
   const now = new Date();
   const period = resolvePeriod({ range: LANDING_PREVIEW_RANGE }, DEMO_STORE.timezone, now);
-  const range = { from: period.from, to: period.to };
+  const range = { from: period.from, to: period.to, filters: NO_DASHBOARD_FILTERS };
   const [overview, funnel, writes] = await Promise.all([
     createOverviewService().overview(DEMO_STORE.id, range),
     createFunnelService().funnel(DEMO_STORE.id, range, DEFAULT_FUNNEL_MODE, DEMO_FUNNEL_STEPS),
@@ -118,7 +119,10 @@ async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
 }
 
 async function demoDigestOf(i18n: I18n): Promise<DigestPreviewView> {
-  const week = lastClosedWeek(todayIn(DEMO_STORE.timezone, new Date()));
+  const week = {
+    ...lastClosedWeek(todayIn(DEMO_STORE.timezone, new Date())),
+    filters: NO_DASHBOARD_FILTERS,
+  };
   const [overview, writes] = await Promise.all([
     createOverviewService().overview(DEMO_STORE.id, week),
     createRequestsService().requests(DEMO_STORE.id, week, null),

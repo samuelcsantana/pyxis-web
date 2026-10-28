@@ -1,7 +1,7 @@
 import { ApiRequestError } from '@/domain/errors';
 import { FAILED_READS, type RequestKind, type RequestsReport } from '@/domain/requests';
 import type { RouteDay } from '@/domain/route-days';
-import type { DateRange } from '../date-range';
+import type { ReportScope } from '../date-range';
 import { createRequestsService } from './requests-service.factory';
 
 const STATUS_BAD_REQUEST = 400;
@@ -19,25 +19,25 @@ async function nullOnBadRequest<Result>(read: () => Promise<Result>): Promise<Re
 
 export async function readRequestsReport(
   projectId: string,
-  range: DateRange,
+  scope: ReportScope,
   kind: RequestKind,
   screen: string | null,
 ): Promise<RequestsReport | null> {
   const service = createRequestsService();
   if (kind !== FAILED_READS) {
-    return service.requests(projectId, range, screen);
+    return service.requests(projectId, scope, screen);
   }
-  return nullOnBadRequest(() => service.failedReads(projectId, range, screen));
+  return nullOnBadRequest(() => service.failedReads(projectId, scope, screen));
 }
 
 export async function readRouteDays(
   projectId: string,
-  range: DateRange,
+  scope: ReportScope,
   kind: RequestKind,
   screen: string | null,
   route: string,
 ): Promise<readonly RouteDay[] | null> {
   return nullOnBadRequest(() =>
-    createRequestsService().routeDays(projectId, range, kind, screen, route),
+    createRequestsService().routeDays(projectId, scope, kind, screen, route),
   );
 }

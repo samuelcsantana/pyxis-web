@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { demoOverviewWire } from './demo-overview';
@@ -8,7 +9,7 @@ import { MockOverviewService } from './mock-overview-service';
 import { createOverviewService } from './overview-service.factory';
 
 const API = 'https://api.pyxis.example.com';
-const RANGE = { from: '2026-09-29', to: '2026-10-05' };
+const RANGE = { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 vi.mock('next/headers', () => ({
@@ -94,7 +95,11 @@ describe('MockOverviewService', () => {
     const service = new MockOverviewService();
 
     const week = await service.overview(DEMO_STORE.id, RANGE);
-    const day = await service.overview(DEMO_STORE.id, { from: '2026-10-05', to: '2026-10-05' });
+    const day = await service.overview(DEMO_STORE.id, {
+      from: '2026-10-05',
+      to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
+    });
 
     expect(day.days[0]).toEqual(week.days.at(-1));
   });

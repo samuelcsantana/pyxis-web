@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
@@ -92,7 +93,7 @@ describe('RequestsPage', () => {
 
     expect(requests).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-29', to: '2026-10-05' },
+      { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       null,
     );
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
@@ -149,7 +150,7 @@ describe('RequestsPage', () => {
 
     expect(failedReads).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-06', to: '2026-10-05' },
+      { from: '2026-09-06', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       null,
     );
     expect(screen.getByRole('group', { name: 'Failed reads' })).toBeInTheDocument();
@@ -219,7 +220,7 @@ describe('RequestsPage', () => {
 
     expect(requests).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-06', to: '2026-10-05' },
+      { from: '2026-09-06', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       '/orders',
     );
     expect(within(screen.getByRole('table', { name: 'Routes' })).getAllByRole('row')).toHaveLength(
@@ -302,7 +303,7 @@ describe('RequestsPage', () => {
     const days = await screen.findByRole('table', { name: 'Day by day' });
     expect(routeDays).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-29', to: '2026-10-05' },
+      { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'reads',
       '/products',
       'GET /products',

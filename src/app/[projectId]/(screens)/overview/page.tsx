@@ -32,6 +32,7 @@ import {
   todayIn,
 } from '@/domain/period';
 import type { TimeOfDayReport } from '@/domain/time-of-day';
+import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -53,7 +54,7 @@ function footnote(i18n: I18n): string {
   ].join(' ');
 }
 
-export interface OverviewSearch extends PeriodSearch {
+export interface OverviewSearch extends PeriodSearch, DashboardSearch {
   readonly metric?: string | string[];
 }
 
@@ -147,13 +148,14 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const today = todayIn(project.timezone, now);
-  const range = { from: period.from, to: period.to };
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
+  const scope = { from: period.from, to: period.to, filters };
   const [report, timeOfDay] = await readOrSignIn(() => {
     const service = createOverviewService();
-    return Promise.all([service.overview(project.id, range), service.timeOfDay(project.id, range)]);
+    return Promise.all([service.overview(project.id, scope), service.timeOfDay(project.id, scope)]);
   });
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
-  const i18n = await getI18n();
   const kpis = overviewKpis(report, compared, project.conversionEvent, i18n);
   const metric = chartMetric(
     search.metric,

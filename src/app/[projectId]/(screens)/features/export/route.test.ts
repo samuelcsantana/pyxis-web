@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { IFeaturesService } from '@/services/features/features-service.interface';
@@ -46,7 +47,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({ currentAdmin: () => Promise.resolve(ADMIN) }),
 }));
 
-const RANGE = { from: '2026-09-30', to: '2026-10-06' };
+const RANGE = { from: '2026-09-30', to: '2026-10-06', filters: NO_DASHBOARD_FILTERS };
 
 function download(query: string) {
   return GET(new NextRequest(`https://pyxis.example.com/p-store/features/export?${query}`), {

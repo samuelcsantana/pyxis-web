@@ -5,7 +5,6 @@ import {
   CHANNELS,
 } from '@/domain/acquisition';
 import { acquisitionResponseSchema } from '@/domain/acquisition.schema';
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoVisitRecord } from '../demo/demo-records';
 import { itemAt } from '../demo/demo-random';
@@ -18,6 +17,7 @@ import {
   groupOf,
   isPageView,
   visitDate,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 import { demoDays } from '../demo/demo-series';
 
@@ -108,12 +108,12 @@ function campaignsOf(entries: readonly Entry[], countsConversions: boolean): Cam
 
 export function demoAcquisitionWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   now: Date,
 ): AcquisitionWire {
   const project = demoProjectOf(projectId);
   const entries = entriesOf(
-    demoVisitsIn(project, demoScopeOf(range, now)),
+    demoVisitsIn(project, demoScopeOf(range, now, range.filters)),
     project.conversionEvent,
   );
   const byDate = groupedBy(entries, (entry) => visitDate(entry.visit));
@@ -133,7 +133,7 @@ export function demoAcquisitionWire(
 
 export function demoAcquisitionReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   now: Date,
 ): AcquisitionReport {
   return acquisitionResponseSchema.parse(demoAcquisitionWire(projectId, range, now));

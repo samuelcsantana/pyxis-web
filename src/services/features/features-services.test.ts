@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { ApiReader } from '../api-reader';
 import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import { MockOverviewService } from '../overview/mock-overview-service';
@@ -12,7 +13,7 @@ import { MockFeaturesService } from './mock-features-service';
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 const API = 'https://api.pyxis.example.com';
-const RANGE = { from: '2026-09-22', to: '2026-10-05' };
+const RANGE = { from: '2026-09-22', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS };
 
 vi.mock('next/headers', () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
@@ -109,6 +110,7 @@ describe('MockFeaturesService engagement', () => {
     const engagement = await new MockFeaturesService().engagement(DEMO_STORE.id, {
       from: '2024-01-01',
       to: '2024-01-07',
+      filters: NO_DASHBOARD_FILTERS,
     });
 
     expect(engagement).toMatchObject({

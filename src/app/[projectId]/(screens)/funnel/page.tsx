@@ -39,6 +39,7 @@ import {
   SEGMENT_PARAMETER,
 } from '@/domain/funnel-segments';
 import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
+import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
@@ -52,7 +53,10 @@ export const generateMetadata = screenMetadata('funnel');
 export interface FunnelPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
   readonly searchParams: Promise<
-    PeriodSearch & FunnelSearch & FunnelDrillSearch & { readonly [SEGMENT_PARAMETER]?: string }
+    PeriodSearch &
+      DashboardSearch &
+      FunnelSearch &
+      FunnelDrillSearch & { readonly [SEGMENT_PARAMETER]?: string }
   >;
 }
 
@@ -93,7 +97,9 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const editorKeep = { ...Object.fromEntries(new URLSearchParams(periodQuery(period))), mode };
   const drill = steps === null ? null : funnelDrillOf(search, steps.length);
   const by = funnelSegmentDimensionOf(search[SEGMENT_PARAMETER]);
-  const range = { from: period.from, to: period.to };
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
+  const range = { from: period.from, to: period.to, filters };
   const service = createFunnelService();
   const [report, drilled, segments] =
     steps === null
@@ -113,7 +119,6 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const kept = { ...funnelKept, ...segmentKept(by) };
   const drillHref = (parameters: Parameters) =>
     `${linkTo({ ...kept, ...parameters })}#${FUNNEL_SUBJECTS_ID}`;
-  const i18n = await getI18n();
   return (
     <ScreenContent
       readAt={now.getTime()}

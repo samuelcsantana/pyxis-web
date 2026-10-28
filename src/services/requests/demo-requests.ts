@@ -1,6 +1,5 @@
 import { type RequestKind, type RequestsReport, type RequestsWire } from '@/domain/requests';
 import { requestsResponseSchema } from '@/domain/requests.schema';
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord } from '../demo/demo-records';
 import { itemAt } from '../demo/demo-random';
@@ -15,6 +14,7 @@ import {
   isFailedStatus,
   isWrite,
   roundedPercentile,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 import { demoDays } from '../demo/demo-series';
 import type { DemoRequest } from '../demo/demo-visits';
@@ -59,18 +59,19 @@ export function statusClassOf(status: number): StatusClass {
 
 function callsOf(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   kind: RequestKind,
   screen: string | null,
   now: Date,
 ): readonly Call[] {
   const counted = COUNTED[kind];
-  return demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now)).flatMap((visit) =>
-    visit.events.flatMap((event) =>
-      event.request !== null && counted(event) && (screen === null || event.path === screen)
-        ? [{ event, request: event.request, session: visit.sessionId }]
-        : [],
-    ),
+  return demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters)).flatMap(
+    (visit) =>
+      visit.events.flatMap((event) =>
+        event.request !== null && counted(event) && (screen === null || event.path === screen)
+          ? [{ event, request: event.request, session: visit.sessionId }]
+          : [],
+      ),
   );
 }
 
@@ -134,7 +135,7 @@ function statusClasses(calls: readonly Call[]): DayWire['by_status_class'] {
   };
 }
 
-function routeDays(calls: readonly Call[], range: DateRange, route: DemoRouteKey) {
+function routeDays(calls: readonly Call[], range: DemoReportRange, route: DemoRouteKey) {
   const ofRoute = calls.filter(
     (call) => call.request.method === route.method && call.request.route === route.route,
   );
@@ -155,7 +156,7 @@ function routeDays(calls: readonly Call[], range: DateRange, route: DemoRouteKey
 function requestsWire(
   calls: readonly Call[],
   kind: RequestKind,
-  range: DateRange,
+  range: DemoReportRange,
   route: DemoRouteKey | null,
   timezone: string,
 ): RequestsWire {
@@ -177,7 +178,7 @@ function requestsWire(
 
 export function demoRequestsWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   screen: string | null,
   now: Date,
   route: DemoRouteKey | null,
@@ -193,7 +194,7 @@ export function demoRequestsWire(
 
 export function demoFailedReadsWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   screen: string | null,
   now: Date,
   route: DemoRouteKey | null,
@@ -214,7 +215,7 @@ function routeKeyOf(route: string): DemoRouteKey {
 
 export function demoRouteRequestsWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   kind: RequestKind,
   screen: string | null,
   route: string,
@@ -231,7 +232,7 @@ export function demoRouteRequestsWire(
 
 export function demoRequestsReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   screen: string | null,
   now: Date,
   route: DemoRouteKey | null,
@@ -241,7 +242,7 @@ export function demoRequestsReport(
 
 export function demoFailedReadsReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   screen: string | null,
   now: Date,
   route: DemoRouteKey | null,

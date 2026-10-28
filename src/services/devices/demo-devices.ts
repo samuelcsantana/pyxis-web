@@ -1,6 +1,5 @@
 import { type DevicesReport, type DevicesWire, OTHER_VALUE } from '@/domain/devices';
 import { devicesResponseSchema } from '@/domain/devices.schema';
-import type { DateRange } from '../date-range';
 import { itemAt } from '../demo/demo-random';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoVisitRecord } from '../demo/demo-records';
@@ -11,6 +10,7 @@ import {
   demoVisitsIn,
   groupedBy,
   hasPageView,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 
 export const TOP_DEVICE_VALUES = 5;
@@ -122,9 +122,9 @@ function regionShares(
   ];
 }
 
-export function demoDevicesWire(projectId: string, range: DateRange, now: Date): DevicesWire {
+export function demoDevicesWire(projectId: string, range: DemoReportRange, now: Date): DevicesWire {
   const project = demoProjectOf(projectId);
-  const visits = demoVisitsIn(project, demoScopeOf(range, now));
+  const visits = demoVisitsIn(project, demoScopeOf(range, now, range.filters));
   const of = (valueOf: (visit: DemoVisitRecord) => string) =>
     shares(visits, valueOf, project.conversionEvent);
   return {
@@ -136,6 +136,10 @@ export function demoDevicesWire(projectId: string, range: DateRange, now: Date):
   };
 }
 
-export function demoDevicesReport(projectId: string, range: DateRange, now: Date): DevicesReport {
+export function demoDevicesReport(
+  projectId: string,
+  range: DemoReportRange,
+  now: Date,
+): DevicesReport {
   return devicesResponseSchema.parse(demoDevicesWire(projectId, range, now));
 }

@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { DevicesReport } from '@/domain/devices';
@@ -72,7 +73,11 @@ describe('DevicesPage', () => {
 
     renderWithMessages(await renderDevices());
 
-    expect(devices).toHaveBeenCalledWith('p-store', { from: '2026-09-06', to: '2026-10-05' });
+    expect(devices).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-06',
+      to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
+    });
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
   });
 
@@ -173,6 +178,7 @@ describe('DevicesPage', () => {
     const report = await new MockDevicesService().devices('p-store', {
       from: '2026-09-06',
       to: '2026-10-05',
+      filters: NO_DASHBOARD_FILTERS,
     });
     const counted: DevicesReport = {
       ...report,

@@ -1,4 +1,4 @@
-import type { DashboardFilters } from '@/domain/dashboard-filters';
+import { type DashboardFilters, NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { DateRange } from '../date-range';
 import { demoAttributedVisits } from './demo-attribution';
 import type { DemoProject } from './demo-catalog';
@@ -15,8 +15,13 @@ import { demoDays } from './demo-series';
 
 export const DEMO_FIRST_EVENT_DATE = '2025-01-06';
 
+export interface DemoReportRange extends DateRange {
+  readonly filters?: DashboardFilters;
+}
+
 export interface DemoScope {
   readonly range: DateRange;
+  readonly filters: DashboardFilters;
   readonly now: Date;
   readonly until: string | null;
 }
@@ -71,14 +76,21 @@ function withinScope(visit: DemoVisitRecord, scope: DemoScope): readonly DemoVis
 }
 
 export function demoVisitsIn(project: DemoProject, scope: DemoScope): readonly DemoVisitRecord[] {
+  const matches = dashboardMatcherOf(scope.filters);
   return [
     ...demoShowcaseVisits(project, scope.now),
     ...demoDays(scope.range).flatMap((date) => demoVisitsOfDay(project, date)),
-  ].flatMap((visit) => withinScope(visit, scope));
+  ]
+    .flatMap((visit) => withinScope(visit, scope))
+    .filter(matches);
 }
 
-export function demoScopeOf(range: DateRange, now: Date): DemoScope {
-  return { range, now, until: null };
+export function demoScopeOf(
+  range: DateRange,
+  now: Date,
+  filters: DashboardFilters = NO_DASHBOARD_FILTERS,
+): DemoScope {
+  return { range, filters, now, until: null };
 }
 
 export function isPageView(event: DemoEventRecord): boolean {

@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { Admin } from '@/domain/admin';
 import { ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import { MockRequestsService } from '@/services/requests/mock-requests-service';
 import type { IRequestsService } from '@/services/requests/requests-service.interface';
-import { loadRouteDays } from './actions';
+import { loadRouteDays, type RouteDaysScope } from './actions';
 
 const state = vi.hoisted<{ admin: unknown; routeDays: IRequestsService['routeDays'] }>(() => ({
   admin: undefined,
@@ -39,7 +40,7 @@ const ADMIN: Admin = {
   email: 'owner@example.com',
   projects: [{ id: 'demo', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
 };
-const WRITES = { from: '2026-09-29', to: '2026-10-05', kind: 'writes', screen: null };
+const WRITES = { from: '2026-09-29', to: '2026-10-05', kind: 'writes', screen: null, filters: {} };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 
 beforeEach(() => {
@@ -62,13 +63,32 @@ describe('loadRouteDays', () => {
 
     expect(routeDays).toHaveBeenCalledWith(
       'demo',
-      { from: '2026-09-29', to: '2026-10-05' },
+      { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'writes',
       '/orders',
       'POST /orders',
     );
     expect(view?.rows.length).toBeGreaterThan(0);
     expect(view?.rows[0]?.median).toMatch(/ ms$/);
+  });
+
+  it('reads the days of a route within the dashboard filters of the screen', async () => {
+    const routeDays = vi.fn<IRequestsService['routeDays']>(() => Promise.resolve(null));
+    state.routeDays = routeDays;
+
+    await loadRouteDays('demo', { ...WRITES, filters: { os: 'ios' } }, 'POST /orders');
+
+    expect(routeDays).toHaveBeenCalledWith(
+      'demo',
+      {
+        from: '2026-09-29',
+        to: '2026-10-05',
+        filters: { ...NO_DASHBOARD_FILTERS, os: 'ios' },
+      },
+      'writes',
+      null,
+      'POST /orders',
+    );
   });
 
   it('reads the days of a failed read', async () => {
@@ -99,9 +119,10 @@ describe('loadRouteDays', () => {
     ['an unknown kind', { ...WRITES, kind: 'pages' }, 'POST /orders'],
     ['a screen that is not a path', { ...WRITES, screen: 'orders' }, 'POST /orders'],
     ['a date that is not one', { ...WRITES, from: 'yesterday' }, 'POST /orders'],
+    ['filters that are not texts', { ...WRITES, filters: { os: ['ios'] } }, 'POST /orders'],
   ])('refuses %s', async (_label, scope, route) => {
-    await expect(loadRouteDays('demo', scope, route)).rejects.toThrow(
-      'The days of a route need a valid range, kind, screen and route.',
+    await expect(loadRouteDays('demo', scope as unknown as RouteDaysScope, route)).rejects.toThrow(
+      'The days of a route need a valid range, kind, screen, filters and route.',
     );
   });
 

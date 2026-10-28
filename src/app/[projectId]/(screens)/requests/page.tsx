@@ -29,6 +29,11 @@ import {
 } from '@/domain/requests';
 import { requestsTableLabel } from '@/domain/requests-export';
 import { routeDaysText } from '@/domain/route-days';
+import {
+  dashboardFilterParameters,
+  type DashboardSearch,
+  dashboardFiltersOf,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -43,7 +48,7 @@ export const generateMetadata = screenMetadata('requests');
 
 export interface RequestsPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch & RequestsSearch>;
+  readonly searchParams: Promise<PeriodSearch & RequestsSearch & DashboardSearch>;
 }
 
 interface RequestFilter {
@@ -108,12 +113,18 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
     failingOnly: kind !== FAILED_READS && failingOnlyOf(search),
     screen: screenFilterOf(search),
   };
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
   const report = await readOrSignIn(() =>
-    readRequestsReport(project.id, { from: period.from, to: period.to }, kind, filter.screen),
+    readRequestsReport(
+      project.id,
+      { from: period.from, to: period.to, filters },
+      kind,
+      filter.screen,
+    ),
   );
   const basePath = screenHref(project.id, 'requests');
   const hrefFor = (target: RequestFilter) => `${basePath}?${filterQuery(period, target)}`;
-  const i18n = await getI18n();
   return (
     <ScreenContent
       readAt={now.getTime()}
@@ -184,6 +195,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                   to: period.to,
                   kind,
                   screen: filter.screen,
+                  filters: dashboardFilterParameters(filters),
                 })}
                 routeDaysText={routeDaysText(kind, i18n)}
                 text={requestsTableText(i18n)}

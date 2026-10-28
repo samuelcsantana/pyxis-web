@@ -3,7 +3,6 @@ import {
   type PropertyBreakdownWire,
 } from '@/domain/property-breakdown';
 import { propertyBreakdownResponseSchema } from '@/domain/property-breakdown.schema';
-import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import {
   byKeys,
@@ -12,6 +11,7 @@ import {
   distinctCount,
   groupedBy,
   isNamedEvent,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 
 export const VALUES_PER_KEY = 10;
@@ -41,11 +41,11 @@ function valuesOf(key: string, carried: readonly Carried[]) {
 
 export function demoPropertyBreakdownWire(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   name: string,
   now: Date,
 ): PropertyBreakdownWire {
-  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now));
+  const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
   const events = visits.flatMap((visit) =>
     visit.events
       .filter((event) => isNamedEvent(event) && event.name === name)
@@ -69,7 +69,7 @@ export function demoPropertyBreakdownWire(
 
 export function demoPropertyBreakdownReport(
   projectId: string,
-  range: DateRange,
+  range: DemoReportRange,
   name: string,
   now: Date,
 ): PropertyBreakdownReport {

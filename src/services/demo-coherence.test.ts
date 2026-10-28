@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { visitsTotal } from '@/domain/acquisition';
 import { addDays, todayIn } from '@/domain/period';
 import { MockAcquisitionService } from './acquisition/mock-acquisition-service';
 import { MockArrivalsService } from './arrivals/mock-arrivals-service';
-import type { DateRange } from './date-range';
+import type { ReportScope } from './date-range';
 import { DEMO_PROJECTS, DEMO_STORE } from './demo/demo-projects';
 import { MockDevicesService } from './devices/mock-devices-service';
 import { MockFeaturesService } from './features/mock-features-service';
@@ -21,16 +22,16 @@ const PERIOD_DAYS = { today: 1, '7d': 7, '30d': 30 } as const;
 const TOP_ITEMS = 10;
 const ARRIVALS_LOOK_BACK_MS = 3 * 60 * 60 * 1_000;
 
-function periodEnding(timeZone: string, days: number): DateRange {
+function periodEnding(timeZone: string, days: number): ReportScope {
   const today = todayIn(timeZone, NOW);
-  return { from: addDays(today, 1 - days), to: today };
+  return { from: addDays(today, 1 - days), to: today, filters: NO_DASHBOARD_FILTERS };
 }
 
 function sum(values: readonly number[]): number {
   return values.reduce((total, value) => total + value, 0);
 }
 
-async function screensOf(projectId: string, range: DateRange) {
+async function screensOf(projectId: string, range: ReportScope) {
   const [overview, devices, acquisition, events, pages, requests] = await Promise.all([
     new MockOverviewService().overview(projectId, range),
     new MockDevicesService().devices(projectId, range),
@@ -41,6 +42,50 @@ async function screensOf(projectId: string, range: DateRange) {
   ]);
   return { overview, devices, acquisition, events, pages, requests };
 }
+
+describe('the demo screens under the same filters', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('count the same visits on Overview, Acquisition and Visits, fewer than without them', async () => {
+    const whole = periodEnding(DEMO_STORE.timezone, PERIOD_DAYS['30d']);
+    const filters = { ...NO_DASHBOARD_FILTERS, device: 'mobile' as const, os: 'ios' as const };
+    const filtered = { ...whole, filters };
+    const [overview, acquisition, visits, unfiltered] = await Promise.all([
+      new MockOverviewService().overview(DEMO_STORE.id, filtered),
+      new MockAcquisitionService().acquisition(DEMO_STORE.id, filtered),
+      new MockVisitsService().visits(
+        DEMO_STORE.id,
+        whole,
+        { ...NO_VISIT_FILTERS, ...filters },
+        null,
+      ),
+      new MockOverviewService().overview(DEMO_STORE.id, whole),
+    ]);
+
+    expect(overview.kpis.visits.current).toBeGreaterThan(0);
+    expect(overview.kpis.visits.current).toBeLessThan(unfiltered.kpis.visits.current);
+    expect(visitsTotal(acquisition.days)).toBe(overview.kpis.visits.current);
+    expect(visits.total).toBe(overview.kpis.visits.current);
+  });
+
+  it('compare with the previous period under the same filters', async () => {
+    const yesterday = addDays(todayIn(DEMO_STORE.timezone, NOW), -1);
+    const filters = { ...NO_DASHBOARD_FILTERS, browser: 'safari' as const };
+    const range = { from: addDays(yesterday, -6), to: yesterday, filters };
+    const overview = new MockOverviewService();
+    const week = await overview.overview(DEMO_STORE.id, range);
+    const weekBefore = await overview.overview(DEMO_STORE.id, { ...previousRange(range), filters });
+
+    expect(week.kpis.visits.previous).toBe(weekBefore.kpis.visits.current);
+  });
+});
 
 describe('the demo screens', () => {
   beforeEach(() => {
@@ -269,10 +314,13 @@ describe('the demo screens', () => {
 
   it('compare a past period with the period before it as that period counts itself', async () => {
     const yesterday = addDays(todayIn(DEMO_STORE.timezone, NOW), -1);
-    const range = { from: addDays(yesterday, -6), to: yesterday };
+    const range = { from: addDays(yesterday, -6), to: yesterday, filters: NO_DASHBOARD_FILTERS };
     const overview = new MockOverviewService();
     const week = await overview.overview(DEMO_STORE.id, range);
-    const weekBefore = await overview.overview(DEMO_STORE.id, previousRange(range));
+    const weekBefore = await overview.overview(DEMO_STORE.id, {
+      ...previousRange(range),
+      filters: NO_DASHBOARD_FILTERS,
+    });
 
     expect(week.comparison).toEqual({ kind: 'whole-days' });
     expect(week.kpis.visits.previous).toBe(weekBefore.kpis.visits.current);

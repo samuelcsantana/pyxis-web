@@ -26,6 +26,7 @@ import {
   periodQuery,
   resolvePeriod,
 } from '@/domain/period';
+import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -38,7 +39,7 @@ export const generateMetadata = screenMetadata('acquisition');
 
 export interface AcquisitionPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch>;
+  readonly searchParams: Promise<PeriodSearch & DashboardSearch>;
 }
 
 interface AcquisitionReportViewProps {
@@ -108,12 +109,18 @@ function AcquisitionReportView({
 
 export default async function AcquisitionPage({ params, searchParams }: AcquisitionPageProps) {
   const { project } = await projectOrNotFound((await params).projectId);
+  const search = await searchParams;
   const now = new Date();
-  const period = resolvePeriod(await searchParams, project.timezone, now);
-  const report = await readOrSignIn(() =>
-    createAcquisitionService().acquisition(project.id, { from: period.from, to: period.to }),
-  );
+  const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
+  const report = await readOrSignIn(() =>
+    createAcquisitionService().acquisition(project.id, {
+      from: period.from,
+      to: period.to,
+      filters,
+    }),
+  );
   const visitsPath = screenHref(project.id, 'visits', periodQuery(period));
   return (
     <ScreenContent

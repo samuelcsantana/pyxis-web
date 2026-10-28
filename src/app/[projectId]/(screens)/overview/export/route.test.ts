@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
@@ -70,7 +71,11 @@ describe('GET /[projectId]/overview/export', () => {
 
     const response = await download('range=7d');
 
-    expect(overview).toHaveBeenCalledWith('p-store', { from: '2026-09-30', to: '2026-10-06' });
+    expect(overview).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-30',
+      to: '2026-10-06',
+      filters: NO_DASHBOARD_FILTERS,
+    });
     expect(response.headers.get('content-disposition')).toBe(
       'attachment; filename="pyxis-overview-daily-2026-09-30-2026-10-06.csv"',
     );

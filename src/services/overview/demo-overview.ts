@@ -1,6 +1,7 @@
 import { type OverviewReport, type OverviewWire } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
 import { todayIn } from '@/domain/period';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
@@ -18,6 +19,7 @@ import {
   isPageView,
   isWrite,
   visitDate,
+  type DemoReportRange,
 } from '../demo/demo-scope';
 import { demoDays, previousRange } from '../demo/demo-series';
 
@@ -87,12 +89,22 @@ function writeErrors(figures: Figures) {
   return { failed: figures.failedWrites, total: figures.writes };
 }
 
-export function demoOverviewWire(projectId: string, range: DateRange, now: Date): OverviewWire {
+export function demoOverviewWire(
+  projectId: string,
+  range: DemoReportRange,
+  now: Date,
+): OverviewWire {
   const project = demoProjectOf(projectId);
   const { conversionEvent } = project;
   const cutoff = comparisonCutoff(range, project.timezone, now);
-  const currentScope: DemoScope = { range, now, until: null };
-  const previousScope: DemoScope = { range: previousRange(range), now, until: cutoff };
+  const filters = range.filters ?? NO_DASHBOARD_FILTERS;
+  const currentScope: DemoScope = { range, filters, now, until: null };
+  const previousScope: DemoScope = {
+    range: previousRange(range),
+    filters,
+    now,
+    until: cutoff,
+  };
   const visits = demoVisitsIn(project, currentScope);
   const previousVisits = demoVisitsIn(project, previousScope);
   const current = figuresOf(visits, conversionEvent);
@@ -133,6 +145,10 @@ export function demoOverviewWire(projectId: string, range: DateRange, now: Date)
   };
 }
 
-export function demoOverviewReport(projectId: string, range: DateRange, now: Date): OverviewReport {
+export function demoOverviewReport(
+  projectId: string,
+  range: DemoReportRange,
+  now: Date,
+): OverviewReport {
   return overviewResponseSchema.parse(demoOverviewWire(projectId, range, now));
 }

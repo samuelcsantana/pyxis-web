@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
@@ -80,7 +81,7 @@ describe('FeaturesPage', () => {
 
     expect(features).toHaveBeenCalledWith(
       'p-store',
-      { from: '2026-09-29', to: '2026-10-05' },
+      { from: '2026-09-29', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS },
       'events',
     );
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();

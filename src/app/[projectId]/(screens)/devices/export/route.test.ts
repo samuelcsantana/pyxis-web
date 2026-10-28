@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { IDevicesService } from '@/services/devices/devices-service.interface';
@@ -58,6 +59,7 @@ describe('GET /[projectId]/devices/export', () => {
     const report = await new MockDevicesService().devices('p-store', {
       from: '2026-09-07',
       to: '2026-10-06',
+      filters: NO_DASHBOARD_FILTERS,
     });
 
     const response = await GET(
@@ -65,7 +67,11 @@ describe('GET /[projectId]/devices/export', () => {
       { params: Promise.resolve({ projectId: 'p-store' }) },
     );
 
-    expect(devices).toHaveBeenCalledWith('p-store', { from: '2026-09-07', to: '2026-10-06' });
+    expect(devices).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-07',
+      to: '2026-10-06',
+      filters: NO_DASHBOARD_FILTERS,
+    });
     expect(response.headers.get('content-disposition')).toBe(
       'attachment; filename="pyxis-devices-2026-09-07-2026-10-06.csv"',
     );

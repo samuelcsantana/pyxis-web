@@ -16,6 +16,11 @@ import {
 } from '@/domain/features';
 import { featuresTableLabel } from '@/domain/features-export';
 import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
+import {
+  dashboardFilterParameters,
+  type DashboardSearch,
+  dashboardFiltersOf,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import { SECTION_STACK } from '@/components/ui/panel-classes';
 import { Reveal } from '@/components/ui/reveal';
@@ -29,7 +34,7 @@ export const generateMetadata = screenMetadata('features');
 
 export interface FeaturesPageProps {
   readonly params: Promise<{ readonly projectId: string }>;
-  readonly searchParams: Promise<PeriodSearch & FeatureSearchParameters>;
+  readonly searchParams: Promise<PeriodSearch & FeatureSearchParameters & DashboardSearch>;
 }
 
 export default async function FeaturesPage({ params, searchParams }: FeaturesPageProps) {
@@ -39,19 +44,20 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const period = resolvePeriod(search, project.timezone, now);
   const kind = featureKindOf(search);
   const query = searchQueryOf(search);
-  const range = { from: period.from, to: period.to };
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(search, i18n);
+  const scope = { from: period.from, to: period.to, filters };
   const [report, engagement] = await readOrSignIn(() => {
     const service = createFeaturesService();
     return Promise.all([
-      service.features(project.id, range, kind),
-      kind === 'screens' ? service.engagement(project.id, range) : Promise.resolve(null),
+      service.features(project.id, scope, kind),
+      kind === 'screens' ? service.engagement(project.id, scope) : Promise.resolve(null),
     ]);
   });
   const basePath = screenHref(project.id, 'features');
   const kindHref = (target: FeatureKind) =>
     `${basePath}?${withKeptParameters(periodQuery(period), { kind: target })}`;
   const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
-  const i18n = await getI18n();
   return (
     <ScreenContent
       readAt={now.getTime()}
@@ -89,7 +95,12 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
           }
           loadProperties={
             kind === 'events'
-              ? loadPropertyBreakdown.bind(null, project.id, { from: period.from, to: period.to })
+              ? loadPropertyBreakdown.bind(
+                  null,
+                  project.id,
+                  { from: period.from, to: period.to },
+                  dashboardFilterParameters(filters),
+                )
               : undefined
           }
           i18n={i18n}

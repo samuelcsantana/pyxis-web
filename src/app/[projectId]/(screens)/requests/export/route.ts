@@ -6,14 +6,14 @@ import {
   visibleRoutes,
 } from '@/domain/requests';
 import { REQUESTS_FILE_SUBJECTS, requestsCsvTable } from '@/domain/requests-export';
-import { csvExport } from '@/lib/csv-export';
+import { csvExport, filteredNameParts } from '@/lib/csv-export';
 import { readRequestsReport } from '@/services/requests/requests-report';
 
-export const GET = csvExport(async ({ project, period, search }) => {
+export const GET = csvExport(async ({ project, period, filters, search }) => {
   const kind = requestKindOf(search);
   const report = await readRequestsReport(
     project.id,
-    { from: period.from, to: period.to },
+    { from: period.from, to: period.to, filters },
     kind,
     screenFilterOf(search),
   );
@@ -22,7 +22,10 @@ export const GET = csvExport(async ({ project, period, search }) => {
   }
   const failingOnly = kind !== FAILED_READS && failingOnlyOf(search);
   return {
-    nameParts: ['requests', REQUESTS_FILE_SUBJECTS[kind], period.from, period.to],
+    nameParts: filteredNameParts(
+      ['requests', REQUESTS_FILE_SUBJECTS[kind], period.from, period.to],
+      filters,
+    ),
     table: requestsCsvTable(visibleRoutes(report.routes, failingOnly), kind),
   };
 });

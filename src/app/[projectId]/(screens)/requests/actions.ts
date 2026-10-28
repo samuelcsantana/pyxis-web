@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { MAX_SCREEN_LENGTH } from '@/domain/requests';
 import { REQUEST_KINDS } from '@/domain/requests.schema';
+import { dashboardFiltersOf } from '@/domain/dashboard-filters';
 import { type RouteDaysView, routeDaysView } from '@/domain/route-days';
 import { isRequestRoute } from '@/domain/visits';
 import { getI18n } from '@/i18n/get-messages';
@@ -15,6 +16,7 @@ const scopeSchema = z.strictObject({
   kind: z.enum(REQUEST_KINDS),
   screen: z.string().startsWith('/').max(MAX_SCREEN_LENGTH).nullable(),
   route: z.string().refine(isRequestRoute),
+  filters: z.record(z.string(), z.string()),
 });
 
 export interface RouteDaysScope {
@@ -22,6 +24,7 @@ export interface RouteDaysScope {
   readonly to: string;
   readonly kind: string;
   readonly screen: string | null;
+  readonly filters: Readonly<Record<string, string>>;
 }
 
 export async function loadRouteDays(
@@ -32,11 +35,13 @@ export async function loadRouteDays(
   const { project } = await projectOrNotFound(projectId);
   const parsed = scopeSchema.safeParse({ ...scope, route });
   if (!parsed.success) {
-    throw new Error('The days of a route need a valid range, kind, screen and route.');
+    throw new Error('The days of a route need a valid range, kind, screen, filters and route.');
   }
   const { from, to, kind, screen } = parsed.data;
+  const i18n = await getI18n();
+  const { filters } = dashboardFiltersOf(parsed.data.filters, i18n);
   const days = await readOrSignIn(() =>
-    readRouteDays(project.id, { from, to }, kind, screen, parsed.data.route),
+    readRouteDays(project.id, { from, to, filters }, kind, screen, parsed.data.route),
   );
-  return days === null ? null : routeDaysView(days, kind, await getI18n());
+  return days === null ? null : routeDaysView(days, kind, i18n);
 }

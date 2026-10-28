@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { regionRows } from '@/domain/devices';
 import { addDays, todayIn } from '@/domain/period';
 import { propertyFilterOf } from '@/domain/visit-property';
@@ -9,7 +10,7 @@ import {
   type VisitFilters,
 } from '@/domain/visits';
 import { MockAcquisitionService } from './acquisition/mock-acquisition-service';
-import type { DateRange } from './date-range';
+import type { ReportScope } from './date-range';
 import { DEMO_PROJECTS } from './demo/demo-projects';
 import { MockDevicesService } from './devices/mock-devices-service';
 import { MockFeaturesService } from './features/mock-features-service';
@@ -21,9 +22,13 @@ import { english } from '@/test-utils/english';
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const DEFAULT_PERIOD_DAYS = 30;
 
-function defaultPeriod(timeZone: string): DateRange {
+function defaultPeriod(timeZone: string): ReportScope {
   const today = todayIn(timeZone, NOW);
-  return { from: addDays(today, 1 - DEFAULT_PERIOD_DAYS), to: today };
+  return {
+    from: addDays(today, 1 - DEFAULT_PERIOD_DAYS),
+    to: today,
+    filters: NO_DASHBOARD_FILTERS,
+  };
 }
 
 describe('the demo visits behind every link into Visits', () => {
