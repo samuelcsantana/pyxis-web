@@ -124,7 +124,9 @@ export const it = translation({
     noAccount:
       'Non hai ancora un account? <plans>Guarda i piani</plans> o <demo>apri la demo</demo>, con dati inventati.',
     noCode:
-      '<strong>Niente dopo qualche minuto?</strong> Forse a questo indirizzo non è ancora associato un account Pyxis.',
+      '<strong>Niente dopo qualche minuto?</strong> Controlla la cartella dello spam. Forse a questo indirizzo non è ancora associato un account Pyxis.',
+    noCodeSupport:
+      'Hai già un account e il codice non arriva? Scrivi a <mail>{email}</mail> da questo indirizzo.',
     seePlans: 'Guarda i piani',
     startTrial: 'Provalo gratis per 14 giorni',
     startFree: 'Inizia gratis',
@@ -690,6 +692,8 @@ export const it = translation({
     resend: 'Invia un nuovo codice',
     resendIn: 'Invia un nuovo codice tra {time}',
     resent: 'Un nuovo codice è in arrivo.',
+    noCode:
+      'Niente dopo qualche minuto? Controlla la cartella dello spam o scrivi a <mail>{email}</mail> da questo indirizzo.',
     preparing: 'Preparazione del pagamento…',
     invalidCode: 'Questo codice è sbagliato o scaduto. Controllalo o richiedine uno nuovo.',
     termsOutdated:

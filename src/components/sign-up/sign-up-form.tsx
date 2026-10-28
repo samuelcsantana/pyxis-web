@@ -24,6 +24,7 @@ import {
   type BillingInterval,
   type BillingRedirectOutcome,
 } from '@/domain/accounts';
+import { SUPPORT_EMAIL } from '@/domain/accounts';
 import { RateLimitedError } from '@/domain/errors';
 import { countdownLabel, emailProblem } from '@/domain/sign-in';
 import {
@@ -537,6 +538,17 @@ export function SignUpForm({
               {resent ? t('signUp.resent') : ''}
             </p>
           </div>
+          {demoCode === undefined ? (
+            <p className="border-t border-line pt-4 text-sm leading-5 text-muted">
+              {rich(t('signUp.noCode', { email: SUPPORT_EMAIL }), {
+                mail: (text) => (
+                  <a href={`mailto:${SUPPORT_EMAIL}`} className={TEXT_LINK}>
+                    {text}
+                  </a>
+                ),
+              })}
+            </p>
+          ) : null}
         </form>
       )}
     </section>

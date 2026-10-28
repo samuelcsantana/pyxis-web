@@ -7,7 +7,9 @@ const meta = {
   component: NoCodeHelp,
   args: {
     message:
-      '<strong>Nothing after a few minutes?</strong> This e-mail may not have a Pyxis account yet.',
+      '<strong>Nothing after a few minutes?</strong> Check your spam folder. This e-mail may not have a Pyxis account yet.',
+    support:
+      'Already have an account and the code does not arrive? Write to <mail>hello@pyxis-analytics.dev</mail> from this address.',
     plans: { label: 'See the plans', href: 'https://pyxis-analytics.dev/#pricing' },
   },
   decorators: [
@@ -24,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 export const SignUpClosed: Story = {
   play: async ({ canvasElement }) => {
-    await expect(within(canvasElement).getAllByRole('link')).toHaveLength(1);
+    await expect(within(canvasElement).getAllByRole('link')).toHaveLength(2);
   },
 };
 
@@ -39,7 +41,9 @@ export const FreePlanOpen: Story = {
 export const Portuguese: Story = {
   args: {
     message:
-      '<strong>Não chegou nada em alguns minutos?</strong> Talvez este e-mail ainda não tenha conta no Pyxis.',
+      '<strong>Não chegou nada em alguns minutos?</strong> Confira a caixa de spam. Talvez este e-mail ainda não tenha conta no Pyxis.',
+    support:
+      'Já tem conta e o código não chega? Escreva para <mail>hello@pyxis-analytics.dev</mail> a partir deste endereço.',
     plans: { label: 'Ver planos', href: 'https://pyxis-analytics.dev/pt-br#pricing' },
     signUp: { label: 'Testar 14 dias grátis', href: '/sign-up' },
   },

@@ -117,7 +117,9 @@ export const en = {
     noAccount:
       'No account yet? <plans>See the plans</plans> or <demo>open the demo</demo>, with invented data.',
     noCode:
-      '<strong>Nothing after a few minutes?</strong> This e-mail may not have a Pyxis account yet.',
+      '<strong>Nothing after a few minutes?</strong> Check your spam folder. This e-mail may not have a Pyxis account yet.',
+    noCodeSupport:
+      'Already have an account and the code does not arrive? Write to <mail>{email}</mail> from this address.',
     seePlans: 'See the plans',
     startTrial: 'Try it free for 14 days',
     startFree: 'Start free',
@@ -660,6 +662,8 @@ export const en = {
     resend: 'Send a new code',
     resendIn: 'Send a new code in {time}',
     resent: 'A new code is on its way.',
+    noCode:
+      'Nothing after a few minutes? Check your spam folder, or write to <mail>{email}</mail> from this address.',
     preparing: 'Preparing the payment…',
     invalidCode: 'This code is wrong or expired. Check it, or ask for a new one.',
     termsOutdated:
