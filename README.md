@@ -374,7 +374,8 @@ Shipping now:
   payment and then confirms the subscription (a cookie set when that Checkout opens tells this
   return from a new free account's welcome). While the API says the free plan is open or full,
   a subscribed account learns what cancelling does (back to the free plan with its projects and
-  data when it holds one project and one person, otherwise what to remove or the account ends),
+  data when it holds one project and one person, otherwise what to remove or the account ends;
+  only when the API says terms with the free plan bind the account, `bound_by_free_plan_terms`),
   a paid one can withdraw within 7 days of its first payment (refunded, back on the free plan;
   the API answers when the 7 days are over), and the texts name no free trial. While the free
   plan is closed, or its state cannot be read, the page is as before
