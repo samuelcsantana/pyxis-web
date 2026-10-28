@@ -176,7 +176,11 @@ Shipping now:
 - Features: the most used events and the most visited screens, with count, visits, a daily trend
   and the share of the ranking; a search by name that lives in the URL; each event opens its
   property breakdown: per key, the ten most frequent values with their share, count and visits, and
-  the rest as "Other values". Every event, screen and value opens the visits that had it, with the
+  the rest as "Other values". A key whose every value shown reads as a number (such as the
+  `seconds` of `article_read_100`) also shows its median and its middle half (the 25th to the 75th
+  percentile, from the API's `/features/properties/summary`), and a "Split by" select splits them
+  by the value of another key of the event (the ten most carried values, then "Other values").
+  Every event, screen and value opens the visits that had it, with the
   period kept; a link's name starts with the text it shows ("/pricing: see its visits"). The
   screens tab also shows where visits start (with how many left after that page) and end, and how
   long they last from their first to their last event: the median, the share that viewed one
