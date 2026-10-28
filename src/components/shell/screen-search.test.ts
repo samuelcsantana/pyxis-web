@@ -31,6 +31,8 @@ const EVERY_VISITS_FILTER: Required<VisitsSearch> = {
   property: '',
   channel: '',
   device: '',
+  browser: '',
+  os: '',
   identity: '',
   country: '',
   region: '',

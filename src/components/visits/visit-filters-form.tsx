@@ -1,13 +1,15 @@
 import Form from 'next/form';
 import Link from 'next/link';
 import { CHANNELS, channelLabel } from '@/domain/acquisition';
-import { deviceTypeLabel } from '@/domain/devices';
+import { browserLabel, deviceTypeLabel, operatingSystemLabel } from '@/domain/devices';
 import { type Period, periodQuery } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
 import {
+  BROWSER_FAMILIES,
   MAX_CAMPAIGN_LENGTH,
   MAX_REGION_LENGTH,
   MAX_SOURCE_LENGTH,
+  OS_FAMILIES,
   PAGE_FILTER_PARAMETERS,
   VISIT_DEVICE_TYPES,
   VISIT_IDENTITIES,
@@ -87,7 +89,7 @@ export function VisitFiltersForm({
             ))}
           </div>
         </fieldset>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <label className={LABEL}>
             {t('visits.filters.event')}
             <input
@@ -130,6 +132,21 @@ export function VisitFiltersForm({
             </SelectField>
           </label>
           <label className={LABEL}>
+            {t('visits.filters.account')}
+            <SelectField
+              name="identity"
+              defaultValue={filters.identity ?? ''}
+              className={FIELD_CLASS}
+            >
+              <option value="">{t('visits.filters.anyone')}</option>
+              {VISIT_IDENTITIES.map((identity) => (
+                <option key={identity} value={identity}>
+                  {t(`visits.filters.identities.${identity}`)}
+                </option>
+              ))}
+            </SelectField>
+          </label>
+          <label className={LABEL}>
             {t('visits.filters.device')}
             <SelectField name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>
               <option value="">{t('visits.filters.anyDevice')}</option>
@@ -141,16 +158,27 @@ export function VisitFiltersForm({
             </SelectField>
           </label>
           <label className={LABEL}>
-            {t('visits.filters.account')}
+            {t('visits.filters.browser')}
             <SelectField
-              name="identity"
-              defaultValue={filters.identity ?? ''}
+              name="browser"
+              defaultValue={filters.browser ?? ''}
               className={FIELD_CLASS}
             >
-              <option value="">{t('visits.filters.anyone')}</option>
-              {VISIT_IDENTITIES.map((identity) => (
-                <option key={identity} value={identity}>
-                  {t(`visits.filters.identities.${identity}`)}
+              <option value="">{t('visits.filters.anyBrowser')}</option>
+              {BROWSER_FAMILIES.map((browser) => (
+                <option key={browser} value={browser}>
+                  {browserLabel(browser, i18n)}
+                </option>
+              ))}
+            </SelectField>
+          </label>
+          <label className={LABEL}>
+            {t('visits.filters.os')}
+            <SelectField name="os" defaultValue={filters.os ?? ''} className={FIELD_CLASS}>
+              <option value="">{t('visits.filters.anySystem')}</option>
+              {OS_FAMILIES.map((os) => (
+                <option key={os} value={os}>
+                  {operatingSystemLabel(os, i18n)}
                 </option>
               ))}
             </SelectField>

@@ -1354,6 +1354,10 @@ export const it = translation({
       anyChannel: 'Qualsiasi canale',
       device: 'Dispositivo',
       anyDevice: 'Qualsiasi dispositivo',
+      browser: 'Browser',
+      anyBrowser: 'Qualsiasi browser',
+      os: 'Sistema',
+      anySystem: 'Qualsiasi sistema',
       account: 'Account',
       anyone: 'Chiunque',
       identities: {

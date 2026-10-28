@@ -1337,6 +1337,10 @@ export const ptBR = translation({
       anyChannel: 'Qualquer canal',
       device: 'Dispositivo',
       anyDevice: 'Qualquer dispositivo',
+      browser: 'Navegador',
+      anyBrowser: 'Qualquer navegador',
+      os: 'Sistema',
+      anySystem: 'Qualquer sistema',
       account: 'Conta',
       anyone: 'Todas',
       identities: {

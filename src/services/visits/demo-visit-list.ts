@@ -5,28 +5,24 @@ import { demoProjectOf } from '../demo/demo-projects';
 import { API_REQUEST, type DemoEventRecord, type DemoVisitRecord } from '../demo/demo-records';
 import {
   countWhere,
+  dashboardMatcherOf,
   demoScopeOf,
   demoVisitsIn,
+  isFailedCall,
   isFailedStatus,
   isNamedEvent,
   isPageView,
-  pathPattern,
 } from '../demo/demo-scope';
 
 export const DEMO_VISITS_PAGE_SIZE = 8;
 const MAX_HIGHLIGHTS = 5;
 const CURSOR_SEPARATOR = '~';
-const PROPERTY_SEPARATOR = '=';
 
 type VisitSummaryWire = VisitsWire['visits'][number];
 
 interface Listed {
   readonly visit: DemoVisitRecord;
   readonly cursor: string;
-}
-
-function isFailedCall(event: DemoEventRecord): boolean {
-  return event.name === API_REQUEST && isFailedStatus(Number(event.properties.status));
 }
 
 function isoAt(at: number): string {
@@ -62,24 +58,6 @@ export function demoVisitSummary(visit: DemoVisitRecord): VisitSummaryWire {
   };
 }
 
-function carriesProperty(event: DemoEventRecord, property: string | null): boolean {
-  if (property === null) {
-    return true;
-  }
-  const separator = property.indexOf(PROPERTY_SEPARATOR);
-  const value = event.properties[property.slice(0, separator)];
-  return value !== undefined && String(value) === property.slice(separator + 1);
-}
-
-function sentEvent(visit: DemoVisitRecord, filters: VisitFilters): boolean {
-  return (
-    filters.event === null ||
-    visit.events.some(
-      (event) => event.name === filters.event && carriesProperty(event, filters.property),
-    )
-  );
-}
-
 function isRequestTo(event: DemoEventRecord, route: string, failed: boolean): boolean {
   return (
     event.name === API_REQUEST &&
@@ -95,28 +73,9 @@ function madeRequest(visit: DemoVisitRecord, route: string | null, failed: boole
   return visit.events.some((event) => isRequestTo(event, route, failed));
 }
 
-function cameFrom(visit: DemoVisitRecord, filters: VisitFilters): boolean {
-  return (
-    (filters.country === null || visit.country === filters.country) &&
-    (filters.region === null || visit.region === filters.region) &&
-    (filters.source === null || visit.source === filters.source) &&
-    (filters.campaign === null || visit.campaign === filters.campaign)
-  );
-}
-
 function matcherOf(filters: VisitFilters): (visit: DemoVisitRecord) => boolean {
-  const pages = filters.paths.map(pathPattern);
-  const viewed = (visit: DemoVisitRecord, page: RegExp) =>
-    visit.events.some((event) => isPageView(event) && page.test(event.path));
-  return (visit) =>
-    pages.every((page) => viewed(visit, page)) &&
-    sentEvent(visit, filters) &&
-    (filters.channel === null || visit.channel === filters.channel) &&
-    (filters.device === null || visit.deviceType === filters.device) &&
-    (filters.identity === null ||
-      (visit.userId !== null) === (filters.identity === 'identified')) &&
-    cameFrom(visit, filters) &&
-    madeRequest(visit, filters.route, filters.failed);
+  const matchesDashboard = dashboardMatcherOf({ ...filters, failed: false });
+  return (visit) => matchesDashboard(visit) && madeRequest(visit, filters.route, filters.failed);
 }
 
 export function demoVisitsPage(

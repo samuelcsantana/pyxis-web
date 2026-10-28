@@ -1321,6 +1321,10 @@ export const en = {
       anyChannel: 'Any channel',
       device: 'Device',
       anyDevice: 'Any device',
+      browser: 'Browser',
+      anyBrowser: 'Any browser',
+      os: 'System',
+      anySystem: 'Any system',
       account: 'Account',
       anyone: 'Anyone',
       identities: {
