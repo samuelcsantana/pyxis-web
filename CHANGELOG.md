@@ -1,5 +1,50 @@
 # Changelog
 
+## [0.40.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.39.0...v0.40.0) (2026-10-28)
+
+
+### Features
+
+* **account:** drop the free trial from the Account texts while the free plan is on ([68c560c](https://github.com/samuelcsantana/pyxis-web/commit/68c560c3de09317c3f9409d6b6ec83230bda9969))
+* **account:** promise the return to the free plan only when its terms bind the account ([96e5e11](https://github.com/samuelcsantana/pyxis-web/commit/96e5e11dafeb57a7bc4b2976ee14fe515ac28e3a))
+* **account:** show a free account its usage, the day to fit by and the paid plan ([e8e45d9](https://github.com/samuelcsantana/pyxis-web/commit/e8e45d90214fb69a454531acf6a99ee1208a894f))
+* **accounts:** know when an account waits for a free place ([9f4f0d7](https://github.com/samuelcsantana/pyxis-web/commit/9f4f0d7dd74f2ccd5998ea02921739e4a34c9cca))
+* **accounts:** read the free-plan fit and know what cancelling or withdrawing does ([be55db0](https://github.com/samuelcsantana/pyxis-web/commit/be55db08c2c545de5dc6e0e12857720893d89725))
+* **accounts:** withdraw to the free plan and subscribe from it ([6442293](https://github.com/samuelcsantana/pyxis-web/commit/6442293914b51241867c0d448bb60dcf5168da49))
+* **account:** tell a paused free account it comes back on the 1st or once subscribed ([e2c1392](https://github.com/samuelcsantana/pyxis-web/commit/e2c1392984bfa2e37feb8cf6cb2001856cda88b3))
+* **account:** tell a paying owner what cancelling does and offer the withdrawal ([1a9c4cb](https://github.com/samuelcsantana/pyxis-web/commit/1a9c4cbfafc6db2a7a234bafeb31df02785506d3))
+* **dashboard:** a filter button after the name of each row ([1965d86](https://github.com/samuelcsantana/pyxis-web/commit/1965d86e2b2de51ebe793ae4eb67a70b90c230e4))
+* **dashboard:** show the filters on every screen and keep them in its links ([8fa9b15](https://github.com/samuelcsantana/pyxis-web/commit/8fa9b1571296a9b9491b17c80eacdbb85b500004))
+* **domain:** turn a dashboard filter on or off from a row ([d05e5f0](https://github.com/samuelcsantana/pyxis-web/commit/d05e5f01b88070310023b9667b786cdd64d66c6a))
+* **features:** read the median of a numeric event property ([6903e7a](https://github.com/samuelcsantana/pyxis-web/commit/6903e7affeb5f8c92c212e4825e4b58257450e32))
+* **features:** show the median of a numeric property, split by another ([9f7ea63](https://github.com/samuelcsantana/pyxis-web/commit/9f7ea63c2fe3186be57e73195d3c095a11da0443))
+* **landing:** answer the free plan's questions ([e16c76e](https://github.com/samuelcsantana/pyxis-web/commit/e16c76e7b8df7cad772356dc31f5facba8c7ffb8))
+* **landing:** lead with the free plan in the hero, the install steps and the description ([8b785db](https://github.com/samuelcsantana/pyxis-web/commit/8b785dbd26a6d11aacfbb955914ce0000a03e951))
+* **landing:** show the free and the paid plan side by side ([0e09e78](https://github.com/samuelcsantana/pyxis-web/commit/0e09e78e40f8429c7d6f2e0525c507d8c44b24cc))
+* **legal:** publish terms 1.3 for the free plan ([905eaab](https://github.com/samuelcsantana/pyxis-web/commit/905eaabf3efcf55915257bcdc4b580f423e8a465))
+* **llms:** name the free plan in llms.txt once it is open ([af43c72](https://github.com/samuelcsantana/pyxis-web/commit/af43c729628a6e5617405e90777907a96ca03892))
+* **reports:** send the dashboard filters with every report ([13b0ac8](https://github.com/samuelcsantana/pyxis-web/commit/13b0ac8edd4db1d6bfdbf6f6232ed0e631f2fbf3))
+* **shell:** keep the dashboard filters across screens and periods ([546a655](https://github.com/samuelcsantana/pyxis-web/commit/546a655e58cae2ea30c30479eacd5bf6cf874cc5))
+* **sign-in:** offer to start free when the free plan is open ([2634052](https://github.com/samuelcsantana/pyxis-web/commit/26340525a6ae16ac0c66981b1c558a75596fe830))
+* **sign-up:** read the free plan's state and the new account's status ([ec03c4a](https://github.com/samuelcsantana/pyxis-web/commit/ec03c4a8f05cd653d47ec235d0e8f8bf2fdb077c))
+* **sign-up:** start new owners on the free plan without payment ([da75b39](https://github.com/samuelcsantana/pyxis-web/commit/da75b398670cad375a4d7a1f6116a40396582d18))
+* **visits:** filter visits by browser and system ([cccc695](https://github.com/samuelcsantana/pyxis-web/commit/cccc695c68f4a15fe11d0736ef7ab9bf1a42eb7a))
+* **welcome:** confirm a subscription that leaves the free plan ([472618a](https://github.com/samuelcsantana/pyxis-web/commit/472618a891d002cc220bcac66036db1d30c109f3))
+* **welcome:** welcome an owner who starts on the free plan ([adfc3d3](https://github.com/samuelcsantana/pyxis-web/commit/adfc3d3eeabfcf64bb0c4d176fe1dae910cec435))
+
+
+### Refactoring
+
+* **landing:** pass what sign-up offers instead of whether it is open ([19fd59d](https://github.com/samuelcsantana/pyxis-web/commit/19fd59d28de376a70ce047c0c9bbe542592ccd8b))
+
+
+### Documentation
+
+* describe the Account screen on the free plan ([9398aa3](https://github.com/samuelcsantana/pyxis-web/commit/9398aa3b3ff48f5c386635cbc137c9527f19efc1))
+* describe the home page on the free plan ([233c533](https://github.com/samuelcsantana/pyxis-web/commit/233c533421ed4ec52afd38b2e4274ce9ac6a6fb4))
+* describe the sign-up and welcome on the free plan ([fe76d22](https://github.com/samuelcsantana/pyxis-web/commit/fe76d22d1e53d5ea449cf862be6622bbedc63606))
+* say the cancelling note waits for terms with the free plan to bind the account ([35eb951](https://github.com/samuelcsantana/pyxis-web/commit/35eb951f4c041b03081dbd65e37c1e674b91f97f))
+
 ## [0.39.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.38.1...v0.39.0) (2026-10-27)
 
 
