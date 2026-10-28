@@ -47,6 +47,7 @@ const ACCOUNT: Account = {
   freePlanFitDueAt: null,
   projectCount: null,
   peopleCount: null,
+  boundByFreePlanTerms: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -357,6 +358,7 @@ describe('accounts on the wire', () => {
           free_plan_fit_due_at: '2026-12-20T12:00:00.000Z',
           project_count: 3,
           people_count: 2,
+          bound_by_free_plan_terms: true,
           month: '2026-11',
           events_this_month: 3_120,
           measured_at: '2026-11-20T03:00:00.000Z',
@@ -369,6 +371,7 @@ describe('accounts on the wire', () => {
       freePlanFitDueAt: '2026-12-20T12:00:00.000Z',
       projectCount: 3,
       peopleCount: 2,
+      boundByFreePlanTerms: true,
     });
   });
 

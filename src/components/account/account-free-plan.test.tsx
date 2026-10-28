@@ -34,6 +34,7 @@ const FREE: Account = {
   freePlanFitDueAt: null,
   projectCount: 1,
   peopleCount: 1,
+  boundByFreePlanTerms: true,
   month: '2026-11',
   eventsThisMonth: 3_120,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -218,6 +219,14 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
     expect(
       screen.getByText(/^At the end of the period the account goes back to the free plan/),
     ).toBeInTheDocument();
+  });
+
+  it('promises no return to the free plan while the earlier terms still bind the account', () => {
+    overview({ ...PAID, boundByFreePlanTerms: false, projectCount: 3, peopleCount: 2 });
+
+    expect(screen.queryByText(/^If you cancel/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/To keep it on the free plan/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
   });
 
   it('says what to remove for an account that does not fit, or it ends', () => {

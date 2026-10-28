@@ -258,6 +258,10 @@ const PAID: Account = {
 
 export const PaidThatFitsTheFreePlan: Story = { args: { account: PAID, freePlan: 'open' } };
 
+export const PaidOnTheEarlierTerms: Story = {
+  args: { account: { ...PAID, boundByFreePlanTerms: false }, freePlan: 'open' },
+};
+
 export const PaidThatDoesNotFitTheFreePlan: Story = {
   args: { account: { ...PAID, projectCount: 3, peopleCount: 2 }, freePlan: 'open' },
 };

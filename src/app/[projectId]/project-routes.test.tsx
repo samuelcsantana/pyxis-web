@@ -146,6 +146,7 @@ describe('ProjectLayout', () => {
           freePlanFitDueAt: null,
           projectCount: 1,
           peopleCount: 1,
+          boundByFreePlanTerms: true,
           month: '2026-10',
           eventsThisMonth: 10,
           measuredAt: null,

@@ -27,6 +27,7 @@ const PAID: Account = {
   freePlanFitDueAt: null,
   projectCount: 1,
   peopleCount: 1,
+  boundByFreePlanTerms: true,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -127,6 +128,21 @@ describe('what cancelling does', () => {
 
   it('says nothing when the owner already has an account on the free plan', () => {
     expect(afterCancelling(PAID, 'open', true)).toBeNull();
+  });
+
+  it('promises nothing while the earlier terms still bind the account, since it then ends', () => {
+    expect(afterCancelling({ ...PAID, boundByFreePlanTerms: false }, 'open', false)).toBeNull();
+    expect(
+      afterCancelling(
+        { ...PAID, boundByFreePlanTerms: false, projectCount: 3, peopleCount: 2 },
+        'open',
+        false,
+      ),
+    ).toBeNull();
+  });
+
+  it('promises nothing when the API does not say whether the terms bind the account', () => {
+    expect(afterCancelling({ ...PAID, boundByFreePlanTerms: null }, 'open', false)).toBeNull();
   });
 
   it('says nothing without the counts', () => {
