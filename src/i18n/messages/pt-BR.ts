@@ -129,7 +129,9 @@ export const ptBR = translation({
     noAccount:
       'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados fictícios.',
     noCode:
-      '<strong>Não chegou nada em alguns minutos?</strong> Talvez este e-mail ainda não tenha conta no Pyxis.',
+      '<strong>Não chegou nada em alguns minutos?</strong> Confira a caixa de spam. Talvez este e-mail ainda não tenha conta no Pyxis.',
+    noCodeSupport:
+      'Já tem conta e o código não chega? Escreva para <mail>{email}</mail> a partir deste endereço.',
     seePlans: 'Ver planos',
     startTrial: 'Testar 14 dias grátis',
     startFree: 'Começar grátis',
@@ -677,6 +679,8 @@ export const ptBR = translation({
     resend: 'Enviar um código novo',
     resendIn: 'Enviar um código novo em {time}',
     resent: 'Um código novo está a caminho.',
+    noCode:
+      'Não chegou nada em alguns minutos? Confira a caixa de spam ou escreva para <mail>{email}</mail> a partir deste endereço.',
     preparing: 'Preparando o pagamento…',
     invalidCode: 'Esse código está errado ou expirou. Confira, ou peça um novo.',
     termsOutdated:

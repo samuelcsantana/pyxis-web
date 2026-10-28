@@ -124,6 +124,11 @@ describe('SignInPage', () => {
 
     expect(screen.getByText('Nothing after a few minutes?')).toBeInTheDocument();
     expect(screen.getByText(/may not have a Pyxis account yet/)).toBeInTheDocument();
+    expect(screen.getByText(/Check your spam folder/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'hello@pyxis-analytics.dev' })).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev',
+    );
     expect(screen.getByRole('link', { name: 'See the plans' })).toHaveAttribute(
       'href',
       'https://pyxis-analytics.dev/#pricing',

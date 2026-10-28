@@ -5,6 +5,7 @@ import { NoCodeHelp } from '@/components/sign-in/no-code-help';
 import { AuthFrame } from '@/components/sign-up/auth-frame';
 import { SignInForm } from '@/components/sign-in/sign-in-form';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { SUPPORT_EMAIL } from '@/domain/accounts';
 import type { FreePlanState } from '@/domain/sign-up';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { rich } from '@/i18n/rich';
@@ -67,6 +68,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           demo ? undefined : (
             <NoCodeHelp
               message={t('signInPage.noCode')}
+              support={t('signInPage.noCodeSupport', { email: SUPPORT_EMAIL })}
               plans={{ label: t('signInPage.seePlans'), href: plansHref }}
               signUp={
                 openSignUp === null

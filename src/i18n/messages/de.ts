@@ -130,7 +130,9 @@ export const de = translation({
     noAccount:
       'Noch kein Konto? <plans>Sieh dir die Pläne an</plans> oder <demo>öffne die Demo</demo> mit erfundenen Daten.',
     noCode:
-      '<strong>Nach ein paar Minuten noch nichts da?</strong> Vielleicht gibt es für diese E-Mail-Adresse noch kein Pyxis-Konto.',
+      '<strong>Nach ein paar Minuten noch nichts da?</strong> Sieh im Spam-Ordner nach. Vielleicht gibt es für diese E-Mail-Adresse noch kein Pyxis-Konto.',
+    noCodeSupport:
+      'Du hast schon ein Konto und der Code kommt nicht an? Schreib von dieser Adresse an <mail>{email}</mail>.',
     seePlans: 'Pläne ansehen',
     startTrial: '14 Tage kostenlos testen',
     startFree: 'Kostenlos starten',
@@ -700,6 +702,8 @@ export const de = translation({
     resend: 'Neuen Code senden',
     resendIn: 'Neuen Code senden in {time}',
     resent: 'Ein neuer Code ist unterwegs.',
+    noCode:
+      'Nach ein paar Minuten noch nichts da? Sieh im Spam-Ordner nach oder schreib von dieser Adresse an <mail>{email}</mail>.',
     preparing: 'Zahlung wird vorbereitet…',
     invalidCode: 'Dieser Code ist falsch oder abgelaufen. Prüf ihn oder fordere einen neuen an.',
     termsOutdated:

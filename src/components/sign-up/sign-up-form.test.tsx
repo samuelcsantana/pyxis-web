@@ -127,6 +127,13 @@ describe('SignUpForm', () => {
 
     expect(calls.requestCode).toHaveBeenCalledWith('ana@example.com', 'en');
     expect(screen.getByRole('heading', { name: 'Check your e-mail' })).toBeInTheDocument();
+    expect(
+      screen.getByText(/Nothing after a few minutes\? Check your spam folder/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'hello@pyxis-analytics.dev' })).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev',
+    );
     typeCode('123456');
     await settle();
 
@@ -458,6 +465,9 @@ describe('SignUpForm', () => {
     await reachTheCode();
 
     expect(screen.getByText(/This is the demo: the code is/)).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'hello@pyxis-analytics.dev' }),
+    ).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Use 000000' }));
     await settle();
 

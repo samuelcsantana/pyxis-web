@@ -126,7 +126,9 @@ export const nl = translation({
     noAccount:
       'Nog geen account? <plans>Bekijk de abonnementen</plans> of <demo>open de demo</demo>, met verzonnen gegevens.',
     noCode:
-      '<strong>Na een paar minuten nog niets?</strong> Misschien heeft dit e-mailadres nog geen Pyxis-account.',
+      '<strong>Na een paar minuten nog niets?</strong> Kijk in je spammap. Misschien heeft dit e-mailadres nog geen Pyxis-account.',
+    noCodeSupport:
+      'Heb je al een account en komt de code niet aan? Mail vanaf dit adres naar <mail>{email}</mail>.',
     seePlans: 'Bekijk de abonnementen',
     startTrial: '14 dagen gratis proberen',
     startFree: 'Gratis beginnen',
@@ -690,6 +692,8 @@ export const nl = translation({
     resend: 'Nieuwe code versturen',
     resendIn: 'Nieuwe code versturen over {time}',
     resent: 'Er is een nieuwe code onderweg.',
+    noCode:
+      'Na een paar minuten nog niets? Kijk in je spammap of mail vanaf dit adres naar <mail>{email}</mail>.',
     preparing: 'Betaling voorbereiden…',
     invalidCode: 'Deze code is onjuist of verlopen. Controleer hem, of vraag een nieuwe aan.',
     termsOutdated:
