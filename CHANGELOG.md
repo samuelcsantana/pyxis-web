@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.41.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.0...v0.41.1) (2026-10-28)
+
+
+### Documentation
+
+* **readme:** add the OpenSSF Scorecard badge ([4fc1c7d](https://github.com/samuelcsantana/pyxis-web/commit/4fc1c7dede7adceb8c68772cae026642ecf7574e))
+* **readme:** bring the README up to the free plan ([d0d53d2](https://github.com/samuelcsantana/pyxis-web/commit/d0d53d249b397a5d005b32cbec6fdf03da6d1e27))
+
 ## [0.41.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.40.1...v0.41.0) (2026-10-28)
 
 
