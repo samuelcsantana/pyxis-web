@@ -25,7 +25,7 @@ describe('a contract document on the main domain', () => {
     const metadata = await generateMetadata(atSlug('privacidade'));
 
     expect(metadata.title).toBe('Política de Privacidade');
-    expect(metadata.description).toBe('Política de Privacidade do Pyxis hospedado, versão 1.2.');
+    expect(metadata.description).toBe('Política de Privacidade do Pyxis hospedado, versão 1.3.');
     expect(metadata.metadataBase?.toString()).toBe('https://pyxis-analytics.dev/');
     expect(metadata.alternates).toEqual({
       canonical: '/privacidade',
@@ -59,7 +59,7 @@ describe('a contract document on the main domain', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Nutzungsbedingungen von Pyxis' }),
     ).toBeVisible();
-    expect(screen.getByText('Version 1.2, gültig ab 20. Oktober 2026.')).toBeVisible();
+    expect(screen.getByText('Version 1.3, gültig ab 20. Oktober 2026.')).toBeVisible();
     expect(screen.getAllByRole('link', { name: 'Português' })[0]).toHaveAttribute(
       'href',
       '/termos',
@@ -92,7 +92,7 @@ describe('a contract document on the main domain', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Termos de Uso do Pyxis' })).toBeVisible();
     expect(
-      screen.getByText('Versão 1.2, vigente a partir de 20 de outubro de 2026.'),
+      screen.getByText('Versão 1.3, vigente a partir de 20 de outubro de 2026.'),
     ).toBeVisible();
     expect(screen.getAllByText('Ana Exemplo').length).toBeGreaterThan(0);
     expect(document.body.textContent).not.toContain('{{');

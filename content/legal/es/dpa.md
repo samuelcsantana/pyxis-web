@@ -20,7 +20,8 @@ personas físicas) con el n.º {{seller.taxId}}, con domicilio en {{seller.addre
 servicio con el nombre **Pyxis**. Contacto: **hello@pyxis-analytics.dev**.
 
 1.2. **Tú:** la persona o la empresa que contrató Pyxis alojado, aceptando los Términos de Uso,
-representada en el panel por el dueño de la cuenta (Términos de Uso, Cláusula 2.9).
+representada en el panel por el dueño de la cuenta (Términos de Uso, Cláusula 2.9). Este acuerdo se
+aplica del mismo modo en el plan gratis y en el plan de pago (Términos de Uso, Cláusula 7.1).
 
 ## Cláusula 2 — Palabras usadas en este acuerdo
 
@@ -85,7 +86,8 @@ alquilamos, no los usamos para publicidad, no los usamos para entrenar modelos d
 artificial y no los combinamos con datos de otros clientes. Las únicas cifras que extraemos de tus
 proyectos para uso propio son recuentos operativos, como la cantidad de eventos al mes de cada cuenta y
 el tamaño de la base de datos, usados para aplicar el límite mensual del plan (Términos de Uso,
-Cláusula 7.2) y comprobar la capacidad del servicio.
+Cláusula 7.2), saber si una cuenta del plan gratis se quedó sin recibir eventos (Términos de Uso,
+Cláusula 7.6) y comprobar la capacidad del servicio.
 
 ## Cláusula 5 — Tus instrucciones
 
@@ -331,10 +333,10 @@ Cláusula 18.4 de los Términos de Uso, y restablecemos en cuanto pase el riesgo
 12.1. **Durante el contrato.** Los eventos se guardan durante **13 meses**. Una rutina diaria borra los
 eventos con más de 13 meses, de todos los proyectos.
 
-12.2. **Fin del contrato.** **30 días después del fin del acceso** (el final del periodo pagado o de la
-prueba después de una cancelación, el cierre de la cuenta desde el panel, el fin de la suscripción por
-falta de pago o la rescisión por nuestra parte; Términos de Uso, Cláusulas 2.10 y 11.4), una rutina
-diaria borra definitivamente la cuenta, los proyectos y todo lo que les pertenece: eventos, claves,
+12.2. **Fin del contrato.** **30 días después del fin del acceso** (el final del periodo pagado después
+de una cancelación o el fin de la suscripción por falta de pago, cuando la cuenta no vuelve al plan
+gratis; el cierre de la cuenta desde el panel; el fin del plan gratis; o la rescisión por nuestra parte;
+Términos de Uso, Cláusulas 2.10 y 11.4), una rutina diaria borra definitivamente la cuenta, los proyectos y todo lo que les pertenece: eventos, claves,
 configuraciones, icono del sitio, registros de envío del resumen semanal, solicitudes de exportación y
 los accesos de las personas a los proyectos. También borramos el registro (correo electrónico,
 sesiones, tokens y aplicaciones conectadas) del dueño de la cuenta y de las personas que solo tenían
@@ -364,6 +366,15 @@ plazos cuando una ley, una orden judicial o un requerimiento de autoridad compet
 cuando sean necesarios para un proceso judicial, administrativo o arbitral (LGPD, arts. 7.º, VI, y 16,
 I). En ese caso, preservamos solo los datos afectados, sin ningún otro uso, durante el tiempo exigido,
 y los borramos después; te avisamos, salvo que la ley o la orden prohíba el aviso.
+
+12.7. **Cuenta del plan gratis sin eventos.** Una cuenta del plan gratis que no reciba ningún evento en
+los 30 días posteriores a su creación, o que pase 90 días seguidos sin recibir eventos, se borra como
+indica la Cláusula 7.6 de los Términos de Uso: el dueño de la cuenta recibe un aviso por correo
+electrónico y, si la cuenta sigue sin eventos 7 días después, una rutina diaria borra la cuenta, los
+proyectos y todo lo que les pertenece, como en el punto 12.2, sin el plazo de 30 días de ese punto.
+Hasta entonces, el dueño de la cuenta puede exportar los eventos (punto 12.3). También se aplican los
+puntos 12.4 (copias de los proveedores), 12.5 (confirmación por correo electrónico) y 12.6
+(preservación por ley u orden).
 
 ## Cláusula 13 — Información y auditoría
 
@@ -563,8 +574,8 @@ ello.
 
 **7. Protección contra el abuso.** Límite de envío de lotes por dirección de origen y por proyecto; lote
 con un máximo de 50 eventos y 32 KB; validación estricta de cada campo; eventos inválidos descartados;
-recepción pausada cuando la cuenta llega al 150 % del límite mensual de eventos; los registros técnicos
-indican cuándo se rechazó un evento o una propiedad y por qué regla, sin guardar el valor rechazado.
+recepción pausada cuando la cuenta llega al 150 % del límite mensual de eventos en el plan de pago, o
+al 100 % en el plan gratis; los registros técnicos indican cuándo se rechazó un evento o una propiedad y por qué regla, sin guardar el valor rechazado.
 
 **8. Infraestructura.** La función de la API rechaza las llamadas que no pasen por la red de
 distribución (secreto de borde comprobado en tiempo constante). El usuario de base de datos de la

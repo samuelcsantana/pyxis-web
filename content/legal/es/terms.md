@@ -15,35 +15,52 @@ que limitan derechos.
 Este resumen no sustituye el texto completo, pero muestra lo más importante antes de contratar.
 
 1. **Quién ofrece:** {{seller.name}}, persona física, CPF {{seller.taxId}} (Cláusula 1).
-2. **Precio:** R$ 39,00 al mes o R$ 390,00 al año, con tarjeta de crédito, a través de Stripe, con
-   **renovación automática** hasta que canceles (Cláusula 8).
-3. **Prueba gratuita:** 14 días, una vez por cliente. La tarjeta se pide al inicio, y Stripe envía un
-   recordatorio 7 días antes del final. **Si no cancelas antes del final de la prueba, el primer cobro
-   se realiza el día 15** (Cláusulas 6.4 y 8.3).
-4. **Límites del plan:** hasta 100.000 eventos al mes, hasta 3 sitios, hasta 3 personas en el panel
-   (contándote a ti) y 13 meses de historial. Te avisamos cuando la cuenta llega al 80 % y al 100 % de
-   los eventos del mes. **Atención: al 150 %, la recepción de eventos se pausa hasta el día 1 del mes
-   siguiente**, y los eventos enviados durante la pausa se pierden. No se cobra nada aparte del precio
+2. **Planes y precio:** hay dos planes. El **plan gratis** no cuesta nada y no pide tarjeta. El
+   **plan de pago** cuesta R$ 39,00 al mes o R$ 390,00 al año, con tarjeta de crédito, a través de
+   Stripe, **cobrado en el momento de la suscripción**, con **renovación automática** hasta que
+   canceles (Cláusulas 7 y 8).
+3. **Plan gratis:** todo registro empieza en él, sin tarjeta y sin límite de tiempo, con una cuenta en
+   el plan gratis por persona. **Ya no hay prueba gratuita de 14 días:** para tener los límites
+   mayores, te suscribes al plan de pago en el panel, cuando quieras (Cláusulas 6 y 8.3). **Atención:
+   el plan gratis puede cambiar o terminar, con un aviso por correo electrónico de al menos 30 días**,
+   y puedes exportar tus eventos antes (Cláusula 7.5).
+4. **Límites:** en el plan gratis, hasta 10.000 eventos al mes, 1 sitio y 1 persona en el panel (solo
+   tú); en el plan de pago, hasta 100.000 eventos al mes, hasta 3 sitios y hasta 3 personas en el
+   panel (contándote a ti). Los dos tienen 13 meses de historial y todas las funciones. **Atención: en
+   el plan gratis, cuando el mes llega a 10.000 eventos, la recepción de eventos se pausa hasta el día
+   1 del mes siguiente**: una cuenta que llega al límite el día 3 no recibe nada hasta el día 1. Te
+   avisamos antes, al 80 %. En el plan de pago, te avisamos al 80 % y al 100 %, y **la pausa llega al
+   150 %**. Los eventos enviados durante la pausa se pierden. No se cobra nada aparte del precio
    (Cláusula 7).
-5. **Desistimiento:** reembolso íntegro si desistes en un plazo de 7 días después del primer cobro.
-   Si cierras la cuenta en el panel dentro de ese plazo, el reembolso es automático (Cláusula 10).
-6. **Cancelación:** en cualquier momento, de dos maneras. En el portal de Stripe, el acceso continúa
-   hasta el final del periodo pagado. Si cierras la cuenta en el panel, **el acceso termina en el
-   acto**. **Atención: pasados los 7 días del desistimiento, no hay reembolso proporcional del periodo
-   ya pagado** en ninguna de las dos (Cláusula 11).
+5. **Desistimiento (plan de pago):** reembolso íntegro si desistes en un plazo de 7 días después del
+   primer cobro de cada suscripción. **Desistir del plan de pago no cierra tu cuenta:** vuelve al plan
+   gratis, con tu proyecto, y tú eliges qué quitar si no cabe en él. Si quieres irte definitivamente,
+   puedes cerrar la cuenta entera (Cláusula 10).
+6. **Cancelación:** en cualquier momento, de dos maneras. En el portal de Stripe, el plan de pago
+   continúa hasta el final del periodo pagado y, después, **la cuenta vuelve al plan gratis si cabe en
+   él** (1 sitio y 1 persona); si no cabe, el acceso termina. Si cierras la cuenta en el panel, **el
+   acceso termina en el acto**. **Atención: pasados los 7 días del desistimiento, no hay reembolso
+   proporcional del periodo ya pagado** en ninguna de las dos (Cláusula 11).
 7. **Eliminación de los datos:** **30 días después del fin del acceso, la cuenta, los proyectos y
    todos los eventos se borran definitivamente.** Hasta entonces, puedes exportar los eventos desde
-   el panel (Cláusula 11).
+   el panel (Cláusula 11). **Atención: una cuenta en el plan gratis que no reciba ningún evento en
+   los 30 días posteriores a su creación, o que pase 90 días seguidos sin eventos, se borra
+   definitivamente si sigue sin eventos 7 días después de un aviso por correo electrónico**
+   (Cláusula 7.6).
 8. **Disponibilidad:** **Atención: no hay garantía de disponibilidad (SLA)**; hacemos nuestro mejor
-   esfuerzo para mantener el servicio en funcionamiento (Cláusula 15). Soporte por correo
-   electrónico, con respuesta en un plazo de 2 días hábiles (Cláusula 16).
+   esfuerzo para mantener el servicio en funcionamiento (Cláusula 15). En el plan de pago, soporte por
+   correo electrónico, con respuesta en un plazo de 2 días hábiles. En el plan gratis, las dudas
+   técnicas de uso y de instalación se atienden mediante la documentación y GitHub; las reclamaciones,
+   las dudas sobre el contrato y la facturación, la cancelación, el desistimiento, los datos personales
+   y los avisos del contrato siguen por correo electrónico, con respuesta en un plazo de 5 días
+   (Cláusula 16).
 9. **Tus principales obligaciones:** **no enviar datos personales en los eventos** (nombre, correo
    electrónico, CPF, teléfono, etc.), informar de la medición a los visitantes de tu sitio y no usar el
    servicio de forma abusiva (Cláusula 12).
 10. **Atención: suspensión y rescisión por abuso.** Si hay abuso (por ejemplo, datos personales en los
-    eventos, medir a quien pidió no ser medido, tráfico falsificado, ataque, fraude o prueba gratuita
-    repetida), podemos suspender la parte afectada del servicio y, en caso grave o repetido, rescindir
-    el contrato. Por regla general avisamos antes y damos un plazo para corregir; siempre indicamos el
+    eventos, medir a quien pidió no ser medido, tráfico falsificado, ataque, fraude o varias cuentas en
+    el plan gratis), podemos suspender la parte afectada del servicio y, en caso grave o repetido,
+    rescindir el contrato. Por regla general avisamos antes y damos un plazo para corregir; siempre indicamos el
     motivo y puedes impugnar la medida (Cláusula 18).
 11. **Datos personales:** tú eres el controlador (responsable del tratamiento) de los datos de los
     visitantes de tu sitio; nosotros somos el operador (encargado del tratamiento) (Cláusula 14 y
@@ -59,7 +76,9 @@ fiscal brasileño de personas físicas) con el n.º **{{seller.taxId}}**, con do
 **{{seller.address}}** ("nosotros"). **Pyxis** es el nombre del servicio.
 
 1.2. Contacto para cualquier asunto, incluidos cancelación, desistimiento, soporte, impugnación de una
-suspensión y datos personales: **hello@pyxis-analytics.dev**.
+suspensión y datos personales: **hello@pyxis-analytics.dev**. En el plan gratis, las dudas técnicas de
+uso y de instalación se atienden mediante la documentación y GitHub; el resto sigue por este correo
+electrónico (Cláusula 16.5).
 
 1.3. "Tú" es la persona física o jurídica que contrata el servicio para medir uno o más sitios.
 
@@ -86,17 +105,23 @@ el panel.
 2.7. **Consumidor:** quien contrata el servicio como destinatario final, en los términos del art. 2.º
 del Código de Defesa do Consumidor (Código de Defensa del Consumidor de Brasil; Lei n.º 8.078/1990).
 
-2.8. **Cuenta:** el registro de quien contrata, al que pertenecen la suscripción, los proyectos y las
-personas con acceso.
+2.8. **Cuenta:** el registro de quien contrata, al que pertenecen el plan, la suscripción del plan de
+pago (cuando la haya), los proyectos y las personas con acceso.
 
 2.9. **Dueño de la cuenta:** la persona que hizo el registro (o la que indicaste cuando creamos
 la cuenta a petición tuya) y que, en tu nombre, administra proyectos, claves, personas, exportaciones
 y facturación.
 
 2.10. **Fin del acceso:** la fecha en que la cuenta deja de recibir eventos y de poder modificar los
-proyectos: el final del periodo pagado o de la prueba después de una cancelación (Cláusula 11.2), el
-cierre de la cuenta (Cláusulas 11.6 y 18.7) o el fin de la suscripción por falta de pago
-(Cláusula 9.2).
+proyectos: el final del periodo pagado después de una cancelación, cuando la cuenta no vuelve al plan
+gratis (Cláusula 11.2), el cierre de la cuenta (Cláusulas 11.6 y 18.7), el fin de la suscripción por
+falta de pago, cuando la cuenta no vuelve al plan gratis (Cláusula 9.2), o el fin del plan gratis para
+la cuenta que no se suscribió al plan de pago (Cláusula 7.5). La eliminación de una cuenta del plan
+gratis sin eventos no es un fin del acceso: sigue solo la Cláusula 7.6.
+
+2.11. **Plan gratis y plan de pago:** los dos planes del servicio, con los límites de la Cláusula 7.1.
+El plan gratis no tiene precio ni suscripción; el plan de pago es la suscripción mensual o anual de la
+Cláusula 8.
 
 ## Cláusula 3 — Aceptación, quién puede contratar y documentos del contrato
 
@@ -105,8 +130,8 @@ cierre de la cuenta (Cláusulas 11.6 y 18.7) o el fin de la suscripción por fal
 1. **en el registro desde el panel** (`app.pyxis-analytics.dev/sign-up`), marcando la casilla de
    aceptación de los Términos de Uso, del Acuerdo de Tratamiento de Datos y de la Política de
    Privacidad, que muestra el número de la versión. Guardamos la versión aceptada y la fecha y la hora
-   de la aceptación (sin guardar tu IP). La página de pago de Stripe vuelve a pedir la aceptación antes
-   de la suscripción;
+   de la aceptación (sin guardar tu IP). Cuando te suscribes al plan de pago, la página de pago de
+   Stripe vuelve a pedir la aceptación antes de la suscripción;
 2. **cuando creamos la cuenta a petición tuya** (Cláusula 6.2), respondiendo a nuestro correo con la
    confirmación de la aceptación de la versión indicada en él, antes de que habilitemos el acceso.
 
@@ -158,7 +183,7 @@ aparecen, y los eventos enviados mientras el servicio esté caído o con la rece
 (Cláusulas 7.2, 15 y 18) se pierden (el rastreador vuelve a intentarlo durante unos segundos mientras
 la página está abierta, pero no cuando la recepción está pausada).
 
-4.4. También forman parte del plan:
+4.4. También forman parte de los dos planes (Cláusula 7.1):
 
 1. el **resumen semanal por correo electrónico**, todos los lunes, que cada persona con acceso puede
    desactivar en Configuración;
@@ -187,19 +212,16 @@ términos no se aplican a esa instalación.
 
 6.1. **Registro desde el panel.**
 
-1. En `app.pyxis-analytics.dev/sign-up`, eliges el plan (mensual o anual), indicas tu correo
-   electrónico, aceptas los términos (Cláusula 3.1) y confirmas el correo con un código de 6 dígitos
-   enviado a él.
-2. A continuación, indicas la tarjeta en la página de pago de Stripe, que inicia la prueba gratuita
-   (Cláusula 8.3).
-3. Una vez que Stripe confirma la suscripción, la cuenta queda lista: creas tus proyectos en el panel
-   (hasta 3), con la dirección del sitio, la zona horaria y, si quieres, el evento de conversión, y
+1. En `app.pyxis-analytics.dev/sign-up`, indicas tu correo electrónico, aceptas los términos
+   (Cláusula 3.1) y confirmas el correo con un código de 6 dígitos enviado a él. **El registro no pide
+   tarjeta.**
+2. Una vez confirmado el código, la cuenta nace en el **plan gratis** (Cláusula 7.1), salvo cuando el
+   registro en el plan gratis esté cerrado (Cláusula 6.5), y queda lista: creas tu proyecto en el
+   panel, con la dirección del sitio, la zona horaria y, si quieres, el evento de conversión, y
    recibes la clave pública y el fragmento de instalación. Quien hizo el registro es el dueño de
    la cuenta.
-
-Si no completas la página de pago de Stripe, la cuenta queda incompleta, sin proyectos, y se borra
-7 días después del registro. Hasta entonces, puedes completar la suscripción volviendo a entrar en el
-panel.
+3. Para tener los límites del plan de pago, el dueño de la cuenta se suscribe al plan de pago en el
+   panel, cuando quiera (Cláusula 8.3).
 
 6.2. **Cuenta creada a petición.** También podemos crear la cuenta por ti, a petición hecha a
 hello@pyxis-analytics.dev, por ejemplo cuando no sea posible completar el registro desde el panel o en
@@ -207,35 +229,46 @@ una cuenta gratuita que ofrezcamos. En ese caso, acordamos por correo electróni
 pago, la aceptación sigue la Cláusula 3.1, punto 2, y habilitamos el acceso en un plazo de 2 días
 hábiles después de la aceptación y, si hay cobro, de la suscripción. En una cuenta gratuita no hay
 cobro; el resto de estos términos se aplica igual, y podemos poner fin a la gratuidad con un aviso de
-30 días, después del cual puedes suscribirte al plan o salir.
+30 días, después del cual puedes suscribirte al plan de pago o salir. Esa cuenta gratuita, acordada
+caso por caso por correo electrónico, es distinta del plan gratis de la Cláusula 7.1.
 
 6.3. Podemos rechazar un registro o una solicitud de cuenta solo por un motivo objetivo: (a) que el
 sitio no sea compatible con el uso aceptable (Cláusula 12); (b) que el volumen esperado supere en mucho
 los límites del plan; (c) que la misma persona o empresa haya tenido una cuenta cerrada por abuso grave
-(Cláusula 18.7) en los 12 meses anteriores; o (d) una prueba gratuita repetida (Cláusula 6.4). Si
-rechazamos después de un cobro, devolvemos el importe íntegro.
+(Cláusula 18.7) en los 12 meses anteriores; (d) en un registro en el plan gratis, que la misma persona
+o empresa ya tenga una cuenta en el plan gratis (Cláusula 6.4); o (e) que el registro en el plan gratis
+esté cerrado (Cláusula 6.5). Si rechazamos después de un cobro, devolvemos el importe íntegro.
 
-6.4. **La prueba gratuita vale una vez por cliente:** una vez por cuenta (una cuenta que ya tuvo
-suscripción no obtiene una nueva prueba al volver a suscribirse) y una vez por persona o empresa,
-aunque sea en otra cuenta, con otro correo electrónico u otra tarjeta. Para detectar una prueba
-repetida con la misma tarjeta, guardamos durante 12 meses la "huella" de la tarjeta calculada por
-Stripe, nunca el número de la tarjeta, como explica la Política de Privacidad (punto 2.7). Lo que
-ocurre en una prueba repetida está en la Cláusula 18.11.
+6.4. **Una cuenta en el plan gratis por persona:** cada persona o empresa puede tener solo una cuenta
+en el plan gratis, y el servicio no permite que el mismo dueño abra otra. Crear otra cuenta, con otra
+persona u otro correo electrónico, para tener más de una en el plan gratis o para sumar sus límites es
+abuso (Cláusula 12.1, punto 14).
+
+6.5. **Plazas en el plan gratis.** Podemos limitar el número de cuentas en el plan gratis y cerrar, en
+cualquier momento, los registros nuevos en el plan gratis, por ejemplo para proteger la capacidad del
+servicio. Mientras esté cerrado, el registro puede ofrecer una lista de espera y el plan de pago.
+Cerrar los registros nuevos no cambia nada para las cuentas que ya están en el plan gratis; cambiar su
+plan o ponerle fin sigue la Cláusula 7.5.
 
 ## Cláusula 7 — Plan y límites
 
-7.1. El plan incluye:
+7.1. El servicio tiene dos planes (Cláusula 2.11):
 
-| Elemento | Límite |
-|---|---|
-| Eventos recibidos al mes, sumando todos los proyectos de la cuenta | hasta 100.000 |
-| Sitios (proyectos) | hasta 3 |
-| Personas con acceso al panel | hasta 3, contando al dueño de la cuenta |
-| Historial | 13 meses (los eventos más antiguos se borran todos los días) |
-| Resumen semanal por correo electrónico | incluido |
-| Tokens de acceso, servidor MCP y conector de Claude | incluidos |
-| Exportación de los eventos de un proyecto | desde el panel, hasta 3 por proyecto al día |
-| Soporte | por correo electrónico, respuesta en un plazo de 2 días hábiles |
+| Elemento | Plan gratis | Plan de pago |
+|---|---|---|
+| Precio | ninguno, sin tarjeta | R$ 39,00 al mes o R$ 390,00 al año (Cláusula 8) |
+| Eventos recibidos al mes, sumando todos los proyectos de la cuenta | hasta 10.000 | hasta 100.000 |
+| Sitios (proyectos) | 1 | hasta 3 |
+| Personas con acceso al panel | 1, solo el dueño de la cuenta | hasta 3, contando al dueño de la cuenta |
+| Historial | 13 meses (los eventos más antiguos se borran todos los días) | 13 meses (los eventos más antiguos se borran todos los días) |
+| Pausa de la recepción por la cuota (Cláusula 7.2) | al llegar al 100 % del límite | al llegar al 150 % del límite |
+| Resumen semanal por correo electrónico | incluido | incluido |
+| Tokens de acceso, servidor MCP y conector de Claude | incluidos | incluidos |
+| Exportación de los eventos de un proyecto | desde el panel, hasta 3 por proyecto al día | desde el panel, hasta 3 por proyecto al día |
+| Soporte | mediante la documentación y GitHub; correo electrónico solo en los casos de la Cláusula 16.5 | por correo electrónico, respuesta en un plazo de 2 días hábiles |
+
+Los dos planes tienen todas las pantallas y funciones del servicio; lo que cambia entre ellos es el
+volumen.
 
 7.2. **Atención: uso por encima del límite.**
 
@@ -244,18 +277,30 @@ ocurre en una prueba repetida está en la Cláusula 18.11.
    de Brasilia comienza a las 21:00 del último día del mes anterior.
 2. El servicio mide el uso una vez al día, de madrugada. El uso medido aparece en Cuenta y
    facturación, en el panel.
-3. Cuando la medición diaria constate el 80 % y, después, el 100 % del límite (80.000 y 100.000
-   eventos), avisamos al dueño de la cuenta por correo electrónico, una vez por nivel en cada
-   mes. **Hasta el 150 %, no se corta nada.**
-4. **Cuando la medición diaria constate el 150 % del límite (150.000 eventos), la recepción de eventos
-   de todos los proyectos de la cuenta se pausa hasta el día 1 del mes siguiente**, y avisamos por
-   correo electrónico. Durante la pausa, el servicio rechaza los eventos (respuesta
+3. En el plan de pago, cuando la medición diaria constate el 80 % y, después, el 100 % del límite
+   (80.000 y 100.000 eventos), avisamos al dueño de la cuenta por correo electrónico, una vez por
+   nivel en cada mes. **Hasta el 150 %, no se corta nada.**
+4. **En el plan de pago, cuando la medición diaria constate el 150 % del límite (150.000 eventos), la
+   recepción de eventos de todos los proyectos de la cuenta se pausa hasta el día 1 del mes
+   siguiente**, y avisamos por correo electrónico. Durante la pausa, el servicio rechaza los eventos (respuesta
    `403 quota_exceeded`), que **no se guardan y no pueden recuperarse**. El panel sigue mostrando los
    datos ya guardados. La recepción se reanuda sola al inicio del mes siguiente. Como la medición es
    diaria, la cuenta puede superar un poco el 150 % antes de que empiece la pausa.
 5. **No cobramos nada aparte del precio del plan** por el uso por encima del límite.
 6. Si la cuenta supera el límite con frecuencia, podemos proponer por correo electrónico un plan o un
    precio adecuados al volumen. Aceptar es opcional.
+7. **En el plan gratis, la pausa llega al 100 % del límite.** Cuando la medición diaria constate el
+   80 % del límite (8000 eventos), avisamos al dueño de la cuenta por correo electrónico. **Cuando la
+   medición diaria constate el 100 % del límite (10.000 eventos), la recepción de eventos se pausa
+   hasta el día 1 del mes siguiente**, en las mismas condiciones del punto 4, y avisamos por correo
+   electrónico. Como la medición es diaria, la cuenta puede superar un poco los 10.000 eventos el día
+   en que llega al límite, y esos eventos quedan guardados. **Atención: la pausa se mantiene hasta el
+   día 1 del mes siguiente, sea cual sea el día en que empezó: una cuenta que llega al límite el día 3
+   no recibe ningún evento hasta el día 1**, y los eventos enviados durante la pausa no se guardan y
+   no pueden recuperarse.
+8. **Suscribirte quita la pausa.** Si el dueño de la cuenta se suscribe al plan de pago durante la
+   pausa del plan gratis (Cláusula 8.3), la recepción se reanuda en cerca de un minuto después de la
+   confirmación de la suscripción, ya con los límites del plan de pago.
 
 7.3. El servicio tiene límites técnicos contra el abuso, como la cantidad de lotes de eventos por
 minuto por dirección y por proyecto y el tamaño de cada lote. Esos límites pueden cambiar para
@@ -264,21 +309,49 @@ proteger el servicio, sin reducir el límite mensual de eventos de tu plan.
 7.4. El borrado de los eventos con más de 13 meses es automático y forma parte del servicio: **no
 guardamos historial más antiguo**.
 
-## Cláusula 8 — Precio, prueba gratuita y cobro
+7.5. **Atención: cambio o fin del plan gratis.** Podemos aumentar los límites del plan gratis o
+agregarle funciones en cualquier momento. Cualquier otro cambio en el plan gratis, incluido reducir
+los límites o poner fin al plan, solo se aplica después de un aviso por correo electrónico al dueño de
+cada cuenta en el plan gratis con **al menos 30 días de antelación**, explicando lo que cambia
+(Cláusula 21.1). Como el plan gratis no tiene renovación, el cambio se aplica a tu cuenta al final de
+ese plazo. Durante el plazo, puedes exportar todos los eventos (Cláusula 11.5), suscribirte al plan de
+pago (Cláusula 8.3) o cerrar la cuenta (Cláusula 11.6). Si el plan gratis termina y tu cuenta no ha
+pasado al plan de pago, el final del plazo es el fin del acceso (Cláusula 2.10), y los datos siguen las
+Cláusulas 11.4 y 11.5.
 
-8.1. **Precio:** R$ 39,00 al mes o R$ 390,00 al año. No hay tarifa de instalación ni otros cargos.
+7.6. **Atención: cuenta del plan gratis sin eventos.** Enviamos un aviso por correo electrónico al
+dueño de una cuenta en el plan gratis que **no reciba ningún evento en los 30 días posteriores a la
+creación de la cuenta** o que **pase 90 días seguidos sin recibir ningún evento**. **Si, 7 días después
+del aviso, la cuenta sigue sin eventos, se borra definitivamente**: la cuenta, los proyectos y todos
+los eventos, sin el plazo de 30 días de la Cláusula 11.4, como se describe en la Cláusula 12.7 del
+Anexo 1; enviamos un correo electrónico que confirma la eliminación. En esos 7 días, puedes exportar
+los eventos (Cláusula 11.5), y no se borra nada si la cuenta recibe algún evento o pasa al plan de
+pago: las cuentas del plan de pago nunca se borran por falta de eventos. Después de la eliminación, no
+hay forma de recuperar los datos; solo siguen guardados los registros que exceptúa la Cláusula 11.4.
+
+## Cláusula 8 — Precio, suscripción y cobro
+
+8.1. **Precio del plan de pago:** R$ 39,00 al mes o R$ 390,00 al año. El plan gratis no tiene precio y
+no pide tarjeta. No hay tarifa de instalación ni otros cargos.
 
 8.2. **Forma de pago:** tarjeta de crédito, procesada por Stripe. **No vemos ni guardamos el número
 de tu tarjeta.** Actualmente no aceptamos Pix ni boleto.
 
-8.3. **Prueba gratuita:** 14 días, contados desde la confirmación de la suscripción en la página de
-pago de Stripe, una vez por cliente (Cláusula 6.4). La tarjeta es obligatoria al inicio, y no se cobra
-nada durante la prueba. Stripe envía un recordatorio por correo electrónico 7 días antes del final de
-la prueba, con el enlace para cancelar. **Si no cancelas antes del final de la prueba (en el portal de
-Stripe o cerrando la cuenta en el panel), el primer cobro se realiza el día 15** y, a partir de
-entonces, en cada nuevo periodo; en el extracto de la tarjeta, ese primer cobro aparece indicado como
-fin de la prueba. Si cancelas durante la prueba, no se cobra nada. Una cuenta que ya tuvo suscripción
-no tiene nueva prueba al volver a suscribirse: el cobro empieza el día de la nueva suscripción.
+8.3. **Suscripción, sin prueba gratuita.** El dueño de la cuenta se suscribe al plan de pago en Cuenta
+y facturación, en el panel, eligiendo el plan mensual o el anual e indicando la tarjeta en la página de
+pago de Stripe. **No hay prueba gratuita: el primer cobro se realiza en el momento de la suscripción**
+y, a partir de entonces, en cada nuevo periodo. Una vez confirmada la suscripción, la cuenta pasa en el
+acto a los límites del plan de pago, y una pausa del plan gratis termina como indica la Cláusula 7.2,
+punto 8. Si sales de la página de pago sin completarla, no se cobra nada y la cuenta sigue en el plan
+gratis. Volver a suscribirse, después de una suscripción anterior, también se cobra en el momento.
+
+**Pruebas que ya empezaron.** Hasta la versión 1.2 de estos términos, la suscripción empezaba con una
+prueba gratuita de 14 días, con la tarjeta indicada al inicio, una vez por cliente. Una cuenta que
+empezó esa prueba antes de la versión 1.3 la termina tal como se contrató: no se cobra nada durante la
+prueba, Stripe envía un recordatorio por correo electrónico 7 días antes del final y, **si no cancelas
+antes del final de la prueba (en el portal de Stripe o cerrando la cuenta en el panel), el primer
+cobro se realiza el día 15**; en el extracto de la tarjeta, aparece indicado como fin de la prueba.
+Una prueba repetida sigue la Cláusula 18.11.
 
 8.4. **Renovación automática:** la suscripción se renueva sola al final de cada periodo, con cobro en
 la misma tarjeta, hasta que canceles (Cláusula 11). La fecha del próximo cobro aparece en Cuenta y
@@ -302,19 +375,21 @@ también avisa por correo electrónico cuando la tarjeta registrada esté a punt
 plazo, el servicio sigue funcionando.
 
 9.2. Si el pago no se realiza después de esos intentos (hasta 2 semanas desde el primer fallo), o si
-la confirmación pedida por el banco no se hace en 15 días, Stripe da por terminada la suscripción, y
-ese es el fin del acceso: a más tardar el día siguiente, las claves de los proyectos se revocan y los
-sitios dejan de enviar eventos; el panel queda disponible solo para consulta y exportación hasta la
-eliminación.
+la confirmación pedida por el banco no se hace en 15 días, Stripe da por terminada la suscripción. Si
+la cuenta cabe en el plan gratis (1 proyecto y 1 persona con acceso), vuelve al plan gratis, como en
+la Cláusula 11.2, punto 1. Si no cabe, ese es el fin del acceso: a más tardar el día siguiente, las
+claves de los proyectos se revocan y los sitios dejan de enviar eventos; el panel queda disponible
+solo para consulta y exportación hasta la eliminación.
 
-9.3. Los datos se borran 30 días después del fin del acceso (Cláusula 11.4). Hasta entonces, puedes
-volver como indica la Cláusula 11.5, punto 3, sin perder datos.
+9.3. Cuando hay fin del acceso, los datos se borran 30 días después de él (Cláusula 11.4). Hasta
+entonces, puedes volver como indica la Cláusula 11.5, punto 3, sin perder datos.
 
 ## Cláusula 10 — Derecho de desistimiento
 
 10.1. Como la contratación se realiza por internet, el consumidor puede desistir del contrato en un
-plazo de 7 días desde la contratación (Código de Defesa do Consumidor, art. 49). Durante la prueba
-gratuita no se cobra nada: basta con cancelar.
+plazo de 7 días desde la contratación (Código de Defesa do Consumidor, art. 49). En el plan gratis no
+se cobra nada: basta con cerrar la cuenta (Cláusula 11.6). El reembolso de esta cláusula se aplica al
+plan de pago.
 
 10.2. **Ampliamos este derecho a todos los clientes:** si desistes en un plazo de **7 días después del
 primer cobro** (del plan mensual o del anual), devolvemos **el importe íntegro** de ese cobro, sin
@@ -322,14 +397,16 @@ necesidad de explicar el motivo.
 
 10.3. Para ejercerlo, usa cualquiera de estos medios:
 
-1. **cierra la cuenta en el panel** (Cuenta y facturación → Cerrar la cuenta), el mismo canal usado
-   para contratar. Dentro del plazo, el reembolso del importe íntegro se solicita a Stripe
-   automáticamente, y la pantalla muestra el importe devuelto;
-2. o envía un correo electrónico a hello@pyxis-analytics.dev, desde el correo del dueño de la
-   cuenta, con la palabra "arrependimento" (desistimiento).
+1. **en el panel**, en Cuenta y facturación → Desistir de la suscripción, el mismo lugar en el que te
+   suscribiste: la suscripción se cancela en el acto, el reembolso del importe íntegro se solicita a
+   Stripe automáticamente, y la pantalla muestra el importe devuelto;
+2. por correo electrónico a hello@pyxis-analytics.dev, desde el correo del dueño de la cuenta, con la
+   palabra "arrependimento" (desistimiento);
+3. si también quieres salir del servicio, **cerrando la cuenta en el panel** (Cuenta y facturación →
+   Cerrar la cuenta), con el reembolso automático de la Cláusula 11.6, punto 5.
 
 Cancelar la suscripción en el portal de Stripe, por sí solo, no genera el reembolso: usa uno de los
-dos medios anteriores.
+medios anteriores.
 
 10.4. Desde el panel, la confirmación aparece en el acto, en la pantalla, y también por correo
 electrónico. Por correo electrónico, confirmamos la recepción por la misma vía y solicitamos el
@@ -337,27 +414,46 @@ reembolso a Stripe en un plazo de 2 días hábiles. Si el reembolso automático 
 manualmente en un plazo de 2 días hábiles y te avisamos. Stripe comunica el reembolso al emisor de la
 tarjeta; el plazo para que aparezca en el extracto depende del emisor.
 
-10.5. Con el desistimiento, la cuenta se cierra como en la Cláusula 11.6: el acceso termina en el acto
-y los datos siguen la Cláusula 11.4.
+10.5. Con el desistimiento por los medios 1 y 2 de la Cláusula 10.3, la suscripción se cancela en el
+acto y la cuenta **vuelve al plan gratis**, con el proyecto y los datos que tiene, si cabe en él
+(1 proyecto y 1 persona con acceso, Cláusula 7.1). Si no cabe, el panel muestra qué quitar, y tienes
+30 días para elegir, exportando antes lo que quieras (Cláusula 11.5); si en ese plazo la cuenta no
+pasa a caber en el plan gratis, sigue la Cláusula 11.2, punto 2. El reembolso no depende de esa
+elección. Si el mes ya ha superado los 10.000 eventos, se aplica la pausa de la Cláusula 7.2, punto 7.
+Por el medio 3, la cuenta se cierra como en la Cláusula 11.6.
 
 ## Cláusula 11 — Cancelación y cierre de la cuenta por tu parte
 
 11.1. Puedes salir en cualquier momento, de dos maneras, con efectos diferentes:
 
 1. **cancelar la suscripción en el portal de Stripe** (Cuenta y facturación → Gestionar la facturación,
-   o mediante el enlace de los correos de Stripe): surte efecto al final del periodo pagado o de la
-   prueba (Cláusula 11.2);
+   o mediante el enlace de los correos de Stripe): surte efecto al final del periodo pagado, y la
+   cuenta vuelve al plan gratis si cabe en él (Cláusula 11.2);
 2. **cerrar la cuenta en el panel** (Cuenta y facturación → Cerrar la cuenta): surte efecto en el
    acto (Cláusula 11.6).
 
+En el plan gratis no hay suscripción que cancelar: para salir, cierra la cuenta en el panel (punto 2).
+
 Si lo prefieres, pídelo por correo electrónico a hello@pyxis-analytics.dev, desde el correo del
 dueño de la cuenta, indicando cuál de las dos quieres. Sin esa indicación, hacemos la
-cancelación del punto 1. Confirmamos la recepción por la misma vía.
+cancelación del punto 1 (en el plan gratis, el cierre del punto 2). Confirmamos la recepción por la
+misma vía.
 
-11.2. **Cancelación en el portal de Stripe:** el acceso continúa hasta el final del periodo pagado (o
-de la prueba) y **no hay nuevo cobro**. A más tardar el día siguiente al fin del acceso, las claves de
-los proyectos se revocan y los sitios dejan de enviar eventos; el panel queda disponible solo para
-consulta y exportación hasta la eliminación.
+11.2. **Cancelación en el portal de Stripe:** el plan de pago continúa hasta el final del periodo
+pagado y **no hay nuevo cobro**. Al final del periodo:
+
+1. **si la cuenta cabe en el plan gratis** (1 proyecto y 1 persona con acceso, Cláusula 7.1), **vuelve
+   al plan gratis**, con el proyecto y los datos que tiene, y sigue recibiendo eventos, con los
+   límites del plan gratis; si el mes ya ha llegado a 10.000 eventos, la recepción se pausa hasta el
+   día 1 del mes siguiente, como en el plan gratis (Cláusula 7.2, punto 7). Si prefieres que la
+   cuenta termine, ciérrala en el panel (Cláusula 11.6);
+2. si la cuenta no cabe en el plan gratis, ese es el fin del acceso: a más tardar el día siguiente,
+   las claves de los proyectos se revocan y los sitios dejan de enviar eventos; el panel queda
+   disponible solo para consulta y exportación hasta la eliminación.
+
+El panel, en Cuenta y facturación, indica qué quitar (proyectos o personas) para que la cuenta quepa en
+el plan gratis antes del final del periodo. **Atención:** borrar un proyecto borra en el acto sus
+eventos (Cláusula 12.2 del Anexo 1); expórtalos antes (Cláusula 11.5).
 
 11.3. **Atención: fuera del derecho de desistimiento (Cláusula 10), no hay reembolso proporcional del
 periodo ya pagado,** ni en el plan mensual ni en el anual, en ninguna de las dos maneras de salir. Solo
@@ -370,7 +466,8 @@ se describe en la Cláusula 12 del Anexo 1. Avisamos al dueño de la cuenta por 
 al fin del acceso, 7 días antes de la eliminación y cuando se realice. Después de eso, **no hay forma
 de recuperar los datos**. Solo siguen guardados los registros de facturación que la ley obliga a
 conservar, el registro de prevención de prueba gratuita repetida (Política de Privacidad, puntos 2.2 y
-2.7) y lo que una ley o una orden de autoridad obligue a preservar (Cláusula 12.6 del Anexo 1).
+2.7) y lo que una ley o una orden de autoridad obligue a preservar (Cláusula 12.6 del Anexo 1). La
+cuenta del plan gratis borrada por falta de eventos sigue la Cláusula 7.6, sin ese plazo de 30 días.
 
 11.5. **Exportar los eventos y volver.**
 
@@ -385,14 +482,15 @@ conservar, el registro de prevención de prueba gratuita repetida (Política de 
    fecha de eliminación, aplazamos la eliminación hasta entregar la copia.
 3. Antes de la eliminación, puedes **volver** sin perder datos: en Cuenta y facturación, elige
    "Suscribirse de nuevo", o escribe a hello@pyxis-analytics.dev y reactivamos la suscripción. En
-   cualquiera de los dos caminos, no hay nueva prueba gratuita y el cobro empieza con la reactivación.
-   Las claves revocadas no vuelven: creas claves nuevas en el panel y las cambias en tu sitio.
+   cualquiera de los dos caminos, el cobro empieza con la reactivación, sin prueba gratuita. Las
+   claves revocadas no vuelven: creas claves nuevas en el panel y las cambias en tu sitio.
 
 11.6. **Cerrar la cuenta desde el panel.** Solo el dueño de la cuenta puede cerrarla, en Cuenta
 y facturación, escribiendo su correo electrónico para confirmar. **Atención: el cierre surte efecto en
-el acto y no puede deshacerse desde el panel:**
+el acto y no puede deshacerse desde el panel** (para desistir solo del plan de pago y quedarte en el
+plan gratis, usa la Cláusula 10.3):
 
-1. la suscripción se cancela en Stripe inmediatamente, sin nuevos cobros;
+1. la suscripción del plan de pago, si la hay, se cancela en Stripe inmediatamente, sin nuevos cobros;
 2. las claves de todos los proyectos se revocan en el acto, y los sitios dejan de enviar eventos;
 3. el panel queda disponible solo para consulta y exportación (Cláusula 11.5) hasta la eliminación;
 4. los datos se borran 30 días después del cierre (Cláusula 11.4);
@@ -402,7 +500,7 @@ el acto y no puede deshacerse desde el panel:**
 6. la pantalla confirma el cierre, la fecha de la eliminación y el importe reembolsado, y enviamos la
    confirmación por correo electrónico.
 
-Cerrar durante la prueba gratuita no genera cobro. Si Stripe no consigue cancelar la suscripción, no se
+Cerrar una cuenta en el plan gratis no genera cobro. Si Stripe no consigue cancelar la suscripción, no se
 cierra nada y la pantalla lo avisa. Si cambias de opinión antes de la eliminación, se aplica la
 Cláusula 11.5, punto 3.
 
@@ -453,8 +551,8 @@ cuenta o por quien use tus claves, tokens o conexiones con tu permiso:
     superar los límites de personas y de proyectos del plan, sin un acuerdo por escrito con nosotros
     (medir, como agencia, sitios de clientes tuyos que lo hayan autorizado, dentro de los límites del
     plan, no es reventa; Cláusula 3.2 del Anexo 1);
-14. crear más de una cuenta, o usar otra persona, otro correo electrónico u otra tarjeta, para
-    **repetir la prueba gratuita** o para eludir un límite o un cobro;
+14. crear más de una cuenta, o usar otra persona, otro correo electrónico u otra tarjeta, para **tener
+    más de una cuenta en el plan gratis** (Cláusula 6.4) o para eludir un límite o un cobro;
 15. **fraude en el pago**: usar una tarjeta sin autorización de su titular o datos de facturación
     falsos, o disputar de mala fe un cargo ante el emisor de la tarjeta, por ejemplo alegando no
     reconocer un cargo que autorizaste y cuyo servicio usaste, sin haber pedido antes la cancelación o
@@ -496,8 +594,9 @@ completo, y no empieza a guardarlos para investigar un abuso.**
 
 ## Cláusula 13 — Personas con acceso, claves y tokens
 
-13.1. **Personas con acceso.** La cuenta tiene hasta 3 personas con acceso al panel, contando al
-dueño. El dueño invita a una persona mediante su correo electrónico, a uno o más proyectos
+13.1. **Personas con acceso.** En el plan de pago, la cuenta tiene hasta 3 personas con acceso al
+panel, contando al dueño; en el plan gratis, solo el dueño, que no invita a otras personas
+(Cláusula 7.1). El dueño invita a una persona mediante su correo electrónico, a uno o más proyectos
 de la cuenta, en Configuración → Personas. La persona recibe un correo de invitación y entra en el panel
 con un código enviado a su correo, sin contraseña. El dueño puede quitar a una persona en la misma
 pantalla, en cualquier momento.
@@ -570,7 +669,7 @@ punto 4).
    válida durante 1 hora) y que guardamos solo como hash. Termina cuando la persona la revoca en
    Configuración → Aplicaciones conectadas; después de 90 días sin uso; cuando la persona pierde el
    acceso (Cláusula 13.3) o tiene el acceso suspendido (Cláusula 18.2); cuando la cuenta se borra
-   (Cláusula 11.4); o sola, cuando una credencial ya sustituida vuelve a usarse, señal de que puede
+   (Cláusulas 7.6 y 11.4); o sola, cuando una credencial ya sustituida vuelve a usarse, señal de que puede
    haber sido copiada. Después de eso, la aplicación pide conectarse de nuevo.
 6. **Límites.** Hasta 10 aplicaciones conectadas al mismo tiempo por persona, y los límites de
    consultas por minuto del Anexo II del Acuerdo de Tratamiento de Datos.
@@ -610,7 +709,7 @@ otra autoridad competente lo exija (por ejemplo, el bloqueo de datos o la suspen
 LGPD, art. 52). Cumplimos solo lo exigido y te avisamos, salvo que la orden prohíba el aviso.
 
 15.5. **Pausa por la cuota.** La pausa de la recepción de eventos al llegar al 150 % del límite
-mensual sigue la Cláusula 7.2.
+mensual en el plan de pago, o al 100 % en el plan gratis, sigue la Cláusula 7.2.
 
 15.6. Si eres consumidor, siguen vigentes tus derechos del art. 20 del Código de Defesa do Consumidor:
 ante un fallo del servicio, incluida una suspensión que resulte indebida (Cláusula 18.9), puedes pedir
@@ -621,12 +720,13 @@ devolución del importe pagado.
 retiramos las funciones enumeradas en la Cláusula 7.1 ni empeoramos los compromisos de privacidad de la
 Cláusula 4.2. Si un cambio de ese tipo es inevitable (por ejemplo, por ley o porque un proveedor dejó
 de ofrecer algo), avisamos con 30 días de antelación, y puedes rescindir con devolución proporcional
-del periodo pagado y no usado.
+del periodo pagado y no usado. Los cambios en el plan gratis siguen la Cláusula 7.5.
 
 ## Cláusula 16 — Soporte y atención
 
 16.1. La atención es por correo electrónico, en hello@pyxis-analytics.dev, para dudas, reclamaciones,
-soporte, impugnación de una suspensión, suspensión y cancelación.
+soporte, impugnación de una suspensión, suspensión y cancelación. En el plan gratis, las dudas técnicas
+de uso y de instalación siguen la Cláusula 16.5.
 
 16.2. Confirmamos la recepción de tu mensaje por el mismo correo y respondemos en un plazo de **2 días
 hábiles** (días hábiles de lunes a viernes, excepto feriados nacionales de Brasil).
@@ -636,6 +736,29 @@ desarrollo en tu sitio ni soporte a instalaciones propias del código abierto.
 
 16.4. En los mensajes, no envíes datos personales de visitantes. Para mostrar un caso, usa el
 identificador de la visita o del usuario.
+
+16.5. **Soporte en el plan gratis.** En el plan gratis, las dudas técnicas de uso y de instalación
+(Cláusula 16.3) se atienden mediante la documentación pública de Pyxis y las *issues* de los
+repositorios públicos en GitHub (Cláusula 5.1), sin el plazo de la Cláusula 16.2. Las *issues* son
+públicas: no publiques en ellas claves, tokens ni datos personales. El correo
+hello@pyxis-analytics.dev sigue vigente en el plan gratis, con confirmación de la recepción por la
+misma vía y respuesta por correo electrónico en un plazo de **5 días**, para:
+
+1. información y dudas sobre el contrato, el plan, los límites y la facturación, incluso sobre la
+   suscripción al plan de pago;
+2. reclamaciones sobre el servicio, incluidos los fallos (Cláusula 15.6);
+3. suspensión, cancelación, cierre de la cuenta y desistimiento (Cláusulas 10, 11 y 18), incluido
+   responder a un aviso o impugnar una medida (Cláusula 18.6);
+4. las solicitudes sobre datos personales: las tuyas y las de las personas con acceso, en los plazos
+   de la Política de Privacidad (punto 6), y tus solicitudes como controlador, en los plazos del
+   Anexo 1 (Cláusula 10);
+5. los demás asuntos que estos términos mandan tratar por correo electrónico, como avisar de una clave
+   filtrada (Cláusula 13.9), informar de un fallo de seguridad (Cláusula 12.1, punto 10) y pedir la
+   copia de los eventos cuando la exportación desde el panel falle (Cláusula 11.5, punto 2).
+
+Si eres consumidor y no puedes o no quieres usar GitHub, también puedes enviar tu duda de uso por
+correo electrónico; respondemos en un plazo de 5 días, y la respuesta puede indicar la parte de la
+documentación que resuelve el caso.
 
 ## Cláusula 17 — Propiedad intelectual y tus datos
 
@@ -750,21 +873,12 @@ además de tus derechos de la Cláusula 15.6.
 4. El reembolso se hace, a través de Stripe, a la tarjeta usada en el pago, en un plazo de 5 días
    hábiles desde la rescisión.
 
-18.11. **Prueba gratuita repetida.** Cuando el servicio indique que la tarjeta usada ya inició una
-prueba gratuita en otra cuenta en los 12 meses anteriores (Política de Privacidad, punto 2.7), o haya
-otro indicio objetivo de prueba repetida por la misma persona o empresa (Cláusula 6.4):
-
-1. no ocurre nada automáticamente: el servicio solo registra la coincidencia y nos avisa; ningún cobro
-   y ninguna cancelación;
-2. examinamos el caso y, si es necesario, te preguntamos, con el plazo de la Cláusula 18.3. Una tarjeta
-   de empresa usada por personas diferentes, o una agencia que contrata para clientes diferentes, no es
-   una prueba repetida;
-3. si confirmamos la prueba repetida, podemos cerrar la cuenta nueva antes del final de la prueba,
-   cancelando la suscripción en Stripe sin ningún cobro, con aviso y el motivo; puedes impugnarlo
-   (Cláusula 18.6) y puedes suscribirte sin prueba gratuita, por correo electrónico, con cobro a partir
-   de la nueva suscripción;
-4. **nunca cobramos nada antes de la fecha mostrada en la página de pago de Stripe**, ni acortamos la
-   prueba para cobrar antes.
+18.11. **Prueba gratuita repetida.** La prueba gratuita terminó con la versión 1.3 de estos términos
+(Cláusula 8.3). La sospecha de que una prueba empezada antes de ella repitió una prueba anterior
+(Política de Privacidad, punto 2.7) sigue la Cláusula 18.11 de la versión en la que empezó esa prueba:
+no ocurre nada automáticamente, se te avisa con el motivo y se te escucha antes de cualquier medida,
+puedes impugnarla (Cláusula 18.6) y **nunca se te cobra antes de la fecha mostrada en la página de
+pago de Stripe**.
 
 18.12. **Disputa de un cargo en la tarjeta.** Disputar un cargo ante el emisor de la tarjeta es tu
 derecho; te pedimos que hables con nosotros antes (Cláusulas 10 y 16). Si la disputa es aceptada y el
@@ -773,9 +887,11 @@ cancelando la suscripción con aviso (Cláusula 9.2). Solo la disputa de mala fe
 punto 15) se trata como abuso.
 
 18.13. **Rescisión sin abuso.** Fuera del abuso, solo rescindimos el contrato en los casos de las
-Cláusulas 6.2 (fin de una gratuidad), 20 (fin del servicio alojado), 21.3 (cambio exigido por ley que
-no aceptes) y 22.1 (cesión que no aceptes), y siempre devolvemos el importe proporcional al periodo
-pagado y no usado; los datos siguen las Cláusulas 11.4 y 11.5.
+Cláusulas 6.2 (fin de una gratuidad), 7.5 (fin del plan gratis), 7.6 (cuenta del plan gratis sin
+eventos), 20 (fin del servicio alojado), 21.3 (cambio exigido por ley que no aceptes) y 22.1 (cesión
+que no aceptes), y, cuando haya periodo pagado, siempre devolvemos el importe proporcional al periodo
+pagado y no usado; los datos siguen las Cláusulas 11.4 y 11.5, salvo en la Cláusula 7.6, que tiene
+plazos propios.
 
 ## Cláusula 19 — Responsabilidad
 

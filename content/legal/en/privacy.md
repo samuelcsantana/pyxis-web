@@ -46,7 +46,7 @@ Directors of the ANPD, the Brazilian National Data Protection Authority).
 
 | Data | Purpose | Legal basis (LGPD) | Retention |
 |---|---|---|---|
-| Email, language of the emails (that of the screen where you signed in or registered), projects you have access to, whether you are the account owner or an invitee, choice about the weekly digest, registration date | Send the sign-in code and the service emails, show your projects and send the weekly digest in your language | Performance of the contract, for the account owner (art. 7, V); our and the customer's legitimate interest in giving access to the people the owner invited (art. 7, IX) | While you have access to any project or own an account. When the owner removes you from a project, access to it ends immediately; if you are left without access to any project, we delete your registration within 30 days. In any case, the registration is deleted together with the account, 30 days after the end of its access |
+| Email, language of the emails (that of the screen where you signed in or registered), projects you have access to, whether you are the account owner or an invitee, choice about the weekly digest, registration date | Send the sign-in code and the service emails, show your projects and send the weekly digest in your language | Performance of the contract, for the account owner (art. 7, V); our and the customer's legitimate interest in giving access to the people the owner invited (art. 7, IX) | While you have access to any project or own an account. When the owner removes you from a project, access to it ends immediately; if you are left without access to any project, we delete your registration within 30 days. In any case, the registration is deleted together with the account (item 2.2) |
 | Invitation: your email, the project name and the email of the person who invited you, in the invitation email | Inform you of the access and of who granted it | Our and the customer's legitimate interest (art. 7, IX) | The invitation itself is not kept in our database (only the registration in the row above); the record of the sending stays with the email provider for its retention period (item 3) |
 | Sign-in and registration codes: email, code stored only as a hash, purpose (sign-in or registration), language, attempts, times | Allow passwordless sign-in and registration and prevent repeated attempts | Performance of the contract, preliminary procedures to it and legitimate interest in security (art. 7, V and IX) | Valid for 10 minutes; deleted by the daily routine after they expire |
 | Sessions: value stored only as a hash, start and last-use dates, device category and browser and operating system family (without version) | Keep you signed in and show your sessions so you can end them | Performance of the contract and legitimate interest in security (art. 7, V and IX) | At most 7 days, or 24 hours without use; deleted by the daily routine after they end |
@@ -66,14 +66,15 @@ receives the IP and browser of whoever accesses it and keeps them in its technic
 
 | Data | Purpose | Legal basis (LGPD) | Retention |
 |---|---|---|---|
-| Account: owner, subscription status, plan and billing interval, Stripe customer and subscription identifiers, dates (end of the trial, of the period, of access, of notices sent), monthly event usage and quota notices sent | Provide the service, apply the monthly limit, turn access on and off according to the subscription, give notice of the end of the account | Performance of the contract (art. 7, V) | Until the account is deleted, 30 days after the end of access. A registration that did not complete the payment page: deleted 7 days later |
-| Acceptance of the terms: accepted version, date and time, account and person who accepted (without IP) | Know which version applies to you and prove acceptance | Performance of the contract and regular exercise of rights (art. 7, V and VI) | Until the account is deleted. Stripe keeps, as controller, the record of the acceptance given on its payment page |
-| Billing data, received through Stripe: name, email, billing address, CPF or CNPJ (Brazilian company taxpayer number), if provided, card brand, last digits and expiry date, history of payments, refunds and chargebacks | Charge the subscription, send receipts, handle withdrawals, refunds and chargebacks, comply with tax obligations | Performance of the contract (art. 7, V) and compliance with a legal obligation (art. 7, II) | During the agreement and for 5 years counted from the year following that of each charge (tax retention period) |
-| Project configuration: name, site addresses, time zone, conversion event, public key, secret key stored only as a hash, icon copied from the site itself | Provide the service | Performance of the contract (art. 7, V) | Until the project is deleted by the owner or the account is deleted (30 days after the end of access) |
+| Account: owner, plan (free or paid), subscription status, billing interval, Stripe customer and subscription identifiers (only on the paid plan), dates (end of the trial, of the period, of access, of notices sent), monthly event usage and notices sent about the quota and about an account without events | Provide the service, apply the plan's limits, turn access on and off according to the plan and the subscription, notify and delete a free plan account without events, give notice of the end of the account | Performance of the contract (art. 7, V) | Until the account is deleted: 30 days after the end of access or, for a free plan account without events, 7 days after the notice (Terms of Use, Clause 7.6) |
+| Acceptance of the terms: accepted version, date and time, account and person who accepted (without IP) | Know which version applies to you and prove acceptance | Performance of the contract and regular exercise of rights (art. 7, V and VI) | Until the account is deleted. When you subscribe to the paid plan, Stripe keeps, as controller, the record of the acceptance given on its payment page |
+| Billing data, only of those who subscribe to the paid plan, received through Stripe: name, email, billing address, CPF or CNPJ (Brazilian company taxpayer number), if provided, card brand, last digits and expiry date, history of payments, refunds and chargebacks | Charge the subscription, send receipts, handle withdrawals, refunds and chargebacks, comply with tax obligations | Performance of the contract (art. 7, V) and compliance with a legal obligation (art. 7, II) | During the agreement and for 5 years counted from the year following that of each charge (tax retention period) |
+| Project configuration: name, site addresses, time zone, conversion event, public key, secret key stored only as a hash, icon copied from the site itself | Provide the service | Performance of the contract (art. 7, V) | Until the project is deleted by the owner or the account is deleted ("Account" row above) |
 | Export requests: who requested, when, status and number of events | Generate and deliver the export file to the account owner | Performance of the contract (art. 7, V) | Until the project is deleted. The file itself is deleted 7 days after it is ready |
 
-**We do not receive or store the card number.** It stays with Stripe. We keep only the card
-fingerprint described in item 2.7.
+**On the free plan, we do not ask for a card or billing data.** On the paid plan, **we do not
+receive or store the card number**: it stays with Stripe. We keep only the card fingerprint
+described in item 2.7.
 
 ### 2.3. People who write to us
 
@@ -114,17 +115,24 @@ cookies, and the dashboard does not measure the use of the people who sign in to
 
 We send only emails related to the service: sign-in and registration codes; invitation to a
 project; welcome, with the version of the terms accepted; usage notices at 80%, at 100% and of the
-pause at 150%; notice of the end of access, reminder 7 days before deletion and notice that deletion
-has been carried out; notice that an export is ready; the weekly digest (which each person can turn
-off in Settings); and communications about the agreement, including notices of abuse and suspension.
-Billing emails are sent by Stripe itself: reminder 7 days before the end of the free trial, receipts
-for payments and refunds, notice of a declined payment, request to confirm the payment (3D Secure)
+pause at 150%, on the paid plan, and at 80% and of the pause at 100%, on the free plan; notice of a
+free plan account without events; notice of the end of access, reminder 7 days before deletion and
+notice that deletion has been carried out; notice that an export is ready; the weekly digest (which
+each person can turn off in Settings); and communications about the agreement, including notices of
+abuse and suspension. Billing emails are sent by Stripe itself: reminder 7 days before the end of
+the free trial (for trials started before version 1.3 of the Terms of Use), receipts for payments
+and refunds, notice of a declined payment, request to confirm the payment (3D Secure)
 and notice of a card about to expire. **Our emails have no open or click tracking.** We do not send
 advertising.
 
 ### 2.7. Prevention of repeated free trials
 
-The free trial is available once per customer (Terms of Use, Clause 6.4). To detect when the same
+**Since version 1.3 of the Terms of Use there has been no free trial** (Terms of Use, Clause 8.3),
+and we do not record new card fingerprints. This item covers the records of the trials started
+before then, which follow the retention period in the table below and disappear, at most, 12 months
+after the start of the last of those trials.
+
+The free trial was available once per customer (Terms of Use, Clause 8.3). To detect when the same
 card starts a second trial in another account, when we record a subscription with a free trial (in
 practice, when the trial starts) we read from Stripe the subscription's **card fingerprint**: a code that Stripe calculates from the card number and that repeats whenever the
 same card number is used in our Stripe account. **The fingerprint is not the card number and cannot
@@ -308,8 +316,10 @@ nor do we create profiles of you. The automatic effects of the service are rules
 for everyone and do not assess you as a person:
 
 1. security: after too many attempts, a code or sign-in request is refused for a few minutes;
-2. contractual: event intake pauses when the account reaches 150% of the monthly limit, and access
-   follows the status of the subscription in Stripe (Terms of Use, Clauses 7.2 and 9).
+2. contractual: event intake pauses when the account reaches 150% of the monthly limit on the paid
+   plan, or 100% on the free plan; access follows the plan and the status of the subscription in
+   Stripe; and a free plan account without events is deleted after the notice (Terms of Use,
+   Clauses 7.2, 7.6 and 9).
 
 A card fingerprint match (item 2.7) and measures for abuse (Terms of Use, Clause 18) are always
 decided by a person. If any of this gets in your way, contact us.

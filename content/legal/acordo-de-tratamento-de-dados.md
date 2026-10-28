@@ -16,7 +16,8 @@ os Termos de Uso, vale este acordo no que se refere a dados pessoais.
 **hello@pyxis-analytics.dev**.
 
 1.2. **Você:** a pessoa ou a empresa que contratou o Pyxis hospedado, aceitando os Termos de Uso,
-representada no painel pelo dono da conta (Termos de Uso, Cláusula 2.9).
+representada no painel pelo dono da conta (Termos de Uso, Cláusula 2.9). Este acordo vale do mesmo
+jeito no plano grátis e no plano pago (Termos de Uso, Cláusula 7.1).
 
 ## Cláusula 2 — Palavras usadas neste acordo
 
@@ -76,8 +77,9 @@ dados, o que **não** é guardado, onde os dados ficam e por quanto tempo.
 alugamos, não usamos para publicidade, não usamos para treinar modelos de inteligência artificial
 e não combinamos com dados de outros clientes. Os únicos números que tiramos dos seus projetos
 para uso próprio são contagens de operação, como a quantidade de eventos por mês de cada conta e o
-tamanho do banco, usadas para aplicar o limite mensal do plano (Termos de Uso, Cláusula 7.2) e
-conferir a capacidade do serviço.
+tamanho do banco, usadas para aplicar o limite mensal do plano (Termos de Uso, Cláusula 7.2), saber
+se uma conta do plano grátis ficou sem receber eventos (Termos de Uso, Cláusula 7.6) e conferir a
+capacidade do serviço.
 
 ## Cláusula 5 — Suas instruções
 
@@ -319,10 +321,11 @@ Cláusula 18.4 dos Termos de Uso, e restabelecemos assim que o risco passar.
 12.1. **Durante o contrato.** Os eventos ficam guardados por **13 meses**. Uma rotina diária apaga
 os eventos com mais de 13 meses, de todos os projetos.
 
-12.2. **Fim do contrato.** **30 dias depois do fim do acesso** (o fim do período pago ou do teste
-depois de um cancelamento, o encerramento da conta pelo painel, o fim da assinatura por falta de
-pagamento ou o encerramento por nós; Termos de Uso, Cláusulas 2.10 e 11.4), uma rotina diária apaga
-definitivamente a conta, os projetos e tudo o que é deles: eventos, chaves, configurações, ícone do
+12.2. **Fim do contrato.** **30 dias depois do fim do acesso** (o fim do período pago depois de um
+cancelamento ou o fim da assinatura por falta de pagamento, quando a conta não volta ao plano grátis;
+o encerramento da conta pelo painel; o fim do plano grátis; ou o encerramento por nós; Termos de Uso,
+Cláusulas 2.10 e 11.4), uma rotina diária apaga definitivamente a conta, os projetos e tudo o que é
+deles: eventos, chaves, configurações, ícone do
 site, registros de envio do resumo semanal, pedidos de exportação e os acessos das pessoas aos
 projetos. Apagamos também o cadastro (e-mail, sessões, tokens e aplicativos conectados) do dono da
 conta e das pessoas que só
@@ -351,6 +354,14 @@ prazos quando uma lei, uma ordem judicial ou uma requisição de autoridade comp
 quando forem necessários para um processo judicial, administrativo ou arbitral (LGPD, arts. 7º, VI,
 e 16, I). Nesse caso, preservamos só os dados alcançados, sem nenhum outro uso, pelo tempo exigido,
 e os apagamos depois; avisamos você, salvo se a lei ou a ordem proibir o aviso.
+
+12.7. **Conta do plano grátis sem eventos.** Uma conta do plano grátis que não receber nenhum evento
+nos 30 dias depois da criação, ou que ficar 90 dias seguidos sem receber eventos, é apagada como diz a
+Cláusula 7.6 dos Termos de Uso: o dono da conta recebe um aviso por e-mail e, se a conta continuar
+sem eventos 7 dias depois, uma rotina diária apaga a conta, os projetos e tudo o que é deles, como no
+item 12.2, sem o prazo de 30 dias desse item. Até lá, o dono da conta pode exportar os eventos
+(item 12.3). Valem também os itens 12.4 (cópias dos provedores), 12.5 (confirmação por e-mail) e
+12.6 (preservação por lei ou ordem).
 
 ## Cláusula 13 — Informações e auditoria
 
@@ -547,8 +558,9 @@ automáticos para isso.
 
 **7. Proteção contra abuso.** Limite de envio de lotes por endereço de origem e por projeto; lote
 com no máximo 50 eventos e 32 KB; validação estrita de cada campo; eventos inválidos descartados;
-recepção pausada quando a conta chega a 150% do limite mensal de eventos; os registros técnicos
-dizem quando um evento ou uma propriedade foi recusado e por qual regra, sem guardar o valor recusado.
+recepção pausada quando a conta chega a 150% do limite mensal de eventos no plano pago, ou a 100% no
+plano grátis; os registros técnicos dizem quando um evento ou uma propriedade foi recusado e por qual
+regra, sem guardar o valor recusado.
 
 **8. Infraestrutura.** A função da API recusa chamadas que não passem pela rede de distribuição
 (segredo de borda conferido em tempo constante). O usuário de banco da aplicação não pode alterar a

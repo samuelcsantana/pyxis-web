@@ -49,7 +49,7 @@ Braziliaanse nationale gegevensbeschermingsautoriteit).
 
 | Gegeven | Waarvoor | Rechtsgrond (LGPD) | Hoe lang |
 |---|---|---|---|
-| E-mailadres, taal van de e-mails (die van het scherm waarop je bent ingelogd of je hebt geregistreerd), projecten waartoe je toegang hebt, of je de accounteigenaar of een genodigde bent, keuze over de wekelijkse samenvatting, registratiedatum | De inlogcode en de e-mails van de dienst sturen, je projecten tonen en de wekelijkse samenvatting in je taal sturen | Uitvoering van de overeenkomst, voor de accounteigenaar (art. 7, V); ons gerechtvaardigd belang en dat van de klant om toegang te geven aan de personen die de eigenaar heeft uitgenodigd (art. 7, IX) | Zolang je toegang hebt tot een project of eigenaar van een account bent. Wanneer de eigenaar je uit een project verwijdert, eindigt de toegang daartoe direct; als je tot geen enkel project meer toegang hebt, verwijderen we je registratie binnen 30 dagen. In elk geval wordt de registratie samen met het account verwijderd, 30 dagen na het einde van de toegang ervan |
+| E-mailadres, taal van de e-mails (die van het scherm waarop je bent ingelogd of je hebt geregistreerd), projecten waartoe je toegang hebt, of je de accounteigenaar of een genodigde bent, keuze over de wekelijkse samenvatting, registratiedatum | De inlogcode en de e-mails van de dienst sturen, je projecten tonen en de wekelijkse samenvatting in je taal sturen | Uitvoering van de overeenkomst, voor de accounteigenaar (art. 7, V); ons gerechtvaardigd belang en dat van de klant om toegang te geven aan de personen die de eigenaar heeft uitgenodigd (art. 7, IX) | Zolang je toegang hebt tot een project of eigenaar van een account bent. Wanneer de eigenaar je uit een project verwijdert, eindigt de toegang daartoe direct; als je tot geen enkel project meer toegang hebt, verwijderen we je registratie binnen 30 dagen. In elk geval wordt de registratie samen met het account verwijderd (punt 2.2) |
 | Uitnodiging: je e-mailadres, de naam van het project en het e-mailadres van wie je heeft uitgenodigd, in de uitnodigingsmail | Je op de hoogte stellen van de toegang en van wie die heeft gegeven | Ons gerechtvaardigd belang en dat van de klant (art. 7, IX) | De uitnodiging zelf blijft niet in onze database (alleen de registratie uit de rij hierboven); het verzendlog blijft bij de e-mailprovider gedurende diens termijn (punt 3) |
 | Inlog- en registratiecodes: e-mailadres, code alleen als hash bewaard, doel (inloggen of registratie), taal, pogingen, tijdstippen | Inloggen en registratie zonder wachtwoord mogelijk maken en herhaalde pogingen verhinderen | Uitvoering van de overeenkomst, precontractuele handelingen en gerechtvaardigd belang bij beveiliging (art. 7, V en IX) | 10 minuten geldig; na het verlopen verwijderd door de dagelijkse routine |
 | Sessies: waarde alleen als hash bewaard, datum van begin en van laatste gebruik, apparaatcategorie en familie van de browser en van het besturingssysteem (zonder versie) | Je ingelogd houden en je sessies tonen zodat je ze kunt beëindigen | Uitvoering van de overeenkomst en gerechtvaardigd belang bij beveiliging (art. 7, V en IX) | Maximaal 7 dagen, of 24 uur zonder gebruik; na beëindiging verwijderd door de dagelijkse routine |
@@ -69,14 +69,15 @@ in zijn technische logs (punt 3).
 
 | Gegeven | Waarvoor | Rechtsgrond (LGPD) | Hoe lang |
 |---|---|---|---|
-| Account: eigenaar, status van het abonnement, abonnement en periodiciteit, identificaties van de klant en van het abonnement bij Stripe, data (einde van de proefperiode, van de periode, van de toegang, van de verzonden waarschuwingen), maandelijks eventgebruik en verzonden quotumwaarschuwingen | De dienst verlenen, de maandlimiet toepassen, de toegang aan- en uitzetten volgens het abonnement, het einde van het account aankondigen | Uitvoering van de overeenkomst (art. 7, V) | Tot de verwijdering van het account, 30 dagen na het einde van de toegang. Registratie waarbij de betaalpagina niet is afgerond: na 7 dagen verwijderd |
-| Aanvaarding van de voorwaarden: aanvaarde versie, datum en tijdstip, account en persoon die heeft aanvaard (zonder IP-adres) | Weten welke versie voor jou geldt en de aanvaarding bewijzen | Uitvoering van de overeenkomst en regelmatige uitoefening van rechten (art. 7, V en VI) | Tot de verwijdering van het account. Stripe bewaart, als verwerkingsverantwoordelijke, het record van de aanvaarding op zijn betaalpagina |
-| Factureringsgegevens, ontvangen via Stripe: naam, e-mailadres, factuuradres, CPF of CNPJ (indien opgegeven; CNPJ: Braziliaans fiscaal nummer van een rechtspersoon), merk, laatste cijfers en vervaldatum van de kaart, betalingsgeschiedenis, terugbetalingen en betwistingen | Het abonnement factureren, betalingsbewijzen sturen, herroeping, terugbetalingen en betwistingen afhandelen, fiscale verplichtingen nakomen | Uitvoering van de overeenkomst (art. 7, V) en nakoming van een wettelijke verplichting (art. 7, II) | Tijdens de overeenkomst en gedurende 5 jaar gerekend vanaf het jaar na dat van elke afschrijving (fiscale bewaartermijn) |
-| Configuratie van de projecten: naam, adressen van de websites, tijdzone, conversie-event, publieke sleutel, geheime sleutel alleen als hash bewaard, icoon gekopieerd van de website zelf | De dienst verlenen | Uitvoering van de overeenkomst (art. 7, V) | Tot de verwijdering van het project door de eigenaar of van het account (30 dagen na het einde van de toegang) |
+| Account: eigenaar, abonnement (gratis of betaald), status van het afgesloten abonnement, periodiciteit, identificaties van de klant en van het abonnement bij Stripe (alleen bij het betaalde abonnement), data (einde van de proefperiode, van de periode, van de toegang, van de verzonden waarschuwingen), maandelijks eventgebruik en verzonden waarschuwingen over het quotum en over een account zonder events | De dienst verlenen, de limieten van het abonnement toepassen, de toegang aan- en uitzetten volgens het gratis of betaalde abonnement en de afsluiting daarvan, het account op het gratis abonnement zonder events waarschuwen en verwijderen, het einde van het account aankondigen | Uitvoering van de overeenkomst (art. 7, V) | Tot de verwijdering van het account: 30 dagen na het einde van de toegang of, bij een account op het gratis abonnement zonder events, 7 dagen na de kennisgeving (Gebruiksvoorwaarden, Artikel 7.6) |
+| Aanvaarding van de voorwaarden: aanvaarde versie, datum en tijdstip, account en persoon die heeft aanvaard (zonder IP-adres) | Weten welke versie voor jou geldt en de aanvaarding bewijzen | Uitvoering van de overeenkomst en regelmatige uitoefening van rechten (art. 7, V en VI) | Tot de verwijdering van het account. Wanneer je het betaalde abonnement afsluit, bewaart Stripe, als verwerkingsverantwoordelijke, het record van de aanvaarding op zijn betaalpagina |
+| Factureringsgegevens, alleen van wie het betaalde abonnement afsluit, ontvangen via Stripe: naam, e-mailadres, factuuradres, CPF of CNPJ (indien opgegeven; CNPJ: Braziliaans fiscaal nummer van een rechtspersoon), merk, laatste cijfers en vervaldatum van de kaart, betalingsgeschiedenis, terugbetalingen en betwistingen | Het abonnement factureren, betalingsbewijzen sturen, herroeping, terugbetalingen en betwistingen afhandelen, fiscale verplichtingen nakomen | Uitvoering van de overeenkomst (art. 7, V) en nakoming van een wettelijke verplichting (art. 7, II) | Tijdens de overeenkomst en gedurende 5 jaar gerekend vanaf het jaar na dat van elke afschrijving (fiscale bewaartermijn) |
+| Configuratie van de projecten: naam, adressen van de websites, tijdzone, conversie-event, publieke sleutel, geheime sleutel alleen als hash bewaard, icoon gekopieerd van de website zelf | De dienst verlenen | Uitvoering van de overeenkomst (art. 7, V) | Tot de verwijdering van het project door de eigenaar of van het account (rij "Account" hierboven) |
 | Exportverzoeken: wie het heeft gevraagd, wanneer, status en aantal events | Het exportbestand aanmaken en aan de accounteigenaar leveren | Uitvoering van de overeenkomst (art. 7, V) | Tot de verwijdering van het project. Het bestand zelf wordt 7 dagen nadat het klaar is verwijderd |
 
-**We ontvangen en bewaren het kaartnummer niet.** Dat blijft bij Stripe. We bewaren alleen de
-kaartvingerafdruk uit punt 2.7.
+**Bij het gratis abonnement vragen we geen kaart en geen factureringsgegevens.** Bij het betaalde
+abonnement **ontvangen en bewaren we het kaartnummer niet**: dat blijft bij Stripe. We bewaren alleen
+de kaartvingerafdruk uit punt 2.7.
 
 ### 2.3. Wie ons schrijft
 
@@ -117,18 +118,25 @@ netwerken, en het dashboard meet het gebruik niet van de personen die erop inlog
 
 We sturen alleen e-mails die met de dienst te maken hebben: inlog- en registratiecodes; uitnodiging
 voor een project; welkom, met de aanvaarde versie van de voorwaarden; waarschuwingen bij 80% en 100%
-gebruik en van de pauze bij 150%; kennisgeving van het einde van de toegang, herinnering 7 dagen vóór
-de verwijdering en kennisgeving van de uitgevoerde verwijdering; melding dat een export klaar is; de
-wekelijkse samenvatting (die elke persoon kan uitschakelen in Instellingen); en mededelingen over de
-overeenkomst, ook waarschuwingen over misbruik en opschorting. De factureringsmails worden door
-Stripe zelf verstuurd: herinnering 7 dagen vóór het einde van de gratis proefperiode,
-betalingsbewijzen van betalingen en terugbetalingen, melding van een geweigerde betaling, verzoek om
+gebruik en van de pauze bij 150%, bij het betaalde abonnement, en bij 80% en van de pauze bij 100%,
+bij het gratis abonnement; waarschuwing over een account op het gratis abonnement zonder events;
+kennisgeving van het einde van de toegang, herinnering 7 dagen vóór de verwijdering en kennisgeving
+van de uitgevoerde verwijdering; melding dat een export klaar is; de wekelijkse samenvatting (die
+elke persoon kan uitschakelen in Instellingen); en mededelingen over de overeenkomst, ook
+waarschuwingen over misbruik en opschorting. De factureringsmails worden door Stripe zelf verstuurd:
+herinnering 7 dagen vóór het einde van de gratis proefperiode (bij proefperiodes die vóór versie 1.3
+van de Gebruiksvoorwaarden zijn begonnen), betalingsbewijzen van betalingen en terugbetalingen, melding van een geweigerde betaling, verzoek om
 bevestiging van de betaling (3D Secure) en waarschuwing dat de kaart bijna verloopt. **Onze e-mails
 volgen niet of ze worden geopend of aangeklikt.** We sturen geen reclame.
 
 ### 2.7. Voorkoming van herhaalde gratis proefperiodes
 
-De gratis proefperiode geldt één keer per klant (Gebruiksvoorwaarden, Artikel 6.4). Om op te merken
+**Sinds versie 1.3 van de Gebruiksvoorwaarden is er geen gratis proefperiode meer**
+(Gebruiksvoorwaarden, Artikel 8.3), en registreren we geen nieuwe kaartvingerafdrukken. Dit punt
+gaat over de records van de eerder begonnen proefperiodes, die de termijn in de tabel hieronder
+volgen en uiterlijk 12 maanden na het begin van de laatste van die proefperiodes verdwijnen.
+
+De gratis proefperiode gold één keer per klant (Gebruiksvoorwaarden, Artikel 8.3). Om op te merken
 wanneer dezelfde kaart een tweede proefperiode in een ander account begint, lezen we, wanneer we een
 abonnement met gratis proefperiode registreren (in de praktijk: wanneer de proefperiode begint), bij
 Stripe de **kaartvingerafdruk** (*fingerprint*) van het abonnement: een code die Stripe berekent op
@@ -334,8 +342,10 @@ zijn regels die voor iedereen gelijk zijn en die jou als persoon niet beoordelen
 1. op het gebied van beveiliging: na te veel pogingen wordt een verzoek om een code of om in te
    loggen enkele minuten geweigerd;
 2. op het gebied van de overeenkomst: de ontvangst van events pauzeert wanneer het account 150% van
-   de maandlimiet bereikt, en de toegang volgt de status van het abonnement bij Stripe
-   (Gebruiksvoorwaarden, Artikelen 7.2 en 9).
+   de maandlimiet bereikt bij het betaalde abonnement, of 100% bij het gratis abonnement; de toegang
+   volgt het gratis of betaalde abonnement en de status van het abonnement bij Stripe; en het account op het
+   gratis abonnement zonder events wordt na de kennisgeving verwijderd (Gebruiksvoorwaarden,
+   Artikelen 7.2, 7.6 en 9).
 
 Over een overeenkomende kaartvingerafdruk (punt 2.7) en de maatregelen wegens misbruik
 (Gebruiksvoorwaarden, Artikel 18) beslist altijd een mens. Als iets hiervan je hindert, neem dan

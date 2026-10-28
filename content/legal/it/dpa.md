@@ -23,7 +23,8 @@ persone fisiche) con il n. {{seller.taxId}}, con indirizzo in
 
 1.2. **Tu:** la persona o l'azienda che ha sottoscritto il Pyxis ospitato, accettando i Termini di
 utilizzo, rappresentata nel pannello (dashboard) dal proprietario dell'account (Termini di utilizzo,
-Clausola 2.9).
+Clausola 2.9). Questo accordo vale allo stesso modo nel piano gratuito e nel piano a pagamento
+(Termini di utilizzo, Clausola 7.1).
 
 ## Clausola 2 — Termini usati in questo accordo
 
@@ -88,7 +89,8 @@ noleggiamo, non li usiamo per pubblicità, non li usiamo per addestrare modelli 
 artificiale e non li combiniamo con dati di altri clienti. Gli unici numeri che ricaviamo dai tuoi
 progetti per uso proprio sono conteggi operativi, come il numero di eventi al mese di ciascun account
 e la dimensione del database, usati per applicare il limite mensile del piano (Termini di utilizzo,
-Clausola 7.2) e verificare la capacità del servizio.
+Clausola 7.2), sapere se un account del piano gratuito è rimasto senza ricevere eventi (Termini di
+utilizzo, Clausola 7.6) e verificare la capacità del servizio.
 
 ## Clausola 5 — Le tue istruzioni
 
@@ -340,10 +342,11 @@ come nella Clausola 18.4 dei Termini di utilizzo, e ripristiniamo non appena il 
 12.1. **Durante il contratto.** Gli eventi restano conservati per **13 mesi**. Una procedura
 giornaliera cancella gli eventi con più di 13 mesi, di tutti i progetti.
 
-12.2. **Fine del contratto.** **30 giorni dopo la fine dell'accesso** (la fine del periodo pagato o
-della prova dopo una disdetta, la chiusura dell'account dal pannello, la fine dell'abbonamento per
-mancato pagamento o la risoluzione da parte nostra; Termini di utilizzo, Clausole 2.10 e 11.4), una
-procedura giornaliera cancella definitivamente l'account, i progetti e tutto ciò che appartiene loro:
+12.2. **Fine del contratto.** **30 giorni dopo la fine dell'accesso** (la fine del periodo pagato
+dopo una disdetta o la fine dell'abbonamento per mancato pagamento, quando l'account non torna al
+piano gratuito; la chiusura dell'account dal pannello; la fine del piano gratuito; oppure la
+risoluzione da parte nostra; Termini di utilizzo, Clausole 2.10 e 11.4), una procedura giornaliera
+cancella definitivamente l'account, i progetti e tutto ciò che appartiene loro:
 eventi, chiavi, configurazioni, icona del sito, registri di invio del riepilogo settimanale,
 richieste di esportazione e gli accessi delle persone ai progetti. Cancelliamo anche la registrazione
 (e-mail, sessioni, token e app collegate) del proprietario dell'account e delle persone che avevano
@@ -375,6 +378,15 @@ ci obbliga, o quando sono necessari per un procedimento giudiziario, amministrat
 (LGPD, artt. 7, VI, e 16, I). In tal caso, conserviamo solo i dati interessati, senza alcun altro
 uso, per il tempo richiesto, e poi li cancelliamo; ti avvisiamo, salvo che la legge o l'ordine vieti
 l'avviso.
+
+12.7. **Account del piano gratuito senza eventi.** Un account del piano gratuito che non riceve alcun
+evento nei 30 giorni successivi alla creazione, o che resta 90 giorni consecutivi senza ricevere
+eventi, viene cancellato come indicato nella Clausola 7.6 dei Termini di utilizzo: il proprietario
+dell'account riceve un avviso via e-mail e, se l'account è ancora senza eventi 7 giorni dopo, una
+procedura giornaliera cancella l'account, i progetti e tutto ciò che appartiene loro, come al punto
+12.2, senza il termine di 30 giorni di tale punto. Fino ad allora, il proprietario dell'account può
+esportare gli eventi (punto 12.3). Valgono anche i punti 12.4 (copie dei fornitori), 12.5 (conferma
+via e-mail) e 12.6 (conservazione per legge o per ordine).
 
 ## Clausola 13 — Informazioni e audit
 
@@ -579,9 +591,9 @@ esistesse. Ci sono test automatici per questo.
 
 **7. Protezione contro gli abusi.** Limite di invio di lotti per indirizzo di origine e per progetto;
 lotto con al massimo 50 eventi e 32 KB; convalida rigorosa di ogni campo; eventi non validi scartati;
-ricezione interrotta quando l'account raggiunge il 150% del limite mensile di eventi; i registri
-tecnici indicano quando un evento o una proprietà è stato rifiutato e in base a quale regola, senza
-conservare il valore rifiutato.
+ricezione interrotta quando l'account raggiunge il 150% del limite mensile di eventi nel piano a
+pagamento, o il 100% nel piano gratuito; i registri tecnici indicano quando un evento o una
+proprietà è stato rifiutato e in base a quale regola, senza conservare il valore rifiutato.
 
 **8. Infrastruttura.** La funzione dell'API rifiuta le chiamate che non passano dalla rete di
 distribuzione (segreto di edge verificato in tempo costante). L'utente del database

@@ -16,36 +16,56 @@ Diese Zusammenfassung ersetzt nicht den vollständigen Text, zeigt aber, was vor
 am wichtigsten ist.
 
 1. **Anbieter:** {{seller.name}}, natürliche Person, CPF {{seller.taxId}} (Klausel 1).
-2. **Preis:** R$ 39,00 pro Monat oder R$ 390,00 pro Jahr, per Kreditkarte, über Stripe, mit
-   **automatischer Verlängerung**, bis du kündigst (Klausel 8).
-3. **Kostenlose Testphase:** 14 Tage, einmal pro Kunde. Die Karte wird zu Beginn verlangt, und Stripe
-   schickt 7 Tage vor dem Ende eine Erinnerung. **Wenn du nicht bis zum Ende der Testphase kündigst,
-   erfolgt die erste Belastung am 15. Tag** (Klauseln 6.4 und 8.3).
-4. **Grenzen des Tarifs:** bis zu 100.000 Ereignisse pro Monat, bis zu 3 Websites, bis zu 3 Personen
-   im Dashboard (dich eingeschlossen) und 13 Monate Verlauf. Wir benachrichtigen dich, wenn das Konto
-   80 % und 100 % der Ereignisse des Monats erreicht. **Achtung: bei 150 % wird der Empfang von
-   Ereignissen bis zum 1. des Folgemonats pausiert**, und die während der Pause gesendeten Ereignisse
-   gehen verloren. Über den Preis hinaus wird nichts berechnet (Klausel 7).
-5. **Widerruf:** volle Erstattung, wenn du innerhalb von 7 Tagen nach der ersten Belastung den
-   Vertrag widerrufst. Schließt du das Konto innerhalb dieser Frist im Dashboard, erfolgt die
-   Rückbuchung automatisch (Klausel 10).
-6. **Kündigung:** jederzeit, auf zwei Wegen. Im Stripe-Portal bleibt der Zugriff bis zum Ende des
-   bezahlten Zeitraums bestehen. Schließt du das Konto im Dashboard, **endet der Zugriff sofort**.
-   **Achtung: nach den 7 Tagen des Widerrufs gibt es keine anteilige Erstattung des bereits
-   bezahlten Zeitraums**, auf keinem der beiden Wege (Klausel 11).
+2. **Tarife und Preis:** es gibt zwei Tarife. Der **kostenlose Tarif** kostet nichts und verlangt
+   keine Karte. Der **kostenpflichtige Tarif** kostet R$ 39,00 pro Monat oder R$ 390,00 pro Jahr,
+   per Kreditkarte, über Stripe, **bei Abschluss des Abonnements belastet**, mit **automatischer
+   Verlängerung**, bis du kündigst (Klauseln 7 und 8).
+3. **Kostenloser Tarif:** jede Registrierung beginnt darin, ohne Karte und ohne zeitliche
+   Begrenzung, mit einem Konto im kostenlosen Tarif pro Person. **Es gibt keine 14-tägige kostenlose
+   Testphase mehr:** um die höheren Grenzen zu erhalten, abonnierst du den kostenpflichtigen Tarif im
+   Dashboard, wann du willst (Klauseln 6 und 8.3). **Achtung: der kostenlose Tarif kann sich ändern
+   oder enden, mit einer Benachrichtigung per E-Mail mindestens 30 Tage im Voraus**, und du kannst
+   deine Ereignisse vorher exportieren (Klausel 7.5).
+4. **Grenzen:** im kostenlosen Tarif bis zu 10.000 Ereignisse pro Monat, 1 Website und 1 Person im
+   Dashboard (nur du); im kostenpflichtigen Tarif bis zu 100.000 Ereignisse pro Monat, bis zu
+   3 Websites und bis zu 3 Personen im Dashboard (dich eingeschlossen). Beide haben 13 Monate Verlauf
+   und alle Funktionen. **Achtung: im kostenlosen Tarif wird der Empfang von Ereignissen
+   bis zum 1. des Folgemonats pausiert, wenn der Monat 10.000 Ereignisse erreicht**: ein Konto, das
+   die Grenze am 3. erreicht, empfängt bis zum 1. nichts. Wir benachrichtigen dich vorher, bei 80 %. Im
+   kostenpflichtigen Tarif benachrichtigen wir dich bei 80 % und bei 100 %, und **die Pause kommt bei
+   150 %**. Die während der Pause gesendeten Ereignisse gehen verloren. Über den Preis hinaus wird
+   nichts berechnet (Klausel 7).
+5. **Widerruf (kostenpflichtiger Tarif):** volle Erstattung, wenn du innerhalb von 7 Tagen nach der
+   ersten Belastung jedes Abonnements den Vertrag widerrufst. **Der Widerruf des kostenpflichtigen
+   Tarifs schließt dein Konto nicht:** es kehrt mit deinem Projekt in den kostenlosen Tarif zurück,
+   und du wählst, was du entfernst, wenn es nicht hineinpasst. Wenn du ganz gehen willst, kannst du
+   das gesamte Konto schließen (Klausel 10).
+6. **Kündigung:** jederzeit, auf zwei Wegen. Im Stripe-Portal bleibt der kostenpflichtige Tarif bis
+   zum Ende des bezahlten Zeitraums bestehen, und danach **kehrt das Konto in den kostenlosen Tarif
+   zurück, wenn es hineinpasst** (1 Website und 1 Person); passt es nicht hinein, endet der Zugriff.
+   Schließt du das Konto im Dashboard, **endet der Zugriff sofort**. **Achtung: nach den 7 Tagen des
+   Widerrufs gibt es keine anteilige Erstattung des bereits bezahlten Zeitraums**, auf keinem der
+   beiden Wege (Klausel 11).
 7. **Löschung der Daten:** **30 Tage nach dem Ende des Zugriffs werden das Konto, die Projekte und
    alle Ereignisse endgültig gelöscht.** Bis dahin exportierst du die Ereignisse über das Dashboard
-   (Klausel 11).
+   (Klausel 11). **Achtung: ein Konto im kostenlosen Tarif, das in den 30 Tagen nach seiner
+   Erstellung kein einziges Ereignis empfängt oder 90 Tage in Folge ohne Ereignisse bleibt, wird
+   endgültig gelöscht, wenn es 7 Tage nach einer Benachrichtigung per E-Mail weiterhin ohne
+   Ereignisse ist** (Klausel 7.6).
 8. **Verfügbarkeit:** **Achtung: es gibt keine Verfügbarkeitsgarantie (SLA)**; wir bemühen uns
-   nach besten Kräften, den Dienst online zu halten (Klausel 15). Support per E-Mail, mit Antwort
-   innerhalb von 2 Werktagen (Klausel 16).
+   nach besten Kräften, den Dienst online zu halten (Klausel 15). Im kostenpflichtigen Tarif Support
+   per E-Mail, mit Antwort innerhalb von 2 Werktagen. Im kostenlosen Tarif werden technische Fragen
+   zur Nutzung und zur Installation über die Dokumentation und über GitHub beantwortet; Beschwerden,
+   Fragen zum Vertrag und zur Abrechnung, Kündigung, Widerruf, personenbezogene Daten und die
+   vertraglichen Hinweise laufen weiterhin per E-Mail, mit Antwort innerhalb von 5 Tagen
+   (Klausel 16).
 9. **Deine wichtigsten Pflichten:** **keine personenbezogenen Daten in den Ereignissen senden**
    (Name, E-Mail, CPF, Telefon usw.), die Besucher deiner Website über die Messung informieren und
    den Dienst nicht missbräuchlich nutzen (Klausel 12).
 10. **Achtung: Sperrung und Beendigung wegen Missbrauchs.** Bei Missbrauch (zum Beispiel
     personenbezogene Daten in den Ereignissen, Messung von Personen, die nicht gemessen werden
-    wollen, gefälschter Traffic, Angriff, Betrug oder wiederholte kostenlose Testphase) können wir
-    den betroffenen Teil des Dienstes sperren und in schweren oder wiederholten Fällen den Vertrag
+    wollen, gefälschter Traffic, Angriff, Betrug oder mehrere Konten im kostenlosen Tarif) können
+    wir den betroffenen Teil des Dienstes sperren und in schweren oder wiederholten Fällen den Vertrag
     beenden. In der Regel benachrichtigen wir dich vorher und geben dir eine Frist zur Behebung; wir
     nennen immer den Grund, und du kannst widersprechen (Klausel 18).
 11. **Personenbezogene Daten:** du bist der Verantwortliche für die Daten der Besucher deiner
@@ -63,7 +83,9 @@ Nr. **{{seller.taxId}}**, mit Anschrift in **{{seller.address}}** („wir“). *
 Dienstes.
 
 1.2. Kontakt für jedes Anliegen, auch Kündigung, Widerruf, Support, Widerspruch gegen eine Sperrung
-und personenbezogene Daten: **hello@pyxis-analytics.dev**.
+und personenbezogene Daten: **hello@pyxis-analytics.dev**. Im kostenlosen Tarif laufen technische
+Fragen zur Nutzung und zur Installation über die Dokumentation und über GitHub; alles andere läuft
+weiterhin über diese E-Mail-Adresse (Klausel 16.5).
 
 1.3. „Du“ ist die natürliche oder juristische Person, die den Dienst beauftragt, um eine oder mehrere
 Websites zu messen.
@@ -91,17 +113,24 @@ Seitenaufruf oder eine Aktion, die du markiert hast.
 2.7. **Verbraucher:** wer den Dienst als Endabnehmer beauftragt, im Sinne von Art. 2 des Código de
 Defesa do Consumidor (brasilianisches Verbraucherschutzgesetzbuch; Lei nº 8.078/1990).
 
-2.8. **Konto:** die Registrierung des Auftraggebers, zu der das Abonnement, die Projekte und die
-Personen mit Zugriff gehören.
+2.8. **Konto:** die Registrierung des Auftraggebers, zu der der Tarif, das Abonnement des
+kostenpflichtigen Tarifs (sofern vorhanden), die Projekte und die Personen mit Zugriff gehören.
 
 2.9. **Kontoinhaber:** die Person, die sich registriert hat (oder die du angegeben hast, als wir das
 Konto auf deine Anfrage angelegt haben) und die in deinem Namen Projekte, Schlüssel, Personen, Exporte
 und Abrechnung verwaltet.
 
 2.10. **Ende des Zugriffs:** der Zeitpunkt, ab dem das Konto keine Ereignisse mehr empfängt und die
-Projekte nicht mehr ändern kann: das Ende des bezahlten Zeitraums oder der Testphase nach einer
-Kündigung (Klausel 11.2), die Schließung des Kontos (Klauseln 11.6 und 18.7) oder das Ende des
-Abonnements wegen Nichtzahlung (Klausel 9.2).
+Projekte nicht mehr ändern kann: das Ende des bezahlten Zeitraums nach einer Kündigung, wenn das
+Konto nicht in den kostenlosen Tarif zurückkehrt (Klausel 11.2), die Schließung des Kontos
+(Klauseln 11.6 und 18.7), das Ende des Abonnements wegen Nichtzahlung, wenn das Konto nicht in den
+kostenlosen Tarif zurückkehrt (Klausel 9.2), oder das Ende des kostenlosen Tarifs für das Konto, das
+den kostenpflichtigen Tarif nicht abonniert hat (Klausel 7.5). Die Löschung eines Kontos des
+kostenlosen Tarifs ohne Ereignisse ist kein Ende des Zugriffs: sie folgt nur Klausel 7.6.
+
+2.11. **Kostenloser Tarif und kostenpflichtiger Tarif:** die beiden Tarife des Dienstes, mit den
+Grenzen aus Klausel 7.1. Der kostenlose Tarif hat weder einen Preis noch ein Abonnement; der
+kostenpflichtige Tarif ist das monatliche oder jährliche Abonnement aus Klausel 8.
 
 ## Klausel 3 — Annahme, wer den Vertrag schließen kann und Vertragsdokumente
 
@@ -110,8 +139,9 @@ Abonnements wegen Nichtzahlung (Klausel 9.2).
 1. **bei der Registrierung über das Dashboard** (`app.pyxis-analytics.dev/sign-up`), indem du das
    Kästchen zur Annahme der Nutzungsbedingungen, des Auftragsverarbeitungsvertrags und der
    Datenschutzerklärung ankreuzt, das die Versionsnummer anzeigt. Wir speichern die angenommene
-   Version sowie Datum und Uhrzeit der Annahme (ohne deine IP zu speichern). Die Zahlungsseite von
-   Stripe verlangt vor dem Abonnement erneut die Annahme;
+   Version sowie Datum und Uhrzeit der Annahme (ohne deine IP zu speichern). Wenn du den
+   kostenpflichtigen Tarif abonnierst, verlangt die Zahlungsseite von Stripe vor dem Abonnement
+   erneut die Annahme;
 2. **wenn wir das Konto auf deine Anfrage anlegen** (Klausel 6.2), indem du auf unsere E-Mail mit der
    Bestätigung der Annahme der darin angegebenen Version antwortest, bevor wir den Zugriff
    freischalten.
@@ -165,7 +195,7 @@ nicht erreichbar ist oder der Empfang pausiert ist (Klauseln 7.2, 15 und 18), ge
 Tracker versucht es einige Sekunden lang erneut, solange die Seite geöffnet ist, aber nicht, wenn der
 Empfang pausiert ist).
 
-4.4. Ebenfalls Teil des Tarifs sind:
+4.4. Ebenfalls Teil beider Tarife (Klausel 7.1) sind:
 
 1. eine **wöchentliche Zusammenfassung per E-Mail**, jeden Montag, die jede Person mit Zugriff in den
    Einstellungen unter „Wochenbericht“ abschalten kann;
@@ -193,19 +223,16 @@ Bedingungen für diese Installation nicht.
 
 6.1. **Registrierung über das Dashboard.**
 
-1. Unter `app.pyxis-analytics.dev/sign-up` wählst du den Tarif (monatlich oder jährlich), gibst deine
-   E-Mail-Adresse an, nimmst die Bedingungen an (Klausel 3.1) und bestätigst die E-Mail-Adresse mit
-   einem 6-stelligen Code, der an sie gesendet wird.
-2. Anschließend gibst du die Karte auf der Zahlungsseite von Stripe an, womit die kostenlose
-   Testphase beginnt (Klausel 8.3).
-3. Sobald Stripe das Abonnement bestätigt hat, ist das Konto bereit: du legst deine Projekte im
-   Dashboard an (bis zu 3), mit der Adresse der Website, der Zeitzone und, wenn du willst, dem
+1. Unter `app.pyxis-analytics.dev/sign-up` gibst du deine E-Mail-Adresse an, nimmst die Bedingungen
+   an (Klausel 3.1) und bestätigst die E-Mail-Adresse mit einem 6-stelligen Code, der an sie
+   gesendet wird. **Die Registrierung verlangt keine Karte.**
+2. Nach Bestätigung des Codes entsteht das Konto im **kostenlosen Tarif** (Klausel 7.1), außer wenn
+   die Registrierung im kostenlosen Tarif geschlossen ist (Klausel 6.5), und ist bereit: du legst
+   dein Projekt im Dashboard an, mit der Adresse der Website, der Zeitzone und, wenn du willst, dem
    Conversion-Ereignis, und erhältst den öffentlichen Schlüssel und das Installations-Snippet. Wer
    sich registriert hat, ist der Kontoinhaber.
-
-Wenn du die Zahlungsseite von Stripe nicht abschließt, bleibt das Konto unvollständig, ohne Projekte,
-und wird 7 Tage nach der Registrierung gelöscht. Bis dahin kannst du das Abonnement abschließen,
-indem du dich erneut im Dashboard anmeldest.
+3. Um die Grenzen des kostenpflichtigen Tarifs zu erhalten, abonniert der Kontoinhaber den
+   kostenpflichtigen Tarif im Dashboard, wann er will (Klausel 8.3).
 
 6.2. **Auf Anfrage angelegtes Konto.** Wir können das Konto auch für dich anlegen, auf eine Anfrage
 an hello@pyxis-analytics.dev hin, zum Beispiel wenn die Registrierung über das Dashboard nicht
@@ -214,37 +241,50 @@ vereinbaren wir per E-Mail den Tarif und die Zahlungsweise, die Annahme folgt Kl
 und wir schalten den Zugriff innerhalb von 2 Werktagen nach der Annahme und, falls eine Belastung
 anfällt, nach dem Abonnement frei. Bei einem kostenlosen Konto gibt es keine Belastung; der Rest
 dieser Bedingungen gilt gleichermaßen, und wir können die Kostenfreiheit mit einer Frist von 30 Tagen
-beenden, nach deren Ablauf du den Tarif abonnieren oder gehen kannst.
+beenden, nach deren Ablauf du den kostenpflichtigen Tarif abonnieren oder gehen kannst. Dieses
+kostenlose Konto, das im Einzelfall per E-Mail vereinbart wird, ist etwas anderes als der kostenlose
+Tarif aus Klausel 7.1.
 
 6.3. Wir können eine Registrierung oder eine Kontoanfrage nur aus objektivem Grund ablehnen: (a) die
 Website ist mit der zulässigen Nutzung nicht vereinbar (Klausel 12); (b) das erwartete Volumen
 überschreitet die Grenzen des Tarifs erheblich; (c) dieselbe Person oder dasselbe Unternehmen hatte in
-den vorangegangenen 12 Monaten ein wegen schweren Missbrauchs beendetes Konto (Klausel 18.7); oder
-(d) wiederholte kostenlose Testphase (Klausel 6.4). Lehnen wir nach einer Belastung ab, erstatten wir
-den vollen Betrag.
+den vorangegangenen 12 Monaten ein wegen schweren Missbrauchs beendetes Konto (Klausel 18.7);
+(d) bei einer Registrierung im kostenlosen Tarif hat dieselbe Person oder dasselbe Unternehmen
+bereits ein Konto im kostenlosen Tarif (Klausel 6.4); oder (e) die Registrierung im kostenlosen Tarif
+ist geschlossen (Klausel 6.5). Lehnen wir nach einer Belastung ab, erstatten wir den vollen Betrag.
 
-6.4. **Die kostenlose Testphase gilt einmal pro Kunde:** einmal pro Konto (ein Konto, das bereits ein
-Abonnement hatte, erhält bei einem erneuten Abonnement keine neue Testphase) und einmal pro Person
-oder Unternehmen, auch in einem anderen Konto, mit einer anderen E-Mail-Adresse oder einer anderen
-Karte. Um eine wiederholte Testphase mit derselben Karte zu erkennen, speichern wir 12 Monate lang
-den von Stripe berechneten „Fingerabdruck“ der Karte, niemals die Kartennummer, wie die
-Datenschutzerklärung (Punkt 2.7) erläutert. Was bei einer wiederholten Testphase geschieht, steht in
-Klausel 18.11.
+6.4. **Ein Konto im kostenlosen Tarif pro Person:** jede Person und jedes Unternehmen kann nur ein
+Konto im kostenlosen Tarif haben, und der Dienst lässt nicht zu, dass derselbe Inhaber ein weiteres
+eröffnet. Ein weiteres Konto anzulegen, mit einer anderen Person oder einer anderen E-Mail-Adresse,
+um mehr als eines im kostenlosen Tarif zu haben oder um dessen Grenzen zu addieren, ist Missbrauch
+(Klausel 12.1, Punkt 14).
+
+6.5. **Plätze im kostenlosen Tarif.** Wir können die Anzahl der Konten im kostenlosen Tarif begrenzen
+und neue Registrierungen im kostenlosen Tarif jederzeit schließen, zum Beispiel um die Kapazität des
+Dienstes zu schützen. Solange der kostenlose Tarif geschlossen ist, kann die Registrierung eine
+Warteliste und den kostenpflichtigen Tarif anbieten. Das Schließen neuer Registrierungen ändert
+nichts für die Konten, die sich bereits im kostenlosen Tarif befinden; eine Änderung oder das Ende
+ihres Tarifs folgt Klausel 7.5.
 
 ## Klausel 7 — Tarif und Grenzen
 
-7.1. Der Tarif umfasst:
+7.1. Der Dienst hat zwei Tarife (Klausel 2.11):
 
-| Posten | Grenze |
-|---|---|
-| Empfangene Ereignisse pro Monat, summiert über alle Projekte des Kontos | bis zu 100.000 |
-| Websites (Projekte) | bis zu 3 |
-| Personen mit Zugriff auf das Dashboard | bis zu 3, einschließlich des Kontoinhabers |
-| Verlauf | 13 Monate (ältere Ereignisse werden täglich gelöscht) |
-| Wöchentliche Zusammenfassung per E-Mail | inbegriffen |
-| Zugriffstokens, MCP-Server und Claude-Connector | inbegriffen |
-| Export der Ereignisse eines Projekts | über das Dashboard, bis zu 3 pro Projekt pro Tag |
-| Support | per E-Mail, Antwort innerhalb von 2 Werktagen |
+| Posten | Kostenloser Tarif | Kostenpflichtiger Tarif |
+|---|---|---|
+| Preis | keiner, ohne Karte | R$ 39,00 pro Monat oder R$ 390,00 pro Jahr (Klausel 8) |
+| Empfangene Ereignisse pro Monat, summiert über alle Projekte des Kontos | bis zu 10.000 | bis zu 100.000 |
+| Websites (Projekte) | 1 | bis zu 3 |
+| Personen mit Zugriff auf das Dashboard | 1, nur der Kontoinhaber | bis zu 3, einschließlich des Kontoinhabers |
+| Verlauf | 13 Monate (ältere Ereignisse werden täglich gelöscht) | 13 Monate (ältere Ereignisse werden täglich gelöscht) |
+| Pause des Empfangs wegen des Kontingents (Klausel 7.2) | beim Erreichen von 100 % der Grenze | beim Erreichen von 150 % der Grenze |
+| Wöchentliche Zusammenfassung per E-Mail | inbegriffen | inbegriffen |
+| Zugriffstokens, MCP-Server und Claude-Connector | inbegriffen | inbegriffen |
+| Export der Ereignisse eines Projekts | über das Dashboard, bis zu 3 pro Projekt pro Tag | über das Dashboard, bis zu 3 pro Projekt pro Tag |
+| Support | über die Dokumentation und über GitHub; E-Mail nur in den Fällen von Klausel 16.5 | per E-Mail, Antwort innerhalb von 2 Werktagen |
+
+Beide Tarife haben alle Bildschirme und Funktionen des Dienstes; was sich zwischen ihnen
+unterscheidet, ist das Volumen.
 
 7.2. **Achtung: Nutzung über der Grenze.**
 
@@ -253,12 +293,12 @@ Klausel 18.11.
    Weltzeit), der in Brasília-Zeit um 21 Uhr am letzten Tag des Vormonats beginnt.
 2. Der Dienst misst die Nutzung einmal täglich, in den frühen Morgenstunden. Die gemessene Nutzung
    erscheint unter Konto und Abrechnung im Dashboard.
-3. Wenn die tägliche Messung 80 % und danach 100 % der Grenze (80.000 und 100.000 Ereignisse)
-   feststellt, benachrichtigen wir den Kontoinhaber per E-Mail, einmal pro Stufe und Monat. **Bis
-   150 % wird nichts abgeschaltet.**
-4. **Wenn die tägliche Messung 150 % der Grenze (150.000 Ereignisse) feststellt, wird der Empfang von
-   Ereignissen aller Projekte des Kontos bis zum 1. des Folgemonats pausiert**, und wir
-   benachrichtigen dich per E-Mail. Während der Pause lehnt der Dienst die Ereignisse ab (Antwort
+3. Wenn die tägliche Messung im kostenpflichtigen Tarif 80 % und danach 100 % der Grenze (80.000 und
+   100.000 Ereignisse) feststellt, benachrichtigen wir den Kontoinhaber per E-Mail, einmal pro Stufe
+   und Monat. **Bis 150 % wird nichts abgeschaltet.**
+4. **Wenn die tägliche Messung im kostenpflichtigen Tarif 150 % der Grenze (150.000 Ereignisse)
+   feststellt, wird der Empfang von Ereignissen aller Projekte des Kontos bis zum 1. des
+   Folgemonats pausiert**, und wir benachrichtigen dich per E-Mail. Während der Pause lehnt der Dienst die Ereignisse ab (Antwort
    `403 quota_exceeded`); sie **werden nicht gespeichert und können nicht wiederhergestellt
    werden**. Das Dashboard zeigt weiterhin die bereits gespeicherten Daten. Der Empfang setzt zu
    Beginn des Folgemonats von selbst wieder ein. Da die Messung täglich erfolgt, kann das Konto
@@ -266,6 +306,19 @@ Klausel 18.11.
 5. **Für die Nutzung über der Grenze berechnen wir nichts über den Preis des Tarifs hinaus.**
 6. Überschreitet das Konto die Grenze häufig, können wir per E-Mail einen dem Volumen angemessenen
    Tarif oder Preis vorschlagen. Die Annahme ist freiwillig.
+7. **Im kostenlosen Tarif kommt die Pause bei 100 % der Grenze.** Wenn die tägliche Messung 80 % der
+   Grenze (8.000 Ereignisse) feststellt, benachrichtigen wir den Kontoinhaber per E-Mail. **Wenn die
+   tägliche Messung 100 % der Grenze (10.000 Ereignisse) feststellt, wird der Empfang von Ereignissen
+   bis zum 1. des Folgemonats pausiert**, unter denselben Bedingungen wie in Punkt 4, und wir
+   benachrichtigen dich per E-Mail. Da die Messung täglich erfolgt, kann das Konto an dem Tag, an dem
+   es die Grenze erreicht, 10.000 Ereignisse etwas überschreiten, und diese Ereignisse bleiben
+   gespeichert. **Achtung: die Pause gilt bis zum 1. des Folgemonats, unabhängig davon, an welchem
+   Tag sie begonnen hat: ein Konto, das die Grenze am 3. erreicht, empfängt bis zum 1. kein einziges
+   Ereignis**, und die während der Pause gesendeten Ereignisse werden nicht gespeichert und können
+   nicht wiederhergestellt werden.
+8. **Ein Abonnement beendet die Pause.** Abonniert der Kontoinhaber während der Pause des kostenlosen
+   Tarifs den kostenpflichtigen Tarif (Klausel 8.3), setzt der Empfang etwa eine Minute nach der
+   Bestätigung des Abonnements wieder ein, bereits mit den Grenzen des kostenpflichtigen Tarifs.
 
 7.3. Der Dienst hat technische Grenzen gegen Missbrauch, etwa die Anzahl der Ereignis-Batches pro
 Minute pro Adresse und pro Projekt und die Größe jedes Batches. Diese Grenzen können sich zum Schutz
@@ -274,23 +327,55 @@ des Dienstes ändern, ohne die monatliche Ereignisgrenze deines Tarifs zu senken
 7.4. Die Löschung der Ereignisse, die älter als 13 Monate sind, erfolgt automatisch und ist Teil des
 Dienstes: **wir bewahren keinen älteren Verlauf auf**.
 
-## Klausel 8 — Preis, kostenlose Testphase und Abrechnung
+7.5. **Achtung: Änderung oder Ende des kostenlosen Tarifs.** Wir können die Grenzen des kostenlosen
+Tarifs jederzeit erhöhen oder ihm Funktionen hinzufügen. Jede andere Änderung des kostenlosen Tarifs,
+einschließlich der Senkung der Grenzen oder der Einstellung des Tarifs, gilt erst nach einer
+Benachrichtigung per E-Mail an den Inhaber jedes Kontos im kostenlosen Tarif **mindestens 30 Tage im
+Voraus**, mit Erläuterung dessen, was sich ändert (Klausel 21.1). Da der kostenlose Tarif keine
+Verlängerung hat, gilt die Änderung für dein Konto mit Ablauf dieser Frist. Während der Frist kannst
+du alle Ereignisse exportieren (Klausel 11.5), den kostenpflichtigen Tarif abonnieren (Klausel 8.3)
+oder das Konto schließen (Klausel 11.6). Endet der kostenlose Tarif und ist dein Konto nicht in den
+kostenpflichtigen Tarif gewechselt, ist der Ablauf der Frist das Ende des Zugriffs (Klausel 2.10), und
+die Daten folgen den Klauseln 11.4 und 11.5.
 
-8.1. **Preis:** R$ 39,00 pro Monat oder R$ 390,00 pro Jahr. Es gibt weder eine Einrichtungsgebühr noch
+7.6. **Achtung: Konto des kostenlosen Tarifs ohne Ereignisse.** Wir senden eine Benachrichtigung per
+E-Mail an den Inhaber eines Kontos im kostenlosen Tarif, das **in den 30 Tagen nach der Erstellung des
+Kontos kein einziges Ereignis empfängt** oder das **90 Tage in Folge kein einziges Ereignis
+empfängt**. **Ist das Konto 7 Tage nach der Benachrichtigung weiterhin ohne Ereignisse, wird es
+endgültig gelöscht**: das Konto, die Projekte und alle Ereignisse, ohne die 30-Tage-Frist aus
+Klausel 11.4, wie in Klausel 12.7 von Anhang 1 beschrieben; wir senden eine E-Mail, die die Löschung
+bestätigt. In diesen 7 Tagen kannst du die Ereignisse exportieren (Klausel 11.5), und es wird nichts
+gelöscht, wenn das Konto ein Ereignis empfängt oder in den kostenpflichtigen Tarif wechselt: die
+Konten des kostenpflichtigen Tarifs werden nie wegen fehlender Ereignisse gelöscht. Nach der Löschung
+können die Daten nicht wiederhergestellt werden; aufbewahrt bleiben nur die Einträge, die Klausel 11.4
+ausnimmt.
+
+## Klausel 8 — Preis, Abonnement und Abrechnung
+
+8.1. **Preis des kostenpflichtigen Tarifs:** R$ 39,00 pro Monat oder R$ 390,00 pro Jahr. Der
+kostenlose Tarif hat keinen Preis und verlangt keine Karte. Es gibt weder eine Einrichtungsgebühr noch
 andere Gebühren.
 
 8.2. **Zahlungsweise:** Kreditkarte, abgewickelt über Stripe. **Wir sehen und speichern deine
 Kartennummer nicht.** Derzeit akzeptieren wir weder Pix noch Boleto.
 
-8.3. **Kostenlose Testphase:** 14 Tage, gerechnet ab der Bestätigung des Abonnements auf der
-Zahlungsseite von Stripe, einmal pro Kunde (Klausel 6.4). Die Karte ist zu Beginn erforderlich, und
-während der Testphase wird nichts berechnet. Stripe schickt 7 Tage vor dem Ende der Testphase eine
-Erinnerung per E-Mail mit dem Link zur Kündigung. **Wenn du nicht bis zum Ende der Testphase kündigst
-(über das Stripe-Portal oder durch Schließung des Kontos im Dashboard), erfolgt die
-erste Belastung am 15. Tag** und danach zu jedem neuen Zeitraum; auf der Kreditkartenabrechnung ist diese erste
-Belastung als Ende der Testphase gekennzeichnet. Kündigst du während der Testphase, wird nichts
-berechnet. Ein Konto, das bereits ein Abonnement hatte, erhält bei einem erneuten Abonnement keine
-neue Testphase: die Belastung beginnt am Tag des neuen Abonnements.
+8.3. **Abonnement, ohne kostenlose Testphase.** Der Kontoinhaber abonniert den kostenpflichtigen
+Tarif unter Konto und Abrechnung im Dashboard, indem er den Monats- oder den Jahrestarif wählt und die
+Karte auf der Zahlungsseite von Stripe angibt. **Es gibt keine kostenlose Testphase: die erste
+Belastung erfolgt bei Abschluss des Abonnements** und danach zu jedem neuen Zeitraum. Sobald das
+Abonnement bestätigt ist, wechselt das Konto sofort zu den Grenzen des kostenpflichtigen Tarifs, und
+eine Pause des kostenlosen Tarifs endet wie in Klausel 7.2, Punkt 8, beschrieben. Verlässt du die
+Zahlungsseite, ohne abzuschließen, wird nichts berechnet, und das Konto bleibt im kostenlosen Tarif.
+Auch ein erneutes Abonnement nach einem früheren Abonnement wird sofort belastet.
+
+**Bereits begonnene Testphasen.** Bis zur Version 1.2 dieser Bedingungen begann das Abonnement mit
+einer 14-tägigen kostenlosen Testphase, bei der die Karte zu Beginn angegeben wurde, einmal pro Kunde.
+Ein Konto, das diese Testphase vor der Version 1.3 begonnen hat, beendet sie so, wie sie vereinbart
+wurde: während der Testphase wird nichts berechnet, Stripe schickt 7 Tage vor dem Ende eine Erinnerung
+per E-Mail, und **wenn du nicht bis zum Ende der Testphase kündigst (über das Stripe-Portal oder durch
+Schließung des Kontos im Dashboard), erfolgt die erste Belastung am 15. Tag**; auf der
+Kreditkartenabrechnung ist sie als Ende der Testphase gekennzeichnet. Eine wiederholte Testphase folgt
+Klausel 18.11.
 
 8.4. **Automatische Verlängerung:** das Abonnement verlängert sich am Ende jedes Zeitraums von selbst,
 mit Belastung derselben Karte, bis du kündigst (Klausel 11). Das Datum der nächsten Belastung
@@ -317,18 +402,21 @@ dieser Frist funktioniert der Dienst weiter.
 
 9.2. Erfolgt die Zahlung nach diesen Versuchen nicht (bis zu 2 Wochen nach dem ersten Fehlschlag)
 oder wird die von der Bank verlangte Bestätigung nicht innerhalb von 15 Tagen vorgenommen, beendet
-Stripe das Abonnement, und dies ist das Ende des Zugriffs: bis zum folgenden Tag werden die Schlüssel
-der Projekte widerrufen und die Websites senden keine Ereignisse mehr; das Dashboard bleibt bis zur
-Löschung nur zur Einsicht und zum Export verfügbar.
+Stripe das Abonnement. Passt das Konto in den kostenlosen Tarif (1 Projekt und 1 Person mit
+Zugriff), kehrt es in den kostenlosen Tarif zurück, wie in Klausel 11.2, Punkt 1. Passt es nicht
+hinein, ist dies das Ende des Zugriffs: bis zum folgenden Tag werden die Schlüssel der Projekte
+widerrufen und die Websites senden keine Ereignisse mehr; das Dashboard bleibt bis zur Löschung nur
+zur Einsicht und zum Export verfügbar.
 
-9.3. Die Daten werden 30 Tage nach dem Ende des Zugriffs gelöscht (Klausel 11.4). Bis dahin kannst du
-wie in Klausel 11.5, Punkt 3, beschrieben zurückkehren, ohne Daten zu verlieren.
+9.3. Kommt es zum Ende des Zugriffs, werden die Daten 30 Tage danach gelöscht (Klausel 11.4). Bis
+dahin kannst du wie in Klausel 11.5, Punkt 3, beschrieben zurückkehren, ohne Daten zu verlieren.
 
 ## Klausel 10 — Widerrufsrecht
 
 10.1. Da der Vertrag über das Internet geschlossen wird, kann der Verbraucher innerhalb von 7 Tagen
-nach Vertragsschluss den Vertrag widerrufen (Código de Defesa do Consumidor, Art. 49). Während der
-kostenlosen Testphase wird nichts berechnet: es genügt zu kündigen.
+nach Vertragsschluss den Vertrag widerrufen (Código de Defesa do Consumidor, Art. 49). Im
+kostenlosen Tarif wird nichts berechnet: es genügt, das Konto zu schließen (Klausel 11.6). Die
+Erstattung nach dieser Klausel gilt für den kostenpflichtigen Tarif.
 
 10.2. **Wir erweitern dieses Recht auf alle Kunden:** wenn du innerhalb von **7 Tagen nach der ersten
 Belastung** (des Monats- oder des Jahrestarifs) den Vertrag widerrufst, erstatten wir **den vollen Betrag**
@@ -336,14 +424,16 @@ dieser Belastung, ohne dass du einen Grund angeben musst.
 
 10.3. Um es auszuüben, nutze eines der folgenden Mittel:
 
-1. **schließe das Konto im Dashboard** (Konto und Abrechnung → Konto schließen), demselben Kanal, der
-   für den Vertragsschluss genutzt wurde. Innerhalb der Frist wird die Rückbuchung des vollen Betrags
+1. **im Dashboard**, unter Konto und Abrechnung → Abo widerrufen, an derselben Stelle, an der du
+   abonniert hast: das Abonnement wird sofort gekündigt, die Rückbuchung des vollen Betrags wird
    automatisch bei Stripe beantragt, und der Bildschirm zeigt den erstatteten Betrag;
-2. oder sende eine E-Mail an hello@pyxis-analytics.dev, von der E-Mail-Adresse des Kontoinhabers, mit
-   dem Wort „arrependimento“ (Widerruf).
+2. per E-Mail an hello@pyxis-analytics.dev, von der E-Mail-Adresse des Kontoinhabers, mit dem Wort
+   „arrependimento“ (Widerruf);
+3. wenn du auch den Dienst verlassen willst, **indem du das Konto im Dashboard schließt** (Konto und
+   Abrechnung → Konto schließen), mit der automatischen Rückbuchung aus Klausel 11.6, Punkt 5.
 
 Die Kündigung des Abonnements im Stripe-Portal allein löst keine Rückbuchung aus: nutze eines der
-beiden oben genannten Mittel.
+oben genannten Mittel.
 
 10.4. Über das Dashboard erscheint die Bestätigung sofort auf dem Bildschirm und zusätzlich per
 E-Mail. Per E-Mail bestätigen wir den Eingang auf demselben Weg und beantragen die Rückbuchung bei
@@ -352,27 +442,50 @@ innerhalb von 2 Werktagen manuell und benachrichtigen dich. Stripe teilt die Rü
 Kartenherausgeber mit; wie lange es dauert, bis sie auf der Abrechnung erscheint, hängt vom
 Kartenherausgeber ab.
 
-10.5. Mit dem Widerruf wird das Konto wie in Klausel 11.6 geschlossen: der Zugriff endet sofort, und
-die Daten folgen Klausel 11.4.
+10.5. Mit dem Widerruf über die Mittel 1 und 2 aus Klausel 10.3 wird das Abonnement sofort gekündigt,
+und das Konto **kehrt in den kostenlosen Tarif zurück**, mit dem Projekt und den Daten, die es hat,
+wenn es hineinpasst (1 Projekt und 1 Person mit Zugriff, Klausel 7.1). Passt es nicht hinein, zeigt
+das Dashboard, was zu entfernen ist, und du hast 30 Tage Zeit für deine Wahl und kannst vorher
+exportieren, was du willst (Klausel 11.5); passt das Konto innerhalb dieser Frist nicht in den
+kostenlosen Tarif, folgt es Klausel 11.2, Punkt 2. Die Rückbuchung hängt nicht von dieser Wahl ab.
+Hat der Monat bereits 10.000 Ereignisse überschritten, gilt die Pause aus Klausel 7.2, Punkt 7. Über
+das Mittel 3 wird das Konto wie in Klausel 11.6 geschlossen.
 
 ## Klausel 11 — Kündigung und Schließung des Kontos durch dich
 
 11.1. Du kannst jederzeit gehen, auf zwei Wegen, mit unterschiedlichen Wirkungen:
 
 1. **das Abonnement im Stripe-Portal kündigen** (Konto und Abrechnung → Abrechnung verwalten, oder
-   über den Link in den E-Mails von Stripe): wirksam zum Ende des bezahlten Zeitraums oder der
-   Testphase (Klausel 11.2);
+   über den Link in den E-Mails von Stripe): wirksam zum Ende des bezahlten Zeitraums, und das Konto
+   kehrt in den kostenlosen Tarif zurück, wenn es hineinpasst (Klausel 11.2);
 2. **das Konto im Dashboard schließen** (Konto und Abrechnung → Konto schließen): sofort wirksam
    (Klausel 11.6).
 
+Im kostenlosen Tarif gibt es kein Abonnement zu kündigen: um zu gehen, schließe das Konto im
+Dashboard (Punkt 2).
+
 Wenn du möchtest, beantrage es per E-Mail an hello@pyxis-analytics.dev, von der E-Mail-Adresse des
 Kontoinhabers, und gib an, welchen der beiden Wege du willst. Ohne diese Angabe führen wir die
-Kündigung nach Punkt 1 durch. Wir bestätigen den Eingang auf demselben Weg.
+Kündigung nach Punkt 1 durch (im kostenlosen Tarif die Schließung nach Punkt 2). Wir bestätigen den
+Eingang auf demselben Weg.
 
-11.2. **Kündigung im Stripe-Portal:** der Zugriff bleibt bis zum Ende des bezahlten Zeitraums (oder
-der Testphase) bestehen, und **es erfolgt keine neue Belastung**. Bis zum Tag nach dem Ende des
-Zugriffs werden die Schlüssel der Projekte widerrufen und die Websites senden keine Ereignisse mehr;
-das Dashboard bleibt bis zur Löschung nur zur Einsicht und zum Export verfügbar.
+11.2. **Kündigung im Stripe-Portal:** der kostenpflichtige Tarif bleibt bis zum Ende des bezahlten
+Zeitraums bestehen, und **es erfolgt keine neue Belastung**. Am Ende des Zeitraums:
+
+1. **passt das Konto in den kostenlosen Tarif** (1 Projekt und 1 Person mit Zugriff, Klausel 7.1),
+   **kehrt es in den kostenlosen Tarif zurück**, mit dem Projekt und den Daten, die es hat, und
+   empfängt weiterhin Ereignisse, mit den Grenzen des kostenlosen Tarifs; hat der Monat bereits
+   10.000 Ereignisse erreicht, wird der Empfang bis zum 1. des Folgemonats pausiert, wie im
+   kostenlosen Tarif (Klausel 7.2, Punkt 7). Wenn du lieber möchtest, dass das Konto endet, schließe
+   es im Dashboard (Klausel 11.6);
+2. passt das Konto nicht in den kostenlosen Tarif, ist dies das Ende des Zugriffs: bis zum folgenden
+   Tag werden die Schlüssel der Projekte widerrufen und die Websites senden keine Ereignisse mehr;
+   das Dashboard bleibt bis zur Löschung nur zur Einsicht und zum Export verfügbar.
+
+Das Dashboard gibt unter Konto und Abrechnung an, was zu entfernen ist (Projekte oder Personen), damit
+das Konto vor dem Ende des Zeitraums in den kostenlosen Tarif passt. **Achtung:** das Löschen eines
+Projekts löscht sofort dessen Ereignisse (Klausel 12.2 von Anhang 1); exportiere sie vorher
+(Klausel 11.5).
 
 11.3. **Achtung: außerhalb des Widerrufsrechts (Klausel 10) gibt es keine anteilige Erstattung des
 bereits bezahlten Zeitraums,** weder beim Monats- noch beim Jahrestarif, auf keinem der beiden Wege.
@@ -386,7 +499,8 @@ Zugriffs, 7 Tage vor der Löschung und wenn sie durchgeführt wurde. Danach **k�
 wiederhergestellt werden**. Aufbewahrt bleiben nur die Abrechnungsunterlagen, deren Aufbewahrung das
 Gesetz vorschreibt, der Eintrag zur Verhinderung wiederholter kostenloser Testphasen
 (Datenschutzerklärung, Punkte 2.2 und 2.7) und das, was ein Gesetz oder eine behördliche Anordnung zu
-bewahren vorschreibt (Klausel 12.6 von Anhang 1).
+bewahren vorschreibt (Klausel 12.6 von Anhang 1). Das wegen fehlender Ereignisse gelöschte Konto des
+kostenlosen Tarifs folgt Klausel 7.6, ohne diese 30-Tage-Frist.
 
 11.5. **Die Ereignisse exportieren und zurückkehren.**
 
@@ -401,15 +515,17 @@ bewahren vorschreibt (Klausel 12.6 von Anhang 1).
    bis wir die Kopie geliefert haben, falls die Anfrage kurz vor dem Löschdatum eingeht.
 3. Vor der Löschung kannst du **zurückkehren**, ohne Daten zu verlieren: wähle unter Konto und
    Abrechnung „Erneut abonnieren“ oder schreibe an hello@pyxis-analytics.dev, und wir reaktivieren das
-   Abonnement. Auf beiden Wegen gibt es keine neue kostenlose Testphase, und die Belastung beginnt mit
-   der Reaktivierung. Die widerrufenen Schlüssel kommen nicht zurück: du erstellst im Dashboard neue
+   Abonnement. Auf beiden Wegen beginnt die Belastung mit der Reaktivierung, ohne kostenlose
+   Testphase. Die widerrufenen Schlüssel kommen nicht zurück: du erstellst im Dashboard neue
    Schlüssel und tauschst sie auf deiner Website aus.
 
 11.6. **Das Konto über das Dashboard schließen.** Nur der Kontoinhaber kann schließen, unter Konto und
 Abrechnung, indem er zur Bestätigung seine E-Mail-Adresse eingibt. **Achtung: die Schließung wird
-sofort wirksam und kann über das Dashboard nicht rückgängig gemacht werden:**
+sofort wirksam und kann über das Dashboard nicht rückgängig gemacht werden** (um nur den
+kostenpflichtigen Tarif zu widerrufen und im kostenlosen Tarif zu bleiben, nutze Klausel 10.3):
 
-1. das Abonnement wird bei Stripe sofort gekündigt, ohne neue Belastungen;
+1. das Abonnement des kostenpflichtigen Tarifs wird, sofern vorhanden, bei Stripe sofort gekündigt,
+   ohne neue Belastungen;
 2. die Schlüssel aller Projekte werden sofort widerrufen, und die Websites senden keine Ereignisse
    mehr;
 3. das Dashboard bleibt bis zur Löschung nur zur Einsicht und zum Export (Klausel 11.5) verfügbar;
@@ -420,7 +536,7 @@ sofort wirksam und kann über das Dashboard nicht rückgängig gemacht werden:**
 6. der Bildschirm bestätigt die Schließung, das Löschdatum und den zurückgebuchten Betrag, und wir
    senden die Bestätigung per E-Mail.
 
-Eine Schließung während der kostenlosen Testphase löst keine Belastung aus. Kann Stripe das
+Die Schließung eines Kontos im kostenlosen Tarif löst keine Belastung aus. Kann Stripe das
 Abonnement nicht kündigen, wird nichts geschlossen, und der Bildschirm weist darauf hin. Wenn du es
 dir vor der Löschung anders überlegst, gilt Klausel 11.5, Punkt 3.
 
@@ -479,8 +595,8 @@ Verbindungen mit deiner Erlaubnis nutzt:
     autorisiert haben, innerhalb der Grenzen des Tarifs, ist kein Weiterverkauf; Klausel 3.2 von
     Anhang 1);
 14. mehr als ein Konto anlegen oder eine andere Person, eine andere E-Mail-Adresse oder eine andere
-    Karte verwenden, um **die kostenlose Testphase zu wiederholen** oder um einer Grenze oder einer
-    Belastung zu entgehen;
+    Karte verwenden, um **mehr als ein Konto im kostenlosen Tarif zu haben** (Klausel 6.4) oder um
+    einer Grenze oder einer Belastung zu entgehen;
 15. **Zahlungsbetrug**: eine Karte ohne Erlaubnis des Karteninhabers oder falsche Abrechnungsdaten
     verwenden, oder eine Belastung beim Kartenherausgeber bösgläubig beanstanden, zum Beispiel indem
     du behauptest, eine Belastung nicht zuordnen zu können, die du autorisiert hast und deren Dienst du
@@ -524,8 +640,9 @@ vollständigen Browser und beginnt auch nicht, sie zur Untersuchung von Missbrau
 
 ## Klausel 13 — Personen mit Zugriff, Schlüssel und Tokens
 
-13.1. **Personen mit Zugriff.** Das Konto hat bis zu 3 Personen mit Zugriff auf das Dashboard,
-einschließlich des Inhabers. Der Inhaber lädt eine Person über ihre E-Mail-Adresse zu einem oder
+13.1. **Personen mit Zugriff.** Im kostenpflichtigen Tarif hat das Konto bis zu 3 Personen mit
+Zugriff auf das Dashboard, einschließlich des Inhabers; im kostenlosen Tarif nur den Inhaber, der
+keine anderen Personen einlädt (Klausel 7.1). Der Inhaber lädt eine Person über ihre E-Mail-Adresse zu einem oder
 mehreren Projekten des Kontos ein, unter Einstellungen → Personen. Die Person erhält eine
 Einladungs-E-Mail und meldet sich mit einem an ihre E-Mail-Adresse gesendeten Code im Dashboard an,
 ohne Passwort. Der Inhaber entfernt eine Person jederzeit auf demselben Bildschirm.
@@ -601,7 +718,7 @@ benachrichtigen dich anschließend (Klausel 18.4, Punkt 4).
    Zugriffs-Credential gilt 1 Stunde) und die wir nur als Hash speichern. Sie endet, wenn die Person
    sie unter Einstellungen → Verbundene Apps widerruft; nach 90 Tagen ohne Nutzung; wenn die Person
    den Zugriff verliert (Klausel 13.3) oder ihr Zugriff gesperrt wird (Klausel 18.2); wenn das Konto
-   gelöscht wird (Klausel 11.4); oder von selbst, wenn ein bereits ausgetauschtes Credential erneut
+   gelöscht wird (Klauseln 7.6 und 11.4); oder von selbst, wenn ein bereits ausgetauschtes Credential erneut
    verwendet wird, ein Zeichen dafür, dass es kopiert worden sein könnte. Danach bittet die App
    erneut um Verbindung.
 6. **Grenzen.** Bis zu 10 gleichzeitig verbundene Apps pro Person sowie die Grenzen für Abfragen pro
@@ -645,7 +762,7 @@ LGPD, Art. 52). Wir erfüllen nur das Verlangte und benachrichtigen dich, sofern
 Benachrichtigung nicht untersagt.
 
 15.5. **Pause wegen des Kontingents.** Die Pause des Ereignisempfangs beim Erreichen von 150 % der
-Monatsgrenze folgt Klausel 7.2.
+Monatsgrenze im kostenpflichtigen Tarif oder von 100 % im kostenlosen Tarif folgt Klausel 7.2.
 
 15.6. Wenn du Verbraucher bist, gelten deine Rechte aus Art. 20 des Código de Defesa do Consumidor
 weiter: bei einem Mangel des Dienstes, auch bei einer Sperrung, die sich als ungerechtfertigt erweist
@@ -657,12 +774,13 @@ bezahlten Zeitraums entfernen wir weder die in Klausel 7.1 aufgeführten Funktio
 verschlechtern wir die Datenschutzzusagen aus Klausel 4.2. Ist eine Änderung dieser Art unvermeidlich
 (zum Beispiel aufgrund eines Gesetzes oder weil ein Anbieter etwas nicht mehr anbietet),
 benachrichtigen wir dich 30 Tage im Voraus, und du kannst den Vertrag mit anteiliger Rückzahlung des bezahlten und
-nicht genutzten Zeitraums beenden.
+nicht genutzten Zeitraums beenden. Die Änderungen des kostenlosen Tarifs folgen Klausel 7.5.
 
 ## Klausel 16 — Support und Kundenservice
 
 16.1. Der Kundenservice erfolgt per E-Mail an hello@pyxis-analytics.dev, für Fragen, Beschwerden,
-Support, Widerspruch gegen eine Sperrung, Sperrung und Kündigung.
+Support, Widerspruch gegen eine Sperrung, Sperrung und Kündigung. Im kostenlosen Tarif folgen
+technische Fragen zur Nutzung und zur Installation Klausel 16.5.
 
 16.2. Wir bestätigen den Eingang deiner Nachricht über dieselbe E-Mail-Adresse und antworten
 **innerhalb von 2 Werktagen** (Werktage von Montag bis Freitag, ausgenommen nationale Feiertage).
@@ -673,6 +791,30 @@ Open-Source-Codes.
 
 16.4. Sende in den Nachrichten keine personenbezogenen Daten von Besuchern. Um einen Fall zu zeigen,
 verwende die Kennung des Besuchs oder des Nutzers.
+
+16.5. **Support im kostenlosen Tarif.** Im kostenlosen Tarif werden technische Fragen zur Nutzung und
+zur Installation (Klausel 16.3) über die öffentliche Dokumentation von Pyxis und über die *Issues*
+der öffentlichen Repositories auf GitHub (Klausel 5.1) beantwortet, ohne die Frist aus Klausel 16.2.
+Die *Issues* sind öffentlich: veröffentliche darin weder Schlüssel noch Tokens noch personenbezogene
+Daten. Die E-Mail-Adresse hello@pyxis-analytics.dev gilt im kostenlosen Tarif weiterhin, mit
+Bestätigung des Eingangs auf demselben Weg und Antwort per E-Mail **innerhalb von 5 Tagen**, für:
+
+1. Informationen und Fragen zum Vertrag, zum Tarif, zu den Grenzen und zur Abrechnung, auch zum
+   Abonnement des kostenpflichtigen Tarifs;
+2. Beschwerden über den Dienst, auch über Mängel (Klausel 15.6);
+3. Sperrung, Kündigung, Schließung des Kontos und Widerruf (Klauseln 10, 11 und 18), auch die
+   Antwort auf einen Hinweis oder den Widerspruch gegen eine Maßnahme (Klausel 18.6);
+4. die Anfragen zu personenbezogenen Daten: deine und die der Personen mit Zugriff, innerhalb der
+   Fristen der Datenschutzerklärung (Punkt 6), und deine Anfragen als Verantwortlicher, innerhalb der
+   Fristen von Anhang 1 (Klausel 10);
+5. die übrigen Angelegenheiten, die nach diesen Bedingungen per E-Mail zu behandeln sind, etwa die
+   Meldung eines geleakten Schlüssels (Klausel 13.9), die Meldung einer Sicherheitslücke (Klausel 12.1,
+   Punkt 10) und die Anforderung der Kopie der Ereignisse, wenn der Export über das Dashboard
+   fehlschlägt (Klausel 11.5, Punkt 2).
+
+Wenn du Verbraucher bist und GitHub nicht nutzen kannst oder willst, kannst du deine Frage zur Nutzung
+auch per E-Mail senden; wir antworten innerhalb von 5 Tagen, und die Antwort kann auf den Teil der
+Dokumentation verweisen, der den Fall löst.
 
 ## Klausel 17 — Geistiges Eigentum und deine Daten
 
@@ -800,22 +942,12 @@ denen das Konto gesperrt war, zusätzlich zu deinen Rechten aus Klausel 15.6.
 4. Die Erstattung erfolgt über Stripe auf die für die Zahlung verwendete Karte, innerhalb von
    5 Werktagen nach der Beendigung.
 
-18.11. **Wiederholte kostenlose Testphase.** Wenn der Dienst anzeigt, dass die verwendete Karte in
-den vorangegangenen 12 Monaten bereits eine kostenlose Testphase in einem anderen Konto begonnen hat
-(Datenschutzerklärung, Punkt 2.7), oder es einen anderen objektiven Hinweis auf eine wiederholte
-Testphase durch dieselbe Person oder dasselbe Unternehmen gibt (Klausel 6.4):
-
-1. geschieht nichts automatisch: der Dienst erfasst nur die Übereinstimmung und benachrichtigt uns;
-   keine Belastung und keine Kündigung;
-2. prüfen wir den Fall und fragen dich bei Bedarf, mit der Frist von Klausel 18.3. Eine
-   Unternehmenskarte, die von verschiedenen Personen genutzt wird, oder eine Agentur, die für
-   verschiedene Kunden Verträge schließt, ist keine wiederholte Testphase;
-3. bestätigen wir die wiederholte Testphase, können wir das neue Konto vor dem Ende der Testphase
-   schließen, indem wir das Abonnement bei Stripe ohne jede Belastung kündigen, mit Hinweis und
-   Begründung; du kannst widersprechen (Klausel 18.6) und per E-Mail ohne kostenlose Testphase
-   abonnieren, mit Belastung ab dem neuen Abonnement;
-4. **berechnen wir niemals etwas vor dem auf der Zahlungsseite von Stripe angezeigten Datum**, und wir
-   verkürzen die Testphase nicht, um früher zu belasten.
+18.11. **Wiederholte kostenlose Testphase.** Die kostenlose Testphase endete mit der Version 1.3
+dieser Bedingungen (Klausel 8.3). Der Verdacht, dass eine vor dieser Version begonnene Testphase eine
+frühere Testphase wiederholt hat (Datenschutzerklärung, Punkt 2.7), folgt Klausel 18.11 der Version,
+in der diese Testphase begonnen hat: nichts geschieht automatisch, du wirst unter Angabe des Grundes
+benachrichtigt und vor jeder Maßnahme angehört, kannst widersprechen (Klausel 18.6), und **dir wird
+niemals etwas vor dem auf der Zahlungsseite von Stripe angezeigten Datum berechnet**.
 
 18.12. **Beanstandung einer Kartenbelastung.** Eine Belastung beim Kartenherausgeber zu beanstanden ist
 dein Recht; wir bitten dich, vorher mit uns zu sprechen (Klauseln 10 und 16). Wird die Beanstandung
@@ -824,10 +956,12 @@ können ihn als Nichtzahlung behandeln und das Abonnement mit Hinweis kündigen 
 bösgläubige Beanstandung (Klausel 12.1, Punkt 15) wird als Missbrauch behandelt.
 
 18.13. **Beendigung ohne Missbrauch.** Außerhalb eines Missbrauchs beenden wir den Vertrag nur in den
-Fällen der Klauseln 6.2 (Ende einer Kostenfreiheit), 20 (Ende des gehosteten Dienstes), 21.3
-(gesetzlich vorgeschriebene Änderung, die du nicht akzeptierst) und 22.1 (Übertragung, die du nicht
-akzeptierst), und erstatten immer den Betrag anteilig für den bezahlten und nicht genutzten Zeitraum;
-die Daten folgen den Klauseln 11.4 und 11.5.
+Fällen der Klauseln 6.2 (Ende einer Kostenfreiheit), 7.5 (Ende des kostenlosen Tarifs), 7.6 (Konto
+des kostenlosen Tarifs ohne Ereignisse), 20 (Ende des gehosteten Dienstes), 21.3 (gesetzlich
+vorgeschriebene Änderung, die du nicht akzeptierst) und 22.1 (Übertragung, die du nicht akzeptierst),
+und erstatten, wenn es einen bezahlten Zeitraum gibt, immer den Betrag anteilig für den bezahlten und
+nicht genutzten Zeitraum; die Daten folgen den Klauseln 11.4 und 11.5, außer bei Klausel 7.6, die
+eigene Fristen hat.
 
 ## Klausel 19 — Haftung
 

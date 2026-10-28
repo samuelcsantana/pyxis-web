@@ -23,7 +23,8 @@ in {{seller.address}}, der den Dienst unter dem Namen **Pyxis** anbietet. Kontak
 
 1.2. **Du:** die Person oder das Unternehmen, die bzw. das das gehostete Pyxis unter Annahme der
 Nutzungsbedingungen beauftragt hat, im Dashboard vertreten durch den Kontoinhaber
-(Nutzungsbedingungen, Klausel 2.9).
+(Nutzungsbedingungen, Klausel 2.9). Dieser Vertrag gilt im kostenlosen Tarif und im
+kostenpflichtigen Tarif gleichermaßen (Nutzungsbedingungen, Klausel 7.1).
 
 ## Klausel 2 — In diesem Vertrag verwendete Begriffe
 
@@ -89,8 +90,9 @@ vermieten sie nicht, nutzen sie nicht für Werbung, nutzen sie nicht zum Trainin
 künstlicher Intelligenz und kombinieren sie nicht mit Daten anderer Kunden. Die einzigen Zahlen, die
 wir für eigene Zwecke aus deinen Projekten ziehen, sind Betriebszählungen, wie die Anzahl der
 Ereignisse pro Monat jedes Kontos und die Größe der Datenbank, die verwendet werden, um die
-Monatsgrenze des Tarifs anzuwenden (Nutzungsbedingungen, Klausel 7.2) und die Kapazität des Dienstes
-zu prüfen.
+Monatsgrenze des Tarifs anzuwenden (Nutzungsbedingungen, Klausel 7.2), festzustellen, ob ein Konto
+des kostenlosen Tarifs keine Ereignisse mehr empfangen hat (Nutzungsbedingungen, Klausel 7.6), und
+die Kapazität des Dienstes zu prüfen.
 
 ## Klausel 5 — Deine Weisungen
 
@@ -356,9 +358,10 @@ her, sobald das Risiko vorüber ist.
 Vorgang löscht die Ereignisse, die älter als 13 Monate sind, aus allen Projekten.
 
 12.2. **Ende des Vertrags.** **30 Tage nach dem Ende des Zugriffs** (das Ende des bezahlten Zeitraums
-oder der Testphase nach einer Kündigung, die Schließung des Kontos über das Dashboard, das Ende des
-Abonnements wegen Nichtzahlung oder die Beendigung durch uns; Nutzungsbedingungen, Klauseln 2.10 und
-11.4) löscht ein täglicher Vorgang endgültig das Konto, die Projekte und alles, was zu ihnen gehört:
+nach einer Kündigung oder das Ende des Abonnements wegen Nichtzahlung, wenn das Konto nicht in den
+kostenlosen Tarif zurückkehrt; die Schließung des Kontos über das Dashboard; das Ende des kostenlosen
+Tarifs; oder die Beendigung durch uns; Nutzungsbedingungen, Klauseln 2.10 und 11.4) löscht ein
+täglicher Vorgang endgültig das Konto, die Projekte und alles, was zu ihnen gehört:
 Ereignisse, Schlüssel, Konfigurationen, Icon der Website, Versandeinträge der wöchentlichen
 Zusammenfassung, Exportanfragen und die Zugriffe der Personen auf die Projekte. Wir löschen auch die
 Registrierung (E-Mail-Adresse, Sitzungen, Tokens und verbundene Apps) des Kontoinhabers und der
@@ -391,6 +394,15 @@ schiedsgerichtliches Verfahren erforderlich sind (LGPD, Art. 7 VI und Art. 16 I)
 bewahren wir nur die betroffenen Daten auf, ohne jede andere Nutzung, für die verlangte Dauer, und
 löschen sie danach; wir benachrichtigen dich, sofern das Gesetz oder die Anordnung die
 Benachrichtigung nicht untersagt.
+
+12.7. **Konto des kostenlosen Tarifs ohne Ereignisse.** Ein Konto des kostenlosen Tarifs, das in den
+30 Tagen nach seiner Erstellung kein einziges Ereignis empfängt oder 90 Tage in Folge keine Ereignisse
+empfängt, wird wie in Klausel 7.6 der Nutzungsbedingungen beschrieben gelöscht: der Kontoinhaber
+erhält eine Benachrichtigung per E-Mail, und ist das Konto 7 Tage danach weiterhin ohne Ereignisse,
+löscht ein täglicher Vorgang das Konto, die Projekte und alles, was zu ihnen gehört, wie in
+Punkt 12.2, ohne die 30-Tage-Frist dieses Punktes. Bis dahin kann der Kontoinhaber die Ereignisse
+exportieren (Punkt 12.3). Es gelten außerdem die Punkte 12.4 (Kopien der Anbieter), 12.5 (Bestätigung
+per E-Mail) und 12.6 (Aufbewahrung aufgrund von Gesetz oder Anordnung).
 
 ## Klausel 13 — Informationen und Audit
 
@@ -602,7 +614,8 @@ es nicht. Dafür gibt es automatische Tests.
 
 **7. Schutz vor Missbrauch.** Begrenzung des Sendens von Batches pro Herkunftsadresse und pro
 Projekt; Batch mit höchstens 50 Ereignissen und 32 KB; strikte Validierung jedes Feldes; ungültige
-Ereignisse verworfen; Empfang pausiert, wenn das Konto 150 % der monatlichen Ereignisgrenze erreicht;
+Ereignisse verworfen; Empfang pausiert, wenn das Konto 150 % der monatlichen Ereignisgrenze im
+kostenpflichtigen Tarif oder 100 % im kostenlosen Tarif erreicht;
 die technischen Protokolle geben an, wann ein Ereignis oder eine Eigenschaft abgelehnt wurde und nach
 welcher Regel, ohne den abgelehnten Wert zu speichern.
 

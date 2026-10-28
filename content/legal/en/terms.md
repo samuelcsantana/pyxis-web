@@ -16,36 +16,51 @@ This summary does not replace the full text, but it shows what matters most befo
 
 1. **Who provides it:** {{seller.name}}, an individual, CPF (Brazilian individual taxpayer number)
    {{seller.taxId}} (Clause 1).
-2. **Price:** R$ 39.00 per month or R$ 390.00 per year, by credit card, through Stripe, with
-   **automatic renewal** until you cancel (Clause 8).
-3. **Free trial:** 14 days, once per customer. The card is requested at the start, and Stripe sends a
-   reminder 7 days before the end. **If you do not cancel by the end of the trial, the first charge
-   takes place on the 15th day** (Clauses 6.4 and 8.3).
-4. **Plan limits:** up to 100 thousand events per month, up to 3 sites, up to 3 people in the
-   dashboard (including you) and 13 months of history. We notify you when the account reaches 80%
-   and 100% of the month's events. **Important: at 150%, event intake pauses until the 1st day of
-   the following month**, and events sent during the pause are lost. Nothing is charged beyond the
-   price (Clause 7).
-5. **Withdrawal:** full refund if you withdraw within 7 days after the first charge. If you close
-   the account in the dashboard within that period, the refund is automatic (Clause 10).
-6. **Cancellation:** at any time, in two ways. In the Stripe portal, access continues until the end
-   of the paid period. If you close the account in the dashboard, **access ends immediately**.
-   **Important: after the 7 days of the right of withdrawal, there is no pro rata refund of the
-   period already paid** in either case (Clause 11).
+2. **Plans and price:** there are two plans. The **free plan** costs nothing and does not ask for a
+   card. The **paid plan** costs R$ 39.00 per month or R$ 390.00 per year, by credit card, through
+   Stripe, **charged at the time of subscription**, with **automatic renewal** until you cancel
+   (Clauses 7 and 8).
+3. **Free plan:** every registration starts on it, without a card and without a time limit, with one
+   account on the free plan per person. **There is no longer a 14-day free trial:** to get the
+   higher limits, you subscribe to the paid plan in the dashboard, whenever you wish (Clauses 6 and
+   8.3). **Important: the free plan may change or end, with at least 30 days' notice by email**, and
+   you can export your events beforehand (Clause 7.5).
+4. **Limits:** on the free plan, up to 10 thousand events per month, 1 site and 1 person in the
+   dashboard (only you); on the paid plan, up to 100 thousand events per month, up to 3 sites and up
+   to 3 people in the dashboard (including you). Both have 13 months of history and all features.
+   **Important: on the free plan, when the month reaches 10 thousand events, event intake pauses
+   until the 1st day of the following month**: an account that reaches the limit on the 3rd receives
+   nothing until the 1st. We notify you beforehand, at 80%. On the paid plan, we notify you at 80%
+   and 100%, and **the pause comes at 150%**. Events sent during the pause are lost. Nothing is
+   charged beyond the price (Clause 7).
+5. **Withdrawal (paid plan):** full refund if you withdraw within 7 days after the first charge of
+   each subscription. **Withdrawing from the paid plan does not close your account:** it goes back
+   to the free plan, with your project, and you choose what to remove if it does not fit. If you
+   want to leave for good, you can close the entire account (Clause 10).
+6. **Cancellation:** at any time, in two ways. In the Stripe portal, the paid plan continues until
+   the end of the paid period and, afterwards, **the account goes back to the free plan if it fits**
+   (1 site and 1 person); if it does not fit, access ends. If you close the account in the
+   dashboard, **access ends immediately**. **Important: after the 7 days of the right of
+   withdrawal, there is no pro rata refund of the period already paid** in either case (Clause 11).
 7. **Deletion of data:** **30 days after the end of access, the account, the projects and all
    events are permanently deleted.** Until then, you can export the events through the dashboard
-   (Clause 11).
+   (Clause 11). **Important: an account on the free plan that receives no event in the 30 days after
+   its creation, or that goes 90 consecutive days without events, is permanently deleted if it is
+   still without events 7 days after a notice by email** (Clause 7.6).
 8. **Availability:** **Important: there is no availability guarantee (SLA)**; we make our best
-   efforts to keep the service running (Clause 15). Support by email, with a response within 2
-   business days (Clause 16).
+   efforts to keep the service running (Clause 15). On the paid plan, support by email, with a
+   response within 2 business days. On the free plan, technical questions about use and installation
+   are handled through the documentation and GitHub; complaints, questions about the agreement and
+   billing, cancellation, withdrawal, personal data and the notices under the agreement continue by
+   email, with a response within 5 days (Clause 16).
 9. **Your main obligations:** **do not send personal data in events** (name, email, CPF, phone
    number, etc.), inform the visitors of your site about the measurement, and do not use the
    service abusively (Clause 12).
 10. **Important: suspension and termination for abuse.** If there is abuse (for example, personal
     data in events, measuring people who asked not to be measured, forged traffic, attacks, fraud or
-    a repeated free trial), we may suspend the affected part of the service and, in serious or
-    repeated cases, terminate the agreement. As a rule, we notify you in advance and give you time
-    to fix it; we always state the reason, and you may contest it (Clause 18).
+    several accounts on the free plan), we may suspend the affected part of the service and, in
+    serious or repeated cases, terminate the agreement. As a rule, we notify you in advance and give
+    you time to fix it; we always state the reason, and you may contest it (Clause 18).
 11. **Personal data:** you are the controller of the data of your site's visitors; we are the
     processor (Clause 14 and the Data Processing Agreement). If a person with access connects
     Claude or Claude Code to Pyxis, the figures that person requests go to Anthropic, which is not
@@ -59,7 +74,9 @@ This summary does not replace the full text, but it shows what matters most befo
 **Pyxis** is the name of the service.
 
 1.2. Contact for any matter, including cancellation, withdrawal, support, contesting a suspension
-and personal data: **hello@pyxis-analytics.dev**.
+and personal data: **hello@pyxis-analytics.dev**. On the free plan, technical questions about use
+and installation go through the documentation and GitHub; everything else continues through this
+email (Clause 16.5).
 
 1.3. "You" means the individual or legal entity that subscribes to the service to measure one or
 more sites.
@@ -87,17 +104,24 @@ action you have marked.
 meaning of art. 2 of the Código de Defesa do Consumidor (Brazilian Consumer Protection Code, Lei
 nº 8.078/1990).
 
-2.8. **Account:** the registration of the subscriber, to which the subscription, the projects and
-the people with access belong.
+2.8. **Account:** the registration of the subscriber, to which the plan, the subscription to the
+paid plan (when there is one), the projects and the people with access belong.
 
 2.9. **Account owner:** the person who registered (or whom you designated when we created the
 account at your request) and who, on your behalf, manages projects, keys, people, exports and
 billing.
 
 2.10. **End of access:** the date on which the account stops receiving events and can no longer
-change its projects: the end of the paid period or of the trial after a cancellation (Clause 11.2),
-the closure of the account (Clauses 11.6 and 18.7) or the end of the subscription for non-payment
-(Clause 9.2).
+change its projects: the end of the paid period after a cancellation, when the account does not go
+back to the free plan (Clause 11.2), the closure of the account (Clauses 11.6 and 18.7), the end of
+the subscription for non-payment, when the account does not go back to the free plan (Clause 9.2),
+or the end of the free plan for an account that has not subscribed to the paid plan (Clause 7.5).
+The deletion of a free plan account without events is not an end of access: it follows only
+Clause 7.6.
+
+2.11. **Free plan and paid plan:** the two plans of the service, with the limits of Clause 7.1. The
+free plan has no price and no subscription; the paid plan is the monthly or annual subscription of
+Clause 8.
 
 ## Clause 3 — Acceptance, who may subscribe and contract documents
 
@@ -106,7 +130,8 @@ the closure of the account (Clauses 11.6 and 18.7) or the end of the subscriptio
 1. **when registering through the dashboard** (`app.pyxis-analytics.dev/sign-up`), by ticking the
    box accepting the Terms of Use, the Data Processing Agreement and the Privacy Policy, which shows
    the version number. We keep the accepted version and the date and time of acceptance (without
-   keeping your IP). The Stripe payment page asks for acceptance again before the subscription;
+   keeping your IP). When you subscribe to the paid plan, the Stripe payment page asks for
+   acceptance again before the subscription;
 2. **when we create the account at your request** (Clause 6.2), by replying to our email confirming
    acceptance of the version stated in it, before we grant access.
 
@@ -159,7 +184,7 @@ appear, and events sent while the service is down or while intake is paused (Cla
 18) are lost (the tracker retries for a few seconds while the page is open, but not when intake is
 paused).
 
-4.4. The plan also includes:
+4.4. Both plans also include (Clause 7.1):
 
 1. a **weekly email digest**, every Monday, which each person with access can turn off in
    Settings;
@@ -187,18 +212,15 @@ installation.
 
 6.1. **Registration through the dashboard.**
 
-1. At `app.pyxis-analytics.dev/sign-up`, you choose the plan (monthly or annual), enter your email,
-   accept the terms (Clause 3.1) and confirm the email with a 6-digit code sent to it.
-2. Next, you enter your card on the Stripe payment page, which starts the free trial
-   (Clause 8.3).
-3. Once Stripe confirms the subscription, the account is ready: you create your projects in the
-   dashboard (up to 3), with the site address, the time zone and, if you wish, the conversion
-   event, and you receive the public key and the installation snippet. The person who registered is
-   the account owner.
-
-If you do not complete the Stripe payment page, the account remains incomplete, without projects,
-and is deleted 7 days after registration. Until then, you can complete the subscription by signing
-in to the dashboard again.
+1. At `app.pyxis-analytics.dev/sign-up`, you enter your email, accept the terms (Clause 3.1) and
+   confirm the email with a 6-digit code sent to it. **Registration does not ask for a card.**
+2. Once the code is confirmed, the account is created on the **free plan** (Clause 7.1), except when
+   registration on the free plan is closed (Clause 6.5), and is ready: you create your project in
+   the dashboard, with the site address, the time zone and, if you wish, the conversion event, and
+   you receive the public key and the installation snippet. The person who registered is the
+   account owner.
+3. To get the limits of the paid plan, the account owner subscribes to the paid plan in the
+   dashboard, whenever they wish (Clause 8.3).
 
 6.2. **Account created on request.** We may also create the account for you, upon a request sent to
 hello@pyxis-analytics.dev, for example when it is not possible to complete registration through the
@@ -206,35 +228,46 @@ dashboard or for a free account that we offer. In that case, we agree by email o
 payment method, acceptance follows Clause 3.1, item 2, and we grant access within 2 business days
 after acceptance and, if there is a charge, after the subscription. A free account has no charge;
 the rest of these terms applies equally, and we may end the free status with 30 days' notice, after
-which you may subscribe to the plan or leave.
+which you may subscribe to the paid plan or leave. This free account, agreed case by case by email,
+is different from the free plan of Clause 7.1.
 
 6.3. We may refuse a registration or an account request only for an objective reason: (a) the site
 is not compatible with acceptable use (Clause 12); (b) the expected volume greatly exceeds the plan
 limits; (c) the same person or company had an account closed for serious abuse (Clause 18.7) in the
-previous 12 months; or (d) a repeated free trial (Clause 6.4). If we refuse after a charge, we
-refund the full amount.
+previous 12 months; (d) in a registration on the free plan, the same person or company already
+having an account on the free plan (Clause 6.4); or (e) registration on the free plan being closed
+(Clause 6.5). If we refuse after a charge, we refund the full amount.
 
-6.4. **The free trial is available once per customer:** once per account (an account that has
-already had a subscription does not get a new trial when it subscribes again) and once per person
-or company, even in another account, with another email or another card. To detect a repeated trial
-with the same card, we keep for 12 months the card "fingerprint" calculated by Stripe, never the
-card number, as explained in the Privacy Policy (item 2.7). What happens with a repeated trial is
-set out in Clause 18.11.
+6.4. **One account on the free plan per person:** each person or company may have only one account
+on the free plan, and the service does not let the same owner open another. Creating another
+account, with another person or another email, to have more than one on the free plan or to add up
+its limits is abuse (Clause 12.1, item 14).
+
+6.5. **Places on the free plan.** We may limit the number of accounts on the free plan and close,
+at any time, new registrations on the free plan, for example to protect the capacity of the
+service. While it is closed, registration may offer a waiting list and the paid plan. Closing new
+registrations changes nothing for the accounts already on the free plan; changing or ending their
+plan follows Clause 7.5.
 
 ## Clause 7 — Plan and limits
 
-7.1. The plan includes:
+7.1. The service has two plans (Clause 2.11):
 
-| Item | Limit |
-|---|---|
-| Events received per month, adding up all the account's projects | up to 100,000 |
-| Sites (projects) | up to 3 |
-| People with access to the dashboard | up to 3, including the account owner |
-| History | 13 months (older events are deleted every day) |
-| Weekly email digest | included |
-| Access tokens, MCP server and Claude connector | included |
-| Export of a project's events | through the dashboard, up to 3 per project per day |
-| Support | by email, response within 2 business days |
+| Item | Free plan | Paid plan |
+|---|---|---|
+| Price | none, without a card | R$ 39.00 per month or R$ 390.00 per year (Clause 8) |
+| Events received per month, adding up all the account's projects | up to 10,000 | up to 100,000 |
+| Sites (projects) | 1 | up to 3 |
+| People with access to the dashboard | 1, only the account owner | up to 3, including the account owner |
+| History | 13 months (older events are deleted every day) | 13 months (older events are deleted every day) |
+| Pause of intake due to the quota (Clause 7.2) | upon reaching 100% of the limit | upon reaching 150% of the limit |
+| Weekly email digest | included | included |
+| Access tokens, MCP server and Claude connector | included | included |
+| Export of a project's events | through the dashboard, up to 3 per project per day | through the dashboard, up to 3 per project per day |
+| Support | through the documentation and GitHub; email only in the cases of Clause 16.5 | by email, response within 2 business days |
+
+Both plans have all the screens and features of the service; what changes between them is the
+volume.
 
 7.2. **Important: usage above the limit.**
 
@@ -243,18 +276,31 @@ set out in Clause 18.11.
    Brasília time begins at 9 p.m. on the last day of the previous month.
 2. The service measures usage once a day, in the early morning. The measured usage appears in
    Account and billing, in the dashboard.
-3. When the daily measurement finds 80% and, later, 100% of the limit (80 thousand and 100 thousand
-   events), we notify the account owner by email, once per level each month. **Up to 150%, nothing
-   is cut off.**
-4. **When the daily measurement finds 150% of the limit (150 thousand events), event intake for all
-   of the account's projects pauses until the 1st day of the following month**, and we notify you
-   by email. During the pause, the service refuses the events (response `403 quota_exceeded`),
-   which **are not stored and cannot be recovered**. The dashboard keeps showing the data already
-   stored. Intake resumes on its own at the beginning of the following month. Because the
-   measurement is daily, the account may go somewhat over 150% before the pause begins.
+3. On the paid plan, when the daily measurement finds 80% and, later, 100% of the limit (80 thousand
+   and 100 thousand events), we notify the account owner by email, once per level each month. **Up
+   to 150%, nothing is cut off.**
+4. **On the paid plan, when the daily measurement finds 150% of the limit (150 thousand events),
+   event intake for all of the account's projects pauses until the 1st day of the following
+   month**, and we notify you by email. During the pause, the service refuses the events (response
+   `403 quota_exceeded`), which **are not stored and cannot be recovered**. The dashboard keeps
+   showing the data already stored. Intake resumes on its own at the beginning of the following
+   month. Because the measurement is daily, the account may go somewhat over 150% before the pause
+   begins.
 5. **We charge nothing beyond the price of the plan** for usage above the limit.
 6. If the account frequently exceeds the limit, we may propose by email a plan or a price suited to
    the volume. Accepting is optional.
+7. **On the free plan, the pause comes at 100% of the limit.** When the daily measurement finds 80%
+   of the limit (8 thousand events), we notify the account owner by email. **When the daily
+   measurement finds 100% of the limit (10 thousand events), event intake pauses until the 1st day
+   of the following month**, under the same conditions as item 4, and we notify you by email.
+   Because the measurement is daily, the account may go somewhat over 10 thousand events on the day
+   it reaches the limit, and those events remain stored. **Important: the pause lasts until the 1st
+   day of the following month, whatever the day on which it began: an account that reaches the
+   limit on the 3rd receives no event until the 1st**, and the events sent during the pause are not
+   stored and cannot be recovered.
+8. **Subscribing lifts the pause.** If the account owner subscribes to the paid plan during the
+   pause of the free plan (Clause 8.3), intake resumes about one minute after the subscription is
+   confirmed, already with the limits of the paid plan.
 
 7.3. The service has technical limits against abuse, such as the number of event batches per minute
 per address and per project and the size of each batch. These limits may change to protect the
@@ -263,23 +309,50 @@ service, without reducing your plan's monthly event limit.
 7.4. The deletion of events older than 13 months is automatic and part of the service: **we do not
 keep older history**.
 
-## Clause 8 — Price, free trial and billing
+7.5. **Important: change or end of the free plan.** We may increase the limits of the free plan or
+add features to it at any time. Any other change to the free plan, including reducing the limits or
+ending the plan, only takes effect after a notice by email to the owner of each account on the free
+plan given **at least 30 days in advance**, explaining what changes (Clause 21.1). Because the free
+plan has no renewal, the change applies to your account at the end of that period. During the
+period, you may export all events (Clause 11.5), subscribe to the paid plan (Clause 8.3) or close
+the account (Clause 11.6). If the free plan ends and your account has not moved to the paid plan,
+the end of the period is the end of access (Clause 2.10), and the data follows Clauses 11.4 and
+11.5.
 
-8.1. **Price:** R$ 39.00 per month or R$ 390.00 per year. There is no setup fee and there are no
-other charges.
+7.6. **Important: free plan account without events.** We send a notice by email to the owner of an
+account on the free plan that **receives no event in the 30 days after the account is created** or
+that **goes 90 consecutive days without receiving any event**. **If, 7 days after the notice, the
+account is still without events, it is permanently deleted**: the account, the projects and all
+events, without the 30-day period of Clause 11.4, as described in Clause 12.7 of Annex 1; we send
+an email confirming the deletion. During those 7 days, you may export the events (Clause 11.5), and
+nothing is deleted if the account receives any event or moves to the paid plan: paid plan accounts
+are never deleted for lack of events. After deletion, the data cannot be recovered; only the records
+that Clause 11.4 excepts remain stored.
+
+## Clause 8 — Price, subscription and billing
+
+8.1. **Price of the paid plan:** R$ 39.00 per month or R$ 390.00 per year. The free plan has no
+price and does not ask for a card. There is no setup fee and there are no other charges.
 
 8.2. **Payment method:** credit card, processed by Stripe. **We do not see or store your card
 number.** We do not currently accept Pix or boleto.
 
-8.3. **Free trial:** 14 days, counted from the confirmation of the subscription on the Stripe
-payment page, once per customer (Clause 6.4). The card is required at the start, and nothing is
-charged during the trial. Stripe sends an email reminder 7 days before the end of the trial, with
-the link to cancel. **If you do not cancel by the end of the trial (through the Stripe portal or by
-closing the account in the dashboard), the first charge takes place on the 15th day** and, from
-then on, at each new period; on your card statement, this first charge is indicated as the end of
-the trial. If you cancel during the trial, nothing is charged. An account that has already had a
-subscription does not get a new trial when it subscribes again: billing starts on the day of the
-new subscription.
+8.3. **Subscription, without a free trial.** The account owner subscribes to the paid plan in
+Account and billing, in the dashboard, by choosing the monthly or the annual plan and entering the
+card on the Stripe payment page. **There is no free trial: the first charge takes place at the time
+of subscription** and, from then on, at each new period. Once the subscription is confirmed, the
+account moves immediately to the limits of the paid plan, and a pause of the free plan ends as
+stated in Clause 7.2, item 8. If you leave the payment page without completing it, nothing is
+charged and the account remains on the free plan. Subscribing again, after a previous subscription,
+is also charged immediately.
+
+**Trials that have already started.** Up to version 1.2 of these terms, the subscription began with
+a 14-day free trial, with the card entered at the start, once per customer. An account that started
+that trial before version 1.3 finishes it as it was contracted: nothing is charged during the trial,
+Stripe sends an email reminder 7 days before the end, and, **if you do not cancel by the end of the
+trial (through the Stripe portal or by closing the account in the dashboard), the first charge takes
+place on the 15th day**; on your card statement, it is indicated as the end of the trial. A repeated
+trial follows Clause 18.11.
 
 8.4. **Automatic renewal:** the subscription renews automatically at the end of each period, with a
 charge to the same card, until you cancel (Clause 11). The date of the next charge appears in
@@ -302,18 +375,21 @@ Stripe sends the confirmation link by email. Stripe also notifies you by email w
 file is about to expire. During this period, the service keeps working.
 
 9.2. If payment is not made after these attempts (up to 2 weeks from the first failure), or if the
-confirmation requested by the bank is not completed within 15 days, Stripe ends the subscription,
-and that is the end of access: by the following day, the projects' keys are revoked and the sites
-stop sending events; the dashboard remains available only for viewing and export until deletion.
+confirmation requested by the bank is not completed within 15 days, Stripe ends the subscription.
+If the account fits in the free plan (1 project and 1 person with access), it goes back to the free
+plan, as in Clause 11.2, item 1. If it does not fit, that is the end of access: by the following
+day, the projects' keys are revoked and the sites stop sending events; the dashboard remains
+available only for viewing and export until deletion.
 
-9.3. The data is deleted 30 days after the end of access (Clause 11.4). Until then, you can come
-back as provided in Clause 11.5, item 3, without losing data.
+9.3. When there is an end of access, the data is deleted 30 days after it (Clause 11.4). Until
+then, you can come back as provided in Clause 11.5, item 3, without losing data.
 
 ## Clause 10 — Right of withdrawal
 
 10.1. Because the agreement is entered into over the internet, the consumer may withdraw from the
-agreement within 7 days of entering into it (Código de Defesa do Consumidor, art. 49). During the
-free trial, nothing is charged: just cancel.
+agreement within 7 days of entering into it (Código de Defesa do Consumidor, art. 49). On the free
+plan, nothing is charged: just close the account (Clause 11.6). The refund under this clause applies
+to the paid plan.
 
 10.2. **We extend this right to all customers:** if you withdraw within **7 days after the first
 charge** (of the monthly or the annual plan), we refund **the full amount** of that charge, without
@@ -321,14 +397,16 @@ you having to give a reason.
 
 10.3. To exercise it, use any of these means:
 
-1. **close the account in the dashboard** (Account and billing → Close the account), the same
-   channel used to subscribe. Within the period, the refund of the full amount is requested from
-   Stripe automatically, and the screen shows the amount refunded;
-2. or send an email to hello@pyxis-analytics.dev, from the account owner's email address, with the
-   word "arrependimento" (withdrawal).
+1. **in the dashboard**, in Account and billing → Withdraw from the subscription, the same place
+   where you subscribed: the subscription is cancelled immediately, the refund of the full amount is
+   requested from Stripe automatically, and the screen shows the amount refunded;
+2. by email to hello@pyxis-analytics.dev, from the account owner's email address, with the word
+   "arrependimento" (withdrawal);
+3. if you also want to leave the service, by **closing the account in the dashboard** (Account and
+   billing → Close the account), with the automatic refund of Clause 11.6, item 5.
 
 Cancelling the subscription in the Stripe portal, by itself, does not trigger the refund: use one of
-the two means above.
+the means above.
 
 10.4. Through the dashboard, the confirmation appears immediately on the screen and also by email.
 Through email, we acknowledge receipt by the same channel and request the refund from Stripe within
@@ -336,27 +414,47 @@ Through email, we acknowledge receipt by the same channel and request the refund
 notify you. Stripe communicates the refund to the card issuer; the time for it to appear on the
 statement depends on the card issuer.
 
-10.5. With the withdrawal, the account is closed as in Clause 11.6: access ends immediately and the
-data follows Clause 11.4.
+10.5. With the withdrawal through means 1 and 2 of Clause 10.3, the subscription is cancelled
+immediately and the account **goes back to the free plan**, with the project and the data it has, if
+it fits in it (1 project and 1 person with access, Clause 7.1). If it does not fit, the dashboard
+shows what to remove, and you have 30 days to choose, exporting beforehand whatever you wish
+(Clause 11.5); if within that period the account does not come to fit in the free plan, it follows
+Clause 11.2, item 2. The refund does not depend on that choice. If the month has already gone over
+10 thousand events, the pause of Clause 7.2, item 7, applies. Through means 3, the account is closed
+as in Clause 11.6.
 
 ## Clause 11 — Cancellation and closure of the account by you
 
 11.1. You can leave at any time, in two ways, with different effects:
 
 1. **cancel the subscription in the Stripe portal** (Account and billing → Manage billing, or
-   through the link in Stripe's emails): takes effect at the end of the paid period or of the trial
-   (Clause 11.2);
+   through the link in Stripe's emails): takes effect at the end of the paid period, and the account
+   goes back to the free plan if it fits in it (Clause 11.2);
 2. **close the account in the dashboard** (Account and billing → Close the account): takes effect
    immediately (Clause 11.6).
 
-If you prefer, ask by email to hello@pyxis-analytics.dev, from the account owner's email address,
-stating which of the two you want. Without that indication, we carry out the cancellation in
-item 1. We acknowledge receipt by the same channel.
+On the free plan there is no subscription to cancel: to leave, close the account in the dashboard
+(item 2).
 
-11.2. **Cancellation in the Stripe portal:** access continues until the end of the paid period (or
-of the trial) and **there is no further charge**. By the day after the end of access, the projects'
-keys are revoked and the sites stop sending events; the dashboard remains available only for
-viewing and export until deletion.
+If you prefer, ask by email to hello@pyxis-analytics.dev, from the account owner's email address,
+stating which of the two you want. Without that indication, we carry out the cancellation in item 1
+(on the free plan, the closure in item 2). We acknowledge receipt by the same channel.
+
+11.2. **Cancellation in the Stripe portal:** the paid plan continues until the end of the paid
+period and **there is no further charge**. At the end of the period:
+
+1. **if the account fits in the free plan** (1 project and 1 person with access, Clause 7.1), **it
+   goes back to the free plan**, with the project and the data it has, and keeps receiving events,
+   with the limits of the free plan; if the month has already reached 10 thousand events, intake
+   pauses until the 1st day of the following month, as on the free plan (Clause 7.2, item 7). If you
+   prefer the account to end, close it in the dashboard (Clause 11.6);
+2. if the account does not fit in the free plan, that is the end of access: by the following day,
+   the projects' keys are revoked and the sites stop sending events; the dashboard remains available
+   only for viewing and export until deletion.
+
+The dashboard, in Account and billing, states what to remove (projects or people) for the account
+to fit in the free plan before the end of the period. **Important:** deleting a project immediately
+deletes its events (Clause 12.2 of Annex 1); export them first (Clause 11.5).
 
 11.3. **Important: outside the right of withdrawal (Clause 10), there is no pro rata refund of the
 period already paid,** on either the monthly or the annual plan, in either way of leaving. There is a
@@ -369,7 +467,8 @@ as described in Clause 12 of Annex 1. We notify the account owner by email at th
 days before deletion and when it is done. After that, **the data cannot be recovered**. Only the
 billing records the law requires us to keep, the record for preventing repeated free trials
 (Privacy Policy, items 2.2 and 2.7) and whatever a law or an order of an authority requires to be
-preserved (Clause 12.6 of Annex 1) remain stored.
+preserved (Clause 12.6 of Annex 1) remain stored. A free plan account deleted for lack of events
+follows Clause 7.6, without this 30-day period.
 
 11.5. **Exporting the events and coming back.**
 
@@ -383,14 +482,16 @@ preserved (Clause 12.6 of Annex 1) remain stored.
    request arrives close to the deletion date, we postpone deletion until we deliver the copy.
 3. Before deletion, you can **come back** without losing data: in Account and billing, choose
    "Subscribe again", or write to hello@pyxis-analytics.dev and we reactivate the subscription. In
-   either case, there is no new free trial and billing starts upon reactivation. Revoked keys do not
-   come back: you create new keys in the dashboard and replace them on your site.
+   either case, billing starts upon reactivation, without a free trial. Revoked keys do not come
+   back: you create new keys in the dashboard and replace them on your site.
 
 11.6. **Closing the account through the dashboard.** Only the account owner can close it, in Account
 and billing, by typing their email to confirm. **Important: closure takes effect immediately and
-cannot be undone through the dashboard:**
+cannot be undone through the dashboard** (to withdraw only from the paid plan and stay on the free
+plan, use Clause 10.3):
 
-1. the subscription is cancelled in Stripe immediately, with no further charges;
+1. the subscription to the paid plan, if there is one, is cancelled in Stripe immediately, with no
+   further charges;
 2. the keys of all projects are revoked immediately, and the sites stop sending events;
 3. the dashboard remains available only for viewing and export (Clause 11.5) until deletion;
 4. the data is deleted 30 days after closure (Clause 11.4);
@@ -400,7 +501,7 @@ cannot be undone through the dashboard:**
 6. the screen confirms the closure, the deletion date and the amount refunded, and we send the
    confirmation by email.
 
-Closing during the free trial does not generate a charge. If Stripe cannot cancel the subscription,
+Closing an account on the free plan does not generate a charge. If Stripe cannot cancel the subscription,
 nothing is closed and the screen tells you so. If you change your mind before deletion, Clause 11.5,
 item 3, applies.
 
@@ -452,7 +553,7 @@ account or by anyone using your keys, tokens or connections with your permission
     (measuring, as an agency, the sites of your clients who have authorized it, within the plan
     limits, is not reselling; Clause 3.2 of Annex 1);
 14. creating more than one account, or using another person, another email or another card, to
-    **repeat the free trial** or to evade a limit or a charge;
+    **have more than one account on the free plan** (Clause 6.4) or to evade a limit or a charge;
 15. **payment fraud**: using a card without the cardholder's authorization or false billing data,
     or disputing a charge in bad faith with the card issuer, for example by claiming not to
     recognize a charge that you authorized and whose service you used, without first having asked
@@ -494,8 +595,9 @@ strings, and does not start storing them to investigate abuse.**
 
 ## Clause 13 — People with access, keys and tokens
 
-13.1. **People with access.** The account has up to 3 people with access to the dashboard,
-including the owner. The owner invites a person by their email, to one or more of the account's
+13.1. **People with access.** On the paid plan, the account has up to 3 people with access to the
+dashboard, including the owner; on the free plan, only the owner, who does not invite other people
+(Clause 7.1). The owner invites a person by their email, to one or more of the account's
 projects, in Settings → People. The person receives an invitation email and signs in to the
 dashboard with a code sent to their email, without a password. The owner removes a person on the
 same screen, at any time.
@@ -565,9 +667,9 @@ item 4).
 5. **How long it lasts.** The connection uses credentials that the app renews on its own (the access
    one is valid for 1 hour) and that we store only as a hash. It ends when the person revokes it in
    Settings → Connected apps; after 90 days without use; when the person loses access (Clause 13.3)
-   or has their access suspended (Clause 18.2); when the account is deleted (Clause 11.4); or on its
-   own, when a credential that has already been exchanged is used again, a sign that it may have
-   been copied. After that, the app asks to connect again.
+   or has their access suspended (Clause 18.2); when the account is deleted (Clauses 7.6 and 11.4);
+   or on its own, when a credential that has already been exchanged is used again, a sign that it
+   may have been copied. After that, the app asks to connect again.
 6. **Limits.** Up to 10 connected apps at the same time per person, and the per-minute query limits
    of Schedule II of the Data Processing Agreement.
 
@@ -605,7 +707,7 @@ LGPD, art. 52). We comply only with what is required and notify you, unless the 
 notice.
 
 15.5. **Pause due to the quota.** The pause in event intake upon reaching 150% of the monthly limit
-follows Clause 7.2.
+on the paid plan, or 100% on the free plan, follows Clause 7.2.
 
 15.6. If you are a consumer, your rights under art. 20 of the Código de Defesa do Consumidor remain
 in force: in the event of a failure of the service, including a suspension that proves to be
@@ -616,12 +718,13 @@ proportional reduction of the price or a refund of the amount paid.
 not remove the features listed in Clause 7.1 or weaken the privacy commitments of Clause 4.2. If a
 change of this kind is unavoidable (for example, because of a law or because a provider stopped
 offering something), we notify you 30 days in advance, and you may terminate with a pro rata refund
-of the paid and unused period.
+of the paid and unused period. Changes to the free plan follow Clause 7.5.
 
 ## Clause 16 — Support and customer service
 
 16.1. Customer service is by email, at hello@pyxis-analytics.dev, for questions, complaints, support,
-contesting a suspension, suspension and cancellation.
+contesting a suspension, suspension and cancellation. On the free plan, technical questions about
+use and installation follow Clause 16.5.
 
 16.2. We acknowledge receipt of your message by the same email and respond **within 2 business
 days** (business days are Monday to Friday, excluding national holidays).
@@ -631,6 +734,29 @@ include development on your site or support for self-hosted installations of the
 
 16.4. Do not send visitors' personal data in your messages. To show a case, use the visit or user
 identifier.
+
+16.5. **Support on the free plan.** On the free plan, technical questions about use and
+installation (Clause 16.3) are handled through the public Pyxis documentation and through the
+issues of the public repositories on GitHub (Clause 5.1), without the deadline of Clause 16.2.
+Issues are public: do not post keys, tokens or personal data in them. The email
+hello@pyxis-analytics.dev remains available on the free plan, with acknowledgment of receipt by the
+same channel and a response by email **within 5 days**, for:
+
+1. information and questions about the agreement, the plan, the limits and billing, including about
+   subscribing to the paid plan;
+2. complaints about the service, including failures (Clause 15.6);
+3. suspension, cancellation, closure of the account and withdrawal (Clauses 10, 11 and 18),
+   including responding to a notice or contesting a measure (Clause 18.6);
+4. requests about personal data: yours and those of the people with access, within the deadlines of
+   the Privacy Policy (item 6), and your requests as controller, within the deadlines of Annex 1
+   (Clause 10);
+5. the other matters that these terms direct to be handled by email, such as reporting a leaked key
+   (Clause 13.9), reporting a security flaw (Clause 12.1, item 10) and requesting the copy of the
+   events when export through the dashboard fails (Clause 11.5, item 2).
+
+If you are a consumer and cannot or do not wish to use GitHub, you may also send your question about
+use by email; we respond within 5 days, and the response may point to the part of the documentation
+that solves the case.
 
 ## Clause 17 — Intellectual property and your data
 
@@ -747,21 +873,11 @@ addition to your rights under Clause 15.6.
 4. The refund goes, through Stripe, to the card used for payment, within 5 business days of
    termination.
 
-18.11. **Repeated free trial.** When the service indicates that the card used has already started a
-free trial in another account in the previous 12 months (Privacy Policy, item 2.7), or there is
-other objective evidence of a repeated trial by the same person or company (Clause 6.4):
-
-1. nothing happens automatically: the service only records the match and notifies us; no charge and
-   no cancellation;
-2. we examine the case and, if necessary, ask you, with the deadline of Clause 18.3. A company card
-   used by different people, or an agency subscribing for different clients, is not a repeated
-   trial;
-3. if we confirm the repeated trial, we may close the new account before the end of the trial,
-   cancelling the subscription in Stripe without any charge, with notice and the reason; you may
-   contest it (Clause 18.6) and may subscribe without a free trial, by email, with billing from the
-   new subscription;
-4. **we never charge anything before the date shown on the Stripe payment page**, nor do we shorten
-   the trial in order to charge earlier.
+18.11. **Repeated free trial.** The free trial ended with version 1.3 of these terms (Clause 8.3).
+A suspicion that a trial started before it repeated an earlier trial (Privacy Policy, item 2.7)
+follows Clause 18.11 of the version under which that trial started: nothing happens automatically,
+you are notified with the reason and heard before any measure, you may contest it (Clause 18.6) and
+**you are never charged before the date shown on the Stripe payment page**.
 
 18.12. **Card chargebacks.** Disputing a charge with the card issuer is your right; we ask that you
 talk to us first (Clauses 10 and 16). If the chargeback is accepted and the amount is returned to
@@ -770,9 +886,11 @@ subscription with notice (Clause 9.2). Only a chargeback in bad faith (Clause 12
 treated as abuse.
 
 18.13. **Termination without abuse.** Apart from abuse, we only terminate the agreement in the cases
-of Clauses 6.2 (end of a free account), 20 (end of the hosted service), 21.3 (a change required by
-law that you do not accept) and 22.1 (an assignment that you do not accept), and we always refund
-the amount proportional to the paid and unused period; the data follows Clauses 11.4 and 11.5.
+of Clauses 6.2 (end of a free account), 7.5 (end of the free plan), 7.6 (free plan account without
+events), 20 (end of the hosted service), 21.3 (a change required by law that you do not accept) and
+22.1 (an assignment that you do not accept), and, when there is a paid period, we always refund the
+amount proportional to the paid and unused period; the data follows Clauses 11.4 and 11.5, except
+under Clause 7.6, which has its own deadlines.
 
 ## Clause 19 — Liability
 

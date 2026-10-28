@@ -47,7 +47,7 @@ Protección de Datos de Brasil).
 
 | Dato | Para qué | Base legal (LGPD) | Durante cuánto tiempo |
 |---|---|---|---|
-| Correo electrónico, idioma de los correos (el de la pantalla en la que entraste o te registraste), proyectos a los que tienes acceso, si eres el dueño de la cuenta o invitado, elección sobre el resumen semanal, fecha de registro | Enviar el código de inicio de sesión y los correos del servicio, mostrar tus proyectos y enviar el resumen semanal en tu idioma | Ejecución del contrato, para el dueño de la cuenta (art. 7.º, V); interés legítimo nuestro y del cliente en dar acceso a las personas que el dueño invitó (art. 7.º, IX) | Mientras tengas acceso a algún proyecto o seas dueño de una cuenta. Cuando el dueño te quita de un proyecto, el acceso a él termina en el acto; si te quedas sin acceso a ningún proyecto, borramos tu registro en un plazo de 30 días. En todo caso, el registro se borra junto con la cuenta, 30 días después del fin de su acceso |
+| Correo electrónico, idioma de los correos (el de la pantalla en la que entraste o te registraste), proyectos a los que tienes acceso, si eres el dueño de la cuenta o invitado, elección sobre el resumen semanal, fecha de registro | Enviar el código de inicio de sesión y los correos del servicio, mostrar tus proyectos y enviar el resumen semanal en tu idioma | Ejecución del contrato, para el dueño de la cuenta (art. 7.º, V); interés legítimo nuestro y del cliente en dar acceso a las personas que el dueño invitó (art. 7.º, IX) | Mientras tengas acceso a algún proyecto o seas dueño de una cuenta. Cuando el dueño te quita de un proyecto, el acceso a él termina en el acto; si te quedas sin acceso a ningún proyecto, borramos tu registro en un plazo de 30 días. En todo caso, el registro se borra junto con la cuenta (punto 2.2) |
 | Invitación: tu correo electrónico, el nombre del proyecto y el correo de quien te invitó, en el correo de invitación | Avisarte del acceso y de quién te lo dio | Interés legítimo nuestro y del cliente (art. 7.º, IX) | La invitación en sí no queda en nuestra base de datos (solo el registro de la fila anterior); el registro del envío queda en manos del proveedor de correo durante su plazo (punto 3) |
 | Códigos de inicio de sesión y de registro: correo electrónico, código guardado solo como hash, finalidad (inicio de sesión o registro), idioma, intentos, horarios | Permitir el inicio de sesión y el registro sin contraseña e impedir intentos repetidos | Ejecución del contrato, procedimientos preliminares a él e interés legítimo en la seguridad (art. 7.º, V y IX) | Válidos durante 10 minutos; borrados por la rutina diaria después de expirar |
 | Sesiones: valor guardado solo como hash, fechas de inicio y de último uso, categoría del dispositivo y familia del navegador y del sistema (sin versión) | Mantenerte conectado y mostrarte tus sesiones para que las cierres | Ejecución del contrato e interés legítimo en la seguridad (art. 7.º, V y IX) | Como máximo 7 días, o 24 horas sin uso; borradas por la rutina diaria después de cerradas |
@@ -67,14 +67,15 @@ recibe la IP y el navegador de quien accede y los guarda en sus registros técni
 
 | Dato | Para qué | Base legal (LGPD) | Durante cuánto tiempo |
 |---|---|---|---|
-| Cuenta: dueño, estado de la suscripción, plan y periodicidad, identificadores del cliente y de la suscripción en Stripe, fechas (fin de la prueba, del periodo, del acceso, de los avisos enviados), uso mensual de eventos y avisos de cuota enviados | Prestar el servicio, aplicar el límite mensual, activar y desactivar el acceso según la suscripción, avisar del fin de la cuenta | Ejecución del contrato (art. 7.º, V) | Hasta la eliminación de la cuenta, 30 días después del fin del acceso. Registro que no completó la página de pago: borrado 7 días después |
-| Aceptación de los términos: versión aceptada, fecha y hora, cuenta y persona que aceptó (sin IP) | Saber qué versión se te aplica y probar la aceptación | Ejecución del contrato y ejercicio regular de derechos (art. 7.º, V y VI) | Hasta la eliminación de la cuenta. Stripe guarda, como controlador, el registro de la aceptación hecha en su página de pago |
-| Datos de facturación, recibidos a través de Stripe: nombre, correo electrónico, dirección de facturación, CPF o CNPJ (registro fiscal brasileño de personas jurídicas; si se indicó), marca, últimos dígitos y validez de la tarjeta, historial de pagos, reembolsos y disputas | Cobrar la suscripción, enviar recibos, tramitar desistimientos, reembolsos y disputas, cumplir obligaciones fiscales | Ejecución del contrato (art. 7.º, V) y cumplimiento de obligación legal (art. 7.º, II) | Durante el contrato y durante 5 años contados desde el año siguiente al de cada cobro (plazo de conservación fiscal) |
-| Configuración de los proyectos: nombre, direcciones de los sitios, zona horaria, evento de conversión, clave pública, clave secreta guardada solo como hash, icono copiado del propio sitio | Prestar el servicio | Ejecución del contrato (art. 7.º, V) | Hasta la eliminación del proyecto por el dueño o de la cuenta (30 días después del fin del acceso) |
+| Cuenta: dueño, plan (gratis o de pago), estado de la suscripción, periodicidad, identificadores del cliente y de la suscripción en Stripe (solo en el plan de pago), fechas (fin de la prueba, del periodo, del acceso, de los avisos enviados), uso mensual de eventos y avisos de cuota y de cuenta sin eventos enviados | Prestar el servicio, aplicar los límites del plan, activar y desactivar el acceso según el plan y la suscripción, avisar y borrar la cuenta del plan gratis sin eventos, avisar del fin de la cuenta | Ejecución del contrato (art. 7.º, V) | Hasta la eliminación de la cuenta: 30 días después del fin del acceso o, en una cuenta del plan gratis sin eventos, 7 días después del aviso (Términos de Uso, Cláusula 7.6) |
+| Aceptación de los términos: versión aceptada, fecha y hora, cuenta y persona que aceptó (sin IP) | Saber qué versión se te aplica y probar la aceptación | Ejecución del contrato y ejercicio regular de derechos (art. 7.º, V y VI) | Hasta la eliminación de la cuenta. Cuando te suscribes al plan de pago, Stripe guarda, como controlador, el registro de la aceptación hecha en su página de pago |
+| Datos de facturación, solo de quien se suscribe al plan de pago, recibidos a través de Stripe: nombre, correo electrónico, dirección de facturación, CPF o CNPJ (registro fiscal brasileño de personas jurídicas; si se indicó), marca, últimos dígitos y validez de la tarjeta, historial de pagos, reembolsos y disputas | Cobrar la suscripción, enviar recibos, tramitar desistimientos, reembolsos y disputas, cumplir obligaciones fiscales | Ejecución del contrato (art. 7.º, V) y cumplimiento de obligación legal (art. 7.º, II) | Durante el contrato y durante 5 años contados desde el año siguiente al de cada cobro (plazo de conservación fiscal) |
+| Configuración de los proyectos: nombre, direcciones de los sitios, zona horaria, evento de conversión, clave pública, clave secreta guardada solo como hash, icono copiado del propio sitio | Prestar el servicio | Ejecución del contrato (art. 7.º, V) | Hasta la eliminación del proyecto por el dueño o de la cuenta (fila "Cuenta" anterior) |
 | Solicitudes de exportación: quién la pidió, cuándo, estado y cantidad de eventos | Generar y entregar el archivo de exportación al dueño de la cuenta | Ejecución del contrato (art. 7.º, V) | Hasta la eliminación del proyecto. El archivo en sí se borra 7 días después de estar listo |
 
-**No recibimos ni guardamos el número de la tarjeta.** Lo conserva Stripe. Solo guardamos la huella de
-la tarjeta del punto 2.7.
+**En el plan gratis, no pedimos tarjeta ni datos de facturación.** En el plan de pago, **no recibimos
+ni guardamos el número de la tarjeta**: lo conserva Stripe. Solo guardamos la huella de la tarjeta del
+punto 2.7.
 
 ### 2.3. Quien nos escribe
 
@@ -116,17 +117,24 @@ y el panel no mide el uso de las personas que entran en él.
 
 Solo enviamos correos relacionados con el servicio: códigos de inicio de sesión y de registro;
 invitación a un proyecto; bienvenida, con la versión de los términos aceptada; avisos de uso al 80 %,
-al 100 % y de la pausa al 150 %; aviso de fin del acceso, recordatorio 7 días antes de la eliminación y
-aviso de eliminación realizada; aviso de exportación lista; el resumen semanal (que cada persona puede
+al 100 % y de la pausa al 150 %, en el plan de pago, y al 80 % y de la pausa al 100 %, en el plan
+gratis; aviso de cuenta del plan gratis sin eventos; aviso de fin del acceso, recordatorio 7 días antes
+de la eliminación y aviso de eliminación realizada; aviso de exportación lista; el resumen semanal (que cada persona puede
 desactivar en Configuración); y comunicaciones sobre el contrato, incluidos avisos de abuso y de
 suspensión. Los correos de facturación los envía el propio Stripe: recordatorio 7 días antes del final
-de la prueba gratuita, recibos de pagos y de reembolsos, aviso de pago rechazado, solicitud de
+de la prueba gratuita (en las pruebas empezadas antes de la versión 1.3 de los Términos de Uso),
+recibos de pagos y de reembolsos, aviso de pago rechazado, solicitud de
 confirmación del pago (3D Secure) y aviso de tarjeta a punto de expirar. **Nuestros correos no tienen
 seguimiento de apertura ni de clics.** No enviamos publicidad.
 
 ### 2.7. Prevención de prueba gratuita repetida
 
-La prueba gratuita vale una vez por cliente (Términos de Uso, Cláusula 6.4). Para detectar cuándo la
+**Desde la versión 1.3 de los Términos de Uso no hay prueba gratuita** (Términos de Uso,
+Cláusula 8.3), y no registramos huellas de tarjeta nuevas. Este punto trata de los registros de las
+pruebas empezadas antes, que siguen el plazo de la tabla siguiente y desaparecen, como máximo,
+12 meses después del inicio de la última de esas pruebas.
+
+La prueba gratuita valía una vez por cliente (Términos de Uso, Cláusula 8.3). Para detectar cuándo la
 misma tarjeta inicia una segunda prueba en otra cuenta, cuando registramos una suscripción con prueba
 gratuita (en la práctica, cuando empieza la prueba) leemos en Stripe la **huella de la tarjeta**
 (*fingerprint*) de la suscripción: un código que Stripe calcula a partir del número de la tarjeta y
@@ -322,8 +330,10 @@ todos, que no evalúan tu persona:
 
 1. de seguridad: después de demasiados intentos, una solicitud de código o de inicio de sesión se
    rechaza durante unos minutos;
-2. del contrato: la recepción de eventos se pausa cuando la cuenta llega al 150 % del límite mensual, y
-   el acceso sigue el estado de la suscripción en Stripe (Términos de Uso, Cláusulas 7.2 y 9).
+2. del contrato: la recepción de eventos se pausa cuando la cuenta llega al 150 % del límite mensual en
+   el plan de pago, o al 100 % en el plan gratis; el acceso sigue el plan y el estado de la suscripción
+   en Stripe; y la cuenta del plan gratis sin eventos se borra después del aviso (Términos de Uso,
+   Cláusulas 7.2, 7.6 y 9).
 
 La coincidencia de huella de tarjeta (punto 2.7) y las medidas por abuso (Términos de Uso,
 Cláusula 18) siempre las decide una persona. Si algo de esto te causa algún problema, habla con nosotros.

@@ -48,7 +48,7 @@ nationale brésilienne de protection des données —, art. 11, et Resolução C
 
 | Donnée | Finalité | Base légale (LGPD) | Durée |
 |---|---|---|---|
-| E-mail, langue des e-mails (celle de l’écran sur lequel vous vous êtes connecté ou inscrit), projets auxquels vous avez accès, si vous êtes le propriétaire du compte ou un invité, choix concernant le récapitulatif hebdomadaire, date d’inscription | Envoyer le code de connexion et les e-mails du service, afficher vos projets et envoyer le récapitulatif hebdomadaire dans votre langue | Exécution du contrat, pour le propriétaire du compte (art. 7º, V) ; intérêt légitime, le nôtre et celui du client, à donner accès aux personnes que le propriétaire a invitées (art. 7º, IX) | Tant que vous avez accès à un projet ou êtes propriétaire d’un compte. Lorsque le propriétaire vous retire d’un projet, l’accès à celui-ci prend fin immédiatement ; si vous n’avez plus accès à aucun projet, nous supprimons votre inscription dans les 30 jours. Dans tous les cas, l’inscription est supprimée avec le compte, 30 jours après la fin de l’accès de celui-ci |
+| E-mail, langue des e-mails (celle de l’écran sur lequel vous vous êtes connecté ou inscrit), projets auxquels vous avez accès, si vous êtes le propriétaire du compte ou un invité, choix concernant le récapitulatif hebdomadaire, date d’inscription | Envoyer le code de connexion et les e-mails du service, afficher vos projets et envoyer le récapitulatif hebdomadaire dans votre langue | Exécution du contrat, pour le propriétaire du compte (art. 7º, V) ; intérêt légitime, le nôtre et celui du client, à donner accès aux personnes que le propriétaire a invitées (art. 7º, IX) | Tant que vous avez accès à un projet ou êtes propriétaire d’un compte. Lorsque le propriétaire vous retire d’un projet, l’accès à celui-ci prend fin immédiatement ; si vous n’avez plus accès à aucun projet, nous supprimons votre inscription dans les 30 jours. Dans tous les cas, l’inscription est supprimée avec le compte (point 2.2) |
 | Invitation : votre e-mail, le nom du projet et l’e-mail de la personne qui a invité, dans l’e-mail d’invitation | Vous informer de l’accès et de qui vous l’a donné | Intérêt légitime, le nôtre et celui du client (art. 7º, IX) | L’invitation elle-même ne reste pas dans notre base de données (seulement l’inscription de la ligne ci-dessus) ; la trace de l’envoi reste chez le prestataire d’e-mail pendant la durée qui lui est propre (point 3) |
 | Codes de connexion et d’inscription : e-mail, code conservé uniquement sous forme de hash, finalité (connexion ou inscription), langue, tentatives, horaires | Permettre la connexion et l’inscription sans mot de passe et empêcher les tentatives répétées | Exécution du contrat, mesures précontractuelles et intérêt légitime en matière de sécurité (art. 7º, V et IX) | Valables 10 minutes ; supprimés par la routine quotidienne après expiration |
 | Sessions : valeur conservée uniquement sous forme de hash, dates de début et de dernière utilisation, catégorie d’appareil et famille du navigateur et du système (sans version) | Vous maintenir connecté et afficher vos sessions pour que vous puissiez les fermer | Exécution du contrat et intérêt légitime en matière de sécurité (art. 7º, V et IX) | 7 jours au maximum, ou 24 heures sans utilisation ; supprimées par la routine quotidienne après leur fermeture |
@@ -68,14 +68,15 @@ accèdent et les conserve dans ses journaux techniques pendant 1 jour (point 3).
 
 | Donnée | Finalité | Base légale (LGPD) | Durée |
 |---|---|---|---|
-| Compte : propriétaire, statut de l’abonnement, forfait et périodicité, identifiants du client et de l’abonnement chez Stripe, dates (fin de l’essai, de la période, de l’accès, des avis envoyés), utilisation mensuelle des événements et avis de quota envoyés | Fournir le service, appliquer la limite mensuelle, activer et désactiver l’accès selon l’abonnement, annoncer la fin du compte | Exécution du contrat (art. 7º, V) | Jusqu’à la suppression du compte, 30 jours après la fin de l’accès. Inscription qui n’a pas terminé la page de paiement : supprimée 7 jours après |
-| Acceptation des conditions : version acceptée, date et heure, compte et personne qui a accepté (sans IP) | Savoir quelle version s’applique à vous et prouver l’acceptation | Exécution du contrat et exercice régulier de droits (art. 7º, V et VI) | Jusqu’à la suppression du compte. Stripe conserve, en tant que responsable du traitement, la trace de l’acceptation donnée sur sa page de paiement |
-| Données de facturation, reçues par Stripe : nom, e-mail, adresse de facturation, CPF ou CNPJ (numéro d’immatriculation des personnes morales au Brésil), s’il est indiqué, réseau, derniers chiffres et date d’expiration de la carte, historique des paiements, remboursements et contestations | Facturer l’abonnement, envoyer les reçus, traiter la rétractation, les remboursements et les contestations, respecter les obligations fiscales | Exécution du contrat (art. 7º, V) et respect d’une obligation légale (art. 7º, II) | Pendant le contrat et pendant 5 ans à compter de l’année suivant celle de chaque prélèvement (délai de conservation fiscale) |
-| Configuration des projets : nom, adresses des sites, fuseau horaire, événement de conversion, clé publique, clé secrète conservée uniquement sous forme de hash, icône copiée du site lui-même | Fournir le service | Exécution du contrat (art. 7º, V) | Jusqu’à la suppression du projet par le propriétaire ou du compte (30 jours après la fin de l’accès) |
+| Compte : propriétaire, forfait (gratuit ou payant), statut de l’abonnement, périodicité, identifiants du client et de l’abonnement chez Stripe (uniquement sur le forfait payant), dates (fin de l’essai, de la période, de l’accès, des avis envoyés), utilisation mensuelle des événements et avis de quota et de compte sans événements envoyés | Fournir le service, appliquer les limites du forfait, activer et désactiver l’accès selon le forfait et l’abonnement, avertir et supprimer le compte du forfait gratuit sans événements, annoncer la fin du compte | Exécution du contrat (art. 7º, V) | Jusqu’à la suppression du compte : 30 jours après la fin de l’accès ou, pour un compte du forfait gratuit sans événements, 7 jours après l’avis (Conditions d’utilisation, Clause 7.6) |
+| Acceptation des conditions : version acceptée, date et heure, compte et personne qui a accepté (sans IP) | Savoir quelle version s’applique à vous et prouver l’acceptation | Exécution du contrat et exercice régulier de droits (art. 7º, V et VI) | Jusqu’à la suppression du compte. Lorsque vous souscrivez au forfait payant, Stripe conserve, en tant que responsable du traitement, la trace de l’acceptation donnée sur sa page de paiement |
+| Données de facturation, uniquement de ceux qui souscrivent au forfait payant, reçues par Stripe : nom, e-mail, adresse de facturation, CPF ou CNPJ (numéro d’immatriculation des personnes morales au Brésil), s’il est indiqué, réseau, derniers chiffres et date d’expiration de la carte, historique des paiements, remboursements et contestations | Facturer l’abonnement, envoyer les reçus, traiter la rétractation, les remboursements et les contestations, respecter les obligations fiscales | Exécution du contrat (art. 7º, V) et respect d’une obligation légale (art. 7º, II) | Pendant le contrat et pendant 5 ans à compter de l’année suivant celle de chaque prélèvement (délai de conservation fiscale) |
+| Configuration des projets : nom, adresses des sites, fuseau horaire, événement de conversion, clé publique, clé secrète conservée uniquement sous forme de hash, icône copiée du site lui-même | Fournir le service | Exécution du contrat (art. 7º, V) | Jusqu’à la suppression du projet par le propriétaire ou du compte (ligne « Compte » ci-dessus) |
 | Demandes d’exportation : qui a demandé, quand, statut et nombre d’événements | Générer et remettre le fichier d’exportation au propriétaire du compte | Exécution du contrat (art. 7º, V) | Jusqu’à la suppression du projet. Le fichier lui-même est supprimé 7 jours après avoir été prêt |
 
-**Nous ne recevons ni ne conservons le numéro de la carte.** Il reste chez Stripe. Nous ne conservons
-que l’empreinte de la carte du point 2.7.
+**Sur le forfait gratuit, nous ne demandons ni carte ni données de facturation.** Sur le forfait
+payant, **nous ne recevons ni ne conservons le numéro de la carte** : il reste chez Stripe. Nous ne
+conservons que l’empreinte de la carte du point 2.7.
 
 ### 2.3. Ceux qui nous écrivent
 
@@ -117,17 +118,25 @@ réseaux sociaux, et le tableau de bord ne mesure pas l’utilisation des person
 
 Nous n’envoyons que des e-mails liés au service : codes de connexion et d’inscription ; invitation à un
 projet ; bienvenue, avec la version des conditions acceptée ; avis d’utilisation à 80 %, à 100 % et de
-la pause à 150 % ; avis de fin de l’accès, rappel 7 jours avant la suppression et avis de suppression
+la pause à 150 %, sur le forfait payant, et à 80 % et de la pause à 100 %, sur le forfait gratuit ;
+avis de compte du forfait gratuit sans événements ; avis de fin de l’accès, rappel 7 jours avant la
+suppression et avis de suppression
 effectuée ; avis d’exportation prête ; le récapitulatif hebdomadaire (que chaque personne peut désactiver dans
 Paramètres) ; et communications relatives au contrat, y compris les avertissements d’abus et de
 suspension. Les e-mails de facturation sont envoyés par Stripe lui-même : rappel 7 jours avant la fin
-de l’essai gratuit, reçus de paiements et de remboursements, avis de paiement refusé, demande de
+de l’essai gratuit (pour les essais commencés avant la version 1.3 des Conditions d’utilisation),
+reçus de paiements et de remboursements, avis de paiement refusé, demande de
 confirmation du paiement (3D Secure) et avis de carte sur le point d’expirer. **Nos e-mails
 ne comportent aucun suivi d’ouverture ni de clics.** Nous n’envoyons pas de publicité.
 
 ### 2.7. Prévention de l’essai gratuit répété
 
-L’essai gratuit vaut une fois par client (Conditions d’utilisation, Clause 6.4). Pour détecter le cas
+**Depuis la version 1.3 des Conditions d’utilisation, il n’y a pas d’essai gratuit** (Conditions
+d’utilisation, Clause 8.3), et nous n’enregistrons pas de nouvelles empreintes de carte. Le présent
+point traite des enregistrements des essais commencés auparavant, qui suivent la durée du tableau
+ci-dessous et disparaissent au plus tard 12 mois après le début du dernier de ces essais.
+
+L’essai gratuit valait une fois par client (Conditions d’utilisation, Clause 8.3). Pour détecter le cas
 où la même carte démarre un second essai sur un autre compte, lorsque nous enregistrons un abonnement
 avec essai gratuit (en pratique, lorsque l’essai commence), nous lisons chez Stripe l’**empreinte de la
 carte** (*fingerprint*) de l’abonnement : un code que Stripe calcule à partir du numéro de la carte et
@@ -335,8 +344,9 @@ service sont des règles identiques pour tous, qui n’évaluent pas votre perso
 1. de sécurité : après trop de tentatives, une demande de code ou de connexion est refusée pendant
    quelques minutes ;
 2. contractuels : la réception des événements est mise en pause lorsque le compte atteint 150 % de la
-   limite mensuelle, et l’accès suit le statut de l’abonnement chez Stripe (Conditions d’utilisation,
-   Clauses 7.2 et 9).
+   limite mensuelle sur le forfait payant, ou 100 % sur le forfait gratuit ; l’accès suit le forfait
+   et le statut de l’abonnement chez Stripe ; et le compte du forfait gratuit sans événements est
+   supprimé après l’avis (Conditions d’utilisation, Clauses 7.2, 7.6 et 9).
 
 La coïncidence d’empreinte de carte (point 2.7) et les mesures pour abus (Conditions d’utilisation,
 Clause 18) sont toujours décidées par une personne. Si l’un de ces éléments vous gêne, contactez-nous.
