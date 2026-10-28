@@ -3,6 +3,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const CLOSED_DAYS = 'from=2026-09-01&to=2026-09-30';
 
 const filtersRow = (page: Page) => page.getByRole('region', { name: 'Filters', exact: true });
 
@@ -41,11 +42,11 @@ async function downloadedText(page: Page, linkName: string) {
 test('a filter narrows the Overview, shows as a chip and compares with the same filters', async ({
   page,
 }) => {
-  await page.goto(`/${STORE_ID}/overview?range=30d`);
+  await page.goto(`/${STORE_ID}/overview?${CLOSED_DAYS}`);
   const everyVisit = await visitsFigure(page);
   await expect(filtersRow(page)).toHaveCount(0);
 
-  await page.goto(`/${STORE_ID}/overview?range=30d&device=mobile`);
+  await page.goto(`/${STORE_ID}/overview?${CLOSED_DAYS}&device=mobile`);
 
   await expect(filtersRow(page).getByRole('listitem')).toHaveText(['Device: Mobile']);
   await expect(filtersRow(page)).toContainText('New arrivals are paused while filters are on.');
