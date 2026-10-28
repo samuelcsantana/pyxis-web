@@ -1,101 +1,66 @@
 import type { I18n } from '@/i18n/i18n';
-import { type Channel, CHANNELS, channelLabel } from './acquisition';
+import { channelLabel } from './acquisition';
 import {
-  browserLabel,
-  deviceTypeLabel,
-  isRegionCode,
-  operatingSystemLabel,
-  placeLabel,
-} from './devices';
-import { stepProblem } from './funnel';
+  BROWSER_FAMILIES,
+  type BrowserFamily,
+  COUNTRY_CODE_PATTERN,
+  type DashboardFilters,
+  dashboardFilterParameters,
+  dashboardFiltersOf,
+  type DashboardSearch,
+  MAX_CAMPAIGN_LENGTH,
+  MAX_SOURCE_LENGTH,
+  NO_DASHBOARD_FILTERS,
+  OS_FAMILIES,
+  type OsFamily,
+  PAGE_FILTER_PARAMETERS,
+  singleValue,
+  textFilter,
+  VISIT_DEVICE_TYPES,
+  VISIT_IDENTITIES,
+  type VisitDeviceType,
+  type VisitIdentity,
+} from './dashboard-filters';
+import { browserLabel, deviceTypeLabel, operatingSystemLabel, placeLabel } from './devices';
 import { eventLabel, formatCount, NO_VALUE } from './metrics';
 import { formatVisitDuration, shortId } from './timeline';
-import {
-  isFilterableProperty,
-  MAX_PROPERTY_VALUE_LENGTH,
-  PROPERTY_SEPARATOR,
-} from './visit-property';
 import type { VisitsReport, VisitsWire } from './visits.schema';
 
 export type { VisitsReport, VisitsWire };
 
 export type VisitSummary = VisitsReport['visits'][number];
 
-export const PAGE_FILTER_PARAMETERS = ['path', 'path2', 'path3'] as const;
-export const VISIT_DEVICE_TYPES = ['mobile', 'tablet', 'desktop', 'other'] as const;
-export type VisitDeviceType = (typeof VISIT_DEVICE_TYPES)[number];
-export const VISIT_IDENTITIES = ['identified', 'anonymous'] as const;
-export type VisitIdentity = (typeof VISIT_IDENTITIES)[number];
+export {
+  BROWSER_FAMILIES,
+  MAX_CAMPAIGN_LENGTH,
+  MAX_SOURCE_LENGTH,
+  OS_FAMILIES,
+  PAGE_FILTER_PARAMETERS,
+  VISIT_DEVICE_TYPES,
+  VISIT_IDENTITIES,
+};
+export type { BrowserFamily, OsFamily, VisitDeviceType, VisitIdentity };
 export const REQUEST_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as const;
-export const MAX_SOURCE_LENGTH = 128;
-export const MAX_CAMPAIGN_LENGTH = 64;
 export const MAX_REGION_LENGTH = 6;
 export const MAX_ROUTE_LENGTH = 100;
-const COUNTRY_CODE_PATTERN = /^[A-Z]{2}$/;
 const ROUTE_SEPARATOR = ' ';
-const FAILED_ONLY = 'true';
 
 const VISIT_CURSOR_PATTERN =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z~[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-export interface VisitsSearch {
-  readonly path?: string | string[];
-  readonly path2?: string | string[];
-  readonly path3?: string | string[];
-  readonly event?: string | string[];
-  readonly property?: string | string[];
-  readonly channel?: string | string[];
-  readonly device?: string | string[];
-  readonly identity?: string | string[];
-  readonly country?: string | string[];
-  readonly region?: string | string[];
-  readonly source?: string | string[];
-  readonly campaign?: string | string[];
+export interface VisitsSearch extends DashboardSearch {
   readonly route?: string | string[];
-  readonly failed?: string | string[];
 }
 
-export interface VisitFilters {
-  readonly paths: readonly string[];
-  readonly event: string | null;
-  readonly property: string | null;
-  readonly channel: Channel | null;
-  readonly device: VisitDeviceType | null;
-  readonly identity: VisitIdentity | null;
-  readonly country: string | null;
-  readonly region: string | null;
-  readonly source: string | null;
-  readonly campaign: string | null;
+export interface VisitFilters extends DashboardFilters {
   readonly route: string | null;
-  readonly failed: boolean;
 }
 
-export const NO_VISIT_FILTERS: VisitFilters = {
-  paths: [],
-  event: null,
-  property: null,
-  channel: null,
-  device: null,
-  identity: null,
-  country: null,
-  region: null,
-  source: null,
-  campaign: null,
-  route: null,
-  failed: false,
-};
+export const NO_VISIT_FILTERS: VisitFilters = { ...NO_DASHBOARD_FILTERS, route: null };
 
 export interface VisitFilterReading {
   readonly filters: VisitFilters;
   readonly problems: readonly string[];
-}
-
-function single(value: string | string[] | undefined): string {
-  return typeof value === 'string' ? value.trim() : '';
-}
-
-function oneOf<Value extends string>(values: readonly Value[], text: string): Value | null {
-  return values.find((value) => value === text) ?? null;
 }
 
 export function countryFilterOf(country: string): string | null {
@@ -103,20 +68,7 @@ export function countryFilterOf(country: string): string | null {
 }
 
 export function deviceFilterOf(deviceType: string): VisitDeviceType | null {
-  return oneOf(VISIT_DEVICE_TYPES, deviceType);
-}
-
-function propertyProblem(property: string, event: string | null, i18n: I18n): string | null {
-  if (event === null) {
-    return i18n.t('visits.problems.propertyNeedsEvent');
-  }
-  const separator = property.indexOf(PROPERTY_SEPARATOR);
-  const wellFormed =
-    separator >= 0 &&
-    isFilterableProperty(property.slice(0, separator), property.slice(separator + 1));
-  return wellFormed
-    ? null
-    : i18n.t('visits.problems.propertyFormat', { max: String(MAX_PROPERTY_VALUE_LENGTH) });
+  return VISIT_DEVICE_TYPES.find((type) => type === deviceType) ?? null;
 }
 
 export function isRequestRoute(text: string): boolean {
@@ -131,110 +83,28 @@ export function isRequestRoute(text: string): boolean {
   );
 }
 
-interface TextFilter {
-  readonly value: string | null;
-  readonly problem: string | null;
-}
-
-function textFilter(typed: string, valid: (text: string) => boolean, problem: string): TextFilter {
-  if (typed === '') {
-    return { value: null, problem: null };
-  }
-  return valid(typed) ? { value: typed, problem: null } : { value: null, problem };
-}
-
-function attributionFilters(search: VisitsSearch, i18n: I18n) {
-  return {
-    country: textFilter(
-      single(search.country).toUpperCase(),
-      (text) => COUNTRY_CODE_PATTERN.test(text),
-      i18n.t('visits.problems.country'),
-    ),
-    region: textFilter(
-      single(search.region).toUpperCase(),
-      isRegionCode,
-      i18n.t('visits.problems.region'),
-    ),
-    source: textFilter(
-      single(search.source),
-      (text) => text.length <= MAX_SOURCE_LENGTH,
-      i18n.t('visits.problems.source', { max: String(MAX_SOURCE_LENGTH) }),
-    ),
-    campaign: textFilter(
-      single(search.campaign),
-      (text) => text.length <= MAX_CAMPAIGN_LENGTH,
-      i18n.t('visits.problems.campaign', { max: String(MAX_CAMPAIGN_LENGTH) }),
-    ),
-    route: textFilter(single(search.route), isRequestRoute, i18n.t('visits.problems.route')),
-  };
-}
-
 export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterReading {
-  const typedPaths = PAGE_FILTER_PARAMETERS.map((name) => single(search[name])).filter(
-    (path) => path !== '',
+  const reading = dashboardFiltersOf(search, i18n);
+  const route = textFilter(
+    singleValue(search.route),
+    isRequestRoute,
+    i18n.t('visits.problems.route'),
   );
-  const pathProblems = typedPaths.map((path) => stepProblem({ type: 'page', path }, i18n.t));
-  const typedEvent = single(search.event);
-  const eventProblem =
-    typedEvent === '' ? null : stepProblem({ type: 'event', name: typedEvent }, i18n.t);
-  const event = typedEvent === '' || eventProblem !== null ? null : typedEvent;
-  const typedProperty = single(search.property);
-  const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event, i18n);
-  const { country, region, source, campaign, route } = attributionFilters(search, i18n);
   return {
-    filters: {
-      paths: typedPaths.filter((_path, index) => pathProblems[index] === null),
-      event,
-      property: typedProperty === '' || propertyIssue !== null ? null : typedProperty,
-      channel: oneOf(CHANNELS, single(search.channel)),
-      device: oneOf(VISIT_DEVICE_TYPES, single(search.device)),
-      identity: oneOf(VISIT_IDENTITIES, single(search.identity)),
-      country: country.value,
-      region: region.value,
-      source: source.value,
-      campaign: campaign.value,
-      route: route.value,
-      failed: single(search.failed) === FAILED_ONLY,
-    },
-    problems: [
-      ...new Set(
-        [
-          ...pathProblems,
-          eventProblem,
-          propertyIssue,
-          country.problem,
-          region.problem,
-          source.problem,
-          campaign.problem,
-          route.problem,
-        ].filter((problem) => problem !== null),
-      ),
-    ],
+    filters: { ...reading.filters, route: route.value },
+    problems:
+      route.problem === null || reading.problems.includes(route.problem)
+        ? reading.problems
+        : [...reading.problems, route.problem],
   };
-}
-
-function optional(name: string, value: string | null): Readonly<Record<string, string>> {
-  return value === null ? {} : { [name]: value };
 }
 
 export function visitFilterParameters(filters: VisitFilters): Readonly<Record<string, string>> {
-  const pages = PAGE_FILTER_PARAMETERS.flatMap((name, index) => {
-    const path = filters.paths[index];
-    return path === undefined ? [] : [[name, path] as const];
-  });
+  const { failed, ...rest } = dashboardFilterParameters(filters);
   return {
-    ...Object.fromEntries(pages),
-    ...optional('event', filters.event),
-    ...optional('property', filters.property),
-    ...optional('channel', filters.channel),
-    ...optional('device', filters.device),
-    ...optional('identity', filters.identity),
-    ...optional('country', filters.country),
-    ...optional('region', filters.region),
-    ...optional('source', filters.source),
-    ...optional('campaign', filters.campaign),
-    ...optional('route', filters.route),
-    ...optional('failed', filters.failed ? FAILED_ONLY : null),
+    ...rest,
+    ...(filters.route === null ? {} : { route: filters.route }),
+    ...(failed === undefined ? {} : { failed }),
   };
 }
 

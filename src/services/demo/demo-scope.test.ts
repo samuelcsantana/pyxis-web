@@ -4,6 +4,7 @@ import type { DemoEventRecord, DemoVisitRecord } from './demo-records';
 import {
   byKeys,
   countWhere,
+  dashboardMatcherOf,
   DEMO_FIRST_EVENT_DATE,
   demoRanking,
   demoScopeOf,
@@ -25,6 +26,7 @@ import {
   roundedPercentile,
   visitDate,
 } from './demo-scope';
+import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { addDays } from '@/domain/period';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
@@ -65,6 +67,38 @@ const VISIT: DemoVisitRecord = {
   fromAdClick: false,
   events: [event('page_view'), event('cta_clicked')],
 };
+
+describe('dashboardMatcherOf', () => {
+  const failing = event('api_request', { properties: { status: 503 } });
+
+  it('keeps every visit without filters', () => {
+    expect(dashboardMatcherOf(NO_DASHBOARD_FILTERS)(VISIT)).toBe(true);
+  });
+
+  it('selects visits by device, browser and system', () => {
+    const matches = (filters: Partial<typeof NO_DASHBOARD_FILTERS>) =>
+      dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, ...filters })(VISIT);
+
+    expect(matches({ device: 'desktop', browser: 'chrome', os: 'windows' })).toBe(true);
+    expect(matches({ device: 'mobile' })).toBe(false);
+    expect(matches({ browser: 'safari' })).toBe(false);
+    expect(matches({ os: 'macos' })).toBe(false);
+  });
+
+  it('selects visits with a failed request only when asked', () => {
+    const failed = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, failed: true });
+
+    expect(failed(VISIT)).toBe(false);
+    expect(failed({ ...VISIT, events: [...VISIT.events, failing] })).toBe(true);
+  });
+
+  it('selects identified or anonymous visits', () => {
+    const identified = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, identity: 'identified' });
+
+    expect(identified(VISIT)).toBe(false);
+    expect(identified({ ...VISIT, userId: 'u1' })).toBe(true);
+  });
+});
 
 describe('demoVisitsOfDay', () => {
   it('draws a day once and keeps it, and nothing before the first event of the demo', () => {

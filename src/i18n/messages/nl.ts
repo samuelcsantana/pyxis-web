@@ -1356,6 +1356,10 @@ export const nl = translation({
       anyChannel: 'Elk kanaal',
       device: 'Apparaat',
       anyDevice: 'Elk apparaat',
+      browser: 'Browser',
+      anyBrowser: 'Elke browser',
+      os: 'Systeem',
+      anySystem: 'Elk systeem',
       account: 'Account',
       anyone: 'Iedereen',
       identities: {

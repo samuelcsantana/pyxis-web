@@ -1,6 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import { channelLabel } from './acquisition';
-import { countryLabel, deviceTypeLabel } from './devices';
+import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import { PAGE_FILTER_PARAMETERS, type VisitFilters } from './visits';
 
 export interface AppliedVisitFilter {
@@ -17,6 +17,8 @@ export const VISIT_FILTER_FIELDS = [
   'property',
   'channel',
   'device',
+  'browser',
+  'os',
   'identity',
   'country',
   'region',
@@ -95,6 +97,20 @@ export function appliedVisitFilters(
       filters.device === null ? null : deviceTypeLabel(filters.device, i18n),
       false,
       { ...filters, device: null },
+    ),
+    ...shown(
+      'browser',
+      t('visits.filters.browser'),
+      filters.browser === null ? null : browserLabel(filters.browser, i18n),
+      false,
+      { ...filters, browser: null },
+    ),
+    ...shown(
+      'os',
+      t('visits.filters.os'),
+      filters.os === null ? null : operatingSystemLabel(filters.os, i18n),
+      false,
+      { ...filters, os: null },
     ),
     ...shown(
       'identity',

@@ -1,3 +1,4 @@
+import type { DashboardFilters } from '@/domain/dashboard-filters';
 import type { DateRange } from '../date-range';
 import { demoAttributedVisits } from './demo-attribution';
 import type { DemoProject } from './demo-catalog';
@@ -90,6 +91,62 @@ export function isNamedEvent(event: DemoEventRecord): boolean {
 
 export function hasPageView(visit: DemoVisitRecord): boolean {
   return visit.events.some(isPageView);
+}
+
+const PROPERTY_SEPARATOR = '=';
+const IDENTIFIED = 'identified';
+
+export function isFailedCall(event: DemoEventRecord): boolean {
+  return event.name === API_REQUEST && isFailedStatus(Number(event.properties.status));
+}
+
+function carriesProperty(event: DemoEventRecord, property: string | null): boolean {
+  if (property === null) {
+    return true;
+  }
+  const separator = property.indexOf(PROPERTY_SEPARATOR);
+  const value = event.properties[property.slice(0, separator)];
+  return value !== undefined && String(value) === property.slice(separator + 1);
+}
+
+function sentEvent(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
+  return (
+    filters.event === null ||
+    visit.events.some(
+      (event) => event.name === filters.event && carriesProperty(event, filters.property),
+    )
+  );
+}
+
+function cameFrom(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
+  return (
+    (filters.country === null || visit.country === filters.country) &&
+    (filters.region === null || visit.region === filters.region) &&
+    (filters.source === null || visit.source === filters.source) &&
+    (filters.campaign === null || visit.campaign === filters.campaign)
+  );
+}
+
+function ranOn(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
+  return (
+    (filters.device === null || visit.deviceType === filters.device) &&
+    (filters.browser === null || visit.browser === filters.browser) &&
+    (filters.os === null || visit.os === filters.os)
+  );
+}
+
+export function dashboardMatcherOf(filters: DashboardFilters): (visit: DemoVisitRecord) => boolean {
+  const pages = filters.paths.map(pathPattern);
+  const viewed = (visit: DemoVisitRecord, page: RegExp) =>
+    visit.events.some((event) => isPageView(event) && page.test(event.path));
+  return (visit) =>
+    pages.every((page) => viewed(visit, page)) &&
+    sentEvent(visit, filters) &&
+    (filters.channel === null || visit.channel === filters.channel) &&
+    ranOn(visit, filters) &&
+    (filters.identity === null || (visit.userId !== null) === (filters.identity === IDENTIFIED)) &&
+    cameFrom(visit, filters) &&
+    (!filters.failed || visit.events.some(isFailedCall));
 }
 
 export function isFailedStatus(status: number): boolean {

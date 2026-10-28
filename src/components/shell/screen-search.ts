@@ -1,3 +1,4 @@
+import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filters';
 import type { RequestsSearch } from '@/domain/requests';
 import type { VisitsSearch } from '@/domain/visits';
 import type { KeptParameters } from './kept-parameters';
@@ -27,20 +28,8 @@ const REQUESTS_CARRIED = [
 ] as const satisfies readonly (keyof RequestsSearch)[];
 
 const VISITS_CARRIED = [
-  'path',
-  'path2',
-  'path3',
-  'event',
-  'property',
-  'channel',
-  'device',
-  'identity',
-  'country',
-  'region',
-  'source',
-  'campaign',
+  ...DASHBOARD_FILTER_PARAMETERS,
   'route',
-  'failed',
 ] as const satisfies readonly (keyof VisitsSearch)[];
 
 export const CARRIED_PARAMETERS: Readonly<Record<ScreenSlug, readonly string[]>> = {

@@ -1370,6 +1370,10 @@ export const fr = translation({
       anyChannel: 'Tous les canaux',
       device: 'Appareil',
       anyDevice: 'Tous les appareils',
+      browser: 'Navigateur',
+      anyBrowser: 'Tous les navigateurs',
+      os: 'Système',
+      anySystem: 'Tous les systèmes',
       account: 'Compte',
       anyone: 'Tout le monde',
       identities: {

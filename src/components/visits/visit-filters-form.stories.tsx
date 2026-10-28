@@ -39,6 +39,8 @@ export const Filtered: Story = {
       property: 'calculator=shipping',
       channel: 'paid',
       device: 'mobile',
+      browser: null,
+      os: null,
       identity: 'anonymous',
       country: 'BR',
       region: 'BR-SP',
