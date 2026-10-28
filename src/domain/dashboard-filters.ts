@@ -235,3 +235,14 @@ export function dashboardFilterQuery(filters: DashboardFilters): URLSearchParams
   }
   return query;
 }
+
+export function withDashboardFilters(query: string, filters: DashboardFilters): string {
+  const parameters = new URLSearchParams(query);
+  for (const name of DASHBOARD_FILTER_PARAMETERS) {
+    parameters.delete(name);
+  }
+  for (const [name, value] of Object.entries(dashboardFilterParameters(filters))) {
+    parameters.set(name, value);
+  }
+  return parameters.toString();
+}

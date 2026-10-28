@@ -928,6 +928,24 @@ export const es = translation({
       yesterdayUntil: 'frente a ayer hasta las {time}',
       previousDaysUntil: 'frente a los {days} días anteriores, hasta las {time}',
     },
+    comparisonFiltered: {
+      dayBefore: 'frente al día anterior, mismos filtros',
+      previousDays: 'frente a los {days} días anteriores, mismos filtros',
+      soFarToday: 'hoy hasta ahora frente a todo el día de ayer, mismos filtros',
+      previousFullDays: 'frente a los {days} días completos anteriores, mismos filtros',
+      yesterdayUntil: 'frente a ayer, mismos filtros, hasta las {time}',
+      previousDaysUntil: 'frente a los {days} días anteriores, mismos filtros, hasta las {time}',
+    },
+  },
+  dashboardFilters: {
+    label: 'Filtros',
+    removeAll: 'Quitar filtros',
+    newsPaused: 'Las novedades quedan en pausa mientras haya filtros.',
+    empty: {
+      title: 'Ninguna visita coincide con estos filtros',
+      body: 'Nada en {period} cumple todos los filtros de arriba. Quita uno de ellos, o todos.',
+    },
+    periodFiltered: '{period}, filtrado por {filters}',
   },
   overviewChart: {
     activityTitle: 'Actividad por día',

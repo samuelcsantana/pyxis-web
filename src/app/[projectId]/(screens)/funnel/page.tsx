@@ -39,7 +39,13 @@ import {
   SEGMENT_PARAMETER,
 } from '@/domain/funnel-segments';
 import { describePeriod, type PeriodSearch, periodQuery, resolvePeriod } from '@/domain/period';
-import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
+import { filteredPeriodLabel } from '@/domain/applied-visit-filters';
+import {
+  type DashboardSearch,
+  dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
@@ -92,13 +98,14 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const addressSteps = funnelStepsOf(search);
   const steps = addressSteps ?? (isDemoMode() ? demoExampleFunnel(project.id) : null);
   const basePath = screenHref(project.id, 'funnel');
-  const linkTo = (parameters: Readonly<Record<string, string>>) =>
-    `${basePath}?${withKeptParameters(periodQuery(period), parameters)}`;
-  const editorKeep = { ...Object.fromEntries(new URLSearchParams(periodQuery(period))), mode };
-  const drill = steps === null ? null : funnelDrillOf(search, steps.length);
-  const by = funnelSegmentDimensionOf(search[SEGMENT_PARAMETER]);
   const i18n = await getI18n();
   const { filters } = dashboardFiltersOf(search, i18n);
+  const filteredQuery = withDashboardFilters(periodQuery(period), filters);
+  const linkTo = (parameters: Readonly<Record<string, string>>) =>
+    `${basePath}?${withKeptParameters(filteredQuery, parameters)}`;
+  const editorKeep = { ...Object.fromEntries(new URLSearchParams(filteredQuery)), mode };
+  const drill = steps === null ? null : funnelDrillOf(search, steps.length);
+  const by = funnelSegmentDimensionOf(search[SEGMENT_PARAMETER]);
   const range = { from: period.from, to: period.to, filters };
   const service = createFunnelService();
   const [report, drilled, segments] =
@@ -122,6 +129,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={hasDashboardFilters(filters)}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
     >
       <FunnelModes
@@ -187,7 +195,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             by={by}
             report={segments}
             stepCount={steps.length}
-            periodLabel={describePeriod(period, i18n)}
+            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
             hrefOf={(target) =>
               `${linkTo({ ...funnelKept, ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
             }

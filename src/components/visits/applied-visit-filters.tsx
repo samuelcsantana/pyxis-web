@@ -10,9 +10,13 @@ export interface AppliedVisitFiltersProps {
   readonly removeHref: (without: VisitFilters) => string;
   readonly clearHref: string;
   readonly i18n: I18n;
+  readonly label?: string;
+  readonly clearLabel?: string;
+  readonly note?: string;
+  readonly labelId?: string;
 }
 
-const LABEL_ID = 'applied-visit-filters';
+const VISITS_LABEL_ID = 'applied-visit-filters';
 const CHIP =
   'flex min-h-8 items-center gap-1 rounded-pill border border-line bg-card py-0.5 pr-0.5 pl-3 text-caption text-ink';
 const REMOVE = `flex size-7 shrink-0 items-center justify-center rounded-pill text-muted hover:bg-soft hover:text-ink active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION}`;
@@ -39,14 +43,18 @@ export function AppliedVisitFilters({
   removeHref,
   clearHref,
   i18n,
+  label = i18n.t('visits.filters.applied.label'),
+  clearLabel = i18n.t('visits.filters.applied.clearAll'),
+  note,
+  labelId = VISITS_LABEL_ID,
 }: AppliedVisitFiltersProps) {
   if (applied.length === 0) {
     return null;
   }
   return (
-    <section aria-labelledby={LABEL_ID} className="flex flex-wrap items-center gap-x-3 gap-y-2">
-      <p id={LABEL_ID} className="text-caption font-semibold text-muted">
-        {i18n.t('visits.filters.applied.label')}
+    <section aria-labelledby={labelId} className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <p id={labelId} className="text-caption font-semibold text-muted">
+        {label}
       </p>
       <ul className="flex flex-wrap items-center gap-2">
         {applied.map((filter) => (
@@ -71,8 +79,9 @@ export function AppliedVisitFilters({
         ))}
       </ul>
       <Link href={clearHref} className={`text-caption ${TEXT_LINK}`}>
-        {i18n.t('visits.filters.applied.clearAll')}
+        {clearLabel}
       </Link>
+      {note === undefined ? null : <p className="text-caption text-muted">{note}</p>}
     </section>
   );
 }

@@ -185,6 +185,37 @@ describe('previousPeriodNote', () => {
   });
 });
 
+describe('previousPeriodNote under dashboard filters', () => {
+  const FILTERED = { filtered: true } as const;
+
+  it('says the previous period has the same filters, before any cut-off time', () => {
+    expect(previousPeriodNote(WHOLE_DAYS, { ...ENDED, ...FILTERED, days: 1 }, english)).toBe(
+      'vs. the day before, same filters',
+    );
+    expect(previousPeriodNote(WHOLE_DAYS, { ...ENDED, ...FILTERED, days: 30 }, english)).toBe(
+      'vs. previous 30 days, same filters',
+    );
+    expect(previousPeriodNote(SAME_TIME, { ...ENDS_TODAY, ...FILTERED, days: 1 }, english)).toBe(
+      'vs. yesterday, same filters, until 10:03',
+    );
+    expect(previousPeriodNote(SAME_TIME, { ...ENDS_TODAY, ...FILTERED, days: 7 }, english)).toBe(
+      'vs. previous 7 days, same filters, until 10:03',
+    );
+    expect(previousPeriodNote(UNKNOWN, { ...ENDS_TODAY, ...FILTERED, days: 1 }, english)).toBe(
+      'so far today vs. all of yesterday, same filters',
+    );
+    expect(previousPeriodNote(UNKNOWN, { ...ENDS_TODAY, ...FILTERED, days: 30 }, english)).toBe(
+      'vs. previous 30 full days, same filters',
+    );
+  });
+
+  it('keeps the plain wording when filters are off', () => {
+    expect(previousPeriodNote(WHOLE_DAYS, { ...ENDED, filtered: false, days: 7 }, english)).toBe(
+      'vs. previous 7 days',
+    );
+  });
+});
+
 describe('spokenChange', () => {
   it('names a figure as a change for a screen reader', () => {
     expect(spokenChange('+12.4% (+525)', english)).toBe(' change');

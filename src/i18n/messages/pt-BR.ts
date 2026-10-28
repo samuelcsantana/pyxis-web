@@ -921,6 +921,24 @@ export const ptBR = translation({
       yesterdayUntil: 'vs. ontem até {time}',
       previousDaysUntil: 'vs. os {days} dias anteriores, até {time}',
     },
+    comparisonFiltered: {
+      dayBefore: 'vs. o dia anterior, mesmos filtros',
+      previousDays: 'vs. os {days} dias anteriores, mesmos filtros',
+      soFarToday: 'hoje até agora vs. ontem inteiro, mesmos filtros',
+      previousFullDays: 'vs. os {days} dias completos anteriores, mesmos filtros',
+      yesterdayUntil: 'vs. ontem, mesmos filtros, até {time}',
+      previousDaysUntil: 'vs. os {days} dias anteriores, mesmos filtros, até {time}',
+    },
+  },
+  dashboardFilters: {
+    label: 'Filtros',
+    removeAll: 'Remover filtros',
+    newsPaused: 'As novidades ficam pausadas enquanto houver filtros.',
+    empty: {
+      title: 'Nenhuma visita corresponde a estes filtros',
+      body: 'Nada em {period} atende a todos os filtros acima. Remova um deles, ou todos.',
+    },
+    periodFiltered: '{period}, filtrado por {filters}',
   },
   overviewChart: {
     activityTitle: 'Atividade por dia',

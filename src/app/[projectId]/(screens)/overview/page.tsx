@@ -9,6 +9,7 @@ import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, type ScreenSlug, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
+import { FilteredPeriodEmpty } from '@/components/states/filtered-period-empty';
 import { NoConversionEvent } from '@/components/states/no-conversion-event';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
@@ -25,14 +26,19 @@ import { OVERVIEW_TABLES, overviewTableLabel } from '@/domain/overview-export';
 import {
   daysBetween,
   describePeriod,
-  type Period,
   type PeriodSearch,
   periodQuery,
   resolvePeriod,
   todayIn,
 } from '@/domain/period';
 import type { TimeOfDayReport } from '@/domain/time-of-day';
-import { type DashboardSearch, dashboardFiltersOf } from '@/domain/dashboard-filters';
+import { filteredPeriodLabel } from '@/domain/applied-visit-filters';
+import {
+  type DashboardSearch,
+  dashboardFiltersOf,
+  hasDashboardFilters,
+  withDashboardFilters,
+} from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -69,19 +75,19 @@ interface OverviewReportViewProps {
   readonly kpis: readonly KpiView[];
   readonly metric: ChartMetric;
   readonly conversionEvent: string | null;
-  readonly period: Period;
+  readonly periodLabel: string;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
   readonly i18n: I18n;
 }
 
-function overviewDownloads(projectId: string, period: Period, i18n: I18n): readonly CsvDownload[] {
+function overviewDownloads(projectId: string, query: string, i18n: I18n): readonly CsvDownload[] {
   return OVERVIEW_TABLES.map((table) => ({
     label: overviewTableLabel(table, i18n),
     href: exportHref(
       projectId,
       'overview',
-      withKeptParameters(periodQuery(period), { [TABLE_PARAMETER]: table }),
+      withKeptParameters(query, { [TABLE_PARAMETER]: table }),
     ),
   }));
 }
@@ -92,13 +98,12 @@ function OverviewReportView({
   kpis,
   metric,
   conversionEvent,
-  period,
+  periodLabel,
   filteredHref,
   downloads,
   i18n,
 }: OverviewReportViewProps) {
   const visitsHref = (filter: Readonly<Record<string, string>>) => filteredHref('visits', filter);
-  const periodLabel = describePeriod(period, i18n);
   const singleDay = report.days.length === 1;
   return (
     <>
@@ -155,7 +160,13 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
     const service = createOverviewService();
     return Promise.all([service.overview(project.id, scope), service.timeOfDay(project.id, scope)]);
   });
-  const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
+  const filtered = hasDashboardFilters(filters);
+  const query = withDashboardFilters(periodQuery(period), filters);
+  const compared = {
+    days: daysBetween(period.from, period.to),
+    endsToday: period.to === today,
+    filtered,
+  };
   const kpis = overviewKpis(report, compared, project.conversionEvent, i18n);
   const metric = chartMetric(
     search.metric,
@@ -164,6 +175,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   return (
     <ScreenContent
       readAt={now.getTime()}
+      filtered={filtered}
       className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-6 sm:px-8 sm:pt-7 sm:pb-12"
     >
       {hasActivity(report) ? (
@@ -173,11 +185,15 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           kpis={kpis}
           metric={metric}
           conversionEvent={project.conversionEvent}
-          period={period}
-          filteredHref={(screen, filter) =>
-            linkWith(screenHref(project.id, screen, periodQuery(period)), filter)
-          }
-          downloads={overviewDownloads(project.id, period, i18n)}
+          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+          filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}
+          downloads={overviewDownloads(project.id, query, i18n)}
+          i18n={i18n}
+        />
+      ) : filtered ? (
+        <FilteredPeriodEmpty
+          periodLabel={describePeriod(period, i18n)}
+          removeFiltersHref={screenHref(project.id, 'overview', periodQuery(period))}
           i18n={i18n}
         />
       ) : (

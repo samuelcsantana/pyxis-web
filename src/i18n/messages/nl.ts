@@ -939,6 +939,24 @@ export const nl = translation({
       yesterdayUntil: 'vs. gisteren tot {time}',
       previousDaysUntil: 'vs. vorige {days} dagen, tot {time}',
     },
+    comparisonFiltered: {
+      dayBefore: 'vs. de dag ervoor, dezelfde filters',
+      previousDays: 'vs. vorige {days} dagen, dezelfde filters',
+      soFarToday: 'vandaag tot nu toe vs. heel gisteren, dezelfde filters',
+      previousFullDays: 'vs. vorige {days} volledige dagen, dezelfde filters',
+      yesterdayUntil: 'vs. gisteren, dezelfde filters, tot {time}',
+      previousDaysUntil: 'vs. vorige {days} dagen, dezelfde filters, tot {time}',
+    },
+  },
+  dashboardFilters: {
+    label: 'Filters',
+    removeAll: 'Filters verwijderen',
+    newsPaused: 'Nieuwe binnenkomsten zijn gepauzeerd zolang er filters aan staan.',
+    empty: {
+      title: 'Geen bezoeken voldoen aan deze filters',
+      body: 'Niets in {period} voldoet aan alle filters hierboven. Verwijder er een, of allemaal.',
+    },
+    periodFiltered: '{period}, gefilterd op {filters}',
   },
   overviewChart: {
     activityTitle: 'Activiteit per dag',

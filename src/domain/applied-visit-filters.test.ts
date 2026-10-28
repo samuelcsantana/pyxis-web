@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
-import { appliedVisitFilters, changedVisitFilterFields } from './applied-visit-filters';
+import {
+  appliedVisitFilters,
+  changedVisitFilterFields,
+  filteredPeriodLabel,
+} from './applied-visit-filters';
+import { NO_DASHBOARD_FILTERS } from './dashboard-filters';
 import { NO_VISIT_FILTERS, type VisitFilters, visitFilterParameters } from './visits';
 
 const EVERY_FILTER: VisitFilters = {
@@ -109,5 +114,23 @@ describe('changedVisitFilterFields', () => {
 
   it('counts a field left empty against an applied value as changed', () => {
     expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country', 'region']);
+  });
+});
+
+describe('filteredPeriodLabel', () => {
+  it('keeps the period alone without filters', () => {
+    expect(filteredPeriodLabel('Sep 30 to Oct 6', NO_DASHBOARD_FILTERS, english)).toBe(
+      'Sep 30 to Oct 6',
+    );
+  });
+
+  it('names every filter after the period, a flag by its label alone', () => {
+    expect(
+      filteredPeriodLabel(
+        'Sep 30 to Oct 6',
+        { ...NO_DASHBOARD_FILTERS, device: 'mobile', os: 'ios', failed: true },
+        english,
+      ),
+    ).toBe('Sep 30 to Oct 6, filtered to Device: Mobile, System: iOS, With a failed request');
   });
 });

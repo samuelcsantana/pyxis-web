@@ -50,10 +50,10 @@ const STORE = {
 const DOCS = { id: 'p-docs', name: 'Demo Docs', timezone: 'UTC', conversionEvent: null };
 const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE, DOCS] };
 
-function renderDevices(projectId = 'p-store') {
+function renderDevices(projectId = 'p-store', search: Readonly<Record<string, string>> = {}) {
   return DevicesPage({
     params: Promise.resolve({ projectId }),
-    searchParams: Promise.resolve({ range: '30d' }),
+    searchParams: Promise.resolve({ range: '30d', ...search }),
   });
 }
 
@@ -248,6 +248,48 @@ describe('DevicesPage', () => {
     expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
     expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'See the last 30 days' })).not.toBeInTheDocument();
+  });
+
+  it('reads the breakdown within the filters of the address and keeps them in its links', async () => {
+    const devices = vi.fn<IDevicesService['devices']>((projectId, range) =>
+      new MockDevicesService().devices(projectId, range),
+    );
+    state.devices = devices;
+
+    renderWithMessages(await renderDevices('p-store', { os: 'ios', device: 'tablet' }));
+
+    expect(devices).toHaveBeenCalledWith('p-store', {
+      from: '2026-09-06',
+      to: '2026-10-05',
+      filters: { ...NO_DASHBOARD_FILTERS, device: 'tablet', os: 'ios' },
+    });
+    expect(
+      screen.getByRole('link', {
+        name: 'Device types, browsers, systems, countries and regions as CSV',
+      }),
+    ).toHaveAttribute('href', '/p-store/devices/export?range=30d&device=tablet&os=ios');
+  });
+
+  it('says no visit matches the filters when a filtered period is empty, never to install', async () => {
+    state.devices = (): Promise<DevicesReport> =>
+      Promise.resolve({
+        deviceTypes: [],
+        browsers: [],
+        operatingSystems: [],
+        countries: [],
+        regions: [],
+      });
+
+    renderWithMessages(await renderDevices('p-store', { browser: 'opera' }));
+
+    expect(
+      screen.getByRole('heading', { name: 'No visits match these filters' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Remove filters' })).toHaveAttribute(
+      'href',
+      '/p-store/devices?range=30d',
+    );
+    expect(screen.queryByRole('heading', { name: 'No events in this period yet' })).toBeNull();
   });
 
   it('sends an expired session back to the sign-in page', async () => {

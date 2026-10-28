@@ -8,12 +8,13 @@ import { projectOrNotFound } from '@/lib/current-admin';
 
 export interface ScreensLayoutProps {
   readonly children: ReactNode;
+  readonly filters: ReactNode;
   readonly params: Promise<{ readonly projectId: string }>;
 }
 
 const STICKS_WITH_THE_TOPBAR = 'max-lg:contents lg:sticky lg:top-0 lg:z-20';
 
-export default async function ScreensLayout({ children, params }: ScreensLayoutProps) {
+export default async function ScreensLayout({ children, filters, params }: ScreensLayoutProps) {
   const { project } = await projectOrNotFound((await params).projectId);
   const serverNow = new Date().getTime();
   const i18n = await getI18n();
@@ -26,6 +27,7 @@ export default async function ScreensLayout({ children, params }: ScreensLayoutP
           serverNow={serverNow}
           texts={screenTopbarTexts(project.name, i18n)}
         />
+        {filters}
         <NewsBar />
       </div>
       <ContentPlaceholder label={i18n.t('states.loading')} />
