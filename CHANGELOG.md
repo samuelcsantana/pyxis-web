@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.2](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.1...v0.41.2) (2026-10-28)
+
+
+### Documentation
+
+* **readme:** describe the property-based tests ([ae10c79](https://github.com/samuelcsantana/pyxis-web/commit/ae10c79e9604c30c9436e419d50fde3703779d13))
+
 ## [0.41.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.0...v0.41.1) (2026-10-28)
 
 
