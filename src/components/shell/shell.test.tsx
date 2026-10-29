@@ -11,6 +11,7 @@ import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import {
+  hrefKeepingView,
   linkWith,
   periodParameters,
   screenParameters,
@@ -18,6 +19,7 @@ import {
   screenHref,
   screenOf,
   screenSlugOf,
+  viewParameters,
 } from './screens';
 import { Sidebar } from './sidebar';
 import { SidebarNav } from './sidebar-nav';
@@ -72,6 +74,26 @@ describe('screens helpers', () => {
 
     expect(screenParameters(search, 'devices')).toBe('range=7d&path=%2Fa&device=mobile');
     expect(screenParameters(search, 'timeline')).toBe('range=7d');
+  });
+
+  it('keep the view of the screens, the period and the filters, without what one screen reads', () => {
+    expect(
+      viewParameters(new URLSearchParams('from=2026-10-01&to=2026-10-10&metric=x&country=BR&os=')),
+    ).toBe('from=2026-10-01&to=2026-10-10&country=BR');
+    expect(viewParameters(new URLSearchParams('tab=events'))).toBe('');
+  });
+
+  it('add the view to a link to another page of the project, before its anchor', () => {
+    const search = new URLSearchParams('range=today&device=mobile&tab=events');
+
+    expect(hrefKeepingView('/p1/settings', search)).toBe('/p1/settings?range=today&device=mobile');
+    expect(hrefKeepingView('/p1/settings#settings-keys-heading', search)).toBe(
+      '/p1/settings?range=today&device=mobile#settings-keys-heading',
+    );
+    expect(hrefKeepingView('/p1/help?topic=a', new URLSearchParams('range=7d'))).toBe(
+      '/p1/help?topic=a&range=7d',
+    );
+    expect(hrefKeepingView('/p1/install', new URLSearchParams('tab=events'))).toBe('/p1/install');
   });
 
   it('build screen links with or without a query', () => {
@@ -179,14 +201,50 @@ describe('SidebarNav', () => {
 });
 
 describe('the project settings in the navigation', () => {
-  it('links the settings of the project in a list of its own, without the period', () => {
+  it('links the settings of the project in a list of its own, keeping the period', () => {
     renderWithMessages(<SidebarNav projectId="p-store" />);
 
     const link = within(screen.getByRole('list', { name: 'Project' })).getByRole('link', {
       name: 'Settings',
     });
-    expect(link).toHaveAttribute('href', '/p-store/settings');
+    expect(link).toHaveAttribute('href', '/p-store/settings?range=7d');
     expect(link).not.toHaveAttribute('aria-current');
+  });
+
+  it('keeps a custom period and the filters on the way to the settings', () => {
+    navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&metric=visitors';
+    renderWithMessages(<SidebarNav projectId="p-store" />);
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings?from=2026-10-01&to=2026-10-10&device=mobile',
+    );
+  });
+
+  it('links the settings without a query when the screen is on the default period', () => {
+    navigation.search = '';
+    renderWithMessages(<SidebarNav projectId="p-store" />);
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings',
+    );
+  });
+
+  it('gives the screens back the period the settings were opened with', () => {
+    navigation.pathname = '/p-store/settings';
+    navigation.search = 'range=today';
+    renderWithMessages(<SidebarNav projectId="p-store" />);
+    navigation.pathname = '/p-store/overview';
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('link', { name: 'Funnel' })).toHaveAttribute(
+      'href',
+      '/p-store/funnel?range=today',
+    );
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
   });
 
   it('marks the settings current on the settings page, and no screen', () => {

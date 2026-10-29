@@ -13,6 +13,7 @@ import { useT } from '@/i18n/messages-provider';
 import { ArrivalBadge } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
+  hrefKeepingView,
   SCREENS,
   screenHref,
   screenLabelKey,
@@ -86,7 +87,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
       >
         <li>
           <Link
-            href={settingsHref(projectId)}
+            href={hrefKeepingView(settingsHref(projectId), search)}
             aria-current={settingsCurrent ? 'page' : undefined}
             className={`${ITEM} ${settingsCurrent ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
           >
