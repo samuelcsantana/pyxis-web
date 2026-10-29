@@ -759,6 +759,27 @@ export const de = translation({
     create: 'Erstes Projekt anlegen',
     dashboard: 'Dashboard öffnen',
   },
+  cityOption: {
+    heading: 'Stadt der Besucher',
+    label: 'Ungefähre Stadt der Besucher erfassen',
+    note: 'Standardmäßig aus. Das Edge-Netzwerk leitet die Stadt aus der IP-Adresse ab, die nicht gespeichert wird, und die Stadt wird nur zusammen mit der Region gespeichert. Schalte sie nur ein, wenn der Datenschutzhinweis deiner Website das sagt: Mit identify wird die Stadt den Personen zugeordnet, die du identifizierst.',
+    on: 'An',
+    off: 'Aus',
+    confirmTitle: 'Stadt ausschalten?',
+    confirmBody:
+      'Die Stadt wird innerhalb einer Minute nicht mehr gelesen, und die schon erfassten Städte dieses Projekts werden innerhalb von 48 Stunden gelöscht, wenn sie ausgeschaltet bleibt. Das lässt sich nicht rückgängig machen.',
+    confirm: 'Ausschalten und löschen',
+    keep: 'Eingeschaltet lassen',
+    saving: 'Wird gespeichert…',
+    saved: 'Gespeichert',
+    failed: 'Die Änderung wurde nicht gespeichert. Versuche es noch einmal.',
+    subscriptionRequired:
+      'Die Änderung wurde nicht gespeichert: Das Konto braucht einen aktiven Tarif.',
+    readOnlyOn:
+      'Dieses Projekt erfasst die ungefähre Stadt der Besucher. Nur der Kontoinhaber kann das ändern.',
+    readOnlyOff:
+      'Dieses Projekt erfasst die Stadt der Besucher nicht. Nur der Kontoinhaber kann das ändern.',
+  },
   emailPreferences: {
     heading: 'E-Mail',
     weeklyDigest: 'Wochenbericht',

@@ -50,6 +50,7 @@ describe('get-messages', () => {
       'propertyBreakdown',
       'propertySummary',
       'emailPreferences',
+      'cityOption',
       'connections',
       'sessions',
       'accessTokens',

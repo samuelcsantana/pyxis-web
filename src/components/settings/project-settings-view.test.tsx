@@ -66,6 +66,7 @@ const EMAIL = {
     addPerson: () => Promise.resolve({ kind: 'limitReached' } as const),
     removePerson: () => Promise.resolve({ kind: 'removed' } as const),
     requestExport: () => Promise.resolve({ kind: 'unavailable' } as const),
+    setCity: (cityEnabled: boolean) => Promise.resolve({ kind: 'saved', cityEnabled } as const),
   },
   people: [
     {
@@ -261,6 +262,35 @@ describe('ProjectSettingsView', () => {
     ).toHaveAttribute('href', 'mailto:hello@pyxis-analytics.dev');
     expect(within(deletion).queryByRole('textbox')).not.toBeInTheDocument();
     expect(within(deletion).queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('gives the owner the city switch, set as the project has it', () => {
+    renderWithMessages(
+      <ProjectSettingsView settings={{ ...OWNED, cityEnabled: true }} i18n={english} {...EMAIL} />,
+    );
+
+    const city = panel('Visitor’s city');
+    expect(
+      within(city).getByRole('switch', { name: 'Record the visitor’s approximate city' }),
+    ).toBeChecked();
+  });
+
+  it.each([
+    [true, 'This project records the visitor’s approximate city.'],
+    [false, 'This project does not record the visitor’s city.'],
+  ])('tells a reader whether the city is recorded (%s), without a switch', (cityEnabled, text) => {
+    renderWithMessages(
+      <ProjectSettingsView
+        settings={{ ...OWNED, role: 'member', cityEnabled }}
+        i18n={english}
+        {...EMAIL}
+      />,
+    );
+
+    const city = panel('Visitor’s city');
+    expect(city).toHaveTextContent(text);
+    expect(city).toHaveTextContent('Only the account owner can change it.');
+    expect(within(city).queryByRole('switch')).not.toBeInTheDocument();
   });
 
   it('shows someone the owner added the project as it is, without changing it', () => {

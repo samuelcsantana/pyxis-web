@@ -734,6 +734,26 @@ export const ptBR = translation({
     create: 'Criar o primeiro projeto',
     dashboard: 'Abrir o painel',
   },
+  cityOption: {
+    heading: 'Cidade do visitante',
+    label: 'Registrar a cidade aproximada do visitante',
+    note: 'Vem desligada. A rede de borda deduz a cidade do endereço IP, que não é guardado, e a cidade só é guardada junto com o estado. Ligue só se o aviso de privacidade do seu site disser isso: com identify, a cidade fica ligada às pessoas que você identifica.',
+    on: 'Ligada',
+    off: 'Desligada',
+    confirmTitle: 'Desligar a cidade?',
+    confirmBody:
+      'A cidade deixa de ser lida em até um minuto, e as cidades já registradas neste projeto são apagadas em até 48 horas, se a opção continuar desligada. Não dá para desfazer.',
+    confirm: 'Desligar e apagar',
+    keep: 'Manter ligada',
+    saving: 'Salvando…',
+    saved: 'Salvo',
+    failed: 'A mudança não foi salva. Tente de novo.',
+    subscriptionRequired: 'A mudança não foi salva: a conta precisa de um plano ativo.',
+    readOnlyOn:
+      'Este projeto registra a cidade aproximada do visitante. Só o dono da conta pode mudar isso.',
+    readOnlyOff:
+      'Este projeto não registra a cidade do visitante. Só o dono da conta pode mudar isso.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Resumo semanal',

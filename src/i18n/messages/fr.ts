@@ -759,6 +759,27 @@ export const fr = translation({
     create: 'Créer votre premier projet',
     dashboard: 'Ouvrir le tableau de bord',
   },
+  cityOption: {
+    heading: 'Ville du visiteur',
+    label: 'Enregistrer la ville approximative du visiteur',
+    note: 'Désactivée par défaut. Le réseau de périphérie déduit la ville de l’adresse IP, qui n’est pas conservée, et la ville n’est conservée qu’avec la région. Activez-la seulement si l’avis de confidentialité de votre site le dit : avec identify, la ville est liée aux personnes que vous identifiez.',
+    on: 'Activée',
+    off: 'Désactivée',
+    confirmTitle: 'Désactiver la ville ?',
+    confirmBody:
+      'La ville n’est plus lue dans la minute, et les villes déjà enregistrées dans ce projet sont effacées sous 48 heures si elle reste désactivée. Cette action est irréversible.',
+    confirm: 'Désactiver et effacer',
+    keep: 'La garder activée',
+    saving: 'Enregistrement…',
+    saved: 'Enregistré',
+    failed: 'La modification n’a pas été enregistrée. Réessayez.',
+    subscriptionRequired:
+      'La modification n’a pas été enregistrée : le compte a besoin d’une offre active.',
+    readOnlyOn:
+      'Ce projet enregistre la ville approximative du visiteur. Seul le propriétaire du compte peut le modifier.',
+    readOnlyOff:
+      'Ce projet n’enregistre pas la ville du visiteur. Seul le propriétaire du compte peut le modifier.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Récapitulatif hebdomadaire',

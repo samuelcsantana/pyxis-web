@@ -747,6 +747,27 @@ export const it = translation({
     create: 'Crea il tuo primo progetto',
     dashboard: 'Apri la dashboard',
   },
+  cityOption: {
+    heading: 'Città del visitatore',
+    label: 'Registra la città approssimativa del visitatore',
+    note: 'Disattivata per impostazione predefinita. La rete edge ricava la città dall’indirizzo IP, che non viene conservato, e la città viene conservata solo insieme alla regione. Attivala solo se l’informativa privacy del tuo sito lo dice: con identify, la città resta legata alle persone che identifichi.',
+    on: 'Attiva',
+    off: 'Disattiva',
+    confirmTitle: 'Disattivare la città?',
+    confirmBody:
+      'La città smette di essere letta entro un minuto, e le città già registrate in questo progetto vengono cancellate entro 48 ore se resta disattivata. Non si può annullare.',
+    confirm: 'Disattiva e cancella',
+    keep: 'Lasciala attiva',
+    saving: 'Salvataggio…',
+    saved: 'Salvato',
+    failed: 'La modifica non è stata salvata. Riprova.',
+    subscriptionRequired:
+      'La modifica non è stata salvata: l’account ha bisogno di un piano attivo.',
+    readOnlyOn:
+      'Questo progetto registra la città approssimativa del visitatore. Solo il proprietario dell’account può cambiarlo.',
+    readOnlyOff:
+      'Questo progetto non registra la città del visitatore. Solo il proprietario dell’account può cambiarlo.',
+  },
   emailPreferences: {
     heading: 'Email',
     weeklyDigest: 'Riepilogo settimanale',
