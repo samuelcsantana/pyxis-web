@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.43.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.42.1...v0.43.0) (2026-10-29)
+
+
+### Features
+
+* **devices:** list the cities of the visits on the Devices screen ([991e1a2](https://github.com/samuelcsantana/pyxis-web/commit/991e1a25c862f92b313867645ace3c94cd40382d))
+* **devices:** open the Devices screen with the reach card ([7e28c80](https://github.com/samuelcsantana/pyxis-web/commit/7e28c80186092daf847d4a2fce1f042a0d57cd42))
+* **devices:** read the visitor's city and the reach of the visits from the API ([30baa00](https://github.com/samuelcsantana/pyxis-web/commit/30baa00388fc1d6270277f8482586b861b156d67))
+* **devices:** sum up how far the visits reached, in every language ([5403941](https://github.com/samuelcsantana/pyxis-web/commit/5403941b44d034fe885da2b10611affa89173247))
+* **i18n:** say the city is read only for a project that turns it on ([93fcce3](https://github.com/samuelcsantana/pyxis-web/commit/93fcce35727f198838dfc0d073d4cb9b8cbd9a61))
+* **legal:** terms 1.4, the visitor's city as a per-project option ([8fbf5b3](https://github.com/samuelcsantana/pyxis-web/commit/8fbf5b3d2312a7e7168f37b18595a44156271454))
+* **settings:** a switch for the visitor's city, asking before it erases ([71e6349](https://github.com/samuelcsantana/pyxis-web/commit/71e63499c9700d57f20c1308f2e84811c5546c30))
+* **settings:** turn a project's city on and off through the API ([b9d4b00](https://github.com/samuelcsantana/pyxis-web/commit/b9d4b00a302d179768c404e382c76083a166555a))
+* **visits:** filter every screen by the visitor's city ([af66694](https://github.com/samuelcsantana/pyxis-web/commit/af666941dc6ead12b3f2951b48bea1c4b00d5294))
+* **visits:** name the city of each visit in Visits and the Timeline ([07f653c](https://github.com/samuelcsantana/pyxis-web/commit/07f653cbae91866be8b1d440ec5336dc2fc33f45))
+
+
+### Bug Fixes
+
+* **shell:** keep the period and the filters on the way to Settings ([a7fa8d3](https://github.com/samuelcsantana/pyxis-web/commit/a7fa8d36d3e67354c01bdbf9d477bd2d6d6e6246))
+* **shell:** keep the period and the filters through Help and Install ([d85d6fc](https://github.com/samuelcsantana/pyxis-web/commit/d85d6fc8d1ca133b23aa48db6028134d789717e1))
+
+
+### Documentation
+
+* **features:** describe the cities on Devices, Visits and the filters ([734b2a1](https://github.com/samuelcsantana/pyxis-web/commit/734b2a1c8c637dd744673573f18faab01ada1799))
+* **features:** describe the reach card on Devices ([c0e589d](https://github.com/samuelcsantana/pyxis-web/commit/c0e589d3359b610debf26dfdde99fb586413724f))
+* **features:** say the period and the filters survive Settings, Help and Install ([279e334](https://github.com/samuelcsantana/pyxis-web/commit/279e33440559df9509181bee794cfea464662150))
+
 ## [0.42.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.42.0...v0.42.1) (2026-10-29)
 
 
