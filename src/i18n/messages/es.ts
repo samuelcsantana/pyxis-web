@@ -741,6 +741,26 @@ export const es = translation({
     create: 'Crear el primer proyecto',
     dashboard: 'Abrir el panel',
   },
+  cityOption: {
+    heading: 'Ciudad del visitante',
+    label: 'Registrar la ciudad aproximada del visitante',
+    note: 'Viene desactivada. La red de borde deduce la ciudad de la dirección IP, que no se guarda, y la ciudad solo se guarda junto con la región. Actívala solo si el aviso de privacidad de tu sitio lo dice: con identify, la ciudad queda vinculada a las personas que identificas.',
+    on: 'Activada',
+    off: 'Desactivada',
+    confirmTitle: '¿Desactivar la ciudad?',
+    confirmBody:
+      'La ciudad deja de leerse en menos de un minuto, y las ciudades ya registradas en este proyecto se borran en un plazo de hasta 48 horas si sigue desactivada. No se puede deshacer.',
+    confirm: 'Desactivar y borrar',
+    keep: 'Mantenerla activada',
+    saving: 'Guardando…',
+    saved: 'Guardado',
+    failed: 'El cambio no se guardó. Inténtalo de nuevo.',
+    subscriptionRequired: 'El cambio no se guardó: la cuenta necesita un plan activo.',
+    readOnlyOn:
+      'Este proyecto registra la ciudad aproximada del visitante. Solo el dueño de la cuenta puede cambiarlo.',
+    readOnlyOff:
+      'Este proyecto no registra la ciudad del visitante. Solo el dueño de la cuenta puede cambiarlo.',
+  },
   emailPreferences: {
     heading: 'Correo electrónico',
     weeklyDigest: 'Resumen semanal',

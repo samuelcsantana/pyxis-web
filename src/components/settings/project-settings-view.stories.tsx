@@ -78,6 +78,7 @@ const meta = {
       addPerson: (email) => PEOPLE.add(STORE.id, email),
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
       requestExport: () => EXPORTS.request(),
+      setCity: (cityEnabled) => Promise.resolve({ kind: 'saved', cityEnabled }),
     },
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
     myEmail: DEMO_OWNER_EMAIL,
@@ -111,6 +112,7 @@ export const WithoutASubscription: Story = {
       addPerson: () => Promise.resolve({ kind: 'subscriptionRequired' }),
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
       requestExport: () => Promise.resolve({ kind: 'limitReached' }),
+      setCity: () => Promise.resolve({ kind: 'subscriptionRequired' }),
     },
   },
 };

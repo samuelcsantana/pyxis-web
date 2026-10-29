@@ -748,6 +748,27 @@ export const nl = translation({
     create: 'Je eerste project aanmaken',
     dashboard: 'Dashboard openen',
   },
+  cityOption: {
+    heading: 'Stad van de bezoeker',
+    label: 'De geschatte stad van de bezoeker vastleggen',
+    note: 'Standaard uit. Het edgenetwerk leidt de stad af uit het IP-adres, dat niet wordt bewaard, en de stad wordt alleen samen met de regio bewaard. Zet hem alleen aan als de privacyverklaring van je site dat zegt: met identify wordt de stad gekoppeld aan de mensen die je identificeert.',
+    on: 'Aan',
+    off: 'Uit',
+    confirmTitle: 'De stad uitzetten?',
+    confirmBody:
+      'De stad wordt binnen een minuut niet meer gelezen, en de steden die al in dit project zijn vastgelegd worden binnen 48 uur gewist als hij uit blijft. Dit kan niet ongedaan worden gemaakt.',
+    confirm: 'Uitzetten en wissen',
+    keep: 'Aan laten',
+    saving: 'Opslaan…',
+    saved: 'Opgeslagen',
+    failed: 'De wijziging is niet opgeslagen. Probeer het opnieuw.',
+    subscriptionRequired:
+      'De wijziging is niet opgeslagen: het account heeft een actief abonnement nodig.',
+    readOnlyOn:
+      'Dit project legt de geschatte stad van de bezoeker vast. Alleen de accounteigenaar kan dat wijzigen.',
+    readOnlyOff:
+      'Dit project legt de stad van de bezoeker niet vast. Alleen de accounteigenaar kan dat wijzigen.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Wekelijkse samenvatting',

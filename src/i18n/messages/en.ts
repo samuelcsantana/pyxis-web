@@ -717,6 +717,26 @@ export const en = {
     create: 'Create your first project',
     dashboard: 'Open the dashboard',
   },
+  cityOption: {
+    heading: 'Visitor’s city',
+    label: 'Record the visitor’s approximate city',
+    note: 'Off by default. The edge network works the city out from the IP address, which is not kept, and the city is kept only with its region. Turn it on only if your site’s privacy notice says so: with identify, the city is tied to the people you identify.',
+    on: 'On',
+    off: 'Off',
+    confirmTitle: 'Turn off the city?',
+    confirmBody:
+      'The city stops being read within a minute, and the cities already recorded in this project are erased within 48 hours if it stays off. This cannot be undone.',
+    confirm: 'Turn off and erase',
+    keep: 'Keep it on',
+    saving: 'Saving…',
+    saved: 'Saved',
+    failed: 'The change was not saved. Try again.',
+    subscriptionRequired: 'The change was not saved: the account needs an active plan.',
+    readOnlyOn:
+      'This project records the visitor’s approximate city. Only the account owner can change it.',
+    readOnlyOff:
+      'This project does not record the visitor’s city. Only the account owner can change it.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Weekly digest',

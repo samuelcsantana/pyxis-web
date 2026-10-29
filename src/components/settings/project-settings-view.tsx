@@ -35,6 +35,7 @@ import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-
 import type { EndSession } from './end-session-button';
 import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
+import { CitySwitch, type SetCity } from './city-switch';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
 export interface ProjectManagement {
@@ -46,6 +47,7 @@ export interface ProjectManagement {
   readonly addPerson: AddPerson;
   readonly removePerson: RemovePerson;
   readonly requestExport: RequestExport;
+  readonly setCity: SetCity;
 }
 
 export interface ProjectSettingsViewProps {
@@ -383,6 +385,26 @@ interface SectionProps {
   readonly when: (iso: string) => string;
 }
 
+interface CityPanelProps {
+  readonly settings: ProjectSettings;
+  readonly i18n: I18n;
+  readonly setCity: SetCity | null;
+}
+
+function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
+  return (
+    <SettingsPanel id="settings-city" title={i18n.t('cityOption.heading')}>
+      {setCity === null ? (
+        <p className="text-sm">
+          {i18n.t(settings.cityEnabled ? 'cityOption.readOnlyOn' : 'cityOption.readOnlyOff')}
+        </p>
+      ) : (
+        <CitySwitch initial={settings.cityEnabled} setCity={setCity} />
+      )}
+    </SettingsPanel>
+  );
+}
+
 interface EmailPanelProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
@@ -456,6 +478,9 @@ export function ProjectSettingsView({
           <ActivityPanel {...section} />
           <RetentionPanel {...section} />
           <div className="lg:col-span-2">
+            <CityPanel settings={settings} i18n={i18n} setCity={manage.setCity} />
+          </div>
+          <div className="lg:col-span-2">
             <ManagedKeysPanel {...section} manage={manage} />
           </div>
           <div className="lg:col-span-2">
@@ -480,6 +505,9 @@ export function ProjectSettingsView({
           <ActivityPanel {...section} />
           <OriginsPanel {...section} />
           <RetentionPanel {...section} />
+          <div className="lg:col-span-2">
+            <CityPanel settings={settings} i18n={i18n} setCity={null} />
+          </div>
           <div className="lg:col-span-2">
             <KeysPanel {...section} />
           </div>
