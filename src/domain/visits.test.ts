@@ -100,6 +100,7 @@ describe('visitFiltersOf', () => {
         identity: 'anonymous',
         country: ' br ',
         region: ' br-sp ',
+        city: ' Campinas ',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
@@ -120,6 +121,7 @@ describe('visitFiltersOf', () => {
         identity: 'anonymous',
         country: 'BR',
         region: 'BR-SP',
+        city: 'Campinas',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
@@ -201,6 +203,7 @@ describe('visitFiltersOf', () => {
       {
         country: 'Brazil',
         region: 'São Paulo',
+        city: 'c'.repeat(101),
         source: 'x'.repeat(129),
         campaign: 'y'.repeat(65),
         route: 'FETCH /orders',
@@ -213,15 +216,20 @@ describe('visitFiltersOf', () => {
     expect(reading.problems).toEqual([
       'A country is its two-letter code, as BR.',
       'A region is its country and region code, as BR-SP.',
+      'A city has at most 100 characters.',
       'A source has at most 128 characters.',
       'A campaign has at most 64 characters.',
       'A request is a method and a route, as POST /orders/:id.',
     ]);
   });
 
-  it('keeps the longest source and campaign the API takes', () => {
-    const reading = visitFiltersOf({ source: 'x'.repeat(128), campaign: 'y'.repeat(64) }, english);
+  it('keeps the longest city, source and campaign the API takes', () => {
+    const reading = visitFiltersOf(
+      { city: 'c'.repeat(100), source: 'x'.repeat(128), campaign: 'y'.repeat(64) },
+      english,
+    );
 
+    expect(reading.filters.city).toHaveLength(100);
     expect(reading.filters.source).toHaveLength(128);
     expect(reading.filters.campaign).toHaveLength(64);
   });
@@ -274,6 +282,7 @@ describe('visitFilterParameters', () => {
         identity: 'identified',
         country: 'BR',
         region: 'BR-MG',
+        city: 'Belo Horizonte',
         source: '(direct)',
         campaign: 'spring_sale',
         route: 'GET /plans',
@@ -291,6 +300,7 @@ describe('visitFilterParameters', () => {
       identity: 'identified',
       country: 'BR',
       region: 'BR-MG',
+      city: 'Belo Horizonte',
       source: '(direct)',
       campaign: 'spring_sale',
       route: 'GET /plans',

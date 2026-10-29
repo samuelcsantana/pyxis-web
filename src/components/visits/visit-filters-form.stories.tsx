@@ -44,6 +44,7 @@ export const Filtered: Story = {
       identity: 'anonymous',
       country: 'BR',
       region: 'BR-SP',
+      city: 'Campinas',
       source: 'google',
       campaign: 'spring_sale',
       route: 'POST /orders',

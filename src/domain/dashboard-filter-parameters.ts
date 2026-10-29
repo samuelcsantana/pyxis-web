@@ -11,6 +11,7 @@ export const DASHBOARD_FILTER_PARAMETERS = [
   'identity',
   'country',
   'region',
+  'city',
   'source',
   'campaign',
   'failed',
