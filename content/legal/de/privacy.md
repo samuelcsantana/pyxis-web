@@ -92,7 +92,7 @@ anbieten.
 
 | Datenfeld | Wofür | Rechtsgrundlage (LGPD) | Wie lange |
 |---|---|---|---|
-| Aufgerufene Seite (Pfad, ohne Parameter außer den Kampagnenparametern), Aktionen auf der Seite (zum Beispiel das Öffnen der Demo), Herkunftswebsite (nur die Domain), Kampagnenparameter, Gerätekategorie, Familie des Browsers und des Betriebssystems, Land und Bundesstaat (nie die Stadt), Zufallsnummer des Besuchs | Verstehen, wie die Seite genutzt wird, und die Präsentation von Pyxis verbessern | Berechtigtes Interesse (Art. 7 IX und Art. 10) | 13 Monate |
+| Aufgerufene Seite (Pfad, ohne Parameter außer den Kampagnenparametern), Aktionen auf der Seite (zum Beispiel das Öffnen der Demo), Herkunftswebsite (nur die Domain), Kampagnenparameter, Gerätekategorie, Familie des Browsers und des Betriebssystems, Land, Bundesstaat und ungefähre Stadt (vom AWS-Netz aus der IP-Adresse abgeleitet, ohne die IP zu speichern; die Stadt ab {{terms.effectiveFrom}}), Zufallsnummer des Besuchs | Verstehen, wie die Seite genutzt wird, und die Präsentation von Pyxis verbessern | Berechtigtes Interesse (Art. 7 IX und Art. 10) | 13 Monate |
 
 Die Messung **verwendet keine Cookies**, **speichert weder IP** noch den vollständigen Browser und
 **sendet nichts**, wenn dein Browser verlangt, nicht verfolgt zu werden (Global Privacy Control oder

@@ -91,7 +91,7 @@ access through tokens and connected apps, including through the MCP server.
 send events to the service.
 
 2.3. **Project:** the configuration of one of your sites in the service (name, authorized
-addresses, time zone, conversion event, keys and events).
+addresses, time zone, conversion event, the option to store the city, keys and events).
 
 2.4. **Event:** each record sent by the tracker or by your integration, such as a page view or an
 action you have marked.
@@ -167,10 +167,13 @@ to your site's API, acquisition, devices and times of day.
 
 1. it does not create cookies on your site;
 2. it does not store the visitor's IP address: the IP is used only in the server's memory, for a few
-   minutes, to limit abuse;
+   minutes, to limit abuse, and by the AWS network, at the time of the request, to provide the
+   country, the state and, if you turn it on, the city;
 3. it does not store the full browser string (user agent), only the device category and the browser
    and operating system family;
-4. it does not store the city, only the country and the state;
+4. it does not store the city, unless the account owner turns on that option in the project
+   (Clause 4.5); we never turn it on without their request. It does store the country and the
+   state;
 5. it does not store the full page address: only the path in template form, without parameters,
    except the campaign ones (`utm_source`, `utm_medium`, `utm_campaign`);
 6. it sends nothing when the visitor's browser asks not to be tracked (Global Privacy Control or
@@ -197,6 +200,24 @@ paused).
 4. the API routes to **delete or copy the data of an identified person**, with the project's
    secret key;
 5. the **export of all events of a project** to a file, through the dashboard (Clause 11.5).
+
+4.5. **Visitor's city, only if you turn it on.** Each project has, in its settings, an option to
+store the approximate city of each visit. The city is inferred from the IP address by the AWS
+network, at the time of the request, and is only stored when the state is also provided; the IP
+is still not stored. The option comes **turned off** in every project, new or existing, and only
+the account owner turns it on or off.
+
+Before turning it on, update your site's privacy notice to say that the city is recorded
+(Schedule IV of the Data Processing Agreement explains how to adapt the template). **Important:**
+together with the time, the device and the page, the city makes a visit easier to associate with
+a person, especially on sites with few visits and in small cities. In a project that uses the
+`identify` function, turning on the city starts recording the approximate city of each visit by
+identified people. It is up to you, as controller, to assess whether you need the city and to
+inform the visitors (Clause 6.1 of the Agreement).
+
+When it is turned off, the city stops being read within one minute, and the cities already stored
+in the project are deleted within 48 hours, if the option is still off by then, as stated in
+Clause 12.8 of the Agreement. Postal codes (CEP), coordinates and the IP address are never stored.
 
 ## Clause 5 — Open source and hosted service
 
@@ -575,7 +596,7 @@ does not recognize names, addresses or free text. **You are responsible for what
 
 1. publish on your site a privacy notice describing the measurement (there is a template in
    Schedule IV of the Data Processing Agreement) and keep that notice in line with what your site
-   sends;
+   sends and with the options of your projects (such as the city, Clause 4.5);
 2. if your site is directed at children or adolescents, assess the measurement beforehand in light
    of art. 14 of the Lei Geral de Proteção de Dados Pessoais (LGPD; Brazilian General Data
    Protection Law);

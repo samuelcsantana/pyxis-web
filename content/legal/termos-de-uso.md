@@ -85,7 +85,7 @@ acesso por tokens e por aplicativos conectados, inclusive pelo servidor MCP.
 enviar eventos ao serviço.
 
 2.3. **Projeto:** a configuração de um site seu no serviço (nome, endereços autorizados, fuso
-horário, evento de conversão, chaves e eventos).
+horário, evento de conversão, a opção de guardar a cidade, chaves e eventos).
 
 2.4. **Evento:** cada registro enviado pelo rastreador ou pela sua integração, como uma página vista
 ou uma ação que você marcou.
@@ -157,10 +157,12 @@ chamadas à API do seu site, aquisição, aparelhos e horários.
 
 1. não cria cookies no seu site;
 2. não guarda o endereço IP do visitante: o IP é usado só na memória do servidor, por alguns
-   minutos, para limitar abusos;
+   minutos, para limitar abusos, e pela rede da AWS, na hora da requisição, para informar o país, o
+   estado e, se você ligar, a cidade;
 3. não guarda o navegador completo (user agent), só a categoria do aparelho e a família do
    navegador e do sistema;
-4. não guarda a cidade, só o país e o estado;
+4. não guarda a cidade, a menos que o dono da conta ligue essa opção no projeto (Cláusula 4.5);
+   nunca a ligamos sem o pedido dele. O país e o estado, sim;
 5. não guarda o endereço completo da página: só o caminho em forma de modelo, sem parâmetros,
    exceto os de campanha (`utm_source`, `utm_medium`, `utm_campaign`);
 6. não envia nada quando o navegador do visitante pede para não ser rastreado (Global Privacy
@@ -187,6 +189,24 @@ página está aberta, mas não quando a recepção está pausada).
 4. as rotas da API para **excluir ou copiar os dados de uma pessoa identificada**, com a chave
    secreta do projeto;
 5. a **exportação de todos os eventos de um projeto** em arquivo, pelo painel (Cláusula 11.5).
+
+4.5. **Cidade do visitante, só se você ligar.** Cada projeto tem, nas configurações, uma opção para
+guardar a cidade aproximada de cada visita. A cidade é deduzida do endereço IP pela rede da AWS, na
+hora da requisição, e só é guardada quando o estado também é informado; o IP continua não sendo
+guardado. A opção vem **desligada** em todo projeto, novo ou antigo, e só o dono da conta a liga ou
+desliga.
+
+Antes de ligar, atualize o aviso de privacidade do seu site para dizer que a cidade é registrada (o
+Anexo IV do Acordo de Tratamento de Dados diz como adaptar o modelo). **Atenção:** junto com o
+horário, o aparelho e a página, a cidade torna uma visita mais fácil de associar a uma pessoa,
+sobretudo em sites com poucas visitas e em cidades pequenas. Num projeto que usa a função
+`identify`, ligar a cidade passa a registrar a cidade aproximada de cada visita das pessoas
+identificadas. Cabe a você, como controlador, avaliar se precisa da cidade e informar os visitantes
+(Cláusula 6.1 do Acordo).
+
+Ao desligar, a cidade deixa de ser lida em até um minuto, e as cidades já guardadas no projeto são
+apagadas em até 48 horas, se a opção continuar desligada até lá, como diz a Cláusula 12.8 do Acordo.
+CEP, coordenadas e o endereço IP nunca são guardados.
 
 ## Cláusula 5 — Código aberto e serviço hospedado
 
@@ -550,7 +570,8 @@ nomes, endereços nem textos livres. **A responsabilidade pelo que o seu site en
 12.3. Você também se compromete a:
 
 1. publicar no seu site um aviso de privacidade que descreva a medição (há um modelo no Anexo IV do
-   Acordo de Tratamento de Dados) e manter esse aviso de acordo com o que o seu site envia;
+   Acordo de Tratamento de Dados) e manter esse aviso de acordo com o que o seu site envia e com as
+   opções dos seus projetos (como a cidade, Cláusula 4.5);
 2. se o seu site for dirigido a crianças ou adolescentes, avaliar antes a medição à luz do art. 14
    da LGPD;
 3. manter em sigilo a chave secreta e os tokens de acesso (Cláusula 13);

@@ -38,7 +38,7 @@ rastreador de Pyxis.
 que marcaste.
 
 2.4. **Proyecto** es la configuración de un sitio tuyo en Pyxis: nombre, direcciones (orígenes)
-autorizadas, zona horaria, evento de conversión, claves y eventos.
+autorizadas, zona horaria, evento de conversión, la opción de guardar la ciudad, claves y eventos.
 
 2.5. **Suboperador** (subencargado del tratamiento) es el proveedor que contratamos y que trata, por
 cuenta nuestra, datos personales de este acuerdo.
@@ -94,8 +94,9 @@ Cláusula 7.6) y comprobar la capacidad del servicio.
 5.1. Tus instrucciones para el tratamiento son, en conjunto:
 
 1. los Términos de Uso y este acuerdo;
-2. la configuración de tus proyectos (orígenes autorizados, zona horaria, evento de conversión, claves
-   y personas con acceso), hecha por el dueño de la cuenta en el panel o, a petición, por nosotros;
+2. la configuración de tus proyectos (orígenes autorizados, zona horaria, evento de conversión, la
+   opción de guardar la ciudad, claves y personas con acceso), hecha por el dueño de la cuenta en el
+   panel o, a petición, por nosotros;
 3. lo que envía el rastreador instalado en tu sitio (qué eventos, qué propiedades y si usas la función
    `identify`);
 4. las acciones del dueño de la cuenta en el panel (por ejemplo, exportar los eventos, borrar un
@@ -156,7 +157,12 @@ a los titulares.
    art. 17, § 2.º, del Reglamento aprobado por la Resolução CD/ANPD n.º 19/2024 (resolución del Consejo
    Director de la ANPD), usando la información de la Cláusula 9 y del Anexo III;
 9. instalas el rastreador y registras como origen de un proyecto solo sitios tuyos o de quien te
-   autorizó (Cláusula 3.2).
+   autorizó (Cláusula 3.2);
+10. si activas la ciudad en un proyecto (Términos de Uso, Cláusula 4.5), evaluaste antes si es
+    necesaria para la finalidad de la medición y si encaja en la base legal del punto 1; actualizaste
+    antes el aviso del punto 2, destacando el cambio; y, si el proyecto usa la función `identify`,
+    sabes que pasa a registrarse la ciudad aproximada de cada visita de las personas identificadas y
+    lo informas en el aviso.
 
 6.2. El servidor de Pyxis descarta automáticamente los valores que tengan forma de correo electrónico
 o las secuencias de 10 o más dígitos (como CPF, CNPJ —registro fiscal brasileño de personas jurídicas— y teléfono) en las propiedades de los eventos, en
@@ -274,7 +280,8 @@ respuesta indica cuántos eventos se borraron. Volver a llamar responde cero; es
 trae los mismos eventos que borraría la eliminación, en orden, hasta 1000 por página, en JSON. Si hay
 más, la respuesta indica el siguiente cursor (`next_after`), que pasas como `?after=` para obtener la
 página siguiente. Cada evento viene con nombre, fecha y hora, identificador de la visita, página,
-origen, dispositivo, país, región y propiedades.
+origen, dispositivo, país, región, ciudad (vacía en los proyectos con la opción desactivada; Términos
+de Uso, Cláusula 4.5) y propiedades.
 
 10.5. **Límites de estas rutas.** Las dos rutas aceptan hasta 60 llamadas por minuto por clave y por
 dirección de origen. La clave secreta solo debe usarse en tu servidor, nunca en el navegador.
@@ -376,6 +383,16 @@ Hasta entonces, el dueño de la cuenta puede exportar los eventos (punto 12.3). 
 puntos 12.4 (copias de los proveedores), 12.5 (confirmación por correo electrónico) y 12.6
 (preservación por ley u orden).
 
+12.8. **Ciudad desactivada.** Cuando el dueño de la cuenta desactiva la ciudad en un proyecto
+(Términos de Uso, Cláusula 4.5), la recepción deja de leer la ciudad en un plazo de hasta un minuto.
+La siguiente rutina diaria borra la ciudad de todos los eventos ya guardados en el proyecto, y eso
+termina en un plazo de hasta 48 horas después de la desactivación, siempre que la opción siga
+desactivada hasta entonces. Se aplican los puntos 12.4 (las copias de seguridad del proveedor y los
+archivos de exportación todavía no expirados desaparecen en los plazos de ese punto) y 12.6 (en un
+proyecto con datos preservados por ley u orden, las ciudades se mantienen durante el tiempo de la
+preservación). Los archivos que ya descargaste y lo que las personas con acceso ya llevaron a
+aplicaciones conectadas (Anexo I, punto 10) quedan bajo tu responsabilidad.
+
 ## Cláusula 13 — Información y auditoría
 
 13.1. Si lo pides por escrito, te damos la información necesaria para demostrar que cumplimos este
@@ -442,7 +459,7 @@ cliente a quienes este identifica con la función `identify`.
 | Clic en anuncio | Solo verdadero o falso. El código del clic (como `gclid`) no se guarda |
 | Dispositivo | Categoría: móvil, tableta, escritorio u otro |
 | Navegador y sistema | Solo la familia (por ejemplo, `chrome`, `safari`, `android`, `ios`), sin versión |
-| País y región | Código del país (2 letras) y región (código y nombre del estado), informados por la red de AWS en el momento de la solicitud. **Nunca la ciudad** |
+| País, región y ciudad | Código del país (2 letras) y región (código y nombre del estado), informados por la red de AWS en el momento de la solicitud. La **ciudad** (nombre aproximado, deducido de la dirección IP por la red de AWS), solo en los proyectos en los que el dueño de la cuenta activó esa opción (Términos de Uso, Cláusula 4.5), que viene desactivada, y solo cuando también se informó la región |
 | Propiedades | Hasta 10 por evento, definidas por el cliente: clave de hasta 40 caracteres (`a-z`, `0-9`, `_`) y valor corto (texto de hasta 100 caracteres, número o verdadero/falso) |
 | Llamadas a la API del sitio (`api_request`) | Método, ruta en forma de plantilla, código de respuesta, duración y, si lo hay, el código del error |
 
@@ -455,8 +472,10 @@ cliente a quienes este identifica con la función `identify`.
   dispositivo, la familia del navegador y la del sistema; después se descarta. Las visitas de robots
   conocidos se descartan.
 - **Cookies:** el rastreador no crea cookies en los sitios del cliente.
-- **Ciudad, dirección completa de la página, parámetros de la dirección (salvo los de campaña), huella
-  digital del navegador:** nunca.
+- **Dirección completa de la página, parámetros de la dirección (salvo los de campaña), huella
+  digital del navegador, código postal y coordenadas:** nunca.
+- **Ciudad:** solo en los proyectos en los que el dueño de la cuenta activó esa opción. Al
+  desactivarla, deja de leerse, y las ya guardadas se borran en los plazos de la Cláusula 12.8.
 
 **5. Datos personales sensibles.** No deben enviarse (Cláusula 6.1, punto 3). Pyxis no está hecho para
 tratarlos.
@@ -516,15 +535,15 @@ responsabilidad.
 ## Anexo II — Medidas de seguridad vigentes
 
 Comprobadas en el código del servicio y en la configuración de la infraestructura el 14/10/2026 y el
-15/10/2026.
+15/10/2026; el punto 1 (ciudad), el 29/10/2026.
 
 **1. Privacidad desde el diseño.** Sin cookies en los sitios medidos; IP y navegador completo nunca
 guardados; páginas reducidas a plantillas; barrera en el servidor que descarta valores con forma de
 correo electrónico y números de 10 o más dígitos en las propiedades, en los parámetros de campaña y en
-el identificador de usuario; región del visitante, nunca la ciudad; señales de "no rastrear" del
-navegador (Global Privacy Control y Do Not Track) respetadas por el rastreador, que no envía nada
-cuando están activadas; opción de no ser medido (`optOut`) para el visitante; eventos borrados después
-de 13 meses.
+el identificador de usuario; región del visitante, y la ciudad solo cuando el cliente activa esa
+opción en el proyecto, que viene desactivada; señales de "no rastrear" del navegador (Global Privacy
+Control y Do Not Track) respetadas por el rastreador, que no envía nada cuando están activadas; opción
+de no ser medido (`optOut`) para el visitante; eventos borrados después de 13 meses.
 
 **2. Cifrado en tránsito.** Navegador → API: HTTPS con TLS 1.2 o superior y HSTS de 2 años. Red de
 distribución → función de la API: solo HTTPS (TLS 1.2). Función → base de datos: TLS con verificación
@@ -652,6 +671,13 @@ No sustituye tu propio análisis.
 > recibe un número aleatorio que queda solo en la pestaña del navegador y se descarta al cerrar la
 > pestaña o después de 30 minutos sin actividad; no hay ningún identificador que te reconozca en otra
 > visita.
+>
+> *(Si activaste la ciudad en el proyecto, sustituye "el país y la región (nunca la ciudad)" por "el
+> país, la región y la ciudad aproximada, deducidos de tu dirección IP en el momento del acceso, sin
+> guardar la IP". Si tu sitio también usa la función `identify`, sustituye, en el párrafo siguiente,
+> "vinculamos los eventos de esa visita al número interno de tu cuenta" por "vinculamos los eventos
+> de esa visita, incluida la ciudad aproximada, al número interno de tu cuenta". Si este aviso ya
+> estaba publicado sin la ciudad, destaca el cambio y la fecha en que empieza a aplicarse.)*
 >
 > *(Incluye el párrafo siguiente solo si tu sitio usa la función `identify`.)* Cuando inicias sesión
 > en tu cuenta, vinculamos los eventos de esa visita al número interno de tu cuenta, nunca a tu nombre

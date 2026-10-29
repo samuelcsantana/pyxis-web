@@ -101,7 +101,7 @@ MCP-Server.
 um Ereignisse an den Dienst zu senden.
 
 2.3. **Projekt:** die Konfiguration einer deiner Websites im Dienst (Name, autorisierte Adressen,
-Zeitzone, Conversion-Ereignis, Schlüssel und Ereignisse).
+Zeitzone, Conversion-Ereignis, Option zum Speichern der Stadt, Schlüssel und Ereignisse).
 
 2.4. **Ereignis:** jeder Datensatz, den der Tracker oder deine Integration sendet, etwa ein
 Seitenaufruf oder eine Aktion, die du markiert hast.
@@ -177,10 +177,13 @@ genutzte Funktionen, Fehler der Aufrufe an die API deiner Website, Akquisition, 
 
 1. er setzt keine Cookies auf deiner Website;
 2. er speichert nicht die IP-Adresse des Besuchers: die IP wird nur im Arbeitsspeicher des Servers
-   für einige Minuten verwendet, um Missbrauch zu begrenzen;
+   für einige Minuten verwendet, um Missbrauch zu begrenzen, und vom AWS-Netz zum Zeitpunkt der
+   Anfrage, um das Land, den Bundesstaat und, wenn du die Option einschaltest, die Stadt mitzuteilen;
 3. er speichert nicht den vollständigen Browser (User Agent), nur die Gerätekategorie und die Familie
    des Browsers und des Betriebssystems;
-4. er speichert nicht die Stadt, nur das Land und den Bundesstaat;
+4. er speichert nicht die Stadt, es sei denn, der Kontoinhaber schaltet diese Option im Projekt ein
+   (Klausel 4.5); wir schalten sie nie ein, ohne dass er es verlangt. Das Land und den Bundesstaat
+   speichert er hingegen;
 5. er speichert nicht die vollständige Adresse der Seite: nur den Pfad in Form einer Vorlage, ohne
    Parameter, außer den Kampagnenparametern (`utm_source`, `utm_medium`, `utm_campaign`);
 6. er sendet nichts, wenn der Browser des Besuchers verlangt, nicht verfolgt zu werden (Global Privacy
@@ -208,6 +211,26 @@ Empfang pausiert ist).
 4. die API-Routen zum **Löschen oder Kopieren der Daten einer identifizierten Person**, mit dem
    geheimen Schlüssel des Projekts;
 5. der **Export aller Ereignisse eines Projekts** als Datei, über das Dashboard (Klausel 11.5).
+
+4.5. **Stadt des Besuchers, nur wenn du sie einschaltest.** Jedes Projekt hat in den Einstellungen
+eine Option, die ungefähre Stadt jedes Besuchs zu speichern. Die Stadt wird vom AWS-Netz zum
+Zeitpunkt der Anfrage aus der IP-Adresse abgeleitet und nur gespeichert, wenn auch der Bundesstaat
+mitgeteilt wird; die IP wird weiterhin nicht gespeichert. Die Option ist in jedem Projekt, ob neu
+oder bestehend, standardmäßig **ausgeschaltet**, und nur der Kontoinhaber schaltet sie ein oder aus.
+
+Bevor du sie einschaltest, aktualisiere den Datenschutzhinweis deiner Website, damit er sagt, dass
+die Stadt erfasst wird (Anhang IV des Auftragsverarbeitungsvertrags erklärt, wie die Vorlage
+anzupassen ist). **Achtung:** zusammen mit der Uhrzeit, dem Gerät und der Seite macht die Stadt es
+leichter, einen Besuch einer Person zuzuordnen, vor allem bei Websites mit wenigen Besuchen und in
+kleinen Städten. In einem Projekt, das die Funktion `identify` verwendet, führt das Einschalten der
+Stadt dazu, dass die ungefähre Stadt jedes Besuchs der identifizierten Personen erfasst wird. Es
+liegt bei dir als Verantwortlichem, zu prüfen, ob du die Stadt brauchst, und die Besucher zu
+informieren (Klausel 6.1 des Auftragsverarbeitungsvertrags).
+
+Beim Ausschalten wird die Stadt innerhalb einer Minute nicht mehr gelesen, und die bereits im
+Projekt gespeicherten Städte werden innerhalb von 48 Stunden gelöscht, sofern die Option bis dahin
+ausgeschaltet bleibt, wie in Klausel 12.8 des Auftragsverarbeitungsvertrags beschrieben.
+Postleitzahl, Koordinaten und die IP-Adresse werden nie gespeichert.
 
 ## Klausel 5 — Open Source und gehosteter Dienst
 
@@ -620,7 +643,8 @@ Website sendet, liegt bei dir.**
 
 1. auf deiner Website einen Datenschutzhinweis zu veröffentlichen, der die Messung beschreibt (eine
    Vorlage findest du in Anhang IV des Auftragsverarbeitungsvertrags), und diesen Hinweis im Einklang
-   mit dem zu halten, was deine Website sendet;
+   mit dem, was deine Website sendet, und mit den Optionen deiner Projekte (etwa der Stadt,
+   Klausel 4.5) zu halten;
 2. wenn deine Website sich an Kinder oder Jugendliche richtet, die Messung vorher im Lichte von
    Art. 14 der LGPD (Lei Geral de Proteção de Dados Pessoais; brasilianisches allgemeines
    Datenschutzgesetz) zu prüfen;

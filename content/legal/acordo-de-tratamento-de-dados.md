@@ -32,7 +32,7 @@ está instalado.
 que você marcou.
 
 2.4. **Projeto** é a configuração de um site seu no Pyxis: nome, endereços (origens) autorizados,
-fuso horário, evento de conversão, chaves e eventos.
+fuso horário, evento de conversão, a opção de guardar a cidade, chaves e eventos.
 
 2.5. **Suboperador** é o provedor que contratamos e que trata, por nossa conta, dados pessoais
 deste acordo.
@@ -86,8 +86,9 @@ capacidade do serviço.
 5.1. Suas instruções para o tratamento são, em conjunto:
 
 1. os Termos de Uso e este acordo;
-2. a configuração dos seus projetos (origens autorizadas, fuso horário, evento de conversão, chaves
-   e pessoas com acesso), feita pelo dono da conta no painel ou, a pedido, por nós;
+2. a configuração dos seus projetos (origens autorizadas, fuso horário, evento de conversão, a opção
+   de guardar a cidade, chaves e pessoas com acesso), feita pelo dono da conta no painel ou, a
+   pedido, por nós;
 3. o que o rastreador instalado no seu site envia (quais eventos, propriedades e se você usa a
    função `identify`);
 4. as ações do dono da conta no painel (por exemplo, exportar os eventos, apagar um projeto ou
@@ -147,7 +148,11 @@ titulares.
    art. 17, § 2º, do Regulamento aprovado pela Resolução CD/ANPD nº 19/2024, usando as informações
    da Cláusula 9 e do Anexo III;
 9. instala o rastreador e cadastra como origem de um projeto só sites seus ou de quem autorizou
-   você (Cláusula 3.2).
+   você (Cláusula 3.2);
+10. se ligar a cidade num projeto (Termos de Uso, Cláusula 4.5), avaliou antes se ela é necessária
+    para a finalidade da medição e se cabe na base legal do item 1; atualizou antes o aviso do item
+    2, com destaque para a mudança; e, se o projeto usa a função `identify`, sabe que passa a
+    registrar a cidade aproximada de cada visita das pessoas identificadas e informa isso no aviso.
 
 6.2. O servidor do Pyxis descarta automaticamente valores que tenham forma de e-mail ou sequências
 com 10 ou mais dígitos (como CPF, CNPJ e telefone) nas propriedades dos eventos, nos parâmetros de
@@ -263,7 +268,8 @@ resposta diz quantos eventos foram apagados. Chamar de novo responde zero; é se
 traz os mesmos eventos que a exclusão apagaria, em ordem, até 1.000 por página, em JSON. Se houver
 mais, a resposta indica o próximo cursor (`next_after`), que você passa como `?after=` para buscar a
 página seguinte. Cada evento vem com nome, data e hora, identificador da visita, página, origem,
-aparelho, país, estado e propriedades.
+aparelho, país, estado, cidade (vazia nos projetos com a opção desligada; Termos de Uso, Cláusula
+4.5) e propriedades.
 
 10.5. **Limites dessas rotas.** As duas rotas aceitam até 60 chamadas por minuto por chave e por
 endereço de origem. A chave secreta só deve ser usada no seu servidor, nunca no navegador.
@@ -363,6 +369,15 @@ item 12.2, sem o prazo de 30 dias desse item. Até lá, o dono da conta pode exp
 (item 12.3). Valem também os itens 12.4 (cópias dos provedores), 12.5 (confirmação por e-mail) e
 12.6 (preservação por lei ou ordem).
 
+12.8. **Cidade desligada.** Quando o dono da conta desliga a cidade num projeto (Termos de Uso,
+Cláusula 4.5), a recepção deixa de ler a cidade em até um minuto. A rotina diária seguinte apaga a
+cidade de todos os eventos já guardados no projeto, e isso termina em até 48 horas depois do
+desligamento, desde que a opção continue desligada até lá. Valem os itens 12.4 (as cópias de
+segurança do provedor e os arquivos de exportação ainda não vencidos somem nos prazos daquele item)
+e 12.6 (num projeto com dados preservados por lei ou ordem, as cidades ficam pelo tempo da
+preservação). Os arquivos que você já baixou e o que as pessoas com acesso já levaram para
+aplicativos conectados (Anexo I, item 10) ficam sob a sua responsabilidade.
+
 ## Cláusula 13 — Informações e auditoria
 
 13.1. Se você pedir por escrito, damos as informações necessárias para mostrar que cumprimos este
@@ -429,7 +444,7 @@ cliente que ele identifica com a função `identify`.
 | Clique em anúncio | Só verdadeiro ou falso. O código do clique (como `gclid`) não é guardado |
 | Aparelho | Categoria: celular, tablet, computador ou outro |
 | Navegador e sistema | Só a família (por exemplo, `chrome`, `safari`, `android`, `ios`), sem versão |
-| País e estado | Código do país (2 letras) e estado (código e nome), informados pela rede da AWS na hora da requisição. **Nunca a cidade** |
+| País, estado e cidade | Código do país (2 letras) e estado (código e nome), informados pela rede da AWS na hora da requisição. A **cidade** (nome aproximado, deduzido do endereço IP pela rede da AWS), só nos projetos em que o dono da conta ligou essa opção (Termos de Uso, Cláusula 4.5), que vem desligada, e só quando o estado também foi informado |
 | Propriedades | Até 10 por evento, definidas pelo cliente: chave com até 40 caracteres (`a-z`, `0-9`, `_`) e valor curto (texto de até 100 caracteres, número ou verdadeiro/falso) |
 | Chamadas à API do site (`api_request`) | Método, rota em forma de modelo, código de resposta, duração e, se houver, o código do erro |
 
@@ -441,8 +456,10 @@ cliente que ele identifica com a função `identify`.
 - **Navegador completo (user agent):** lido na hora para descobrir a categoria do aparelho, a família
   do navegador e a do sistema; depois descartado. Visitas de robôs conhecidos são descartadas.
 - **Cookies:** o rastreador não cria cookies nos sites do cliente.
-- **Cidade, endereço completo da página, parâmetros do endereço (fora os de campanha),
-  impressão digital do navegador:** nunca.
+- **Endereço completo da página, parâmetros do endereço (fora os de campanha), impressão digital
+  do navegador, CEP e coordenadas:** nunca.
+- **Cidade:** só nos projetos em que o dono da conta ligou essa opção. Ao desligar, ela deixa de ser
+  lida, e as já guardadas são apagadas nos prazos da Cláusula 12.8.
 
 **5. Dados pessoais sensíveis.** Não devem ser enviados (Cláusula 6.1, item 3). O Pyxis não foi
 feito para tratá-los.
@@ -500,12 +517,14 @@ pronto. Só o dono da conta baixa o arquivo, pelo painel, com um link novo a cad
 
 ## Anexo II — Medidas de segurança em vigor
 
-Conferidas no código do serviço e na configuração da infraestrutura em 14/10/2026 e 15/10/2026.
+Conferidas no código do serviço e na configuração da infraestrutura em 14/10/2026 e 15/10/2026; o
+item 1 (cidade), em 29/10/2026.
 
 **1. Privacidade desde a concepção.** Sem cookies nos sites medidos; IP e navegador completo nunca
 guardados; páginas reduzidas a modelos; barreira no servidor que descarta valores com forma de
 e-mail e números com 10 ou mais dígitos nas propriedades, nos parâmetros de campanha e no
-identificador de usuário; estado do visitante, nunca a cidade; sinais "não rastrear" do navegador
+identificador de usuário; estado do visitante, e a cidade só quando o cliente liga essa opção no
+projeto, que vem desligada; sinais "não rastrear" do navegador
 (Global Privacy Control e Do Not Track) respeitados pelo rastreador, que não envia nada quando eles
 estão ligados; opção de não ser medido (`optOut`) para o visitante; eventos apagados depois de
 13 meses.
@@ -635,6 +654,13 @@ envia. Ele não substitui a sua própria análise.
 > navegador e do sistema, o país e o estado (nunca a cidade) e as ações que marcamos no site. Cada
 > visita recebe um número aleatório que fica só na aba do navegador e é descartado ao fechar a aba
 > ou depois de 30 minutos sem atividade; não há identificador que reconheça você em outra visita.
+>
+> *(Se você ligou a cidade no projeto, troque "o país e o estado (nunca a cidade)" por "o país, o
+> estado e a cidade aproximada, deduzidos do seu endereço IP no momento do acesso, sem guardar o
+> IP". Se o seu site também usa a função `identify`, troque, no parágrafo seguinte, "ligamos os
+> eventos daquela visita ao número interno da sua conta" por "ligamos os eventos daquela visita,
+> inclusive a cidade aproximada, ao número interno da sua conta". Se este aviso já estava publicado
+> sem a cidade, destaque a mudança e a data em que ela passa a valer.)*
 >
 > *(Inclua o parágrafo abaixo só se o seu site usar a função `identify`.)* Quando você entra na sua
 > conta, ligamos os eventos daquela visita ao número interno da sua conta, nunca ao seu nome ou

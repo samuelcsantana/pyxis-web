@@ -81,7 +81,7 @@ clientes.
 
 | Dado | Para quê | Base legal (LGPD) | Por quanto tempo |
 |---|---|---|---|
-| Página vista (caminho, sem parâmetros fora os de campanha), ações na página (por exemplo, abrir a demonstração), site de origem (só o domínio), parâmetros de campanha, categoria do aparelho, família do navegador e do sistema, país e estado (nunca a cidade), número aleatório da visita | Entender como a página é usada e melhorar a apresentação do Pyxis | Legítimo interesse (art. 7º, IX, e art. 10) | 13 meses |
+| Página vista (caminho, sem parâmetros fora os de campanha), ações na página (por exemplo, abrir a demonstração), site de origem (só o domínio), parâmetros de campanha, categoria do aparelho, família do navegador e do sistema, país, estado e cidade aproximada (deduzidos do endereço IP pela rede da AWS, sem guardar o IP; a cidade a partir {{terms.effectiveFrom}}), número aleatório da visita | Entender como a página é usada e melhorar a apresentação do Pyxis | Legítimo interesse (art. 7º, IX, e art. 10) | 13 meses |
 
 A medição **não usa cookies**, **não guarda IP** nem o navegador completo, e **não envia nada** se o
 seu navegador pedir para não ser rastreado (Global Privacy Control ou Do Not Track). Na própria

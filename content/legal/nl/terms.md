@@ -99,7 +99,7 @@ per e-mail en de toegang via tokens en via gekoppelde apps, ook via de MCP-serve
 events naar de dienst te sturen.
 
 2.3. **Project:** de configuratie van een van je websites in de dienst (naam, toegestane adressen,
-tijdzone, conversie-event, sleutels en events).
+tijdzone, conversie-event, de optie om de stad te bewaren, sleutels en events).
 
 2.4. **Event:** elk record dat door de tracker of door je integratie wordt verzonden, zoals een
 bekeken pagina of een actie die je hebt gemarkeerd.
@@ -177,10 +177,13 @@ functies, fouten in aanroepen naar de API van je website, acquisitie, apparaten 
 
 1. hij plaatst geen cookies op je website;
 2. hij bewaart het IP-adres van de bezoeker niet: het IP-adres wordt alleen in het geheugen van de
-   server gebruikt, gedurende enkele minuten, om misbruik te beperken;
+   server gebruikt, gedurende enkele minuten, om misbruik te beperken, en door het netwerk van AWS,
+   op het moment van het verzoek, om het land, de staat en, als je dat inschakelt, de stad door te
+   geven;
 3. hij bewaart niet de volledige browseridentificatie (user agent), alleen de apparaatcategorie en de
    familie van de browser en van het besturingssysteem;
-4. hij bewaart niet de stad, alleen het land en de staat;
+4. hij bewaart niet de stad, tenzij de accounteigenaar die optie in het project inschakelt
+   (Artikel 4.5); we schakelen die nooit in zonder zijn verzoek. Het land en de staat wel;
 5. hij bewaart niet het volledige adres van de pagina: alleen het pad in de vorm van een sjabloon,
    zonder parameters, behalve die van campagnes (`utm_source`, `utm_medium`, `utm_campaign`);
 6. hij verzendt niets wanneer de browser van de bezoeker vraagt niet gevolgd te worden (Global
@@ -207,6 +210,26 @@ zolang de pagina open is, maar niet wanneer de ontvangst is gepauzeerd).
 4. de API-routes om **de gegevens van een geïdentificeerde persoon te verwijderen of te kopiëren**,
    met de geheime sleutel van het project;
 5. de **export van alle events van een project** als bestand, via het dashboard (Artikel 11.5).
+
+4.5. **Stad van de bezoeker, alleen als je die inschakelt.** Elk project heeft in de instellingen
+een optie om de geschatte stad van elk bezoek te bewaren. De stad wordt door het netwerk van AWS, op
+het moment van het verzoek, afgeleid uit het IP-adres en wordt alleen bewaard wanneer ook de staat
+wordt doorgegeven; het IP-adres wordt nog steeds niet bewaard. De optie is in elk project, nieuw of
+al bestaand, standaard **uitgeschakeld**, en alleen de accounteigenaar schakelt haar in of uit.
+
+Werk, voordat je de optie inschakelt, de privacyverklaring van je website bij, zodat die vermeldt
+dat de stad wordt vastgelegd (Bijlage IV van de Verwerkersovereenkomst legt uit hoe je het model
+aanpast). **Let op:** samen met het tijdstip, het apparaat en de pagina maakt de stad het
+makkelijker om een bezoek aan een persoon te koppelen, vooral bij websites met weinig bezoeken en in
+kleine steden. In een project dat de functie `identify` gebruikt, wordt na het inschakelen van de
+stad de geschatte stad van elk bezoek van de geïdentificeerde personen vastgelegd. Het is aan jou,
+als verwerkingsverantwoordelijke, om te beoordelen of je de stad nodig hebt en de bezoekers te
+informeren (Artikel 6.1 van de Verwerkersovereenkomst).
+
+Na het uitschakelen wordt de stad binnen een minuut niet meer gelezen, en worden de al in het
+project bewaarde steden binnen 48 uur verwijderd, als de optie tot dan uitgeschakeld blijft, zoals
+Artikel 12.8 van de Verwerkersovereenkomst bepaalt. Postcode, coördinaten en het IP-adres worden
+nooit bewaard.
 
 ## Artikel 5 — Open source en gehoste dienst
 
@@ -620,7 +643,7 @@ verzendt, ligt bij jou.**
 
 1. op je website een privacyverklaring te publiceren die de meting beschrijft (er is een model in
    Bijlage IV van de Verwerkersovereenkomst) en die verklaring in overeenstemming te houden met wat
-   je website verzendt;
+   je website verzendt en met de opties van je projecten (zoals de stad, Artikel 4.5);
 2. als je website gericht is op kinderen of adolescenten, de meting vooraf te beoordelen in het licht
    van art. 14 van de LGPD;
 3. de geheime sleutel en de toegangstokens geheim te houden (Artikel 13);
