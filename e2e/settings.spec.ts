@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { currentNavigationLinks } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
+const DEMO_EXPORT_ID = '5e1b3d7f-9a2c-4e6d-8f1b-3c5d7e9f1a2b';
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`settings, ${colorScheme} theme`, () => {
@@ -191,6 +193,19 @@ test('asks for an export, opens it and downloads the file', async ({ page, reque
 
   expect(file.ok()).toBe(true);
   expect(await file.text()).toMatch(/^id,occurred_at,name,path,/);
+});
+
+test('marks Settings in the navigation as where an export is', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/exports/${DEMO_EXPORT_ID}`);
+  await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+
+  const current = currentNavigationLinks(page);
+  await expect(current).toHaveCount(1);
+  await expect(current).toBeVisible();
+  await expect(current).toHaveAccessibleName('Settings');
 });
 
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({

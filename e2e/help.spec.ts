@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { currentNavigationLinks } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -55,6 +56,20 @@ test('keeps the period of the screen through Help and Install', async ({ page, i
   }
   await page.getByRole('link', { name: 'Visits' }).click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
+});
+
+test('marks the account row as where Help is, and no link', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/help`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+
+  const account = page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .locator('summary[data-current]');
+  await expect(account).toBeVisible();
+  await expect(account).toContainText('Account and preferences');
+  await expect(currentNavigationLinks(page)).toHaveCount(0);
 });
 
 test('closes Account and billing with the support address', async ({ page }) => {

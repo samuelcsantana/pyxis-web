@@ -19,8 +19,10 @@ export type RequestExportOutcome =
   | { readonly kind: 'limitReached' }
   | { readonly kind: 'unavailable' };
 
+export const EXPORTS_SEGMENT = 'exports';
+
 export function exportHref(projectId: string, exportId: string): string {
-  return `/${encodeURIComponent(projectId)}/exports/${encodeURIComponent(exportId)}`;
+  return `/${encodeURIComponent(projectId)}/${EXPORTS_SEGMENT}/${encodeURIComponent(exportId)}`;
 }
 
 export function exportDownloadHref(projectId: string, exportId: string): string {

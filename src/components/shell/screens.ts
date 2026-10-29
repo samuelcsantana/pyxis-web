@@ -1,4 +1,5 @@
 import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
+import { EXPORTS_SEGMENT } from '@/domain/exports';
 
 export const SCREENS = [
   {
@@ -149,6 +150,36 @@ export function screenSlugOf(pathname: string): ScreenSlug | undefined {
   return segments.length === SCREEN_PATH_SEGMENTS && segments[1] !== '' && isScreenSlug(slug)
     ? slug
     : undefined;
+}
+
+export const SETTINGS_ITEM = 'settings';
+export const ACCOUNT_MENU_ITEM = 'account-menu';
+
+export type NavigationItem = ScreenSlug | typeof SETTINGS_ITEM | typeof ACCOUNT_MENU_ITEM;
+
+interface ProjectPage {
+  readonly item: NavigationItem;
+  readonly segmentsAfter: number;
+}
+
+const PROJECT_PAGES: ReadonlyMap<string, ProjectPage> = new Map<string, ProjectPage>([
+  [SETTINGS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 0 }],
+  [INSTALL_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 0 }],
+  [EXPORTS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 1 }],
+  [HELP_SEGMENT, { item: ACCOUNT_MENU_ITEM, segmentsAfter: 0 }],
+]);
+
+export function navigationItemOf(pathname: string): NavigationItem | undefined {
+  const screen = screenSlugOf(pathname);
+  if (screen !== undefined) {
+    return screen;
+  }
+  const [, projectId = '', segment = '', ...after] = pathname.split('/');
+  const page = PROJECT_PAGES.get(segment);
+  if (projectId === '' || after.length !== page?.segmentsAfter || after.includes('')) {
+    return undefined;
+  }
+  return page.item;
 }
 
 export function returnPathOf(value: string | null | undefined): string | undefined {

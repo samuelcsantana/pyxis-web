@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
+import { DEMO_EXPORT_ID } from '@/services/exports/mock-exports-service';
 import { demoAdminOf } from '@/services/projects/mock-projects-service';
 import { english } from '@/test-utils/english';
 import { MobileMenu } from './mobile-menu';
@@ -137,6 +138,55 @@ export const LogoKeepsTheView: Story = {
       `/${STORE.id}/overview?${new URLSearchParams(FILTERED_DEVICES_VIEW).toString()}`,
     );
   },
+};
+
+const onPageOf = (segment: string) => ({
+  nextjs: { appDirectory: true, navigation: { pathname: `/${STORE.id}/${segment}` } },
+});
+
+const currentLinksOutsideTheMenus = (canvasElement: HTMLElement) =>
+  within(canvasElement)
+    .queryAllByRole('link', { current: 'page' })
+    .filter((link) => link.closest('details') === null);
+
+const CURRENT_TEXT_COLOR = 'rgb(255, 255, 255)';
+
+const settingsStandsForThePage: Play = async ({ canvasElement }) => {
+  const current = currentLinksOutsideTheMenus(canvasElement);
+  await expect(current).toHaveLength(1);
+  await expect(current[0]).toHaveAccessibleName('Settings');
+  await expect(canvasElement.querySelector('summary[data-current]')).toBeNull();
+};
+
+export const OnInstall: Story = {
+  parameters: onPageOf('install'),
+  play: settingsStandsForThePage,
+};
+
+export const OnAnExport: Story = {
+  parameters: onPageOf(`exports/${DEMO_EXPORT_ID}`),
+  play: settingsStandsForThePage,
+};
+
+const theAccountStandsForThePage: Play = async ({ canvasElement }) => {
+  await expect(currentLinksOutsideTheMenus(canvasElement)).toHaveLength(0);
+  await expect(canvasElement.querySelector('summary[data-current]')).toHaveTextContent(
+    'Account and preferences',
+  );
+  const email = within(canvasElement).getByText(DEMO_ADMIN.email);
+  await expect(getComputedStyle(email).fontWeight).toBe('600');
+  await expect(getComputedStyle(email).color).toBe(CURRENT_TEXT_COLOR);
+};
+
+export const OnHelp: Story = {
+  parameters: onPageOf('help'),
+  play: theAccountStandsForThePage,
+};
+
+export const OnHelpDark: Story = {
+  parameters: onPageOf('help'),
+  globals: { theme: 'dark' },
+  play: theAccountStandsForThePage,
 };
 
 export const KeyboardFocus: Story = {

@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { currentNavigationLinks } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const INSTALL_PATH = `/${STORE_ID}/install`;
@@ -27,6 +28,21 @@ for (const colorScheme of ['light', 'dark'] as const) {
     });
   });
 }
+
+test('marks Settings in the navigation as where the install guide is', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(INSTALL_PATH);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+
+  const current = currentNavigationLinks(page);
+  await expect(current).toHaveCount(1);
+  await expect(current).toBeVisible();
+  await expect(current).toHaveAccessibleName('Settings');
+});
 
 test("hands the agent a request with the project's key, the API and the site", async ({
   page,
