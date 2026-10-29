@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.42.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.2...v0.42.0) (2026-10-29)
+
+
+### Features
+
+* **sign-up:** read the free place the API answers at sign-up ([aa75ad8](https://github.com/samuelcsantana/pyxis-web/commit/aa75ad8192f36e951477a1862bc1f9dacd2feca6))
+* **sign-up:** send an address whose mailbox has a free account to finish its subscription ([a099141](https://github.com/samuelcsantana/pyxis-web/commit/a0991417b9751701b060a58737beac841f3bbdb5))
+
+
+### Documentation
+
+* **features:** say where an address whose mailbox has a free account goes ([445449d](https://github.com/samuelcsantana/pyxis-web/commit/445449ddc31962ddae2872cdf4d97a0b289014c2))
+* fold the reference sections of the README ([f2d69f2](https://github.com/samuelcsantana/pyxis-web/commit/f2d69f292667b01e96d52807668e389e3ad08f8d))
+* keep the feature list short and move the detail to FEATURES.md ([1eb0782](https://github.com/samuelcsantana/pyxis-web/commit/1eb07826d3e805f2494659e47a4bb2bdc558f1d1))
+* shorten the status note and point the roadmap at the changelog ([497da52](https://github.com/samuelcsantana/pyxis-web/commit/497da52c20933f3b8410e3f5fa18c83788da4d1c))
+
 ## [0.41.2](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.1...v0.41.2) (2026-10-28)
 
 
