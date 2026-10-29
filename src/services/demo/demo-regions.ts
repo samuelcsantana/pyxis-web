@@ -7,6 +7,8 @@ export interface DemoPlace {
 
 type DemoRegion = readonly [code: string, name: string, weight: number];
 
+export type DemoContinent = 'africa' | 'americas' | 'asia' | 'europe' | 'oceania';
+
 export const UNKNOWN_REGION_SHARE = 0.03;
 
 const NO_REGION: DemoPlace = { region: null, regionName: null };
@@ -81,6 +83,25 @@ const REGIONS_OF_COUNTRY: Readonly<Record<string, readonly DemoRegion[]>> = {
     ['CO-ANT', 'Antioquia', 40],
   ],
 };
+
+const CONTINENT_OF_COUNTRY: Readonly<Record<string, DemoContinent>> = {
+  AR: 'americas',
+  BR: 'americas',
+  CL: 'americas',
+  CO: 'americas',
+  MX: 'americas',
+  US: 'americas',
+  DE: 'europe',
+  ES: 'europe',
+  FR: 'europe',
+  GB: 'europe',
+  IT: 'europe',
+  PT: 'europe',
+};
+
+export function demoContinentOf(country: string): DemoContinent | null {
+  return CONTINENT_OF_COUNTRY[country] ?? null;
+}
 
 export function demoRegionsOf(country: string): readonly DemoRegion[] {
   return REGIONS_OF_COUNTRY[country] ?? [];

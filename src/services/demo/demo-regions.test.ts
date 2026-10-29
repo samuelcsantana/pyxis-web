@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { demoPlaceFor, demoRegionsOf, UNKNOWN_REGION_SHARE } from './demo-regions';
+import { demoContinentOf, demoPlaceFor, demoRegionsOf, UNKNOWN_REGION_SHARE } from './demo-regions';
 
 function answering(...values: readonly number[]) {
   const queue = [...values];
@@ -25,6 +25,16 @@ describe('demoPlaceFor', () => {
   it('leaves a country it has no regions for without one', () => {
     expect(demoRegionsOf('NZ')).toEqual([]);
     expect(demoPlaceFor('NZ', answering(0.5, 0.5))).toEqual({ region: null, regionName: null });
+  });
+
+  it('places every demo country on its continent, as UN M49 does, and no other', () => {
+    for (const country of ['BR', 'US', 'AR', 'MX', 'CL', 'CO']) {
+      expect(demoContinentOf(country), country).toBe('americas');
+    }
+    for (const country of ['PT', 'ES', 'DE', 'FR', 'IT', 'GB']) {
+      expect(demoContinentOf(country), country).toBe('europe');
+    }
+    expect(demoContinentOf('AQ')).toBeNull();
   });
 
   it('writes every region as the country code, a dash and up to three letters or digits', () => {

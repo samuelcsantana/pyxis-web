@@ -20,6 +20,16 @@ function region(
   return { ...share('', visits, conversions), value, name };
 }
 
+const NO_REACH: DevicesReport['reach'] = {
+  visits: 0,
+  continents: 0,
+  countries: 0,
+  regions: 0,
+  cities: 0,
+  topCountry: null,
+  topRegion: null,
+};
+
 const REPORT: DevicesReport = {
   deviceTypes: [share('mobile', 30, 4)],
   browsers: [share('chrome', 25, 3)],
@@ -30,6 +40,8 @@ const REPORT: DevicesReport = {
     region('other', null, 8, 1),
     region(null, null, 2, 1),
   ],
+  cities: [],
+  reach: NO_REACH,
 };
 
 describe('devicesCsvTable', () => {
@@ -56,6 +68,8 @@ describe('devicesCsvTable', () => {
       operatingSystems: [],
       countries: [],
       regions: [region(null, null, 10, null)],
+      cities: [],
+      reach: NO_REACH,
     });
 
     expect(table).toEqual({

@@ -6,7 +6,10 @@ export function devicesTableLabel(i18n: I18n): string {
   return i18n.t('exports.devices');
 }
 
-const DIMENSIONS: readonly (readonly [string, Exclude<keyof DevicesReport, 'regions'>])[] = [
+const DIMENSIONS: readonly (readonly [
+  string,
+  Exclude<keyof DevicesReport, 'regions' | 'cities' | 'reach'>,
+])[] = [
   ['device_type', 'deviceTypes'],
   ['browser', 'browsers'],
   ['operating_system', 'operatingSystems'],

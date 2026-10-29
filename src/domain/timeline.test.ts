@@ -31,6 +31,7 @@ const WIRE: TimelineWire = {
       country: 'BR',
       region: 'BR-BA',
       region_name: 'Bahia',
+      city: 'Feira de Santana',
       channel: 'paid',
       user_id: 'u_7f3a',
       events: [
@@ -87,6 +88,7 @@ const WIRE: TimelineWire = {
       country: null,
       region: null,
       region_name: null,
+      city: null,
       channel: null,
       events: [],
     },

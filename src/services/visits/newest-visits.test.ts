@@ -30,6 +30,7 @@ function visit(index: number): VisitSummary {
     country: 'BR',
     region: null,
     regionName: null,
+    city: null,
     channel: 'direct',
     userId: null,
   };

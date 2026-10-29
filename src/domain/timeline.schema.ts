@@ -16,6 +16,7 @@ export const timelineResponseSchema = z
         country: z.string().nullable(),
         region: z.string().nullable(),
         region_name: z.string().nullable(),
+        city: z.string().nullable(),
         channel: z.enum(CHANNELS).nullable(),
         user_id: z.string().nullable().optional(),
         events: z.array(
@@ -43,6 +44,7 @@ export const timelineResponseSchema = z
       country: visit.country,
       region: visit.region,
       regionName: visit.region_name,
+      city: visit.city,
       channel: visit.channel,
       userId: visit.user_id ?? null,
       events: visit.events.map((event) => ({

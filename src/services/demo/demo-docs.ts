@@ -14,6 +14,7 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     country: 'PT',
     region: 'PT-13',
     regionName: 'Porto',
+    city: 'Porto',
     channel: 'organic',
     events: [
       { second: 2, name: 'page_view', path: '/' },
@@ -51,6 +52,7 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-RJ',
     regionName: 'Rio de Janeiro',
+    city: 'Rio de Janeiro',
     channel: 'referral',
     events: [
       { second: 3, name: 'page_view', path: '/guides/:slug' },
@@ -87,6 +89,7 @@ const DOCS_VISITS: readonly DemoVisit[] = [
     country: 'ES',
     region: 'ES-CT',
     regionName: 'Cataluña',
+    city: 'Barcelona',
     channel: 'direct',
     events: [
       { second: 1, name: 'page_view', path: '/search' },

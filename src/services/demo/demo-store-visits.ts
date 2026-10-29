@@ -14,6 +14,7 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-SP',
     regionName: 'São Paulo',
+    city: 'São Paulo',
     channel: 'direct',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -40,6 +41,7 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-RJ',
     regionName: 'Rio de Janeiro',
+    city: 'Niterói',
     channel: 'direct',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -68,6 +70,7 @@ const PERSON_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-SP',
     regionName: 'São Paulo',
+    city: 'Campinas',
     channel: 'paid',
     userId: DEMO_STORE_PERSON,
     events: [
@@ -134,6 +137,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-MG',
     regionName: 'Minas Gerais',
+    city: 'Belo Horizonte',
     channel: 'direct',
     userId: 'u_93d1',
     events: [
@@ -166,6 +170,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-BA',
     regionName: 'Bahia',
+    city: 'Feira de Santana',
     channel: 'direct',
     userId: 'u_93d1',
     events: [
@@ -186,6 +191,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-PR',
     regionName: 'Paraná',
+    city: 'Curitiba',
     channel: 'direct',
     userId: 'u_2b6e',
     events: [
@@ -217,6 +223,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-SP',
     regionName: 'São Paulo',
+    city: null,
     channel: 'paid',
     events: [
       { second: 4, name: 'page_view', path: '/sign-up' },
@@ -252,6 +259,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-RS',
     regionName: 'Rio Grande do Sul',
+    city: 'Porto Alegre',
     channel: 'paid',
     events: [
       { second: 3, name: 'page_view', path: '/sign-up' },
@@ -287,6 +295,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-PE',
     regionName: 'Pernambuco',
+    city: 'Recife',
     channel: 'direct',
     userId: 'u_5e0a',
     events: [
@@ -311,6 +320,7 @@ const FAILURE_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-SC',
     regionName: 'Santa Catarina',
+    city: 'Joinville',
     channel: 'direct',
     userId: 'u_5e0a',
     events: [
@@ -333,6 +343,7 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-SP',
     regionName: 'São Paulo',
+    city: 'São Paulo',
     channel: 'paid',
     events: [
       { second: 2, name: 'page_view', path: '/' },
@@ -364,6 +375,7 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     country: 'PT',
     region: 'PT-11',
     regionName: 'Lisboa',
+    city: 'Lisboa',
     channel: 'organic',
     events: [
       { second: 1, name: 'page_view', path: '/blog/:slug' },
@@ -388,6 +400,7 @@ const BROWSING_VISITS: readonly DemoVisit[] = [
     country: 'BR',
     region: 'BR-DF',
     regionName: 'Distrito Federal',
+    city: 'Brasília',
     channel: 'direct',
     userId: 'u_c41e',
     events: [

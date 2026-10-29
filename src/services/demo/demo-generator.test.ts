@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { OTHER_VALUE } from '@/domain/devices';
 import type { DemoProject } from './demo-catalog';
+import { demoCitiesOf } from './demo-cities';
 import { clockOf, demoGeneratedVisits, demoPeople, demoShareOf } from './demo-generator';
 import { DEMO_DOCS, DEMO_STORE } from './demo-projects';
 import { type DemoEventRecord, type DemoVisitRecord, localDateAndTime } from './demo-records';
@@ -93,6 +94,21 @@ describe('demoGeneratedVisits', () => {
       STORE_WEEK.filter((visit) => visit.region === null).every(
         (visit) => visit.regionName === null,
       ),
+    ).toBe(true);
+  });
+
+  it('gives most placed visits a city of their region, and none to a visit without a region', () => {
+    const placed = STORE_WEEK.filter((visit) => visit.region !== null);
+    const withCity = placed.filter((visit) => visit.city !== null);
+
+    for (const visit of withCity) {
+      const cities = demoCitiesOf(visit.region).map(([name]) => name);
+      expect(cities).toContain(visit.city);
+    }
+    expect(withCity.length).toBeGreaterThan(placed.length * 0.8);
+    expect(withCity.length).toBeLessThan(placed.length);
+    expect(
+      STORE_WEEK.filter((visit) => visit.region === null).every((visit) => visit.city === null),
     ).toBe(true);
   });
 
