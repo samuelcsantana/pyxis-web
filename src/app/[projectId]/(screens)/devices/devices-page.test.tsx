@@ -145,6 +145,48 @@ describe('DevicesPage', () => {
     expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));
   });
 
+  it('opens with the reach of the visits, above the donuts', async () => {
+    renderWithMessages(await renderDevices());
+
+    const reach = screen.getByRole('region', { name: 'Reach' });
+    expect(
+      within(reach)
+        .getAllByRole('listitem')
+        .map((count) => count.textContent),
+    ).toEqual(['2 continents·', '12 countries·', '43 regions·', '103 cities']);
+    expect(reach).toHaveTextContent('Top region: São Paulo, Brazil (26.8% of visits)');
+    expect(
+      reach.compareDocumentPosition(screen.getByRole('table', { name: 'Device type' })) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  it('counts no city in the reach while the project keeps none and the period holds none', async () => {
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      return { ...report, reach: { ...report.reach, cities: 0 } };
+    };
+
+    renderWithMessages(await renderDevices());
+
+    const reach = screen.getByRole('region', { name: 'Reach' });
+    expect(within(reach).getAllByRole('listitem')).toHaveLength(3);
+    expect(reach).not.toHaveTextContent(/cit(y|ies)/);
+  });
+
+  it('counts the cities of a project that keeps them, even before the first one', async () => {
+    state.cityEnabled = true;
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      return { ...report, reach: { ...report.reach, cities: 0 } };
+    };
+
+    renderWithMessages(await renderDevices());
+
+    const reach = screen.getByRole('region', { name: 'Reach' });
+    expect(within(reach).getAllByRole('listitem').at(-1)).toHaveTextContent('0 cities');
+  });
+
   it('links each device type Visits filters by to its visits, in the same period', async () => {
     state.devices = async (projectId, range) => {
       const report = await new MockDevicesService().devices(projectId, range);
@@ -360,6 +402,7 @@ describe('DevicesPage', () => {
     expect(
       screen.getByRole('heading', { name: 'No events in this period yet' }),
     ).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Reach' })).not.toBeInTheDocument();
   });
 
   it('calls an empty period quiet once the project has received events', async () => {

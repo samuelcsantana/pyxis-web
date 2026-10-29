@@ -15,6 +15,7 @@ import {
 import { CitiesTable } from './cities-table';
 import { CountriesTable } from './countries-table';
 import { DeviceConversionList } from './device-conversion-list';
+import { ReachCard } from './reach-card';
 import { RegionsTable } from './regions-table';
 import { segmentColor, ShareDonut } from './share-donut';
 import { english } from '@/test-utils/english';
@@ -361,5 +362,52 @@ describe('CitiesTable', () => {
     expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
     expect(screen.getAllByRole('link')).toHaveLength(1);
     expect(screen.getAllByRole('row')[1]).toHaveTextContent('Feira de SantanaBahia60100.0%5.0%');
+  });
+});
+
+const REACH = {
+  counts: ['5 continents', '8 countries', '10 regions', '42 cities'],
+  leader: 'Top region: Bahia, Brazil (78.0% of visits)',
+};
+
+describe('ReachCard', () => {
+  it('lists the counts, then the leading place and what a continent is', () => {
+    render(<ReachCard summary={REACH} i18n={english} />);
+
+    const card = screen.getByRole('region', { name: 'Reach' });
+    const counts = within(card).getAllByRole('listitem');
+    expect(counts.map((count) => count.textContent)).toEqual([
+      '5 continents·',
+      '8 countries·',
+      '10 regions·',
+      '42 cities',
+    ]);
+    expect(within(card).getByText(REACH.leader)).toBeInTheDocument();
+    expect(
+      within(card).getByText(
+        'Continents as the UN groups countries: Americas, Europe, Asia, Africa, Oceania.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('hides the separators from assistive technology', () => {
+    const { container } = render(<ReachCard summary={REACH} i18n={english} />);
+
+    expect(container.querySelectorAll('li > [aria-hidden="true"]')).toHaveLength(3);
+  });
+
+  it('leaves the leading place out when there is none', () => {
+    render(<ReachCard summary={{ ...REACH, leader: null }} i18n={english} />);
+
+    expect(screen.queryByText(/^Top /)).not.toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(4);
+  });
+
+  it('says so when no visit has a known country, without counting zeros', () => {
+    render(<ReachCard summary={null} i18n={english} />);
+
+    const card = screen.getByRole('region', { name: 'Reach' });
+    expect(card).toHaveTextContent('ReachNo visit in this period has a known country.');
+    expect(within(card).queryByRole('list')).not.toBeInTheDocument();
   });
 });

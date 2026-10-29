@@ -4,6 +4,7 @@ import type { RowFilter } from '@/components/ui/row-filter-link';
 import { BROWSER_FAMILIES, OS_FAMILIES } from '@/domain/dashboard-filters';
 import { screenRowFilters } from '@/lib/row-filters';
 import { DeviceConversionList } from '@/components/devices/device-conversion-list';
+import { ReachCard } from '@/components/devices/reach-card';
 import { RegionsTable } from '@/components/devices/regions-table';
 import { ShareDonut } from '@/components/devices/share-donut';
 import { ScreenContent } from '@/components/shell/screen-content';
@@ -25,6 +26,7 @@ import {
   hasVisits,
   operatingSystemLabel,
   OTHER_VALUE,
+  reachSummary,
   regionRows,
   shareRows,
 } from '@/domain/devices';
@@ -100,6 +102,7 @@ function DevicesReportView({
   const showsConversions = conversionEvent !== null && conversions.length > 0;
   return (
     <>
+      <ReachCard summary={reachSummary(report.reach, cityEnabled, i18n)} i18n={i18n} />
       <div className="grid gap-3.5 sm:grid-cols-2 sm:gap-4 sm:[&>:last-child:nth-child(odd)]:col-span-full xl:grid-cols-3 xl:[&>:last-child:nth-child(odd)]:col-span-1">
         <ShareDonut
           id="device-type"

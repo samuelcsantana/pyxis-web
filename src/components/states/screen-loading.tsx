@@ -10,6 +10,7 @@ import {
   SkeletonControls,
   SkeletonForm,
   SkeletonPair,
+  SkeletonReach,
   SkeletonRows,
   SkeletonSteps,
 } from './screen-skeleton';
@@ -55,6 +56,7 @@ const SCREEN_SKELETONS: Readonly<Record<ScreenSlug, () => ReactNode>> = {
   ),
   devices: () => (
     <>
+      <SkeletonReach />
       <SkeletonPair />
       <SkeletonPair />
     </>
