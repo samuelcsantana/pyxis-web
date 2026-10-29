@@ -27,6 +27,12 @@ const LONG_VALUES: Admin = {
   projects: [LONG_PROJECT, ...DEMO_ADMIN.projects.slice(1)],
 };
 
+function linesOf(node: Node): DOMRectList {
+  const range = document.createRange();
+  range.selectNodeContents(node);
+  return range.getClientRects();
+}
+
 const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   for (const text of [LONG_VALUES.email, LONG_PROJECT.name, LONG_PROJECT.timezone]) {
@@ -35,6 +41,11 @@ const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
       await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
     }
   }
+  const zoneParts = [...canvas.getByText(LONG_PROJECT.timezone).childNodes]
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map(linesOf);
+  await expect(zoneParts.map((lines) => lines.length)).toEqual([1, 1, 1]);
+  await expect(new Set(zoneParts.map((lines) => lines[0]?.top)).size).toBeGreaterThan(1);
 };
 
 const meta = {
