@@ -135,11 +135,14 @@ describe('labels', () => {
     expect(countryLabel('XX', english)).toBe('XX');
   });
 
-  it('place a visit by its region and country, or by its country alone', () => {
-    expect(placeLabel('BR', 'São Paulo', english)).toBe('São Paulo, Brazil');
-    expect(placeLabel('BR', 'São Paulo', portuguese)).toBe('São Paulo, Brasil');
-    expect(placeLabel('PT', null, english)).toBe('Portugal');
-    expect(placeLabel(null, null, english)).toBeNull();
+  it('place a visit by its city, region and country, or by as much of them as is known', () => {
+    const feira = { country: 'BR', regionName: 'Bahia', city: 'Feira de Santana' };
+    expect(placeLabel(feira, english)).toBe('Feira de Santana, Bahia, Brazil');
+    expect(placeLabel(feira, portuguese)).toBe('Feira de Santana, Bahia, Brasil');
+    expect(placeLabel({ ...feira, city: null }, english)).toBe('Bahia, Brazil');
+    expect(placeLabel({ ...feira, regionName: null }, english)).toBe('Feira de Santana, Brazil');
+    expect(placeLabel({ country: 'PT', regionName: null, city: null }, english)).toBe('Portugal');
+    expect(placeLabel({ country: null, regionName: null, city: null }, english)).toBeNull();
   });
 
   it('tell a region code, the country code then the region, from anything else', () => {

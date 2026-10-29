@@ -80,7 +80,7 @@ describe('GET /[projectId]/visits/export', () => {
     );
     const rows = (await response.text()).trimEnd().split('\r\n');
     expect(rows[0]).toBe(
-      'visit_id,started_at,ended_at,entry_path,page_views,highlights,failed_requests,device_type,browser,os,country,region,region_name,channel,user_id',
+      'visit_id,started_at,ended_at,entry_path,page_views,highlights,failed_requests,device_type,browser,os,country,region,region_name,city,channel,user_id',
     );
     expect(rows.length).toBeGreaterThan(1);
     expect(rows.slice(1).every((row) => row.includes(',paid,'))).toBe(true);

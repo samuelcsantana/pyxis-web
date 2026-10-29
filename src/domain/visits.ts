@@ -182,7 +182,7 @@ function failedRequestsLabel(count: number, i18n: I18n): string {
 }
 
 function deviceLabel(visit: VisitSummary, i18n: I18n): string {
-  const place = placeLabel(visit.country, visit.regionName, i18n);
+  const place = placeLabel(visit, i18n);
   return [
     deviceTypeLabel(visit.deviceType, i18n),
     browserLabel(visit.browser, i18n),

@@ -130,7 +130,7 @@ test('opens the visits of a source, a country and a failing route', async ({ pag
 
   await expect(page).toHaveURL(/\/visits\?range=30d&region=BR-SP&city=Campinas$/);
   await expect(filters(page).getByRole('textbox', { name: /^City/ })).toHaveValue('Campinas');
-  await expect(visitRows(page).first()).toBeVisible();
+  await expect(visitRows(page).first()).toContainText('Campinas, São Paulo, Brazil');
 
   await page.goto(`/${STORE_ID}/requests?range=30d`);
   await page.getByRole('button', { name: 'POST /orders, show details' }).click();

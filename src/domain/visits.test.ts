@@ -374,7 +374,7 @@ describe('visitRows', () => {
       highlights: ['Calculator result shown', 'CTA clicked'],
       failedRequests: 1,
       failedRequestsLabel: '1 failed request',
-      device: 'Mobile · Safari · iOS · São Paulo, Brazil',
+      device: 'Mobile · Safari · iOS · Campinas, São Paulo, Brazil',
       channel: 'Paid',
       channelNote: 'Channel: Paid',
       account: {

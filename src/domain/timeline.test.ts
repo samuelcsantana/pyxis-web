@@ -160,7 +160,7 @@ describe('items', () => {
 
     expect(visit?.heading).toBe('Visit 3c07a1b2 · Mon, Oct 5, 18:40');
     expect(visit?.meta).toBe(
-      'Mobile · Samsung Internet · Android · Bahia, Brazil · Paid · 2 min 41 s',
+      'Mobile · Samsung Internet · Android · Feira de Santana, Bahia, Brazil · Paid · 2 min 41 s',
     );
     expect(quiet?.meta).toBe('Desktop · Chrome · macOS · 42 s');
     expect(visit?.personId).toBe('u_7f3a');
