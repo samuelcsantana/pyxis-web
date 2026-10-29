@@ -46,6 +46,23 @@ test('opens the first project from the root, with the demo banner', async ({ pag
   await expect(page).toHaveTitle('Overview · My site · Pyxis');
 });
 
+test('takes the logo to the overview of the project on screen, on the same period', async ({
+  page,
+}) => {
+  await page.goto(`/${DOCS_ID}/devices?range=7d`);
+
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Pyxis', exact: true })
+    .click();
+
+  await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
+  await expect(page).toHaveTitle('Overview · Demo Docs · Pyxis');
+  await expect(
+    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
+  ).toHaveAttribute('aria-current', 'page');
+});
+
 test('writes the chosen period into the URL', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
   const periods = page.getByRole('navigation', { name: 'Period' });

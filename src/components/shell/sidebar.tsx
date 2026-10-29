@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { Admin, Project } from '@/domain/admin';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
@@ -6,8 +5,9 @@ import type { I18n } from '@/i18n/i18n';
 import type { Theme } from '@/lib/theme';
 import { AccountMenu } from './account-menu';
 import { ProjectSwitcher } from './project-switcher';
-import { helpHref } from './screens';
+import { FIRST_SCREEN, helpHref, screenHref } from './screens';
 import { SidebarNav } from './sidebar-nav';
+import { ViewKeepingLink } from './view-keeping-link';
 
 export interface SidebarProps {
   readonly admin: Admin;
@@ -31,13 +31,13 @@ export function Sidebar({
   return (
     <div className="flex min-h-full grow flex-col gap-4 bg-nav px-3.5 pt-4 pb-4 text-nav-text lg:gap-3">
       <div className="hidden lg:flex">
-        <Link
-          href="/"
+        <ViewKeepingLink
+          href={screenHref(project.id, FIRST_SCREEN)}
           className={`flex items-center gap-2.5 px-2 py-1 text-nav-strong ${NAV_FOCUS_RING}`}
         >
           <LogoMark size={28} />
           <span className="text-xl font-bold tracking-tight">Pyxis</span>
-        </Link>
+        </ViewKeepingLink>
       </div>
       <ProjectSwitcher
         projects={admin.projects}
