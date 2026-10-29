@@ -97,8 +97,14 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   conversion event at least once (Overview, Devices, Acquisition), so it never passes 100 %; the
   Overview keeps the number of conversion events beside it; without a conversion event, the
   Overview and Devices say so in one line and how the operator sets one
-- Devices: device type, browser and operating system as donuts whose legend is a table of every
-  value with its visits and share, conversion by device, the countries by name and the regions
+- Devices: a Reach card first, counting the continents (the five of UN M49, named under the
+  count), countries, regions and, for a project that keeps the city or a period that holds one,
+  cities the visits came from, then the region with most visits and its share of them (the
+  country when no visit had a region); the place stands apart from the sentence, so no language
+  needs an article for it, and a period where no visit has a known country says so instead of
+  counting zeros. Then device type, browser and operating system as donuts whose legend is a
+  table of every value with its visits and share, conversion by device, the countries by name and
+  the regions
   (a state or a province: the ten with most visits by name, the rest, and the visits the edge
   network could not place, which includes every visit from before regions were recorded); with a
   conversion event set, each browser, system, country and region also gives its conversion rate;
