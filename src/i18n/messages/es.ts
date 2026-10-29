@@ -902,6 +902,10 @@ export const es = translation({
     clientError: forms('{count} error del cliente (4xx)', '{count} errores del cliente (4xx)'),
     serverError: forms('{count} error del servidor (5xx)', '{count} errores del servidor (5xx)'),
     conversionEvent: forms('{count} evento de conversión', '{count} eventos de conversión'),
+    continent: forms('{count} continente', '{count} continentes'),
+    country: forms('{count} país', '{count} países'),
+    region: forms('{count} región', '{count} regiones'),
+    city: forms('{count} ciudad', '{count} ciudades'),
   },
   period: {
     presets: {
@@ -1142,6 +1146,20 @@ export const es = translation({
     countries: 'Países',
     regions: 'Regiones',
     cities: 'Ciudades',
+    reach: {
+      title: 'Alcance',
+      leadingRegion: 'Región con más visitas: {place} ({share} de las visitas)',
+      leadingCountry: 'País con más visitas: {place} ({share} de las visitas)',
+      noKnownPlace: 'Ninguna visita de este periodo tiene un país conocido.',
+      continentsNote: 'Continentes según la agrupación de países de la ONU: {continents}.',
+      continents: {
+        americas: 'América',
+        europe: 'Europa',
+        asia: 'Asia',
+        africa: 'África',
+        oceania: 'Oceanía',
+      },
+    },
     conversionByDevice: {
       title: 'Conversión por dispositivo',
       description: 'Proporción de visitas que enviaron <code/>',

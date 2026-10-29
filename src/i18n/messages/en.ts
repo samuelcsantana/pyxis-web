@@ -878,6 +878,10 @@ export const en = {
     clientError: { one: '{count} client error (4xx)', other: '{count} client errors (4xx)' },
     serverError: { one: '{count} server error (5xx)', other: '{count} server errors (5xx)' },
     conversionEvent: { one: '{count} conversion event', other: '{count} conversion events' },
+    continent: { one: '{count} continent', other: '{count} continents' },
+    country: { one: '{count} country', other: '{count} countries' },
+    region: { one: '{count} region', other: '{count} regions' },
+    city: { one: '{count} city', other: '{count} cities' },
   },
   period: {
     presets: {
@@ -1116,6 +1120,20 @@ export const en = {
     countries: 'Countries',
     regions: 'Regions',
     cities: 'Cities',
+    reach: {
+      title: 'Reach',
+      leadingRegion: 'Top region: {place} ({share} of visits)',
+      leadingCountry: 'Top country: {place} ({share} of visits)',
+      noKnownPlace: 'No visit in this period has a known country.',
+      continentsNote: 'Continents as the UN groups countries: {continents}.',
+      continents: {
+        americas: 'Americas',
+        europe: 'Europe',
+        asia: 'Asia',
+        africa: 'Africa',
+        oceania: 'Oceania',
+      },
+    },
     conversionByDevice: {
       title: 'Conversion by device',
       description: 'Share of visits that sent <code/>',
