@@ -92,7 +92,7 @@ export const FilteredOnAPhone: Story = {
   globals: PHONE,
   play: async ({ canvasElement }) => {
     await expect(
-      within(canvasElement).getByRole('button', { name: 'Filters · 13 active' }),
+      within(canvasElement).getByRole('button', { name: 'Filters · 14 active' }),
     ).toHaveAttribute('aria-expanded', 'true');
   },
 };
