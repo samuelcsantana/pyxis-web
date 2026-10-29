@@ -1,5 +1,5 @@
 import type { AccountStatus } from '@/domain/accounts';
-import type { FreePlanState, SignUpStatus, VerifySignUpOutcome } from '@/domain/sign-up';
+import type { FreePlace, FreePlanState, SignUpStatus, VerifySignUpOutcome } from '@/domain/sign-up';
 import { LANDING_ORIGIN } from '@/lib/site';
 import { DEMO_SIGN_IN_CODE } from '../auth/mock-auth-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
@@ -12,6 +12,12 @@ const STATUS_OF_A_NEW_ACCOUNT: Readonly<Record<FreePlanState, AccountStatus>> = 
   open: 'free',
   full: 'incomplete',
   closed: 'incomplete',
+};
+
+const FREE_PLACE_OF_A_NEW_ACCOUNT: Readonly<Record<FreePlanState, FreePlace>> = {
+  open: 'placed',
+  full: 'waitlisted',
+  closed: 'not_offered',
 };
 
 export class MockSignUpService implements ISignUpService {
@@ -37,6 +43,7 @@ export class MockSignUpService implements ISignUpService {
             kind: 'verified',
             accountId: DEMO_ACCOUNT_ID,
             accountStatus: STATUS_OF_A_NEW_ACCOUNT[this.freePlan],
+            freePlace: FREE_PLACE_OF_A_NEW_ACCOUNT[this.freePlan],
           }
         : { kind: 'invalidCode' },
     );

@@ -72,6 +72,7 @@ export class HttpSignUpService implements ISignUpService {
       kind: 'verified',
       accountId: signedUp.accountId,
       accountStatus: signedUp.accountStatus,
+      freePlace: signedUp.freePlace,
     };
   }
 

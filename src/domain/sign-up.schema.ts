@@ -1,6 +1,12 @@
 import { ACCOUNT_STATUSES, type AccountStatus } from './accounts';
 import { isSessionToken } from './session-token';
-import { FREE_PLAN_STATES, type FreePlanState, type SignUpStatus } from './sign-up';
+import {
+  FREE_PLACES,
+  FREE_PLAN_STATES,
+  type FreePlace,
+  type FreePlanState,
+  type SignUpStatus,
+} from './sign-up';
 
 export class MalformedSignUpAnswerError extends Error {
   constructor() {
@@ -13,6 +19,7 @@ export interface SignedUp {
   readonly accountId: string;
   readonly sessionToken: string;
   readonly accountStatus: AccountStatus;
+  readonly freePlace: FreePlace | null;
 }
 
 const FREE_PLAN_OF_AN_API_WITHOUT_ONE: FreePlanState = 'closed';
@@ -32,19 +39,27 @@ function nullableText(value: unknown): string | null {
   throw new MalformedSignUpAnswerError();
 }
 
-function oneOf<const Value extends string>(
-  values: readonly Value[],
-  value: unknown,
-  absent: Value,
-): Value {
-  if (value === undefined) {
-    return absent;
-  }
+function knownOf<const Value extends string>(values: readonly Value[], value: unknown): Value {
   const known = values.find((candidate) => candidate === value);
   if (known === undefined) {
     throw new MalformedSignUpAnswerError();
   }
   return known;
+}
+
+function oneOf<const Value extends string>(
+  values: readonly Value[],
+  value: unknown,
+  absent: Value,
+): Value {
+  return value === undefined ? absent : knownOf(values, value);
+}
+
+function optionalOneOf<const Value extends string>(
+  values: readonly Value[],
+  value: unknown,
+): Value | null {
+  return value === undefined ? null : knownOf(values, value);
 }
 
 export function signUpStatusOf(body: unknown): SignUpStatus {
@@ -73,6 +88,7 @@ export function signedUpOf(body: unknown): SignedUp {
       record.account_status,
       STATUS_OF_AN_ACCOUNT_BEFORE_THE_FREE_PLAN,
     ),
+    freePlace: optionalOneOf(FREE_PLACES, record.free_place),
   };
 }
 
