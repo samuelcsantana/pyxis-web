@@ -64,11 +64,8 @@ export function periodParameters(search: SearchReader): string {
   return kept.toString();
 }
 
-export function screenParameters(search: SearchReader, slug: ScreenSlug): string {
+export function viewParameters(search: SearchReader): string {
   const kept = new URLSearchParams(periodParameters(search));
-  if (SCREENS_WITHOUT_FILTERS.has(slug)) {
-    return kept.toString();
-  }
   for (const name of DASHBOARD_FILTER_PARAMETERS) {
     const value = search.get(name);
     if (value !== null && value !== '') {
@@ -76,6 +73,10 @@ export function screenParameters(search: SearchReader, slug: ScreenSlug): string
     }
   }
   return kept.toString();
+}
+
+export function screenParameters(search: SearchReader, slug: ScreenSlug): string {
+  return SCREENS_WITHOUT_FILTERS.has(slug) ? periodParameters(search) : viewParameters(search);
 }
 
 export function screenHref(projectId: string, slug: ScreenSlug, query = ''): string {
@@ -124,6 +125,14 @@ export function linkWith(href: string, parameters: Readonly<Record<string, strin
     url.searchParams.set(name, value);
   }
   return `${url.pathname}${url.search}`;
+}
+
+export function hrefKeepingView(href: string, search: SearchReader): string {
+  const url = new URL(href, LINK_BASE);
+  for (const [name, value] of new URLSearchParams(viewParameters(search))) {
+    url.searchParams.set(name, value);
+  }
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 const SCREEN_PATH_SEGMENTS = 3;
