@@ -14,12 +14,13 @@ import { ArrivalBadge } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
   hrefKeepingView,
+  navigationItemOf,
   SCREENS,
   screenHref,
   screenLabelKey,
-  screenOf,
   screenParameters,
   SETTINGS_ICON,
+  SETTINGS_ITEM,
   settingsHref,
 } from './screens';
 
@@ -56,8 +57,8 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
   const t = useT();
   const pathname = usePathname();
   const search = useSearchParams();
-  const current = screenOf(pathname);
-  const settingsCurrent = pathname === settingsHref(projectId);
+  const current = navigationItemOf(pathname);
+  const settingsCurrent = current === SETTINGS_ITEM;
 
   return (
     <div className="flex flex-col gap-1">

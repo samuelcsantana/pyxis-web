@@ -4,10 +4,11 @@ import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { AccountMenu } from './account-menu';
 
-const navigation = vi.hoisted(() => ({ search: '' }));
+const navigation = vi.hoisted(() => ({ pathname: '/p-1/overview', search: '' }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  usePathname: () => navigation.pathname,
   useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
@@ -32,7 +33,21 @@ describe('AccountMenu', () => {
 
     const summary = container.querySelector('summary');
     expect(summary).toHaveTextContent('OAccount and preferencesowner@example.com');
+    expect(summary).not.toHaveAttribute('data-current');
+    expect(summary).toHaveClass('hover:bg-nav-hover');
     expect(container.querySelector('details')).not.toHaveAttribute('open');
+  });
+
+  it('marks the account as where you are on the help page, whose link it holds', () => {
+    navigation.pathname = '/p-1/help';
+    const { container } = renderMenu();
+    navigation.pathname = '/p-1/overview';
+
+    const summary = container.querySelector('summary');
+    expect(summary).toHaveAttribute('data-current');
+    expect(summary).toHaveClass('bg-nav-active');
+    expect(summary).not.toHaveClass('hover:bg-nav-hover');
+    expect(summary).not.toHaveAttribute('aria-current');
   });
 
   it('opens upwards on the languages, the themes and signing out', () => {

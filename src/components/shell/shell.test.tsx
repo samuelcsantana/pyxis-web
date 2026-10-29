@@ -13,6 +13,7 @@ import { MainContent } from './main-content';
 import {
   hrefKeepingView,
   linkWith,
+  navigationItemOf,
   periodParameters,
   screenParameters,
   returnPathOf,
@@ -156,6 +157,36 @@ describe('screens helpers', () => {
     expect(screenOf('/p1/overview')).toBe('overview');
     expect(screenOf('/')).toBeUndefined();
   });
+
+  it('name the item of the navigation that stands for each page of a project', () => {
+    expect(navigationItemOf('/p1/overview')).toBe('overview');
+    expect(navigationItemOf('/p1/timeline')).toBe('timeline');
+    expect(navigationItemOf('/p1/settings')).toBe('settings');
+    expect(navigationItemOf('/p1/install')).toBe('settings');
+    expect(navigationItemOf('/p1/exports/e1')).toBe('settings');
+    expect(navigationItemOf('/p1/help')).toBe('account-menu');
+  });
+
+  it('name no item of the navigation for any other path', () => {
+    for (const pathname of [
+      '/',
+      '/account',
+      '/connect',
+      '/p1',
+      '/p1/unknown',
+      '/p1/constructor',
+      '/p1/__proto__',
+      '/p1/settings/extra',
+      '/p1/help/',
+      '/p1/exports',
+      '/p1/exports/',
+      '/p1/exports/e1/download',
+      '/p1/overview/export',
+      '//settings',
+    ]) {
+      expect(navigationItemOf(pathname)).toBeUndefined();
+    }
+  });
 });
 
 describe('SidebarNav', () => {
@@ -262,6 +293,27 @@ describe('the project settings in the navigation', () => {
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
+  });
+
+  it.each(['/p-store/install', '/p-store/exports/e1'])(
+    'marks the settings current on %s, a project page with no item of its own',
+    (pathname) => {
+      navigation.pathname = pathname;
+      renderWithMessages(<SidebarNav projectId="p-store" />);
+      navigation.pathname = '/p-store/overview';
+
+      const current = document.querySelectorAll('[aria-current="page"]');
+      expect(current).toHaveLength(1);
+      expect(current[0]).toHaveAccessibleName('Settings');
+    },
+  );
+
+  it('marks no link current on the help page, whose link is in the account menu', () => {
+    navigation.pathname = '/p-store/help';
+    renderWithMessages(<SidebarNav projectId="p-store" />);
+    navigation.pathname = '/p-store/overview';
+
+    expect(document.querySelector('[aria-current]')).toBeNull();
   });
 });
 

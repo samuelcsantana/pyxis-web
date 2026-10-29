@@ -1,4 +1,10 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
+
+export function currentNavigationLinks(page: Page): Locator {
+  return page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .locator('a[aria-current="page"]:not(details a)');
+}
 
 export async function holdScreenRequests(page: Page): Promise<() => void> {
   let release: () => void = () => undefined;
