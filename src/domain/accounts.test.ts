@@ -48,6 +48,7 @@ const ACCOUNT: Account = {
   projectCount: null,
   peopleCount: null,
   boundByFreePlanTerms: null,
+  mailboxHasAnotherFreeAccount: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -372,7 +373,37 @@ describe('accounts on the wire', () => {
       projectCount: 3,
       peopleCount: 2,
       boundByFreePlanTerms: true,
+      mailboxHasAnotherFreeAccount: null,
     });
+  });
+
+  it("reads whether another free account belongs to the owner's mailbox", () => {
+    const [account] = myAccountsResponseSchema.parse({
+      accounts: [
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'active',
+          billing_interval: 'month',
+          trial_ends_at: null,
+          current_period_ends_at: '2026-12-01T00:00:00.000Z',
+          access_ends_at: null,
+          ingestion_paused_until: null,
+          suspended_at: null,
+          suspension_reason: null,
+          deletion_held_at: null,
+          quota_pause_exempt_until: null,
+          bound_by_free_plan_terms: true,
+          mailbox_has_another_free_account: true,
+          month: '2026-11',
+          events_this_month: 120,
+          measured_at: '2026-11-20T03:00:00.000Z',
+          limits: { events_per_month: 100_000, projects: 3, people: 3, pause_at_events: 150_000 },
+        },
+      ],
+    });
+
+    expect(account?.mailboxHasAnotherFreeAccount).toBe(true);
   });
 
   it('reads the address Stripe gives and writes the requests', () => {

@@ -30,6 +30,7 @@ const ENDING: Account = {
   projectCount: 1,
   peopleCount: 1,
   boundByFreePlanTerms: true,
+  mailboxHasAnotherFreeAccount: null,
   month: '2026-11',
   eventsThisMonth: 10,
   measuredAt: null,

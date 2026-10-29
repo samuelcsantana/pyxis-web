@@ -28,6 +28,7 @@ const PAID: Account = {
   projectCount: 1,
   peopleCount: 1,
   boundByFreePlanTerms: true,
+  mailboxHasAnotherFreeAccount: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
@@ -75,6 +76,17 @@ describe('the free plan', () => {
     expect(ownsAnotherFreeAccount(PAID, [PAID, other])).toBe(true);
     expect(ownsAnotherFreeAccount(FREE, [FREE])).toBe(false);
     expect(ownsAnotherFreeAccount(PAID, [PAID, { ...PAID, id: 'a3' }])).toBe(false);
+  });
+
+  it("follows the API when it says whether the owner's mailbox has another free account", () => {
+    const other = { ...FREE, id: 'a2' };
+
+    expect(ownsAnotherFreeAccount({ ...PAID, mailboxHasAnotherFreeAccount: true }, [PAID])).toBe(
+      true,
+    );
+    expect(
+      ownsAnotherFreeAccount({ ...PAID, mailboxHasAnotherFreeAccount: false }, [PAID, other]),
+    ).toBe(false);
   });
 });
 

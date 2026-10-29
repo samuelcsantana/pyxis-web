@@ -35,6 +35,7 @@ const FREE: Account = {
   projectCount: 1,
   peopleCount: 1,
   boundByFreePlanTerms: true,
+  mailboxHasAnotherFreeAccount: null,
   month: '2026-11',
   eventsThisMonth: 3_120,
   measuredAt: '2026-11-20T03:00:00.000Z',

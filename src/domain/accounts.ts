@@ -51,6 +51,7 @@ export interface Account {
   readonly projectCount: number | null;
   readonly peopleCount: number | null;
   readonly boundByFreePlanTerms: boolean | null;
+  readonly mailboxHasAnotherFreeAccount: boolean | null;
   readonly month: string;
   readonly eventsThisMonth: number | null;
   readonly measuredAt: string | null;
