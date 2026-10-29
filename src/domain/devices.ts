@@ -7,6 +7,8 @@ export type { DevicesReport, DevicesWire };
 export type ValueShare = DevicesReport['browsers'][number];
 export type RegionShare = DevicesReport['regions'][number];
 export type CityShare = DevicesReport['cities'][number];
+export type Reach = DevicesReport['reach'];
+type LeadingRegion = NonNullable<Reach['topRegion']>;
 
 export const OTHER_VALUE = 'other';
 const OTHER_COUNTRIES_CODE = '··';
@@ -15,6 +17,7 @@ const UNKNOWN_REGION_KEY = 'unknown';
 const UNKNOWN_CITY_KEY = 'unknown';
 const CITY_KEY_SEPARATOR = '|';
 const PLACE_SEPARATOR = ', ';
+const CONTINENTS = ['americas', 'europe', 'asia', 'africa', 'oceania'] as const;
 const COUNTRY_CODE = /^[A-Z]{2}$/;
 const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
 
@@ -264,6 +267,56 @@ export function cityRows(cities: readonly CityShare[], i18n: I18n): readonly Cit
       conversionRate: conversionRateOf(share, i18n),
     };
   });
+}
+
+export interface ReachSummary {
+  readonly counts: readonly string[];
+  readonly leader: string | null;
+}
+
+function leadingRegionPlace(region: LeadingRegion, namesCountry: boolean, i18n: I18n): string {
+  const name = region.name ?? region.value;
+  const country = regionParts(region.value)?.country;
+  return namesCountry && country !== undefined
+    ? `${name}${PLACE_SEPARATOR}${countryLabel(country, i18n)}`
+    : name;
+}
+
+function leadingPlace(reach: Reach, i18n: I18n): string | null {
+  const share = (visits: number) => formatPercent(rate(visits, reach.visits), i18n);
+  if (reach.topRegion !== null) {
+    return i18n.t('devices.reach.leadingRegion', {
+      place: leadingRegionPlace(reach.topRegion, reach.countries > 1, i18n),
+      share: share(reach.topRegion.visits),
+    });
+  }
+  return reach.topCountry === null
+    ? null
+    : i18n.t('devices.reach.leadingCountry', {
+        place: countryLabel(reach.topCountry.value, i18n),
+        share: share(reach.topCountry.visits),
+      });
+}
+
+export function reachSummary(reach: Reach, cityEnabled: boolean, i18n: I18n): ReachSummary | null {
+  if (reach.countries === 0) {
+    return null;
+  }
+  const cities = cityEnabled || reach.cities > 0 ? [reach.cities] : [];
+  return {
+    counts: [
+      i18n.t('counts.continent', { count: reach.continents }),
+      i18n.t('counts.country', { count: reach.countries }),
+      i18n.t('counts.region', { count: reach.regions }),
+      ...cities.map((count) => i18n.t('counts.city', { count })),
+    ],
+    leader: leadingPlace(reach, i18n),
+  };
+}
+
+export function continentsNote(i18n: I18n): string {
+  const continents = CONTINENTS.map((continent) => i18n.t(`devices.reach.continents.${continent}`));
+  return i18n.t('devices.reach.continentsNote', { continents: i18n.format.list(continents) });
 }
 
 export function countsConversions(rows: readonly { conversionRate: string | null }[]): boolean {

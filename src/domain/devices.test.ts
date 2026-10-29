@@ -8,17 +8,25 @@ import {
   deviceConversions,
   deviceTypeLabel,
   type DevicesWire,
+  continentsNote,
   hasNamedCity,
   hasVisits,
   isRegionCode,
   operatingSystemLabel,
   placeLabel,
+  type Reach,
+  reachSummary,
   regionRows,
   shareRows,
 } from './devices';
 import { devicesResponseSchema } from './devices.schema';
+import { dutch } from '@/test-utils/dutch';
 import { english } from '@/test-utils/english';
+import { french } from '@/test-utils/french';
+import { german } from '@/test-utils/german';
+import { italian } from '@/test-utils/italian';
 import { portuguese } from '@/test-utils/portuguese';
+import { spanish } from '@/test-utils/spanish';
 
 const WIRE: DevicesWire = {
   device_types: [
@@ -440,6 +448,140 @@ describe('hasNamedCity', () => {
 
     expect(hasNamedCity(unnamed)).toBe(false);
     expect(hasNamedCity([])).toBe(false);
+  });
+});
+
+describe('reachSummary', () => {
+  const REACH: Reach = {
+    visits: 200,
+    continents: 2,
+    countries: 8,
+    regions: 10,
+    cities: 42,
+    topCountry: { value: 'BR', visits: 170 },
+    topRegion: { value: 'BR-BA', name: 'Bahia', visits: 156 },
+  };
+  const ONE_OF_EACH: Reach = {
+    ...REACH,
+    continents: 1,
+    countries: 1,
+    regions: 1,
+    cities: 1,
+    topCountry: { value: 'BR', visits: 200 },
+    topRegion: { value: 'BR-BA', name: 'Bahia', visits: 200 },
+  };
+
+  it('count the continents, countries, regions and cities, and name the leading region', () => {
+    expect(reachSummary(REACH, true, english)).toEqual({
+      counts: ['2 continents', '8 countries', '10 regions', '42 cities'],
+      leader: 'Top region: Bahia, Brazil (78.0% of visits)',
+    });
+  });
+
+  it('name the leading region alone when every visit came from one country', () => {
+    const summary = reachSummary({ ...REACH, continents: 1, countries: 1 }, true, english);
+
+    expect(summary?.leader).toBe('Top region: Bahia (78.0% of visits)');
+  });
+
+  it('leave the cities out while the project keeps none and the period holds none', () => {
+    expect(reachSummary({ ...REACH, cities: 0 }, false, english)?.counts).toEqual([
+      '2 continents',
+      '8 countries',
+      '10 regions',
+    ]);
+  });
+
+  it('count the cities of a project that keeps them, even before the first one', () => {
+    expect(reachSummary({ ...REACH, cities: 0 }, true, english)?.counts).toContain('0 cities');
+  });
+
+  it('count the cities a period holds after the project turned the city off', () => {
+    expect(reachSummary(REACH, false, english)?.counts).toContain('42 cities');
+  });
+
+  it('name the leading region by its code when the API knows no name for it', () => {
+    const topRegion = { value: 'BR-BA', name: null, visits: 156 };
+
+    expect(reachSummary({ ...REACH, topRegion }, true, english)?.leader).toBe(
+      'Top region: BR-BA, Brazil (78.0% of visits)',
+    );
+  });
+
+  it('keep a leading region the dashboard cannot read as a code without naming its country', () => {
+    const topRegion = { value: 'Bahia', name: null, visits: 156 };
+
+    expect(reachSummary({ ...REACH, topRegion }, true, english)?.leader).toBe(
+      'Top region: Bahia (78.0% of visits)',
+    );
+  });
+
+  it('name the leading country when no visit had a region', () => {
+    const summary = reachSummary({ ...REACH, regions: 0, topRegion: null }, true, english);
+
+    expect(summary).toEqual({
+      counts: ['2 continents', '8 countries', '0 regions', '42 cities'],
+      leader: 'Top country: Brazil (85.0% of visits)',
+    });
+  });
+
+  it('give no leader when the API names no place', () => {
+    const summary = reachSummary({ ...REACH, topCountry: null, topRegion: null }, true, english);
+
+    expect(summary?.leader).toBeNull();
+  });
+
+  it('is null when no visit has a known country, with visits or without', () => {
+    const unplaced = { ...REACH, continents: 0, countries: 0, regions: 0, cities: 0 };
+    const placeless = { ...unplaced, topCountry: null, topRegion: null };
+
+    expect(reachSummary(placeless, true, english)).toBeNull();
+    expect(reachSummary({ ...placeless, visits: 0 }, true, english)).toBeNull();
+  });
+
+  it.each([
+    [english, ['1 continent', '1 country', '1 region', '1 city']],
+    [portuguese, ['1 continente', '1 país', '1 estado', '1 cidade']],
+    [spanish, ['1 continente', '1 país', '1 región', '1 ciudad']],
+    [german, ['1 Kontinent', '1 Land', '1 Region', '1 Stadt']],
+    [french, ['1 continent', '1 pays', '1 région', '1 ville']],
+    [italian, ['1 continente', '1 paese', '1 regione', '1 città']],
+    [dutch, ['1 continent', '1 land', '1 regio', '1 stad']],
+  ])('say one of each in the singular in %#', (i18n, counts) => {
+    expect(reachSummary(ONE_OF_EACH, true, i18n)?.counts).toEqual(counts);
+  });
+
+  it('write the counts and the share in the language of the dashboard', () => {
+    const summary = reachSummary(
+      { ...REACH, continents: 5, countries: 27, regions: 140, cities: 1473 },
+      true,
+      portuguese,
+    );
+
+    expect(summary).toEqual({
+      counts: ['5 continentes', '27 países', '140 estados', '1.473 cidades'],
+      leader: 'Estado com mais visitas: Bahia, Brasil (78,0% das visitas)',
+    });
+  });
+
+  it('name the leading country in the language of the dashboard', () => {
+    const summary = reachSummary({ ...REACH, topRegion: null }, true, portuguese);
+
+    expect(summary?.leader).toBe('País com mais visitas: Brasil (85,0% das visitas)');
+  });
+});
+
+describe('continentsNote', () => {
+  it('names the five continents as the UN groups countries', () => {
+    expect(continentsNote(english)).toBe(
+      'Continents as the UN groups countries: Americas, Europe, Asia, Africa, Oceania.',
+    );
+  });
+
+  it('names them in the language of the dashboard', () => {
+    expect(continentsNote(portuguese)).toBe(
+      'Continentes como a ONU agrupa os países: Américas, Europa, Ásia, África e Oceania.',
+    );
   });
 });
 

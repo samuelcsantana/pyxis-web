@@ -912,6 +912,10 @@ export const nl = translation({
     clientError: forms('{count} clientfout (4xx)', '{count} clientfouten (4xx)'),
     serverError: forms('{count} serverfout (5xx)', '{count} serverfouten (5xx)'),
     conversionEvent: forms('{count} conversie-event', '{count} conversie-events'),
+    continent: forms('{count} continent', '{count} continenten'),
+    country: forms('{count} land', '{count} landen'),
+    region: forms('{count} regio', '{count} regio’s'),
+    city: forms('{count} stad', '{count} steden'),
   },
   period: {
     presets: {
@@ -1154,6 +1158,20 @@ export const nl = translation({
     countries: 'Landen',
     regions: 'Regio’s',
     cities: 'Steden',
+    reach: {
+      title: 'Bereik',
+      leadingRegion: 'Regio met de meeste bezoeken: {place} ({share} van de bezoeken)',
+      leadingCountry: 'Land met de meeste bezoeken: {place} ({share} van de bezoeken)',
+      noKnownPlace: 'Bij geen enkel bezoek in deze periode is het land bekend.',
+      continentsNote: 'Continenten zoals de VN landen indeelt: {continents}.',
+      continents: {
+        americas: 'Amerika',
+        europe: 'Europa',
+        asia: 'Azië',
+        africa: 'Afrika',
+        oceania: 'Oceanië',
+      },
+    },
     conversionByDevice: {
       title: 'Conversie per apparaat',
       description: 'Aandeel van de bezoeken die <code/> verstuurden',
