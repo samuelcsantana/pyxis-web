@@ -2,6 +2,8 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
   browserLabel,
+  cityRows,
+  type CityShare,
   countryLabel,
   deviceConversions,
   deviceTypeLabel,
@@ -10,6 +12,7 @@ import {
   shareRows,
   type ValueShare,
 } from '@/domain/devices';
+import { CitiesTable } from './cities-table';
 import { CountriesTable } from './countries-table';
 import { DeviceConversionList } from './device-conversion-list';
 import { RegionsTable } from './regions-table';
@@ -270,5 +273,93 @@ describe('RegionsTable', () => {
 
     expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
     expect(screen.getAllByRole('row')[1]).toHaveTextContent('SPSão Paulo50100.0%4.0%');
+  });
+});
+
+const CITIES: readonly CityShare[] = [
+  {
+    value: 'Feira de Santana',
+    region: 'BR-BA',
+    regionName: 'Bahia',
+    visits: 60,
+    conversions: 6,
+    convertingVisits: 3,
+  },
+  {
+    value: 'Sintra',
+    region: 'PT-11',
+    regionName: 'Lisboa',
+    visits: 20,
+    conversions: 0,
+    convertingVisits: 0,
+  },
+  {
+    value: 'other',
+    region: null,
+    regionName: null,
+    visits: 15,
+    conversions: 1,
+    convertingVisits: 1,
+  },
+  { value: null, region: null, regionName: null, visits: 5, conversions: 0, convertingVisits: 0 },
+];
+
+describe('CitiesTable', () => {
+  it('names each city with its region, and the country when the list spans several', () => {
+    render(<CitiesTable rows={cityRows(CITIES, english)} i18n={english} />);
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Cities' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'City' })).toBeInTheDocument();
+    const rows = screen.getAllByRole('row');
+    expect(rows[1]).toHaveTextContent('Feira de SantanaBahia, Brazil6060.0%');
+    expect(rows[2]).toHaveTextContent('SintraLisboa, Portugal2020.0%');
+    expect(rows[3]).toHaveTextContent('Other cities1515.0%');
+    expect(rows[4]).toHaveTextContent('Unknown55.0%');
+    expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
+    expect(screen.queryByRole('link')).toBeNull();
+  });
+
+  it('links each city to its visits in its region, never the other or unknown rows', () => {
+    render(
+      <CitiesTable
+        rows={cityRows(CITIES, english)}
+        visitsHref={({ region, city }) =>
+          region === 'PT-11' ? null : `/p1/visits?region=${region}&city=${city}`
+        }
+        filterOf={({ city }) => ({
+          href: `/p1/devices?city=${city}`,
+          active: false,
+          label: `Filter by ${city}`,
+          title: `Filter every screen by ${city}`,
+        })}
+        i18n={english}
+      />,
+    );
+
+    const table = within(screen.getByRole('table', { name: 'Cities' }));
+    expect(table.getByRole('link', { name: 'Feira de Santana: see its visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?region=BR-BA&city=Feira de Santana',
+    );
+    expect(table.getByRole('link', { name: 'Filter by Feira de Santana' })).toHaveAttribute(
+      'href',
+      '/p1/devices?city=Feira de Santana',
+    );
+    expect(table.getAllByRole('link')).toHaveLength(2);
+  });
+
+  it('adds the conversion rate of each city when asked, and no filter button unless given', () => {
+    render(
+      <CitiesTable
+        rows={cityRows(CITIES.slice(0, 1), english)}
+        withConversionRate
+        visitsHref={({ city }) => `/p1/visits?city=${city}`}
+        i18n={english}
+      />,
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Conversion rate' })).toBeVisible();
+    expect(screen.getAllByRole('link')).toHaveLength(1);
+    expect(screen.getAllByRole('row')[1]).toHaveTextContent('Feira de SantanaBahia60100.0%5.0%');
   });
 });

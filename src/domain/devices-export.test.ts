@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DevicesReport, RegionShare, ValueShare } from './devices';
+import type { CityShare, DevicesReport, RegionShare, ValueShare } from './devices';
 import { devicesCsvTable } from './devices-export';
 
 function share(value: string, visits: number, conversions: number | null): ValueShare {
@@ -18,6 +18,16 @@ function region(
   conversions: number | null,
 ): RegionShare {
   return { ...share('', visits, conversions), value, name };
+}
+
+function city(
+  value: string | null,
+  region: string | null,
+  regionName: string | null,
+  visits: number,
+  conversions: number | null,
+): CityShare {
+  return { ...share('', visits, conversions), value, region, regionName };
 }
 
 const NO_REACH: DevicesReport['reach'] = {
@@ -40,12 +50,16 @@ const REPORT: DevicesReport = {
     region('other', null, 8, 1),
     region(null, null, 2, 1),
   ],
-  cities: [],
+  cities: [
+    city('Campinas', 'BR-SP', 'São Paulo', 12, 2),
+    city('other', null, null, 9, 1),
+    city(null, null, null, 9, 2),
+  ],
   reach: NO_REACH,
 };
 
 describe('devicesCsvTable', () => {
-  it('writes every breakdown in one table, named in a dimension column, regions with their name', () => {
+  it('writes every breakdown in one table, named in a dimension column, regions and cities named', () => {
     expect(devicesCsvTable(REPORT)).toEqual({
       columns: ['dimension', 'value', 'name', 'visits', 'conversion_events', 'converting_visits'],
       rows: [
@@ -57,6 +71,9 @@ describe('devicesCsvTable', () => {
         ['region', 'BR-SP', 'São Paulo', 20, 3, 2],
         ['region', 'other', null, 8, 1, 0],
         ['region', null, null, 2, 1, 0],
+        ['city', 'Campinas', 'São Paulo', 12, 2, 1],
+        ['city', 'other', null, 9, 1, 0],
+        ['city', null, null, 9, 2, 1],
       ],
     });
   });
@@ -68,7 +85,7 @@ describe('devicesCsvTable', () => {
       operatingSystems: [],
       countries: [],
       regions: [region(null, null, 10, null)],
-      cities: [],
+      cities: [city(null, null, null, 10, null)],
       reach: NO_REACH,
     });
 
@@ -77,6 +94,7 @@ describe('devicesCsvTable', () => {
       rows: [
         ['device_type', 'desktop', 10],
         ['region', null, 10],
+        ['city', null, 10],
       ],
     });
   });

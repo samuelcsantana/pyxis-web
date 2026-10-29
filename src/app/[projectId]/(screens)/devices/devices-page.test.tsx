@@ -3,14 +3,20 @@ import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import type { DevicesReport } from '@/domain/devices';
+import type { ProjectSettings } from '@/domain/project-settings';
 import { UnauthenticatedError } from '@/domain/errors';
 import { MockDevicesService } from '@/services/devices/mock-devices-service';
 import type { IDevicesService } from '@/services/devices/devices-service.interface';
 import DevicesPage from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
-const state = vi.hoisted<{ admin: unknown; devices: IDevicesService['devices'] }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  cityEnabled: boolean;
+  devices: IDevicesService['devices'];
+}>(() => ({
   admin: undefined,
+  cityEnabled: false,
   devices: () => Promise.reject(new Error('devices not set')),
 }));
 
@@ -32,7 +38,11 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/services/projects/projects-service.factory', () => ({
-  createProjectsService: () => ({ currentAdmin: () => Promise.resolve(state.admin) }),
+  createProjectsService: () => ({
+    currentAdmin: () => Promise.resolve(state.admin),
+    settings: (projectId: string): Promise<ProjectSettings> =>
+      Promise.resolve({ ...SETTINGS, id: projectId, cityEnabled: state.cityEnabled }),
+  }),
 }));
 
 vi.mock('@/services/devices/devices-service.factory', () => ({
@@ -49,6 +59,24 @@ const STORE = {
 };
 const DOCS = { id: 'p-docs', name: 'Demo Docs', timezone: 'UTC', conversionEvent: null };
 const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE, DOCS] };
+
+const SETTINGS: ProjectSettings = {
+  id: 'p-store',
+  accountId: 'a1',
+  role: 'owner',
+  name: 'Demo Store',
+  timezone: 'America/Sao_Paulo',
+  conversionEvent: 'signup_completed',
+  cityEnabled: false,
+  allowedOrigins: ['https://store.example.com'],
+  createdAt: '2026-01-06T08:00:00.000Z',
+  firstEventAt: null,
+  lastEventAt: null,
+  eventRetentionMonths: 13,
+  publicKeys: [],
+  secretKeys: [],
+  deletionHeldAt: null,
+};
 
 const NO_DEVICES: DevicesReport = {
   deviceTypes: [],
@@ -77,6 +105,7 @@ function renderDevices(projectId = 'p-store', search: Readonly<Record<string, st
 
 beforeEach(() => {
   state.admin = ADMIN;
+  state.cityEnabled = false;
   state.devices = (projectId, range) => new MockDevicesService().devices(projectId, range);
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
@@ -107,7 +136,9 @@ describe('DevicesPage', () => {
     }
     expect(screen.getByRole('heading', { name: 'Conversion by device' })).toBeInTheDocument();
     expect(screen.getByText('Brazil')).toBeInTheDocument();
-    expect(screen.getByText('São Paulo')).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('table', { name: 'Regions' })).getByText('São Paulo'),
+    ).toBeInTheDocument();
     const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
     expect(grid).toHaveClass('xl:grid-cols-2');
     expect(grid?.children).toHaveLength(3);
@@ -202,10 +233,68 @@ describe('DevicesPage', () => {
     expect(regions.queryByRole('link', { name: /^(Other regions|Unknown)/ })).toBeNull();
   });
 
+  it('lists the cities below the grid, each linked to its visits in its region', async () => {
+    renderWithMessages(await renderDevices('p-store', { country: 'BR' }));
+
+    const table = screen.getByRole('table', { name: 'Cities' });
+    const cities = within(table);
+    expect(screen.getByRole('table', { name: 'Countries' }).closest('.grid')).not.toContainElement(
+      table,
+    );
+    expect(cities.getByRole('link', { name: 'São Paulo: see its visits' })).toHaveAttribute(
+      'href',
+      '/p-store/visits?range=30d&country=BR&region=BR-SP&city=S%C3%A3o+Paulo',
+    );
+    expect(cities.getByRole('link', { name: 'Filter by Campinas' })).toHaveAttribute(
+      'href',
+      '/p-store/devices?range=30d&country=BR&region=BR-SP&city=Campinas',
+    );
+    expect(cities.getByRole('rowheader', { name: /^Campinas/ })).toHaveTextContent(
+      'CampinasSão Paulo',
+    );
+    expect(cities.getByRole('rowheader', { name: 'Other cities' })).toBeInTheDocument();
+    expect(cities.getByRole('rowheader', { name: 'Unknown' })).toBeInTheDocument();
+    expect(cities.queryByRole('link', { name: /^(Other cities|Unknown)/ })).toBeNull();
+  });
+
+  it('leaves the cities out while the project keeps no city and the period names none', async () => {
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      const visits = report.cities.reduce((total, share) => total + share.visits, 0);
+      const unknown = {
+        value: null,
+        region: null,
+        regionName: null,
+        visits,
+        conversions: null,
+        convertingVisits: null,
+      };
+      return { ...report, cities: [unknown] };
+    };
+
+    renderWithMessages(await renderDevices());
+
+    expect(screen.queryByRole('table', { name: 'Cities' })).not.toBeInTheDocument();
+  });
+
+  it('shows the cities of a project that keeps them even before the first one is named', async () => {
+    state.cityEnabled = true;
+    state.devices = async (projectId, range) => {
+      const report = await new MockDevicesService().devices(projectId, range);
+      return { ...report, cities: report.cities.filter((share) => share.value === null) };
+    };
+
+    renderWithMessages(await renderDevices());
+
+    const cities = within(screen.getByRole('table', { name: 'Cities' }));
+    expect(cities.getAllByRole('row')).toHaveLength(2);
+    expect(cities.getByRole('rowheader', { name: 'Unknown' })).toBeInTheDocument();
+  });
+
   it('gives the conversion rate of each browser, system and country, not again per device type', async () => {
     renderWithMessages(await renderDevices());
 
-    for (const name of ['Browser', 'Operating system', 'Countries', 'Regions']) {
+    for (const name of ['Browser', 'Operating system', 'Countries', 'Regions', 'Cities']) {
       expect(
         within(screen.getByRole('table', { name })).getByRole('columnheader', {
           name: 'Conversion rate',
@@ -258,7 +347,7 @@ describe('DevicesPage', () => {
 
     expect(
       screen.getByRole('link', {
-        name: 'Device types, browsers, systems, countries and regions as CSV',
+        name: 'Device types, browsers, systems, countries, regions and cities as CSV',
       }),
     ).toHaveAttribute('href', '/p-store/devices/export?range=30d');
   });
@@ -309,7 +398,7 @@ describe('DevicesPage', () => {
     });
     expect(
       screen.getByRole('link', {
-        name: 'Device types, browsers, systems, countries and regions as CSV',
+        name: 'Device types, browsers, systems, countries, regions and cities as CSV',
       }),
     ).toHaveAttribute('href', '/p-store/devices/export?range=30d&device=tablet&os=ios');
   });

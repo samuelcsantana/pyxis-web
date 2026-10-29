@@ -6,11 +6,14 @@ export type { DevicesReport, DevicesWire };
 
 export type ValueShare = DevicesReport['browsers'][number];
 export type RegionShare = DevicesReport['regions'][number];
+export type CityShare = DevicesReport['cities'][number];
 
 export const OTHER_VALUE = 'other';
 const OTHER_COUNTRIES_CODE = '··';
 const OTHER_REGIONS_CODE = '··';
 const UNKNOWN_REGION_KEY = 'unknown';
+const UNKNOWN_CITY_KEY = 'unknown';
+const CITY_KEY_SEPARATOR = '|';
 const COUNTRY_CODE = /^[A-Z]{2}$/;
 const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
 
@@ -176,6 +179,80 @@ export function regionRows(regions: readonly RegionShare[], i18n: I18n): readonl
       label: regionName(share, i18n),
       country: namesCountry && parts !== null ? countryLabel(parts.country, i18n) : null,
       filterValue: parts === null ? null : share.value,
+      visits: formatCount(share.visits, i18n),
+      counted: share.visits,
+      share: formatPercent(fraction, i18n),
+      fraction: fraction ?? 0,
+      conversionRate: conversionRateOf(share, i18n),
+    };
+  });
+}
+
+export interface CityFilterValue {
+  readonly region: string;
+  readonly city: string;
+}
+
+export interface CityRow {
+  readonly key: string;
+  readonly label: string;
+  readonly place: string | null;
+  readonly filterValue: CityFilterValue | null;
+  readonly visits: string;
+  readonly counted: number;
+  readonly share: string;
+  readonly fraction: number;
+  readonly conversionRate: string | null;
+}
+
+type NamedCityShare = CityShare & { readonly value: string; readonly region: string };
+
+function isNamedCity(share: CityShare): share is NamedCityShare {
+  return share.value !== null && share.region !== null;
+}
+
+function cityKey(share: CityShare): string {
+  if (isNamedCity(share)) {
+    return `${share.region}${CITY_KEY_SEPARATOR}${share.value}`;
+  }
+  return share.value === null ? UNKNOWN_CITY_KEY : OTHER_VALUE;
+}
+
+function cityName(share: CityShare, i18n: I18n): string {
+  if (isNamedCity(share)) {
+    return share.value;
+  }
+  return i18n.t(share.value === null ? 'devices.unknownCity' : 'devices.otherCities');
+}
+
+function cityPlace(share: CityShare, namesCountry: boolean, i18n: I18n): string | null {
+  if (!isNamedCity(share)) {
+    return null;
+  }
+  const region = share.regionName ?? share.region;
+  const country = regionParts(share.region)?.country;
+  return namesCountry && country !== undefined
+    ? `${region}, ${countryLabel(country, i18n)}`
+    : region;
+}
+
+export function hasNamedCity(cities: readonly CityShare[]): boolean {
+  return cities.some(isNamedCity);
+}
+
+export function cityRows(cities: readonly CityShare[], i18n: I18n): readonly CityRow[] {
+  const total = cities.reduce((sum, share) => sum + share.visits, 0);
+  const countries = new Set(
+    cities.filter(isNamedCity).flatMap((share) => regionParts(share.region)?.country ?? []),
+  );
+  const namesCountry = countries.size > 1;
+  return cities.map((share) => {
+    const fraction = rate(share.visits, total);
+    return {
+      key: cityKey(share),
+      label: cityName(share, i18n),
+      place: cityPlace(share, namesCountry, i18n),
+      filterValue: isNamedCity(share) ? { region: share.region, city: share.value } : null,
       visits: formatCount(share.visits, i18n),
       counted: share.visits,
       share: formatPercent(fraction, i18n),

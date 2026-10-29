@@ -1096,6 +1096,8 @@ export const en = {
     otherCountries: 'Other countries',
     otherRegions: 'Other regions',
     unknownRegion: 'Unknown',
+    otherCities: 'Other cities',
+    unknownCity: 'Unknown',
     convertedOfVisits: '{converted} of {visits}',
     subtitle: 'What people use to reach {project}',
     panels: {
@@ -1106,12 +1108,14 @@ export const en = {
     columns: {
       country: 'Country',
       region: 'Region',
+      city: 'City',
       visits: 'Visits',
       share: 'Share',
       conversionRate: 'Conversion rate',
     },
     countries: 'Countries',
     regions: 'Regions',
+    cities: 'Cities',
     conversionByDevice: {
       title: 'Conversion by device',
       description: 'Share of visits that sent <code/>',
@@ -1652,7 +1656,7 @@ export const en = {
       campaigns: 'Campaigns',
       channels: 'Visits by channel',
     },
-    devices: 'Device types, browsers, systems, countries and regions',
+    devices: 'Device types, browsers, systems, countries, regions and cities',
     features: {
       events: 'Events',
       screens: 'Screens',

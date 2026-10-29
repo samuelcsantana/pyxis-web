@@ -1,3 +1,4 @@
+import { CitiesTable } from '@/components/devices/cities-table';
 import { CountriesTable } from '@/components/devices/countries-table';
 import type { RowFilter } from '@/components/ui/row-filter-link';
 import { BROWSER_FAMILIES, OS_FAMILIES } from '@/domain/dashboard-filters';
@@ -14,10 +15,13 @@ import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
   browserLabel,
+  cityRows,
+  type CityFilterValue,
   countryLabel,
   deviceConversions,
   type DevicesReport,
   deviceTypeLabel,
+  hasNamedCity,
   hasVisits,
   operatingSystemLabel,
   OTHER_VALUE,
@@ -40,6 +44,7 @@ import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { createDevicesService } from '@/services/devices/devices-service.factory';
+import { createProjectsService } from '@/services/projects/projects-service.factory';
 
 export const generateMetadata = screenMetadata('devices');
 
@@ -58,11 +63,13 @@ export interface DevicesPageProps {
 interface DevicesReportViewProps {
   readonly report: DevicesReport;
   readonly conversionEvent: string | null;
+  readonly cityEnabled: boolean;
   readonly exportPath: string;
   readonly deviceVisitsHref: (deviceType: string) => string | null;
   readonly i18n: I18n;
   readonly countryVisitsHref: (country: string) => string | null;
   readonly regionVisitsHref: (region: string) => string | null;
+  readonly cityVisitsHref: (city: CityFilterValue) => string | null;
   readonly rows: DevicesRowLinks;
 }
 
@@ -74,16 +81,19 @@ interface DevicesRowLinks {
   readonly osFilter: (os: string) => RowFilter | null;
   readonly countryFilter: (country: string) => RowFilter | null;
   readonly regionFilter: (region: string) => RowFilter;
+  readonly cityFilter: (city: CityFilterValue) => RowFilter;
 }
 
 function DevicesReportView({
   report,
   conversionEvent,
+  cityEnabled,
   exportPath,
   deviceVisitsHref,
   i18n,
   countryVisitsHref,
   regionVisitsHref,
+  cityVisitsHref,
   rows,
 }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes, i18n);
@@ -142,6 +152,15 @@ function DevicesReportView({
           i18n={i18n}
         />
       </div>
+      {cityEnabled || hasNamedCity(report.cities) ? (
+        <CitiesTable
+          rows={cityRows(report.cities, i18n)}
+          withConversionRate={conversionEvent !== null}
+          visitsHref={cityVisitsHref}
+          filterOf={rows.cityFilter}
+          i18n={i18n}
+        />
+      ) : null}
       <CsvDownloads
         downloads={[{ label: devicesTableLabel(i18n), href: exportPath }]}
         i18n={i18n}
@@ -158,9 +177,12 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
   const { filters } = dashboardFiltersOf(search, i18n);
-  const report = await readOrSignIn(() =>
-    createDevicesService().devices(project.id, { from: period.from, to: period.to, filters }),
-  );
+  const [report, settings] = await Promise.all([
+    readOrSignIn(() =>
+      createDevicesService().devices(project.id, { from: period.from, to: period.to, filters }),
+    ),
+    readOrSignIn(() => createProjectsService().settings(project.id)),
+  ]);
   const filtered = hasDashboardFilters(filters);
   const query = withDashboardFilters(periodQuery(period), filters);
   const visitsHref = screenHref(project.id, 'visits', query);
@@ -173,6 +195,8 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
     return country === null ? null : linkWith(visitsHref, { country });
   };
   const regionVisitsHref = (region: string) => linkWith(visitsHref, { region });
+  const cityVisitsHref = ({ region, city }: CityFilterValue) =>
+    linkWith(visitsHref, { region, city });
   const rowFilter = screenRowFilters(project.id, 'devices', search, filters, i18n);
   const browserOf = (value: string) => familyOf(BROWSER_FAMILIES, value);
   const osOf = (value: string) => familyOf(OS_FAMILIES, value);
@@ -202,6 +226,7 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
       return country === null ? null : rowFilter({ country }, countryLabel(country, i18n));
     },
     regionFilter: (region) => rowFilter({ region }, region),
+    cityFilter: ({ region, city }) => rowFilter({ region, city }, city),
   };
   return (
     <ScreenContent
@@ -213,11 +238,13 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
         <DevicesReportView
           report={report}
           conversionEvent={project.conversionEvent}
+          cityEnabled={settings.cityEnabled}
           exportPath={exportHref(project.id, 'devices', query)}
           deviceVisitsHref={deviceVisitsHref}
           i18n={i18n}
           countryVisitsHref={countryVisitsHref}
           regionVisitsHref={regionVisitsHref}
+          cityVisitsHref={cityVisitsHref}
           rows={rows}
         />
       ) : filtered ? (

@@ -1130,6 +1130,8 @@ export const it = translation({
     otherCountries: 'Altri paesi',
     otherRegions: 'Altre regioni',
     unknownRegion: 'Sconosciuta',
+    otherCities: 'Altre città',
+    unknownCity: 'Sconosciuta',
     convertedOfVisits: '{converted} su {visits}',
     subtitle: 'Cosa usano le persone per raggiungere {project}',
     panels: {
@@ -1140,12 +1142,14 @@ export const it = translation({
     columns: {
       country: 'Paese',
       region: 'Regione',
+      city: 'Città',
       visits: 'Visite',
       share: 'Quota',
       conversionRate: 'Tasso di conversione',
     },
     countries: 'Paesi',
     regions: 'Regioni',
+    cities: 'Città',
     conversionByDevice: {
       title: 'Conversione per dispositivo',
       description: 'Quota di visite che hanno inviato <code/>',
@@ -1691,7 +1695,7 @@ export const it = translation({
       campaigns: 'Campagne',
       channels: 'Visite per canale',
     },
-    devices: 'Tipi di dispositivo, browser, sistemi, paesi e regioni',
+    devices: 'Tipi di dispositivo, browser, sistemi, paesi, regioni e città',
     features: {
       events: 'Eventi',
       screens: 'Schermate',

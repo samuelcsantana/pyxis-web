@@ -1134,6 +1134,8 @@ export const nl = translation({
     otherCountries: 'Andere landen',
     otherRegions: 'Andere regio’s',
     unknownRegion: 'Onbekend',
+    otherCities: 'Andere steden',
+    unknownCity: 'Onbekend',
     convertedOfVisits: '{converted} van {visits}',
     subtitle: 'Waarmee mensen {project} bezoeken',
     panels: {
@@ -1144,12 +1146,14 @@ export const nl = translation({
     columns: {
       country: 'Land',
       region: 'Regio',
+      city: 'Stad',
       visits: 'Bezoeken',
       share: 'Aandeel',
       conversionRate: 'Conversieratio',
     },
     countries: 'Landen',
     regions: 'Regio’s',
+    cities: 'Steden',
     conversionByDevice: {
       title: 'Conversie per apparaat',
       description: 'Aandeel van de bezoeken die <code/> verstuurden',
@@ -1690,7 +1694,7 @@ export const nl = translation({
       campaigns: 'Campagnes',
       channels: 'Bezoeken per kanaal',
     },
-    devices: 'Apparaattypen, browsers, systemen, landen en regio’s',
+    devices: 'Apparaattypen, browsers, systemen, landen, regio’s en steden',
     features: {
       events: 'Events',
       screens: 'Schermen',

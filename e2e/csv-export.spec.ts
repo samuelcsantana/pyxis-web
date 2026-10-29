@@ -112,7 +112,7 @@ test('downloads every Devices breakdown in one file', async ({ page }) => {
 
   const csv = await downloadCsv(
     page,
-    'Device types, browsers, systems, countries and regions as CSV',
+    'Device types, browsers, systems, countries, regions and cities as CSV',
   );
 
   expect(csv.fileName).toMatch(new RegExp(`^pyxis-devices-${ISO_DAY}-${ISO_DAY}\\.csv$`));
@@ -124,8 +124,10 @@ test('downloads every Devices breakdown in one file', async ({ page }) => {
     'operating_system',
     'country',
     'region',
+    'city',
   ]);
   expect(csv.lines.some((line) => /^region,BR-SP,São Paulo,\d+,\d+,\d+$/.test(line))).toBe(true);
+  expect(csv.lines.some((line) => /^city,Campinas,São Paulo,\d+,\d+,\d+$/.test(line))).toBe(true);
 });
 
 test('downloads the visits that match the Visits filters', async ({ page }) => {

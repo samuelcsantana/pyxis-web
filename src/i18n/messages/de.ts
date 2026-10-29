@@ -1148,6 +1148,8 @@ export const de = translation({
     otherCountries: 'Andere Länder',
     otherRegions: 'Andere Regionen',
     unknownRegion: 'Unbekannt',
+    otherCities: 'Andere Städte',
+    unknownCity: 'Unbekannt',
     convertedOfVisits: '{converted} konvertiert · {visits} insgesamt',
     subtitle: 'Womit Menschen {project} nutzen',
     panels: {
@@ -1158,12 +1160,14 @@ export const de = translation({
     columns: {
       country: 'Land',
       region: 'Region',
+      city: 'Stadt',
       visits: 'Besuche',
       share: 'Anteil',
       conversionRate: 'Conversion-Rate',
     },
     countries: 'Länder',
     regions: 'Regionen',
+    cities: 'Städte',
     conversionByDevice: {
       title: 'Conversion nach Gerät',
       description: 'Anteil der Besuche, die <code/> gesendet haben',
@@ -1710,7 +1714,7 @@ export const de = translation({
       campaigns: 'Kampagnen',
       channels: 'Besuche nach Kanal',
     },
-    devices: 'Gerätetypen, Browser, Systeme, Länder und Regionen',
+    devices: 'Gerätetypen, Browser, Systeme, Länder, Regionen und Städte',
     features: {
       events: 'Ereignisse',
       screens: 'Ansichten',
