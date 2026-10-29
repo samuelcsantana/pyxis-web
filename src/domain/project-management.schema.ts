@@ -18,6 +18,10 @@ export const deletedProjectResponseSchema = z
   .object({ project_id: z.string() })
   .transform((): void => undefined);
 
+export function cityChangeWire(cityEnabled: boolean) {
+  return { city_enabled: cityEnabled };
+}
+
 export function projectChangesWire(changes: ProjectChanges) {
   return {
     name: changes.name,

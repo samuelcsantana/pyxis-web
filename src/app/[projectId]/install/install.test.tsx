@@ -15,6 +15,7 @@ const SETTINGS: ProjectSettings = {
   name: 'Demo Store',
   timezone: 'UTC',
   conversionEvent: null,
+  cityEnabled: false,
   allowedOrigins: ['https://store.example.com'],
   createdAt: '2026-11-20T12:00:00.000Z',
   firstEventAt: null,

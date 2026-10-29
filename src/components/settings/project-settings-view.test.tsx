@@ -18,6 +18,7 @@ const SETTINGS: ProjectSettings = {
   name: 'Shop',
   timezone: 'UTC',
   conversionEvent: 'signup_completed',
+  cityEnabled: false,
   allowedOrigins: ['https://shop.example.com', 'https://www.shop.example.com'],
   createdAt: '2026-09-01T08:00:00.000Z',
   firstEventAt: '2026-09-02T10:00:00.000Z',

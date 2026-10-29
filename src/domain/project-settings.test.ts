@@ -15,6 +15,7 @@ const SETTINGS: ProjectSettings = {
   name: 'Shop',
   timezone: 'UTC',
   conversionEvent: null,
+  cityEnabled: false,
   allowedOrigins: [],
   createdAt: '2026-10-01T00:00:00.000Z',
   firstEventAt: '2026-10-02T00:00:00.000Z',
@@ -109,5 +110,12 @@ describe('projectSettingsResponseSchema', () => {
 
   it('reads no hold when the project has none', () => {
     expect(projectSettingsResponseSchema.parse(WIRE).deletionHeldAt).toBeNull();
+  });
+
+  it('reads whether the project keeps the city, and takes it as off when the API says nothing', () => {
+    expect(projectSettingsResponseSchema.parse({ ...WIRE, city_enabled: true }).cityEnabled).toBe(
+      true,
+    );
+    expect(projectSettingsResponseSchema.parse(WIRE).cityEnabled).toBe(false);
   });
 });
