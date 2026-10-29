@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.42.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.42.0...v0.42.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* **account:** promise the return to free only when the API's mailbox check allows it ([e844d19](https://github.com/samuelcsantana/pyxis-web/commit/e844d19f0e12dc30a09c2147105347ffc23a4aa4))
+* **sign-up:** ask an unfinished owner to subscribe without a trial while the free plan is on ([7bf37cc](https://github.com/samuelcsantana/pyxis-web/commit/7bf37cc83f8576992144e6a07474d970365baa1a))
+
+
+### Documentation
+
+* **features:** say the cancel promise follows the API's mailbox check ([ccd0575](https://github.com/samuelcsantana/pyxis-web/commit/ccd0575210c0d0512ec1ac41abfb3efedd43d80e))
+
 ## [0.42.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.41.2...v0.42.0) (2026-10-29)
 
 
