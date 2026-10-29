@@ -23,6 +23,7 @@ const EVERY_FILTER: DashboardFilters = {
   identity: 'anonymous',
   country: 'PT',
   region: 'PT-11',
+  city: 'Sintra',
   source: 'newsletter',
   campaign: 'launch',
   failed: true,
@@ -44,6 +45,7 @@ describe('dashboardFiltersOf', () => {
           identity: 'anonymous',
           country: 'pt',
           region: 'pt-11',
+          city: ' Sintra ',
           source: 'newsletter',
           campaign: 'launch',
           failed: 'true',
@@ -74,6 +76,7 @@ describe('dashboardFiltersOf', () => {
         property: 'plan=pro',
         country: 'Brazil',
         region: 'SP',
+        city: 'z'.repeat(101),
         source: 'x'.repeat(129),
         campaign: 'y'.repeat(65),
       },
@@ -81,7 +84,8 @@ describe('dashboardFiltersOf', () => {
     );
 
     expect(reading.filters).toEqual(NO_DASHBOARD_FILTERS);
-    expect(reading.problems).toHaveLength(6);
+    expect(reading.problems).toHaveLength(7);
+    expect(reading.problems).toContain('A city has at most 100 characters.');
   });
 });
 
@@ -101,6 +105,7 @@ describe('dashboardFilterParameters', () => {
       identity: 'anonymous',
       country: 'PT',
       region: 'PT-11',
+      city: 'Sintra',
       source: 'newsletter',
       campaign: 'launch',
       failed: 'true',
@@ -139,6 +144,7 @@ describe('dashboardFilterQuery', () => {
       identity: 'anonymous',
       country: 'PT',
       region: 'PT-11',
+      city: 'Sintra',
       source: 'newsletter',
       campaign: 'launch',
       failed: 'true',

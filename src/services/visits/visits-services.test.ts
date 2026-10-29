@@ -102,6 +102,7 @@ describe('HttpVisitsService', () => {
         identity: 'anonymous',
         country: 'BR',
         region: 'BR-SP',
+        city: 'Campinas',
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders',
@@ -123,6 +124,7 @@ describe('HttpVisitsService', () => {
       identity: 'anonymous',
       country: 'BR',
       region: 'BR-SP',
+      city: 'Campinas',
       source: 'google',
       campaign: 'spring_sale',
       route: 'POST /orders',
@@ -290,6 +292,17 @@ describe('MockVisitsService', () => {
     expect(totalOf({ country: 'BR', region: 'BR-SP' })).toBe(saoPaulo?.visits);
     expect(totalOf({ country: 'PT', region: 'BR-SP' })).toBe(0);
     expect(ids({ region: 'BR-SP' })).toContain('3c07a1b2');
+  });
+
+  it('filters by city as Devices counts it, with its region or alone', () => {
+    const { cities } = demoDevicesWire(STORE, RANGE, NOW);
+    const campinas = cities.find((share) => share.value === 'Campinas');
+
+    expect(campinas?.visits).toBeGreaterThan(0);
+    expect(totalOf({ region: 'BR-SP', city: 'Campinas' })).toBe(campinas?.visits);
+    expect(totalOf({ city: 'Campinas' })).toBe(campinas?.visits);
+    expect(totalOf({ region: 'BR-RJ', city: 'Campinas' })).toBe(0);
+    expect(ids({ region: 'BR-BA', city: 'Feira de Santana' })).toContain('d073f2ad');
   });
 
   it('filters by a request the visit made, or one that failed, on a route or on any', () => {

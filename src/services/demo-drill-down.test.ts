@@ -152,6 +152,16 @@ describe('the demo visits behind every link into Visits', () => {
         }
       });
 
+      it('include a visit for every city Devices lists, by its region and its name', async () => {
+        const devices = await new MockDevicesService().devices(project.id, range);
+
+        for (const { value: city, region } of devices.cities) {
+          if (city !== null && region !== null) {
+            expect(await visitsFound({ region, city }), city).toBeGreaterThan(0);
+          }
+        }
+      });
+
       it('include a visit for every route that failed in Requests', async () => {
         const requests = await new MockRequestsService().requests(project.id, range, null);
 

@@ -36,6 +36,7 @@ const EVERY_VISITS_FILTER: Required<VisitsSearch> = {
   identity: '',
   country: '',
   region: '',
+  city: '',
   source: '',
   campaign: '',
   route: '',

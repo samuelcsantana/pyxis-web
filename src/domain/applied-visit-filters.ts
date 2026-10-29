@@ -23,6 +23,7 @@ export const VISIT_FILTER_FIELDS = [
   'identity',
   'country',
   'region',
+  'city',
   'source',
   'campaign',
   'route',
@@ -130,6 +131,10 @@ export function appliedVisitFilters(
     ...shown('region', t('visits.filters.region'), filters.region, true, {
       ...filters,
       region: null,
+    }),
+    ...shown('city', t('visits.filters.city'), filters.city, false, {
+      ...filters,
+      city: null,
     }),
     ...shown('source', t('visits.filters.source'), filters.source, true, {
       ...filters,

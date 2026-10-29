@@ -41,6 +41,7 @@ export { DASHBOARD_FILTER_PARAMETERS, PAGE_FILTER_PARAMETERS };
 export type { DashboardFilterParameter };
 export const MAX_SOURCE_LENGTH = 128;
 export const MAX_CAMPAIGN_LENGTH = 64;
+export const MAX_CITY_LENGTH = 100;
 export const COUNTRY_CODE_PATTERN = /^[A-Z]{2}$/;
 export const FAILED_ONLY = 'true';
 
@@ -59,6 +60,7 @@ export interface DashboardFilters {
   readonly identity: VisitIdentity | null;
   readonly country: string | null;
   readonly region: string | null;
+  readonly city: string | null;
   readonly source: string | null;
   readonly campaign: string | null;
   readonly failed: boolean;
@@ -75,6 +77,7 @@ export const NO_DASHBOARD_FILTERS: DashboardFilters = {
   identity: null,
   country: null,
   region: null,
+  city: null,
   source: null,
   campaign: null,
   failed: false,
@@ -134,6 +137,11 @@ function attributionFilters(search: DashboardSearch, i18n: I18n) {
       isRegionCode,
       i18n.t('visits.problems.region'),
     ),
+    city: textFilter(
+      singleValue(search.city),
+      (text) => text.length <= MAX_CITY_LENGTH,
+      i18n.t('visits.problems.city', { max: String(MAX_CITY_LENGTH) }),
+    ),
     source: textFilter(
       singleValue(search.source),
       (text) => text.length <= MAX_SOURCE_LENGTH,
@@ -158,7 +166,7 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
   const event = typedEvent === '' || eventProblem !== null ? null : typedEvent;
   const typedProperty = singleValue(search.property);
   const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event, i18n);
-  const { country, region, source, campaign } = attributionFilters(search, i18n);
+  const { country, region, city, source, campaign } = attributionFilters(search, i18n);
   return {
     filters: {
       paths: typedPaths.filter((_path, index) => pathProblems[index] === null),
@@ -171,6 +179,7 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
       identity: oneOf(VISIT_IDENTITIES, singleValue(search.identity)),
       country: country.value,
       region: region.value,
+      city: city.value,
       source: source.value,
       campaign: campaign.value,
       failed: singleValue(search.failed) === FAILED_ONLY,
@@ -183,6 +192,7 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
           propertyIssue,
           country.problem,
           region.problem,
+          city.problem,
           source.problem,
           campaign.problem,
         ].filter((problem) => problem !== null),
@@ -213,6 +223,7 @@ export function dashboardFilterParameters(
     ...optional('identity', filters.identity),
     ...optional('country', filters.country),
     ...optional('region', filters.region),
+    ...optional('city', filters.city),
     ...optional('source', filters.source),
     ...optional('campaign', filters.campaign),
     ...optional('failed', filters.failed ? FAILED_ONLY : null),
@@ -256,6 +267,7 @@ export const ROW_FILTER_FIELDS = [
   'os',
   'country',
   'region',
+  'city',
   'source',
   'campaign',
 ] as const;

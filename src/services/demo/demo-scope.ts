@@ -134,6 +134,7 @@ function cameFrom(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
   return (
     (filters.country === null || visit.country === filters.country) &&
     (filters.region === null || visit.region === filters.region) &&
+    (filters.city === null || visit.city === filters.city) &&
     (filters.source === null || visit.source === filters.source) &&
     (filters.campaign === null || visit.campaign === filters.campaign)
   );

@@ -19,6 +19,7 @@ const EVERY_FILTER: VisitFilters = {
   identity: 'identified',
   country: 'BR',
   region: 'BR-SP',
+  city: 'Campinas',
   source: 'google',
   campaign: 'spring_sale',
   route: 'POST /orders',
@@ -45,6 +46,7 @@ describe('appliedVisitFilters', () => {
       { key: 'identity', label: 'Account', value: 'Identified', code: false },
       { key: 'country', label: 'Country', value: 'Brazil', code: false },
       { key: 'region', label: 'Region', value: 'BR-SP', code: true },
+      { key: 'city', label: 'City', value: 'Campinas', code: false },
       { key: 'source', label: 'Source', value: 'google', code: true },
       { key: 'campaign', label: 'Campaign', value: 'spring_sale', code: true },
       { key: 'route', label: 'Made request', value: 'POST /orders', code: true },
@@ -74,6 +76,7 @@ describe('appliedVisitFilters', () => {
       'identity',
       'country',
       'region',
+      'city',
       'source',
       'campaign',
       'route',
@@ -93,12 +96,29 @@ describe('changedVisitFilterFields', () => {
     channel: 'paid',
     country: 'BR',
     region: 'BR-SP',
+    city: 'Campinas',
   });
 
-  it('finds no change when the form holds what is applied, spaces and case aside', () => {
+  it('finds no change when the form holds what is applied, spaces and case of codes aside', () => {
     expect(
-      changedVisitFilterFields(applied, { channel: 'paid', country: ' br ', region: 'br-sp' }),
+      changedVisitFilterFields(applied, {
+        channel: 'paid',
+        country: ' br ',
+        region: 'br-sp',
+        city: ' Campinas ',
+      }),
     ).toEqual([]);
+  });
+
+  it('takes a city as typed, since the API matches its exact name', () => {
+    expect(
+      changedVisitFilterFields(applied, {
+        channel: 'paid',
+        country: 'BR',
+        region: 'BR-SP',
+        city: 'campinas',
+      }),
+    ).toEqual(['city']);
   });
 
   it('names each field whose value differs from the applied one', () => {
@@ -107,13 +127,14 @@ describe('changedVisitFilterFields', () => {
         channel: 'email',
         country: 'BR',
         region: 'BR-RJ',
+        city: 'Campinas',
         event: 'cta_clicked',
       }),
     ).toEqual(['event', 'channel', 'region']);
   });
 
   it('counts a field left empty against an applied value as changed', () => {
-    expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country', 'region']);
+    expect(changedVisitFilterFields(applied, {})).toEqual(['channel', 'country', 'region', 'city']);
   });
 });
 

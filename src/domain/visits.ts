@@ -9,6 +9,7 @@ import {
   dashboardFiltersOf,
   type DashboardSearch,
   MAX_CAMPAIGN_LENGTH,
+  MAX_CITY_LENGTH,
   MAX_SOURCE_LENGTH,
   NO_DASHBOARD_FILTERS,
   OS_FAMILIES,
@@ -33,6 +34,7 @@ export type VisitSummary = VisitsReport['visits'][number];
 export {
   BROWSER_FAMILIES,
   MAX_CAMPAIGN_LENGTH,
+  MAX_CITY_LENGTH,
   MAX_SOURCE_LENGTH,
   OS_FAMILIES,
   PAGE_FILTER_PARAMETERS,
