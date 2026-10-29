@@ -46,8 +46,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. The
   sidebar fits in 700px, so Sign out shows without scrolling on a 1366×768 laptop, and the
-  account email, project names and time zones wrap instead of being cut. Each project in the
-  switcher shows the icon of its own site (the API fetches it daily from the project's first
+  account email, project names and time zones wrap instead of being cut, the time zone only
+  after a slash (`America/` above `Sao_Paulo`), never inside a word. The Pyxis logo, in the
+  sidebar and in the phone's bar, opens the Overview of the project on screen with the period
+  and the filters of the page. The navigation marks where you are: the screen; Settings on the
+  settings and also on the install guide and on an export, which have no item of their own; on
+  Help, whose link is in the account menu, the account row (its background, and the e-mail in
+  bold). Each project in the switcher shows the icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
