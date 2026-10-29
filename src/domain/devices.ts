@@ -14,6 +14,7 @@ const OTHER_REGIONS_CODE = '··';
 const UNKNOWN_REGION_KEY = 'unknown';
 const UNKNOWN_CITY_KEY = 'unknown';
 const CITY_KEY_SEPARATOR = '|';
+const PLACE_SEPARATOR = ', ';
 const COUNTRY_CODE = /^[A-Z]{2}$/;
 const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
 
@@ -70,16 +71,19 @@ export function countryCode(value: string): string {
   return value === OTHER_VALUE ? OTHER_COUNTRIES_CODE : value;
 }
 
-export function placeLabel(
-  country: string | null,
-  regionName: string | null,
-  i18n: I18n,
-): string | null {
-  if (country === null) {
+export interface VisitPlace {
+  readonly country: string | null;
+  readonly regionName: string | null;
+  readonly city: string | null;
+}
+
+export function placeLabel(place: VisitPlace, i18n: I18n): string | null {
+  if (place.country === null) {
     return null;
   }
-  const countryName = countryLabel(country, i18n);
-  return regionName === null ? countryName : `${regionName}, ${countryName}`;
+  return [place.city, place.regionName, countryLabel(place.country, i18n)]
+    .filter((part) => part !== null)
+    .join(PLACE_SEPARATOR);
 }
 
 export function isRegionCode(value: string): boolean {

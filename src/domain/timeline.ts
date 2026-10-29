@@ -229,7 +229,7 @@ export function visitViews(
   const time = i18n.format.dateTime('clock', timeZone);
   const started = i18n.format.dateTime('visitStart', timeZone);
   return visits.map((visit) => {
-    const place = placeLabel(visit.country, visit.regionName, i18n);
+    const place = placeLabel(visit, i18n);
     return {
       key: visit.sessionId,
       personId: visit.userId,
