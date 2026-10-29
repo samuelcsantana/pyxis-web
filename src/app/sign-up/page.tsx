@@ -10,6 +10,7 @@ import {
   needsCheckout,
   waitsForAFreePlace,
 } from '@/domain/accounts';
+import { isFreePlanOn } from '@/domain/free-plan';
 import { openSignUpOf, requestedIntervalOf } from '@/domain/sign-up';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
@@ -83,6 +84,11 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps = {})
           terms={open}
           unfinishedAccountId={unfinished?.id}
           unfinishedWaitsForAFreePlace={owned.some(waitsForAFreePlace)}
+          unfinishedBody={
+            open !== null && isFreePlanOn(open.freePlan)
+              ? t('account.status.incompleteFree')
+              : undefined
+          }
           openCheckout={openCheckout}
           demoCode={isDemoMode() ? DEMO_SIGN_IN_CODE : undefined}
           initialInterval={requestedIntervalOf(query?.interval)}

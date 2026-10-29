@@ -52,6 +52,7 @@ export interface SignUpFormProps {
   readonly terms: OpenSignUp | null;
   readonly unfinishedAccountId?: string;
   readonly unfinishedWaitsForAFreePlace?: boolean;
+  readonly unfinishedBody?: string;
   readonly openCheckout: OpenCheckoutFor;
   readonly signUpService?: ISignUpService;
   readonly demoCode?: string;
@@ -124,6 +125,7 @@ export function SignUpForm({
   terms,
   unfinishedAccountId,
   unfinishedWaitsForAFreePlace = false,
+  unfinishedBody,
   openCheckout,
   signUpService,
   demoCode,
@@ -315,7 +317,7 @@ export function SignUpForm({
     return (
       <section className={CARD_CLASS}>
         <h1 className="text-title font-semibold">{t('signUp.finishTitle')}</h1>
-        <p className="text-sm text-muted">{t('signUp.finishBody')}</p>
+        <p className="text-sm text-muted">{unfinishedBody ?? t('signUp.finishBody')}</p>
         <BillingActions
           kind="checkout"
           open={(chosen) => openCheckout(unfinishedAccountId, chosen)}

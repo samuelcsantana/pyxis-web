@@ -129,7 +129,35 @@ describe('SignUpPage', () => {
       screen.getByRole('heading', { level: 1, name: 'Finish your subscription' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Finish subscription' })).toBeInTheDocument();
+    expect(screen.getByText(/Choose one to start the free trial/)).toBeInTheDocument();
   });
+
+  it.each(['open', 'full'] as const)(
+    'asks an unfinished owner to subscribe, with no free trial, while the free plan is %s',
+    async (freePlan) => {
+      state.token = 'session';
+      state.accounts = () => demoAccount({ status: 'incomplete' });
+      state.status = () =>
+        Promise.resolve({
+          open: true,
+          termsVersion: '2026-11-01',
+          termsUrl: 'https://pyxis.example.com/terms',
+          freePlan,
+        });
+
+      renderWithMessages(await SignUpPage());
+
+      expect(
+        screen.getByRole('heading', { level: 1, name: 'Finish your subscription' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'The subscription was not finished. Choose a plan to subscribe; it is charged from today.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
+    },
+  );
 
   it('tells an owner who waits for a free place that the account waits, and offers to subscribe', async () => {
     state.token = 'session';
