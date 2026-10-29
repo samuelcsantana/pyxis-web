@@ -17,6 +17,7 @@ const VISIT: VisitSummary = {
   country: 'BR',
   region: 'BR-PE',
   regionName: 'Pernambuco',
+  city: 'Recife',
   channel: 'social',
   userId: 'user-42',
 };
@@ -71,6 +72,7 @@ describe('visitsCsvTable', () => {
         country: null,
         region: null,
         regionName: null,
+        city: null,
         channel: null,
         userId: null,
         highlights: [],

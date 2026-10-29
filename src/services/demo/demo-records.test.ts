@@ -24,6 +24,7 @@ const VISIT: DemoVisit = {
   country: 'BR',
   region: 'BR-MG',
   regionName: 'Minas Gerais',
+  city: null,
   channel: 'paid',
   userId: 'u_7f3a',
   events: [

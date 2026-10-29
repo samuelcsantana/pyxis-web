@@ -51,6 +51,7 @@ export function demoVisitSummary(visit: DemoVisitRecord): VisitSummaryWire {
     country: visit.country,
     region: visit.region,
     region_name: visit.regionName,
+    city: visit.city,
     channel: visit.channel,
     user_id: visit.userId,
     source: visit.source,

@@ -13,6 +13,7 @@ const SOCIAL_VISIT = {
   country: 'BR',
   region: 'BR-SP',
   regionName: 'São Paulo',
+  city: 'Campinas',
   channel: 'social',
   events: [{ second: 3, name: 'page_view', path: '/' }],
 } as const;

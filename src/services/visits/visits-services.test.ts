@@ -37,6 +37,7 @@ const RECORD: DemoVisitRecord = {
   country: 'BR',
   region: 'BR-RJ',
   regionName: 'Rio de Janeiro',
+  city: 'Niterói',
   channel: 'paid',
   source: 'google',
   medium: 'cpc',
@@ -188,6 +189,7 @@ describe('MockVisitsService', () => {
     expect(summary).toMatchObject({
       region: 'BR-RJ',
       region_name: 'Rio de Janeiro',
+      city: 'Niterói',
       entry_path: '/',
       page_views: 2,
       highlights: ['cta_clicked'],

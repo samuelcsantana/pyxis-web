@@ -978,7 +978,7 @@
       },
       "DevicesReport": {
         "additionalProperties": false,
-        "description": "Visits, conversion events and converting visits (both null without a conversion event) per value, sorted by visits: the top five values and \"other\" for the rest, unknown countries included. regions lists the top 10 regions (the first subdivision of the country, as an ISO 3166-2 code such as BR-SP, with the name CloudFront gave it), then \"other\" for the rest, then a null value for visits without a region.",
+        "description": "Visits, conversion events and converting visits (both null without a conversion event) per value, sorted by visits: the top five values and \"other\" for the rest, unknown countries included. regions lists the top 10 regions (the first subdivision of the country, as an ISO 3166-2 code such as BR-SP, with the name CloudFront gave it), then \"other\" for the rest, then a null value for visits without a region. cities lists the top 20 approximate cities with their region, kept only for projects that turned the city on, then \"other\", then a null value for the visits without a city (every visit, for a project with the city off).",
         "properties": {
           "browsers": {
             "items": {
@@ -1019,6 +1019,70 @@
               },
               "required": [
                 "value",
+                "visits",
+                "conversions",
+                "converting_visits"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "cities": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "conversions": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "converting_visits": {
+                  "anyOf": [
+                    {
+                      "maximum": 9007199254740991,
+                      "minimum": -9007199254740991,
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "region": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "region_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "visits": {
+                  "maximum": 9007199254740991,
+                  "minimum": -9007199254740991,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "value",
+                "region",
+                "region_name",
                 "visits",
                 "conversions",
                 "converting_visits"
@@ -1168,6 +1232,111 @@
             },
             "type": "array"
           },
+          "reach": {
+            "additionalProperties": false,
+            "description": "How far the visits of the range reached, and where most of them came from",
+            "properties": {
+              "cities": {
+                "description": "Distinct approximate cities, each in its region; 0 while the city is off",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "continents": {
+                "description": "Continents the visits came from, as UN M49 places their countries (Americas, Europe, Asia, Africa, Oceania); Antarctica and unknown countries count for none",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "countries": {
+                "description": "Distinct countries",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "regions": {
+                "description": "Distinct regions (first subdivisions of a country)",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "top_country": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "value": {
+                        "type": "string"
+                      },
+                      "visits": {
+                        "maximum": 9007199254740991,
+                        "minimum": -9007199254740991,
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "visits"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The country with most visits; null when no visit had a country"
+              },
+              "top_region": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "visits": {
+                        "maximum": 9007199254740991,
+                        "minimum": -9007199254740991,
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "name",
+                      "visits"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "The region with most visits; null when no visit had a region"
+              },
+              "visits": {
+                "description": "Visits of the range, the base of every share",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "visits",
+              "continents",
+              "countries",
+              "regions",
+              "cities",
+              "top_country",
+              "top_region"
+            ],
+            "type": "object"
+          },
           "regions": {
             "items": {
               "additionalProperties": false,
@@ -1231,7 +1400,9 @@
           "browsers",
           "operating_systems",
           "countries",
-          "regions"
+          "regions",
+          "cities",
+          "reach"
         ],
         "type": "object"
       },
@@ -1779,6 +1950,9 @@
             },
             "type": "array"
           },
+          "city_enabled": {
+            "type": "boolean"
+          },
           "conversion_event": {
             "type": [
               "string",
@@ -1808,6 +1982,7 @@
           "allowed_origins",
           "timezone",
           "conversion_event",
+          "city_enabled",
           "created_at"
         ],
         "type": "object"
@@ -2911,6 +3086,10 @@
             "minItems": 1,
             "type": "array"
           },
+          "city_enabled": {
+            "description": "Keep the visitor's approximate city on new events; off by default. Turning it off stops reading the city at once and erases the cities already kept within a day.",
+            "type": "boolean"
+          },
           "conversion_event": {
             "anyOf": [
               {
@@ -3111,6 +3290,10 @@
             },
             "type": "array"
           },
+          "city_enabled": {
+            "description": "Whether new events keep the visitor's approximate city; off by default, and when off the city is never read",
+            "type": "boolean"
+          },
           "conversion_event": {
             "description": "The event counted as a conversion; null when the project has none",
             "type": [
@@ -3275,6 +3458,7 @@
           "name",
           "timezone",
           "conversion_event",
+          "city_enabled",
           "allowed_origins",
           "created_at",
           "account_id",
@@ -4059,6 +4243,12 @@
                 "browser": {
                   "type": "string"
                 },
+                "city": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "country": {
                   "type": [
                     "string",
@@ -4162,6 +4352,7 @@
                 "country",
                 "region",
                 "region_name",
+                "city",
                 "properties"
               ],
               "type": "object"
@@ -4231,6 +4422,12 @@
                     {
                       "type": "null"
                     }
+                  ]
+                },
+                "city": {
+                  "type": [
+                    "string",
+                    "null"
                   ]
                 },
                 "country": {
@@ -4334,6 +4531,7 @@
                 "country",
                 "region",
                 "region_name",
+                "city",
                 "channel",
                 "user_id",
                 "events"
@@ -4464,6 +4662,12 @@
                     }
                   ]
                 },
+                "city": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
                 "country": {
                   "type": [
                     "string",
@@ -4553,6 +4757,7 @@
                 "country",
                 "region",
                 "region_name",
+                "city",
                 "channel",
                 "source",
                 "campaign",
@@ -6922,6 +7127,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -7402,6 +7618,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -7820,6 +8047,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -8259,6 +8497,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -8535,6 +8784,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -8841,6 +9101,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -9127,6 +9398,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -9421,6 +9703,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -9707,6 +10000,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -10272,6 +10576,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -10815,6 +11130,17 @@
             }
           },
           {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
             "description": "Only the visits from this source as Acquisition names it: campaign source, referring host, (ad click) or (direct)",
             "in": "query",
             "name": "source",
@@ -11153,6 +11479,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -11532,6 +11869,17 @@
             "required": false,
             "schema": {
               "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only the visits from this approximate city, by its exact name; send it with its region, since the same name exists in several regions",
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "minLength": 1,
               "type": "string"
             }
           },

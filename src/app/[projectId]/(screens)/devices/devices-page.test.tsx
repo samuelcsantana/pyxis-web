@@ -50,6 +50,24 @@ const STORE = {
 const DOCS = { id: 'p-docs', name: 'Demo Docs', timezone: 'UTC', conversionEvent: null };
 const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE, DOCS] };
 
+const NO_DEVICES: DevicesReport = {
+  deviceTypes: [],
+  browsers: [],
+  operatingSystems: [],
+  countries: [],
+  regions: [],
+  cities: [],
+  reach: {
+    visits: 0,
+    continents: 0,
+    countries: 0,
+    regions: 0,
+    cities: 0,
+    topCountry: null,
+    topRegion: null,
+  },
+};
+
 function renderDevices(projectId = 'p-store', search: Readonly<Record<string, string>> = {}) {
   return DevicesPage({
     params: Promise.resolve({ projectId }),
@@ -246,14 +264,7 @@ describe('DevicesPage', () => {
   });
 
   it('shows how to install the SDK when nobody visited in the period', async () => {
-    state.devices = (): Promise<DevicesReport> =>
-      Promise.resolve({
-        deviceTypes: [],
-        browsers: [],
-        operatingSystems: [],
-        countries: [],
-        regions: [],
-      });
+    state.devices = (): Promise<DevicesReport> => Promise.resolve(NO_DEVICES);
 
     renderWithMessages(await renderDevices());
 
@@ -263,14 +274,7 @@ describe('DevicesPage', () => {
   });
 
   it('calls an empty period quiet once the project has received events', async () => {
-    state.devices = (): Promise<DevicesReport> =>
-      Promise.resolve({
-        deviceTypes: [],
-        browsers: [],
-        operatingSystems: [],
-        countries: [],
-        regions: [],
-      });
+    state.devices = (): Promise<DevicesReport> => Promise.resolve(NO_DEVICES);
     state.admin = {
       ...ADMIN,
       projects: [
@@ -311,14 +315,7 @@ describe('DevicesPage', () => {
   });
 
   it('says no visit matches the filters when a filtered period is empty, never to install', async () => {
-    state.devices = (): Promise<DevicesReport> =>
-      Promise.resolve({
-        deviceTypes: [],
-        browsers: [],
-        operatingSystems: [],
-        countries: [],
-        regions: [],
-      });
+    state.devices = (): Promise<DevicesReport> => Promise.resolve(NO_DEVICES);
 
     renderWithMessages(await renderDevices('p-store', { browser: 'opera' }));
 

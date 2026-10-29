@@ -31,6 +31,7 @@ const WIRE: VisitsWire = {
       country: 'BR',
       region: 'BR-SP',
       region_name: 'São Paulo',
+      city: 'Campinas',
       channel: 'paid',
       user_id: 'u_check_visits',
     },
@@ -48,6 +49,7 @@ const WIRE: VisitsWire = {
       country: null,
       region: null,
       region_name: null,
+      city: null,
       channel: null,
       user_id: null,
     },
@@ -74,6 +76,7 @@ describe('visitsResponseSchema', () => {
       country: 'BR',
       region: 'BR-SP',
       regionName: 'São Paulo',
+      city: 'Campinas',
       channel: 'paid',
       userId: 'u_check_visits',
     });

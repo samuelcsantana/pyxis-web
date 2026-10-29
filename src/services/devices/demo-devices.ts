@@ -3,6 +3,7 @@ import { devicesResponseSchema } from '@/domain/devices.schema';
 import { itemAt } from '../demo/demo-random';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoVisitRecord } from '../demo/demo-records';
+import { demoContinentOf } from '../demo/demo-regions';
 import {
   byKeys,
   countWhere,
@@ -15,9 +16,15 @@ import {
 
 export const TOP_DEVICE_VALUES = 5;
 export const TOP_REGIONS = 10;
+export const TOP_CITIES = 20;
 
 type ShareWire = DevicesWire['device_types'][number];
 type RegionShareWire = DevicesWire['regions'][number];
+type CityShareWire = DevicesWire['cities'][number];
+type ReachWire = DevicesWire['reach'];
+type PlacedVisit = DemoVisitRecord & { readonly region: string; readonly city: string };
+
+const PLACE_KEY_SEPARATOR = '|';
 
 interface ValueCount {
   readonly value: string;
@@ -122,6 +129,118 @@ function regionShares(
   ];
 }
 
+interface CityPlace {
+  readonly value: string | null;
+  readonly region: string | null;
+  readonly regionName: string | null;
+}
+
+const NO_CITY_PLACE: CityPlace = { value: null, region: null, regionName: null };
+
+function cityShare(place: CityPlace, count: ValueCount, countsConversions: boolean): CityShareWire {
+  return {
+    value: place.value,
+    region: place.region,
+    region_name: place.regionName,
+    visits: count.visits,
+    conversions: countsConversions ? count.conversions : null,
+    converting_visits: countsConversions ? count.convertingVisits : null,
+  };
+}
+
+function isPlaced(visit: DemoVisitRecord): visit is PlacedVisit {
+  return visit.city !== null && visit.region !== null;
+}
+
+function placeKey(visit: PlacedVisit): string {
+  return `${visit.region}${PLACE_KEY_SEPARATOR}${visit.city}`;
+}
+
+function cityShares(
+  visits: readonly DemoVisitRecord[],
+  conversionEvent: string | null,
+): CityShareWire[] {
+  const countsConversions = conversionEvent !== null;
+  const ranked = [...groupedBy(visits.filter(isPlaced), placeKey)]
+    .map(([key, group]) => {
+      const first = itemAt(group, 0);
+      return { first, count: counted(key, group, conversionEvent) };
+    })
+    .toSorted(byKeys(({ first, count }) => [-count.visits, first.city, first.region]));
+  const rest = ranked.slice(TOP_CITIES).map(({ count }) => count);
+  const unplaced = visits.filter((visit) => !isPlaced(visit));
+  return [
+    ...ranked
+      .slice(0, TOP_CITIES)
+      .map(({ first, count }) =>
+        cityShare(
+          { value: first.city, region: first.region, regionName: first.regionName },
+          count,
+          countsConversions,
+        ),
+      ),
+    ...(rest.length === 0
+      ? []
+      : [
+          cityShare(
+            { ...NO_CITY_PLACE, value: OTHER_VALUE },
+            summed(OTHER_VALUE, rest),
+            countsConversions,
+          ),
+        ]),
+    ...(unplaced.length === 0
+      ? []
+      : [
+          cityShare(
+            NO_CITY_PLACE,
+            counted(OTHER_VALUE, unplaced, conversionEvent),
+            countsConversions,
+          ),
+        ]),
+  ];
+}
+
+function distinct(values: readonly (string | null)[]): number {
+  return new Set(values.filter((value) => value !== null)).size;
+}
+
+function leading<Visit extends DemoVisitRecord>(
+  visits: readonly Visit[],
+  valueOf: (visit: Visit) => string,
+): { readonly first: Visit; readonly count: ValueCount } | undefined {
+  return [...groupedBy(visits, valueOf)]
+    .map(([value, group]) => ({ first: itemAt(group, 0), count: counted(value, group, null) }))
+    .toSorted(byKeys(({ count }) => [-count.visits, count.value]))[0];
+}
+
+function reachOf(visits: readonly DemoVisitRecord[]): ReachWire {
+  const countries = visits.map((visit) => visit.country);
+  const regioned = visits.filter(
+    (visit): visit is DemoVisitRecord & { readonly region: string } => visit.region !== null,
+  );
+  const topCountry = leading(visits, (visit) => visit.country);
+  const topRegion = leading(regioned, (visit) => visit.region);
+  return {
+    visits: countWhere(visits, hasPageView),
+    continents: distinct(countries.map(demoContinentOf)),
+    countries: distinct(countries),
+    regions: distinct(regioned.map((visit) => visit.region)),
+    cities: distinct(visits.filter(isPlaced).map(placeKey)),
+    top_country:
+      topCountry === undefined
+        ? null
+        : { value: topCountry.count.value, visits: topCountry.count.visits },
+    top_region:
+      topRegion === undefined
+        ? null
+        : {
+            value: topRegion.count.value,
+            name: topRegion.first.regionName,
+            visits: topRegion.count.visits,
+          },
+  };
+}
+
 export function demoDevicesWire(projectId: string, range: DemoReportRange, now: Date): DevicesWire {
   const project = demoProjectOf(projectId);
   const visits = demoVisitsIn(project, demoScopeOf(range, now, range.filters));
@@ -133,6 +252,8 @@ export function demoDevicesWire(projectId: string, range: DemoReportRange, now: 
     operating_systems: of((visit) => visit.os),
     countries: of((visit) => visit.country),
     regions: regionShares(visits, project.conversionEvent),
+    cities: cityShares(visits, project.conversionEvent),
+    reach: reachOf(visits),
   };
 }
 

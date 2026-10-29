@@ -34,6 +34,33 @@ const WIRE: DevicesWire = {
     { value: 'BR-SP', name: 'São Paulo', visits: 20, conversions: 2, converting_visits: 1 },
     { value: 'other', name: null, visits: 10, conversions: 0, converting_visits: 0 },
   ],
+  cities: [
+    {
+      value: 'Campinas',
+      region: 'BR-SP',
+      region_name: 'São Paulo',
+      visits: 12,
+      conversions: 1,
+      converting_visits: 1,
+    },
+    {
+      value: null,
+      region: null,
+      region_name: null,
+      visits: 18,
+      conversions: 1,
+      converting_visits: 0,
+    },
+  ],
+  reach: {
+    visits: 30,
+    continents: 1,
+    countries: 1,
+    regions: 1,
+    cities: 1,
+    top_country: { value: 'BR', visits: 30 },
+    top_region: { value: 'BR-SP', name: 'São Paulo', visits: 20 },
+  },
 };
 
 describe('devicesResponseSchema', () => {
@@ -62,6 +89,23 @@ describe('devicesResponseSchema', () => {
       convertingVisits: 1,
     });
     expect(report.browsers[0]?.value).toBe('samsung');
+    expect(report.cities[0]).toEqual({
+      value: 'Campinas',
+      region: 'BR-SP',
+      regionName: 'São Paulo',
+      visits: 12,
+      conversions: 1,
+      convertingVisits: 1,
+    });
+    expect(report.reach).toEqual({
+      visits: 30,
+      continents: 1,
+      countries: 1,
+      regions: 1,
+      cities: 1,
+      topCountry: { value: 'BR', visits: 30 },
+      topRegion: { value: 'BR-SP', name: 'São Paulo', visits: 20 },
+    });
   });
 });
 

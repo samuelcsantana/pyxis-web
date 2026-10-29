@@ -60,6 +60,7 @@ const VISIT: DemoVisitRecord = {
   country: 'BR',
   region: null,
   regionName: null,
+  city: null,
   channel: 'direct',
   source: '(direct)',
   medium: null,
