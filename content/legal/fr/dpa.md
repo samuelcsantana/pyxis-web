@@ -40,7 +40,8 @@ traceur de Pyxis est installé.
 une action que vous avez balisée.
 
 2.4. **Projet** désigne la configuration d’un de vos sites dans Pyxis : nom, adresses (origines)
-autorisées, fuseau horaire, événement de conversion, clés et événements.
+autorisées, fuseau horaire, événement de conversion, l’option de conserver la ville, clés et
+événements.
 
 2.5. **Sous-traitant ultérieur** désigne le prestataire que nous engageons et qui traite, pour notre
 compte, des données personnelles visées par le présent accord.
@@ -101,9 +102,9 @@ Clause 7.6) et vérifier la capacité du service.
 5.1. Vos instructions pour le traitement sont, ensemble :
 
 1. les Conditions d’utilisation et le présent accord ;
-2. la configuration de vos projets (origines autorisées, fuseau horaire, événement de conversion, clés
-   et personnes ayant accès), effectuée par le propriétaire du compte sur le tableau de bord ou, sur
-   demande, par nous ;
+2. la configuration de vos projets (origines autorisées, fuseau horaire, événement de conversion,
+   l’option de conserver la ville, clés et personnes ayant accès), effectuée par le propriétaire du
+   compte sur le tableau de bord ou, sur demande, par nous ;
 3. ce que le traceur installé sur votre site envoie (quels événements, quelles propriétés et si vous
    utilisez la fonction `identify`) ;
 4. les actions du propriétaire du compte sur le tableau de bord (par exemple, exporter les événements,
@@ -167,7 +168,12 @@ obligations de responsable du traitement envers les personnes concernées.
    § 2º, du Règlement approuvé par la Resolução CD/ANPD nº 19/2024 (résolution du conseil directeur de
    l’ANPD), en utilisant les informations de la Clause 9 et de l’Annexe III ;
 9. n’installez le traceur et n’enregistrez comme origine d’un projet que des sites qui vous
-   appartiennent ou appartiennent à quelqu’un qui vous y a autorisé (Clause 3.2).
+   appartiennent ou appartiennent à quelqu’un qui vous y a autorisé (Clause 3.2) ;
+10. si vous activez la ville dans un projet (Conditions d’utilisation, Clause 4.5), avez évalué au
+    préalable si elle est nécessaire à la finalité de la mesure et si elle est couverte par la base
+    légale du point 1 ; avez mis à jour au préalable l’avis du point 2, en mettant le changement en
+    évidence ; et, si le projet utilise la fonction `identify`, savez qu’il enregistre dès lors la
+    ville approximative de chaque visite des personnes identifiées et l’indiquez dans l’avis.
 
 6.2. Le serveur de Pyxis écarte automatiquement les valeurs qui ont la forme d’un e-mail ou les
 séquences de 10 chiffres ou plus (comme le CPF, le CNPJ — numéro d’immatriculation des personnes
@@ -294,7 +300,9 @@ risque de le répéter.
 contient les mêmes événements que ceux que la suppression effacerait, dans l’ordre, jusqu’à 1 000 par
 page, en JSON. S’il y en a davantage, la réponse indique le curseur suivant (`next_after`), que vous
 passez comme `?after=` pour obtenir la page suivante. Chaque événement comporte le nom, la date et
-l’heure, l’identifiant de la visite, la page, l’origine, l’appareil, le pays, l’État et les propriétés.
+l’heure, l’identifiant de la visite, la page, l’origine, l’appareil, le pays, l’État, la ville (vide
+dans les projets où l’option est désactivée ; Conditions d’utilisation, Clause 4.5) et les
+propriétés.
 
 10.5. **Limites de ces routes.** Les deux routes acceptent jusqu’à 60 appels par minute par clé et par
 adresse d’origine. La clé secrète ne doit être utilisée que sur votre serveur, jamais dans le
@@ -404,6 +412,17 @@ point 12.2, sans le délai de 30 jours de ce point. D’ici là, le propriétair
 les événements (point 12.3). Les points 12.4 (copies des prestataires), 12.5 (confirmation par
 e-mail) et 12.6 (préservation en vertu de la loi ou d’un ordre) s’appliquent également.
 
+12.8. **Ville désactivée.** Lorsque le propriétaire du compte désactive la ville dans un projet
+(Conditions d’utilisation, Clause 4.5), la réception cesse de lire la ville dans un délai d’une
+minute. La routine quotidienne suivante supprime la ville de tous les événements déjà conservés dans
+le projet, et cette suppression s’achève au plus tard 48 heures après la désactivation, à condition
+que l’option reste désactivée jusque-là. Les points 12.4 (les sauvegardes du prestataire et les
+fichiers d’exportation non encore expirés disparaissent dans les délais de ce point) et 12.6 (dans
+un projet dont les données sont préservées en vertu de la loi ou d’un ordre, les villes restent
+conservées pendant la durée de la préservation) s’appliquent. Les fichiers que vous avez déjà
+téléchargés et ce que les personnes ayant accès ont déjà transféré vers des applications connectées
+(Annexe I, point 10) relèvent de votre responsabilité.
+
 ## Clause 13 — Informations et audit
 
 13.1. Si vous le demandez par écrit, nous fournissons les informations nécessaires pour démontrer que
@@ -474,7 +493,7 @@ système du client qu’il identifie avec la fonction `identify`.
 | Clic sur une annonce | Uniquement vrai ou faux. Le code du clic (comme `gclid`) n’est pas conservé |
 | Appareil | Catégorie : mobile, tablette, ordinateur ou autre |
 | Navigateur et système | Uniquement la famille (par exemple, `chrome`, `safari`, `android`, `ios`), sans version |
-| Pays et État | Code du pays (2 lettres) et État (code et nom), fournis par le réseau d’AWS au moment de la requête. **Jamais la ville** |
+| Pays, État et ville | Code du pays (2 lettres) et État (code et nom), fournis par le réseau d’AWS au moment de la requête. La **ville** (nom approximatif, déduit de l’adresse IP par le réseau d’AWS), uniquement dans les projets où le propriétaire du compte a activé cette option (Conditions d’utilisation, Clause 4.5), désactivée par défaut, et uniquement lorsque l’État a également été fourni |
 | Propriétés | Jusqu’à 10 par événement, définies par le client : clé d’au plus 40 caractères (`a-z`, `0-9`, `_`) et valeur courte (texte d’au plus 100 caractères, nombre ou vrai/faux) |
 | Appels à l’API du site (`api_request`) | Méthode, route sous forme de modèle, code de réponse, durée et, le cas échéant, le code d’erreur |
 
@@ -487,8 +506,11 @@ système du client qu’il identifie avec la fonction `identify`.
   famille du navigateur et celle du système ; ensuite écarté. Les visites de robots connus sont
   écartées.
 - **Cookies :** le traceur ne crée pas de cookies sur les sites du client.
-- **Ville, adresse complète de la page, paramètres de l’adresse (autres que ceux de campagne),
-  empreinte du navigateur :** jamais.
+- **Adresse complète de la page, paramètres de l’adresse (autres que ceux de campagne), empreinte
+  du navigateur, code postal et coordonnées géographiques :** jamais.
+- **Ville :** uniquement dans les projets où le propriétaire du compte a activé cette option. Lorsque
+  l’option est désactivée, la ville cesse d’être lue, et les villes déjà conservées sont supprimées
+  dans les délais de la Clause 12.8.
 
 **5. Données personnelles sensibles.** Elles ne doivent pas être envoyées (Clause 6.1, point 3). Pyxis
 n’a pas été conçu pour les traiter.
@@ -553,12 +575,13 @@ valable 5 minutes. Une fois téléchargé, le fichier est sous votre responsabil
 ## Annexe II — Mesures de sécurité en vigueur
 
 Vérifiées dans le code du service et dans la configuration de l’infrastructure le 14/10/2026 et le
-15/10/2026.
+15/10/2026 ; le point 1 (ville), le 29/10/2026.
 
 **1. Protection de la vie privée dès la conception.** Pas de cookies sur les sites mesurés ; IP et
 navigateur complet jamais conservés ; pages réduites à des modèles ; barrière sur le serveur qui écarte
 les valeurs ayant la forme d’un e-mail et les nombres de 10 chiffres ou plus dans les propriétés, les
-paramètres de campagne et l’identifiant d’utilisateur ; État du visiteur, jamais la ville ; signaux
+paramètres de campagne et l’identifiant d’utilisateur ; État du visiteur, et la ville uniquement
+lorsque le client active cette option dans le projet, désactivée par défaut ; signaux
 « ne pas suivre » du navigateur (Global Privacy Control et Do Not Track) respectés par le traceur, qui
 n’envoie rien lorsqu’ils sont activés ; option de ne pas être mesuré (`optOut`) pour le visiteur ;
 événements supprimés après 13 mois.
@@ -697,6 +720,14 @@ réellement. Il ne remplace pas votre propre analyse.
 > ville) et les actions que nous avons balisées sur le site. Chaque visite reçoit un numéro aléatoire
 > qui reste uniquement dans l’onglet du navigateur et est écarté à la fermeture de l’onglet ou après
 > 30 minutes d’inactivité ; aucun identifiant ne vous reconnaît lors d’une autre visite.
+>
+> *(Si vous avez activé la ville dans le projet, remplacez « le pays et l’État (jamais la ville) » par
+> « le pays, l’État et la ville approximative, déduits de votre adresse IP au moment de l’accès, sans
+> conserver l’IP ». Si votre site utilise aussi la fonction `identify`, remplacez, dans le paragraphe
+> suivant, « nous relions les événements de cette visite au numéro interne de votre compte » par
+> « nous relions les événements de cette visite, y compris la ville approximative, au numéro interne
+> de votre compte ». Si cet avis était déjà publié sans la ville, mettez en évidence le changement et
+> la date à laquelle il prend effet.)*
 >
 > *(N’incluez le paragraphe ci-dessous que si votre site utilise la fonction `identify`.)* Lorsque vous
 > vous connectez à votre compte, nous relions les événements de cette visite au numéro interne de votre

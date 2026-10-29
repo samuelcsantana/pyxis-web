@@ -41,7 +41,7 @@ geïnstalleerd.
 die je hebt gemarkeerd.
 
 2.4. **Project** is de configuratie van een van je websites in Pyxis: naam, toegestane adressen
-(origins), tijdzone, conversie-event, sleutels en events.
+(origins), tijdzone, conversie-event, de optie om de stad te bewaren, sleutels en events.
 
 2.5. **Subverwerker** is de provider die wij inschakelen en die voor onze rekening persoonsgegevens
 uit deze overeenkomst verwerkt.
@@ -99,9 +99,9 @@ van de dienst te controleren.
 5.1. Je instructies voor de verwerking zijn, gezamenlijk:
 
 1. de Gebruiksvoorwaarden en deze overeenkomst;
-2. de configuratie van je projecten (toegestane origins, tijdzone, conversie-event, sleutels en
-   personen met toegang), ingesteld door de accounteigenaar in het dashboard of, op verzoek, door
-   ons;
+2. de configuratie van je projecten (toegestane origins, tijdzone, conversie-event, de optie om de
+   stad te bewaren, sleutels en personen met toegang), ingesteld door de accounteigenaar in het
+   dashboard of, op verzoek, door ons;
 3. wat de op je website geïnstalleerde tracker verzendt (welke events, eigenschappen en of je de
    functie `identify` gebruikt);
 4. de handelingen van de accounteigenaar in het dashboard (bijvoorbeeld de events exporteren, een
@@ -168,7 +168,13 @@ betrokkenen.
    art. 17, § 2, van het Reglement dat is goedgekeurd bij Resolução CD/ANPD nº 19/2024 (besluit van
    de raad van bestuur van de ANPD), met gebruikmaking van de informatie in Artikel 9 en Bijlage III;
 9. de tracker alleen installeert op, en als origin van een project alleen registreert, websites die
-   van jou zijn of van iemand die je toestemming heeft gegeven (Artikel 3.2).
+   van jou zijn of van iemand die je toestemming heeft gegeven (Artikel 3.2);
+10. als je de stad in een project inschakelt (Gebruiksvoorwaarden, Artikel 4.5), vooraf hebt
+    beoordeeld of die nodig is voor het doel van de meting en past binnen de rechtsgrond van punt 1;
+    vooraf de verklaring van punt 2 hebt bijgewerkt en de wijziging daarin duidelijk hebt
+    aangegeven; en, als het project de functie `identify` gebruikt, weet dat dan de geschatte stad
+    van elk bezoek van de geïdentificeerde personen wordt vastgelegd, en dat in de verklaring
+    vermeldt.
 
 6.2. De server van Pyxis verwijdert automatisch waarden met de vorm van een e-mailadres of reeksen
 van 10 of meer cijfers (zoals CPF, CNPJ – Braziliaans fiscaal nummer van een rechtspersoon – en telefoonnummer) in de eigenschappen van de events, in de
@@ -292,7 +298,8 @@ is veilig.
 antwoord bevat dezelfde events die de verwijdering zou wissen, op volgorde, tot 1.000 per pagina, in
 JSON. Als er meer zijn, vermeldt het antwoord de volgende cursor (`next_after`), die je als
 `?after=` meegeeft om de volgende pagina op te halen. Elk event bevat naam, datum en tijd,
-bezoekidentificatie, pagina, herkomst, apparaat, land, staat en eigenschappen.
+bezoekidentificatie, pagina, herkomst, apparaat, land, staat, stad (leeg in de projecten waarin de
+optie is uitgeschakeld; Gebruiksvoorwaarden, Artikel 4.5) en eigenschappen.
 
 10.5. **Limieten van deze routes.** Beide routes accepteren tot 60 aanroepen per minuut per sleutel
 en per herkomstadres. De geheime sleutel mag alleen op je server worden gebruikt, nooit in de
@@ -406,6 +413,16 @@ hoort, zoals in punt 12.2, zonder de termijn van 30 dagen van dat punt. Tot dan 
 accounteigenaar de events exporteren (punt 12.3). Ook de punten 12.4 (kopieën van de providers), 12.5
 (bevestiging per e-mail) en 12.6 (bewaring op grond van wet of bevel) zijn van toepassing.
 
+12.8. **Stad uitgeschakeld.** Wanneer de accounteigenaar de stad in een project uitschakelt
+(Gebruiksvoorwaarden, Artikel 4.5), stopt de ontvangst binnen een minuut met het lezen van de stad.
+De volgende dagelijkse routine verwijdert de stad uit alle events die al in het project zijn
+bewaard, en dat is uiterlijk 48 uur na het uitschakelen afgerond, mits de optie tot dan
+uitgeschakeld blijft. De punten 12.4 (de back-ups van de provider en de nog niet verlopen
+exportbestanden verdwijnen binnen de termijnen van dat punt) en 12.6 (in een project met gegevens
+die op grond van wet of bevel worden bewaard, blijven de steden bewaard zolang die bewaring duurt)
+zijn van toepassing. De bestanden die je al hebt gedownload en wat de personen met toegang al naar
+gekoppelde apps hebben gehaald (Bijlage I, punt 10), vallen onder jouw verantwoordelijkheid.
+
 ## Artikel 13 — Informatie en audit
 
 13.1. Als je er schriftelijk om vraagt, geven we **binnen 15 dagen** de informatie die nodig is om aan
@@ -474,7 +491,7 @@ systeem van de klant die hij met de functie `identify` identificeert.
 | Klik op advertentie | Alleen waar of onwaar. De klikcode (zoals `gclid`) wordt niet bewaard |
 | Apparaat | Categorie: mobiel, tablet, computer of overig |
 | Browser en besturingssysteem | Alleen de familie (bijvoorbeeld `chrome`, `safari`, `android`, `ios`), zonder versie |
-| Land en staat | Landcode (2 letters) en staat (code en naam), op het moment van het verzoek verstrekt door het netwerk van AWS. **Nooit de stad** |
+| Land, staat en stad | Landcode (2 letters) en staat (code en naam), op het moment van het verzoek verstrekt door het netwerk van AWS. De **stad** (geschatte naam, door het netwerk van AWS afgeleid uit het IP-adres), alleen in de projecten waarin de accounteigenaar die optie heeft ingeschakeld (Gebruiksvoorwaarden, Artikel 4.5), die standaard is uitgeschakeld, en alleen wanneer ook de staat is verstrekt |
 | Eigenschappen | Tot 10 per event, bepaald door de klant: sleutel van tot 40 tekens (`a-z`, `0-9`, `_`) en korte waarde (tekst van tot 100 tekens, getal of waar/onwaar) |
 | Aanroepen naar de API van de website (`api_request`) | Methode, route in de vorm van een sjabloon, antwoordcode, duur en, als die er is, de foutcode |
 
@@ -487,8 +504,11 @@ systeem van de klant die hij met de functie `identify` identificeert.
   de familie van de browser en die van het besturingssysteem te bepalen; daarna weggegooid. Bezoeken
   van bekende bots worden weggegooid.
 - **Cookies:** de tracker plaatst geen cookies op de websites van de klant.
-- **Stad, volledig adres van de pagina, parameters van het adres (behalve die van campagnes),
-  browser-fingerprint:** nooit.
+- **Volledig adres van de pagina, parameters van het adres (behalve die van campagnes),
+  browser-fingerprint, postcode en coördinaten:** nooit.
+- **Stad:** alleen in de projecten waarin de accounteigenaar die optie heeft ingeschakeld. Na het
+  uitschakelen wordt de stad niet meer gelezen, en worden de al bewaarde steden verwijderd binnen de
+  termijnen van Artikel 12.8.
 
 **5. Gevoelige persoonsgegevens.** Mogen niet worden verzonden (Artikel 6.1, punt 3). Pyxis is niet
 gemaakt om ze te verwerken.
@@ -554,12 +574,13 @@ onder jouw verantwoordelijkheid.
 ## Bijlage II — Geldende beveiligingsmaatregelen
 
 Gecontroleerd in de code van de dienst en in de configuratie van de infrastructuur op 14 oktober
-2026 en 15 oktober 2026.
+2026 en 15 oktober 2026; punt 1 (stad) op 29 oktober 2026.
 
 **1. Privacy by design.** Geen cookies op de gemeten websites; IP-adres en volledige browser nooit
 bewaard; pagina's gereduceerd tot sjablonen; barrière op de server die waarden met de vorm van een
 e-mailadres en getallen van 10 of meer cijfers verwijdert in de eigenschappen, in de
-campagneparameters en in de gebruikersidentificatie; staat van de bezoeker, nooit de stad;
+campagneparameters en in de gebruikersidentificatie; staat van de bezoeker, en de stad alleen
+wanneer de klant die optie in het project inschakelt, die standaard is uitgeschakeld;
 "niet volgen"-signalen van de browser (Global Privacy Control en Do Not Track) gerespecteerd door de
 tracker, die niets verzendt wanneer ze zijn ingeschakeld; optie om niet gemeten te worden (`optOut`)
 voor de bezoeker; events verwijderd na 13 maanden.
@@ -694,6 +715,14 @@ verzendt. Hij vervangt je eigen analyse niet.
 > een willekeurig nummer dat alleen in het browsertabblad staat en wordt weggegooid bij het sluiten
 > van het tabblad of na 30 minuten zonder activiteit; er is geen identificatie die je bij een ander
 > bezoek herkent.
+>
+> *(Als je de stad in het project hebt ingeschakeld, vervang dan "het land en de staat (nooit de
+> stad)" door "het land, de staat en de geschatte stad, afgeleid uit je IP-adres op het moment van
+> je bezoek, zonder het IP-adres te bewaren". Als je website ook de functie `identify` gebruikt,
+> vervang dan in de volgende alinea "koppelen we de events van dat bezoek aan het interne nummer van
+> je account" door "koppelen we de events van dat bezoek, ook de geschatte stad, aan het interne
+> nummer van je account". Als deze kennisgeving al zonder de stad was gepubliceerd, breng de
+> wijziging en de datum waarop die ingaat dan duidelijk onder de aandacht.)*
 >
 > *(Neem de onderstaande alinea alleen op als je website de functie `identify` gebruikt.)* Wanneer je
 > inlogt op je account, koppelen we de events van dat bezoek aan het interne nummer van je account,

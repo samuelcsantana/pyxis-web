@@ -88,7 +88,7 @@ The Pyxis home page is measured by Pyxis itself, with the same rules we offer cu
 
 | Data | Purpose | Legal basis (LGPD) | Retention |
 |---|---|---|---|
-| Page viewed (path, without parameters other than campaign ones), actions on the page (for example, opening the demo), referring site (domain only), campaign parameters, device category, browser and operating system family, country and state (never the city), random visit number | Understand how the page is used and improve the presentation of Pyxis | Legitimate interest (art. 7, IX, and art. 10) | 13 months |
+| Page viewed (path, without parameters other than campaign ones), actions on the page (for example, opening the demo), referring site (domain only), campaign parameters, device category, browser and operating system family, country, state and approximate city (inferred from the IP address by the AWS network, without storing the IP; the city from {{terms.effectiveFrom}}), random visit number | Understand how the page is used and improve the presentation of Pyxis | Legitimate interest (art. 7, IX, and art. 10) | 13 months |
 
 The measurement **does not use cookies**, **does not store the IP** or the full browser string, and
 **sends nothing** if your browser asks not to be tracked (Global Privacy Control or Do Not Track). On

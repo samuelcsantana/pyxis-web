@@ -97,7 +97,7 @@ par e-mail et l’accès par jetons et par applications connectées, y compris v
 envoyer des événements au service.
 
 2.3. **Projet :** la configuration d’un de vos sites dans le service (nom, adresses autorisées, fuseau
-horaire, événement de conversion, clés et événements).
+horaire, événement de conversion, l’option de conserver la ville, clés et événements).
 
 2.4. **Événement :** chaque enregistrement envoyé par le traceur ou par votre intégration, comme une
 page vue ou une action que vous avez balisée.
@@ -174,10 +174,13 @@ fonctionnalités utilisées, échecs des appels à l’API de votre site, acquis
 
 1. il ne crée pas de cookies sur votre site ;
 2. il ne conserve pas l’adresse IP du visiteur : l’IP est utilisée uniquement dans la mémoire du
-   serveur, pendant quelques minutes, pour limiter les abus ;
+   serveur, pendant quelques minutes, pour limiter les abus, et par le réseau d’AWS, au moment de la
+   requête, pour indiquer le pays, l’État et, si vous l’activez, la ville ;
 3. il ne conserve pas le navigateur complet (user agent), seulement la catégorie d’appareil et la
    famille du navigateur et du système ;
-4. il ne conserve pas la ville, seulement le pays et l’État ;
+4. il ne conserve pas la ville, sauf si le propriétaire du compte active cette option dans le
+   projet (Clause 4.5) ; nous ne l’activons jamais sans sa demande. Le pays et l’État, en revanche,
+   sont conservés ;
 5. il ne conserve pas l’adresse complète de la page : seulement le chemin sous forme de modèle, sans
    paramètres, sauf ceux de campagne (`utm_source`, `utm_medium`, `utm_campaign`) ;
 6. il n’envoie rien lorsque le navigateur du visiteur demande à ne pas être suivi (Global Privacy
@@ -206,6 +209,27 @@ pause).
    clé secrète du projet ;
 5. l’**exportation de tous les événements d’un projet** sous forme de fichier, depuis le tableau de
    bord (Clause 11.5).
+
+4.5. **Ville du visiteur, uniquement si vous l’activez.** Chaque projet dispose, dans ses paramètres,
+d’une option pour conserver la ville approximative de chaque visite. La ville est déduite de
+l’adresse IP par le réseau d’AWS, au moment de la requête, et n’est conservée que lorsque l’État est
+également fourni ; l’IP, elle, n’est toujours pas conservée. L’option est **désactivée** par défaut
+dans tous les projets, nouveaux ou anciens, et seul le propriétaire du compte l’active ou la
+désactive.
+
+Avant de l’activer, mettez à jour l’avis de confidentialité de votre site pour indiquer que la ville
+est enregistrée (l’Annexe IV de l’Accord de traitement des données indique comment adapter le
+modèle). **Attention :** combinée à l’heure, à l’appareil et à la page, la ville permet de relier
+plus facilement une visite à une personne, en particulier sur les sites peu visités et dans les
+petites villes. Dans un projet qui utilise la fonction `identify`, activer la ville conduit à
+enregistrer la ville approximative de chaque visite des personnes identifiées. Il vous appartient, en
+tant que responsable du traitement, d’évaluer si vous avez besoin de la ville et d’en informer les
+visiteurs (Clause 6.1 de l’Accord).
+
+Lorsque l’option est désactivée, la ville cesse d’être lue dans un délai d’une minute, et les villes
+déjà conservées dans le projet sont supprimées dans un délai de 48 heures, si l’option reste
+désactivée jusque-là, comme l’indique la Clause 12.8 de l’Accord. Le code postal, les coordonnées
+géographiques et l’adresse IP ne sont jamais conservés.
 
 ## Clause 5 — Open source et service hébergé
 
@@ -616,7 +640,7 @@ responsabilité de ce que votre site envoie vous incombe.**
 
 1. publier sur votre site un avis de confidentialité décrivant la mesure (un modèle figure à
    l’Annexe IV de l’Accord de traitement des données) et maintenir cet avis en conformité avec ce que
-   votre site envoie ;
+   votre site envoie et avec les options de vos projets (comme la ville, Clause 4.5) ;
 2. si votre site s’adresse à des enfants ou à des adolescents, évaluer au préalable la mesure au
    regard de l’art. 14 de la LGPD (Lei Geral de Proteção de Dados Pessoais, loi générale brésilienne
    sur la protection des données personnelles) ;

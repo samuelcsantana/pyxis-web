@@ -37,7 +37,7 @@ installed.
 have marked.
 
 2.4. **Project** is the configuration of one of your sites in Pyxis: name, authorized addresses
-(origins), time zone, conversion event, keys and events.
+(origins), time zone, conversion event, the option to store the city, keys and events.
 
 2.5. **Sub-processor** is the provider we engage and that processes, on our behalf, personal data
 covered by this agreement.
@@ -93,8 +93,9 @@ service.
 5.1. Your instructions for the processing are, taken together:
 
 1. the Terms of Use and this agreement;
-2. the configuration of your projects (authorized origins, time zone, conversion event, keys and
-   people with access), made by the account owner in the dashboard or, on request, by us;
+2. the configuration of your projects (authorized origins, time zone, conversion event, the option
+   to store the city, keys and people with access), made by the account owner in the dashboard or,
+   on request, by us;
 3. what the tracker installed on your site sends (which events and properties, and whether you use
    the `identify` function);
 4. the actions of the account owner in the dashboard (for example, exporting the events, deleting a
@@ -154,7 +155,12 @@ subjects.
    of the Regulation approved by Resolução CD/ANPD nº 19/2024 (resolution of the ANPD Board of
    Directors), using the information in Clause 9 and Schedule III;
 9. install the tracker and register as the origin of a project only sites that are yours or belong
-   to someone who authorized you (Clause 3.2).
+   to someone who authorized you (Clause 3.2);
+10. if you turn on the city in a project (Terms of Use, Clause 4.5), have first assessed whether it
+    is necessary for the purpose of the measurement and whether it fits the legal basis of item 1;
+    have first updated the notice of item 2, highlighting the change; and, if the project uses the
+    `identify` function, know that it starts recording the approximate city of each visit by
+    identified people, and state this in the notice.
 
 6.2. The Pyxis server automatically discards values shaped like an email address or sequences of 10
 or more digits (such as CPF and CNPJ, the Brazilian individual and company taxpayer numbers, and phone numbers) in event properties, in campaign parameters and
@@ -270,7 +276,8 @@ states how many events were deleted. Calling again returns zero; it is safe to r
 returns the same events that the deletion would delete, in order, up to 1,000 per page, in JSON. If
 there are more, the response gives the next cursor (`next_after`), which you pass as `?after=` to
 fetch the next page. Each event comes with its name, date and time, visit identifier, page, source,
-device, country, state and properties.
+device, country, state, city (empty in projects with the option turned off; Terms of Use,
+Clause 4.5) and properties.
 
 10.5. **Limits on these routes.** Both routes accept up to 60 calls per minute per key and per
 source address. The secret key must only be used on your server, never in the browser.
@@ -368,6 +375,15 @@ everything belonging to them, as in item 12.2, without the 30-day period of that
 the account owner can export the events (item 12.3). Items 12.4 (providers' copies), 12.5
 (confirmation by email) and 12.6 (preservation by law or order) also apply.
 
+12.8. **City turned off.** When the account owner turns off the city in a project (Terms of Use,
+Clause 4.5), intake stops reading the city within one minute. The next daily routine deletes the
+city from all events already stored in the project, and this finishes within 48 hours after the
+option is turned off, provided that the option is still off by then. Items 12.4 (the provider's
+backups and the export files that have not yet expired disappear within the periods of that item)
+and 12.6 (in a project with data preserved by law or order, the cities remain for the duration of
+the preservation) apply. The files you have already downloaded and what the people with access have
+already taken to connected apps (Schedule I, item 10) are your responsibility.
+
 ## Clause 13 — Information and audit
 
 13.1. If you ask in writing, we provide the information needed to show that we comply with this
@@ -433,7 +449,7 @@ system whom the customer identifies with the `identify` function.
 | Ad click | Only true or false. The click code (such as `gclid`) is not stored |
 | Device | Category: mobile, tablet, desktop or other |
 | Browser and operating system | Only the family (for example, `chrome`, `safari`, `android`, `ios`), without version |
-| Country and state | Country code (2 letters) and state (code and name), provided by the AWS network at the time of the request. **Never the city** |
+| Country, state and city | Country code (2 letters) and state (code and name), provided by the AWS network at the time of the request. The **city** (approximate name, inferred from the IP address by the AWS network), only in projects in which the account owner has turned on that option (Terms of Use, Clause 4.5), which comes turned off, and only when the state was also provided |
 | Properties | Up to 10 per event, defined by the customer: key with up to 40 characters (`a-z`, `0-9`, `_`) and a short value (text of up to 100 characters, number or true/false) |
 | Calls to the site's API (`api_request`) | Method, route in template form, response code, duration and, if any, the error code |
 
@@ -446,8 +462,11 @@ system whom the customer identifies with the `identify` function.
   browser family and the operating system family; then discarded. Visits from known bots are
   discarded.
 - **Cookies:** the tracker does not create cookies on the customer's sites.
-- **City, full page address, address parameters (other than campaign ones), browser
-  fingerprint:** never.
+- **Full page address, address parameters (other than campaign ones), browser fingerprint, postal
+  code (CEP) and coordinates:** never.
+- **City:** only in projects in which the account owner has turned on that option. When it is
+  turned off, the city stops being read, and the cities already stored are deleted within the
+  periods of Clause 12.8.
 
 **5. Sensitive personal data.** It must not be sent (Clause 6.1, item 3). Pyxis was not designed to
 process it.
@@ -505,14 +524,15 @@ for each download, valid for 5 minutes. Once downloaded, the file is your respon
 ## Schedule II — Security measures in force
 
 Checked in the service's code and infrastructure configuration on October 14, 2026 and October 15,
-2026.
+2026; item 1 (city), on October 29, 2026.
 
 **1. Privacy by design.** No cookies on the measured sites; IP and full browser string never stored;
 pages reduced to templates; a server-side barrier that discards values shaped like an email address
 and numbers with 10 or more digits in properties, campaign parameters and the user identifier; the
-visitor's state, never the city; the browser's "do not track" signals (Global Privacy Control and
-Do Not Track) respected by the tracker, which sends nothing when they are on; an option not to be
-measured (`optOut`) for the visitor; events deleted after 13 months.
+visitor's state, and the city only when the customer turns on that option in the project, which
+comes turned off; the browser's "do not track" signals (Global Privacy Control and Do Not Track)
+respected by the tracker, which sends nothing when they are on; an option not to be measured
+(`optOut`) for the visitor; events deleted after 13 months.
 
 **2. Encryption in transit.** Browser → API: HTTPS with TLS 1.2 or higher and 2-year HSTS. Content
 delivery network → API function: HTTPS only (TLS 1.2). Function → database: TLS with verification of
@@ -639,6 +659,14 @@ not replace your own analysis.
 > marked on the site. Each visit receives a random number that stays only in the browser tab and is
 > discarded when the tab is closed or after 30 minutes of inactivity; there is no identifier that
 > recognizes you on another visit.
+>
+> *(If you turned on the city in the project, replace "the country and the state (never the city)"
+> with "the country, the state and the approximate city, inferred from your IP address at the time
+> of access, without storing the IP". If your site also uses the `identify` function, replace, in
+> the next paragraph, "we link the events of that visit to your account's internal number" with "we
+> link the events of that visit, including the approximate city, to your account's internal
+> number". If this notice was already published without the city, highlight the change and the date
+> on which it takes effect.)*
 >
 > *(Include the paragraph below only if your site uses the `identify` function.)* When you sign in
 > to your account, we link the events of that visit to your account's internal number, never to your

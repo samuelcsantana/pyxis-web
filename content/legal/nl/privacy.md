@@ -91,7 +91,7 @@ De homepage van Pyxis wordt door Pyxis zelf gemeten, met dezelfde regels die we 
 
 | Gegeven | Waarvoor | Rechtsgrond (LGPD) | Hoe lang |
 |---|---|---|---|
-| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land en staat (nooit de stad), willekeurig nummer van het bezoek | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
+| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land, staat en geschatte stad (door het netwerk van AWS afgeleid uit het IP-adres, zonder het IP-adres te bewaren; de stad vanaf {{terms.effectiveFrom}}), willekeurig nummer van het bezoek | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
 
 De meting **gebruikt geen cookies**, **bewaart geen IP-adres** en ook niet de volledige browser, en
 **verzendt niets** als je browser vraagt niet gevolgd te worden (Global Privacy Control of Do Not

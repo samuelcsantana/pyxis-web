@@ -91,7 +91,7 @@ proposons aux clients.
 
 | Donnée | Finalité | Base légale (LGPD) | Durée |
 |---|---|---|---|
-| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays et État (jamais la ville), numéro aléatoire de la visite | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
+| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays, État et ville approximative (déduits de l’adresse IP par le réseau d’AWS, sans conserver l’IP ; la ville depuis le {{terms.effectiveFrom}}), numéro aléatoire de la visite | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
 
 La mesure **n’utilise pas de cookies**, **ne conserve ni l’IP** ni le navigateur complet, et **n’envoie
 rien** si votre navigateur demande à ne pas être suivi (Global Privacy Control ou Do Not Track). Sur la

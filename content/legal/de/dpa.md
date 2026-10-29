@@ -40,7 +40,7 @@ Pyxis installiert ist.
 eine Aktion, die du markiert hast.
 
 2.4. **Projekt** ist die Konfiguration einer deiner Websites in Pyxis: Name, autorisierte Adressen
-(Origins), Zeitzone, Conversion-Ereignis, Schlüssel und Ereignisse.
+(Origins), Zeitzone, Conversion-Ereignis, Option zum Speichern der Stadt, Schlüssel und Ereignisse.
 
 2.5. **Unterauftragsverarbeiter** ist der Anbieter, den wir beauftragen und der in unserem Auftrag
 personenbezogene Daten dieses Vertrags verarbeitet.
@@ -99,8 +99,9 @@ die Kapazität des Dienstes zu prüfen.
 5.1. Deine Weisungen für die Verarbeitung sind, zusammengenommen:
 
 1. die Nutzungsbedingungen und dieser Vertrag;
-2. die Konfiguration deiner Projekte (autorisierte Origins, Zeitzone, Conversion-Ereignis, Schlüssel
-   und Personen mit Zugriff), vorgenommen vom Kontoinhaber im Dashboard oder, auf Anfrage, von uns;
+2. die Konfiguration deiner Projekte (autorisierte Origins, Zeitzone, Conversion-Ereignis, Option
+   zum Speichern der Stadt, Schlüssel und Personen mit Zugriff), vorgenommen vom Kontoinhaber im
+   Dashboard oder, auf Anfrage, von uns;
 3. das, was der auf deiner Website installierte Tracker sendet (welche Ereignisse, Eigenschaften und
    ob du die Funktion `identify` verwendest);
 4. die Aktionen des Kontoinhabers im Dashboard (zum Beispiel die Ereignisse exportieren, ein Projekt
@@ -167,7 +168,13 @@ deinen Pflichten als Verantwortlicher gegenüber den betroffenen Personen.
    der durch Resolução CD/ANPD nº 19/2024 genehmigten Verordnung verlangt, unter Verwendung der
    Informationen aus Klausel 9 und Anhang III;
 9. den Tracker nur auf deinen Websites oder denen von Personen, die dich autorisiert haben,
-   installierst und nur solche als Origin eines Projekts einträgst (Klausel 3.2).
+   installierst und nur solche als Origin eines Projekts einträgst (Klausel 3.2);
+10. wenn du die Stadt in einem Projekt einschaltest (Nutzungsbedingungen, Klausel 4.5), vorher
+    geprüft hast, ob sie für den Zweck der Messung erforderlich ist und ob sie unter die
+    Rechtsgrundlage aus Punkt 1 fällt; vorher den Datenschutzhinweis aus Punkt 2 aktualisiert hast,
+    mit deutlicher Hervorhebung der Änderung; und, wenn das Projekt die Funktion `identify`
+    verwendet, weißt, dass dann die ungefähre Stadt jedes Besuchs der identifizierten Personen
+    erfasst wird, und dies im Hinweis angibst.
 
 6.2. Der Server von Pyxis verwirft automatisch Werte, die die Form einer E-Mail-Adresse haben, oder
 Folgen von 10 oder mehr Ziffern (wie CPF, CNPJ – Cadastro Nacional da Pessoa Jurídica, brasilianische Steuernummer für Unternehmen – und Telefonnummern) in den Eigenschaften der
@@ -293,7 +300,8 @@ mit null; eine Wiederholung ist unbedenklich.
 Antwort enthält dieselben Ereignisse, die die Löschung entfernen würde, in Reihenfolge, bis zu 1.000
 pro Seite, in JSON. Gibt es mehr, gibt die Antwort den nächsten Cursor an (`next_after`), den du als
 `?after=` übergibst, um die folgende Seite abzurufen. Jedes Ereignis enthält Name, Datum und Uhrzeit,
-Besuchskennung, Seite, Herkunft, Gerät, Land, Bundesstaat und Eigenschaften.
+Besuchskennung, Seite, Herkunft, Gerät, Land, Bundesstaat, Stadt (leer in Projekten mit
+ausgeschalteter Option; Nutzungsbedingungen, Klausel 4.5) und Eigenschaften.
 
 10.5. **Grenzen dieser Routen.** Beide Routen akzeptieren bis zu 60 Aufrufe pro Minute pro Schlüssel
 und pro Herkunftsadresse. Der geheime Schlüssel darf nur auf deinem Server verwendet werden, nie im
@@ -404,6 +412,17 @@ Punkt 12.2, ohne die 30-Tage-Frist dieses Punktes. Bis dahin kann der Kontoinhab
 exportieren (Punkt 12.3). Es gelten außerdem die Punkte 12.4 (Kopien der Anbieter), 12.5 (Bestätigung
 per E-Mail) und 12.6 (Aufbewahrung aufgrund von Gesetz oder Anordnung).
 
+12.8. **Ausgeschaltete Stadt.** Wenn der Kontoinhaber die Stadt in einem Projekt ausschaltet
+(Nutzungsbedingungen, Klausel 4.5), liest der Empfang die Stadt innerhalb einer Minute nicht mehr.
+Der nächste tägliche Vorgang löscht die Stadt aus allen bereits im Projekt gespeicherten
+Ereignissen, und dies ist innerhalb von 48 Stunden nach dem Ausschalten abgeschlossen, sofern die
+Option bis dahin ausgeschaltet bleibt. Es gelten die Punkte 12.4 (die Sicherungskopien des Anbieters
+und die noch nicht abgelaufenen Exportdateien verschwinden innerhalb der Fristen jenes Punktes) und
+12.6 (in einem Projekt mit aufgrund von Gesetz oder Anordnung aufbewahrten Daten bleiben die Städte
+für die Dauer der Aufbewahrung erhalten). Die Dateien, die du bereits heruntergeladen hast, und das,
+was die Personen mit Zugriff bereits in verbundene Apps übernommen haben (Anhang I, Punkt 10),
+liegen in deiner Verantwortung.
+
 ## Klausel 13 — Informationen und Audit
 
 13.1. Wenn du es schriftlich verlangst, geben wir dir **innerhalb von 15 Tagen** die Informationen,
@@ -474,7 +493,7 @@ Kunden, die er mit der Funktion `identify` identifiziert.
 | Klick auf eine Anzeige | Nur wahr oder falsch. Der Klickcode (wie `gclid`) wird nicht gespeichert |
 | Gerät | Kategorie: Mobiltelefon, Tablet, Computer oder sonstiges |
 | Browser und Betriebssystem | Nur die Familie (zum Beispiel `chrome`, `safari`, `android`, `ios`), ohne Version |
-| Land und Bundesstaat | Ländercode (2 Buchstaben) und Bundesstaat (Code und Name), vom AWS-Netz zum Zeitpunkt der Anfrage mitgeteilt. **Nie die Stadt** |
+| Land, Bundesstaat und Stadt | Ländercode (2 Buchstaben) und Bundesstaat (Code und Name), vom AWS-Netz zum Zeitpunkt der Anfrage mitgeteilt. Die **Stadt** (ungefährer Name, vom AWS-Netz aus der IP-Adresse abgeleitet) nur in Projekten, in denen der Kontoinhaber diese Option eingeschaltet hat (Nutzungsbedingungen, Klausel 4.5), die standardmäßig ausgeschaltet ist, und nur, wenn auch der Bundesstaat mitgeteilt wurde |
 | Eigenschaften | Bis zu 10 pro Ereignis, vom Kunden festgelegt: Schlüssel mit bis zu 40 Zeichen (`a-z`, `0-9`, `_`) und kurzer Wert (Text mit bis zu 100 Zeichen, Zahl oder wahr/falsch) |
 | Aufrufe an die API der Website (`api_request`) | Methode, Route in Form einer Vorlage, Antwortcode, Dauer und gegebenenfalls der Fehlercode |
 
@@ -487,8 +506,11 @@ Kunden, die er mit der Funktion `identify` identifiziert.
   Browsers und die des Betriebssystems zu ermitteln; danach verworfen. Besuche bekannter Bots werden
   verworfen.
 - **Cookies:** der Tracker setzt keine Cookies auf den Websites des Kunden.
-- **Stadt, vollständige Adresse der Seite, Adressparameter (außer den Kampagnenparametern),
-  Browser-Fingerabdruck:** nie.
+- **Vollständige Adresse der Seite, Adressparameter (außer den Kampagnenparametern),
+  Browser-Fingerabdruck, Postleitzahl und Koordinaten:** nie.
+- **Stadt:** nur in Projekten, in denen der Kontoinhaber diese Option eingeschaltet hat. Beim
+  Ausschalten wird sie nicht mehr gelesen, und die bereits gespeicherten Städte werden innerhalb der
+  Fristen von Klausel 12.8 gelöscht.
 
 **5. Sensible personenbezogene Daten.** Dürfen nicht gesendet werden (Klausel 6.1, Punkt 3). Pyxis
 ist nicht für ihre Verarbeitung ausgelegt.
@@ -553,12 +575,13 @@ liegt die Datei in deiner Verantwortung.
 ## Anhang II — Geltende Sicherheitsmaßnahmen
 
 Überprüft im Code des Dienstes und in der Konfiguration der Infrastruktur am 14.10.2026 und
-am 15.10.2026.
+am 15.10.2026; Punkt 1 (Stadt) am 29.10.2026.
 
 **1. Datenschutz durch Technikgestaltung.** Keine Cookies auf den gemessenen Websites; IP und
 vollständiger Browser nie gespeichert; Seiten auf Vorlagen reduziert; Sperre auf dem Server, die Werte
 in Form einer E-Mail-Adresse und Zahlen mit 10 oder mehr Ziffern in den Eigenschaften, in den
-Kampagnenparametern und in der Nutzerkennung verwirft; Bundesstaat des Besuchers, nie die Stadt;
+Kampagnenparametern und in der Nutzerkennung verwirft; Bundesstaat des Besuchers, und die Stadt nur,
+wenn der Kunde diese Option im Projekt einschaltet, die standardmäßig ausgeschaltet ist;
 „Nicht verfolgen“-Signale des Browsers (Global Privacy Control und Do Not Track) vom Tracker
 beachtet, der nichts sendet, wenn sie eingeschaltet sind; Option, nicht gemessen zu werden
 (`optOut`), für den Besucher; Ereignisse nach 13 Monaten gelöscht.
@@ -695,6 +718,14 @@ Website tatsächlich sendet. Er ersetzt nicht deine eigene Prüfung.
 > Website markiert haben. Jeder Besuch erhält eine Zufallsnummer, die nur im Tab des Browsers bleibt
 > und beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität verworfen wird; es gibt keine
 > Kennung, die dich bei einem anderen Besuch wiedererkennt.
+>
+> *(Wenn du die Stadt im Projekt eingeschaltet hast, ersetze „das Land und den Bundesstaat (nie die
+> Stadt)“ durch „das Land, den Bundesstaat und die ungefähre Stadt, im Moment des Aufrufs aus deiner
+> IP-Adresse abgeleitet, ohne die IP zu speichern“. Wenn deine Website auch die Funktion `identify`
+> verwendet, ersetze im folgenden Absatz „verknüpfen wir die Ereignisse dieses Besuchs mit der
+> internen Nummer deines Kontos“ durch „verknüpfen wir die Ereignisse dieses Besuchs, einschließlich
+> der ungefähren Stadt, mit der internen Nummer deines Kontos“. War dieser Hinweis bereits ohne die
+> Stadt veröffentlicht, hebe die Änderung und das Datum hervor, ab dem sie gilt.)*
 >
 > *(Füge den folgenden Absatz nur ein, wenn deine Website die Funktion `identify` verwendet.)* Wenn du
 > dich in dein Konto einloggst, verknüpfen wir die Ereignisse dieses Besuchs mit der internen Nummer

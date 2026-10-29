@@ -91,7 +91,7 @@ e-mail e l'accesso tramite token e tramite app collegate, anche attraverso il se
 inviare eventi al servizio.
 
 2.3. **Progetto:** la configurazione di un tuo sito nel servizio (nome, indirizzi autorizzati, fuso
-orario, evento di conversione, chiavi ed eventi).
+orario, evento di conversione, l'opzione di conservare la città, chiavi ed eventi).
 
 2.4. **Evento:** ciascun record inviato dal tracker o dalla tua integrazione, come una pagina vista
 o un'azione che hai contrassegnato.
@@ -166,10 +166,12 @@ delle chiamate all'API del tuo sito, acquisizione, dispositivi e orari.
 
 1. non crea cookie sul tuo sito;
 2. non conserva l'indirizzo IP del visitatore: l'IP è usato solo nella memoria del server, per
-   qualche minuto, per limitare gli abusi;
+   qualche minuto, per limitare gli abusi, e dalla rete di AWS, al momento della richiesta, per
+   fornire il paese, la regione e, se attivi l'opzione, la città;
 3. non conserva il browser completo (user agent), solo la categoria del dispositivo e la famiglia del
    browser e del sistema;
-4. non conserva la città, solo il paese e la regione;
+4. non conserva la città, a meno che il proprietario dell'account non attivi questa opzione nel
+   progetto (Clausola 4.5); non la attiviamo mai senza una sua richiesta. Il paese e la regione, sì;
 5. non conserva l'indirizzo completo della pagina: solo il percorso in forma di modello, senza
    parametri, tranne quelli di campagna (`utm_source`, `utm_medium`, `utm_campaign`);
 6. non invia nulla quando il browser del visitatore chiede di non essere tracciato (Global Privacy
@@ -196,6 +198,26 @@ finché la pagina è aperta, ma non quando la ricezione è sospesa).
 4. le rotte dell'API per **eliminare o copiare i dati di una persona identificata**, con la chiave
    segreta del progetto;
 5. l'**esportazione di tutti gli eventi di un progetto** in un file, dal pannello (Clausola 11.5).
+
+4.5. **Città del visitatore, solo se la attivi.** Ogni progetto ha, nelle impostazioni, un'opzione
+per conservare la città approssimativa di ciascuna visita. La città è ricavata dalla rete di AWS a
+partire dall'indirizzo IP, al momento della richiesta, ed è conservata solo quando viene fornita
+anche la regione; l'IP continua a non essere conservato. L'opzione è inizialmente **disattivata** in
+ogni progetto, nuovo o già esistente, e solo il proprietario dell'account la attiva o la disattiva.
+
+Prima di attivarla, aggiorna l'informativa sulla privacy del tuo sito per dire che la città viene
+registrata (l'Allegato IV dell'Accordo sul trattamento dei dati spiega come adattare il modello).
+**Attenzione:** insieme all'orario, al dispositivo e alla pagina, la città rende una visita più
+facile da associare a una persona, soprattutto nei siti con poche visite e nelle città piccole. In
+un progetto che usa la funzione `identify`, attivare la città comporta la registrazione della città
+approssimativa di ciascuna visita delle persone identificate. Spetta a te, in qualità di titolare
+del trattamento, valutare se hai bisogno della città e informare i visitatori (Clausola 6.1
+dell'Accordo).
+
+Quando la disattivi, la città smette di essere letta entro un minuto, e le città già conservate nel
+progetto vengono cancellate entro 48 ore, se l'opzione resta disattivata fino ad allora, come
+stabilisce la Clausola 12.8 dell'Accordo. Codice postale, coordinate e indirizzo IP non vengono mai
+conservati.
 
 ## Clausola 5 — Open source e servizio ospitato
 
@@ -585,7 +607,7 @@ indirizzi né testi liberi. **La responsabilità per ciò che il tuo sito invia 
 
 1. pubblicare sul tuo sito un'informativa sulla privacy che descriva la misurazione (c'è un modello
    nell'Allegato IV dell'Accordo sul trattamento dei dati) e mantenerla coerente con ciò che il tuo
-   sito invia;
+   sito invia e con le opzioni dei tuoi progetti (come la città, Clausola 4.5);
 2. se il tuo sito è rivolto a bambini o adolescenti, valutare prima la misurazione alla luce
    dell'art. 14 della LGPD (Lei Geral de Proteção de Dados Pessoais, legge generale brasiliana sulla
    protezione dei dati personali);
