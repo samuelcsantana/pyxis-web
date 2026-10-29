@@ -69,11 +69,12 @@ export function offersTheFreePlan(offer: SignUpOffer): boolean {
 export function stepAfterSignUp(
   accountStatus: AccountStatus,
   freePlan: FreePlanState,
+  freePlace: FreePlace | null,
 ): StepAfterSignUp {
   if (accountStatus === 'free') {
     return 'welcome';
   }
-  if (accountStatus !== 'incomplete') {
+  if (accountStatus !== 'incomplete' || freePlace === 'taken_by_same_mailbox') {
     return 'dashboard';
   }
   return freePlan === 'closed' ? 'checkout' : 'waitForAFreePlace';
