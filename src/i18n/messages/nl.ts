@@ -1134,7 +1134,7 @@ export const nl = translation({
       description: 'Aandeel van de bezoeken die <code/> verstuurden',
     },
     footnote:
-      'Apparaat, browser en systeem worden op de server afgeleid uit de user agent van de browser, die daarna wordt weggegooid. Het land en de regio komen van het edgenetwerk, nooit van een opgeslagen IP-adres, en de stad wordt nooit vastgelegd. Oudere bezoeken hebben alleen het land.',
+      'Apparaat, browser en systeem worden op de server afgeleid uit de user agent van de browser, die daarna wordt weggegooid. Het land en de regio komen van het edgenetwerk, nooit van een opgeslagen IP-adres; de geschatte stad wordt alleen vastgelegd in een project waarvan de eigenaar die in de Instellingen heeft aangezet. Oudere bezoeken hebben alleen het land.',
   },
   requests: {
     noResponse: 'Geen antwoord',
@@ -1768,7 +1768,7 @@ export const nl = translation({
         ip: {
           label: 'IP-adres',
           where:
-            'Bij de API: land en regio, daarna wordt het adres weggegooid. De stad wordt nooit gelezen.',
+            'Bij de API: land en regio, en de stad alleen als de site die heeft aangezet; daarna wordt het adres weggegooid.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2116,7 +2116,7 @@ export const nl = translation({
         address: {
           question: 'Slaat het IP-adressen op?',
           answer:
-            'Nee. CloudFront geeft de API het land en de regio van elk verzoek door; het adres zelf wordt nergens weggeschreven, en de stad wordt nooit gelezen.',
+            'Nee. CloudFront geeft de API het land en de regio van elk verzoek door, en de geschatte stad alleen in een project waarvan de eigenaar die heeft aangezet; het adres zelf wordt nergens weggeschreven.',
         },
         people: {
           question: 'Kan het zien dat twee bezoeken van dezelfde persoon komen?',
@@ -2230,7 +2230,7 @@ export const nl = translation({
       noReferrer: 'verwijzer: geen',
       empty: 'Nog niets verstuurd. De eerste batch gaat binnen 5 seconden weg.',
       never:
-        '<strong>Nooit verstuurd:</strong> je IP-adres, de volledige naam van je browser, een cookie, het volledige adres van de pagina. <strong>Toegevoegd door de server:</strong> land en regio, uit het verzoek; daarna wordt het adres weggegooid.',
+        '<strong>Nooit verstuurd:</strong> je IP-adres, de volledige naam van je browser, een cookie, het volledige adres van de pagina. <strong>Toegevoegd door de server:</strong> land, regio en geschatte stad, uit het verzoek; daarna wordt het adres weggegooid.',
       close: 'Sluiten',
     },
     footer: {

@@ -1116,7 +1116,7 @@ export const ptBR = translation({
       description: 'Parcela das visitas que enviaram <code/>',
     },
     footnote:
-      'Dispositivo, navegador e sistema são deduzidos no servidor a partir do user agent do navegador, que depois é descartado. O país e o estado vêm da rede de borda, nunca de um endereço IP guardado, e a cidade nunca é registrada. Visitas mais antigas têm só o país.',
+      'Dispositivo, navegador e sistema são deduzidos no servidor a partir do user agent do navegador, que depois é descartado. O país e o estado vêm da rede de borda, nunca de um endereço IP guardado; a cidade aproximada só é registrada num projeto cujo dono a ligou em Configurações. Visitas mais antigas têm só o país.',
   },
   requests: {
     noResponse: 'Sem resposta',
@@ -1748,7 +1748,8 @@ export const ptBR = translation({
         },
         ip: {
           label: 'Endereço IP',
-          where: 'Na API: país e estado, depois o endereço é descartado. A cidade nunca é lida.',
+          where:
+            'Na API: país e estado, e a cidade só se o site a ligou; depois o endereço é descartado.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2093,7 +2094,7 @@ export const ptBR = translation({
         address: {
           question: 'Ele guarda endereço IP?',
           answer:
-            'Não. O CloudFront informa à API o país e o estado de cada requisição; o endereço em si nunca é gravado, e a cidade nunca é lida.',
+            'Não. O CloudFront informa à API o país e o estado de cada requisição, e a cidade aproximada só num projeto cujo dono a ligou; o endereço em si nunca é gravado.',
         },
         people: {
           question: 'Ele sabe que duas visitas são da mesma pessoa?',
@@ -2207,7 +2208,7 @@ export const ptBR = translation({
       noReferrer: 'origem: nenhuma',
       empty: 'Nada enviado ainda. O primeiro lote sai em até 5 segundos.',
       never:
-        '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página. <strong>Acrescentado pelo servidor:</strong> país e estado, a partir da requisição; depois o endereço é descartado.',
+        '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página. <strong>Acrescentado pelo servidor:</strong> país, estado e cidade aproximada, a partir da requisição; depois o endereço é descartado.',
       close: 'Fechar',
     },
     footer: {

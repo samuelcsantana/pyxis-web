@@ -1130,7 +1130,7 @@ export const it = translation({
       description: 'Quota di visite che hanno inviato <code/>',
     },
     footnote:
-      'Dispositivo, browser e sistema vengono ricavati sul server dallo user agent del browser, che poi viene scartato. Il paese e la regione arrivano dalla rete edge, mai da un indirizzo IP salvato, e la città non viene mai registrata. Le visite più vecchie hanno solo il paese.',
+      'Dispositivo, browser e sistema vengono ricavati sul server dallo user agent del browser, che poi viene scartato. Il paese e la regione arrivano dalla rete edge, mai da un indirizzo IP salvato; la città approssimativa viene registrata solo in un progetto il cui proprietario l’ha attivata nelle Impostazioni. Le visite più vecchie hanno solo il paese.',
   },
   requests: {
     noResponse: 'Nessuna risposta',
@@ -1768,7 +1768,7 @@ export const it = translation({
         ip: {
           label: 'Indirizzo IP',
           where:
-            'Nell’API: paese e regione, poi l’indirizzo viene scartato. La città non viene mai letta.',
+            'Nell’API: paese e regione, e la città solo se il sito l’ha attivata; poi l’indirizzo viene scartato.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2120,7 +2120,7 @@ export const it = translation({
         address: {
           question: 'Salva gli indirizzi IP?',
           answer:
-            'No. CloudFront comunica all’API il paese e la regione di ogni richiesta; l’indirizzo non viene mai scritto da nessuna parte, e la città non viene mai letta.',
+            'No. CloudFront comunica all’API il paese e la regione di ogni richiesta, e la città approssimativa solo in un progetto il cui proprietario l’ha attivata; l’indirizzo non viene mai scritto da nessuna parte.',
         },
         people: {
           question: 'Può capire che due visite vengono dalla stessa persona?',
@@ -2235,7 +2235,7 @@ export const it = translation({
       noReferrer: 'referrer: nessuno',
       empty: 'Ancora niente inviato. Il primo batch parte entro 5 secondi.',
       never:
-        '<strong>Mai inviati:</strong> il tuo indirizzo IP, il nome completo del tuo browser, un cookie, l’indirizzo completo della pagina. <strong>Aggiunti dal server:</strong> paese e regione, dalla richiesta; poi l’indirizzo viene scartato.',
+        '<strong>Mai inviati:</strong> il tuo indirizzo IP, il nome completo del tuo browser, un cookie, l’indirizzo completo della pagina. <strong>Aggiunti dal server:</strong> paese, regione e città approssimativa, dalla richiesta; poi l’indirizzo viene scartato.',
       close: 'Chiudi',
     },
     footer: {

@@ -1097,7 +1097,7 @@ export const en = {
       description: 'Share of visits that sent <code/>',
     },
     footnote:
-      "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country and the region come from the edge network, never from a stored IP address, and the city is never recorded. Older visits have only the country.",
+      "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country and the region come from the edge network, never from a stored IP address; the approximate city is recorded only for a project whose owner turned it on in Settings. Older visits have only the country.",
   },
   requests: {
     noResponse: 'No response',
@@ -1731,7 +1731,7 @@ export const en = {
         ip: {
           label: 'IP address',
           where:
-            'At the API: country and state, then the address is dropped. The city is never read.',
+            'At the API: country and state, and the city only if the site turned it on; then the address is dropped.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2074,7 +2074,7 @@ export const en = {
         address: {
           question: 'Does it store IP addresses?',
           answer:
-            'No. CloudFront tells the API the country and the state of each request; the address itself is never written anywhere, and the city is never read.',
+            'No. CloudFront tells the API the country and the state of each request, and the approximate city only for a project whose owner turned it on; the address itself is never written anywhere.',
         },
         people: {
           question: 'Can it tell that two visits came from the same person?',
@@ -2188,7 +2188,7 @@ export const en = {
       noReferrer: 'referrer: none',
       empty: 'Nothing sent yet. The first batch leaves within 5 seconds.',
       never:
-        '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page. <strong>Added by the server:</strong> country and state, from the request; then the address is dropped.',
+        '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page. <strong>Added by the server:</strong> country, state and approximate city, from the request; then the address is dropped.',
       close: 'Close',
     },
     footer: {
