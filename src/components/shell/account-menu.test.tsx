@@ -4,8 +4,11 @@ import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { AccountMenu } from './account-menu';
 
+const navigation = vi.hoisted(() => ({ search: '' }));
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
 const EMAIL = 'owner@example.com';
@@ -60,6 +63,17 @@ describe('AccountMenu', () => {
       'bottom-full',
     );
     delete document.documentElement.dataset.theme;
+  });
+
+  it('keeps the period and the filters of the screen on the way to Help', () => {
+    navigation.search = 'range=7d&country=BR&metric=visitors';
+    renderMenu();
+    navigation.search = '';
+
+    expect(screen.getByRole('link', { name: 'Help and support', hidden: true })).toHaveAttribute(
+      'href',
+      '/p-1/help?range=7d&country=BR',
+    );
   });
 
   it('closes on Escape, with the focus back on the account', () => {

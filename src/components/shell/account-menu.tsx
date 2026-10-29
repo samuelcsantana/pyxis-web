@@ -8,6 +8,7 @@ import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
 import type { Theme } from '@/lib/theme';
 import { SignOutButton } from './sign-out-button';
+import { ViewKeepingLink } from './view-keeping-link';
 
 export interface AccountMenuProps {
   readonly email: string;
@@ -73,12 +74,12 @@ export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: Acco
           >
             {i18n.t('nav.billing')}
           </Link>
-          <Link
+          <ViewKeepingLink
             href={helpHref}
             className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
           >
             {i18n.t('nav.help')}
-          </Link>
+          </ViewKeepingLink>
           <SignOutButton />
         </div>
       </div>

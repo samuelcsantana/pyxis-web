@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { ViewKeepingLink } from '@/components/shell/view-keeping-link';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
@@ -20,9 +20,9 @@ function nextStep(step: NoLiveKeyStep, i18n: I18n) {
     case 'createInSettings':
       return rich(i18n.t('settings.keys.createInSettings'), {
         settings: (text) => (
-          <Link href={step.keysHref} className={TEXT_LINK}>
+          <ViewKeepingLink href={step.keysHref} className={TEXT_LINK}>
             {text}
-          </Link>
+          </ViewKeepingLink>
         ),
       });
     case 'ownerOnly':

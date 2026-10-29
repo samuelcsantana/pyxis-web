@@ -29,6 +29,8 @@ const state = vi.hoisted<{ settings: () => Promise<ProjectSettings> }>(() => ({
   settings: () => Promise.reject(new Error('settings not set')),
 }));
 
+const navigation = vi.hoisted(() => ({ search: '' }));
+
 vi.mock('@/services/projects/projects-service.factory', () => ({
   createProjectsService: () => ({
     currentAdmin: (): Promise<Admin> =>
@@ -53,6 +55,7 @@ vi.mock('next/navigation', () => ({
     throw new Error('not-found');
   },
   useRouter: () => ({ refresh: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
 const PARAMS = { params: Promise.resolve({ projectId: 'p-store' }) };
@@ -217,6 +220,47 @@ describe('InstallGuide', () => {
     expect(within(first).queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: '2. Open a page of your site' })).toHaveTextContent(
       'Page views from show up here',
+    );
+  });
+
+  it('keeps the period and the filters it was opened with in its links to Settings and the dashboard', () => {
+    navigation.search = 'range=today&device=mobile';
+    const { unmount } = render(
+      <InstallGuide
+        settings={{ ...SETTINGS, publicKeys: [], allowedOrigins: [] }}
+        endpoint="https://api.example.com"
+        i18n={english}
+      />,
+    );
+
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
+    expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings?range=today&device=mobile#settings-keys-heading',
+    );
+    const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
+    expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings?range=today&device=mobile#settings-connections-heading',
+    );
+    unmount();
+
+    render(
+      <InstallGuide
+        settings={{
+          ...SETTINGS,
+          firstEventAt: '2026-11-20T12:01:00.000Z',
+          lastEventAt: '2026-11-20T12:01:00.000Z',
+        }}
+        endpoint="https://api.example.com"
+        i18n={english}
+      />,
+    );
+    navigation.search = '';
+
+    expect(screen.getByRole('link', { name: 'Open the dashboard' })).toHaveAttribute(
+      'href',
+      '/p-store/overview?range=today&device=mobile',
     );
   });
 
