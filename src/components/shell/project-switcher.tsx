@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import type { Project } from '@/domain/admin';
+import { Breakable } from '@/components/ui/breakable';
 import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { useT } from '@/i18n/messages-provider';
@@ -71,7 +72,7 @@ export function ProjectSwitcher({
         <span className="flex min-w-0 grow flex-col gap-0.5">
           <span className="text-sm font-semibold break-words">{currentProject.name}</span>
           <span className="font-mono text-xs break-words text-nav-muted">
-            {currentProject.timezone}
+            <Breakable text={currentProject.timezone} breakAt="slashes" />
           </span>
         </span>
         <svg

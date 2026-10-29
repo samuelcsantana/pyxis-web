@@ -271,6 +271,28 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
       expect(cut).toBe(false);
     }
   });
+
+  test('breaks the time zone after its slash, never inside a word', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    await page.goto(`/${STORE_ID}/overview`);
+    await page.addStyleTag({ content: WCAG_TEXT_SPACING });
+
+    const zone = page
+      .locator('summary', { hasText: 'Switch project' })
+      .getByText('America/Sao_Paulo', { exact: true });
+    const lineTopsOfEachPart = await zone.evaluate((element) =>
+      [...element.childNodes]
+        .filter((node) => node.nodeType === Node.TEXT_NODE)
+        .map((node) => {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          return [...range.getClientRects()].map((line) => line.top);
+        }),
+    );
+
+    expect(lineTopsOfEachPart.map((tops) => tops.length)).toEqual([1, 1]);
+    expect(lineTopsOfEachPart[1]?.[0]).toBeGreaterThan(lineTopsOfEachPart[0]?.[0] ?? Infinity);
+  });
 });
 
 test.describe('at 320×640, below the sm breakpoint, the content', () => {

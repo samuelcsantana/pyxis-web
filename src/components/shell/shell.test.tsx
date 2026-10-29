@@ -282,6 +282,16 @@ describe('ProjectSwitcher', () => {
     );
   });
 
+  it('lets the time zone of the current project break only after its slash, whole', () => {
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+
+    const zone = screen.getByText('America/Sao_Paulo');
+
+    expect(zone.querySelectorAll('wbr')).toHaveLength(1);
+    expect(zone.firstChild).toHaveTextContent('America/');
+    expect(zone).not.toHaveClass('truncate');
+  });
+
   it('offers a new project only to the owner of an account that can create one', () => {
     const { unmount } = renderWithMessages(
       <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
