@@ -18,6 +18,48 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
+test('keeps the period of the screen on the way to the settings and back', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/devices?range=7d&device=mobile`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Settings' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings\\?range=7d&device=mobile$`));
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Funnel' }).click();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=7d&device=mobile$`));
+  await expect(
+    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
+  ).toHaveAttribute('aria-current', 'page');
+});
+
+test('keeps a custom period on the way to the settings and back', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Settings' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Overview' }).click();
+
+  await expect(page).toHaveURL(
+    new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),
+  );
+  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+});
+
 test('opens from the navigation and marks it current', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
   if (isMobile) {

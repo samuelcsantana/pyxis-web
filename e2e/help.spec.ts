@@ -38,6 +38,25 @@ test('opens from the account menu with the support address and the reply time of
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install$`));
 });
 
+test('keeps the period of the screen through Help and Install', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/acquisition?range=today`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.locator('summary', { hasText: 'Account and preferences' }).click();
+  await page.getByRole('link', { name: 'Help and support' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help\\?range=today$`));
+
+  await page.getByRole('link', { name: 'How to install' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install\\?range=today$`));
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Visits' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
+});
+
 test('closes Account and billing with the support address', async ({ page }) => {
   await page.goto('/account');
 
