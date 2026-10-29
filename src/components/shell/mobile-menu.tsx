@@ -7,8 +7,10 @@ import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
 import { useArrivalNews } from './arrival-badge';
+import { FIRST_SCREEN, hrefKeepingView, screenHref } from './screens';
 
 export interface MobileMenuProps {
+  readonly projectId: string;
   readonly children: ReactNode;
 }
 
@@ -16,13 +18,10 @@ const MENU_ID = 'main-navigation';
 const OPEN_ICON = 'M4 7h16 M4 12h16 M4 17h16';
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
 
-function useLocationKey(): string {
-  return `${usePathname()}?${useSearchParams().toString()}`;
-}
-
-export function MobileMenu({ children }: MobileMenuProps) {
+export function MobileMenu({ projectId, children }: MobileMenuProps) {
   const t = useT();
-  const location = useLocationKey();
+  const search = useSearchParams();
+  const location = `${usePathname()}?${search.toString()}`;
   const [openAt, setOpenAt] = useState<string>();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const open = openAt === location;
@@ -49,7 +48,13 @@ export function MobileMenu({ children }: MobileMenuProps) {
       className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0"
     >
       <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-nav px-4 text-nav-strong lg:hidden">
-        <Link href="/" className={`flex items-center gap-2 ${NAV_FOCUS_RING}`}>
+        <Link
+          href={hrefKeepingView(screenHref(projectId, FIRST_SCREEN), search)}
+          onClick={() => {
+            setOpenAt(undefined);
+          }}
+          className={`flex items-center gap-2 ${NAV_FOCUS_RING}`}
+        >
           <LogoMark size={24} />
           <span className="text-lg font-bold tracking-tight">Pyxis</span>
         </Link>

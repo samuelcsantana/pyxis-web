@@ -61,6 +61,14 @@ function store() {
   return first;
 }
 
+function docs() {
+  const [, second] = ADMIN.projects;
+  if (second === undefined) {
+    throw new Error('fixture without a second project');
+  }
+  return second;
+}
+
 describe('screens helpers', () => {
   it('keep only the period parameters', () => {
     expect(periodParameters(new URLSearchParams('range=7d&tab=x&from=a&to=b'))).toBe(
@@ -320,7 +328,7 @@ describe('ProjectSwitcher', () => {
 
   it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
     const { container } = renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
       </MobileMenu>,
     );
@@ -515,9 +523,24 @@ describe('Sidebar', () => {
     expect(screen.queryByRole('link', { name: 'Project settings' })).not.toBeInTheDocument();
   });
 
+  it('links the logo to the overview of the current project, keeping the period and the filters', () => {
+    navigation.pathname = '/p-docs/devices';
+    navigation.search = 'range=7d&device=mobile&tab=events';
+    renderWithMessages(
+      <Sidebar admin={ADMIN} project={docs()} i18n={english} chooseLocale={chooseNothing} />,
+    );
+    navigation.pathname = '/p-store/overview';
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      '/p-docs/overview?range=7d&device=mobile',
+    );
+  });
+
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />
       </MobileMenu>,
     );
@@ -532,9 +555,48 @@ describe('Sidebar', () => {
 });
 
 describe('MobileMenu', () => {
+  it('links the logo of its bar to the overview of the project, keeping the period and the filters', () => {
+    navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&tab=events';
+    renderWithMessages(
+      <MobileMenu projectId="p-docs">
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      '/p-docs/overview?from=2026-10-01&to=2026-10-10&device=mobile',
+    );
+  });
+
+  it('closes when its logo is followed, even to the address it is already on', () => {
+    renderWithMessages(
+      <MobileMenu projectId="p-store">
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    const logo = screen.getByRole('link', { name: 'Pyxis' });
+
+    fireEvent.click(logo);
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    fireEvent.click(logo);
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(document.getElementById('main-navigation')).toHaveClass('hidden');
+  });
+
   it('marks its button with a dot, and says so, when another screen has news', () => {
     renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <span>menu</span>
       </MobileMenu>,
     );
@@ -560,7 +622,7 @@ describe('MobileMenu', () => {
 
   it('opens and closes the navigation, and closes after a link is followed', () => {
     renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
         <span>Not a link</span>
       </MobileMenu>,
@@ -585,7 +647,7 @@ describe('MobileMenu', () => {
 
   it('closes with its own button', () => {
     renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <span>menu</span>
       </MobileMenu>,
     );
@@ -601,7 +663,7 @@ describe('MobileMenu', () => {
 
   function renderOpenMenu() {
     const view = renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -634,7 +696,7 @@ describe('MobileMenu', () => {
 
   it('leaves the focus alone on Escape while closed', () => {
     renderWithMessages(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -654,7 +716,7 @@ describe('MobileMenu', () => {
     const { rerender } = renderOpenMenu();
 
     rerender(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -667,7 +729,7 @@ describe('MobileMenu', () => {
 
     navigation.search = 'range=30d';
     rerender(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -684,7 +746,7 @@ describe('MobileMenu', () => {
 
     navigation.pathname = '/p-store/funnel';
     rerender(
-      <MobileMenu>
+      <MobileMenu projectId="p-store">
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );

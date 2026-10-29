@@ -111,6 +111,23 @@ export const LongValuesDark: Story = {
   play: nothingIsCut,
 };
 
+const FILTERED_DEVICES_VIEW = { range: '7d', device: 'mobile' };
+
+export const LogoKeepsTheView: Story = {
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+      navigation: { pathname: `/${STORE.id}/devices`, query: FILTERED_DEVICES_VIEW },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      `/${STORE.id}/overview?${new URLSearchParams(FILTERED_DEVICES_VIEW).toString()}`,
+    );
+  },
+};
+
 export const KeyboardFocus: Story = {
   play: async ({ canvasElement }) => {
     const funnel = within(canvasElement).getByRole('link', { name: 'Funnel' });
@@ -214,9 +231,9 @@ export const SignOutFailedDark: Story = {
 };
 
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
-  (Story) => (
+  (Story, { args }) => (
     <div className="w-[390px]">
-      <MobileMenu>
+      <MobileMenu projectId={args.project.id}>
         <Story />
       </MobileMenu>
     </div>
