@@ -2073,6 +2073,13 @@
                   ],
                   "type": "object"
                 },
+                "mailbox_has_another_free_account": {
+                  "description": "Whether another account on the free plan belongs to the mailbox of the owner (the address without its +tag, and on Gmail without dots). Only one free account is kept per mailbox, so a subscription that ends then ends the account instead of falling back to the free plan. Null for members.",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
                 "measured_at": {
                   "anyOf": [
                     {
@@ -2199,6 +2206,7 @@
                 "project_count",
                 "people_count",
                 "bound_by_free_plan_terms",
+                "mailbox_has_another_free_account",
                 "month",
                 "events_this_month",
                 "measured_at",
@@ -3922,6 +3930,16 @@
             "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
             "type": "string"
           },
+          "free_place": {
+            "description": "placed when the account took a place on the free plan; waitlisted when it waits for one; taken_by_same_mailbox when the mailbox behind the address (the address without its +tag, and on Gmail without dots) already has an account on the free plan or waiting for one, so this account waits for its subscription; not_offered when the free plan is closed or a returning owner gets an account that already runs.",
+            "enum": [
+              "placed",
+              "waitlisted",
+              "taken_by_same_mailbox",
+              "not_offered"
+            ],
+            "type": "string"
+          },
           "session_token": {
             "pattern": "^[A-Za-z0-9_-]{43}$",
             "type": "string"
@@ -3931,7 +3949,8 @@
           "email",
           "session_token",
           "account_id",
-          "account_status"
+          "account_status",
+          "free_place"
         ],
         "type": "object"
       },
@@ -5629,7 +5648,7 @@
     },
     "/v1/auth/sign-up/code": {
       "post": {
-        "description": "Answers 202 whoever the email is. A code is created and emailed within the limits per email and per day; 404 while sign-up is closed.",
+        "description": "Answers 202 whoever the email is: a code is created and emailed within the limit per email, and nothing is said when that limit is reached. 429 sign_up_busy once the sign-up codes of the last 24 hours reach the daily cap, for every address alike; 429 also when the client address sends too many requests; 404 while sign-up is closed.",
         "operationId": "SignUpController_code",
         "parameters": [],
         "requestBody": {
