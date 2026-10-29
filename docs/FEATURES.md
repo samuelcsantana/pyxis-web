@@ -343,7 +343,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   return from a new free account's welcome). While the API says the free plan is open or full,
   a subscribed account learns what cancelling does (back to the free plan with its projects and
   data when it holds one project and one person, otherwise what to remove or the account ends;
-  only when the API says terms with the free plan bind the account, `bound_by_free_plan_terms`),
+  only when the API says terms with the free plan bind the account, `bound_by_free_plan_terms`,
+  and never when another free account belongs to the owner's mailbox, which the API answers as
+  `mailbox_has_another_free_account`; an API that does not answer it leaves the check to the
+  accounts the owner has),
   a paid one can withdraw within 7 days of its first payment (refunded, back on the free plan;
   the API answers when the 7 days are over), and the texts name no free trial. While the free
   plan is closed, or its state cannot be read, the page is as before
