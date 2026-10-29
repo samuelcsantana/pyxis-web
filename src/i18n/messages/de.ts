@@ -1148,7 +1148,7 @@ export const de = translation({
       description: 'Anteil der Besuche, die <code/> gesendet haben',
     },
     footnote:
-      'Gerät, Browser und System werden auf dem Server aus dem User-Agent des Browsers ermittelt, der danach verworfen wird. Land und Region stammen aus dem Edge-Netzwerk, nie aus einer gespeicherten IP-Adresse, und die Stadt wird nie erfasst. Ältere Besuche haben nur das Land.',
+      'Gerät, Browser und System werden auf dem Server aus dem User-Agent des Browsers ermittelt, der danach verworfen wird. Land und Region stammen aus dem Edge-Netzwerk, nie aus einer gespeicherten IP-Adresse; die ungefähre Stadt wird nur in einem Projekt erfasst, dessen Inhaber sie in den Einstellungen eingeschaltet hat. Ältere Besuche haben nur das Land.',
   },
   requests: {
     noResponse: 'Keine Antwort',
@@ -1788,7 +1788,7 @@ export const de = translation({
         ip: {
           label: 'IP-Adresse',
           where:
-            'In der API: Land und Region, danach wird die Adresse verworfen. Die Stadt wird nie gelesen.',
+            'In der API: Land und Region, die Stadt nur, wenn die Website sie eingeschaltet hat; danach wird die Adresse verworfen.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2140,7 +2140,7 @@ export const de = translation({
         address: {
           question: 'Speichert es IP-Adressen?',
           answer:
-            'Nein. CloudFront teilt der API Land und Region jeder Anfrage mit; die Adresse selbst wird nirgends gespeichert, und die Stadt wird nie gelesen.',
+            'Nein. CloudFront teilt der API Land und Region jeder Anfrage mit, die ungefähre Stadt nur in einem Projekt, dessen Inhaber sie eingeschaltet hat; die Adresse selbst wird nirgends gespeichert.',
         },
         people: {
           question: 'Kann es erkennen, dass zwei Besuche von derselben Person stammen?',
@@ -2256,7 +2256,7 @@ export const de = translation({
       noReferrer: 'Referrer: keiner',
       empty: 'Noch nichts gesendet. Der erste Batch geht innerhalb von 5 Sekunden raus.',
       never:
-        '<strong>Nie gesendet:</strong> deine IP-Adresse, der vollständige Name deines Browsers, ein Cookie, die vollständige Adresse der Seite. <strong>Vom Server ergänzt:</strong> Land und Region, aus der Anfrage; danach wird die Adresse verworfen.',
+        '<strong>Nie gesendet:</strong> deine IP-Adresse, der vollständige Name deines Browsers, ein Cookie, die vollständige Adresse der Seite. <strong>Vom Server ergänzt:</strong> Land, Region und ungefähre Stadt, aus der Anfrage; danach wird die Adresse verworfen.',
       close: 'Schließen',
     },
     footer: {

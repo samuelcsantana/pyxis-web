@@ -1146,7 +1146,7 @@ export const fr = translation({
       description: 'Part des visites ayant envoyé <code/>',
     },
     footnote:
-      'L’appareil, le navigateur et le système sont déduits côté serveur à partir du user agent du navigateur, qui est ensuite jeté. Le pays et la région viennent du réseau de périphérie, jamais d’une adresse IP stockée, et la ville n’est jamais enregistrée. Les visites plus anciennes n’ont que le pays.',
+      'L’appareil, le navigateur et le système sont déduits côté serveur à partir du user agent du navigateur, qui est ensuite jeté. Le pays et la région viennent du réseau de périphérie, jamais d’une adresse IP stockée ; la ville approximative n’est enregistrée que dans un projet dont le propriétaire l’a activée dans les Paramètres. Les visites plus anciennes n’ont que le pays.',
   },
   requests: {
     noResponse: 'Sans réponse',
@@ -1784,7 +1784,7 @@ export const fr = translation({
         ip: {
           label: 'Adresse IP',
           where:
-            'Dans l’API : le pays et la région, puis l’adresse est supprimée. La ville n’est jamais lue.',
+            'Dans l’API : le pays et la région, et la ville seulement si le site l’a activée ; puis l’adresse est supprimée.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2139,7 +2139,7 @@ export const fr = translation({
         address: {
           question: 'Stocke-t-il les adresses IP ?',
           answer:
-            'Non. CloudFront indique à l’API le pays et la région de chaque requête ; l’adresse elle-même n’est jamais écrite nulle part, et la ville n’est jamais lue.',
+            'Non. CloudFront indique à l’API le pays et la région de chaque requête, et la ville approximative seulement dans un projet dont le propriétaire l’a activée ; l’adresse elle-même n’est jamais écrite nulle part.',
         },
         people: {
           question: 'Peut-il savoir que deux visites viennent de la même personne ?',
@@ -2254,7 +2254,7 @@ export const fr = translation({
       noReferrer: 'référent : aucun',
       empty: 'Rien d’envoyé pour l’instant. Le premier lot part dans les 5 secondes.',
       never:
-        '<strong>Jamais envoyé :</strong> votre adresse IP, le nom complet de votre navigateur, un cookie, l’adresse complète de la page. <strong>Ajouté par le serveur :</strong> le pays et la région, d’après la requête ; puis l’adresse est supprimée.',
+        '<strong>Jamais envoyé :</strong> votre adresse IP, le nom complet de votre navigateur, un cookie, l’adresse complète de la page. <strong>Ajouté par le serveur :</strong> le pays, la région et la ville approximative, d’après la requête ; puis l’adresse est supprimée.',
       close: 'Fermer',
     },
     footer: {

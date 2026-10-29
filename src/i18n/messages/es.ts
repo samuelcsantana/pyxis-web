@@ -1123,7 +1123,7 @@ export const es = translation({
       description: 'Proporción de visitas que enviaron <code/>',
     },
     footnote:
-      'El dispositivo, el navegador y el sistema se deducen en el servidor a partir del user agent del navegador, que luego se descarta. El país y la región vienen de la red de borde, nunca de una dirección IP guardada, y la ciudad nunca se registra. Las visitas más antiguas solo tienen el país.',
+      'El dispositivo, el navegador y el sistema se deducen en el servidor a partir del user agent del navegador, que luego se descarta. El país y la región vienen de la red de borde, nunca de una dirección IP guardada; la ciudad aproximada solo se registra en un proyecto cuyo dueño la activó en Configuración. Las visitas más antiguas solo tienen el país.',
   },
   requests: {
     noResponse: 'Sin respuesta',
@@ -1756,7 +1756,7 @@ export const es = translation({
         ip: {
           label: 'Dirección IP',
           where:
-            'En la API: país y región, y luego se descarta la dirección. La ciudad nunca se lee.',
+            'En la API: país y región, y la ciudad solo si el sitio la activó; luego se descarta la dirección.',
           raw: '203.0.113.7',
           kept: 'BR · BR-BA',
         },
@@ -2103,7 +2103,7 @@ export const es = translation({
         address: {
           question: '¿Guarda direcciones IP?',
           answer:
-            'No. CloudFront le indica a la API el país y la región de cada solicitud; la dirección en sí nunca se escribe en ninguna parte, y la ciudad nunca se lee.',
+            'No. CloudFront le indica a la API el país y la región de cada solicitud, y la ciudad aproximada solo en un proyecto cuyo dueño la activó; la dirección en sí nunca se escribe en ninguna parte.',
         },
         people: {
           question: '¿Puede saber que dos visitas vienen de la misma persona?',
@@ -2217,7 +2217,7 @@ export const es = translation({
       noReferrer: 'origen: ninguno',
       empty: 'Todavía no se envió nada. El primer lote sale en menos de 5 segundos.',
       never:
-        '<strong>Nunca se envía:</strong> tu dirección IP, el nombre completo de tu navegador, una cookie, la dirección completa de la página. <strong>Lo agrega el servidor:</strong> el país y la región, a partir de la solicitud; luego se descarta la dirección.',
+        '<strong>Nunca se envía:</strong> tu dirección IP, el nombre completo de tu navegador, una cookie, la dirección completa de la página. <strong>Lo agrega el servidor:</strong> el país, la región y la ciudad aproximada, a partir de la solicitud; luego se descarta la dirección.',
       close: 'Cerrar',
     },
     footer: {
