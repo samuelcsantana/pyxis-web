@@ -287,7 +287,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   free, goes to `/welcome?account=<id>` (the free plan's limits from the account, then the first
   project); while it is full the account is created and waits for a place, and the form offers to
   subscribe now, also on a later visit. Where a verified owner goes follows the account status
-  the API answers, so a returning owner whose account runs goes to the dashboard
+  the API answers, so a returning owner whose account runs goes to the dashboard, and the free
+  place it answers (`free_place`): an address whose mailbox already has a free account
+  (`taken_by_same_mailbox`, one free account per mailbox) goes to the dashboard to finish its
+  subscription, never to the wait for a free place
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; three projects on the paid plan, one on the
