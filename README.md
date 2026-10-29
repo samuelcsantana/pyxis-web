@@ -385,8 +385,8 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart                      | 172               |
-| Dashboard screens with a chart (Overview, Acquisition) | 169               |
+| Dashboard screens without a chart                      | 173               |
+| Dashboard screens with a chart (Overview, Acquisition) | 170               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
