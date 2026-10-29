@@ -38,7 +38,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - The app shell: sidebar with the screens (resting the pointer on one, or reaching it with the
   keyboard, fetches that screen ahead, so the click opens it without a skeleton even the first
   time; a tap on a phone, which has no hover, works as before), project switcher, period selector (today, 7 days,
-  30 days or a custom range, kept in the URL; a range it cannot use is named with the reason and
+  30 days or a custom range, kept in the URL across the screens and through Settings, Help and
+  Install, together with the filters; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
   button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
   a slim bar that stays at the top while the page scrolls, and it closes with Escape (the focus
