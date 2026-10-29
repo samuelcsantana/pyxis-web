@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { installHref } from '@/components/shell/screens';
+import { ViewKeepingLink } from '@/components/shell/view-keeping-link';
 import { SupportAddress } from '@/components/support/support-address';
 import { SupportReplies } from '@/components/support/support-replies';
 import { TEXT_LINK } from '@/components/ui/control-classes';
@@ -55,9 +55,9 @@ function HelpLink({ href, label, body }: HelpLinkProps) {
           {label}
         </a>
       ) : (
-        <Link href={href} className={`self-start text-sm ${TEXT_LINK}`}>
+        <ViewKeepingLink href={href} className={`self-start text-sm ${TEXT_LINK}`}>
           {label}
-        </Link>
+        </ViewKeepingLink>
       )}
       <span className={NOTE}>{body}</span>
     </li>

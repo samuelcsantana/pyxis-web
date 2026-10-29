@@ -11,9 +11,11 @@ import HelpPage, { generateMetadata } from './page';
 const state = vi.hoisted<{
   admin: unknown;
   accounts: () => Promise<readonly Account[]>;
+  search: string;
 }>(() => ({
   admin: undefined,
   accounts: () => Promise.reject(new Error('accounts not set')),
+  search: '',
 }));
 
 vi.mock('next/headers', () => ({
@@ -30,7 +32,7 @@ vi.mock('next/navigation', () => ({
   },
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
   usePathname: () => `/${DEMO_STORE.id}/help`,
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => new URLSearchParams(state.search),
 }));
 
 vi.mock('@/services/projects/projects-service.factory', () => ({
@@ -62,6 +64,7 @@ async function demoAccountWith(status: Account['status']): Promise<readonly Acco
 beforeEach(() => {
   state.admin = ADMIN;
   state.accounts = () => demoAccountWith('active');
+  state.search = '';
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(NOW);
 });
@@ -96,6 +99,17 @@ describe('HelpPage', () => {
     expect(screen.getByRole('link', { name: 'Report it privately' })).toHaveAttribute(
       'href',
       'https://github.com/samuelcsantana/pyxis-api/security/advisories/new',
+    );
+  });
+
+  it('keeps the period and the filters it was opened with on the way to the install guide', async () => {
+    state.search = 'from=2026-10-01&to=2026-10-05&path=%2Fpricing';
+
+    renderWithMessages(await renderHelp());
+
+    expect(screen.getByRole('link', { name: 'How to install' })).toHaveAttribute(
+      'href',
+      `/${DEMO_STORE.id}/install?from=2026-10-01&to=2026-10-05&path=%2Fpricing`,
     );
   });
 
