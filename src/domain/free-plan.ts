@@ -95,5 +95,8 @@ export function freePlanFitDue(account: Account): FreePlanFitDue | null {
 }
 
 export function ownsAnotherFreeAccount(account: Account, owned: readonly Account[]): boolean {
-  return owned.some((other) => other.id !== account.id && other.status === 'free');
+  return (
+    account.mailboxHasAnotherFreeAccount ??
+    owned.some((other) => other.id !== account.id && other.status === 'free')
+  );
 }

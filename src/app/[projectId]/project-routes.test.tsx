@@ -148,6 +148,7 @@ describe('ProjectLayout', () => {
           projectCount: 1,
           peopleCount: 1,
           boundByFreePlanTerms: true,
+          mailboxHasAnotherFreeAccount: null,
           month: '2026-10',
           eventsThisMonth: 10,
           measuredAt: null,

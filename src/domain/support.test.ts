@@ -20,6 +20,7 @@ const ACCOUNT: Account = {
   projectCount: 1,
   peopleCount: 1,
   boundByFreePlanTerms: true,
+  mailboxHasAnotherFreeAccount: null,
   month: '2026-11',
   eventsThisMonth: 10_000,
   measuredAt: '2026-11-20T03:00:00.000Z',
