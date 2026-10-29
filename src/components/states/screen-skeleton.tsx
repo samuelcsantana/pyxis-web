@@ -103,6 +103,16 @@ export function SkeletonSteps() {
   );
 }
 
+export function SkeletonReach() {
+  return (
+    <div className={`flex flex-col gap-3 p-3.5 sm:px-5.5 sm:py-5 ${CARD}`}>
+      <span className={`h-3.5 w-20 ${PULSE}`} />
+      <span className={`h-6 w-11/12 max-w-xl ${PULSE}`} />
+      <span className={`h-3 w-3/5 max-w-sm ${PULSE}`} />
+    </div>
+  );
+}
+
 export function SkeletonPair() {
   return (
     <div className="grid gap-3.5 sm:gap-5 xl:grid-cols-2">
