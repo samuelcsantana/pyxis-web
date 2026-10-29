@@ -229,7 +229,7 @@ export function SignUpForm({
     if (outcome.kind === 'verified') {
       await continueAfterSignUp(
         outcome.accountId,
-        stepAfterSignUp(outcome.accountStatus, freePlanAtSignUp),
+        stepAfterSignUp(outcome.accountStatus, freePlanAtSignUp, outcome.freePlace),
       );
       return;
     }

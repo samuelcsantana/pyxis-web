@@ -225,6 +225,33 @@ describe('SignUpForm', () => {
     expect(assign).toHaveBeenCalledWith('https://checkout.stripe.com/c/now');
   });
 
+  it('sends an address whose mailbox already has a free account to the dashboard, never to wait', async () => {
+    const signUp = service();
+    calls.verify.mockResolvedValue({
+      kind: 'verified',
+      accountId: ACCOUNT,
+      accountStatus: 'incomplete',
+      freePlace: 'taken_by_same_mailbox',
+    });
+    const openCheckout = vi.fn<OpenCheckout>();
+    renderWithMessages(
+      <SignUpForm
+        terms={{ ...TERMS, freePlan: 'open' }}
+        signUpService={signUp}
+        openCheckout={openCheckout}
+      />,
+    );
+    await reachTheCode();
+    typeCode('123456');
+    await settle();
+
+    expect(openCheckout).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('heading', { name: 'The free plan is full for now' }),
+    ).not.toBeInTheDocument();
+    expect(navigation.router.replace).toHaveBeenCalledWith('/');
+  });
+
   it('sends a returning owner whose account already runs to the dashboard, not to Checkout', async () => {
     const signUp = service();
     calls.verify.mockResolvedValue({

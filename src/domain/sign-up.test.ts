@@ -37,25 +37,39 @@ describe('what the home page offers', () => {
 
 describe('where a verified sign-up goes', () => {
   it.each(FREE_PLAN_STATES)('welcomes an owner who starts on the free plan (%s)', (freePlan) => {
-    expect(stepAfterSignUp('free', freePlan)).toBe('welcome');
+    expect(stepAfterSignUp('free', freePlan, 'placed')).toBe('welcome');
   });
 
   it('opens Checkout for an account waiting for it while the free plan is closed', () => {
-    expect(stepAfterSignUp('incomplete', 'closed')).toBe('checkout');
+    expect(stepAfterSignUp('incomplete', 'closed', 'not_offered')).toBe('checkout');
   });
 
   it.each(['open', 'full'] as const)(
     'offers to wait for a free place, or subscribe, when the free plan is %s but had none',
     (freePlan) => {
-      expect(stepAfterSignUp('incomplete', freePlan)).toBe('waitForAFreePlace');
+      expect(stepAfterSignUp('incomplete', freePlan, 'waitlisted')).toBe('waitForAFreePlace');
+    },
+  );
+
+  it.each(['open', 'full'] as const)(
+    'keeps the waiting screen when an API that does not say the free place answers, the plan %s',
+    (freePlan) => {
+      expect(stepAfterSignUp('incomplete', freePlan, null)).toBe('waitForAFreePlace');
+    },
+  );
+
+  it.each(FREE_PLAN_STATES)(
+    'sends an account whose mailbox already has a free one to finish its subscription, never to wait (%s)',
+    (freePlan) => {
+      expect(stepAfterSignUp('incomplete', freePlan, 'taken_by_same_mailbox')).toBe('dashboard');
     },
   );
 
   it.each(ACCOUNT_STATUSES.filter((status) => status !== 'free' && status !== 'incomplete'))(
     'sends a returning owner whose account is %s to the dashboard',
     (status) => {
-      expect(stepAfterSignUp(status, 'open')).toBe('dashboard');
-      expect(stepAfterSignUp(status, 'closed')).toBe('dashboard');
+      expect(stepAfterSignUp(status, 'open', 'not_offered')).toBe('dashboard');
+      expect(stepAfterSignUp(status, 'closed', null)).toBe('dashboard');
     },
   );
 });
