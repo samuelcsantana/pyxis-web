@@ -102,7 +102,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   (a state or a province: the ten with most visits by name, the rest, and the visits the edge
   network could not place, which includes every visit from before regions were recorded); with a
   conversion event set, each browser, system, country and region also gives its conversion rate;
-  each device type, country and region opens its visits
+  each device type, country and region opens its visits. For a project that turned the visitor's
+  city on in Settings, or a period that holds a named city, a Cities table follows: the twenty
+  approximate cities with most visits, each with its region (and the country when they span
+  several), the rest, and the visits without a city, with the conversion rate under a conversion
+  event; each city opens its visits by its region and its name, since the same name exists in
+  several regions
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
   stacked by channel (chart or table; a pointer over a day lists its channels and total), and the sources with their conversion rate and the visits
@@ -149,11 +154,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   links to every visit of the person it was identified as; an id it cannot look up stays in the
   field, marked invalid, with an example of what that kind of id looks like
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
-  count, first named events, failed requests (reads and writes), device and place (region and
-  country, or the country alone), channel and account; filters for the pages it viewed (up to
+  count, first named events, failed requests (reads and writes), device and place (city, region
+  and country, or as much of them as is known), channel and account; filters for the pages it viewed (up to
   three, `*` matching any characters), an event with an optional `key=value` property, the
   channel, the device, the browser, the system, identified or anonymous visitors, the country,
-  the region (`BR-SP`), the
+  the region (`BR-SP`), the city (its exact name, best sent with its region), the
   source and campaign (as Acquisition names them), a request it made (`POST /orders/:id`) and
   whether it had a failed request, all kept in the URL, with the number
   of matching visits above the list; on a phone the filters fold behind a "Filters · 2 active"
@@ -170,7 +175,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the "+N" and "New" marks pause while a filter is on ("N on the site now" and the menu counts
   stay). The chips are a parallel route slot (`@filters`) of the screens layout, drawn on the
   server, so they add no client code. Each named row (device types, browsers, systems, countries,
-  regions, sources, channels, campaigns, events, screens, top pages and top events, never an
+  regions, cities (by region and name), sources, channels, campaigns, events, screens, top pages and top events, never an
   aggregate such as "Other") has a filter button right after its name: it adds that value to the
   filters of every screen, shows a filled × once it is on and then removes it, while the name
   still opens the row's visits
