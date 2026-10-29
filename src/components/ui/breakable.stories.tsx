@@ -25,4 +25,8 @@ export const Route: Story = { args: { text: '/projects/:projectId/orders/:id' } 
 
 export const PlainText: Story = { args: { text: 'Organic search' } };
 
+export const OnlyAfterSlashes: Story = {
+  args: { text: 'America/Argentina/Buenos_Aires', breakAt: 'slashes' },
+};
+
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
