@@ -105,6 +105,9 @@ German uses _du_, the French _vous_, the Italian _tu_ and the Dutch _je_, the us
 software in each. Numbers and dates follow the conventions of Spain (`es`), Germany (`de`),
 France (`fr`), Italy (`it`) and the Netherlands (`nl`).
 
+<details>
+<summary>How the language is chosen, written and checked</summary>
+
 - **Which language:** the one chosen in the language menu wins, kept in the functional
   `pyxis_locale` cookie; without a choice, the browser's `Accept-Language` decides, matching on
   the language, so `pt-PT` gets Brazilian Portuguese, `es-MX` Spanish, `de-AT` German, `fr-CA`
@@ -137,6 +140,8 @@ France (`fr`), Italy (`it`) and the Netherlands (`nl`).
   screen in Portuguese, Spanish, German, French, Italian and Dutch with axe, at 1440 and 390px,
   reads the French figures back through its narrow-space separator, and checks the language
   switch round trip.
+
+</details>
 
 ## Architecture
 
@@ -202,6 +207,9 @@ origin the sign-in and sign-out calls carry.
 
 ### Routes
 
+<details>
+<summary>Every route and what it shows</summary>
+
 | Route                                                                          | What it shows                                                                                                                                                                                                                                                                                |
 | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/`                                                                            | Opens the first project the admin may read, or explains there is none                                                                                                                                                                                                                        |
@@ -259,6 +267,8 @@ header yourself: `curl -H 'x-forwarded-host: pyxis-analytics.dev' http://localho
 is on the HSTS preload list, so Chromium upgrades it to HTTPS). The `landing-*` Playwright
 projects do exactly that.
 
+</details>
+
 ### Contract
 
 `contract/openapi.json` is a copy of the API's published contract. `npm run contract:sync`
@@ -273,6 +283,9 @@ Two Vercel projects build this repository, and every merge to `main` deploys bot
 | ------------ | ------------------------------------------------------------------------------------- | --------------------------------- |
 | `pyxis-web`  | `https://app.pyxis-analytics.dev`, the dashboard for the projects' admins             | `https://api.pyxis-analytics.dev` |
 | `pyxis-demo` | [`https://demo.pyxis-analytics.dev`](https://demo.pyxis-analytics.dev), the live demo | unset                             |
+
+<details>
+<summary>Its settings, the contract pages and what deploys</summary>
 
 The demo's project also builds the home page. `NEXT_PUBLIC_LANDING_PYXIS_KEY` (the public key of
 the Pyxis project that measures the home page) turns its measurement on;
@@ -304,6 +317,8 @@ requests get no preview deployment and spend no build minutes. Check a change
 locally instead (`npm run dev`, or the e2e suite on a production build). `vercel.json` also runs
 the functions in `gru1` (São Paulo), the city of the API, because every page reads it on the
 server.
+
+</details>
 
 ## Testing
 
@@ -377,7 +392,12 @@ that says why:
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
-the two screens loaded 154.1 KiB when that change landed, down from about 256 KiB with Recharts. The budget went from 162 to 163 KiB
+the two screens loaded 154.1 KiB when that change landed, down from about 256 KiB with Recharts.
+
+<details>
+<summary>How each budget grew</summary>
+
+The budget went from 162 to 163 KiB
 with the sliding period presets, a client component of about 1 KiB that moves the indicator on
 the click, before the next page arrives, and to 165 KiB with the sliding indicators of the other
 switches, the tabs and the theme choice (about 1.4 KiB on these two screens: a hook that measures
@@ -416,6 +436,8 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)): Overview stayed at
 168.5 KiB, and the two tables drawn in the browser carry the slot (Requests 171.6 KiB, Visits
 171.0 KiB).
+
+</details>
 
 ## Project structure
 
