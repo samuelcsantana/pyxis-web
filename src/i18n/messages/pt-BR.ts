@@ -1115,6 +1115,8 @@ export const ptBR = translation({
     otherCountries: 'Outros países',
     otherRegions: 'Outros estados',
     unknownRegion: 'Não identificado',
+    otherCities: 'Outras cidades',
+    unknownCity: 'Não identificada',
     convertedOfVisits: '{converted} de {visits}',
     subtitle: 'O que as pessoas usam para acessar {project}',
     panels: {
@@ -1125,12 +1127,14 @@ export const ptBR = translation({
     columns: {
       country: 'País',
       region: 'Estado',
+      city: 'Cidade',
       visits: 'Visitas',
       share: 'Parcela',
       conversionRate: 'Taxa de conversão',
     },
     countries: 'Países',
     regions: 'Estados',
+    cities: 'Cidades',
     conversionByDevice: {
       title: 'Conversão por dispositivo',
       description: 'Parcela das visitas que enviaram <code/>',
@@ -1671,7 +1675,7 @@ export const ptBR = translation({
       campaigns: 'Campanhas',
       channels: 'Visitas por canal',
     },
-    devices: 'Tipos de dispositivo, navegadores, sistemas, países e estados',
+    devices: 'Tipos de dispositivo, navegadores, sistemas, países, estados e cidades',
     features: {
       events: 'Eventos',
       screens: 'Telas',

@@ -113,11 +113,24 @@ test('opens the visits of a source, a country and a failing route', async ({ pag
   await expect(visitRows(page).first()).toBeVisible();
 
   await page.goto(`/${STORE_ID}/devices?range=30d`);
-  await page.getByRole('link', { name: 'São Paulo: see its visits' }).click();
+  await page
+    .getByRole('table', { name: 'Regions' })
+    .getByRole('link', { name: 'São Paulo: see its visits' })
+    .click();
 
   await expect(page).toHaveURL(/\/visits\?range=30d&region=BR-SP$/);
   await expect(filters(page).getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
   await expect(visitRows(page).first()).toContainText('São Paulo');
+
+  await page.goto(`/${STORE_ID}/devices?range=30d`);
+  await page
+    .getByRole('table', { name: 'Cities' })
+    .getByRole('link', { name: 'Campinas: see its visits' })
+    .click();
+
+  await expect(page).toHaveURL(/\/visits\?range=30d&region=BR-SP&city=Campinas$/);
+  await expect(filters(page).getByRole('textbox', { name: /^City/ })).toHaveValue('Campinas');
+  await expect(visitRows(page).first()).toBeVisible();
 
   await page.goto(`/${STORE_ID}/requests?range=30d`);
   await page.getByRole('button', { name: 'POST /orders, show details' }).click();

@@ -1,6 +1,6 @@
 import type { I18n } from '@/i18n/i18n';
 import type { CsvTable, CsvValue } from './csv';
-import type { DevicesReport, RegionShare, ValueShare } from './devices';
+import type { CityShare, DevicesReport, RegionShare, ValueShare } from './devices';
 
 export function devicesTableLabel(i18n: I18n): string {
   return i18n.t('exports.devices');
@@ -16,6 +16,7 @@ const DIMENSIONS: readonly (readonly [
   ['country', 'countries'],
 ];
 const REGION_DIMENSION = 'region';
+const CITY_DIMENSION = 'city';
 
 interface ExportedShare {
   readonly dimension: string;
@@ -37,6 +38,17 @@ function exportedShare(dimension: string, share: ValueShare): ExportedShare {
 
 function exportedRegion(share: RegionShare): ExportedShare {
   return { dimension: REGION_DIMENSION, ...share };
+}
+
+function exportedCity(share: CityShare): ExportedShare {
+  return {
+    dimension: CITY_DIMENSION,
+    value: share.value,
+    name: share.regionName,
+    visits: share.visits,
+    conversions: share.conversions,
+    convertingVisits: share.convertingVisits,
+  };
 }
 
 function shareColumns(shares: readonly ExportedShare[]): readonly ShareColumn[] {
@@ -63,6 +75,7 @@ export function devicesCsvTable(report: DevicesReport): CsvTable {
       report[key].map((share) => exportedShare(dimension, share)),
     ),
     ...report.regions.map(exportedRegion),
+    ...report.cities.map(exportedCity),
   ];
   const columns = shareColumns(shares);
   return {

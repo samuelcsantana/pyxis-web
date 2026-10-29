@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import {
   browserLabel,
+  cityRows,
   countsConversions,
   countryCode,
   countryLabel,
   deviceConversions,
   deviceTypeLabel,
   type DevicesWire,
+  hasNamedCity,
   hasVisits,
   isRegionCode,
   operatingSystemLabel,
@@ -241,6 +243,200 @@ describe('regionRows', () => {
     expect(rows.map((row) => row.country)).toEqual([null, null]);
     expect(rows.map((row) => row.conversionRate)).toEqual([null, null]);
     expect(countsConversions(rows)).toBe(false);
+  });
+});
+
+describe('cityRows', () => {
+  const cities = devicesResponseSchema.parse({
+    ...WIRE,
+    cities: [
+      {
+        value: 'Feira de Santana',
+        region: 'BR-BA',
+        region_name: 'Bahia',
+        visits: 50,
+        conversions: 6,
+        converting_visits: 4,
+      },
+      {
+        value: 'Sintra',
+        region: 'PT-11',
+        region_name: null,
+        visits: 20,
+        conversions: 0,
+        converting_visits: 0,
+      },
+      {
+        value: 'other',
+        region: null,
+        region_name: null,
+        visits: 20,
+        conversions: 1,
+        converting_visits: 1,
+      },
+      {
+        value: null,
+        region: null,
+        region_name: null,
+        visits: 10,
+        conversions: 0,
+        converting_visits: 0,
+      },
+    ],
+  }).cities;
+
+  it('name each city with its region and country, its share and what its row filters by', () => {
+    expect(cityRows(cities, english)).toEqual([
+      {
+        key: 'BR-BA|Feira de Santana',
+        label: 'Feira de Santana',
+        place: 'Bahia, Brazil',
+        filterValue: { region: 'BR-BA', city: 'Feira de Santana' },
+        visits: '50',
+        counted: 50,
+        share: '50.0%',
+        fraction: 0.5,
+        conversionRate: '8.0%',
+      },
+      {
+        key: 'PT-11|Sintra',
+        label: 'Sintra',
+        place: 'PT-11, Portugal',
+        filterValue: { region: 'PT-11', city: 'Sintra' },
+        visits: '20',
+        counted: 20,
+        share: '20.0%',
+        fraction: 0.2,
+        conversionRate: '0.0%',
+      },
+      {
+        key: 'other',
+        label: 'Other cities',
+        place: null,
+        filterValue: null,
+        visits: '20',
+        counted: 20,
+        share: '20.0%',
+        fraction: 0.2,
+        conversionRate: '5.0%',
+      },
+      {
+        key: 'unknown',
+        label: 'Unknown',
+        place: null,
+        filterValue: null,
+        visits: '10',
+        counted: 10,
+        share: '10.0%',
+        fraction: 0.1,
+        conversionRate: '0.0%',
+      },
+    ]);
+  });
+
+  it('name the other cities and the unknown ones in the language of the dashboard', () => {
+    expect(cityRows(cities, portuguese).map((row) => row.label)).toEqual([
+      'Feira de Santana',
+      'Sintra',
+      'Outras cidades',
+      'Não identificada',
+    ]);
+  });
+
+  it('leave the country out when every city is in the same one, and give no rate without one', () => {
+    const rows = cityRows(
+      [
+        {
+          value: 'Salvador',
+          region: 'BR-BA',
+          regionName: 'Bahia',
+          visits: 3,
+          conversions: null,
+          convertingVisits: null,
+        },
+        {
+          value: 'Niterói',
+          region: 'BR-RJ',
+          regionName: 'Rio de Janeiro',
+          visits: 1,
+          conversions: null,
+          convertingVisits: null,
+        },
+      ],
+      english,
+    );
+
+    expect(rows.map((row) => row.place)).toEqual(['Bahia', 'Rio de Janeiro']);
+    expect(rows.map((row) => row.conversionRate)).toEqual([null, null]);
+    expect(countsConversions(rows)).toBe(false);
+  });
+
+  it('keep a region the dashboard cannot read as a code without naming its country', () => {
+    const rows = cityRows(
+      [
+        {
+          value: 'Atlantis',
+          region: 'atlantic',
+          regionName: null,
+          visits: 1,
+          conversions: null,
+          convertingVisits: null,
+        },
+        {
+          value: 'Feira de Santana',
+          region: 'BR-BA',
+          regionName: 'Bahia',
+          visits: 1,
+          conversions: null,
+          convertingVisits: null,
+        },
+        {
+          value: 'Sintra',
+          region: 'PT-11',
+          regionName: 'Lisboa',
+          visits: 1,
+          conversions: null,
+          convertingVisits: null,
+        },
+      ],
+      english,
+    );
+
+    expect(rows.map((row) => row.place)).toEqual(['atlantic', 'Bahia, Brazil', 'Lisboa, Portugal']);
+  });
+
+  it('show dashes, not NaN, when nobody visited', () => {
+    const [row] = cityRows(
+      [
+        {
+          value: null,
+          region: null,
+          regionName: null,
+          visits: 0,
+          conversions: null,
+          convertingVisits: null,
+        },
+      ],
+      english,
+    );
+
+    expect(row).toMatchObject({ share: '—', fraction: 0 });
+  });
+});
+
+describe('hasNamedCity', () => {
+  it('is true when a city has a name and a region', () => {
+    expect(hasNamedCity(devicesResponseSchema.parse(WIRE).cities)).toBe(true);
+  });
+
+  it('is false when the cities are only the other and the unknown ones, or none', () => {
+    const unnamed = devicesResponseSchema
+      .parse(WIRE)
+      .cities.map((share) => ({ ...share, value: share.value === null ? null : 'other' }))
+      .map((share) => ({ ...share, region: null }));
+
+    expect(hasNamedCity(unnamed)).toBe(false);
+    expect(hasNamedCity([])).toBe(false);
   });
 });
 

@@ -83,7 +83,12 @@ describe('GET /[projectId]/devices/export', () => {
         report.browsers.length +
         report.operatingSystems.length +
         report.countries.length +
-        report.regions.length,
+        report.regions.length +
+        report.cities.length,
+    );
+    const campinas = report.cities.find((share) => share.value === 'Campinas');
+    expect(rows.find((row) => row.startsWith('city,Campinas,'))).toMatch(
+      new RegExp(`^city,Campinas,São Paulo,${String(campinas?.visits)},\\d+,\\d+$`),
     );
   });
 });

@@ -105,7 +105,7 @@ test('says no visit matches when the filters select nothing, and removes them', 
 test('downloads the filtered rows of a filtered screen, in a file named as filtered', async ({
   page,
 }) => {
-  const linkName = 'Device types, browsers, systems, countries and regions as CSV';
+  const linkName = 'Device types, browsers, systems, countries, regions and cities as CSV';
   await page.goto(`/${STORE_ID}/devices?range=30d`);
   const everyVisit = await downloadedText(page, linkName);
 
