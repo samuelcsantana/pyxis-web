@@ -96,7 +96,14 @@ describe('AccountPage', () => {
         throw new Error('The demo has an account.');
       }
       return [
-        { ...paid, status: 'active', trialEndsAt: null, projectCount: 1, peopleCount: 1 },
+        {
+          ...paid,
+          status: 'active',
+          trialEndsAt: null,
+          projectCount: 1,
+          peopleCount: 1,
+          mailboxHasAnotherFreeAccount: true,
+        },
         { ...paid, id: 'free-account', status: 'free', billingInterval: null },
       ];
     };

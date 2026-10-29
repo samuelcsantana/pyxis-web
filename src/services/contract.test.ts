@@ -429,12 +429,21 @@ describe('the API contract copied from pyxis-api', () => {
       session_token: 'T'.repeat(43),
       account_id: '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f',
       account_status: 'free',
+      free_place: 'placed',
+    };
+    const refusedForTheMailbox = {
+      ...startedFree,
+      email: 'ana+shop@example.com',
+      account_status: 'incomplete',
+      free_place: 'taken_by_same_mailbox',
     };
 
     expect(status(openToFreeOwners), JSON.stringify(status.errors)).toBe(true);
     expect(signUpStatusOf(openToFreeOwners).freePlan).toBe('open');
     expect(signedUp(startedFree), JSON.stringify(signedUp.errors)).toBe(true);
-    expect(signedUpOf(startedFree).accountStatus).toBe('free');
+    expect(signedUpOf(startedFree)).toMatchObject({ accountStatus: 'free', freePlace: 'placed' });
+    expect(signedUp(refusedForTheMailbox), JSON.stringify(signedUp.errors)).toBe(true);
+    expect(signedUpOf(refusedForTheMailbox).freePlace).toBe('taken_by_same_mailbox');
   });
 
   it('accepts the bodies the sign-up form sends', () => {

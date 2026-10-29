@@ -43,6 +43,7 @@ export function demoAccountsWire(now: Date) {
         project_count: DEMO_PROJECTS.length,
         people_count: demoPeopleWire().people.length,
         bound_by_free_plan_terms: true,
+        mailbox_has_another_free_account: false,
         month: now.toISOString().slice(0, 7),
         events_this_month: DEMO_EVENTS_THIS_MONTH,
         measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
