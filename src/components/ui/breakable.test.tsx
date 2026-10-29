@@ -14,6 +14,17 @@ describe('Breakable', () => {
     expect(container.querySelectorAll('wbr')).toHaveLength(3);
   });
 
+  it('offers a line break only after each slash when asked to', () => {
+    const { container } = render(
+      <span>
+        <Breakable text="America/Argentina/Buenos_Aires" breakAt="slashes" />
+      </span>,
+    );
+
+    expect(container).toHaveTextContent('America/Argentina/Buenos_Aires');
+    expect(container.querySelectorAll('wbr')).toHaveLength(2);
+  });
+
   it('adds no break to text without a separator', () => {
     const { container } = render(
       <span>
