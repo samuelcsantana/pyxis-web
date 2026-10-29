@@ -37,6 +37,10 @@ export type SaveProjectOutcome =
   | { readonly kind: 'invalid' }
   | { readonly kind: 'subscriptionRequired' };
 
+export type SetCityOutcome =
+  | { readonly kind: 'saved'; readonly cityEnabled: boolean }
+  | { readonly kind: 'subscriptionRequired' };
+
 export interface CreatedProjectKey {
   readonly id: string;
   readonly kind: ProjectKeyKind;

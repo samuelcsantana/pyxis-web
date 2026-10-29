@@ -19,6 +19,7 @@ import {
   type ProjectKeyKind,
   type RevokeProjectKeyOutcome,
   type SaveProjectOutcome,
+  type SetCityOutcome,
 } from '@/domain/project-management';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
@@ -33,6 +34,7 @@ import { createExportsService } from '@/services/exports/exports-service.factory
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
+const cityEnabledSchema = z.boolean();
 const sessionIdSchema = z.uuid();
 const newAccessTokenSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_ACCESS_TOKEN_NAME_LENGTH),
@@ -117,6 +119,24 @@ export async function updateProject(
   }
   const outcome = await readOrSignIn(() =>
     createProjectManagementService().update(project.id, parsed.data),
+  );
+  if (outcome.kind === 'saved') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
+}
+
+export async function setProjectCity(
+  projectId: string,
+  cityEnabled: boolean,
+): Promise<SetCityOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = cityEnabledSchema.safeParse(cityEnabled);
+  if (!parsed.success) {
+    throw new Error('The city is turned on or off with a boolean.');
+  }
+  const outcome = await readOrSignIn(() =>
+    createProjectManagementService().setCity(project.id, parsed.data),
   );
   if (outcome.kind === 'saved') {
     revalidatePath(EVERY_PROJECT_SCREEN, 'layout');

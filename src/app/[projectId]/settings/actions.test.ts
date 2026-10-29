@@ -21,6 +21,7 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  setProjectCity,
   updateProject,
 } from './actions';
 
@@ -42,6 +43,7 @@ const state = vi.hoisted<{
   disconnect: () => Promise.reject(new Error('disconnect not set')),
   management: {
     update: () => Promise.reject(new Error('update not set')),
+    setCity: () => Promise.reject(new Error('setCity not set')),
     createKey: () => Promise.reject(new Error('createKey not set')),
     revokeKey: () => Promise.reject(new Error('revokeKey not set')),
     delete: () => Promise.reject(new Error('delete not set')),
@@ -68,6 +70,7 @@ vi.mock('@/services/project-people/project-people-service.factory', () => ({
 vi.mock('@/services/project-management/project-management-service.factory', () => ({
   createProjectManagementService: (): Omit<IProjectManagementService, 'create'> => ({
     update: (projectId, changes) => state.management.update(projectId, changes),
+    setCity: (projectId, cityEnabled) => state.management.setCity(projectId, cityEnabled),
     createKey: (projectId, kind) => state.management.createKey(projectId, kind),
     revokeKey: (projectId, keyId) => state.management.revokeKey(projectId, keyId),
     delete: (projectId, confirmName) => state.management.delete(projectId, confirmName),
@@ -365,6 +368,9 @@ describe('the owner managing a project', () => {
   function management(overrides: Partial<IProjectManagementService>) {
     const mocks = {
       update: vi.fn<IProjectManagementService['update']>(() => Promise.resolve({ kind: 'saved' })),
+      setCity: vi.fn<IProjectManagementService['setCity']>((_projectId, cityEnabled) =>
+        Promise.resolve({ kind: 'saved', cityEnabled }),
+      ),
       createKey: vi.fn<IProjectManagementService['createKey']>(() =>
         Promise.resolve({ kind: 'tooMany' }),
       ),
@@ -377,6 +383,7 @@ describe('the owner managing a project', () => {
     };
     state.management = {
       update: overrides.update ?? mocks.update,
+      setCity: overrides.setCity ?? mocks.setCity,
       createKey: mocks.createKey,
       revokeKey: mocks.revokeKey,
       delete: overrides.delete ?? mocks.delete,
@@ -403,6 +410,41 @@ describe('the owner managing a project', () => {
       ['/[projectId]', 'layout'],
       ['/[projectId]', 'layout'],
     ]);
+  });
+
+  it('turns the city on and off, dropping the visited screens each time', async () => {
+    const service = management({});
+
+    await expect(setProjectCity('p-store', true)).resolves.toEqual({
+      kind: 'saved',
+      cityEnabled: true,
+    });
+    await expect(setProjectCity('p-store', false)).resolves.toEqual({
+      kind: 'saved',
+      cityEnabled: false,
+    });
+    expect(service.setCity.mock.calls).toEqual([
+      ['p-store', true],
+      ['p-store', false],
+    ]);
+    expect(revalidated.paths).toEqual([
+      ['/[projectId]', 'layout'],
+      ['/[projectId]', 'layout'],
+    ]);
+  });
+
+  it('keeps the visited screens when the API refuses the city, and refuses what is not a boolean', async () => {
+    const refuse = vi.fn<IProjectManagementService['setCity']>(() =>
+      Promise.resolve({ kind: 'subscriptionRequired' }),
+    );
+    management({ setCity: refuse });
+
+    await expect(setProjectCity('p-store', true)).resolves.toEqual({
+      kind: 'subscriptionRequired',
+    });
+    await expect(setProjectCity('p-store', 'yes' as unknown as boolean)).rejects.toThrow('boolean');
+    expect(refuse).toHaveBeenCalledTimes(1);
+    expect(revalidated.paths).toEqual([]);
   });
 
   it('drops no visited screen when the API kept the project as it was', async () => {

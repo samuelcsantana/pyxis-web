@@ -110,6 +110,36 @@ describe('HttpProjectManagementService update', () => {
   });
 });
 
+describe('HttpProjectManagementService setCity', () => {
+  it.each([true, false])('patches only city_enabled, set to %s, and answers it', async (wanted) => {
+    const patch = vi.fn<WriteMock>(() => Promise.resolve(undefined));
+
+    await expect(serviceWith({ patch }).setCity(PROJECT, wanted)).resolves.toEqual({
+      kind: 'saved',
+      cityEnabled: wanted,
+    });
+    expect(patch.mock.calls[0]?.slice(0, 2)).toEqual([
+      `/v1/projects/${PROJECT}`,
+      { city_enabled: wanted },
+    ]);
+  });
+
+  it('answers a subscription refusal', async () => {
+    const patch = vi.fn(() => Promise.reject(refusal(API_ERROR_CODES.subscriptionRequired, 409)));
+
+    await expect(serviceWith({ patch }).setCity(PROJECT, true)).resolves.toEqual({
+      kind: 'subscriptionRequired',
+    });
+  });
+
+  it('lets any other failure through', async () => {
+    const failure = new UnauthenticatedError();
+    const patch = vi.fn(() => Promise.reject(failure));
+
+    await expect(serviceWith({ patch }).setCity(PROJECT, false)).rejects.toBe(failure);
+  });
+});
+
 describe('HttpProjectManagementService createKey', () => {
   it('creates a key of the kind asked, with the project id escaped', async () => {
     const key = { id: 'k1', kind: 'secret' as const, key: 'pyxis_sk_x' };
@@ -221,6 +251,13 @@ describe('MockProjectManagementService', () => {
 
   it('saves any change', async () => {
     await expect(service.update()).resolves.toEqual({ kind: 'saved' });
+  });
+
+  it('turns the city on and off', async () => {
+    await expect(service.setCity(DEMO_STORE.id, false)).resolves.toEqual({
+      kind: 'saved',
+      cityEnabled: false,
+    });
   });
 
   it('creates every new project as the demo store, so the demo can follow it', async () => {

@@ -18,6 +18,7 @@ export interface ProjectSettings {
   readonly name: string;
   readonly timezone: string;
   readonly conversionEvent: string | null;
+  readonly cityEnabled: boolean;
   readonly allowedOrigins: readonly string[];
   readonly createdAt: string;
   readonly firstEventAt: string | null;

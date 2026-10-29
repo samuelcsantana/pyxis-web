@@ -7,12 +7,14 @@ import type {
   ProjectKeyKind,
   RevokeProjectKeyOutcome,
   SaveProjectOutcome,
+  SetCityOutcome,
 } from '@/domain/project-management';
 import {
   createdProjectKeyResponseSchema,
   createdProjectResponseSchema,
   newProjectWire,
   deletedProjectResponseSchema,
+  cityChangeWire,
   managedProjectResponseSchema,
   projectChangesWire,
   projectDeletionWire,
@@ -77,6 +79,22 @@ export class HttpProjectManagementService implements IProjectManagementService {
       }
       if (refusedWith(error, API_ERROR_CODES.invalidSettings)) {
         return { kind: 'invalid' };
+      }
+      throw error;
+    }
+  }
+
+  async setCity(projectId: string, cityEnabled: boolean): Promise<SetCityOutcome> {
+    try {
+      await this.writer.patch(
+        projectPath(projectId),
+        cityChangeWire(cityEnabled),
+        managedProjectResponseSchema,
+      );
+      return { kind: 'saved', cityEnabled };
+    } catch (error) {
+      if (refusedWith(error, API_ERROR_CODES.subscriptionRequired)) {
+        return { kind: 'subscriptionRequired' };
       }
       throw error;
     }

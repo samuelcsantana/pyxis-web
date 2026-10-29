@@ -5,6 +5,7 @@ import type {
   ProjectKeyKind,
   RevokeProjectKeyOutcome,
   SaveProjectOutcome,
+  SetCityOutcome,
 } from '@/domain/project-management';
 import {
   DEMO_STORE,
@@ -34,6 +35,10 @@ export class MockProjectManagementService implements IProjectManagementService {
 
   update(): Promise<SaveProjectOutcome> {
     return Promise.resolve({ kind: 'saved' });
+  }
+
+  setCity(_projectId: string, cityEnabled: boolean): Promise<SetCityOutcome> {
+    return Promise.resolve({ kind: 'saved', cityEnabled });
   }
 
   createKey(_projectId: string, kind: ProjectKeyKind): Promise<CreateProjectKeyOutcome> {
