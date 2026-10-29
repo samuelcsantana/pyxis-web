@@ -2,12 +2,19 @@ import type { AccountStatus, BillingInterval } from './accounts';
 
 export const TRIAL_DAYS = 14;
 export const FREE_PLAN_STATES = ['open', 'full', 'closed'] as const;
+export const FREE_PLACES = [
+  'placed',
+  'waitlisted',
+  'taken_by_same_mailbox',
+  'not_offered',
+] as const;
 export const FREE_PLAN_EVENTS_PER_MONTH = 10_000;
 export const FREE_PLAN_PROJECTS = 1;
 export const FREE_PLAN_PEOPLE = 1;
 export const FREE_PLACE_WAIT_DAYS = 60;
 
 export type FreePlanState = (typeof FREE_PLAN_STATES)[number];
+export type FreePlace = (typeof FREE_PLACES)[number];
 export type StepAfterSignUp = 'welcome' | 'checkout' | 'waitForAFreePlace' | 'dashboard';
 export type SignUpOffer = 'byInvitation' | 'trial' | 'free' | 'freeFull';
 
@@ -35,6 +42,7 @@ export type VerifySignUpOutcome =
       readonly kind: 'verified';
       readonly accountId: string;
       readonly accountStatus: AccountStatus;
+      readonly freePlace: FreePlace | null;
     }
   | { readonly kind: 'invalidCode' }
   | { readonly kind: 'termsOutdated' }

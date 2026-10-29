@@ -36,6 +36,7 @@ function service(overrides: Partial<ISignUpService> = {}): ISignUpService {
     kind: 'verified',
     accountId: ACCOUNT,
     accountStatus: 'incomplete',
+    freePlace: 'not_offered',
   });
   return {
     status: () => Promise.reject(new Error('status is read by the page')),
@@ -145,7 +146,12 @@ describe('SignUpForm', () => {
 
   it('starts a new owner on the free plan with no card, then welcomes them', async () => {
     const signUp = service();
-    calls.verify.mockResolvedValue({ kind: 'verified', accountId: ACCOUNT, accountStatus: 'free' });
+    calls.verify.mockResolvedValue({
+      kind: 'verified',
+      accountId: ACCOUNT,
+      accountStatus: 'free',
+      freePlace: 'placed',
+    });
     const openCheckout = vi.fn<OpenCheckout>();
     renderWithMessages(
       <SignUpForm
@@ -225,6 +231,7 @@ describe('SignUpForm', () => {
       kind: 'verified',
       accountId: ACCOUNT,
       accountStatus: 'active',
+      freePlace: 'not_offered',
     });
     const openCheckout = vi.fn<OpenCheckout>();
     renderForm(signUp, openCheckout);

@@ -48,8 +48,21 @@ describe('sign-up answers', () => {
         account_id: 'a1',
         session_token: TOKEN,
         account_status: 'free',
+        free_place: 'placed',
       }),
-    ).toEqual({ accountId: 'a1', sessionToken: TOKEN, accountStatus: 'free' });
+    ).toEqual({ accountId: 'a1', sessionToken: TOKEN, accountStatus: 'free', freePlace: 'placed' });
+  });
+
+  it('reads that the mailbox of the address already has a free account', () => {
+    expect(
+      signedUpOf({
+        email: 'a+shop@example.com',
+        account_id: 'a2',
+        session_token: TOKEN,
+        account_status: 'incomplete',
+        free_place: 'taken_by_same_mailbox',
+      }).freePlace,
+    ).toBe('taken_by_same_mailbox');
   });
 
   it('reads the account of an API that does not say its status as one waiting for Checkout', () => {
@@ -58,10 +71,17 @@ describe('sign-up answers', () => {
     ).toBe('incomplete');
   });
 
+  it('reads no free place from an API that does not say it', () => {
+    expect(
+      signedUpOf({ email: 'a@example.com', account_id: 'a1', session_token: TOKEN }).freePlace,
+    ).toBeNull();
+  });
+
   it.each([
     [{ account_id: 7, session_token: TOKEN }],
     [{ account_id: 'a1', session_token: 'short' }],
     [{ account_id: 'a1', session_token: TOKEN, account_status: 'gifted' }],
+    [{ account_id: 'a1', session_token: TOKEN, free_place: 'borrowed' }],
   ])('refuses a sign-up answer shaped otherwise: %j', (body) => {
     expect(() => signedUpOf(body)).toThrow(MalformedSignUpAnswerError);
   });

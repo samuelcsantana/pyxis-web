@@ -83,12 +83,18 @@ describe('HttpSignUpService', () => {
       session_token: TOKEN,
       account_id: ACCOUNT,
       account_status: 'free',
+      free_place: 'placed',
     });
     const keep = vi.fn(() => Promise.resolve());
 
     await expect(
       new HttpSignUpService(API, keep).verify('ana@example.com', '123456', '2026-11-01'),
-    ).resolves.toEqual({ kind: 'verified', accountId: ACCOUNT, accountStatus: 'free' });
+    ).resolves.toEqual({
+      kind: 'verified',
+      accountId: ACCOUNT,
+      accountStatus: 'free',
+      freePlace: 'placed',
+    });
     expect(fetchMock.mock.calls[0]?.[1]?.body).toBe(
       '{"email":"ana@example.com","code":"123456","terms_version":"2026-11-01"}',
     );
@@ -138,6 +144,7 @@ describe('MockSignUpService', () => {
       kind: 'verified',
       accountId: DEMO_ACCOUNT_ID,
       accountStatus: 'incomplete',
+      freePlace: 'not_offered',
     });
     await expect(service.verify('x@example.com', '123456')).resolves.toEqual({
       kind: 'invalidCode',
@@ -145,11 +152,11 @@ describe('MockSignUpService', () => {
   });
 
   it.each([
-    ['open', 'free'],
-    ['full', 'incomplete'],
+    ['open', 'free', 'placed'],
+    ['full', 'incomplete', 'waitlisted'],
   ] as const)(
-    'starts the account as the API does with the free plan %s: %s',
-    async (freePlan, accountStatus) => {
+    'starts the account as the API does with the free plan %s: %s, its free place %s',
+    async (freePlan, accountStatus, freePlace) => {
       const withTheFreePlan = new MockSignUpService(freePlan);
 
       await expect(withTheFreePlan.status()).resolves.toMatchObject({ freePlan });
@@ -157,6 +164,7 @@ describe('MockSignUpService', () => {
         kind: 'verified',
         accountId: DEMO_ACCOUNT_ID,
         accountStatus,
+        freePlace,
       });
     },
   );
