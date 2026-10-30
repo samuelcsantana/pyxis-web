@@ -60,9 +60,18 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
   box) and the account. The navigation marks where you are: the screen, Install, Settings or
   Help; Settings also on an export, which has no item of its own. The account menu is compact,
-  under 300 px closed: Account and billing, the three themes on one row, the language behind a
-  "Language: …" row that opens the list in place, then Sign out. Each project in the switcher
-  shows the icon of its own site (the API fetches it daily from the project's first
+  under 300 px with the language list closed, before the owner's usage line: Account and billing, the three themes on one row, the language behind a
+  "Language: …" row that opens the list in place, then Sign out. To the owner of the account
+  that holds the project on screen, the account row also shows the month's usage under the
+  e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
+  gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
+  rounded up past the tone); the menu then opens on those numbers and the day the count resets
+  (the 1st, in UTC), or, while paused, the day measuring comes back, linking to Account and
+  billing. A paused account is also said in words, to the eye in the menu and to a screen reader
+  on the row.
+  Members, projects outside any account and an account not yet measured show none, and so does
+  an API that does not yet name each project's account. Each project in the switcher shows the
+  icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
