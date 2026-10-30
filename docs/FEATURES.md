@@ -271,23 +271,39 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner's "What is Pyxis?" links to the home page in the demo's language
-- A Settings page per project, behind the gear next to the language button (beside the project
-  switcher in the phone menu). It opens with the admin's own weekly digest switch: the Monday
+- Settings is a window with an address ([ADR 0016](adr/0016-settings-as-a-window-with-an-address.md)),
+  opened from the gear in the sidebar (and in the phone menu) over the screen on view, which keeps
+  its period and filters: Back, Esc, the close button or a click outside close it to that screen,
+  and focus goes back to the gear (on a phone, to the menu button). Its menu has two groups, the
+  project, named by the project (Project, Keys, People, E-mail, and for the owner Export events and
+  Delete project), and You (Sessions, Access tokens, Connected apps), with Sign out at its foot. Every part has its own
+  address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
+  `…/email`, `…/export`, `…/delete`, and `/account/sessions`, `/account/tokens`,
+  `/account/apps`. Switching parts replaces the address without a new history entry and moves
+  the focus to the part's heading. Opened directly (a reload, a link from an e-mail or from
+  someone else), a part is a full page with the same menu; the person's parts opened outside a
+  project list only You. The window keeps one height in every part, `min(44rem, 100dvh − top −
+3.75rem)` (551 px at 1366×650), and scrolls inside the part and, when it does not fit, inside
+  the menu; beside the menu the part's title is read by screen readers but not repeated on
+  screen, and only the headings that split a part show (Project: Activity, Data retention,
+  Visitor's city). Below the `lg` breakpoint it fills the screen: the list of parts first when
+  opened from the gear, then a part with "‹ Settings" back to the list. E-mail holds the admin's
+  own weekly digest switch: the Monday
   e-mail with the week that closed on Sunday, on by default, saved through a server action that
-  re-checks access, moving back with an alert when the API refuses. Then the admin's sessions:
-  every device where they are signed in, named by the browser and system classified at sign-in
+  re-checks access, moving back with an alert when the API refuses. Sessions lists
+  every device where the admin is signed in, named by the browser and system classified at sign-in
   (never the user agent), this one marked, each with a button to end it, and "Sign out
-  everywhere" below the list. Then the admin's access tokens, for an AI agent or a script that
+  everywhere" below the list. Access tokens are the admin's, for an AI agent or a script that
   reads the same numbers: each with its name, creation, last use and expiry, and a button to
   revoke it; a form creates one with a name and a lifetime (30, 90 or 365 days) and shows the
-  token once, with a copy button and how to send it, and offers no new one past ten. Then the
-  apps the admin connected through the Claude connector (Claude, Claude Code): each with its
+  token once, with a copy button and how to send it, and offers no new one past ten. Connected
+  apps are the apps the admin connected through the Claude connector (Claude, Claude Code): each with its
   host, when it was connected and last used, and a button to revoke it, after which the app asks
   to connect again. While the API keeps the connector open, a box shows how to connect Claude:
   the three steps in Claude, the connector's address and the Claude Code command, each with a copy
   button; while it is closed the box is hidden, so the page never shows an address that answers
-  404, and the list still shows. Below it,
-  the project. The owner of its account edits it: name, up to five allowed origins (typed as
+  404, and the list still shows. In the project's group,
+  the owner of its account edits it: name, up to five allowed origins (typed as
   `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
   problem named under its field before anything is sent; creates a public key or a secret key
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
