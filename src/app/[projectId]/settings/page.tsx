@@ -16,16 +16,18 @@ import { createProjectPeopleService } from '@/services/project-people/project-pe
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 import {
-  addProjectPerson,
-  chooseEmailPreferences,
   createAccessToken,
-  createProjectKey,
-  deleteProject,
   endSession,
-  removeProjectPerson,
-  requestProjectExport,
   revokeAccessToken,
   revokeConnection,
+} from '@/app/account/access-actions';
+import {
+  addProjectPerson,
+  chooseEmailPreferences,
+  createProjectKey,
+  deleteProject,
+  removeProjectPerson,
+  requestProjectExport,
   revokeProjectKey,
   setProjectCity,
   updateProject,
@@ -82,12 +84,12 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           emailPreferences={emailPreferences}
           chooseEmailPreferences={chooseEmailPreferences.bind(null, project.id)}
           sessions={sessions}
-          endSession={endSession.bind(null, project.id)}
+          endSession={endSession}
           accessTokens={accessTokens}
-          createAccessToken={createAccessToken.bind(null, project.id)}
-          revokeAccessToken={revokeAccessToken.bind(null, project.id)}
+          createAccessToken={createAccessToken}
+          revokeAccessToken={revokeAccessToken}
           connectedApps={connectedApps}
-          revokeConnection={revokeConnection.bind(null, project.id)}
+          revokeConnection={revokeConnection}
           manage={{
             timezones: timeZoneChoices(settings.timezone),
             save: updateProject.bind(null, project.id),
