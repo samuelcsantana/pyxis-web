@@ -6,11 +6,14 @@ import { type KeyboardEvent, type MouseEvent, type ReactNode, useRef, useState }
 import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_CONTROL, NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
+import type { Project } from '@/domain/admin';
 import { useArrivalNews } from './arrival-badge';
+import { ProjectMark } from './project-mark';
 import { FIRST_SCREEN, hrefKeepingView, screenHref } from './screens';
 
 export interface MobileMenuProps {
-  readonly projectId: string;
+  readonly project: Project;
+  readonly homeLabel: string;
   readonly children: ReactNode;
 }
 
@@ -18,7 +21,7 @@ const MENU_ID = 'main-navigation';
 const OPEN_ICON = 'M4 7h16 M4 12h16 M4 17h16';
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
 
-export function MobileMenu({ projectId, children }: MobileMenuProps) {
+export function MobileMenu({ project, homeLabel, children }: MobileMenuProps) {
   const t = useT();
   const search = useSearchParams();
   const location = `${usePathname()}?${search.toString()}`;
@@ -47,18 +50,22 @@ export function MobileMenu({ projectId, children }: MobileMenuProps) {
       onKeyDown={closeOnEscape}
       className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0 lg:bg-nav"
     >
-      <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-nav px-4 text-nav-strong lg:hidden">
+      <div className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 bg-nav px-4 text-nav-strong lg:hidden">
         <Link
-          href={hrefKeepingView(screenHref(projectId, FIRST_SCREEN), search)}
+          href={hrefKeepingView(screenHref(project.id, FIRST_SCREEN), search)}
           onClick={() => {
             setOpenAt(undefined);
           }}
-          className={`flex items-center gap-2 ${NAV_FOCUS_RING}`}
+          className={`flex min-w-0 items-center gap-2 ${NAV_FOCUS_RING}`}
         >
           <LogoMark size={24} />
-          <span className="text-lg font-bold tracking-tight">Pyxis</span>
+          <ProjectMark project={project} size="small" />
+          <span aria-hidden="true" className="truncate text-base font-semibold">
+            {project.name}
+          </span>
+          <span className="sr-only">{homeLabel}</span>
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             ref={toggleRef}
             type="button"

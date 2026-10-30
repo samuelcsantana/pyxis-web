@@ -5,6 +5,7 @@ import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
+const TOUCH_TARGET_PX = 44;
 
 async function openNavigation(page: Page, isMobile: boolean) {
   if (isMobile) {
@@ -73,12 +74,13 @@ test('lists the screens in the order of the questions, then the project', async 
 
 test('takes the logo to the overview of the project on screen, on the same period', async ({
   page,
+  isMobile,
 }) => {
   await page.goto(`/${DOCS_ID}/devices?range=7d`);
 
   await page
     .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Pyxis', exact: true })
+    .getByRole('link', { name: isMobile ? 'Overview · Demo Docs' : 'Pyxis', exact: true })
     .click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
@@ -86,6 +88,27 @@ test('takes the logo to the overview of the project on screen, on the same perio
   await expect(
     page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
   ).toHaveAttribute('aria-current', 'page');
+});
+
+test('names the project on screen in the bar of a phone, after a switch too', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'A computer shows the project in the sidebar.');
+  await page.goto(`/${STORE_ID}/overview`);
+  const bar = page.getByRole('navigation', { name: 'Main navigation' });
+
+  await expect(bar.getByRole('link', { name: 'Overview · My site', exact: true })).toBeVisible();
+  await bar.getByRole('button', { name: 'Open menu' }).click();
+  await page.locator('summary', { hasText: 'Switch project' }).click();
+  await page.getByRole('link', { name: 'Demo Docs' }).click();
+
+  const home = bar.getByRole('link', { name: 'Overview · Demo Docs', exact: true });
+  await expect(home).toBeVisible();
+  await expect(home.getByText('Demo Docs', { exact: true })).toBeVisible();
+  const button = await bar.getByRole('button', { name: 'Open menu' }).boundingBox();
+  expect(button?.width).toBe(TOUCH_TARGET_PX);
+  expect(button?.height).toBe(TOUCH_TARGET_PX);
 });
 
 test('writes the chosen period into the URL', async ({ page }) => {
@@ -317,7 +340,7 @@ test('remembers the chosen theme across a reload, and goes back to the system on
 test('collapses the navigation behind a menu button on a phone', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'The menu button exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/overview`);
-  const overviewLink = page.getByRole('link', { name: 'Overview' });
+  const overviewLink = page.getByRole('link', { name: 'Overview', exact: true });
 
   await expect(overviewLink).toBeHidden();
   await page.getByRole('button', { name: 'Open menu' }).click();

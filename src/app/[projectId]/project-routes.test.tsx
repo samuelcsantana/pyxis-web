@@ -109,11 +109,13 @@ describe('ProjectLayout', () => {
     expect(links[0]).toHaveAttribute('href', '#content');
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
     expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
+    expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
+      'href',
+      '/p-store/overview',
+    );
     expect(
-      within(navigation)
-        .getAllByRole('link', { name: 'Pyxis', hidden: true })
-        .map((logo) => logo.getAttribute('href')),
-    ).toEqual(['/p-store/overview', '/p-store/overview']);
+      within(navigation).getByRole('link', { name: 'Overview · Demo Store', hidden: true }),
+    ).toHaveAttribute('href', '/p-store/overview');
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByText('screen')).toBeInTheDocument();
   });

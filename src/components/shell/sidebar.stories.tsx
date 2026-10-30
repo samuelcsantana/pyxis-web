@@ -403,7 +403,7 @@ export const SignOutFailedDark: Story = {
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
   (Story, { args }) => (
     <div className="w-[390px]">
-      <MobileMenu projectId={args.project.id}>
+      <MobileMenu project={args.project} homeLabel={`Overview · ${args.project.name}`}>
         <Story />
       </MobileMenu>
     </div>
@@ -413,6 +413,25 @@ const insideTheMobileMenu: NonNullable<Story['decorators']> = [
 export const OnAPhone: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   decorators: insideTheMobileMenu,
+};
+
+const PHONE_TOUCH_TARGET_PX = 44;
+
+export const OnAPhoneWithALongProjectName: Story = {
+  args: { admin: LONG_VALUES, project: LONG_PROJECT },
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  decorators: insideTheMobileMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const home = canvas.getByRole('link', { name: `Overview · ${LONG_PROJECT.name}` });
+    const name = within(home).getByText(LONG_PROJECT.name);
+    await expect(getComputedStyle(name).textOverflow).toBe('ellipsis');
+    await expect(name.scrollWidth).toBeGreaterThan(name.clientWidth);
+    const button = boxOf(canvas.getByRole('button', { name: 'Open menu' }));
+    await expect(button.width).toBe(PHONE_TOUCH_TARGET_PX);
+    await expect(button.height).toBe(PHONE_TOUCH_TARGET_PX);
+    await expect(home.getBoundingClientRect().right).toBeLessThanOrEqual(button.left);
+  },
 };
 
 const SHORT_LAPTOP_WINDOW = { width: 1366, height: 650 } as const;
@@ -442,7 +461,7 @@ export const ShortWindow: Story = {
   globals: { viewport: { value: SHORT_LAPTOP, isRotated: false } },
   decorators: [
     (Story, { args }) => (
-      <MobileMenu projectId={args.project.id}>
+      <MobileMenu project={args.project} homeLabel={`Overview · ${args.project.name}`}>
         <Story />
       </MobileMenu>
     ),
