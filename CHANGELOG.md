@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.45.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.44.0...v0.45.0) (2026-10-30)
+
+
+### Features
+
+* **domain:** read the account that holds each project from GET /v1/me ([489c8eb](https://github.com/samuelcsantana/pyxis-web/commit/489c8ebea75867df162e9cd13c1fd0f97f47f28f))
+* **shell:** give the install guide its own item in a labelled Project block ([a4328e8](https://github.com/samuelcsantana/pyxis-web/commit/a4328e865684b416acb7d3fe23c8aeaec1a9da5a))
+* **shell:** keep the project and the account in view, scrolling only the screens ([198be48](https://github.com/samuelcsantana/pyxis-web/commit/198be48f0d9ffc656f64541e0b545499958a8ba1))
+* **shell:** list the screens in the order of the questions they answer ([09ce5d0](https://github.com/samuelcsantana/pyxis-web/commit/09ce5d095800953ba49bb5b3d85ed79f3143f2ff))
+* **shell:** make the account menu compact, with the languages behind one row ([8967201](https://github.com/samuelcsantana/pyxis-web/commit/89672013eb75f4032dfe827c8b76e41d3355f0ab))
+* **shell:** name the project on screen in the phone's top bar ([3076c67](https://github.com/samuelcsantana/pyxis-web/commit/3076c677a5a5ff52474e13353ad7765fbdfb0eb6))
+* **shell:** put Help and support in the foot of the sidebar, marked on its page ([ca2a383](https://github.com/samuelcsantana/pyxis-web/commit/ca2a383dc095245bdf96fca3af99b150cced497f))
+* **shell:** show the owner the month's usage of the project's account ([9f0813b](https://github.com/samuelcsantana/pyxis-web/commit/9f0813bab3956ef156ad41e5bae604f7af09c770))
+* **shell:** show the privacy note as a line, not a box ([66e52ad](https://github.com/samuelcsantana/pyxis-web/commit/66e52ad25448c345759022f4990f9140b7d20b10))
+
+
+### Bug Fixes
+
+* **shell:** let the account menu scroll inside itself when taller than the room above ([eda8381](https://github.com/samuelcsantana/pyxis-web/commit/eda8381d24135435daac5a85436e25ad01376801))
+
+
+### Refactoring
+
+* **shell:** share the look of a navigation item ([4fad445](https://github.com/samuelcsantana/pyxis-web/commit/4fad44507be2f31c718c19571cc2fc580cb0038a))
+
+
+### Documentation
+
+* **features:** describe the foot of the sidebar and the compact account menu ([8e4481a](https://github.com/samuelcsantana/pyxis-web/commit/8e4481a704187dc2980444a30698ba20abaa8597))
+* **features:** describe the month's usage in the account row ([932694e](https://github.com/samuelcsantana/pyxis-web/commit/932694e42060c4cfae1ec0ad9bb52b9203047dc4))
+* **features:** describe the order of the screens and the Project block ([d1d8016](https://github.com/samuelcsantana/pyxis-web/commit/d1d80166aeff225cae74d51270a122acd20cbff2))
+* **features:** describe the project in the phone's top bar ([3dbf315](https://github.com/samuelcsantana/pyxis-web/commit/3dbf315bf9c89f6446111a21fc58629eaa14373b))
+* **features:** describe the sidebar that scrolls only its screens ([ab784ce](https://github.com/samuelcsantana/pyxis-web/commit/ab784ce60e179ccdbc97ea3db29bcb9e1a413de6))
+* **readme:** record the tour and the screenshots with the new sidebar ([b79205d](https://github.com/samuelcsantana/pyxis-web/commit/b79205df2dac6f9baae98c7b15c12795bb4bdbc9))
+
 ## [0.44.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.43.0...v0.44.0) (2026-10-30)
 
 
