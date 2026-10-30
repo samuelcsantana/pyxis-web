@@ -53,7 +53,7 @@ export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: Acco
           />
         </svg>
       </AccountSummary>
-      <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-3 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg">
+      <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-3 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
         <div className="flex flex-col gap-1.5">
           <span className={GROUP_LABEL}>{i18n.t('nav.language')}</span>
           <LanguageMenu
