@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { SECTION_LOOKS } from '@/components/settings-window/sections';
 import { sessionsResponseSchema } from '@/domain/sessions.schema';
 import { demoSessionsWire } from '@/services/sessions/mock-sessions-service';
 import { english } from '@/test-utils/english';
@@ -8,6 +9,8 @@ import { SessionsPanel } from './sessions-panel';
 const STORY_NOW = new Date('2026-10-10T12:00:00.000Z');
 const SESSIONS = sessionsResponseSchema.parse(demoSessionsWire(STORY_NOW));
 const format = english.format.dateTime('eventTime', 'America/Sao_Paulo');
+
+const LOOK = SECTION_LOOKS.sessions;
 
 const meta = {
   title: 'Settings/Sessions panel',
@@ -20,6 +23,19 @@ const meta = {
     end: () => Promise.resolve(),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
+  decorators: [
+    (Story, { args }) => (
+      <section
+        aria-labelledby={LOOK.titleId}
+        className="flex max-w-2xl flex-col gap-4 rounded-card border border-line bg-card p-6 text-ink"
+      >
+        <h2 id={LOOK.titleId} className="text-2xl font-bold tracking-tight">
+          {args.i18n.t(LOOK.label)}
+        </h2>
+        <Story />
+      </section>
+    ),
+  ],
 } satisfies Meta<typeof SessionsPanel>;
 
 export default meta;
