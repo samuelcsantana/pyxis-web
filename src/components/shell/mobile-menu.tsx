@@ -45,7 +45,7 @@ export function MobileMenu({ projectId, children }: MobileMenuProps) {
     <nav
       aria-label={t('nav.label')}
       onKeyDown={closeOnEscape}
-      className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0"
+      className="sticky top-0 z-30 max-h-dvh scroll-pt-14 overflow-y-auto overscroll-contain lg:h-dvh lg:scroll-pt-0 lg:bg-nav"
     >
       <div className="sticky top-0 z-20 flex h-14 items-center justify-between bg-nav px-4 text-nav-strong lg:hidden">
         <Link
@@ -91,7 +91,7 @@ export function MobileMenu({ projectId, children }: MobileMenuProps) {
       <div
         id={MENU_ID}
         onClick={closeAfterNavigation}
-        className={`${open ? 'block' : 'hidden'} lg:flex lg:min-h-full lg:flex-col`}
+        className={`${open ? 'block' : 'hidden'} lg:flex lg:h-full lg:flex-col`}
       >
         {children}
       </div>

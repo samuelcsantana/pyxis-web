@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 import { openAccountMenu } from './navigation';
 import { sidewaysOverflow } from './accessibility';
 
@@ -209,40 +209,112 @@ test.describe('at 1440×900', () => {
   });
 });
 
-const SIDEBAR_BUDGET_PX = 700;
+const SIDEBAR_FITS = { width: 1440, height: 800 } as const;
+const SIDEBAR_SCROLLS_ITS_SCREENS = { width: 1366, height: 650 } as const;
+const PHONES_HAVE_A_MENU = 'The sidebar is a menu behind a button on phones.';
 const WCAG_TEXT_SPACING = `
   * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
   p { margin-bottom: 2em !important; }
 `;
 
-test.describe('sidebar on a 1366×768 laptop', () => {
-  test.use({ viewport: { width: 1366, height: 768 } });
+function hiddenHeightOf(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => element.scrollHeight - element.clientHeight);
+}
 
-  test('shows the account menu without scrolling the sidebar', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+function sidebarParts(page: Page) {
+  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  return {
+    navigation,
+    screens: navigation.getByText('Analytics', { exact: true }).locator('..'),
+    project: page.locator('summary', { hasText: 'Switch project' }),
+    account: page.locator('summary', { hasText: 'Account and preferences' }),
+  };
+}
+
+test.describe(`sidebar at ${String(SIDEBAR_FITS.width)}×${String(SIDEBAR_FITS.height)}`, () => {
+  test.use({ viewport: SIDEBAR_FITS });
+
+  test('scrolls nowhere', async ({ page, isMobile }) => {
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
+    const { navigation, screens, account } = sidebarParts(page);
 
-    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
-
-    await expect(page.locator('summary', { hasText: 'Account and preferences' })).toBeInViewport({
-      ratio: 1,
-    });
-    expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(768);
+    await expect(account).toBeInViewport({ ratio: 1 });
+    expect(await hiddenHeightOf(navigation)).toBe(0);
+    expect(await hiddenHeightOf(screens)).toBe(0);
   });
 });
 
-test.describe(`sidebar in ${String(SIDEBAR_BUDGET_PX)}px of height`, () => {
-  test.use({ viewport: { width: 1280, height: SIDEBAR_BUDGET_PX } });
+test.describe(`sidebar in a ${String(SIDEBAR_SCROLLS_ITS_SCREENS.width)}×${String(SIDEBAR_SCROLLS_ITS_SCREENS.height)} laptop window`, () => {
+  test.use({ viewport: SIDEBAR_SCROLLS_ITS_SCREENS });
 
-  test('needs no inner scroll', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+  test('keeps the project and the account in view and scrolls only the screens', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
+    const { navigation, screens, project, account } = sidebarParts(page);
 
-    const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+    await expect(project).toBeInViewport({ ratio: 1 });
+    await expect(account).toBeInViewport({ ratio: 1 });
+    expect(await hiddenHeightOf(navigation)).toBe(0);
+    expect(await hiddenHeightOf(screens)).toBeGreaterThan(0);
 
-    expect(await navigation.evaluate((element) => element.scrollHeight)).toBeLessThanOrEqual(
-      SIDEBAR_BUDGET_PX,
+    const settings = navigation.getByRole('link', { name: 'Settings' });
+    await settings.scrollIntoViewIfNeeded();
+    await expect(settings).toBeInViewport({ ratio: 1 });
+    await expect(account).toBeInViewport({ ratio: 1 });
+  });
+
+  test('opens the account menu above the account, every choice within reach', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    await page.goto(`/${STORE_ID}/overview`);
+    const { account } = sidebarParts(page);
+
+    await account.click();
+    const languages = page.getByRole('group', { name: 'Language' });
+    const signOut = page.getByRole('button', { name: 'Sign out' });
+
+    await expect(page.getByText('Language', { exact: true })).toBeInViewport({ ratio: 1 });
+    await languages.scrollIntoViewIfNeeded();
+    await expect(languages).toBeInViewport({ ratio: 1 });
+    await signOut.scrollIntoViewIfNeeded();
+    await expect(signOut).toBeInViewport({ ratio: 1 });
+    await expect(account).toBeInViewport({ ratio: 1 });
+  });
+});
+
+const VERY_SHORT_WINDOW = { width: 1280, height: 260 } as const;
+const SCREEN_LIST_FLOOR_PX = 112;
+
+test.describe(`sidebar in a ${String(VERY_SHORT_WINDOW.width)}×${String(VERY_SHORT_WINDOW.height)} window`, () => {
+  test.use({ viewport: VERY_SHORT_WINDOW });
+
+  test('keeps three screens in view and scrolls the whole sidebar for the rest', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    await page.goto(`/${STORE_ID}/overview`);
+    const { navigation, screens, account } = sidebarParts(page);
+
+    expect(await screens.evaluate((element) => element.clientHeight)).toBeGreaterThanOrEqual(
+      SCREEN_LIST_FLOOR_PX,
     );
+    expect(await hiddenHeightOf(navigation)).toBeGreaterThan(0);
+    await account.scrollIntoViewIfNeeded();
+    await expect(account).toBeInViewport({ ratio: 1 });
+    await expect
+      .poll(() =>
+        account.evaluate(
+          (element) => getComputedStyle(element.closest('nav') ?? element).backgroundColor,
+        ),
+      )
+      .not.toBe('rgba(0, 0, 0, 0)');
   });
 });
 
@@ -253,7 +325,7 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 
@@ -273,7 +345,7 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
   });
 
   test('breaks the time zone after its slash, never inside a word', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'The sidebar is a menu behind a button on phones.');
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 

@@ -26,7 +26,9 @@ import {
 
 const SECTION_LABEL =
   'px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
-const ITEM = `flex min-h-11 items-center gap-3 rounded-input px-3 text-sm lg:min-h-10 ${PENDING_HOST} ${NAV_CONTROL}`;
+const ITEM = `flex min-h-11 items-center gap-3 rounded-input px-3 text-sm lg:min-h-9 ${PENDING_HOST} ${NAV_CONTROL}`;
+const SCROLLS_ALONE_ON_A_DESKTOP =
+  'lg:-mx-1 lg:min-h-28 lg:flex-1 lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain lg:px-1 lg:pb-1';
 
 export interface SidebarNavProps {
   readonly projectId: string;
@@ -61,7 +63,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
   const settingsCurrent = current === SETTINGS_ITEM;
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={`flex flex-col gap-1 ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
       <span className={SECTION_LABEL}>{t('nav.section')}</span>
       <ul className="flex flex-col gap-0.5">
         {SCREENS.map((screen) => {
