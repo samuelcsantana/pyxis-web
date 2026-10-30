@@ -25,6 +25,7 @@ import type { RequestExportOutcome } from '@/domain/exports';
 import { createExportsService } from '@/services/exports/exports-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
+const EMAIL_SECTION = '/[projectId]/settings/email';
 const cityEnabledSchema = z.boolean();
 const projectChangesSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_PROJECT_NAME_LENGTH),
@@ -48,7 +49,11 @@ export async function chooseEmailPreferences(
   if (!parsed.success) {
     throw new Error('E-mail preferences need a weekly digest choice, on or off.');
   }
-  return readOrSignIn(() => createEmailPreferencesService().choose(project.id, parsed.data));
+  const chosen = await readOrSignIn(() =>
+    createEmailPreferencesService().choose(project.id, parsed.data),
+  );
+  revalidatePath(EMAIL_SECTION, 'page');
+  return chosen;
 }
 
 const EVERY_PROJECT_SCREEN = '/[projectId]';

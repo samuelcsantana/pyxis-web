@@ -200,7 +200,9 @@ export const de = translation({
     current: 'Sprache: {name}',
   },
   settings: {
-    title: 'Einstellungen',
+    you: 'Du',
+    sections: 'Abschnitte',
+    close: 'Schließen',
     subtitle:
       'Wie {project} eingerichtet ist und welche E-Mails du dazu bekommst. Projekteinstellungen werden über die Kommandozeile geändert.',
     subtitleOwner:
@@ -257,7 +259,6 @@ export const de = translation({
     },
   },
   projectForm: {
-    heading: 'Projekt',
     name: 'Name',
     origins: 'Erlaubte Origins',
     originsNote:

@@ -17,7 +17,7 @@ export interface MobileMenuProps {
   readonly children: ReactNode;
 }
 
-const MENU_ID = 'main-navigation';
+export const MENU_ID = 'main-navigation';
 const OPEN_ICON = 'M4 7h16 M4 12h16 M4 17h16';
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
 

@@ -197,7 +197,9 @@ export const nl = translation({
     current: 'Taal: {name}',
   },
   settings: {
-    title: 'Instellingen',
+    you: 'Jij',
+    sections: 'Onderdelen',
+    close: 'Sluiten',
     subtitle:
       'Hoe {project} is ingesteld, en de e-mails die je erover krijgt. Projectinstellingen wijzig je via de opdrachtregel.',
     subtitleOwner: 'Hoe {project} is ingesteld, de sleutels, en de e-mails die je erover krijgt.',
@@ -251,7 +253,6 @@ export const nl = translation({
     },
   },
   projectForm: {
-    heading: 'Project',
     name: 'Naam',
     origins: 'Toegestane origins',
     originsNote:

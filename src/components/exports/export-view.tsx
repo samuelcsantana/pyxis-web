@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { settingsHref } from '@/components/shell/screens';
+import { projectSectionHref } from '@/components/settings-window/sections';
 import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
 import { exportDownloadHref, isDownloadable, type ProjectExport } from '@/domain/exports';
@@ -18,7 +18,11 @@ const NOTE = 'text-xs leading-[18px] text-muted';
 function Body({ projectId, found, i18n, now }: ExportViewProps) {
   const day = (iso: string) => i18n.format.dayWithYear(new Date(iso));
   const settings = (
-    <Link href={settingsHref(projectId)} className={`self-start text-sm ${TEXT_LINK}`}>
+    <Link
+      href={projectSectionHref(projectId, 'export')}
+      scroll={false}
+      className={`self-start text-sm ${TEXT_LINK}`}
+    >
       {i18n.t('exportPage.settings')}
     </Link>
   );

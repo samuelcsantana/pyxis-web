@@ -110,7 +110,10 @@ test('offers a question for Claude once the first event arrived, and the way to 
     `claude mcp add --transport http pyxis ${HOSTED_API}/mcp`,
   );
   await third.getByRole('link', { name: 'Settings' }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings#settings-connections-heading$`));
+  await expect(page).toHaveURL(/\/account\/apps$/);
+  await expect(
+    page.getByRole('dialog', { name: 'Settings' }).getByRole('region', { name: 'Connected apps' }),
+  ).toBeVisible();
 });
 
 test('tells a phone that installing happens on a computer and copies this address', async ({

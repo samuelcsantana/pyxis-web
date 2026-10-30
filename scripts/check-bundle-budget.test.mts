@@ -45,6 +45,13 @@ describe('routeClassOf', () => {
     assert.equal(routeClassOf('/sign-up'), 'signUp');
     assert.equal(routeClassOf('/welcome'), 'entry');
   });
+
+  it('counts the settings pages of the person, opened outside a project, as dashboard screens', () => {
+    assert.equal(routeClassOf('/account/sessions'), 'screen');
+    assert.equal(routeClassOf('/account/tokens'), 'screen');
+    assert.equal(routeClassOf('/account/apps'), 'screen');
+    assert.equal(routeClassOf('/account'), 'entry');
+  });
 });
 
 describe('parseStats', () => {

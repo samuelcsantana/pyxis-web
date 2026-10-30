@@ -123,15 +123,15 @@ export function helpHref(projectId: string): string {
 
 export const SETTINGS_KEYS_PANEL = 'settings-keys';
 
+export const SETTINGS_KEYS_SEGMENT = 'keys';
+
 export function settingsKeysHref(projectId: string): string {
-  return `${settingsHref(projectId)}#${SETTINGS_KEYS_PANEL}-heading`;
+  return `${settingsHref(projectId)}/${SETTINGS_KEYS_SEGMENT}`;
 }
 
 export const SETTINGS_CONNECTIONS_PANEL = 'settings-connections';
 
-export function settingsConnectionsHref(projectId: string): string {
-  return `${settingsHref(projectId)}#${SETTINGS_CONNECTIONS_PANEL}-heading`;
-}
+export const CONNECTED_APPS_HREF = '/account/apps';
 
 const LINK_BASE = 'http://link.invalid';
 

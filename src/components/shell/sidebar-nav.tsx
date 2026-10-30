@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useId } from 'react';
+import { type MouseEvent, useId } from 'react';
 import type { Project } from '@/domain/admin';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
@@ -20,6 +20,7 @@ import {
   screenParameters,
   SETTINGS_ICON,
   SETTINGS_ITEM,
+  SETTINGS_SEGMENT,
   settingsHref,
 } from './screens';
 
@@ -46,6 +47,44 @@ function InstallPending() {
   );
 }
 
+interface SettingsItemProps {
+  readonly href: string;
+  readonly current: boolean;
+  readonly onItsPage: boolean;
+  readonly label: string;
+}
+
+function opensElsewhere(event: MouseEvent<HTMLAnchorElement>): boolean {
+  return event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+}
+
+export function isSettingsPath(pathname: string): boolean {
+  const [, projectId = '', segment = ''] = pathname.split('/');
+  return projectId !== '' && segment === SETTINGS_SEGMENT;
+}
+
+function SettingsItem({ href, current, onItsPage, label }: SettingsItemProps) {
+  const reloadAsAPage = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (onItsPage && !opensElsewhere(event)) {
+      event.preventDefault();
+      window.location.assign(href);
+    }
+  };
+  return (
+    <Link
+      href={href}
+      scroll={false}
+      aria-current={current ? 'page' : undefined}
+      onClick={reloadAsAPage}
+      className={navItemClasses(current)}
+    >
+      <NavItemIcon path={SETTINGS_ICON} current={current} />
+      <span>{label}</span>
+      <PendingMark />
+    </Link>
+  );
+}
+
 export function SidebarNav({ project }: SidebarNavProps) {
   const t = useT();
   const pathname = usePathname();
@@ -53,7 +92,8 @@ export function SidebarNav({ project }: SidebarNavProps) {
   const projectLabel = useId();
   const current = navigationItemOf(pathname);
   const installCurrent = current === INSTALL_ITEM;
-  const settingsCurrent = current === SETTINGS_ITEM;
+  const settingsOnItsPage = isSettingsPath(pathname);
+  const settingsCurrent = current === SETTINGS_ITEM || settingsOnItsPage;
 
   return (
     <div className={`flex flex-col gap-1 ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
@@ -95,15 +135,12 @@ export function SidebarNav({ project }: SidebarNavProps) {
             </Link>
           </li>
           <li>
-            <Link
+            <SettingsItem
               href={hrefKeepingView(settingsHref(project.id), search)}
-              aria-current={settingsCurrent ? 'page' : undefined}
-              className={navItemClasses(settingsCurrent)}
-            >
-              <NavItemIcon path={SETTINGS_ICON} current={settingsCurrent} />
-              <span>{t('nav.settings')}</span>
-              <PendingMark />
-            </Link>
+              current={settingsCurrent}
+              onItsPage={settingsOnItsPage}
+              label={t('nav.settings')}
+            />
           </li>
         </ul>
       </div>

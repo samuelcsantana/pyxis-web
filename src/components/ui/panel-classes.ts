@@ -2,6 +2,9 @@ import { CONTROL_TRANSITION, FOCUS_RING } from './control-classes';
 export const PANEL =
   'flex min-w-0 flex-col gap-3 rounded-card border border-line bg-card p-3.5 text-ink sm:px-5.5 sm:py-5';
 export const PANEL_TITLE = 'text-sm font-semibold sm:text-base';
+export const SECTION_BODY = 'flex min-w-0 flex-col gap-3';
+export const SECTION_LIST =
+  'flex flex-col divide-y divide-line rounded-[0.875rem] border border-line px-4';
 export const HEADER_CELL = 'border-b border-line px-2.5 py-2 font-medium text-muted';
 export const BODY_CELL = 'border-b border-line px-2.5 py-2.5';
 export const TABLE_SCROLL = 'relative -m-1 overflow-x-auto p-1';

@@ -20,9 +20,16 @@ const SIGN_OUT_ICON = 'M15 4h4v16h-4 M10 8l-4 4 4 4 M6 12h10';
 
 export type SignOutScope = 'this-device' | 'everywhere';
 
+export interface SignOutLook {
+  readonly frame: string;
+  readonly button: string;
+  readonly error: string;
+  readonly withIcon: boolean;
+}
+
 export interface SignOutButtonProps {
   readonly authService?: IAuthService;
-  readonly variant?: 'nav' | 'page';
+  readonly variant?: 'nav' | 'page' | SignOutLook;
   readonly scope?: SignOutScope;
 }
 
@@ -44,7 +51,7 @@ const VARIANT_CLASSES = {
     error: 'px-3 text-bad',
     withIcon: true,
   },
-} as const;
+} as const satisfies Readonly<Record<string, SignOutLook>>;
 
 function SignOutIcon() {
   return (
@@ -67,7 +74,7 @@ export function SignOutButton({
   scope = 'this-device',
 }: SignOutButtonProps) {
   const t = useT();
-  const classes = VARIANT_CLASSES[variant];
+  const classes = typeof variant === 'string' ? VARIANT_CLASSES[variant] : variant;
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
   const [busy, setBusy] = useState(false);

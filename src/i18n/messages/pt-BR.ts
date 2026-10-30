@@ -199,7 +199,9 @@ export const ptBR = translation({
     current: 'Idioma: {name}',
   },
   settings: {
-    title: 'Configurações',
+    you: 'Você',
+    sections: 'Seções',
+    close: 'Fechar',
     subtitle:
       'Como o {project} está configurado e os e-mails que você recebe sobre ele. As configurações do projeto mudam pela linha de comando.',
     subtitleOwner:
@@ -253,7 +255,6 @@ export const ptBR = translation({
     },
   },
   projectForm: {
-    heading: 'Projeto',
     name: 'Nome',
     origins: 'Origens permitidas',
     originsNote:

@@ -43,8 +43,8 @@ vi.mock('next/navigation', () => ({
   },
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
   usePathname: () => '/p-store/overview',
-  useSelectedLayoutSegments: () => ['overview'],
   useSearchParams: () => new URLSearchParams(),
+  useSelectedLayoutSegments: () => ['overview'],
 }));
 
 vi.mock('@/services/overview/overview-service.factory', () => ({
@@ -100,6 +100,7 @@ describe('ProjectLayout', () => {
     renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
+        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -121,12 +122,27 @@ describe('ProjectLayout', () => {
     expect(screen.getByText('screen')).toBeInTheDocument();
   });
 
+  it('draws the window the modal slot holds beside the screen, outside its content region', async () => {
+    renderWithMessages(
+      await ProjectLayout({
+        children: <p>screen</p>,
+        modal: <p>settings window</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    const window = screen.getByText('settings window');
+    expect(window).toBeInTheDocument();
+    expect(screen.getByText('screen').parentElement).not.toContainElement(window);
+  });
+
   it('shows no demo banner with a real API', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
     renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
+        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -171,6 +187,7 @@ describe('ProjectLayout', () => {
     renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
+        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -211,6 +228,7 @@ describe('ProjectLayout', () => {
     renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
+        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -233,6 +251,7 @@ describe('ProjectLayout', () => {
     renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
+        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -246,7 +265,11 @@ describe('ProjectLayout', () => {
 
   it('answers not found for a project the admin may not read', async () => {
     await expect(
-      ProjectLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),
+      ProjectLayout({
+        children: null,
+        modal: null,
+        params: Promise.resolve({ projectId: 'p-other' }),
+      }),
     ).rejects.toThrow('not-found');
   });
 });

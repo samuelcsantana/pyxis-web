@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { settingsHref } from '@/components/shell/screens';
+import { CONNECTED_APPS_HREF } from '@/components/shell/screens';
 import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
@@ -100,7 +100,7 @@ export function ConnectionRequestView({
           allow={allow}
           deny={deny}
           limitReached={request.connectionLimitReached}
-          settingsHref={firstProject === undefined ? null : settingsHref(firstProject.id)}
+          settingsHref={firstProject === undefined ? null : CONNECTED_APPS_HREF}
         />
         <p className={NOTE}>{t('connect.revokeLater')}</p>
       </section>

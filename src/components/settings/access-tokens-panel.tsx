@@ -1,5 +1,5 @@
 import { Breakable } from '@/components/ui/breakable';
-import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { SECTION_BODY, SECTION_LIST } from '@/components/ui/panel-classes';
 import { type AccessToken, canCreateAccessToken } from '@/domain/access-tokens';
 import type { I18n } from '@/i18n/i18n';
 import { type CreateAccessToken, CreateAccessTokenForm } from './create-access-token-form';
@@ -13,7 +13,7 @@ export interface AccessTokensPanelProps {
   readonly revoke: Revoke;
 }
 
-const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
+const ROW = 'flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3';
 const DETAIL = 'text-xs leading-[18px] text-muted';
 const NOTE = 'text-xs leading-[18px] text-muted';
 
@@ -72,21 +72,18 @@ function TokenRow({ token, i18n, when, revoke }: TokenRowProps) {
 
 export function AccessTokensPanel({ tokens, i18n, when, create, revoke }: AccessTokensPanelProps) {
   return (
-    <section aria-labelledby="settings-access-tokens-heading" className={PANEL}>
-      <h2 id="settings-access-tokens-heading" className={PANEL_TITLE}>
-        {i18n.t('accessTokens.heading')}
-      </h2>
+    <div className={SECTION_BODY}>
       <p className={NOTE}>{i18n.t('accessTokens.note')}</p>
       <CreateAccessTokenForm create={create} limitReached={!canCreateAccessToken(tokens)} />
       {tokens.length === 0 ? (
         <p className="text-sm text-muted">{i18n.t('accessTokens.empty')}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-line border-t border-line pt-3">
+        <ul className={SECTION_LIST}>
           {tokens.map((token) => (
             <TokenRow key={token.id} token={token} i18n={i18n} when={when} revoke={revoke} />
           ))}
         </ul>
       )}
-    </section>
+    </div>
   );
 }
