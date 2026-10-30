@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
+import { SECTION_LOOKS } from '@/components/settings-window/sections';
 import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
 import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
 import {
@@ -14,6 +15,8 @@ const STORY_NOW = new Date('2026-10-15T12:00:00.000Z');
 const PEOPLE = new MockProjectPeopleService(() => STORY_NOW);
 const PROJECT = 'story-project';
 const format = english.format.dateTime('eventTime', 'America/Sao_Paulo');
+
+const LOOK = SECTION_LOOKS.people;
 
 const meta = {
   title: 'Settings/People panel',
@@ -31,6 +34,19 @@ const meta = {
     },
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
+  decorators: [
+    (Story, { args }) => (
+      <section
+        aria-labelledby={LOOK.titleId}
+        className="flex max-w-2xl flex-col gap-4 rounded-card border border-line bg-card p-6 text-ink"
+      >
+        <h2 id={LOOK.titleId} className="text-2xl font-bold tracking-tight">
+          {args.i18n.t(LOOK.label)}
+        </h2>
+        <Story />
+      </section>
+    ),
+  ],
 } satisfies Meta<typeof PeoplePanel>;
 
 export default meta;

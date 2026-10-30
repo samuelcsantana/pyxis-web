@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { SECTION_LOOKS } from '@/components/settings-window/sections';
 import { accessTokensResponseSchema } from '@/domain/access-tokens.schema';
 import {
   DEMO_CREATED_ACCESS_TOKEN,
@@ -19,6 +20,8 @@ const UNUSED_TOKEN = {
   lastUsedAt: null,
   expiresAt: '2026-11-10T12:00:00.000Z',
 };
+
+const LOOK = SECTION_LOOKS.tokens;
 
 const meta = {
   title: 'Settings/Access tokens panel',
@@ -43,6 +46,19 @@ const meta = {
     revoke: () => Promise.resolve(),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
+  decorators: [
+    (Story, { args }) => (
+      <section
+        aria-labelledby={LOOK.titleId}
+        className="flex max-w-2xl flex-col gap-4 rounded-card border border-line bg-card p-6 text-ink"
+      >
+        <h2 id={LOOK.titleId} className="text-2xl font-bold tracking-tight">
+          {args.i18n.t(LOOK.label)}
+        </h2>
+        <Story />
+      </section>
+    ),
+  ],
 } satisfies Meta<typeof AccessTokensPanel>;
 
 export default meta;
