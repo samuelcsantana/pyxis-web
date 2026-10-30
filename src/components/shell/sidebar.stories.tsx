@@ -151,21 +151,115 @@ const currentLinksOutsideTheMenus = (canvasElement: HTMLElement) =>
 
 const CURRENT_TEXT_COLOR = 'rgb(255, 255, 255)';
 
-const settingsStandsForThePage: Play = async ({ canvasElement }) => {
-  const current = currentLinksOutsideTheMenus(canvasElement);
-  await expect(current).toHaveLength(1);
-  await expect(current[0]).toHaveAccessibleName('Settings');
-  await expect(canvasElement.querySelector('summary[data-current]')).toBeNull();
-};
+const standsForThePage =
+  (name: string): Play =>
+  async ({ canvasElement }) => {
+    const current = currentLinksOutsideTheMenus(canvasElement);
+    await expect(current).toHaveLength(1);
+    await expect(current[0]).toHaveAccessibleName(name);
+    await expect(canvasElement.querySelector('summary[data-current]')).toBeNull();
+  };
 
 export const OnInstall: Story = {
   parameters: onPageOf('install'),
-  play: settingsStandsForThePage,
+  play: standsForThePage('Install'),
 };
 
 export const OnAnExport: Story = {
   parameters: onPageOf(`exports/${DEMO_EXPORT_ID}`),
-  play: settingsStandsForThePage,
+  play: standsForThePage('Settings'),
+};
+
+const NO_EVENTS_YET = { ...STORE, firstEventAt: null };
+
+function spokenWithItsTag(label: string, tag: string): RegExp {
+  return new RegExp(`^${label}\\s*, ${tag}$`);
+}
+
+const theInstallGuideIsPending: Play = async ({ canvasElement }) => {
+  const install = within(canvasElement).getByRole('link', {
+    name: spokenWithItsTag('Install', 'Pending'),
+  });
+  const tag = within(install).getByText('Pending');
+  await expect(tag).toBeVisible();
+  await expect(tag.parentElement?.getBoundingClientRect().right).toBeLessThanOrEqual(
+    install.getBoundingClientRect().right,
+  );
+};
+
+export const NoEventsYet: Story = {
+  args: { project: NO_EVENTS_YET, admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] } },
+  play: theInstallGuideIsPending,
+};
+
+export const NoEventsYetDark: Story = {
+  args: { project: NO_EVENTS_YET, admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] } },
+  globals: { theme: 'dark' },
+  play: theInstallGuideIsPending,
+};
+
+const pendingTagFitsIn =
+  (install: string, pending: string): Play =>
+  async ({ canvasElement }) => {
+    const link = within(canvasElement).getByRole('link', {
+      name: spokenWithItsTag(install, pending),
+    });
+    const tag = within(link).getByText(pending);
+    const pill = boxOf(tag.parentElement);
+    const box = link.getBoundingClientRect();
+    await expect(pill.height).toBeLessThanOrEqual(TAG_LINE_HEIGHT_PX);
+    await expect(pill.left).toBeGreaterThanOrEqual(box.left);
+    await expect(pill.right).toBeLessThanOrEqual(box.right);
+    await expect(pill.bottom).toBeLessThanOrEqual(box.bottom);
+    await expect(link.scrollWidth).toBeLessThanOrEqual(link.clientWidth);
+  };
+
+const TAG_LINE_HEIGHT_PX = 20;
+const NO_EVENTS_YET_ARGS = {
+  project: NO_EVENTS_YET,
+  admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] },
+};
+const NARROWED_BY_A_SCROLLBAR: NonNullable<Story['decorators']> = [
+  (Story) => (
+    <div className="w-[233px]">
+      <Story />
+    </div>
+  ),
+];
+
+export const NoEventsYetInDutch: Story = {
+  args: NO_EVENTS_YET_ARGS,
+  globals: { locale: 'nl' },
+  play: pendingTagFitsIn('Installeren', 'In afwachting'),
+};
+
+export const NoEventsYetInGerman: Story = {
+  args: NO_EVENTS_YET_ARGS,
+  globals: { locale: 'de' },
+  play: pendingTagFitsIn('Installieren', 'Ausstehend'),
+};
+
+export const NoEventsYetOnInstallInDutch: Story = {
+  args: NO_EVENTS_YET_ARGS,
+  parameters: onPageOf('install'),
+  globals: { locale: 'nl' },
+  play: pendingTagFitsIn('Installeren', 'In afwachting'),
+};
+
+export const NoEventsYetNarrowedInDutch: Story = {
+  args: NO_EVENTS_YET_ARGS,
+  parameters: onPageOf('install'),
+  globals: { locale: 'nl' },
+  decorators: NARROWED_BY_A_SCROLLBAR,
+  play: pendingTagFitsIn('Installeren', 'In afwachting'),
+};
+
+export const NoEventsYetNarrowedInGerman: Story = {
+  args: NO_EVENTS_YET_ARGS,
+  parameters: onPageOf('install'),
+  globals: { locale: 'de' },
+  decorators: NARROWED_BY_A_SCROLLBAR,
+  play: pendingTagFitsIn('Installieren', 'Ausstehend'),
 };
 
 const theAccountStandsForThePage: Play = async ({ canvasElement }) => {

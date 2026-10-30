@@ -50,6 +50,8 @@ export const it = translation({
     signingOut: 'Uscita…',
     signOutFailed: 'Impossibile uscire. Riprova.',
     projectSection: 'Progetto',
+    install: 'Installazione',
+    installPending: 'In attesa',
     settings: 'Impostazioni',
     account: 'Account e preferenze',
     language: 'Lingua',

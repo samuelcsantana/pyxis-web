@@ -66,6 +66,7 @@ test('lists the screens in the order of the questions, then the project', async 
     /^Requests/,
   ]);
   await expect(navigation.getByRole('list', { name: 'Project' }).getByRole('link')).toHaveText([
+    'Install',
     'Settings',
   ]);
 });

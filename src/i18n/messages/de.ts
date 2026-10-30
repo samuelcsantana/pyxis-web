@@ -53,6 +53,8 @@ export const de = translation({
     signingOut: 'Wird abgemeldet…',
     signOutFailed: 'Abmelden fehlgeschlagen. Versuch es erneut.',
     projectSection: 'Projekt',
+    install: 'Installieren',
+    installPending: 'Ausstehend',
     settings: 'Einstellungen',
     account: 'Konto und Präferenzen',
     language: 'Sprache',

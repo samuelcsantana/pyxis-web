@@ -173,7 +173,7 @@ describe('screens helpers', () => {
     expect(navigationItemOf('/p1/overview')).toBe('overview');
     expect(navigationItemOf('/p1/timeline')).toBe('timeline');
     expect(navigationItemOf('/p1/settings')).toBe('settings');
-    expect(navigationItemOf('/p1/install')).toBe('settings');
+    expect(navigationItemOf('/p1/install')).toBe('install');
     expect(navigationItemOf('/p1/exports/e1')).toBe('settings');
     expect(navigationItemOf('/p1/help')).toBe('account-menu');
   });
@@ -202,7 +202,7 @@ describe('screens helpers', () => {
 
 describe('SidebarNav', () => {
   it('links each screen with the period and marks the current one', () => {
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     const overview = screen.getByRole('link', { name: 'Overview' });
 
@@ -216,7 +216,7 @@ describe('SidebarNav', () => {
   });
 
   it('counts the news of each other screen inside its link', () => {
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     act(() => {
       publishArrivalNews({
@@ -233,8 +233,8 @@ describe('SidebarNav', () => {
     });
   });
 
-  it('links the screens in the order of the questions, then the project settings', () => {
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+  it('links the screens in the order of the questions, then the install guide and the settings', () => {
+    renderWithMessages(<SidebarNav project={store()} />);
 
     expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual([
       'Overview',
@@ -245,6 +245,7 @@ describe('SidebarNav', () => {
       'Visits',
       'Timeline',
       'Requests',
+      'Install',
       'Settings',
     ]);
     expect(screen.queryByText('Soon')).not.toBeInTheDocument();
@@ -252,7 +253,7 @@ describe('SidebarNav', () => {
 
   it('marks nothing current on another screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
@@ -261,7 +262,7 @@ describe('SidebarNav', () => {
 
 describe('the project settings in the navigation', () => {
   it('links the settings of the project in a list of its own, keeping the period', () => {
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     const link = within(screen.getByRole('list', { name: 'Project' })).getByRole('link', {
       name: 'Settings',
@@ -272,7 +273,7 @@ describe('the project settings in the navigation', () => {
 
   it('keeps a custom period and the filters on the way to the settings', () => {
     navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&metric=visitors';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -283,7 +284,7 @@ describe('the project settings in the navigation', () => {
 
   it('links the settings without a query when the screen is on the default period', () => {
     navigation.search = '';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -295,7 +296,7 @@ describe('the project settings in the navigation', () => {
   it('gives the screens back the period the settings were opened with', () => {
     navigation.pathname = '/p-store/settings';
     navigation.search = 'range=today';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -308,32 +309,74 @@ describe('the project settings in the navigation', () => {
 
   it('marks the settings current on the settings page, and no screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
   });
 
-  it.each(['/p-store/install', '/p-store/exports/e1'])(
-    'marks the settings current on %s, a project page with no item of its own',
-    (pathname) => {
-      navigation.pathname = pathname;
-      renderWithMessages(<SidebarNav projectId="p-store" />);
-      navigation.pathname = '/p-store/overview';
+  it('marks the settings current on an export, which has no item of its own', () => {
+    navigation.pathname = '/p-store/exports/e1';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
 
-      const current = document.querySelectorAll('[aria-current="page"]');
-      expect(current).toHaveLength(1);
-      expect(current[0]).toHaveAccessibleName('Settings');
-    },
-  );
+    const current = document.querySelectorAll('[aria-current="page"]');
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveAccessibleName('Settings');
+  });
 
   it('marks no link current on the help page, whose link is in the account menu', () => {
     navigation.pathname = '/p-store/help';
-    renderWithMessages(<SidebarNav projectId="p-store" />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(document.querySelector('[aria-current]')).toBeNull();
+  });
+});
+
+describe('the install guide in the navigation', () => {
+  it('links the install guide first in the Project list, under a visible label, keeping the view', () => {
+    navigation.search = 'range=7d&device=mobile';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.search = 'range=7d&tab=events';
+
+    const project = screen.getByRole('list', { name: 'Project' });
+    const [install, settings] = within(project).getAllByRole('link');
+    expect(screen.getByText('Project')).toBeVisible();
+    expect(install).toHaveAccessibleName('Install');
+    expect(install).toHaveAttribute('href', '/p-store/install?range=7d&device=mobile');
+    expect(install).not.toHaveAttribute('aria-current');
+    expect(settings).toHaveAccessibleName('Settings');
+  });
+
+  it('marks the install guide current on its page, and nothing else', () => {
+    navigation.pathname = '/p-store/install';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
+
+    const current = document.querySelectorAll('[aria-current="page"]');
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveAccessibleName('Install');
+  });
+
+  it('tags the install guide as pending while the project has received no event', () => {
+    renderWithMessages(<SidebarNav project={{ ...store(), firstEventAt: null }} />);
+
+    expect(screen.getByRole('link', { name: 'Install, Pending' })).toBeInTheDocument();
+  });
+
+  it('tags nothing once an event arrived, or when the first event is not known', () => {
+    const { unmount } = renderWithMessages(
+      <SidebarNav project={{ ...store(), firstEventAt: '2026-10-01T10:00:00.000Z' }} />,
+    );
+    expect(screen.getByRole('link', { name: 'Install' })).toBeInTheDocument();
+    expect(screen.queryByText('Pending')).not.toBeInTheDocument();
+    unmount();
+
+    renderWithMessages(<SidebarNav project={store()} />);
+    expect(store().firstEventAt).toBeUndefined();
+    expect(screen.queryByText('Pending')).not.toBeInTheDocument();
   });
 });
 

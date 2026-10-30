@@ -45,6 +45,8 @@ export const en = {
     signingOut: 'Signing out…',
     signOutFailed: 'Could not sign out. Try again.',
     projectSection: 'Project',
+    install: 'Install',
+    installPending: 'Pending',
     settings: 'Settings',
     account: 'Account and preferences',
     language: 'Language',
