@@ -54,7 +54,7 @@ test('keeps a custom period on the way to the settings and back', async ({ page,
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  await page.getByRole('link', { name: 'Overview' }).click();
+  await page.getByRole('link', { name: 'Overview', exact: true }).click();
 
   await expect(page).toHaveURL(
     new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),

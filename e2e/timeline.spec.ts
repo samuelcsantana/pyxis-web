@@ -117,7 +117,7 @@ test('keeps the period through the Timeline, so the way back has it', async ({
   }
   await page
     .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Overview' })
+    .getByRole('link', { name: 'Overview', exact: true })
     .click();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));

@@ -65,6 +65,8 @@ function store() {
   return first;
 }
 
+const STORE_HOME = 'Overview · Demo Store';
+
 function docs() {
   const [, second] = ADMIN.projects;
   if (second === undefined) {
@@ -453,7 +455,7 @@ describe('ProjectSwitcher', () => {
 
   it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
     const { container } = renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
       </MobileMenu>,
     );
@@ -668,7 +670,7 @@ describe('Sidebar', () => {
 
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />
       </MobileMenu>,
     );
@@ -683,16 +685,19 @@ describe('Sidebar', () => {
 });
 
 describe('MobileMenu', () => {
-  it('links the logo of its bar to the overview of the project, keeping the period and the filters', () => {
+  it('names the project in its bar, linking its overview with the period and the filters', () => {
     navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&tab=events';
     renderWithMessages(
-      <MobileMenu projectId="p-docs">
+      <MobileMenu project={docs()} homeLabel="Overview · Demo Docs">
         <span>menu</span>
       </MobileMenu>,
     );
     navigation.search = 'range=7d&tab=events';
 
-    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+    const home = screen.getByRole('link', { name: 'Overview · Demo Docs' });
+    expect(home).toHaveTextContent('DDDemo Docs');
+    expect(within(home).getByText('Demo Docs')).toHaveClass('truncate');
+    expect(home).toHaveAttribute(
       'href',
       '/p-docs/overview?from=2026-10-01&to=2026-10-10&device=mobile',
     );
@@ -700,11 +705,11 @@ describe('MobileMenu', () => {
 
   it('closes when its logo is followed, even to the address it is already on', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <span>menu</span>
       </MobileMenu>,
     );
-    const logo = screen.getByRole('link', { name: 'Pyxis' });
+    const logo = screen.getByRole('link', { name: STORE_HOME });
 
     fireEvent.click(logo);
     expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
@@ -724,7 +729,7 @@ describe('MobileMenu', () => {
 
   it('marks its button with a dot, and says so, when another screen has news', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <span>menu</span>
       </MobileMenu>,
     );
@@ -750,7 +755,7 @@ describe('MobileMenu', () => {
 
   it('opens and closes the navigation, and closes after a link is followed', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
         <span>Not a link</span>
       </MobileMenu>,
@@ -775,7 +780,7 @@ describe('MobileMenu', () => {
 
   it('closes with its own button', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <span>menu</span>
       </MobileMenu>,
     );
@@ -791,7 +796,7 @@ describe('MobileMenu', () => {
 
   function renderOpenMenu() {
     const view = renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -824,7 +829,7 @@ describe('MobileMenu', () => {
 
   it('leaves the focus alone on Escape while closed', () => {
     renderWithMessages(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -844,7 +849,7 @@ describe('MobileMenu', () => {
     const { rerender } = renderOpenMenu();
 
     rerender(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -857,7 +862,7 @@ describe('MobileMenu', () => {
 
     navigation.search = 'range=30d';
     rerender(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );
@@ -874,7 +879,7 @@ describe('MobileMenu', () => {
 
     navigation.pathname = '/p-store/funnel';
     rerender(
-      <MobileMenu projectId="p-store">
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
         <a href="#overview">Overview</a>
       </MobileMenu>,
     );

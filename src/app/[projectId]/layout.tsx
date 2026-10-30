@@ -38,7 +38,13 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
           timeZone={project.timezone}
           serverNow={new Date().getTime()}
         />
-        <MobileMenu projectId={project.id}>
+        <MobileMenu
+          project={project}
+          homeLabel={i18n.t('meta.screenTitle', {
+            screen: i18n.t('screens.overview'),
+            project: project.name,
+          })}
+        >
           <Sidebar
             admin={admin}
             project={project}
