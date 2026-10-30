@@ -57,7 +57,6 @@ export const de = translation({
     installPending: 'Ausstehend',
     settings: 'Einstellungen',
     account: 'Konto und Präferenzen',
-    language: 'Sprache',
     billing: 'Konto und Abrechnung',
     help: 'Hilfe und Support',
   },

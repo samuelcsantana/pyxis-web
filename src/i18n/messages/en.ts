@@ -49,7 +49,6 @@ export const en = {
     installPending: 'Pending',
     settings: 'Settings',
     account: 'Account and preferences',
-    language: 'Language',
     billing: 'Account and billing',
     help: 'Help and support',
   },

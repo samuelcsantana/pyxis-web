@@ -54,7 +54,6 @@ export const nl = translation({
     installPending: 'In afwachting',
     settings: 'Instellingen',
     account: 'Account en voorkeuren',
-    language: 'Taal',
     billing: 'Account en facturatie',
     help: 'Hulp en support',
   },

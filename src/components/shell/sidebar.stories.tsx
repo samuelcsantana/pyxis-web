@@ -92,6 +92,7 @@ export const BrazilianPortuguese: Story = {
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
     await userEvent.click(canvas.getByText('Conta e preferências'));
+    await userEvent.click(canvas.getByText('Idioma: Português (Brasil)'));
     await expect(canvas.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -100,17 +101,43 @@ export const BrazilianPortuguese: Story = {
   },
 };
 
+const COMPACT_MENU_MAX_HEIGHT_PX = 300;
+
 const openTheAccountMenu: Play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   await userEvent.click(canvas.getByText('Account and preferences'));
-  await expect(canvas.getByRole('group', { name: 'Language' })).toBeVisible();
+  await expect(canvas.getByRole('link', { name: 'Account and billing' })).toBeVisible();
   await expect(canvas.getByRole('group', { name: 'Theme' })).toBeVisible();
+  await expect(canvas.getByText('Language: English')).toBeVisible();
+  await expect(canvas.getByRole('group', { name: 'Language' })).not.toBeVisible();
   await expect(canvas.getByRole('button', { name: 'Sign out' })).toBeVisible();
+  const panel = canvas.getByRole('group', { name: 'Theme' }).closest('details > div');
+  await expect(boxOf(panel).height).toBeLessThanOrEqual(COMPACT_MENU_MAX_HEIGHT_PX);
 };
 
 export const AccountMenuOpen: Story = { play: openTheAccountMenu };
 
 export const AccountMenuOpenDark: Story = { globals: { theme: 'dark' }, play: openTheAccountMenu };
+
+const openTheLanguages: Play = async (context) => {
+  await openTheAccountMenu(context);
+  const canvas = within(context.canvasElement);
+  const row = canvas.getByText('Language: English').closest('details');
+  await userEvent.click(canvas.getByText('Language: English'));
+  await expect(row).toHaveAttribute('open');
+  await expect(canvas.getByRole('group', { name: 'Language' })).toBeVisible();
+  await expect(canvas.getByRole('button', { name: 'English' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+};
+
+export const AccountMenuLanguagesOpen: Story = { play: openTheLanguages };
+
+export const AccountMenuLanguagesOpenDark: Story = {
+  globals: { theme: 'dark' },
+  play: openTheLanguages,
+};
 
 export const LongValues: Story = {
   args: { admin: LONG_VALUES, project: LONG_PROJECT },

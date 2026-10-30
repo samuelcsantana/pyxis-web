@@ -57,7 +57,6 @@ export const ptBR = translation({
     installPending: 'Pendente',
     settings: 'Configurações',
     account: 'Conta e preferências',
-    language: 'Idioma',
     billing: 'Conta e cobrança',
     help: 'Ajuda e suporte',
   },

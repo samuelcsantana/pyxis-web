@@ -196,3 +196,21 @@ describe('useSlidingIndicator', () => {
     expect(result.current.frame).toBeNull();
   });
 });
+
+describe('useSlidingIndicator, when the words of a choice change', () => {
+  it('watches every choice as well as the container, so new labels move the indicator', () => {
+    const observe = vi.spyOn(ResizeObserver.prototype, 'observe');
+    const { result } = renderHook(() => useSlidingIndicator('all'));
+    const container = document.createElement('nav');
+    const choices = ['all', 'failing'].map((key) => {
+      const item = document.createElement('a');
+      item.dataset.choice = key;
+      container.append(item);
+      return item;
+    });
+
+    result.current.attach(container);
+
+    expect(observe.mock.calls.map(([target]) => target)).toEqual([container, ...choices]);
+  });
+});

@@ -53,6 +53,24 @@ describe('AccountMenu', () => {
     delete document.documentElement.dataset.theme;
   });
 
+  it('lists billing, the themes on one row, the language behind one row, then signing out', () => {
+    const { container } = renderMenu();
+
+    const panel = container.querySelector('details > div');
+    const billing = screen.getByRole('link', { name: 'Account and billing', hidden: true });
+    const themes = screen.getByRole('group', { name: 'Theme', hidden: true });
+    const language = screen.getByText('Language: English').closest('summary');
+    const signOut = screen.getByRole('button', { name: 'Sign out', hidden: true });
+
+    expect(panel?.firstElementChild).toBe(billing);
+    expect(themes).toHaveClass('flex-row');
+    expect(language?.parentElement).not.toHaveAttribute('open');
+    expect(language?.parentElement).toContainElement(
+      screen.getByRole('group', { name: 'Language', hidden: true }),
+    );
+    expect(panel?.lastElementChild).toContainElement(signOut);
+  });
+
   it('closes on Escape, with the focus back on the account', () => {
     const { container } = renderMenu();
     const details = container.querySelector('details');

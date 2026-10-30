@@ -6,6 +6,7 @@ import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
+import { localeName } from '@/i18n/locales';
 import type { Theme } from '@/lib/theme';
 import { SignOutButton } from './sign-out-button';
 
@@ -17,6 +18,8 @@ export interface AccountMenuProps {
 }
 
 const CHEVRON = 'M6 15l6-6 6 6';
+const LANGUAGES_CHEVRON = 'M9 6l6 6-6 6';
+const MENU_ROW = `flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`;
 const GROUP_LABEL = 'px-1 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 
 export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuProps) {
@@ -50,28 +53,47 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
           />
         </svg>
       </summary>
-      <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-3 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
-        <div className="flex flex-col gap-1.5">
-          <span className={GROUP_LABEL}>{i18n.t('nav.language')}</span>
-          <LanguageMenu
-            locale={i18n.locale}
-            label={i18n.t('language.label')}
-            choose={chooseLocale}
-            surface="nav"
-            layout="column"
-          />
-        </div>
-        <div className="flex flex-col gap-1.5">
+      <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-2 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
+        <Link href={ACCOUNT_PAGE} className={MENU_ROW}>
+          {i18n.t('nav.billing')}
+        </Link>
+        <div className="flex flex-col gap-1.5 border-t border-nav-line pt-2">
           <span className={GROUP_LABEL}>{i18n.t('theme.label')}</span>
-          <ThemeChoiceGroup initialTheme={theme} />
+          <ThemeChoiceGroup initialTheme={theme} layout="row" />
         </div>
-        <div className="flex flex-col gap-1 border-t border-nav-line pt-2">
-          <Link
-            href={ACCOUNT_PAGE}
-            className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
+        <details className="group/languages">
+          <summary
+            className={`${MENU_ROW} justify-between gap-2 list-none [&::-webkit-details-marker]:hidden`}
           >
-            {i18n.t('nav.billing')}
-          </Link>
+            <span>{i18n.t('language.current', { name: localeName(i18n.locale) })}</span>
+            <svg
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="shrink-0 text-nav-muted transition-transform duration-150 group-open/languages:rotate-90 motion-reduce:transition-none"
+            >
+              <path
+                d={LANGUAGES_CHEVRON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </summary>
+          <div className="pt-1">
+            <LanguageMenu
+              locale={i18n.locale}
+              label={i18n.t('language.label')}
+              choose={chooseLocale}
+              surface="nav"
+              layout="column"
+            />
+          </div>
+        </details>
+        <div className="border-t border-nav-line pt-2">
           <SignOutButton />
         </div>
       </div>

@@ -1,10 +1,10 @@
 'use client';
 
-import type { DetailsHTMLAttributes, FocusEvent, KeyboardEvent } from 'react';
+import type { DetailsHTMLAttributes, FocusEvent, KeyboardEvent, SyntheticEvent } from 'react';
 
 export interface DismissableDetailsProps extends Omit<
   DetailsHTMLAttributes<HTMLDetailsElement>,
-  'open' | 'onKeyDown' | 'onBlur'
+  'open' | 'onKeyDown' | 'onBlur' | 'onToggle'
 > {
   readonly defaultOpen?: boolean;
 }
@@ -39,6 +39,16 @@ function closeWhenFocusLeaves(event: FocusEvent<HTMLDetailsElement>) {
   }
 }
 
+function closeWhatItHolds(event: SyntheticEvent<HTMLDetailsElement>) {
+  const details = event.currentTarget;
+  if (details.open) {
+    return;
+  }
+  for (const inner of details.querySelectorAll<HTMLDetailsElement>('details[open]')) {
+    inner.open = false;
+  }
+}
+
 export function DismissableDetails({
   defaultOpen = false,
   children,
@@ -51,6 +61,7 @@ export function DismissableDetails({
       open={defaultOpen}
       onKeyDown={closeOnEscape}
       onBlur={closeWhenFocusLeaves}
+      onToggle={closeWhatItHolds}
     >
       {children}
     </details>
