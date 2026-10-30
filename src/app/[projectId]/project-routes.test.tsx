@@ -133,6 +133,50 @@ describe('ProjectLayout', () => {
     expect(screen.queryByRole('note')).not.toBeInTheDocument();
   });
 
+  it("shows the owner the month's usage of the account that holds the project", async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    state.admin = {
+      ...ADMIN,
+      projects: ADMIN.projects.map((project) => ({ ...project, accountId: 'a1' })),
+    };
+    state.accounts = () =>
+      Promise.resolve([
+        {
+          id: 'a1',
+          role: 'owner',
+          status: 'active',
+          billingInterval: 'month',
+          trialEndsAt: null,
+          currentPeriodEndsAt: null,
+          accessEndsAt: null,
+          ingestionPausedUntil: null,
+          suspendedAt: null,
+          suspensionReason: null,
+          deletionHeldAt: null,
+          quotaPauseExemptUntil: null,
+          freeWaitlistedAt: null,
+          freePlanFitDueAt: null,
+          projectCount: 1,
+          peopleCount: 1,
+          boundByFreePlanTerms: true,
+          mailboxHasAnotherFreeAccount: null,
+          month: '2026-10',
+          eventsThisMonth: 41_230,
+          measuredAt: null,
+          limits: { eventsPerMonth: 100_000, projects: 3, people: 3, pauseAtEvents: 150_000 },
+        },
+      ]);
+
+    renderWithMessages(
+      await ProjectLayout({
+        children: <p>screen</p>,
+        params: Promise.resolve({ projectId: 'p-store' }),
+      }),
+    );
+
+    expect(screen.getByText('41% of the month')).toBeInTheDocument();
+  });
+
   it("warns about an owned account's failed payment, linking to billing", async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     state.accounts = () =>

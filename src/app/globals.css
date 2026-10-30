@@ -43,6 +43,8 @@
   --pyx-nav-text: #c9d4e3;
   --pyx-nav-muted: #8796ad;
   --pyx-nav-strong: #ffffff;
+  --pyx-nav-warn: #fb923c;
+  --pyx-nav-bad: #f87171;
   color-scheme: light;
 }
 
@@ -161,6 +163,8 @@
   --color-nav-text: var(--pyx-nav-text);
   --color-nav-muted: var(--pyx-nav-muted);
   --color-nav-strong: var(--pyx-nav-strong);
+  --color-nav-warn: var(--pyx-nav-warn);
+  --color-nav-bad: var(--pyx-nav-bad);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --text-micro: 0.6875rem;

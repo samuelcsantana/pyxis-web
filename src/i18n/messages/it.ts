@@ -52,6 +52,11 @@ export const it = translation({
     projectSection: 'Progetto',
     install: 'Installazione',
     installPending: 'In attesa',
+    usage: {
+      share: '{share} del mese',
+      events: '{count} su {limit} eventi questo mese',
+      resets: 'Il conteggio si azzera il {date}',
+    },
     settings: 'Impostazioni',
     account: 'Account e preferenze',
     billing: 'Account e fatturazione',

@@ -14,12 +14,16 @@ describe('createFormats', () => {
     expect(english.percent(0.623)).toBe('62.3%');
     expect(english.percent(0.5)).toBe('50.0%');
     expect(english.decimal(2)).toBe('2.0');
+    expect(english.wholePercent(0.4123)).toBe('41%');
+    expect(english.wholePercent(0.7999)).toBe('79%');
+    expect(english.wholePercent(0.9999)).toBe('99%');
   });
 
   it('formats the same numbers with the separators of another language', () => {
     expect(portuguese.count(1_234_567)).toBe('1.234.567');
     expect(portuguese.percent(0.623)).toBe('62,3%');
     expect(portuguese.decimal(2)).toBe('2,0');
+    expect(portuguese.wholePercent(0.4123)).toBe('41%');
   });
 
   it('formats calendar days in UTC, with and without the year', () => {

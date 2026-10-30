@@ -197,6 +197,9 @@ describe('sidebar item states, the same in both themes', () => {
     ['nav-muted', 'nav-hover'],
     ['nav-muted', 'nav-active'],
     ['accent', 'nav-active'],
+    ['accent', 'nav-border'],
+    ['nav-warn', 'nav-border'],
+    ['nav-bad', 'nav-border'],
   ])('keep %s icons visible on %s', (icon, surface) => {
     expect(contrastRatio(nav(icon), nav(surface))).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
   });

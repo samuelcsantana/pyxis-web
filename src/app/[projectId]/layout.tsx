@@ -23,9 +23,9 @@ export interface ProjectLayoutProps {
 
 export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [i18n, { notice, canCreateProject }] = await Promise.all([
+  const [i18n, { notice, canCreateProject, usage }] = await Promise.all([
     getI18n(),
-    bestEffortAccountsInView(new Date()),
+    bestEffortAccountsInView(new Date(), project),
   ]);
   const suspension = ingestionSuspensionOf(project);
   return (
@@ -52,6 +52,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
             i18n={i18n}
             chooseLocale={chooseLocale}
             canCreateProject={canCreateProject}
+            usage={usage}
           />
         </MobileMenu>
         <NavigationRegion className="relative flex min-w-0 flex-col">

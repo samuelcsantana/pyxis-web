@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import type { Admin } from '@/domain/admin';
+import type { MonthUsage } from '@/lib/accounts-in-view';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_EXPORT_ID } from '@/services/exports/mock-exports-service';
 import { demoAdminOf } from '@/services/projects/mock-projects-service';
@@ -528,4 +529,52 @@ export const MenuButtonPressed: Story = {
     pseudo: { active: ['button[aria-controls="main-navigation"]'] },
   },
   decorators: insideTheMobileMenu,
+};
+
+const DEMO_USAGE: MonthUsage = {
+  events: 41_230,
+  limit: 100_000,
+  share: 0.4123,
+  pausedUntil: null,
+  resetsOn: '2026-11-01T00:00:00.000Z',
+};
+
+const showsTheUsage =
+  (share: string, tone: string): Play =>
+  async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText(`${share} of the month`)).toBeVisible();
+    await expect(canvasElement.querySelector(`summary .${tone}`)).not.toBeNull();
+    await userEvent.click(canvas.getByText('Account and preferences'));
+    await expect(canvas.getByRole('link', { name: /events this month/ })).toBeVisible();
+  };
+
+export const UsageOfTheMonth: Story = {
+  args: { usage: DEMO_USAGE },
+  play: showsTheUsage('41%', 'bg-accent'),
+};
+
+export const UsageOfTheMonthDark: Story = {
+  args: { usage: DEMO_USAGE },
+  globals: { theme: 'dark' },
+  play: showsTheUsage('41%', 'bg-accent'),
+};
+
+export const UsageNearTheQuota: Story = {
+  args: { usage: { ...DEMO_USAGE, events: 82_000, share: 0.82 } },
+  play: showsTheUsage('82%', 'bg-nav-warn'),
+};
+
+export const UsageWhileReceptionIsPaused: Story = {
+  args: {
+    usage: { ...DEMO_USAGE, events: 150_000, share: 1.5, pausedUntil: '2026-11-01T00:00:00.000Z' },
+  },
+  play: async (context) => {
+    await showsTheUsage('150%', 'bg-nav-bad')(context);
+    await expect(
+      within(context.canvasElement).getByText(
+        /Measuring is paused until Nov 1: the account passed/,
+      ),
+    ).toBeVisible();
+  },
 };

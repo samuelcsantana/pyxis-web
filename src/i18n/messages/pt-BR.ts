@@ -55,6 +55,11 @@ export const ptBR = translation({
     projectSection: 'Projeto',
     install: 'Instalação',
     installPending: 'Pendente',
+    usage: {
+      share: '{share} do mês',
+      events: '{count} de {limit} eventos neste mês',
+      resets: 'A contagem zera em {date}',
+    },
     settings: 'Configurações',
     account: 'Conta e preferências',
     billing: 'Conta e cobrança',
