@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useLayoutEffect, useRef, useState, useSyncExternalStore, useTransition } from 'react';
 import { BUTTON_STRONG, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
@@ -12,7 +12,7 @@ import {
 } from './arrival-news';
 import { CONTENT_ID } from './content-id';
 import { useHoldNavigationWhile } from './navigation-pending';
-import { screenSlugOf } from './screens';
+import { useScreenOnView } from './use-screen-on-view';
 
 const BAR = 'pointer-events-none sticky top-14 z-10 flex justify-center py-2 lg:static lg:bg-bg';
 const PILL = `pointer-events-auto inline-flex h-9 items-center gap-2 rounded-pill pr-4 pl-3.5 text-caption shadow-raised motion-safe:animate-reveal ${BUTTON_STRONG} ${CONTROL_BUSY}`;
@@ -24,7 +24,7 @@ function useOpenScreenNews(): OpenScreenNews | undefined {
 }
 
 export function NewsBar() {
-  const screen = screenSlugOf(usePathname());
+  const screen = useScreenOnView();
   const news = useOpenScreenNews();
   return news === undefined || news.screen !== screen ? null : <NewsPill news={news} />;
 }

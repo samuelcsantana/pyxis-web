@@ -43,6 +43,7 @@ vi.mock('next/navigation', () => ({
   },
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
   usePathname: () => '/p-store/overview',
+  useSelectedLayoutSegments: () => ['overview'],
   useSearchParams: () => new URLSearchParams(),
 }));
 
