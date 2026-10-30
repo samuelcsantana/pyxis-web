@@ -169,10 +169,10 @@ export function screenSlugOf(pathname: string): ScreenSlug | undefined {
 
 export const SETTINGS_ITEM = 'settings';
 export const INSTALL_ITEM = 'install';
-export const ACCOUNT_MENU_ITEM = 'account-menu';
+export const HELP_ITEM = 'help';
 
 export type NavigationItem =
-  ScreenSlug | typeof SETTINGS_ITEM | typeof INSTALL_ITEM | typeof ACCOUNT_MENU_ITEM;
+  ScreenSlug | typeof SETTINGS_ITEM | typeof INSTALL_ITEM | typeof HELP_ITEM;
 
 interface ProjectPage {
   readonly item: NavigationItem;
@@ -183,7 +183,7 @@ const PROJECT_PAGES: ReadonlyMap<string, ProjectPage> = new Map<string, ProjectP
   [SETTINGS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 0 }],
   [INSTALL_SEGMENT, { item: INSTALL_ITEM, segmentsAfter: 0 }],
   [EXPORTS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 1 }],
-  [HELP_SEGMENT, { item: ACCOUNT_MENU_ITEM, segmentsAfter: 0 }],
+  [HELP_SEGMENT, { item: HELP_ITEM, segmentsAfter: 0 }],
 ]);
 
 export function navigationItemOf(pathname: string): NavigationItem | undefined {

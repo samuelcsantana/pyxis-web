@@ -18,7 +18,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the account menu with the support address and the reply time of the plan', async ({
+test('opens from the foot of the sidebar with the support address and the reply time of the plan', async ({
   page,
   isMobile,
 }) => {
@@ -26,8 +26,10 @@ test('opens from the account menu with the support address and the reply time of
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
-  await page.getByRole('link', { name: 'Help and support' }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Help and support' })
+    .click();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help$`));
   await expect(page).toHaveTitle('Help and support · My site · Pyxis');
@@ -44,8 +46,10 @@ test('keeps the period of the screen through Help and Install', async ({ page, i
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
-  await page.getByRole('link', { name: 'Help and support' }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Help and support' })
+    .click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help\\?range=today$`));
 
   await page.getByRole('link', { name: 'How to install' }).click();
@@ -58,18 +62,17 @@ test('keeps the period of the screen through Help and Install', async ({ page, i
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
 });
 
-test('marks the account row as where Help is, and no link', async ({ page, isMobile }) => {
+test('marks its own item in the foot as where you are', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/help`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
 
-  const account = page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .locator('summary[data-current]');
-  await expect(account).toBeVisible();
-  await expect(account).toContainText('Account and preferences');
-  await expect(currentNavigationLinks(page)).toHaveCount(0);
+  const current = currentNavigationLinks(page);
+  await expect(current).toHaveCount(1);
+  await expect(current).toBeVisible();
+  await expect(current).toHaveAccessibleName('Help and support');
+  await expect(page.locator('summary[data-current]')).toHaveCount(0);
 });
 
 test('closes Account and billing with the support address', async ({ page }) => {

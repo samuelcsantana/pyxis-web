@@ -149,8 +149,6 @@ const currentLinksOutsideTheMenus = (canvasElement: HTMLElement) =>
     .queryAllByRole('link', { current: 'page' })
     .filter((link) => link.closest('details') === null);
 
-const CURRENT_TEXT_COLOR = 'rgb(255, 255, 255)';
-
 const standsForThePage =
   (name: string): Play =>
   async ({ canvasElement }) => {
@@ -262,25 +260,15 @@ export const NoEventsYetNarrowedInGerman: Story = {
   play: pendingTagFitsIn('Installieren', 'Ausstehend'),
 };
 
-const theAccountStandsForThePage: Play = async ({ canvasElement }) => {
-  await expect(currentLinksOutsideTheMenus(canvasElement)).toHaveLength(0);
-  await expect(canvasElement.querySelector('summary[data-current]')).toHaveTextContent(
-    'Account and preferences',
-  );
-  const email = within(canvasElement).getByText(DEMO_ADMIN.email);
-  await expect(getComputedStyle(email).fontWeight).toBe('600');
-  await expect(getComputedStyle(email).color).toBe(CURRENT_TEXT_COLOR);
-};
-
 export const OnHelp: Story = {
   parameters: onPageOf('help'),
-  play: theAccountStandsForThePage,
+  play: standsForThePage('Help and support'),
 };
 
 export const OnHelpDark: Story = {
   parameters: onPageOf('help'),
   globals: { theme: 'dark' },
-  play: theAccountStandsForThePage,
+  play: standsForThePage('Help and support'),
 };
 
 export const KeyboardFocus: Story = {
