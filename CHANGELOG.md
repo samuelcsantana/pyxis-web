@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.44.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.43.0...v0.44.0) (2026-10-30)
+
+
+### Features
+
+* **ui:** let Breakable break a text only after its slashes ([80a0989](https://github.com/samuelcsantana/pyxis-web/commit/80a09896938cfc55b6b98d28164a8e19752adba8))
+
+
+### Bug Fixes
+
+* **shell:** break the project's time zone only after its slash ([433f56a](https://github.com/samuelcsantana/pyxis-web/commit/433f56a9ffa0af745e11f8d4d697710f292ef487))
+* **shell:** mark where you are on Install, an export and Help ([765c03f](https://github.com/samuelcsantana/pyxis-web/commit/765c03f3d0b126f0d16f2b1e2db6e297d8e3bc6f))
+* **shell:** open the current project's overview from the logo, keeping the view ([1f63b52](https://github.com/samuelcsantana/pyxis-web/commit/1f63b52f38b3ef72c06d785aabd22e0044ed18d3))
+
+
+### Documentation
+
+* **features:** describe the logo, the time zone's line break and the marked page ([48b6313](https://github.com/samuelcsantana/pyxis-web/commit/48b6313e9f056124b11de94aa513f2b8c44e30a4))
+
 ## [0.43.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.42.1...v0.43.0) (2026-10-29)
 
 
