@@ -38,6 +38,21 @@ export const SCREENS = [
 
 export type ScreenSlug = (typeof SCREENS)[number]['slug'];
 
+export const NAVIGATION_ORDER: readonly ScreenSlug[] = [
+  'overview',
+  'acquisition',
+  'devices',
+  'features',
+  'funnel',
+  'visits',
+  'timeline',
+  'requests',
+];
+
+export const SCREENS_IN_NAVIGATION_ORDER = [...SCREENS].sort(
+  (first, second) => NAVIGATION_ORDER.indexOf(first.slug) - NAVIGATION_ORDER.indexOf(second.slug),
+);
+
 export const SCREENS_WITHOUT_PERIOD: ReadonlySet<ScreenSlug> = new Set(['timeline']);
 
 export const SCREENS_WITHOUT_FILTERS: ReadonlySet<ScreenSlug> = new Set(['timeline']);

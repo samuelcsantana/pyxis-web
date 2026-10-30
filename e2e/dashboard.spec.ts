@@ -46,6 +46,30 @@ test('opens the first project from the root, with the demo banner', async ({ pag
   await expect(page).toHaveTitle('Overview · My site · Pyxis');
 });
 
+test('lists the screens in the order of the questions, then the project', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  await openNavigation(page, isMobile);
+  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+
+  const screens = navigation.getByText('Analytics', { exact: true }).locator('..');
+  await expect(screens.getByRole('list').first().getByRole('link')).toHaveText([
+    'Overview',
+    /^Acquisition/,
+    /^Devices/,
+    /^Features/,
+    /^Funnel/,
+    /^Visits/,
+    'Timeline',
+    /^Requests/,
+  ]);
+  await expect(navigation.getByRole('list', { name: 'Project' }).getByRole('link')).toHaveText([
+    'Settings',
+  ]);
+});
+
 test('takes the logo to the overview of the project on screen, on the same period', async ({
   page,
 }) => {
