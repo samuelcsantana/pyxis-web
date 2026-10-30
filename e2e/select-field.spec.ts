@@ -1,12 +1,16 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
+import { untilHydrated } from './hydration';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
 async function openVisitFilters(page: Page, isMobile: boolean): Promise<void> {
   await page.goto(`/${STORE_ID}/visits`);
   if (isMobile) {
-    await page.getByRole('button', { name: 'Filters' }).click();
+    const filters = page.getByRole('button', { name: 'Filters' });
+    await untilHydrated(filters);
+    await filters.click();
   }
+  await untilHydrated(page.getByRole('combobox', { name: 'Channel' }));
 }
 
 function backgroundOf(locator: Locator): Promise<string> {
