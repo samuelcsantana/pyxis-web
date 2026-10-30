@@ -29,7 +29,7 @@ export function Sidebar({
   canCreateProject = false,
 }: SidebarProps) {
   return (
-    <div className="flex min-h-full grow flex-col gap-4 bg-nav px-3.5 pt-4 pb-4 text-nav-text lg:gap-3">
+    <div className="flex min-h-full grow flex-col gap-4 bg-nav px-3.5 pt-4 pb-4 text-nav-text lg:h-full lg:min-h-0 lg:gap-3">
       <div className="hidden lg:flex">
         <ViewKeepingLink
           href={screenHref(project.id, FIRST_SCREEN)}
@@ -45,7 +45,7 @@ export function Sidebar({
         canCreateProject={canCreateProject}
       />
       <SidebarNav projectId={project.id} />
-      <div className="mt-auto flex flex-col gap-3 border-t border-nav-line pt-3">
+      <div className="mt-auto flex shrink-0 flex-col gap-2 border-t border-nav-line pt-3">
         <p className="flex items-center gap-2 rounded-input bg-nav-raised px-2.5 py-2 text-xs text-nav-text">
           <svg
             width={16}

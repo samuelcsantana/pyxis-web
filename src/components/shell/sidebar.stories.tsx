@@ -306,6 +306,51 @@ export const OnAPhone: Story = {
   decorators: insideTheMobileMenu,
 };
 
+const SHORT_LAPTOP_WINDOW = { width: 1366, height: 650 } as const;
+const SHORT_LAPTOP = 'shortLaptop';
+
+function boxOf(element: Element | null): DOMRect {
+  if (element === null) {
+    throw new Error('The sidebar part is missing.');
+  }
+  return element.getBoundingClientRect();
+}
+
+export const ShortWindow: Story = {
+  parameters: {
+    viewport: {
+      options: {
+        [SHORT_LAPTOP]: {
+          name: 'Laptop window, 1366×650',
+          styles: {
+            width: `${String(SHORT_LAPTOP_WINDOW.width)}px`,
+            height: `${String(SHORT_LAPTOP_WINDOW.height)}px`,
+          },
+        },
+      },
+    },
+  },
+  globals: { viewport: { value: SHORT_LAPTOP, isRotated: false } },
+  decorators: [
+    (Story, { args }) => (
+      <MobileMenu projectId={args.project.id}>
+        <Story />
+      </MobileMenu>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(window.innerHeight).toBe(SHORT_LAPTOP_WINDOW.height);
+    const screens = canvas.getByText('Analytics').parentElement;
+    await expect(screens?.scrollHeight).toBeGreaterThan(screens?.clientHeight ?? Infinity);
+    for (const part of ['Switch project. Current project:', 'Account and preferences']) {
+      const box = boxOf(canvas.getByText(part).closest('summary'));
+      await expect(box.top).toBeGreaterThanOrEqual(0);
+      await expect(box.bottom).toBeLessThanOrEqual(SHORT_LAPTOP_WINDOW.height);
+    }
+  },
+};
+
 const openTheMenu: Play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
