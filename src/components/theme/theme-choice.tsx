@@ -12,8 +12,11 @@ import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-ind
 import { useT } from '@/i18n/messages-provider';
 import { parseTheme, type Theme, THEME_CHOICES, type ThemeChoice, themeCookie } from '@/lib/theme';
 
+export type ThemeChoiceLayout = 'column' | 'row';
+
 export interface ThemeChoiceProps {
   readonly initialTheme?: Theme;
+  readonly layout?: ThemeChoiceLayout;
 }
 
 const CHOICE_LABELS = {
@@ -22,7 +25,16 @@ const CHOICE_LABELS = {
   system: 'theme.system',
 } as const satisfies Readonly<Record<ThemeChoice, string>>;
 
-const CHOICE = `relative z-[1] flex h-8 items-center rounded-control px-2.5 text-caption ${NAV_CONTROL}`;
+const CHOICE = `relative z-[1] flex items-center rounded-control text-caption ${NAV_CONTROL}`;
+const LAYOUTS: Readonly<
+  Record<ThemeChoiceLayout, { readonly group: string; readonly choice: string }>
+> = {
+  column: { group: 'flex-col', choice: 'h-8 px-2.5' },
+  row: {
+    group: 'flex-row',
+    choice: 'min-h-8 min-w-0 flex-auto justify-center px-1.5 py-1 text-center',
+  },
+};
 const CHOSEN = `${NAV_ITEM_CURRENT} group-data-sliding/theme:bg-transparent`;
 const HIGHLIGHT = `rounded-control bg-nav-active ${SLIDING_INDICATOR}`;
 
@@ -48,7 +60,7 @@ function apply(choice: ThemeChoice): void {
   document.cookie = themeCookie(choice);
 }
 
-export function ThemeChoiceGroup({ initialTheme }: ThemeChoiceProps) {
+export function ThemeChoiceGroup({ initialTheme, layout = 'column' }: ThemeChoiceProps) {
   const t = useT();
   const chosen = useSyncExternalStore(
     subscribeToThemeChanges,
@@ -62,7 +74,7 @@ export function ThemeChoiceGroup({ initialTheme }: ThemeChoiceProps) {
       role="group"
       aria-label={t('theme.label')}
       data-sliding={sliding}
-      className="group/theme relative flex flex-col gap-1"
+      className={`group/theme relative flex gap-1 ${LAYOUTS[layout].group}`}
     >
       <SlidingIndicator frame={frame} shape="fill" className={HIGHLIGHT} />
       {THEME_CHOICES.map((choice) => (
@@ -74,7 +86,7 @@ export function ThemeChoiceGroup({ initialTheme }: ThemeChoiceProps) {
           onClick={() => {
             apply(choice);
           }}
-          className={`${CHOICE} ${choice === chosen ? CHOSEN : NAV_ITEM_IDLE}`}
+          className={`${CHOICE} ${LAYOUTS[layout].choice} ${choice === chosen ? CHOSEN : NAV_ITEM_IDLE}`}
         >
           {t(CHOICE_LABELS[choice])}
         </button>

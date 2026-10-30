@@ -1,5 +1,9 @@
 import { expect, type Page, test } from '@playwright/test';
-import { sawBusyContent, watchForBusyContent } from './navigation';
+import {
+  openTheLanguagesOfTheAccountMenu,
+  sawBusyContent,
+  watchForBusyContent,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const JUST_PAST_THE_REFRESH_BOUND = '00:21';
@@ -80,6 +84,7 @@ test('shows a visited screen in the language chosen since', async ({ page, isMob
 
   await openMenuOnAPhone(page, isMobile);
   await page.locator('summary', { hasText: 'Account and preferences' }).click();
+  await openTheLanguagesOfTheAccountMenu(page);
   await page.getByRole('button', { name: 'Português (Brasil)' }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 

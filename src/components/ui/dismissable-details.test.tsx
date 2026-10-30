@@ -102,6 +102,28 @@ describe('DismissableDetails', () => {
     expect(details.open).toBe(true);
   });
 
+  it('closes the disclosures it holds when it closes, so it opens as it was first drawn', () => {
+    const { container } = render(
+      <DismissableDetails defaultOpen>
+        <summary>Account</summary>
+        <details open>
+          <summary>Language</summary>
+          <p>English</p>
+        </details>
+      </DismissableDetails>,
+    );
+    const [outer, inner] = container.querySelectorAll('details');
+
+    fireEvent(inner ?? container, new Event('toggle'));
+    expect(inner).toHaveAttribute('open');
+    if (outer !== undefined) {
+      outer.open = false;
+      fireEvent(outer, new Event('toggle'));
+    }
+
+    expect(inner).not.toHaveAttribute('open');
+  });
+
   it('closes on a pointer pressed outside it', () => {
     const { details } = renderPopover();
 

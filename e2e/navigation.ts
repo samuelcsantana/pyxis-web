@@ -58,3 +58,7 @@ export async function openAccountMenu(page: Page, isMobile: boolean): Promise<vo
   await account.click();
   await expect(page.getByRole('group', { name: 'Theme' })).toBeVisible();
 }
+
+export async function openTheLanguagesOfTheAccountMenu(page: Page): Promise<void> {
+  await page.locator('details details > summary').click();
+}

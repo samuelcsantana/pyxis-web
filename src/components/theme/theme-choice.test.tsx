@@ -29,6 +29,17 @@ describe('ThemeChoiceGroup', () => {
     expect(screen.getByRole('button', { name: 'Light' })).toHaveAttribute('aria-pressed', 'false');
   });
 
+  it('stacks the choices by default, or lays them on one row whose words may wrap', () => {
+    const { unmount } = renderWithMessages(<ThemeChoiceGroup />);
+    expect(screen.getByRole('group', { name: 'Theme' })).toHaveClass('flex-col');
+    unmount();
+
+    renderWithMessages(<ThemeChoiceGroup layout="row" />);
+    const row = screen.getByRole('group', { name: 'Theme' });
+    expect(row).toHaveClass('flex-row');
+    expect(screen.getByRole('button', { name: 'System' })).toHaveClass('min-w-0', 'text-center');
+  });
+
   it('applies a chosen theme to the page at once and remembers it for a year', async () => {
     renderWithMessages(<ThemeChoiceGroup />);
 

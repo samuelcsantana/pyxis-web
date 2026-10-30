@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { openAccountMenu } from './navigation';
+import { openAccountMenu, openTheLanguagesOfTheAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const ALIGNED_WITHIN_PX = 1;
@@ -96,4 +96,19 @@ test('shows the theme highlight in place as the account menu opens, without slid
 
   expect(moving).toBe(0);
   await expectIndicatorOn(themes, themes.getByRole('button', { name: 'System' }));
+});
+
+test('keeps the theme highlight on the chosen theme after the language changes in place', async ({
+  page,
+  isMobile,
+}) => {
+  await open(page, 'overview');
+  await openAccountMenu(page, isMobile);
+  await openTheLanguagesOfTheAccountMenu(page);
+
+  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
+
+  const themes = page.getByRole('group', { name: 'Tema' });
+  await expectIndicatorOn(themes, themes.getByRole('button', { name: 'Do sistema' }));
 });

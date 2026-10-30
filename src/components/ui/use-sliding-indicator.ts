@@ -45,6 +45,9 @@ export function useSlidingIndicator(choice: string) {
       measure();
       const observer = new ResizeObserver(measure);
       observer.observe(container);
+      for (const each of container.querySelectorAll(`[${CHOICE_ATTRIBUTE}]`)) {
+        observer.observe(each);
+      }
       return () => {
         observer.disconnect();
       };

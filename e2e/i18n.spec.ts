@@ -2,6 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { languageTrigger } from './language-select';
 import { parseCount } from './locale-numbers';
+import { openTheLanguagesOfTheAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PORTUGUESE = 'pt-BR';
@@ -36,6 +37,7 @@ async function openLanguages(page: Page, isMobile: boolean, menu: string, accoun
     await page.getByRole('button', { name: menu }).click();
   }
   await page.locator('summary', { hasText: account }).click();
+  await openTheLanguagesOfTheAccountMenu(page);
 }
 
 async function visitsFigure(page: Page, name: string): Promise<string | null> {
