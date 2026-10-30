@@ -10,7 +10,11 @@ import {
   demoProjectNameOf,
   demoProjectOf,
 } from '../demo/demo-projects';
-import { DEMO_FIRST_EVENT_AT, demoProjectSettingsWire } from './demo-project-settings';
+import {
+  DEMO_ACCOUNT_ID,
+  DEMO_FIRST_EVENT_AT,
+  demoProjectSettingsWire,
+} from './demo-project-settings';
 import type { IProjectsService } from './projects-service.interface';
 
 export const DEMO_OWNER_EMAIL = 'owner@example.com';
@@ -26,6 +30,7 @@ export function demoMeResponse(t: Translator<SourceMessages>, now: Date) {
       first_event_at: DEMO_FIRST_EVENT_AT,
       last_event_at: now.toISOString(),
       icon_version: null,
+      account_id: DEMO_ACCOUNT_ID,
       ingestion_suspended_at: null,
       ingestion_suspension_reason: null,
     })),
