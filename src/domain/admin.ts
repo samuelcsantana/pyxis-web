@@ -6,6 +6,7 @@ export interface Project {
   readonly firstEventAt?: string | null;
   readonly lastEventAt?: string | null;
   readonly iconVersion?: string | null;
+  readonly accountId?: string | null;
   readonly ingestionSuspendedAt?: string | null;
   readonly ingestionSuspensionReason?: string | null;
 }

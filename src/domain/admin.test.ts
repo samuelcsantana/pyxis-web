@@ -40,6 +40,21 @@ describe('meResponseSchema', () => {
     });
   });
 
+  it('reads the account that holds each project, null outside any, unknown from an older API', () => {
+    const [held, operators, older] = meResponseSchema.parse({
+      ...WIRE,
+      projects: [
+        { ...WIRE.projects[0], account_id: '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f' },
+        { ...WIRE.projects[0], account_id: null },
+        WIRE.projects[0],
+      ],
+    }).projects;
+
+    expect(held?.accountId).toBe('7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f');
+    expect(operators?.accountId).toBeNull();
+    expect(older?.accountId).toBeUndefined();
+  });
+
   it('reads the version of the icon taken from the project site', () => {
     const [project] = meResponseSchema.parse({
       ...WIRE,
