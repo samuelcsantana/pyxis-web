@@ -175,7 +175,7 @@ describe('screens helpers', () => {
     expect(navigationItemOf('/p1/settings')).toBe('settings');
     expect(navigationItemOf('/p1/install')).toBe('install');
     expect(navigationItemOf('/p1/exports/e1')).toBe('settings');
-    expect(navigationItemOf('/p1/help')).toBe('account-menu');
+    expect(navigationItemOf('/p1/help')).toBe('help');
   });
 
   it('name no item of the navigation for any other path', () => {
@@ -326,7 +326,7 @@ describe('the project settings in the navigation', () => {
     expect(current[0]).toHaveAccessibleName('Settings');
   });
 
-  it('marks no link current on the help page, whose link is in the account menu', () => {
+  it('marks no link of its own current on the help page, whose link is in the foot', () => {
     navigation.pathname = '/p-store/help';
     renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';

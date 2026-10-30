@@ -7,13 +7,10 @@ import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
 import type { Theme } from '@/lib/theme';
-import { AccountSummary } from './account-summary';
 import { SignOutButton } from './sign-out-button';
-import { ViewKeepingLink } from './view-keeping-link';
 
 export interface AccountMenuProps {
   readonly email: string;
-  readonly helpHref: string;
   readonly theme?: Theme;
   readonly i18n: I18n;
   readonly chooseLocale: (form: FormData) => Promise<void>;
@@ -22,10 +19,12 @@ export interface AccountMenuProps {
 const CHEVRON = 'M6 15l6-6 6 6';
 const GROUP_LABEL = 'px-1 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 
-export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: AccountMenuProps) {
+export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuProps) {
   return (
     <DismissableDetails className="group relative">
-      <AccountSummary>
+      <summary
+        className={`flex min-h-11 list-none items-center gap-2 rounded-input px-1 hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
+      >
         <span
           aria-hidden="true"
           className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-nav-border text-caption font-semibold text-nav-strong"
@@ -33,9 +32,7 @@ export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: Acco
           {emailInitial(email)}
         </span>
         <span className="sr-only">{i18n.t('nav.account')}</span>
-        <span className="min-w-0 flex-1 text-xs wrap-anywhere text-nav-text group-data-current/account:font-semibold group-data-current/account:text-nav-strong">
-          {email}
-        </span>
+        <span className="min-w-0 flex-1 text-xs wrap-anywhere text-nav-text">{email}</span>
         <svg
           width={16}
           height={16}
@@ -52,7 +49,7 @@ export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: Acco
             strokeLinejoin="round"
           />
         </svg>
-      </AccountSummary>
+      </summary>
       <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-3 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
         <div className="flex flex-col gap-1.5">
           <span className={GROUP_LABEL}>{i18n.t('nav.language')}</span>
@@ -75,12 +72,6 @@ export function AccountMenu({ email, helpHref, theme, i18n, chooseLocale }: Acco
           >
             {i18n.t('nav.billing')}
           </Link>
-          <ViewKeepingLink
-            href={helpHref}
-            className={`flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`}
-          >
-            {i18n.t('nav.help')}
-          </ViewKeepingLink>
           <SignOutButton />
         </div>
       </div>
