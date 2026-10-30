@@ -75,8 +75,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
 - **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free plan or through Stripe
   Checkout, a first project with its install guide, the Account and billing page and a Help and
   support page.
-- **Settings per project.** The weekly digest and the admin's sessions, and for the account's
-  owner the project's name, origins, time zone, keys and people.
+- **Settings as a window.** Opens over the screen with an address per part (the project's, and
+  the person's sessions, tokens and apps); opened directly, each part is a page.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
@@ -385,7 +385,7 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart                      | 174               |
+| Dashboard screens without a chart, and Settings pages  | 174               |
 | Dashboard screens with a chart (Overview, Acquisition) | 171               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
@@ -433,7 +433,12 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 171.3 KiB. The "+N" marks fill slots the server draws, from the watcher's chunk
 ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)): Overview stayed at
 168.5 KiB, and the two tables drawn in the browser carry the slot (Requests 171.6 KiB, Visits
-171.0 KiB).
+171.0 KiB). Settings as a window ([ADR 0016](docs/adr/0016-settings-as-a-window-with-an-address.md))
+puts a small host on every project route and loads the dialog on demand, after the page is shown:
+0.1 KiB more on every screen (Overview 170.1 KiB, Requests 173.1 KiB). Each part of Settings is its
+own route that loads only its own forms (163.7–167.8 KiB, down from 169.4 KiB for the whole page);
+the person's parts opened outside a project (`/account/sessions`, `/account/tokens`,
+`/account/apps`, 153.2–155.0 KiB) count as Settings pages, not entry pages.
 
 </details>
 
@@ -513,6 +518,7 @@ index) are in [docs/FEATURES.md](docs/FEATURES.md#privacy-and-security-in-detail
 | [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
 | [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
 | [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)             | What went up since the last read fills slots the server drew      |
+| [0016](docs/adr/0016-settings-as-a-window-with-an-address.md)              | Settings is a window with an address                              |
 
 ## Roadmap
 
