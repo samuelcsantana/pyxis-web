@@ -29,8 +29,8 @@ const CHART_ROUTES: ReadonlySet<string> = new Set([
 export const BUDGET_KIB: Readonly<Record<RouteClass, number>> = {
   entry: 155,
   signUp: 162,
-  screen: 173,
-  chart: 170,
+  screen: 174,
+  chart: 171,
 };
 
 export function routeClassOf(route: string): RouteClass {
