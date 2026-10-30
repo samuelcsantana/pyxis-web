@@ -4,16 +4,11 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useId } from 'react';
 import type { Project } from '@/domain/admin';
-import {
-  NAV_CONTROL,
-  NAV_ITEM_CURRENT,
-  NAV_ITEM_IDLE,
-  PENDING_HOST,
-} from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
 import { ArrivalBadge, BADGE, BADGE_TONE } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
+import { NavItemIcon, navItemClasses } from './nav-item';
 import {
   hrefKeepingView,
   INSTALL_ITEM,
@@ -30,7 +25,6 @@ import {
 
 const SECTION_LABEL =
   'px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
-const ITEM = `flex min-h-11 items-center gap-3 rounded-input px-3 text-sm lg:min-h-9 ${PENDING_HOST} ${NAV_CONTROL}`;
 const INSTALL_ICON = 'M8 8l-4 4 4 4 M16 8l4 4-4 4 M13.5 5l-3 14';
 const SPOKEN_SEPARATOR = ', ';
 const TAG_STAYS_WHOLE = 'shrink-0 whitespace-nowrap';
@@ -40,31 +34,6 @@ const SCROLLS_ALONE_ON_A_DESKTOP =
 
 export interface SidebarNavProps {
   readonly project: Project;
-}
-
-function ScreenIcon({ path, active }: { readonly path: string; readonly active: boolean }) {
-  return (
-    <svg
-      width={18}
-      height={18}
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={active ? 'text-accent' : 'text-nav-muted'}
-    >
-      <path
-        d={path}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function itemClasses(current: boolean): string {
-  return `${ITEM} ${current ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`;
 }
 
 function InstallPending() {
@@ -97,9 +66,9 @@ export function SidebarNav({ project }: SidebarNavProps) {
               <IntentPrefetchLink
                 href={screenHref(project.id, screen.slug, screenParameters(search, screen.slug))}
                 aria-current={active ? 'page' : undefined}
-                className={itemClasses(active)}
+                className={navItemClasses(active)}
               >
-                <ScreenIcon path={screen.icon} active={active} />
+                <NavItemIcon path={screen.icon} current={active} />
                 <span>{t(screenLabelKey(screen.slug))}</span>
                 <ArrivalBadge screen={screen.slug} active={active} />
                 <PendingMark />
@@ -117,9 +86,9 @@ export function SidebarNav({ project }: SidebarNavProps) {
             <Link
               href={hrefKeepingView(installHref(project.id), search)}
               aria-current={installCurrent ? 'page' : undefined}
-              className={`${itemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
+              className={`${navItemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
             >
-              <ScreenIcon path={INSTALL_ICON} active={installCurrent} />
+              <NavItemIcon path={INSTALL_ICON} current={installCurrent} />
               <span>{t('nav.install')}</span>
               {project.firstEventAt === null ? <InstallPending /> : null}
               <PendingMark />
@@ -129,9 +98,9 @@ export function SidebarNav({ project }: SidebarNavProps) {
             <Link
               href={hrefKeepingView(settingsHref(project.id), search)}
               aria-current={settingsCurrent ? 'page' : undefined}
-              className={itemClasses(settingsCurrent)}
+              className={navItemClasses(settingsCurrent)}
             >
-              <ScreenIcon path={SETTINGS_ICON} active={settingsCurrent} />
+              <NavItemIcon path={SETTINGS_ICON} current={settingsCurrent} />
               <span>{t('nav.settings')}</span>
               <PendingMark />
             </Link>
