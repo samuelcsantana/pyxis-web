@@ -4,9 +4,11 @@ import { LanguageMenu } from '@/components/language/language-menu';
 import { ThemeChoiceGroup } from '@/components/theme/theme-choice';
 import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
+import { QUOTA_WARNING_RATIO } from '@/domain/accounts';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
 import { localeName } from '@/i18n/locales';
+import type { MonthUsage } from '@/lib/accounts-in-view';
 import type { Theme } from '@/lib/theme';
 import { SignOutButton } from './sign-out-button';
 
@@ -15,14 +17,88 @@ export interface AccountMenuProps {
   readonly theme?: Theme;
   readonly i18n: I18n;
   readonly chooseLocale: (form: FormData) => Promise<void>;
+  readonly usage?: MonthUsage | null;
 }
 
 const CHEVRON = 'M6 15l6-6 6 6';
 const LANGUAGES_CHEVRON = 'M9 6l6 6-6 6';
 const MENU_ROW = `flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`;
+const FULL_BAR = 1;
+
+function usageTone(usage: MonthUsage): string {
+  if (usage.pausedUntil !== null) {
+    return 'bg-nav-bad';
+  }
+  return usage.share >= QUOTA_WARNING_RATIO ? 'bg-nav-warn' : 'bg-accent';
+}
+
+function eventsOfTheMonth(usage: MonthUsage, i18n: I18n): string {
+  return i18n.t('nav.usage.events', {
+    count: i18n.format.count(usage.events),
+    limit: i18n.format.count(usage.limit),
+  });
+}
+
+function spokenUsage(usage: MonthUsage, i18n: I18n): string {
+  if (usage.pausedUntil === null) {
+    return eventsOfTheMonth(usage, i18n);
+  }
+  return i18n.t('account.paused', {
+    date: i18n.format.day(new Date(usage.pausedUntil)),
+    events: i18n.format.count(usage.events),
+  });
+}
+
+function whenTheCountResumes(usage: MonthUsage, i18n: I18n): string {
+  if (usage.pausedUntil === null) {
+    return i18n.t('nav.usage.resets', { date: i18n.format.day(new Date(usage.resetsOn)) });
+  }
+  return i18n.t('account.notice.paused', {
+    date: i18n.format.day(new Date(usage.pausedUntil)),
+  });
+}
+
+interface UsageProps {
+  readonly usage: MonthUsage;
+  readonly i18n: I18n;
+}
+
+function UsageBar({ usage, i18n }: UsageProps) {
+  const filled = Math.min(usage.share, FULL_BAR) * 100;
+  return (
+    <span className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className="h-[3px] flex-1 overflow-hidden rounded-pill bg-nav-border"
+      >
+        <span
+          className={`block h-full rounded-pill ${usageTone(usage)}`}
+          style={{ width: `${String(filled)}%` }}
+        />
+      </span>
+      <span aria-hidden="true" className="shrink-0 text-micro text-nav-text tabular-nums">
+        {i18n.t('nav.usage.share', { share: i18n.format.wholePercent(usage.share) })}
+      </span>
+      <span className="sr-only">{spokenUsage(usage, i18n)}</span>
+    </span>
+  );
+}
+
+function UsageLink({ usage, i18n }: UsageProps) {
+  return (
+    <Link
+      href={ACCOUNT_PAGE}
+      className={`${MENU_ROW} flex-col items-start justify-center gap-0.5 py-1.5`}
+    >
+      <span className="text-nav-strong">{eventsOfTheMonth(usage, i18n)}</span>
+      <span className="text-micro text-nav-text">{whenTheCountResumes(usage, i18n)}</span>
+    </Link>
+  );
+}
+
 const GROUP_LABEL = 'px-1 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 
-export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuProps) {
+export function AccountMenu({ email, theme, i18n, chooseLocale, usage = null }: AccountMenuProps) {
   return (
     <DismissableDetails className="group relative">
       <summary
@@ -35,7 +111,10 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
           {emailInitial(email)}
         </span>
         <span className="sr-only">{i18n.t('nav.account')}</span>
-        <span className="min-w-0 flex-1 text-xs wrap-anywhere text-nav-text">{email}</span>
+        <span className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="text-xs wrap-anywhere text-nav-text">{email}</span>
+          {usage === null ? null : <UsageBar usage={usage} i18n={i18n} />}
+        </span>
         <svg
           width={16}
           height={16}
@@ -54,6 +133,7 @@ export function AccountMenu({ email, theme, i18n, chooseLocale }: AccountMenuPro
         </svg>
       </summary>
       <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-2 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
+        {usage === null ? null : <UsageLink usage={usage} i18n={i18n} />}
         <Link href={ACCOUNT_PAGE} className={MENU_ROW}>
           {i18n.t('nav.billing')}
         </Link>

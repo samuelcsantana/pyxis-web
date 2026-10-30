@@ -52,6 +52,11 @@ export const nl = translation({
     projectSection: 'Project',
     install: 'Installeren',
     installPending: 'In afwachting',
+    usage: {
+      share: '{share} van de maand',
+      events: '{count} van {limit} events deze maand',
+      resets: 'De telling begint op {date} opnieuw',
+    },
     settings: 'Instellingen',
     account: 'Account en voorkeuren',
     billing: 'Account en facturatie',

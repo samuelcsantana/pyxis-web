@@ -47,6 +47,11 @@ export const en = {
     projectSection: 'Project',
     install: 'Install',
     installPending: 'Pending',
+    usage: {
+      share: '{share} of the month',
+      events: '{count} of {limit} events this month',
+      resets: 'Count resets on {date}',
+    },
     settings: 'Settings',
     account: 'Account and preferences',
     billing: 'Account and billing',

@@ -111,6 +111,29 @@ test('names the project on screen in the bar of a phone, after a switch too', as
   expect(button?.height).toBe(TOUCH_TARGET_PX);
 });
 
+test("shows the owner the month's usage of the project's account, and where it counts down to", async ({
+  page,
+  isMobile,
+}) => {
+  const today = new Date();
+  const resetsOn = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 1)));
+  await page.goto(`/${STORE_ID}/overview`);
+  await openNavigation(page, isMobile);
+  const account = page.locator('summary', { hasText: 'Account and preferences' });
+
+  await expect(account).toContainText('41% of the month');
+  await account.click();
+  const usage = page.getByRole('link', { name: /41,230 of 100,000 events this month/ });
+  await expect(usage).toBeVisible();
+  await expect(usage).toContainText(`Count resets on ${resetsOn}`);
+  await expect(usage).toHaveAttribute('href', '/account');
+  expect(await axeViolations(page)).toEqual([]);
+});
+
 test('writes the chosen period into the URL', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
   const periods = page.getByRole('navigation', { name: 'Period' });
