@@ -42,17 +42,19 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Install, together with the filters; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
   button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
-  a slim bar that stays at the top while the page scrolls, and it closes with Escape (the focus
+  a slim bar that stays at the top while the page scrolls and names the project on screen (the
+  Pyxis mark, the project's mark and its name, cut with an ellipsis when long, linking to its
+  Overview and read as the Overview's title), and it closes with Escape (the focus
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
   computer the logo, the project and the account stay in place and only the list of screens
   scrolls when the window is short: nothing scrolls at 1440×800, and at 1366×650 the project and
   the account stay in view; the account menu scrolls inside itself when it is taller than the
-  space above the account. The account email, project names and time zones wrap instead of
-  being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never inside a
-  word. The Pyxis logo, in the
-  sidebar and in the phone's bar, opens the Overview of the project on screen with the period
-  and the filters of the page. The screens are listed in the order of the questions they answer
+  space above the account. In the sidebar the account email, project names and time zones wrap
+  instead of being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never
+  inside a word; the phone's bar, short of room, is the one place that ends a long project name
+  with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
+  Overview of the project on screen with the period and the filters of the page. The screens are listed in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
   Project block with Install, tagged "Pending" until the project's first event arrives, and
   Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
