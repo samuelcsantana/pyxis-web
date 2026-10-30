@@ -13,10 +13,13 @@ import { MainContent } from './main-content';
 import {
   hrefKeepingView,
   linkWith,
+  NAVIGATION_ORDER,
   navigationItemOf,
   periodParameters,
   screenParameters,
   returnPathOf,
+  SCREENS,
+  SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
   screenOf,
   screenSlugOf,
@@ -158,6 +161,14 @@ describe('screens helpers', () => {
     expect(screenOf('/')).toBeUndefined();
   });
 
+  it('order the navigation with every screen exactly once', () => {
+    const registry = SCREENS.map((screen) => screen.slug);
+
+    expect(NAVIGATION_ORDER).toHaveLength(registry.length);
+    expect([...NAVIGATION_ORDER].sort()).toEqual([...registry].sort());
+    expect(SCREENS_IN_NAVIGATION_ORDER.map((screen) => screen.slug)).toEqual(NAVIGATION_ORDER);
+  });
+
   it('name the item of the navigation that stands for each page of a project', () => {
     expect(navigationItemOf('/p1/overview')).toBe('overview');
     expect(navigationItemOf('/p1/timeline')).toBe('timeline');
@@ -222,11 +233,20 @@ describe('SidebarNav', () => {
     });
   });
 
-  it('links every screen, then the project settings', () => {
+  it('links the screens in the order of the questions, then the project settings', () => {
     renderWithMessages(<SidebarNav projectId="p-store" />);
 
-    expect(screen.getAllByRole('link')).toHaveLength(9);
-    expect(screen.getAllByRole('link').at(-1)).toHaveAccessibleName('Settings');
+    expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual([
+      'Overview',
+      'Acquisition',
+      'Devices',
+      'Features',
+      'Funnel',
+      'Visits',
+      'Timeline',
+      'Requests',
+      'Settings',
+    ]);
     expect(screen.queryByText('Soon')).not.toBeInTheDocument();
   });
 

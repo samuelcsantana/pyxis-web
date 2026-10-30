@@ -15,7 +15,7 @@ import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
   hrefKeepingView,
   navigationItemOf,
-  SCREENS,
+  SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
   screenLabelKey,
   screenParameters,
@@ -66,7 +66,7 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
     <div className={`flex flex-col gap-1 ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
       <span className={SECTION_LABEL}>{t('nav.section')}</span>
       <ul className="flex flex-col gap-0.5">
-        {SCREENS.map((screen) => {
+        {SCREENS_IN_NAVIGATION_ORDER.map((screen) => {
           const active = screen.slug === current;
           return (
             <li key={screen.slug}>
