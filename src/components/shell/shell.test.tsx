@@ -637,7 +637,10 @@ describe('Sidebar', () => {
       <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
     );
 
-    expect(screen.getByText('No cookies, no personal data')).toBeInTheDocument();
+    const privacy = screen.getByText('No cookies, no personal data');
+    expect(privacy).toHaveClass('text-nav-muted');
+    expect(privacy).not.toHaveClass('bg-nav-raised');
+    expect(screen.getByRole('link', { name: 'Help and support' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByText('Account and preferences')).toBeInTheDocument();

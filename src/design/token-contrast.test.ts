@@ -184,6 +184,7 @@ describe('sidebar item states, the same in both themes', () => {
   });
 
   it.each([
+    ['nav-muted', 'nav'],
     ['nav-text', 'nav-hover'],
     ['nav-text', 'nav-active'],
     ['nav-strong', 'nav-hover'],

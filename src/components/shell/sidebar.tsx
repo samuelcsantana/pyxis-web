@@ -48,7 +48,7 @@ export function Sidebar({
       <SidebarNav project={project} />
       <div className="mt-auto flex shrink-0 flex-col gap-2 border-t border-nav-line pt-3">
         <HelpLink projectId={project.id} />
-        <p className="flex items-center gap-2 rounded-input bg-nav-raised px-2.5 py-2 text-xs text-nav-text">
+        <p className="flex items-center gap-2 px-2.5 text-xs text-nav-muted">
           <svg
             width={16}
             height={16}
