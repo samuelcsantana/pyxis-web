@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { resolvePeriodOn } from '@/domain/period';
 import { requestKindOf } from '@/domain/request-kind';
@@ -11,14 +11,9 @@ import { ActiveVisits } from './active-visits';
 import { PeriodSelector } from './period-selector';
 import { carriedParameters, type ScreenSearch, screenSearchOf } from './screen-search';
 import type { ScreenTopbarTexts } from './screen-topbar-texts';
-import {
-  SCREENS_WITHOUT_PERIOD,
-  type ScreenSlug,
-  screenHref,
-  screenLabelKey,
-  screenSlugOf,
-} from './screens';
+import { SCREENS_WITHOUT_PERIOD, type ScreenSlug, screenHref, screenLabelKey } from './screens';
 import { PeriodLabel, RangeNotice, TopbarFrame } from './topbar';
+import { useScreenOnView } from './use-screen-on-view';
 import { useProjectToday } from './use-project-today';
 
 const ACTIVE_VISITS_SCREEN: ScreenSlug = 'overview';
@@ -37,7 +32,7 @@ function subtitleOf(screen: ScreenSlug, search: ScreenSearch, texts: ScreenTopba
 }
 
 export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTopbarProps) {
-  const screen = screenSlugOf(usePathname());
+  const screen = useScreenOnView();
   const search = screenSearchOf(useSearchParams());
   const today = useProjectToday(timeZone, serverNow);
   const t = useT();

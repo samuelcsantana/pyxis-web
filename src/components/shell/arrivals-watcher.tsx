@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { type ArrivalsReport, isCappedArrivalCount } from '@/domain/arrivals';
 import { hasDashboardFilterIn } from '@/domain/dashboard-filter-parameters';
@@ -30,6 +30,7 @@ import { type ArrivalsPoller, startArrivalsPoller } from './arrivals-poller';
 import { screenSearchOf } from './screen-search';
 import { screenSlugOf } from './screens';
 import { useProjectToday } from './use-project-today';
+import { useScreenOnView } from './use-screen-on-view';
 
 export interface ArrivalsWatcherProps {
   readonly projectId: string;
@@ -71,10 +72,9 @@ function onlyInTheBrowser(): number {
 
 export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: ArrivalsWatcherProps) {
   const t = useT();
-  const pathname = usePathname();
   const search = useSearchParams();
   const today = useProjectToday(timeZone, serverNow);
-  const current = screenSlugOf(pathname);
+  const current = useScreenOnView();
   const { from, to } = resolvePeriodOn(screenSearchOf(search), today);
   const includesToday = to >= today;
   const filtered = hasDashboardFilterIn(search);

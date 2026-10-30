@@ -15,6 +15,7 @@ const navigation = vi.hoisted(() => ({ pathname: '/p-store/overview', search: 'r
 
 vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
+  useSelectedLayoutSegments: () => ['(screens)', navigation.pathname.split('/')[2] ?? ''],
   useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 

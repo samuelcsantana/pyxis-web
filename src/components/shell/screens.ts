@@ -155,7 +155,7 @@ const SCREEN_PATH_SEGMENTS = 3;
 export const CONNECT_PAGE = '/connect';
 const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account', CONNECT_PAGE]);
 
-function isScreenSlug(value: string | undefined): value is ScreenSlug {
+export function isScreenSlug(value: string | undefined): value is ScreenSlug {
   return SCREENS.some((screen) => screen.slug === value);
 }
 

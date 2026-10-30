@@ -6,10 +6,15 @@ import { publishActiveVisits } from './arrival-news';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
-const navigation = vi.hoisted(() => ({ pathname: '/p1/overview', search: '' }));
+const navigation = vi.hoisted<{ pathname: string; search: string; segment: string | null }>(() => ({
+  pathname: '/p1/overview',
+  search: '',
+  segment: 'overview',
+}));
 
 vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
+  useSelectedLayoutSegments: () => (navigation.segment === null ? [] : [navigation.segment]),
   useSearchParams: () => new URLSearchParams(navigation.search),
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
 }));
@@ -17,9 +22,14 @@ vi.mock('next/navigation', () => ({
 const MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO = Date.parse('2026-10-05T15:00:00.000Z');
 const TEXTS = screenTopbarTexts('Demo Store', english);
 
-function at(pathname: string, search = '') {
+function segmentOf(pathname: string): string | null {
+  return pathname.split('/')[2] ?? null;
+}
+
+function at(pathname: string, search = '', segment = segmentOf(pathname)) {
   navigation.pathname = pathname;
   navigation.search = search;
+  navigation.segment = segment;
 }
 
 function topbar() {
@@ -164,7 +174,7 @@ describe('ScreenTopbar', () => {
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
   });
 
-  it.each(['/p1/settings', '/p1/install', '/p1/overview/extra', '/p1'])(
+  it.each(['/p1/settings', '/p1/install', '/p1'])(
     'draws nothing at %s, which keeps its own header or none',
     (pathname) => {
       at(pathname);
@@ -173,6 +183,18 @@ describe('ScreenTopbar', () => {
       expect(container).toBeEmptyDOMElement();
     },
   );
+
+  it('keeps the screen under the settings window, whose address is the settings', () => {
+    at('/p1/settings', 'range=30d', 'overview');
+    renderWithMessages(topbar());
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
+    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
+    expect(periods().getByRole('link', { name: 'Today' })).toHaveAttribute(
+      'href',
+      '/p1/overview?range=today',
+    );
+  });
 
   it('closes the custom form when the screen changes', async () => {
     at('/p1/overview', 'from=2026-08-01&to=2026-08-31');

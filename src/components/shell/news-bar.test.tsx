@@ -2,20 +2,28 @@ import type { ReactNode } from 'react';
 import { act, cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { type OpenScreenNews, publishOpenScreenNews } from './arrival-news';
 import { CONTENT_ID } from './content-id';
 import { NavigationPendingProvider, NavigationRegion } from './navigation-pending';
 import { NewsBar } from './news-bar';
 
-const navigation = vi.hoisted(() => ({
+const navigation = vi.hoisted<{
+  pathname: string;
+  segmentUnderWindow: string | undefined;
+  router: { refresh: Mock<() => void> };
+}>(() => ({
   pathname: '/p-store/overview',
+  segmentUnderWindow: undefined,
   router: { refresh: vi.fn() },
 }));
 
 vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
+  useSelectedLayoutSegments: () => [
+    navigation.segmentUnderWindow ?? navigation.pathname.split('/')[2] ?? '',
+  ],
   useRouter: () => navigation.router,
 }));
 
@@ -42,6 +50,7 @@ function showBar(after?: ReactNode) {
 describe('NewsBar', () => {
   beforeEach(() => {
     navigation.pathname = '/p-store/overview';
+    navigation.segmentUnderWindow = undefined;
     navigation.router.refresh.mockClear();
   });
 
@@ -61,6 +70,25 @@ describe('NewsBar', () => {
 
   it('draws nothing for news counted while another screen was shown', () => {
     navigation.pathname = '/p-store/funnel';
+    showBar();
+
+    publish(THREE_VISITS);
+
+    expect(screen.queryByRole('button')).toBeNull();
+  });
+
+  it('keeps offering the news of the screen under the settings window, whose address is the settings', () => {
+    navigation.pathname = '/p-store/settings';
+    navigation.segmentUnderWindow = 'overview';
+    showBar();
+
+    publish(THREE_VISITS);
+
+    expect(screen.getByRole('button', { name: OFFER })).toBeInTheDocument();
+  });
+
+  it('draws nothing on a page of its own that is not a screen', () => {
+    navigation.pathname = '/p-store/settings';
     showBar();
 
     publish(THREE_VISITS);
