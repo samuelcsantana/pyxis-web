@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
+import { untilHydrated } from './hydration';
 import { holdScreenRequests } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -54,6 +55,7 @@ test('shows the loading placeholder only while the screen has no content', async
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
   const placeholder = page.getByText('Loading…', { exact: true });
   await expect(placeholder).toBeHidden();
+  await untilHydrated(page.getByRole('main'));
 
   await page.getByRole('main').evaluate((main) => {
     main.remove();

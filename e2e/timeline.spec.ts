@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { untilHydrated } from './hydration';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEMO_USER = 'u_7f3a';
@@ -72,7 +73,9 @@ test('keeps a visit id it could not use, and says what one looks like', async ({
 test('opens one visit by its id, and says when an id is unknown', async ({ page }) => {
   await page.goto(`/${STORE_ID}/timeline`);
 
-  await page.getByRole('combobox', { name: 'Look up' }).selectOption('visit');
+  const lookUp = page.getByRole('combobox', { name: 'Look up' });
+  await untilHydrated(lookUp);
+  await lookUp.selectOption('visit');
   await page.getByRole('textbox', { name: 'Visit id' }).fill(SIGN_UP_VISIT);
   await page.getByRole('button', { name: 'Show timeline' }).click();
 
