@@ -53,6 +53,8 @@ export const ptBR = translation({
     signingOut: 'Saindo…',
     signOutFailed: 'Não foi possível sair. Tente de novo.',
     projectSection: 'Projeto',
+    install: 'Instalação',
+    installPending: 'Pendente',
     settings: 'Configurações',
     account: 'Conta e preferências',
     language: 'Idioma',

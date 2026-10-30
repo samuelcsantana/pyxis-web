@@ -50,6 +50,8 @@ export const nl = translation({
     signingOut: 'Uitloggen…',
     signOutFailed: 'Uitloggen is niet gelukt. Probeer het opnieuw.',
     projectSection: 'Project',
+    install: 'Installeren',
+    installPending: 'In afwachting',
     settings: 'Instellingen',
     account: 'Account en voorkeuren',
     language: 'Taal',

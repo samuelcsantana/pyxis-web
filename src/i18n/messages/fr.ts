@@ -53,6 +53,8 @@ export const fr = translation({
     signingOut: 'Déconnexion…',
     signOutFailed: 'La déconnexion a échoué. Réessayez.',
     projectSection: 'Projet',
+    install: 'Installation',
+    installPending: 'En attente',
     settings: 'Paramètres',
     account: 'Compte et préférences',
     language: 'Langue',

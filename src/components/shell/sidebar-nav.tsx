@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useId } from 'react';
+import type { Project } from '@/domain/admin';
 import {
   NAV_CONTROL,
   NAV_ITEM_CURRENT,
@@ -10,10 +12,12 @@ import {
 } from '@/components/ui/control-classes';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
-import { ArrivalBadge } from './arrival-badge';
+import { ArrivalBadge, BADGE, BADGE_TONE } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import {
   hrefKeepingView,
+  INSTALL_ITEM,
+  installHref,
   navigationItemOf,
   SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
@@ -27,11 +31,15 @@ import {
 const SECTION_LABEL =
   'px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 const ITEM = `flex min-h-11 items-center gap-3 rounded-input px-3 text-sm lg:min-h-9 ${PENDING_HOST} ${NAV_CONTROL}`;
+const INSTALL_ICON = 'M8 8l-4 4 4 4 M16 8l4 4-4 4 M13.5 5l-3 14';
+const SPOKEN_SEPARATOR = ', ';
+const TAG_STAYS_WHOLE = 'shrink-0 whitespace-nowrap';
+const ROOM_FOR_A_TAG_BELOW = 'flex-wrap gap-y-1 py-1.5';
 const SCROLLS_ALONE_ON_A_DESKTOP =
   'lg:-mx-1 lg:min-h-28 lg:flex-1 lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain lg:px-1 lg:pb-1';
 
 export interface SidebarNavProps {
-  readonly projectId: string;
+  readonly project: Project;
 }
 
 function ScreenIcon({ path, active }: { readonly path: string; readonly active: boolean }) {
@@ -55,11 +63,27 @@ function ScreenIcon({ path, active }: { readonly path: string; readonly active: 
   );
 }
 
-export function SidebarNav({ projectId }: SidebarNavProps) {
+function itemClasses(current: boolean): string {
+  return `${ITEM} ${current ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`;
+}
+
+function InstallPending() {
+  const t = useT();
+  return (
+    <span className={`${BADGE} ${BADGE_TONE} ${TAG_STAYS_WHOLE}`}>
+      <span aria-hidden="true">{t('nav.installPending')}</span>
+      <span className="sr-only">{`${SPOKEN_SEPARATOR}${t('nav.installPending')}`}</span>
+    </span>
+  );
+}
+
+export function SidebarNav({ project }: SidebarNavProps) {
   const t = useT();
   const pathname = usePathname();
   const search = useSearchParams();
+  const projectLabel = useId();
   const current = navigationItemOf(pathname);
+  const installCurrent = current === INSTALL_ITEM;
   const settingsCurrent = current === SETTINGS_ITEM;
 
   return (
@@ -71,9 +95,9 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
           return (
             <li key={screen.slug}>
               <IntentPrefetchLink
-                href={screenHref(projectId, screen.slug, screenParameters(search, screen.slug))}
+                href={screenHref(project.id, screen.slug, screenParameters(search, screen.slug))}
                 aria-current={active ? 'page' : undefined}
-                className={`${ITEM} ${active ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
+                className={itemClasses(active)}
               >
                 <ScreenIcon path={screen.icon} active={active} />
                 <span>{t(screenLabelKey(screen.slug))}</span>
@@ -84,22 +108,36 @@ export function SidebarNav({ projectId }: SidebarNavProps) {
           );
         })}
       </ul>
-      <ul
-        aria-label={t('nav.projectSection')}
-        className="mt-2 flex flex-col gap-0.5 border-t border-nav-line pt-2"
-      >
-        <li>
-          <Link
-            href={hrefKeepingView(settingsHref(projectId), search)}
-            aria-current={settingsCurrent ? 'page' : undefined}
-            className={`${ITEM} ${settingsCurrent ? NAV_ITEM_CURRENT : `font-medium ${NAV_ITEM_IDLE}`}`}
-          >
-            <ScreenIcon path={SETTINGS_ICON} active={settingsCurrent} />
-            <span>{t('nav.settings')}</span>
-            <PendingMark />
-          </Link>
-        </li>
-      </ul>
+      <div className="mt-2 flex flex-col gap-1 border-t border-nav-line pt-2">
+        <span id={projectLabel} className={`${SECTION_LABEL} pt-1`}>
+          {t('nav.projectSection')}
+        </span>
+        <ul aria-labelledby={projectLabel} className="flex flex-col gap-0.5">
+          <li>
+            <Link
+              href={hrefKeepingView(installHref(project.id), search)}
+              aria-current={installCurrent ? 'page' : undefined}
+              className={`${itemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
+            >
+              <ScreenIcon path={INSTALL_ICON} active={installCurrent} />
+              <span>{t('nav.install')}</span>
+              {project.firstEventAt === null ? <InstallPending /> : null}
+              <PendingMark />
+            </Link>
+          </li>
+          <li>
+            <Link
+              href={hrefKeepingView(settingsHref(project.id), search)}
+              aria-current={settingsCurrent ? 'page' : undefined}
+              className={itemClasses(settingsCurrent)}
+            >
+              <ScreenIcon path={SETTINGS_ICON} active={settingsCurrent} />
+              <span>{t('nav.settings')}</span>
+              <PendingMark />
+            </Link>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

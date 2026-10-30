@@ -53,6 +53,8 @@ export const es = translation({
     signingOut: 'Cerrando sesión…',
     signOutFailed: 'No se pudo cerrar la sesión. Inténtalo de nuevo.',
     projectSection: 'Proyecto',
+    install: 'Instalación',
+    installPending: 'Pendiente',
     settings: 'Configuración',
     account: 'Cuenta y preferencias',
     language: 'Idioma',

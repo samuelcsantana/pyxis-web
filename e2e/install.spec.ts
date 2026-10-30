@@ -29,7 +29,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('marks Settings in the navigation as where the install guide is', async ({
+test('marks its own item in the navigation, without the pending tag once events arrive', async ({
   page,
   isMobile,
 }) => {
@@ -41,7 +41,8 @@ test('marks Settings in the navigation as where the install guide is', async ({
   const current = currentNavigationLinks(page);
   await expect(current).toHaveCount(1);
   await expect(current).toBeVisible();
-  await expect(current).toHaveAccessibleName('Settings');
+  await expect(current).toHaveAccessibleName('Install');
+  await expect(current).not.toContainText('Pending');
 });
 
 test("hands the agent a request with the project's key, the API and the site", async ({

@@ -9,9 +9,9 @@ import {
 } from './arrival-news';
 import type { ScreenSlug } from './screens';
 
-const BADGE =
+export const BADGE =
   'ml-auto min-w-5 rounded-full px-1.5 text-center text-micro leading-5 font-semibold tabular-nums';
-const BADGE_TONE = 'bg-accent text-accent-ink';
+export const BADGE_TONE = 'bg-accent text-accent-ink';
 const FAILURE_TONE = 'bg-bad text-white';
 const SPOKEN_SEPARATOR = ', ';
 
