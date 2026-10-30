@@ -52,10 +52,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never inside a
   word. The Pyxis logo, in the
   sidebar and in the phone's bar, opens the Overview of the project on screen with the period
-  and the filters of the page. The navigation marks where you are: the screen; Settings on the
-  settings and also on the install guide and on an export, which have no item of their own; on
-  Help, whose link is in the account menu, the account row (its background, and the e-mail in
-  bold). Each project in the switcher shows the icon of its own site (the API fetches it daily from the project's first
+  and the filters of the page. The screens are listed in the order of the questions they answer
+  (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
+  Project block with Install, tagged "Pending" until the project's first event arrives, and
+  Settings. The navigation marks where you are: the screen, Install or Settings; Settings also on
+  an export, which has no item of its own; on Help, whose link is in the account menu, the
+  account row (its background, and the e-mail in bold). Each project in the switcher shows the
+  icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
