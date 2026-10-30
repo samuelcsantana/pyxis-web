@@ -18,10 +18,11 @@ import { chosenTheme } from '@/lib/theme-cookie';
 
 export interface ProjectLayoutProps {
   readonly children: ReactNode;
+  readonly modal: ReactNode;
   readonly params: Promise<{ readonly projectId: string }>;
 }
 
-export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
+export default async function ProjectLayout({ children, modal, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
   const [i18n, { notice, canCreateProject, usage }] = await Promise.all([
     getI18n(),
@@ -63,6 +64,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
           )}
           {children}
         </NavigationRegion>
+        {modal}
       </div>
     </NavigationPendingProvider>
   );

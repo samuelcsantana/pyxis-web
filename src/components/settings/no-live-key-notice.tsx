@@ -20,7 +20,7 @@ function nextStep(step: NoLiveKeyStep, i18n: I18n) {
     case 'createInSettings':
       return rich(i18n.t('settings.keys.createInSettings'), {
         settings: (text) => (
-          <ViewKeepingLink href={step.keysHref} className={TEXT_LINK}>
+          <ViewKeepingLink href={step.keysHref} scroll={false} className={TEXT_LINK}>
             {text}
           </ViewKeepingLink>
         ),

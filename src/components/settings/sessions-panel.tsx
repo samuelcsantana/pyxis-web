@@ -1,5 +1,5 @@
 import { SignOutButton } from '@/components/shell/sign-out-button';
-import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { SECTION_BODY, SECTION_LIST } from '@/components/ui/panel-classes';
 import { type AdminSession, describeDevice } from '@/domain/sessions';
 import type { I18n } from '@/i18n/i18n';
 import { type EndSession, EndSessionButton } from './end-session-button';
@@ -11,7 +11,7 @@ export interface SessionsPanelProps {
   readonly end: EndSession;
 }
 
-const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
+const ROW = 'flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3';
 const DEVICE = 'text-sm font-semibold text-ink';
 const BADGE =
   'rounded-pill bg-soft px-2 py-0.5 text-micro font-semibold tracking-[0.04em] text-muted uppercase';
@@ -51,17 +51,14 @@ function SessionRow({ session, i18n, when, end }: SessionRowProps) {
 
 export function SessionsPanel({ sessions, i18n, when, end }: SessionsPanelProps) {
   return (
-    <section aria-labelledby="settings-sessions-heading" className={PANEL}>
-      <h2 id="settings-sessions-heading" className={PANEL_TITLE}>
-        {i18n.t('sessions.heading')}
-      </h2>
+    <div className={SECTION_BODY}>
       <p className={NOTE}>{i18n.t('sessions.note')}</p>
-      <ul className="flex flex-col divide-y divide-line">
+      <ul className={SECTION_LIST}>
         {sessions.map((session) => (
           <SessionRow key={session.id} session={session} i18n={i18n} when={when} end={end} />
         ))}
       </ul>
       <SignOutButton scope="everywhere" variant="page" />
-    </section>
+    </div>
   );
 }

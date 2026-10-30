@@ -149,10 +149,7 @@ describe('ConnectionRequestView', () => {
     expect(screen.getByRole('status')).toHaveTextContent(
       'You already have 10 connected apps, the most you can keep.',
     );
-    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
-      'href',
-      `/${DEMO_STORE.id}/settings`,
-    );
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/account/apps');
     expect(screen.getByRole('button', { name: 'Allow' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeEnabled();
   });

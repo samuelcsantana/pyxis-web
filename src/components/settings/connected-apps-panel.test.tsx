@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ConnectedApps } from '@/domain/connections';
+import { SETTINGS_CONNECTIONS_PANEL } from '@/components/shell/screens';
 import { connectedAppsResponseSchema } from '@/domain/connections.schema';
 import {
   DEMO_CONNECTION_IDS,
@@ -21,15 +22,19 @@ const DEMO_APPS = connectedAppsResponseSchema.parse(demoConnectionsWire(NOW));
 const CLOSED: ConnectedApps = { connectorUrl: null, connections: DEMO_APPS.connections };
 const CLAUDE_CODE_COMMAND = `claude mcp add --transport http pyxis ${DEMO_CONNECTOR_URL}`;
 const format = english.format.dateTime('eventTime', 'UTC');
+const WINDOW_SECTION_TITLE = `${SETTINGS_CONNECTIONS_PANEL}-heading`;
 
 function renderPanel(apps: ConnectedApps, revoke = () => Promise.resolve()) {
   return renderWithMessages(
-    <ConnectedAppsPanel
-      apps={apps}
-      i18n={english}
-      when={(iso) => format(new Date(iso))}
-      revoke={revoke}
-    />,
+    <section aria-labelledby={WINDOW_SECTION_TITLE}>
+      <h2 id={WINDOW_SECTION_TITLE}>Connected apps</h2>
+      <ConnectedAppsPanel
+        apps={apps}
+        i18n={english}
+        when={(iso) => format(new Date(iso))}
+        revoke={revoke}
+      />
+    </section>,
   );
 }
 
@@ -40,6 +45,21 @@ function stubClipboard(writeText: (text: string) => Promise<void>) {
 describe('ConnectedAppsPanel', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('leaves the title to the settings window and names the list after it', () => {
+    renderWithMessages(
+      <ConnectedAppsPanel
+        apps={DEMO_APPS}
+        i18n={english}
+        when={(iso) => iso}
+        revoke={() => Promise.resolve()}
+      />,
+    );
+
+    expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('list')[0]).toHaveAttribute('aria-labelledby', WINDOW_SECTION_TITLE);
   });
 
   it('lists each connected app with its host, when it was connected and last used', () => {

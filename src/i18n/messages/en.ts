@@ -186,7 +186,9 @@ export const en = {
     current: 'Language: {name}',
   },
   settings: {
-    title: 'Settings',
+    you: 'You',
+    sections: 'Sections',
+    close: 'Close',
     subtitle:
       'How {project} is set up, and the e-mails you get about it. Project settings change through the command line.',
     subtitleOwner: 'How {project} is set up, its keys, and the e-mails you get about it.',
@@ -239,7 +241,6 @@ export const en = {
     },
   },
   projectForm: {
-    heading: 'Project',
     name: 'Name',
     origins: 'Allowed origins',
     originsNote:

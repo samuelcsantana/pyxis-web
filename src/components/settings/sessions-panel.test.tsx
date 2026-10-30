@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { AdminSession } from '@/domain/sessions';
 import { english } from '@/test-utils/english';
@@ -49,8 +49,7 @@ describe('SessionsPanel', () => {
       <SessionsPanel sessions={SESSIONS} i18n={english} when={when} end={endNothing} />,
     );
 
-    const panel = screen.getByRole('region', { name: 'Sessions' });
-    const rows = within(panel).getAllByRole('listitem');
+    const rows = screen.getAllByRole('listitem');
     expect(rows).toHaveLength(3);
     expect(rows[0]).toHaveTextContent('Chrome on Windows');
     expect(rows[0]).toHaveTextContent('This device');
@@ -59,24 +58,32 @@ describe('SessionsPanel', () => {
     expect(rows[1]).toHaveTextContent('Safari on iOS');
     expect(rows[1]).not.toHaveTextContent('This device');
     expect(rows[2]).toHaveTextContent('Unknown browser');
-    expect(within(panel).getAllByRole('button', { name: 'End' })).toHaveLength(3);
-    expect(within(panel).getByRole('button', { name: 'Sign out everywhere' })).toBeInTheDocument();
-    expect(panel).toHaveTextContent('Every device where you are signed in');
+    expect(screen.getAllByRole('button', { name: 'End' })).toHaveLength(3);
+    expect(screen.getByRole('button', { name: 'Sign out everywhere' })).toBeInTheDocument();
+    expect(screen.getByText(/Every device where you are signed in/)).toBeInTheDocument();
+  });
+
+  it('leaves the title to the settings window that holds it', () => {
+    renderWithMessages(
+      <SessionsPanel sessions={SESSIONS} i18n={english} when={when} end={endNothing} />,
+    );
+
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
   });
 
   it('speaks Portuguese when asked', () => {
-    renderWithMessages(
+    const { container } = renderWithMessages(
       <SessionsPanel sessions={SESSIONS} i18n={portuguese} when={when} end={endNothing} />,
       'pt-BR',
     );
 
-    const panel = screen.getByRole('region', { name: 'Sessões' });
-    expect(panel).toHaveTextContent('Chrome no Windows');
-    expect(panel).toHaveTextContent('Este dispositivo');
-    expect(panel).toHaveTextContent('Navegador desconhecido');
-    expect(within(panel).getAllByRole('button', { name: 'Encerrar' })).toHaveLength(3);
+    expect(container).toHaveTextContent('Chrome no Windows');
+    expect(container).toHaveTextContent('Este dispositivo');
+    expect(container).toHaveTextContent('Navegador desconhecido');
+    expect(screen.getAllByRole('button', { name: 'Encerrar' })).toHaveLength(3);
     expect(
-      within(panel).getByRole('button', { name: 'Sair de todos os dispositivos' }),
+      screen.getByRole('button', { name: 'Sair de todos os dispositivos' }),
     ).toBeInTheDocument();
   });
 });

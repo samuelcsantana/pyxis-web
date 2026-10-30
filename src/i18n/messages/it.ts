@@ -194,7 +194,9 @@ export const it = translation({
     current: 'Lingua: {name}',
   },
   settings: {
-    title: 'Impostazioni',
+    you: 'Tu',
+    sections: 'Sezioni',
+    close: 'Chiudi',
     subtitle:
       'Come è configurato {project} e le email che ricevi al riguardo. Le impostazioni del progetto si cambiano dalla riga di comando.',
     subtitleOwner: 'Come è configurato {project}, le sue chiavi e le email che ricevi al riguardo.',
@@ -248,7 +250,6 @@ export const it = translation({
     },
   },
   projectForm: {
-    heading: 'Progetto',
     name: 'Nome',
     origins: 'Origini consentite',
     originsNote:

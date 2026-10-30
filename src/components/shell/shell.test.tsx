@@ -11,6 +11,7 @@ import { PeriodSelector } from './period-selector';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import {
+  CONNECTED_APPS_HREF,
   hrefKeepingView,
   linkWith,
   NAVIGATION_ORDER,
@@ -23,6 +24,7 @@ import {
   screenHref,
   screenOf,
   screenSlugOf,
+  settingsKeysHref,
   viewParameters,
 } from './screens';
 import { Sidebar } from './sidebar';
@@ -122,6 +124,11 @@ describe('screens helpers', () => {
     );
   });
 
+  it('link the keys of the settings and the connected apps of the account by their own address', () => {
+    expect(settingsKeysHref('p 1')).toBe('/p%201/settings/keys');
+    expect(CONNECTED_APPS_HREF).toBe('/account/apps');
+  });
+
   it('name the screen of a path only when the path is exactly a project and a screen', () => {
     expect(screenSlugOf('/p1/overview')).toBe('overview');
     expect(screenSlugOf('/p1/acquisition')).toBe('acquisition');
@@ -189,7 +196,11 @@ describe('screens helpers', () => {
       '/p1/unknown',
       '/p1/constructor',
       '/p1/__proto__',
-      '/p1/settings/extra',
+      '/p1/settings/',
+      '/p1/settings/keys',
+      '/p1/settings//keys',
+      '/p1/install/extra',
+      '/p1/help/extra',
       '/p1/help/',
       '/p1/exports',
       '/p1/exports/',
@@ -316,6 +327,52 @@ describe('the project settings in the navigation', () => {
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('marks the settings current on a section of the settings, and no screen', () => {
+    navigation.pathname = '/p-store/settings/keys';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
+
+    const current = document.querySelectorAll('[aria-current="page"]');
+    expect(current).toHaveLength(1);
+    expect(current[0]).toHaveAccessibleName('Settings');
+  });
+
+  function clickWithoutLeaving(link: HTMLElement): boolean {
+    let preventedBeforeTheDocument = false;
+    const record = (event: Event) => {
+      preventedBeforeTheDocument = event.defaultPrevented;
+      event.preventDefault();
+    };
+    document.addEventListener('click', record);
+    fireEvent.click(link);
+    document.removeEventListener('click', record);
+    return preventedBeforeTheDocument;
+  }
+
+  it('loads the settings as a full page when they are already open, so they never open over themselves', () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    navigation.pathname = '/p-store/settings/keys';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
+
+    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
+
+    expect(prevented).toBe(true);
+    expect(assign).toHaveBeenCalledExactlyOnceWith('/p-store/settings?range=7d');
+  });
+
+  it('leaves a click on the settings from a screen to the link, which opens them over the screen', () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    renderWithMessages(<SidebarNav project={store()} />);
+
+    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
+
+    expect(prevented).toBe(false);
+    expect(assign).not.toHaveBeenCalled();
   });
 
   it('marks the settings current on an export, which has no item of its own', () => {
@@ -586,6 +643,31 @@ describe('SignOutButton', () => {
     await settle(SIGN_OUT_MIN_BUSY_MS);
 
     expect(screen.getByRole('alert')).toHaveTextContent('Could not sign out');
+    expect(navigation.router.replace).not.toHaveBeenCalled();
+  });
+
+  it('takes the look its caller gives, with its icon, and says there when it fails', async () => {
+    const failing: IAuthService = {
+      requestCode: () => Promise.resolve(),
+      verifyCode: () => Promise.resolve(),
+      signOut: () => Promise.reject(new TypeError('Failed to fetch')),
+      signOutEverywhere: () => Promise.reject(new TypeError('Failed to fetch')),
+    };
+    renderWithMessages(
+      <SignOutButton
+        authService={failing}
+        variant={{ frame: 'flex', button: 'w-full', error: 'px-2 text-bad', withIcon: true }}
+      />,
+    );
+
+    const button = screen.getByRole('button', { name: 'Sign out' });
+    expect(button).toHaveClass('w-full');
+    expect(button.querySelector('svg')).not.toBeNull();
+    fireEvent.click(button);
+    await settle(SIGN_OUT_MIN_BUSY_MS);
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Could not sign out');
+    expect(screen.getByRole('alert')).toHaveClass('px-2', 'text-bad');
     expect(navigation.router.replace).not.toHaveBeenCalled();
   });
 

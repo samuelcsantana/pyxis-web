@@ -160,7 +160,7 @@ describe('InstallGuide', () => {
     const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
     expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings#settings-connections-heading',
+      '/account/apps',
     );
     expect(within(third).getByText('claude.ai/directory/pyxis').tagName).toBe('CODE');
     expect(document.getElementById('install-claude-code')).toHaveTextContent(
@@ -215,7 +215,7 @@ describe('InstallGuide', () => {
     expect(first).toHaveTextContent('A revoked key never works again.');
     expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings#settings-keys-heading',
+      '/p-store/settings/keys',
     );
     expect(within(first).queryByRole('tablist')).not.toBeInTheDocument();
     expect(within(first).queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
@@ -237,12 +237,12 @@ describe('InstallGuide', () => {
     const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
     expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings?range=today&device=mobile#settings-keys-heading',
+      '/p-store/settings/keys?range=today&device=mobile',
     );
     const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
     expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings?range=today&device=mobile#settings-connections-heading',
+      '/account/apps?range=today&device=mobile',
     );
     unmount();
 

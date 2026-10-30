@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 import { type CopyCodeLabels, CopyCodeButton } from '@/components/landing/copy-code-button';
 import { NoLiveKeyNotice } from '@/components/settings/no-live-key-notice';
 import {
+  CONNECTED_APPS_HREF,
   FIRST_SCREEN,
   screenHref,
-  settingsConnectionsHref,
   settingsKeysHref,
 } from '@/components/shell/screens';
 import { ViewKeepingLink } from '@/components/shell/view-keeping-link';
@@ -289,7 +289,7 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
         <p className="text-sm">
           {rich(t('install.claude.body'), {
             settings: (text) => (
-              <ViewKeepingLink href={settingsConnectionsHref(settings.id)} className={TEXT_LINK}>
+              <ViewKeepingLink href={CONNECTED_APPS_HREF} scroll={false} className={TEXT_LINK}>
                 {text}
               </ViewKeepingLink>
             ),

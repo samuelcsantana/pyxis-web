@@ -149,7 +149,7 @@ describe('ExportView', () => {
     expect(screen.getByText(/The file was deleted on Nov 19, 2026/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open Settings' })).toHaveAttribute(
       'href',
-      '/p1/settings',
+      '/p1/settings/export',
     );
   });
 

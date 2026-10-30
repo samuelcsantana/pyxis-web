@@ -116,6 +116,15 @@ describe('chooseEmailPreferences', () => {
     expect(choose).toHaveBeenCalledWith('p-store', { weeklyDigest: false });
   });
 
+  it('drops the cached e-mail part once saved, so the window opened again shows the new choice', async () => {
+    state.choose = () => Promise.resolve({ weeklyDigest: false });
+    revalidated.paths.length = 0;
+
+    await chooseEmailPreferences('p-store', { weeklyDigest: false });
+
+    expect(revalidated.paths).toEqual([['/[projectId]/settings/email', 'page']]);
+  });
+
   it('answers not found for a project the admin cannot read, without saving', async () => {
     const choose = vi.fn<IEmailPreferencesService['choose']>();
     state.choose = choose;

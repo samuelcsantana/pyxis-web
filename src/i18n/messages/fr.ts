@@ -200,7 +200,9 @@ export const fr = translation({
     current: 'Langue : {name}',
   },
   settings: {
-    title: 'Paramètres',
+    you: 'Vous',
+    sections: 'Sections',
+    close: 'Fermer',
     subtitle:
       'La configuration de {project} et les e-mails que vous recevez à son sujet. Les paramètres du projet se modifient en ligne de commande.',
     subtitleOwner:
@@ -256,7 +258,6 @@ export const fr = translation({
     },
   },
   projectForm: {
-    heading: 'Projet',
     name: 'Nom',
     origins: 'Origines autorisées',
     originsNote:
