@@ -55,10 +55,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and the filters of the page. The screens are listed in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
   Project block with Install, tagged "Pending" until the project's first event arrives, and
-  Settings. The navigation marks where you are: the screen, Install or Settings; Settings also on
-  an export, which has no item of its own; on Help, whose link is in the account menu, the
-  account row (its background, and the e-mail in bold). Each project in the switcher shows the
-  icon of its own site (the API fetches it daily from the project's first
+  Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
+  box) and the account. The navigation marks where you are: the screen, Install, Settings or
+  Help; Settings also on an export, which has no item of its own. The account menu is compact,
+  under 300 px closed: Account and billing, the three themes on one row, the language behind a
+  "Language: …" row that opens the list in place, then Sign out. Each project in the switcher
+  shows the icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
@@ -334,7 +336,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and copies this page's address to send it there. The plain-HTML snippet loads the exact
   `pyxis-analytics` version this repository depends on (read from `package.json`), so the weekly
   Dependabot update of the package moves the snippet with it
-- A Help and support page (`/[projectId]/help`, from the account menu): the support address with
+- A Help and support page (`/[projectId]/help`, from the foot of the sidebar): the support address with
   a copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
   the free plan, as the Terms of Use set), the installation links, the GitHub question form and
   the private security report. Account and billing ends with the same address and reply time,
@@ -477,7 +479,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   token the API answers at sign-in: `HttpOnly`, `Secure`, `SameSite=Lax`, no `Domain`, so no other
   host under the domain ever receives it; the server forwards it to the API as `pyxis_session` and
   signs out by calling the API's logout with it before clearing it, or every session of the admin
-  at once ("Sign out everywhere" in the account menu). The token crosses the sign-in
+  at once ("Sign out everywhere" in the sessions panel of Settings). The token crosses the sign-in
   page's script once, between the API's answer and the action, which is what the nonce CSP
   protects. The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
   which the root layout reads so the first paint has the right theme (so every page renders on
