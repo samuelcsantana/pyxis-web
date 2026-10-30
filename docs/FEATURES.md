@@ -44,10 +44,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
   a slim bar that stays at the top while the page scrolls, and it closes with Escape (the focus
   goes back to its button), when a link in it is followed and when the address changes (Back,
-  Forward, a period link); an open menu taller than the screen scrolls inside itself. The
-  sidebar fits in 700px, so Sign out shows without scrolling on a 1366×768 laptop, and the
-  account email, project names and time zones wrap instead of being cut, the time zone only
-  after a slash (`America/` above `Sao_Paulo`), never inside a word. The Pyxis logo, in the
+  Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
+  computer the logo, the project and the account stay in place and only the list of screens
+  scrolls when the window is short: nothing scrolls at 1440×800, and at 1366×650 the project and
+  the account stay in view; the account menu scrolls inside itself when it is taller than the
+  space above the account. The account email, project names and time zones wrap instead of
+  being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never inside a
+  word. The Pyxis logo, in the
   sidebar and in the phone's bar, opens the Overview of the project on screen with the period
   and the filters of the page. The navigation marks where you are: the screen; Settings on the
   settings and also on the install guide and on an export, which have no item of their own; on
