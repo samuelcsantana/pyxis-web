@@ -37,27 +37,33 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   GitHub cover's backdrop, star dust and the faint brand mark, behind one raised card
 - The app shell: sidebar with the screens (resting the pointer on one, or reaching it with the
   keyboard, fetches that screen ahead, so the click opens it without a skeleton even the first
-  time; a tap on a phone, which has no hover, works as before), project switcher, period selector (today, 7 days,
+  time; a tap on a phone, which has no hover, works as before), a top bar whose path names the
+  project and the page (`<project switcher> / Overview`) on every screen and page (on a phone the
+  switcher shows the project's mark, its name read to screen readers and written in the phone's
+  bar above), and a period selector (today, 7 days,
   30 days or a custom range, kept in the URL across the screens and through Settings, Help and
   Install, together with the filters; a range it cannot use is named with the reason and
-  reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
+  reopened with its dates, never swapped silently; the Custom button shows the period's short
+  dates, "Oct 2 – 31", with the year only outside the current one, and keeps the width of the
+  longest preset's dates so the bar never shifts when the period changes), light and dark themes, sign-out, and a menu
   button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
   a slim bar that stays at the top while the page scrolls and names the project on screen (the
   Pyxis mark, the project's mark and its name, cut with an ellipsis when long, linking to its
   Overview and read as the Overview's title), and it closes with Escape (the focus
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
-  computer the logo, the project and the account stay in place and only the list of screens
-  scrolls when the window is short: nothing scrolls at 1440×800, and at 1366×650 the project and
-  the account stay in view; the account menu scrolls inside itself when it is taller than the
-  space above the account. In the sidebar the account email, project names and time zones wrap
-  instead of being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never
-  inside a word; the phone's bar, short of room, is the one place that ends a long project name
+  computer the logo and the foot (Install, Settings and the account) stay in place and only the
+  list of screens scrolls when the window is short: nothing scrolls at 1440×800 nor at 1366×650,
+  with Settings and the account in view; the account menu scrolls inside itself when it is taller
+  than the space above the account, and on a phone it opens under the account, in the flow of
+  the menu, scrolling itself into view. The account email in the sidebar, and the project names
+  and time zones in the project menu, wrap instead of being cut, the time zone only after a slash
+  (`America/` above `Sao_Paulo`), never inside a word; the phone's bar, short of room, is the one place that ends a long project name
   with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
-  Overview of the project on screen with the period and the filters of the page. The screens are listed in the order of the questions they answer
-  (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
-  Project block with Install, tagged "Pending" until the project's first event arrives, and
-  Settings. The foot holds the privacy note (a plain line, not a box) and the account. The
+  Overview of the project on screen with the period and the filters of the page. The screens are listed, with no section label, in the order of the questions they answer
+  (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests); the foot holds
+  Install, tagged "Pending" until the project's first event arrives, Settings and the account.
+  The
   navigation marks where you are: the screen, Install or Settings; Settings also on an export,
   which has no item of its own. The account menu is compact, 235 px before the owner's usage line
   (it was 254 px with the languages closed, 506 px open): Account and billing, Theme and
@@ -79,9 +85,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
   focus moves past them and on a click outside, so they never cover the control that has the
-  focus; inside the phone menu, the first Escape closes the switcher and the second the menu.
-  On phones the header stays compact: the theme toggle sits in the menu bar (every toggle on the
-  page follows the same theme), the period presets and Custom are 44px targets on one row, and
+  focus. The project menu scrolls inside itself when it is taller than the window under the
+  pinned bar, and a hovered or pressed project turns its time zone to the text color, readable
+  on the row's fill.
+  On phones the header stays compact: the period presets stay on one row, every period control
+  is a 44px target inside a 320px screen, and
   the content starts within 260px of the top of a 390×844 screen (budgets checked in
   `e2e/responsive.spec.ts`). The content is dense on phones too: figures stay on one line,
   cards share the panels' padding, a rate on the Sources table keeps its "6 converted" beside
@@ -244,8 +252,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   changes (the chart's metric, a step's list, a route's details) and nothing new arrives; the
   numbers each read showed are kept on the device
   ([ADR 0015](adr/0015-fresh-numbers-fill-server-drawn-slots.md))
-- Loading, empty and error states shared by every screen; the top bar of the eight screens lives
-  in their layout and stays in place between them (the same element, with its title, subtitle,
+- Loading, empty and error states shared by every screen (a screen whose data cannot be read shows
+  its error under its top bar, so the project switcher, the period and the filters stay at hand);
+  the top bar of the eight screens lives
+  in their layout and stays in place between them (the same element, with its title,
   period and selector updated: [ADR 0012](adr/0012-persistent-screen-topbar.md)), so while a
   screen loads only its content shows a skeleton shaped like it (or a generic one, drawn by the
   layout, when the tap came before the screen's prefetch); a screen visited in the last five
