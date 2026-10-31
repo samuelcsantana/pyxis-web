@@ -1,4 +1,5 @@
 import { act, fireEvent, screen } from '@testing-library/react';
+import type { MouseEvent, ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BillingInterval, BillingRedirectOutcome } from '@/domain/accounts';
 import { RateLimitedError } from '@/domain/errors';
@@ -15,6 +16,29 @@ const navigation = vi.hoisted(() => ({ router: { refresh: vi.fn(), replace: vi.f
 
 vi.mock('next/navigation', () => ({
   useRouter: () => navigation.router,
+}));
+
+vi.mock('next/link', () => ({
+  default: ({
+    href,
+    className,
+    children,
+  }: {
+    readonly href: string;
+    readonly className?: string;
+    readonly children: ReactNode;
+  }) => (
+    <a
+      href={href}
+      className={className}
+      data-next-link=""
+      onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+      }}
+    >
+      {children}
+    </a>
+  ),
 }));
 
 const ACCOUNT = '7d3f9b1e-5a2c-4e8d-9f6b-1c4a7e2d8b5f';
@@ -92,6 +116,18 @@ function typeCode(value: string) {
   fireEvent.change(screen.getByRole('textbox', { name: '6-digit code' }), {
     target: { value },
   });
+}
+
+function preventedClick(element: HTMLElement): boolean {
+  let prevented = false;
+  const settle = (event: Event) => {
+    prevented = event.defaultPrevented;
+    event.preventDefault();
+  };
+  window.addEventListener('click', settle);
+  fireEvent.click(element);
+  window.removeEventListener('click', settle);
+  return prevented;
 }
 
 describe('SignUpForm', () => {
@@ -368,6 +404,21 @@ describe('SignUpForm', () => {
       'href',
       '/account',
     );
+  });
+
+  it('opens Account and billing with a full page load, while signing in stays a soft link', async () => {
+    renderForm(service(), () => Promise.resolve({ kind: 'unavailable' }));
+    const signIn = screen.getByRole('link', { name: 'Sign in' });
+    expect(signIn).toHaveAttribute('data-next-link');
+    expect(preventedClick(signIn)).toBe(true);
+    await reachTheCode();
+
+    typeCode('123456');
+    await settle();
+
+    const account = screen.getByRole('link', { name: 'Open Account and billing' });
+    expect(account).not.toHaveAttribute('data-next-link');
+    expect(preventedClick(account)).toBe(false);
   });
 
   it('waits before sending a new code, then says it is on its way', async () => {

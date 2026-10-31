@@ -9,9 +9,8 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
     test('has no WCAG 2.2 A or AA violation and never scrolls sideways', async ({ page }) => {
       await page.goto('/account');
-      await expect(
-        page.getByRole('heading', { level: 1, name: 'Account and billing' }),
-      ).toBeVisible();
+      await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+      await expect(page.getByRole('region', { name: 'Account and billing' })).toBeVisible();
 
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
@@ -19,22 +18,66 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the account menu and shows the free trial with the month used', async ({
+test('opens from the account menu as the settings window, with the free trial and the month used', async ({
   page,
   isMobile,
 }) => {
-  await page.goto(`/${STORE_ID}/overview`);
+  await page.goto(`/${STORE_ID}/overview?range=7d`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
   await page.locator('summary', { hasText: 'Account and preferences' }).click();
   await page.getByRole('link', { name: 'Account and billing' }).click();
 
+  const window = page.getByRole('dialog', { name: 'Settings' });
+  const plan = window.getByRole('region', { name: 'Account and billing' });
   await expect(page).toHaveURL(/\/account$/);
-  await expect(page).toHaveTitle('Account and billing · Pyxis');
-  await expect(page.getByText(/Free trial until/)).toBeVisible();
-  await expect(page.getByText(/41,230 of 100,000/)).toBeVisible();
-  await expect(page.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
+  await expect(page).toHaveTitle('Account and billing · My site · Pyxis');
+  await expect(plan.getByText(/Free trial until/)).toBeVisible();
+  await expect(plan.getByText(/41,230 of 100,000/)).toBeVisible();
+  await expect(plan.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+
+  await page.keyboard.press('Escape');
+
+  await expect(window).toBeHidden();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
+  await expect(
+    isMobile
+      ? page.getByRole('button', { name: 'Open menu' })
+      : page.locator('summary', { hasText: 'Account and preferences' }),
+  ).toBeFocused();
+});
+
+test('lists Account and billing first under You, and opens it from another part', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'the phone opens the list first, checked in settings.spec.ts');
+  await page.goto(`/${STORE_ID}/overview`);
+  await page.getByRole('link', { name: 'Settings' }).click();
+  const window = page.getByRole('dialog', { name: 'Settings' });
+  const parts = window.getByRole('navigation', { name: 'Sections' });
+
+  await expect(parts.getByRole('link')).toHaveText([
+    'Project',
+    'Keys',
+    'People',
+    'E-mail',
+    'Export events',
+    'Delete project',
+    'Account and billing',
+    'Sessions',
+    'Access tokens',
+    'Connected apps',
+  ]);
+  await parts.getByRole('link', { name: 'Account and billing' }).click();
+
+  await expect(page).toHaveURL(/\/account$/);
+  await expect(
+    window.getByRole('heading', { name: 'Account and billing', exact: true }),
+  ).toBeFocused();
+  await expect(window.getByRole('region', { name: 'Support' })).toBeVisible();
 });
 
 test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {
@@ -79,16 +122,25 @@ test('speaks Portuguese', async ({ page, context, baseURL }) => {
 
   await page.goto('/account');
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Conta e cobrança' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Gerenciar cobrança' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Configurações' })).toBeVisible();
+  await expect(
+    page.getByRole('region', { name: 'Conta e cobrança' }).getByRole('button', {
+      name: 'Gerenciar cobrança',
+    }),
+  ).toBeVisible();
 });
 
 test('closes the account only with the owner address, saying when everything goes', async ({
   page,
 }) => {
   await page.goto('/account');
+  const toggle = page.getByRole('button', { name: 'Close the account', exact: true });
   const field = page.getByRole('textbox', { name: 'Type your e-mail address to confirm' });
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(field).toBeHidden();
 
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await field.fill('someone@example.com');
   await page.getByRole('button', { name: 'Close the account for good' }).click();
   await expect(page.getByRole('main').getByRole('alert')).toHaveText(

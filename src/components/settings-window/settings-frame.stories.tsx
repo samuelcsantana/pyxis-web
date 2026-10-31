@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
+import { AccountOverview } from '@/components/account/account-overview';
+import { AccountSupport } from '@/components/account/account-support';
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { RAISED_CARDS } from '@/components/brand/raised-cards';
@@ -15,18 +17,22 @@ import { ProjectPart } from '@/components/settings/project-part';
 import { SessionsPanel } from '@/components/settings/sessions-panel';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { accessTokensResponseSchema } from '@/domain/access-tokens.schema';
+import type { Account, BillingRedirectOutcome, WithdrawOutcome } from '@/domain/accounts';
+import { myAccountsResponseSchema } from '@/domain/accounts.schema';
 import { connectedAppsResponseSchema } from '@/domain/connections.schema';
 import { timeZoneChoices } from '@/domain/project-management';
 import { projectPeopleResponseSchema } from '@/domain/project-people.schema';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { projectSettingsResponseSchema } from '@/domain/project-settings.schema';
 import { sessionsResponseSchema } from '@/domain/sessions.schema';
+import { supportPlanOf } from '@/domain/support';
 import type { I18n } from '@/i18n/i18n';
 import { DEFAULT_LOCALE, type Locale, parseLocale } from '@/i18n/locales';
 import {
   DEMO_CREATED_ACCESS_TOKEN,
   demoAccessTokensWire,
 } from '@/services/access-tokens/mock-access-tokens-service';
+import { demoAccountsWire, MockAccountsService } from '@/services/accounts/mock-accounts-service';
 import { demoConnectionsWire } from '@/services/connections/mock-connections-service';
 import { DEMO_STORE, demoProjectNameOf } from '@/services/demo/demo-projects';
 import { MockExportsService } from '@/services/exports/mock-exports-service';
@@ -68,10 +74,41 @@ const SESSIONS = sessionsResponseSchema.parse(demoSessionsWire(STORY_NOW));
 const TOKENS = accessTokensResponseSchema.parse(demoAccessTokensWire(STORY_NOW));
 const APPS = connectedAppsResponseSchema.parse(demoConnectionsWire(STORY_NOW));
 const PEOPLE = projectPeopleResponseSchema.parse(demoPeopleWire());
+function theDemoAccount(): Account {
+  const [account] = myAccountsResponseSchema.parse(demoAccountsWire(STORY_NOW));
+  if (account === undefined) {
+    throw new Error('The demo has an account.');
+  }
+  return account;
+}
+
+const DEMO_ACCOUNT = theDemoAccount();
+const FREE_ACCOUNT: Account = {
+  ...DEMO_ACCOUNT,
+  status: 'free',
+  billingInterval: null,
+  trialEndsAt: null,
+  currentPeriodEndsAt: null,
+  eventsThisMonth: 3_120,
+  projectCount: 1,
+  peopleCount: 1,
+  limits: { eventsPerMonth: 10_000, projects: 1, people: 1, pauseAtEvents: 10_000 },
+};
+const PAUSED_ACCOUNT: Account = {
+  ...FREE_ACCOUNT,
+  eventsThisMonth: 10_000,
+  ingestionPausedUntil: '2026-11-01T00:00:00.000Z',
+};
 
 const MANAGEMENT = new MockProjectManagementService(() => Promise.resolve(english.t));
 const PEOPLE_SERVICE = new MockProjectPeopleService(() => STORY_NOW);
 const EXPORTS = new MockExportsService(() => STORY_NOW);
+const ACCOUNTS = new MockAccountsService(() => STORY_NOW);
+
+const stayOnThePage = (): Promise<BillingRedirectOutcome> =>
+  Promise.resolve({ kind: 'noBillingYet' });
+const withdrawalWindowClosed = (): Promise<WithdrawOutcome> =>
+  Promise.resolve({ kind: 'windowClosed' });
 
 const SERVER_TEXTS: Readonly<Record<Locale, I18n>> = {
   en: english,
@@ -98,6 +135,37 @@ function whenIn(i18n: I18n): When {
 
 function projectFor(who: Who): ProjectSettings {
   return who === 'owner' ? STORE : MEMBER_VIEW;
+}
+
+function emailOf(accounts: readonly Account[]): string {
+  return accounts.length === 0 ? MEMBER_EMAIL : DEMO_OWNER_EMAIL;
+}
+
+function planPart(accounts: readonly Account[], i18n: I18n): ReactNode {
+  return (
+    <div className="flex flex-col gap-4">
+      {accounts.length === 0 ? (
+        <p className="text-sm">{i18n.t('account.noAccount')}</p>
+      ) : (
+        accounts.map((account) => (
+          <AccountOverview
+            key={account.id}
+            account={account}
+            i18n={i18n}
+            now={STORY_NOW}
+            freePlan="open"
+            ownsAnotherFreeAccount={false}
+            openCheckout={stayOnThePage}
+            subscribe={stayOnThePage}
+            openPortal={stayOnThePage}
+            withdraw={withdrawalWindowClosed}
+            close={(email) => ACCOUNTS.close(account.id, email)}
+          />
+        ))
+      )}
+      <AccountSupport email={emailOf(accounts)} plan={supportPlanOf(accounts)} i18n={i18n} />
+    </div>
+  );
 }
 
 function bodyOf(section: SettingsSection, who: Who, i18n: I18n): ReactNode {
@@ -173,6 +241,8 @@ function bodyOf(section: SettingsSection, who: Who, i18n: I18n): ReactNode {
           remove={(confirmName) => MANAGEMENT.delete(settings.id, confirmName)}
         />
       );
+    case 'plan':
+      return planPart(owner ? [DEMO_ACCOUNT] : [], i18n);
     case 'sessions':
       return (
         <SessionsPanel sessions={SESSIONS} i18n={i18n} when={when} end={() => Promise.resolve()} />
@@ -376,13 +446,14 @@ const OWNER_ROWS = [
   'E-mail',
   'Export events',
   'Delete project',
+  'Account and billing',
   'Sessions',
   'Access tokens',
   'Connected apps',
 ] as const;
 const OWNER_ONLY_ROWS: ReadonlySet<string> = new Set(['Export events', 'Delete project']);
 const MEMBER_ROWS = OWNER_ROWS.filter((row) => !OWNER_ONLY_ROWS.has(row));
-const YOU_ROWS = ['Sessions', 'Access tokens', 'Connected apps'] as const;
+const YOU_ROWS = ['Account and billing', 'Sessions', 'Access tokens', 'Connected apps'] as const;
 
 const ownerWindow =
   (title: string): Play =>
@@ -475,6 +546,112 @@ export const AccessTokens: Story = {
 export const ConnectedApps: Story = {
   args: windowArgs('owner', 'apps'),
   play: ownerWindow('Connected apps'),
+};
+
+const ACCOUNT_AND_BILLING = 'Account and billing';
+
+function planWindowWith(account: Account): SettingsFrameProps {
+  return { ...windowArgs('owner', 'plan'), children: planPart([account], english) };
+}
+
+async function showsThePlanCard(canvasElement: HTMLElement, plan: string, usage: string) {
+  const part = sectionNamed(canvasElement, ACCOUNT_AND_BILLING);
+  const card = within(part).getByRole('region', { name: plan });
+  await expect(within(card).getByRole('heading', { level: 3, name: plan })).toBeVisible();
+  await expect(within(card).getByText(usage)).toBeVisible();
+  await expect(within(part).getByRole('button', { name: 'Close the account' })).toHaveAttribute(
+    'aria-expanded',
+    'false',
+  );
+  await expect(within(part).queryByRole('textbox')).toBeNull();
+}
+
+export const AccountAndBilling: Story = {
+  args: windowArgs('owner', 'plan'),
+  play: async (context) => {
+    await ownerWindow(ACCOUNT_AND_BILLING)(context);
+    await showsThePlanCard(context.canvasElement, 'Plan: Monthly', '41,230 of 100,000');
+    await expect(
+      within(sectionNamed(context.canvasElement, ACCOUNT_AND_BILLING)).getByRole('button', {
+        name: 'Manage billing',
+      }),
+    ).toBeVisible();
+  },
+};
+
+export const AccountAndBillingOnTheFreePlan: Story = {
+  args: planWindowWith(FREE_ACCOUNT),
+  play: async (context) => {
+    await ownerWindow(ACCOUNT_AND_BILLING)(context);
+    await showsThePlanCard(context.canvasElement, 'Plan', '3,120 of 10,000');
+    const part = sectionNamed(context.canvasElement, ACCOUNT_AND_BILLING);
+    await expect(
+      within(part).getByRole('heading', { level: 4, name: 'The paid plan' }),
+    ).toBeVisible();
+    await expect(within(part).getByRole('button', { name: 'Subscribe now' })).toBeVisible();
+  },
+};
+
+export const AccountAndBillingPaused: Story = {
+  args: planWindowWith(PAUSED_ACCOUNT),
+  play: async (context) => {
+    await ownerWindow(ACCOUNT_AND_BILLING)(context);
+    await showsThePlanCard(context.canvasElement, 'Plan', '10,000 of 10,000');
+    const part = sectionNamed(context.canvasElement, ACCOUNT_AND_BILLING);
+    await expect(within(part).getByText(/^Measuring is paused until /)).toBeVisible();
+    await expect(
+      within(part).getByText('Measuring resumes within a minute of subscribing.'),
+    ).toBeVisible();
+  },
+};
+
+export const AccountAndBillingWithoutAnAccount: Story = {
+  args: windowArgs('member', 'plan'),
+  play: async (context) => {
+    await memberWindow(ACCOUNT_AND_BILLING)(context);
+    const part = sectionNamed(context.canvasElement, ACCOUNT_AND_BILLING);
+    await expect(within(part).getByText(/^You do not own a Pyxis account\./)).toBeVisible();
+    await expect(within(part).queryByRole('region', { name: /^Plan/ })).toBeNull();
+    await expect(within(part).queryByRole('button', { name: 'Close the account' })).toBeNull();
+  },
+};
+
+export const AccountAndBillingDark: Story = {
+  args: windowArgs('owner', 'plan'),
+  globals: { theme: 'dark' },
+  play: async (context) => {
+    await ownerWindow(ACCOUNT_AND_BILLING)(context);
+    await showsThePlanCard(context.canvasElement, 'Plan: Monthly', '41,230 of 100,000');
+  },
+};
+
+export const AccountAndBillingOnAPhone: Story = {
+  args: windowArgs('owner', 'plan'),
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.queryByRole('navigation', { name: 'Sections' })).toBeNull();
+    await expect(sectionNamed(canvasElement, ACCOUNT_AND_BILLING)).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Settings' })).toBeVisible();
+    await showsThePlanCard(canvasElement, 'Plan: Monthly', '41,230 of 100,000');
+  },
+};
+
+export const AccountAndBillingOnAPhoneDark: Story = {
+  ...AccountAndBillingOnAPhone,
+  globals: { ...PHONE, theme: 'dark' },
+};
+
+export const AccountAndBillingFullPage: Story = {
+  args: fullPageArgs('plan'),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+    await expect(canvas.queryByRole('dialog')).toBeNull();
+    await listsTheRows(canvasElement, YOU_ROWS);
+    await expect(currentRow(canvasElement)).toHaveAccessibleName(ACCOUNT_AND_BILLING);
+    await showsThePlanCard(canvasElement, 'Plan: Monthly', '41,230 of 100,000');
+  },
 };
 
 export const FullPageOutsideAProject: Story = {

@@ -13,6 +13,7 @@ const PARTS = [
   'E-mail',
   'Export events',
   'Delete project',
+  'Account and billing',
   'Sessions',
   'Access tokens',
   'Connected apps',
@@ -245,7 +246,12 @@ test("shows the person's parts outside a project with only the You group", async
   if (isMobile) {
     await page.getByRole('main').getByRole('button', { name: 'Settings' }).click();
   }
-  await expect(parts.getByRole('link')).toHaveText(['Sessions', 'Access tokens', 'Connected apps']);
+  await expect(parts.getByRole('link')).toHaveText([
+    'Account and billing',
+    'Sessions',
+    'Access tokens',
+    'Connected apps',
+  ]);
 });
 
 test('shows the origins, a public key and no secret key value for each project', async ({

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
 import {
+  ACCOUNT_HOME_SECTION,
   ACCOUNT_PATH,
   ACCOUNT_SECTIONS,
   accountSectionHref,
-  isAccountSection,
+  accountSectionOf,
   isOwnerOnly,
   PROJECT_SECTIONS,
   projectSectionHref,
@@ -59,22 +60,49 @@ describe('settings sections', () => {
     );
   });
 
-  it('point the account sections at their segment under the account address', () => {
+  it('put the plan first among the account sections and make it their home', () => {
+    expect(ACCOUNT_SECTIONS).toEqual(['plan', 'sessions', 'tokens', 'apps']);
+    expect(ACCOUNT_HOME_SECTION).toBe('plan');
+  });
+
+  it('point the plan at the account address itself', () => {
     expect(ACCOUNT_PATH).toBe('/account');
+    expect(accountSectionHref('plan')).toBe('/account');
+  });
+
+  it('point the account sections, in their order, at the account address and its segments', () => {
     expect(ACCOUNT_SECTIONS.map((section) => accountSectionHref(section))).toEqual([
+      '/account',
       '/account/sessions',
       '/account/tokens',
       '/account/apps',
     ]);
   });
 
-  it('know the account sections by name, and nothing else', () => {
-    for (const section of ACCOUNT_SECTIONS) {
-      expect(isAccountSection(section)).toBe(true);
+  it('read the bare account address as the plan', () => {
+    expect(accountSectionOf(undefined)).toBe('plan');
+    expect(accountSectionOf([])).toBe('plan');
+  });
+
+  it('read one segment naming an account section other than the plan as that section', () => {
+    expect(accountSectionOf(['sessions'])).toBe('sessions');
+    expect(accountSectionOf(['tokens'])).toBe('tokens');
+    expect(accountSectionOf(['apps'])).toBe('apps');
+  });
+
+  it('read the plan as a segment as no section, since the plan lives at the bare address', () => {
+    expect(accountSectionOf(['plan'])).toBeUndefined();
+  });
+
+  it('read a segment that names no account section as no section', () => {
+    for (const segment of ['billing', 'keys', 'Sessions', '']) {
+      expect(accountSectionOf([segment])).toBeUndefined();
     }
-    for (const value of ['billing', 'keys', 'Sessions', '']) {
-      expect(isAccountSection(value)).toBe(false);
-    }
+  });
+
+  it('read more than one segment as no section, even when the first names one', () => {
+    expect(accountSectionOf(['sessions', 'tokens'])).toBeUndefined();
+    expect(accountSectionOf(['apps', 'extra'])).toBeUndefined();
   });
 
   it('give every section the id of the heading its panel used to carry', () => {
@@ -89,6 +117,7 @@ describe('settings sections', () => {
       email: 'settings-email-heading',
       export: 'settings-export-heading',
       delete: 'settings-delete-heading',
+      plan: 'account-plan-heading',
       sessions: 'settings-sessions-heading',
       tokens: 'settings-access-tokens-heading',
       apps: 'settings-connections-heading',
@@ -108,6 +137,7 @@ describe('settings sections', () => {
       'emailPreferences.heading',
       'exportEvents.heading',
       'deleteProject.heading',
+      'nav.billing',
       'sessions.heading',
       'accessTokens.heading',
       'connectedApps.heading',

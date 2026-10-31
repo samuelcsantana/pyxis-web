@@ -1,4 +1,5 @@
 import { fireEvent, screen, within } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -7,6 +8,24 @@ import { AccountMenu } from './account-menu';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+}));
+
+vi.mock('next/link', () => ({
+  default: ({
+    href,
+    scroll,
+    className,
+    children,
+  }: {
+    readonly href: string;
+    readonly scroll?: boolean;
+    readonly className?: string;
+    readonly children: ReactNode;
+  }) => (
+    <a href={href} className={className} data-scroll={String(scroll)}>
+      {children}
+    </a>
+  ),
 }));
 
 const EMAIL = 'owner@example.com';
@@ -167,6 +186,19 @@ describe("AccountMenu with the month's usage", () => {
     expect(container.querySelector('details > div')?.firstElementChild).toHaveTextContent(
       '15,000 of 10,000 events this monthMeasuring is paused until Nov 1: the account passed its monthly events.',
     );
+  });
+
+  it('opens Account and billing from both rows without scrolling the page under the window', () => {
+    const { container } = renderMenuWith(USAGE);
+
+    const panel = container.querySelector('details > div');
+    const usage = panel?.firstElementChild;
+    const billing = screen.getByRole('link', { name: 'Account and billing', hidden: true });
+    expect(usage).not.toBe(billing);
+    expect(usage).toHaveAttribute('href', '/account');
+    expect(usage).toHaveAttribute('data-scroll', 'false');
+    expect(billing).toHaveAttribute('href', '/account');
+    expect(billing).toHaveAttribute('data-scroll', 'false');
   });
 
   it('shows no usage without it', () => {

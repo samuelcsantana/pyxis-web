@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ReactElement } from 'react';
 import {
+  type AccountSectionWindowProps,
+  AccountSectionWindow,
   type ProjectSectionProps,
   ProjectSectionWindow,
 } from '@/app/[projectId]/settings/settings-sections';
@@ -11,13 +13,22 @@ import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { MockProjectsService } from '@/services/projects/mock-projects-service';
 import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
+import AccountWindow from './(..)account/[[...section]]/page';
 import SettingsKeysWindow from './(.)settings/keys/page';
 import ModalDefault from './default';
 import ModalLayout from './layout';
 
-const state = vi.hoisted<{ admin: unknown; segments: readonly string[]; back: () => void }>(() => ({
+const KEYS_PATH = `/${DEMO_STORE.id}/settings/keys`;
+
+const state = vi.hoisted<{
+  admin: unknown;
+  segments: readonly string[];
+  pathname: string;
+  back: () => void;
+}>(() => ({
   admin: undefined,
   segments: [],
+  pathname: '',
   back: () => undefined,
 }));
 
@@ -34,7 +45,7 @@ vi.mock('next/navigation', () => ({
     throw new Error('not-found');
   },
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn(), back: state.back }),
-  usePathname: () => `/${DEMO_STORE.id}/settings/keys`,
+  usePathname: () => state.pathname,
   useSearchParams: () => new URLSearchParams(),
   useSelectedLayoutSegments: () => state.segments,
 }));
@@ -58,7 +69,7 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
   }),
 }));
 
-function keysWindowProps() {
+function windowProps() {
   return {
     params: Promise.resolve({ projectId: DEMO_STORE.id }),
     searchParams: Promise.resolve({}),
@@ -66,9 +77,15 @@ function keysWindowProps() {
 }
 
 async function keysWindow() {
-  const element: ReactElement<ProjectSectionProps> = SettingsKeysWindow(keysWindowProps());
+  const element: ReactElement<ProjectSectionProps> = SettingsKeysWindow(windowProps());
   expect(element.type).toBe(ProjectSectionWindow);
   return ProjectSectionWindow(element.props);
+}
+
+async function bareAccountWindow() {
+  const element: ReactElement<AccountSectionWindowProps> = await AccountWindow(windowProps());
+  expect(element.type).toBe(AccountSectionWindow);
+  return AccountSectionWindow(element.props);
 }
 
 beforeEach(() => {
@@ -77,6 +94,7 @@ beforeEach(() => {
   vi.setSystemTime(new Date('2026-10-06T02:30:00.000Z'));
   state.admin = ADMIN;
   state.segments = [];
+  state.pathname = KEYS_PATH;
   state.back = () => undefined;
 });
 
@@ -115,12 +133,29 @@ describe('ModalLayout', () => {
 
   it('opens an account section as a dialog too', async () => {
     state.segments = ['(..)account', 'sessions'];
+    state.pathname = '/account/sessions';
 
     renderWithMessages(
       await ModalLayout({ children: <h2 id="settings-window-title">Settings</h2> }),
     );
 
     expect(await screen.findByRole('dialog', { name: 'Settings' })).toHaveAttribute('open');
+  });
+
+  it('opens the bare account address as a dialog on the plan part of the account', async () => {
+    state.segments = ['(..)account'];
+    state.pathname = '/account';
+
+    renderWithMessages(await ModalLayout({ children: await bareAccountWindow() }));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Settings' });
+    expect(within(dialog).getByRole('region', { name: 'Account and billing' })).toHaveTextContent(
+      /Free trial until/,
+    );
+    expect(within(dialog).getByRole('link', { current: 'page' })).toHaveAttribute(
+      'href',
+      '/account',
+    );
   });
 
   it('leaves what the slot holds outside any dialog when no window is open', async () => {

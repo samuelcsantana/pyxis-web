@@ -6,24 +6,26 @@ import {
   type PageSearch,
 } from '@/app/[projectId]/settings/settings-sections';
 import { appsBody } from '@/app/account/sections/apps-body';
+import { planBody } from '@/app/account/sections/plan-body';
 import { sessionsBody } from '@/app/account/sections/sessions-body';
 import { tokensBody } from '@/app/account/sections/tokens-body';
-import { type AccountSection, isAccountSection } from '@/components/settings-window/sections';
+import { type AccountSection, accountSectionOf } from '@/components/settings-window/sections';
 
 const BODIES: Readonly<Record<AccountSection, AccountBody>> = {
+  plan: planBody,
   sessions: sessionsBody,
   tokens: tokensBody,
   apps: appsBody,
 };
 
 export interface AccountWindowProps {
-  readonly params: Promise<{ readonly projectId: string; readonly section: string }>;
+  readonly params: Promise<{ readonly projectId: string; readonly section?: readonly string[] }>;
   readonly searchParams: Promise<PageSearch>;
 }
 
 async function sectionOf(props: AccountWindowProps): Promise<AccountSection> {
-  const { section } = await props.params;
-  if (!isAccountSection(section)) {
+  const section = accountSectionOf((await props.params).section);
+  if (section === undefined) {
     notFound();
   }
   return section;
