@@ -98,10 +98,14 @@ test('keeps the scroll of the screen under the window and after it closes', asyn
   test.skip(isMobile, 'a phone opens the window from its menu, at the top of the screen');
   await page.setViewportSize({ width: 1366, height: 650 });
   await page.goto(`/${STORE_ID}/devices`);
-  await page.evaluate(() => {
-    window.scrollTo(0, 600);
-  });
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(300);
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        window.scrollTo(0, 600);
+        return window.scrollY;
+      }),
+    )
+    .toBeGreaterThan(300);
   const scrolled = await page.evaluate(() => window.scrollY);
 
   const settingsWindow = await openSettingsFrom(page, isMobile);
