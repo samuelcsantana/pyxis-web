@@ -50,7 +50,8 @@ describe('routeClassOf', () => {
     assert.equal(routeClassOf('/account/sessions'), 'screen');
     assert.equal(routeClassOf('/account/tokens'), 'screen');
     assert.equal(routeClassOf('/account/apps'), 'screen');
-    assert.equal(routeClassOf('/account'), 'entry');
+    assert.equal(routeClassOf('/account'), 'screen');
+    assert.equal(routeClassOf('/account-suspended'), 'entry');
   });
 });
 

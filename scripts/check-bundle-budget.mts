@@ -26,6 +26,7 @@ const CHART_ROUTES: ReadonlySet<string> = new Set([
   '/[projectId]/acquisition',
 ]);
 const SETTINGS_PAGES_OUTSIDE_A_PROJECT: ReadonlySet<string> = new Set([
+  '/account',
   '/account/sessions',
   '/account/tokens',
   '/account/apps',
