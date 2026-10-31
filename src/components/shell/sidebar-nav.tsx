@@ -63,19 +63,22 @@ export function isSettingsPath(pathname: string): boolean {
   return projectId !== '' && segment === SETTINGS_SEGMENT;
 }
 
-function SettingsItem({ href, current, onItsPage, label }: SettingsItemProps) {
-  const reloadAsAPage = (event: MouseEvent<HTMLAnchorElement>) => {
+function reloadOnItsPage(onItsPage: boolean, href: string) {
+  return (event: MouseEvent<HTMLAnchorElement>) => {
     if (onItsPage && !opensElsewhere(event)) {
       event.preventDefault();
       window.location.assign(href);
     }
   };
+}
+
+function SettingsItem({ href, current, onItsPage, label }: SettingsItemProps) {
   return (
     <Link
       href={href}
       scroll={false}
       aria-current={current ? 'page' : undefined}
-      onClick={reloadAsAPage}
+      onClick={reloadOnItsPage(onItsPage, href)}
       className={navItemClasses(current)}
     >
       <NavItemIcon path={SETTINGS_ICON} current={current} />
@@ -92,6 +95,7 @@ export function SidebarNav({ project }: SidebarNavProps) {
   const projectLabel = useId();
   const current = navigationItemOf(pathname);
   const installCurrent = current === INSTALL_ITEM;
+  const installLink = hrefKeepingView(installHref(project.id), search);
   const settingsOnItsPage = isSettingsPath(pathname);
   const settingsCurrent = current === SETTINGS_ITEM || settingsOnItsPage;
 
@@ -124,8 +128,10 @@ export function SidebarNav({ project }: SidebarNavProps) {
         <ul aria-labelledby={projectLabel} className="flex flex-col gap-0.5">
           <li>
             <Link
-              href={hrefKeepingView(installHref(project.id), search)}
+              href={installLink}
+              scroll={false}
               aria-current={installCurrent ? 'page' : undefined}
+              onClick={reloadOnItsPage(installCurrent, installLink)}
               className={`${navItemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
             >
               <NavItemIcon path={INSTALL_ICON} current={installCurrent} />

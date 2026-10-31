@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import type { MouseEvent, ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import {
@@ -207,6 +207,27 @@ describe('SectionLink', () => {
 
     expect(frameRoot()).toHaveAttribute('data-view', 'section');
     expect(sectionTitle()).toHaveFocus();
+  });
+
+  it('focuses the title inside the open window, not the one of a page under it', () => {
+    const pageTitle = document.createElement('h2');
+    pageTitle.setAttribute('data-section-title', '');
+    pageTitle.tabIndex = -1;
+    document.body.prepend(pageTitle);
+    const window = document.createElement('dialog');
+    window.setAttribute('open', '');
+    document.body.append(window);
+    const { rerender } = render(
+      <Frame mode="window" initial="list" current="keys" section="/p-store/settings/keys" />,
+      { container: window },
+    );
+
+    rerender(<Frame mode="window" initial="list" current="project" section="/p-store/settings" />);
+
+    expect(within(window).getByRole('heading', { level: 2 })).toHaveFocus();
+    expect(pageTitle).not.toHaveFocus();
+    pageTitle.remove();
+    window.remove();
   });
 
   it('stays where it is when the same section renders again', () => {

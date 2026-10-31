@@ -46,7 +46,8 @@ test('opens from the account menu as the settings window, in two clicks, with th
 
   await part.getByRole('link', { name: 'How to install' }).click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install$`));
-  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.getByRole('dialog', { name: 'Install' })).toBeVisible();
+  await expect(page.getByRole('dialog')).toHaveCount(1);
 });
 
 test('keeps the period of the screen through Help and Install', async ({ page, isMobile }) => {
@@ -57,11 +58,21 @@ test('keeps the period of the screen through Help and Install', async ({ page, i
 
   await page.getByRole('link', { name: 'How to install' }).click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install\\?range=today$`));
+  await expect(page.getByRole('dialog', { name: 'Install' })).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help\\?range=today$`));
+  await page.keyboard.press('Escape');
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/acquisition\\?range=today$`));
+  await expect(page.getByRole('dialog')).toHaveCount(0);
 
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  await page.getByRole('link', { name: 'Visits' }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Visits', exact: true })
+    .click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
 });
 

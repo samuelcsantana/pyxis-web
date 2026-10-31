@@ -28,7 +28,10 @@ export default async function InstallPage({ params }: InstallPageProps) {
         title={i18n.t('install.title')}
         subtitle={i18n.t('install.subtitle', { project: project.name })}
       />
-      <MainContent className="flex w-full max-w-200 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent
+        data-window-page=""
+        className="flex w-full max-w-200 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+      >
         <InstallGuide
           settings={settings}
           endpoint={apiBaseUrl() ?? PYXIS_INGESTION_URL}

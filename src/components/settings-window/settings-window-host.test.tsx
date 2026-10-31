@@ -2,11 +2,14 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { type ReactNode, StrictMode } from 'react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FrameRoot, WINDOW_TITLE_ID } from './frame-view';
+import { SettingsDialog } from './settings-dialog';
 import {
   ACCOUNT_WINDOW_SEGMENT,
   HELP_WINDOW_SEGMENT,
+  INSTALL_WINDOW_SEGMENT,
   initialViewOf,
   isWindowAddress,
+  windowSizeOf,
   PROJECT_WINDOW_SEGMENT,
   SettingsWindowHost,
 } from './settings-window-host';
@@ -204,18 +207,26 @@ describe('initialViewOf', () => {
   });
 });
 
+describe('windowSizeOf', () => {
+  it('opens Install wider than the settings window', () => {
+    expect(windowSizeOf([INSTALL_WINDOW_SEGMENT])).toBe('install');
+    expect(windowSizeOf([PROJECT_WINDOW_SEGMENT, 'keys'])).toBe('settings');
+    expect(windowSizeOf([])).toBe('settings');
+  });
+});
+
 describe('isWindowAddress', () => {
   it('knows the addresses of the settings window', () => {
     expect(isWindowAddress('/p-store/settings')).toBe(true);
     expect(isWindowAddress('/p-store/settings/keys')).toBe(true);
     expect(isWindowAddress('/account/sessions')).toBe(true);
     expect(isWindowAddress('/p-store/help')).toBe(true);
+    expect(isWindowAddress('/p-store/install')).toBe(true);
   });
 
   it('knows that a screen, an export or the home are not the window', () => {
     expect(isWindowAddress('/p-store/overview')).toBe(false);
     expect(isWindowAddress('/p-store/exports/e1')).toBe(false);
-    expect(isWindowAddress('/p-store/install')).toBe(false);
     expect(isWindowAddress('/')).toBe(false);
   });
 });
@@ -270,6 +281,48 @@ describe('SettingsWindowHost', () => {
 
     expect(settingsWindow()).toHaveAttribute('data-settings-window');
     expect(settingsWindow().open).toBe(true);
+  });
+
+  it('draws the settings width when no size is given', () => {
+    render(
+      <SettingsDialog closeLabel="Close" initialView="section">
+        <WindowContent />
+      </SettingsDialog>,
+    );
+
+    expect(settingsWindow()).toHaveClass('lg:w-[min(50rem,calc(100vw-3rem))]');
+  });
+
+  it('opens Install as a wider window, focused on its title', () => {
+    navigation.pathname = '/p-store/install';
+    navigation.segments = [INSTALL_WINDOW_SEGMENT];
+
+    render(
+      <Window>
+        <h2 id="settings-window-title" data-section-title="" tabIndex={-1}>
+          Install
+        </h2>
+      </Window>,
+    );
+
+    expect(settingsWindow().open).toBe(true);
+    expect(settingsWindow()).toHaveClass('lg:w-[min(60rem,calc(100vw-3rem))]');
+    expect(screen.getByRole('heading', { name: 'Install' })).toHaveFocus();
+  });
+
+  it('closes again with Escape after going back from one window to another', () => {
+    navigation.pathname = '/p-store/install';
+    navigation.segments = [INSTALL_WINDOW_SEGMENT];
+    const { rerender } = render(<Window />);
+    pressEscape();
+    expect(navigation.router.back).toHaveBeenCalledOnce();
+
+    navigation.pathname = '/p-store/help';
+    navigation.segments = [HELP_WINDOW_SEGMENT];
+    rerender(<Window />);
+    pressEscape();
+
+    expect(navigation.router.back).toHaveBeenCalledTimes(2);
   });
 
   it('opens Help and support as the same window', () => {

@@ -16,7 +16,14 @@ import { type FrameView, FrameViewProvider, SECTION_TITLE, WINDOW_TITLE_ID } fro
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
 const ON_A_PHONE = 'max-lg:inset-0 max-lg:h-dvh max-lg:w-full';
 const ON_A_LAPTOP =
-  'lg:top-[clamp(1rem,6vh,4rem)] lg:left-1/2 lg:h-[min(44rem,calc(100dvh-clamp(1rem,6vh,4rem)-3.75rem))] lg:w-[min(50rem,calc(100vw-3rem))] lg:-translate-x-1/2 lg:rounded-2xl lg:border lg:border-line lg:shadow-[0_32px_80px_-24px_rgba(4,10,20,0.6),0_2px_6px_rgba(4,10,20,0.08)]';
+  'lg:top-[clamp(1rem,6vh,4rem)] lg:left-1/2 lg:h-[min(44rem,calc(100dvh-clamp(1rem,6vh,4rem)-3.75rem))] lg:-translate-x-1/2 lg:rounded-2xl lg:border lg:border-line lg:shadow-[0_32px_80px_-24px_rgba(4,10,20,0.6),0_2px_6px_rgba(4,10,20,0.08)]';
+
+export type WindowSize = 'settings' | 'install';
+
+const LAPTOP_WIDTHS: Readonly<Record<WindowSize, string>> = {
+  settings: 'lg:w-[min(50rem,calc(100vw-3rem))]',
+  install: 'lg:w-[min(60rem,calc(100vw-3rem))]',
+};
 
 const PHONE_WIDTH = '(width < 64rem)';
 
@@ -74,10 +81,16 @@ function returnFocusTo(opener: Opener | null) {
 export interface SettingsDialogProps {
   readonly closeLabel: string;
   readonly initialView: FrameView;
+  readonly size?: WindowSize;
   readonly children: ReactNode;
 }
 
-export function SettingsDialog({ closeLabel, initialView, children }: SettingsDialogProps) {
+export function SettingsDialog({
+  closeLabel,
+  initialView,
+  size = 'settings',
+  children,
+}: SettingsDialogProps) {
   const router = useRouter();
   const pathname = usePathname();
   const dialog = useRef<HTMLDialogElement>(null as unknown as HTMLDialogElement);
@@ -95,6 +108,10 @@ export function SettingsDialog({ closeLabel, initialView, children }: SettingsDi
       returnFocusTo(returning);
     };
   }, []);
+
+  useEffect(() => {
+    closing.current = false;
+  }, [pathname]);
 
   const close = () => {
     if (closing.current) {
@@ -124,7 +141,7 @@ export function SettingsDialog({ closeLabel, initialView, children }: SettingsDi
       onCancel={closeOnEscape}
       onPointerDown={notePress}
       onClick={closeOutside}
-      className={`fixed m-0 max-h-none max-w-none overflow-hidden border-0 bg-card p-0 text-ink backdrop:bg-[rgba(4,10,20,0.55)] open:flex ${ON_A_PHONE} ${ON_A_LAPTOP}`}
+      className={`fixed m-0 max-h-none max-w-none overflow-hidden border-0 bg-card p-0 text-ink backdrop:bg-[rgba(4,10,20,0.55)] open:flex ${ON_A_PHONE} ${ON_A_LAPTOP} ${LAPTOP_WIDTHS[size]}`}
     >
       <FrameViewProvider initial={initialView} section={pathname}>
         {children}
