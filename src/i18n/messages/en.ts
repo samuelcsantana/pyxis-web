@@ -37,14 +37,12 @@ export const en = {
       newVisit: 'New',
     },
     closeMenu: 'Close menu',
-    section: 'Analytics',
     switchProject: 'Switch project. Current project:',
     newProject: 'New project',
     signOut: 'Sign out',
     signOutEverywhere: 'Sign out everywhere',
     signingOut: 'Signing out…',
     signOutFailed: 'Could not sign out. Try again.',
-    projectSection: 'Project',
     install: 'Install',
     installPending: 'Pending',
     usage: {
@@ -192,11 +190,6 @@ export const en = {
     you: 'You',
     sections: 'Sections',
     close: 'Close',
-    subtitle:
-      'How {project} is set up, and the e-mails you get about it. Project settings change through the command line.',
-    subtitleOwner: 'How {project} is set up, its keys, and the e-mails you get about it.',
-    subtitleMember:
-      'How {project} is set up, and the e-mails you get about it. Only the owner of its account changes the project.',
     project: {
       heading: 'Project',
       name: 'Name',
@@ -432,7 +425,6 @@ export const en = {
   },
   support: {
     title: 'Help and support',
-    subtitle: 'Talk to the people who run Pyxis, or find the answer in the documentation.',
     copy: 'Copy',
     copied: 'Copied',
     selected: 'Selected, press Ctrl+C',
@@ -502,7 +494,6 @@ export const en = {
   },
   exportPage: {
     title: 'Export',
-    subtitle: 'The events of {project}, in a compressed CSV file.',
     pending: 'Preparing the file…',
     pendingNote:
       'This page checks again every few seconds, and you also get an e-mail when it is ready.',
@@ -586,7 +577,6 @@ export const en = {
   },
   install: {
     title: 'Install',
-    subtitle: 'Send the first events of {project}.',
     step1: '1. Install Pyxis on your site',
     npm: 'With a bundler (npm):',
     script: 'Or in plain HTML, before the closing body tag:',
@@ -923,7 +913,6 @@ export const en = {
     noChange: 'no change',
   },
   overview: {
-    subtitle: 'How {project} was used in the period',
     kpiToggleHint: 'Plots this figure per day on the chart below.',
     topPages: {
       title: 'Top pages',
@@ -1044,7 +1033,6 @@ export const en = {
     point: '{series}, {day}',
   },
   acquisition: {
-    subtitle: 'Where visits to {project} come from',
     paidVisits: 'Paid visits',
     footnote:
       'An ad click is recognised by the click id in the landing URL. Pyxis keeps only the fact that it was there, never the id itself, and keeps just the domain of a referring site.',
@@ -1113,7 +1101,6 @@ export const en = {
     otherCities: 'Other cities',
     unknownCity: 'Unknown',
     convertedOfVisits: '{converted} of {visits}',
-    subtitle: 'What people use to reach {project}',
     panels: {
       deviceType: 'Device type',
       browser: 'Browser',
@@ -1226,10 +1213,6 @@ export const en = {
       },
     },
     page: {
-      subtitle: {
-        writes: 'Every write {project} made, and how it ended',
-        reads: 'The reads {project} made that failed',
-      },
       kinds: {
         label: 'Request kind',
         writes: 'Writes',
@@ -1296,7 +1279,6 @@ export const en = {
     otherValues: 'Other values',
   },
   features: {
-    subtitle: 'What people use the most in {project}',
     kindLabel: 'Feature kind',
     kinds: {
       events: 'Events',
@@ -1359,7 +1341,6 @@ export const en = {
     timeToFinish: 'Median time to finish',
     timeToFinishNote: 'from step 1 to step {last}, for those who reached it',
     page: {
-      subtitle: 'Where people continue and where they drop off in {project}',
       countBy: 'Count by',
       modes: {
         visit: 'Per visit',
@@ -1419,7 +1400,6 @@ export const en = {
     shortAccountLink: '{shown}, open the timeline of user {user}',
     noFailedRequest: 'No failed request',
     page: {
-      subtitle: 'Every visit to {project} in the period, newest first',
       footnote:
         'Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.',
       empty: {
@@ -1530,7 +1510,6 @@ export const en = {
       seconds: '{seconds} s',
     },
     page: {
-      subtitle: 'Everything one person or one visit did in {project}, in order',
       tryPerson: 'Try {user}',
     },
     lookUp: {

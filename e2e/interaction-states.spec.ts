@@ -1,5 +1,10 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
+import {
+  contrastRatio,
+  MIN_NON_TEXT_CONTRAST,
+  MIN_STATE_CHANGE,
+  MIN_TEXT_CONTRAST,
+} from './contrast';
 import { focusRing } from './focus-ring';
 import { openAccountMenu, openThemeAndLanguage } from './navigation';
 import { readPaint } from './paint';
@@ -151,7 +156,8 @@ interface SidebarControl {
   readonly prepare?: (page: Page) => Promise<void>;
 }
 
-const switcher = (page: Page) => page.locator('details', { hasText: 'Switch project' });
+const switcher = (page: Page) =>
+  page.getByRole('banner').locator('details', { hasText: 'Switch project' });
 
 const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   {
@@ -324,6 +330,38 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(table).toHaveAttribute('aria-pressed', 'true');
       const paint = await readPaint(chartViews(page).getByTestId('sliding-indicator'));
       expect(contrastRatio(paint.fill, paint.behind)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+    });
+  });
+
+  test.describe(`project switcher, ${colorScheme} theme`, () => {
+    test.use({ colorScheme });
+
+    test('a hovered or pressed project keeps its time zone readable on the row fill', async ({
+      page,
+      isMobile,
+    }) => {
+      test.skip(isMobile, 'Phones have no hover.');
+      await page.goto(`/${STORE_ID}/overview`);
+      await switcher(page).locator('summary').click();
+      const row = switcher(page).locator('a:not([aria-current])').first();
+      const zone = row.getByText('Europe/Lisbon');
+      const rest = await readPaint(row);
+      const readZone = async () => {
+        const rowPaint = await readPaint(row);
+        expect(contrastRatio(rowPaint.fill, rest.fill)).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+        const paint = await readPaint(zone);
+        return contrastRatio(paint.text, paint.behind);
+      };
+
+      await row.hover();
+      const hovered = await readZone();
+      await page.mouse.down();
+      const pressed = await readZone();
+      await page.mouse.move(0, 0);
+      await page.mouse.up();
+
+      expect(hovered).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
+      expect(pressed).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
     });
   });
 }

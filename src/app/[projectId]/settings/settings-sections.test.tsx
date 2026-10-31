@@ -31,7 +31,7 @@ import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { MockProjectPeopleService } from '@/services/project-people/mock-project-people-service';
 import { MockProjectsService } from '@/services/projects/mock-projects-service';
 import { englishTranslator } from '@/test-utils/english';
-import { renderWithMessages } from '@/test-utils/render-with-messages';
+import { renderInProject } from '@/test-utils/project-choices';
 import SettingsDeletePage, { generateMetadata as deletePageMetadata } from './delete/page';
 import SettingsEmailPage, { generateMetadata as emailPageMetadata } from './email/page';
 import SettingsExportPage, { generateMetadata as exportPageMetadata } from './export/page';
@@ -65,6 +65,7 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
+  useSelectedLayoutSegments: () => [],
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -260,13 +261,10 @@ describe('a project section as a full page', () => {
   it.each(ROUTES)(
     'shows the $section section under the Settings title, with every section in the menu',
     async ({ page, title, path, control }) => {
-      renderWithMessages(await fullPage(page(propsFor())));
+      renderInProject(await fullPage(page(propsFor())));
 
       expect(screen.getByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
       expect(screen.getAllByRole('heading', { name: 'Settings' })).toHaveLength(1);
-      expect(
-        screen.getByText('How My site is set up, its keys, and the e-mails you get about it.'),
-      ).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 2, name: title })).toHaveAttribute(
         'tabindex',
         '-1',
@@ -275,13 +273,20 @@ describe('a project section as a full page', () => {
         within(sectionRegion(title)).getByRole(control.role, { name: control.name }),
       ).toBeInTheDocument();
       expect(menuLinks()).toEqual(OWNER_LINKS);
-      expect(screen.getByRole('link', { current: 'page' })).toHaveAttribute('href', path);
+      expect(
+        within(screen.getByRole('navigation', { name: 'Sections' })).getByRole('link', {
+          current: 'page',
+        }),
+      ).toHaveAttribute('href', path);
       expect(screen.getByRole('main')).toBeInTheDocument();
+      expect(
+        within(screen.getByRole('banner')).getByText('Switch project. Current project:'),
+      ).toBeInTheDocument();
     },
   );
 
   it('groups the menu under the project name and You, beside the e-mail of the admin', async () => {
-    renderWithMessages(await fullPage(SettingsKeysPage(propsFor())));
+    renderInProject(await fullPage(SettingsKeysPage(propsFor())));
 
     const menu = screen.getByRole('navigation', { name: 'Sections' });
     expect(within(menu).getByText('My site')).toBeInTheDocument();
@@ -291,40 +296,28 @@ describe('a project section as a full page', () => {
   });
 
   it('writes the dates of a section in the time zone of the project', async () => {
-    renderWithMessages(await fullPage(SettingsKeysPage(propsFor())));
+    renderInProject(await fullPage(SettingsKeysPage(propsFor())));
 
     expect(sectionRegion('Keys')).toHaveTextContent('Created Feb 3, 2025, 07:00');
   });
 
   it.each([
-    [
-      'someone the owner added',
-      'member',
-      'How My site is set up, and the e-mails you get about it. Only the owner of its account changes the project.',
-    ],
-    [
-      'the operator',
-      null,
-      'How My site is set up, and the e-mails you get about it. Project settings change through the command line.',
-    ],
-  ] as const)(
-    'tells %s who changes the project, without the owner controls',
-    async (_, role, subtitle) => {
-      state.settings = settingsWithRole(role);
+    ['someone the owner added', 'member'],
+    ['the operator', null],
+  ] as const)('shows %s the project without the owner controls', async (_, role) => {
+    state.settings = settingsWithRole(role);
 
-      renderWithMessages(await fullPage(SettingsProjectPage(propsFor())));
+    renderInProject(await fullPage(SettingsProjectPage(propsFor())));
 
-      expect(screen.getByText(subtitle)).toBeInTheDocument();
-      expect(within(sectionRegion('Project')).queryByRole('textbox')).not.toBeInTheDocument();
-      expect(sectionRegion('Project')).toHaveTextContent('https://www.store.example.com');
-      expect(menuLinks()).toEqual(MEMBER_LINKS);
-    },
-  );
+    expect(within(sectionRegion('Project')).queryByRole('textbox')).not.toBeInTheDocument();
+    expect(sectionRegion('Project')).toHaveTextContent('https://www.store.example.com');
+    expect(menuLinks()).toEqual(MEMBER_LINKS);
+  });
 
   it('shows someone the owner added the keys without a way to create or revoke one', async () => {
     state.settings = settingsWithRole('member');
 
-    renderWithMessages(await fullPage(SettingsKeysPage(propsFor())));
+    renderInProject(await fullPage(SettingsKeysPage(propsFor())));
 
     const keys = sectionRegion('Keys');
     expect(keys).toHaveTextContent('pyxis_pk_');
@@ -335,7 +328,7 @@ describe('a project section as a full page', () => {
   it('shows someone the owner added the people without a way to add or remove one', async () => {
     state.settings = settingsWithRole('member');
 
-    renderWithMessages(await fullPage(SettingsPeoplePage(propsFor())));
+    renderInProject(await fullPage(SettingsPeoplePage(propsFor())));
 
     const people = sectionRegion('People');
     expect(people).toHaveTextContent('Who can open this project.');
@@ -374,7 +367,7 @@ describe('a project section as a full page', () => {
     );
     state.people = people;
 
-    renderWithMessages(await fullPage(SettingsPeoplePage(propsFor())));
+    renderInProject(await fullPage(SettingsPeoplePage(propsFor())));
 
     expect(people).toHaveBeenCalledWith(STORE.id);
     const rows = within(sectionRegion('People')).getAllByRole('listitem');
@@ -392,7 +385,7 @@ describe('a project section as a full page', () => {
     );
     state.preferences = preferences;
 
-    renderWithMessages(await fullPage(SettingsEmailPage(propsFor())));
+    renderInProject(await fullPage(SettingsEmailPage(propsFor())));
 
     expect(preferences).toHaveBeenCalledWith(STORE.id);
     expect(
@@ -401,7 +394,7 @@ describe('a project section as a full page', () => {
   });
 
   it('keeps the period and the filters of the screen behind in every menu link', async () => {
-    renderWithMessages(
+    renderInProject(
       await fullPage(
         SettingsEmailPage(
           propsFor({
@@ -437,7 +430,7 @@ describe('a project section as a window', () => {
   it.each(ROUTES)(
     'shows the $section section under a Settings window title, with every section in the menu',
     async ({ window, title, path, control }) => {
-      renderWithMessages(await windowed(window(propsFor())));
+      renderInProject(await windowed(window(propsFor())));
 
       const windowTitle = screen.getByRole('heading', { level: 2, name: 'Settings' });
       expect(windowTitle).toHaveAttribute('id', 'settings-window-title');
@@ -447,14 +440,18 @@ describe('a project section as a window', () => {
         within(sectionRegion(title)).getByRole(control.role, { name: control.name }),
       ).toBeInTheDocument();
       expect(menuLinks()).toEqual(OWNER_LINKS);
-      expect(screen.getByRole('link', { current: 'page' })).toHaveAttribute('href', path);
+      expect(
+        within(screen.getByRole('navigation', { name: 'Sections' })).getByRole('link', {
+          current: 'page',
+        }),
+      ).toHaveAttribute('href', path);
     },
   );
 
   it('leaves the owner-only sections out of the menu of someone the owner added', async () => {
     state.settings = settingsWithRole('member');
 
-    renderWithMessages(await windowed(SettingsKeysWindow(propsFor())));
+    renderInProject(await windowed(SettingsKeysWindow(propsFor())));
 
     expect(menuLinks()).toEqual(MEMBER_LINKS);
     expect(
@@ -463,7 +460,7 @@ describe('a project section as a window', () => {
   });
 
   it('keeps the period and the filters of the screen behind in every menu link', async () => {
-    renderWithMessages(
+    renderInProject(
       await windowed(
         SettingsProjectWindow(
           propsFor({ range: 'custom', from: '2026-09-01', to: '2026-09-30', path: '/pricing' }),

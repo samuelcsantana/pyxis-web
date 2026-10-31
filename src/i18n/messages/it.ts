@@ -42,14 +42,12 @@ export const it = translation({
       newVisit: 'Nuova',
     },
     closeMenu: 'Chiudi il menu',
-    section: 'Analisi',
     switchProject: 'Cambia progetto. Progetto attuale:',
     newProject: 'Nuovo progetto',
     signOut: 'Esci',
     signOutEverywhere: 'Esci da tutti i dispositivi',
     signingOut: 'Uscita…',
     signOutFailed: 'Impossibile uscire. Riprova.',
-    projectSection: 'Progetto',
     install: 'Installazione',
     installPending: 'In attesa',
     usage: {
@@ -200,11 +198,6 @@ export const it = translation({
     you: 'Tu',
     sections: 'Sezioni',
     close: 'Chiudi',
-    subtitle:
-      'Come è configurato {project} e le email che ricevi al riguardo. Le impostazioni del progetto si cambiano dalla riga di comando.',
-    subtitleOwner: 'Come è configurato {project}, le sue chiavi e le email che ricevi al riguardo.',
-    subtitleMember:
-      'Come è configurato {project} e le email che ricevi al riguardo. Solo il proprietario del suo account può modificare il progetto.',
     project: {
       heading: 'Progetto',
       name: 'Nome',
@@ -452,7 +445,6 @@ export const it = translation({
   },
   support: {
     title: 'Aiuto e assistenza',
-    subtitle: 'Parla con chi gestisce Pyxis o trova la risposta nella documentazione.',
     copy: 'Copia',
     copied: 'Copiato',
     selected: 'Selezionato, premi Ctrl+C',
@@ -526,7 +518,6 @@ export const it = translation({
   },
   exportPage: {
     title: 'Esportazione',
-    subtitle: 'Gli eventi di {project}, in un file CSV compresso.',
     pending: 'Preparazione del file…',
     pendingNote:
       'Questa pagina ricontrolla ogni pochi secondi, e ricevi anche un’email quando il file è pronto.',
@@ -614,7 +605,6 @@ export const it = translation({
   },
   install: {
     title: 'Installazione',
-    subtitle: 'Invia i primi eventi di {project}.',
     step1: '1. Installa Pyxis sul tuo sito',
     npm: 'Con un bundler (npm):',
     script: 'Oppure in HTML semplice, prima del tag di chiusura del body:',
@@ -955,7 +945,6 @@ export const it = translation({
     noChange: 'nessuna variazione',
   },
   overview: {
-    subtitle: 'Come è stato usato {project} nel periodo',
     kpiToggleHint: 'Mostra questo valore giorno per giorno nel grafico qui sotto.',
     topPages: {
       title: 'Pagine principali',
@@ -1077,7 +1066,6 @@ export const it = translation({
     point: '{series}, {day}',
   },
   acquisition: {
-    subtitle: 'Da dove arrivano le visite a {project}',
     paidVisits: 'Visite a pagamento',
     footnote:
       'Un clic su un annuncio viene riconosciuto dall’ID di clic nell’URL di arrivo. Pyxis conserva solo il fatto che c’era, mai l’ID stesso, e di un sito di provenienza conserva solo il dominio.',
@@ -1147,7 +1135,6 @@ export const it = translation({
     otherCities: 'Altre città',
     unknownCity: 'Sconosciuta',
     convertedOfVisits: '{converted} su {visits}',
-    subtitle: 'Cosa usano le persone per raggiungere {project}',
     panels: {
       deviceType: 'Tipo di dispositivo',
       browser: 'Browser',
@@ -1260,10 +1247,6 @@ export const it = translation({
       },
     },
     page: {
-      subtitle: {
-        writes: 'Ogni scrittura fatta da {project} e come è andata a finire',
-        reads: 'Le letture fatte da {project} che sono fallite',
-      },
       kinds: {
         label: 'Tipo di richiesta',
         writes: 'Scritture',
@@ -1331,7 +1314,6 @@ export const it = translation({
     otherValues: 'Altri valori',
   },
   features: {
-    subtitle: 'Cosa usano di più le persone in {project}',
     kindLabel: 'Tipo di funzionalità',
     kinds: {
       events: 'Eventi',
@@ -1395,7 +1377,6 @@ export const it = translation({
     timeToFinish: 'Tempo mediano di completamento',
     timeToFinishNote: 'dal passaggio 1 al passaggio {last}, per chi lo ha raggiunto',
     page: {
-      subtitle: 'Dove le persone proseguono e dove abbandonano in {project}',
       countBy: 'Conta per',
       modes: {
         visit: 'Per visita',
@@ -1455,7 +1436,6 @@ export const it = translation({
     shortAccountLink: '{shown}, apri la cronologia dell’utente {user}',
     noFailedRequest: 'Nessuna richiesta fallita',
     page: {
-      subtitle: 'Tutte le visite a {project} nel periodo, dalle più recenti',
       footnote:
         'In evidenza: i primi cinque eventi con nome di ogni visita, in ordine. Una richiesta fallita è una lettura o una scrittura inviata con trackRequest() che ha risposto 400 o più, oppure non ha mai risposto; Richieste elenca le scritture e le letture fallite in schede separate.',
       empty: {
@@ -1566,7 +1546,6 @@ export const it = translation({
       seconds: '{seconds} s',
     },
     page: {
-      subtitle: 'Tutto ciò che una persona o una visita ha fatto in {project}, in ordine',
       tryPerson: 'Prova {user}',
     },
     lookUp: {

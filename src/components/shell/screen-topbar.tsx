@@ -1,18 +1,17 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import { resolvePeriodOn } from '@/domain/period';
-import { requestKindOf } from '@/domain/request-kind';
 import { createDayFormats } from '@/i18n/day-formats';
 import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import { ActiveVisits } from './active-visits';
 import { PeriodSelector } from './period-selector';
-import { carriedParameters, type ScreenSearch, screenSearchOf } from './screen-search';
+import { carriedParameters, screenSearchOf } from './screen-search';
 import type { ScreenTopbarTexts } from './screen-topbar-texts';
 import { SCREENS_WITHOUT_PERIOD, type ScreenSlug, screenHref, screenLabelKey } from './screens';
-import { PeriodLabel, RangeNotice, TopbarFrame } from './topbar';
+import { RangeNotice, TopbarFrame } from './topbar';
 import { useScreenOnView } from './use-screen-on-view';
 import { useProjectToday } from './use-project-today';
 
@@ -23,15 +22,16 @@ export interface ScreenTopbarProps {
   readonly timeZone: string;
   readonly serverNow: number;
   readonly texts: ScreenTopbarTexts;
+  readonly children?: ReactNode;
 }
 
-function subtitleOf(screen: ScreenSlug, search: ScreenSearch, texts: ScreenTopbarTexts): string {
-  return screen === 'requests'
-    ? texts.requestsSubtitles[requestKindOf(search)]
-    : texts.subtitles[screen];
-}
-
-export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTopbarProps) {
+export function ScreenTopbar({
+  projectId,
+  timeZone,
+  serverNow,
+  texts,
+  children,
+}: ScreenTopbarProps) {
   const screen = useScreenOnView();
   const search = screenSearchOf(useSearchParams());
   const today = useProjectToday(timeZone, serverNow);
@@ -42,9 +42,12 @@ export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTo
     return null;
   }
   const title = t(screenLabelKey(screen));
-  const subtitle = subtitleOf(screen, search, texts);
   if (SCREENS_WITHOUT_PERIOD.has(screen)) {
-    return <TopbarFrame title={title} subtitle={subtitle} controls={null} />;
+    return (
+      <TopbarFrame title={title} controls={null}>
+        {children}
+      </TopbarFrame>
+    );
   }
   const period = resolvePeriodOn(search, today);
   const showsVisitsNow = screen === ACTIVE_VISITS_SCREEN && period.to >= today;
@@ -52,8 +55,6 @@ export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTo
     <TopbarFrame
       title={title}
       besideTitle={showsVisitsNow ? <ActiveVisits /> : undefined}
-      subtitle={subtitle}
-      context={<PeriodLabel period={period} format={formats} />}
       notice={
         period.rejected === undefined ? undefined : (
           <RangeNotice text={texts.rangeNotices[period.rejected.problem]} />
@@ -65,9 +66,12 @@ export function ScreenTopbar({ projectId, timeZone, serverNow, texts }: ScreenTo
           period={period}
           today={today}
           keep={carriedParameters(screen, search)}
+          format={formats}
           t={t}
         />
       }
-    />
+    >
+      {children}
+    </TopbarFrame>
   );
 }

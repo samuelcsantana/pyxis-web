@@ -50,13 +50,7 @@ export default async function ProjectLayout({ children, modal, params }: Project
               project: project.name,
             })}
           >
-            <Sidebar
-              admin={admin}
-              project={project}
-              i18n={i18n}
-              canCreateProject={canCreateProject}
-              usage={usage}
-            />
+            <Sidebar admin={admin} project={project} i18n={i18n} usage={usage} />
           </MobileMenu>
           <NavigationRegion className="relative flex min-w-0 flex-col">
             {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}

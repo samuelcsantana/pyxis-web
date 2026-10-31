@@ -209,7 +209,3 @@ export function returnPathOf(value: string | null | undefined): string | undefin
     ? `${url.pathname}${url.search}`
     : undefined;
 }
-
-export function screenOf(pathname: string): string | undefined {
-  return pathname.split('/')[2];
-}

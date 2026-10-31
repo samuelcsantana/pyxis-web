@@ -142,6 +142,10 @@ describe.each(Object.entries(THEMES))('button states in the %s theme', (_, token
     expect(pair(state, rest)).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
   });
 
+  it('fill a hovered menu row in line-strong, a change from the card that can be seen', () => {
+    expect(pair('line-strong', 'card')).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+  });
+
   it.each([
     ['accent-ink', 'accent-hover'],
     ['accent-ink', 'accent-pressed'],
@@ -149,6 +153,7 @@ describe.each(Object.entries(THEMES))('button states in the %s theme', (_, token
     ['card', 'ink-pressed'],
     ['ink', 'soft'],
     ['ink', 'line'],
+    ['ink', 'line-strong'],
     ['ink', 'warn-soft'],
     ['muted', 'soft'],
   ])('keep %s text readable on %s', (text, surface) => {

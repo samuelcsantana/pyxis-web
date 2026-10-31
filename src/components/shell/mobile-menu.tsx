@@ -59,7 +59,7 @@ export function MobileMenu({ project, homeLabel, children }: MobileMenuProps) {
           className={`flex min-w-0 items-center gap-2 ${NAV_FOCUS_RING}`}
         >
           <LogoMark size={24} />
-          <ProjectMark project={project} size="small" />
+          <ProjectMark project={project} />
           <span aria-hidden="true" className="truncate text-base font-semibold">
             {project.name}
           </span>

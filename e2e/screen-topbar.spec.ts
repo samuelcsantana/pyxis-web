@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { holdScreenRequests } from './navigation';
+import { holdScreenRequests, shownDates } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const HEADER_MARKER = 'pyxisE2eHeader';
@@ -92,11 +92,11 @@ test('keeps the same header while the screen and then the period change', async 
   expect(await theMarkedHeaderIsShown(page)).toBe(true);
 });
 
-test('shows the real subtitle and period of the destination while it loads', async ({
+test('shows the title and the dates of the destination while it loads', async ({
   page,
   isMobile,
 }) => {
-  test.skip(isMobile, 'A phone hides the subtitle of the header.');
+  test.skip(isMobile, 'a phone opens the screens from its menu, checked in loading.spec.ts');
   await page.goto(`/${STORE_ID}/overview`);
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await waitForPrefetchOf(page, 'devices');
@@ -106,7 +106,7 @@ test('shows the real subtitle and period of the destination while it loads', asy
 
   const header = page.getByRole('banner');
   await expect(header.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
-  await expect(header.getByText('What people use to reach My site')).toBeVisible();
+  await expect(shownDates(page)).toBeVisible();
   await expect(periodLink(page, '30 days')).toHaveAttribute('aria-current', 'page');
   await expect(header.locator('.motion-safe\\:animate-pulse:visible')).toHaveCount(0);
   await expect(page.getByRole('main')).toHaveAttribute('aria-busy', 'true');

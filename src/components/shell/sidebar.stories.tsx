@@ -16,8 +16,6 @@ if (STORE === undefined) {
   throw new Error('The demo admin has no project.');
 }
 
-const ONE_PROJECT: Admin = { ...DEMO_ADMIN, projects: [STORE] };
-
 const LONG_PROJECT = {
   ...STORE,
   name: 'Customer Self-Service Portal (Production)',
@@ -29,25 +27,12 @@ const LONG_VALUES: Admin = {
   projects: [LONG_PROJECT, ...DEMO_ADMIN.projects.slice(1)],
 };
 
-function linesOf(node: Node): DOMRectList {
-  const range = document.createRange();
-  range.selectNodeContents(node);
-  return range.getClientRects();
-}
-
 const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  for (const text of [LONG_VALUES.email, LONG_PROJECT.name, LONG_PROJECT.timezone]) {
-    for (const element of canvas.getAllByText(text)) {
-      await expect(element.scrollWidth).toBeLessThanOrEqual(element.clientWidth);
-      await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
-    }
+  for (const element of canvas.getAllByText(LONG_VALUES.email)) {
+    await expect(element.scrollWidth).toBeLessThanOrEqual(element.clientWidth);
+    await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
   }
-  const zoneParts = [...canvas.getByText(LONG_PROJECT.timezone).childNodes]
-    .filter((node) => node.nodeType === Node.TEXT_NODE)
-    .map(linesOf);
-  await expect(zoneParts.map((lines) => lines.length)).toEqual([1, 1, 1]);
-  await expect(new Set(zoneParts.map((lines) => lines[0]?.top)).size).toBeGreaterThan(1);
 };
 
 const meta = {
@@ -80,15 +65,13 @@ type Story = StoryObj<typeof meta>;
 
 export const OverviewSelected: Story = {};
 
-export const SingleProject: Story = { args: { admin: ONE_PROJECT } };
-
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
 export const BrazilianPortuguese: Story = {
   globals: { locale: 'pt-BR' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByText('Sem cookies, sem dados pessoais')).toBeVisible();
+    await expect(canvas.queryByText('Sem cookies, sem dados pessoais')).toBeNull();
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
     await userEvent.click(canvas.getByText('Conta e preferências'));
@@ -307,22 +290,6 @@ export const Pressed: Story = {
 
 type Play = NonNullable<Story['play']>;
 
-const openTheSwitcher: Play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByText('Switch project. Current project:'));
-  for (const project of DEMO_ADMIN.projects) {
-    await expect(canvas.getByRole('link', { name: project.name })).toBeVisible();
-  }
-  await expect(canvas.getByRole('link', { name: STORE.name })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
-};
-
-export const SwitcherOpen: Story = { play: openTheSwitcher };
-
-export const SwitcherOpenDark: Story = { globals: { theme: 'dark' }, play: openTheSwitcher };
-
 class PendingSignOut extends MockAuthService {
   override signOut(): Promise<void> {
     return new Promise(() => undefined);
@@ -458,10 +425,13 @@ export const ShortWindow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(window.innerHeight).toBe(SHORT_LAPTOP_WINDOW.height);
-    const screens = canvas.getByText('Analytics').parentElement;
-    await expect(screens?.scrollHeight).toBeGreaterThan(screens?.clientHeight ?? Infinity);
-    for (const part of ['Switch project. Current project:', 'Account and preferences']) {
-      const box = boxOf(canvas.getByText(part).closest('summary'));
+    const screens = canvas.getByRole('link', { name: 'Overview' }).closest('ul')?.parentElement;
+    await expect(screens?.scrollHeight).toBe(screens?.clientHeight);
+    for (const part of [
+      canvas.getByRole('link', { name: 'Settings' }),
+      canvas.getByText('Account and preferences').closest('summary'),
+    ]) {
+      const box = boxOf(part);
       await expect(box.top).toBeGreaterThanOrEqual(0);
       await expect(box.bottom).toBeLessThanOrEqual(SHORT_LAPTOP_WINDOW.height);
     }
@@ -489,15 +459,6 @@ export const MenuOpenOnAPhoneDark: Story = {
   globals: { theme: 'dark' },
   decorators: insideTheMobileMenu,
   play: openTheMenu,
-};
-
-export const SwitcherOpenInTheMenuOnAPhone: Story = {
-  parameters: { viewport: { defaultViewport: 'mobile1' } },
-  decorators: insideTheMobileMenu,
-  play: async (context) => {
-    await openTheMenu(context);
-    await openTheSwitcher(context);
-  },
 };
 
 export const MenuClosedWithEscape: Story = {
@@ -564,5 +525,19 @@ export const UsageWhileReceptionIsPaused: Story = {
         /Measuring is paused until Nov 1: the account passed/,
       ),
     ).toBeVisible();
+  },
+};
+
+export const AccountMenuOpenOnAPhone: Story = {
+  globals: { viewport: { value: 'mobile1', isRotated: false } },
+  decorators: insideTheMobileMenu,
+  play: async (context) => {
+    await openTheMenu(context);
+    await openTheAccountMenu(context);
+    const canvas = within(context.canvasElement);
+    const summary = canvas.getByText('Account and preferences').closest('summary');
+    const panel = canvas.getByRole('link', { name: 'Theme and language' }).closest('details > div');
+    await expect(boxOf(panel).top).toBeGreaterThanOrEqual(boxOf(summary).bottom);
+    await expect(canvas.getByRole('link', { name: 'Settings' })).toBeVisible();
   },
 };

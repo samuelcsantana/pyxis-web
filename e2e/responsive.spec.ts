@@ -87,18 +87,23 @@ for (const budget of HEADER_BUDGETS) {
 test.describe('at 320×640, below the sm breakpoint, the period controls', () => {
   test.use({ viewport: { width: 320, height: 640 } });
 
-  test('sit on one row of 44px targets', async ({ page }) => {
+  test('keep the presets on one row and every target at 44px, inside the screen', async ({
+    page,
+  }) => {
     await page.goto(`/${STORE_ID}/overview`);
     const presets = page.getByRole('navigation', { name: 'Period' }).getByRole('link');
     const custom = page.locator('summary', { hasText: 'Custom' });
     await expect(presets).toHaveCount(3);
     await expect(custom).toBeVisible();
-    const controls = [...(await presets.all()), custom];
+    const presetBoxes = await Promise.all((await presets.all()).map((link) => link.boundingBox()));
+    const boxes = [...presetBoxes, await custom.boundingBox()];
 
-    const boxes = await Promise.all(controls.map((control) => control.boundingBox()));
-
-    expect(new Set(boxes.map((box) => box?.y))).toHaveProperty('size', 1);
+    expect(new Set(presetBoxes.map((box) => box?.y))).toHaveProperty('size', 1);
     expect(Math.min(...boxes.map((box) => box?.height ?? 0))).toBeGreaterThanOrEqual(44);
+    expect(Math.max(...boxes.map((box) => (box?.x ?? 0) + (box?.width ?? 0)))).toBeLessThanOrEqual(
+      320,
+    );
+    expect(await sidewaysOverflow(page)).toBe(0);
   });
 });
 
@@ -225,8 +230,8 @@ function sidebarParts(page: Page) {
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
   return {
     navigation,
-    screens: navigation.getByText('Analytics', { exact: true }).locator('..'),
-    project: page.locator('summary', { hasText: 'Switch project' }),
+    screens: navigation.getByRole('list').first().locator('..'),
+    settings: navigation.getByRole('link', { name: 'Settings' }),
     account: page.locator('summary', { hasText: 'Account and preferences' }),
   };
 }
@@ -248,23 +253,15 @@ test.describe(`sidebar at ${String(SIDEBAR_FITS.width)}×${String(SIDEBAR_FITS.h
 test.describe(`sidebar in a ${String(SIDEBAR_SCROLLS_ITS_SCREENS.width)}×${String(SIDEBAR_SCROLLS_ITS_SCREENS.height)} laptop window`, () => {
   test.use({ viewport: SIDEBAR_SCROLLS_ITS_SCREENS });
 
-  test('keeps the project and the account in view and scrolls only the screens', async ({
-    page,
-    isMobile,
-  }) => {
+  test('needs no scroll, with Settings and the account in view', async ({ page, isMobile }) => {
     test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
-    const { navigation, screens, project, account } = sidebarParts(page);
+    const { navigation, screens, settings, account } = sidebarParts(page);
 
-    await expect(project).toBeInViewport({ ratio: 1 });
-    await expect(account).toBeInViewport({ ratio: 1 });
-    expect(await hiddenHeightOf(navigation)).toBe(0);
-    expect(await hiddenHeightOf(screens)).toBeGreaterThan(0);
-
-    const settings = navigation.getByRole('link', { name: 'Settings' });
-    await settings.scrollIntoViewIfNeeded();
     await expect(settings).toBeInViewport({ ratio: 1 });
     await expect(account).toBeInViewport({ ratio: 1 });
+    expect(await hiddenHeightOf(navigation)).toBe(0);
+    expect(await hiddenHeightOf(screens)).toBe(0);
   });
 
   test('opens the account menu above the account, every choice within reach', async ({
@@ -344,6 +341,34 @@ test.describe(`sidebar in a ${String(VERY_SHORT_WINDOW.width)}×${String(VERY_SH
   });
 });
 
+const PROJECT_MENU_OVERFLOWS = { width: 1280, height: 200 } as const;
+
+test.describe(`project menu in a ${String(PROJECT_MENU_OVERFLOWS.width)}×${String(PROJECT_MENU_OVERFLOWS.height)} window`, () => {
+  test.use({ viewport: PROJECT_MENU_OVERFLOWS });
+
+  test('brings the last choice of the project menu into view under the pinned bar', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    await page.goto(`/${STORE_ID}/overview`);
+    await page.waitForLoadState('networkidle');
+    const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
+
+    await switcher.locator('summary').click();
+    const choices = switcher.getByRole('link');
+    const count = await choices.count();
+    for (let press = 0; press < count; press += 1) {
+      await page.keyboard.press('Tab');
+    }
+
+    const last = choices.last();
+    await expect(last).toBeFocused();
+    await expect(last).toBeInViewport({ ratio: 1 });
+    expect(await axeViolations(page)).toEqual([]);
+  });
+});
+
 const NARROWEST_PHONE = { width: 320, height: 640 } as const;
 
 for (const { locale, themes } of [
@@ -377,10 +402,11 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 
-    const switcher = page.locator('summary', { hasText: 'Switch project' });
+    const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
+    await switcher.locator('summary').click();
     for (const text of [
       page.getByText('owner@example.com', { exact: true }),
-      switcher.getByText('My site', { exact: true }),
+      switcher.locator('summary').getByText('My site', { exact: true }),
       switcher.getByText('America/Sao_Paulo', { exact: true }),
     ]) {
       const cut = await text.evaluate(
@@ -392,26 +418,25 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     }
   });
 
-  test('breaks the time zone after its slash, never inside a word', async ({ page, isMobile }) => {
+  test('keeps each part of a time zone whole in the project menu', async ({ page, isMobile }) => {
     test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 
-    const zone = page
-      .locator('summary', { hasText: 'Switch project' })
-      .getByText('America/Sao_Paulo', { exact: true });
-    const lineTopsOfEachPart = await zone.evaluate((element) =>
+    const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
+    await switcher.locator('summary').click();
+    const zone = switcher.getByText('America/Sao_Paulo', { exact: true });
+    const linesOfEachPart = await zone.evaluate((element) =>
       [...element.childNodes]
         .filter((node) => node.nodeType === Node.TEXT_NODE)
         .map((node) => {
           const range = document.createRange();
           range.selectNodeContents(node);
-          return [...range.getClientRects()].map((line) => line.top);
+          return range.getClientRects().length;
         }),
     );
 
-    expect(lineTopsOfEachPart.map((tops) => tops.length)).toEqual([1, 1]);
-    expect(lineTopsOfEachPart[1]?.[0]).toBeGreaterThan(lineTopsOfEachPart[0]?.[0] ?? Infinity);
+    expect(linesOfEachPart).toEqual([1, 1]);
   });
 });
 

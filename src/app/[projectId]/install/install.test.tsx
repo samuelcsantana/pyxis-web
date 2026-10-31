@@ -5,7 +5,7 @@ import { InstallGuide } from '@/components/install/install-guide';
 import type { Admin } from '@/domain/admin';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { english } from '@/test-utils/english';
-import { renderWithMessages } from '@/test-utils/render-with-messages';
+import { renderInProject } from '@/test-utils/project-choices';
 import InstallPage, { generateMetadata } from './page';
 
 const SETTINGS: ProjectSettings = {
@@ -49,6 +49,8 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
+  useSelectedLayoutSegments: () => [],
+  usePathname: () => '/p-store/overview',
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -73,7 +75,7 @@ describe('InstallPage', () => {
   it('shows the snippets with the key and the API it talks to', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    renderWithMessages(await InstallPage(PARAMS));
+    renderInProject(await InstallPage(PARAMS));
 
     expect(screen.getByRole('heading', { level: 1, name: 'Install' })).toBeInTheDocument();
     expect(
@@ -86,7 +88,7 @@ describe('InstallPage', () => {
   it('points the demo at the hosted API', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    renderWithMessages(await InstallPage(PARAMS));
+    renderInProject(await InstallPage(PARAMS));
 
     expect(screen.getAllByText(/https:\/\/api\.pyxis-analytics\.dev/).length).toBeGreaterThan(0);
   });

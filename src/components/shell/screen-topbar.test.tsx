@@ -1,6 +1,7 @@
 import { act, cleanup, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
+import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { publishActiveVisits } from './arrival-news';
 import { ScreenTopbar } from './screen-topbar';
@@ -20,7 +21,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO = Date.parse('2026-10-05T15:00:00.000Z');
-const TEXTS = screenTopbarTexts('Demo Store', english);
+const TEXTS = screenTopbarTexts(english);
 
 function segmentOf(pathname: string): string | null {
   return pathname.split('/')[2] ?? null;
@@ -32,15 +33,21 @@ function at(pathname: string, search = '', segment = segmentOf(pathname)) {
   navigation.segment = segment;
 }
 
-function topbar() {
-  return (
+function topbar(chips?: string) {
+  return withProjectChoices(
     <ScreenTopbar
       projectId="p1"
       timeZone="America/Sao_Paulo"
       serverNow={MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO}
       texts={TEXTS}
-    />
+    >
+      {chips === undefined ? null : <p>{chips}</p>}
+    </ScreenTopbar>,
   );
+}
+
+function customButton() {
+  return screen.getByText(/^Custom,/).closest('summary');
 }
 
 function periods() {
@@ -81,29 +88,43 @@ describe('ScreenTopbar visits on the site now', () => {
     renderWithMessages(topbar());
 
     expect(screen.queryByText('4 on the site now')).not.toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: 'Overview' }).parentElement).toBe(
-      screen.getByRole('banner').firstElementChild,
-    );
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Overview' }).nextElementSibling,
+    ).toBeNull();
   });
 });
 
 describe('ScreenTopbar', () => {
-  it('shows the title, the subtitle and the period of the screen in words', () => {
+  it('shows the project, then the title as the path, and the dates of the period in the custom button', () => {
     at('/p1/overview', 'range=30d');
     renderWithMessages(topbar());
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
-    const subtitle = screen.getByText('How Demo Store was used in the period');
-    expect(subtitle).toHaveClass('hidden', 'sm:inline', 'truncate');
-    const range = screen.getByText('Sep 6 – Oct 5, 2026');
-    expect(range.closest('p')).toContainElement(subtitle);
-    expect(range.parentElement).toHaveClass('shrink-0');
+    const bar = screen.getByRole('banner');
+    const heading = within(bar).getByRole('heading', { level: 1, name: 'Overview' });
+    const project = within(bar).getByText('Demo Store', { selector: 'summary span' });
+    expect(project.compareDocumentPosition(heading)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(customButton()?.querySelector('[data-shown-dates]')).toHaveTextContent(
+      /^Sep 6\s–\sOct 5$/,
+    );
+    const button = customButton();
+    const copies = [...(button?.querySelectorAll('[data-shown-dates] ~ span') ?? [])];
+    expect(copies).toHaveLength(3);
+    for (const copy of copies) {
+      expect(copy).toHaveAttribute('aria-hidden', 'true');
+      expect(copy).toHaveClass('invisible');
+    }
     expect(periods().getByRole('link', { name: '30 days' })).toHaveAttribute(
       'aria-current',
       'page',
     );
-    expect(screen.getByRole('navigation', { name: 'Period' })).not.toContainElement(range);
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('puts what it is given under the path, inside the bar', () => {
+    at('/p1/overview', 'range=30d&country=BR');
+    renderWithMessages(topbar('Country: Brazil'));
+
+    expect(within(screen.getByRole('banner')).getByText('Country: Brazil')).toBeInTheDocument();
   });
 
   it('says which custom range it did not use, and what it shows instead', async () => {
@@ -116,7 +137,9 @@ describe('ScreenTopbar', () => {
       'That range was not used: it is longer than 400 days. Showing the last 30 days instead.',
     );
     expect(notice).toHaveAttribute('id', 'period-range-notice');
-    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
+    expect(customButton()?.querySelector('[data-shown-dates]')).toHaveTextContent(
+      /Sep 6\s–\sOct 5$/,
+    );
   });
 
   it('shows a custom period from the address', () => {
@@ -124,8 +147,7 @@ describe('ScreenTopbar', () => {
     renderWithMessages(topbar());
 
     expect(screen.getByRole('heading', { level: 1, name: 'Devices' })).toBeInTheDocument();
-    expect(screen.getByText('Aug 1 – Aug 31, 2026')).toBeInTheDocument();
-    expect(screen.getByText('What people use to reach Demo Store')).toBeInTheDocument();
+    expect(customButton()?.querySelector('[data-shown-dates]')).toHaveTextContent(/Aug 1\s–\s31$/);
   });
 
   it('carries the filters of the screen into every preset and into the custom form', () => {
@@ -150,28 +172,13 @@ describe('ScreenTopbar', () => {
     );
   });
 
-  it('names the kind of request in the subtitle of Requests', () => {
-    at('/p1/requests', 'kind=reads');
-    const { unmount } = renderWithMessages(topbar());
-
-    expect(screen.getByText('The reads Demo Store made that failed')).toBeInTheDocument();
-    unmount();
-
-    at('/p1/requests');
-    renderWithMessages(topbar());
-
-    expect(screen.getByText('Every write Demo Store made, and how it ended')).toBeInTheDocument();
-  });
-
-  it('shows the timeline with no period', () => {
+  it('shows the timeline with no period, with what it is given under the path', () => {
     at('/p1/timeline');
-    renderWithMessages(topbar());
+    renderWithMessages(topbar('User u_1'));
 
     expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
-    expect(
-      screen.getByText('Everything one person or one visit did in Demo Store, in order'),
-    ).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
+    expect(within(screen.getByRole('banner')).getByText('User u_1')).toBeInTheDocument();
   });
 
   it.each(['/p1/settings', '/p1/install', '/p1'])(
@@ -189,7 +196,9 @@ describe('ScreenTopbar', () => {
     renderWithMessages(topbar());
 
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
-    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
+    expect(customButton()?.querySelector('[data-shown-dates]')).toHaveTextContent(
+      /Sep 6\s–\sOct 5$/,
+    );
     expect(periods().getByRole('link', { name: 'Today' })).toHaveAttribute(
       'href',
       '/p1/overview?range=today',
@@ -198,8 +207,8 @@ describe('ScreenTopbar', () => {
 
   it('closes the custom form when the screen changes', async () => {
     at('/p1/overview', 'from=2026-08-01&to=2026-08-31');
-    const { container, rerender } = renderWithMessages(topbar());
-    const details = container.querySelector('details');
+    const { rerender } = renderWithMessages(topbar());
+    const details = customButton()?.closest('details') ?? null;
     if (details === null) {
       throw new Error('The period selector has no custom form.');
     }
@@ -210,6 +219,6 @@ describe('ScreenTopbar', () => {
     rerender(topbar());
 
     expect(screen.getByRole('heading', { level: 1, name: 'Funnel' })).toBeInTheDocument();
-    expect(container.querySelector('details')).not.toHaveAttribute('open');
+    expect(customButton()?.closest('details')).not.toHaveAttribute('open');
   });
 });

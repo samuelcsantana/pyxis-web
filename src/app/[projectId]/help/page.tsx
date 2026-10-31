@@ -29,7 +29,7 @@ export default async function HelpPage({ params }: HelpPageProps) {
   const i18n = await getI18n();
   return (
     <>
-      <Topbar title={i18n.t('support.title')} subtitle={i18n.t('support.subtitle')} />
+      <Topbar title={i18n.t('support.title')} />
       <MainContent
         data-window-page=""
         className="flex w-full max-w-3xl flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"

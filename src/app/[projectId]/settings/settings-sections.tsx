@@ -98,19 +98,6 @@ const ACCOUNT_TIME_ZONE_FALLBACK = 'UTC';
 const FULL_PAGE_FRAME =
   'flex overflow-hidden lg:min-h-[min(44rem,calc(100dvh-12rem))] lg:rounded-card lg:border lg:border-line';
 
-const SUBTITLES = {
-  owner: 'settings.subtitleOwner',
-  member: 'settings.subtitleMember',
-  operator: 'settings.subtitle',
-} as const;
-
-function subtitleOf(settings: ProjectSettings) {
-  if (canManageProject(settings)) {
-    return SUBTITLES.owner;
-  }
-  return settings.role === 'member' ? SUBTITLES.member : SUBTITLES.operator;
-}
-
 export function searchReaderOf(search: PageSearch): SearchReader {
   return {
     get: (name) => {
@@ -264,13 +251,10 @@ export async function ProjectSectionPage({
     'page',
     searchReaderOf(search),
   );
-  const { i18n, settings } = context;
+  const { i18n } = context;
   return (
     <>
-      <Topbar
-        title={i18n.t('nav.settings')}
-        subtitle={i18n.t(subtitleOf(settings), { project: settings.name })}
-      />
+      <Topbar title={i18n.t('nav.settings')} />
       <MainContent
         data-window-page=""
         className="flex w-full max-w-310 flex-col p-0 sm:px-8 sm:pt-7 sm:pb-12"

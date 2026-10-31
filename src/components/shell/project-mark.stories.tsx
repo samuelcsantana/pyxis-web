@@ -17,7 +17,7 @@ const meta = {
   title: 'Shell/ProjectMark',
   component: ProjectMark,
   tags: ['autodocs'],
-  args: { project: STORE, size: 'large', iconHref: SITE_ICON },
+  args: { project: STORE, iconHref: SITE_ICON },
   decorators: [
     (Story) => (
       <div className="flex items-center gap-3 rounded-card bg-nav p-4">
@@ -36,15 +36,11 @@ export const SiteIcon: Story = {
   },
 };
 
-export const SiteIconInTheList: Story = { args: { size: 'small' } };
-
 export const Initials: Story = {
   args: { iconHref: null },
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByText('MS')).toBeInTheDocument();
   },
 };
-
-export const InitialsInTheList: Story = { args: { iconHref: null, size: 'small' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };

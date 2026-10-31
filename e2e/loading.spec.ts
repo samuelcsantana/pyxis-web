@@ -46,8 +46,8 @@ test('keeps the top bar with the destination title while a screen loads', async 
 
   release();
 
-  await expect(page.getByText('What people use to reach My site')).toBeAttached();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
 });
 
 test('shows the loading placeholder only while the screen has no content', async ({ page }) => {

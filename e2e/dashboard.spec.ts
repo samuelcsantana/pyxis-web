@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
-import { openAccountMenu, openThemeAndLanguage } from './navigation';
+import { customPeriod, openAccountMenu, openThemeAndLanguage, shownDates } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -29,7 +29,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       page,
     }) => {
       await page.goto(`/${STORE_ID}/overview`);
-      await page.getByText('Custom', { exact: true }).click();
+      await customPeriod(page).click();
       await page.getByRole('grid').locator('button[tabindex="0"]').click();
       await expect(page.getByText(/now choose the last day/)).toBeVisible();
 
@@ -55,8 +55,8 @@ test('lists the screens in the order of the questions, then the project', async 
   await openNavigation(page, isMobile);
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
 
-  const screens = navigation.getByText('Analytics', { exact: true }).locator('..');
-  await expect(screens.getByRole('list').first().getByRole('link')).toHaveText([
+  await expect(navigation.getByText('Analytics', { exact: true })).toHaveCount(0);
+  await expect(navigation.getByRole('list').first().getByRole('link')).toHaveText([
     'Overview',
     /^Acquisition/,
     /^Devices/,
@@ -66,7 +66,7 @@ test('lists the screens in the order of the questions, then the project', async 
     'Timeline',
     /^Requests/,
   ]);
-  await expect(navigation.getByRole('list', { name: 'Project' }).getByRole('link')).toHaveText([
+  await expect(navigation.getByRole('list').nth(1).getByRole('link')).toHaveText([
     'Install',
     'Settings',
   ]);
@@ -94,13 +94,12 @@ test('names the project on screen in the bar of a phone, after a switch too', as
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, 'A computer shows the project in the sidebar.');
+  test.skip(!isMobile, 'Only a phone has the bar that names the project beside its menu button.');
   await page.goto(`/${STORE_ID}/overview`);
   const bar = page.getByRole('navigation', { name: 'Main navigation' });
 
   await expect(bar.getByRole('link', { name: 'Overview · My site', exact: true })).toBeVisible();
-  await bar.getByRole('button', { name: 'Open menu' }).click();
-  await page.locator('summary', { hasText: 'Switch project' }).click();
+  await page.getByRole('banner').locator('summary', { hasText: 'Switch project' }).click();
   await page.getByRole('link', { name: 'Demo Docs' }).click();
 
   const home = bar.getByRole('link', { name: 'Overview · Demo Docs', exact: true });
@@ -150,11 +149,11 @@ test('writes the chosen period into the URL', async ({ page }) => {
 test('applies a custom period picked on the calendar through a plain form', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
-  await page.getByText('Custom', { exact: true }).click();
+  await customPeriod(page).click();
   await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
 
   await expect(page).toHaveURL(/from=2026-08-01&to=2026-08-31$/);
-  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+  await expect(shownDates(page)).toHaveText(/^Aug 1\s–\s31$/);
   await expect(page.getByText('Page views and named events, Aug 1 – Aug 31, 2026')).toBeVisible();
 });
 
@@ -187,7 +186,7 @@ test('picks a custom period with the keyboard alone', async ({ page }) => {
 test('keeps the custom period calendar closed until asked for', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
 
-  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+  await expect(shownDates(page)).toHaveText(/^Aug 1\s–\s31$/);
   await expect(page.getByRole('grid')).toBeHidden();
 });
 
@@ -223,7 +222,7 @@ for (const { from, to, reason } of REJECTED_RANGES) {
 test('keeps the custom period form inside the screen', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
-  await page.getByText('Custom', { exact: true }).click();
+  await customPeriod(page).click();
 
   const form = page.locator('form', { has: page.getByRole('grid') });
   await expect(form).toBeVisible();
@@ -242,11 +241,14 @@ test('stretches the sidebar down the whole screen on a desktop', async ({ page, 
   expect(box?.height).toBe(page.viewportSize()?.height);
 });
 
-test('switches project and keeps the period', async ({ page, isMobile }) => {
+test('switches project from a 44px target in the top bar and keeps the period', async ({
+  page,
+}) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
-  await openNavigation(page, isMobile);
+  const summary = page.getByRole('banner').locator('summary', { hasText: 'Switch project' });
 
-  await page.locator('summary', { hasText: 'Switch project' }).click();
+  expect((await summary.boundingBox())?.height).toBeGreaterThanOrEqual(TOUCH_TARGET_PX);
+  await summary.click();
   await page.getByRole('link', { name: 'Demo Docs' }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
@@ -255,12 +257,10 @@ test('switches project and keeps the period', async ({ page, isMobile }) => {
 
 test('closes the project switcher when the focus moves past it, leaving that focus in sight', async ({
   page,
-  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
-  await openNavigation(page, isMobile);
-  const switcher = page.locator('details', { hasText: 'Switch project' });
+  const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
 
   await switcher.locator('summary').click();
   await expect(switcher).toHaveAttribute('open');
@@ -270,18 +270,16 @@ test('closes the project switcher when the focus moves past it, leaving that foc
   }
 
   await expect(switcher).not.toHaveAttribute('open');
-  await expect(page.getByRole('link', { name: 'Overview', exact: true })).toBeFocused();
+  await expect(
+    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: 'Today' }),
+  ).toBeFocused();
   expect(await focusedElementIsUncovered(page)).toBe(true);
 });
 
-test('closes the project switcher on Escape and keeps the mobile menu open', async ({
-  page,
-  isMobile,
-}) => {
+test('closes the project switcher on Escape, with the focus back on it', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
-  await openNavigation(page, isMobile);
-  const switcher = page.locator('details', { hasText: 'Switch project' });
+  const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
 
   await switcher.locator('summary').click();
   await page.keyboard.press('Tab');
@@ -289,16 +287,12 @@ test('closes the project switcher on Escape and keeps the mobile menu open', asy
 
   await expect(switcher).not.toHaveAttribute('open');
   await expect(switcher.locator('summary')).toBeFocused();
-  if (isMobile) {
-    await expect(page.locator(MENU_BUTTON)).toHaveAttribute('aria-expanded', 'true');
-  }
 });
 
-test('closes the project switcher on a click outside it', async ({ page, isMobile }) => {
-  test.skip(isMobile, 'On a phone the menu covers the page under the switcher.');
+test('closes the project switcher on a click outside it', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
-  const switcher = page.locator('details', { hasText: 'Switch project' });
+  const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
 
   await switcher.locator('summary').click();
   await page.getByRole('heading', { level: 1, name: 'Overview' }).click();
@@ -438,16 +432,25 @@ test('keeps the menu bar on screen while the page scrolls', async ({ page, isMob
 test.describe('on a short phone', () => {
   test.use({ viewport: { width: 390, height: 640 } });
 
-  test('keeps sign-out reachable inside the open menu', async ({ page, isMobile }) => {
+  test('shows every choice of the account menu, sign-out included, as it opens', async ({
+    page,
+    isMobile,
+  }) => {
     test.skip(!isMobile, 'The menu button exists only on narrow screens.');
     await page.goto(`/${STORE_ID}/overview`);
 
     await openAccountMenu(page, isMobile);
     const menu = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
-    await page.getByRole('button', { name: 'Sign out', exact: true }).scrollIntoViewIfNeeded();
 
     expect(menu?.height).toBeLessThanOrEqual(640);
-    await expect(page.getByRole('button', { name: 'Sign out', exact: true })).toBeInViewport();
+    for (const choice of [
+      page.getByRole('link', { name: 'Account and billing' }),
+      page.getByRole('link', { name: 'Theme and language' }),
+      page.getByRole('link', { name: 'Help and support' }),
+      page.getByRole('button', { name: 'Sign out', exact: true }),
+    ]) {
+      await expect(choice).toBeInViewport({ ratio: 1 });
+    }
     await expect(page.getByRole('button', { name: 'Close menu' })).toBeInViewport();
   });
 });
@@ -480,6 +483,7 @@ for (const [locale, width] of [
     const layouts: string[] = [];
     for (const range of ['today', '7d', '30d']) {
       await page.goto(`/${STORE_ID}/overview?range=${range}`);
+      await page.waitForLoadState('networkidle');
       const frame = await header.boundingBox();
       const group = await presets.boundingBox();
       layouts.push(
