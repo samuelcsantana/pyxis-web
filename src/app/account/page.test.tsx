@@ -19,6 +19,7 @@ import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { FreePlanState } from '@/domain/sign-up';
 import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import AccountPlanPage, { generateMetadata } from './page';
 
@@ -289,27 +290,27 @@ describe('the full page of the plan part of the account', () => {
     ).toBeInTheDocument();
   });
 
-  it('closes with the support address and the reply time of the paid plan, for the account’s e-mail', async () => {
+  it('keeps the support address for an admin with no project, who has no Help to go to', async () => {
     renderWithMessages(await planPage());
 
     const support = within(planRegion()).getByRole('region', { name: 'Support' });
     expect(within(support).getByText('hello@pyxis-analytics.dev')).toBeInTheDocument();
-    expect(within(support).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
-    expect(support).toHaveTextContent(
-      'On the paid plan, we confirm that your message arrived and reply within 2 business days.',
-    );
     expect(support).toHaveTextContent('Write from owner@example.com, so we know which account');
-    expect(support).not.toHaveTextContent('On the free plan');
+    expect(menuLinks()).toEqual(ACCOUNT_LINKS);
   });
 
-  it('gives the reply time of the free plan to an admin whose only account is on it', async () => {
-    state.accounts = async () => [await freeAccount('owner')];
+  it('lists Help and support last, at the first project of an admin who has one', async () => {
+    state.admin = {
+      email: 'owner@example.com',
+      projects: [
+        { id: DEMO_STORE.id, name: 'My site', timezone: 'Europe/Lisbon', conversionEvent: null },
+      ],
+    };
 
     renderWithMessages(await planPage());
 
-    const support = within(planRegion()).getByRole('region', { name: 'Support' });
-    expect(support).toHaveTextContent('On the free plan');
-    expect(support).not.toHaveTextContent('On the paid plan');
+    expect(menuLinks()).toEqual([...ACCOUNT_LINKS, `/${DEMO_STORE.id}/help`]);
+    expect(within(planRegion()).queryByRole('region', { name: 'Support' })).not.toBeInTheDocument();
   });
 
   it('binds every billing action of an owned account to that account', async () => {

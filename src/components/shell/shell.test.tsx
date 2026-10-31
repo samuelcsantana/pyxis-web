@@ -382,7 +382,7 @@ describe('the project settings in the navigation', () => {
     expect(current[0]).toHaveAccessibleName('Settings');
   });
 
-  it('marks no link of its own current on the help page, whose link is in the foot', () => {
+  it('marks no link of its own current on the help page, whose row is in the account menu', () => {
     navigation.pathname = '/p-store/help';
     renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';

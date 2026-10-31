@@ -107,6 +107,7 @@ const ACCOUNT_LINKS = [
   '/account/sessions',
   '/account/tokens',
   '/account/apps',
+  `/${STORE.id}/help`,
 ];
 const OWNER_LINKS = [
   SETTINGS_PATH,

@@ -13,7 +13,10 @@ export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 export const ACCOUNT_SECTIONS = ['plan', 'preferences', 'sessions', 'tokens', 'apps'] as const;
 export type AccountSection = (typeof ACCOUNT_SECTIONS)[number];
 
-export type SettingsSection = ProjectSection | AccountSection;
+export const HELP_SECTION = 'help';
+export type HelpSection = typeof HELP_SECTION;
+
+export type SettingsSection = ProjectSection | AccountSection | HelpSection;
 
 export const ACCOUNT_PATH = '/account';
 
@@ -75,6 +78,11 @@ export const SECTION_LOOKS: Readonly<Record<SettingsSection, SectionLook>> = {
     label: 'accessTokens.heading',
     icon: 'M4 7h16v10H4z M8 12h.01 M12 12h.01 M16 12h.01',
     titleId: 'settings-access-tokens-heading',
+  },
+  help: {
+    label: 'nav.help',
+    icon: 'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.4 M12 16.8v.2',
+    titleId: 'settings-help-heading',
   },
   apps: {
     label: 'connectedApps.heading',

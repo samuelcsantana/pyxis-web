@@ -18,6 +18,7 @@ const PARTS = [
   'Sessions',
   'Access tokens',
   'Connected apps',
+  'Help and support',
 ];
 
 async function openSettingsFrom(page: Page, isMobile: boolean) {
@@ -257,6 +258,7 @@ test("shows the person's parts outside a project with only the You group", async
     'Sessions',
     'Access tokens',
     'Connected apps',
+    'Help and support',
   ]);
 });
 

@@ -4,6 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { FrameRoot, WINDOW_TITLE_ID } from './frame-view';
 import {
   ACCOUNT_WINDOW_SEGMENT,
+  HELP_WINDOW_SEGMENT,
   initialViewOf,
   isWindowAddress,
   PROJECT_WINDOW_SEGMENT,
@@ -208,11 +209,13 @@ describe('isWindowAddress', () => {
     expect(isWindowAddress('/p-store/settings')).toBe(true);
     expect(isWindowAddress('/p-store/settings/keys')).toBe(true);
     expect(isWindowAddress('/account/sessions')).toBe(true);
+    expect(isWindowAddress('/p-store/help')).toBe(true);
   });
 
   it('knows that a screen, an export or the home are not the window', () => {
     expect(isWindowAddress('/p-store/overview')).toBe(false);
     expect(isWindowAddress('/p-store/exports/e1')).toBe(false);
+    expect(isWindowAddress('/p-store/install')).toBe(false);
     expect(isWindowAddress('/')).toBe(false);
   });
 });
@@ -266,6 +269,15 @@ describe('SettingsWindowHost', () => {
     render(<Window />);
 
     expect(settingsWindow()).toHaveAttribute('data-settings-window');
+    expect(settingsWindow().open).toBe(true);
+  });
+
+  it('opens Help and support as the same window', () => {
+    navigation.pathname = '/p-store/help';
+    navigation.segments = [HELP_WINDOW_SEGMENT];
+
+    render(<Window />);
+
     expect(settingsWindow().open).toBe(true);
   });
 

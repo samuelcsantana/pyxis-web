@@ -14,11 +14,15 @@ import {
 } from '@/domain/support';
 import type { I18n } from '@/i18n/i18n';
 
+export type HelpHeadingLevel = 'h2' | 'h3';
+
 export interface HelpViewProps {
   readonly projectId: string;
   readonly email: string;
   readonly plan: SupportPlan | null;
   readonly i18n: I18n;
+  readonly headingLevel?: HelpHeadingLevel;
+  readonly idPrefix?: string;
 }
 
 const NOTE = 'text-sm text-muted';
@@ -26,15 +30,16 @@ const NOTE = 'text-sm text-muted';
 interface HelpPanelProps {
   readonly id: string;
   readonly title: string;
+  readonly heading: HelpHeadingLevel;
   readonly children: ReactNode;
 }
 
-function HelpPanel({ id, title, children }: HelpPanelProps) {
+function HelpPanel({ id, title, heading: Heading, children }: HelpPanelProps) {
   return (
     <section aria-labelledby={`${id}-heading`} className={PANEL}>
-      <h2 id={`${id}-heading`} className={PANEL_TITLE}>
+      <Heading id={`${id}-heading`} className={PANEL_TITLE}>
         {title}
-      </h2>
+      </Heading>
       {children}
     </section>
   );
@@ -64,13 +69,20 @@ function HelpLink({ href, label, body }: HelpLinkProps) {
   );
 }
 
-export function HelpView({ projectId, email, plan, i18n }: HelpViewProps) {
+export function HelpView({
+  projectId,
+  email,
+  plan,
+  i18n,
+  headingLevel = 'h2',
+  idPrefix = 'help',
+}: HelpViewProps) {
   const t = i18n.t;
   return (
     <div className={SECTION_STACK}>
-      <HelpPanel id="help-write" title={t('support.writeHeading')}>
+      <HelpPanel id={`${idPrefix}-write`} title={t('support.writeHeading')} heading={headingLevel}>
         <SupportAddress
-          id="help-support-address"
+          id={`${idPrefix}-support-address`}
           labels={{
             copy: t('support.copy'),
             copied: t('support.copied'),
@@ -81,7 +93,7 @@ export function HelpView({ projectId, email, plan, i18n }: HelpViewProps) {
         <SupportReplies plan={plan} i18n={i18n} />
         <p className={NOTE}>{t('support.noPersonalData')}</p>
       </HelpPanel>
-      <HelpPanel id="help-docs" title={t('support.docsHeading')}>
+      <HelpPanel id={`${idPrefix}-docs`} title={t('support.docsHeading')} heading={headingLevel}>
         <ul className="flex flex-col gap-3">
           <HelpLink
             href={installHref(projectId)}
@@ -105,7 +117,11 @@ export function HelpView({ projectId, email, plan, i18n }: HelpViewProps) {
           />
         </ul>
       </HelpPanel>
-      <HelpPanel id="help-security" title={t('support.securityHeading')}>
+      <HelpPanel
+        id={`${idPrefix}-security`}
+        title={t('support.securityHeading')}
+        heading={headingLevel}
+      >
         <p className="text-sm">{t('support.securityBody')}</p>
         <a href={SECURITY_REPORT_URL} className={`self-start text-sm ${TEXT_LINK}`}>
           {t('support.securityLink')}

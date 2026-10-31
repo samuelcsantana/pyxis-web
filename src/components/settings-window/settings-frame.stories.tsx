@@ -3,10 +3,11 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import { AccountOverview } from '@/components/account/account-overview';
-import { AccountSupport } from '@/components/account/account-support';
 import { BrandBackdrop } from '@/components/brand/brand-backdrop';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { RAISED_CARDS } from '@/components/brand/raised-cards';
+import { HelpView } from '@/components/help/help-view';
+import { helpHref } from '@/components/shell/screens';
 import { AccessTokensPanel } from '@/components/settings/access-tokens-panel';
 import { ConnectedAppsPanel } from '@/components/settings/connected-apps-panel';
 import { KeysPart } from '@/components/settings/keys-part';
@@ -56,6 +57,7 @@ import { SettingsDialog } from './settings-dialog';
 import {
   ACCOUNT_SECTIONS,
   accountSectionHref,
+  HELP_SECTION,
   projectSectionHref,
   projectSectionsFor,
   SECTION_LOOKS,
@@ -138,10 +140,6 @@ function projectFor(who: Who): ProjectSettings {
   return who === 'owner' ? STORE : MEMBER_VIEW;
 }
 
-function emailOf(accounts: readonly Account[]): string {
-  return accounts.length === 0 ? MEMBER_EMAIL : DEMO_OWNER_EMAIL;
-}
-
 function planPart(accounts: readonly Account[], i18n: I18n): ReactNode {
   return (
     <div className="flex flex-col gap-4">
@@ -164,7 +162,6 @@ function planPart(accounts: readonly Account[], i18n: I18n): ReactNode {
           />
         ))
       )}
-      <AccountSupport email={emailOf(accounts)} plan={supportPlanOf(accounts)} i18n={i18n} />
     </div>
   );
 }
@@ -272,6 +269,16 @@ function bodyOf(section: SettingsSection, who: Who, i18n: I18n): ReactNode {
           revoke={() => Promise.resolve()}
         />
       );
+    case 'help':
+      return (
+        <HelpView
+          projectId={STORE.id}
+          email={DEMO_OWNER_EMAIL}
+          plan={supportPlanOf([DEMO_ACCOUNT])}
+          i18n={i18n}
+          headingLevel="h3"
+        />
+      );
     case 'apps':
       return (
         <ConnectedAppsPanel apps={APPS} i18n={i18n} when={when} revoke={() => Promise.resolve()} />
@@ -280,14 +287,18 @@ function bodyOf(section: SettingsSection, who: Who, i18n: I18n): ReactNode {
 }
 
 function youGroup(i18n: I18n): FrameGroup {
+  const row = (section: SettingsSection, href: string) => ({
+    section,
+    href,
+    label: i18n.t(SECTION_LOOKS[section].label),
+    icon: SECTION_LOOKS[section].icon,
+  });
   return {
     label: i18n.t('settings.you'),
-    rows: ACCOUNT_SECTIONS.map((section) => ({
-      section,
-      href: accountSectionHref(section),
-      label: i18n.t(SECTION_LOOKS[section].label),
-      icon: SECTION_LOOKS[section].icon,
-    })),
+    rows: [
+      ...ACCOUNT_SECTIONS.map((section) => row(section, accountSectionHref(section))),
+      row(HELP_SECTION, helpHref(STORE.id)),
+    ],
   };
 }
 
@@ -454,6 +465,7 @@ const OWNER_ROWS = [
   'Sessions',
   'Access tokens',
   'Connected apps',
+  'Help and support',
 ] as const;
 const OWNER_ONLY_ROWS: ReadonlySet<string> = new Set(['Export events', 'Delete project']);
 const MEMBER_ROWS = OWNER_ROWS.filter((row) => !OWNER_ONLY_ROWS.has(row));
@@ -463,6 +475,7 @@ const YOU_ROWS = [
   'Sessions',
   'Access tokens',
   'Connected apps',
+  'Help and support',
 ] as const;
 
 const ownerWindow =
@@ -724,6 +737,39 @@ export const ThemeAndLanguageInPortuguese: Story = {
       label: 'Idioma',
       name: 'Português (Brasil)',
     });
+  },
+};
+
+const HELP_AND_SUPPORT = 'Help and support';
+
+async function showsHowToReachSupport(canvasElement: HTMLElement) {
+  const part = within(sectionNamed(canvasElement, HELP_AND_SUPPORT));
+  await expect(part.getByText('hello@pyxis-analytics.dev')).toBeVisible();
+  await expect(part.getByRole('button', { name: 'Copy' })).toBeVisible();
+  await expect(
+    part.getByRole('heading', { level: 3, name: 'Found a security flaw?' }),
+  ).toBeVisible();
+}
+
+export const HelpAndSupport: Story = {
+  args: windowArgs('owner', 'help'),
+  play: async (context) => {
+    await ownerWindow(HELP_AND_SUPPORT)(context);
+    await showsHowToReachSupport(context.canvasElement);
+  },
+};
+
+export const HelpAndSupportDark: Story = {
+  ...HelpAndSupport,
+  globals: { theme: 'dark' },
+};
+
+export const HelpAndSupportOnAPhone: Story = {
+  args: windowArgs('owner', 'help'),
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).queryByRole('navigation', { name: 'Sections' })).toBeNull();
+    await showsHowToReachSupport(canvasElement);
   },
 };
 
