@@ -174,6 +174,19 @@ export function formatDayRange(from: string, to: string, format: DayFormats): st
   return `${start} – ${format.dayWithYear(last)}`;
 }
 
+export function formatShortDayRange(
+  from: string,
+  to: string,
+  today: string,
+  format: DayFormats,
+): string {
+  const first = calendarDate(from);
+  const last = calendarDate(to);
+  const thisYear = calendarDate(today).getUTCFullYear();
+  const inThisYear = first.getUTCFullYear() === thisYear && last.getUTCFullYear() === thisYear;
+  return inThisYear ? format.dayRange(first, last) : format.dayRangeWithYear(first, last);
+}
+
 export function formatPeriod(period: Period, i18n: I18n): string {
   return formatDayRange(period.from, period.to, i18n.format);
 }
