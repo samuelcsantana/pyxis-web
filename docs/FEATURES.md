@@ -274,11 +274,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - Settings is a window with an address ([ADR 0016](adr/0016-settings-as-a-window-with-an-address.md)),
   opened from the gear in the sidebar (and in the phone menu) over the screen on view, which keeps
   its period and filters: Back, Esc, the close button or a click outside close it to that screen,
-  and focus goes back to the gear (on a phone, to the menu button). Its menu has two groups, the
-  project, named by the project (Project, Keys, People, E-mail, and for the owner Export events and
-  Delete project), and You (Sessions, Access tokens, Connected apps), with Sign out at its foot. Every part has its own
-  address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
-  `…/email`, `…/export`, `…/delete`, and `/account/sessions`, `/account/tokens`,
+  and focus goes back to the gear, or to the account menu's button when one of its rows opened it
+  (on a phone, to the menu button). Its menu has two groups, the project, named by the project
+  (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
+  (Account and billing, Sessions, Access tokens, Connected apps), with Sign out at its foot. Every
+  part has its own address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
+  `…/email`, `…/export`, `…/delete`, and `/account`, `/account/sessions`, `/account/tokens`,
   `/account/apps`. Switching parts replaces the address without a new history entry and moves
   the focus to the part's heading. Opened directly (a reload, a link from an e-mail or from
   someone else), a part is a full page with the same menu; the person's parts opened outside a
@@ -368,16 +369,18 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the free plan, as the Terms of Use set), the installation links, the GitHub question form and
   the private security report. Account and billing ends with the same address and reply time,
   and the code step of sign-in and sign-up names it for a code that does not arrive
-- An Account and billing page (`/account`, from the account menu) for the owner of a hosted
-  account: the plan and its state (free trial, active, payment failed, ending, ended with the
-  deletion date, sign-up not finished), the events measured this month against the quota, the
-  limits, and a button to Stripe: "Finish subscription" with a monthly or yearly plan, or
-  "Manage billing" for the customer portal. The dashboard warns, under the demo banner's place,
-  when an owned account's payment failed, its access ends or ended, measuring is paused, or the
-  month reached 80% of its events; reading the accounts for that warning never blocks a page.
-  The same page closes an account at once, with the owner's address typed again: the
-  subscription is cancelled, the keys are revoked, a first payment of the last seven days is
-  refunded, and the page says when everything is deleted (and keeps saying it after the page
+- Account and billing, the first part of You in the Settings window (`/account`, from the
+  account menu and its usage row, as a page when opened directly or on Stripe's return), for
+  the owner of a hosted account: a card with the plan and its state (free trial, active, payment
+  failed, ending, ended with the deletion date, sign-up not finished), the events measured this
+  month against the quota, the limits, and a button to Stripe: "Finish subscription" with a
+  monthly or yearly plan, or "Manage billing" for the customer portal. The dashboard warns,
+  under the demo banner's place, when an owned account's payment failed, its access ends or
+  ended, measuring is paused, or the month reached 80% of its events; reading the accounts for
+  that warning never blocks a page. A red card below it closes an account at once: its button
+  opens, in place, the field for the owner's address typed again; then the subscription is
+  cancelled, the keys are revoked, a first payment of the last seven days is refunded, and the
+  page says when everything is deleted (and keeps saying it after the page
   refreshes to the ended account). An account Pyxis suspended shows the date, the reason and the
   address to contest it, every dashboard screen of its owner carries a banner, and the screens of
   its projects open `/account-suspended` instead of failing; an account whose deletion Pyxis holds
