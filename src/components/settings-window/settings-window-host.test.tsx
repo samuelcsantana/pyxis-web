@@ -79,6 +79,31 @@ function hiddenMenuWith<T extends Element>(element: T): T {
   return element;
 }
 
+interface AccountMenu {
+  readonly details: HTMLDetailsElement;
+  readonly summary: HTMLElement;
+  readonly close: () => void;
+}
+
+function openAccountMenuWith(link: HTMLAnchorElement): AccountMenu {
+  const details = document.createElement('details');
+  details.open = true;
+  const summary = document.createElement('summary');
+  summary.textContent = 'Account and preferences';
+  const rows = document.createElement('div');
+  rows.append(link);
+  details.append(summary, rows);
+  onThePage(details);
+  return {
+    details,
+    summary,
+    close: () => {
+      details.open = false;
+      rows.hidden = true;
+    },
+  };
+}
+
 beforeEach(() => {
   vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(function rects(this: Element) {
     return this.closest('[hidden]') === null ? RENDERED : NOT_RENDERED;
@@ -460,6 +485,51 @@ describe('SettingsWindowHost', () => {
     const opener = hiddenMenuWith(linkOnThePage(OVERVIEW_HREF));
     opener.focus();
     const { unmount } = render(<Window />);
+
+    unmount();
+
+    expect(toggle).toHaveFocus();
+  });
+
+  it('returns focus to the button of the menu that held the opener, closed since', () => {
+    const toggle = menuToggleOnThePage();
+    const opener = linkOnThePage('/account');
+    const menu = openAccountMenuWith(opener);
+    const sameAddress = linkOnThePage('/account');
+    opener.focus();
+    const { unmount } = render(<Window />);
+    menu.close();
+
+    unmount();
+
+    expect(menu.summary).toHaveFocus();
+    expect(sameAddress).not.toHaveFocus();
+    expect(toggle).not.toHaveFocus();
+  });
+
+  it('moves on to the menu button when the closed menu keeps its rows laid out but refuses focus', () => {
+    const opener = linkOnThePage('/account');
+    const menu = openAccountMenuWith(opener);
+    opener.focus();
+    const { unmount } = render(<Window />);
+    menu.details.open = false;
+    vi.spyOn(opener, 'focus').mockImplementation(() => undefined);
+
+    unmount();
+
+    expect(menu.summary).toHaveFocus();
+  });
+
+  it('returns focus to the phone menu button when the closed menu sat in the closed phone menu', () => {
+    const toggle = menuToggleOnThePage();
+    const opener = linkOnThePage('/account');
+    const menu = openAccountMenuWith(opener);
+    const phoneMenu = onThePage(document.createElement('div'));
+    phoneMenu.append(menu.details);
+    opener.focus();
+    const { unmount } = render(<Window />);
+    menu.close();
+    phoneMenu.hidden = true;
 
     unmount();
 
