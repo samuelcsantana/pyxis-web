@@ -11,6 +11,8 @@ import {
   ACCOUNT_SECTIONS,
   type AccountSection,
   accountSectionHref,
+  HELP_SECTION,
+  type HelpSection,
   isOwnerOnly,
   type ProjectSection,
   projectSectionHref,
@@ -24,7 +26,7 @@ import {
   SettingsFrame,
 } from '@/components/settings-window/settings-frame';
 import { MainContent } from '@/components/shell/main-content';
-import { hrefKeepingView, type SearchReader } from '@/components/shell/screens';
+import { helpHref, hrefKeepingView, type SearchReader } from '@/components/shell/screens';
 import { Topbar } from '@/components/shell/topbar';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import type { Admin } from '@/domain/admin';
@@ -64,6 +66,14 @@ export interface AccountBodyInput {
 
 export type AccountBody = (input: AccountBodyInput) => Promise<ReactNode>;
 
+export interface HelpBodyInput {
+  readonly i18n: I18n;
+  readonly admin: Admin;
+  readonly projectId: string;
+}
+
+export type HelpBody = (input: HelpBodyInput) => Promise<ReactNode>;
+
 export interface ProjectSectionProps extends ProjectPageProps {
   readonly section: ProjectSection;
   readonly body: ProjectBody;
@@ -72,6 +82,10 @@ export interface ProjectSectionProps extends ProjectPageProps {
 export interface AccountSectionWindowProps extends ProjectPageProps {
   readonly section: AccountSection;
   readonly body: AccountBody;
+}
+
+export interface HelpSectionWindowProps extends ProjectPageProps {
+  readonly body: HelpBody;
 }
 
 export interface AccountSectionPageProps extends AccountPageProps {
@@ -121,6 +135,7 @@ function frameGroups(
   i18n: I18n,
   search: SearchReader,
   project: MenuProject | null,
+  helpProjectId: string | undefined = project?.id,
 ): readonly FrameGroup[] {
   const row = (section: SettingsSection, href: string) => ({
     section,
@@ -128,10 +143,9 @@ function frameGroups(
     label: i18n.t(SECTION_LOOKS[section].label),
     icon: SECTION_LOOKS[section].icon,
   });
-  const you: FrameGroup = {
-    label: i18n.t('settings.you'),
-    rows: ACCOUNT_SECTIONS.map((section) => row(section, accountSectionHref(section))),
-  };
+  const accountRows = ACCOUNT_SECTIONS.map((section) => row(section, accountSectionHref(section)));
+  const helpRows = helpProjectId === undefined ? [] : [row(HELP_SECTION, helpHref(helpProjectId))];
+  const you: FrameGroup = { label: i18n.t('settings.you'), rows: [...accountRows, ...helpRows] };
   if (project === null) {
     return [you];
   }
@@ -284,6 +298,21 @@ export async function AccountSectionWindow({
   });
 }
 
+export async function HelpSectionWindow({ params, searchParams, body }: HelpSectionWindowProps) {
+  const [{ projectId }, search] = await Promise.all([params, searchParams]);
+  const context = await projectContextOf(projectId);
+  const { admin, i18n, settings } = context;
+  return framed({
+    mode: 'window',
+    titleLevel: 2,
+    i18n,
+    admin,
+    groups: frameGroups(i18n, searchReaderOf(search), menuProjectOf(context)),
+    section: HELP_SECTION,
+    body: await body({ i18n, admin, projectId: settings.id }),
+  });
+}
+
 export async function AccountSectionPage({ searchParams, section, body }: AccountSectionPageProps) {
   const [admin, search, i18n] = await Promise.all([currentAdmin(), searchParams, getI18n()]);
   const timeZone = admin.projects[0]?.timezone ?? ACCOUNT_TIME_ZONE_FALLBACK;
@@ -292,7 +321,7 @@ export async function AccountSectionPage({ searchParams, section, body }: Accoun
     titleLevel: null,
     i18n,
     admin,
-    groups: frameGroups(i18n, searchReaderOf(search), null),
+    groups: frameGroups(i18n, searchReaderOf(search), null, admin.projects[0]?.id),
     section,
     body: await body({ i18n, when: whenIn(i18n, timeZone), admin }),
   });
@@ -333,7 +362,7 @@ export async function projectSectionMetadata(
 
 export async function accountWindowMetadata(
   props: Pick<ProjectPageProps, 'params'>,
-  section: AccountSection,
+  section: AccountSection | HelpSection,
 ): Promise<Metadata> {
   const { project } = await projectOrNotFound((await props.params).projectId);
   const t = await getTranslator();

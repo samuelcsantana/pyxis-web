@@ -43,7 +43,9 @@ export async function planBody({ i18n, admin }: AccountBodyInput) {
           />
         ))
       )}
-      <AccountSupport email={admin.email} plan={supportPlanOf(accounts)} i18n={i18n} />
+      {admin.projects.length === 0 ? (
+        <AccountSupport email={admin.email} plan={supportPlanOf(accounts)} i18n={i18n} />
+      ) : null}
     </div>
   );
 }

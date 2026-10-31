@@ -54,7 +54,7 @@ interface SettingsItemProps {
   readonly label: string;
 }
 
-function opensElsewhere(event: MouseEvent<HTMLAnchorElement>): boolean {
+export function opensElsewhere(event: MouseEvent<HTMLAnchorElement>): boolean {
   return event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 }
 

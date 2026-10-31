@@ -108,6 +108,7 @@ const ACCOUNT_LINKS = [
   '/account/sessions',
   '/account/tokens',
   '/account/apps',
+  `/${STORE.id}/help`,
 ];
 const PROJECT_LINKS = [
   SETTINGS_PATH,
@@ -392,25 +393,11 @@ describe('the plan part of the account', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('ends with the support address and reply time, for the e-mail of the admin', async () => {
+  it('leaves support to Help and support, the last part of You', async () => {
     renderWithMessages(await windowed(AccountPlanWindow(windowProps())));
 
-    const support = within(planRegion()).getByRole('region', { name: 'Support' });
-    expect(within(support).getByText('hello@pyxis-analytics.dev')).toBeInTheDocument();
-    expect(support).toHaveTextContent(
-      'On the paid plan, we confirm that your message arrived and reply within 2 business days.',
-    );
-    expect(support).toHaveTextContent('Write from owner@example.com, so we know which account');
-  });
-
-  it('keeps the support block for an admin who owns no account', async () => {
-    state.accounts = sharedAccountsOnly;
-
-    renderWithMessages(await windowed(AccountPlanWindow(windowProps())));
-
-    expect(within(planRegion()).getByRole('region', { name: 'Support' })).toHaveTextContent(
-      'Write from owner@example.com',
-    );
+    expect(within(planRegion()).queryByRole('region', { name: 'Support' })).not.toBeInTheDocument();
+    expect(menuLinks().at(-1)).toBe(`/${STORE.id}/help`);
   });
 
   it('shows the same part as a full page, with only the You group in the menu', async () => {
@@ -422,7 +409,7 @@ describe('the plan part of the account', () => {
     expect(menuLinks()).toEqual(ACCOUNT_LINKS);
     expect(screen.getByRole('link', { current: 'page' })).toHaveAttribute('href', '/account');
     expect(within(planRegion()).getByRole('region', { name: 'Plan: Yearly' })).toBeInTheDocument();
-    expect(within(planRegion()).getByRole('region', { name: 'Support' })).toBeInTheDocument();
+    expect(within(planRegion()).queryByRole('region', { name: 'Support' })).not.toBeInTheDocument();
   });
 
   it('sends a signed-out admin to sign in again, as a window and as a page', async () => {

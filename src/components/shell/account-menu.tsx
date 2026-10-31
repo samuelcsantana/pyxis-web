@@ -1,22 +1,25 @@
 import Link from 'next/link';
 import { ACCOUNT_PAGE } from '@/components/account/account-notice-banner';
 import { accountSectionHref } from '@/components/settings-window/sections';
-import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import { NAV_CONTROL } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { QUOTA_WARNING_RATIO } from '@/domain/accounts';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
 import type { MonthUsage } from '@/lib/accounts-in-view';
+import { HelpMenuRow } from './help-menu-row';
+import { menuRowClasses } from './menu-row-classes';
 import { SignOutButton } from './sign-out-button';
 
 export interface AccountMenuProps {
   readonly email: string;
+  readonly projectId: string;
   readonly i18n: I18n;
   readonly usage?: MonthUsage | null;
 }
 
 const CHEVRON = 'M6 15l6-6 6 6';
-const MENU_ROW = `flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`;
+const MENU_ROW = menuRowClasses();
 const FULL_BAR = 1;
 
 function usageTone(usage: MonthUsage): string {
@@ -91,7 +94,7 @@ function UsageLink({ usage, i18n }: UsageProps) {
   );
 }
 
-export function AccountMenu({ email, i18n, usage = null }: AccountMenuProps) {
+export function AccountMenu({ email, projectId, i18n, usage = null }: AccountMenuProps) {
   return (
     <DismissableDetails className="group relative">
       <summary
@@ -133,6 +136,7 @@ export function AccountMenu({ email, i18n, usage = null }: AccountMenuProps) {
         <Link href={accountSectionHref('preferences')} scroll={false} className={MENU_ROW}>
           {i18n.t('preferences.heading')}
         </Link>
+        <HelpMenuRow projectId={projectId} label={i18n.t('nav.help')} />
         <div className="border-t border-nav-line pt-2">
           <SignOutButton />
         </div>

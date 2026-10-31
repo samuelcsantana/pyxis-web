@@ -124,6 +124,7 @@ describe('settings sections', () => {
       sessions: 'settings-sessions-heading',
       tokens: 'settings-access-tokens-heading',
       apps: 'settings-connections-heading',
+      help: 'settings-help-heading',
     });
   });
 

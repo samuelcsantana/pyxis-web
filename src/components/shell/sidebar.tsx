@@ -5,7 +5,6 @@ import type { I18n } from '@/i18n/i18n';
 import type { MonthUsage } from '@/lib/accounts-in-view';
 import { AccountMenu } from './account-menu';
 import { ProjectSwitcher } from './project-switcher';
-import { HelpLink } from './help-link';
 import { FIRST_SCREEN, screenHref } from './screens';
 import { SidebarNav } from './sidebar-nav';
 import { ViewKeepingLink } from './view-keeping-link';
@@ -45,7 +44,6 @@ export function Sidebar({
       />
       <SidebarNav project={project} />
       <div className="mt-auto flex shrink-0 flex-col gap-2 border-t border-nav-line pt-3">
-        <HelpLink projectId={project.id} />
         <p className="flex items-center gap-2 px-2.5 text-xs text-nav-muted">
           <svg
             width={16}
@@ -65,7 +63,7 @@ export function Sidebar({
           </svg>
           {i18n.t('shell.privacy')}
         </p>
-        <AccountMenu email={admin.email} i18n={i18n} usage={usage} />
+        <AccountMenu email={admin.email} projectId={project.id} i18n={i18n} usage={usage} />
       </div>
     </div>
   );

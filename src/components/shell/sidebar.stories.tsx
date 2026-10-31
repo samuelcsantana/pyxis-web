@@ -99,7 +99,7 @@ export const BrazilianPortuguese: Story = {
   },
 };
 
-const COMPACT_MENU_MAX_HEIGHT_PX = 200;
+const COMPACT_MENU_MAX_HEIGHT_PX = 240;
 
 const openTheAccountMenu: Play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
@@ -264,15 +264,27 @@ export const NoEventsYetNarrowedInGerman: Story = {
   play: pendingTagFitsIn('Installieren', 'Ausstehend'),
 };
 
+const leavesHelpToTheAccountMenu: Play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await expect(currentLinksOutsideTheMenus(canvasElement)).toHaveLength(0);
+  const help = canvas.getByRole('link', { name: 'Help and support', hidden: true });
+  await expect(help.closest('details')).toContainElement(
+    canvas.getByText('Account and preferences'),
+  );
+  await userEvent.click(canvas.getByText('Account and preferences'));
+  await expect(help).toBeVisible();
+  await expect(help).toHaveAttribute('href', `/${STORE.id}/help?range=7d`);
+};
+
 export const OnHelp: Story = {
   parameters: onPageOf('help'),
-  play: standsForThePage('Help and support'),
+  play: leavesHelpToTheAccountMenu,
 };
 
 export const OnHelpDark: Story = {
   parameters: onPageOf('help'),
   globals: { theme: 'dark' },
-  play: standsForThePage('Help and support'),
+  play: leavesHelpToTheAccountMenu,
 };
 
 export const KeyboardFocus: Story = {

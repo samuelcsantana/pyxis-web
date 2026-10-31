@@ -5,6 +5,8 @@ import type { ReactElement } from 'react';
 import {
   type AccountSectionWindowProps,
   AccountSectionWindow,
+  HelpSectionWindow,
+  type HelpSectionWindowProps,
   type ProjectSectionProps,
   ProjectSectionWindow,
 } from '@/app/[projectId]/settings/settings-sections';
@@ -14,6 +16,7 @@ import { MockProjectsService } from '@/services/projects/mock-projects-service';
 import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import AccountWindow from './(..)account/[[...section]]/page';
+import HelpWindow, { generateMetadata as helpWindowMetadata } from './(.)help/page';
 import SettingsKeysWindow from './(.)settings/keys/page';
 import ModalDefault from './default';
 import ModalLayout from './layout';
@@ -80,6 +83,12 @@ async function keysWindow() {
   const element: ReactElement<ProjectSectionProps> = SettingsKeysWindow(windowProps());
   expect(element.type).toBe(ProjectSectionWindow);
   return ProjectSectionWindow(element.props);
+}
+
+async function helpWindow() {
+  const element: ReactElement<HelpSectionWindowProps> = HelpWindow(windowProps());
+  expect(element.type).toBe(HelpSectionWindow);
+  return HelpSectionWindow(element.props);
 }
 
 async function bareAccountWindow() {
@@ -156,6 +165,30 @@ describe('ModalLayout', () => {
       'href',
       '/account',
     );
+  });
+
+  it('opens Help and support as a dialog, the last part of You, its panels under the part', async () => {
+    state.segments = ['(.)help'];
+    state.pathname = `/${DEMO_STORE.id}/help`;
+
+    renderWithMessages(await ModalLayout({ children: await helpWindow() }));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Settings' });
+    const part = within(dialog).getByRole('region', { name: 'Help and support' });
+    expect(within(part).getByText('hello@pyxis-analytics.dev')).toBeInTheDocument();
+    expect(
+      within(part).getByRole('heading', { level: 3, name: 'Found a security flaw?' }),
+    ).toBeInTheDocument();
+    expect(within(dialog).getByRole('link', { current: 'page' })).toHaveAttribute(
+      'href',
+      `/${DEMO_STORE.id}/help`,
+    );
+  });
+
+  it('titles the Help window after the part and the project', async () => {
+    expect(await helpWindowMetadata(windowProps())).toMatchObject({
+      title: expect.stringContaining('Help and support') as unknown,
+    });
   });
 
   it('leaves what the slot holds outside any dialog when no window is open', async () => {

@@ -71,6 +71,7 @@ test('lists Account and billing first under You, and opens it from another part'
     'Sessions',
     'Access tokens',
     'Connected apps',
+    'Help and support',
   ]);
   await parts.getByRole('link', { name: 'Account and billing' }).click();
 
@@ -78,7 +79,8 @@ test('lists Account and billing first under You, and opens it from another part'
   await expect(
     window.getByRole('heading', { name: 'Account and billing', exact: true }),
   ).toBeFocused();
-  await expect(window.getByRole('region', { name: 'Support' })).toBeVisible();
+  await expect(window.getByRole('region', { name: 'Account and billing' })).toBeVisible();
+  await expect(window.getByRole('region', { name: 'Support' })).toHaveCount(0);
 });
 
 test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {
