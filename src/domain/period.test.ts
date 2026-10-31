@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  formatShortDayRange,
   addDays,
   daysBetween,
   describePeriod,
@@ -15,6 +16,7 @@ import {
   todayIn,
 } from './period';
 import { english } from '@/test-utils/english';
+import { italian } from '@/test-utils/italian';
 import { portuguese } from '@/test-utils/portuguese';
 
 const SAO_PAULO = 'America/Sao_Paulo';
@@ -174,6 +176,57 @@ describe('formatPeriod', () => {
   it('names both years across new year', () => {
     expect(formatPeriod(presetPeriod('7d', '2027-01-02'), english)).toBe(
       'Dec 27, 2026 – Jan 2, 2027',
+    );
+  });
+});
+
+describe('formatShortDayRange', () => {
+  const today = '2026-10-31';
+  const spaced = (text: string) => text.replace(/\s/g, ' ');
+
+  it('writes one day once, without the year of today', () => {
+    expect(formatShortDayRange('2026-10-31', '2026-10-31', today, english.format)).toBe('Oct 31');
+  });
+
+  it('writes a range inside one month with its month once', () => {
+    expect(spaced(formatShortDayRange('2026-10-02', '2026-10-31', today, english.format))).toBe(
+      'Oct 2 – 31',
+    );
+  });
+
+  it('writes a range across months with both months', () => {
+    expect(spaced(formatShortDayRange('2026-09-25', '2026-10-01', today, english.format))).toBe(
+      'Sep 25 – Oct 1',
+    );
+  });
+
+  it('writes the years of a range that leaves the year of today', () => {
+    expect(spaced(formatShortDayRange('2025-12-20', '2026-01-05', today, english.format))).toBe(
+      'Dec 20, 2025 – Jan 5, 2026',
+    );
+    expect(spaced(formatShortDayRange('2025-03-01', '2025-03-09', today, english.format))).toBe(
+      'Mar 1 – 9, 2025',
+    );
+  });
+
+  it('writes the range the way of the language', () => {
+    expect(spaced(formatShortDayRange('2026-10-02', '2026-10-31', today, portuguese.format))).toBe(
+      '2 – 31 de out.',
+    );
+  });
+
+  it('writes each day without a padding zero, like every other date of the language', () => {
+    expect(
+      spaced(formatShortDayRange('2026-11-01', '2026-11-07', '2026-11-07', italian.format)),
+    ).toBe('1–7 nov');
+    expect(spaced(formatShortDayRange('2026-09-25', '2026-10-01', today, italian.format))).toBe(
+      '25 set – 1 ott',
+    );
+    expect(spaced(formatShortDayRange('2025-12-20', '2026-01-05', today, italian.format))).toBe(
+      '20 dic 2025 – 5 gen 2026',
+    );
+    expect(spaced(formatShortDayRange('2025-10-02', '2025-10-31', today, italian.format))).toBe(
+      '2–31 ott 2025',
     );
   });
 });

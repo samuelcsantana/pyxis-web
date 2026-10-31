@@ -46,7 +46,7 @@ function buildFormats(tag: string): Formats {
     roundingMode: 'trunc',
   });
   const decimal = new Intl.NumberFormat(tag, ONE_DECIMAL);
-  const { day, dayWithYear } = createDayFormats(tag);
+  const { day, dayWithYear, dayRange, dayRangeWithYear } = createDayFormats(tag);
   const monthWithYear = new Intl.DateTimeFormat(tag, {
     month: 'long',
     year: 'numeric',
@@ -73,6 +73,8 @@ function buildFormats(tag: string): Formats {
     decimal: (value) => decimal.format(value),
     day,
     dayWithYear,
+    dayRange,
+    dayRangeWithYear,
     monthWithYear: (date) => monthWithYear.format(date),
     fullDay: (date) => fullDay.format(date),
     dateTime: (style, timeZone) => {
