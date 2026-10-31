@@ -3,6 +3,7 @@ import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
 import { ArrivalsLoader } from '@/components/shell/arrivals-loader';
 import { MobileMenu } from '@/components/shell/mobile-menu';
 import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
+import { ProjectChoicesProvider } from '@/components/shell/project-choices';
 import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
 import { AccountNoticeBanner } from '@/components/account/account-notice-banner';
@@ -29,39 +30,45 @@ export default async function ProjectLayout({ children, modal, params }: Project
   const suspension = ingestionSuspensionOf(project);
   return (
     <NavigationPendingProvider>
-      <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
-        <SkipLink i18n={i18n} />
-        <PreferenceCarrier locale={i18n.locale} />
-        <ArrivalsLoader
-          projectId={project.id}
-          timeZone={project.timezone}
-          serverNow={new Date().getTime()}
-        />
-        <MobileMenu
-          project={project}
-          homeLabel={i18n.t('meta.screenTitle', {
-            screen: i18n.t('screens.overview'),
-            project: project.name,
-          })}
-        >
-          <Sidebar
-            admin={admin}
-            project={project}
-            i18n={i18n}
-            canCreateProject={canCreateProject}
-            usage={usage}
+      <ProjectChoicesProvider
+        projects={admin.projects}
+        currentProject={project}
+        canCreateProject={canCreateProject}
+      >
+        <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
+          <SkipLink i18n={i18n} />
+          <PreferenceCarrier locale={i18n.locale} />
+          <ArrivalsLoader
+            projectId={project.id}
+            timeZone={project.timezone}
+            serverNow={new Date().getTime()}
           />
-        </MobileMenu>
-        <NavigationRegion className="relative flex min-w-0 flex-col">
-          {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
-          {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
-          {suspension === null ? null : (
-            <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
-          )}
-          {children}
-        </NavigationRegion>
-        {modal}
-      </div>
+          <MobileMenu
+            project={project}
+            homeLabel={i18n.t('meta.screenTitle', {
+              screen: i18n.t('screens.overview'),
+              project: project.name,
+            })}
+          >
+            <Sidebar
+              admin={admin}
+              project={project}
+              i18n={i18n}
+              canCreateProject={canCreateProject}
+              usage={usage}
+            />
+          </MobileMenu>
+          <NavigationRegion className="relative flex min-w-0 flex-col">
+            {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
+            {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
+            {suspension === null ? null : (
+              <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
+            )}
+            {children}
+          </NavigationRegion>
+          {modal}
+        </div>
+      </ProjectChoicesProvider>
     </NavigationPendingProvider>
   );
 }
