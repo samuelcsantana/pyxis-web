@@ -24,9 +24,12 @@ screen it opened over, with the screen's period and filters intact.
   Inside it, `(.)settings/…` intercepts the project's parts and `(..)account/[[...section]]` the
   person's parts (Account and billing, Theme and language, Sessions, Access tokens and Connected
   apps are the person's, so their addresses are `/account`, `/account/preferences`,
-  `/account/sessions`, `/account/tokens` and `/account/apps`, with no project). A click inside the dashboard (a soft navigation) renders the part in the slot
-  over the current screen; a direct visit or a reload (a hard navigation) renders the real page
-  at the same address, with the same menu and pane. The person's parts are one dynamic route that checks the section: Next 16.4
+  `/account/sessions`, `/account/tokens` and `/account/apps`, with no project); `(.)help`
+  intercepts Help and support, the last part of You, whose address stays `/[projectId]/help`
+  because its links need a project. A click inside the dashboard (a soft navigation) renders the
+  part in the slot over the current screen; a direct visit or a reload (a hard navigation) renders
+  the real page at the same address, with the same menu and pane. The person's parts are one
+  dynamic route that checks the section: Next 16.4
   treats `/[projectId]/(..)account/sessions` as a static route, because its own address has no
   parameter, and the rewritten request then falls to the project's catch-all page and answers
   404 in a production build.
