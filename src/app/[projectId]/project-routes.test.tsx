@@ -10,6 +10,7 @@ import type { IOverviewService } from '@/services/overview/overview-service.inte
 import { renderInProject } from '@/test-utils/project-choices';
 import ProjectError from './error';
 import ProjectLayout from './layout';
+import ScreenError from './(screens)/error';
 import ScreensLayout from './(screens)/layout';
 import OverviewPage from './(screens)/overview/page';
 
@@ -583,5 +584,23 @@ describe('error state', () => {
     renderInProject(<ProjectError error={new Error('boom')} retry={vi.fn()} />);
 
     expect(screen.queryByText(/error id/)).not.toBeInTheDocument();
+  });
+});
+
+describe('error state of a screen, under its top bar', () => {
+  it('offers a retry and the error id under a second-level heading, leaving the h1 to the bar', () => {
+    const retry = vi.fn();
+    const error = Object.assign(new Error('boom'), { digest: 'abc123' });
+    renderInProject(<ScreenError error={error} retry={retry} />);
+
+    screen.getByRole('button', { name: 'Try again' }).click();
+
+    expect(screen.getByRole('main')).toContainElement(screen.getByRole('alert'));
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Could not load this data' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
+    expect(screen.getByText('error id abc123')).toBeInTheDocument();
+    expect(retry).toHaveBeenCalledOnce();
   });
 });
