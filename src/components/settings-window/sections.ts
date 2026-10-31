@@ -10,7 +10,7 @@ import {
 export const PROJECT_SECTIONS = ['project', 'keys', 'people', 'email', 'export', 'delete'] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 
-export const ACCOUNT_SECTIONS = ['sessions', 'tokens', 'apps'] as const;
+export const ACCOUNT_SECTIONS = ['plan', 'sessions', 'tokens', 'apps'] as const;
 export type AccountSection = (typeof ACCOUNT_SECTIONS)[number];
 
 export type SettingsSection = ProjectSection | AccountSection;
@@ -56,6 +56,11 @@ export const SECTION_LOOKS: Readonly<Record<SettingsSection, SectionLook>> = {
     icon: 'M4 7h16 M9 7V4h6v3 M6 7l1 13h10l1-13',
     titleId: 'settings-delete-heading',
   },
+  plan: {
+    label: 'nav.billing',
+    icon: 'M4 7h16v10H4z M4 11h16',
+    titleId: 'account-plan-heading',
+  },
   sessions: {
     label: 'sessions.heading',
     icon: 'M3 5h12v9H3z M7 18h4 M9 14v4 M17 8h4v12h-4z',
@@ -73,8 +78,18 @@ export const SECTION_LOOKS: Readonly<Record<SettingsSection, SectionLook>> = {
   },
 };
 
-export function isAccountSection(value: string): value is AccountSection {
-  return ACCOUNT_SECTIONS.some((section) => section === value);
+export const ACCOUNT_HOME_SECTION: AccountSection = 'plan';
+
+export function accountSectionOf(
+  segments: readonly string[] | undefined,
+): AccountSection | undefined {
+  if (segments === undefined || segments.length === 0) {
+    return ACCOUNT_HOME_SECTION;
+  }
+  const [section] = segments;
+  return segments.length === 1 && section !== ACCOUNT_HOME_SECTION
+    ? ACCOUNT_SECTIONS.find((known) => known === section)
+    : undefined;
 }
 
 export function projectSectionsFor(owner: boolean): readonly ProjectSection[] {
@@ -91,5 +106,5 @@ export function projectSectionHref(projectId: string, section: ProjectSection): 
 }
 
 export function accountSectionHref(section: AccountSection): string {
-  return `${ACCOUNT_PATH}/${section}`;
+  return section === ACCOUNT_HOME_SECTION ? ACCOUNT_PATH : `${ACCOUNT_PATH}/${section}`;
 }

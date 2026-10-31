@@ -346,9 +346,9 @@ export function SignUpForm({
         {failure === 'checkoutFailed' ? (
           <>
             <FieldError id={ERROR_ID} text={t('signUp.checkoutFailed')} />
-            <Link href={ACCOUNT_PAGE_PATH} className={`self-start text-sm ${TEXT_LINK}`}>
+            <a href={ACCOUNT_PAGE_PATH} className={`self-start text-sm ${TEXT_LINK}`}>
               {t('signUp.openAccount')}
-            </Link>
+            </a>
           </>
         ) : (
           <p role="status" className="text-sm font-semibold">

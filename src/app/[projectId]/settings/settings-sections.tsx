@@ -59,6 +59,7 @@ export type ProjectBody = (input: ProjectBodyInput) => ReactNode | Promise<React
 export interface AccountBodyInput {
   readonly i18n: I18n;
   readonly when: When;
+  readonly admin: Admin;
 }
 
 export type AccountBody = (input: AccountBodyInput) => Promise<ReactNode>;
@@ -279,7 +280,7 @@ export async function AccountSectionWindow({
     admin,
     groups: frameGroups(i18n, searchReaderOf(search), menuProjectOf(context)),
     section,
-    body: await body({ i18n, when: whenIn(i18n, settings.timezone) }),
+    body: await body({ i18n, when: whenIn(i18n, settings.timezone), admin }),
   });
 }
 
@@ -293,7 +294,7 @@ export async function AccountSectionPage({ searchParams, section, body }: Accoun
     admin,
     groups: frameGroups(i18n, searchReaderOf(search), null),
     section,
-    body: await body({ i18n, when: whenIn(i18n, timeZone) }),
+    body: await body({ i18n, when: whenIn(i18n, timeZone), admin }),
   });
   return (
     <div className="relative isolate">

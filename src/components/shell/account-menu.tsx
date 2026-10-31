@@ -88,6 +88,7 @@ function UsageLink({ usage, i18n }: UsageProps) {
   return (
     <Link
       href={ACCOUNT_PAGE}
+      scroll={false}
       className={`${MENU_ROW} flex-col items-start justify-center gap-0.5 py-1.5`}
     >
       <span className="text-nav-strong">{eventsOfTheMonth(usage, i18n)}</span>
@@ -134,7 +135,7 @@ export function AccountMenu({ email, theme, i18n, chooseLocale, usage = null }: 
       </summary>
       <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-2 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
         {usage === null ? null : <UsageLink usage={usage} i18n={i18n} />}
-        <Link href={ACCOUNT_PAGE} className={MENU_ROW}>
+        <Link href={ACCOUNT_PAGE} scroll={false} className={MENU_ROW}>
           {i18n.t('nav.billing')}
         </Link>
         <div className="flex flex-col gap-1.5 border-t border-nav-line pt-2">
