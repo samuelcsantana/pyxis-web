@@ -76,8 +76,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   Checkout, a first project with its install guide, the Account and billing page and a Help and
   support page.
 - **Settings as a window.** Opens over the screen with an address per part (the project's, and
-  the person's account and billing, theme and language, sessions, tokens and apps); opened
-  directly, each is a page.
+  the person's account and billing, theme and language, sessions, tokens, apps and help);
+  opened directly, each is a page.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,

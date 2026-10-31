@@ -57,11 +57,14 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Overview of the project on screen with the period and the filters of the page. The screens are listed in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
   Project block with Install, tagged "Pending" until the project's first event arrives, and
-  Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
-  box) and the account. The navigation marks where you are: the screen, Install, Settings or
-  Help; Settings also on an export, which has no item of its own. The account menu is compact,
-  183 px before the owner's usage line (it was 254 px with the languages closed, 506 px open):
-  Account and billing, Theme and language, then Sign out. To the owner of the account
+  Settings. The foot holds the privacy note (a plain line, not a box) and the account. The
+  navigation marks where you are: the screen, Install or Settings; Settings also on an export,
+  which has no item of its own. The account menu is compact, 235 px before the owner's usage line
+  (it was 254 px with the languages closed, 506 px open): Account and billing, Theme and
+  language, Help and support (which keeps the screen's period and filters, and on the Help page
+  is marked as where you are and reloads it as a page), then Sign out. Reaching the support
+  address takes two clicks on a laptop, the account and Help and support. To the owner of the
+  account
   that holds the project on screen, the account row also shows the month's usage under the
   e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
   gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
@@ -277,8 +280,9 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and focus goes back to the gear, or to the account menu's button when one of its rows opened it
   (on a phone, to the menu button). Its menu has two groups, the project, named by the project
   (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
-  (Account and billing, Theme and language, Sessions, Access tokens, Connected apps), with Sign out
-  at its foot. Every
+  (Account and billing, Theme and language, Sessions, Access tokens, Connected apps, and Help and
+  support at `/[projectId]/help` when there is a project to go back to), with Sign out at its
+  foot. Every
   part has its own address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
   `…/email`, `…/export`, `…/delete`, and `/account`, `/account/preferences`, `/account/sessions`, `/account/tokens`,
   `/account/apps`. Switching parts replaces the address without a new history entry and moves
@@ -365,11 +369,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and copies this page's address to send it there. The plain-HTML snippet loads the exact
   `pyxis-analytics` version this repository depends on (read from `package.json`), so the weekly
   Dependabot update of the package moves the snippet with it
-- A Help and support page (`/[projectId]/help`, from the foot of the sidebar): the support address with
-  a copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
+- Help and support, the last part of You in the Settings window (`/[projectId]/help`, from the
+  account menu; opened directly it stays a page of the dashboard): the support address with a
+  copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
   the free plan, as the Terms of Use set), the installation links, the GitHub question form and
-  the private security report. Account and billing ends with the same address and reply time,
-  and the code step of sign-in and sign-up names it for a code that does not arrive
+  the private security report. An admin with no project, who has no Help to go to, finds the same
+  address and reply time at the end of Account and billing. The code step of sign-in and sign-up
+  names the same address for a code that does not arrive
 - Theme and language, the second part of You in the Settings window (`/account/preferences`,
   from the account menu): "These apply to this browser." (the theme and the language are cookies
   of this browser, not settings of the account), the three themes as one segmented control, and
