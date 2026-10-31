@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.46.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.45.0...v0.46.0) (2026-10-31)
+
+
+### Features
+
+* **account:** show the plan as a card and closing the account apart ([b942ad5](https://github.com/samuelcsantana/pyxis-web/commit/b942ad50ca388cfaed4d07761c78a311d806172a))
+* **install:** open Install as a window of its own ([d4934ae](https://github.com/samuelcsantana/pyxis-web/commit/d4934ae7f9f00ccf88c8ca9201f6dd104d9036fe))
+* **language:** add a language field that switches only on a choice ([066d225](https://github.com/samuelcsantana/pyxis-web/commit/066d2251e2bf1f07db21057c63086aab1a59ee6c))
+* **period:** write a period as its short dates ([d25db48](https://github.com/samuelcsantana/pyxis-web/commit/d25db4837d8d4e10e2972a7dc7f9a44948376476))
+* **settings:** open Account and billing as a part of the settings window ([33e8a5c](https://github.com/samuelcsantana/pyxis-web/commit/33e8a5cbb4e92a8b311855ab2a22c142c0bdd759))
+* **settings:** open Help and support as the last part of the window ([392fe57](https://github.com/samuelcsantana/pyxis-web/commit/392fe570db85ed1444ca7510bd4a85bef60ee675))
+* **settings:** open settings as a window with an address per part ([9c862d6](https://github.com/samuelcsantana/pyxis-web/commit/9c862d6febf61e6216f3fa18b0c4c667158dbcc3))
+* **settings:** open Theme and language as a part of the settings window ([ac77869](https://github.com/samuelcsantana/pyxis-web/commit/ac778699278cb3047264fffb83f5785ab57d6c9e))
+* **shell:** hand the project choices down from the project layout ([ab2fd8a](https://github.com/samuelcsantana/pyxis-web/commit/ab2fd8aeddaf45ecd5deffca2bdfd83a700509e7))
+* **shell:** keep a failing screen under its top bar ([852e9ca](https://github.com/samuelcsantana/pyxis-web/commit/852e9caa2776bfa7d8ccde4a00a247a615a7842e))
+* **shell:** open the top bar with the project as a path ([5bcacae](https://github.com/samuelcsantana/pyxis-web/commit/5bcacaee4c36d31bc866728a603457fd4bffa6df))
+* **shell:** take the screen on view from the address, else from the layout ([45fbba2](https://github.com/samuelcsantana/pyxis-web/commit/45fbba2589460d78acc13e2203fd96de2013e767))
+* **ui:** let a disclosure scroll itself into view as it opens ([5995529](https://github.com/samuelcsantana/pyxis-web/commit/599552912177a6e2635f952276af2742f240bbdb))
+
+
+### Bug Fixes
+
+* **account:** open a new project's Install as a page ([1632272](https://github.com/samuelcsantana/pyxis-web/commit/1632272de0895989dc539d43f837990f8b2a48a7))
+* **settings:** return focus to the menu the window was opened from ([1376888](https://github.com/samuelcsantana/pyxis-web/commit/137688830f2e8bdc352f55d439227dc4c4e519d9))
+
+
+### Refactoring
+
+* **account:** move the session, token and app actions to the account ([6d77231](https://github.com/samuelcsantana/pyxis-web/commit/6d7723144def2df09bf36d1a5ce2b33d1c369046))
+
+
+### Documentation
+
+* describe Account and billing inside the settings window ([7811684](https://github.com/samuelcsantana/pyxis-web/commit/7811684991c732a8189b5d46df58cf5244beaee4))
+* describe Help and support inside the settings window ([01ee55b](https://github.com/samuelcsantana/pyxis-web/commit/01ee55b95e3b2a32b54320c633045c119e3f80cc))
+* describe Install as a window of its own ([42aaaff](https://github.com/samuelcsantana/pyxis-web/commit/42aaaff01140f42064dbd12796538dfdb89e8912))
+* describe the settings window and record ADR 0016 ([dea36e6](https://github.com/samuelcsantana/pyxis-web/commit/dea36e61a5565b035a84a4dccf16fb2bbac50155))
+* describe Theme and language inside the settings window ([062e49a](https://github.com/samuelcsantana/pyxis-web/commit/062e49a8fc1745b2b825e1c4f9b2e79554492742))
+* **features:** describe the path bar and the shorter sidebar ([332a985](https://github.com/samuelcsantana/pyxis-web/commit/332a985643564d1cc690105cb695f3bdb02a60de))
+
 ## [0.45.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.44.0...v0.45.0) (2026-10-30)
 
 
