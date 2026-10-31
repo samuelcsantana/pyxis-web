@@ -67,16 +67,37 @@ async function settle() {
   });
 }
 
+function planCard(): HTMLElement {
+  return screen.getByRole('region', { name: /^Plan/ });
+}
+
+function closingRegion(): HTMLElement {
+  return screen.getByRole('region', { name: 'Close the account' });
+}
+
 describe('AccountOverview', () => {
   it('shows the plan, the renewal, the month used and the limits, with the billing portal', () => {
     overview();
 
-    expect(screen.getByRole('heading', { name: 'Plan: Monthly' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'Plan: Monthly' })).toBeInTheDocument();
     expect(screen.getByText('Active. It renews on Dec 1, 2026.')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 4, name: 'Events this month' })).toBeVisible();
     expect(screen.getByText('41,230 of 100,000')).toBeInTheDocument();
     expect(screen.getByText('Measured Nov 20, 2026.')).toBeInTheDocument();
     expect(screen.getByText('Up to 3 projects and 3 people, you included.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
+  });
+
+  it('keeps every part of the plan in its card, and closing the account in its own block after it', () => {
+    overview();
+
+    const plan = planCard();
+    const closing = closingRegion();
+    expect(plan).toContainElement(screen.getByText('41,230 of 100,000'));
+    expect(plan).toContainElement(screen.getByRole('button', { name: 'Manage billing' }));
+    expect(plan).not.toContainElement(closing);
+    expect(plan.compareDocumentPosition(closing)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getAllByRole('region')).toEqual([plan, closing]);
   });
 
   it.each([
@@ -97,7 +118,7 @@ describe('AccountOverview', () => {
   ] as const)('describes %o', (account, text) => {
     overview(account);
 
-    expect(screen.getByRole('region')).toHaveTextContent(text);
+    expect(planCard()).toHaveTextContent(text);
   });
 
   it('describes the free plan with the limits the API answers, with no billing to manage', () => {
@@ -143,7 +164,7 @@ describe('AccountOverview', () => {
   ] as const)('says %o without a date it does not know', (account, text) => {
     overview(account);
 
-    expect(screen.getByRole('region')).toHaveTextContent(text);
+    expect(planCard()).toHaveTextContent(text);
   });
 
   it('says when measuring is paused, and turns the bar red past the quota', () => {
@@ -180,12 +201,19 @@ describe('AccountOverview', () => {
 
   it('offers to close an account that has not ended, and not one that has', () => {
     const { unmount } = overview();
-    expect(screen.getByRole('heading', { name: 'Close the account' })).toBeInTheDocument();
-    expect(screen.getByText(/refunded in full/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: 'Close the account' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Close the account' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(screen.getByText(/refunded in full/)).not.toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Close the account' }));
+    expect(screen.getByText(/refunded in full/)).toBeVisible();
     unmount();
 
     overview({ status: 'ended', accessEndsAt: '2026-11-10T00:00:00.000Z' });
     expect(screen.queryByRole('heading', { name: 'Close the account' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('region')).toEqual([planCard()]);
   });
 
   it('keeps the closing confirmation when the refreshed page shows the account ended', async () => {
@@ -199,6 +227,7 @@ describe('AccountOverview', () => {
     const props = { i18n: english, now: NOW, ...OPEN, close: () => Promise.resolve(closed) };
     const view = renderWithMessages(<AccountOverview account={ACCOUNT} {...props} />);
 
+    fireEvent.click(screen.getByRole('button', { name: 'Close the account' }));
     fireEvent.change(screen.getByRole('textbox', { name: 'Type your e-mail address to confirm' }), {
       target: { value: 'owner@example.com' },
     });
@@ -218,7 +247,8 @@ describe('AccountOverview', () => {
       'The account is closed. Everything is deleted on December 20, 2026.',
     );
     expect(screen.getByRole('status')).toHaveTextContent('R$39.00 were refunded to your card.');
-    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { hidden: true })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close the account' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
   });
 
@@ -257,7 +287,7 @@ describe('AccountOverview', () => {
           'Deletion is on hold: nothing in this account is deleted until Pyxis lifts the hold.',
         ),
       ).toBeInTheDocument();
-      expect(screen.getByRole('region')).not.toHaveTextContent('deleted on');
+      expect(planCard()).not.toHaveTextContent('deleted on');
     },
   );
 
@@ -352,10 +382,32 @@ describe('BillingActions', () => {
       />,
     );
 
+    expect(screen.getByRole('button', { name: 'Manage billing' })).toHaveClass(
+      'bg-accent',
+      'text-accent-ink',
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Manage billing' }));
     await settle();
 
     expect(assign).toHaveBeenCalledWith('https://billing.stripe.com/p/x');
+  });
+
+  it('gives the portal the same primary look as every other billing action', () => {
+    const answer = () => Promise.resolve<BillingRedirectOutcome>({ kind: 'unavailable' });
+    renderWithMessages(
+      <>
+        <billing.BillingActions kind="portal" open={answer} />
+        <billing.BillingActions kind="checkout" open={answer} />
+        <billing.BillingActions kind="subscribe" open={answer} />
+        <billing.BillingActions kind="resubscribe" open={answer} />
+      </>,
+    );
+
+    const portal = screen.getByRole('button', { name: 'Manage billing' });
+    expect(portal).not.toHaveClass('border-line');
+    for (const name of ['Finish subscription', 'Subscribe now', 'Subscribe again']) {
+      expect(screen.getByRole('button', { name })).toHaveAttribute('class', portal.className);
+    }
   });
 
   it.each([

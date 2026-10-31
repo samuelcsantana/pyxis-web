@@ -62,7 +62,7 @@ describe('AccountPage', () => {
     expect(screen.queryByText(/free plan/)).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Close the account for good' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close the account' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to the dashboard' })).toHaveAttribute(
       'href',
       DASHBOARD_HOME,
