@@ -21,12 +21,12 @@ screen it opened over, with the screen's period and filters intact.
 ## Decision
 
 - **Intercepted routes in a modal slot.** `src/app/[projectId]/layout.tsx` takes a `@modal` slot.
-  Inside it, `(.)settings/…` intercepts the project's parts and `(..)account/[section]` the
-  person's parts (Sessions, Access tokens and Connected apps are the person's, so their addresses
-  are `/account/sessions`, `/account/tokens` and `/account/apps`, with no project). A click inside
-  the dashboard (a soft navigation) renders the part in the slot over the current screen; a direct
-  visit or a reload (a hard navigation) renders the real page at the same address, with the same
-  menu and pane. The person's parts are one dynamic route that checks the section: Next 16.4
+  Inside it, `(.)settings/…` intercepts the project's parts and `(..)account/[[...section]]` the
+  person's parts (Account and billing, Sessions, Access tokens and Connected apps are the person's,
+  so their addresses are `/account`, `/account/sessions`, `/account/tokens` and `/account/apps`,
+  with no project). A click inside the dashboard (a soft navigation) renders the part in the slot
+  over the current screen; a direct visit or a reload (a hard navigation) renders the real page
+  at the same address, with the same menu and pane. The person's parts are one dynamic route that checks the section: Next 16.4
   treats `/[projectId]/(..)account/sessions` as a static route, because its own address has no
   parameter, and the rewritten request then falls to the project's catch-all page and answers
   404 in a production build.
