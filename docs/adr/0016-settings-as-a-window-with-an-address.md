@@ -26,7 +26,9 @@ screen it opened over, with the screen's period and filters intact.
   apps are the person's, so their addresses are `/account`, `/account/preferences`,
   `/account/sessions`, `/account/tokens` and `/account/apps`, with no project); `(.)help`
   intercepts Help and support, the last part of You, whose address stays `/[projectId]/help`
-  because its links need a project. A click inside the dashboard (a soft navigation) renders the
+  because its links need a project; `(.)install` opens Install as a window of its own, wider and
+  without the menu, since it is a task with an end rather than a setting. A click inside the
+  dashboard (a soft navigation) renders the
   part in the slot over the current screen; a direct visit or a reload (a hard navigation) renders
   the real page at the same address, with the same menu and pane. The person's parts are one
   dynamic route that checks the section: Next 16.4
