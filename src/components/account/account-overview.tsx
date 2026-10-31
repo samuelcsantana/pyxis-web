@@ -1,5 +1,5 @@
 import { TEXT_LINK } from '@/components/ui/control-classes';
-import { BAR_FILL, BAR_TRACK, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
+import { BAR_FILL, BAR_TRACK } from '@/components/ui/panel-classes';
 import {
   type Account,
   canClose,
@@ -37,6 +37,10 @@ export interface AccountOverviewProps {
 }
 
 const NOTE = 'text-xs leading-[18px] text-muted';
+const PLAN_CARD = 'flex min-w-0 flex-col gap-3 rounded-[0.875rem] border border-line p-4';
+const TILE =
+  'inline-flex size-9 shrink-0 items-center justify-center rounded-input bg-soft text-ink';
+const CARD_ICON = 'M4 7h16v10H4z M4 11h16';
 const FULL_SHARE = 1;
 const PERCENT = 100;
 const INTERVAL_LABELS = { month: 'account.monthly', year: 'account.yearly' } as const;
@@ -153,8 +157,8 @@ function UsageMeter({
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-sm font-semibold">{i18n.t('account.usage')}</h3>
-        <span className="text-sm tabular-nums">
+        <h4 className="text-sm font-semibold">{i18n.t('account.usage')}</h4>
+        <span className="text-lg font-semibold tabular-nums">
           {i18n.t('account.usageCount', {
             count: i18n.format.count(account.eventsThisMonth ?? 0),
             limit: i18n.format.count(account.limits.eventsPerMonth),
@@ -206,7 +210,7 @@ function SubscribeFromFreePlan({
 }: Pick<AccountOverviewProps, 'account' | 'i18n' | 'now' | 'subscribe'>) {
   return (
     <div className="flex flex-col gap-3 border-t border-line pt-3">
-      <h3 className="text-sm font-semibold">{i18n.t('account.paidPlan.heading')}</h3>
+      <h4 className="text-sm font-semibold">{i18n.t('account.paidPlan.heading')}</h4>
       <p className="text-sm">{i18n.t('account.paidPlan.offer')}</p>
       {pausedUntilOf(account, now) === null ? null : (
         <p className="text-sm font-medium">{i18n.t('account.paidPlan.resumes')}</p>
@@ -229,52 +233,69 @@ export function AccountOverview({
   close,
 }: AccountOverviewProps) {
   return (
-    <section aria-labelledby={`account-${account.id}-heading`} className={PANEL}>
-      <h2 id={`account-${account.id}-heading`} className={PANEL_TITLE}>
-        {account.billingInterval === null
-          ? i18n.t('account.plan')
-          : i18n.t('account.planWithInterval', {
-              interval: i18n.t(INTERVAL_LABELS[account.billingInterval]),
-            })}
-      </h2>
-      <p className="text-sm">{statusText(account, i18n, freePlan)}</p>
-      <Suspension account={account} i18n={i18n} />
-      {isDeletionHeld(account) ? (
-        <p className="text-sm font-medium">{i18n.t('account.deletionHeld')}</p>
-      ) : null}
-      <UsageMeter account={account} i18n={i18n} now={now} />
-      <p className={NOTE}>
-        {i18n.t('account.limits', {
-          projects: i18n.t('counts.project', { count: account.limits.projects }),
-          people: i18n.t('counts.person', { count: account.limits.people }),
-        })}
-      </p>
-      <FreePlanFit account={account} i18n={i18n} />
-      {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
-      {canSubscribeAgain(account) ? (
-        <SubscribeAgain
+    <div className="flex flex-col gap-4">
+      <section aria-labelledby={`account-${account.id}-heading`} className={PLAN_CARD}>
+        <div className="flex items-start gap-3">
+          <span aria-hidden="true" className={TILE}>
+            <svg width={18} height={18} viewBox="0 0 24 24">
+              <path
+                d={CARD_ICON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <h3 id={`account-${account.id}-heading`} className="text-base font-semibold">
+              {account.billingInterval === null
+                ? i18n.t('account.plan')
+                : i18n.t('account.planWithInterval', {
+                    interval: i18n.t(INTERVAL_LABELS[account.billingInterval]),
+                  })}
+            </h3>
+            <p className="text-sm">{statusText(account, i18n, freePlan)}</p>
+          </div>
+        </div>
+        <Suspension account={account} i18n={i18n} />
+        {isDeletionHeld(account) ? (
+          <p className="text-sm font-medium">{i18n.t('account.deletionHeld')}</p>
+        ) : null}
+        <UsageMeter account={account} i18n={i18n} now={now} />
+        <p className={NOTE}>
+          {i18n.t('account.limits', {
+            projects: i18n.t('counts.project', { count: account.limits.projects }),
+            people: i18n.t('counts.person', { count: account.limits.people }),
+          })}
+        </p>
+        <FreePlanFit account={account} i18n={i18n} />
+        {needsCheckout(account) ? <BillingActions kind="checkout" open={openCheckout} /> : null}
+        {canSubscribeAgain(account) ? (
+          <SubscribeAgain
+            account={account}
+            i18n={i18n}
+            freePlan={freePlan}
+            openCheckout={openCheckout}
+          />
+        ) : null}
+        {account.status === 'free' ? (
+          <SubscribeFromFreePlan account={account} i18n={i18n} now={now} subscribe={subscribe} />
+        ) : null}
+        {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
+        <AfterCancellingNote
           account={account}
           i18n={i18n}
           freePlan={freePlan}
-          openCheckout={openCheckout}
+          ownsAnotherFreeAccount={ownsAnotherFreeAccount}
         />
-      ) : null}
-      {account.status === 'free' ? (
-        <SubscribeFromFreePlan account={account} i18n={i18n} now={now} subscribe={subscribe} />
-      ) : null}
-      {hasBillingPortal(account) ? <BillingActions kind="portal" open={openPortal} /> : null}
-      <AfterCancellingNote
-        account={account}
-        i18n={i18n}
-        freePlan={freePlan}
-        ownsAnotherFreeAccount={ownsAnotherFreeAccount}
-      />
-      <WithdrawSection open={canWithdraw(account, freePlan)} withdraw={withdraw} />
+        <WithdrawSection open={canWithdraw(account, freePlan)} withdraw={withdraw} />
+      </section>
       <CloseAccountSection
         open={canClose(account)}
         onFreePlan={account.status === 'free'}
         close={close}
       />
-    </section>
+    </div>
   );
 }

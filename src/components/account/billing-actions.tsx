@@ -5,7 +5,6 @@ import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import {
   BUTTON_PRIMARY,
-  BUTTON_SECONDARY,
   CONTROL_BUSY,
   SEGMENTED_GROUP,
   SEGMENTED_IDLE,
@@ -109,7 +108,7 @@ export function BillingActions(props: BillingActionsProps) {
         onClick={open}
         disabled={busy}
         aria-busy={busy}
-        className={`min-h-11 self-start rounded-input px-4 text-sm ${props.kind === 'portal' ? BUTTON_SECONDARY : BUTTON_PRIMARY} ${CONTROL_BUSY}`}
+        className={`min-h-11 self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY} ${CONTROL_BUSY}`}
       >
         {busy ? t('billing.opening') : t(ACTION_LABELS[props.kind])}
       </button>

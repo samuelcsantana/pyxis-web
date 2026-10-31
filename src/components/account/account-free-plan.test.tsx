@@ -63,7 +63,7 @@ function overview(account: Partial<Account> = {}, props: Partial<AccountOverview
 }
 
 function paidPlan(): HTMLElement {
-  const section = screen.getByRole('heading', { name: 'The paid plan' }).parentElement;
+  const section = screen.getByRole('heading', { level: 4, name: 'The paid plan' }).parentElement;
   if (section === null) {
     throw new Error('The paid plan sits in its own block.');
   }
@@ -98,6 +98,7 @@ describe('AccountOverview on the free plan', () => {
       'true',
     );
     expect(within(paidPlan()).getByRole('button', { name: 'Subscribe now' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Plan' })).toContainElement(paidPlan());
     expect(screen.queryByText(/resumes within a minute/)).not.toBeInTheDocument();
   });
 
