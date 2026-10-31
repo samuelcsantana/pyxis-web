@@ -56,6 +56,10 @@ Element.prototype.getAnimations = function noAnimations(): Animation[] {
   return [];
 };
 
+Element.prototype.scrollIntoView = function staysWhereItIs(): void {
+  return undefined;
+};
+
 afterEach(() => {
   cleanup();
   window.sessionStorage.clear();

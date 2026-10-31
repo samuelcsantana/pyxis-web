@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { DismissableDetails } from './dismissable-details';
 
 function renderPopover({ defaultOpen = true }: { defaultOpen?: boolean } = {}) {
@@ -122,6 +122,49 @@ describe('DismissableDetails', () => {
     }
 
     expect(inner).not.toHaveAttribute('open');
+  });
+
+  it('scrolls itself into view when it opens, only when asked to reveal what it opens', () => {
+    const reveal = vi.spyOn(Element.prototype, 'scrollIntoView');
+    const { container } = render(
+      <>
+        <DismissableDetails revealWhenOpened>
+          <summary>Account</summary>
+        </DismissableDetails>
+        <DismissableDetails>
+          <summary>Project</summary>
+        </DismissableDetails>
+      </>,
+    );
+    const [revealing, plain] = container.querySelectorAll('details');
+    for (const details of [revealing, plain]) {
+      if (details !== undefined) {
+        details.open = true;
+        fireEvent(details, new Event('toggle'));
+      }
+    }
+
+    expect(reveal).toHaveBeenCalledOnce();
+    expect(reveal).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(reveal.mock.contexts[0]).toBe(revealing);
+    reveal.mockRestore();
+  });
+
+  it('does not scroll when it closes, even when it reveals what it opens', () => {
+    const reveal = vi.spyOn(Element.prototype, 'scrollIntoView');
+    const { container } = render(
+      <DismissableDetails revealWhenOpened defaultOpen>
+        <summary>Account</summary>
+      </DismissableDetails>,
+    );
+    const details = container.querySelector('details');
+    if (details !== null) {
+      details.open = false;
+      fireEvent(details, new Event('toggle'));
+    }
+
+    expect(reveal).not.toHaveBeenCalled();
+    reveal.mockRestore();
   });
 
   it('closes on a pointer pressed outside it', () => {
