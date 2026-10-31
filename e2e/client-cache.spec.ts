@@ -1,9 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import {
-  openTheLanguagesOfTheAccountMenu,
-  sawBusyContent,
-  watchForBusyContent,
-} from './navigation';
+import { openThemeAndLanguage, sawBusyContent, watchForBusyContent } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const JUST_PAST_THE_REFRESH_BOUND = '00:21';
@@ -82,13 +78,12 @@ test('loads a screen visited more than five minutes ago as a new one', async ({
 test('shows a visited screen in the language chosen since', async ({ page, isMobile }) => {
   await openOverviewThenFunnel(page, isMobile);
 
-  await openMenuOnAPhone(page, isMobile);
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
-  await openTheLanguagesOfTheAccountMenu(page);
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  const part = await openThemeAndLanguage(page, isMobile);
+  await part.getByRole('combobox', { name: 'Language' }).selectOption('pt-BR');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
-  await page.locator('summary', { hasText: 'Conta e preferências' }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
   const overview = page
     .getByRole('navigation', { name: 'Navegação principal' })
     .getByRole('link', { name: 'Visão geral', exact: true });

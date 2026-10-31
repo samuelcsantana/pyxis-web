@@ -9,12 +9,10 @@ import { AccountNoticeBanner } from '@/components/account/account-notice-banner'
 import { DemoBanner } from '@/components/states/demo-banner';
 import { IngestionSuspendedBanner } from '@/components/states/ingestion-suspended-banner';
 import { ingestionSuspensionOf } from '@/domain/admin';
-import { chooseLocale } from '@/i18n/choose-locale';
 import { getI18n } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { bestEffortAccountsInView } from '@/lib/accounts-in-view';
 import { projectOrNotFound } from '@/lib/current-admin';
-import { chosenTheme } from '@/lib/theme-cookie';
 
 export interface ProjectLayoutProps {
   readonly children: ReactNode;
@@ -49,9 +47,7 @@ export default async function ProjectLayout({ children, modal, params }: Project
           <Sidebar
             admin={admin}
             project={project}
-            theme={await chosenTheme()}
             i18n={i18n}
-            chooseLocale={chooseLocale}
             canCreateProject={canCreateProject}
             usage={usage}
           />

@@ -14,6 +14,7 @@ const PARTS = [
   'Export events',
   'Delete project',
   'Account and billing',
+  'Theme and language',
   'Sessions',
   'Access tokens',
   'Connected apps',
@@ -248,6 +249,7 @@ test("shows the person's parts outside a project with only the You group", async
   }
   await expect(parts.getByRole('link')).toHaveText([
     'Account and billing',
+    'Theme and language',
     'Sessions',
     'Access tokens',
     'Connected apps',

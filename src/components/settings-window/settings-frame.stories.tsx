@@ -12,6 +12,7 @@ import { ConnectedAppsPanel } from '@/components/settings/connected-apps-panel';
 import { KeysPart } from '@/components/settings/keys-part';
 import type { When } from '@/components/settings/part-pieces';
 import { PeoplePanel } from '@/components/settings/people-panel';
+import { PreferencesPanel } from '@/components/settings/preferences-panel';
 import { DeletePart, EmailPart, ExportPart } from '@/components/settings/project-actions-parts';
 import { ProjectPart } from '@/components/settings/project-part';
 import { SessionsPanel } from '@/components/settings/sessions-panel';
@@ -243,6 +244,8 @@ function bodyOf(section: SettingsSection, who: Who, i18n: I18n): ReactNode {
       );
     case 'plan':
       return planPart(owner ? [DEMO_ACCOUNT] : [], i18n);
+    case 'preferences':
+      return <PreferencesPanel i18n={i18n} choose={() => Promise.resolve()} />;
     case 'sessions':
       return (
         <SessionsPanel sessions={SESSIONS} i18n={i18n} when={when} end={() => Promise.resolve()} />
@@ -447,13 +450,20 @@ const OWNER_ROWS = [
   'Export events',
   'Delete project',
   'Account and billing',
+  'Theme and language',
   'Sessions',
   'Access tokens',
   'Connected apps',
 ] as const;
 const OWNER_ONLY_ROWS: ReadonlySet<string> = new Set(['Export events', 'Delete project']);
 const MEMBER_ROWS = OWNER_ROWS.filter((row) => !OWNER_ONLY_ROWS.has(row));
-const YOU_ROWS = ['Account and billing', 'Sessions', 'Access tokens', 'Connected apps'] as const;
+const YOU_ROWS = [
+  'Account and billing',
+  'Theme and language',
+  'Sessions',
+  'Access tokens',
+  'Connected apps',
+] as const;
 
 const ownerWindow =
   (title: string): Play =>
@@ -651,6 +661,69 @@ export const AccountAndBillingFullPage: Story = {
     await listsTheRows(canvasElement, YOU_ROWS);
     await expect(currentRow(canvasElement)).toHaveAccessibleName(ACCOUNT_AND_BILLING);
     await showsThePlanCard(canvasElement, 'Plan: Monthly', '41,230 of 100,000');
+  },
+};
+
+const THEME_AND_LANGUAGE = 'Theme and language';
+
+async function showsTheChoicesOfThisBrowser(
+  canvasElement: HTMLElement,
+  title: string,
+  language: { readonly label: string; readonly name: string },
+) {
+  const part = within(sectionNamed(canvasElement, title));
+  const themes = part.getByRole('group');
+  await expect(within(themes).getAllByRole('button')).toHaveLength(3);
+  await expect(within(themes).getAllByRole('button', { pressed: true })).toHaveLength(1);
+  await expect(part.getByRole('combobox', { name: language.label })).toHaveDisplayValue(
+    language.name,
+  );
+}
+
+export const ThemeAndLanguage: Story = {
+  args: windowArgs('owner', 'preferences'),
+  play: async (context) => {
+    await ownerWindow(THEME_AND_LANGUAGE)(context);
+    await expect(
+      within(sectionNamed(context.canvasElement, THEME_AND_LANGUAGE)).getByText(
+        'These apply to this browser.',
+      ),
+    ).toBeVisible();
+    await showsTheChoicesOfThisBrowser(context.canvasElement, THEME_AND_LANGUAGE, {
+      label: 'Language',
+      name: 'English',
+    });
+  },
+};
+
+export const ThemeAndLanguageDark: Story = {
+  ...ThemeAndLanguage,
+  globals: { theme: 'dark' },
+};
+
+export const ThemeAndLanguageOnAPhone: Story = {
+  args: windowArgs('owner', 'preferences'),
+  globals: PHONE,
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).queryByRole('navigation', { name: 'Sections' })).toBeNull();
+    await showsTheChoicesOfThisBrowser(canvasElement, THEME_AND_LANGUAGE, {
+      label: 'Language',
+      name: 'English',
+    });
+  },
+};
+
+export const ThemeAndLanguageInPortuguese: Story = {
+  args: windowArgs('owner', 'preferences', portuguese),
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(sectionNamed(canvasElement, 'Tema e idioma')).getByText('Valem para este navegador.'),
+    ).toBeVisible();
+    await showsTheChoicesOfThisBrowser(canvasElement, 'Tema e idioma', {
+      label: 'Idioma',
+      name: 'Português (Brasil)',
+    });
   },
 };
 

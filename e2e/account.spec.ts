@@ -67,6 +67,7 @@ test('lists Account and billing first under You, and opens it from another part'
     'Export events',
     'Delete project',
     'Account and billing',
+    'Theme and language',
     'Sessions',
     'Access tokens',
     'Connected apps',

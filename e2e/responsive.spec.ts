@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { openAccountMenu, openTheLanguagesOfTheAccountMenu } from './navigation';
+import { openThemeAndLanguage } from './navigation';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -105,19 +105,19 @@ test.describe('at 320×640, below the sm breakpoint, the period controls', () =>
 test.describe('the theme choice', () => {
   test.use({ viewport: { width: 390, height: 844 }, colorScheme: 'light' });
 
-  test('sits in the account menu, on a phone and on a wider screen alike', async ({ page }) => {
+  test('sits in Theme and language, on a phone and on a wider screen alike', async ({ page }) => {
     await page.goto(`/${STORE_ID}/overview`);
     const header = page.getByRole('banner');
 
     await expect(header.getByRole('button', { name: /theme/i })).toHaveCount(0);
-    await openAccountMenu(page, true);
-    await page.getByRole('button', { name: 'Dark' }).click();
+    const onAPhone = await openThemeAndLanguage(page, true);
+    await onAPhone.getByRole('button', { name: 'Dark' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.reload();
-    await openAccountMenu(page, false);
-    await page.getByRole('button', { name: 'Light' }).click();
+    await page.goto(`/${STORE_ID}/overview`);
+    const onALaptop = await openThemeAndLanguage(page, false);
+    await onALaptop.getByRole('button', { name: 'Light' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   });
 });
@@ -276,14 +276,12 @@ test.describe(`sidebar in a ${String(SIDEBAR_SCROLLS_ITS_SCREENS.width)}×${Stri
     const { account } = sidebarParts(page);
 
     await account.click();
-    await openTheLanguagesOfTheAccountMenu(page);
     const billing = page.getByRole('link', { name: 'Account and billing' });
-    const languages = page.getByRole('group', { name: 'Language' });
+    const preferences = page.getByRole('link', { name: 'Theme and language' });
     const signOut = page.getByRole('button', { name: 'Sign out' });
 
     await expect(billing).toBeInViewport({ ratio: 1 });
-    await languages.scrollIntoViewIfNeeded();
-    await expect(languages).toBeInViewport({ ratio: 1 });
+    await expect(preferences).toBeInViewport({ ratio: 1 });
     await signOut.scrollIntoViewIfNeeded();
     await expect(signOut).toBeInViewport({ ratio: 1 });
     await expect(account).toBeInViewport({ ratio: 1 });
@@ -295,7 +293,7 @@ const COMPACT_MENU_WINDOW = { width: 1366, height: 620 } as const;
 test.describe(`account menu in a ${String(COMPACT_MENU_WINDOW.width)}×${String(COMPACT_MENU_WINDOW.height)} window`, () => {
   test.use({ viewport: COMPACT_MENU_WINDOW });
 
-  test('opens whole, from Account and billing to Sign out, and stays accessible with the languages open', async ({
+  test('opens whole, from Account and billing to Sign out, and stays accessible', async ({
     page,
     isMobile,
   }) => {
@@ -308,11 +306,10 @@ test.describe(`account menu in a ${String(COMPACT_MENU_WINDOW.width)}×${String(
     await expect(page.getByRole('link', { name: 'Account and billing' })).toBeInViewport({
       ratio: 1,
     });
+    await expect(page.getByRole('link', { name: 'Theme and language' })).toBeInViewport({
+      ratio: 1,
+    });
     await expect(page.getByRole('button', { name: 'Sign out' })).toBeInViewport({ ratio: 1 });
-    expect(await axeViolations(page)).toEqual([]);
-
-    await openTheLanguagesOfTheAccountMenu(page);
-    await expect(page.getByRole('group', { name: 'Language' })).toBeVisible();
     expect(await axeViolations(page)).toEqual([]);
   });
 });
@@ -347,28 +344,24 @@ test.describe(`sidebar in a ${String(VERY_SHORT_WINDOW.width)}×${String(VERY_SH
   });
 });
 
-for (const { locale, account } of [
-  { locale: 'pt-BR', account: 'Conta e preferências' },
-  { locale: 'es-ES', account: 'Cuenta y preferencias' },
-] as const) {
-  test.describe(`account menu under WCAG text spacing in ${locale}`, () => {
-    test.use({ locale, viewport: { width: 1280, height: 800 } });
+const NARROWEST_PHONE = { width: 320, height: 640 } as const;
 
-    test('keeps the themes inside the menu, wrapping their words if it must', async ({
-      page,
-      isMobile,
-    }) => {
-      test.skip(isMobile, PHONES_HAVE_A_MENU);
-      await page.goto(`/${STORE_ID}/overview`);
+for (const { locale, themes } of [
+  { locale: 'pt-BR', themes: 'Tema' },
+  { locale: 'es-ES', themes: 'Tema' },
+  { locale: 'de-DE', themes: 'Design' },
+] as const) {
+  test.describe(`theme and language under WCAG text spacing in ${locale}`, () => {
+    test.use({ locale, viewport: NARROWEST_PHONE });
+
+    test('keeps the themes and the language inside a 320 px screen', async ({ page }) => {
+      await page.goto('/account/preferences');
       await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 
-      await page.locator('summary', { hasText: account }).click();
-      const panel = page
-        .locator('details > div')
-        .filter({ has: page.getByRole('group') })
-        .last();
-
-      expect(await panel.evaluate((element) => element.scrollWidth - element.clientWidth)).toBe(0);
+      const group = page.getByRole('group', { name: themes });
+      await expect(group).toBeVisible();
+      expect(await group.evaluate((element) => element.scrollWidth - element.clientWidth)).toBe(0);
+      expect(await sidewaysOverflow(page)).toBe(0);
     });
   });
 }

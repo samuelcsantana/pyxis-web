@@ -10,7 +10,7 @@ import {
 export const PROJECT_SECTIONS = ['project', 'keys', 'people', 'email', 'export', 'delete'] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
 
-export const ACCOUNT_SECTIONS = ['plan', 'sessions', 'tokens', 'apps'] as const;
+export const ACCOUNT_SECTIONS = ['plan', 'preferences', 'sessions', 'tokens', 'apps'] as const;
 export type AccountSection = (typeof ACCOUNT_SECTIONS)[number];
 
 export type SettingsSection = ProjectSection | AccountSection;
@@ -60,6 +60,11 @@ export const SECTION_LOOKS: Readonly<Record<SettingsSection, SectionLook>> = {
     label: 'nav.billing',
     icon: 'M4 7h16v10H4z M4 11h16',
     titleId: 'account-plan-heading',
+  },
+  preferences: {
+    label: 'preferences.heading',
+    icon: 'M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18z M12 3v18 M12 8h6.5 M12 12h9 M12 16h6.5',
+    titleId: 'account-preferences-heading',
   },
   sessions: {
     label: 'sessions.heading',

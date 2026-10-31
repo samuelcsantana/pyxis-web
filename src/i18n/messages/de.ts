@@ -197,7 +197,10 @@ export const de = translation({
   },
   language: {
     label: 'Sprache',
-    current: 'Sprache: {name}',
+  },
+  preferences: {
+    heading: 'Design und Sprache',
+    thisBrowser: 'Gilt für diesen Browser.',
   },
   settings: {
     you: 'Du',

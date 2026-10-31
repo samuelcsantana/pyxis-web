@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
-import { openAccountMenu } from './navigation';
+import { openAccountMenu, openThemeAndLanguage } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -346,12 +346,12 @@ test('remembers the chosen theme across a reload, and goes back to the system on
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`/${STORE_ID}/overview`);
 
-  await openAccountMenu(page, isMobile);
-  await page.getByRole('button', { name: 'Dark' }).click();
+  const part = await openThemeAndLanguage(page, isMobile);
+  await part.getByRole('button', { name: 'Dark' }).click();
   await page.reload();
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await openAccountMenu(page, isMobile);
+  await expect(page).toHaveURL(/\/account\/preferences$/);
   await expect(page.getByRole('button', { name: 'Dark' })).toHaveAttribute('aria-pressed', 'true');
 
   await page.getByRole('button', { name: 'System' }).click();

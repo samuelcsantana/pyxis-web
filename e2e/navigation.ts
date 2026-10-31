@@ -56,9 +56,13 @@ export async function openAccountMenu(page: Page, isMobile: boolean): Promise<vo
   }
   const account = page.locator('summary', { hasText: 'Account and preferences' });
   await account.click();
-  await expect(page.getByRole('group', { name: 'Theme' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Theme and language' })).toBeVisible();
 }
 
-export async function openTheLanguagesOfTheAccountMenu(page: Page): Promise<void> {
-  await page.locator('details details > summary').click();
+export async function openThemeAndLanguage(page: Page, isMobile: boolean): Promise<Locator> {
+  await openAccountMenu(page, isMobile);
+  await page.getByRole('link', { name: 'Theme and language' }).click();
+  const part = page.getByRole('dialog').getByRole('region', { name: 'Theme and language' });
+  await expect(part).toBeVisible();
+  return part;
 }

@@ -196,7 +196,10 @@ export const ptBR = translation({
   },
   language: {
     label: 'Idioma',
-    current: 'Idioma: {name}',
+  },
+  preferences: {
+    heading: 'Tema e idioma',
+    thisBrowser: 'Valem para este navegador.',
   },
   settings: {
     you: 'Você',

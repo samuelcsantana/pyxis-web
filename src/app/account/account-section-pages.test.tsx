@@ -34,6 +34,9 @@ import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import AccountAppsPage, { generateMetadata as appsPageMetadata } from './apps/page';
 import AccountPlanPage, { generateMetadata as planPageMetadata } from './page';
+import AccountPreferencesPage, {
+  generateMetadata as preferencesPageMetadata,
+} from './preferences/page';
 import AccountSessionsPage, { generateMetadata as sessionsPageMetadata } from './sessions/page';
 import AccountTokensPage, { generateMetadata as tokensPageMetadata } from './tokens/page';
 
@@ -99,7 +102,13 @@ const STORE = {
 };
 const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE] };
 const SETTINGS_PATH = `/${STORE.id}/settings`;
-const ACCOUNT_LINKS = ['/account', '/account/sessions', '/account/tokens', '/account/apps'];
+const ACCOUNT_LINKS = [
+  '/account',
+  '/account/preferences',
+  '/account/sessions',
+  '/account/tokens',
+  '/account/apps',
+];
 const PROJECT_LINKS = [
   SETTINGS_PATH,
   `${SETTINGS_PATH}/keys`,
@@ -131,10 +140,12 @@ function windowTitleOf(section: Exclude<AccountSection, 'plan'>) {
 }
 
 const AccountPlanWindow = (props: ProjectPageProps) => AccountWindow(props);
+const AccountPreferencesWindow = windowOf('preferences');
 const AccountSessionsWindow = windowOf('sessions');
 const AccountTokensWindow = windowOf('tokens');
 const AccountAppsWindow = windowOf('apps');
 const planWindowMetadata = (props: ProjectPageProps) => accountWindowMetadata(props);
+const preferencesWindowMetadata = windowTitleOf('preferences');
 const sessionsWindowMetadata = windowTitleOf('sessions');
 const tokensWindowMetadata = windowTitleOf('tokens');
 const appsWindowMetadata = windowTitleOf('apps');
@@ -160,6 +171,16 @@ const ROUTES: readonly AccountRoutes[] = [
     pageMetadata: planPageMetadata,
     window: AccountPlanWindow,
     windowMetadata: planWindowMetadata,
+  },
+  {
+    section: 'preferences',
+    title: 'Theme and language',
+    path: '/account/preferences',
+    content: 'These apply to this browser.',
+    page: AccountPreferencesPage,
+    pageMetadata: preferencesPageMetadata,
+    window: AccountPreferencesWindow,
+    windowMetadata: preferencesWindowMetadata,
   },
   {
     section: 'sessions',

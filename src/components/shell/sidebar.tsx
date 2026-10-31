@@ -3,7 +3,6 @@ import { LogoMark } from '@/components/brand/logo-mark';
 import { NAV_FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import type { MonthUsage } from '@/lib/accounts-in-view';
-import type { Theme } from '@/lib/theme';
 import { AccountMenu } from './account-menu';
 import { ProjectSwitcher } from './project-switcher';
 import { HelpLink } from './help-link';
@@ -14,9 +13,7 @@ import { ViewKeepingLink } from './view-keeping-link';
 export interface SidebarProps {
   readonly admin: Admin;
   readonly project: Project;
-  readonly theme?: Theme;
   readonly i18n: I18n;
-  readonly chooseLocale: (form: FormData) => Promise<void>;
   readonly canCreateProject?: boolean;
   readonly usage?: MonthUsage | null;
 }
@@ -26,9 +23,7 @@ const SHIELD_ICON = 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 
 export function Sidebar({
   admin,
   project,
-  theme,
   i18n,
-  chooseLocale,
   canCreateProject = false,
   usage = null,
 }: SidebarProps) {
@@ -70,13 +65,7 @@ export function Sidebar({
           </svg>
           {i18n.t('shell.privacy')}
         </p>
-        <AccountMenu
-          email={admin.email}
-          theme={theme}
-          i18n={i18n}
-          chooseLocale={chooseLocale}
-          usage={usage}
-        />
+        <AccountMenu email={admin.email} i18n={i18n} usage={usage} />
       </div>
     </div>
   );
