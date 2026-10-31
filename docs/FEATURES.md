@@ -353,7 +353,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; three projects on the paid plan, one on the
   free plan). The new project
-  opens on `/[projectId]/install`. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
+  opens on `/[projectId]/install`, a page when opened directly (the link sent to whoever runs the
+  site); from the sidebar's Install item or Help's "How to install" the same address opens as its
+  own window over the screen, 960 px wide on a laptop: the project and its state at the top
+  ("Waiting for the first event…" with a pulsing dot, or "The first event arrived."), the three
+  steps below scrolling inside, Escape or Back to the screen. On its own page the Install item
+  reloads the page instead of opening the window over it. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
   Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
   the API's address, each with a copy button. "With an AI agent" holds a ready request for Claude
   Code, Cursor or another coding agent, written in the dashboard's language with the project's
