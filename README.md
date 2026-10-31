@@ -76,7 +76,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   Checkout, a first project with its install guide, the Account and billing page and a Help and
   support page.
 - **Settings as a window.** Opens over the screen with an address per part (the project's, and
-  the person's account and billing, sessions, tokens and apps); opened directly, each is a page.
+  the person's account and billing, theme and language, sessions, tokens and apps); opened
+  directly, each is a page.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
@@ -439,8 +440,10 @@ puts a small host on every project route and loads the dialog on demand, after t
 own route that loads only its own forms (163.7–167.8 KiB, down from 169.4 KiB for the whole page);
 the person's parts opened outside a project (`/account/sessions`, `/account/tokens`,
 `/account/apps`, 153.2–155.0 KiB) count as Settings pages, not entry pages. Account and billing
-joined them as a part of the window: `/account` went from 152.8 to 155.7 KiB with the window's
-menu and counts as a Settings page too.
+joined them as a part of the window: `/account` went from 152.8 to 155.6 KiB with the window's
+menu and counts as a Settings page too, like Theme and language (`/account/preferences`,
+155.0 KiB). Moving the theme and the languages out of the sidebar's account menu took about 1 KiB
+off every screen (Overview 170.1 → 169.2 KiB, Requests 173.1 → 172.1 KiB).
 
 </details>
 

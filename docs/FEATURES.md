@@ -60,8 +60,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
   box) and the account. The navigation marks where you are: the screen, Install, Settings or
   Help; Settings also on an export, which has no item of its own. The account menu is compact,
-  under 300 px with the language list closed, before the owner's usage line: Account and billing, the three themes on one row, the language behind a
-  "Language: …" row that opens the list in place, then Sign out. To the owner of the account
+  183 px before the owner's usage line (it was 254 px with the languages closed, 506 px open):
+  Account and billing, Theme and language, then Sign out. To the owner of the account
   that holds the project on screen, the account row also shows the month's usage under the
   e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
   gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
@@ -277,9 +277,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and focus goes back to the gear, or to the account menu's button when one of its rows opened it
   (on a phone, to the menu button). Its menu has two groups, the project, named by the project
   (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
-  (Account and billing, Sessions, Access tokens, Connected apps), with Sign out at its foot. Every
+  (Account and billing, Theme and language, Sessions, Access tokens, Connected apps), with Sign out
+  at its foot. Every
   part has its own address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
-  `…/email`, `…/export`, `…/delete`, and `/account`, `/account/sessions`, `/account/tokens`,
+  `…/email`, `…/export`, `…/delete`, and `/account`, `/account/preferences`, `/account/sessions`, `/account/tokens`,
   `/account/apps`. Switching parts replaces the address without a new history entry and moves
   the focus to the part's heading. Opened directly (a reload, a link from an e-mail or from
   someone else), a part is a full page with the same menu; the person's parts opened outside a
@@ -369,6 +370,14 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the free plan, as the Terms of Use set), the installation links, the GitHub question form and
   the private security report. Account and billing ends with the same address and reply time,
   and the code step of sign-in and sign-up names it for a code that does not arrive
+- Theme and language, the second part of You in the Settings window (`/account/preferences`,
+  from the account menu): "These apply to this browser." (the theme and the language are cookies
+  of this browser, not settings of the account), the three themes as one segmented control, and
+  the language as the browser's own select field with the current language in view, each option
+  named in its own language. The field posts only on a deliberate choice: a pick from its list,
+  with a pointer or the keyboard, Enter, or leaving the field on another language; never while
+  the keyboard browses the closed field, where arrows and typed letters change the value at once
+  in Chromium, so a keyboard user does not reload the dashboard on every key
 - Account and billing, the first part of You in the Settings window (`/account`, from the
   account menu and its usage row, as a page when opened directly or on Stripe's return), for
   the owner of a hosted account: a card with the plan and its state (free trial, active, payment
@@ -513,7 +522,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   page's script once, between the API's answer and the action, which is what the nonce CSP
   protects. The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
   which the root layout reads so the first paint has the right theme (so every page renders on
-  request), and `pyxis_locale`, the language chosen in the language menu, set by a Server Action
+  request), and `pyxis_locale`, the language chosen in Theme and language, set by a Server Action
   as `HttpOnly` because only the server reads it. Neither identifies anyone
 - The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data
