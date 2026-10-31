@@ -271,7 +271,10 @@ export async function ProjectSectionPage({
         title={i18n.t('nav.settings')}
         subtitle={i18n.t(subtitleOf(settings), { project: settings.name })}
       />
-      <MainContent className="flex w-full max-w-310 flex-col p-0 sm:px-8 sm:pt-7 sm:pb-12">
+      <MainContent
+        data-window-page=""
+        className="flex w-full max-w-310 flex-col p-0 sm:px-8 sm:pt-7 sm:pb-12"
+      >
         <div className={FULL_PAGE_FRAME}>{frame}</div>
       </MainContent>
     </>

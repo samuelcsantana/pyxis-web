@@ -149,6 +149,7 @@ describe.each(Object.entries(THEMES))('button states in the %s theme', (_, token
     ['card', 'ink-pressed'],
     ['ink', 'soft'],
     ['ink', 'line'],
+    ['ink', 'warn-soft'],
     ['muted', 'soft'],
   ])('keep %s text readable on %s', (text, surface) => {
     expect(pair(text, surface)).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);

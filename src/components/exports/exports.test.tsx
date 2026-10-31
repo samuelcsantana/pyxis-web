@@ -205,4 +205,32 @@ describe('RefreshWhilePending', () => {
     await settle(PENDING_REFRESH_MS * 2);
     expect(navigation.router.refresh).toHaveBeenCalledTimes(PENDING_REFRESH_LIMIT);
   });
+
+  it('waits while a window covers a page that is itself a window address, then goes on', async () => {
+    const page = document.createElement('main');
+    page.setAttribute('data-window-page', '');
+    const window = document.createElement('dialog');
+    window.setAttribute('open', '');
+    document.body.append(page, window);
+    render(<RefreshWhilePending pending />);
+
+    await settle(PENDING_REFRESH_MS * 3);
+    expect(navigation.router.refresh).not.toHaveBeenCalled();
+
+    window.remove();
+    await settle(PENDING_REFRESH_MS);
+    expect(navigation.router.refresh).toHaveBeenCalledOnce();
+    page.remove();
+  });
+
+  it('refreshes under a window that covers a screen', async () => {
+    const window = document.createElement('dialog');
+    window.setAttribute('open', '');
+    document.body.append(window);
+    render(<RefreshWhilePending pending />);
+
+    await settle(PENDING_REFRESH_MS);
+    expect(navigation.router.refresh).toHaveBeenCalledOnce();
+    window.remove();
+  });
 });

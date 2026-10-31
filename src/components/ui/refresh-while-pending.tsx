@@ -9,6 +9,14 @@ export interface RefreshWhilePendingProps {
 
 export const PENDING_REFRESH_MS = 5_000;
 export const PENDING_REFRESH_LIMIT = 120;
+const OPEN_WINDOW = 'dialog[open]';
+const WINDOW_PAGE = '[data-window-page]';
+
+function aWindowCoversAWindowPage(): boolean {
+  return (
+    document.querySelector(OPEN_WINDOW) !== null && document.querySelector(WINDOW_PAGE) !== null
+  );
+}
 
 export function RefreshWhilePending({ pending }: RefreshWhilePendingProps) {
   const router = useRouter();
@@ -19,6 +27,9 @@ export function RefreshWhilePending({ pending }: RefreshWhilePendingProps) {
     }
     let refreshes = 0;
     const timer = setInterval(() => {
+      if (aWindowCoversAWindowPage()) {
+        return;
+      }
       refreshes += 1;
       router.refresh();
       if (refreshes >= PENDING_REFRESH_LIMIT) {

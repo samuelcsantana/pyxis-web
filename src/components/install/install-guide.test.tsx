@@ -76,6 +76,18 @@ describe('InstallGuide', () => {
     );
   });
 
+  it('titles its steps as h2 on its own page, with what the agent changes as h3 under them', async () => {
+    showGuide(SETTINGS);
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: '1. Install Pyxis on your site' }),
+    ).toHaveAttribute('id', 'install-step-1');
+    await userEvent.click(screen.getByRole('tab', { name: 'With an AI agent' }));
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'What the agent will change' }),
+    ).toHaveAttribute('id', 'install-agent-changes');
+  });
+
   it('sends the Claude connection to the connected apps of the account, a window away', () => {
     showGuide(SETTINGS);
 

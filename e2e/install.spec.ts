@@ -137,3 +137,54 @@ test('tells a phone that installing happens on a computer and copies this addres
   await expect(notice.getByRole('button', { name: 'Copied' })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(page.url());
 });
+
+test.describe('install as a window', () => {
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`opens from the sidebar over the screen, wider than Settings, in the ${colorScheme} theme`, async ({
+      page,
+      isMobile,
+    }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.goto(`/${STORE_ID}/overview?range=7d`);
+      if (isMobile) {
+        await page.getByRole('button', { name: 'Open menu' }).click();
+      }
+      await page
+        .getByRole('navigation', { name: 'Main navigation' })
+        .getByRole('link', { name: /^Install/ })
+        .click();
+
+      const installWindow = page.getByRole('dialog', { name: 'Install' });
+      await expect(installWindow).toBeVisible();
+      await expect(page).toHaveURL(new RegExp(`${INSTALL_PATH}\\?range=7d$`));
+      await expect(installWindow.getByRole('heading', { level: 2, name: 'Install' })).toBeFocused();
+      await expect(installWindow.getByText('My site', { exact: true })).toBeVisible();
+      if (!isMobile) {
+        expect((await installWindow.boundingBox())?.width).toBe(960);
+      }
+      expect(await axeViolations(page)).toEqual([]);
+
+      await page.keyboard.press('Escape');
+      await expect(installWindow).toBeHidden();
+      await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
+    });
+  }
+
+  test('reloads its own page from its item instead of opening over itself', async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto(INSTALL_PATH);
+    if (isMobile) {
+      await page.getByRole('button', { name: 'Open menu' }).click();
+    }
+    await page
+      .getByRole('navigation', { name: 'Main navigation' })
+      .getByRole('link', { name: /^Install/ })
+      .click();
+
+    await expect(page).toHaveURL(new RegExp(`${INSTALL_PATH}$`));
+    await expect(page.getByRole('heading', { level: 1, name: 'Install' })).toBeVisible();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+});

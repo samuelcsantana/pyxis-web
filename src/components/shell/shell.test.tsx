@@ -372,6 +372,42 @@ describe('the project settings in the navigation', () => {
     expect(assign).not.toHaveBeenCalled();
   });
 
+  it('loads Install as a full page when it is already open, so it never opens over itself', () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    navigation.pathname = '/p-store/install';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
+
+    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
+
+    expect(prevented).toBe(true);
+    expect(assign).toHaveBeenCalledExactlyOnceWith('/p-store/install?range=7d');
+  });
+
+  it('leaves a click that opens Install elsewhere to the browser, even on its own page', () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    navigation.pathname = '/p-store/install';
+    renderWithMessages(<SidebarNav project={store()} />);
+    navigation.pathname = '/p-store/overview';
+
+    fireEvent.click(screen.getByRole('link', { name: /^Install/ }), { ctrlKey: true });
+
+    expect(assign).not.toHaveBeenCalled();
+  });
+
+  it('leaves a click on Install from a screen to the link, which opens it over the screen', () => {
+    const assign = vi.fn();
+    vi.stubGlobal('location', { assign });
+    renderWithMessages(<SidebarNav project={store()} />);
+
+    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
+
+    expect(prevented).toBe(false);
+    expect(assign).not.toHaveBeenCalled();
+  });
+
   it('marks the settings current on an export, which has no item of its own', () => {
     navigation.pathname = '/p-store/exports/e1';
     renderWithMessages(<SidebarNav project={store()} />);

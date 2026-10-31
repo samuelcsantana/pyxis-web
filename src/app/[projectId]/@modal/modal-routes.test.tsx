@@ -11,12 +11,14 @@ import {
   ProjectSectionWindow,
 } from '@/app/[projectId]/settings/settings-sections';
 import type { Admin } from '@/domain/admin';
+import { PYXIS_INGESTION_URL } from '@/lib/landing-measurement-config';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { MockProjectsService } from '@/services/projects/mock-projects-service';
 import { englishTranslator } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import AccountWindow from './(..)account/[[...section]]/page';
 import HelpWindow, { generateMetadata as helpWindowMetadata } from './(.)help/page';
+import InstallWindowPage, { generateMetadata as installWindowMetadata } from './(.)install/page';
 import SettingsKeysWindow from './(.)settings/keys/page';
 import ModalDefault from './default';
 import ModalLayout from './layout';
@@ -183,6 +185,27 @@ describe('ModalLayout', () => {
       'href',
       `/${DEMO_STORE.id}/help`,
     );
+  });
+
+  it('opens Install as its own window, titled Install, naming the project and its state', async () => {
+    state.segments = ['(.)install'];
+    state.pathname = `/${DEMO_STORE.id}/install`;
+
+    renderWithMessages(await ModalLayout({ children: await InstallWindowPage(windowProps()) }));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Install' });
+    expect(within(dialog).getByRole('banner')).toHaveTextContent(/My site/);
+    expect(
+      within(dialog).getByRole('region', { name: '1. Install Pyxis on your site' }),
+    ).toBeInTheDocument();
+    expect(within(dialog).queryByRole('navigation', { name: 'Sections' })).not.toBeInTheDocument();
+    expect(dialog).toHaveTextContent(PYXIS_INGESTION_URL);
+  });
+
+  it('titles the Install window like the Install page', async () => {
+    expect(await installWindowMetadata(windowProps())).toMatchObject({
+      title: expect.stringContaining('Install') as unknown,
+    });
   });
 
   it('titles the Help window after the part and the project', async () => {

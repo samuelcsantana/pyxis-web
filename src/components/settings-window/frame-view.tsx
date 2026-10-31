@@ -47,7 +47,10 @@ export function FrameViewProvider({ initial, section, children }: FrameViewProvi
   }
   useEffect(() => {
     if (change.focus !== null) {
-      document.querySelector<HTMLElement>(change.focus)?.focus();
+      (
+        document.querySelector<HTMLElement>(`dialog[open] ${change.focus}`) ??
+        document.querySelector<HTMLElement>(change.focus)
+      )?.focus();
     }
   }, [change]);
   const state = useMemo<FrameViewState>(
