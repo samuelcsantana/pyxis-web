@@ -7,6 +7,7 @@ export interface DismissableDetailsProps extends Omit<
   'open' | 'onKeyDown' | 'onBlur' | 'onToggle'
 > {
   readonly defaultOpen?: boolean;
+  readonly revealWhenOpened?: boolean;
 }
 
 function closeOnPointerOutside(details: HTMLDetailsElement) {
@@ -39,18 +40,28 @@ function closeWhenFocusLeaves(event: FocusEvent<HTMLDetailsElement>) {
   }
 }
 
-function closeWhatItHolds(event: SyntheticEvent<HTMLDetailsElement>) {
-  const details = event.currentTarget;
-  if (details.open) {
-    return;
-  }
+function closeWhatItHolds(details: HTMLDetailsElement) {
   for (const inner of details.querySelectorAll<HTMLDetailsElement>('details[open]')) {
     inner.open = false;
   }
 }
 
+function followTheToggle(revealWhenOpened: boolean) {
+  return (event: SyntheticEvent<HTMLDetailsElement>) => {
+    const details = event.currentTarget;
+    if (!details.open) {
+      closeWhatItHolds(details);
+      return;
+    }
+    if (revealWhenOpened) {
+      details.scrollIntoView({ block: 'nearest' });
+    }
+  };
+}
+
 export function DismissableDetails({
   defaultOpen = false,
+  revealWhenOpened = false,
   children,
   ...attributes
 }: DismissableDetailsProps) {
@@ -61,7 +72,7 @@ export function DismissableDetails({
       open={defaultOpen}
       onKeyDown={closeOnEscape}
       onBlur={closeWhenFocusLeaves}
-      onToggle={closeWhatItHolds}
+      onToggle={followTheToggle(revealWhenOpened)}
     >
       {children}
     </details>
