@@ -53,12 +53,22 @@ function sameLinkAs(opener: Opener): HTMLElement | null {
     : document.querySelector<HTMLElement>(`a[href="${CSS.escape(opener.href)}"]`);
 }
 
+function buttonOfTheMenuHolding(opener: Opener): HTMLElement | null {
+  return opener.element.closest('details')?.querySelector<HTMLElement>('summary') ?? null;
+}
+
+function takesFocus(element: HTMLElement | null): boolean {
+  if (!canTakeFocus(element)) {
+    return false;
+  }
+  element.focus();
+  return document.activeElement === element;
+}
+
 function returnFocusTo(opener: Opener | null) {
-  const candidates = opener === null ? [] : [opener.element, sameLinkAs(opener)];
-  const target = [...candidates, document.querySelector<HTMLElement>(MENU_TOGGLE)].find(
-    canTakeFocus,
-  );
-  target?.focus();
+  const candidates =
+    opener === null ? [] : [opener.element, buttonOfTheMenuHolding(opener), sameLinkAs(opener)];
+  [...candidates, document.querySelector<HTMLElement>(MENU_TOGGLE)].some(takesFocus);
 }
 
 export interface SettingsDialogProps {
