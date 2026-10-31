@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { english } from '@/test-utils/english';
+import { withProjectChoices } from '@/test-utils/project-choices';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
@@ -21,9 +22,10 @@ const meta = {
     projectId: PROJECT_ID,
     timeZone: 'America/Sao_Paulo',
     serverNow: MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO,
-    texts: screenTopbarTexts('Demo Store', english),
+    texts: screenTopbarTexts(english),
   },
   parameters: { layout: 'fullscreen', ...at('overview') },
+  decorators: [(Story) => withProjectChoices(<Story />)],
 } satisfies Meta<typeof ScreenTopbar>;
 
 export default meta;
@@ -65,9 +67,22 @@ export const RejectedRangeOnAPhone: Story = {
   play: showsTheRejectedRange,
 };
 
+function customButton(canvasElement: HTMLElement): HTMLElement {
+  const summary = within(canvasElement)
+    .getByText(/^Custom,/)
+    .closest('summary');
+  if (summary === null) {
+    throw new Error('The period selector has a custom button.');
+  }
+  return summary;
+}
+
 const openTheCustomForm: NonNullable<Story['play']> = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByText('Custom'));
+  await expect(customButton(canvasElement).querySelector('[data-shown-dates]')).toHaveTextContent(
+    /Sep 6\s–\sOct 5$/,
+  );
+  await userEvent.click(customButton(canvasElement));
   await expect(await canvas.findByRole('grid', {}, { timeout: 4000 })).toBeVisible();
   await expect(canvas.getByRole('button', { name: 'Apply' })).toBeEnabled();
 };
@@ -90,7 +105,7 @@ export const CustomFormClosedWithEscape: Story = {
     focusable?.focus();
     await userEvent.keyboard('{Escape}');
     await expect(grid).not.toBeVisible();
-    await expect(canvas.getByText('Custom')).toHaveFocus();
+    await expect(customButton(canvasElement)).toHaveFocus();
   },
 };
 
@@ -108,6 +123,41 @@ export const KeyboardFocusDark: Story = { globals: { theme: 'dark' }, play: focu
 
 export const RequestsReads: Story = { parameters: at('requests', { kind: 'reads' }) };
 
+export const WithFilters: Story = {
+  args: {
+    children: <p className="text-sm text-muted">Country: Brazil · Device: Mobile</p>,
+  },
+  parameters: at('overview', { range: '30d', country: 'BR' }),
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(within(canvasElement).getByRole('banner')).getByText(/Country: Brazil/),
+    ).toBeVisible();
+  },
+};
+
+export const AcrossTwoYears: Story = {
+  parameters: at('overview', { from: '2025-12-20', to: '2026-01-05' }),
+  play: async ({ canvasElement }) => {
+    await expect(customButton(canvasElement).querySelector('[data-shown-dates]')).toHaveTextContent(
+      /2025.*2026/,
+    );
+  },
+};
+
+const openTheProjects: NonNullable<Story['play']> = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByText('Demo Store', { selector: 'summary span' }));
+  await expect(canvas.getByRole('link', { name: /Demo Store/ })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(canvas.getByText('America/Sao_Paulo')).toBeVisible();
+};
+
+export const ProjectsOpen: Story = { play: openTheProjects };
+
+export const ProjectsOpenDark: Story = { globals: { theme: 'dark' }, play: openTheProjects };
+
 export const TimelineWithoutPeriod: Story = { parameters: at('timeline') };
 
 export const TimelineWithoutPeriodDark: Story = {
@@ -115,12 +165,16 @@ export const TimelineWithoutPeriodDark: Story = {
   globals: { theme: 'dark' },
 };
 
+const PHONE_WIDTH_PX = 414;
+
 export const OnAPhone: Story = {
-  decorators: [
-    (Story) => (
-      <div className="w-[390px]">
-        <Story />
-      </div>
-    ),
-  ],
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const bar = within(canvasElement).getByRole('banner');
+    const name = within(bar).getByText('Demo Store', { selector: 'summary span' });
+    await expect(window.innerWidth).toBe(PHONE_WIDTH_PX);
+    await expect(name.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+    await expect(bar.scrollWidth).toBeLessThanOrEqual(bar.clientWidth);
+  },
 };

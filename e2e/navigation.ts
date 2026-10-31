@@ -66,3 +66,11 @@ export async function openThemeAndLanguage(page: Page, isMobile: boolean): Promi
   await expect(part).toBeVisible();
   return part;
 }
+
+export function customPeriod(page: Page): Locator {
+  return page.getByRole('banner').locator('summary', { hasText: 'Custom' });
+}
+
+export function shownDates(page: Page): Locator {
+  return customPeriod(page).locator('[data-shown-dates]');
+}

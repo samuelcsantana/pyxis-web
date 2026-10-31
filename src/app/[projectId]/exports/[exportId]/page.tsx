@@ -23,10 +23,7 @@ export default async function ExportPage({ params }: ExportPageProps) {
   const i18n = await getI18n();
   return (
     <>
-      <Topbar
-        title={i18n.t('exportPage.title')}
-        subtitle={i18n.t('exportPage.subtitle', { project: project.name })}
-      />
+      <Topbar title={i18n.t('exportPage.title')} />
       <MainContent className="flex w-full max-w-180 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
         <ExportView projectId={project.id} found={found} i18n={i18n} now={new Date()} />
       </MainContent>

@@ -1,29 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
-import type { Project } from '@/domain/admin';
 import { Breakable } from '@/components/ui/breakable';
-import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
+import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { useT } from '@/i18n/messages-provider';
+import { useProjectChoices } from './project-choices';
 import { ProjectMark } from './project-mark';
-import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
-
-export interface ProjectSwitcherProps {
-  readonly projects: readonly Project[];
-  readonly currentProject: Project;
-  readonly canCreateProject?: boolean;
-}
+import { FIRST_SCREEN, periodParameters, screenHref } from './screens';
+import { useScreenOnView } from './use-screen-on-view';
 
 export const NEW_PROJECT_PAGE = '/new-project';
 const PLUS_ICON = 'M12 5v14M5 12h14';
-
-function sameScreenIn(pathname: string) {
-  const current = screenOf(pathname);
-  return SCREENS.find((screen) => screen.slug === current)?.slug ?? FIRST_SCREEN;
-}
+const ROW = `flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`;
+const ROW_IDLE = 'group/row hover:bg-line-strong active:bg-line-strong';
+const ROW_CURRENT = 'bg-soft font-semibold';
 
 function CurrentCheck() {
   return (
@@ -32,7 +25,7 @@ function CurrentCheck() {
       height={16}
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className="shrink-0 text-accent"
+      className="shrink-0 text-ink"
     >
       <path
         d="M5 12.5l4.5 4.5L19 7.5"
@@ -46,15 +39,11 @@ function CurrentCheck() {
   );
 }
 
-export function ProjectSwitcher({
-  projects,
-  currentProject,
-  canCreateProject = false,
-}: ProjectSwitcherProps) {
+export function ProjectSwitcher() {
   const t = useT();
-  const pathname = usePathname();
+  const { projects, currentProject, canCreateProject } = useProjectChoices();
   const query = periodParameters(useSearchParams());
-  const screen = sameScreenIn(pathname);
+  const screen = useScreenOnView() ?? FIRST_SCREEN;
 
   const closeAfterChoice = (event: MouseEvent<HTMLDetailsElement>) => {
     if (event.target instanceof Element && event.target.closest('a') !== null) {
@@ -65,22 +54,19 @@ export function ProjectSwitcher({
   return (
     <DismissableDetails onClick={closeAfterChoice} className="group relative">
       <summary
-        className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
+        className={`flex min-h-11 max-w-[min(20rem,60vw)] list-none items-center gap-2 rounded-input border border-line bg-card px-2.5 text-left text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION} [&::-webkit-details-marker]:hidden`}
       >
         <span className="sr-only">{t('nav.switchProject')} </span>
-        <ProjectMark project={currentProject} size="large" />
-        <span className="flex min-w-0 grow flex-col gap-0.5">
-          <span className="text-sm font-semibold break-words">{currentProject.name}</span>
-          <span className="font-mono text-xs break-words text-nav-muted">
-            <Breakable text={currentProject.timezone} breakAt="slashes" />
-          </span>
+        <ProjectMark project={currentProject} />
+        <span className="min-w-0 text-sm font-semibold break-words max-lg:sr-only">
+          {currentProject.name}
         </span>
         <svg
           width={16}
           height={16}
           viewBox="0 0 24 24"
           aria-hidden="true"
-          className="shrink-0 text-nav-muted transition-transform group-open:rotate-180 motion-reduce:transition-none"
+          className="shrink-0 text-muted transition-transform group-open:rotate-180 motion-reduce:transition-none"
         >
           <path
             d="M7 10l5 5 5-5"
@@ -92,7 +78,7 @@ export function ProjectSwitcher({
           />
         </svg>
       </summary>
-      <ul className="absolute inset-x-0 top-full z-10 mt-1.5 flex flex-col gap-1 rounded-input border border-nav-border bg-nav-raised p-1.5 shadow-lg">
+      <ul className="absolute top-full left-0 z-30 mt-1.5 flex w-max max-w-[min(24rem,calc(100vw-2rem))] min-w-60 flex-col gap-1 rounded-input border border-line bg-card p-1.5 shadow-lg lg:max-h-[calc(100dvh-100%-3rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
         {projects.map((project) => {
           const current = project.id === currentProject.id;
           return (
@@ -100,27 +86,29 @@ export function ProjectSwitcher({
               <Link
                 href={screenHref(project.id, screen, query)}
                 aria-current={current ? 'page' : undefined}
-                className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${current ? NAV_ITEM_CURRENT : NAV_ITEM_IDLE}`}
+                className={`${ROW} ${current ? ROW_CURRENT : ROW_IDLE}`}
               >
-                <ProjectMark project={project} size="small" />
-                <span className="min-w-0 grow break-words">{project.name}</span>
+                <ProjectMark project={project} />
+                <span className="flex min-w-0 grow flex-col gap-0.5">
+                  <span className="break-words">{project.name}</span>
+                  <span className="font-mono text-xs font-normal break-words text-muted group-hover/row:text-ink group-active/row:text-ink">
+                    <Breakable text={project.timezone} breakAt="slashes" />
+                  </span>
+                </span>
                 {current ? <CurrentCheck /> : null}
               </Link>
             </li>
           );
         })}
         {canCreateProject ? (
-          <li className="border-t border-nav-line pt-1">
-            <Link
-              href={NEW_PROJECT_PAGE}
-              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${NAV_ITEM_IDLE}`}
-            >
+          <li className="border-t border-line pt-1">
+            <Link href={NEW_PROJECT_PAGE} className={`${ROW} ${ROW_IDLE}`}>
               <svg
                 width={16}
                 height={16}
                 viewBox="0 0 24 24"
                 aria-hidden="true"
-                className="shrink-0 text-nav-muted"
+                className="shrink-0 text-muted"
               >
                 <path
                   d={PLUS_ICON}

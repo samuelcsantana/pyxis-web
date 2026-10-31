@@ -25,9 +25,10 @@ export default async function ScreensLayout({ children, filters, params }: Scree
           projectId={project.id}
           timeZone={project.timezone}
           serverNow={serverNow}
-          texts={screenTopbarTexts(project.name, i18n)}
-        />
-        {filters}
+          texts={screenTopbarTexts(i18n)}
+        >
+          {filters}
+        </ScreenTopbar>
         <NewsBar />
       </div>
       <ContentPlaceholder label={i18n.t('states.loading')} />

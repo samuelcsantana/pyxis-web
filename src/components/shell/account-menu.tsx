@@ -96,7 +96,7 @@ function UsageLink({ usage, i18n }: UsageProps) {
 
 export function AccountMenu({ email, projectId, i18n, usage = null }: AccountMenuProps) {
   return (
-    <DismissableDetails className="group relative">
+    <DismissableDetails className="group relative" revealWhenOpened>
       <summary
         className={`flex min-h-11 list-none items-center gap-2 rounded-input px-1 hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
@@ -128,7 +128,7 @@ export function AccountMenu({ email, projectId, i18n, usage = null }: AccountMen
           />
         </svg>
       </summary>
-      <div className="absolute right-0 bottom-full left-0 z-10 mb-2 flex flex-col gap-2 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
+      <div className="flex flex-col gap-2 max-lg:mt-2 lg:absolute lg:right-0 lg:bottom-full lg:left-0 lg:z-10 lg:mb-2 rounded-input border border-nav-border bg-nav-raised p-3 shadow-lg lg:max-h-[calc(100dvh-5rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
         {usage === null ? null : <UsageLink usage={usage} i18n={i18n} />}
         <Link href={ACCOUNT_PAGE} scroll={false} className={MENU_ROW}>
           {i18n.t('nav.billing')}

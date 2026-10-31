@@ -45,7 +45,21 @@ describe('AccountMenu', () => {
     expect(container.querySelector('details')).not.toHaveAttribute('open');
   });
 
-  it('opens upwards on billing, the theme and language of this browser, and signing out', () => {
+  it('scrolls the opened menu into view, so its choices show at the foot of the phone menu', () => {
+    const reveal = vi.spyOn(Element.prototype, 'scrollIntoView');
+    const { container } = renderMenu();
+    const details = container.querySelector('details');
+    if (details !== null) {
+      details.open = true;
+      fireEvent(details, new Event('toggle'));
+    }
+
+    expect(reveal).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(reveal.mock.contexts[0]).toBe(details);
+    reveal.mockRestore();
+  });
+
+  it('opens on billing, the theme and language of this browser, and signing out, above the account only on a laptop', () => {
     const { container } = renderMenu();
     const details = container.querySelector('details');
     if (details !== null) {
@@ -68,8 +82,10 @@ describe('AccountMenu', () => {
     expect(screen.queryByRole('group', { name: 'Theme' })).not.toBeInTheDocument();
     expect(screen.queryByRole('group', { name: 'Language' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Sign out everywhere' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign out' }).closest('div.absolute')).toHaveClass(
-      'bottom-full',
+    expect(container.querySelector('details > div')).toHaveClass(
+      'lg:absolute',
+      'lg:bottom-full',
+      'max-lg:mt-2',
     );
   });
 

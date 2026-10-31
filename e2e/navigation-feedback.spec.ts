@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { documentMarker, holdScreenRequests, markTheDocument } from './navigation';
+import { documentMarker, holdScreenRequests, markTheDocument, shownDates } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -139,7 +139,7 @@ test('applies a custom period in place and closes its form', async ({ page }) =>
   await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
 
   await expect(page).toHaveURL(/from=2026-08-01&to=2026-08-31$/);
-  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+  await expect(shownDates(page)).toHaveText(/^Aug 1\s–\s31$/);
   await expect(custom).not.toHaveAttribute('open');
   expect(await documentMarker(page)).toBe('kept');
 });

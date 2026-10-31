@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Admin } from '@/domain/admin';
+import type { Admin, Project } from '@/domain/admin';
 import { presetPeriod } from '@/domain/period';
 import { seenMarksKey } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
@@ -8,6 +8,8 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { publishArrivalNews } from './arrival-news';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
+import { AccountMenu } from './account-menu';
+import { ProjectChoicesProvider } from './project-choices';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import {
@@ -22,18 +24,18 @@ import {
   SCREENS,
   SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
-  screenOf,
   screenSlugOf,
   settingsKeysHref,
   viewParameters,
 } from './screens';
 import { Sidebar } from './sidebar';
-import { SidebarNav } from './sidebar-nav';
+import { SidebarFootNav, SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID } from './content-id';
 import { SkipLink } from './skip-link';
 import { Topbar } from './topbar';
 import { english } from '@/test-utils/english';
+import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const navigation = vi.hoisted(() => ({
@@ -46,6 +48,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
   useSearchParams: () => new URLSearchParams(navigation.search),
   useRouter: () => navigation.router,
+  useSelectedLayoutSegments: () => [],
 }));
 
 const ADMIN: Admin = {
@@ -162,11 +165,6 @@ describe('screens helpers', () => {
     }
   });
 
-  it('read the screen of a path', () => {
-    expect(screenOf('/p1/overview')).toBe('overview');
-    expect(screenOf('/')).toBeUndefined();
-  });
-
   it('order the navigation with every screen exactly once', () => {
     const registry = SCREENS.map((screen) => screen.slug);
 
@@ -212,7 +210,7 @@ describe('screens helpers', () => {
 
 describe('SidebarNav', () => {
   it('links each screen with the period and marks the current one', () => {
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
 
     const overview = screen.getByRole('link', { name: 'Overview' });
 
@@ -226,7 +224,7 @@ describe('SidebarNav', () => {
   });
 
   it('counts the news of each other screen inside its link', () => {
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
 
     act(() => {
       publishArrivalNews({
@@ -244,7 +242,7 @@ describe('SidebarNav', () => {
   });
 
   it('links the screens in the order of the questions, then the install guide and the settings', () => {
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
 
     expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual([
       'Overview',
@@ -263,7 +261,7 @@ describe('SidebarNav', () => {
 
   it('marks nothing current on another screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
@@ -271,19 +269,21 @@ describe('SidebarNav', () => {
 });
 
 describe('the project settings in the navigation', () => {
-  it('links the settings of the project in a list of its own, keeping the period', () => {
-    renderWithMessages(<SidebarNav project={store()} />);
+  it('links the settings of the project in the foot, keeping the period', () => {
+    renderWithMessages(<Navigation project={store()} />);
 
-    const link = within(screen.getByRole('list', { name: 'Project' })).getByRole('link', {
-      name: 'Settings',
-    });
+    const [, foot] = screen.getAllByRole('list');
+    if (foot === undefined) {
+      throw new Error('The sidebar has a foot list.');
+    }
+    const link = within(foot).getByRole('link', { name: 'Settings' });
     expect(link).toHaveAttribute('href', '/p-store/settings?range=7d');
     expect(link).not.toHaveAttribute('aria-current');
   });
 
   it('keeps a custom period and the filters on the way to the settings', () => {
     navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&metric=visitors';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -294,7 +294,7 @@ describe('the project settings in the navigation', () => {
 
   it('links the settings without a query when the screen is on the default period', () => {
     navigation.search = '';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -306,7 +306,7 @@ describe('the project settings in the navigation', () => {
   it('gives the screens back the period the settings were opened with', () => {
     navigation.pathname = '/p-store/settings';
     navigation.search = 'range=today';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -319,7 +319,7 @@ describe('the project settings in the navigation', () => {
 
   it('marks the settings current on the settings page, and no screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
@@ -328,7 +328,7 @@ describe('the project settings in the navigation', () => {
 
   it('marks the settings current on a section of the settings, and no screen', () => {
     navigation.pathname = '/p-store/settings/keys';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const current = document.querySelectorAll('[aria-current="page"]');
@@ -352,7 +352,7 @@ describe('the project settings in the navigation', () => {
     const assign = vi.fn();
     vi.stubGlobal('location', { assign });
     navigation.pathname = '/p-store/settings/keys';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
@@ -364,7 +364,7 @@ describe('the project settings in the navigation', () => {
   it('leaves a click on the settings from a screen to the link, which opens them over the screen', () => {
     const assign = vi.fn();
     vi.stubGlobal('location', { assign });
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
 
     const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
 
@@ -376,7 +376,7 @@ describe('the project settings in the navigation', () => {
     const assign = vi.fn();
     vi.stubGlobal('location', { assign });
     navigation.pathname = '/p-store/install';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
@@ -389,7 +389,7 @@ describe('the project settings in the navigation', () => {
     const assign = vi.fn();
     vi.stubGlobal('location', { assign });
     navigation.pathname = '/p-store/install';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     fireEvent.click(screen.getByRole('link', { name: /^Install/ }), { ctrlKey: true });
@@ -400,7 +400,7 @@ describe('the project settings in the navigation', () => {
   it('leaves a click on Install from a screen to the link, which opens it over the screen', () => {
     const assign = vi.fn();
     vi.stubGlobal('location', { assign });
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
 
     const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
 
@@ -410,7 +410,7 @@ describe('the project settings in the navigation', () => {
 
   it('marks the settings current on an export, which has no item of its own', () => {
     navigation.pathname = '/p-store/exports/e1';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const current = document.querySelectorAll('[aria-current="page"]');
@@ -420,7 +420,7 @@ describe('the project settings in the navigation', () => {
 
   it('marks no link of its own current on the help page, whose row is in the account menu', () => {
     navigation.pathname = '/p-store/help';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(document.querySelector('[aria-current]')).toBeNull();
@@ -428,14 +428,19 @@ describe('the project settings in the navigation', () => {
 });
 
 describe('the install guide in the navigation', () => {
-  it('links the install guide first in the Project list, under a visible label, keeping the view', () => {
+  it('links the install guide first in the foot, with no section label, keeping the view', () => {
     navigation.search = 'range=7d&device=mobile';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
-    const project = screen.getByRole('list', { name: 'Project' });
-    const [install, settings] = within(project).getAllByRole('link');
-    expect(screen.getByText('Project')).toBeVisible();
+    const [screens, foot] = screen.getAllByRole('list');
+    if (screens === undefined || foot === undefined) {
+      throw new Error('The sidebar has the screens and a foot.');
+    }
+    const [install, settings] = within(foot).getAllByRole('link');
+    expect(within(screens).getAllByRole('link')).toHaveLength(8);
+    expect(screen.queryByText('Project')).not.toBeInTheDocument();
+    expect(screen.queryByText('Analytics')).not.toBeInTheDocument();
     expect(install).toHaveAccessibleName('Install');
     expect(install).toHaveAttribute('href', '/p-store/install?range=7d&device=mobile');
     expect(install).not.toHaveAttribute('aria-current');
@@ -444,7 +449,7 @@ describe('the install guide in the navigation', () => {
 
   it('marks the install guide current on its page, and nothing else', () => {
     navigation.pathname = '/p-store/install';
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const current = document.querySelectorAll('[aria-current="page"]');
@@ -453,28 +458,49 @@ describe('the install guide in the navigation', () => {
   });
 
   it('tags the install guide as pending while the project has received no event', () => {
-    renderWithMessages(<SidebarNav project={{ ...store(), firstEventAt: null }} />);
+    renderWithMessages(<Navigation project={{ ...store(), firstEventAt: null }} />);
 
     expect(screen.getByRole('link', { name: 'Install, Pending' })).toBeInTheDocument();
   });
 
   it('tags nothing once an event arrived, or when the first event is not known', () => {
     const { unmount } = renderWithMessages(
-      <SidebarNav project={{ ...store(), firstEventAt: '2026-10-01T10:00:00.000Z' }} />,
+      <Navigation project={{ ...store(), firstEventAt: '2026-10-01T10:00:00.000Z' }} />,
     );
     expect(screen.getByRole('link', { name: 'Install' })).toBeInTheDocument();
     expect(screen.queryByText('Pending')).not.toBeInTheDocument();
     unmount();
 
-    renderWithMessages(<SidebarNav project={store()} />);
+    renderWithMessages(<Navigation project={store()} />);
     expect(store().firstEventAt).toBeUndefined();
     expect(screen.queryByText('Pending')).not.toBeInTheDocument();
   });
 });
 
+function Navigation({ project }: { readonly project: Project }) {
+  return (
+    <>
+      <SidebarNav project={project} />
+      <SidebarFootNav project={project} />
+    </>
+  );
+}
+
+function switcher(canCreateProject = false) {
+  return (
+    <ProjectChoicesProvider
+      projects={ADMIN.projects}
+      currentProject={store()}
+      canCreateProject={canCreateProject}
+    >
+      <ProjectSwitcher />
+    </ProjectChoicesProvider>
+  );
+}
+
 describe('ProjectSwitcher', () => {
   it('names the current project and links every project on the same screen and period', () => {
-    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(switcher());
 
     expect(document.querySelector('summary')).toHaveTextContent(
       /^Switch project\. Current project: .*Demo Store/,
@@ -489,26 +515,36 @@ describe('ProjectSwitcher', () => {
     );
   });
 
-  it('lets the time zone of the current project break only after its slash, whole', () => {
-    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+  it('shows the time zone of each project in its row, breaking only after its slash', () => {
+    renderWithMessages(switcher());
 
     const zone = screen.getByText('America/Sao_Paulo');
 
     expect(zone.querySelectorAll('wbr')).toHaveLength(1);
     expect(zone.firstChild).toHaveTextContent('America/');
     expect(zone).not.toHaveClass('truncate');
+    expect(screen.getByRole('link', { name: /Demo Docs/ })).toHaveTextContent('Europe/Lisbon');
+    expect(document.querySelector('summary')).not.toHaveTextContent('America/Sao_Paulo');
+  });
+
+  it('inks the time zone of a hovered or pressed row, readable on its stronger fill', () => {
+    renderWithMessages(switcher());
+
+    const other = screen.getByRole('link', { name: /Demo Docs/ });
+    expect(other).toHaveClass('group/row', 'hover:bg-line-strong', 'active:bg-line-strong');
+    expect(screen.getByText('Europe/Lisbon')).toHaveClass(
+      'text-muted',
+      'group-hover/row:text-ink',
+      'group-active/row:text-ink',
+    );
   });
 
   it('offers a new project only to the owner of an account that can create one', () => {
-    const { unmount } = renderWithMessages(
-      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
-    );
+    const { unmount } = renderWithMessages(switcher());
     expect(screen.queryByRole('link', { name: 'New project' })).not.toBeInTheDocument();
     unmount();
 
-    renderWithMessages(
-      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} canCreateProject />,
-    );
+    renderWithMessages(switcher(true));
     expect(screen.getByRole('link', { name: 'New project' })).toHaveAttribute(
       'href',
       '/new-project',
@@ -516,20 +552,18 @@ describe('ProjectSwitcher', () => {
   });
 
   it('marks the current project with a check and the current-item background, not by weight alone', () => {
-    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(switcher());
 
     const current = screen.getByRole('link', { name: /Demo Store/ });
     const other = screen.getByRole('link', { name: /Demo Docs/ });
     expect(current.querySelector('svg')).toBeInTheDocument();
     expect(other.querySelector('svg')).not.toBeInTheDocument();
-    expect(current).toHaveClass('bg-nav-active');
-    expect(other).not.toHaveClass('bg-nav-active');
+    expect(current).toHaveClass('bg-soft');
+    expect(other).not.toHaveClass('bg-soft');
   });
 
   it('closes after a project is chosen', () => {
-    const { container } = renderWithMessages(
-      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
-    );
+    const { container } = renderWithMessages(switcher());
     const details = container.querySelector('details');
     if (details === null) {
       throw new Error('no details element');
@@ -543,10 +577,10 @@ describe('ProjectSwitcher', () => {
     expect(details.open).toBe(false);
   });
 
-  it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
+  it('closes a menu inside the mobile menu on Escape, which stays open until a second Escape', () => {
     const { container } = renderWithMessages(
       <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
+        <AccountMenu email={ADMIN.email} projectId="p-store" i18n={english} />
       </MobileMenu>,
     );
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
@@ -556,7 +590,7 @@ describe('ProjectSwitcher', () => {
       throw new Error('no project switcher');
     }
     details.open = true;
-    const link = screen.getByRole('link', { name: /Demo Docs/ });
+    const link = screen.getByRole('link', { name: 'Account and billing' });
     link.focus();
 
     fireEvent.keyDown(link, { key: 'Escape' });
@@ -579,7 +613,7 @@ describe('ProjectSwitcher', () => {
   it('closes when the focus moves past its last project', () => {
     const { container } = renderWithMessages(
       <>
-        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
+        {switcher()}
         <a href="#overview">Overview</a>
       </>,
     );
@@ -598,7 +632,7 @@ describe('ProjectSwitcher', () => {
 
   it('falls back to the first screen from a path without one', () => {
     navigation.pathname = '/p-store';
-    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
+    renderWithMessages(switcher());
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: /Demo Docs/ })).toHaveAttribute(
@@ -749,13 +783,14 @@ describe('SignOutButton', () => {
 });
 
 describe('Sidebar', () => {
-  it('holds the project switcher, the screens, the settings, the privacy note and the account menu', () => {
+  it('holds the logo, the screens, and a foot with Install, Settings and the account menu', () => {
     renderWithMessages(<Sidebar admin={ADMIN} project={store()} i18n={english} />);
 
-    const privacy = screen.getByText('No cookies, no personal data');
-    expect(privacy).toHaveClass('text-nav-muted');
-    expect(privacy).not.toHaveClass('bg-nav-raised');
-    expect(screen.getByRole('link', { name: 'Help and support' })).toBeInTheDocument();
+    expect(screen.queryByText('No cookies, no personal data')).not.toBeInTheDocument();
+    expect(screen.queryByText('Switch project. Current project:')).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Help and support', hidden: true }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByText('Account and preferences')).toBeInTheDocument();
@@ -1046,6 +1081,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={presetPeriod('7d', today)}
         today={today}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1066,6 +1102,7 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
         today={today}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1096,6 +1133,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1119,6 +1157,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1130,7 +1169,7 @@ describe('PeriodSelector', () => {
 
     fireEvent.keyDown(day, { key: 'Escape' });
     expect(container.querySelector('details')).not.toHaveAttribute('open');
-    expect(screen.getByText('Custom')).toHaveFocus();
+    expect(screen.getByText(/^Custom,/).closest('summary')).toHaveFocus();
   });
 
   it('closes the custom form when the focus moves to a preset', async () => {
@@ -1142,6 +1181,7 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1163,6 +1203,7 @@ describe('PeriodSelector with parameters of the screen', () => {
         period={presetPeriod('7d', '2026-10-05')}
         today="2026-10-05"
         keep={{ kind: 'screens', q: 'order' }}
+        format={english.format}
         t={english.t}
       />,
     );
@@ -1177,10 +1218,13 @@ describe('PeriodSelector with parameters of the screen', () => {
 });
 
 describe('Topbar without a period', () => {
-  it('shows the title, with no period controls and no theme toggle', () => {
-    renderWithMessages(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
+  it('shows the project, then the title as the path, with no period controls and no theme toggle', () => {
+    renderWithMessages(withProjectChoices(<Topbar title="Timeline" />));
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
+    const bar = screen.getByRole('banner');
+    const heading = within(bar).getByRole('heading', { level: 1, name: 'Timeline' });
+    const project = within(bar).getByText('Demo Store', { selector: 'summary span' });
+    expect(project.compareDocumentPosition(heading)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /theme/ })).not.toBeInTheDocument();
   });

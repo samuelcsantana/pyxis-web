@@ -1,5 +1,11 @@
 import Form from 'next/form';
-import { type Period, type PeriodPreset, periodQuery, presetPeriod } from '@/domain/period';
+import {
+  formatShortDayRange,
+  type Period,
+  type PeriodPreset,
+  periodQuery,
+  presetPeriod,
+} from '@/domain/period';
 import {
   PENDING_HOST,
   SEGMENTED_IDLE,
@@ -7,6 +13,7 @@ import {
   SEGMENTED_SELECTED,
 } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
+import type { DayFormats } from '@/i18n/day-formats';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import type { Translator } from '@/i18n/translate';
 import { type KeptParameters, RANGE_NOTICE_ID, withKeptParameters } from './kept-parameters';
@@ -18,10 +25,12 @@ export interface PeriodSelectorProps {
   readonly period: Period;
   readonly today: string;
   readonly keep?: KeptParameters;
+  readonly format: DayFormats;
   readonly t: Translator<ClientSourceMessages>;
 }
 
 const NOTHING_KEPT: KeptParameters = {};
+const CALENDAR_ICON = 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4';
 
 const PRESET_LABELS = {
   today: 'periodSelector.presets.today',
@@ -38,10 +47,16 @@ export function PeriodSelector({
   period,
   today,
   keep = NOTHING_KEPT,
+  format,
   t,
 }: PeriodSelectorProps) {
   const custom = period.preset === 'custom';
   const shown = period.rejected ?? period;
+  const datesOf = (from: string, to: string) => formatShortDayRange(from, to, today, format);
+  const presetDates = PRESETS.map((preset) => {
+    const presetRange = presetPeriod(preset, today);
+    return { preset, dates: datesOf(presetRange.from, presetRange.to) };
+  });
   return (
     <div className="flex flex-wrap items-center gap-2">
       <PeriodPresets
@@ -61,7 +76,44 @@ export function PeriodSelector({
         <summary
           className={`${OPTION_CLASS} w-fit list-none border border-line [&::-webkit-details-marker]:hidden ${custom ? SEGMENTED_SELECTED : `bg-soft ${SEGMENTED_IDLE}`}`}
         >
-          {t('periodSelector.custom')}
+          <span className="inline-flex items-center gap-1.5">
+            <svg
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="shrink-0 max-sm:hidden"
+            >
+              <path
+                d={CALENDAR_ICON}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="sr-only">{`${t('periodSelector.custom')}, `}</span>
+            <span className="inline-grid">
+              <span
+                data-shown-dates=""
+                className="col-start-1 row-start-1 tabular-nums"
+                suppressHydrationWarning
+              >
+                {datesOf(period.from, period.to)}
+              </span>
+              {presetDates.map(({ preset, dates }) => (
+                <span
+                  key={preset}
+                  aria-hidden="true"
+                  className="invisible col-start-1 row-start-1 tabular-nums max-sm:hidden"
+                  suppressHydrationWarning
+                >
+                  {dates}
+                </span>
+              ))}
+            </span>
+          </span>
         </summary>
         <Form
           action={basePath}

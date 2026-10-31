@@ -11,29 +11,28 @@ const PROJECT = {
 
 describe('ProjectMark', () => {
   it('draws the icon of the project site on a white tile when it has one', () => {
-    const { container } = render(
-      <ProjectMark project={{ ...PROJECT, iconVersion: 'abc' }} size="large" />,
-    );
+    const { container } = render(<ProjectMark project={{ ...PROJECT, iconVersion: 'abc' }} />);
 
     const icon = screen.getByTestId('project-icon');
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(icon.style.backgroundImage).toBe('url("/p-store/icon?v=abc")');
-    expect(icon).toHaveClass('size-8', 'bg-white', 'bg-contain');
+    expect(icon).toHaveClass('size-6', 'bg-white', 'bg-contain');
     expect(container).not.toHaveTextContent('DS');
   });
 
-  it('draws the initials of the project when it has no icon', () => {
-    render(<ProjectMark project={PROJECT} size="large" />);
+  it('draws the icon it is given in place of the project one', () => {
+    render(<ProjectMark project={PROJECT} iconHref="data:image/png;base64,AA==" />);
 
-    expect(screen.getByText('DS')).toHaveClass('size-8', 'bg-accent');
-    expect(screen.queryByTestId('project-icon')).not.toBeInTheDocument();
+    expect(screen.getByTestId('project-icon').style.backgroundImage).toBe(
+      'url("data:image/png;base64,AA==")',
+    );
   });
 
-  it('draws the smaller mark of the project list', () => {
-    const { rerender } = render(<ProjectMark project={PROJECT} size="small" />);
-    expect(screen.getByText('DS')).toHaveClass('size-6', 'bg-nav-border');
+  it('draws the initials of the project when it has no icon', () => {
+    render(<ProjectMark project={PROJECT} />);
 
-    rerender(<ProjectMark project={PROJECT} size="small" iconHref="data:image/png;base64,AA==" />);
-    expect(screen.getByTestId('project-icon')).toHaveClass('size-6');
+    expect(screen.getByText('DS')).toHaveClass('size-6', 'bg-nav-border');
+    expect(screen.getByText('DS')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.queryByTestId('project-icon')).not.toBeInTheDocument();
   });
 });
