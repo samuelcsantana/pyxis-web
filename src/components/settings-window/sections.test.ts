@@ -61,7 +61,7 @@ describe('settings sections', () => {
   });
 
   it('put the plan first among the account sections and make it their home', () => {
-    expect(ACCOUNT_SECTIONS).toEqual(['plan', 'sessions', 'tokens', 'apps']);
+    expect(ACCOUNT_SECTIONS).toEqual(['plan', 'preferences', 'sessions', 'tokens', 'apps']);
     expect(ACCOUNT_HOME_SECTION).toBe('plan');
   });
 
@@ -73,6 +73,7 @@ describe('settings sections', () => {
   it('point the account sections, in their order, at the account address and its segments', () => {
     expect(ACCOUNT_SECTIONS.map((section) => accountSectionHref(section))).toEqual([
       '/account',
+      '/account/preferences',
       '/account/sessions',
       '/account/tokens',
       '/account/apps',
@@ -85,6 +86,7 @@ describe('settings sections', () => {
   });
 
   it('read one segment naming an account section other than the plan as that section', () => {
+    expect(accountSectionOf(['preferences'])).toBe('preferences');
     expect(accountSectionOf(['sessions'])).toBe('sessions');
     expect(accountSectionOf(['tokens'])).toBe('tokens');
     expect(accountSectionOf(['apps'])).toBe('apps');
@@ -118,6 +120,7 @@ describe('settings sections', () => {
       export: 'settings-export-heading',
       delete: 'settings-delete-heading',
       plan: 'account-plan-heading',
+      preferences: 'account-preferences-heading',
       sessions: 'settings-sessions-heading',
       tokens: 'settings-access-tokens-heading',
       apps: 'settings-connections-heading',
@@ -138,6 +141,7 @@ describe('settings sections', () => {
       'exportEvents.heading',
       'deleteProject.heading',
       'nav.billing',
+      'preferences.heading',
       'sessions.heading',
       'accessTokens.heading',
       'connectedApps.heading',

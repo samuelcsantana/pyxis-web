@@ -194,7 +194,10 @@ export const nl = translation({
   },
   language: {
     label: 'Taal',
-    current: 'Taal: {name}',
+  },
+  preferences: {
+    heading: 'Thema en taal',
+    thisBrowser: 'Gelden voor deze browser.',
   },
   settings: {
     you: 'Jij',

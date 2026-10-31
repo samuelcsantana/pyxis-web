@@ -7,12 +7,14 @@ import {
 } from '@/app/[projectId]/settings/settings-sections';
 import { appsBody } from '@/app/account/sections/apps-body';
 import { planBody } from '@/app/account/sections/plan-body';
+import { preferencesBody } from '@/app/account/sections/preferences-body';
 import { sessionsBody } from '@/app/account/sections/sessions-body';
 import { tokensBody } from '@/app/account/sections/tokens-body';
 import { type AccountSection, accountSectionOf } from '@/components/settings-window/sections';
 
 const BODIES: Readonly<Record<AccountSection, AccountBody>> = {
   plan: planBody,
+  preferences: preferencesBody,
   sessions: sessionsBody,
   tokens: tokensBody,
   apps: appsBody,

@@ -84,7 +84,13 @@ vi.mock('next/navigation', () => ({
 }));
 
 const PLAN_TITLE = 'Account and billing';
-const ACCOUNT_LINKS = ['/account', '/account/sessions', '/account/tokens', '/account/apps'];
+const ACCOUNT_LINKS = [
+  '/account',
+  '/account/preferences',
+  '/account/sessions',
+  '/account/tokens',
+  '/account/apps',
+];
 const CHECKOUT_ACCOUNT_ID = '1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f';
 const FREE_ACCOUNT_ID = '2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f6a';
 const PAID_ACCOUNT_ID = '3e4f5a6b-7c8d-4e9f-8a1b-2c3d4e5f6a7b';

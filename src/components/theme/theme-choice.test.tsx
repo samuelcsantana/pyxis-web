@@ -5,7 +5,21 @@ import { MessagesProvider } from '@/i18n/messages-provider';
 import { CLIENT_NAMESPACES, pickNamespaces } from '@/i18n/messages';
 import { en } from '@/i18n/messages/en';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
-import { ThemeChoiceGroup } from './theme-choice';
+import { ThemeChoiceGroup, type ThemeChoiceProps } from './theme-choice';
+
+const LABEL_ID = 'theme-label';
+
+function Choices({
+  initialTheme,
+  label = 'Theme',
+}: Partial<ThemeChoiceProps> & { label?: string }) {
+  return (
+    <>
+      <span id={LABEL_ID}>{label}</span>
+      <ThemeChoiceGroup initialTheme={initialTheme} labelledBy={LABEL_ID} />
+    </>
+  );
+}
 
 function themeCookie(): string | undefined {
   return document.cookie
@@ -21,7 +35,7 @@ describe('ThemeChoiceGroup', () => {
   });
 
   it('follows the system until a theme is chosen', () => {
-    renderWithMessages(<ThemeChoiceGroup />);
+    renderWithMessages(<Choices />);
 
     const group = screen.getByRole('group', { name: 'Theme' });
     expect(group).toBeInTheDocument();
@@ -29,19 +43,17 @@ describe('ThemeChoiceGroup', () => {
     expect(screen.getByRole('button', { name: 'Light' })).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('stacks the choices by default, or lays them on one row whose words may wrap', () => {
-    const { unmount } = renderWithMessages(<ThemeChoiceGroup />);
-    expect(screen.getByRole('group', { name: 'Theme' })).toHaveClass('flex-col');
-    unmount();
+  it('is named by the label it is given and draws its choices as one segmented row', () => {
+    renderWithMessages(<Choices />);
 
-    renderWithMessages(<ThemeChoiceGroup layout="row" />);
-    const row = screen.getByRole('group', { name: 'Theme' });
-    expect(row).toHaveClass('flex-row');
-    expect(screen.getByRole('button', { name: 'System' })).toHaveClass('min-w-0', 'text-center');
+    const group = screen.getByRole('group', { name: 'Theme' });
+    expect(group).toHaveAttribute('aria-labelledby', LABEL_ID);
+    expect(group).toHaveClass('group/segmented', 'self-start');
+    expect(screen.getByRole('button', { name: 'System' })).toHaveClass('min-h-11', 'lg:min-h-9');
   });
 
   it('applies a chosen theme to the page at once and remembers it for a year', async () => {
-    renderWithMessages(<ThemeChoiceGroup />);
+    renderWithMessages(<Choices />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Dark' }));
 
@@ -55,7 +67,7 @@ describe('ThemeChoiceGroup', () => {
   it('goes back to the system theme, forgetting the choice', async () => {
     document.documentElement.dataset.theme = 'light';
     document.cookie = 'pyxis_theme=light; Path=/';
-    renderWithMessages(<ThemeChoiceGroup initialTheme="light" />);
+    renderWithMessages(<Choices initialTheme="light" />);
     expect(screen.getByRole('button', { name: 'Light' })).toHaveAttribute('aria-pressed', 'true');
 
     fireEvent.click(screen.getByRole('button', { name: 'System' }));
@@ -73,7 +85,7 @@ describe('ThemeChoiceGroup', () => {
   it('renders the theme it was given on the server', () => {
     const html = renderToString(
       <MessagesProvider locale="en" messages={pickNamespaces(en, CLIENT_NAMESPACES)}>
-        <ThemeChoiceGroup initialTheme="dark" />
+        <Choices initialTheme="dark" />
       </MessagesProvider>,
     );
 
@@ -83,7 +95,7 @@ describe('ThemeChoiceGroup', () => {
   it('renders the system theme on the server when none was chosen', () => {
     const html = renderToString(
       <MessagesProvider locale="en" messages={pickNamespaces(en, CLIENT_NAMESPACES)}>
-        <ThemeChoiceGroup />
+        <Choices />
       </MessagesProvider>,
     );
 
@@ -91,7 +103,7 @@ describe('ThemeChoiceGroup', () => {
   });
 
   it('speaks Portuguese', () => {
-    renderWithMessages(<ThemeChoiceGroup />, 'pt-BR');
+    renderWithMessages(<Choices label="Tema" />, 'pt-BR');
 
     expect(screen.getByRole('group', { name: 'Tema' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Do sistema' })).toHaveAttribute(

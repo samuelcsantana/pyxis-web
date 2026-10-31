@@ -191,7 +191,10 @@ export const it = translation({
   },
   language: {
     label: 'Lingua',
-    current: 'Lingua: {name}',
+  },
+  preferences: {
+    heading: 'Tema e lingua',
+    thisBrowser: 'Valgono per questo browser.',
   },
   settings: {
     you: 'Tu',

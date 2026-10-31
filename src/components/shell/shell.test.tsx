@@ -55,9 +55,6 @@ const ADMIN: Admin = {
     { id: 'p-docs', name: 'Demo Docs', timezone: 'Europe/Lisbon', conversionEvent: 'signup' },
   ],
 };
-function chooseNothing(): Promise<void> {
-  return Promise.resolve();
-}
 
 function store() {
   const [first] = ADMIN.projects;
@@ -717,9 +714,7 @@ describe('SignOutButton', () => {
 
 describe('Sidebar', () => {
   it('holds the project switcher, the screens, the settings, the privacy note and the account menu', () => {
-    renderWithMessages(
-      <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
-    );
+    renderWithMessages(<Sidebar admin={ADMIN} project={store()} i18n={english} />);
 
     const privacy = screen.getByText('No cookies, no personal data');
     expect(privacy).toHaveClass('text-nav-muted');
@@ -729,8 +724,12 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByText('Account and preferences')).toBeInTheDocument();
     expect(screen.getByText('owner@example.com')).toBeInTheDocument();
-    expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(1);
-    expect(screen.getByRole('group', { name: 'Theme', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Theme and language', hidden: true })).toHaveAttribute(
+      'href',
+      '/account/preferences',
+    );
+    expect(screen.queryByRole('group', { name: 'Language', hidden: true })).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Theme', hidden: true })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out', hidden: true })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Project settings' })).not.toBeInTheDocument();
   });
@@ -738,9 +737,7 @@ describe('Sidebar', () => {
   it('links the logo to the overview of the current project, keeping the period and the filters', () => {
     navigation.pathname = '/p-docs/devices';
     navigation.search = 'range=7d&device=mobile&tab=events';
-    renderWithMessages(
-      <Sidebar admin={ADMIN} project={docs()} i18n={english} chooseLocale={chooseNothing} />,
-    );
+    renderWithMessages(<Sidebar admin={ADMIN} project={docs()} i18n={english} />);
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -753,7 +750,7 @@ describe('Sidebar', () => {
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
       <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />
+        <Sidebar admin={ADMIN} project={store()} i18n={english} />
       </MobileMenu>,
     );
 

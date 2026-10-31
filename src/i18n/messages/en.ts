@@ -183,7 +183,10 @@ export const en = {
   },
   language: {
     label: 'Language',
-    current: 'Language: {name}',
+  },
+  preferences: {
+    heading: 'Theme and language',
+    thisBrowser: 'These apply to this browser.',
   },
   settings: {
     you: 'You',

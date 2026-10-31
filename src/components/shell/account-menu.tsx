@@ -1,27 +1,21 @@
 import Link from 'next/link';
 import { ACCOUNT_PAGE } from '@/components/account/account-notice-banner';
-import { LanguageMenu } from '@/components/language/language-menu';
-import { ThemeChoiceGroup } from '@/components/theme/theme-choice';
+import { accountSectionHref } from '@/components/settings-window/sections';
 import { NAV_CONTROL, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { QUOTA_WARNING_RATIO } from '@/domain/accounts';
 import { emailInitial } from '@/domain/admin';
 import type { I18n } from '@/i18n/i18n';
-import { localeName } from '@/i18n/locales';
 import type { MonthUsage } from '@/lib/accounts-in-view';
-import type { Theme } from '@/lib/theme';
 import { SignOutButton } from './sign-out-button';
 
 export interface AccountMenuProps {
   readonly email: string;
-  readonly theme?: Theme;
   readonly i18n: I18n;
-  readonly chooseLocale: (form: FormData) => Promise<void>;
   readonly usage?: MonthUsage | null;
 }
 
 const CHEVRON = 'M6 15l6-6 6 6';
-const LANGUAGES_CHEVRON = 'M9 6l6 6-6 6';
 const MENU_ROW = `flex min-h-11 items-center rounded-input px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`;
 const FULL_BAR = 1;
 
@@ -97,9 +91,7 @@ function UsageLink({ usage, i18n }: UsageProps) {
   );
 }
 
-const GROUP_LABEL = 'px-1 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
-
-export function AccountMenu({ email, theme, i18n, chooseLocale, usage = null }: AccountMenuProps) {
+export function AccountMenu({ email, i18n, usage = null }: AccountMenuProps) {
   return (
     <DismissableDetails className="group relative">
       <summary
@@ -138,42 +130,9 @@ export function AccountMenu({ email, theme, i18n, chooseLocale, usage = null }: 
         <Link href={ACCOUNT_PAGE} scroll={false} className={MENU_ROW}>
           {i18n.t('nav.billing')}
         </Link>
-        <div className="flex flex-col gap-1.5 border-t border-nav-line pt-2">
-          <span className={GROUP_LABEL}>{i18n.t('theme.label')}</span>
-          <ThemeChoiceGroup initialTheme={theme} layout="row" />
-        </div>
-        <details className="group/languages">
-          <summary
-            className={`${MENU_ROW} justify-between gap-2 list-none [&::-webkit-details-marker]:hidden`}
-          >
-            <span>{i18n.t('language.current', { name: localeName(i18n.locale) })}</span>
-            <svg
-              width={16}
-              height={16}
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="shrink-0 text-nav-muted transition-transform duration-150 group-open/languages:rotate-90 motion-reduce:transition-none"
-            >
-              <path
-                d={LANGUAGES_CHEVRON}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </summary>
-          <div className="pt-1">
-            <LanguageMenu
-              locale={i18n.locale}
-              label={i18n.t('language.label')}
-              choose={chooseLocale}
-              surface="nav"
-              layout="column"
-            />
-          </div>
-        </details>
+        <Link href={accountSectionHref('preferences')} scroll={false} className={MENU_ROW}>
+          {i18n.t('preferences.heading')}
+        </Link>
         <div className="border-t border-nav-line pt-2">
           <SignOutButton />
         </div>

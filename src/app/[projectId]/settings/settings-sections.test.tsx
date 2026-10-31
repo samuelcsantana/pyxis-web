@@ -101,7 +101,13 @@ const STORE = {
 };
 const ADMIN: Admin = { email: 'owner@example.com', projects: [STORE] };
 const SETTINGS_PATH = `/${STORE.id}/settings`;
-const ACCOUNT_LINKS = ['/account', '/account/sessions', '/account/tokens', '/account/apps'];
+const ACCOUNT_LINKS = [
+  '/account',
+  '/account/preferences',
+  '/account/sessions',
+  '/account/tokens',
+  '/account/apps',
+];
 const OWNER_LINKS = [
   SETTINGS_PATH,
   `${SETTINGS_PATH}/keys`,

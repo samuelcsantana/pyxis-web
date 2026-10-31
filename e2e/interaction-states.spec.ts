@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
-import { openAccountMenu } from './navigation';
+import { openAccountMenu, openThemeAndLanguage } from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -60,8 +60,10 @@ const REPRESENTATIVES: readonly Representative[] = [
   {
     control: 'a theme choice',
     screen: 'overview',
-    target: (page) => page.getByRole('button', { name: 'Dark' }),
-    prepare: openAccountMenu,
+    target: (page) => page.getByRole('dialog').getByRole('button', { name: 'Dark' }),
+    prepare: async (page, isMobile) => {
+      await openThemeAndLanguage(page, isMobile);
+    },
   },
   {
     control: 'a feature tab',
