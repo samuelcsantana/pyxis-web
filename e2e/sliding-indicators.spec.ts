@@ -72,12 +72,9 @@ test('moves the underline to the clicked feature tab', async ({ page }) => {
   await expectIndicatorOn(tabs, tabs.getByRole('link', { name: 'Screens' }));
 });
 
-test('slides the highlight to the chosen theme in Theme and language', async ({
-  page,
-  isMobile,
-}) => {
+test('slides the highlight to the chosen theme in Theme and language', async ({ page }) => {
   await open(page, 'overview');
-  const themes = (await openThemeAndLanguage(page, isMobile)).getByRole('group', { name: 'Theme' });
+  const themes = (await openThemeAndLanguage(page)).getByRole('group', { name: 'Theme' });
 
   await themes.getByRole('button', { name: 'Dark' }).click();
 
@@ -86,10 +83,9 @@ test('slides the highlight to the chosen theme in Theme and language', async ({
 
 test('shows the theme highlight in place as Theme and language opens, without sliding in', async ({
   page,
-  isMobile,
 }) => {
   await open(page, 'overview');
-  const themes = (await openThemeAndLanguage(page, isMobile)).getByRole('group', { name: 'Theme' });
+  const themes = (await openThemeAndLanguage(page)).getByRole('group', { name: 'Theme' });
 
   const moving = await themes
     .getByTestId('sliding-indicator')
@@ -101,10 +97,9 @@ test('shows the theme highlight in place as Theme and language opens, without sl
 
 test('keeps the theme highlight on the chosen theme after the language changes in place', async ({
   page,
-  isMobile,
 }) => {
   await open(page, 'overview');
-  const part = await openThemeAndLanguage(page, isMobile);
+  const part = await openThemeAndLanguage(page);
 
   await part.getByRole('combobox', { name: 'Language' }).selectOption('pt-BR');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');

@@ -7,6 +7,7 @@ import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domai
 import type { OverviewReport } from '@/domain/overview';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
+import { Topbar } from '@/components/shell/topbar';
 import { renderInProject } from '@/test-utils/project-choices';
 import ProjectError from './error';
 import ProjectLayout from './layout';
@@ -100,7 +101,12 @@ describe('ProjectLayout', () => {
 
     renderInProject(
       await ProjectLayout({
-        children: <p>screen</p>,
+        children: (
+          <>
+            <Topbar title="Overview" />
+            <p>screen</p>
+          </>
+        ),
         modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
@@ -111,7 +117,10 @@ describe('ProjectLayout', () => {
     expect(links[0]).toHaveAccessibleName('Skip to content');
     expect(links[0]).toHaveAttribute('href', '#content');
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
-    expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
+    expect(within(navigation).queryByText('Account and preferences')).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole('banner')).getByText('Account and preferences'),
+    ).toBeInTheDocument();
     expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
       'href',
       '/p-store/overview',
@@ -187,13 +196,21 @@ describe('ProjectLayout', () => {
 
     renderInProject(
       await ProjectLayout({
-        children: <p>screen</p>,
+        children: <Topbar title="Overview" />,
         modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
 
-    expect(screen.getByText('41% of the month')).toBeInTheDocument();
+    const bar = screen.getByRole('banner');
+    const account = within(bar).getByText('Account and preferences').closest('summary');
+    expect(within(account ?? bar).getByText('41,230 of 100,000 events this month')).toHaveClass(
+      'sr-only',
+    );
+    expect(bar.querySelector('[data-usage-ring] circle[stroke-dasharray]')).toHaveAttribute(
+      'stroke-dasharray',
+      '41.23 100',
+    );
   });
 
   it("warns about an owned account's failed payment, linking to billing", async () => {

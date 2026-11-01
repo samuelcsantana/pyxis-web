@@ -8,12 +8,9 @@ for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`theme and language, ${colorScheme} theme`, () => {
     test.use({ colorScheme });
 
-    test('has no WCAG 2.2 A or AA violation and never scrolls sideways', async ({
-      page,
-      isMobile,
-    }) => {
+    test('has no WCAG 2.2 A or AA violation and never scrolls sideways', async ({ page }) => {
       await page.goto(`/${STORE_ID}/overview`);
-      const part = await openThemeAndLanguage(page, isMobile);
+      const part = await openThemeAndLanguage(page);
 
       await expect(part.getByText('These apply to this browser.')).toBeVisible();
       await expect(part.getByRole('button', { name: 'System' })).toHaveAttribute(
@@ -26,13 +23,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the account menu as the window, titled after the part', async ({
-  page,
-  isMobile,
-}) => {
+test('opens from the account menu as the window, titled after the part', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
 
-  await openThemeAndLanguage(page, isMobile);
+  await openThemeAndLanguage(page);
 
   await expect(page).toHaveURL(/\/account\/preferences$/);
   await expect(page).toHaveTitle('Theme and language · My site · Pyxis');

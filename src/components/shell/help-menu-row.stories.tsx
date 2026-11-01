@@ -19,7 +19,7 @@ const meta = {
   parameters: onPage('overview'),
   decorators: [
     (Story) => (
-      <div className="w-56 rounded-input border border-nav-border bg-nav-raised p-3">
+      <div className="w-72 rounded-input border border-line bg-card p-1.5 text-ink">
         <Story />
       </div>
     ),
@@ -40,9 +40,9 @@ export const OverAScreen: Story = {
 export const OnTheHelpPage: Story = {
   parameters: onPage('help'),
   play: async ({ canvasElement }) => {
-    await expect(
-      within(canvasElement).getByRole('link', { name: 'Help and support' }),
-    ).toHaveAttribute('aria-current', 'page');
+    const row = within(canvasElement).getByRole('link', { name: 'Help and support' });
+    await expect(row).toHaveAttribute('aria-current', 'page');
+    await expect(row.querySelector('svg')).toBeInTheDocument();
   },
 };
 

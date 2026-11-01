@@ -115,13 +115,13 @@ test.describe('the theme choice', () => {
     const header = page.getByRole('banner');
 
     await expect(header.getByRole('button', { name: /theme/i })).toHaveCount(0);
-    const onAPhone = await openThemeAndLanguage(page, true);
+    const onAPhone = await openThemeAndLanguage(page);
     await onAPhone.getByRole('button', { name: 'Dark' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(`/${STORE_ID}/overview`);
-    const onALaptop = await openThemeAndLanguage(page, false);
+    const onALaptop = await openThemeAndLanguage(page);
     await onALaptop.getByRole('button', { name: 'Light' }).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   });
@@ -217,6 +217,9 @@ test.describe('at 1440×900', () => {
 const SIDEBAR_FITS = { width: 1440, height: 800 } as const;
 const SIDEBAR_SCROLLS_ITS_SCREENS = { width: 1366, height: 650 } as const;
 const PHONES_HAVE_A_MENU = 'The sidebar is a menu behind a button on phones.';
+const LAPTOPS_PIN_THE_BAR =
+  'Only a laptop pins the top bar; on a phone the page scrolls to a menu.';
+const LAPTOP_LAYOUT = 'This checks the laptop layout of the bar.';
 const WCAG_TEXT_SPACING = `
   * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
   p { margin-bottom: 2em !important; }
@@ -232,8 +235,11 @@ function sidebarParts(page: Page) {
     navigation,
     screens: navigation.getByRole('list').first().locator('..'),
     settings: navigation.getByRole('link', { name: 'Settings' }),
-    account: page.locator('summary', { hasText: 'Account and preferences' }),
   };
+}
+
+function accountOf(page: Page) {
+  return page.getByRole('banner').locator('summary', { hasText: 'Account and preferences' });
 }
 
 test.describe(`sidebar at ${String(SIDEBAR_FITS.width)}×${String(SIDEBAR_FITS.height)}`, () => {
@@ -242,9 +248,9 @@ test.describe(`sidebar at ${String(SIDEBAR_FITS.width)}×${String(SIDEBAR_FITS.h
   test('scrolls nowhere', async ({ page, isMobile }) => {
     test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
-    const { navigation, screens, account } = sidebarParts(page);
+    const { navigation, screens, settings } = sidebarParts(page);
 
-    await expect(account).toBeInViewport({ ratio: 1 });
+    await expect(settings).toBeInViewport({ ratio: 1 });
     expect(await hiddenHeightOf(navigation)).toBe(0);
     expect(await hiddenHeightOf(screens)).toBe(0);
   });
@@ -253,34 +259,34 @@ test.describe(`sidebar at ${String(SIDEBAR_FITS.width)}×${String(SIDEBAR_FITS.h
 test.describe(`sidebar in a ${String(SIDEBAR_SCROLLS_ITS_SCREENS.width)}×${String(SIDEBAR_SCROLLS_ITS_SCREENS.height)} laptop window`, () => {
   test.use({ viewport: SIDEBAR_SCROLLS_ITS_SCREENS });
 
-  test('needs no scroll, with Settings and the account in view', async ({ page, isMobile }) => {
+  test('needs no scroll, with Settings in view', async ({ page, isMobile }) => {
     test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
-    const { navigation, screens, settings, account } = sidebarParts(page);
+    const { navigation, screens, settings } = sidebarParts(page);
 
     await expect(settings).toBeInViewport({ ratio: 1 });
-    await expect(account).toBeInViewport({ ratio: 1 });
     expect(await hiddenHeightOf(navigation)).toBe(0);
     expect(await hiddenHeightOf(screens)).toBe(0);
   });
 
-  test('opens the account menu above the account, every choice within reach', async ({
+  test('opens the account menu under the bar, every choice in view without a scroll', async ({
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    test.skip(isMobile, LAPTOPS_PIN_THE_BAR);
     await page.goto(`/${STORE_ID}/overview`);
-    const { account } = sidebarParts(page);
+    const account = accountOf(page);
 
     await account.click();
-    const billing = page.getByRole('link', { name: 'Account and billing' });
-    const preferences = page.getByRole('link', { name: 'Theme and language' });
-    const signOut = page.getByRole('button', { name: 'Sign out' });
 
-    await expect(billing).toBeInViewport({ ratio: 1 });
-    await expect(preferences).toBeInViewport({ ratio: 1 });
-    await signOut.scrollIntoViewIfNeeded();
-    await expect(signOut).toBeInViewport({ ratio: 1 });
+    for (const choice of [
+      page.getByRole('link', { name: /^Account and billing/ }),
+      page.getByRole('link', { name: 'Theme and language' }),
+      page.getByRole('link', { name: 'Help and support' }),
+      page.getByRole('button', { name: 'Sign out' }),
+    ]) {
+      await expect(choice).toBeInViewport({ ratio: 1 });
+    }
     await expect(account).toBeInViewport({ ratio: 1 });
   });
 });
@@ -294,13 +300,12 @@ test.describe(`account menu in a ${String(COMPACT_MENU_WINDOW.width)}×${String(
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    test.skip(isMobile, LAPTOPS_PIN_THE_BAR);
     await page.goto(`/${STORE_ID}/overview`);
-    const { account } = sidebarParts(page);
 
-    await account.click();
+    await accountOf(page).click();
 
-    await expect(page.getByRole('link', { name: 'Account and billing' })).toBeInViewport({
+    await expect(page.getByRole('link', { name: /^Account and billing/ })).toBeInViewport({
       ratio: 1,
     });
     await expect(page.getByRole('link', { name: 'Theme and language' })).toBeInViewport({
@@ -323,17 +328,17 @@ test.describe(`sidebar in a ${String(VERY_SHORT_WINDOW.width)}×${String(VERY_SH
   }) => {
     test.skip(isMobile, PHONES_HAVE_A_MENU);
     await page.goto(`/${STORE_ID}/overview`);
-    const { navigation, screens, account } = sidebarParts(page);
+    const { navigation, screens, settings } = sidebarParts(page);
 
     expect(await screens.evaluate((element) => element.clientHeight)).toBeGreaterThanOrEqual(
       SCREEN_LIST_FLOOR_PX,
     );
     expect(await hiddenHeightOf(navigation)).toBeGreaterThan(0);
-    await account.scrollIntoViewIfNeeded();
-    await expect(account).toBeInViewport({ ratio: 1 });
+    await settings.scrollIntoViewIfNeeded();
+    await expect(settings).toBeInViewport({ ratio: 1 });
     await expect
       .poll(() =>
-        account.evaluate(
+        settings.evaluate(
           (element) => getComputedStyle(element.closest('nav') ?? element).backgroundColor,
         ),
       )
@@ -350,7 +355,7 @@ test.describe(`project menu in a ${String(PROJECT_MENU_OVERFLOWS.width)}×${Stri
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    test.skip(isMobile, LAPTOPS_PIN_THE_BAR);
     await page.goto(`/${STORE_ID}/overview`);
     await page.waitForLoadState('networkidle');
     const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
@@ -365,6 +370,30 @@ test.describe(`project menu in a ${String(PROJECT_MENU_OVERFLOWS.width)}×${Stri
     const last = choices.last();
     await expect(last).toBeFocused();
     await expect(last).toBeInViewport({ ratio: 1 });
+    expect(await axeViolations(page)).toEqual([]);
+  });
+
+  test('brings sign-out, the last choice of the account menu, into view under the pinned bar', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, LAPTOPS_PIN_THE_BAR);
+    await page.goto(`/${STORE_ID}/overview`);
+    await page.waitForLoadState('networkidle');
+    const account = page
+      .getByRole('banner')
+      .locator('details', { hasText: 'Account and preferences' });
+
+    await account.locator('summary').click();
+    const choices = account.locator('a, button');
+    const count = await choices.count();
+    for (let press = 0; press < count; press += 1) {
+      await page.keyboard.press('Tab');
+    }
+
+    const signOut = account.getByRole('button', { name: 'Sign out' });
+    await expect(signOut).toBeFocused();
+    await expect(signOut).toBeInViewport({ ratio: 1 });
     expect(await axeViolations(page)).toEqual([]);
   });
 });
@@ -398,28 +427,33 @@ test.describe('sidebar under WCAG text spacing at 1280×800', () => {
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    test.skip(isMobile, LAPTOP_LAYOUT);
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
-
-    const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
-    await switcher.locator('summary').click();
-    for (const text of [
-      page.getByText('owner@example.com', { exact: true }),
-      switcher.locator('summary').getByText('My site', { exact: true }),
-      switcher.getByText('America/Sao_Paulo', { exact: true }),
-    ]) {
-      const cut = await text.evaluate(
+    const isCut = (text: Locator) =>
+      text.evaluate(
         (element) =>
           element.scrollWidth > element.clientWidth ||
           getComputedStyle(element).textOverflow === 'ellipsis',
       );
-      expect(cut).toBe(false);
+
+    const switcher = page.getByRole('banner').locator('details', { hasText: 'Switch project' });
+    await switcher.locator('summary').click();
+    for (const text of [
+      switcher.locator('summary').getByText('My site', { exact: true }),
+      switcher.getByText('America/Sao_Paulo', { exact: true }),
+    ]) {
+      await expect(text).toBeVisible();
+      expect(await isCut(text)).toBe(false);
     }
+    await accountOf(page).click();
+    const email = page.getByText('owner@example.com', { exact: true });
+    await expect(email).toBeVisible();
+    expect(await isCut(email)).toBe(false);
   });
 
   test('keeps each part of a time zone whole in the project menu', async ({ page, isMobile }) => {
-    test.skip(isMobile, PHONES_HAVE_A_MENU);
+    test.skip(isMobile, LAPTOP_LAYOUT);
     await page.goto(`/${STORE_ID}/overview`);
     await page.addStyleTag({ content: WCAG_TEXT_SPACING });
 

@@ -46,7 +46,6 @@ export const en = {
     install: 'Install',
     installPending: 'Pending',
     usage: {
-      share: '{share} of the month',
       events: '{count} of {limit} events this month',
       resets: 'Count resets on {date}',
     },

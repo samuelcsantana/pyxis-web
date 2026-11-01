@@ -78,7 +78,7 @@ test('loads a screen visited more than five minutes ago as a new one', async ({
 test('shows a visited screen in the language chosen since', async ({ page, isMobile }) => {
   await openOverviewThenFunnel(page, isMobile);
 
-  const part = await openThemeAndLanguage(page, isMobile);
+  const part = await openThemeAndLanguage(page);
   await part.getByRole('combobox', { name: 'Language' }).selectOption('pt-BR');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 

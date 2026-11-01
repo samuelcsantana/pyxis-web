@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import { PreferenceCarrier } from '@/components/preferences/preference-carrier';
+import { AccountMenu } from '@/components/shell/account-menu';
 import { ArrivalsLoader } from '@/components/shell/arrivals-loader';
+import { BarAccountProvider } from '@/components/shell/bar-account';
 import { MobileMenu } from '@/components/shell/mobile-menu';
 import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/navigation-pending';
 import { ProjectChoicesProvider } from '@/components/shell/project-choices';
@@ -35,33 +37,39 @@ export default async function ProjectLayout({ children, modal, params }: Project
         currentProject={project}
         canCreateProject={canCreateProject}
       >
-        <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
-          <SkipLink i18n={i18n} />
-          <PreferenceCarrier locale={i18n.locale} />
-          <ArrivalsLoader
-            projectId={project.id}
-            timeZone={project.timezone}
-            serverNow={new Date().getTime()}
-          />
-          <MobileMenu
-            project={project}
-            homeLabel={i18n.t('meta.screenTitle', {
-              screen: i18n.t('screens.overview'),
-              project: project.name,
-            })}
-          >
-            <Sidebar admin={admin} project={project} i18n={i18n} usage={usage} />
-          </MobileMenu>
-          <NavigationRegion className="relative flex min-w-0 flex-col">
-            {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
-            {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
-            {suspension === null ? null : (
-              <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
-            )}
-            {children}
-          </NavigationRegion>
-          {modal}
-        </div>
+        <BarAccountProvider
+          account={
+            <AccountMenu email={admin.email} projectId={project.id} i18n={i18n} usage={usage} />
+          }
+        >
+          <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
+            <SkipLink i18n={i18n} />
+            <PreferenceCarrier locale={i18n.locale} />
+            <ArrivalsLoader
+              projectId={project.id}
+              timeZone={project.timezone}
+              serverNow={new Date().getTime()}
+            />
+            <MobileMenu
+              project={project}
+              homeLabel={i18n.t('meta.screenTitle', {
+                screen: i18n.t('screens.overview'),
+                project: project.name,
+              })}
+            >
+              <Sidebar project={project} />
+            </MobileMenu>
+            <NavigationRegion className="relative flex min-w-0 flex-col">
+              {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
+              {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
+              {suspension === null ? null : (
+                <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
+              )}
+              {children}
+            </NavigationRegion>
+            {modal}
+          </div>
+        </BarAccountProvider>
       </ProjectChoicesProvider>
     </NavigationPendingProvider>
   );

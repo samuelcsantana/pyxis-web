@@ -4,12 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
-import {
-  BUTTON_SECONDARY,
-  CONTROL_BUSY,
-  NAV_CONTROL,
-  NAV_ITEM_IDLE,
-} from '@/components/ui/control-classes';
+import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
 import { bestEffortForgetSeenMarks } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
@@ -29,7 +24,7 @@ export interface SignOutLook {
 
 export interface SignOutButtonProps {
   readonly authService?: IAuthService;
-  readonly variant?: 'nav' | 'page' | SignOutLook;
+  readonly variant?: 'page' | SignOutLook;
   readonly scope?: SignOutScope;
 }
 
@@ -39,12 +34,6 @@ const LABEL_KEY_BY_SCOPE = {
 } as const;
 
 const VARIANT_CLASSES = {
-  nav: {
-    frame: 'contents',
-    button: `px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
-    error: 'basis-full px-1 text-nav-text',
-    withIcon: false,
-  },
   page: {
     frame: 'flex flex-col gap-1',
     button: `gap-2.5 self-start px-3 text-sm ${BUTTON_SECONDARY}`,
@@ -70,7 +59,7 @@ function SignOutIcon() {
 
 export function SignOutButton({
   authService,
-  variant = 'nav',
+  variant = 'page',
   scope = 'this-device',
 }: SignOutButtonProps) {
   const t = useT();

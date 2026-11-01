@@ -32,36 +32,29 @@ function watchConsoleErrors(page: Page): string[] {
 }
 
 interface PreferencesLabels {
-  readonly menu: string;
   readonly account: string;
   readonly part: string;
   readonly language: string;
 }
 
 const ENGLISH_LABELS: PreferencesLabels = {
-  menu: 'Open menu',
   account: 'Account and preferences',
   part: 'Theme and language',
   language: 'Language',
 };
 const PORTUGUESE_LABELS: PreferencesLabels = {
-  menu: 'Abrir menu',
   account: 'Conta e preferências',
   part: 'Tema e idioma',
   language: 'Idioma',
 };
 const SPANISH_LABELS: PreferencesLabels = {
-  menu: 'Abrir el menú',
   account: 'Cuenta y preferencias',
   part: 'Tema e idioma',
   language: 'Idioma',
 };
 
-async function languageField(page: Page, isMobile: boolean, labels: PreferencesLabels) {
-  if (isMobile) {
-    await page.getByRole('button', { name: labels.menu }).click();
-  }
-  await page.locator('summary', { hasText: labels.account }).click();
+async function languageField(page: Page, labels: PreferencesLabels) {
+  await page.getByRole('banner').locator('summary', { hasText: labels.account }).click();
   await page.getByRole('link', { name: labels.part }).click();
   return page
     .getByRole('dialog')
@@ -334,12 +327,11 @@ test('serves Brazilian Portuguese to a browser that asks for European Portuguese
 
 test('switches the language in Theme and language, stays on the part, and back', async ({
   page,
-  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
-  await (await languageField(page, isMobile, ENGLISH_LABELS)).selectOption(PORTUGUESE);
+  await (await languageField(page, ENGLISH_LABELS)).selectOption(PORTUGUESE);
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
   await expect(page).toHaveURL(/\/account\/preferences$/);
@@ -353,13 +345,13 @@ test('switches the language in Theme and language, stays on the part, and back',
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 
-  await (await languageField(page, isMobile, PORTUGUESE_LABELS)).selectOption('es');
+  await (await languageField(page, PORTUGUESE_LABELS)).selectOption('es');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('heading', { level: 1, name: 'Vista general' })).toBeVisible();
 
-  await (await languageField(page, isMobile, SPANISH_LABELS)).selectOption('en');
+  await (await languageField(page, SPANISH_LABELS)).selectOption('en');
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await page.keyboard.press('Escape');
@@ -373,7 +365,7 @@ test('waits while letters typed on the closed field find a language, and switche
 }) => {
   test.skip(isMobile, 'a phone picks from its own wheel, checked with a pointer above');
   await page.goto(`/${STORE_ID}/overview`);
-  const field = await languageField(page, isMobile, ENGLISH_LABELS);
+  const field = await languageField(page, ENGLISH_LABELS);
 
   await field.focus();
   await page.keyboard.press('e');
@@ -393,7 +385,7 @@ test('switches on a language picked with the keyboard from the open list', async
 }) => {
   test.skip(isMobile, 'a phone picks from its own wheel, checked with a pointer above');
   await page.goto(`/${STORE_ID}/overview`);
-  const field = await languageField(page, isMobile, ENGLISH_LABELS);
+  const field = await languageField(page, ENGLISH_LABELS);
 
   await field.focus();
   await page.keyboard.press('ArrowDown');

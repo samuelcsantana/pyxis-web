@@ -6,7 +6,7 @@ import {
   MIN_TEXT_CONTRAST,
 } from './contrast';
 import { focusRing } from './focus-ring';
-import { openAccountMenu, openThemeAndLanguage } from './navigation';
+import { accountMenuButton, openAccountMenu, openThemeAndLanguage } from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -66,8 +66,8 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'a theme choice',
     screen: 'overview',
     target: (page) => page.getByRole('dialog').getByRole('button', { name: 'Dark' }),
-    prepare: async (page, isMobile) => {
-      await openThemeAndLanguage(page, isMobile);
+    prepare: async (page) => {
+      await openThemeAndLanguage(page);
     },
   },
   {
@@ -168,13 +168,13 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
         .getByRole('link', { name: 'Funnel' }),
   },
   {
-    control: 'the account menu',
-    target: (page) => page.locator('summary', { hasText: 'Account and preferences' }),
+    control: 'the account avatar',
+    target: (page) => accountMenuButton(page).getByText('O', { exact: true }),
   },
   {
     control: 'the sign-out button',
     target: (page) => page.getByRole('button', { name: 'Sign out', exact: true }),
-    prepare: (page) => openAccountMenu(page, false),
+    prepare: (page) => openAccountMenu(page),
   },
   {
     control: 'the project switcher',
@@ -189,10 +189,10 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   },
 ];
 
-test.describe('sidebar states on a desktop', () => {
+test.describe('sidebar and top bar states on a desktop', () => {
   for (const { control, target, prepare } of SIDEBAR_CONTROLS) {
     test(`${control} changes visibly on hover and on press`, async ({ page, isMobile }) => {
-      test.skip(isMobile, 'Phones have no hover; the menu button covers pressing on a phone.');
+      test.skip(isMobile, 'Phones have no hover; the tests below cover pressing on a phone.');
       await page.goto(`/${STORE_ID}/overview`);
       await prepare?.(page);
 
@@ -209,6 +209,15 @@ test('the menu button changes visibly when pressed on a phone', async ({ page, i
   await page.goto(`/${STORE_ID}/overview`);
 
   const states = await pointerStates(page.getByRole('button', { name: 'Open menu' }));
+
+  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+});
+
+test('the account avatar changes visibly when pressed on a phone', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The desktop run covers the avatar with hover and press.');
+  await page.goto(`/${STORE_ID}/overview`);
+
+  const states = await pointerStates(accountMenuButton(page).getByText('O', { exact: true }));
 
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
 });

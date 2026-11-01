@@ -8,7 +8,6 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { publishArrivalNews } from './arrival-news';
 import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
-import { AccountMenu } from './account-menu';
 import { ProjectChoicesProvider } from './project-choices';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
@@ -34,6 +33,8 @@ import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID } from './content-id';
 import { SkipLink } from './skip-link';
 import { Topbar } from './topbar';
+import { BarAccountProvider } from './bar-account';
+import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { english } from '@/test-utils/english';
 import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -580,17 +581,20 @@ describe('ProjectSwitcher', () => {
   it('closes a menu inside the mobile menu on Escape, which stays open until a second Escape', () => {
     const { container } = renderWithMessages(
       <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <AccountMenu email={ADMIN.email} projectId="p-store" i18n={english} />
+        <DismissableDetails>
+          <summary>More</summary>
+          <a href="#choice">A choice</a>
+        </DismissableDetails>
       </MobileMenu>,
     );
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     const details = container.querySelector('details');
     const summary = container.querySelector('summary');
     if (details === null || summary === null) {
-      throw new Error('no project switcher');
+      throw new Error('no menu inside the mobile menu');
     }
     details.open = true;
-    const link = screen.getByRole('link', { name: 'Account and billing' });
+    const link = screen.getByRole('link', { name: 'A choice' });
     link.focus();
 
     fireEvent.keyDown(link, { key: 'Escape' });
@@ -662,7 +666,7 @@ describe('SignOutButton', () => {
   it('signs out and goes to the sign-in page', async () => {
     renderWithMessages(<SignOutButton authService={new MockAuthService()} />);
 
-    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).not.toBeNull();
 
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
 
@@ -783,32 +787,25 @@ describe('SignOutButton', () => {
 });
 
 describe('Sidebar', () => {
-  it('holds the logo, the screens, and a foot with Install, Settings and the account menu', () => {
-    renderWithMessages(<Sidebar admin={ADMIN} project={store()} i18n={english} />);
+  it('holds the logo, the screens, and a foot with Install and Settings, leaving the account to the bar', () => {
+    renderWithMessages(<Sidebar project={store()} />);
 
     expect(screen.queryByText('No cookies, no personal data')).not.toBeInTheDocument();
     expect(screen.queryByText('Switch project. Current project:')).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: 'Help and support', hidden: true }),
-    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Install' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByText('Account and preferences')).toBeInTheDocument();
-    expect(screen.getByText('owner@example.com')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Theme and language', hidden: true })).toHaveAttribute(
-      'href',
-      '/account/preferences',
-    );
-    expect(screen.queryByRole('group', { name: 'Language', hidden: true })).not.toBeInTheDocument();
-    expect(screen.queryByRole('group', { name: 'Theme', hidden: true })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign out', hidden: true })).toBeInTheDocument();
+    expect(screen.queryByText('Account and preferences')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Sign out', hidden: true }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Project settings' })).not.toBeInTheDocument();
   });
 
   it('links the logo to the overview of the current project, keeping the period and the filters', () => {
     navigation.pathname = '/p-docs/devices';
     navigation.search = 'range=7d&device=mobile&tab=events';
-    renderWithMessages(<Sidebar admin={ADMIN} project={docs()} i18n={english} />);
+    renderWithMessages(<Sidebar project={docs()} />);
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -821,7 +818,7 @@ describe('Sidebar', () => {
   it('becomes the main navigation inside the menu, with the menu bar', () => {
     renderWithMessages(
       <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <Sidebar admin={ADMIN} project={store()} i18n={english} />
+        <Sidebar project={store()} />
       </MobileMenu>,
     );
 
@@ -829,7 +826,7 @@ describe('Sidebar', () => {
 
     expect(within(navigation).getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
     expect(
-      within(navigation).getByRole('button', { name: 'Sign out', hidden: true }),
+      within(navigation).getByRole('link', { name: 'Settings', hidden: true }),
     ).toBeInTheDocument();
   });
 });
@@ -1214,6 +1211,30 @@ describe('PeriodSelector with parameters of the screen', () => {
     );
     expect(container.querySelector('input[type="hidden"][name="kind"]')).toHaveValue('screens');
     expect(container.querySelector('input[type="hidden"][name="q"]')).toHaveValue('order');
+  });
+});
+
+describe('Topbar with the account', () => {
+  it('ends the bar with the account it is given, beside the project and the title', () => {
+    renderWithMessages(
+      withProjectChoices(
+        <BarAccountProvider account={<button type="button">Account</button>}>
+          <Topbar title="Timeline" />
+        </BarAccountProvider>,
+      ),
+    );
+
+    const bar = screen.getByRole('banner');
+    const account = within(bar).getByRole('button', { name: 'Account' });
+    const heading = within(bar).getByRole('heading', { level: 1, name: 'Timeline' });
+    expect(heading.compareDocumentPosition(account)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(account.parentElement).toHaveClass('col-start-2', 'row-start-1');
+  });
+
+  it('leaves the end of the bar empty without one', () => {
+    renderWithMessages(withProjectChoices(<Topbar title="Timeline" />));
+
+    expect(screen.getByRole('banner').querySelector('.col-start-2')).toBeNull();
   });
 });
 
