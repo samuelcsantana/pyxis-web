@@ -3,7 +3,7 @@ import { type ReactNode, useEffect } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import type { MonthUsage } from '@/lib/accounts-in-view';
 import { english } from '@/test-utils/english';
-import { withProjectChoices } from '@/test-utils/project-choices';
+import { PROJECT_AWAITING_ITS_FIRST_EVENT, withProjectChoices } from '@/test-utils/project-choices';
 import { AccountMenu } from './account-menu';
 import { publishActiveVisits } from './arrival-news';
 import { BarAccountProvider } from './bar-account';
@@ -164,6 +164,58 @@ export const VisitsNowOnDevices: Story = {
 export const VisitsNowOnDevicesDark: Story = {
   ...VisitsNowOnDevices,
   globals: { theme: 'dark' },
+};
+
+const awaitingTheFirstEvent: NonNullable<Story['decorators']> = [
+  (Story) => (
+    <WithVisitsNow>{withProjectChoices(<Story />, PROJECT_AWAITING_ITS_FIRST_EVENT)}</WithVisitsNow>
+  ),
+];
+
+function installCallIn(canvasElement: HTMLElement): HTMLElement {
+  return within(canvasElement).getByRole('link', { name: /^Install Pyxis/ });
+}
+
+export const AwaitingTheFirstEvent: Story = {
+  parameters: at('devices'),
+  decorators: awaitingTheFirstEvent,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heading = canvas.getByRole('heading', { level: 1, name: 'Devices' });
+    const call = installCallIn(canvasElement);
+    await expect(call.getBoundingClientRect().left).toBeGreaterThan(
+      heading.getBoundingClientRect().right,
+    );
+    await expect(canvas.queryByText(/on the site now$/)).toBeNull();
+  },
+};
+
+export const AwaitingTheFirstEventDark: Story = {
+  ...AwaitingTheFirstEvent,
+  globals: { theme: 'dark' },
+};
+
+const PHONE_TARGET_PX = 44;
+
+export const AwaitingTheFirstEventOnAPhone: Story = {
+  parameters: at('devices'),
+  decorators: awaitingTheFirstEvent,
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const heading = within(canvasElement).getByRole('heading', { level: 1, name: 'Devices' });
+    const call = installCallIn(canvasElement).getBoundingClientRect();
+    await expect(call.top).toBeGreaterThanOrEqual(heading.getBoundingClientRect().bottom);
+    await expect(call.height).toBeGreaterThanOrEqual(PHONE_TARGET_PX);
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+export const AwaitingTheFirstEventOnTimeline: Story = {
+  parameters: at('timeline'),
+  decorators: awaitingTheFirstEvent,
+  play: async ({ canvasElement }) => {
+    await expect(installCallIn(canvasElement)).toBeVisible();
+  },
 };
 
 export const WithFilters: Story = {

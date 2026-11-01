@@ -30,7 +30,7 @@ export function TopbarFrame({ title, controls, notice, besideTitle, children }: 
             <h1 className="min-w-0 text-title leading-7 font-semibold tracking-tight wrap-break-word">
               {title}
             </h1>
-            {besideTitle === undefined ? null : <div className="max-lg:hidden">{besideTitle}</div>}
+            {besideTitle}
           </div>
           {controls === null ? null : (
             <div className="flex flex-wrap items-center gap-3 max-lg:hidden">{controls}</div>

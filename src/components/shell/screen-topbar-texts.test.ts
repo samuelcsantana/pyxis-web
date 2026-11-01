@@ -16,4 +16,11 @@ describe('screenTopbarTexts', () => {
     });
     expect(screenTopbarTexts(portuguese).rangeNotices.future).toContain('termina depois de hoje');
   });
+
+  it('says the project waits for its first event, in the language of the admin', () => {
+    expect(screenTopbarTexts(english).waitingForTheFirstEvent).toBe('Waiting for the first event');
+    expect(screenTopbarTexts(portuguese).waitingForTheFirstEvent).toBe(
+      'Aguardando o primeiro evento',
+    );
+  });
 });

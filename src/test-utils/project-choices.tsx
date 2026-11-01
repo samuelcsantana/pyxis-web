@@ -12,11 +12,16 @@ export const TEST_PROJECT: Project = {
   conversionEvent: null,
 };
 
-export function withProjectChoices(children: ReactNode): ReactElement {
+export const PROJECT_AWAITING_ITS_FIRST_EVENT: Project = { ...TEST_PROJECT, firstEventAt: null };
+
+export function withProjectChoices(
+  children: ReactNode,
+  currentProject: Project = TEST_PROJECT,
+): ReactElement {
   return (
     <ProjectChoicesProvider
-      projects={[TEST_PROJECT]}
-      currentProject={TEST_PROJECT}
+      projects={[currentProject]}
+      currentProject={currentProject}
       canCreateProject={false}
     >
       {children}

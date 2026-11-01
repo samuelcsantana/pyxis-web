@@ -3,6 +3,7 @@ import type { I18n } from '@/i18n/i18n';
 
 export interface ScreenTopbarTexts {
   readonly rangeNotices: Readonly<Record<RangeProblem, string>>;
+  readonly waitingForTheFirstEvent: string;
 }
 
 export function screenTopbarTexts(i18n: I18n): ScreenTopbarTexts {
@@ -13,5 +14,6 @@ export function screenTopbarTexts(i18n: I18n): ScreenTopbarTexts {
       future: rangeProblemNotice('future', i18n),
       'too-long': rangeProblemNotice('too-long', i18n),
     },
+    waitingForTheFirstEvent: i18n.t('settings.activity.waiting'),
   };
 }

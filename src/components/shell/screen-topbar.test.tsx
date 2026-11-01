@@ -1,7 +1,11 @@
 import { act, cleanup, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
-import { withProjectChoices } from '@/test-utils/project-choices';
+import {
+  PROJECT_AWAITING_ITS_FIRST_EVENT,
+  TEST_PROJECT,
+  withProjectChoices,
+} from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { publishActiveVisits } from './arrival-news';
 import { PhoneBarSlotsProvider, usePhoneBarHostSetter } from './phone-bar-slots';
@@ -34,7 +38,7 @@ function at(pathname: string, search = '', segment = segmentOf(pathname)) {
   navigation.segment = segment;
 }
 
-function topbar(chips?: string) {
+function topbar(chips?: string, project = TEST_PROJECT) {
   return withProjectChoices(
     <ScreenTopbar
       projectId="p1"
@@ -44,6 +48,7 @@ function topbar(chips?: string) {
     >
       {chips === undefined ? null : <p>{chips}</p>}
     </ScreenTopbar>,
+    project,
   );
 }
 
@@ -99,6 +104,60 @@ describe('ScreenTopbar visits on the site now', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Overview' }).nextElementSibling,
     ).toBeNull();
+  });
+});
+
+describe('ScreenTopbar install call', () => {
+  afterEach(() => {
+    cleanup();
+    publishActiveVisits(undefined);
+  });
+
+  const INSTALL_CALL = 'Install Pyxis, Waiting for the first event';
+
+  it('offers Install beside the title in place of the visits on the site now while no event arrived', () => {
+    at('/p1/devices', 'range=7d');
+    renderWithMessages(topbar(undefined, PROJECT_AWAITING_ITS_FIRST_EVENT));
+
+    act(() => {
+      publishActiveVisits(0);
+    });
+
+    const heading = screen.getByRole('heading', { level: 1, name: 'Devices' });
+    const call = screen.getByRole('link', { name: INSTALL_CALL });
+    expect(heading.parentElement).toContainElement(call);
+    expect(call).toHaveAttribute('href', '/p1/install?range=7d');
+    expect(call.parentElement).toHaveClass('max-lg:basis-full');
+    expect(call.parentElement).not.toHaveClass('max-lg:hidden');
+    expect(screen.queryByText('0 on the site now')).not.toBeInTheDocument();
+  });
+
+  it('offers Install on a screen without a period and on a period that ends before today', () => {
+    at('/p1/timeline');
+    renderWithMessages(topbar(undefined, PROJECT_AWAITING_ITS_FIRST_EVENT));
+    expect(screen.getByRole('link', { name: INSTALL_CALL })).toBeInTheDocument();
+    cleanup();
+
+    at('/p1/overview', 'from=2026-09-01&to=2026-09-30');
+    renderWithMessages(topbar(undefined, PROJECT_AWAITING_ITS_FIRST_EVENT));
+
+    expect(screen.getByRole('link', { name: INSTALL_CALL })).toBeInTheDocument();
+  });
+
+  it('is left out once the project has an event, or when the project does not say', () => {
+    at('/p1/timeline');
+    renderWithMessages(
+      topbar(undefined, { ...TEST_PROJECT, firstEventAt: '2026-10-01T12:00:00.000Z' }),
+    );
+    expect(screen.queryByRole('link', { name: INSTALL_CALL })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Timeline' }).nextElementSibling,
+    ).toBeNull();
+    cleanup();
+
+    renderWithMessages(topbar());
+
+    expect(screen.queryByRole('link', { name: INSTALL_CALL })).not.toBeInTheDocument();
   });
 });
 

@@ -56,6 +56,7 @@ export const es = translation({
     signOutFailed: 'No se pudo cerrar la sesión. Inténtalo de nuevo.',
     install: 'Instalación',
     installPending: 'Pendiente',
+    installCta: 'Instalar Pyxis',
     usage: {
       events: '{count} de {limit} eventos este mes',
       resets: 'El recuento vuelve a cero el {date}',

@@ -56,6 +56,7 @@ export const de = translation({
     signOutFailed: 'Abmelden fehlgeschlagen. Versuch es erneut.',
     install: 'Installieren',
     installPending: 'Ausstehend',
+    installCta: 'Pyxis installieren',
     usage: {
       events: '{count} von {limit} Ereignissen diesen Monat',
       resets: 'Der Zähler beginnt am {date} wieder bei null',

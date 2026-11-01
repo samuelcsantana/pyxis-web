@@ -47,6 +47,7 @@ export const en = {
     signOutFailed: 'Could not sign out. Try again.',
     install: 'Install',
     installPending: 'Pending',
+    installCta: 'Install Pyxis',
     usage: {
       events: '{count} of {limit} events this month',
       resets: 'Count resets on {date}',
