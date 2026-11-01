@@ -123,15 +123,15 @@ export function helpHref(projectId: string): string {
 
 export const SETTINGS_KEYS_PANEL = 'settings-keys';
 
-export const SETTINGS_KEYS_SEGMENT = 'keys';
-
 export function settingsKeysHref(projectId: string): string {
-  return `${settingsHref(projectId)}/${SETTINGS_KEYS_SEGMENT}`;
+  return `${settingsHref(projectId)}#${SETTINGS_KEYS_PANEL}-heading`;
 }
 
 export const SETTINGS_CONNECTIONS_PANEL = 'settings-connections';
 
-export const CONNECTED_APPS_HREF = '/account/apps';
+export function settingsConnectionsHref(projectId: string): string {
+  return `${settingsHref(projectId)}#${SETTINGS_CONNECTIONS_PANEL}-heading`;
+}
 
 const LINK_BASE = 'http://link.invalid';
 
@@ -155,7 +155,7 @@ const SCREEN_PATH_SEGMENTS = 3;
 export const CONNECT_PAGE = '/connect';
 const ACCOUNT_LEVEL_PATHS: ReadonlySet<string> = new Set(['/account', CONNECT_PAGE]);
 
-export function isScreenSlug(value: string | undefined): value is ScreenSlug {
+function isScreenSlug(value: string | undefined): value is ScreenSlug {
   return SCREENS.some((screen) => screen.slug === value);
 }
 
@@ -208,4 +208,8 @@ export function returnPathOf(value: string | null | undefined): string | undefin
   return url.origin === LINK_BASE && (isScreen || ACCOUNT_LEVEL_PATHS.has(url.pathname))
     ? `${url.pathname}${url.search}`
     : undefined;
+}
+
+export function screenOf(pathname: string): string | undefined {
+  return pathname.split('/')[2];
 }

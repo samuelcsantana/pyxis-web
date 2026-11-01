@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
@@ -89,9 +90,9 @@ export function ConsentButtons({
               settingsHref === null ? (
                 text
               ) : (
-                <a href={settingsHref} className={TEXT_LINK}>
+                <Link href={settingsHref} className={TEXT_LINK}>
                   {text}
-                </a>
+                </Link>
               ),
           })}
         </p>

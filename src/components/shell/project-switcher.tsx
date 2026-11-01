@@ -1,27 +1,60 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
+import type { Project } from '@/domain/admin';
 import { Breakable } from '@/components/ui/breakable';
-import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
+import { NAV_CONTROL, NAV_ITEM_CURRENT, NAV_ITEM_IDLE } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { useT } from '@/i18n/messages-provider';
-import { CurrentCheck } from './current-check';
-import { useProjectChoices } from './project-choices';
 import { ProjectMark } from './project-mark';
-import { MENU_PANEL, MENU_ROW_NOTE, menuRowClasses } from './menu-row-classes';
-import { FIRST_SCREEN, periodParameters, screenHref } from './screens';
-import { useScreenOnView } from './use-screen-on-view';
+import { FIRST_SCREEN, periodParameters, SCREENS, screenHref, screenOf } from './screens';
+
+export interface ProjectSwitcherProps {
+  readonly projects: readonly Project[];
+  readonly currentProject: Project;
+  readonly canCreateProject?: boolean;
+}
 
 export const NEW_PROJECT_PAGE = '/new-project';
 const PLUS_ICON = 'M12 5v14M5 12h14';
 
-export function ProjectSwitcher() {
+function sameScreenIn(pathname: string) {
+  const current = screenOf(pathname);
+  return SCREENS.find((screen) => screen.slug === current)?.slug ?? FIRST_SCREEN;
+}
+
+function CurrentCheck() {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="shrink-0 text-accent"
+    >
+      <path
+        d="M5 12.5l4.5 4.5L19 7.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ProjectSwitcher({
+  projects,
+  currentProject,
+  canCreateProject = false,
+}: ProjectSwitcherProps) {
   const t = useT();
-  const { projects, currentProject, canCreateProject } = useProjectChoices();
+  const pathname = usePathname();
   const query = periodParameters(useSearchParams());
-  const screen = useScreenOnView() ?? FIRST_SCREEN;
+  const screen = sameScreenIn(pathname);
 
   const closeAfterChoice = (event: MouseEvent<HTMLDetailsElement>) => {
     if (event.target instanceof Element && event.target.closest('a') !== null) {
@@ -32,19 +65,22 @@ export function ProjectSwitcher() {
   return (
     <DismissableDetails onClick={closeAfterChoice} className="group relative">
       <summary
-        className={`flex min-h-11 max-w-[min(20rem,60vw)] list-none items-center gap-2 rounded-input border border-line bg-card px-2.5 text-left text-ink hover:border-muted hover:bg-soft active:border-muted active:bg-line ${FOCUS_RING} ${CONTROL_TRANSITION} [&::-webkit-details-marker]:hidden`}
+        className={`flex w-full list-none items-center gap-2.5 rounded-input border border-nav-border bg-nav-raised p-2.5 text-left text-nav-strong hover:bg-nav-hover active:bg-nav-active ${NAV_CONTROL} [&::-webkit-details-marker]:hidden`}
       >
         <span className="sr-only">{t('nav.switchProject')} </span>
-        <ProjectMark project={currentProject} />
-        <span className="min-w-0 text-sm font-semibold break-words max-lg:sr-only">
-          {currentProject.name}
+        <ProjectMark project={currentProject} size="large" />
+        <span className="flex min-w-0 grow flex-col gap-0.5">
+          <span className="text-sm font-semibold break-words">{currentProject.name}</span>
+          <span className="font-mono text-xs break-words text-nav-muted">
+            <Breakable text={currentProject.timezone} breakAt="slashes" />
+          </span>
         </span>
         <svg
           width={16}
           height={16}
           viewBox="0 0 24 24"
           aria-hidden="true"
-          className="shrink-0 text-muted transition-transform group-open:rotate-180 motion-reduce:transition-none"
+          className="shrink-0 text-nav-muted transition-transform group-open:rotate-180 motion-reduce:transition-none"
         >
           <path
             d="M7 10l5 5 5-5"
@@ -56,7 +92,7 @@ export function ProjectSwitcher() {
           />
         </svg>
       </summary>
-      <ul className={`${MENU_PANEL} left-0 w-max max-w-[min(24rem,calc(100vw-2rem))] min-w-60`}>
+      <ul className="absolute inset-x-0 top-full z-10 mt-1.5 flex flex-col gap-1 rounded-input border border-nav-border bg-nav-raised p-1.5 shadow-lg">
         {projects.map((project) => {
           const current = project.id === currentProject.id;
           return (
@@ -64,29 +100,27 @@ export function ProjectSwitcher() {
               <Link
                 href={screenHref(project.id, screen, query)}
                 aria-current={current ? 'page' : undefined}
-                className={menuRowClasses(current)}
+                className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${current ? NAV_ITEM_CURRENT : NAV_ITEM_IDLE}`}
               >
-                <ProjectMark project={project} />
-                <span className="flex min-w-0 grow flex-col gap-0.5">
-                  <span className="break-words">{project.name}</span>
-                  <span className={`font-mono text-xs font-normal break-words ${MENU_ROW_NOTE}`}>
-                    <Breakable text={project.timezone} breakAt="slashes" />
-                  </span>
-                </span>
+                <ProjectMark project={project} size="small" />
+                <span className="min-w-0 grow break-words">{project.name}</span>
                 {current ? <CurrentCheck /> : null}
               </Link>
             </li>
           );
         })}
         {canCreateProject ? (
-          <li className="border-t border-line pt-1">
-            <Link href={NEW_PROJECT_PAGE} className={menuRowClasses()}>
+          <li className="border-t border-nav-line pt-1">
+            <Link
+              href={NEW_PROJECT_PAGE}
+              className={`flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm ${NAV_CONTROL} ${NAV_ITEM_IDLE}`}
+            >
               <svg
                 width={16}
                 height={16}
                 viewBox="0 0 24 24"
                 aria-hidden="true"
-                className="shrink-0 text-muted"
+                className="shrink-0 text-nav-muted"
               >
                 <path
                   d={PLUS_ICON}

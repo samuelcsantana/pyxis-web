@@ -1,8 +1,8 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { languageTrigger } from './language-select';
-import { hasThePhoneBar } from './navigation';
 import { parseCount } from './locale-numbers';
+import { openTheLanguagesOfTheAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PORTUGUESE = 'pt-BR';
@@ -32,44 +32,12 @@ function watchConsoleErrors(page: Page): string[] {
   return errors;
 }
 
-interface PreferencesLabels {
-  readonly account: string;
-  readonly accountTab: string;
-  readonly part: string;
-  readonly language: string;
-}
-
-const ENGLISH_LABELS: PreferencesLabels = {
-  account: 'Account and preferences',
-  accountTab: 'Account',
-  part: 'Theme and language',
-  language: 'Language',
-};
-const PORTUGUESE_LABELS: PreferencesLabels = {
-  account: 'Conta e preferências',
-  accountTab: 'Conta',
-  part: 'Tema e idioma',
-  language: 'Idioma',
-};
-const SPANISH_LABELS: PreferencesLabels = {
-  account: 'Cuenta y preferencias',
-  accountTab: 'Cuenta',
-  part: 'Tema e idioma',
-  language: 'Idioma',
-};
-
-async function languageField(page: Page, labels: PreferencesLabels) {
-  if (hasThePhoneBar(page)) {
-    await page.getByRole('link', { name: labels.accountTab, exact: true }).click();
-    await page.getByRole('dialog').getByRole('link', { name: labels.part }).click();
-  } else {
-    await page.getByRole('banner').locator('summary', { hasText: labels.account }).click();
-    await page.getByRole('link', { name: labels.part }).click();
+async function openLanguages(page: Page, isMobile: boolean, menu: string, account: string) {
+  if (isMobile) {
+    await page.getByRole('button', { name: menu }).click();
   }
-  return page
-    .getByRole('dialog')
-    .getByRole('region', { name: labels.part })
-    .getByRole('combobox', { name: labels.language });
+  await page.locator('summary', { hasText: account }).click();
+  await openTheLanguagesOfTheAccountMenu(page);
 }
 
 async function visitsFigure(page: Page, name: string): Promise<string | null> {
@@ -335,75 +303,39 @@ test('serves Brazilian Portuguese to a browser that asks for European Portuguese
   await context.close();
 });
 
-test('switches the language in Theme and language, stays on the part, and back', async ({
+test('switches the language in place, keeping the address, and back', async ({
   page,
+  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
-  await (await languageField(page, ENGLISH_LABELS)).selectOption(PORTUGUESE);
+  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
+  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
-  await expect(page).toHaveURL(/\/account\/preferences(\?range=7d)?$/);
-  await expect(
-    page.getByRole('dialog').getByRole('region', { name: PORTUGUESE_LABELS.part }),
-  ).toBeVisible();
-  await page.keyboard.press('Escape');
   await expect(page.getByRole('heading', { level: 1, name: 'Visão geral' })).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
 
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 
-  await (await languageField(page, PORTUGUESE_LABELS)).selectOption('es');
+  await openLanguages(page, isMobile, 'Abrir menu', 'Conta e preferências');
+  await page.getByRole('button', { name: 'Español' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  await page.keyboard.press('Escape');
   await expect(page.getByRole('heading', { level: 1, name: 'Vista general' })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
 
-  await (await languageField(page, SPANISH_LABELS)).selectOption('en');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+
+  await openLanguages(page, isMobile, 'Abrir el menú', 'Cuenta y preferencias');
+  await page.getByRole('button', { name: 'English' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await page.keyboard.press('Escape');
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
-});
-
-test('waits while letters typed on the closed field find a language, and switches on Enter', async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(isMobile, 'a phone picks from its own wheel, checked with a pointer above');
-  await page.goto(`/${STORE_ID}/overview`);
-  const field = await languageField(page, ENGLISH_LABELS);
-
-  await field.focus();
-  await page.keyboard.press('e');
-
-  await expect(field).toHaveValue('es');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-
-  await page.keyboard.press('Enter');
-
-  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  await expect(page.getByRole('combobox', { name: 'Idioma' })).toBeFocused();
-});
-
-test('switches on a language picked with the keyboard from the open list', async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(isMobile, 'a phone picks from its own wheel, checked with a pointer above');
-  await page.goto(`/${STORE_ID}/overview`);
-  const field = await languageField(page, ENGLISH_LABELS);
-
-  await field.focus();
-  await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('ArrowDown');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await page.keyboard.press('Enter');
-
-  await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 });
 
 test('keeps a chosen language over the one the browser asks for', async ({
@@ -417,4 +349,23 @@ test('keeps a chosen language over the one the browser asks for', async ({
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
   await expect(page.getByRole('heading', { level: 1, name: 'Visitas' })).toBeVisible();
+});
+
+test('opens the account menu inside the window, with the languages in it', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto(`/${STORE_ID}/overview`);
+
+  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
+
+  const languages = page.getByRole('group', { name: 'Language', exact: true });
+  await expect(languages).toBeVisible();
+  const box = await languages.boundingBox();
+  const width = page.viewportSize()?.width ?? 0;
+  expect(box?.x).toBeGreaterThanOrEqual(0);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
+  for (const name of ['English', 'Português (Brasil)', 'Español']) {
+    await expect(languages.getByRole('button', { name })).toBeInViewport({ ratio: 1 });
+  }
 });

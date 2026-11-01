@@ -71,13 +71,12 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
 - **Honest numbers.** A range that ends today is compared with the previous period up to the same
   time of day, a conversion rate counts visits, and one word names one idea on every screen.
 - **What changed since the last read.** The menu counts what arrived for each screen, a screen
-  offers to refresh when something new arrives, and the top bar shows the visits on the site now.
+  offers to refresh when something new arrives, and the Overview shows the visits on the site now.
 - **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free plan or through Stripe
   Checkout, a first project with its install guide, the Account and billing page and a Help and
   support page.
-- **Settings as a window.** Opens over the screen with an address per part (the project's, and
-  the person's account and billing, theme and language, sessions, tokens, apps and help);
-  opened directly, each is a page.
+- **Settings per project.** The weekly digest and the admin's sessions, and for the account's
+  owner the project's name, origins, time zone, keys and people.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
@@ -117,8 +116,7 @@ France (`fr`), Italy (`it`) and the Netherlands (`nl`).
   Français, Italiano, Nederlands), with its flag. On the
   home page, the sign-in and the sign-up pages it is a dropdown in the top bar beside the theme
   toggle, showing the flag and the name of the language in use (the flag alone on phones); in the
-  dashboard it is a list in Theme and language, opened from the account menu at the end of the
-  top bar. On the sign-in, the sign-up and
+  dashboard it is in the account menu at the foot of the sidebar. On the sign-in, the sign-up and
   the dashboard it posts to a Server Action and the screen changes language in place, keeping its
   address, its query and what was typed. The choice shows on the click, before the page in that
   language arrives, and the content comes in with the short reveal of a screen change when it
@@ -387,8 +385,8 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart, and Settings pages  | 176               |
-| Dashboard screens with a chart (Overview, Acquisition) | 173               |
+| Dashboard screens without a chart                      | 174               |
+| Dashboard screens with a chart (Overview, Acquisition) | 171               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -435,20 +433,7 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 171.3 KiB. The "+N" marks fill slots the server draws, from the watcher's chunk
 ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)): Overview stayed at
 168.5 KiB, and the two tables drawn in the browser carry the slot (Requests 171.6 KiB, Visits
-171.0 KiB). Settings as a window ([ADR 0016](docs/adr/0016-settings-as-a-window-with-an-address.md))
-puts a small host on every project route and loads the dialog on demand, after the page is shown:
-0.1 KiB more on every screen (Overview 170.1 KiB, Requests 173.1 KiB). Each part of Settings is its
-own route that loads only its own forms (163.7–167.8 KiB, down from 169.4 KiB for the whole page);
-the person's parts opened outside a project (`/account/sessions`, `/account/tokens`,
-`/account/apps`, 153.2–155.0 KiB) count as Settings pages, not entry pages. Account and billing
-joined them as a part of the window: `/account` went from 152.8 to 155.6 KiB with the window's
-menu and counts as a Settings page too, like Theme and language (`/account/preferences`,
-155.0 KiB). Moving the theme and the languages out of the sidebar's account menu took about 1 KiB
-off every screen (Overview 170.1 → 169.2 KiB, Requests 173.1 → 172.1 KiB). The bar at the
-bottom of phones, with its three sheets and the channel that carries the period and the filters
-into them, took every screen 1.9 KiB up net of the menu drawer it replaced (Overview 170.8 →
-172.7 KiB, Requests 173.7 → 175.6 KiB); the chart budget went to 173 KiB and the screen budget
-to 176 KiB.
+171.0 KiB).
 
 </details>
 
@@ -528,7 +513,6 @@ index) are in [docs/FEATURES.md](docs/FEATURES.md#privacy-and-security-in-detail
 | [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
 | [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
 | [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)             | What went up since the last read fills slots the server drew      |
-| [0016](docs/adr/0016-settings-as-a-window-with-an-address.md)              | Settings is a window with an address                              |
 
 ## Roadmap
 

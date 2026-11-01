@@ -121,28 +121,6 @@ describe.each(Object.entries(THEMES))('chart series in the %s theme', (_, tokens
   });
 });
 
-describe.each(Object.entries(THEMES))('the account avatar in the %s theme', (_, tokens) => {
-  const pair = (one: string, other: string) =>
-    contrastRatio(color(tokens, one), color(tokens, other));
-
-  it.each(['usage-ok', 'usage-warn', 'usage-paused'])(
-    'draws the %s ring of the month at 3:1 against the bar and the ring track',
-    (tone) => {
-      expect(pair(tone, 'card')).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
-      expect(pair(tone, 'line')).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
-    },
-  );
-
-  it('keeps the initial readable at rest and when hovered or open', () => {
-    expect(pair('card', 'ink')).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
-    expect(pair('accent-ink', 'accent')).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
-  });
-
-  it('changes the avatar enough to be seen when hovered or open', () => {
-    expect(pair('accent', 'ink')).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-  });
-});
-
 describe.each(Object.entries(THEMES))('form fields in the %s theme', (_, tokens) => {
   it.each(['card', 'bg', 'soft'])('have a border at 3:1 against the %s surface', (surface) => {
     expect(contrastRatio(color(tokens, 'field'), color(tokens, surface))).toBeGreaterThanOrEqual(
@@ -164,10 +142,6 @@ describe.each(Object.entries(THEMES))('button states in the %s theme', (_, token
     expect(pair(state, rest)).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
   });
 
-  it('fill a hovered menu row in line-strong, a change from the card that can be seen', () => {
-    expect(pair('line-strong', 'card')).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-  });
-
   it.each([
     ['accent-ink', 'accent-hover'],
     ['accent-ink', 'accent-pressed'],
@@ -175,8 +149,6 @@ describe.each(Object.entries(THEMES))('button states in the %s theme', (_, token
     ['card', 'ink-pressed'],
     ['ink', 'soft'],
     ['ink', 'line'],
-    ['ink', 'line-strong'],
-    ['ink', 'warn-soft'],
     ['muted', 'soft'],
   ])('keep %s text readable on %s', (text, surface) => {
     expect(pair(text, surface)).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
@@ -225,6 +197,9 @@ describe('sidebar item states, the same in both themes', () => {
     ['nav-muted', 'nav-hover'],
     ['nav-muted', 'nav-active'],
     ['accent', 'nav-active'],
+    ['accent', 'nav-border'],
+    ['nav-warn', 'nav-border'],
+    ['nav-bad', 'nav-border'],
   ])('keep %s icons visible on %s', (icon, surface) => {
     expect(contrastRatio(nav(icon), nav(surface))).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
   });

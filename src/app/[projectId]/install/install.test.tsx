@@ -5,7 +5,7 @@ import { InstallGuide } from '@/components/install/install-guide';
 import type { Admin } from '@/domain/admin';
 import type { ProjectSettings } from '@/domain/project-settings';
 import { english } from '@/test-utils/english';
-import { renderInProject } from '@/test-utils/project-choices';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import InstallPage, { generateMetadata } from './page';
 
 const SETTINGS: ProjectSettings = {
@@ -49,8 +49,6 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
-  useSelectedLayoutSegments: () => [],
-  usePathname: () => '/p-store/overview',
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -75,7 +73,7 @@ describe('InstallPage', () => {
   it('shows the snippets with the key and the API it talks to', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    renderInProject(await InstallPage(PARAMS));
+    renderWithMessages(await InstallPage(PARAMS));
 
     expect(screen.getByRole('heading', { level: 1, name: 'Install' })).toBeInTheDocument();
     expect(
@@ -88,7 +86,7 @@ describe('InstallPage', () => {
   it('points the demo at the hosted API', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    renderInProject(await InstallPage(PARAMS));
+    renderWithMessages(await InstallPage(PARAMS));
 
     expect(screen.getAllByText(/https:\/\/api\.pyxis-analytics\.dev/).length).toBeGreaterThan(0);
   });
@@ -162,7 +160,7 @@ describe('InstallGuide', () => {
     const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
     expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/account/apps',
+      '/p-store/settings#settings-connections-heading',
     );
     expect(within(third).getByText('claude.ai/directory/pyxis').tagName).toBe('CODE');
     expect(document.getElementById('install-claude-code')).toHaveTextContent(
@@ -217,7 +215,7 @@ describe('InstallGuide', () => {
     expect(first).toHaveTextContent('A revoked key never works again.');
     expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings/keys',
+      '/p-store/settings#settings-keys-heading',
     );
     expect(within(first).queryByRole('tablist')).not.toBeInTheDocument();
     expect(within(first).queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument();
@@ -239,12 +237,12 @@ describe('InstallGuide', () => {
     const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
     expect(within(first).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/p-store/settings/keys?range=today&device=mobile',
+      '/p-store/settings?range=today&device=mobile#settings-keys-heading',
     );
     const third = screen.getByRole('region', { name: '3. Check with Claude (optional)' });
     expect(within(third).getByRole('link', { name: 'Settings' })).toHaveAttribute(
       'href',
-      '/account/apps?range=today&device=mobile',
+      '/p-store/settings?range=today&device=mobile#settings-connections-heading',
     );
     unmount();
 

@@ -9,7 +9,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - Storybook with the design tokens page, a page of every control recipe (primary, strong,
   secondary and icon buttons, segmented options, tabs, pills, links, fields) at rest, hovered,
   pressed, focused, unavailable and busy, and stories for those states; the open, busy and failed
-  states of the shell (project switcher, Custom period, the phone's bar and sheets, Sign out) and the app's own
+  states of the shell (project switcher, Custom period, phone menu, Sign out) and the app's own
   empty pages under "Pages/States"; every story is also an automated accessibility test
 - Every control answers the pointer and a tap: hover and pressed states of at least 1.3:1 in both
   themes, the pointer cursor on enabled buttons, colour transitions that respect reduced motion
@@ -37,70 +37,48 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   GitHub cover's backdrop, star dust and the faint brand mark, behind one raised card
 - The app shell: sidebar with the screens (resting the pointer on one, or reaching it with the
   keyboard, fetches that screen ahead, so the click opens it without a skeleton even the first
-  time; a tap on a phone, which has no hover, works as before), a top bar whose path names the
-  project and the page (`<project switcher> / Overview`) on every screen and page (on a phone the
-  switcher shows the project's mark, its name read to screen readers, after the Pyxis mark that
-  leads to the Overview), and a period selector (today, 7 days,
+  time; a tap on a phone, which has no hover, works as before), project switcher, period selector (today, 7 days,
   30 days or a custom range, kept in the URL across the screens and through Settings, Help and
   Install, together with the filters; a range it cannot use is named with the reason and
-  reopened with its dates, never swapped silently; the Custom button shows the period's short
-  dates, "Oct 2 – 31", with the year only outside the current one, and keeps the width of the
-  longest preset's dates so the bar never shifts when the period changes), light and dark themes, sign-out, and a bar at
-  the bottom of phones. The first Tab stop is a "Skip to content" link. Below 1024px the top bar
-  holds only the path and stays at the top while the page scrolls (the content starts 57px
-  down), and a bar at the bottom holds Screens, Period, Filters and Account on 48px targets in a 60px bar. The
-  first three open a sheet over the page: the screens with Install and Settings (Screens gets a
-  dot when another screen has news), the period, in two taps from anywhere on the page, and the
-  filters in force or how to add one; Period is off where a screen has none, and Filters off on
-  Visits, which filters in the page, and on the Timeline. Account opens the settings window on
-  its list, Sign out at its foot. A sheet traps the focus and closes with Escape, a tap above it,
-  a choice or a change of address, the focus going back to its button. On a
-  computer the logo and the foot (Install and Settings) stay in place and only the list of
-  screens scrolls when the window is short: nothing scrolls at 1440×800 nor at 1366×650, with
-  Settings in view. The account email in its menu, and the project names
-  and time zones in the project menu, wrap instead of being cut, the time zone only after a slash
-  (`America/` above `Sao_Paulo`), never inside a word; the phone's bar, short of room, is the one place that ends a long project name
+  reopened with its dates, never swapped silently), light and dark themes, sign-out, and a menu
+  button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
+  a slim bar that stays at the top while the page scrolls and names the project on screen (the
+  Pyxis mark, the project's mark and its name, cut with an ellipsis when long, linking to its
+  Overview and read as the Overview's title), and it closes with Escape (the focus
+  goes back to its button), when a link in it is followed and when the address changes (Back,
+  Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
+  computer the logo, the project and the account stay in place and only the list of screens
+  scrolls when the window is short: nothing scrolls at 1440×800, and at 1366×650 the project and
+  the account stay in view; the account menu scrolls inside itself when it is taller than the
+  space above the account. In the sidebar the account email, project names and time zones wrap
+  instead of being cut, the time zone only after a slash (`America/` above `Sao_Paulo`), never
+  inside a word; the phone's bar, short of room, is the one place that ends a long project name
   with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
-  Overview of the project on screen with the period and the filters of the page. The screens are listed, with no section label, in the order of the questions they answer
-  (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests); the foot holds
-  Install, tagged "Pending" until the project's first event arrives, and Settings. Until then
-  the top bar of every screen also shows a gold "Install Pyxis" call with a pulsing dot (still
-  when motion is not welcome) where the visits on the site now would be, read as "Install Pyxis,
-  Waiting for the first event" and opening Install with the period and the filters; below
-  1024px it takes its own row under the path, on a 44px target. The first answer of the
-  30-second arrivals question that reports an event reads the view again, once, so the call,
-  the tag and the empty screens give way together without a reload.
-  The
-  navigation marks where you are: the screen, Install or Settings; Settings also on an export,
-  which has no item of its own. The account is an avatar with its initial at the right end of
-  the top bar from 1024px up (40 px; below, Account in the bottom bar opens the settings window
-  instead), read as "Account and preferences". Its menu opens
-  downward and scrolls inside itself when it is taller than the window under the pinned bar: the
-  e-mail, Account and billing, Theme and language, Help and support (which keeps the screen's
-  period and filters, and on the Help page is marked as where you are, with a check and not by
-  weight alone, and reloads it as a page), Sign out, then the privacy line ("No cookies, no
-  personal data"). Reaching the support address takes two clicks, the avatar and Help and
-  support. The avatar takes the accent on hover, on a press (a tap on a touch screen) and while open. To the
-  owner of the account that holds the project on screen, a ring around the avatar draws the
-  month's usage, in tones that keep 3:1 against the bar in both themes (gold below 80%, orange
-  from 80%, the ring never drawn past full nor before the month's first event); while the
-  reception is paused the ring is red and broken into ten segments, so the pause does not rest
-  on a hue the orange of a full month sits close to, and the avatar is read with the whole sentence
-  ("41,230 of 100,000 events this month"); Account and billing then carries those numbers and
-  the day the count resets (the 1st, in UTC), or, while paused, the day measuring comes back. A
-  paused account is said in words, to the eye in the menu and to a screen reader on the avatar.
-  Members, projects outside any account and an account not yet measured show no ring, and so does
+  Overview of the project on screen with the period and the filters of the page. The screens are listed in the order of the questions they answer
+  (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
+  Project block with Install, tagged "Pending" until the project's first event arrives, and
+  Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
+  box) and the account. The navigation marks where you are: the screen, Install, Settings or
+  Help; Settings also on an export, which has no item of its own. The account menu is compact,
+  under 300 px with the language list closed, before the owner's usage line: Account and billing, the three themes on one row, the language behind a
+  "Language: …" row that opens the list in place, then Sign out. To the owner of the account
+  that holds the project on screen, the account row also shows the month's usage under the
+  e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
+  gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
+  rounded up past the tone); the menu then opens on those numbers and the day the count resets
+  (the 1st, in UTC), or, while paused, the day measuring comes back, linking to Account and
+  billing. A paused account is also said in words, to the eye in the menu and to a screen reader
+  on the row.
+  Members, projects outside any account and an account not yet measured show none, and so does
   an API that does not yet name each project's account. Each project in the switcher shows the
   icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
   Policy needs no other image origin), or its initials when the site has none. The project switcher
   and the custom range form close on Escape (the focus goes back to their button), when the
   focus moves past them and on a click outside, so they never cover the control that has the
-  focus. The project menu scrolls inside itself when it is taller than the window under the
-  pinned bar, and a hovered or pressed project turns its time zone to the text color, readable
-  on the row's fill.
-  On phones the header stays compact: the period presets stay on one row, every period control
-  is a 44px target inside a 320px screen, and
+  focus; inside the phone menu, the first Escape closes the switcher and the second the menu.
+  On phones the header stays compact: the theme toggle sits in the menu bar (every toggle on the
+  page follows the same theme), the period presets and Custom are 44px targets on one row, and
   the content starts within 260px of the top of a 390×844 screen (budgets checked in
   `e2e/responsive.spec.ts`). The content is dense on phones too: figures stay on one line,
   cards share the panels' padding, a rate on the Sources table keeps its "6 converted" beside
@@ -244,7 +222,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - News on the menu: each screen's item counts what arrived since that screen was last read on this
   device (visits on Overview, Visits, Devices and Acquisition; conversions on Funnel; named events
   on Features; failed requests on Requests, in red), never on the screen being shown, `99+` from
-  100 on, with the words for a screen reader; on a phone Screens in the bottom bar gets a dot. The dashboard
+  100 on, with the words for a screen reader; on a phone the menu button gets a dot. The dashboard
   asks every 30 seconds while the tab is visible and the period includes today, and stops after
   30 idle minutes ([ADR 0014](adr/0014-arrivals-are-polled-not-streamed.md))
 - News on the screen being shown: when something of its kind arrived after that screen was read,
@@ -253,20 +231,18 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   while the page scrolls; it reads the screen again in place, without a skeleton and without
   touching the top bar, says "Refreshing…" until the new read lands, then goes away and hands the
   keyboard focus to the content if it had it
-- Visits on the site now: beside the title of every screen with a period, from 1024 px, while the
-  period includes today, the visits with an event received in the last five minutes ("4 on the
-  site now"), updated by every answer of the same 30-second question, with a green dot that pings
-  only when someone is there and motion is welcome; a phone keeps its top bar to the path alone
+- Visits on the site now: beside the Overview title, while the period includes today, the visits
+  with an event received in the last five minutes ("4 on the site now"), updated by every answer
+  of the same 30-second question, with a green dot that pings only when someone is there and
+  motion is welcome
 - What went up since the last read: when a screen is read again for the same period and filters,
   each count that went up shows "+N" and each visit that started since shows "New", and their row
   or card is lit for five seconds when motion is welcome; the marks stay while only the display
   changes (the chart's metric, a step's list, a route's details) and nothing new arrives; the
   numbers each read showed are kept on the device
   ([ADR 0015](adr/0015-fresh-numbers-fill-server-drawn-slots.md))
-- Loading, empty and error states shared by every screen (a screen whose data cannot be read shows
-  its error under its top bar, so the project switcher, the period and the filters stay at hand);
-  the top bar of the eight screens lives
-  in their layout and stays in place between them (the same element, with its title,
+- Loading, empty and error states shared by every screen; the top bar of the eight screens lives
+  in their layout and stays in place between them (the same element, with its title, subtitle,
   period and selector updated: [ADR 0012](adr/0012-persistent-screen-topbar.md)), so while a
   screen loads only its content shows a skeleton shaped like it (or a generic one, drawn by the
   layout, when the tap came before the screen's prefetch); a screen visited in the last five
@@ -295,42 +271,23 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner's "What is Pyxis?" links to the home page in the demo's language
-- Settings is a window with an address ([ADR 0016](adr/0016-settings-as-a-window-with-an-address.md)),
-  opened from the gear in the sidebar (on a phone, from Screens or Account in the bottom bar) over the screen on view, which keeps
-  its period and filters: Back, Esc, the close button or a click outside close it to that screen,
-  and focus goes back to what opened it: the gear, the avatar in the top bar when one of the
-  account menu's rows opened it, or on a phone the button of the bottom bar. Its menu has two groups, the project, named by the project
-  (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
-  (Account and billing, Theme and language, Sessions, Access tokens, Connected apps, and Help and
-  support at `/[projectId]/help` when there is a project to go back to), with Sign out at its
-  foot. Every
-  part has its own address: `/[projectId]/settings` (Project), `/[projectId]/settings/keys`, `…/people`,
-  `…/email`, `…/export`, `…/delete`, and `/account`, `/account/preferences`, `/account/sessions`, `/account/tokens`,
-  `/account/apps`. Switching parts replaces the address without a new history entry and moves
-  the focus to the part's heading. Opened directly (a reload, a link from an e-mail or from
-  someone else), a part is a full page with the same menu; the person's parts opened outside a
-  project list only You. The window keeps one height in every part, `min(44rem, 100dvh − top −
-3.75rem)` (551 px at 1366×650), and scrolls inside the part and, when it does not fit, inside
-  the menu; beside the menu the part's title is read by screen readers but not repeated on
-  screen, and only the headings that split a part show (Project: Activity, Data retention,
-  Visitor's city). Below the `lg` breakpoint it fills the screen: the list of parts first when
-  opened from the gear, then a part with "‹ Settings" back to the list. E-mail holds the admin's
-  own weekly digest switch: the Monday
+- A Settings page per project, behind the gear next to the language button (beside the project
+  switcher in the phone menu). It opens with the admin's own weekly digest switch: the Monday
   e-mail with the week that closed on Sunday, on by default, saved through a server action that
-  re-checks access, moving back with an alert when the API refuses. Sessions lists
-  every device where the admin is signed in, named by the browser and system classified at sign-in
+  re-checks access, moving back with an alert when the API refuses. Then the admin's sessions:
+  every device where they are signed in, named by the browser and system classified at sign-in
   (never the user agent), this one marked, each with a button to end it, and "Sign out
-  everywhere" below the list. Access tokens are the admin's, for an AI agent or a script that
+  everywhere" below the list. Then the admin's access tokens, for an AI agent or a script that
   reads the same numbers: each with its name, creation, last use and expiry, and a button to
   revoke it; a form creates one with a name and a lifetime (30, 90 or 365 days) and shows the
-  token once, with a copy button and how to send it, and offers no new one past ten. Connected
-  apps are the apps the admin connected through the Claude connector (Claude, Claude Code): each with its
+  token once, with a copy button and how to send it, and offers no new one past ten. Then the
+  apps the admin connected through the Claude connector (Claude, Claude Code): each with its
   host, when it was connected and last used, and a button to revoke it, after which the app asks
   to connect again. While the API keeps the connector open, a box shows how to connect Claude:
   the three steps in Claude, the connector's address and the Claude Code command, each with a copy
   button; while it is closed the box is hidden, so the page never shows an address that answers
-  404, and the list still shows. In the project's group,
-  the owner of its account edits it: name, up to five allowed origins (typed as
+  404, and the list still shows. Below it,
+  the project. The owner of its account edits it: name, up to five allowed origins (typed as
   `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
   problem named under its field before anything is sent; creates a public key or a secret key
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
@@ -374,12 +331,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; three projects on the paid plan, one on the
   free plan). The new project
-  opens on `/[projectId]/install`, a page when opened directly (the link sent to whoever runs the
-  site); from the sidebar's Install item or Help's "How to install" the same address opens as its
-  own window over the screen, 960 px wide on a laptop: the project and its state at the top
-  ("Waiting for the first event…" with a pulsing dot, or "The first event arrived."), the three
-  steps below scrolling inside, Escape or Back to the screen. On its own page the Install item
-  reloads the page instead of opening the window over it. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
+  opens on `/[projectId]/install`. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
   Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
   the API's address, each with a copy button. "With an AI agent" holds a ready request for Claude
   Code, Cursor or another coding agent, written in the dashboard's language with the project's
@@ -395,34 +347,21 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and copies this page's address to send it there. The plain-HTML snippet loads the exact
   `pyxis-analytics` version this repository depends on (read from `package.json`), so the weekly
   Dependabot update of the package moves the snippet with it
-- Help and support, the last part of You in the Settings window (`/[projectId]/help`, from the
-  account menu; opened directly it stays a page of the dashboard): the support address with a
-  copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
+- A Help and support page (`/[projectId]/help`, from the foot of the sidebar): the support address with
+  a copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
   the free plan, as the Terms of Use set), the installation links, the GitHub question form and
-  the private security report. An admin with no project, who has no Help to go to, finds the same
-  address and reply time at the end of Account and billing. The code step of sign-in and sign-up
-  names the same address for a code that does not arrive
-- Theme and language, the second part of You in the Settings window (`/account/preferences`,
-  from the account menu): "These apply to this browser." (the theme and the language are cookies
-  of this browser, not settings of the account), the three themes as one segmented control, and
-  the language as the browser's own select field with the current language in view, each option
-  named in its own language. The field posts only on a deliberate choice: a pick from its list,
-  with a pointer or the keyboard, Enter, or leaving the field on another language; never while
-  the keyboard browses the closed field, where arrows and typed letters change the value at once
-  in Chromium, so a keyboard user does not reload the dashboard on every key
-- Account and billing, the first part of You in the Settings window (`/account`, from the
-  account menu, whose row carries the owner's usage of the month, as a page when opened directly
-  or on Stripe's return), for
-  the owner of a hosted account: a card with the plan and its state (free trial, active, payment
-  failed, ending, ended with the deletion date, sign-up not finished), the events measured this
-  month against the quota, the limits, and a button to Stripe: "Finish subscription" with a
-  monthly or yearly plan, or "Manage billing" for the customer portal. The dashboard warns,
-  under the demo banner's place, when an owned account's payment failed, its access ends or
-  ended, measuring is paused, or the month reached 80% of its events; reading the accounts for
-  that warning never blocks a page. A red card below it closes an account at once: its button
-  opens, in place, the field for the owner's address typed again; then the subscription is
-  cancelled, the keys are revoked, a first payment of the last seven days is refunded, and the
-  page says when everything is deleted (and keeps saying it after the page
+  the private security report. Account and billing ends with the same address and reply time,
+  and the code step of sign-in and sign-up names it for a code that does not arrive
+- An Account and billing page (`/account`, from the account menu) for the owner of a hosted
+  account: the plan and its state (free trial, active, payment failed, ending, ended with the
+  deletion date, sign-up not finished), the events measured this month against the quota, the
+  limits, and a button to Stripe: "Finish subscription" with a monthly or yearly plan, or
+  "Manage billing" for the customer portal. The dashboard warns, under the demo banner's place,
+  when an owned account's payment failed, its access ends or ended, measuring is paused, or the
+  month reached 80% of its events; reading the accounts for that warning never blocks a page.
+  The same page closes an account at once, with the owner's address typed again: the
+  subscription is cancelled, the keys are revoked, a first payment of the last seven days is
+  refunded, and the page says when everything is deleted (and keeps saying it after the page
   refreshes to the ended account). An account Pyxis suspended shows the date, the reason and the
   address to contest it, every dashboard screen of its owner carries a banner, and the screens of
   its projects open `/account-suspended` instead of failing; an account whose deletion Pyxis holds
@@ -555,7 +494,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   page's script once, between the API's answer and the action, which is what the nonce CSP
   protects. The dashboard writes two preference cookies of its own: `pyxis_theme`, the light or dark choice,
   which the root layout reads so the first paint has the right theme (so every page renders on
-  request), and `pyxis_locale`, the language chosen in Theme and language, set by a Server Action
+  request), and `pyxis_locale`, the language chosen in the language menu, set by a Server Action
   as `HttpOnly` because only the server reads it. Neither identifies anyone
 - The sign-in screen says the same thing for every email, like the API it calls
 - The live demo has no API configured at all, so it cannot reach real data

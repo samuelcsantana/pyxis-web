@@ -4,7 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
-import { BUTTON_SECONDARY, CONTROL_BUSY } from '@/components/ui/control-classes';
+import {
+  BUTTON_SECONDARY,
+  CONTROL_BUSY,
+  NAV_CONTROL,
+  NAV_ITEM_IDLE,
+} from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
 import { bestEffortForgetSeenMarks } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
@@ -15,16 +20,9 @@ const SIGN_OUT_ICON = 'M15 4h4v16h-4 M10 8l-4 4 4 4 M6 12h10';
 
 export type SignOutScope = 'this-device' | 'everywhere';
 
-export interface SignOutLook {
-  readonly frame: string;
-  readonly button: string;
-  readonly error: string;
-  readonly withIcon: boolean;
-}
-
 export interface SignOutButtonProps {
   readonly authService?: IAuthService;
-  readonly variant?: 'page' | SignOutLook;
+  readonly variant?: 'nav' | 'page';
   readonly scope?: SignOutScope;
 }
 
@@ -34,13 +32,19 @@ const LABEL_KEY_BY_SCOPE = {
 } as const;
 
 const VARIANT_CLASSES = {
+  nav: {
+    frame: 'contents',
+    button: `px-2.5 text-caption ${NAV_ITEM_IDLE} ${NAV_CONTROL}`,
+    error: 'basis-full px-1 text-nav-text',
+    withIcon: false,
+  },
   page: {
     frame: 'flex flex-col gap-1',
     button: `gap-2.5 self-start px-3 text-sm ${BUTTON_SECONDARY}`,
     error: 'px-3 text-bad',
     withIcon: true,
   },
-} as const satisfies Readonly<Record<string, SignOutLook>>;
+} as const;
 
 function SignOutIcon() {
   return (
@@ -59,11 +63,11 @@ function SignOutIcon() {
 
 export function SignOutButton({
   authService,
-  variant = 'page',
+  variant = 'nav',
   scope = 'this-device',
 }: SignOutButtonProps) {
   const t = useT();
-  const classes = typeof variant === 'string' ? VARIANT_CLASSES[variant] : variant;
+  const classes = VARIANT_CLASSES[variant];
   const router = useRouter();
   const service = useMemo(() => authService ?? createAuthService(), [authService]);
   const [busy, setBusy] = useState(false);

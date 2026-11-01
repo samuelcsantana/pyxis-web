@@ -1,7 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
 import { untilHydrated } from './hydration';
-import { holdScreenRequests, openScreens, screensMenu } from './navigation';
+import { holdScreenRequests } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -24,12 +24,15 @@ test('keeps the top bar with the destination title while a screen loads', async 
   await page.goto(`/${STORE_ID}/overview`);
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
   if (isMobile) {
-    await openScreens(page);
+    await page.getByRole('button', { name: 'Open menu' }).click();
   }
   await waitForPrefetchOf(page, 'devices');
   const release = await holdScreenRequests(page);
 
-  await screensMenu(page).getByRole('link', { name: 'Devices', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Devices', exact: true })
+    .click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
   await expect(page.getByRole('status')).toHaveText('Loading Devices…');
@@ -43,8 +46,8 @@ test('keeps the top bar with the destination title while a screen loads', async 
 
   release();
 
+  await expect(page.getByText('What people use to reach My site')).toBeAttached();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
-  await expect(page.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
 });
 
 test('shows the loading placeholder only while the screen has no content', async ({ page }) => {

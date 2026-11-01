@@ -5,7 +5,7 @@ import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
-import { renderInProject } from '@/test-utils/project-choices';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import HelpPage, { generateMetadata } from './page';
 
 const state = vi.hoisted<{
@@ -24,7 +24,6 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
-  useSelectedLayoutSegments: () => [],
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -76,7 +75,7 @@ afterEach(() => {
 
 describe('HelpPage', () => {
   it('gives the support address, who should write, the reply time of a paid plan and the links', async () => {
-    renderInProject(await renderHelp());
+    renderWithMessages(await renderHelp());
 
     expect(screen.getByRole('heading', { level: 1, name: 'Help and support' })).toBeInTheDocument();
     const write = screen.getByRole('region', { name: 'Write to support' });
@@ -106,7 +105,7 @@ describe('HelpPage', () => {
   it('keeps the period and the filters it was opened with on the way to the install guide', async () => {
     state.search = 'from=2026-10-01&to=2026-10-05&path=%2Fpricing';
 
-    renderInProject(await renderHelp());
+    renderWithMessages(await renderHelp());
 
     expect(screen.getByRole('link', { name: 'How to install' })).toHaveAttribute(
       'href',
@@ -117,7 +116,7 @@ describe('HelpPage', () => {
   it('gives a free account the free plan’s reply time and sends its technical questions to GitHub', async () => {
     state.accounts = () => demoAccountWith('free');
 
-    renderInProject(await renderHelp());
+    renderWithMessages(await renderHelp());
 
     const write = screen.getByRole('region', { name: 'Write to support' });
     expect(write).toHaveTextContent('On the free plan, we reply by e-mail within 5 days');
@@ -127,7 +126,7 @@ describe('HelpPage', () => {
   it('gives both reply times to someone who owns no account', async () => {
     state.accounts = () => Promise.resolve([]);
 
-    renderInProject(await renderHelp());
+    renderWithMessages(await renderHelp());
 
     const write = screen.getByRole('region', { name: 'Write to support' });
     expect(write).toHaveTextContent('2 business days');

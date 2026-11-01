@@ -43,8 +43,9 @@ describe('AccessTokensPanel', () => {
   it('says what a token can do and lists each one with its dates', () => {
     renderPanel([USED, UNUSED]);
 
-    expect(screen.getByText(/A token only reads/)).toBeInTheDocument();
-    const rows = screen.getAllByRole('listitem');
+    const panel = screen.getByRole('region', { name: 'Access tokens' });
+    expect(panel).toHaveTextContent('A token only reads');
+    const rows = within(panel).getAllByRole('listitem');
     const [usedRow, unusedRow] = rows;
     if (usedRow === undefined || unusedRow === undefined) {
       throw new Error('Two rows were expected.');
@@ -57,20 +58,15 @@ describe('AccessTokensPanel', () => {
     expect(rows[1]).toHaveTextContent('Never used');
     expect(within(unusedRow).getByText('Last used')).toHaveClass('sr-only');
     expect(within(usedRow).getByText('Last used')).not.toHaveClass('sr-only');
-    expect(screen.getByRole('button', { name: 'Create token' })).toBeInTheDocument();
-  });
-
-  it('leaves the title to the settings window that holds it', () => {
-    renderPanel([USED]);
-
-    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
-    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+    expect(within(panel).getByRole('button', { name: 'Create token' })).toBeInTheDocument();
   });
 
   it('says there is none yet', () => {
     renderPanel([]);
 
-    expect(screen.getByText('No tokens yet.')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Access tokens' })).toHaveTextContent(
+      'No tokens yet.',
+    );
     expect(screen.queryByRole('list')).not.toBeInTheDocument();
   });
 

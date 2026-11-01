@@ -1,18 +1,9 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import {
-  documentMarker,
-  markTheDocument,
-  phoneBar,
-  sawBusyContent,
-  screensMenu,
-  watchForBusyContent,
-} from './navigation';
+import { documentMarker, markTheDocument, sawBusyContent, watchForBusyContent } from './navigation';
 
 const CONTENT_ID = 'content';
 
-const ON_A_LAPTOP_ONLY =
-  'The visits on the site now sit beside the title from 1024px; a phone keeps its path to one row.';
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const NEXT_QUESTION = '00:31';
 const NOTHING = { times: [], more: false };
@@ -49,7 +40,7 @@ async function answerArrivals(page: Page, answers: Answer[]): Promise<string[]> 
 }
 
 function menu(page: Page) {
-  return screensMenu(page);
+  return page.getByRole('navigation', { name: 'Main navigation', includeHidden: true });
 }
 
 function screenLink(page: Page, screen: string) {
@@ -73,15 +64,13 @@ test('counts on the menu what arrived after the first answer, never on the scree
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await expect.poll(() => asked.length).toBe(1);
   await expect(
-    page
-      .getByRole('navigation', { name: 'Main navigation', includeHidden: true })
-      .getByRole('link', { name: 'Visits', exact: true, includeHidden: true }),
+    menu(page).getByRole('link', { name: 'Visits', exact: true, includeHidden: true }),
   ).toBeAttached();
 
   await page.clock.fastForward(NEXT_QUESTION);
 
   if (isMobile) {
-    await phoneBar(page).getByRole('button', { name: 'Screens, there is news' }).click();
+    await page.getByRole('button', { name: 'Open menu, there is news' }).click();
   }
   await expect(screenLink(page, 'visits')).toHaveAccessibleName(/^Visits\s*, 1 new visit$/);
   await expect(screenLink(page, 'features')).toHaveAccessibleName(/^Features\s*, 2 new events$/);
@@ -146,11 +135,9 @@ test('asks nothing while the period does not include today', async ({ page }) =>
   await expect(page.getByText(/on the site now$/)).toHaveCount(0);
 });
 
-test('shows the visits on the site now beside the title of every screen, new at each answer', async ({
+test('shows the visits on the site now beside the Overview title, new at each answer', async ({
   page,
-  isMobile,
 }) => {
-  test.skip(isMobile, ON_A_LAPTOP_ONLY);
   const start = Date.now();
   const asked = await answerArrivals(page, [
     answerAt(start, { activeVisits: 2 }),
@@ -170,18 +157,16 @@ test('shows the visits on the site now beside the title of every screen, new at 
   expect(await documentMarker(page)).toBe('kept');
   expect(asked).toHaveLength(2);
 
-  await page.goto(`/${STORE_ID}/devices`);
+  await page.goto(`/${STORE_ID}/funnel`);
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await expect.poll(() => asked.length).toBe(3);
-  const devices = page.getByRole('heading', { level: 1, name: 'Devices' });
-  await expect(devices.locator('..').getByText('3 on the site now')).toBeVisible();
+  await expect(page.getByText(/on the site now$/)).toHaveCount(0);
 });
 
 test.describe('with reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('keeps the dot of the visits on the site now still', async ({ page, isMobile }) => {
-    test.skip(isMobile, ON_A_LAPTOP_ONLY);
+  test('keeps the dot of the visits on the site now still', async ({ page }) => {
     await answerArrivals(page, [answerAt(Date.now(), { activeVisits: 2 })]);
     await page.goto(`/${STORE_ID}/overview`);
     const visitsNow = page.getByText('2 on the site now');

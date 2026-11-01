@@ -51,7 +51,7 @@ export function DashboardFiltersRow({ projectId, screen, search, i18n }: Dashboa
     return query === '' ? basePath : `${basePath}?${query}`;
   };
   return (
-    <div>
+    <div className="border-b border-line bg-bg px-4 py-2.5 sm:px-8">
       <AppliedVisitFilters
         applied={appliedVisitFilters({ ...filters, route: null }, i18n)}
         removeHref={hrefWith}

@@ -17,9 +17,15 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('creates a project from the switcher and follows it to the installation', async ({ page }) => {
+test('creates a project from the switcher and follows it to the installation', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await page.getByRole('banner').locator('summary', { hasText: 'Switch project' }).click();
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.locator('summary', { hasText: 'Switch project' }).click();
   await page.getByRole('link', { name: 'New project' }).click();
   await expect(page).toHaveURL(/\/new-project$/);
 

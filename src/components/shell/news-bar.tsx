@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useLayoutEffect, useRef, useState, useSyncExternalStore, useTransition } from 'react';
 import { BUTTON_STRONG, CONTROL_BUSY } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
@@ -12,10 +12,9 @@ import {
 } from './arrival-news';
 import { CONTENT_ID } from './content-id';
 import { useHoldNavigationWhile } from './navigation-pending';
-import { useScreenOnView } from './use-screen-on-view';
+import { screenSlugOf } from './screens';
 
-const BAR =
-  'pointer-events-none sticky top-[3.5625rem] z-10 flex justify-center py-2 lg:static lg:bg-bg';
+const BAR = 'pointer-events-none sticky top-14 z-10 flex justify-center py-2 lg:static lg:bg-bg';
 const PILL = `pointer-events-auto inline-flex h-9 items-center gap-2 rounded-pill pr-4 pl-3.5 text-caption shadow-raised motion-safe:animate-reveal ${BUTTON_STRONG} ${CONTROL_BUSY}`;
 const ARROW_UP_ICON = 'M12 19V5 M5 12l7-7 7 7';
 const SPOKEN_SEPARATOR = ', ';
@@ -25,7 +24,7 @@ function useOpenScreenNews(): OpenScreenNews | undefined {
 }
 
 export function NewsBar() {
-  const screen = useScreenOnView();
+  const screen = screenSlugOf(usePathname());
   const news = useOpenScreenNews();
   return news === undefined || news.screen !== screen ? null : <NewsPill news={news} />;
 }

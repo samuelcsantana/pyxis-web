@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { type SubmitEvent, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { catchToState, withSmoothLoading } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
@@ -66,6 +67,7 @@ export function NewProjectForm({
   localTimeZone = browserTimeZone,
 }: NewProjectFormProps) {
   const t = useT();
+  const router = useRouter();
   const ids = useId();
   const form = useRef<HTMLFormElement>(null);
   const [name, setName] = useState('');
@@ -108,7 +110,7 @@ export function NewProjectForm({
             setRefusal(outcome.kind);
             return;
           }
-          window.location.assign(installHref(outcome.project.projectId));
+          router.push(installHref(outcome.project.projectId));
         }),
         catchToState(() => {
           setRefusal('failed');

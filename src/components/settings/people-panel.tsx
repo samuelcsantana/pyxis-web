@@ -1,5 +1,5 @@
 import { Breakable } from '@/components/ui/breakable';
-import { SECTION_BODY, SECTION_LIST } from '@/components/ui/panel-classes';
+import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { MAX_ACCOUNT_PEOPLE, ownerFirst, type ProjectPerson } from '@/domain/project-people';
 import type { I18n } from '@/i18n/i18n';
 import { type AddPerson, AddPersonForm } from './add-person-form';
@@ -13,7 +13,7 @@ export interface PeoplePanelProps {
   readonly manage: { readonly add: AddPerson; readonly remove: RemovePerson } | null;
 }
 
-const ROW = 'flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3';
+const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
 const NOTE = 'text-xs leading-[18px] text-muted';
 const ROLE_LABELS = { owner: 'people.owner', member: 'people.member' } as const;
 
@@ -23,13 +23,16 @@ export function personRowId(adminUserId: string): string {
 
 export function PeoplePanel({ people, myEmail, i18n, when, manage }: PeoplePanelProps) {
   return (
-    <div className={SECTION_BODY}>
+    <section aria-labelledby="settings-people-heading" className={PANEL}>
+      <h2 id="settings-people-heading" className={PANEL_TITLE}>
+        {i18n.t('people.heading')}
+      </h2>
       <p className={NOTE}>
         {manage === null
           ? i18n.t('people.note')
           : i18n.t('people.noteOwner', { max: i18n.format.count(MAX_ACCOUNT_PEOPLE) })}
       </p>
-      <ul className={SECTION_LIST}>
+      <ul className="flex flex-col divide-y divide-line">
         {ownerFirst(people).map((person) => (
           <li key={person.adminUserId} className={ROW}>
             <div id={personRowId(person.adminUserId)} className="flex min-w-0 flex-col gap-0.5">
@@ -62,6 +65,6 @@ export function PeoplePanel({ people, myEmail, i18n, when, manage }: PeoplePanel
           <AddPersonForm add={manage.add} />
         </div>
       )}
-    </div>
+    </section>
   );
 }

@@ -1,265 +1,85 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import {
-  currentNavigationLinks,
-  expectPeriodInForce,
-  openScreensOnAPhone,
-  phoneBar,
-  shownDates,
-} from './navigation';
+import { currentNavigationLinks } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
 const DEMO_EXPORT_ID = '5e1b3d7f-9a2c-4e6d-8f1b-3c5d7e9f1a2b';
 
-const PARTS = [
-  'Project',
-  'Keys',
-  'People',
-  'E-mail',
-  'Export events',
-  'Delete project',
-  'Account and billing',
-  'Theme and language',
-  'Sessions',
-  'Access tokens',
-  'Connected apps',
-  'Help and support',
-];
-
-async function openSettingsFrom(page: Page, isMobile: boolean) {
-  await openScreensOnAPhone(page, isMobile);
-  await page.getByRole('link', { name: 'Settings' }).click();
-  const window = page.getByRole('dialog', { name: 'Settings' });
-  await expect(window).toBeVisible();
-  return window;
-}
-
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`settings, ${colorScheme} theme`, () => {
     test.use({ colorScheme });
 
-    test('has no WCAG 2.2 A or AA violation as a page and never scrolls sideways', async ({
-      page,
-    }) => {
-      await page.goto(`/${STORE_ID}/settings/keys`);
+    test('has no WCAG 2.2 A or AA violation and never scrolls sideways', async ({ page }) => {
+      await page.goto(`/${STORE_ID}/settings`);
       await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
 
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
     });
-
-    test('has no WCAG 2.2 A or AA violation as a window over a screen', async ({
-      page,
-      isMobile,
-    }) => {
-      await page.goto(`/${STORE_ID}/devices`);
-      const window = await openSettingsFrom(page, isMobile);
-      if (isMobile) {
-        await window.getByRole('link', { name: 'Project', exact: true }).click();
-      }
-      await expect(window.getByRole('region', { name: 'Project' })).toBeVisible();
-
-      expect(await axeViolations(page)).toEqual([]);
-      expect(await sidewaysOverflow(page)).toBe(0);
-    });
   });
 }
 
-test('opens over the screen with its period and filter, and Esc closes it back to them', async ({
+test('keeps the period of the screen on the way to the settings and back', async ({
   page,
   isMobile,
 }) => {
-  await page.goto(`/${STORE_ID}/devices?range=7d&country=BR`);
-
-  const window = await openSettingsFrom(page, isMobile);
-
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings\\?range=7d&country=BR$`));
-  await expect(page).toHaveTitle('Project · My site · Pyxis');
-  await expect(page.locator('h1', { hasText: 'Devices' })).toBeAttached();
-  await window.getByRole('link', { name: 'Keys', exact: true }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings/keys\\?range=7d&country=BR$`));
-  await expect(window.getByRole('region', { name: 'Keys', exact: true })).toBeVisible();
-  await expect(window.getByRole('heading', { name: 'Keys', exact: true })).toBeFocused();
-
-  await page.keyboard.press('Escape');
-
-  await expect(window).toBeHidden();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/devices\\?range=7d&country=BR$`));
-  await expectPeriodInForce(page, '7 days');
-  await expect(
-    isMobile
-      ? phoneBar(page).getByRole('button', { name: 'Screens' })
-      : page.getByRole('link', { name: 'Settings' }),
-  ).toBeFocused();
-});
-
-test('keeps the scroll of the screen under the window and after it closes', async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(isMobile, 'a phone opens the window from its menu, at the top of the screen');
-  await page.setViewportSize({ width: 1366, height: 650 });
-  await page.goto(`/${STORE_ID}/devices`);
-  await expect
-    .poll(() =>
-      page.evaluate(() => {
-        window.scrollTo(0, 600);
-        return window.scrollY;
-      }),
-    )
-    .toBeGreaterThan(300);
-  const scrolled = await page.evaluate(() => window.scrollY);
-
-  const settingsWindow = await openSettingsFrom(page, isMobile);
-  expect(await page.evaluate(() => window.scrollY)).toBe(scrolled);
-  await page.keyboard.press('Escape');
-
-  await expect(settingsWindow).toBeHidden();
-  expect(await page.evaluate(() => window.scrollY)).toBe(scrolled);
-});
-
-test('closes with Back, opens again with Forward, and closes with its button', async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
-  const window = await openSettingsFrom(page, isMobile);
-
-  await page.goBack();
-
-  await expect(window).toBeHidden();
-  await expect(page).toHaveURL(
-    new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),
-  );
-  await expect(shownDates(page)).toHaveText(/^Aug 1\s–\s31$/);
-
-  await page.goForward();
-  await expect(window).toBeVisible();
-
-  await window.getByRole('button', { name: 'Close' }).click();
-
-  await expect(window).toBeHidden();
-  await expect(page).toHaveURL(
-    new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),
-  );
-});
-
-test('lists the parts first on a phone, and goes back to the list from a part', async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(!isMobile, 'the list comes first only below the lg breakpoint');
-  await page.goto(`/${STORE_ID}/overview`);
-  const window = await openSettingsFrom(page, isMobile);
-  const parts = window.getByRole('navigation', { name: 'Sections' });
-
-  await expect(parts).toBeVisible();
-  await expect(window.getByRole('heading', { name: 'Settings', exact: true })).toBeFocused();
-  await parts.getByRole('link', { name: 'People' }).click();
-
-  await expect(parts).toBeHidden();
-  await expect(window.getByRole('heading', { name: 'People', exact: true })).toBeVisible();
-  await window.getByRole('button', { name: 'Settings' }).click();
-
-  await expect(parts).toBeVisible();
-  await expect(parts.getByRole('link', { name: 'People' })).toBeFocused();
-});
-
-for (const viewport of [
-  { width: 1366, height: 650, windowHeight: 551 },
-  { width: 1440, height: 900, windowHeight: 704 },
-]) {
-  test(`keeps one height in every part at ${String(viewport.width)}×${String(viewport.height)}`, async ({
-    page,
-    isMobile,
-  }) => {
-    test.skip(isMobile, 'a phone shows the window full screen');
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
-    await page.goto(`/${STORE_ID}/overview`);
-    const window = await openSettingsFrom(page, isMobile);
-    const heights = new Set<number>();
-
-    for (const part of PARTS) {
-      await window.getByRole('link', { name: part, exact: true }).click();
-      await expect(window.getByRole('heading', { name: part, exact: true })).toBeFocused();
-      const box = await window.boundingBox();
-      heights.add(Math.round(box?.height ?? 0));
-    }
-
-    expect([...heights]).toEqual([viewport.windowHeight]);
-  });
-}
-
-test('closes when a link inside it leaves for another page', async ({ page, isMobile }) => {
-  await page.goto(`/${STORE_ID}/overview`);
-  const window = await openSettingsFrom(page, isMobile);
-  await window.getByRole('link', { name: 'Export events' }).click();
-  const panel = window.getByRole('region', { name: 'Export events' });
-
-  await panel.getByRole('button', { name: 'Export events' }).click();
-  await panel.getByRole('link', { name: 'Open the export' }).click();
-
-  await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-});
-
-test('is a page when a part is opened directly, and its menu changes parts as pages', async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto(`/${STORE_ID}/settings/keys`);
-
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Keys', exact: true })).toContainText(
-    /pyxis_pk_[0-9a-f]{32}/,
-  );
-  await expect(page).toHaveTitle('Keys · My site · Pyxis');
+  await page.goto(`/${STORE_ID}/devices?range=7d&device=mobile`);
   if (isMobile) {
-    await page.getByRole('main').getByRole('button', { name: 'Settings' }).click();
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Settings' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings\\?range=7d&device=mobile$`));
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Funnel' }).click();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=7d&device=mobile$`));
+  await expect(
+    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
+  ).toHaveAttribute('aria-current', 'page');
+});
+
+test('keeps a custom period on the way to the settings and back', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Settings' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page.getByRole('link', { name: 'Overview', exact: true }).click();
+
+  await expect(page).toHaveURL(
+    new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),
+  );
+  await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
+});
+
+test('opens from the navigation and marks it current', async ({ page, isMobile }) => {
+  await page.goto(`/${STORE_ID}/overview`);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
   }
 
-  await page
-    .getByRole('navigation', { name: 'Sections' })
-    .getByRole('link', { name: 'People' })
-    .click();
+  await page.getByRole('link', { name: 'Settings' }).click();
 
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings/people$`));
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect(page.getByRole('region', { name: 'People' })).toContainText('owner@example.com');
-});
-
-test('marks Settings current in the navigation on its page', async ({ page, isMobile }) => {
-  await page.goto(`/${STORE_ID}/settings`);
-  await openScreensOnAPhone(page, isMobile);
-
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings$`));
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+  await expect(page).toHaveTitle('Settings · My site · Pyxis');
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
   await expect(page.getByRole('link', { name: 'Settings' })).toHaveAttribute(
     'aria-current',
     'page',
   );
-});
-
-test("shows the person's parts outside a project with only the You group", async ({
-  page,
-  isMobile,
-}) => {
-  await page.goto('/account/sessions');
-
-  const parts = page.getByRole('navigation', { name: 'Sections' });
-  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Sessions' })).toContainText('Chrome on Windows');
-  if (isMobile) {
-    await page.getByRole('main').getByRole('button', { name: 'Settings' }).click();
-  }
-  await expect(parts.getByRole('link')).toHaveText([
-    'Account and billing',
-    'Theme and language',
-    'Sessions',
-    'Access tokens',
-    'Connected apps',
-    'Help and support',
-  ]);
 });
 
 test('shows the origins, a public key and no secret key value for each project', async ({
@@ -271,11 +91,10 @@ test('shows the origins, a public key and no secret key value for each project',
   await expect(project.getByRole('textbox', { name: 'Origin 1' })).toHaveValue(
     'https://store.example.com',
   );
-  await expect(page.getByRole('region', { name: 'Data retention' })).toContainText('13 months');
-  await page.goto(`/${STORE_ID}/settings/keys`);
-  const keys = page.getByRole('region', { name: 'Keys', exact: true });
+  const keys = page.getByRole('region', { name: 'Keys' });
   await expect(keys).toContainText(/pyxis_pk_[0-9a-f]{32}/);
   await expect(keys).not.toContainText('pyxis_sk_');
+  await expect(page.getByRole('region', { name: 'Data retention' })).toContainText('13 months');
 
   await page.goto(`/${DOCS_ID}/settings`);
 
@@ -306,8 +125,8 @@ test('lets the owner change the project, with each problem named under its field
 });
 
 test('creates a secret key, shows it once, and keeps the only public key', async ({ page }) => {
-  await page.goto(`/${DOCS_ID}/settings/keys`);
-  const keys = page.getByRole('region', { name: 'Keys', exact: true });
+  await page.goto(`/${DOCS_ID}/settings`);
+  const keys = page.getByRole('region', { name: 'Keys' });
 
   await expect(keys).toContainText('The only public key stays');
   await keys.getByRole('button', { name: 'New secret key' }).click();
@@ -323,7 +142,7 @@ test('creates a secret key, shows it once, and keeps the only public key', async
 });
 
 test('deletes a project only with its name typed, then leaves its settings', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/settings/delete`);
+  await page.goto(`/${STORE_ID}/settings`);
   const danger = page.getByRole('region', { name: 'Delete project' });
   const confirm = danger.getByRole('textbox', { name: 'Type My site to confirm' });
 
@@ -335,11 +154,11 @@ test('deletes a project only with its name typed, then leaves its settings', asy
   await confirm.fill('My site');
   await danger.getByRole('button', { name: 'Delete project for good' }).click();
 
-  await expect(page).not.toHaveURL(/\/settings\/delete$/);
+  await expect(page).not.toHaveURL(/\/settings$/);
 });
 
 test('lists the people, adds an address with an e-mail and removes a member', async ({ page }) => {
-  await page.goto(`/${STORE_ID}/settings/people`);
+  await page.goto(`/${STORE_ID}/settings`);
   const people = page.getByRole('region', { name: 'People' });
 
   await expect(people).toContainText('owner@example.com (you)');
@@ -359,7 +178,7 @@ test('lists the people, adds an address with an e-mail and removes a member', as
 });
 
 test('asks for an export, opens it and downloads the file', async ({ page, request }) => {
-  await page.goto(`/${STORE_ID}/settings/export`);
+  await page.goto(`/${STORE_ID}/settings`);
   const panel = page.getByRole('region', { name: 'Export events' });
 
   await panel.getByRole('button', { name: 'Export events' }).click();
@@ -379,7 +198,9 @@ test('asks for an export, opens it and downloads the file', async ({ page, reque
 test('marks Settings in the navigation as where an export is', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/exports/${DEMO_EXPORT_ID}`);
   await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
-  await openScreensOnAPhone(page, isMobile);
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
 
   const current = currentNavigationLinks(page);
   await expect(current).toHaveCount(1);
@@ -390,7 +211,7 @@ test('marks Settings in the navigation as where an export is', async ({ page, is
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({
   page,
 }) => {
-  await page.goto(`/${STORE_ID}/settings/email`);
+  await page.goto(`/${STORE_ID}/settings`);
   const email = page.getByRole('region', { name: 'E-mail' });
   const toggle = email.getByRole('switch', { name: 'Weekly digest' });
 
@@ -411,7 +232,7 @@ test('turns the weekly digest off and on from the e-mail panel, saying when it s
 test('names the switch in Portuguese', async ({ page, context, baseURL }) => {
   await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
-  await page.goto(`/${STORE_ID}/settings/email`);
+  await page.goto(`/${STORE_ID}/settings`);
 
   await expect(
     page.getByRole('region', { name: 'E-mail' }).getByRole('switch', { name: 'Resumo semanal' }),
@@ -421,7 +242,7 @@ test('names the switch in Portuguese', async ({ page, context, baseURL }) => {
 test('lists the sessions with this device marked, and ends another one from its row', async ({
   page,
 }) => {
-  await page.goto('/account/sessions');
+  await page.goto(`/${STORE_ID}/settings`);
   const sessions = page.getByRole('region', { name: 'Sessions' });
   const rows = sessions.getByRole('listitem');
 
@@ -438,7 +259,7 @@ test('lists the sessions with this device marked, and ends another one from its 
 });
 
 test('signs out everywhere from the sessions panel, to the sign-in page', async ({ page }) => {
-  await page.goto('/account/sessions');
+  await page.goto(`/${STORE_ID}/settings`);
 
   await page
     .getByRole('region', { name: 'Sessions' })
@@ -451,7 +272,7 @@ test('signs out everywhere from the sessions panel, to the sign-in page', async 
 test('names the sessions panel in Portuguese', async ({ page, context, baseURL }) => {
   await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
-  await page.goto('/account/sessions');
+  await page.goto(`/${STORE_ID}/settings`);
   const sessions = page.getByRole('region', { name: 'Sessões' });
 
   await expect(sessions).toContainText('Este dispositivo');
@@ -467,7 +288,7 @@ test.describe('access tokens', () => {
   test('creates a token, shows it once with a copy button, then offers the form again', async ({
     page,
   }) => {
-    await page.goto('/account/tokens');
+    await page.goto(`/${STORE_ID}/settings`);
     const tokens = page.getByRole('region', { name: 'Access tokens' });
     await expect(tokens.getByRole('listitem')).toHaveCount(2);
     await expect(tokens.getByRole('listitem').nth(1)).toContainText('Never used');
@@ -495,7 +316,7 @@ test.describe('access tokens', () => {
   });
 
   test('asks for a name under the field before calling anything', async ({ page }) => {
-    await page.goto('/account/tokens');
+    await page.goto(`/${STORE_ID}/settings`);
     const tokens = page.getByRole('region', { name: 'Access tokens' });
 
     await tokens.getByRole('button', { name: 'Create token' }).click();
@@ -507,7 +328,7 @@ test.describe('access tokens', () => {
   });
 
   test('revokes a token from its row', async ({ page }) => {
-    await page.goto('/account/tokens');
+    await page.goto(`/${STORE_ID}/settings`);
     const tokens = page.getByRole('region', { name: 'Access tokens' });
 
     await tokens
@@ -525,7 +346,7 @@ test.describe('access tokens', () => {
   test('speaks Portuguese', async ({ page, context, baseURL }) => {
     await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
-    await page.goto('/account/tokens');
+    await page.goto(`/${STORE_ID}/settings`);
 
     const tokens = page.getByRole('region', { name: 'Tokens de acesso' });
     await expect(tokens.getByRole('button', { name: 'Criar token' })).toBeVisible();
@@ -539,7 +360,7 @@ test.describe('connected apps', () => {
   const CONNECTOR_URL = 'https://api.pyxis-analytics.dev/mcp';
 
   test('lists the connected apps and copies the address to connect Claude', async ({ page }) => {
-    await page.goto('/account/apps');
+    await page.goto(`/${STORE_ID}/settings`);
     const apps = page.getByRole('region', { name: 'Connected apps' });
     const list = apps.getByRole('list', { name: 'Connected apps' });
     await expect(list.getByRole('listitem')).toHaveCount(2);
@@ -558,7 +379,7 @@ test.describe('connected apps', () => {
   });
 
   test('revokes an app from its row', async ({ page }) => {
-    await page.goto('/account/apps');
+    await page.goto(`/${STORE_ID}/settings`);
     const list = page
       .getByRole('region', { name: 'Connected apps' })
       .getByRole('list', { name: 'Connected apps' });
@@ -577,7 +398,7 @@ test.describe('connected apps', () => {
   test('speaks Portuguese', async ({ page, context, baseURL }) => {
     await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
-    await page.goto('/account/apps');
+    await page.goto(`/${STORE_ID}/settings`);
 
     const apps = page.getByRole('region', { name: 'Aplicativos conectados' });
     await expect(apps.getByRole('group', { name: 'Conectar o Pyxis ao Claude' })).toBeVisible();

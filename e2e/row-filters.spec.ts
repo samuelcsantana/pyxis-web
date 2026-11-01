@@ -1,6 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { expectAppliedFilters, openScreens, screensMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -8,7 +7,7 @@ const filtersRow = (page: Page) => page.getByRole('region', { name: 'Filters', e
 
 async function openTheMenu(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
-    await openScreens(page);
+    await page.getByRole('button', { name: 'Open menu' }).click();
   }
 }
 
@@ -22,15 +21,18 @@ test('a row button filters every screen, and pressing it again removes the filte
   await browsers.getByRole('link', { name: 'Filter by Safari' }).click();
 
   await expect(page).toHaveURL(/browser=safari/);
-  await expectAppliedFilters(page, ['Browser: Safari']);
+  await expect(filtersRow(page).getByRole('listitem')).toHaveText(['Browser: Safari']);
   const active = browsers.getByRole('link', { name: 'Remove filter Safari' });
   await expect(active).toBeVisible();
   expect(await axeViolations(page)).toEqual([]);
 
   await openTheMenu(page, isMobile);
-  await screensMenu(page).getByRole('link', { name: 'Overview', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Overview', exact: true })
+    .click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?.*browser=safari`));
-  await expectAppliedFilters(page, ['Browser: Safari']);
+  await expect(filtersRow(page).getByRole('listitem')).toHaveText(['Browser: Safari']);
 
   await page.goBack();
   await page

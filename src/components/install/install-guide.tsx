@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 import { type CopyCodeLabels, CopyCodeButton } from '@/components/landing/copy-code-button';
 import { NoLiveKeyNotice } from '@/components/settings/no-live-key-notice';
 import {
-  CONNECTED_APPS_HREF,
   FIRST_SCREEN,
   screenHref,
+  settingsConnectionsHref,
   settingsKeysHref,
 } from '@/components/shell/screens';
 import { ViewKeepingLink } from '@/components/shell/view-keeping-link';
@@ -25,22 +25,11 @@ import { rich } from '@/i18n/rich';
 import { InstallTabs } from './install-tabs';
 import { PageAddress } from './page-address';
 
-export type InstallHeadingLevel = 2 | 3;
-
 export interface InstallGuideProps {
   readonly settings: ProjectSettings;
   readonly endpoint: string;
   readonly i18n: I18n;
-  readonly headingLevel?: InstallHeadingLevel;
-  readonly idPrefix?: string;
 }
-
-type IdOf = (name: string) => string;
-
-const HEADINGS = {
-  2: { step: 'h2', inside: 'h3' },
-  3: { step: 'h3', inside: 'h4' },
-} as const satisfies Readonly<Record<InstallHeadingLevel, { step: string; inside: string }>>;
 
 const NOTE = 'text-xs leading-[18px] text-muted';
 const INLINE_CODE = 'rounded-chip border border-line bg-soft px-1 font-mono text-[0.85em]';
@@ -50,6 +39,11 @@ const TAB_ICON_PATHS = {
   yourself: 'm16 18 6-6-6-6 M8 6l-6 6 6 6',
   withAgent:
     'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M6 6l2.5 2.5 M15.5 15.5 18 18 M6 18l2.5-2.5 M15.5 8.5 18 6',
+} as const;
+
+export const INSTALL_TABS = {
+  yourself: 'install-yourself',
+  withAgent: 'install-with-agent',
 } as const;
 
 function codeText(text: string): ReactNode {
@@ -116,41 +110,31 @@ interface StepProps {
   readonly endpoint: string;
   readonly labels: CopyCodeLabels;
   readonly i18n: I18n;
-  readonly idOf: IdOf;
 }
 
-function Yourself({ publicKey, endpoint, labels, i18n, idOf }: StepProps) {
+function Yourself({ publicKey, endpoint, labels, i18n }: StepProps) {
   return (
     <>
       <p className="text-sm">{i18n.t('install.npm')}</p>
-      <CodeBlock id={idOf('command')} code={installCommand()} labels={labels} />
-      <CodeBlock id={idOf('module')} code={moduleSnippet(publicKey, endpoint)} labels={labels} />
+      <CodeBlock id="install-command" code={installCommand()} labels={labels} />
+      <CodeBlock id="install-module" code={moduleSnippet(publicKey, endpoint)} labels={labels} />
       <p className="text-sm">{i18n.t('install.script')}</p>
-      <CodeBlock id={idOf('script')} code={scriptSnippet(publicKey, endpoint)} labels={labels} />
+      <CodeBlock id="install-script" code={scriptSnippet(publicKey, endpoint)} labels={labels} />
     </>
   );
 }
 
 interface WithAgentProps extends StepProps {
   readonly origin: string | undefined;
-  readonly inside: 'h3' | 'h4';
 }
 
-function WithAgent({
-  publicKey,
-  endpoint,
-  origin,
-  labels,
-  i18n,
-  idOf,
-  inside: Inside,
-}: WithAgentProps) {
+function WithAgent({ publicKey, endpoint, origin, labels, i18n }: WithAgentProps) {
   const { t } = i18n;
   return (
     <>
       <p className="text-sm">{t('install.agent.lead')}</p>
       <CodeBlock
-        id={idOf('agent-prompt')}
+        id="install-agent-prompt"
         code={agentPrompt({ key: publicKey, endpoint, origin }, i18n)}
         labels={labels}
         wrap="words"
@@ -172,12 +156,12 @@ function WithAgent({
       </ol>
       <div
         role="group"
-        aria-labelledby={idOf('agent-changes')}
+        aria-labelledby="install-agent-changes"
         className="flex flex-col gap-2 rounded-card border border-dashed border-line-strong px-3.5 py-3"
       >
-        <Inside id={idOf('agent-changes')} className="text-sm font-semibold">
+        <h3 id="install-agent-changes" className="text-sm font-semibold">
           {t('install.agent.changes.title')}
-        </Inside>
+        </h3>
         <ul className="flex list-disc flex-col gap-1 pl-5 text-sm">
           {AGENT_CHANGES.map((change) => (
             <li key={change}>{rich(t(`install.agent.changes.${change}`), { code: codeText })}</li>
@@ -190,42 +174,27 @@ function WithAgent({
   );
 }
 
-interface PhoneNoticeProps {
-  readonly labels: CopyCodeLabels;
-  readonly i18n: I18n;
-  readonly idOf: IdOf;
-  readonly heading: 'h2' | 'h3';
-}
-
-function PhoneNotice({ labels, i18n, idOf, heading: Heading }: PhoneNoticeProps) {
+function PhoneNotice({ labels, i18n }: { readonly labels: CopyCodeLabels; readonly i18n: I18n }) {
   return (
     <div
       role="group"
-      aria-labelledby={idOf('phone-title')}
+      aria-labelledby="install-phone-title"
       className="flex flex-col gap-2 rounded-card border border-warn/35 bg-warn-soft px-3.5 py-3 md:hidden"
     >
-      <Heading id={idOf('phone-title')} className="text-sm font-semibold">
+      <h2 id="install-phone-title" className="text-sm font-semibold">
         {i18n.t('install.phone.title')}
-      </Heading>
+      </h2>
       <p className="text-sm">{i18n.t('install.phone.body')}</p>
       <PageAddress
-        id={idOf('page-address')}
+        id="install-page-address"
         labels={{ ...labels, copy: i18n.t('install.phone.copy') }}
       />
     </div>
   );
 }
 
-export function InstallGuide({
-  settings,
-  endpoint,
-  i18n,
-  headingLevel = 2,
-  idPrefix = 'install',
-}: InstallGuideProps) {
+export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
   const { t } = i18n;
-  const idOf: IdOf = (name) => `${idPrefix}-${name}`;
-  const { step: Step, inside } = HEADINGS[headingLevel];
   const key = settings.publicKeys[0]?.key;
   const firstOrigin = settings.allowedOrigins[0];
   const labels = {
@@ -236,11 +205,11 @@ export function InstallGuide({
   const receiving = projectActivity(settings).kind === 'receiving';
   return (
     <>
-      <PhoneNotice labels={labels} i18n={i18n} idOf={idOf} heading={Step} />
-      <section aria-labelledby={idOf('step-1')} className={PANEL}>
-        <Step id={idOf('step-1')} className={PANEL_TITLE}>
+      <PhoneNotice labels={labels} i18n={i18n} />
+      <section aria-labelledby="install-step-1" className={PANEL}>
+        <h2 id="install-step-1" className={PANEL_TITLE}>
           {t('install.step1')}
-        </Step>
+        </h2>
         {key === undefined ? (
           <NoLiveKeyNotice
             step={
@@ -255,20 +224,12 @@ export function InstallGuide({
             label={t('install.how')}
             tabs={[
               {
-                id: idOf('yourself'),
+                id: INSTALL_TABS.yourself,
                 label: <TabLabel icon="yourself" text={t('install.yourself')} />,
-                panel: (
-                  <Yourself
-                    publicKey={key}
-                    endpoint={endpoint}
-                    labels={labels}
-                    i18n={i18n}
-                    idOf={idOf}
-                  />
-                ),
+                panel: <Yourself publicKey={key} endpoint={endpoint} labels={labels} i18n={i18n} />,
               },
               {
-                id: idOf('with-agent'),
+                id: INSTALL_TABS.withAgent,
                 label: <TabLabel icon="withAgent" text={t('install.withAgent')} />,
                 panel: (
                   <WithAgent
@@ -277,8 +238,6 @@ export function InstallGuide({
                     origin={firstOrigin}
                     labels={labels}
                     i18n={i18n}
-                    idOf={idOf}
-                    inside={inside}
                   />
                 ),
               },
@@ -287,10 +246,10 @@ export function InstallGuide({
         )}
         <p className={NOTE}>{t('install.privacy')}</p>
       </section>
-      <section aria-labelledby={idOf('step-2')} className={PANEL}>
-        <Step id={idOf('step-2')} className={PANEL_TITLE}>
+      <section aria-labelledby="install-step-2" className={PANEL}>
+        <h2 id="install-step-2" className={PANEL_TITLE}>
           {t('install.step2')}
-        </Step>
+        </h2>
         <p className="text-sm">{t('install.step2Note', { origin: firstOrigin ?? '' })}</p>
         {receiving ? (
           <div className="flex flex-col gap-3">
@@ -306,7 +265,7 @@ export function InstallGuide({
             <div className="flex flex-col gap-2 rounded-card bg-soft px-3.5 py-3">
               <p className="text-sm">{t('install.ask.lead')}</p>
               <CodeBlock
-                id={idOf('first-question')}
+                id="install-first-question"
                 code={t('install.ask.question', { project: settings.name })}
                 labels={labels}
                 wrap="words"
@@ -323,14 +282,14 @@ export function InstallGuide({
         )}
         <RefreshWhilePending pending={!receiving} />
       </section>
-      <section aria-labelledby={idOf('step-3')} className={PANEL}>
-        <Step id={idOf('step-3')} className={PANEL_TITLE}>
+      <section aria-labelledby="install-step-3" className={PANEL}>
+        <h2 id="install-step-3" className={PANEL_TITLE}>
           {t('install.step3')}
-        </Step>
+        </h2>
         <p className="text-sm">
           {rich(t('install.claude.body'), {
             settings: (text) => (
-              <ViewKeepingLink href={CONNECTED_APPS_HREF} scroll={false} className={TEXT_LINK}>
+              <ViewKeepingLink href={settingsConnectionsHref(settings.id)} className={TEXT_LINK}>
                 {text}
               </ViewKeepingLink>
             ),
@@ -338,7 +297,7 @@ export function InstallGuide({
         </p>
         <p className="text-sm">{rich(t('install.claude.connect'), { code: codeText })}</p>
         <CodeBlock
-          id={idOf('claude-code')}
+          id="install-claude-code"
           code={claudeCodeCommand(connectorUrlOf(endpoint))}
           labels={labels}
         />
