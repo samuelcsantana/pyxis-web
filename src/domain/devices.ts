@@ -19,7 +19,7 @@ const CITY_KEY_SEPARATOR = '|';
 const PLACE_SEPARATOR = ', ';
 const CONTINENTS = ['americas', 'europe', 'asia', 'africa', 'oceania'] as const;
 const COUNTRY_CODE = /^[A-Z]{2}$/;
-const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
+export const REGION_CODE = /^([A-Z]{2})-([A-Z0-9]{1,3})$/;
 
 const DEVICE_TYPES = ['mobile', 'desktop', 'tablet'] as const;
 type DeviceType = (typeof DEVICE_TYPES)[number];

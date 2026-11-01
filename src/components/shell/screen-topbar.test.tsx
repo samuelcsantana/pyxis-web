@@ -22,7 +22,7 @@ vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
   useSelectedLayoutSegments: () => (navigation.segment === null ? [] : [navigation.segment]),
   useSearchParams: () => new URLSearchParams(navigation.search),
-  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
+  useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
 }));
 
 const MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO = Date.parse('2026-10-05T15:00:00.000Z');
@@ -301,6 +301,31 @@ function SheetHosts() {
   );
 }
 
+describe('ScreenTopbar tools', () => {
+  it('offers Filter before the period, then Copy link, on a screen that takes the filters', () => {
+    at('/p1/devices', 'range=7d');
+    renderWithMessages(topbar());
+
+    const bar = screen.getByRole('banner');
+    const filter = within(bar).getByText('Filter');
+    const period = within(bar).getByRole('navigation', { name: 'Period' });
+    const copy = within(bar).getByRole('button', { name: 'Copy link' });
+    expect(filter.compareDocumentPosition(period)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(period.compareDocumentPosition(copy)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  it('leaves Filter out of Visits and the Timeline, which keep Copy link', () => {
+    for (const path of ['/p1/visits', '/p1/timeline']) {
+      at(path, 'range=7d');
+      renderWithMessages(topbar());
+
+      expect(screen.queryByText('Filter')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Copy link' })).toBeInTheDocument();
+      cleanup();
+    }
+  });
+});
+
 describe('ScreenTopbar with the sheets of the phone bar open', () => {
   it('moves the period and the filters out of the bar into their sheets', () => {
     at('/p1/overview', 'range=7d&country=BR');
@@ -320,5 +345,33 @@ describe('ScreenTopbar with the sheets of the phone bar open', () => {
     expect(
       within(screen.getByTestId('filters-sheet')).getByText('Country: Brazil'),
     ).toBeInTheDocument();
+  });
+
+  it('adds a filter from the Filters sheet, its form loaded at once', async () => {
+    at('/p1/overview', 'range=7d');
+    renderWithMessages(
+      <PhoneBarSlotsProvider>
+        {topbar()}
+        <SheetHosts />
+      </PhoneBarSlotsProvider>,
+    );
+
+    const sheet = within(screen.getByTestId('filters-sheet'));
+    expect(sheet.getByRole('heading', { level: 3, name: 'Add a filter' })).toBeInTheDocument();
+    expect(await sheet.findByLabelText('Filter by')).toBeInTheDocument();
+  });
+
+  it('gives the Visits sheet no form of its own', () => {
+    at('/p1/visits', 'range=7d');
+    renderWithMessages(
+      <PhoneBarSlotsProvider>
+        {topbar()}
+        <SheetHosts />
+      </PhoneBarSlotsProvider>,
+    );
+
+    expect(
+      within(screen.getByTestId('filters-sheet')).queryByText('Add a filter'),
+    ).not.toBeInTheDocument();
   });
 });

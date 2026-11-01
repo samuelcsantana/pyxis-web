@@ -3,7 +3,11 @@ import { type ReactNode, useEffect } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import type { MonthUsage } from '@/lib/accounts-in-view';
 import { english } from '@/test-utils/english';
-import { PROJECT_AWAITING_ITS_FIRST_EVENT, withProjectChoices } from '@/test-utils/project-choices';
+import {
+  PROJECT_AWAITING_ITS_FIRST_EVENT,
+  TEST_PROJECT,
+  withProjectChoices,
+} from '@/test-utils/project-choices';
 import { AccountMenu } from './account-menu';
 import { publishActiveVisits } from './arrival-news';
 import { BarAccountProvider } from './bar-account';
@@ -334,5 +338,38 @@ export const WithTheAccountOnAPhone: Story = {
       PHONE_BAR_HEIGHT_PX,
     );
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+  },
+};
+
+const withEveryTool: NonNullable<Story['decorators']> = [
+  (Story) => withProjectChoices(<Story />, TEST_PROJECT, true),
+];
+
+const showsEveryTool: NonNullable<Story['play']> = async ({ canvasElement }) => {
+  const bar = within(within(canvasElement).getByRole('banner'));
+  await expect(bar.getByText('Filter')).toBeVisible();
+  await expect(bar.getByRole('button', { name: 'Copy link' })).toBeVisible();
+  await expect(bar.getByRole('link', { name: 'Export' })).toBeVisible();
+  const banner = within(canvasElement).getByRole('banner');
+  await expect(banner.scrollWidth).toBeLessThanOrEqual(banner.clientWidth);
+};
+
+export const WithEveryTool: Story = {
+  parameters: at('devices', { range: '30d' }),
+  decorators: withEveryTool,
+  play: showsEveryTool,
+};
+
+export const WithEveryToolDark: Story = { ...WithEveryTool, globals: { theme: 'dark' } };
+
+export const WithEveryToolOnAPhone: Story = {
+  parameters: at('devices', { range: '30d' }),
+  decorators: withEveryTool,
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByText('Filter')).not.toBeVisible();
+    await expect(
+      within(canvasElement).getByRole('button', { name: 'Copy link', hidden: true }),
+    ).not.toBeVisible();
   },
 };

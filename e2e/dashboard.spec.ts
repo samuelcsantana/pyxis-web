@@ -290,7 +290,7 @@ test('closes the project switcher when the focus moves past it, leaving that foc
 
   await expect(switcher).not.toHaveAttribute('open');
   if (!isMobile) {
-    await expect(periods(page).getByRole('link', { name: 'Today' })).toBeFocused();
+    await expect(page.getByRole('banner').getByText('Filter', { exact: true })).toBeFocused();
   }
   expect(await focusedElementIsUncovered(page)).toBe(true);
 });
