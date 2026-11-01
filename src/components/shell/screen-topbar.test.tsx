@@ -4,6 +4,7 @@ import { english } from '@/test-utils/english';
 import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { publishActiveVisits } from './arrival-news';
+import { PhoneBarSlotsProvider, usePhoneBarHostSetter } from './phone-bar-slots';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
@@ -220,5 +221,38 @@ describe('ScreenTopbar', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Funnel' })).toBeInTheDocument();
     expect(customButton()?.closest('details')).not.toHaveAttribute('open');
+  });
+});
+
+function SheetHosts() {
+  const setPeriodHost = usePhoneBarHostSetter('period');
+  const setFiltersHost = usePhoneBarHostSetter('filters');
+  return (
+    <>
+      <div data-testid="period-sheet" ref={setPeriodHost} />
+      <div data-testid="filters-sheet" ref={setFiltersHost} />
+    </>
+  );
+}
+
+describe('ScreenTopbar with the sheets of the phone bar open', () => {
+  it('moves the period and the filters out of the bar into their sheets', () => {
+    at('/p1/overview', 'range=7d&country=BR');
+    renderWithMessages(
+      <PhoneBarSlotsProvider>
+        {topbar('Country: Brazil')}
+        <SheetHosts />
+      </PhoneBarSlotsProvider>,
+    );
+
+    const bar = screen.getByRole('banner');
+    expect(within(bar).queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
+    expect(within(bar).queryByText('Country: Brazil')).not.toBeInTheDocument();
+    expect(
+      within(screen.getByTestId('period-sheet')).getByRole('navigation', { name: 'Period' }),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByTestId('filters-sheet')).getByText('Country: Brazil'),
+    ).toBeInTheDocument();
   });
 });

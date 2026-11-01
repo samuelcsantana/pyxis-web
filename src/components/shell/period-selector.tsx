@@ -40,6 +40,17 @@ const PRESET_LABELS = {
 
 const PRESETS = Object.keys(PRESET_LABELS) as PeriodPreset[];
 
+export function periodLabelOf(
+  period: Period,
+  today: string,
+  format: DayFormats,
+  t: Translator<ClientSourceMessages>,
+): string {
+  return period.preset === 'custom'
+    ? formatShortDayRange(period.from, period.to, today, format)
+    : t(PRESET_LABELS[period.preset]);
+}
+
 const OPTION_CLASS = `min-h-11 px-2 sm:min-h-8.5 sm:px-3 ${PENDING_HOST} ${SEGMENTED_OPTION}`;
 
 export function PeriodSelector({
