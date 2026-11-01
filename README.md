@@ -117,7 +117,8 @@ France (`fr`), Italy (`it`) and the Netherlands (`nl`).
   Français, Italiano, Nederlands), with its flag. On the
   home page, the sign-in and the sign-up pages it is a dropdown in the top bar beside the theme
   toggle, showing the flag and the name of the language in use (the flag alone on phones); in the
-  dashboard it is in the account menu at the foot of the sidebar. On the sign-in, the sign-up and
+  dashboard it is a list in Theme and language, opened from the account menu at the end of the
+  top bar. On the sign-in, the sign-up and
   the dashboard it posts to a Server Action and the screen changes language in place, keeping its
   address, its query and what was typed. The choice shows on the click, before the page in that
   language arrives, and the content comes in with the short reveal of a screen change when it
