@@ -17,12 +17,14 @@ export const PROJECT_AWAITING_ITS_FIRST_EVENT: Project = { ...TEST_PROJECT, firs
 export function withProjectChoices(
   children: ReactNode,
   currentProject: Project = TEST_PROJECT,
+  ownsCurrentProject = false,
 ): ReactElement {
   return (
     <ProjectChoicesProvider
       projects={[currentProject]}
       currentProject={currentProject}
       canCreateProject={false}
+      ownsCurrentProject={ownsCurrentProject}
     >
       {children}
     </ProjectChoicesProvider>

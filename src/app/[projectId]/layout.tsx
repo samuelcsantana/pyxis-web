@@ -26,7 +26,7 @@ export interface ProjectLayoutProps {
 
 export default async function ProjectLayout({ children, modal, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [i18n, { notice, canCreateProject, usage }] = await Promise.all([
+  const [i18n, { notice, canCreateProject, usage, ownsProject }] = await Promise.all([
     getI18n(),
     bestEffortAccountsInView(new Date(), project),
   ]);
@@ -37,6 +37,7 @@ export default async function ProjectLayout({ children, modal, params }: Project
         projects={admin.projects}
         currentProject={project}
         canCreateProject={canCreateProject}
+        ownsCurrentProject={ownsProject}
       >
         <BarAccountProvider
           account={

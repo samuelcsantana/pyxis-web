@@ -37,7 +37,12 @@ const meta = {
   title: 'Shell/Project switcher',
   component: SwitcherIn,
   tags: ['autodocs'],
-  args: { projects: DEMO_ADMIN.projects, currentProject: STORE, canCreateProject: false },
+  args: {
+    projects: DEMO_ADMIN.projects,
+    currentProject: STORE,
+    canCreateProject: false,
+    ownsCurrentProject: true,
+  },
   parameters: {
     layout: 'fullscreen',
     nextjs: {

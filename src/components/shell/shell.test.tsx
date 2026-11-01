@@ -489,6 +489,7 @@ function switcher(canCreateProject = false) {
       projects={ADMIN.projects}
       currentProject={store()}
       canCreateProject={canCreateProject}
+      ownsCurrentProject
     >
       <ProjectSwitcher />
     </ProjectChoicesProvider>

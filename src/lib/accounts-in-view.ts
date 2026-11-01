@@ -23,6 +23,7 @@ export interface AccountsInView {
   readonly canCreateProject: boolean;
   readonly hasUnfinishedSignUp: boolean;
   readonly usage: MonthUsage | null;
+  readonly ownsProject: boolean;
 }
 
 const NOTHING_TO_SHOW: AccountsInView = {
@@ -30,6 +31,7 @@ const NOTHING_TO_SHOW: AccountsInView = {
   canCreateProject: false,
   hasUnfinishedSignUp: false,
   usage: null,
+  ownsProject: false,
 };
 
 function firstDayOfNextMonth(now: Date): string {
@@ -65,6 +67,9 @@ export function accountsInView(
     canCreateProject: accounts.some(canCreateProjects),
     hasUnfinishedSignUp: ownedAccounts(accounts).some(needsCheckout),
     usage: project === undefined ? null : monthUsageOf(accounts, project, now),
+    ownsProject:
+      project !== undefined &&
+      ownedAccounts(accounts).some((owned) => owned.id === project.accountId),
   };
 }
 

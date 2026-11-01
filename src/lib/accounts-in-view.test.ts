@@ -55,6 +55,7 @@ describe('accountsInView', () => {
       canCreateProject: true,
       hasUnfinishedSignUp: false,
       usage: null,
+      ownsProject: false,
     });
   });
 
@@ -74,7 +75,18 @@ describe('accountsInView', () => {
       canCreateProject: false,
       hasUnfinishedSignUp: false,
       usage: null,
+      ownsProject: false,
     });
+  });
+
+  it('says the admin owns the project on screen only when they own the account that holds it', () => {
+    expect(accountsInView([ENDING], NOW, project('a1')).ownsProject).toBe(true);
+    expect(accountsInView([{ ...ENDING, role: 'member' }], NOW, project('a1')).ownsProject).toBe(
+      false,
+    );
+    expect(accountsInView([ENDING], NOW, project('a2')).ownsProject).toBe(false);
+    expect(accountsInView([ENDING], NOW, project(null)).ownsProject).toBe(false);
+    expect(accountsInView([ENDING], NOW).ownsProject).toBe(false);
   });
 
   it("gives the owner the month's usage of the account that holds the project on screen", () => {
@@ -137,6 +149,7 @@ describe('bestEffortAccountsInView', () => {
       canCreateProject: true,
       hasUnfinishedSignUp: false,
       usage: null,
+      ownsProject: false,
     });
   });
 
@@ -150,6 +163,7 @@ describe('bestEffortAccountsInView', () => {
       canCreateProject: false,
       hasUnfinishedSignUp: false,
       usage: null,
+      ownsProject: false,
     });
     expect(warn).toHaveBeenCalledWith(
       'accounts in view: could not read the accounts, showing none',

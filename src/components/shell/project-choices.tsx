@@ -7,6 +7,7 @@ export interface ProjectChoices {
   readonly projects: readonly Project[];
   readonly currentProject: Project;
   readonly canCreateProject: boolean;
+  readonly ownsCurrentProject: boolean;
 }
 
 const ProjectChoicesContext = createContext<ProjectChoices | null>(null);
