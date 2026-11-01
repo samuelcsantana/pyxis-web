@@ -121,6 +121,28 @@ describe.each(Object.entries(THEMES))('chart series in the %s theme', (_, tokens
   });
 });
 
+describe.each(Object.entries(THEMES))('the account avatar in the %s theme', (_, tokens) => {
+  const pair = (one: string, other: string) =>
+    contrastRatio(color(tokens, one), color(tokens, other));
+
+  it.each(['usage-ok', 'usage-warn', 'usage-paused'])(
+    'draws the %s ring of the month at 3:1 against the bar and the ring track',
+    (tone) => {
+      expect(pair(tone, 'card')).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+      expect(pair(tone, 'line')).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
+    },
+  );
+
+  it('keeps the initial readable at rest and when hovered or open', () => {
+    expect(pair('card', 'ink')).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
+    expect(pair('accent-ink', 'accent')).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
+  });
+
+  it('changes the avatar enough to be seen when hovered or open', () => {
+    expect(pair('accent', 'ink')).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+  });
+});
+
 describe.each(Object.entries(THEMES))('form fields in the %s theme', (_, tokens) => {
   it.each(['card', 'bg', 'soft'])('have a border at 3:1 against the %s surface', (surface) => {
     expect(contrastRatio(color(tokens, 'field'), color(tokens, surface))).toBeGreaterThanOrEqual(
