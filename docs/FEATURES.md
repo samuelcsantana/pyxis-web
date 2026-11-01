@@ -230,7 +230,21 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   regions, cities (by region and name), sources, channels, campaigns, events, screens, top pages and top events, never an
   aggregate such as "Other") has a filter button right after its name: it adds that value to the
   filters of every screen, shows a filled × once it is on and then removes it, while the name
-  still opens the row's visits
+  still opens the row's visits. The top bar's "Filter" button (before the period, from 1024px;
+  on a phone, an "Add a filter" form under the chips of the Filters sheet) adds one without
+  finding its row: "Filter by" picks the field (country, region, city, device, browser, system,
+  channel, source, campaign, viewed page or event), "Value" is a list for the fields that have
+  one and a text box with the field's hint and rule for the others (a country or a region is
+  written in capitals as it is typed), and "Apply" writes the same parameters the row buttons
+  write (a page fills `path`, `path2`, `path3` in order and replaces the last of three; an event
+  drops the property of the one it replaces), so every screen keeps it. The form is loaded the
+  first time it opens; Visits, which filters in its page, and the Timeline have no button
+- Copy link and Export in the top bar, from 1024px: "Copy link" puts the address of the view,
+  period and filters included, on the clipboard and says "Link copied" for four seconds (a polite
+  live region); where the browser refuses, it shows the address in a box, selected, until Escape
+  or a click elsewhere. "Export", for the owner of the project's account only (a member has no
+  Export events part), opens the settings window's Export events part keeping the view; the
+  export is of every event the project keeps, not of the period
 - CSV export of what a screen shows, for the same period and filters: the Overview's activity
   per day (with every daily figure of its cards), top pages and top events; the routes of
   Requests (writes or failed reads); the Features ranking (events or screens, search kept); the
