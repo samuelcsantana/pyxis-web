@@ -387,8 +387,8 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart, and Settings pages  | 176               |
-| Dashboard screens with a chart (Overview, Acquisition) | 173               |
+| Dashboard screens without a chart, and Settings pages  | 178               |
+| Dashboard screens with a chart (Overview, Acquisition) | 175               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -448,7 +448,9 @@ off every screen (Overview 170.1 → 169.2 KiB, Requests 173.1 → 172.1 KiB). T
 bottom of phones, with its three sheets and the channel that carries the period and the filters
 into them, took every screen 1.9 KiB up net of the menu drawer it replaced (Overview 170.8 →
 172.7 KiB, Requests 173.7 → 175.6 KiB); the chart budget went to 173 KiB and the screen budget
-to 176 KiB.
+to 176 KiB. The top bar's Filter, Copy link and Export took every screen 1.3 KiB up, the filter
+form itself loading only when it opens (Overview 172.9 → 174.2 KiB, Requests 175.8 → 177.1 KiB);
+the chart budget went to 175 KiB and the screen budget to 178 KiB.
 
 </details>
 

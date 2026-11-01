@@ -36,8 +36,8 @@ const SETTINGS_PAGES_OUTSIDE_A_PROJECT: ReadonlySet<string> = new Set([
 export const BUDGET_KIB: Readonly<Record<RouteClass, number>> = {
   entry: 155,
   signUp: 162,
-  screen: 176,
-  chart: 173,
+  screen: 178,
+  chart: 175,
 };
 
 export function routeClassOf(route: string): RouteClass {
