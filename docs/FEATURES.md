@@ -63,7 +63,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
   Overview of the project on screen with the period and the filters of the page. The screens are listed, with no section label, in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests); the foot holds
-  Install, tagged "Pending" until the project's first event arrives, and Settings.
+  Install, tagged "Pending" until the project's first event arrives, and Settings. Until then
+  the top bar of every screen also shows a gold "Install Pyxis" call with a pulsing dot (still
+  when motion is not welcome) where the visits on the site now would be, read as "Install Pyxis,
+  Waiting for the first event" and opening Install with the period and the filters; below
+  1024px it takes its own row under the path, on a 44px target. The first answer of the
+  30-second arrivals question that reports an event reads the view again, once, so the call,
+  the tag and the empty screens give way together without a reload.
   The
   navigation marks where you are: the screen, Install or Settings; Settings also on an export,
   which has no item of its own. The account is an avatar with its initial at the right end of
