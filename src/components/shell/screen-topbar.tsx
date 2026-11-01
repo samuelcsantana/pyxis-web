@@ -11,12 +11,10 @@ import { PeriodSelector, periodLabelOf } from './period-selector';
 import { InPhoneBar, usePhoneBarHost } from './phone-bar-slots';
 import { carriedParameters, screenSearchOf } from './screen-search';
 import type { ScreenTopbarTexts } from './screen-topbar-texts';
-import { SCREENS_WITHOUT_PERIOD, type ScreenSlug, screenHref, screenLabelKey } from './screens';
+import { SCREENS_WITHOUT_PERIOD, screenHref, screenLabelKey } from './screens';
 import { RangeNotice, TopbarFrame } from './topbar';
 import { useScreenOnView } from './use-screen-on-view';
 import { useProjectToday } from './use-project-today';
-
-const ACTIVE_VISITS_SCREEN: ScreenSlug = 'overview';
 
 export interface ScreenTopbarProps {
   readonly projectId: string;
@@ -53,7 +51,7 @@ export function ScreenTopbar({
     );
   }
   const period = resolvePeriodOn(search, today);
-  const showsVisitsNow = screen === ACTIVE_VISITS_SCREEN && period.to >= today;
+  const showsVisitsNow = period.to >= today;
   const periodSelector = (
     <PeriodSelector
       basePath={screenHref(projectId, screen)}

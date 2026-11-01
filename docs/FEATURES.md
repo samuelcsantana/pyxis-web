@@ -247,10 +247,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   while the page scrolls; it reads the screen again in place, without a skeleton and without
   touching the top bar, says "Refreshing…" until the new read lands, then goes away and hands the
   keyboard focus to the content if it had it
-- Visits on the site now: beside the Overview title, while the period includes today, the visits
-  with an event received in the last five minutes ("4 on the site now"), updated by every answer
-  of the same 30-second question, with a green dot that pings only when someone is there and
-  motion is welcome
+- Visits on the site now: beside the title of every screen with a period, from 1024 px, while the
+  period includes today, the visits with an event received in the last five minutes ("4 on the
+  site now"), updated by every answer of the same 30-second question, with a green dot that pings
+  only when someone is there and motion is welcome; a phone keeps its top bar to the path alone
 - What went up since the last read: when a screen is read again for the same period and filters,
   each count that went up shows "+N" and each visit that started since shows "New", and their row
   or card is lit for five seconds when motion is welcome; the marks stay while only the display

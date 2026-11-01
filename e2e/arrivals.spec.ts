@@ -146,7 +146,7 @@ test('asks nothing while the period does not include today', async ({ page }) =>
   await expect(page.getByText(/on the site now$/)).toHaveCount(0);
 });
 
-test('shows the visits on the site now beside the Overview title, new at each answer', async ({
+test('shows the visits on the site now beside the title of every screen, new at each answer', async ({
   page,
   isMobile,
 }) => {
@@ -170,10 +170,11 @@ test('shows the visits on the site now beside the Overview title, new at each an
   expect(await documentMarker(page)).toBe('kept');
   expect(asked).toHaveLength(2);
 
-  await page.goto(`/${STORE_ID}/funnel`);
+  await page.goto(`/${STORE_ID}/devices`);
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await expect.poll(() => asked.length).toBe(3);
-  await expect(page.getByText(/on the site now$/)).toHaveCount(0);
+  const devices = page.getByRole('heading', { level: 1, name: 'Devices' });
+  await expect(devices.locator('..').getByText('3 on the site now')).toBeVisible();
 });
 
 test.describe('with reduced motion', () => {

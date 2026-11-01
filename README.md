@@ -71,7 +71,7 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
 - **Honest numbers.** A range that ends today is compared with the previous period up to the same
   time of day, a conversion rate counts visits, and one word names one idea on every screen.
 - **What changed since the last read.** The menu counts what arrived for each screen, a screen
-  offers to refresh when something new arrives, and the Overview shows the visits on the site now.
+  offers to refresh when something new arrives, and the top bar shows the visits on the site now.
 - **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free plan or through Stripe
   Checkout, a first project with its install guide, the Account and billing page and a Help and
   support page.
