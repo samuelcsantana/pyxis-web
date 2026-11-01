@@ -26,6 +26,12 @@ export const fr = translation({
     label: 'Navigation principale',
     openMenu: 'Ouvrir le menu',
     openMenuWithNews: 'Ouvrir le menu, il y a du nouveau',
+    screens: 'Écrans',
+    screensWithNews: 'Écrans, il y a du nouveau',
+    accountTab: 'Compte',
+    filters: 'Filtres',
+    filtersEmpty:
+      'Aucun filtre. Touchez une ligne d’un tableau (un pays, une source) pour filtrer tous les écrans.',
     arrivals: {
       visits: forms('{count} nouvelle visite', '{count} nouvelles visites'),
       conversions: forms('{count} nouvelle conversion', '{count} nouvelles conversions'),

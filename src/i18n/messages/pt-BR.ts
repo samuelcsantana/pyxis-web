@@ -26,6 +26,12 @@ export const ptBR = translation({
     label: 'Navegação principal',
     openMenu: 'Abrir menu',
     openMenuWithNews: 'Abrir menu, há novidades',
+    screens: 'Telas',
+    screensWithNews: 'Telas, há novidades',
+    accountTab: 'Conta',
+    filters: 'Filtros',
+    filtersEmpty:
+      'Nenhum filtro. Toque numa linha de uma tabela (um país, uma origem) para filtrar todas as telas.',
     arrivals: {
       visits: forms('{count} nova visita', '{count} novas visitas'),
       conversions: forms('{count} nova conversão', '{count} novas conversões'),
