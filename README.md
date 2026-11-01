@@ -387,8 +387,8 @@ that says why:
 | ------------------------------------------------------ | ----------------- |
 | Sign-in, home and not-found pages                      | 155               |
 | Sign-up page                                           | 162               |
-| Dashboard screens without a chart, and Settings pages  | 174               |
-| Dashboard screens with a chart (Overview, Acquisition) | 171               |
+| Dashboard screens without a chart, and Settings pages  | 176               |
+| Dashboard screens with a chart (Overview, Acquisition) | 173               |
 
 A chart adds no JavaScript: Overview and Acquisition draw theirs as SVG on the server
 ([ADR 0006](docs/adr/0006-server-rendered-svg-charts.md)), so the chart is in the first paint and
@@ -444,7 +444,11 @@ the person's parts opened outside a project (`/account/sessions`, `/account/toke
 joined them as a part of the window: `/account` went from 152.8 to 155.6 KiB with the window's
 menu and counts as a Settings page too, like Theme and language (`/account/preferences`,
 155.0 KiB). Moving the theme and the languages out of the sidebar's account menu took about 1 KiB
-off every screen (Overview 170.1 → 169.2 KiB, Requests 173.1 → 172.1 KiB).
+off every screen (Overview 170.1 → 169.2 KiB, Requests 173.1 → 172.1 KiB). The bar at the
+bottom of phones, with its three sheets and the channel that carries the period and the filters
+into them, took every screen 1.9 KiB up net of the menu drawer it replaced (Overview 170.8 →
+172.7 KiB, Requests 173.7 → 175.6 KiB); the chart budget went to 173 KiB and the screen budget
+to 176 KiB.
 
 </details>
 
