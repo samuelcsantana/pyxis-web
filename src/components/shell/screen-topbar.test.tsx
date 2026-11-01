@@ -76,15 +76,22 @@ describe('ScreenTopbar visits on the site now', () => {
     expect(heading.parentElement).toContainElement(screen.getByText('4 on the site now'));
   });
 
-  it('is left out of the other screens and of a period that ends before today', () => {
+  it('sits beside the title of every other screen too', () => {
     act(() => {
       publishActiveVisits(4);
     });
-    at('/p1/funnel');
-    renderWithMessages(topbar());
-    expect(screen.queryByText('4 on the site now')).not.toBeInTheDocument();
-    cleanup();
+    at('/p1/devices', 'range=7d');
 
+    renderWithMessages(topbar());
+
+    const heading = screen.getByRole('heading', { level: 1, name: 'Devices' });
+    expect(heading.parentElement).toContainElement(screen.getByText('4 on the site now'));
+  });
+
+  it('is left out of a period that ends before today', () => {
+    act(() => {
+      publishActiveVisits(4);
+    });
     at('/p1/overview', 'from=2026-09-01&to=2026-09-30');
     renderWithMessages(topbar());
 

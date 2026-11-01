@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { type ReactNode, useEffect } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import type { MonthUsage } from '@/lib/accounts-in-view';
 import { english } from '@/test-utils/english';
 import { withProjectChoices } from '@/test-utils/project-choices';
 import { AccountMenu } from './account-menu';
+import { publishActiveVisits } from './arrival-news';
 import { BarAccountProvider } from './bar-account';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
@@ -127,6 +129,42 @@ export const KeyboardFocus: Story = { play: focusSevenDays };
 export const KeyboardFocusDark: Story = { globals: { theme: 'dark' }, play: focusSevenDays };
 
 export const RequestsReads: Story = { parameters: at('requests', { kind: 'reads' }) };
+
+const VISITS_NOW = 3;
+
+function WithVisitsNow({ children }: { readonly children: ReactNode }) {
+  useEffect(() => {
+    publishActiveVisits(VISITS_NOW);
+    return () => {
+      publishActiveVisits(undefined);
+    };
+  }, []);
+  return children;
+}
+
+const showsTheVisitsNow: NonNullable<Story['play']> = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+  const heading = canvas.getByRole('heading', { level: 1, name: 'Devices' });
+  const visitsNow = await canvas.findByText(`${String(VISITS_NOW)} on the site now`);
+  await expect(heading.parentElement).toContainElement(visitsNow);
+};
+
+export const VisitsNowOnDevices: Story = {
+  parameters: at('devices'),
+  decorators: [
+    (Story) => (
+      <WithVisitsNow>
+        <Story />
+      </WithVisitsNow>
+    ),
+  ],
+  play: showsTheVisitsNow,
+};
+
+export const VisitsNowOnDevicesDark: Story = {
+  ...VisitsNowOnDevices,
+  globals: { theme: 'dark' },
+};
 
 export const WithFilters: Story = {
   args: {
