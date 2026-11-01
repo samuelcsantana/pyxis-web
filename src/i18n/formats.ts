@@ -6,7 +6,6 @@ export type WeekdayWidth = 'narrow' | 'short' | 'long';
 export interface Formats extends DayFormats {
   readonly count: (value: number) => string;
   readonly percent: (value: number) => string;
-  readonly wholePercent: (value: number) => string;
   readonly decimal: (value: number) => string;
   readonly monthWithYear: (date: Date) => string;
   readonly fullDay: (date: Date) => string;
@@ -40,11 +39,6 @@ const DATE_TIME_STYLES: Readonly<Record<DateTimeStyle, Intl.DateTimeFormatOption
 function buildFormats(tag: string): Formats {
   const count = new Intl.NumberFormat(tag);
   const percent = new Intl.NumberFormat(tag, { style: 'percent', ...ONE_DECIMAL });
-  const wholePercent = new Intl.NumberFormat(tag, {
-    style: 'percent',
-    maximumFractionDigits: 0,
-    roundingMode: 'trunc',
-  });
   const decimal = new Intl.NumberFormat(tag, ONE_DECIMAL);
   const { day, dayWithYear, dayRange, dayRangeWithYear } = createDayFormats(tag);
   const monthWithYear = new Intl.DateTimeFormat(tag, {
@@ -69,7 +63,6 @@ function buildFormats(tag: string): Formats {
   return {
     count: (value) => count.format(value),
     percent: (value) => percent.format(value),
-    wholePercent: (value) => wholePercent.format(value),
     decimal: (value) => decimal.format(value),
     day,
     dayWithYear,

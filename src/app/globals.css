@@ -43,8 +43,6 @@
   --pyx-nav-text: #c9d4e3;
   --pyx-nav-muted: #8796ad;
   --pyx-nav-strong: #ffffff;
-  --pyx-nav-warn: #fb923c;
-  --pyx-nav-bad: #f87171;
   --pyx-usage-ok: #a16207;
   --pyx-usage-warn: #b45309;
   --pyx-usage-paused: #b91c1c;
@@ -172,8 +170,6 @@
   --color-nav-text: var(--pyx-nav-text);
   --color-nav-muted: var(--pyx-nav-muted);
   --color-nav-strong: var(--pyx-nav-strong);
-  --color-nav-warn: var(--pyx-nav-warn);
-  --color-nav-bad: var(--pyx-nav-bad);
   --color-usage-ok: var(--pyx-usage-ok);
   --color-usage-warn: var(--pyx-usage-warn);
   --color-usage-paused: var(--pyx-usage-paused);
