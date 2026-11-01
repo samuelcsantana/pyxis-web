@@ -7,37 +7,15 @@ import { Breakable } from '@/components/ui/breakable';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { useT } from '@/i18n/messages-provider';
+import { CurrentCheck } from './current-check';
 import { useProjectChoices } from './project-choices';
 import { ProjectMark } from './project-mark';
+import { MENU_PANEL, MENU_ROW_NOTE, menuRowClasses } from './menu-row-classes';
 import { FIRST_SCREEN, periodParameters, screenHref } from './screens';
 import { useScreenOnView } from './use-screen-on-view';
 
 export const NEW_PROJECT_PAGE = '/new-project';
 const PLUS_ICON = 'M12 5v14M5 12h14';
-const ROW = `flex min-h-11 items-center gap-2.5 rounded-control px-2.5 py-1.5 text-sm text-ink ${FOCUS_RING} ${CONTROL_TRANSITION}`;
-const ROW_IDLE = 'group/row hover:bg-line-strong active:bg-line-strong';
-const ROW_CURRENT = 'bg-soft font-semibold';
-
-function CurrentCheck() {
-  return (
-    <svg
-      width={16}
-      height={16}
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="shrink-0 text-ink"
-    >
-      <path
-        d="M5 12.5l4.5 4.5L19 7.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2.2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function ProjectSwitcher() {
   const t = useT();
@@ -78,7 +56,7 @@ export function ProjectSwitcher() {
           />
         </svg>
       </summary>
-      <ul className="absolute top-full left-0 z-30 mt-1.5 flex w-max max-w-[min(24rem,calc(100vw-2rem))] min-w-60 flex-col gap-1 rounded-input border border-line bg-card p-1.5 shadow-lg lg:max-h-[calc(100dvh-100%-3rem)] lg:scroll-py-1 lg:overflow-y-auto lg:overscroll-contain">
+      <ul className={`${MENU_PANEL} left-0 w-max max-w-[min(24rem,calc(100vw-2rem))] min-w-60`}>
         {projects.map((project) => {
           const current = project.id === currentProject.id;
           return (
@@ -86,12 +64,12 @@ export function ProjectSwitcher() {
               <Link
                 href={screenHref(project.id, screen, query)}
                 aria-current={current ? 'page' : undefined}
-                className={`${ROW} ${current ? ROW_CURRENT : ROW_IDLE}`}
+                className={menuRowClasses(current)}
               >
                 <ProjectMark project={project} />
                 <span className="flex min-w-0 grow flex-col gap-0.5">
                   <span className="break-words">{project.name}</span>
-                  <span className="font-mono text-xs font-normal break-words text-muted group-hover/row:text-ink group-active/row:text-ink">
+                  <span className={`font-mono text-xs font-normal break-words ${MENU_ROW_NOTE}`}>
                     <Breakable text={project.timezone} breakAt="slashes" />
                   </span>
                 </span>
@@ -102,7 +80,7 @@ export function ProjectSwitcher() {
         })}
         {canCreateProject ? (
           <li className="border-t border-line pt-1">
-            <Link href={NEW_PROJECT_PAGE} className={`${ROW} ${ROW_IDLE}`}>
+            <Link href={NEW_PROJECT_PAGE} className={menuRowClasses()}>
               <svg
                 width={16}
                 height={16}

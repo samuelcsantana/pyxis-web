@@ -50,17 +50,17 @@ export function sawBusyContent(page: Page): Promise<boolean> {
   return page.evaluate((name) => Reflect.get(window, name) === true, BUSY_MARKER);
 }
 
-export async function openAccountMenu(page: Page, isMobile: boolean): Promise<void> {
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  const account = page.locator('summary', { hasText: 'Account and preferences' });
-  await account.click();
+export function accountMenuButton(page: Page): Locator {
+  return page.getByRole('banner').locator('summary', { hasText: 'Account and preferences' });
+}
+
+export async function openAccountMenu(page: Page): Promise<void> {
+  await accountMenuButton(page).click();
   await expect(page.getByRole('link', { name: 'Theme and language' })).toBeVisible();
 }
 
-export async function openThemeAndLanguage(page: Page, isMobile: boolean): Promise<Locator> {
-  await openAccountMenu(page, isMobile);
+export async function openThemeAndLanguage(page: Page): Promise<Locator> {
+  await openAccountMenu(page);
   await page.getByRole('link', { name: 'Theme and language' }).click();
   const part = page.getByRole('dialog').getByRole('region', { name: 'Theme and language' });
   await expect(part).toBeVisible();

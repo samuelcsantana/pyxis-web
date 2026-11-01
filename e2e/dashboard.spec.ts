@@ -1,6 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
-import { customPeriod, openAccountMenu, openThemeAndLanguage, shownDates } from './navigation';
+import {
+  accountMenuButton,
+  customPeriod,
+  openAccountMenu,
+  openThemeAndLanguage,
+  shownDates,
+} from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -112,7 +118,6 @@ test('names the project on screen in the bar of a phone, after a switch too', as
 
 test("shows the owner the month's usage of the project's account, and where it counts down to", async ({
   page,
-  isMobile,
 }) => {
   const today = new Date();
   const resetsOn = new Intl.DateTimeFormat('en-US', {
@@ -121,10 +126,10 @@ test("shows the owner the month's usage of the project's account, and where it c
     timeZone: 'UTC',
   }).format(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 1)));
   await page.goto(`/${STORE_ID}/overview`);
-  await openNavigation(page, isMobile);
-  const account = page.locator('summary', { hasText: 'Account and preferences' });
+  const account = accountMenuButton(page);
 
-  await expect(account).toContainText('41% of the month');
+  await expect(account).toContainText('41,230 of 100,000 events this month');
+  await expect(account.locator('[data-usage-ring]')).toBeVisible();
   await account.click();
   const usage = page.getByRole('link', { name: /41,230 of 100,000 events this month/ });
   await expect(usage).toBeVisible();
@@ -324,9 +329,9 @@ test('answers not found for a project outside the account', async ({ page }) => 
   await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible();
 });
 
-test('signs out to the sign-in page', async ({ page, isMobile }) => {
+test('signs out to the sign-in page', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await openAccountMenu(page, isMobile);
+  await openAccountMenu(page);
 
   await page.getByRole('button', { name: 'Sign out', exact: true }).click();
 
@@ -335,12 +340,11 @@ test('signs out to the sign-in page', async ({ page, isMobile }) => {
 
 test('remembers the chosen theme across a reload, and goes back to the system one', async ({
   page,
-  isMobile,
 }) => {
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`/${STORE_ID}/overview`);
 
-  const part = await openThemeAndLanguage(page, isMobile);
+  const part = await openThemeAndLanguage(page);
   await part.getByRole('button', { name: 'Dark' }).click();
   await page.reload();
 
@@ -432,26 +436,27 @@ test('keeps the menu bar on screen while the page scrolls', async ({ page, isMob
 test.describe('on a short phone', () => {
   test.use({ viewport: { width: 390, height: 640 } });
 
-  test('shows every choice of the account menu, sign-out included, as it opens', async ({
+  test('shows every choice of the account menu under the bar, sign-out included, as it opens', async ({
     page,
     isMobile,
   }) => {
-    test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+    test.skip(!isMobile, 'This checks the bar of a phone.');
     await page.goto(`/${STORE_ID}/overview`);
+    const avatar = await accountMenuButton(page).boundingBox();
 
-    await openAccountMenu(page, isMobile);
-    const menu = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
+    await openAccountMenu(page);
 
-    expect(menu?.height).toBeLessThanOrEqual(640);
+    expect(avatar?.width).toBe(TOUCH_TARGET_PX);
+    expect(avatar?.height).toBe(TOUCH_TARGET_PX);
     for (const choice of [
-      page.getByRole('link', { name: 'Account and billing' }),
+      page.getByRole('link', { name: /^Account and billing/ }),
       page.getByRole('link', { name: 'Theme and language' }),
       page.getByRole('link', { name: 'Help and support' }),
       page.getByRole('button', { name: 'Sign out', exact: true }),
     ]) {
       await expect(choice).toBeInViewport({ ratio: 1 });
     }
-    await expect(page.getByRole('button', { name: 'Close menu' })).toBeInViewport();
+    expect(await sidewaysOverflow(page)).toBe(0);
   });
 });
 

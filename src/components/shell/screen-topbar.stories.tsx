@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
+import type { MonthUsage } from '@/lib/accounts-in-view';
 import { english } from '@/test-utils/english';
 import { withProjectChoices } from '@/test-utils/project-choices';
+import { AccountMenu } from './account-menu';
+import { BarAccountProvider } from './bar-account';
 import { ScreenTopbar } from './screen-topbar';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
 const PROJECT_ID = 'demo';
+const BAR_SIDE_PADDING_PX = 32;
 const MIDDAY_OF_OCTOBER_5_IN_SAO_PAULO = Date.UTC(2026, 9, 5, 15);
 
 function at(screen: string, query: Readonly<Record<string, string>> = {}) {
@@ -176,5 +180,67 @@ export const OnAPhone: Story = {
     await expect(name.getBoundingClientRect().width).toBeLessThanOrEqual(1);
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
     await expect(bar.scrollWidth).toBeLessThanOrEqual(bar.clientWidth);
+  },
+};
+
+const DEMO_USAGE: MonthUsage = {
+  events: 41_230,
+  limit: 100_000,
+  share: 0.4123,
+  pausedUntil: null,
+  resetsOn: '2026-11-01T00:00:00.000Z',
+};
+
+const withTheAccount: NonNullable<Story['decorators']> = [
+  (Story) => (
+    <BarAccountProvider
+      account={
+        <AccountMenu
+          email="owner@example.com"
+          projectId={PROJECT_ID}
+          i18n={english}
+          usage={DEMO_USAGE}
+        />
+      }
+    >
+      <Story />
+    </BarAccountProvider>
+  ),
+];
+
+function avatarOf(canvasElement: HTMLElement): DOMRect {
+  const avatar = within(canvasElement).getByText('Account and preferences').closest('summary');
+  if (avatar === null) {
+    throw new Error('The bar has no account.');
+  }
+  return avatar.getBoundingClientRect();
+}
+
+export const WithTheAccount: Story = {
+  decorators: withTheAccount,
+  play: async ({ canvasElement }) => {
+    const bar = within(canvasElement).getByRole('banner').getBoundingClientRect();
+    const avatar = avatarOf(canvasElement);
+    const custom = customButton(canvasElement).getBoundingClientRect();
+    await expect(avatar.left).toBeGreaterThanOrEqual(custom.right);
+    await expect(bar.right - avatar.right).toBeLessThanOrEqual(BAR_SIDE_PADDING_PX);
+  },
+};
+
+export const WithTheAccountDark: Story = { ...WithTheAccount, globals: { theme: 'dark' } };
+
+export const WithTheAccountOnAPhone: Story = {
+  decorators: withTheAccount,
+  globals: { viewport: { value: 'mobile2', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const avatar = avatarOf(canvasElement);
+    const switcher = canvas.getByText('Switch project. Current project:').closest('summary');
+    const presets = canvas.getByRole('navigation', { name: 'Period' }).getBoundingClientRect();
+    await expect(
+      Math.abs(avatar.top - (switcher?.getBoundingClientRect().top ?? 0)),
+    ).toBeLessThanOrEqual(1);
+    await expect(presets.top).toBeGreaterThanOrEqual(avatar.bottom);
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
   },
 };

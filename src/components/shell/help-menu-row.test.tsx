@@ -36,6 +36,7 @@ describe('HelpMenuRow', () => {
     expect(row).toHaveAttribute('href', '/p-1/help?range=7d');
     expect(row).not.toHaveAttribute('aria-current');
     expect(row.className).toBe(menuRowClasses());
+    expect(row.querySelector('svg')).not.toBeInTheDocument();
   });
 
   it('lets the window open over a screen, without reloading', () => {
@@ -47,7 +48,7 @@ describe('HelpMenuRow', () => {
     expect(assign).not.toHaveBeenCalled();
   });
 
-  it('marks itself as where you are on the Help page, and reloads it as a page there', () => {
+  it('marks itself as where you are on the Help page, not by weight alone, and reloads it there', () => {
     navigation.pathname = '/p-1/help';
     navigation.search = '';
     const row = helpRow();
@@ -56,6 +57,7 @@ describe('HelpMenuRow', () => {
 
     expect(row).toHaveAttribute('aria-current', 'page');
     expect(row.className).toBe(menuRowClasses(true));
+    expect(row.querySelector('svg')).toBeInTheDocument();
     expect(opened).toBe(false);
     expect(assign).toHaveBeenCalledWith('/p-1/help');
   });

@@ -54,7 +54,6 @@ export const ptBR = translation({
     install: 'Instalação',
     installPending: 'Pendente',
     usage: {
-      share: '{share} do mês',
       events: '{count} de {limit} eventos neste mês',
       resets: 'A contagem zera em {date}',
     },

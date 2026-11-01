@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { accountMenuButton, openAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -20,14 +21,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 test('opens from the account menu as the settings window, with the free trial and the month used', async ({
   page,
-  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
-  await page.getByRole('link', { name: 'Account and billing' }).click();
+  await openAccountMenu(page);
+  await page.getByRole('link', { name: /^Account and billing/ }).click();
 
   const window = page.getByRole('dialog', { name: 'Settings' });
   const plan = window.getByRole('region', { name: 'Account and billing' });
@@ -42,11 +39,7 @@ test('opens from the account menu as the settings window, with the free trial an
 
   await expect(window).toBeHidden();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
-  await expect(
-    isMobile
-      ? page.getByRole('button', { name: 'Open menu' })
-      : page.locator('summary', { hasText: 'Account and preferences' }),
-  ).toBeFocused();
+  await expect(accountMenuButton(page)).toBeFocused();
 });
 
 test('lists Account and billing first under You, and opens it from another part', async ({

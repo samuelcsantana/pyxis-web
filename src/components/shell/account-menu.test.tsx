@@ -36,79 +36,70 @@ function renderMenu() {
   return renderWithMessages(<AccountMenu email={EMAIL} projectId="p-1" i18n={english} />);
 }
 
+function panelOf(container: HTMLElement): HTMLElement | null {
+  return container.querySelector('details > div');
+}
+
 describe('AccountMenu', () => {
-  it('shows the account by its initial and e-mail, named for screen readers, closed', () => {
+  it('shows the account as an avatar with its initial, named for screen readers, closed', () => {
     const { container } = renderMenu();
 
     const summary = container.querySelector('summary');
-    expect(summary).toHaveTextContent('OAccount and preferencesowner@example.com');
+    expect(summary).toHaveTextContent('OAccount and preferences');
+    expect(summary).toHaveClass('size-11', 'lg:size-10', 'rounded-pill', 'group/avatar');
+    expect(within(summary ?? container).getByText('O')).toHaveAttribute('aria-hidden', 'true');
+    expect(within(summary ?? container).getByText('O')).toHaveClass(
+      'group-active/avatar:bg-accent',
+      'group-active/avatar:text-accent-ink',
+    );
+    expect(within(summary ?? container).getByText('Account and preferences')).toHaveClass(
+      'sr-only',
+    );
     expect(container.querySelector('details')).not.toHaveAttribute('open');
   });
 
-  it('scrolls the opened menu into view, so its choices show at the foot of the phone menu', () => {
-    const reveal = vi.spyOn(Element.prototype, 'scrollIntoView');
+  it('opens downward, at the right end of the bar, on the e-mail, the choices and signing out', () => {
     const { container } = renderMenu();
-    const details = container.querySelector('details');
-    if (details !== null) {
-      details.open = true;
-      fireEvent(details, new Event('toggle'));
-    }
 
-    expect(reveal).toHaveBeenCalledWith({ block: 'nearest' });
-    expect(reveal.mock.contexts[0]).toBe(details);
-    reveal.mockRestore();
-  });
-
-  it('opens on billing, the theme and language of this browser, and signing out, above the account only on a laptop', () => {
-    const { container } = renderMenu();
-    const details = container.querySelector('details');
-    if (details !== null) {
-      details.open = true;
-    }
-
-    expect(screen.getByRole('link', { name: 'Account and billing' })).toHaveAttribute(
+    const panel = panelOf(container);
+    expect(panel).toHaveClass('absolute', 'top-full', 'right-0', 'bg-card');
+    expect(panel?.firstElementChild).toHaveTextContent(EMAIL);
+    expect(screen.getByRole('link', { name: 'Account and billing', hidden: true })).toHaveAttribute(
       'href',
       '/account',
     );
-    expect(screen.getByRole('link', { name: 'Theme and language' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Theme and language', hidden: true })).toHaveAttribute(
       'href',
       '/account/preferences',
     );
-    expect(screen.getByRole('link', { name: 'Help and support' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Help and support', hidden: true })).toHaveAttribute(
       'href',
       '/p-1/help?range=7d',
     );
-    expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
-    expect(screen.queryByRole('group', { name: 'Theme' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('group', { name: 'Language' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign out everywhere' })).not.toBeInTheDocument();
-    expect(container.querySelector('details > div')).toHaveClass(
-      'lg:absolute',
-      'lg:bottom-full',
-      'max-lg:mt-2',
-    );
+    expect(
+      screen.getByRole('button', { name: 'Sign out', hidden: true }).querySelector('svg'),
+    ).toBeNull();
   });
 
-  it('lists billing, theme and language, help, then signing out', () => {
+  it('lists the e-mail, billing, theme and language, help, signing out, then the privacy line', () => {
     const { container } = renderMenu();
 
-    const panel = container.querySelector('details > div');
-    const rows = panel === null ? [] : [...panel.children];
-    const signOut = screen.getByRole('button', { name: 'Sign out', hidden: true });
+    const rows = [...(panelOf(container)?.children ?? [])].map((row) => row.textContent);
 
-    expect(rows.map((row) => row.textContent)).toEqual([
+    expect(rows).toEqual([
+      EMAIL,
       'Account and billing',
       'Theme and language',
       'Help and support',
       'Sign out',
+      'No cookies, no personal data',
     ]);
-    expect(panel?.lastElementChild).toContainElement(signOut);
   });
 
-  it('opens Theme and language and Help without scrolling the page under the window', () => {
+  it('opens Account and billing, Theme and language and Help without scrolling the page', () => {
     renderMenu();
 
-    for (const name of ['Theme and language', 'Help and support']) {
+    for (const name of ['Account and billing', 'Theme and language', 'Help and support']) {
       expect(screen.getByRole('link', { name, hidden: true })).toHaveAttribute(
         'data-scroll',
         'false',
@@ -116,7 +107,7 @@ describe('AccountMenu', () => {
     }
   });
 
-  it('closes on Escape, with the focus back on the account', () => {
+  it('closes on Escape, with the focus back on the avatar', () => {
     const { container } = renderMenu();
     const details = container.querySelector('details');
     const summary = container.querySelector('summary');
@@ -147,47 +138,63 @@ function renderMenuWith(usage: MonthUsage) {
   );
 }
 
-function barOf(container: HTMLElement): HTMLElement | null {
-  return container.querySelector('summary [style]');
+function ringOf(container: HTMLElement): SVGCircleElement | null {
+  return container.querySelector('[data-usage-ring] circle[stroke-dasharray]');
 }
 
 describe("AccountMenu with the month's usage", () => {
-  it('shows the share of the month under the e-mail, read as the whole sentence', () => {
+  it('rings the avatar with the share of the month, read as the whole sentence', () => {
     const { container } = renderMenuWith(USAGE);
 
     const summary = container.querySelector('summary');
-    expect(summary).toHaveTextContent('31% of the month');
+    expect(container.querySelector('[data-usage-ring]')).toHaveAttribute('aria-hidden', 'true');
+    expect(ringOf(container)).toHaveAttribute('stroke-dasharray', '31.2 100');
+    expect(ringOf(container)).toHaveClass('stroke-usage-ok');
     expect(within(summary ?? container).getByText('3,120 of 10,000 events this month')).toHaveClass(
       'sr-only',
     );
-    expect(within(summary ?? container).getByText('31% of the month')).toHaveAttribute(
-      'aria-hidden',
-      'true',
+  });
+
+  it('shows the events of the month and the day the count resets under Account and billing', () => {
+    renderMenuWith(USAGE);
+
+    const billing = screen.getByRole('link', { name: /^Account and billing/, hidden: true });
+    expect(billing).toHaveAttribute('href', '/account');
+    expect(billing).toHaveTextContent(
+      'Account and billing3,120 of 10,000 events this monthCount resets on Nov 1',
     );
-    expect(barOf(container)).toHaveStyle({ width: '31.2%' });
-    expect(barOf(container)).toHaveClass('bg-accent');
+    expect(within(billing).getByText('Count resets on Nov 1')).toHaveClass(
+      'text-muted',
+      'group-hover/row:text-ink',
+      'group-active/row:text-ink',
+    );
   });
 
-  it('opens on the events of the month and the day the count resets, linking to billing', () => {
-    const { container } = renderMenuWith(USAGE);
-
-    const panel = container.querySelector('details > div');
-    const usage = panel?.firstElementChild;
-    expect(usage).toHaveAttribute('href', '/account');
-    expect(usage).toHaveTextContent('3,120 of 10,000 events this monthCount resets on Nov 1');
-  });
-
-  it('warns from 80% of the month, and never shows a share past the one the tone stands for', () => {
+  it('warns from 80% of the month, and never draws more than the whole ring', () => {
     const near = renderMenuWith({ ...USAGE, events: 8_000, share: 0.8 });
-    expect(barOf(near.container)).toHaveClass('bg-nav-warn');
+    expect(ringOf(near.container)).toHaveClass('stroke-usage-warn');
     near.unmount();
 
     const justBelow = renderMenuWith({ ...USAGE, events: 7_999, share: 0.7999 });
-    expect(barOf(justBelow.container)).toHaveClass('bg-accent');
-    expect(justBelow.container.querySelector('summary')).toHaveTextContent('79% of the month');
+    expect(ringOf(justBelow.container)).toHaveClass('stroke-usage-ok');
+    justBelow.unmount();
+
+    const over = renderMenuWith({ ...USAGE, events: 12_000, share: 1.2 });
+    expect(ringOf(over.container)).toHaveAttribute('stroke-dasharray', '100 100');
+    expect(ringOf(over.container)).toHaveAttribute('stroke-linecap', 'round');
   });
 
-  it('says in words, read and spoken, that the reception is paused and until when', () => {
+  it('draws only the empty track before the first event of the month', () => {
+    const { container } = renderMenuWith({ ...USAGE, events: 0, share: 0 });
+
+    expect(container.querySelectorAll('[data-usage-ring] circle')).toHaveLength(1);
+    expect(ringOf(container)).toBeNull();
+    expect(
+      screen.getByText('0 of 10,000 events this month', { selector: 'summary span' }),
+    ).toHaveClass('sr-only');
+  });
+
+  it('says in words, read and spoken, that the reception is paused, and breaks the ring', () => {
     const { container } = renderMenuWith({
       ...USAGE,
       events: 15_000,
@@ -196,36 +203,25 @@ describe("AccountMenu with the month's usage", () => {
     });
 
     const summary = container.querySelector('summary');
-    expect(barOf(container)).toHaveClass('bg-nav-bad');
-    expect(barOf(container)).toHaveStyle({ width: '100%' });
-    expect(summary).toHaveTextContent('150% of the month');
+    expect(ringOf(container)).toHaveClass('stroke-usage-paused');
+    expect(ringOf(container)).toHaveAttribute('stroke-dasharray', '7 3');
+    expect(ringOf(container)).not.toHaveAttribute('stroke-linecap');
     expect(
       within(summary ?? container).getByText(
         'Measuring is paused until Nov 1: the account reached 15,000 events this month.',
       ),
     ).toHaveClass('sr-only');
-    expect(container.querySelector('details > div')?.firstElementChild).toHaveTextContent(
-      '15,000 of 10,000 events this monthMeasuring is paused until Nov 1: the account passed its monthly events.',
+    expect(
+      screen.getByRole('link', { name: /^Account and billing/, hidden: true }),
+    ).toHaveTextContent(
+      'Account and billing15,000 of 10,000 events this monthMeasuring is paused until Nov 1: the account passed its monthly events.',
     );
   });
 
-  it('opens Account and billing from both rows without scrolling the page under the window', () => {
-    const { container } = renderMenuWith(USAGE);
-
-    const panel = container.querySelector('details > div');
-    const usage = panel?.firstElementChild;
-    const billing = screen.getByRole('link', { name: 'Account and billing', hidden: true });
-    expect(usage).not.toBe(billing);
-    expect(usage).toHaveAttribute('href', '/account');
-    expect(usage).toHaveAttribute('data-scroll', 'false');
-    expect(billing).toHaveAttribute('href', '/account');
-    expect(billing).toHaveAttribute('data-scroll', 'false');
-  });
-
-  it('shows no usage without it', () => {
+  it('shows no ring and no usage without it', () => {
     const { container } = renderMenu();
 
-    expect(barOf(container)).toBeNull();
+    expect(container.querySelector('[data-usage-ring]')).toBeNull();
     expect(screen.queryByText(/events this month/)).not.toBeInTheDocument();
   });
 });

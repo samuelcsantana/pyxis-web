@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
+import { CurrentCheck } from './current-check';
 import { menuRowClasses } from './menu-row-classes';
 import { HELP_ITEM, helpHref, hrefKeepingView, navigationItemOf } from './screens';
 import { opensElsewhere } from './sidebar-nav';
@@ -30,7 +31,8 @@ export function HelpMenuRow({ projectId, label }: HelpMenuRowProps) {
       onClick={reloadAsAPage}
       className={menuRowClasses(onItsPage)}
     >
-      {label}
+      <span className="min-w-0 grow">{label}</span>
+      {onItsPage ? <CurrentCheck /> : null}
     </Link>
   );
 }

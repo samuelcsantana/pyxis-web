@@ -54,7 +54,6 @@ export const es = translation({
     install: 'Instalación',
     installPending: 'Pendiente',
     usage: {
-      share: '{share} del mes',
       events: '{count} de {limit} eventos este mes',
       resets: 'El recuento vuelve a cero el {date}',
     },

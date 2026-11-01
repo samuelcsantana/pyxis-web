@@ -1,14 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import type { Admin } from '@/domain/admin';
-import type { MonthUsage } from '@/lib/accounts-in-view';
-import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_EXPORT_ID } from '@/services/exports/mock-exports-service';
 import { demoAdminOf } from '@/services/projects/mock-projects-service';
 import { english } from '@/test-utils/english';
 import { MobileMenu } from './mobile-menu';
 import { Sidebar } from './sidebar';
-import { SignOutButton } from './sign-out-button';
 
 const DEMO_ADMIN = demoAdminOf(english.t, new Date('2026-10-06T02:30:00.000Z'));
 const [STORE] = DEMO_ADMIN.projects;
@@ -22,28 +18,11 @@ const LONG_PROJECT = {
   timezone: 'America/Argentina/Buenos_Aires',
 };
 
-const LONG_VALUES: Admin = {
-  email: 'analytics.operations+dashboards@a-very-long-company-domain.example',
-  projects: [LONG_PROJECT, ...DEMO_ADMIN.projects.slice(1)],
-};
-
-const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
-  for (const element of canvas.getAllByText(LONG_VALUES.email)) {
-    await expect(element.scrollWidth).toBeLessThanOrEqual(element.clientWidth);
-    await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
-  }
-};
-
 const meta = {
   title: 'Shell/Sidebar',
   component: Sidebar,
   tags: ['autodocs'],
-  args: {
-    admin: DEMO_ADMIN,
-    project: STORE,
-    i18n: english,
-  },
+  args: { project: STORE },
   parameters: {
     layout: 'fullscreen',
     nextjs: {
@@ -74,40 +53,8 @@ export const BrazilianPortuguese: Story = {
     await expect(canvas.queryByText('Sem cookies, sem dados pessoais')).toBeNull();
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
-    await userEvent.click(canvas.getByText('Conta e preferências'));
-    await expect(canvas.getByRole('link', { name: 'Tema e idioma' })).toHaveAttribute(
-      'href',
-      '/account/preferences',
-    );
+    await expect(canvas.queryByText('Conta e preferências')).toBeNull();
   },
-};
-
-const COMPACT_MENU_MAX_HEIGHT_PX = 240;
-
-const openTheAccountMenu: Play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByText('Account and preferences'));
-  await expect(canvas.getByRole('link', { name: 'Account and billing' })).toBeVisible();
-  await expect(canvas.getByRole('link', { name: 'Theme and language' })).toBeVisible();
-  await expect(canvas.queryByRole('group', { name: 'Theme' })).toBeNull();
-  await expect(canvas.getByRole('button', { name: 'Sign out' })).toBeVisible();
-  const panel = canvas.getByRole('link', { name: 'Theme and language' }).closest('details > div');
-  await expect(boxOf(panel).height).toBeLessThanOrEqual(COMPACT_MENU_MAX_HEIGHT_PX);
-};
-
-export const AccountMenuOpen: Story = { play: openTheAccountMenu };
-
-export const AccountMenuOpenDark: Story = { globals: { theme: 'dark' }, play: openTheAccountMenu };
-
-export const LongValues: Story = {
-  args: { admin: LONG_VALUES, project: LONG_PROJECT },
-  play: nothingIsCut,
-};
-
-export const LongValuesDark: Story = {
-  args: { admin: LONG_VALUES, project: LONG_PROJECT },
-  globals: { theme: 'dark' },
-  play: nothingIsCut,
 };
 
 const FILTERED_DEVICES_VIEW = { range: '7d', device: 'mobile' };
@@ -173,12 +120,12 @@ const theInstallGuideIsPending: Play = async ({ canvasElement }) => {
 };
 
 export const NoEventsYet: Story = {
-  args: { project: NO_EVENTS_YET, admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] } },
+  args: { project: NO_EVENTS_YET },
   play: theInstallGuideIsPending,
 };
 
 export const NoEventsYetDark: Story = {
-  args: { project: NO_EVENTS_YET, admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] } },
+  args: { project: NO_EVENTS_YET },
   globals: { theme: 'dark' },
   play: theInstallGuideIsPending,
 };
@@ -200,10 +147,7 @@ const pendingTagFitsIn =
   };
 
 const TAG_LINE_HEIGHT_PX = 20;
-const NO_EVENTS_YET_ARGS = {
-  project: NO_EVENTS_YET,
-  admin: { ...DEMO_ADMIN, projects: [NO_EVENTS_YET] },
-};
+const NO_EVENTS_YET_ARGS = { project: NO_EVENTS_YET };
 const NARROWED_BY_A_SCROLLBAR: NonNullable<Story['decorators']> = [
   (Story) => (
     <div className="w-[233px]">
@@ -247,27 +191,20 @@ export const NoEventsYetNarrowedInGerman: Story = {
   play: pendingTagFitsIn('Installieren', 'Ausstehend'),
 };
 
-const leavesHelpToTheAccountMenu: Play = async ({ canvasElement }) => {
-  const canvas = within(canvasElement);
+const marksNothingOnHelp: Play = async ({ canvasElement }) => {
   await expect(currentLinksOutsideTheMenus(canvasElement)).toHaveLength(0);
-  const help = canvas.getByRole('link', { name: 'Help and support', hidden: true });
-  await expect(help.closest('details')).toContainElement(
-    canvas.getByText('Account and preferences'),
-  );
-  await userEvent.click(canvas.getByText('Account and preferences'));
-  await expect(help).toBeVisible();
-  await expect(help).toHaveAttribute('href', `/${STORE.id}/help?range=7d`);
+  await expect(within(canvasElement).queryByRole('link', { name: 'Help and support' })).toBeNull();
 };
 
 export const OnHelp: Story = {
   parameters: onPageOf('help'),
-  play: leavesHelpToTheAccountMenu,
+  play: marksNothingOnHelp,
 };
 
 export const OnHelpDark: Story = {
   parameters: onPageOf('help'),
   globals: { theme: 'dark' },
-  play: leavesHelpToTheAccountMenu,
+  play: marksNothingOnHelp,
 };
 
 export const KeyboardFocus: Story = {
@@ -280,7 +217,7 @@ export const KeyboardFocus: Story = {
 
 export const Hovered: Story = {
   parameters: {
-    pseudo: { hover: ['a[href*="/funnel"]', 'summary', 'button'] },
+    pseudo: { hover: ['a[href*="/funnel"]'] },
   },
 };
 
@@ -289,72 +226,6 @@ export const Pressed: Story = {
 };
 
 type Play = NonNullable<Story['play']>;
-
-class PendingSignOut extends MockAuthService {
-  override signOut(): Promise<void> {
-    return new Promise(() => undefined);
-  }
-}
-
-class FailingSignOut extends MockAuthService {
-  override signOut(): Promise<void> {
-    return Promise.reject(new Error('The API answered 503'));
-  }
-}
-
-const signOutWith = (authService: MockAuthService): Story['render'] =>
-  function SignOutOnTheNav() {
-    return (
-      <div className="flex flex-wrap gap-1 bg-nav p-4">
-        <SignOutButton authService={authService} />
-      </div>
-    );
-  };
-
-const clickSignOut = async (canvasElement: HTMLElement) => {
-  const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByRole('button', { name: 'Sign out' }));
-  return canvas;
-};
-
-const showsSigningOut: Play = async ({ canvasElement }) => {
-  const canvas = await clickSignOut(canvasElement);
-  const button = await canvas.findByRole('button', { name: 'Signing out…' });
-  await expect(button).toBeDisabled();
-  await expect(button).toHaveAttribute('aria-busy', 'true');
-};
-
-const showsTheSignOutError: Play = async ({ canvasElement }) => {
-  const canvas = await clickSignOut(canvasElement);
-  await expect(await canvas.findByRole('alert')).toHaveTextContent(
-    'Could not sign out. Try again.',
-  );
-  await expect(await canvas.findByRole('button', { name: 'Sign out' })).toBeEnabled();
-};
-
-export const SignOutIdle: Story = { render: signOutWith(new MockAuthService()) };
-
-export const SigningOut: Story = {
-  render: signOutWith(new PendingSignOut()),
-  play: showsSigningOut,
-};
-
-export const SigningOutDark: Story = {
-  render: signOutWith(new PendingSignOut()),
-  globals: { theme: 'dark' },
-  play: showsSigningOut,
-};
-
-export const SignOutFailed: Story = {
-  render: signOutWith(new FailingSignOut()),
-  play: showsTheSignOutError,
-};
-
-export const SignOutFailedDark: Story = {
-  render: signOutWith(new FailingSignOut()),
-  globals: { theme: 'dark' },
-  play: showsTheSignOutError,
-};
 
 const insideTheMobileMenu: NonNullable<Story['decorators']> = [
   (Story, { args }) => (
@@ -374,7 +245,7 @@ export const OnAPhone: Story = {
 const PHONE_TOUCH_TARGET_PX = 44;
 
 export const OnAPhoneWithALongProjectName: Story = {
-  args: { admin: LONG_VALUES, project: LONG_PROJECT },
+  args: { project: LONG_PROJECT },
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   decorators: insideTheMobileMenu,
   play: async ({ canvasElement }) => {
@@ -427,14 +298,9 @@ export const ShortWindow: Story = {
     await expect(window.innerHeight).toBe(SHORT_LAPTOP_WINDOW.height);
     const screens = canvas.getByRole('link', { name: 'Overview' }).closest('ul')?.parentElement;
     await expect(screens?.scrollHeight).toBe(screens?.clientHeight);
-    for (const part of [
-      canvas.getByRole('link', { name: 'Settings' }),
-      canvas.getByText('Account and preferences').closest('summary'),
-    ]) {
-      const box = boxOf(part);
-      await expect(box.top).toBeGreaterThanOrEqual(0);
-      await expect(box.bottom).toBeLessThanOrEqual(SHORT_LAPTOP_WINDOW.height);
-    }
+    const settings = boxOf(canvas.getByRole('link', { name: 'Settings' }));
+    await expect(settings.top).toBeGreaterThanOrEqual(0);
+    await expect(settings.bottom).toBeLessThanOrEqual(SHORT_LAPTOP_WINDOW.height);
   },
 };
 
@@ -478,66 +344,4 @@ export const MenuButtonPressed: Story = {
     pseudo: { active: ['button[aria-controls="main-navigation"]'] },
   },
   decorators: insideTheMobileMenu,
-};
-
-const DEMO_USAGE: MonthUsage = {
-  events: 41_230,
-  limit: 100_000,
-  share: 0.4123,
-  pausedUntil: null,
-  resetsOn: '2026-11-01T00:00:00.000Z',
-};
-
-const showsTheUsage =
-  (share: string, tone: string): Play =>
-  async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(canvas.getByText(`${share} of the month`)).toBeVisible();
-    await expect(canvasElement.querySelector(`summary .${tone}`)).not.toBeNull();
-    await userEvent.click(canvas.getByText('Account and preferences'));
-    await expect(canvas.getByRole('link', { name: /events this month/ })).toBeVisible();
-  };
-
-export const UsageOfTheMonth: Story = {
-  args: { usage: DEMO_USAGE },
-  play: showsTheUsage('41%', 'bg-accent'),
-};
-
-export const UsageOfTheMonthDark: Story = {
-  args: { usage: DEMO_USAGE },
-  globals: { theme: 'dark' },
-  play: showsTheUsage('41%', 'bg-accent'),
-};
-
-export const UsageNearTheQuota: Story = {
-  args: { usage: { ...DEMO_USAGE, events: 82_000, share: 0.82 } },
-  play: showsTheUsage('82%', 'bg-nav-warn'),
-};
-
-export const UsageWhileReceptionIsPaused: Story = {
-  args: {
-    usage: { ...DEMO_USAGE, events: 150_000, share: 1.5, pausedUntil: '2026-11-01T00:00:00.000Z' },
-  },
-  play: async (context) => {
-    await showsTheUsage('150%', 'bg-nav-bad')(context);
-    await expect(
-      within(context.canvasElement).getByText(
-        /Measuring is paused until Nov 1: the account passed/,
-      ),
-    ).toBeVisible();
-  },
-};
-
-export const AccountMenuOpenOnAPhone: Story = {
-  globals: { viewport: { value: 'mobile1', isRotated: false } },
-  decorators: insideTheMobileMenu,
-  play: async (context) => {
-    await openTheMenu(context);
-    await openTheAccountMenu(context);
-    const canvas = within(context.canvasElement);
-    const summary = canvas.getByText('Account and preferences').closest('summary');
-    const panel = canvas.getByRole('link', { name: 'Theme and language' }).closest('details > div');
-    await expect(boxOf(panel).top).toBeGreaterThanOrEqual(boxOf(summary).bottom);
-    await expect(canvas.getByRole('link', { name: 'Settings' })).toBeVisible();
-  },
 };
