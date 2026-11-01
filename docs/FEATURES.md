@@ -9,7 +9,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - Storybook with the design tokens page, a page of every control recipe (primary, strong,
   secondary and icon buttons, segmented options, tabs, pills, links, fields) at rest, hovered,
   pressed, focused, unavailable and busy, and stories for those states; the open, busy and failed
-  states of the shell (project switcher, Custom period, phone menu, Sign out) and the app's own
+  states of the shell (project switcher, Custom period, the phone's bar and sheets, Sign out) and the app's own
   empty pages under "Pages/States"; every story is also an automated accessibility test
 - Every control answers the pointer and a tap: hover and pressed states of at least 1.3:1 in both
   themes, the pointer cursor on enabled buttons, colour transitions that respect reduced motion
@@ -39,19 +39,22 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   keyboard, fetches that screen ahead, so the click opens it without a skeleton even the first
   time; a tap on a phone, which has no hover, works as before), a top bar whose path names the
   project and the page (`<project switcher> / Overview`) on every screen and page (on a phone the
-  switcher shows the project's mark, its name read to screen readers and written in the phone's
-  bar above), and a period selector (today, 7 days,
+  switcher shows the project's mark, its name read to screen readers, after the Pyxis mark that
+  leads to the Overview), and a period selector (today, 7 days,
   30 days or a custom range, kept in the URL across the screens and through Settings, Help and
   Install, together with the filters; a range it cannot use is named with the reason and
   reopened with its dates, never swapped silently; the Custom button shows the period's short
   dates, "Oct 2 – 31", with the year only outside the current one, and keeps the width of the
-  longest preset's dates so the bar never shifts when the period changes), light and dark themes, sign-out, and a menu
-  button on phones. The first Tab stop is a "Skip to content" link; below 1024px the menu sits in
-  a slim bar that stays at the top while the page scrolls and names the project on screen (the
-  Pyxis mark, the project's mark and its name, cut with an ellipsis when long, linking to its
-  Overview and read as the Overview's title), and it closes with Escape (the focus
-  goes back to its button), when a link in it is followed and when the address changes (Back,
-  Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
+  longest preset's dates so the bar never shifts when the period changes), light and dark themes, sign-out, and a bar at
+  the bottom of phones. The first Tab stop is a "Skip to content" link. Below 1024px the top bar
+  holds only the path and stays at the top while the page scrolls (the content starts 57px
+  down), and a bar at the bottom holds Screens, Period, Filters and Account on 48px targets in a 60px bar. The
+  first three open a sheet over the page: the screens with Install and Settings (Screens gets a
+  dot when another screen has news), the period, in two taps from anywhere on the page, and the
+  filters in force or how to add one; Period is off where a screen has none, and Filters off on
+  Visits, which filters in the page, and on the Timeline. Account opens the settings window on
+  its list, Sign out at its foot. A sheet traps the focus and closes with Escape, a tap above it,
+  a choice or a change of address, the focus going back to its button. On a
   computer the logo and the foot (Install and Settings) stay in place and only the list of
   screens scrolls when the window is short: nothing scrolls at 1440×800 nor at 1366×650, with
   Settings in view. The account email in its menu, and the project names
@@ -64,14 +67,14 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   The
   navigation marks where you are: the screen, Install or Settings; Settings also on an export,
   which has no item of its own. The account is an avatar with its initial at the right end of
-  the top bar (40 px on a computer, 44 px on a phone, where it stays on the first row beside the
-  path while the period moves under them), read as "Account and preferences". Its menu opens
+  the top bar from 1024px up (40 px; below, Account in the bottom bar opens the settings window
+  instead), read as "Account and preferences". Its menu opens
   downward and scrolls inside itself when it is taller than the window under the pinned bar: the
   e-mail, Account and billing, Theme and language, Help and support (which keeps the screen's
   period and filters, and on the Help page is marked as where you are, with a check and not by
   weight alone, and reloads it as a page), Sign out, then the privacy line ("No cookies, no
   personal data"). Reaching the support address takes two clicks, the avatar and Help and
-  support. The avatar takes the accent on hover, on a press (a tap on a phone) and while open. To the
+  support. The avatar takes the accent on hover, on a press (a tap on a touch screen) and while open. To the
   owner of the account that holds the project on screen, a ring around the avatar draws the
   month's usage, in tones that keep 3:1 against the bar in both themes (gold below 80%, orange
   from 80%, the ring never drawn past full nor before the month's first event); while the
@@ -235,7 +238,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - News on the menu: each screen's item counts what arrived since that screen was last read on this
   device (visits on Overview, Visits, Devices and Acquisition; conversions on Funnel; named events
   on Features; failed requests on Requests, in red), never on the screen being shown, `99+` from
-  100 on, with the words for a screen reader; on a phone the menu button gets a dot. The dashboard
+  100 on, with the words for a screen reader; on a phone Screens in the bottom bar gets a dot. The dashboard
   asks every 30 seconds while the tab is visible and the period includes today, and stops after
   30 idle minutes ([ADR 0014](adr/0014-arrivals-are-polled-not-streamed.md))
 - News on the screen being shown: when something of its kind arrived after that screen was read,
@@ -287,10 +290,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner's "What is Pyxis?" links to the home page in the demo's language
 - Settings is a window with an address ([ADR 0016](adr/0016-settings-as-a-window-with-an-address.md)),
-  opened from the gear in the sidebar (and in the phone menu) over the screen on view, which keeps
+  opened from the gear in the sidebar (on a phone, from Screens or Account in the bottom bar) over the screen on view, which keeps
   its period and filters: Back, Esc, the close button or a click outside close it to that screen,
-  and focus goes back to the gear (on a phone, to the menu button), or to the avatar in the top
-  bar when one of the account menu's rows opened it. Its menu has two groups, the project, named by the project
+  and focus goes back to what opened it: the gear, the avatar in the top bar when one of the
+  account menu's rows opened it, or on a phone the button of the bottom bar. Its menu has two groups, the project, named by the project
   (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
   (Account and billing, Theme and language, Sessions, Access tokens, Connected apps, and Help and
   support at `/[projectId]/help` when there is a project to go back to), with Sign out at its
