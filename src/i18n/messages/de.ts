@@ -26,6 +26,12 @@ export const de = translation({
     label: 'Hauptnavigation',
     openMenu: 'Menü öffnen',
     openMenuWithNews: 'Menü öffnen, es gibt Neues',
+    screens: 'Ansichten',
+    screensWithNews: 'Ansichten, es gibt Neues',
+    accountTab: 'Konto',
+    filters: 'Filter',
+    filtersEmpty:
+      'Keine Filter. Tippe auf eine Zeile einer Tabelle (ein Land, eine Quelle), um alle Ansichten zu filtern.',
     arrivals: {
       visits: forms('{count} neuer Besuch', '{count} neue Besuche'),
       conversions: forms('{count} neue Conversion', '{count} neue Conversions'),

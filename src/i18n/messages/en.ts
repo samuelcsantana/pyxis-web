@@ -21,6 +21,11 @@ export const en = {
     label: 'Main navigation',
     openMenu: 'Open menu',
     openMenuWithNews: 'Open menu, there is news',
+    screens: 'Screens',
+    screensWithNews: 'Screens, there is news',
+    accountTab: 'Account',
+    filters: 'Filters',
+    filtersEmpty: 'No filters. Tap a row in a table (a country, a source) to filter every screen.',
     arrivals: {
       visits: { one: '{count} new visit', other: '{count} new visits' },
       conversions: { one: '{count} new conversion', other: '{count} new conversions' },

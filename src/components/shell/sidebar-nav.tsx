@@ -61,7 +61,7 @@ export function isSettingsPath(pathname: string): boolean {
   return projectId !== '' && segment === SETTINGS_SEGMENT;
 }
 
-function reloadOnItsPage(onItsPage: boolean, href: string) {
+export function reloadOnItsPage(onItsPage: boolean, href: string) {
   return (event: MouseEvent<HTMLAnchorElement>) => {
     if (onItsPage && !opensElsewhere(event)) {
       event.preventDefault();

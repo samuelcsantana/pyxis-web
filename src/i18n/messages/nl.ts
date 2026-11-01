@@ -26,6 +26,12 @@ export const nl = translation({
     label: 'Hoofdnavigatie',
     openMenu: 'Menu openen',
     openMenuWithNews: 'Menu openen, er is nieuws',
+    screens: 'Schermen',
+    screensWithNews: 'Schermen, er is nieuws',
+    accountTab: 'Account',
+    filters: 'Filters',
+    filtersEmpty:
+      'Geen filters. Tik op een rij in een tabel (een land, een bron) om alle schermen te filteren.',
     arrivals: {
       visits: forms('{count} nieuw bezoek', '{count} nieuwe bezoeken'),
       conversions: forms('{count} nieuwe conversie', '{count} nieuwe conversies'),
