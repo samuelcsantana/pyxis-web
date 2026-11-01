@@ -1,6 +1,14 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { holdScreenRequests, shownDates } from './navigation';
+import {
+  expectPeriodInForce,
+  holdScreenRequests,
+  openPeriodOnAPhone,
+  openScreens,
+  periods,
+  screensMenu,
+  shownDates,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const HEADER_MARKER = 'pyxisE2eHeader';
@@ -33,18 +41,16 @@ function theMarkedHeaderIsShown(page: Page): Promise<boolean> {
 
 async function openTheMenu(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
 }
 
 function screenLink(page: Page, name: string) {
-  return page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name, exact: true });
+  return screensMenu(page).getByRole('link', { name, exact: true });
 }
 
 function periodLink(page: Page, name: string) {
-  return page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name });
+  return periods(page).getByRole('link', { name });
 }
 
 async function waitForPrefetchOf(page: Page, screen: string): Promise<void> {
@@ -85,9 +91,10 @@ test('keeps the same header while the screen and then the period change', async 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=7d$`));
   expect(await theMarkedHeaderIsShown(page)).toBe(true);
 
+  await openPeriodOnAPhone(page);
   await periodLink(page, '30 days').click();
 
-  await expect(periodLink(page, '30 days')).toHaveAttribute('aria-current', 'page');
+  await expectPeriodInForce(page, '30 days');
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=30d`));
   expect(await theMarkedHeaderIsShown(page)).toBe(true);
 });
@@ -129,11 +136,12 @@ test('takes a period chosen while a screen loads to that screen and period', asy
 
   await screenLink(page, 'Acquisition').click();
   await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
+  await openPeriodOnAPhone(page);
   await periodLink(page, '7 days').click();
   release();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/acquisition\\?range=7d$`));
-  await expect(periodLink(page, '7 days')).toHaveAttribute('aria-current', 'page');
+  await expectPeriodInForce(page, '7 days');
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 });
 

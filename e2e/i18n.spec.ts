@@ -1,6 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { languageTrigger } from './language-select';
+import { hasThePhoneBar } from './navigation';
 import { parseCount } from './locale-numbers';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -33,29 +34,38 @@ function watchConsoleErrors(page: Page): string[] {
 
 interface PreferencesLabels {
   readonly account: string;
+  readonly accountTab: string;
   readonly part: string;
   readonly language: string;
 }
 
 const ENGLISH_LABELS: PreferencesLabels = {
   account: 'Account and preferences',
+  accountTab: 'Account',
   part: 'Theme and language',
   language: 'Language',
 };
 const PORTUGUESE_LABELS: PreferencesLabels = {
   account: 'Conta e preferências',
+  accountTab: 'Conta',
   part: 'Tema e idioma',
   language: 'Idioma',
 };
 const SPANISH_LABELS: PreferencesLabels = {
   account: 'Cuenta y preferencias',
+  accountTab: 'Cuenta',
   part: 'Tema e idioma',
   language: 'Idioma',
 };
 
 async function languageField(page: Page, labels: PreferencesLabels) {
-  await page.getByRole('banner').locator('summary', { hasText: labels.account }).click();
-  await page.getByRole('link', { name: labels.part }).click();
+  if (hasThePhoneBar(page)) {
+    await page.getByRole('link', { name: labels.accountTab, exact: true }).click();
+    await page.getByRole('dialog').getByRole('link', { name: labels.part }).click();
+  } else {
+    await page.getByRole('banner').locator('summary', { hasText: labels.account }).click();
+    await page.getByRole('link', { name: labels.part }).click();
+  }
   return page
     .getByRole('dialog')
     .getByRole('region', { name: labels.part })
@@ -334,7 +344,7 @@ test('switches the language in Theme and language, stays on the part, and back',
   await (await languageField(page, ENGLISH_LABELS)).selectOption(PORTUGUESE);
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
-  await expect(page).toHaveURL(/\/account\/preferences$/);
+  await expect(page).toHaveURL(/\/account\/preferences(\?range=7d)?$/);
   await expect(
     page.getByRole('dialog').getByRole('region', { name: PORTUGUESE_LABELS.part }),
   ).toBeVisible();

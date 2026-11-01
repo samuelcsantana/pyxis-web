@@ -68,7 +68,13 @@ export const RejectedRangeDark: Story = {
 export const RejectedRangeOnAPhone: Story = {
   parameters: REJECTED,
   globals: { viewport: { value: 'mobile2', isRotated: false } },
-  play: showsTheRejectedRange,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('status')).toHaveTextContent(
+      'That range was not used: it ends before it starts.',
+    );
+    await expect(canvas.queryByRole('navigation', { name: 'Period' })).toBeNull();
+  },
 };
 
 function customButton(canvasElement: HTMLElement): HTMLElement {
@@ -94,11 +100,6 @@ const openTheCustomForm: NonNullable<Story['play']> = async ({ canvasElement }) 
 export const CustomFormOpen: Story = { play: openTheCustomForm };
 
 export const CustomFormOpenDark: Story = { globals: { theme: 'dark' }, play: openTheCustomForm };
-
-export const CustomFormOpenOnAPhone: Story = {
-  globals: { viewport: { value: 'mobile2', isRotated: false } },
-  play: openTheCustomForm,
-};
 
 export const CustomFormClosedWithEscape: Story = {
   parameters: REJECTED,
@@ -229,18 +230,19 @@ export const WithTheAccount: Story = {
 
 export const WithTheAccountDark: Story = { ...WithTheAccount, globals: { theme: 'dark' } };
 
+const PHONE_BAR_HEIGHT_PX = 57;
+
 export const WithTheAccountOnAPhone: Story = {
   decorators: withTheAccount,
   globals: { viewport: { value: 'mobile2', isRotated: false } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const avatar = avatarOf(canvasElement);
-    const switcher = canvas.getByText('Switch project. Current project:').closest('summary');
-    const presets = canvas.getByRole('navigation', { name: 'Period' }).getBoundingClientRect();
-    await expect(
-      Math.abs(avatar.top - (switcher?.getBoundingClientRect().top ?? 0)),
-    ).toBeLessThanOrEqual(1);
-    await expect(presets.top).toBeGreaterThanOrEqual(avatar.bottom);
+    const avatar = canvas.getByText('Account and preferences').closest('summary');
+    await expect(avatar).not.toBeVisible();
+    await expect(canvas.queryByRole('navigation', { name: 'Period' })).toBeNull();
+    await expect(canvas.getByRole('banner').getBoundingClientRect().height).toBeLessThanOrEqual(
+      PHONE_BAR_HEIGHT_PX,
+    );
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
   },
 };

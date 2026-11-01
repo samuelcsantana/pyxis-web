@@ -1,23 +1,25 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
 import {
+  accountButton,
   accountMenuButton,
   customPeriod,
-  openAccountMenu,
+  openScreens,
+  openScreensOnAPhone,
+  expectPeriodInForce,
+  openPeriodOnAPhone,
   openThemeAndLanguage,
+  periods,
+  phoneBar,
+  screensMenu,
   shownDates,
+  signOutButton,
 } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
 const TOUCH_TARGET_PX = 44;
-
-async function openNavigation(page: Page, isMobile: boolean) {
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-}
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`overview, ${colorScheme} theme`, () => {
@@ -35,6 +37,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       page,
     }) => {
       await page.goto(`/${STORE_ID}/overview`);
+      await openPeriodOnAPhone(page);
       await customPeriod(page).click();
       await page.getByRole('grid').locator('button[tabindex="0"]').click();
       await expect(page.getByText(/now choose the last day/)).toBeVisible();
@@ -58,8 +61,8 @@ test('lists the screens in the order of the questions, then the project', async 
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await openNavigation(page, isMobile);
-  const navigation = page.getByRole('navigation', { name: 'Main navigation' });
+  await openScreensOnAPhone(page, isMobile);
+  const navigation = screensMenu(page);
 
   await expect(navigation.getByText('Analytics', { exact: true })).toHaveCount(0);
   await expect(navigation.getByRole('list').first().getByRole('link')).toHaveText([
@@ -84,40 +87,42 @@ test('takes the logo to the overview of the project on screen, on the same perio
 }) => {
   await page.goto(`/${DOCS_ID}/devices?range=7d`);
 
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: isMobile ? 'Overview · Demo Docs' : 'Pyxis', exact: true })
-    .click();
+  const logo = isMobile
+    ? page.getByRole('banner').getByRole('link', { name: 'Overview', exact: true })
+    : page
+        .getByRole('navigation', { name: 'Main navigation' })
+        .getByRole('link', { name: 'Pyxis' });
+  await logo.click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));
   await expect(page).toHaveTitle('Overview · Demo Docs · Pyxis');
-  await expect(
-    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
-  ).toHaveAttribute('aria-current', 'page');
 });
 
-test('names the project on screen in the bar of a phone, after a switch too', async ({
+test('starts a phone with the path, its logo and the project on 44px targets, after a switch too', async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, 'Only a phone has the bar that names the project beside its menu button.');
+  test.skip(!isMobile, 'This checks the top of a phone.');
   await page.goto(`/${STORE_ID}/overview`);
-  const bar = page.getByRole('navigation', { name: 'Main navigation' });
+  const bar = page.getByRole('banner');
+  const switcher = bar.locator('summary', { hasText: 'Switch project' });
 
-  await expect(bar.getByRole('link', { name: 'Overview · My site', exact: true })).toBeVisible();
-  await page.getByRole('banner').locator('summary', { hasText: 'Switch project' }).click();
+  await expect(switcher).toContainText('My site');
+  await switcher.click();
   await page.getByRole('link', { name: 'Demo Docs' }).click();
 
-  const home = bar.getByRole('link', { name: 'Overview · Demo Docs', exact: true });
-  await expect(home).toBeVisible();
-  await expect(home.getByText('Demo Docs', { exact: true })).toBeVisible();
-  const button = await bar.getByRole('button', { name: 'Open menu' }).boundingBox();
-  expect(button?.width).toBe(TOUCH_TARGET_PX);
-  expect(button?.height).toBe(TOUCH_TARGET_PX);
+  await expect(page).toHaveTitle('Overview · Demo Docs · Pyxis');
+  await expect(switcher).toContainText('Demo Docs');
+  for (const target of [bar.getByRole('link', { name: 'Overview', exact: true }), switcher]) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(TOUCH_TARGET_PX);
+    expect(box?.width).toBeGreaterThanOrEqual(TOUCH_TARGET_PX);
+  }
 });
 
 test("shows the owner the month's usage of the project's account, and where it counts down to", async ({
   page,
+  isMobile,
 }) => {
   const today = new Date();
   const resetsOn = new Intl.DateTimeFormat('en-US', {
@@ -125,6 +130,10 @@ test("shows the owner the month's usage of the project's account, and where it c
     day: 'numeric',
     timeZone: 'UTC',
   }).format(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 1)));
+  test.skip(
+    isMobile,
+    'The ring is on the avatar of a laptop; a phone reads it in Account and billing.',
+  );
   await page.goto(`/${STORE_ID}/overview`);
   const account = accountMenuButton(page);
 
@@ -140,19 +149,17 @@ test("shows the owner the month's usage of the project's account, and where it c
 
 test('writes the chosen period into the URL', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  const periods = page.getByRole('navigation', { name: 'Period' });
+  await openPeriodOnAPhone(page);
 
-  await periods.getByRole('link', { name: '7 days' }).click();
+  await periods(page).getByRole('link', { name: '7 days' }).click();
 
   await expect(page).toHaveURL(/range=7d$/);
-  await expect(periods.getByRole('link', { name: '7 days' })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
+  await expectPeriodInForce(page, '7 days');
 });
 
 test('applies a custom period picked on the calendar through a plain form', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
+  await openPeriodOnAPhone(page);
 
   await customPeriod(page).click();
   await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
@@ -162,10 +169,16 @@ test('applies a custom period picked on the calendar through a plain form', asyn
   await expect(page.getByText('Page views and named events, Aug 1 – Aug 31, 2026')).toBeVisible();
 });
 
-test('picks a custom period with the keyboard alone', async ({ page }) => {
+test('picks a custom period with the keyboard alone', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
   const custom = page.locator('summary', { hasText: 'Custom' });
+  if (isMobile) {
+    await phoneBar(page)
+      .getByRole('button', { name: /^Period/ })
+      .focus();
+    await page.keyboard.press('Enter');
+  }
 
   await custom.focus();
   await page.keyboard.press('Enter');
@@ -211,9 +224,8 @@ for (const { from, to, reason } of REJECTED_RANGES) {
       `That range was not used: ${reason}. Showing the last 30 days instead.`,
     );
     await expect(notice).toHaveAttribute('role', 'status');
-    await expect(
-      page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '30 days' }),
-    ).toHaveAttribute('aria-current', 'page');
+    await expectPeriodInForce(page, '30 days');
+    await openPeriodOnAPhone(page);
     await expect(page.getByRole('grid')).toBeVisible();
     await expect(page.getByText(/· 30 days$/)).toHaveAttribute(
       'aria-describedby',
@@ -226,6 +238,7 @@ for (const { from, to, reason } of REJECTED_RANGES) {
 
 test('keeps the custom period form inside the screen', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
+  await openPeriodOnAPhone(page);
 
   await customPeriod(page).click();
 
@@ -262,6 +275,7 @@ test('switches project from a 44px target in the top bar and keeps the period', 
 
 test('closes the project switcher when the focus moves past it, leaving that focus in sight', async ({
   page,
+  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
@@ -275,9 +289,9 @@ test('closes the project switcher when the focus moves past it, leaving that foc
   }
 
   await expect(switcher).not.toHaveAttribute('open');
-  await expect(
-    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: 'Today' }),
-  ).toBeFocused();
+  if (!isMobile) {
+    await expect(periods(page).getByRole('link', { name: 'Today' })).toBeFocused();
+  }
   expect(await focusedElementIsUncovered(page)).toBe(true);
 });
 
@@ -305,10 +319,14 @@ test('closes the project switcher on a click outside it', async ({ page }) => {
   await expect(switcher).not.toHaveAttribute('open');
 });
 
-test('closes the custom period form on Escape and on a click outside it', async ({ page }) => {
+test('closes the custom period form on Escape and on a click outside it', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/overview`);
   await page.waitForLoadState('networkidle');
   const custom = page.locator('details', { hasText: 'Custom' });
+  await openPeriodOnAPhone(page);
 
   await custom.locator('summary').click();
   await page.getByRole('grid').locator('button[tabindex="0"]').focus();
@@ -318,7 +336,11 @@ test('closes the custom period form on Escape and on a click outside it', async 
   await expect(custom.locator('summary')).toBeFocused();
 
   await custom.locator('summary').click();
-  await page.getByRole('heading', { level: 1, name: 'Overview' }).click();
+  if (isMobile) {
+    await page.mouse.click(20, 20);
+  } else {
+    await page.getByRole('heading', { level: 1, name: 'Overview' }).click();
+  }
 
   await expect(custom).not.toHaveAttribute('open');
 });
@@ -331,9 +353,7 @@ test('answers not found for a project outside the account', async ({ page }) => 
 
 test('signs out to the sign-in page', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  await openAccountMenu(page);
-
-  await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+  await (await signOutButton(page)).click();
 
   await expect(page).toHaveURL(/\/sign-in$/);
 });
@@ -358,16 +378,23 @@ test('remembers the chosen theme across a reload, and goes back to the system on
   await expect(page.locator('html')).not.toHaveAttribute('data-theme');
 });
 
-test('collapses the navigation behind a menu button on a phone', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+test('keeps the screens in a sheet of the bar at the bottom of a phone', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'The bar at the bottom exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/overview`);
-  const overviewLink = page.getByRole('link', { name: 'Overview', exact: true });
+  const funnel = page.getByRole('link', { name: 'Funnel', exact: true });
 
-  await expect(overviewLink).toBeHidden();
-  await page.getByRole('button', { name: 'Open menu' }).click();
-  await expect(overviewLink).toBeVisible();
-  await overviewLink.click();
-  await expect(page.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+  await expect(funnel).toBeHidden();
+  await openScreens(page);
+  await expect(funnel).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+  await funnel.click();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel`));
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(phoneBar(page).getByRole('button', { name: 'Screens' })).toHaveAttribute(
     'aria-expanded',
     'false',
   );
@@ -386,41 +413,58 @@ test('skips the navigation to the content with the first Tab', async ({ page }) 
   await expect(page.getByRole('main')).toBeFocused();
 });
 
-const MENU_BUTTON = 'button[aria-controls="main-navigation"]';
-
-test('closes the menu with Escape and gives the focus back to its button', async ({
+test('closes a sheet with Escape or a tap above it, giving the focus back to its button', async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+  test.skip(!isMobile, 'The bar at the bottom exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/overview`);
+  const screens = phoneBar(page).getByRole('button', { name: 'Screens' });
 
-  await page.getByRole('button', { name: 'Open menu' }).click();
+  await screens.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog', { name: 'Screens' })).toBeVisible();
+  await expect(
+    page.getByRole('dialog', { name: 'Screens' }).getByRole('link').first(),
+  ).toBeFocused();
   await page.keyboard.press('Escape');
 
-  const toggle = page.locator(MENU_BUTTON);
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(toggle).toBeFocused();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(screens).toHaveAttribute('aria-expanded', 'false');
+  await expect(screens).toBeFocused();
+
+  await openScreens(page);
+  await page.mouse.click(20, 20);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
-test('closes the menu when Back changes the address', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'The menu button exists only on narrow screens.');
+test('changes the period in two taps on a phone, and closes a sheet when Back changes the address', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'The bar at the bottom exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/overview`);
-  await page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' })
-    .click();
-  await expect(page).toHaveURL(/range=7d$/);
+  await page.evaluate(() => {
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  });
 
-  await page.getByRole('button', { name: 'Open menu' }).click();
+  await phoneBar(page).getByRole('button', { name: 'Period' }).click();
+  await page.getByRole('dialog', { name: 'Period' }).getByRole('link', { name: '7 days' }).click();
+  await expect(page).toHaveURL(/range=7d$/);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+
+  await openScreens(page);
   await page.goBack();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview$`));
-  await expect(page.locator(MENU_BUTTON)).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
-test('keeps the menu bar on screen while the page scrolls', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'The menu bar exists only on narrow screens.');
+test('keeps the path on top and the bar at the bottom while the page scrolls', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, 'The bar at the bottom exists only on narrow screens.');
   await page.goto(`/${STORE_ID}/visits`);
 
   await page.evaluate(() => {
@@ -428,34 +472,42 @@ test('keeps the menu bar on screen while the page scrolls', async ({ page, isMob
   });
 
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-  const bar = await page.getByRole('navigation', { name: 'Main navigation' }).boundingBox();
-  expect(bar?.y).toBe(0);
-  await expect(page.getByRole('button', { name: 'Open menu' })).toBeInViewport();
+  const path = await page.getByRole('banner').boundingBox();
+  const bar = await phoneBar(page).boundingBox();
+  expect(path?.y).toBe(0);
+  expect((bar?.y ?? 0) + (bar?.height ?? 0)).toBe(page.viewportSize()?.height);
+  for (const name of ['Screens', 'Period', 'Filters']) {
+    const box = await phoneBar(page).getByRole('button', { name }).boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(TOUCH_TARGET_PX);
+  }
 });
 
 test.describe('on a short phone', () => {
   test.use({ viewport: { width: 390, height: 640 } });
 
-  test('shows every choice of the account menu under the bar, sign-out included, as it opens', async ({
+  test('opens Account as the list of the settings window, sign-out at its foot', async ({
     page,
     isMobile,
   }) => {
     test.skip(!isMobile, 'This checks the bar of a phone.');
     await page.goto(`/${STORE_ID}/overview`);
-    const avatar = await accountMenuButton(page).boundingBox();
+    const account = await accountButton(page).boundingBox();
 
-    await openAccountMenu(page);
+    await accountButton(page).click();
+    const window = page.getByRole('dialog', { name: 'Settings' });
 
-    expect(avatar?.width).toBe(TOUCH_TARGET_PX);
-    expect(avatar?.height).toBe(TOUCH_TARGET_PX);
+    expect(account?.height).toBeGreaterThanOrEqual(TOUCH_TARGET_PX);
     for (const choice of [
-      page.getByRole('link', { name: /^Account and billing/ }),
-      page.getByRole('link', { name: 'Theme and language' }),
-      page.getByRole('link', { name: 'Help and support' }),
-      page.getByRole('button', { name: 'Sign out', exact: true }),
+      window.getByRole('link', { name: 'Account and billing' }),
+      window.getByRole('link', { name: 'Theme and language' }),
+      window.getByRole('link', { name: 'Help and support' }),
     ]) {
-      await expect(choice).toBeInViewport({ ratio: 1 });
+      await expect(choice).toBeVisible();
     }
+    await window.getByRole('button', { name: 'Sign out', exact: true }).scrollIntoViewIfNeeded();
+    await expect(window.getByRole('button', { name: 'Sign out', exact: true })).toBeInViewport({
+      ratio: 1,
+    });
     expect(await sidewaysOverflow(page)).toBe(0);
   });
 });

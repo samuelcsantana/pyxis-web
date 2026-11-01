@@ -1,5 +1,6 @@
 import { expect, type Locator, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { openPeriodOnAPhone, periods } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -50,10 +51,8 @@ test('switches to the failed reads, counted without a rate, keeping the period',
   await expect(page.getByRole('group', { name: 'Write error rate' })).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Show' })).toHaveCount(0);
 
-  await page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' })
-    .click();
+  await openPeriodOnAPhone(page);
+  await periods(page).getByRole('link', { name: '7 days' }).click();
   await expect(page).toHaveURL(/range=7d&kind=reads$/);
 
   await tabs.getByRole('link', { name: 'Writes' }).click();
@@ -102,10 +101,8 @@ test('filters by the screen where a route failed, through reloads and periods', 
   await page.reload();
   await expect(rows).toHaveCount(1);
 
-  await page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' })
-    .click();
+  await openPeriodOnAPhone(page);
+  await periods(page).getByRole('link', { name: '7 days' }).click();
   await expect(page).toHaveURL(/range=7d&screen=%2Forders%2Fnew$/);
   await expect(rows).toHaveCount(1);
 

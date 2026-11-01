@@ -6,7 +6,6 @@ import { seenMarksKey } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { publishArrivalNews } from './arrival-news';
-import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
 import { ProjectChoicesProvider } from './project-choices';
 import { ProjectSwitcher } from './project-switcher';
@@ -34,7 +33,6 @@ import { CONTENT_ID } from './content-id';
 import { SkipLink } from './skip-link';
 import { Topbar } from './topbar';
 import { BarAccountProvider } from './bar-account';
-import { DismissableDetails } from '@/components/ui/dismissable-details';
 import { english } from '@/test-utils/english';
 import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -67,8 +65,6 @@ function store() {
   }
   return first;
 }
-
-const STORE_HOME = 'Overview · Demo Store';
 
 function docs() {
   const [, second] = ADMIN.projects;
@@ -578,40 +574,21 @@ describe('ProjectSwitcher', () => {
     expect(details.open).toBe(false);
   });
 
-  it('closes a menu inside the mobile menu on Escape, which stays open until a second Escape', () => {
-    const { container } = renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <DismissableDetails>
-          <summary>More</summary>
-          <a href="#choice">A choice</a>
-        </DismissableDetails>
-      </MobileMenu>,
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+  it('closes on Escape, with the focus back on its button', () => {
+    const { container } = renderWithMessages(switcher());
     const details = container.querySelector('details');
     const summary = container.querySelector('summary');
     if (details === null || summary === null) {
-      throw new Error('no menu inside the mobile menu');
+      throw new Error('no project menu');
     }
     details.open = true;
-    const link = screen.getByRole('link', { name: 'A choice' });
+    const link = screen.getByRole('link', { name: /Demo Docs/ });
     link.focus();
 
     fireEvent.keyDown(link, { key: 'Escape' });
 
     expect(details.open).toBe(false);
     expect(summary).toHaveFocus();
-    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
-
-    fireEvent.keyDown(summary, { key: 'Escape' });
-
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
   });
 
   it('closes when the focus moves past its last project', () => {
@@ -814,226 +791,6 @@ describe('Sidebar', () => {
       '/p-docs/overview?range=7d&device=mobile',
     );
   });
-
-  it('becomes the main navigation inside the menu, with the menu bar', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <Sidebar project={store()} />
-      </MobileMenu>,
-    );
-
-    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
-
-    expect(within(navigation).getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
-    expect(
-      within(navigation).getByRole('link', { name: 'Settings', hidden: true }),
-    ).toBeInTheDocument();
-  });
-});
-
-describe('MobileMenu', () => {
-  it('names the project in its bar, linking its overview with the period and the filters', () => {
-    navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&tab=events';
-    renderWithMessages(
-      <MobileMenu project={docs()} homeLabel="Overview · Demo Docs">
-        <span>menu</span>
-      </MobileMenu>,
-    );
-    navigation.search = 'range=7d&tab=events';
-
-    const home = screen.getByRole('link', { name: 'Overview · Demo Docs' });
-    expect(home).toHaveTextContent('DDDemo Docs');
-    expect(within(home).getByText('Demo Docs')).toHaveClass('truncate');
-    expect(home).toHaveAttribute(
-      'href',
-      '/p-docs/overview?from=2026-10-01&to=2026-10-10&device=mobile',
-    );
-  });
-
-  it('closes when its logo is followed, even to the address it is already on', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <span>menu</span>
-      </MobileMenu>,
-    );
-    const logo = screen.getByRole('link', { name: STORE_HOME });
-
-    fireEvent.click(logo);
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    fireEvent.click(logo);
-
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-    expect(document.getElementById('main-navigation')).toHaveClass('hidden');
-  });
-
-  it('marks its button with a dot, and says so, when another screen has news', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <span>menu</span>
-      </MobileMenu>,
-    );
-    const toggle = screen.getByRole('button', { name: 'Open menu' });
-    expect(toggle.querySelector('.rounded-full')).toBeNull();
-
-    act(() => {
-      publishArrivalNews({ visits: { shown: '2', label: '2 new visits' } });
-    });
-
-    expect(screen.getByRole('button', { name: 'Open menu, there is news' })).toBe(toggle);
-    expect(toggle.querySelector('.rounded-full')).toHaveAttribute('aria-hidden', 'true');
-
-    fireEvent.click(toggle);
-
-    expect(screen.getByRole('button', { name: 'Close menu' })).toBe(toggle);
-    expect(toggle.querySelector('.rounded-full')).toBeNull();
-
-    act(() => {
-      publishArrivalNews({});
-    });
-  });
-
-  it('opens and closes the navigation, and closes after a link is followed', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-        <span>Not a link</span>
-      </MobileMenu>,
-    );
-    const toggle = screen.getByRole('button', { name: 'Open menu' });
-    const menu = document.getElementById('main-navigation');
-
-    fireEvent.click(toggle);
-    expect(toggle).toHaveAttribute('aria-expanded', 'true');
-    expect(menu).toHaveClass('block');
-
-    fireEvent.click(screen.getByText('Not a link'));
-    expect(toggle).toHaveAttribute('aria-expanded', 'true');
-
-    fireEvent.click(screen.getByRole('link', { name: 'Overview', hidden: true }));
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-    expect(menu).toHaveClass('hidden');
-  });
-
-  it('closes with its own button', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <span>menu</span>
-      </MobileMenu>,
-    );
-
-    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Close menu' }));
-
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-  });
-
-  function renderOpenMenu() {
-    const view = renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-      </MobileMenu>,
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
-    return view;
-  }
-
-  it('closes on Escape and gives the focus back to its button', () => {
-    renderOpenMenu();
-    const link = screen.getByRole('link', { name: 'Overview' });
-    link.focus();
-
-    fireEvent.keyDown(link, { key: 'Escape' });
-
-    const toggle = screen.getByRole('button', { name: 'Open menu' });
-    expect(toggle).toHaveAttribute('aria-expanded', 'false');
-    expect(toggle).toHaveFocus();
-  });
-
-  it('stays open on any other key', () => {
-    renderOpenMenu();
-
-    fireEvent.keyDown(screen.getByRole('link', { name: 'Overview' }), { key: 'Enter' });
-
-    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
-  });
-
-  it('leaves the focus alone on Escape while closed', () => {
-    renderWithMessages(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-      </MobileMenu>,
-    );
-    const link = screen.getByRole('link', { name: 'Overview', hidden: true });
-    link.focus();
-
-    fireEvent.keyDown(link, { key: 'Escape' });
-
-    expect(link).toHaveFocus();
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-  });
-
-  it('stays open while the address stays the same', () => {
-    const { rerender } = renderOpenMenu();
-
-    rerender(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-      </MobileMenu>,
-    );
-
-    expect(screen.getByRole('button', { name: 'Close menu' })).toBeInTheDocument();
-  });
-
-  it('closes when the query changes, as with a period link or Back', () => {
-    const { rerender } = renderOpenMenu();
-
-    navigation.search = 'range=30d';
-    rerender(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-      </MobileMenu>,
-    );
-    navigation.search = 'range=7d&tab=events';
-
-    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-  });
-
-  it('closes when the path changes', () => {
-    const { rerender } = renderOpenMenu();
-
-    navigation.pathname = '/p-store/funnel';
-    rerender(
-      <MobileMenu project={store()} homeLabel={STORE_HOME}>
-        <a href="#overview">Overview</a>
-      </MobileMenu>,
-    );
-    navigation.pathname = '/p-store/overview';
-
-    expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
-  });
 });
 
 describe('SkipLink and MainContent', () => {
@@ -1228,7 +985,7 @@ describe('Topbar with the account', () => {
     const account = within(bar).getByRole('button', { name: 'Account' });
     const heading = within(bar).getByRole('heading', { level: 1, name: 'Timeline' });
     expect(heading.compareDocumentPosition(account)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(account.parentElement).toHaveClass('col-start-2', 'row-start-1');
+    expect(account.parentElement).toHaveClass('self-start', 'max-lg:hidden');
   });
 
   it('leaves the end of the bar empty without one', () => {

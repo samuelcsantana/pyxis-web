@@ -1,6 +1,14 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { documentMarker, holdScreenRequests, markTheDocument, shownDates } from './navigation';
+import {
+  documentMarker,
+  expectPeriodInForce,
+  holdScreenRequests,
+  markTheDocument,
+  openPeriodOnAPhone,
+  periods,
+  shownDates,
+} from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -50,9 +58,8 @@ test('marks the clicked period and keeps the content busy until the period arriv
 }) => {
   await openReadyPage(page, `/${STORE_ID}/overview`);
   const release = await holdScreenRequests(page);
-  const sevenDays = page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' });
+  await openPeriodOnAPhone(page);
+  const sevenDays = periods(page).getByRole('link', { name: '7 days' });
 
   await sevenDays.click();
 
@@ -64,7 +71,7 @@ test('marks the clicked period and keeps the content busy until the period arriv
   release();
 
   await expect(page).toHaveURL(/range=7d$/);
-  await expect(sevenDays).toHaveAttribute('aria-current', 'page');
+  await expectPeriodInForce(page, '7 days');
   await expectScreenAtRest(page);
   await expect(page.locator('[data-pending]')).toHaveCount(0);
   expect(await documentMarker(page)).toBe('kept');
@@ -134,6 +141,7 @@ test('searches the features in place and says so while it waits', async ({ page 
 test('applies a custom period in place and closes its form', async ({ page }) => {
   await openReadyPage(page, `/${STORE_ID}/overview`);
   const custom = page.locator('details', { hasText: 'Custom' });
+  await openPeriodOnAPhone(page);
 
   await custom.locator('summary').click();
   await pickCustomRange(page, 'August 2026', 'Saturday, August 1, 2026', 'Monday, August 31, 2026');
@@ -147,7 +155,10 @@ test('applies a custom period in place and closes its form', async ({ page }) =>
 test('filters the visits in place', async ({ page, isMobile }) => {
   await openReadyPage(page, `/${STORE_ID}/visits?range=30d`);
   if (isMobile) {
-    await page.getByRole('button', { name: /^Filters/ }).click();
+    await page
+      .getByRole('main')
+      .getByRole('button', { name: /^Filters/ })
+      .click();
   }
 
   await page.getByRole('textbox', { name: 'Viewed page' }).fill('/pricing');

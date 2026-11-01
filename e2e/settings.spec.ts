@@ -1,6 +1,12 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { currentNavigationLinks, shownDates } from './navigation';
+import {
+  currentNavigationLinks,
+  expectPeriodInForce,
+  openScreensOnAPhone,
+  phoneBar,
+  shownDates,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -22,9 +28,7 @@ const PARTS = [
 ];
 
 async function openSettingsFrom(page: Page, isMobile: boolean) {
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
+  await openScreensOnAPhone(page, isMobile);
   await page.getByRole('link', { name: 'Settings' }).click();
   const window = page.getByRole('dialog', { name: 'Settings' });
   await expect(window).toBeVisible();
@@ -82,12 +86,10 @@ test('opens over the screen with its period and filter, and Esc closes it back t
 
   await expect(window).toBeHidden();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/devices\\?range=7d&country=BR$`));
-  await expect(
-    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
-  ).toHaveAttribute('aria-current', 'page');
+  await expectPeriodInForce(page, '7 days');
   await expect(
     isMobile
-      ? page.getByRole('button', { name: 'Open menu' })
+      ? phoneBar(page).getByRole('button', { name: 'Screens' })
       : page.getByRole('link', { name: 'Settings' }),
   ).toBeFocused();
 });
@@ -230,9 +232,7 @@ test('is a page when a part is opened directly, and its menu changes parts as pa
 
 test('marks Settings current in the navigation on its page', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/settings`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
+  await openScreensOnAPhone(page, isMobile);
 
   await expect(page.getByRole('link', { name: 'Settings' })).toHaveAttribute(
     'aria-current',
@@ -379,9 +379,7 @@ test('asks for an export, opens it and downloads the file', async ({ page, reque
 test('marks Settings in the navigation as where an export is', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/exports/${DEMO_EXPORT_ID}`);
   await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
+  await openScreensOnAPhone(page, isMobile);
 
   const current = currentNavigationLinks(page);
   await expect(current).toHaveCount(1);

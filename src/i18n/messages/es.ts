@@ -24,8 +24,6 @@ export const es = translation({
   },
   nav: {
     label: 'Navegación principal',
-    openMenu: 'Abrir el menú',
-    openMenuWithNews: 'Abrir el menú, hay novedades',
     screens: 'Pantallas',
     screensWithNews: 'Pantallas, hay novedades',
     accountTab: 'Cuenta',
@@ -50,7 +48,6 @@ export const es = translation({
       moreSinceLastRead: '{count} más desde la última vez que miraste',
       newVisit: 'Nueva',
     },
-    closeMenu: 'Cerrar el menú',
     switchProject: 'Cambiar de proyecto. Proyecto actual:',
     newProject: 'Nuevo proyecto',
     signOut: 'Cerrar sesión',

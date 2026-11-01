@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { openThemeAndLanguage } from './navigation';
+import { openPeriodOnAPhone, openThemeAndLanguage, periods } from './navigation';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -62,7 +62,7 @@ const HEADER_BUDGETS = [
 ] as const;
 
 async function mainTop(page: Page): Promise<number> {
-  const main = page.locator('main#content:not([aria-busy])');
+  const main = page.locator('main#content:not([aria-busy]):visible');
   await expect(main).toBeVisible();
   return main.evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
 }
@@ -91,7 +91,8 @@ test.describe('at 320×640, below the sm breakpoint, the period controls', () =>
     page,
   }) => {
     await page.goto(`/${STORE_ID}/overview`);
-    const presets = page.getByRole('navigation', { name: 'Period' }).getByRole('link');
+    await openPeriodOnAPhone(page);
+    const presets = periods(page).getByRole('link');
     const custom = page.locator('summary', { hasText: 'Custom' });
     await expect(presets).toHaveCount(3);
     await expect(custom).toBeVisible();
@@ -194,7 +195,7 @@ test.describe('at 390×844, below the sm breakpoint', () => {
     }) => {
       await page.goto(screen.path);
       if ('open' in screen) {
-        await page.getByText(screen.open, { exact: true }).click();
+        await page.getByRole('main').getByText(screen.open, { exact: true }).click();
       }
 
       const sizes = await fieldFontSizes(page);

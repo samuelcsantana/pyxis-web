@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { type ReactNode, StrictMode } from 'react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PHONE_ACCOUNT_ID } from '@/components/shell/phone-bar';
 import { FrameRoot, WINDOW_TITLE_ID } from './frame-view';
 import { SettingsDialog } from './settings-dialog';
 import {
@@ -66,20 +67,19 @@ beforeAll(async () => {
 const NOT_RENDERED = [] as unknown as DOMRectList;
 const RENDERED = [new DOMRect(0, 0, 10, 10)] as unknown as DOMRectList;
 
-function menuToggleOnThePage(): HTMLButtonElement {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.textContent = 'Open menu';
-  button.setAttribute('aria-controls', 'main-navigation');
-  return onThePage(button);
+function accountTabOnThePage(): HTMLAnchorElement {
+  const tab = document.createElement('a');
+  tab.href = '/p-store/settings';
+  tab.id = PHONE_ACCOUNT_ID;
+  tab.textContent = 'Account';
+  return onThePage(tab);
 }
 
-function hiddenMenuWith<T extends Element>(element: T): T {
-  const menu = document.createElement('div');
-  menu.id = 'main-navigation';
-  menu.hidden = true;
-  menu.append(element);
-  onThePage(menu);
+function hiddenSheetWith<T extends Element>(element: T): T {
+  const sheet = document.createElement('div');
+  sheet.hidden = true;
+  sheet.append(element);
+  onThePage(sheet);
   return element;
 }
 
@@ -545,9 +545,9 @@ describe('SettingsWindowHost', () => {
     expect(other).not.toHaveFocus();
   });
 
-  it('returns focus to the menu button when the opener sat in the phone menu, now hidden', () => {
-    const toggle = menuToggleOnThePage();
-    const opener = hiddenMenuWith(linkOnThePage(OVERVIEW_HREF));
+  it("returns focus to the bar's Account when the opener sat in a sheet, now hidden", () => {
+    const toggle = accountTabOnThePage();
+    const opener = hiddenSheetWith(linkOnThePage(OVERVIEW_HREF));
     opener.focus();
     const { unmount } = render(<Window />);
 
@@ -557,7 +557,7 @@ describe('SettingsWindowHost', () => {
   });
 
   it('returns focus to the button of the menu that held the opener, closed since', () => {
-    const toggle = menuToggleOnThePage();
+    const toggle = accountTabOnThePage();
     const opener = linkOnThePage('/account');
     const menu = openAccountMenuWith(opener);
     const sameAddress = linkOnThePage('/account');
@@ -585,24 +585,24 @@ describe('SettingsWindowHost', () => {
     expect(menu.summary).toHaveFocus();
   });
 
-  it('returns focus to the phone menu button when the closed menu sat in the closed phone menu', () => {
-    const toggle = menuToggleOnThePage();
+  it("returns focus to the bar's Account when the menu that held the opener is hidden too", () => {
+    const toggle = accountTabOnThePage();
     const opener = linkOnThePage('/account');
     const menu = openAccountMenuWith(opener);
-    const phoneMenu = onThePage(document.createElement('div'));
-    phoneMenu.append(menu.details);
+    const avatar = onThePage(document.createElement('div'));
+    avatar.append(menu.details);
     opener.focus();
     const { unmount } = render(<Window />);
     menu.close();
-    phoneMenu.hidden = true;
+    avatar.hidden = true;
 
     unmount();
 
     expect(toggle).toHaveFocus();
   });
 
-  it('returns focus to the menu button when nothing had focus before it opened', () => {
-    const toggle = menuToggleOnThePage();
+  it("returns focus to the bar's Account when nothing had focus before it opened", () => {
+    const toggle = accountTabOnThePage();
     const { unmount } = render(<Window />);
 
     unmount();

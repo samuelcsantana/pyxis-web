@@ -6,7 +6,16 @@ import {
   MIN_TEXT_CONTRAST,
 } from './contrast';
 import { focusRing } from './focus-ring';
-import { accountMenuButton, openAccountMenu, openThemeAndLanguage } from './navigation';
+import {
+  accountMenuButton,
+  openAccountMenu,
+  openPeriodOnAPhone,
+  openScreensOnAPhone,
+  openThemeAndLanguage,
+  periods,
+  phoneBar,
+  screensMenu,
+} from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -19,8 +28,6 @@ interface Representative {
   readonly ring?: (page: Page) => Locator;
   readonly prepare?: (page: Page, isMobile: boolean) => Promise<void>;
 }
-
-const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' });
 
 const UNDERLINE_ON_HOVER = '2px';
 const MIN_TARGET_PX = 24;
@@ -42,7 +49,7 @@ async function editFunnelSteps(page: Page): Promise<void> {
 
 async function openVisitFiltersOnAPhone(page: Page, isMobile: boolean) {
   if (isMobile) {
-    await page.getByRole('button', { name: 'Filters' }).click();
+    await page.getByRole('main').getByRole('button', { name: 'Filters' }).click();
   }
 }
 
@@ -51,16 +58,19 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'a period preset',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '7 days' }),
+    prepare: openPeriodOnAPhone,
   },
   {
     control: 'the selected period',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '30 days' }),
+    prepare: openPeriodOnAPhone,
   },
   {
     control: 'the custom period',
     screen: 'overview',
     target: (page) => page.locator('summary').filter({ hasText: 'Custom' }),
+    prepare: openPeriodOnAPhone,
   },
   {
     control: 'a theme choice',
@@ -115,15 +125,8 @@ const REPRESENTATIVES: readonly Representative[] = [
   {
     control: 'a sidebar link',
     screen: 'overview',
-    target: (page) =>
-      page
-        .getByRole('navigation', { name: 'Main navigation' })
-        .getByRole('link', { name: 'Funnel' }),
-    prepare: async (page, isMobile) => {
-      if (isMobile) {
-        await page.getByRole('button', { name: 'Open menu' }).click();
-      }
-    },
+    target: (page) => screensMenu(page).getByRole('link', { name: 'Funnel' }),
+    prepare: openScreensOnAPhone,
   },
 ];
 
@@ -204,23 +207,24 @@ test.describe('sidebar and top bar states on a desktop', () => {
   }
 });
 
-test('the menu button changes visibly when pressed on a phone', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'The menu button only shows on narrow screens.');
-  await page.goto(`/${STORE_ID}/overview`);
+for (const item of ['Screens', 'Period', 'Account'] as const) {
+  test(`${item} in the bar at the bottom changes visibly when pressed on a phone`, async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(!isMobile, 'The bar at the bottom only shows on narrow screens.');
+    await page.goto(`/${STORE_ID}/overview`);
+    const bar = phoneBar(page);
 
-  const states = await pointerStates(page.getByRole('button', { name: 'Open menu' }));
+    const states = await pointerStates(
+      item === 'Account'
+        ? bar.getByRole('link', { name: item })
+        : bar.getByRole('button', { name: item }),
+    );
 
-  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-});
-
-test('the account avatar changes visibly when pressed on a phone', async ({ page, isMobile }) => {
-  test.skip(!isMobile, 'The desktop run covers the avatar with hover and press.');
-  await page.goto(`/${STORE_ID}/overview`);
-
-  const states = await pointerStates(accountMenuButton(page).getByText('O', { exact: true }));
-
-  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-});
+    expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+  });
+}
 
 test('the visits filters toggle changes visibly when pressed on a phone', async ({
   page,
@@ -229,7 +233,9 @@ test('the visits filters toggle changes visibly when pressed on a phone', async 
   test.skip(!isMobile, 'The filters toggle only shows on narrow screens.');
   await page.goto(`/${STORE_ID}/visits`);
 
-  const states = await pointerStates(page.getByRole('button', { name: 'Filters' }));
+  const states = await pointerStates(
+    page.getByRole('main').getByRole('button', { name: 'Filters' }),
+  );
 
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
 });
@@ -272,6 +278,7 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     control: 'a segmented option',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '7 days' }),
+    prepare: openPeriodOnAPhone,
   },
   {
     control: 'a tab',

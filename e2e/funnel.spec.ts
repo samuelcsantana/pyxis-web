@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { backToTheTop, openPeriodOnAPhone, periods } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -45,10 +46,8 @@ test('round-trips an edited funnel through the URL', async ({ page }) => {
   await page.getByRole('button', { name: 'Edit steps' }).click();
   await expect(page.getByRole('textbox', { name: 'Step 1 page path' })).toHaveValue('/pricing');
 
-  await page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' })
-    .click();
+  await openPeriodOnAPhone(page);
+  await periods(page).getByRole('link', { name: '7 days' }).click();
   await expect(page).toHaveURL(/range=7d/);
   await expect(steps).toHaveCount(3);
 });
@@ -171,7 +170,12 @@ test('splits the per-visit funnel by device, then by channel, kept across period
   await expect(page).toHaveURL(/by=channel/);
   const byChannel = page.getByRole('table', { name: 'The funnel by channel' });
   await expect(byChannel.locator('tbody tr').first()).toBeVisible();
+  await backToTheTop(page);
   expect(await axeViolations(page)).toEqual([]);
   expect(await sidewaysOverflow(page)).toBe(0);
-  await expect(page.getByRole('link', { name: '7 days' })).toHaveAttribute('href', /by=channel/);
+  await openPeriodOnAPhone(page);
+  await expect(periods(page).getByRole('link', { name: '7 days' })).toHaveAttribute(
+    'href',
+    /by=channel/,
+  );
 });
