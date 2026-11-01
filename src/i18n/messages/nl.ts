@@ -53,6 +53,7 @@ export const nl = translation({
     signOutFailed: 'Uitloggen is niet gelukt. Probeer het opnieuw.',
     install: 'Installeren',
     installPending: 'In afwachting',
+    installCta: 'Pyxis installeren',
     usage: {
       events: '{count} van {limit} events deze maand',
       resets: 'De telling begint op {date} opnieuw',

@@ -56,6 +56,7 @@ export const ptBR = translation({
     signOutFailed: 'Não foi possível sair. Tente de novo.',
     install: 'Instalação',
     installPending: 'Pendente',
+    installCta: 'Instalar o Pyxis',
     usage: {
       events: '{count} de {limit} eventos neste mês',
       resets: 'A contagem zera em {date}',

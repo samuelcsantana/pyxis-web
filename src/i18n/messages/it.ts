@@ -53,6 +53,7 @@ export const it = translation({
     signOutFailed: 'Impossibile uscire. Riprova.',
     install: 'Installazione',
     installPending: 'In attesa',
+    installCta: 'Installa Pyxis',
     usage: {
       events: '{count} su {limit} eventi questo mese',
       resets: 'Il conteggio si azzera il {date}',

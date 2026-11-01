@@ -56,6 +56,7 @@ export const fr = translation({
     signOutFailed: 'La déconnexion a échoué. Réessayez.',
     install: 'Installation',
     installPending: 'En attente',
+    installCta: 'Installer Pyxis',
     usage: {
       events: '{count} sur {limit} événements ce mois-ci',
       resets: 'Le compteur repart de zéro le {date}',
