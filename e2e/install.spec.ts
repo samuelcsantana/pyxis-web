@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { currentNavigationLinks } from './navigation';
+import { currentNavigationLinks, openScreens, screensMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const INSTALL_PATH = `/${STORE_ID}/install`;
@@ -35,7 +35,7 @@ test('marks its own item in the navigation, without the pending tag once events 
 }) => {
   await page.goto(INSTALL_PATH);
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
 
   const current = currentNavigationLinks(page);
@@ -147,10 +147,9 @@ test.describe('install as a window', () => {
       await page.emulateMedia({ colorScheme });
       await page.goto(`/${STORE_ID}/overview?range=7d`);
       if (isMobile) {
-        await page.getByRole('button', { name: 'Open menu' }).click();
+        await openScreens(page);
       }
-      await page
-        .getByRole('navigation', { name: 'Main navigation' })
+      await screensMenu(page)
         .getByRole('link', { name: /^Install/ })
         .click();
 
@@ -176,10 +175,9 @@ test.describe('install as a window', () => {
   }) => {
     await page.goto(INSTALL_PATH);
     if (isMobile) {
-      await page.getByRole('button', { name: 'Open menu' }).click();
+      await openScreens(page);
     }
-    await page
-      .getByRole('navigation', { name: 'Main navigation' })
+    await screensMenu(page)
       .getByRole('link', { name: /^Install/ })
       .click();
 

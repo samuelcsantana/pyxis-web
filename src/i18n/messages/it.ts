@@ -24,8 +24,6 @@ export const it = translation({
   },
   nav: {
     label: 'Navigazione principale',
-    openMenu: 'Apri il menu',
-    openMenuWithNews: 'Apri il menu, ci sono novità',
     screens: 'Schermate',
     screensWithNews: 'Schermate, ci sono novità',
     accountTab: 'Account',
@@ -47,7 +45,6 @@ export const it = translation({
       moreSinceLastRead: '{count} in più dall’ultima volta che hai guardato',
       newVisit: 'Nuova',
     },
-    closeMenu: 'Chiudi il menu',
     switchProject: 'Cambia progetto. Progetto attuale:',
     newProject: 'Nuovo progetto',
     signOut: 'Esci',

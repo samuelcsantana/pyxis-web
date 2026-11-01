@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { openScreens } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -21,7 +22,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 test('opens from the sidebar and keeps the period', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
 
   await page.getByRole('link', { name: 'Devices' }).click();

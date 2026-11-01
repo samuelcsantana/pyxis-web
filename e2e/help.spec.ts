@@ -1,6 +1,13 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { accountMenuButton, currentNavigationLinks } from './navigation';
+import {
+  accountButton,
+  accountMenuButton,
+  currentNavigationLinks,
+  openAccountRow,
+  openScreens,
+  screensMenu,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -19,8 +26,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 }
 
 async function openHelpFromTheAccountMenu(page: Page) {
-  await accountMenuButton(page).click();
-  await page.getByRole('link', { name: 'Help and support' }).click();
+  await openAccountRow(page, 'Help and support');
 }
 
 test('opens from the account menu as the settings window, in two clicks, with the support address', async ({
@@ -63,12 +69,9 @@ test('keeps the period of the screen through Help and Install', async ({ page, i
   await expect(page.getByRole('dialog')).toHaveCount(0);
 
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Visits', exact: true })
-    .click();
+  await screensMenu(page).getByRole('link', { name: 'Visits', exact: true }).click();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
 });
 
@@ -81,12 +84,14 @@ test('closes to the screen it opened over with Escape', async ({ page }) => {
 
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
-  await expect(accountMenuButton(page)).toBeFocused();
+  await expect(accountButton(page)).toBeFocused();
 });
 
 test('stays the Help page when opened directly, marked in the account menu, which reloads it', async ({
   page,
+  isMobile,
 }) => {
+  test.skip(isMobile, 'The account menu is the avatar of a laptop; a phone opens the window.');
   await page.goto(`/${STORE_ID}/help`);
   await expect(page.getByRole('heading', { level: 1, name: 'Help and support' })).toBeVisible();
   await expect(page.getByRole('dialog')).toHaveCount(0);

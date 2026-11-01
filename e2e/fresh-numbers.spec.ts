@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
+import { openScreens, screensMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const RECORD_KEY = `pyxis:seen:numbers:${STORE_ID}`;
@@ -144,12 +145,9 @@ test('shows the same marks, without lighting them, on a screen back from the cac
 
   for (const screen of ['Funnel', 'Overview']) {
     if (isMobile) {
-      await page.getByRole('button', { name: /^Open menu/ }).click();
+      await openScreens(page);
     }
-    await page
-      .getByRole('navigation', { name: 'Main navigation' })
-      .getByRole('link', { name: screen, exact: true })
-      .click();
+    await screensMenu(page).getByRole('link', { name: screen, exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: screen })).toBeVisible();
   }
 

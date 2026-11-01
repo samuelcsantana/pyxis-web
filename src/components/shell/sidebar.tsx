@@ -5,6 +5,9 @@ import { FIRST_SCREEN, screenHref } from './screens';
 import { SidebarFootNav, SidebarNav } from './sidebar-nav';
 import { ViewKeepingLink } from './view-keeping-link';
 
+export const SIDEBAR_COLUMN =
+  'hidden lg:sticky lg:top-0 lg:z-30 lg:flex lg:h-dvh lg:flex-col lg:overflow-y-auto lg:overscroll-contain lg:bg-nav';
+
 export interface SidebarProps {
   readonly project: Project;
 }

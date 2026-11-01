@@ -24,8 +24,6 @@ export const nl = translation({
   },
   nav: {
     label: 'Hoofdnavigatie',
-    openMenu: 'Menu openen',
-    openMenuWithNews: 'Menu openen, er is nieuws',
     screens: 'Schermen',
     screensWithNews: 'Schermen, er is nieuws',
     accountTab: 'Account',
@@ -47,7 +45,6 @@ export const nl = translation({
       moreSinceLastRead: '{count} meer sinds je laatst keek',
       newVisit: 'Nieuw',
     },
-    closeMenu: 'Menu sluiten',
     switchProject: 'Ander project kiezen. Huidig project:',
     newProject: 'Nieuw project',
     signOut: 'Uitloggen',

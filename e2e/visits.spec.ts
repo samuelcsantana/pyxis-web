@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { backToTheTop, openPeriodOnAPhone, periods } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -17,15 +18,9 @@ function innerScroll(table: Locator): Promise<number> {
   });
 }
 
-async function backToTheTop(page: Page) {
-  await page.evaluate(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  });
-}
-
 async function openFiltersOnAPhone(page: Page, isMobile: boolean) {
   if (isMobile) {
-    await page.getByRole('button', { name: 'Filters' }).click();
+    await page.getByRole('main').getByRole('button', { name: 'Filters' }).click();
   }
 }
 
@@ -76,10 +71,8 @@ test('filters by two pages through the form and opens the visit in the timeline'
   await page.reload();
   await expect(page.getByText(total ?? '', { exact: true })).toBeVisible();
 
-  await page
-    .getByRole('navigation', { name: 'Period' })
-    .getByRole('link', { name: '7 days' })
-    .click();
+  await openPeriodOnAPhone(page);
+  await periods(page).getByRole('link', { name: '7 days' }).click();
   await expect(page).toHaveURL(/range=7d&path=%2F&path2=%2Fpri\*$/);
   const newest = visitRows(page)
     .first()
@@ -159,7 +152,7 @@ test('keeps the filters behind a toggle on a phone unless some are in use', asyn
   isMobile,
 }) => {
   test.skip(!isMobile, 'From 640 px up the filters are always open.');
-  const toggle = page.getByRole('button', { name: /^Filters/ });
+  const toggle = page.getByRole('main').getByRole('button', { name: /^Filters/ });
 
   await page.goto(`/${STORE_ID}/visits`);
   await expect(toggle).toHaveText('Filters');
@@ -187,7 +180,7 @@ test('shows every filter at once from 640 px up', async ({ page, isMobile }) => 
   test.skip(isMobile, 'Below 640 px the filters sit behind a toggle.');
   await page.goto(`/${STORE_ID}/visits`);
 
-  await expect(page.getByRole('button', { name: /^Filters/ })).toBeHidden();
+  await expect(page.getByRole('main').getByRole('button', { name: /^Filters/ })).toBeHidden();
   await expect(page.getByRole('textbox', { name: 'Had event' })).toBeVisible();
 });
 

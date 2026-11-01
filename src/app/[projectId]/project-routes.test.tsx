@@ -116,18 +116,27 @@ describe('ProjectLayout', () => {
 
     expect(links[0]).toHaveAccessibleName('Skip to content');
     expect(links[0]).toHaveAttribute('href', '#content');
-    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
-    expect(within(navigation).queryByText('Account and preferences')).not.toBeInTheDocument();
-    expect(
-      within(screen.getByRole('banner')).getByText('Account and preferences'),
-    ).toBeInTheDocument();
-    expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
+    const [sidebar, phoneBar] = screen.getAllByRole('navigation', { name: 'Main navigation' });
+    if (sidebar === undefined || phoneBar === undefined) {
+      throw new Error('the layout has no sidebar or no phone bar');
+    }
+    const banner = screen.getByRole('banner');
+    expect(sidebar).toHaveClass('hidden', 'lg:flex');
+    expect(within(sidebar).queryByText('Account and preferences')).not.toBeInTheDocument();
+    expect(within(banner).getByText('Account and preferences')).toBeInTheDocument();
+    expect(within(sidebar).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
       'href',
       '/p-store/overview',
     );
-    expect(
-      within(navigation).getByRole('link', { name: 'Overview · Demo Store', hidden: true }),
-    ).toHaveAttribute('href', '/p-store/overview');
+    expect(within(banner).getByRole('link', { name: 'Overview' })).toHaveAttribute(
+      'href',
+      '/p-store/overview',
+    );
+    expect(phoneBar).toHaveClass('lg:hidden');
+    expect(within(phoneBar).getByRole('link', { name: 'Account' })).toHaveAttribute(
+      'href',
+      '/p-store/settings',
+    );
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByText('screen')).toBeInTheDocument();
   });

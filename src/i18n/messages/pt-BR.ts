@@ -24,8 +24,6 @@ export const ptBR = translation({
   },
   nav: {
     label: 'Navegação principal',
-    openMenu: 'Abrir menu',
-    openMenuWithNews: 'Abrir menu, há novidades',
     screens: 'Telas',
     screensWithNews: 'Telas, há novidades',
     accountTab: 'Conta',
@@ -50,7 +48,6 @@ export const ptBR = translation({
       moreSinceLastRead: '{count} a mais desde a última vez que você olhou',
       newVisit: 'Nova',
     },
-    closeMenu: 'Fechar menu',
     switchProject: 'Trocar de projeto. Projeto atual:',
     newProject: 'Novo projeto',
     signOut: 'Sair',

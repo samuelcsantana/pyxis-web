@@ -217,12 +217,14 @@
 
 @layer base {
   html {
-    scroll-padding-top: --spacing(14);
+    scroll-padding-top: --spacing(15);
+    scroll-padding-bottom: calc(--spacing(15) + env(safe-area-inset-bottom, 0px));
   }
 
   @media (width >= --theme(--breakpoint-lg)) {
     html {
       scroll-padding-top: --spacing(24);
+      scroll-padding-bottom: 0;
       scrollbar-gutter: stable;
     }
   }

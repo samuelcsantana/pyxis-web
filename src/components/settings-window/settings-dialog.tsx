@@ -9,7 +9,7 @@ import {
   useEffect,
   useRef,
 } from 'react';
-import { MENU_ID } from '@/components/shell/mobile-menu';
+import { PHONE_ACCOUNT_ID } from '@/components/shell/phone-bar';
 import { CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
 import { type FrameView, FrameViewProvider, SECTION_TITLE, WINDOW_TITLE_ID } from './frame-view';
 
@@ -43,8 +43,6 @@ function openerOf(active: Element | null): Opener | null {
     : null;
 }
 
-const MENU_TOGGLE = `[aria-controls="${MENU_ID}"]`;
-
 function canTakeFocus(element: HTMLElement | null): element is HTMLElement {
   return (
     element !== null &&
@@ -75,7 +73,7 @@ function takesFocus(element: HTMLElement | null): boolean {
 function returnFocusTo(opener: Opener | null) {
   const candidates =
     opener === null ? [] : [opener.element, buttonOfTheMenuHolding(opener), sameLinkAs(opener)];
-  [...candidates, document.querySelector<HTMLElement>(MENU_TOGGLE)].some(takesFocus);
+  [...candidates, document.getElementById(PHONE_ACCOUNT_ID)].some(takesFocus);
 }
 
 export interface SettingsDialogProps {

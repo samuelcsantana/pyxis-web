@@ -1,9 +1,18 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { documentMarker, markTheDocument, sawBusyContent, watchForBusyContent } from './navigation';
+import {
+  documentMarker,
+  markTheDocument,
+  phoneBar,
+  sawBusyContent,
+  screensMenu,
+  watchForBusyContent,
+} from './navigation';
 
 const CONTENT_ID = 'content';
 
+const ON_A_LAPTOP_ONLY =
+  'The visits on the site now sit beside the title from 1024px; a phone keeps its path to one row.';
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const NEXT_QUESTION = '00:31';
 const NOTHING = { times: [], more: false };
@@ -40,7 +49,7 @@ async function answerArrivals(page: Page, answers: Answer[]): Promise<string[]> 
 }
 
 function menu(page: Page) {
-  return page.getByRole('navigation', { name: 'Main navigation', includeHidden: true });
+  return screensMenu(page);
 }
 
 function screenLink(page: Page, screen: string) {
@@ -64,13 +73,15 @@ test('counts on the menu what arrived after the first answer, never on the scree
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await expect.poll(() => asked.length).toBe(1);
   await expect(
-    menu(page).getByRole('link', { name: 'Visits', exact: true, includeHidden: true }),
+    page
+      .getByRole('navigation', { name: 'Main navigation', includeHidden: true })
+      .getByRole('link', { name: 'Visits', exact: true, includeHidden: true }),
   ).toBeAttached();
 
   await page.clock.fastForward(NEXT_QUESTION);
 
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu, there is news' }).click();
+    await phoneBar(page).getByRole('button', { name: 'Screens, there is news' }).click();
   }
   await expect(screenLink(page, 'visits')).toHaveAccessibleName(/^Visits\s*, 1 new visit$/);
   await expect(screenLink(page, 'features')).toHaveAccessibleName(/^Features\s*, 2 new events$/);
@@ -137,7 +148,9 @@ test('asks nothing while the period does not include today', async ({ page }) =>
 
 test('shows the visits on the site now beside the Overview title, new at each answer', async ({
   page,
+  isMobile,
 }) => {
+  test.skip(isMobile, ON_A_LAPTOP_ONLY);
   const start = Date.now();
   const asked = await answerArrivals(page, [
     answerAt(start, { activeVisits: 2 }),
@@ -166,7 +179,8 @@ test('shows the visits on the site now beside the Overview title, new at each an
 test.describe('with reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('keeps the dot of the visits on the site now still', async ({ page }) => {
+  test('keeps the dot of the visits on the site now still', async ({ page, isMobile }) => {
+    test.skip(isMobile, ON_A_LAPTOP_ONLY);
     await answerArrivals(page, [answerAt(Date.now(), { activeVisits: 2 })]);
     await page.goto(`/${STORE_ID}/overview`);
     const visitsNow = page.getByText('2 on the site now');

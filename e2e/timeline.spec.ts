@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { untilHydrated } from './hydration';
+import { openScreens, screensMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEMO_USER = 'u_7f3a';
@@ -101,24 +102,18 @@ test('keeps the period through the Timeline, so the way back has it', async ({
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Timeline' })
-    .click();
+  await screensMenu(page).getByRole('link', { name: 'Timeline' }).click();
   await page
     .getByRole('link', { name: `Open the timeline of the demo person ${DEMO_USER}` })
     .click();
   await expect(page.getByRole('heading', { name: `User ${DEMO_USER}` })).toBeVisible();
 
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Overview', exact: true })
-    .click();
+  await screensMenu(page).getByRole('link', { name: 'Overview', exact: true }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview\\?range=7d$`));
 });

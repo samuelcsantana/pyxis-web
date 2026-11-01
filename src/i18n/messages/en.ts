@@ -19,8 +19,6 @@ export const en = {
   },
   nav: {
     label: 'Main navigation',
-    openMenu: 'Open menu',
-    openMenuWithNews: 'Open menu, there is news',
     screens: 'Screens',
     screensWithNews: 'Screens, there is news',
     accountTab: 'Account',
@@ -41,7 +39,6 @@ export const en = {
       moreSinceLastRead: '{count} more since you last looked',
       newVisit: 'New',
     },
-    closeMenu: 'Close menu',
     switchProject: 'Switch project. Current project:',
     newProject: 'New project',
     signOut: 'Sign out',

@@ -1,5 +1,11 @@
 import { expect, type Page, test } from '@playwright/test';
-import { openThemeAndLanguage, sawBusyContent, watchForBusyContent } from './navigation';
+import {
+  openScreens,
+  openThemeAndLanguage,
+  sawBusyContent,
+  screensMenu,
+  watchForBusyContent,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const JUST_PAST_THE_REFRESH_BOUND = '00:21';
@@ -7,16 +13,13 @@ const JUST_PAST_THE_CLIENT_CACHE = '05:01';
 
 async function openMenuOnAPhone(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
+    await openScreens(page);
   }
 }
 
 async function goTo(page: Page, isMobile: boolean, screen: string): Promise<void> {
   await openMenuOnAPhone(page, isMobile);
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: screen, exact: true })
-    .click();
+  await screensMenu(page).getByRole('link', { name: screen, exact: true }).click();
   await expect(page.getByRole('heading', { level: 1, name: screen })).toBeVisible();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 }
@@ -85,10 +88,14 @@ test('shows a visited screen in the language chosen since', async ({ page, isMob
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();
   const overview = page
-    .getByRole('navigation', { name: 'Navegação principal' })
+    .getByRole('dialog', { name: 'Telas' })
+    .or(page.getByRole('navigation', { name: 'Navegação principal' }))
     .getByRole('link', { name: 'Visão geral', exact: true });
-  if (isMobile && !(await overview.isVisible())) {
-    await page.getByRole('button', { name: 'Abrir menu' }).click();
+  if (isMobile) {
+    await page
+      .getByRole('navigation', { name: 'Navegação principal' })
+      .getByRole('button', { name: /^Telas/ })
+      .click();
   }
   await overview.click();
 

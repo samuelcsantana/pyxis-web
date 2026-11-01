@@ -28,7 +28,7 @@ test('opens from the account menu as the window, titled after the part', async (
 
   await openThemeAndLanguage(page);
 
-  await expect(page).toHaveURL(/\/account\/preferences$/);
+  await expect(page).toHaveURL(/\/account\/preferences(\?range=7d)?$/);
   await expect(page).toHaveTitle('Theme and language · My site · Pyxis');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();
