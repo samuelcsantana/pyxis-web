@@ -52,33 +52,35 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Overview and read as the Overview's title), and it closes with Escape (the focus
   goes back to its button), when a link in it is followed and when the address changes (Back,
   Forward, a period link); an open menu taller than the screen scrolls inside itself. On a
-  computer the logo and the foot (Install, Settings and the account) stay in place and only the
-  list of screens scrolls when the window is short: nothing scrolls at 1440×800 nor at 1366×650,
-  with Settings and the account in view; the account menu scrolls inside itself when it is taller
-  than the space above the account, and on a phone it opens under the account, in the flow of
-  the menu, scrolling itself into view. The account email in the sidebar, and the project names
+  computer the logo and the foot (Install and Settings) stay in place and only the list of
+  screens scrolls when the window is short: nothing scrolls at 1440×800 nor at 1366×650, with
+  Settings in view. The account email in its menu, and the project names
   and time zones in the project menu, wrap instead of being cut, the time zone only after a slash
   (`America/` above `Sao_Paulo`), never inside a word; the phone's bar, short of room, is the one place that ends a long project name
   with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
   Overview of the project on screen with the period and the filters of the page. The screens are listed, with no section label, in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests); the foot holds
-  Install, tagged "Pending" until the project's first event arrives, Settings and the account.
+  Install, tagged "Pending" until the project's first event arrives, and Settings.
   The
   navigation marks where you are: the screen, Install or Settings; Settings also on an export,
-  which has no item of its own. The account menu is compact, 235 px before the owner's usage line
-  (it was 254 px with the languages closed, 506 px open): Account and billing, Theme and
-  language, Help and support (which keeps the screen's period and filters, and on the Help page
-  is marked as where you are and reloads it as a page), then Sign out. Reaching the support
-  address takes two clicks on a laptop, the account and Help and support. To the owner of the
-  account
-  that holds the project on screen, the account row also shows the month's usage under the
-  e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
-  gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
-  rounded up past the tone); the menu then opens on those numbers and the day the count resets
-  (the 1st, in UTC), or, while paused, the day measuring comes back, linking to Account and
-  billing. A paused account is also said in words, to the eye in the menu and to a screen reader
-  on the row.
-  Members, projects outside any account and an account not yet measured show none, and so does
+  which has no item of its own. The account is an avatar with its initial at the right end of
+  the top bar (40 px on a computer, 44 px on a phone, where it stays on the first row beside the
+  path while the period moves under them), read as "Account and preferences". Its menu opens
+  downward and scrolls inside itself when it is taller than the window under the pinned bar: the
+  e-mail, Account and billing, Theme and language, Help and support (which keeps the screen's
+  period and filters, and on the Help page is marked as where you are, with a check and not by
+  weight alone, and reloads it as a page), Sign out, then the privacy line ("No cookies, no
+  personal data"). Reaching the support address takes two clicks, the avatar and Help and
+  support. The avatar takes the accent on hover, on a press (a tap on a phone) and while open. To the
+  owner of the account that holds the project on screen, a ring around the avatar draws the
+  month's usage, in tones that keep 3:1 against the bar in both themes (gold below 80%, orange
+  from 80%, the ring never drawn past full nor before the month's first event); while the
+  reception is paused the ring is red and broken into ten segments, so the pause does not rest
+  on a hue the orange of a full month sits close to, and the avatar is read with the whole sentence
+  ("41,230 of 100,000 events this month"); Account and billing then carries those numbers and
+  the day the count resets (the 1st, in UTC), or, while paused, the day measuring comes back. A
+  paused account is said in words, to the eye in the menu and to a screen reader on the avatar.
+  Members, projects outside any account and an account not yet measured show no ring, and so does
   an API that does not yet name each project's account. Each project in the switcher shows the
   icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
@@ -287,8 +289,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
 - Settings is a window with an address ([ADR 0016](adr/0016-settings-as-a-window-with-an-address.md)),
   opened from the gear in the sidebar (and in the phone menu) over the screen on view, which keeps
   its period and filters: Back, Esc, the close button or a click outside close it to that screen,
-  and focus goes back to the gear, or to the account menu's button when one of its rows opened it
-  (on a phone, to the menu button). Its menu has two groups, the project, named by the project
+  and focus goes back to the gear (on a phone, to the menu button), or to the avatar in the top
+  bar when one of the account menu's rows opened it. Its menu has two groups, the project, named by the project
   (Project, Keys, People, E-mail, and for the owner Export events and Delete project), and You
   (Account and billing, Theme and language, Sessions, Access tokens, Connected apps, and Help and
   support at `/[projectId]/help` when there is a project to go back to), with Sign out at its
@@ -400,7 +402,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the keyboard browses the closed field, where arrows and typed letters change the value at once
   in Chromium, so a keyboard user does not reload the dashboard on every key
 - Account and billing, the first part of You in the Settings window (`/account`, from the
-  account menu and its usage row, as a page when opened directly or on Stripe's return), for
+  account menu, whose row carries the owner's usage of the month, as a page when opened directly
+  or on Stripe's return), for
   the owner of a hosted account: a card with the plan and its state (free trial, active, payment
   failed, ending, ended with the deletion date, sign-up not finished), the events measured this
   month against the quota, the limits, and a button to Stripe: "Finish subscription" with a
