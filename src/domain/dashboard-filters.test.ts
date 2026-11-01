@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
+import { withAddedFilter } from './dashboard-filter-parameters';
 import {
   DASHBOARD_FILTER_PARAMETERS,
   dashboardFilterParameters,
@@ -8,6 +9,8 @@ import {
   type DashboardFilters,
   hasDashboardFilters,
   NO_DASHBOARD_FILTERS,
+  ROW_FILTER_FIELDS,
+  type RowFilterField,
   toggledDashboardFilters,
   withDashboardFilters,
 } from './dashboard-filters';
@@ -227,5 +230,47 @@ describe('toggledDashboardFilters', () => {
         campaign,
       ),
     ).toEqual({ active: true, filters: NO_DASHBOARD_FILTERS });
+  });
+});
+
+describe('withAddedFilter, against the row filters', () => {
+  const ADDED: Readonly<Record<RowFilterField, string>> = {
+    path: '/checkout',
+    event: 'order_placed',
+    channel: 'email',
+    device: 'mobile',
+    browser: 'safari',
+    os: 'ios',
+    country: 'BR',
+    region: 'BR-SP',
+    city: 'Campinas',
+    source: 'google',
+    campaign: 'spring',
+  };
+  const STARTS = [
+    '',
+    'path=%2Fa',
+    'path=%2Fa&path2=%2Fb&path3=%2Fc',
+    'event=signup&property=plan%3Dpro&country=PT',
+  ];
+
+  function rowFilterQuery(start: string, field: RowFilterField): string {
+    const { filters } = dashboardFiltersOf(Object.fromEntries(new URLSearchParams(start)), english);
+    const toggled = toggledDashboardFilters(filters, { [field]: ADDED[field] });
+    return withDashboardFilters('', toggled.filters);
+  }
+
+  function sorted(query: string): string[] {
+    return [...new URLSearchParams(query)].map(([name, value]) => `${name}=${value}`).sort();
+  }
+
+  it('writes the same filters as the row filter for every field', () => {
+    for (const start of STARTS) {
+      for (const field of ROW_FILTER_FIELDS) {
+        expect(sorted(withAddedFilter(start, field, ADDED[field]))).toEqual(
+          sorted(rowFilterQuery(start, field)),
+        );
+      }
+    }
   });
 });

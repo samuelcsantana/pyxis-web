@@ -3,6 +3,8 @@ import {
   DASHBOARD_FILTER_PARAMETERS,
   type DashboardFilterParameter,
   PAGE_FILTER_PARAMETERS,
+  ROW_FILTER_FIELDS,
+  type RowFilterField,
 } from './dashboard-filter-parameters';
 import { type Channel, CHANNELS } from './acquisition';
 import { isRegionCode } from './devices';
@@ -258,21 +260,8 @@ export function withDashboardFilters(query: string, filters: DashboardFilters): 
   return parameters.toString();
 }
 
-export const ROW_FILTER_FIELDS = [
-  'path',
-  'event',
-  'channel',
-  'device',
-  'browser',
-  'os',
-  'country',
-  'region',
-  'city',
-  'source',
-  'campaign',
-] as const;
-
-export type RowFilterField = (typeof ROW_FILTER_FIELDS)[number];
+export { ROW_FILTER_FIELDS };
+export type { RowFilterField };
 
 export type RowFilterValues = Readonly<Partial<Record<RowFilterField, string>>>;
 
