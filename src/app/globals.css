@@ -45,6 +45,9 @@
   --pyx-nav-strong: #ffffff;
   --pyx-nav-warn: #fb923c;
   --pyx-nav-bad: #f87171;
+  --pyx-usage-ok: #a16207;
+  --pyx-usage-warn: #b45309;
+  --pyx-usage-paused: #b91c1c;
   color-scheme: light;
 }
 
@@ -81,6 +84,9 @@
     --pyx-mark-faint: #24344d;
     --pyx-mark-mid: #6a5426;
     --pyx-glow: rgb(245 184 61 / 0.26);
+    --pyx-usage-ok: #f5b83d;
+    --pyx-usage-warn: #fb923c;
+    --pyx-usage-paused: #f87171;
     color-scheme: dark;
   }
 }
@@ -117,6 +123,9 @@
   --pyx-mark-faint: #24344d;
   --pyx-mark-mid: #6a5426;
   --pyx-glow: rgb(245 184 61 / 0.26);
+  --pyx-usage-ok: #f5b83d;
+  --pyx-usage-warn: #fb923c;
+  --pyx-usage-paused: #f87171;
   color-scheme: dark;
 }
 
@@ -165,6 +174,9 @@
   --color-nav-strong: var(--pyx-nav-strong);
   --color-nav-warn: var(--pyx-nav-warn);
   --color-nav-bad: var(--pyx-nav-bad);
+  --color-usage-ok: var(--pyx-usage-ok);
+  --color-usage-warn: var(--pyx-usage-warn);
+  --color-usage-paused: var(--pyx-usage-paused);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --text-micro: 0.6875rem;
