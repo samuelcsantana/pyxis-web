@@ -1,8 +1,8 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { startTransition, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { type ArrivalsReport, isCappedArrivalCount, reportsAnEvent } from '@/domain/arrivals';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { type ArrivalsReport, isCappedArrivalCount } from '@/domain/arrivals';
 import { hasDashboardFilterIn } from '@/domain/dashboard-filter-parameters';
 import { resolvePeriodOn, todayIn } from '@/domain/period';
 import { useT } from '@/i18n/messages-provider';
@@ -30,13 +30,11 @@ import { type ArrivalsPoller, startArrivalsPoller } from './arrivals-poller';
 import { screenSearchOf } from './screen-search';
 import { screenSlugOf } from './screens';
 import { useProjectToday } from './use-project-today';
-import { useScreenOnView } from './use-screen-on-view';
 
 export interface ArrivalsWatcherProps {
   readonly projectId: string;
   readonly timeZone: string;
   readonly serverNow: number;
-  readonly awaitsItsFirstEvent: boolean;
 }
 
 interface PeriodDays {
@@ -71,17 +69,12 @@ function onlyInTheBrowser(): number {
   return 0;
 }
 
-export default function ArrivalsWatcher({
-  projectId,
-  timeZone,
-  serverNow,
-  awaitsItsFirstEvent,
-}: ArrivalsWatcherProps) {
+export default function ArrivalsWatcher({ projectId, timeZone, serverNow }: ArrivalsWatcherProps) {
   const t = useT();
-  const router = useRouter();
+  const pathname = usePathname();
   const search = useSearchParams();
   const today = useProjectToday(timeZone, serverNow);
-  const current = useScreenOnView();
+  const current = screenSlugOf(pathname);
   const { from, to } = resolvePeriodOn(screenSearchOf(search), today);
   const includesToday = to >= today;
   const filtered = hasDashboardFilterIn(search);
@@ -94,7 +87,6 @@ export default function ArrivalsWatcher({
   const [report, setReport] = useState<ArrivalsReport>();
   const period = useRef<PeriodDays>({ from, to });
   const poller = useRef<ArrivalsPoller>(undefined);
-  const refreshedForTheFirstEvent = useRef(false);
 
   const label = useMemo<ArrivalLabel>(
     () => (kind, count) =>
@@ -181,21 +173,6 @@ export default function ArrivalsWatcher({
   useEffect(() => {
     publishActiveVisits(includesToday ? report?.activeVisits : undefined);
   }, [report, includesToday]);
-
-  useEffect(() => {
-    if (
-      !awaitsItsFirstEvent ||
-      refreshedForTheFirstEvent.current ||
-      report === undefined ||
-      !reportsAnEvent(report)
-    ) {
-      return;
-    }
-    refreshedForTheFirstEvent.current = true;
-    startTransition(() => {
-      router.refresh();
-    });
-  }, [awaitsItsFirstEvent, report, router]);
 
   useEffect(
     () => () => {

@@ -1,6 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { openPeriodOnAPhone, periods } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -101,8 +100,10 @@ test('draws one point per day; a single day shows its figures, or that nothing a
   await page.goto(`/${STORE_ID}/overview?range=30d`);
   await expect(chartFigure(page)).toHaveAccessibleName(/^Line chart of 30 days\./);
 
-  await openPeriodOnAPhone(page);
-  await periods(page).getByRole('link', { name: 'Today' }).click();
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: 'Today' })
+    .click();
 
   await expect(page).toHaveURL(/range=today$/);
   const figures = page.getByRole('region', { name: 'Activity of the day' });
@@ -169,8 +170,10 @@ test('plots the figure a card picks, from the keyboard too, and keeps it across 
   await expect(page).toHaveTitle('Overview · My site · Pyxis');
   expect(await axeViolations(page)).toEqual([]);
 
-  await openPeriodOnAPhone(page);
-  await periods(page).getByRole('link', { name: '30 days' }).click();
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: '30 days' })
+    .click();
 
   await expect(page).toHaveURL(/\/overview\?range=30d&metric=visits$/);
   await expect(page.getByRole('region', { name: 'Visits per day' })).toBeVisible();
@@ -217,12 +220,9 @@ test('shows the values of the day under the pointer', async ({ page, isMobile })
   await expect(async () => {
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.move(box.x + box.width - 2, box.y + box.height / 2);
-    await expect(plot).toContainText(
-      /^[A-Z][a-z]{2} \d+Visits[\d,]+Visits, [A-Z][a-z]{2} \d+[\d,]+$/,
-      {
-        timeout: 1_000,
-      },
-    );
+    await expect(plot).toContainText(/^Oct \d+Visits[\d,]+Visits, (Sep|Oct) \d+[\d,]+$/, {
+      timeout: 1_000,
+    });
   }).toPass();
   await page.mouse.move(0, 0);
   await expect(plot).toBeEmpty();

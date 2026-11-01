@@ -25,19 +25,12 @@ const CHART_ROUTES: ReadonlySet<string> = new Set([
   '/[projectId]/overview',
   '/[projectId]/acquisition',
 ]);
-const SETTINGS_PAGES_OUTSIDE_A_PROJECT: ReadonlySet<string> = new Set([
-  '/account',
-  '/account/preferences',
-  '/account/sessions',
-  '/account/tokens',
-  '/account/apps',
-]);
 
 export const BUDGET_KIB: Readonly<Record<RouteClass, number>> = {
   entry: 155,
   signUp: 162,
-  screen: 176,
-  chart: 173,
+  screen: 174,
+  chart: 171,
 };
 
 export function routeClassOf(route: string): RouteClass {
@@ -47,9 +40,7 @@ export function routeClassOf(route: string): RouteClass {
   if (route === SIGN_UP_ROUTE) {
     return 'signUp';
   }
-  return route.startsWith(PROJECT_ROUTE_PREFIX) || SETTINGS_PAGES_OUTSIDE_A_PROJECT.has(route)
-    ? 'screen'
-    : 'entry';
+  return route.startsWith(PROJECT_ROUTE_PREFIX) ? 'screen' : 'entry';
 }
 
 function isRouteStats(entry: unknown): entry is RouteStats {

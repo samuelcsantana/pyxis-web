@@ -1,9 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 import {
-  openScreens,
-  openThemeAndLanguage,
+  openTheLanguagesOfTheAccountMenu,
   sawBusyContent,
-  screensMenu,
   watchForBusyContent,
 } from './navigation';
 
@@ -13,13 +11,16 @@ const JUST_PAST_THE_CLIENT_CACHE = '05:01';
 
 async function openMenuOnAPhone(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
-    await openScreens(page);
+    await page.getByRole('button', { name: 'Open menu' }).click();
   }
 }
 
 async function goTo(page: Page, isMobile: boolean, screen: string): Promise<void> {
   await openMenuOnAPhone(page, isMobile);
-  await screensMenu(page).getByRole('link', { name: screen, exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: screen, exact: true })
+    .click();
   await expect(page.getByRole('heading', { level: 1, name: screen })).toBeVisible();
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 }
@@ -81,21 +82,18 @@ test('loads a screen visited more than five minutes ago as a new one', async ({
 test('shows a visited screen in the language chosen since', async ({ page, isMobile }) => {
   await openOverviewThenFunnel(page, isMobile);
 
-  const part = await openThemeAndLanguage(page);
-  await part.getByRole('combobox', { name: 'Language' }).selectOption('pt-BR');
+  await openMenuOnAPhone(page, isMobile);
+  await page.locator('summary', { hasText: 'Account and preferences' }).click();
+  await openTheLanguagesOfTheAccountMenu(page);
+  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).toBeHidden();
+  await page.locator('summary', { hasText: 'Conta e preferências' }).click();
   const overview = page
-    .getByRole('dialog', { name: 'Telas' })
-    .or(page.getByRole('navigation', { name: 'Navegação principal' }))
+    .getByRole('navigation', { name: 'Navegação principal' })
     .getByRole('link', { name: 'Visão geral', exact: true });
-  if (isMobile) {
-    await page
-      .getByRole('navigation', { name: 'Navegação principal' })
-      .getByRole('button', { name: /^Telas/ })
-      .click();
+  if (isMobile && !(await overview.isVisible())) {
+    await page.getByRole('button', { name: 'Abrir menu' }).click();
   }
   await overview.click();
 

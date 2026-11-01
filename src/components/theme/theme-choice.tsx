@@ -2,20 +2,21 @@
 
 import { useSyncExternalStore } from 'react';
 import {
-  SEGMENTED_GROUP,
-  SEGMENTED_IDLE,
-  SEGMENTED_OPTION,
-  SEGMENTED_SELECTED,
-  SEGMENTED_THUMB,
+  NAV_CONTROL,
+  NAV_ITEM_CURRENT,
+  NAV_ITEM_IDLE,
+  SLIDING_INDICATOR,
 } from '@/components/ui/control-classes';
 import { SlidingIndicator } from '@/components/ui/sliding-indicator';
 import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
 import { useT } from '@/i18n/messages-provider';
 import { parseTheme, type Theme, THEME_CHOICES, type ThemeChoice, themeCookie } from '@/lib/theme';
 
+export type ThemeChoiceLayout = 'column' | 'row';
+
 export interface ThemeChoiceProps {
   readonly initialTheme?: Theme;
-  readonly labelledBy: string;
+  readonly layout?: ThemeChoiceLayout;
 }
 
 const CHOICE_LABELS = {
@@ -24,7 +25,18 @@ const CHOICE_LABELS = {
   system: 'theme.system',
 } as const satisfies Readonly<Record<ThemeChoice, string>>;
 
-const CHOICE = `min-h-11 px-3.5 lg:min-h-9 ${SEGMENTED_OPTION}`;
+const CHOICE = `relative z-[1] flex items-center rounded-control text-caption ${NAV_CONTROL}`;
+const LAYOUTS: Readonly<
+  Record<ThemeChoiceLayout, { readonly group: string; readonly choice: string }>
+> = {
+  column: { group: 'flex-col', choice: 'h-8 px-2.5' },
+  row: {
+    group: 'flex-row',
+    choice: 'min-h-8 min-w-0 flex-auto justify-center px-1.5 py-1 text-center',
+  },
+};
+const CHOSEN = `${NAV_ITEM_CURRENT} group-data-sliding/theme:bg-transparent`;
+const HIGHLIGHT = `rounded-control bg-nav-active ${SLIDING_INDICATOR}`;
 
 function subscribeToThemeChanges(onChange: () => void): () => void {
   const observer = new MutationObserver(onChange);
@@ -48,7 +60,7 @@ function apply(choice: ThemeChoice): void {
   document.cookie = themeCookie(choice);
 }
 
-export function ThemeChoiceGroup({ initialTheme, labelledBy }: ThemeChoiceProps) {
+export function ThemeChoiceGroup({ initialTheme, layout = 'column' }: ThemeChoiceProps) {
   const t = useT();
   const chosen = useSyncExternalStore(
     subscribeToThemeChanges,
@@ -60,11 +72,11 @@ export function ThemeChoiceGroup({ initialTheme, labelledBy }: ThemeChoiceProps)
     <div
       ref={attach}
       role="group"
-      aria-labelledby={labelledBy}
+      aria-label={t('theme.label')}
       data-sliding={sliding}
-      className={`self-start ${SEGMENTED_GROUP}`}
+      className={`group/theme relative flex gap-1 ${LAYOUTS[layout].group}`}
     >
-      <SlidingIndicator frame={frame} shape="fill" className={SEGMENTED_THUMB} />
+      <SlidingIndicator frame={frame} shape="fill" className={HIGHLIGHT} />
       {THEME_CHOICES.map((choice) => (
         <button
           key={choice}
@@ -74,7 +86,7 @@ export function ThemeChoiceGroup({ initialTheme, labelledBy }: ThemeChoiceProps)
           onClick={() => {
             apply(choice);
           }}
-          className={`${CHOICE} ${choice === chosen ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+          className={`${CHOICE} ${LAYOUTS[layout].choice} ${choice === chosen ? CHOSEN : NAV_ITEM_IDLE}`}
         >
           {t(CHOICE_LABELS[choice])}
         </button>

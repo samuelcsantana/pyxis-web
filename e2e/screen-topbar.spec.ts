@@ -1,14 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import {
-  expectPeriodInForce,
-  holdScreenRequests,
-  openPeriodOnAPhone,
-  openScreens,
-  periods,
-  screensMenu,
-  shownDates,
-} from './navigation';
+import { holdScreenRequests } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const HEADER_MARKER = 'pyxisE2eHeader';
@@ -41,16 +33,18 @@ function theMarkedHeaderIsShown(page: Page): Promise<boolean> {
 
 async function openTheMenu(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
-    await openScreens(page);
+    await page.getByRole('button', { name: 'Open menu' }).click();
   }
 }
 
 function screenLink(page: Page, name: string) {
-  return screensMenu(page).getByRole('link', { name, exact: true });
+  return page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name, exact: true });
 }
 
 function periodLink(page: Page, name: string) {
-  return periods(page).getByRole('link', { name });
+  return page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name });
 }
 
 async function waitForPrefetchOf(page: Page, screen: string): Promise<void> {
@@ -91,19 +85,18 @@ test('keeps the same header while the screen and then the period change', async 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=7d$`));
   expect(await theMarkedHeaderIsShown(page)).toBe(true);
 
-  await openPeriodOnAPhone(page);
   await periodLink(page, '30 days').click();
 
-  await expectPeriodInForce(page, '30 days');
+  await expect(periodLink(page, '30 days')).toHaveAttribute('aria-current', 'page');
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=30d`));
   expect(await theMarkedHeaderIsShown(page)).toBe(true);
 });
 
-test('shows the title and the dates of the destination while it loads', async ({
+test('shows the real subtitle and period of the destination while it loads', async ({
   page,
   isMobile,
 }) => {
-  test.skip(isMobile, 'a phone opens the screens from its menu, checked in loading.spec.ts');
+  test.skip(isMobile, 'A phone hides the subtitle of the header.');
   await page.goto(`/${STORE_ID}/overview`);
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
   await waitForPrefetchOf(page, 'devices');
@@ -113,7 +106,7 @@ test('shows the title and the dates of the destination while it loads', async ({
 
   const header = page.getByRole('banner');
   await expect(header.getByRole('heading', { level: 1, name: 'Devices' })).toBeVisible();
-  await expect(shownDates(page)).toBeVisible();
+  await expect(header.getByText('What people use to reach My site')).toBeVisible();
   await expect(periodLink(page, '30 days')).toHaveAttribute('aria-current', 'page');
   await expect(header.locator('.motion-safe\\:animate-pulse:visible')).toHaveCount(0);
   await expect(page.getByRole('main')).toHaveAttribute('aria-busy', 'true');
@@ -136,12 +129,11 @@ test('takes a period chosen while a screen loads to that screen and period', asy
 
   await screenLink(page, 'Acquisition').click();
   await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
-  await openPeriodOnAPhone(page);
   await periodLink(page, '7 days').click();
   release();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/acquisition\\?range=7d$`));
-  await expectPeriodInForce(page, '7 days');
+  await expect(periodLink(page, '7 days')).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
 });
 

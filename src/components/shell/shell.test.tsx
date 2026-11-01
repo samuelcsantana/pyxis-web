@@ -1,17 +1,16 @@
 import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Admin, Project } from '@/domain/admin';
+import type { Admin } from '@/domain/admin';
 import { presetPeriod } from '@/domain/period';
 import { seenMarksKey } from '@/lib/seen-marks';
 import type { IAuthService } from '@/services/auth/auth-service.interface';
 import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { publishArrivalNews } from './arrival-news';
+import { MobileMenu } from './mobile-menu';
 import { PeriodSelector } from './period-selector';
-import { ProjectChoicesProvider } from './project-choices';
 import { ProjectSwitcher } from './project-switcher';
 import { MainContent } from './main-content';
 import {
-  CONNECTED_APPS_HREF,
   hrefKeepingView,
   linkWith,
   NAVIGATION_ORDER,
@@ -22,19 +21,17 @@ import {
   SCREENS,
   SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
+  screenOf,
   screenSlugOf,
-  settingsKeysHref,
   viewParameters,
 } from './screens';
 import { Sidebar } from './sidebar';
-import { SidebarFootNav, SidebarNav } from './sidebar-nav';
+import { SidebarNav } from './sidebar-nav';
 import { SIGN_OUT_MIN_BUSY_MS, SignOutButton } from './sign-out-button';
 import { CONTENT_ID } from './content-id';
 import { SkipLink } from './skip-link';
 import { Topbar } from './topbar';
-import { BarAccountProvider } from './bar-account';
 import { english } from '@/test-utils/english';
-import { withProjectChoices } from '@/test-utils/project-choices';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 const navigation = vi.hoisted(() => ({
@@ -47,7 +44,6 @@ vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
   useSearchParams: () => new URLSearchParams(navigation.search),
   useRouter: () => navigation.router,
-  useSelectedLayoutSegments: () => [],
 }));
 
 const ADMIN: Admin = {
@@ -57,6 +53,9 @@ const ADMIN: Admin = {
     { id: 'p-docs', name: 'Demo Docs', timezone: 'Europe/Lisbon', conversionEvent: 'signup' },
   ],
 };
+function chooseNothing(): Promise<void> {
+  return Promise.resolve();
+}
 
 function store() {
   const [first] = ADMIN.projects;
@@ -65,6 +64,8 @@ function store() {
   }
   return first;
 }
+
+const STORE_HOME = 'Overview · Demo Store';
 
 function docs() {
   const [, second] = ADMIN.projects;
@@ -121,11 +122,6 @@ describe('screens helpers', () => {
     );
   });
 
-  it('link the keys of the settings and the connected apps of the account by their own address', () => {
-    expect(settingsKeysHref('p 1')).toBe('/p%201/settings/keys');
-    expect(CONNECTED_APPS_HREF).toBe('/account/apps');
-  });
-
   it('name the screen of a path only when the path is exactly a project and a screen', () => {
     expect(screenSlugOf('/p1/overview')).toBe('overview');
     expect(screenSlugOf('/p1/acquisition')).toBe('acquisition');
@@ -162,6 +158,11 @@ describe('screens helpers', () => {
     }
   });
 
+  it('read the screen of a path', () => {
+    expect(screenOf('/p1/overview')).toBe('overview');
+    expect(screenOf('/')).toBeUndefined();
+  });
+
   it('order the navigation with every screen exactly once', () => {
     const registry = SCREENS.map((screen) => screen.slug);
 
@@ -188,11 +189,7 @@ describe('screens helpers', () => {
       '/p1/unknown',
       '/p1/constructor',
       '/p1/__proto__',
-      '/p1/settings/',
-      '/p1/settings/keys',
-      '/p1/settings//keys',
-      '/p1/install/extra',
-      '/p1/help/extra',
+      '/p1/settings/extra',
       '/p1/help/',
       '/p1/exports',
       '/p1/exports/',
@@ -207,7 +204,7 @@ describe('screens helpers', () => {
 
 describe('SidebarNav', () => {
   it('links each screen with the period and marks the current one', () => {
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     const overview = screen.getByRole('link', { name: 'Overview' });
 
@@ -221,7 +218,7 @@ describe('SidebarNav', () => {
   });
 
   it('counts the news of each other screen inside its link', () => {
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     act(() => {
       publishArrivalNews({
@@ -239,7 +236,7 @@ describe('SidebarNav', () => {
   });
 
   it('links the screens in the order of the questions, then the install guide and the settings', () => {
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
 
     expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual([
       'Overview',
@@ -258,7 +255,7 @@ describe('SidebarNav', () => {
 
   it('marks nothing current on another screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
@@ -266,21 +263,19 @@ describe('SidebarNav', () => {
 });
 
 describe('the project settings in the navigation', () => {
-  it('links the settings of the project in the foot, keeping the period', () => {
-    renderWithMessages(<Navigation project={store()} />);
+  it('links the settings of the project in a list of its own, keeping the period', () => {
+    renderWithMessages(<SidebarNav project={store()} />);
 
-    const [, foot] = screen.getAllByRole('list');
-    if (foot === undefined) {
-      throw new Error('The sidebar has a foot list.');
-    }
-    const link = within(foot).getByRole('link', { name: 'Settings' });
+    const link = within(screen.getByRole('list', { name: 'Project' })).getByRole('link', {
+      name: 'Settings',
+    });
     expect(link).toHaveAttribute('href', '/p-store/settings?range=7d');
     expect(link).not.toHaveAttribute('aria-current');
   });
 
   it('keeps a custom period and the filters on the way to the settings', () => {
     navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&metric=visitors';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -291,7 +286,7 @@ describe('the project settings in the navigation', () => {
 
   it('links the settings without a query when the screen is on the default period', () => {
     navigation.search = '';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute(
@@ -303,7 +298,7 @@ describe('the project settings in the navigation', () => {
   it('gives the screens back the period the settings were opened with', () => {
     navigation.pathname = '/p-store/settings';
     navigation.search = 'range=today';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -316,98 +311,16 @@ describe('the project settings in the navigation', () => {
 
   it('marks the settings current on the settings page, and no screen', () => {
     navigation.pathname = '/p-store/settings';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Overview' })).not.toHaveAttribute('aria-current');
   });
 
-  it('marks the settings current on a section of the settings, and no screen', () => {
-    navigation.pathname = '/p-store/settings/keys';
-    renderWithMessages(<Navigation project={store()} />);
-    navigation.pathname = '/p-store/overview';
-
-    const current = document.querySelectorAll('[aria-current="page"]');
-    expect(current).toHaveLength(1);
-    expect(current[0]).toHaveAccessibleName('Settings');
-  });
-
-  function clickWithoutLeaving(link: HTMLElement): boolean {
-    let preventedBeforeTheDocument = false;
-    const record = (event: Event) => {
-      preventedBeforeTheDocument = event.defaultPrevented;
-      event.preventDefault();
-    };
-    document.addEventListener('click', record);
-    fireEvent.click(link);
-    document.removeEventListener('click', record);
-    return preventedBeforeTheDocument;
-  }
-
-  it('loads the settings as a full page when they are already open, so they never open over themselves', () => {
-    const assign = vi.fn();
-    vi.stubGlobal('location', { assign });
-    navigation.pathname = '/p-store/settings/keys';
-    renderWithMessages(<Navigation project={store()} />);
-    navigation.pathname = '/p-store/overview';
-
-    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
-
-    expect(prevented).toBe(true);
-    expect(assign).toHaveBeenCalledExactlyOnceWith('/p-store/settings?range=7d');
-  });
-
-  it('leaves a click on the settings from a screen to the link, which opens them over the screen', () => {
-    const assign = vi.fn();
-    vi.stubGlobal('location', { assign });
-    renderWithMessages(<Navigation project={store()} />);
-
-    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: 'Settings' }));
-
-    expect(prevented).toBe(false);
-    expect(assign).not.toHaveBeenCalled();
-  });
-
-  it('loads Install as a full page when it is already open, so it never opens over itself', () => {
-    const assign = vi.fn();
-    vi.stubGlobal('location', { assign });
-    navigation.pathname = '/p-store/install';
-    renderWithMessages(<Navigation project={store()} />);
-    navigation.pathname = '/p-store/overview';
-
-    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
-
-    expect(prevented).toBe(true);
-    expect(assign).toHaveBeenCalledExactlyOnceWith('/p-store/install?range=7d');
-  });
-
-  it('leaves a click that opens Install elsewhere to the browser, even on its own page', () => {
-    const assign = vi.fn();
-    vi.stubGlobal('location', { assign });
-    navigation.pathname = '/p-store/install';
-    renderWithMessages(<Navigation project={store()} />);
-    navigation.pathname = '/p-store/overview';
-
-    fireEvent.click(screen.getByRole('link', { name: /^Install/ }), { ctrlKey: true });
-
-    expect(assign).not.toHaveBeenCalled();
-  });
-
-  it('leaves a click on Install from a screen to the link, which opens it over the screen', () => {
-    const assign = vi.fn();
-    vi.stubGlobal('location', { assign });
-    renderWithMessages(<Navigation project={store()} />);
-
-    const prevented = clickWithoutLeaving(screen.getByRole('link', { name: /^Install/ }));
-
-    expect(prevented).toBe(false);
-    expect(assign).not.toHaveBeenCalled();
-  });
-
   it('marks the settings current on an export, which has no item of its own', () => {
     navigation.pathname = '/p-store/exports/e1';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const current = document.querySelectorAll('[aria-current="page"]');
@@ -415,9 +328,9 @@ describe('the project settings in the navigation', () => {
     expect(current[0]).toHaveAccessibleName('Settings');
   });
 
-  it('marks no link of its own current on the help page, whose row is in the account menu', () => {
+  it('marks no link of its own current on the help page, whose link is in the foot', () => {
     navigation.pathname = '/p-store/help';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(document.querySelector('[aria-current]')).toBeNull();
@@ -425,19 +338,14 @@ describe('the project settings in the navigation', () => {
 });
 
 describe('the install guide in the navigation', () => {
-  it('links the install guide first in the foot, with no section label, keeping the view', () => {
+  it('links the install guide first in the Project list, under a visible label, keeping the view', () => {
     navigation.search = 'range=7d&device=mobile';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.search = 'range=7d&tab=events';
 
-    const [screens, foot] = screen.getAllByRole('list');
-    if (screens === undefined || foot === undefined) {
-      throw new Error('The sidebar has the screens and a foot.');
-    }
-    const [install, settings] = within(foot).getAllByRole('link');
-    expect(within(screens).getAllByRole('link')).toHaveLength(8);
-    expect(screen.queryByText('Project')).not.toBeInTheDocument();
-    expect(screen.queryByText('Analytics')).not.toBeInTheDocument();
+    const project = screen.getByRole('list', { name: 'Project' });
+    const [install, settings] = within(project).getAllByRole('link');
+    expect(screen.getByText('Project')).toBeVisible();
     expect(install).toHaveAccessibleName('Install');
     expect(install).toHaveAttribute('href', '/p-store/install?range=7d&device=mobile');
     expect(install).not.toHaveAttribute('aria-current');
@@ -446,7 +354,7 @@ describe('the install guide in the navigation', () => {
 
   it('marks the install guide current on its page, and nothing else', () => {
     navigation.pathname = '/p-store/install';
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     navigation.pathname = '/p-store/overview';
 
     const current = document.querySelectorAll('[aria-current="page"]');
@@ -455,49 +363,28 @@ describe('the install guide in the navigation', () => {
   });
 
   it('tags the install guide as pending while the project has received no event', () => {
-    renderWithMessages(<Navigation project={{ ...store(), firstEventAt: null }} />);
+    renderWithMessages(<SidebarNav project={{ ...store(), firstEventAt: null }} />);
 
     expect(screen.getByRole('link', { name: 'Install, Pending' })).toBeInTheDocument();
   });
 
   it('tags nothing once an event arrived, or when the first event is not known', () => {
     const { unmount } = renderWithMessages(
-      <Navigation project={{ ...store(), firstEventAt: '2026-10-01T10:00:00.000Z' }} />,
+      <SidebarNav project={{ ...store(), firstEventAt: '2026-10-01T10:00:00.000Z' }} />,
     );
     expect(screen.getByRole('link', { name: 'Install' })).toBeInTheDocument();
     expect(screen.queryByText('Pending')).not.toBeInTheDocument();
     unmount();
 
-    renderWithMessages(<Navigation project={store()} />);
+    renderWithMessages(<SidebarNav project={store()} />);
     expect(store().firstEventAt).toBeUndefined();
     expect(screen.queryByText('Pending')).not.toBeInTheDocument();
   });
 });
 
-function Navigation({ project }: { readonly project: Project }) {
-  return (
-    <>
-      <SidebarNav project={project} />
-      <SidebarFootNav project={project} />
-    </>
-  );
-}
-
-function switcher(canCreateProject = false) {
-  return (
-    <ProjectChoicesProvider
-      projects={ADMIN.projects}
-      currentProject={store()}
-      canCreateProject={canCreateProject}
-    >
-      <ProjectSwitcher />
-    </ProjectChoicesProvider>
-  );
-}
-
 describe('ProjectSwitcher', () => {
   it('names the current project and links every project on the same screen and period', () => {
-    renderWithMessages(switcher());
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 
     expect(document.querySelector('summary')).toHaveTextContent(
       /^Switch project\. Current project: .*Demo Store/,
@@ -512,36 +399,26 @@ describe('ProjectSwitcher', () => {
     );
   });
 
-  it('shows the time zone of each project in its row, breaking only after its slash', () => {
-    renderWithMessages(switcher());
+  it('lets the time zone of the current project break only after its slash, whole', () => {
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 
     const zone = screen.getByText('America/Sao_Paulo');
 
     expect(zone.querySelectorAll('wbr')).toHaveLength(1);
     expect(zone.firstChild).toHaveTextContent('America/');
     expect(zone).not.toHaveClass('truncate');
-    expect(screen.getByRole('link', { name: /Demo Docs/ })).toHaveTextContent('Europe/Lisbon');
-    expect(document.querySelector('summary')).not.toHaveTextContent('America/Sao_Paulo');
-  });
-
-  it('inks the time zone of a hovered or pressed row, readable on its stronger fill', () => {
-    renderWithMessages(switcher());
-
-    const other = screen.getByRole('link', { name: /Demo Docs/ });
-    expect(other).toHaveClass('group/row', 'hover:bg-line-strong', 'active:bg-line-strong');
-    expect(screen.getByText('Europe/Lisbon')).toHaveClass(
-      'text-muted',
-      'group-hover/row:text-ink',
-      'group-active/row:text-ink',
-    );
   });
 
   it('offers a new project only to the owner of an account that can create one', () => {
-    const { unmount } = renderWithMessages(switcher());
+    const { unmount } = renderWithMessages(
+      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
+    );
     expect(screen.queryByRole('link', { name: 'New project' })).not.toBeInTheDocument();
     unmount();
 
-    renderWithMessages(switcher(true));
+    renderWithMessages(
+      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} canCreateProject />,
+    );
     expect(screen.getByRole('link', { name: 'New project' })).toHaveAttribute(
       'href',
       '/new-project',
@@ -549,18 +426,20 @@ describe('ProjectSwitcher', () => {
   });
 
   it('marks the current project with a check and the current-item background, not by weight alone', () => {
-    renderWithMessages(switcher());
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
 
     const current = screen.getByRole('link', { name: /Demo Store/ });
     const other = screen.getByRole('link', { name: /Demo Docs/ });
     expect(current.querySelector('svg')).toBeInTheDocument();
     expect(other.querySelector('svg')).not.toBeInTheDocument();
-    expect(current).toHaveClass('bg-soft');
-    expect(other).not.toHaveClass('bg-soft');
+    expect(current).toHaveClass('bg-nav-active');
+    expect(other).not.toHaveClass('bg-nav-active');
   });
 
   it('closes after a project is chosen', () => {
-    const { container } = renderWithMessages(switcher());
+    const { container } = renderWithMessages(
+      <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />,
+    );
     const details = container.querySelector('details');
     if (details === null) {
       throw new Error('no details element');
@@ -574,12 +453,17 @@ describe('ProjectSwitcher', () => {
     expect(details.open).toBe(false);
   });
 
-  it('closes on Escape, with the focus back on its button', () => {
-    const { container } = renderWithMessages(switcher());
+  it('closes on Escape inside the mobile menu, which stays open until a second Escape', () => {
+    const { container } = renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
+      </MobileMenu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
     const details = container.querySelector('details');
     const summary = container.querySelector('summary');
     if (details === null || summary === null) {
-      throw new Error('no project menu');
+      throw new Error('no project switcher');
     }
     details.open = true;
     const link = screen.getByRole('link', { name: /Demo Docs/ });
@@ -589,12 +473,23 @@ describe('ProjectSwitcher', () => {
 
     expect(details.open).toBe(false);
     expect(summary).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+
+    fireEvent.keyDown(summary, { key: 'Escape' });
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
   });
 
   it('closes when the focus moves past its last project', () => {
     const { container } = renderWithMessages(
       <>
-        {switcher()}
+        <ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />
         <a href="#overview">Overview</a>
       </>,
     );
@@ -613,7 +508,7 @@ describe('ProjectSwitcher', () => {
 
   it('falls back to the first screen from a path without one', () => {
     navigation.pathname = '/p-store';
-    renderWithMessages(switcher());
+    renderWithMessages(<ProjectSwitcher projects={ADMIN.projects} currentProject={store()} />);
     navigation.pathname = '/p-store/overview';
 
     expect(screen.getByRole('link', { name: /Demo Docs/ })).toHaveAttribute(
@@ -643,7 +538,7 @@ describe('SignOutButton', () => {
   it('signs out and goes to the sign-in page', async () => {
     renderWithMessages(<SignOutButton authService={new MockAuthService()} />);
 
-    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Sign out' }).querySelector('svg')).toBeNull();
 
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
 
@@ -694,31 +589,6 @@ describe('SignOutButton', () => {
     expect(navigation.router.replace).not.toHaveBeenCalled();
   });
 
-  it('takes the look its caller gives, with its icon, and says there when it fails', async () => {
-    const failing: IAuthService = {
-      requestCode: () => Promise.resolve(),
-      verifyCode: () => Promise.resolve(),
-      signOut: () => Promise.reject(new TypeError('Failed to fetch')),
-      signOutEverywhere: () => Promise.reject(new TypeError('Failed to fetch')),
-    };
-    renderWithMessages(
-      <SignOutButton
-        authService={failing}
-        variant={{ frame: 'flex', button: 'w-full', error: 'px-2 text-bad', withIcon: true }}
-      />,
-    );
-
-    const button = screen.getByRole('button', { name: 'Sign out' });
-    expect(button).toHaveClass('w-full');
-    expect(button.querySelector('svg')).not.toBeNull();
-    fireEvent.click(button);
-    await settle(SIGN_OUT_MIN_BUSY_MS);
-
-    expect(screen.getByRole('alert')).toHaveTextContent('Could not sign out');
-    expect(screen.getByRole('alert')).toHaveClass('px-2', 'text-bad');
-    expect(navigation.router.replace).not.toHaveBeenCalled();
-  });
-
   it('forgets on this device which screens were seen, only once signed out', async () => {
     window.localStorage.setItem(seenMarksKey('p-store'), '{"overview":1}');
     const failing: IAuthService = {
@@ -764,25 +634,31 @@ describe('SignOutButton', () => {
 });
 
 describe('Sidebar', () => {
-  it('holds the logo, the screens, and a foot with Install and Settings, leaving the account to the bar', () => {
-    renderWithMessages(<Sidebar project={store()} />);
+  it('holds the project switcher, the screens, the settings, the privacy note and the account menu', () => {
+    renderWithMessages(
+      <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
+    );
 
-    expect(screen.queryByText('No cookies, no personal data')).not.toBeInTheDocument();
-    expect(screen.queryByText('Switch project. Current project:')).not.toBeInTheDocument();
+    const privacy = screen.getByText('No cookies, no personal data');
+    expect(privacy).toHaveClass('text-nav-muted');
+    expect(privacy).not.toHaveClass('bg-nav-raised');
+    expect(screen.getByRole('link', { name: 'Help and support' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Overview' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Install' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.queryByText('Account and preferences')).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Sign out', hidden: true }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText('Account and preferences')).toBeInTheDocument();
+    expect(screen.getByText('owner@example.com')).toBeInTheDocument();
+    expect(screen.getAllByRole('group', { name: 'Language', hidden: true })).toHaveLength(1);
+    expect(screen.getByRole('group', { name: 'Theme', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sign out', hidden: true })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Project settings' })).not.toBeInTheDocument();
   });
 
   it('links the logo to the overview of the current project, keeping the period and the filters', () => {
     navigation.pathname = '/p-docs/devices';
     navigation.search = 'range=7d&device=mobile&tab=events';
-    renderWithMessages(<Sidebar project={docs()} />);
+    renderWithMessages(
+      <Sidebar admin={ADMIN} project={docs()} i18n={english} chooseLocale={chooseNothing} />,
+    );
     navigation.pathname = '/p-store/overview';
     navigation.search = 'range=7d&tab=events';
 
@@ -790,6 +666,226 @@ describe('Sidebar', () => {
       'href',
       '/p-docs/overview?range=7d&device=mobile',
     );
+  });
+
+  it('becomes the main navigation inside the menu, with the menu bar', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />
+      </MobileMenu>,
+    );
+
+    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
+
+    expect(within(navigation).getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
+    expect(
+      within(navigation).getByRole('button', { name: 'Sign out', hidden: true }),
+    ).toBeInTheDocument();
+  });
+});
+
+describe('MobileMenu', () => {
+  it('names the project in its bar, linking its overview with the period and the filters', () => {
+    navigation.search = 'from=2026-10-01&to=2026-10-10&device=mobile&tab=events';
+    renderWithMessages(
+      <MobileMenu project={docs()} homeLabel="Overview · Demo Docs">
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    navigation.search = 'range=7d&tab=events';
+
+    const home = screen.getByRole('link', { name: 'Overview · Demo Docs' });
+    expect(home).toHaveTextContent('DDDemo Docs');
+    expect(within(home).getByText('Demo Docs')).toHaveClass('truncate');
+    expect(home).toHaveAttribute(
+      'href',
+      '/p-docs/overview?from=2026-10-01&to=2026-10-10&device=mobile',
+    );
+  });
+
+  it('closes when its logo is followed, even to the address it is already on', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    const logo = screen.getByRole('link', { name: STORE_HOME });
+
+    fireEvent.click(logo);
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    fireEvent.click(logo);
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(document.getElementById('main-navigation')).toHaveClass('hidden');
+  });
+
+  it('marks its button with a dot, and says so, when another screen has news', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <span>menu</span>
+      </MobileMenu>,
+    );
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(toggle.querySelector('.rounded-full')).toBeNull();
+
+    act(() => {
+      publishArrivalNews({ visits: { shown: '2', label: '2 new visits' } });
+    });
+
+    expect(screen.getByRole('button', { name: 'Open menu, there is news' })).toBe(toggle);
+    expect(toggle.querySelector('.rounded-full')).toHaveAttribute('aria-hidden', 'true');
+
+    fireEvent.click(toggle);
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toBe(toggle);
+    expect(toggle.querySelector('.rounded-full')).toBeNull();
+
+    act(() => {
+      publishArrivalNews({});
+    });
+  });
+
+  it('opens and closes the navigation, and closes after a link is followed', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+        <span>Not a link</span>
+      </MobileMenu>,
+    );
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    const menu = document.getElementById('main-navigation');
+
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(menu).toHaveClass('block');
+
+    fireEvent.click(screen.getByText('Not a link'));
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(screen.getByRole('link', { name: 'Overview', hidden: true }));
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(menu).toHaveClass('hidden');
+  });
+
+  it('closes with its own button', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <span>menu</span>
+      </MobileMenu>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Close menu' }));
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  function renderOpenMenu() {
+    const view = renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    return view;
+  }
+
+  it('closes on Escape and gives the focus back to its button', () => {
+    renderOpenMenu();
+    const link = screen.getByRole('link', { name: 'Overview' });
+    link.focus();
+
+    fireEvent.keyDown(link, { key: 'Escape' });
+
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveFocus();
+  });
+
+  it('stays open on any other key', () => {
+    renderOpenMenu();
+
+    fireEvent.keyDown(screen.getByRole('link', { name: 'Overview' }), { key: 'Enter' });
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+  });
+
+  it('leaves the focus alone on Escape while closed', () => {
+    renderWithMessages(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    const link = screen.getByRole('link', { name: 'Overview', hidden: true });
+    link.focus();
+
+    fireEvent.keyDown(link, { key: 'Escape' });
+
+    expect(link).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('stays open while the address stays the same', () => {
+    const { rerender } = renderOpenMenu();
+
+    rerender(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Close menu' })).toBeInTheDocument();
+  });
+
+  it('closes when the query changes, as with a period link or Back', () => {
+    const { rerender } = renderOpenMenu();
+
+    navigation.search = 'range=30d';
+    rerender(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    navigation.search = 'range=7d&tab=events';
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+  });
+
+  it('closes when the path changes', () => {
+    const { rerender } = renderOpenMenu();
+
+    navigation.pathname = '/p-store/funnel';
+    rerender(
+      <MobileMenu project={store()} homeLabel={STORE_HOME}>
+        <a href="#overview">Overview</a>
+      </MobileMenu>,
+    );
+    navigation.pathname = '/p-store/overview';
+
+    expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
   });
 });
 
@@ -835,7 +931,6 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={presetPeriod('7d', today)}
         today={today}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -856,7 +951,6 @@ describe('PeriodSelector', () => {
         basePath="/p1/overview"
         period={{ preset: 'custom', from: '2026-08-01', to: '2026-08-31' }}
         today={today}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -887,7 +981,6 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -911,7 +1004,6 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -923,7 +1015,7 @@ describe('PeriodSelector', () => {
 
     fireEvent.keyDown(day, { key: 'Escape' });
     expect(container.querySelector('details')).not.toHaveAttribute('open');
-    expect(screen.getByText(/^Custom,/).closest('summary')).toHaveFocus();
+    expect(screen.getByText('Custom')).toHaveFocus();
   });
 
   it('closes the custom form when the focus moves to a preset', async () => {
@@ -935,7 +1027,6 @@ describe('PeriodSelector', () => {
           rejected: { from: '2026-10-05', to: '2026-09-20', problem: 'inverted' },
         }}
         today={today}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -957,7 +1048,6 @@ describe('PeriodSelector with parameters of the screen', () => {
         period={presetPeriod('7d', '2026-10-05')}
         today="2026-10-05"
         keep={{ kind: 'screens', q: 'order' }}
-        format={english.format}
         t={english.t}
       />,
     );
@@ -971,38 +1061,11 @@ describe('PeriodSelector with parameters of the screen', () => {
   });
 });
 
-describe('Topbar with the account', () => {
-  it('ends the bar with the account it is given, beside the project and the title', () => {
-    renderWithMessages(
-      withProjectChoices(
-        <BarAccountProvider account={<button type="button">Account</button>}>
-          <Topbar title="Timeline" />
-        </BarAccountProvider>,
-      ),
-    );
-
-    const bar = screen.getByRole('banner');
-    const account = within(bar).getByRole('button', { name: 'Account' });
-    const heading = within(bar).getByRole('heading', { level: 1, name: 'Timeline' });
-    expect(heading.compareDocumentPosition(account)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(account.parentElement).toHaveClass('self-start', 'max-lg:hidden');
-  });
-
-  it('leaves the end of the bar empty without one', () => {
-    renderWithMessages(withProjectChoices(<Topbar title="Timeline" />));
-
-    expect(screen.getByRole('banner').querySelector('.col-start-2')).toBeNull();
-  });
-});
-
 describe('Topbar without a period', () => {
-  it('shows the project, then the title as the path, with no period controls and no theme toggle', () => {
-    renderWithMessages(withProjectChoices(<Topbar title="Timeline" />));
+  it('shows the title, with no period controls and no theme toggle', () => {
+    renderWithMessages(<Topbar title="Timeline" subtitle="Everything one person did, in order" />);
 
-    const bar = screen.getByRole('banner');
-    const heading = within(bar).getByRole('heading', { level: 1, name: 'Timeline' });
-    const project = within(bar).getByText('Demo Store', { selector: 'summary span' });
-    expect(project.compareDocumentPosition(heading)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getByRole('heading', { level: 1, name: 'Timeline' })).toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: 'Period' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /theme/ })).not.toBeInTheDocument();
   });

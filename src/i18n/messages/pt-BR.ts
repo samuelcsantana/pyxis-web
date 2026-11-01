@@ -24,12 +24,8 @@ export const ptBR = translation({
   },
   nav: {
     label: 'Navegação principal',
-    screens: 'Telas',
-    screensWithNews: 'Telas, há novidades',
-    accountTab: 'Conta',
-    filters: 'Filtros',
-    filtersEmpty:
-      'Nenhum filtro. Toque numa linha de uma tabela (um país, uma origem) para filtrar todas as telas.',
+    openMenu: 'Abrir menu',
+    openMenuWithNews: 'Abrir menu, há novidades',
     arrivals: {
       visits: forms('{count} nova visita', '{count} novas visitas'),
       conversions: forms('{count} nova conversão', '{count} novas conversões'),
@@ -48,16 +44,19 @@ export const ptBR = translation({
       moreSinceLastRead: '{count} a mais desde a última vez que você olhou',
       newVisit: 'Nova',
     },
+    closeMenu: 'Fechar menu',
+    section: 'Análises',
     switchProject: 'Trocar de projeto. Projeto atual:',
     newProject: 'Novo projeto',
     signOut: 'Sair',
     signOutEverywhere: 'Sair de todos os dispositivos',
     signingOut: 'Saindo…',
     signOutFailed: 'Não foi possível sair. Tente de novo.',
+    projectSection: 'Projeto',
     install: 'Instalação',
     installPending: 'Pendente',
-    installCta: 'Instalar o Pyxis',
     usage: {
+      share: '{share} do mês',
       events: '{count} de {limit} eventos neste mês',
       resets: 'A contagem zera em {date}',
     },
@@ -197,15 +196,16 @@ export const ptBR = translation({
   },
   language: {
     label: 'Idioma',
-  },
-  preferences: {
-    heading: 'Tema e idioma',
-    thisBrowser: 'Valem para este navegador.',
+    current: 'Idioma: {name}',
   },
   settings: {
-    you: 'Você',
-    sections: 'Seções',
-    close: 'Fechar',
+    title: 'Configurações',
+    subtitle:
+      'Como o {project} está configurado e os e-mails que você recebe sobre ele. As configurações do projeto mudam pela linha de comando.',
+    subtitleOwner:
+      'Como o {project} está configurado, as chaves dele e os e-mails que você recebe sobre ele.',
+    subtitleMember:
+      'Como o {project} está configurado e os e-mails que você recebe sobre ele. Só o dono da conta muda o projeto.',
     project: {
       heading: 'Projeto',
       name: 'Nome',
@@ -253,6 +253,7 @@ export const ptBR = translation({
     },
   },
   projectForm: {
+    heading: 'Projeto',
     name: 'Nome',
     origins: 'Origens permitidas',
     originsNote:
@@ -439,6 +440,7 @@ export const ptBR = translation({
   },
   support: {
     title: 'Ajuda e suporte',
+    subtitle: 'Fale com quem mantém o Pyxis ou encontre a resposta na documentação.',
     copy: 'Copiar',
     copied: 'Copiado',
     selected: 'Selecionado, aperte Ctrl+C',
@@ -509,6 +511,7 @@ export const ptBR = translation({
   },
   exportPage: {
     title: 'Exportação',
+    subtitle: 'Os eventos do {project}, num arquivo CSV compactado.',
     pending: 'Preparando o arquivo…',
     pendingNote:
       'Esta página confere de novo a cada poucos segundos, e você também recebe um e-mail quando ficar pronto.',
@@ -595,6 +598,7 @@ export const ptBR = translation({
   },
   install: {
     title: 'Instalação',
+    subtitle: 'Envie os primeiros eventos do {project}.',
     step1: '1. Instale o Pyxis no seu site',
     npm: 'Com um bundler (npm):',
     script: 'Ou em HTML puro, antes do fechamento do body:',
@@ -932,6 +936,7 @@ export const ptBR = translation({
     noChange: 'sem variação',
   },
   overview: {
+    subtitle: 'O uso de {project} no período',
     kpiToggleHint: 'Mostra este número por dia no gráfico abaixo.',
     topPages: {
       title: 'Páginas mais vistas',
@@ -1053,6 +1058,7 @@ export const ptBR = translation({
     point: '{series}, {day}',
   },
   acquisition: {
+    subtitle: 'De onde vêm as visitas de {project}',
     paidVisits: 'Visitas pagas',
     footnote:
       'Um clique em anúncio é reconhecido pelo id de clique na URL de entrada. O Pyxis guarda só o fato de que ele estava lá, nunca o id em si, e guarda apenas o domínio de um site de referência.',
@@ -1122,6 +1128,7 @@ export const ptBR = translation({
     otherCities: 'Outras cidades',
     unknownCity: 'Não identificada',
     convertedOfVisits: '{converted} de {visits}',
+    subtitle: 'O que as pessoas usam para acessar {project}',
     panels: {
       deviceType: 'Tipo de dispositivo',
       browser: 'Navegador',
@@ -1234,6 +1241,10 @@ export const ptBR = translation({
       },
     },
     page: {
+      subtitle: {
+        writes: 'Todas as escritas que {project} fez, e como terminaram',
+        reads: 'As leituras que {project} fez e que falharam',
+      },
       kinds: {
         label: 'Tipo de requisição',
         writes: 'Escritas',
@@ -1301,6 +1312,7 @@ export const ptBR = translation({
     otherValues: 'Outros valores',
   },
   features: {
+    subtitle: 'O que as pessoas mais usam em {project}',
     kindLabel: 'Tipo de funcionalidade',
     kinds: {
       events: 'Eventos',
@@ -1363,6 +1375,7 @@ export const ptBR = translation({
     timeToFinish: 'Tempo mediano até concluir',
     timeToFinishNote: 'do passo 1 ao passo {last}, para quem chegou até lá',
     page: {
+      subtitle: 'Onde as pessoas seguem e onde saem em {project}',
       countBy: 'Contar por',
       modes: {
         visit: 'Por visita',
@@ -1419,6 +1432,7 @@ export const ptBR = translation({
     shortAccountLink: '{shown}, abrir a linha do tempo do usuário {user}',
     noFailedRequest: 'Nenhuma requisição com falha',
     page: {
+      subtitle: 'Todas as visitas a {project} no período, das mais recentes para as mais antigas',
       footnote:
         'Os destaques são os cinco primeiros eventos nomeados, em ordem. Uma requisição com falha é uma leitura ou escrita enviada com trackRequest() que respondeu 400 ou acima, ou nunca respondeu; Requisições lista as escritas e as leituras com falha em abas separadas.',
       empty: {
@@ -1529,6 +1543,7 @@ export const ptBR = translation({
       seconds: '{seconds} s',
     },
     page: {
+      subtitle: 'Tudo o que uma pessoa ou uma visita fez em {project}, em ordem',
       tryPerson: 'Experimente {user}',
     },
     lookUp: {

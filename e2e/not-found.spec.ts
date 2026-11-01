@@ -61,7 +61,7 @@ test('keeps the project shell around an unknown screen, and answers 404', async 
   await expect(page.getByRole('note')).toContainText('Demo data');
   await expect(
     page.getByRole('navigation', { name: 'Main navigation', includeHidden: true }),
-  ).toHaveCount(2);
+  ).toBeAttached();
   await expect(page.getByRole('link', { name: 'Open the Overview' })).toHaveAttribute(
     'href',
     `/${STORE_ID}/overview`,

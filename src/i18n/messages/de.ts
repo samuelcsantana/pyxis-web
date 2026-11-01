@@ -24,12 +24,8 @@ export const de = translation({
   },
   nav: {
     label: 'Hauptnavigation',
-    screens: 'Ansichten',
-    screensWithNews: 'Ansichten, es gibt Neues',
-    accountTab: 'Konto',
-    filters: 'Filter',
-    filtersEmpty:
-      'Keine Filter. Tippe auf eine Zeile einer Tabelle (ein Land, eine Quelle), um alle Ansichten zu filtern.',
+    openMenu: 'Menü öffnen',
+    openMenuWithNews: 'Menü öffnen, es gibt Neues',
     arrivals: {
       visits: forms('{count} neuer Besuch', '{count} neue Besuche'),
       conversions: forms('{count} neue Conversion', '{count} neue Conversions'),
@@ -48,16 +44,19 @@ export const de = translation({
       moreSinceLastRead: '{count} mehr als beim letzten Mal',
       newVisit: 'Neu',
     },
+    closeMenu: 'Menü schließen',
+    section: 'Analyse',
     switchProject: 'Projekt wechseln. Aktuelles Projekt:',
     newProject: 'Neues Projekt',
     signOut: 'Abmelden',
     signOutEverywhere: 'Überall abmelden',
     signingOut: 'Wird abgemeldet…',
     signOutFailed: 'Abmelden fehlgeschlagen. Versuch es erneut.',
+    projectSection: 'Projekt',
     install: 'Installieren',
     installPending: 'Ausstehend',
-    installCta: 'Pyxis installieren',
     usage: {
+      share: '{share} des Monats',
       events: '{count} von {limit} Ereignissen diesen Monat',
       resets: 'Der Zähler beginnt am {date} wieder bei null',
     },
@@ -198,15 +197,16 @@ export const de = translation({
   },
   language: {
     label: 'Sprache',
-  },
-  preferences: {
-    heading: 'Design und Sprache',
-    thisBrowser: 'Gilt für diesen Browser.',
+    current: 'Sprache: {name}',
   },
   settings: {
-    you: 'Du',
-    sections: 'Abschnitte',
-    close: 'Schließen',
+    title: 'Einstellungen',
+    subtitle:
+      'Wie {project} eingerichtet ist und welche E-Mails du dazu bekommst. Projekteinstellungen werden über die Kommandozeile geändert.',
+    subtitleOwner:
+      'Wie {project} eingerichtet ist, seine Schlüssel und die E-Mails, die du dazu bekommst.',
+    subtitleMember:
+      'Wie {project} eingerichtet ist und welche E-Mails du dazu bekommst. Nur der Inhaber des Kontos ändert das Projekt.',
     project: {
       heading: 'Projekt',
       name: 'Name',
@@ -257,6 +257,7 @@ export const de = translation({
     },
   },
   projectForm: {
+    heading: 'Projekt',
     name: 'Name',
     origins: 'Erlaubte Origins',
     originsNote:
@@ -458,6 +459,7 @@ export const de = translation({
   },
   support: {
     title: 'Hilfe und Support',
+    subtitle: 'Sprich mit den Menschen hinter Pyxis oder finde die Antwort in der Dokumentation.',
     copy: 'Kopieren',
     copied: 'Kopiert',
     selected: 'Markiert, drück Strg+C',
@@ -530,6 +532,7 @@ export const de = translation({
   },
   exportPage: {
     title: 'Export',
+    subtitle: 'Die Ereignisse von {project} in einer komprimierten CSV-Datei.',
     pending: 'Datei wird vorbereitet…',
     pendingNote:
       'Diese Seite prüft alle paar Sekunden erneut, und du bekommst außerdem eine E-Mail, sobald die Datei fertig ist.',
@@ -617,6 +620,7 @@ export const de = translation({
   },
   install: {
     title: 'Installieren',
+    subtitle: 'Sende die ersten Ereignisse von {project}.',
     step1: '1. Installiere Pyxis auf deiner Website',
     npm: 'Mit einem Bundler (npm):',
     script: 'Oder in reinem HTML, vor dem schließenden body-Tag:',
@@ -965,6 +969,7 @@ export const de = translation({
     noChange: 'keine Veränderung',
   },
   overview: {
+    subtitle: 'Wie {project} im Zeitraum genutzt wurde',
     kpiToggleHint: 'Zeigt diesen Wert pro Tag im Diagramm unten.',
     topPages: {
       title: 'Top-Seiten',
@@ -1086,6 +1091,7 @@ export const de = translation({
     point: '{series}, {day}',
   },
   acquisition: {
+    subtitle: 'Woher die Besuche von {project} kommen',
     paidVisits: 'Bezahlte Besuche',
     footnote:
       'Ein Anzeigenklick wird an der Klick-ID in der Einstiegs-URL erkannt. Pyxis speichert nur, dass sie vorhanden war, nie die ID selbst, und von einer verweisenden Website nur die Domain.',
@@ -1155,6 +1161,7 @@ export const de = translation({
     otherCities: 'Andere Städte',
     unknownCity: 'Unbekannt',
     convertedOfVisits: '{converted} konvertiert · {visits} insgesamt',
+    subtitle: 'Womit Menschen {project} nutzen',
     panels: {
       deviceType: 'Gerätetyp',
       browser: 'Browser',
@@ -1267,6 +1274,10 @@ export const de = translation({
       },
     },
     page: {
+      subtitle: {
+        writes: 'Alle Schreibzugriffe von {project} und wie sie ausgingen',
+        reads: 'Die fehlgeschlagenen Lesezugriffe von {project}',
+      },
       kinds: {
         label: 'Art der Anfrage',
         writes: 'Schreibzugriffe',
@@ -1335,6 +1346,7 @@ export const de = translation({
     otherValues: 'Andere Werte',
   },
   features: {
+    subtitle: 'Was in {project} am meisten genutzt wird',
     kindLabel: 'Art der Funktion',
     kinds: {
       events: 'Ereignisse',
@@ -1398,6 +1410,7 @@ export const de = translation({
     timeToFinish: 'Mediane Zeit bis zum Abschluss',
     timeToFinishNote: 'von Schritt 1 bis Schritt {last}, für alle, die ihn erreicht haben',
     page: {
+      subtitle: 'Wo Menschen in {project} weitermachen und wo sie abspringen',
       countBy: 'Zählen nach',
       modes: {
         visit: 'Pro Besuch',
@@ -1457,6 +1470,7 @@ export const de = translation({
     shortAccountLink: '{shown}, Zeitleiste des Nutzers {user} öffnen',
     noFailedRequest: 'Keine fehlgeschlagene Anfrage',
     page: {
+      subtitle: 'Alle Besuche von {project} im Zeitraum, neueste zuerst',
       footnote:
         'Highlights sind die ersten fünf benannten Ereignisse eines Besuchs, in ihrer Reihenfolge. Eine fehlgeschlagene Anfrage ist ein mit trackRequest() gesendeter Lese- oder Schreibzugriff, der mit 400 oder höher oder gar nicht geantwortet hat; Anfragen listet die Schreibzugriffe und die fehlgeschlagenen Lesezugriffe in getrennten Tabs.',
       empty: {
@@ -1567,6 +1581,7 @@ export const de = translation({
       seconds: '{seconds} s',
     },
     page: {
+      subtitle: 'Alles, was eine Person oder ein Besuch in {project} getan hat, der Reihe nach',
       tryPerson: '{user} ausprobieren',
     },
     lookUp: {

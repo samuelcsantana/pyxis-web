@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
-import { openPeriodOnAPhone, periods } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -88,8 +87,10 @@ test('searches, keeps the search on reload and across periods, then clears it', 
   await page.reload();
   await expect(events).toHaveCount(2);
 
-  await openPeriodOnAPhone(page);
-  await periods(page).getByRole('link', { name: '7 days' }).click();
+  await page
+    .getByRole('navigation', { name: 'Period' })
+    .getByRole('link', { name: '7 days' })
+    .click();
   await expect(page).toHaveURL(/range=7d&kind=events&q=signup$/);
   await expect(events).toHaveCount(2);
 
@@ -100,12 +101,7 @@ test('searches, keeps the search on reload and across periods, then clears it', 
 
 test('closes the custom period form once the focus leaves it, so the search stays in sight', async ({
   page,
-  isMobile,
 }) => {
-  test.skip(
-    isMobile,
-    'A phone keeps the custom period in its Period sheet, which holds the focus.',
-  );
   await page.goto(`/${STORE_ID}/features`);
   await page.waitForLoadState('networkidle');
   const custom = page.locator('details', { hasText: 'Custom' });
@@ -131,7 +127,7 @@ test('closes the custom period form once the focus leaves it, so the search stay
 test('says when nothing matches the search', async ({ page }) => {
   await page.goto(`/${STORE_ID}/features?q=refund`);
 
-  await expect(page.getByRole('main').getByText('Nothing matches “refund”.')).toBeVisible();
+  await expect(page.getByText('Nothing matches “refund”.')).toBeVisible();
 });
 
 test('shows where visits start and end and how long they last on the screens tab', async ({

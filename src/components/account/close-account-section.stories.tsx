@@ -44,42 +44,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-async function unfold(canvasElement: HTMLElement) {
-  const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByRole('button', { name: 'Close the account' }));
-  return canvas;
-}
-
 async function closeTheAccount(canvasElement: HTMLElement) {
-  const canvas = await unfold(canvasElement);
+  const canvas = within(canvasElement);
   await userEvent.type(canvas.getByRole('textbox'), OWNER_EMAIL);
   await userEvent.click(canvas.getByRole('button', { name: 'Close the account for good' }));
   return canvas.findByRole('status');
 }
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Close the account' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
-    await expect(canvas.queryByRole('textbox')).toBeNull();
-    await expect(canvas.getByRole('textbox', { hidden: true })).not.toBeVisible();
-  },
-};
-
-export const Unfolded: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = await unfold(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Close the account' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
-    await expect(canvas.getByRole('textbox')).toBeVisible();
-    await expect(canvas.getByText(/refunded in full/)).toBeVisible();
-  },
-};
+export const Default: Story = {};
 
 export const Closed: Story = {
   play: async ({ canvasElement }) => {
@@ -104,17 +76,8 @@ export const StaysAfterTheRefresh: Story = {
   },
 };
 
-export const OnTheFreePlan: Story = {
-  args: { onFreePlan: true },
-  play: async ({ canvasElement }) => {
-    const canvas = await unfold(canvasElement);
-    await expect(canvas.getByRole('textbox')).toBeVisible();
-    await expect(canvas.queryByText(/refunded in full/)).toBeNull();
-  },
-};
+export const OnTheFreePlan: Story = { args: { onFreePlan: true } };
 
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
-
-export const UnfoldedDark: Story = { ...Unfolded, globals: { theme: 'dark' } };

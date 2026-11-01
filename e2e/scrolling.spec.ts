@@ -1,10 +1,8 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { openScreens } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
-const PHONES_KEEP_ONLY_THEIR_MENU_BAR =
-  'A phone pins only the path; the bar at the bottom is checked apart.';
-const ONLY_PHONES_HAVE_A_MENU_BAR = 'A desktop shows the sidebar instead of the bar at the bottom.';
+const PHONES_KEEP_ONLY_THEIR_MENU_BAR = 'On a phone the header scrolls away under the menu bar.';
+const ONLY_PHONES_HAVE_A_MENU_BAR = 'A desktop shows the sidebar instead of the menu bar.';
 const PHONE_VIEWPORT = { width: 390, height: 844 };
 const FAR_DOWN_PX = 900;
 const SCROLL_PLACES = ['inside the banner', 'inside the header', 'far down'] as const;
@@ -146,6 +144,10 @@ async function scrollOffsetOf(page: Page, place: ScrollPlace): Promise<number> {
   }
 }
 
+function bottomOf(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => element.getBoundingClientRect().bottom);
+}
+
 function topOf(locator: Locator): Promise<number> {
   return locator.evaluate((element) => element.getBoundingClientRect().top);
 }
@@ -154,7 +156,7 @@ test.describe('on a phone', () => {
   test.use({ viewport: PHONE_VIEWPORT });
 
   for (const place of SCROLL_PLACES) {
-    test(`opens the next screen with its whole header in view, scrolled ${place}`, async ({
+    test(`opens the next screen with its whole header below the menu bar, scrolled ${place}`, async ({
       page,
       isMobile,
     }) => {
@@ -166,13 +168,13 @@ test.describe('on a phone', () => {
       }, offset);
       await expect.poll(() => pageScroll(page)).toBe(offset);
 
-      await openScreens(page);
+      await page.getByRole('button', { name: 'Open menu' }).click();
       await page.getByRole('link', { name: 'Acquisition', exact: true }).click();
 
       await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
       await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
-      await expect.poll(() => topOf(page.getByRole('banner'))).toBeGreaterThanOrEqual(0);
-      await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeInViewport();
+      const menuBar = await bottomOf(page.getByRole('navigation', { name: 'Main navigation' }));
+      await expect.poll(() => topOf(page.getByRole('banner'))).toBeGreaterThanOrEqual(menuBar);
     });
   }
 });

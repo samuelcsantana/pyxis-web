@@ -24,12 +24,8 @@ export const nl = translation({
   },
   nav: {
     label: 'Hoofdnavigatie',
-    screens: 'Schermen',
-    screensWithNews: 'Schermen, er is nieuws',
-    accountTab: 'Account',
-    filters: 'Filters',
-    filtersEmpty:
-      'Geen filters. Tik op een rij in een tabel (een land, een bron) om alle schermen te filteren.',
+    openMenu: 'Menu openen',
+    openMenuWithNews: 'Menu openen, er is nieuws',
     arrivals: {
       visits: forms('{count} nieuw bezoek', '{count} nieuwe bezoeken'),
       conversions: forms('{count} nieuwe conversie', '{count} nieuwe conversies'),
@@ -45,16 +41,19 @@ export const nl = translation({
       moreSinceLastRead: '{count} meer sinds je laatst keek',
       newVisit: 'Nieuw',
     },
+    closeMenu: 'Menu sluiten',
+    section: 'Analyse',
     switchProject: 'Ander project kiezen. Huidig project:',
     newProject: 'Nieuw project',
     signOut: 'Uitloggen',
     signOutEverywhere: 'Overal uitloggen',
     signingOut: 'Uitloggen…',
     signOutFailed: 'Uitloggen is niet gelukt. Probeer het opnieuw.',
+    projectSection: 'Project',
     install: 'Installeren',
     installPending: 'In afwachting',
-    installCta: 'Pyxis installeren',
     usage: {
+      share: '{share} van de maand',
       events: '{count} van {limit} events deze maand',
       resets: 'De telling begint op {date} opnieuw',
     },
@@ -195,15 +194,15 @@ export const nl = translation({
   },
   language: {
     label: 'Taal',
-  },
-  preferences: {
-    heading: 'Thema en taal',
-    thisBrowser: 'Gelden voor deze browser.',
+    current: 'Taal: {name}',
   },
   settings: {
-    you: 'Jij',
-    sections: 'Onderdelen',
-    close: 'Sluiten',
+    title: 'Instellingen',
+    subtitle:
+      'Hoe {project} is ingesteld, en de e-mails die je erover krijgt. Projectinstellingen wijzig je via de opdrachtregel.',
+    subtitleOwner: 'Hoe {project} is ingesteld, de sleutels, en de e-mails die je erover krijgt.',
+    subtitleMember:
+      'Hoe {project} is ingesteld, en de e-mails die je erover krijgt. Alleen de eigenaar van het account wijzigt het project.',
     project: {
       heading: 'Project',
       name: 'Naam',
@@ -252,6 +251,7 @@ export const nl = translation({
     },
   },
   projectForm: {
+    heading: 'Project',
     name: 'Naam',
     origins: 'Toegestane origins',
     originsNote:
@@ -450,6 +450,7 @@ export const nl = translation({
   },
   support: {
     title: 'Hulp en support',
+    subtitle: 'Praat met de mensen achter Pyxis of vind het antwoord in de documentatie.',
     copy: 'Kopiëren',
     copied: 'Gekopieerd',
     selected: 'Geselecteerd, druk op Ctrl+C',
@@ -522,6 +523,7 @@ export const nl = translation({
   },
   exportPage: {
     title: 'Export',
+    subtitle: 'De events van {project}, in een gecomprimeerd CSV-bestand.',
     pending: 'Bestand wordt klaargezet…',
     pendingNote:
       'Deze pagina controleert om de paar seconden opnieuw, en je krijgt ook een e-mail als het klaar is.',
@@ -609,6 +611,7 @@ export const nl = translation({
   },
   install: {
     title: 'Installeren',
+    subtitle: 'Verstuur de eerste events van {project}.',
     step1: '1. Installeer Pyxis op je site',
     npm: 'Met een bundler (npm):',
     script: 'Of in gewone HTML, vóór de afsluitende body-tag:',
@@ -952,6 +955,7 @@ export const nl = translation({
     noChange: 'geen verandering',
   },
   overview: {
+    subtitle: 'Hoe {project} in de periode is gebruikt',
     kpiToggleHint: 'Toont dit cijfer per dag in de grafiek hieronder.',
     topPages: {
       title: 'Toppagina’s',
@@ -1073,6 +1077,7 @@ export const nl = translation({
     point: '{series}, {day}',
   },
   acquisition: {
+    subtitle: 'Waar de bezoeken aan {project} vandaan komen',
     paidVisits: 'Betaalde bezoeken',
     footnote:
       'Een advertentieklik wordt herkend aan de klik-id in de URL van de landingspagina. Pyxis bewaart alleen dát die er was, nooit de id zelf, en van een verwijzende site alleen het domein.',
@@ -1142,6 +1147,7 @@ export const nl = translation({
     otherCities: 'Andere steden',
     unknownCity: 'Onbekend',
     convertedOfVisits: '{converted} van {visits}',
+    subtitle: 'Waarmee mensen {project} bezoeken',
     panels: {
       deviceType: 'Apparaattype',
       browser: 'Browser',
@@ -1254,6 +1260,10 @@ export const nl = translation({
       },
     },
     page: {
+      subtitle: {
+        writes: 'Alle schrijfverzoeken van {project}, en hoe ze afliepen',
+        reads: 'De leesverzoeken van {project} die mislukten',
+      },
       kinds: {
         label: 'Soort verzoek',
         writes: 'Schrijfverzoeken',
@@ -1321,6 +1331,7 @@ export const nl = translation({
     otherValues: 'Andere waarden',
   },
   features: {
+    subtitle: 'Wat mensen het meest gebruiken in {project}',
     kindLabel: 'Soort functie',
     kinds: {
       events: 'Events',
@@ -1384,6 +1395,7 @@ export const nl = translation({
     timeToFinish: 'Mediane tijd tot het einde',
     timeToFinishNote: 'van stap 1 tot stap {last}, voor wie die bereikte',
     page: {
+      subtitle: 'Waar mensen doorgaan en waar ze afhaken in {project}',
       countBy: 'Tellen per',
       modes: {
         visit: 'Per bezoek',
@@ -1440,6 +1452,7 @@ export const nl = translation({
     shortAccountLink: '{shown}, open de tijdlijn van gebruiker {user}',
     noFailedRequest: 'Geen mislukt verzoek',
     page: {
+      subtitle: 'Alle bezoeken aan {project} in de periode, nieuwste eerst',
       footnote:
         'Hoogtepunten zijn de eerste vijf benoemde events, op volgorde. Een mislukt verzoek is een lees- of schrijfverzoek dat met trackRequest() is verstuurd en met 400 of hoger antwoordde, of nooit antwoordde; Verzoeken toont de schrijfverzoeken en de mislukte leesverzoeken op aparte tabbladen.',
       empty: {
@@ -1550,6 +1563,7 @@ export const nl = translation({
       seconds: '{seconds} s',
     },
     page: {
+      subtitle: 'Alles wat één persoon of één bezoek deed in {project}, op volgorde',
       tryPerson: 'Probeer {user}',
     },
     lookUp: {

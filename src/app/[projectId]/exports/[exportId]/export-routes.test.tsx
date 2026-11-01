@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { ProjectExport } from '@/domain/exports';
-import { renderInProject } from '@/test-utils/project-choices';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { GET } from './download/route';
 import ExportPage, { generateMetadata } from './page';
 
@@ -44,9 +44,6 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('next/navigation', () => ({
-  useSelectedLayoutSegments: () => [],
-  usePathname: () => '/p-store/overview',
-  useSearchParams: () => new URLSearchParams(),
   redirect: (path: string) => {
     throw new Error(`redirect:${path}`);
   },
@@ -73,7 +70,7 @@ describe('the export of a project', () => {
     const get = vi.fn(() => Promise.resolve(DONE));
     state.get = get;
 
-    renderInProject(await ExportPage(PARAMS));
+    renderWithMessages(await ExportPage(PARAMS));
 
     expect(get).toHaveBeenCalledWith('p-store', 'e1');
     expect(screen.getByRole('heading', { level: 1, name: 'Export' })).toBeInTheDocument();

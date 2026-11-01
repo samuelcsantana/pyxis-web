@@ -68,7 +68,6 @@ describe('RootError', () => {
     const retry = vi.fn();
     const layout = ProjectLayout({
       children: <p>screen</p>,
-      modal: null,
       params: Promise.resolve({ projectId: 'p-store' }),
     });
 

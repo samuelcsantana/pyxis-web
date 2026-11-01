@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import type { MouseEvent } from 'react';
+import { useId } from 'react';
 import type { Project } from '@/domain/admin';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
@@ -20,10 +20,11 @@ import {
   screenParameters,
   SETTINGS_ICON,
   SETTINGS_ITEM,
-  SETTINGS_SEGMENT,
   settingsHref,
 } from './screens';
 
+const SECTION_LABEL =
+  'px-3 pb-1.5 text-micro font-semibold tracking-[0.08em] text-nav-muted uppercase';
 const INSTALL_ICON = 'M8 8l-4 4 4 4 M16 8l4 4-4 4 M13.5 5l-3 14';
 const SPOKEN_SEPARATOR = ', ';
 const TAG_STAYS_WHOLE = 'shrink-0 whitespace-nowrap';
@@ -45,54 +46,18 @@ function InstallPending() {
   );
 }
 
-interface SettingsItemProps {
-  readonly href: string;
-  readonly current: boolean;
-  readonly onItsPage: boolean;
-  readonly label: string;
-}
-
-export function opensElsewhere(event: MouseEvent<HTMLAnchorElement>): boolean {
-  return event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
-}
-
-export function isSettingsPath(pathname: string): boolean {
-  const [, projectId = '', segment = ''] = pathname.split('/');
-  return projectId !== '' && segment === SETTINGS_SEGMENT;
-}
-
-export function reloadOnItsPage(onItsPage: boolean, href: string) {
-  return (event: MouseEvent<HTMLAnchorElement>) => {
-    if (onItsPage && !opensElsewhere(event)) {
-      event.preventDefault();
-      window.location.assign(href);
-    }
-  };
-}
-
-function SettingsItem({ href, current, onItsPage, label }: SettingsItemProps) {
-  return (
-    <Link
-      href={href}
-      scroll={false}
-      aria-current={current ? 'page' : undefined}
-      onClick={reloadOnItsPage(onItsPage, href)}
-      className={navItemClasses(current)}
-    >
-      <NavItemIcon path={SETTINGS_ICON} current={current} />
-      <span>{label}</span>
-      <PendingMark />
-    </Link>
-  );
-}
-
 export function SidebarNav({ project }: SidebarNavProps) {
   const t = useT();
+  const pathname = usePathname();
   const search = useSearchParams();
-  const current = navigationItemOf(usePathname());
+  const projectLabel = useId();
+  const current = navigationItemOf(pathname);
+  const installCurrent = current === INSTALL_ITEM;
+  const settingsCurrent = current === SETTINGS_ITEM;
 
   return (
-    <div className={`flex flex-col ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
+    <div className={`flex flex-col gap-1 ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
+      <span className={SECTION_LABEL}>{t('nav.section')}</span>
       <ul className="flex flex-col gap-0.5">
         {SCREENS_IN_NAVIGATION_ORDER.map((screen) => {
           const active = screen.slug === current;
@@ -112,44 +77,36 @@ export function SidebarNav({ project }: SidebarNavProps) {
           );
         })}
       </ul>
+      <div className="mt-2 flex flex-col gap-1 border-t border-nav-line pt-2">
+        <span id={projectLabel} className={`${SECTION_LABEL} pt-1`}>
+          {t('nav.projectSection')}
+        </span>
+        <ul aria-labelledby={projectLabel} className="flex flex-col gap-0.5">
+          <li>
+            <Link
+              href={hrefKeepingView(installHref(project.id), search)}
+              aria-current={installCurrent ? 'page' : undefined}
+              className={`${navItemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
+            >
+              <NavItemIcon path={INSTALL_ICON} current={installCurrent} />
+              <span>{t('nav.install')}</span>
+              {project.firstEventAt === null ? <InstallPending /> : null}
+              <PendingMark />
+            </Link>
+          </li>
+          <li>
+            <Link
+              href={hrefKeepingView(settingsHref(project.id), search)}
+              aria-current={settingsCurrent ? 'page' : undefined}
+              className={navItemClasses(settingsCurrent)}
+            >
+              <NavItemIcon path={SETTINGS_ICON} current={settingsCurrent} />
+              <span>{t('nav.settings')}</span>
+              <PendingMark />
+            </Link>
+          </li>
+        </ul>
+      </div>
     </div>
-  );
-}
-
-export function SidebarFootNav({ project }: SidebarNavProps) {
-  const t = useT();
-  const pathname = usePathname();
-  const search = useSearchParams();
-  const current = navigationItemOf(pathname);
-  const installCurrent = current === INSTALL_ITEM;
-  const installLink = hrefKeepingView(installHref(project.id), search);
-  const settingsOnItsPage = isSettingsPath(pathname);
-  const settingsCurrent = current === SETTINGS_ITEM || settingsOnItsPage;
-
-  return (
-    <ul className="flex flex-col gap-0.5">
-      <li>
-        <Link
-          href={installLink}
-          scroll={false}
-          aria-current={installCurrent ? 'page' : undefined}
-          onClick={reloadOnItsPage(installCurrent, installLink)}
-          className={`${navItemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
-        >
-          <NavItemIcon path={INSTALL_ICON} current={installCurrent} />
-          <span>{t('nav.install')}</span>
-          {project.firstEventAt === null ? <InstallPending /> : null}
-          <PendingMark />
-        </Link>
-      </li>
-      <li>
-        <SettingsItem
-          href={hrefKeepingView(settingsHref(project.id), search)}
-          current={settingsCurrent}
-          onItsPage={settingsOnItsPage}
-          label={t('nav.settings')}
-        />
-      </li>
-    </ul>
   );
 }

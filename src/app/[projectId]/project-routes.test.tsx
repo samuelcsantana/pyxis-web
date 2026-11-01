@@ -7,11 +7,9 @@ import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domai
 import type { OverviewReport } from '@/domain/overview';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
-import { Topbar } from '@/components/shell/topbar';
-import { renderInProject } from '@/test-utils/project-choices';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 import ProjectError from './error';
 import ProjectLayout from './layout';
-import ScreenError from './(screens)/error';
 import ScreensLayout from './(screens)/layout';
 import OverviewPage from './(screens)/overview/page';
 
@@ -46,7 +44,6 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn() }),
   usePathname: () => '/p-store/overview',
   useSearchParams: () => new URLSearchParams(),
-  useSelectedLayoutSegments: () => ['overview'],
 }));
 
 vi.mock('@/services/overview/overview-service.factory', () => ({
@@ -99,15 +96,9 @@ describe('ProjectLayout', () => {
   it('frames the screen with the sidebar and the demo banner in demo mode', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    renderInProject(
+    renderWithMessages(
       await ProjectLayout({
-        children: (
-          <>
-            <Topbar title="Overview" />
-            <p>screen</p>
-          </>
-        ),
-        modal: null,
+        children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -116,52 +107,25 @@ describe('ProjectLayout', () => {
 
     expect(links[0]).toHaveAccessibleName('Skip to content');
     expect(links[0]).toHaveAttribute('href', '#content');
-    const [sidebar, phoneBar] = screen.getAllByRole('navigation', { name: 'Main navigation' });
-    if (sidebar === undefined || phoneBar === undefined) {
-      throw new Error('the layout has no sidebar or no phone bar');
-    }
-    const banner = screen.getByRole('banner');
-    expect(sidebar).toHaveClass('hidden', 'lg:flex');
-    expect(within(sidebar).queryByText('Account and preferences')).not.toBeInTheDocument();
-    expect(within(banner).getByText('Account and preferences')).toBeInTheDocument();
-    expect(within(sidebar).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
+    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
+    expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
       'href',
       '/p-store/overview',
     );
-    expect(within(banner).getByRole('link', { name: 'Overview' })).toHaveAttribute(
-      'href',
-      '/p-store/overview',
-    );
-    expect(phoneBar).toHaveClass('lg:hidden');
-    expect(within(phoneBar).getByRole('link', { name: 'Account' })).toHaveAttribute(
-      'href',
-      '/p-store/settings',
-    );
+    expect(
+      within(navigation).getByRole('link', { name: 'Overview · Demo Store', hidden: true }),
+    ).toHaveAttribute('href', '/p-store/overview');
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByText('screen')).toBeInTheDocument();
-  });
-
-  it('draws the window the modal slot holds beside the screen, outside its content region', async () => {
-    renderInProject(
-      await ProjectLayout({
-        children: <p>screen</p>,
-        modal: <p>settings window</p>,
-        params: Promise.resolve({ projectId: 'p-store' }),
-      }),
-    );
-
-    const window = screen.getByText('settings window');
-    expect(window).toBeInTheDocument();
-    expect(screen.getByText('screen').parentElement).not.toContainElement(window);
   });
 
   it('shows no demo banner with a real API', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
-    renderInProject(
+    renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
-        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -203,23 +167,14 @@ describe('ProjectLayout', () => {
         },
       ]);
 
-    renderInProject(
+    renderWithMessages(
       await ProjectLayout({
-        children: <Topbar title="Overview" />,
-        modal: null,
+        children: <p>screen</p>,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
 
-    const bar = screen.getByRole('banner');
-    const account = within(bar).getByText('Account and preferences').closest('summary');
-    expect(within(account ?? bar).getByText('41,230 of 100,000 events this month')).toHaveClass(
-      'sr-only',
-    );
-    expect(bar.querySelector('[data-usage-ring] circle[stroke-dasharray]')).toHaveAttribute(
-      'stroke-dasharray',
-      '41.23 100',
-    );
+    expect(screen.getByText('41% of the month')).toBeInTheDocument();
   });
 
   it("warns about an owned account's failed payment, linking to billing", async () => {
@@ -252,10 +207,9 @@ describe('ProjectLayout', () => {
         },
       ]);
 
-    renderInProject(
+    renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
-        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -275,10 +229,9 @@ describe('ProjectLayout', () => {
       })),
     };
 
-    renderInProject(
+    renderWithMessages(
       await ProjectLayout({
         children: <p>screen</p>,
-        modal: null,
         params: Promise.resolve({ projectId: 'p-store' }),
       }),
     );
@@ -292,11 +245,7 @@ describe('ProjectLayout', () => {
 
   it('answers not found for a project the admin may not read', async () => {
     await expect(
-      ProjectLayout({
-        children: null,
-        modal: null,
-        params: Promise.resolve({ projectId: 'p-other' }),
-      }),
+      ProjectLayout({ children: null, params: Promise.resolve({ projectId: 'p-other' }) }),
     ).rejects.toThrow('not-found');
   });
 });
@@ -308,7 +257,7 @@ describe('ScreensLayout', () => {
   });
 
   it('puts the top bar of the screen above it, in the calendar of the project', async () => {
-    renderInProject(
+    renderWithMessages(
       await ScreensLayout({
         filters: null,
         children: <p>screen</p>,
@@ -317,17 +266,13 @@ describe('ScreensLayout', () => {
     );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Overview' })).toBeInTheDocument();
-    expect(
-      screen
-        .getByText(/^Custom,/)
-        .closest('summary')
-        ?.querySelector('[data-shown-dates]'),
-    ).toHaveTextContent(/Sep 6\s–\sOct 5$/);
+    expect(screen.getByText('How Demo Store was used in the period')).toBeInTheDocument();
+    expect(screen.getByText('Sep 6 – Oct 5, 2026')).toBeInTheDocument();
     expect(screen.getByText('screen')).toBeInTheDocument();
   });
 
   it('keeps a loading placeholder right before the screen, for a screen whose content has not arrived', async () => {
-    renderInProject(
+    renderWithMessages(
       await ScreensLayout({
         filters: null,
         children: <p>screen</p>,
@@ -364,7 +309,7 @@ describe('OverviewPage', () => {
     );
     state.overview = overview;
 
-    renderInProject(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     expect(overview).toHaveBeenCalledWith('p-store', {
       from: '2026-09-29',
@@ -376,7 +321,7 @@ describe('OverviewPage', () => {
   });
 
   it('shows the figures, the daily chart and the top pages and events', async () => {
-    renderInProject(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
@@ -396,7 +341,7 @@ describe('OverviewPage', () => {
   });
 
   it('defines its words in a footnote', async () => {
-    renderInProject(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     const footnote = screen.getByText(/^A visit is one browser tab/);
     for (const word of [
@@ -416,14 +361,14 @@ describe('OverviewPage', () => {
       projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
     };
 
-    renderInProject(await renderOverview());
+    renderWithMessages(await renderOverview());
 
     expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Conversions' })).not.toBeInTheDocument();
   });
 
   it('shows the figures of a single day instead of a chart of one point', async () => {
-    renderInProject(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(screen.getByRole('region', { name: 'Activity of the day' })).toHaveTextContent(
       'Page views and named events, today',
@@ -435,7 +380,7 @@ describe('OverviewPage', () => {
   });
 
   it('plots the figure the address names', async () => {
-    renderInProject(await renderOverview({ range: '7d', metric: 'visits' }));
+    renderWithMessages(await renderOverview({ range: '7d', metric: 'visits' }));
 
     expect(screen.getByRole('region', { name: 'Visits per day' })).toHaveTextContent(
       'Visits, last 7 days',
@@ -449,14 +394,14 @@ describe('OverviewPage', () => {
       projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
     };
 
-    renderInProject(await renderOverview({ range: '7d', metric: 'conversions' }));
+    renderWithMessages(await renderOverview({ range: '7d', metric: 'conversions' }));
 
     expect(screen.getByRole('region', { name: 'Activity per day' })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Conversions per day' })).not.toBeInTheDocument();
   });
 
   it('links the top pages and events to their visits in the same period', async () => {
-    renderInProject(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+    renderWithMessages(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 
     expect(screen.getByRole('link', { name: '/calculator: see its visits' })).toHaveAttribute(
       'href',
@@ -471,7 +416,7 @@ describe('OverviewPage', () => {
   });
 
   it('offers its tables as CSV files of the same period', async () => {
-    renderInProject(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
+    renderWithMessages(await renderOverview({ from: '2026-09-01', to: '2026-09-30' }));
 
     expect(screen.getByRole('link', { name: 'Activity per day as CSV' })).toHaveAttribute(
       'href',
@@ -499,7 +444,7 @@ describe('OverviewPage', () => {
         days: empty.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
       });
 
-    renderInProject(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(
       screen.getByRole('heading', { name: 'No events in this period yet' }),
@@ -519,7 +464,7 @@ describe('OverviewPage', () => {
         days: empty.days.map((day) => ({ ...day, pageViews: 0, events: 0 })),
       });
 
-    renderInProject(await renderOverview({ range: 'today', identity: 'identified' }));
+    renderWithMessages(await renderOverview({ range: 'today', identity: 'identified' }));
 
     expect(
       screen.getByRole('heading', { name: 'No visits match these filters' }),
@@ -531,7 +476,7 @@ describe('OverviewPage', () => {
   });
 
   it('compares with the previous period under the same filters, and keeps them in its links', async () => {
-    renderInProject(await renderOverview({ range: '7d', os: 'android' }));
+    renderWithMessages(await renderOverview({ range: '7d', os: 'android' }));
 
     expect(screen.getAllByText(/same filters/).length).toBeGreaterThan(0);
     for (const link of screen.getAllByRole('link', { name: /as CSV$/ })) {
@@ -560,7 +505,7 @@ describe('OverviewPage', () => {
       })),
     };
 
-    renderInProject(await renderOverview({ range: 'today' }));
+    renderWithMessages(await renderOverview({ range: 'today' }));
 
     expect(screen.getByRole('heading', { name: 'Nothing in this period' })).toBeInTheDocument();
     expect(screen.getByText(/The latest one arrived on Sep 19, 2026, 22:30\./)).toBeInTheDocument();
@@ -595,7 +540,7 @@ describe('error state', () => {
   it('offers a retry and the error id when the screen fails', () => {
     const retry = vi.fn();
     const error = Object.assign(new Error('boom'), { digest: 'abc123' });
-    renderInProject(<ProjectError error={error} retry={retry} />);
+    renderWithMessages(<ProjectError error={error} retry={retry} />);
 
     screen.getByRole('button', { name: 'Try again' }).click();
 
@@ -607,26 +552,8 @@ describe('error state', () => {
   });
 
   it('shows no error id when there is none', () => {
-    renderInProject(<ProjectError error={new Error('boom')} retry={vi.fn()} />);
+    renderWithMessages(<ProjectError error={new Error('boom')} retry={vi.fn()} />);
 
     expect(screen.queryByText(/error id/)).not.toBeInTheDocument();
-  });
-});
-
-describe('error state of a screen, under its top bar', () => {
-  it('offers a retry and the error id under a second-level heading, leaving the h1 to the bar', () => {
-    const retry = vi.fn();
-    const error = Object.assign(new Error('boom'), { digest: 'abc123' });
-    renderInProject(<ScreenError error={error} retry={retry} />);
-
-    screen.getByRole('button', { name: 'Try again' }).click();
-
-    expect(screen.getByRole('main')).toContainElement(screen.getByRole('alert'));
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Could not load this data' }),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
-    expect(screen.getByText('error id abc123')).toBeInTheDocument();
-    expect(retry).toHaveBeenCalledOnce();
   });
 });

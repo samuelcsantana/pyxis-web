@@ -15,12 +15,7 @@ describe('ArrivalsLoader when the watcher cannot be loaded', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
     const { container } = render(
-      <ArrivalsLoader
-        projectId="p-store"
-        timeZone="America/Sao_Paulo"
-        serverNow={0}
-        awaitsItsFirstEvent={false}
-      />,
+      <ArrivalsLoader projectId="p-store" timeZone="America/Sao_Paulo" serverNow={0} />,
     );
 
     await waitFor(() => {

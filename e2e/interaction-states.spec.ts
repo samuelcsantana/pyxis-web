@@ -1,21 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import {
-  contrastRatio,
-  MIN_NON_TEXT_CONTRAST,
-  MIN_STATE_CHANGE,
-  MIN_TEXT_CONTRAST,
-} from './contrast';
+import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
-import {
-  accountMenuButton,
-  openAccountMenu,
-  openPeriodOnAPhone,
-  openScreensOnAPhone,
-  openThemeAndLanguage,
-  periods,
-  phoneBar,
-  screensMenu,
-} from './navigation';
+import { openAccountMenu } from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -28,6 +14,8 @@ interface Representative {
   readonly ring?: (page: Page) => Locator;
   readonly prepare?: (page: Page, isMobile: boolean) => Promise<void>;
 }
+
+const periods = (page: Page) => page.getByRole('navigation', { name: 'Period' });
 
 const UNDERLINE_ON_HOVER = '2px';
 const MIN_TARGET_PX = 24;
@@ -49,7 +37,7 @@ async function editFunnelSteps(page: Page): Promise<void> {
 
 async function openVisitFiltersOnAPhone(page: Page, isMobile: boolean) {
   if (isMobile) {
-    await page.getByRole('main').getByRole('button', { name: 'Filters' }).click();
+    await page.getByRole('button', { name: 'Filters' }).click();
   }
 }
 
@@ -58,27 +46,22 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'a period preset',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '7 days' }),
-    prepare: openPeriodOnAPhone,
   },
   {
     control: 'the selected period',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '30 days' }),
-    prepare: openPeriodOnAPhone,
   },
   {
     control: 'the custom period',
     screen: 'overview',
     target: (page) => page.locator('summary').filter({ hasText: 'Custom' }),
-    prepare: openPeriodOnAPhone,
   },
   {
     control: 'a theme choice',
     screen: 'overview',
-    target: (page) => page.getByRole('dialog').getByRole('button', { name: 'Dark' }),
-    prepare: async (page) => {
-      await openThemeAndLanguage(page);
-    },
+    target: (page) => page.getByRole('button', { name: 'Dark' }),
+    prepare: openAccountMenu,
   },
   {
     control: 'a feature tab',
@@ -125,8 +108,15 @@ const REPRESENTATIVES: readonly Representative[] = [
   {
     control: 'a sidebar link',
     screen: 'overview',
-    target: (page) => screensMenu(page).getByRole('link', { name: 'Funnel' }),
-    prepare: openScreensOnAPhone,
+    target: (page) =>
+      page
+        .getByRole('navigation', { name: 'Main navigation' })
+        .getByRole('link', { name: 'Funnel' }),
+    prepare: async (page, isMobile) => {
+      if (isMobile) {
+        await page.getByRole('button', { name: 'Open menu' }).click();
+      }
+    },
   },
 ];
 
@@ -159,8 +149,7 @@ interface SidebarControl {
   readonly prepare?: (page: Page) => Promise<void>;
 }
 
-const switcher = (page: Page) =>
-  page.getByRole('banner').locator('details', { hasText: 'Switch project' });
+const switcher = (page: Page) => page.locator('details', { hasText: 'Switch project' });
 
 const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   {
@@ -171,13 +160,13 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
         .getByRole('link', { name: 'Funnel' }),
   },
   {
-    control: 'the account avatar',
-    target: (page) => accountMenuButton(page).getByText('O', { exact: true }),
+    control: 'the account menu',
+    target: (page) => page.locator('summary', { hasText: 'Account and preferences' }),
   },
   {
     control: 'the sign-out button',
     target: (page) => page.getByRole('button', { name: 'Sign out', exact: true }),
-    prepare: (page) => openAccountMenu(page),
+    prepare: (page) => openAccountMenu(page, false),
   },
   {
     control: 'the project switcher',
@@ -192,10 +181,10 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   },
 ];
 
-test.describe('sidebar and top bar states on a desktop', () => {
+test.describe('sidebar states on a desktop', () => {
   for (const { control, target, prepare } of SIDEBAR_CONTROLS) {
     test(`${control} changes visibly on hover and on press`, async ({ page, isMobile }) => {
-      test.skip(isMobile, 'Phones have no hover; the tests below cover pressing on a phone.');
+      test.skip(isMobile, 'Phones have no hover; the menu button covers pressing on a phone.');
       await page.goto(`/${STORE_ID}/overview`);
       await prepare?.(page);
 
@@ -207,24 +196,14 @@ test.describe('sidebar and top bar states on a desktop', () => {
   }
 });
 
-for (const item of ['Screens', 'Period', 'Account'] as const) {
-  test(`${item} in the bar at the bottom changes visibly when pressed on a phone`, async ({
-    page,
-    isMobile,
-  }) => {
-    test.skip(!isMobile, 'The bar at the bottom only shows on narrow screens.');
-    await page.goto(`/${STORE_ID}/overview`);
-    const bar = phoneBar(page);
+test('the menu button changes visibly when pressed on a phone', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'The menu button only shows on narrow screens.');
+  await page.goto(`/${STORE_ID}/overview`);
 
-    const states = await pointerStates(
-      item === 'Account'
-        ? bar.getByRole('link', { name: item })
-        : bar.getByRole('button', { name: item }),
-    );
+  const states = await pointerStates(page.getByRole('button', { name: 'Open menu' }));
 
-    expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-  });
-}
+  expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
+});
 
 test('the visits filters toggle changes visibly when pressed on a phone', async ({
   page,
@@ -233,9 +212,7 @@ test('the visits filters toggle changes visibly when pressed on a phone', async 
   test.skip(!isMobile, 'The filters toggle only shows on narrow screens.');
   await page.goto(`/${STORE_ID}/visits`);
 
-  const states = await pointerStates(
-    page.getByRole('main').getByRole('button', { name: 'Filters' }),
-  );
+  const states = await pointerStates(page.getByRole('button', { name: 'Filters' }));
 
   expect(states.pressed).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
 });
@@ -278,7 +255,6 @@ const CONTENT_CONTROLS: readonly ContentControl[] = [
     control: 'a segmented option',
     screen: 'overview',
     target: (page) => periods(page).getByRole('link', { name: '7 days' }),
-    prepare: openPeriodOnAPhone,
   },
   {
     control: 'a tab',
@@ -346,38 +322,6 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(table).toHaveAttribute('aria-pressed', 'true');
       const paint = await readPaint(chartViews(page).getByTestId('sliding-indicator'));
       expect(contrastRatio(paint.fill, paint.behind)).toBeGreaterThanOrEqual(MIN_NON_TEXT_CONTRAST);
-    });
-  });
-
-  test.describe(`project switcher, ${colorScheme} theme`, () => {
-    test.use({ colorScheme });
-
-    test('a hovered or pressed project keeps its time zone readable on the row fill', async ({
-      page,
-      isMobile,
-    }) => {
-      test.skip(isMobile, 'Phones have no hover.');
-      await page.goto(`/${STORE_ID}/overview`);
-      await switcher(page).locator('summary').click();
-      const row = switcher(page).locator('a:not([aria-current])').first();
-      const zone = row.getByText('Europe/Lisbon');
-      const rest = await readPaint(row);
-      const readZone = async () => {
-        const rowPaint = await readPaint(row);
-        expect(contrastRatio(rowPaint.fill, rest.fill)).toBeGreaterThanOrEqual(MIN_STATE_CHANGE);
-        const paint = await readPaint(zone);
-        return contrastRatio(paint.text, paint.behind);
-      };
-
-      await row.hover();
-      const hovered = await readZone();
-      await page.mouse.down();
-      const pressed = await readZone();
-      await page.mouse.move(0, 0);
-      await page.mouse.up();
-
-      expect(hovered).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
-      expect(pressed).toBeGreaterThanOrEqual(MIN_TEXT_CONTRAST);
     });
   });
 }

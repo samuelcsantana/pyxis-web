@@ -24,12 +24,8 @@ export const es = translation({
   },
   nav: {
     label: 'Navegación principal',
-    screens: 'Pantallas',
-    screensWithNews: 'Pantallas, hay novedades',
-    accountTab: 'Cuenta',
-    filters: 'Filtros',
-    filtersEmpty:
-      'Sin filtros. Toca una fila de una tabla (un país, una fuente) para filtrar todas las pantallas.',
+    openMenu: 'Abrir el menú',
+    openMenuWithNews: 'Abrir el menú, hay novedades',
     arrivals: {
       visits: forms('{count} visita nueva', '{count} visitas nuevas'),
       conversions: forms('{count} conversión nueva', '{count} conversiones nuevas'),
@@ -48,16 +44,19 @@ export const es = translation({
       moreSinceLastRead: '{count} más desde la última vez que miraste',
       newVisit: 'Nueva',
     },
+    closeMenu: 'Cerrar el menú',
+    section: 'Analítica',
     switchProject: 'Cambiar de proyecto. Proyecto actual:',
     newProject: 'Nuevo proyecto',
     signOut: 'Cerrar sesión',
     signOutEverywhere: 'Cerrar sesión en todos los dispositivos',
     signingOut: 'Cerrando sesión…',
     signOutFailed: 'No se pudo cerrar la sesión. Inténtalo de nuevo.',
+    projectSection: 'Proyecto',
     install: 'Instalación',
     installPending: 'Pendiente',
-    installCta: 'Instalar Pyxis',
     usage: {
+      share: '{share} del mes',
       events: '{count} de {limit} eventos este mes',
       resets: 'El recuento vuelve a cero el {date}',
     },
@@ -197,15 +196,16 @@ export const es = translation({
   },
   language: {
     label: 'Idioma',
-  },
-  preferences: {
-    heading: 'Tema e idioma',
-    thisBrowser: 'Se aplican a este navegador.',
+    current: 'Idioma: {name}',
   },
   settings: {
-    you: 'Tú',
-    sections: 'Secciones',
-    close: 'Cerrar',
+    title: 'Configuración',
+    subtitle:
+      'Cómo está configurado {project} y los correos que recibes sobre él. La configuración del proyecto se cambia desde la línea de comandos.',
+    subtitleOwner:
+      'Cómo está configurado {project}, sus claves y los correos que recibes sobre él.',
+    subtitleMember:
+      'Cómo está configurado {project} y los correos que recibes sobre él. Solo el dueño de la cuenta cambia el proyecto.',
     project: {
       heading: 'Proyecto',
       name: 'Nombre',
@@ -253,6 +253,7 @@ export const es = translation({
     },
   },
   projectForm: {
+    heading: 'Proyecto',
     name: 'Nombre',
     origins: 'Orígenes permitidos',
     originsNote:
@@ -442,6 +443,7 @@ export const es = translation({
   },
   support: {
     title: 'Ayuda y soporte',
+    subtitle: 'Habla con quienes mantienen Pyxis o encuentra la respuesta en la documentación.',
     copy: 'Copiar',
     copied: 'Copiado',
     selected: 'Seleccionado, presiona Ctrl+C',
@@ -513,6 +515,7 @@ export const es = translation({
   },
   exportPage: {
     title: 'Exportación',
+    subtitle: 'Los eventos de {project}, en un archivo CSV comprimido.',
     pending: 'Preparando el archivo…',
     pendingNote:
       'Esta página vuelve a comprobar cada pocos segundos, y también recibes un correo cuando esté listo.',
@@ -600,6 +603,7 @@ export const es = translation({
   },
   install: {
     title: 'Instalación',
+    subtitle: 'Envía los primeros eventos de {project}.',
     step1: '1. Instala Pyxis en tu sitio',
     npm: 'Con un bundler (npm):',
     script: 'O en HTML puro, antes del cierre del body:',
@@ -939,6 +943,7 @@ export const es = translation({
     noChange: 'sin variación',
   },
   overview: {
+    subtitle: 'Cómo se usó {project} en el periodo',
     kpiToggleHint: 'Muestra esta cifra por día en el gráfico de abajo.',
     topPages: {
       title: 'Páginas más vistas',
@@ -1060,6 +1065,7 @@ export const es = translation({
     point: '{series}, {day}',
   },
   acquisition: {
+    subtitle: 'De dónde vienen las visitas a {project}',
     paidVisits: 'Visitas de pago',
     footnote:
       'Un clic en un anuncio se reconoce por el id de clic en la URL de llegada. Pyxis guarda solo el hecho de que estaba ahí, nunca el id en sí, y del sitio de referencia guarda solo el dominio.',
@@ -1129,6 +1135,7 @@ export const es = translation({
     otherCities: 'Otras ciudades',
     unknownCity: 'Desconocida',
     convertedOfVisits: '{converted} de {visits}',
+    subtitle: 'Qué usan las personas para llegar a {project}',
     panels: {
       deviceType: 'Tipo de dispositivo',
       browser: 'Navegador',
@@ -1241,6 +1248,10 @@ export const es = translation({
       },
     },
     page: {
+      subtitle: {
+        writes: 'Todas las escrituras que hizo {project} y cómo terminaron',
+        reads: 'Las lecturas que hizo {project} y que fallaron',
+      },
       kinds: {
         label: 'Tipo de solicitud',
         writes: 'Escrituras',
@@ -1308,6 +1319,7 @@ export const es = translation({
     otherValues: 'Otros valores',
   },
   features: {
+    subtitle: 'Lo que más usan las personas en {project}',
     kindLabel: 'Tipo de funcionalidad',
     kinds: {
       events: 'Eventos',
@@ -1371,6 +1383,7 @@ export const es = translation({
     timeToFinish: 'Tiempo mediano hasta completar',
     timeToFinishNote: 'del paso 1 al paso {last}, para quienes llegaron',
     page: {
+      subtitle: 'Dónde siguen las personas y dónde abandonan en {project}',
       countBy: 'Contar por',
       modes: {
         visit: 'Por visita',
@@ -1427,6 +1440,7 @@ export const es = translation({
     shortAccountLink: '{shown}, abrir la línea de tiempo del usuario {user}',
     noFailedRequest: 'Ninguna solicitud fallida',
     page: {
+      subtitle: 'Todas las visitas a {project} en el periodo, de la más reciente a la más antigua',
       footnote:
         'Los destacados son los cinco primeros eventos con nombre de la visita, en orden. Una solicitud fallida es una lectura o una escritura enviada con trackRequest() que respondió 400 o más, o nunca respondió; Solicitudes muestra las escrituras y las lecturas fallidas en pestañas separadas.',
       empty: {
@@ -1537,6 +1551,7 @@ export const es = translation({
       seconds: '{seconds} s',
     },
     page: {
+      subtitle: 'Todo lo que hizo una persona o una visita en {project}, en orden',
       tryPerson: 'Prueba con {user}',
     },
     lookUp: {

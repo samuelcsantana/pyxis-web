@@ -9,7 +9,11 @@ import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { installHref } from '@/components/shell/screens';
 import { CREATE_PROJECT_MIN_BUSY_MS, FALLBACK_TIME_ZONE, NewProjectForm } from './new-project-form';
 
-const assign = vi.fn();
+const navigation = vi.hoisted(() => ({ router: { push: vi.fn() } }));
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => navigation.router,
+}));
 
 const TIMEZONES = ['America/Sao_Paulo', 'Europe/Lisbon', 'UTC'];
 
@@ -32,14 +36,12 @@ function renderForm(create: (changes: ProjectChanges) => Promise<CreateProjectOu
 describe('NewProjectForm', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    assign.mockClear();
-    vi.stubGlobal('location', { assign });
+    navigation.router.push.mockClear();
   });
 
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
-    vi.unstubAllGlobals();
   });
 
   it("starts in the browser's time zone, creates the project and goes to its installation", async () => {
@@ -71,7 +73,7 @@ describe('NewProjectForm', () => {
       timezone: 'Europe/Lisbon',
       conversionEvent: 'signup_completed',
     });
-    expect(assign).toHaveBeenCalledWith('/p2/install');
+    expect(navigation.router.push).toHaveBeenCalledWith('/p2/install');
   });
 
   it('falls back to UTC for a zone it does not list, and keeps the zone chosen', () => {
@@ -146,7 +148,7 @@ describe('NewProjectForm', () => {
     await settle();
 
     expect(screen.getByRole('alert')).toHaveTextContent(text);
-    expect(assign).not.toHaveBeenCalled();
+    expect(navigation.router.push).not.toHaveBeenCalled();
     fireEvent.change(field('Project name'), { target: { value: 'Shop 2' } });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });

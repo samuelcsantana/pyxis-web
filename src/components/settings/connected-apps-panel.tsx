@@ -1,5 +1,5 @@
 import { SETTINGS_CONNECTIONS_PANEL } from '@/components/shell/screens';
-import { SECTION_BODY, SECTION_LIST } from '@/components/ui/panel-classes';
+import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { type ConnectedApp, type ConnectedApps, claudeCodeCommand } from '@/domain/connections';
 import type { I18n } from '@/i18n/i18n';
 import { CopyableCode } from './copyable-code';
@@ -12,7 +12,7 @@ export interface ConnectedAppsPanelProps {
   readonly revoke: Revoke;
 }
 
-const ROW = 'flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3';
+const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
 const DETAIL = 'text-xs leading-[18px] text-muted';
 const NOTE = 'text-xs leading-[18px] text-muted';
 
@@ -89,12 +89,18 @@ function ConnectToClaude({ connectorUrl, i18n }: ConnectToClaudeProps) {
 
 export function ConnectedAppsPanel({ apps, i18n, when, revoke }: ConnectedAppsPanelProps) {
   return (
-    <div className={SECTION_BODY}>
+    <section aria-labelledby={`${SETTINGS_CONNECTIONS_PANEL}-heading`} className={PANEL}>
+      <h2 id={`${SETTINGS_CONNECTIONS_PANEL}-heading`} className={PANEL_TITLE}>
+        {i18n.t('connectedApps.heading')}
+      </h2>
       <p className={NOTE}>{i18n.t('connectedApps.note')}</p>
       {apps.connections.length === 0 ? (
         <p className="text-sm text-muted">{i18n.t('connectedApps.empty')}</p>
       ) : (
-        <ul aria-labelledby={`${SETTINGS_CONNECTIONS_PANEL}-heading`} className={SECTION_LIST}>
+        <ul
+          aria-labelledby={`${SETTINGS_CONNECTIONS_PANEL}-heading`}
+          className="flex flex-col divide-y divide-line border-t border-line pt-3"
+        >
           {apps.connections.map((app) => (
             <AppRow key={app.id} app={app} i18n={i18n} when={when} revoke={revoke} />
           ))}
@@ -103,6 +109,6 @@ export function ConnectedAppsPanel({ apps, i18n, when, revoke }: ConnectedAppsPa
       {apps.connectorUrl === null ? null : (
         <ConnectToClaude connectorUrl={apps.connectorUrl} i18n={i18n} />
       )}
-    </div>
+    </section>
   );
 }

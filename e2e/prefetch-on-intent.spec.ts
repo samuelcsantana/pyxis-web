@@ -1,11 +1,13 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { holdScreenRequests, sawBusyContent, screensMenu, watchForBusyContent } from './navigation';
+import { holdScreenRequests, sawBusyContent, watchForBusyContent } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PHONES_HAVE_NO_HOVER = 'A phone has no pointer resting on a link.';
 
 function screenLink(page: Page, name: string): Locator {
-  return screensMenu(page).getByRole('link', { name, exact: true });
+  return page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name, exact: true });
 }
 
 function readsOf(url: string, screen: string, rsc: string | undefined): boolean {
