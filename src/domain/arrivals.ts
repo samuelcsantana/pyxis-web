@@ -35,3 +35,8 @@ export function isCappedArrivalCount(count: number): boolean {
 export function shownArrivalCount(count: number): string {
   return isCappedArrivalCount(count) ? CAPPED_ARRIVAL_COUNT : String(count);
 }
+
+export function reportsAnEvent(report: ArrivalsReport): boolean {
+  const lists = [report.visits, report.conversions, report.namedEvents, report.failedRequests];
+  return report.activeVisits > 0 || lists.some((arrivals) => (arrivals?.times.length ?? 0) > 0);
+}

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  type ArrivalsReport,
   CAPPED_ARRIVAL_COUNT,
   countNewerThan,
   isCappedArrivalCount,
+  reportsAnEvent,
   shownArrivalCount,
 } from './arrivals';
 import { arrivalsResponseSchema } from './arrivals.schema';
@@ -51,6 +53,32 @@ describe('shownArrivalCount', () => {
   it('shows 99+ from 100 on', () => {
     expect(shownArrivalCount(100)).toBe(CAPPED_ARRIVAL_COUNT);
     expect(shownArrivalCount(250)).toBe('99+');
+  });
+});
+
+describe('reportsAnEvent', () => {
+  const NOTHING = { times: [], more: false };
+  const QUIET: ArrivalsReport = {
+    asOf: AT_NOON,
+    activeVisits: 0,
+    visits: NOTHING,
+    conversions: null,
+    namedEvents: NOTHING,
+    failedRequests: NOTHING,
+  };
+  const ONE = { times: [AT_NOON], more: false };
+
+  it('sees nothing in a quiet report, with or without conversions', () => {
+    expect(reportsAnEvent(QUIET)).toBe(false);
+    expect(reportsAnEvent({ ...QUIET, conversions: NOTHING })).toBe(false);
+  });
+
+  it('sees an event in a visit on the site now or in any arrival', () => {
+    expect(reportsAnEvent({ ...QUIET, activeVisits: 1 })).toBe(true);
+    expect(reportsAnEvent({ ...QUIET, visits: ONE })).toBe(true);
+    expect(reportsAnEvent({ ...QUIET, conversions: ONE })).toBe(true);
+    expect(reportsAnEvent({ ...QUIET, namedEvents: ONE })).toBe(true);
+    expect(reportsAnEvent({ ...QUIET, failedRequests: ONE })).toBe(true);
   });
 });
 

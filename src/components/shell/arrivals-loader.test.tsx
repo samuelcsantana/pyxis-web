@@ -16,7 +16,12 @@ vi.mock('./refresh-when-stale', () => ({ RefreshWhenStale: () => null }));
 
 vi.mock('./main-content', () => ({ MainContent: () => null }));
 
-const PROPS = { projectId: 'p-store', timeZone: 'America/Sao_Paulo', serverNow: 0 };
+const PROPS = {
+  projectId: 'p-store',
+  timeZone: 'America/Sao_Paulo',
+  serverNow: 0,
+  awaitsItsFirstEvent: false,
+};
 
 describe('ArrivalsLoader', () => {
   it('loads the watcher only in the browser, after the page is shown', async () => {

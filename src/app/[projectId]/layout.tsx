@@ -51,6 +51,7 @@ export default async function ProjectLayout({ children, modal, params }: Project
                 projectId={project.id}
                 timeZone={project.timezone}
                 serverNow={new Date().getTime()}
+                awaitsItsFirstEvent={project.firstEventAt === null}
               />
               <nav aria-label={i18n.t('nav.label')} className={SIDEBAR_COLUMN}>
                 <Sidebar project={project} />

@@ -9,14 +9,16 @@ import { seenMarksKey } from '@/lib/seen-marks';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { activeVisits, arrivalNews, noteScreenRead, openScreenNews } from './arrival-news';
 import { ARRIVALS_POLL_MS, IDLE_STOP_MS, MIN_POLL_GAP_MS } from './arrivals-poller';
-import ArrivalsWatcher from './arrivals-watcher';
+import ArrivalsWatcher, { type ArrivalsWatcherProps } from './arrivals-watcher';
 
 const navigation = vi.hoisted(() => ({ pathname: '/p-store/overview', search: 'range=7d' }));
+const router = vi.hoisted(() => ({ refresh: vi.fn() }));
 
 vi.mock('next/navigation', () => ({
   usePathname: () => navigation.pathname,
   useSelectedLayoutSegments: () => ['(screens)', navigation.pathname.split('/')[2] ?? ''],
   useSearchParams: () => new URLSearchParams(navigation.search),
+  useRouter: () => router,
 }));
 
 const NOW = Date.parse('2026-10-23T15:00:00.000Z');
@@ -54,10 +56,15 @@ function setVisibility(state: DocumentVisibilityState) {
   Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state });
 }
 
-function watch() {
-  return renderWithMessages(
-    <ArrivalsWatcher projectId="p-store" timeZone="America/Sao_Paulo" serverNow={NOW} />,
-  );
+const WATCHED: ArrivalsWatcherProps = {
+  projectId: 'p-store',
+  timeZone: 'America/Sao_Paulo',
+  serverNow: NOW,
+  awaitsItsFirstEvent: false,
+};
+
+function watch(changes: Partial<ArrivalsWatcherProps> = {}) {
+  return renderWithMessages(<ArrivalsWatcher {...WATCHED} {...changes} />);
 }
 
 async function pass(milliseconds: number) {
@@ -84,6 +91,7 @@ describe('ArrivalsWatcher', () => {
     navigation.search = 'range=7d';
     answers = [];
     fetchMock.mockClear();
+    router.refresh.mockClear();
   });
 
   afterEach(() => {
@@ -186,9 +194,7 @@ describe('ArrivalsWatcher', () => {
     await pass(0);
 
     navigation.pathname = '/p-store/funnel';
-    view.rerender(
-      <ArrivalsWatcher projectId="p-store" timeZone="America/Sao_Paulo" serverNow={NOW} />,
-    );
+    view.rerender(<ArrivalsWatcher {...WATCHED} />);
     await pass(MIN_POLL_GAP_MS - 1);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     await pass(1);
@@ -250,11 +256,36 @@ describe('ArrivalsWatcher', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it('reads the view again once when the first event of a project arrives', async () => {
+    const quiet = { activeVisits: 0, visits: NOTHING };
+    answers = [report(NOW, quiet), report(NOW + ARRIVALS_POLL_MS), LATER];
+    watch({ awaitsItsFirstEvent: true });
+    await pass(0);
+    expect(router.refresh).not.toHaveBeenCalled();
+
+    await pass(ARRIVALS_POLL_MS);
+    expect(router.refresh).toHaveBeenCalledTimes(1);
+
+    await pass(ARRIVALS_POLL_MS);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(router.refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('never reads the view again for a project that already had an event', async () => {
+    answers = [report(NOW), LATER];
+    watch();
+    await pass(0);
+    await pass(ARRIVALS_POLL_MS);
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(router.refresh).not.toHaveBeenCalled();
+  });
+
   it('draws nothing on the server', () => {
     expect(
       renderToString(
         <MessagesProvider locale="en" messages={pickNamespaces(en, CLIENT_NAMESPACES)}>
-          <ArrivalsWatcher projectId="p-store" timeZone="America/Sao_Paulo" serverNow={NOW} />
+          <ArrivalsWatcher {...WATCHED} />
         </MessagesProvider>,
       ),
     ).toBe('');
