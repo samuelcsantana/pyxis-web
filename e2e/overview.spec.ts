@@ -220,9 +220,12 @@ test('shows the values of the day under the pointer', async ({ page, isMobile })
   await expect(async () => {
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.move(box.x + box.width - 2, box.y + box.height / 2);
-    await expect(plot).toContainText(/^Oct \d+Visits[\d,]+Visits, (Sep|Oct) \d+[\d,]+$/, {
-      timeout: 1_000,
-    });
+    await expect(plot).toContainText(
+      /^[A-Z][a-z]{2} \d+Visits[\d,]+Visits, [A-Z][a-z]{2} \d+[\d,]+$/,
+      {
+        timeout: 1_000,
+      },
+    );
   }).toPass();
   await page.mouse.move(0, 0);
   await expect(plot).toBeEmpty();
