@@ -1,11 +1,13 @@
 import type { SourceMessages } from '@/i18n/messages';
 import type { MessageKey } from '@/i18n/translate';
 import {
+  projectSectionHref,
   SETTINGS_CONNECTIONS_PANEL,
   SETTINGS_ICON,
   SETTINGS_KEYS_PANEL,
-  settingsHref,
 } from '@/components/shell/screens';
+
+export { projectSectionHref };
 
 export const PROJECT_SECTIONS = ['project', 'keys', 'people', 'email', 'export', 'delete'] as const;
 export type ProjectSection = (typeof PROJECT_SECTIONS)[number];
@@ -111,11 +113,6 @@ export function projectSectionsFor(owner: boolean): readonly ProjectSection[] {
 
 export function isOwnerOnly(section: ProjectSection): boolean {
   return OWNER_ONLY.has(section);
-}
-
-export function projectSectionHref(projectId: string, section: ProjectSection): string {
-  const base = settingsHref(projectId);
-  return section === 'project' ? base : `${base}/${section}`;
 }
 
 export function accountSectionHref(section: AccountSection): string {

@@ -1,7 +1,8 @@
 'use client';
 
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import type { RangeCalendarProps } from './range-calendar';
+import { useWantedWhenOpen } from './use-wanted-when-open';
 
 function CalendarPlaceholder() {
   return (
@@ -22,25 +23,7 @@ export interface LazyRangeCalendarProps extends RangeCalendarProps {
 }
 
 export function LazyRangeCalendar({ openAtFirst, ...calendar }: LazyRangeCalendarProps) {
-  const anchor = useRef<HTMLDivElement>(null);
-  const [wanted, setWanted] = useState(openAtFirst);
-
-  useEffect(() => {
-    const details = anchor.current?.closest('details');
-    if (details === null || details === undefined) {
-      return undefined;
-    }
-    const loadWhenOpen = () => {
-      if (details.open) {
-        setWanted(true);
-      }
-    };
-    details.addEventListener('toggle', loadWhenOpen);
-    return () => {
-      details.removeEventListener('toggle', loadWhenOpen);
-    };
-  }, []);
-
+  const { anchor, wanted } = useWantedWhenOpen(openAtFirst);
   return (
     <div ref={anchor}>
       {wanted ? (

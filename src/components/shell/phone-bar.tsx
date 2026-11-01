@@ -12,10 +12,10 @@ import { PhoneSheet } from './phone-sheet';
 import { usePhoneBarHostSetter } from './phone-bar-slots';
 import {
   hrefKeepingView,
-  SCREENS_WITHOUT_FILTERS,
   SCREENS_WITHOUT_PERIOD,
   type ScreenSlug,
   settingsHref,
+  takesDashboardFilters,
 } from './screens';
 import { isSettingsPath, reloadOnItsPage, SidebarFootNav, SidebarNav } from './sidebar-nav';
 import { useScreenOnView } from './use-screen-on-view';
@@ -36,7 +36,6 @@ const FILTERS_ICON = 'M4 5h16l-6 7v6l-4 2v-8z';
 const ACCOUNT_ICON =
   'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4.5 20c1.4-3.3 4.2-5 7.5-5s6.1 1.7 7.5 5';
 const SPOKEN_SEPARATOR = ', ';
-const FILTERS_OF_THEIR_OWN: ReadonlySet<ScreenSlug> = new Set(['visits']);
 const MARK = 'absolute top-1.5 left-[calc(50%+0.375rem)]';
 
 const BAR =
@@ -115,14 +114,6 @@ function SheetButton({
 
 function hasPeriod(screen: ScreenSlug | undefined): boolean {
   return screen !== undefined && !SCREENS_WITHOUT_PERIOD.has(screen);
-}
-
-function takesFilters(screen: ScreenSlug | undefined): boolean {
-  return (
-    screen !== undefined &&
-    !FILTERS_OF_THEIR_OWN.has(screen) &&
-    !SCREENS_WITHOUT_FILTERS.has(screen)
-  );
 }
 
 export interface PhoneBarProps {
@@ -204,7 +195,7 @@ export function PhoneBar({ project }: PhoneBarProps) {
         <SheetButton
           path={FILTERS_ICON}
           expanded={open === 'filters'}
-          disabled={!takesFilters(screen)}
+          disabled={!takesDashboardFilters(screen)}
           onToggle={toggle('filters')}
         >
           {filters > 0 ? (

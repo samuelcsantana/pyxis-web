@@ -1,3 +1,4 @@
+import type { ProjectSection } from '@/components/settings-window/sections';
 import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
 import { EXPORTS_SEGMENT } from '@/domain/exports';
 
@@ -57,6 +58,16 @@ export const SCREENS_WITHOUT_PERIOD: ReadonlySet<ScreenSlug> = new Set(['timelin
 
 export const SCREENS_WITHOUT_FILTERS: ReadonlySet<ScreenSlug> = new Set(['timeline']);
 
+export const SCREENS_WITH_THEIR_OWN_FILTERS: ReadonlySet<ScreenSlug> = new Set(['visits']);
+
+export function takesDashboardFilters(screen: ScreenSlug | undefined): boolean {
+  return (
+    screen !== undefined &&
+    !SCREENS_WITH_THEIR_OWN_FILTERS.has(screen) &&
+    !SCREENS_WITHOUT_FILTERS.has(screen)
+  );
+}
+
 export function screenLabelKey(slug: ScreenSlug): `screens.${ScreenSlug}` {
   return `screens.${slug}`;
 }
@@ -107,6 +118,13 @@ export const SETTINGS_ICON =
 
 export function settingsHref(projectId: string): string {
   return `/${encodeURIComponent(projectId)}/${SETTINGS_SEGMENT}`;
+}
+
+const PROJECT_HOME_SECTION: ProjectSection = 'project';
+
+export function projectSectionHref(projectId: string, section: ProjectSection): string {
+  const base = settingsHref(projectId);
+  return section === PROJECT_HOME_SECTION ? base : `${base}/${section}`;
 }
 
 export const INSTALL_SEGMENT = 'install';
