@@ -68,6 +68,7 @@ const SETTINGS: ProjectSettings = {
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
   cityEnabled: false,
+  visitorsEnabled: false,
   allowedOrigins: ['https://store.example.com'],
   createdAt: '2026-01-06T08:00:00.000Z',
   firstEventAt: null,

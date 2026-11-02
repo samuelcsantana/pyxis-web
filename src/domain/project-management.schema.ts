@@ -22,6 +22,10 @@ export function cityChangeWire(cityEnabled: boolean) {
   return { city_enabled: cityEnabled };
 }
 
+export function visitorsChangeWire(visitorsEnabled: boolean) {
+  return { visitors_enabled: visitorsEnabled };
+}
+
 export function projectChangesWire(changes: ProjectChanges) {
   return {
     name: changes.name,

@@ -153,6 +153,7 @@ describe('HttpProjectsService', () => {
       timezone: 'UTC',
       conversionEvent: null,
       cityEnabled: false,
+      visitorsEnabled: false,
       allowedOrigins: ['https://shop.example.com'],
       createdAt: '2026-10-01T00:00:00.000Z',
       firstEventAt: null,
