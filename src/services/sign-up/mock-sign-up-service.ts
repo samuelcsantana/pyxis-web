@@ -1,4 +1,5 @@
 import type { AccountStatus } from '@/domain/accounts';
+import { SignUpBusyError } from '@/domain/errors';
 import type { FreePlace, FreePlanState, SignUpStatus, VerifySignUpOutcome } from '@/domain/sign-up';
 import { LANDING_ORIGIN } from '@/lib/site';
 import { DEMO_SIGN_IN_CODE } from '../auth/mock-auth-service';
@@ -7,6 +8,7 @@ import type { ISignUpService } from './sign-up-service.interface';
 
 export const DEMO_TERMS_VERSION = '2026-11-01';
 export const DEMO_TERMS_URL = `${LANDING_ORIGIN}/`;
+export const DEMO_BUSY_EMAIL = 'busy@example.com';
 
 const STATUS_OF_A_NEW_ACCOUNT: Readonly<Record<FreePlanState, AccountStatus>> = {
   open: 'free',
@@ -32,8 +34,8 @@ export class MockSignUpService implements ISignUpService {
     });
   }
 
-  requestCode(): Promise<void> {
-    return Promise.resolve();
+  requestCode(email: string): Promise<void> {
+    return email === DEMO_BUSY_EMAIL ? Promise.reject(new SignUpBusyError()) : Promise.resolve();
   }
 
   verify(_email: string, code: string): Promise<VerifySignUpOutcome> {

@@ -4,7 +4,12 @@ import { openSignUpOf } from '@/domain/sign-up';
 import { DEMO_SIGN_IN_CODE } from '../auth/mock-auth-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
 import { HttpSignUpService, SIGN_UP_PATH } from './http-sign-up-service';
-import { DEMO_TERMS_URL, DEMO_TERMS_VERSION, MockSignUpService } from './mock-sign-up-service';
+import {
+  DEMO_BUSY_EMAIL,
+  DEMO_TERMS_URL,
+  DEMO_TERMS_VERSION,
+  MockSignUpService,
+} from './mock-sign-up-service';
 import { createSignUpService } from './sign-up-service.factory';
 
 vi.mock('@/app/sign-in/actions', () => ({ keepSession: () => Promise.resolve() }));
@@ -156,7 +161,7 @@ describe('MockSignUpService', () => {
       termsUrl: DEMO_TERMS_URL,
       freePlan: 'closed',
     });
-    await expect(service.requestCode()).resolves.toBeUndefined();
+    await expect(service.requestCode('x@example.com')).resolves.toBeUndefined();
     await expect(service.verify('x@example.com', DEMO_SIGN_IN_CODE)).resolves.toEqual({
       kind: 'verified',
       accountId: DEMO_ACCOUNT_ID,
@@ -166,6 +171,10 @@ describe('MockSignUpService', () => {
     await expect(service.verify('x@example.com', '123456')).resolves.toEqual({
       kind: 'invalidCode',
     });
+  });
+
+  it('answers the daily cap of new sign-ups for its reserved demo address', async () => {
+    await expect(service.requestCode(DEMO_BUSY_EMAIL)).rejects.toBeInstanceOf(SignUpBusyError);
   });
 
   it.each([
