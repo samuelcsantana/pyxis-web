@@ -463,6 +463,9 @@ export const it = translation({
     docsHeading: 'Installazione e uso',
     install: 'Come installare',
     installBody: 'Lo snippet con la tua chiave, passo dopo passo.',
+    tagManager: 'Installare con Google Tag Manager',
+    tagManagerBody:
+      'Per un sito che carica già Tag Manager: il modello Pyxis Analytics, senza codice. La pagina Installazione mostra la tua chiave.',
     code: 'Documentazione del codice di Pyxis',
     codeBody: 'track, identify, trackRequest e tutte le opzioni.',
     agents: 'Guida per gli agenti IA',

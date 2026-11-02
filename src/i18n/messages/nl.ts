@@ -465,6 +465,9 @@ export const nl = translation({
     docsHeading: 'Installatie en gebruik',
     install: 'Zo installeer je Pyxis',
     installBody: 'Het fragment met je sleutel, stap voor stap.',
+    tagManager: 'Installeren met Google Tag Manager',
+    tagManagerBody:
+      'Voor een site die Tag Manager al laadt: de template Pyxis Analytics, zonder code. De pagina Installeren toont je sleutel.',
     code: 'Documentatie van de Pyxis-code',
     codeBody: 'track, identify, trackRequest en alle opties.',
     agents: 'Handleiding voor AI-agents',

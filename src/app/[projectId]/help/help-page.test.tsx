@@ -88,6 +88,10 @@ describe('HelpPage', () => {
       'href',
       `/${DEMO_STORE.id}/install`,
     );
+    expect(screen.getByRole('link', { name: 'Install with Google Tag Manager' })).toHaveAttribute(
+      'href',
+      'https://github.com/samuelcsantana/pyxis-gtm-template#install',
+    );
     expect(screen.getByRole('link', { name: 'Guide for AI agents' })).toHaveAttribute(
       'href',
       'https://pyxis-analytics.dev/llms.txt',
