@@ -16,6 +16,7 @@ const SETTINGS: ProjectSettings = {
   timezone: 'UTC',
   conversionEvent: null,
   cityEnabled: false,
+  visitorsEnabled: false,
   allowedOrigins: [],
   createdAt: '2026-10-01T00:00:00.000Z',
   firstEventAt: '2026-10-02T00:00:00.000Z',
@@ -117,5 +118,12 @@ describe('projectSettingsResponseSchema', () => {
       true,
     );
     expect(projectSettingsResponseSchema.parse(WIRE).cityEnabled).toBe(false);
+  });
+
+  it('reads whether the project counts unique visitors, and takes it as off when the API says nothing', () => {
+    expect(
+      projectSettingsResponseSchema.parse({ ...WIRE, visitors_enabled: true }).visitorsEnabled,
+    ).toBe(true);
+    expect(projectSettingsResponseSchema.parse(WIRE).visitorsEnabled).toBe(false);
   });
 });

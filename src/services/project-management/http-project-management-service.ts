@@ -8,6 +8,7 @@ import type {
   RevokeProjectKeyOutcome,
   SaveProjectOutcome,
   SetCityOutcome,
+  SetVisitorsOutcome,
 } from '@/domain/project-management';
 import {
   createdProjectKeyResponseSchema,
@@ -15,6 +16,7 @@ import {
   newProjectWire,
   deletedProjectResponseSchema,
   cityChangeWire,
+  visitorsChangeWire,
   managedProjectResponseSchema,
   projectChangesWire,
   projectDeletionWire,
@@ -92,6 +94,22 @@ export class HttpProjectManagementService implements IProjectManagementService {
         managedProjectResponseSchema,
       );
       return { kind: 'saved', cityEnabled };
+    } catch (error) {
+      if (refusedWith(error, API_ERROR_CODES.subscriptionRequired)) {
+        return { kind: 'subscriptionRequired' };
+      }
+      throw error;
+    }
+  }
+
+  async setVisitors(projectId: string, visitorsEnabled: boolean): Promise<SetVisitorsOutcome> {
+    try {
+      await this.writer.patch(
+        projectPath(projectId),
+        visitorsChangeWire(visitorsEnabled),
+        managedProjectResponseSchema,
+      );
+      return { kind: 'saved', visitorsEnabled };
     } catch (error) {
       if (refusedWith(error, API_ERROR_CODES.subscriptionRequired)) {
         return { kind: 'subscriptionRequired' };
