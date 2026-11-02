@@ -58,7 +58,7 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
 
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <div role="tablist" aria-label={label} className={`self-start ${SEGMENTED_GROUP}`}>
+      <div role="tablist" aria-label={label} className={`flex-wrap self-start ${SEGMENTED_GROUP}`}>
         {tabs.map((tab, index) => (
           <button
             key={tab.id}
@@ -75,7 +75,7 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
               setSelected(index);
             }}
             onKeyDown={moveWith}
-            className={`min-h-9 gap-1.5 px-3 ${SEGMENTED_OPTION} ${index === selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+            className={`min-h-9 gap-1.5 px-3 whitespace-nowrap ${SEGMENTED_OPTION} ${index === selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
           >
             {tab.label}
           </button>

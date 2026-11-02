@@ -18,6 +18,7 @@ import {
   installCommand,
   moduleSnippet,
   scriptSnippet,
+  TAG_MANAGER_TEMPLATE_FILE_URL,
 } from '@/domain/install';
 import { canManageProject, projectActivity, type ProjectSettings } from '@/domain/project-settings';
 import type { I18n } from '@/i18n/i18n';
@@ -35,20 +36,34 @@ const NOTE = 'text-xs leading-[18px] text-muted';
 const INLINE_CODE = 'rounded-chip border border-line bg-soft px-1 font-mono text-[0.85em]';
 const AGENT_STEPS = ['open', 'paste', 'review', 'publish'] as const;
 const AGENT_CHANGES = ['package', 'init', 'track', 'csp'] as const;
+const TAG_MANAGER_LAST_STEPS = ['trigger', 'events', 'publish'] as const;
 const TAB_ICON_PATHS = {
   yourself: 'm16 18 6-6-6-6 M8 6l-6 6 6 6',
   withAgent:
     'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M6 6l2.5 2.5 M15.5 15.5 18 18 M6 18l2.5-2.5 M15.5 8.5 18 6',
+  withTagManager:
+    'M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z M7.5 7.5h.01',
 } as const;
 
 export const INSTALL_TABS = {
   yourself: 'install-yourself',
   withAgent: 'install-with-agent',
+  withTagManager: 'install-with-tag-manager',
 } as const;
 
 function codeText(text: string): ReactNode {
   return <code className={INLINE_CODE}>{text}</code>;
 }
+
+const TAG_MANAGER_SLOTS = {
+  b: (text: string) => <b className="font-semibold">{text}</b>,
+  code: codeText,
+  file: (text: string) => (
+    <a href={TAG_MANAGER_TEMPLATE_FILE_URL} className={`font-mono text-[0.9em] ${TEXT_LINK}`}>
+      {text}
+    </a>
+  ),
+};
 
 type CodeWrap = 'none' | 'words';
 
@@ -188,6 +203,46 @@ function WithAgent({ publicKey, endpoint, origin, labels, i18n }: WithAgentProps
   );
 }
 
+function WithTagManager({ publicKey, endpoint, labels, i18n }: StepProps) {
+  const { t } = i18n;
+  return (
+    <>
+      <p className="text-sm">{t('install.tagManager.lead')}</p>
+      <NumberedSteps
+        steps={[
+          {
+            id: 'template',
+            content: <p>{rich(t('install.tagManager.steps.template'), TAG_MANAGER_SLOTS)}</p>,
+          },
+          {
+            id: 'tag',
+            content: (
+              <>
+                <p>{rich(t('install.tagManager.steps.tag'), TAG_MANAGER_SLOTS)}</p>
+                <CodeBlock
+                  id="install-tag-manager-key"
+                  code={publicKey}
+                  labels={labels}
+                  wrap="words"
+                />
+                <p>
+                  {rich(t('install.tagManager.steps.endpoint', { endpoint }), TAG_MANAGER_SLOTS)}
+                </p>
+              </>
+            ),
+          },
+          ...TAG_MANAGER_LAST_STEPS.map((step) => ({
+            id: step,
+            content: <p>{rich(t(`install.tagManager.steps.${step}`), TAG_MANAGER_SLOTS)}</p>,
+          })),
+        ]}
+      />
+      <p className={NOTE}>{rich(t('install.tagManager.consent'), TAG_MANAGER_SLOTS)}</p>
+      <p className={NOTE}>{rich(t('install.tagManager.nuvemshop'), TAG_MANAGER_SLOTS)}</p>
+    </>
+  );
+}
+
 function PhoneNotice({ labels, i18n }: { readonly labels: CopyCodeLabels; readonly i18n: I18n }) {
   return (
     <div
@@ -253,6 +308,13 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
                     labels={labels}
                     i18n={i18n}
                   />
+                ),
+              },
+              {
+                id: INSTALL_TABS.withTagManager,
+                label: <TabLabel icon="withTagManager" text={t('install.withTagManager')} />,
+                panel: (
+                  <WithTagManager publicKey={key} endpoint={endpoint} labels={labels} i18n={i18n} />
                 ),
               },
             ]}

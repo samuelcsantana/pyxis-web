@@ -113,6 +113,11 @@ describe('InstallGuide', () => {
 
     const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
     expect(within(first).getByRole('tablist', { name: 'How to install' })).toBeInTheDocument();
+    expect(
+      within(first)
+        .getAllByRole('tab')
+        .map((tab) => tab.textContent),
+    ).toEqual(['Yourself', 'With an AI agent', 'Google Tag Manager']);
     expect(within(first).getByRole('tab', { name: 'Yourself' })).toHaveAttribute(
       'aria-selected',
       'true',
@@ -153,6 +158,46 @@ describe('InstallGuide', () => {
     );
     expect(within(agent).getByText('llms.txt').tagName).toBe('CODE');
     expect(within(agent).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+  });
+
+  it('walks a site with Google Tag Manager through the template, with the key and the API filled in', async () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Google Tag Manager' }));
+
+    const tagManager = screen.getByRole('tabpanel', { name: 'Google Tag Manager' });
+    expect(screen.queryByRole('tabpanel', { name: 'Yourself' })).toBeNull();
+    expect(tagManager).toHaveTextContent(
+      'If your site already loads Google Tag Manager, add Pyxis there, without changing the site’s code.',
+    );
+    expect(
+      within(tagManager)
+        .getAllByRole('listitem')
+        .map((item) => item.firstChild?.textContent),
+    ).toEqual(['1', '2', '3', '4', '5']);
+    expect(within(tagManager).getAllByRole('listitem')[0]).toHaveTextContent(
+      'In Tag Manager, open Templates › Tag Templates › Search Gallery and add Pyxis Analytics. If the gallery does not list it yet, download template.tpl and choose New › ⋮ › Import instead.',
+    );
+    expect(within(tagManager).getByRole('link', { name: 'template.tpl' })).toHaveAttribute(
+      'href',
+      'https://github.com/samuelcsantana/pyxis-gtm-template/blob/main/template.tpl',
+    );
+    expect(within(tagManager).getByText('Initialization - All Pages').tagName).toBe('B');
+    expect(document.getElementById('install-tag-manager-key')).toHaveTextContent(
+      /^pyxis_pk_store$/,
+    );
+    expect(within(tagManager).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+    expect(tagManager).toHaveTextContent('The Endpoint field must hold https://api.example.com.');
+    expect(within(tagManager).getByText('https://api.example.com').tagName).toBe('CODE');
+    expect(tagManager).toHaveTextContent(
+      'Publish the container with Submit › Publish. Step 2, below, says when the first event arrives.',
+    );
+    expect(tagManager).toHaveTextContent(
+      'By default the template respects Consent Mode: while analytics_storage is denied, it loads nothing.',
+    );
+    expect(tagManager).toHaveTextContent(
+      'Nuvemshop: paid plans accept the container ID in Configurações › Códigos externos › Google Tag Manager.',
+    );
   });
 
   it('suggests checking the first events with Claude, read-only and revocable in Settings', () => {

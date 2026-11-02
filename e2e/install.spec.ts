@@ -10,7 +10,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`install, ${colorScheme} theme`, () => {
     test.use({ colorScheme });
 
-    test('has no WCAG 2.2 A or AA violation on either tab and never scrolls sideways', async ({
+    test('has no WCAG 2.2 A or AA violation on any tab and never scrolls sideways', async ({
       page,
     }) => {
       await page.goto(INSTALL_PATH);
@@ -23,6 +23,11 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
       await page.getByRole('tab', { name: 'With an AI agent' }).click();
       await expect(page.getByRole('tabpanel', { name: 'With an AI agent' })).toBeVisible();
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
+
+      await page.getByRole('tab', { name: 'Google Tag Manager' }).click();
+      await expect(page.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
     });
@@ -70,10 +75,11 @@ test("hands the agent a request with the project's key, the API and the site", a
   );
 });
 
-test('moves between the two ways to install with the arrow keys', async ({ page }) => {
+test('moves between the three ways to install with the arrow keys', async ({ page }) => {
   await page.goto(INSTALL_PATH);
   const yourself = page.getByRole('tab', { name: 'Yourself' });
   const withAgent = page.getByRole('tab', { name: 'With an AI agent' });
+  const withTagManager = page.getByRole('tab', { name: 'Google Tag Manager' });
 
   await yourself.focus();
   await page.keyboard.press('ArrowRight');
@@ -84,8 +90,40 @@ test('moves between the two ways to install with the arrow keys', async ({ page 
 
   await page.keyboard.press('ArrowRight');
 
+  await expect(withTagManager).toBeFocused();
+  await expect(page.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
+
+  await page.keyboard.press('ArrowRight');
+
   await expect(yourself).toBeFocused();
   await expect(page.getByText('npm install pyxis-analytics')).toBeVisible();
+});
+
+test("walks a site with Google Tag Manager through the template with the project's key", async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto(INSTALL_PATH);
+
+  await page.getByRole('tab', { name: 'Google Tag Manager' }).click();
+
+  const tagManager = page.getByRole('tabpanel', { name: 'Google Tag Manager' });
+  await expect(page.getByRole('tabpanel', { name: 'Yourself' })).toBeHidden();
+  await expect(tagManager.getByRole('listitem')).toHaveCount(5);
+  await expect(tagManager.getByRole('link', { name: 'template.tpl' })).toHaveAttribute(
+    'href',
+    'https://github.com/samuelcsantana/pyxis-gtm-template/blob/main/template.tpl',
+  );
+  await expect(tagManager).toContainText('Initialization - All Pages');
+  await expect(tagManager).toContainText(`The Endpoint field must hold ${HOSTED_API}.`);
+  const key = page.locator('#install-tag-manager-key');
+  await expect(key).toHaveText(/^pyxis_pk_\w+$/);
+  await tagManager.getByRole('button', { name: 'Copy' }).click();
+  await expect(tagManager.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await key.textContent());
 });
 
 test('offers a question for Claude once the first event arrived, and the way to connect it', async ({

@@ -639,6 +639,7 @@ export const de = translation({
     how: 'So installierst du',
     yourself: 'Selbst',
     withAgent: 'Mit einem KI-Agenten',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Coding-Agenten und füge diese Anfrage ein. Sie enthält schon den öffentlichen Schlüssel und die Adresse dieses Projekts.',
       prompt:
@@ -665,6 +666,25 @@ export const de = translation({
       },
       rules:
         'Der Agent folgt den Regeln in <code>llms.txt</code>: keine personenbezogenen Daten, gültige Ereignisnamen, die Adresse der API in der CSP.',
+    },
+    tagManager: {
+      lead: 'Lädt deine Website schon Google Tag Manager? Dann füge Pyxis dort hinzu, ohne den Code der Website zu ändern.',
+      steps: {
+        template:
+          'Öffne in Tag Manager <b>Vorlagen</b> › <b>Tag-Vorlagen</b> › <b>In Galerie suchen</b> und füge <b>Pyxis Analytics</b> hinzu. Listet die Galerie sie noch nicht, lade <file>template.tpl</file> herunter und wähle stattdessen <b>Neu</b> › ⋮ › <b>Importieren</b>.',
+        tag: 'Lege ein Tag vom Typ <b>Pyxis Analytics</b> mit der Aktion <b>Initialize</b> an und füge den öffentlichen Schlüssel dieses Projekts ein:',
+        endpoint: 'Im Feld <b>Endpoint</b> muss <code>{endpoint}</code> stehen.',
+        trigger:
+          'Wähle unter <b>Trigger</b> den Trigger <b>Initialisierung – Alle Seiten</b>. Pyxis zählt dann jeden Seitenaufruf, auch die Routen von Single-Page-Apps.',
+        events:
+          'Optional: Lege für jedes gewünschte Ereignis ein Tag mit der Aktion <b>Track event</b>, seinem Namen und bis zu zehn Eigenschaften an, und lass unter <b>Erweiterte Einstellungen</b> › <b>Tag-Reihenfolge</b> das Initialize-Tag davor auslösen.',
+        publish:
+          'Veröffentliche den Container mit <b>Senden</b> › <b>Veröffentlichen</b>. Schritt 2, hier unten, zeigt an, wann das erste Ereignis ankommt.',
+      },
+      consent:
+        'Standardmäßig beachtet die Vorlage den Einwilligungsmodus: Solange <code>analytics_storage</code> abgelehnt ist, lädt sie nichts.',
+      nuvemshop:
+        'Nuvemshop: Die kostenpflichtigen Tarife nehmen die Container-ID unter <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b> an.',
     },
     step3: '3. Mit Claude prüfen (optional)',
     claude: {

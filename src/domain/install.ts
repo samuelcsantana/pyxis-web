@@ -4,6 +4,9 @@ import manifest from '../../package.json';
 
 export const TRACKER_PACKAGE = 'pyxis-analytics';
 export const AGENT_RECIPE_URL = `${LANDING_ORIGIN}/llms.txt`;
+export const TAG_MANAGER_TEMPLATE_URL = 'https://github.com/samuelcsantana/pyxis-gtm-template';
+export const TAG_MANAGER_TEMPLATE_FILE_URL = `${TAG_MANAGER_TEMPLATE_URL}/blob/main/template.tpl`;
+export const TAG_MANAGER_GUIDE_URL = `${TAG_MANAGER_TEMPLATE_URL}#install`;
 const CONNECTOR_PATH = '/mcp';
 
 const PINNABLE_RANGE = /^[\^~]?(\d+\.\d+\.\d+)$/;

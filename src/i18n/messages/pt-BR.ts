@@ -617,6 +617,7 @@ export const ptBR = translation({
     how: 'Como instalar',
     yourself: 'Você mesmo',
     withAgent: 'Com um agente de IA',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Abra o repositório do site no Claude Code, no Cursor ou em outro agente de código e cole este pedido. Ele já traz a chave pública e o endereço deste projeto.',
       prompt:
@@ -642,6 +643,25 @@ export const ptBR = translation({
       },
       rules:
         'O agente segue as regras do <code>llms.txt</code>: sem dado pessoal, nomes de evento válidos, o endereço da API na CSP.',
+    },
+    tagManager: {
+      lead: 'Se o seu site já carrega o Google Tag Manager, adicione o Pyxis por lá, sem mexer no código do site.',
+      steps: {
+        template:
+          'No Tag Manager, abra <b>Modelos</b> › <b>Modelos de tag</b> › <b>Pesquisar na galeria</b> e adicione o <b>Pyxis Analytics</b>. Se a galeria ainda não o listar, baixe o <file>template.tpl</file> e escolha <b>Novo</b> › ⋮ › <b>Importar</b>.',
+        tag: 'Crie uma tag do tipo <b>Pyxis Analytics</b> com a ação <b>Initialize</b> e cole a chave pública deste projeto:',
+        endpoint: 'O campo <b>Endpoint</b> deve conter <code>{endpoint}</code>.',
+        trigger:
+          'Em <b>Acionamento</b>, escolha <b>Inicialização – todas as páginas</b>. O Pyxis passa a contar cada visualização de página, inclusive as rotas de aplicativos de página única.',
+        events:
+          'Opcional: para cada evento que você quiser, adicione uma tag com a ação <b>Track event</b>, o nome dele e até dez propriedades e, em <b>Configurações avançadas</b> › <b>Sequenciamento de tags</b>, dispare a tag Initialize antes dela.',
+        publish:
+          'Publique o contêiner com <b>Enviar</b> › <b>Publicar</b>. O passo 2, aqui embaixo, avisa quando o primeiro evento chegar.',
+      },
+      consent:
+        'Por padrão, o modelo respeita o modo de consentimento: enquanto <code>analytics_storage</code> estiver negado, ele não carrega nada.',
+      nuvemshop:
+        'Nuvemshop: os planos pagos aceitam o ID do contêiner em <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
     },
     step3: '3. Confira com o Claude (opcional)',
     claude: {

@@ -55,6 +55,43 @@ export const WithAnAiAgentInTheDarkTheme: Story = {
   },
 };
 
+export const WithGoogleTagManager: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Google Tag Manager' }));
+    const panel = canvas.getByRole('tabpanel', { name: 'Google Tag Manager' });
+    await expect(panel).toBeVisible();
+    await expect(within(panel).getByRole('link', { name: 'template.tpl' })).toBeVisible();
+  },
+};
+
+export const WithGoogleTagManagerInPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Google Tag Manager' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
+  },
+};
+
+export const WithGoogleTagManagerInTheDarkTheme: Story = {
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Google Tag Manager' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
+  },
+};
+
+export const WithGoogleTagManagerOnAPhone: Story = {
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Google Tag Manager' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
+  },
+};
+
 export const OnAPhone: Story = {
   globals: { viewport: { value: 'mobile1' } },
   play: async ({ canvasElement }) => {
