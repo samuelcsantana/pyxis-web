@@ -91,11 +91,11 @@ proposons aux clients.
 
 | Donnée | Finalité | Base légale (LGPD) | Durée |
 |---|---|---|---|
-| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays, État et ville approximative (déduits de l’adresse IP par le réseau d’AWS, sans conserver l’IP ; la ville depuis le 29 octobre 2026), numéro aléatoire de la visite, type de la visite (la première de ce navigateur, la première du mois, la première de la journée ou une autre le même jour ; depuis le [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
+| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays, État et ville approximative (déduits de l’adresse IP par le réseau d’AWS, sans conserver l’IP ; la ville depuis le 29 octobre 2026), numéro aléatoire de la visite, type de la visite (la première de ce navigateur, la première du mois, la première de la journée ou une autre le même jour ; depuis le 2 novembre 2026) | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
 
 La mesure **n’utilise pas de cookies**, **ne conserve ni l’IP** ni le navigateur complet, et **n’envoie
 rien** si votre navigateur demande à ne pas être suivi (Global Privacy Control ou Do Not Track).
-**À partir du [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA], nous comptons les visiteurs uniques
+**À partir du 2 novembre 2026, nous comptons les visiteurs uniques
 sans identifiant :** votre navigateur conserve, dans le stockage local de la page (ce n’est pas un
 cookie), uniquement les moments où se terminent le jour et le mois à l’heure de Brasília, qui sont
 les mêmes pour tous les visiteurs ce jour-là (point 2.5), et chaque visite ne nous indique que son

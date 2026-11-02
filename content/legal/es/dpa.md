@@ -565,7 +565,7 @@ responsabilidad.
 ## Anexo II — Medidas de seguridad vigentes
 
 Comprobadas en el código del servicio y en la configuración de la infraestructura el 14/10/2026 y el
-15/10/2026; el punto 1 (ciudad), el 29/10/2026; el punto 1 (visitantes únicos), el [DATA DA CONFERÊNCIA].
+15/10/2026; el punto 1 (ciudad), el 29/10/2026; el punto 1 (visitantes únicos), el 02/11/2026.
 
 **1. Privacidad desde el diseño.** Sin cookies en los sitios medidos; IP y navegador completo nunca
 guardados; páginas reducidas a plantillas; barrera en el servidor que descarta valores con forma de

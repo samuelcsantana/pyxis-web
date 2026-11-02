@@ -546,7 +546,7 @@ pronto. Só o dono da conta baixa o arquivo, pelo painel, com um link novo a cad
 ## Anexo II — Medidas de segurança em vigor
 
 Conferidas no código do serviço e na configuração da infraestrutura em 14/10/2026 e 15/10/2026; o
-item 1 (cidade), em 29/10/2026; o item 1 (visitantes únicos), em [DATA DA CONFERÊNCIA].
+item 1 (cidade), em 29/10/2026; o item 1 (visitantes únicos), em 02/11/2026.
 
 **1. Privacidade desde a concepção.** Sem cookies nos sites medidos; IP e navegador completo nunca
 guardados; páginas reduzidas a modelos; barreira no servidor que descarta valores com forma de

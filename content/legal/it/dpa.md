@@ -587,7 +587,7 @@ file è sotto la tua responsabilità.
 
 Verificate nel codice del servizio e nella configurazione dell'infrastruttura il 14/10/2026 e il
 15/10/2026; il punto 1 (città), il 29/10/2026; il punto 1 (visitatori unici), il
-[DATA DA CONFERÊNCIA].
+02/11/2026.
 
 **1. Privacy fin dalla progettazione.** Nessun cookie sui siti misurati; IP e browser completo mai
 conservati; pagine ridotte a modelli; barriera sul server che scarta valori con forma di e-mail e

@@ -609,7 +609,7 @@ onder jouw verantwoordelijkheid.
 
 Gecontroleerd in de code van de dienst en in de configuratie van de infrastructuur op 14 oktober
 2026 en 15 oktober 2026; punt 1 (stad) op 29 oktober 2026; punt 1 (unieke bezoekers)
-op [DATA DA CONFERÊNCIA].
+op 2 november 2026.
 
 **1. Privacy by design.** Geen cookies op de gemeten websites; IP-adres en volledige browser nooit
 bewaard; pagina's gereduceerd tot sjablonen; barrière op de server die waarden met de vorm van een
