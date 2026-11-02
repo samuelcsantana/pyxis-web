@@ -1,7 +1,7 @@
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BillingInterval, BillingRedirectOutcome } from '@/domain/accounts';
-import { RateLimitedError } from '@/domain/errors';
+import { RateLimitedError, SignUpBusyError } from '@/domain/errors';
 import type { ISignUpService } from '@/services/sign-up/sign-up-service.interface';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import {
@@ -307,6 +307,23 @@ describe('SignUpForm', () => {
     await reachTheCode();
 
     expect(screen.getByRole('alert')).toHaveTextContent(text);
+    expect(screen.getByRole('heading', { name: 'Start your free trial' })).toBeInTheDocument();
+  });
+
+  it('says the day’s limit of new sign-ups was reached and offers the support address', async () => {
+    renderForm(service({ requestCode: () => Promise.reject(new SignUpBusyError()) }));
+
+    await reachTheCode();
+
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveTextContent(
+      'We reached today’s limit of new sign-ups. Try again in a few hours, or write to hello@pyxis-analytics.dev.',
+    );
+    expect(alert).not.toHaveTextContent('Too many attempts');
+    expect(within(alert).getByRole('link', { name: 'hello@pyxis-analytics.dev' })).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev',
+    );
     expect(screen.getByRole('heading', { name: 'Start your free trial' })).toBeInTheDocument();
   });
 

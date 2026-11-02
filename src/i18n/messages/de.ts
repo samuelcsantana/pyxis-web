@@ -740,6 +740,7 @@ export const de = translation({
     closed: 'Die Registrierung wurde geschlossen, während diese Seite offen war.',
     rateLimited:
       'Zu viele Versuche aus diesem Netzwerk. Warte ein paar Minuten und versuch es erneut.',
+    busy: 'Für heute ist das Limit für neue Registrierungen erreicht. Versuch es in ein paar Stunden erneut oder schreib an <mail>{email}</mail>.',
     unreachable: 'Pyxis ist nicht erreichbar. Versuch es erneut.',
     checkoutFailed:
       'Dein Konto ist bereit, aber die Zahlungsseite hat sich nicht geöffnet. Schließ die Zahlung unter Konto und Abrechnung ab.',

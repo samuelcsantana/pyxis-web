@@ -11,7 +11,7 @@ export interface DemoHintProps {
 
 export interface FieldErrorProps {
   readonly id: string;
-  readonly text: string;
+  readonly text: ReactNode;
 }
 
 export function FieldError({ id, text }: FieldErrorProps) {

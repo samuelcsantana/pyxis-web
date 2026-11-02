@@ -741,6 +741,7 @@ export const fr = translation({
     closed: 'Les inscriptions ont fermé pendant que cette page était ouverte.',
     rateLimited:
       'Trop de tentatives depuis cette adresse. Patientez quelques minutes et réessayez.',
+    busy: 'Nous avons atteint la limite d’inscriptions pour aujourd’hui. Réessayez dans quelques heures ou écrivez à <mail>{email}</mail>.',
     unreachable: 'Impossible de joindre Pyxis. Réessayez.',
     checkoutFailed:
       'Votre compte est prêt, mais la page de paiement ne s’est pas ouverte. Finalisez le paiement dans Compte et facturation.',
