@@ -1,6 +1,13 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations } from './accessibility';
-import { documentMarker, markTheDocument, sawBusyContent, watchForBusyContent } from './navigation';
+import {
+  documentMarker,
+  markTheDocument,
+  sawBusyContent,
+  untilFullyReceived,
+  watchForBusyContent,
+  wholeScreenRead,
+} from './navigation';
 
 const CONTENT_ID = 'content';
 
@@ -103,17 +110,12 @@ test('refreshes the screen shown with what arrived for it, keeping its header an
     heading.dataset.e2eKept = 'yes';
   });
   await watchForBusyContent(page);
-  const read = page.waitForRequest(
-    (request) =>
-      request.url().includes(`/${STORE_ID}/overview`) &&
-      request.headers().rsc === '1' &&
-      request.headers()['next-router-prefetch'] === undefined,
-  );
+  const read = wholeScreenRead(page, `/${STORE_ID}/overview`);
 
   await offer.focus();
   await page.keyboard.press('Enter');
 
-  await read;
+  await untilFullyReceived(page, read);
   await expect(offer).toBeHidden();
   await expect(page.locator(`#${CONTENT_ID}`)).toBeFocused();
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toHaveAttribute(

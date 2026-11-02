@@ -1,9 +1,14 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page, type Request, type Response } from '@playwright/test';
 
 export function currentNavigationLinks(page: Page): Locator {
   return page
     .getByRole('navigation', { name: 'Main navigation' })
     .locator('a[aria-current="page"]:not(details a)');
+}
+
+function readsAWholeScreen(request: Request): boolean {
+  const headers = request.headers();
+  return headers.rsc === '1' && headers['next-router-prefetch'] === undefined;
 }
 
 export async function holdScreenRequests(page: Page): Promise<() => void> {
@@ -12,13 +17,27 @@ export async function holdScreenRequests(page: Page): Promise<() => void> {
     release = resolve;
   });
   await page.route('**/*', async (route) => {
-    const headers = route.request().headers();
-    if (headers.rsc === '1' && headers['next-router-prefetch'] === undefined) {
+    if (readsAWholeScreen(route.request())) {
       await released;
     }
     await route.continue();
   });
   return release;
+}
+
+export function wholeScreenRead(page: Page, path: string): Promise<Response> {
+  return page.waitForResponse(
+    (response) =>
+      readsAWholeScreen(response.request()) && new URL(response.url()).pathname === path,
+  );
+}
+
+export async function untilFullyReceived(page: Page, read: Promise<Response>): Promise<void> {
+  const response = await read;
+  await page.waitForFunction(
+    (name) => performance.getEntriesByName(name, 'resource').length > 0,
+    response.url(),
+  );
 }
 
 const DOCUMENT_MARKER = 'pyxisE2eDocument';
