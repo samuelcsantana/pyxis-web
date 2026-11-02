@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { untilHydrated } from './hydration';
+import { untilFullyReceived, wholeScreenRead } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEMO_USER = 'u_7f3a';
 const SIGN_UP_VISIT = '19c2e5f6-a7b8-4c90-9d01-2e3f4a5b6c03';
+const TIMELINE_PATH = `/${STORE_ID}/timeline`;
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`timeline, ${colorScheme} theme`, () => {
@@ -77,14 +79,18 @@ test('opens one visit by its id, and says when an id is unknown', async ({ page 
   await untilHydrated(lookUp);
   await lookUp.selectOption('visit');
   await page.getByRole('textbox', { name: 'Visit id' }).fill(SIGN_UP_VISIT);
+  const visitRead = wholeScreenRead(page, TIMELINE_PATH);
   await page.getByRole('button', { name: 'Show timeline' }).click();
+  await untilFullyReceived(page, visitRead);
 
   await expect(page).toHaveURL(new RegExp(`visit=${SIGN_UP_VISIT}$`));
   await expect(page.getByRole('region', { name: /^Visit 19c2e5f6 · / })).toContainText(
     'Visit linked to the user',
   );
 
+  const personRead = wholeScreenRead(page, TIMELINE_PATH);
   await page.getByRole('link', { name: `All visits of ${DEMO_USER}` }).click();
+  await untilFullyReceived(page, personRead);
   await expect(page).toHaveURL(new RegExp(`user=${DEMO_USER}$`));
   await expect(page.getByRole('heading', { name: `User ${DEMO_USER}` })).toBeVisible();
   await expect(page.getByRole('link', { name: /^All visits of/ })).toHaveCount(0);
