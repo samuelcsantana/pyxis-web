@@ -91,13 +91,21 @@ proposons aux clients.
 
 | Donnée | Finalité | Base légale (LGPD) | Durée |
 |---|---|---|---|
-| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays, État et ville approximative (déduits de l’adresse IP par le réseau d’AWS, sans conserver l’IP ; la ville depuis le {{terms.effectiveFrom}}), numéro aléatoire de la visite | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
+| Page vue (chemin, sans paramètres autres que ceux de campagne), actions sur la page (par exemple, ouvrir la démonstration), site d’origine (uniquement le domaine), paramètres de campagne, catégorie d’appareil, famille du navigateur et du système, pays, État et ville approximative (déduits de l’adresse IP par le réseau d’AWS, sans conserver l’IP ; la ville depuis le 29 octobre 2026), numéro aléatoire de la visite, type de la visite (la première de ce navigateur, la première du mois, la première de la journée ou une autre le même jour ; depuis le [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Comprendre comment la page est utilisée et améliorer la présentation de Pyxis | Intérêt légitime (art. 7º, IX, et art. 10) | 13 mois |
 
 La mesure **n’utilise pas de cookies**, **ne conserve ni l’IP** ni le navigateur complet, et **n’envoie
-rien** si votre navigateur demande à ne pas être suivi (Global Privacy Control ou Do Not Track). Sur la
-page elle-même, le panneau « Ce que cette page a enregistré » montre chaque événement envoyé et permet
-de désactiver la mesure dans ce navigateur. Vercel, qui héberge la page, conserve l’IP et le navigateur
-des personnes qui y accèdent dans ses journaux techniques pendant 1 jour.
+rien** si votre navigateur demande à ne pas être suivi (Global Privacy Control ou Do Not Track).
+**À partir du [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA], nous comptons les visiteurs uniques
+sans identifiant :** votre navigateur conserve, dans le stockage local de la page (ce n’est pas un
+cookie), uniquement les moments où se terminent le jour et le mois à l’heure de Brasília, qui sont
+les mêmes pour tous les visiteurs ce jour-là (point 2.5), et chaque visite ne nous indique que son
+type. Aucun identifiant n’est créé, et nous ne relions pas une visite anonyme à une autre ; un jour
+où il y a peu de visites, toutefois, le type, combiné à l’heure, à l’appareil et au lieu, peut
+indiquer que deux visites proviennent du même navigateur. Sur la page elle-même, le panneau
+« Ce que cette page a enregistré » montre chaque événement envoyé et le marqueur conservé, et
+permet de désactiver la mesure dans ce navigateur, ce qui supprime aussi le marqueur, tout comme le
+signal Global Privacy Control ou Do Not Track. Vercel, qui héberge la page, conserve l’IP et le
+navigateur des personnes qui y accèdent dans ses journaux techniques pendant 1 jour.
 
 ### 2.5. Cookies et stockage dans le navigateur
 
@@ -109,6 +117,7 @@ des personnes qui y accèdent dans ses journaux techniques pendant 1 jour.
 | Tableau de bord | `pyxis:pending-sign-in` | `sessionStorage` (uniquement dans l’onglet) | Mémoriser l’e-mail saisi pendant que vous attendez le code, même si vous rechargez la page | 10 minutes, ou jusqu’à la fermeture de l’onglet |
 | Page d’accueil | `pyxis:session` | `sessionStorage` (uniquement dans l’onglet) | Numéro aléatoire de la visite | Jusqu’à la fermeture de l’onglet ou 30 minutes d’inactivité |
 | Page d’accueil | `pyxis:opt-out` | `localStorage` | Mémoriser que vous avez désactivé la mesure | Jusqu’à ce que vous la réactiviez ou effaciez les données du navigateur |
+| Page d’accueil | `pyxis:period` | `localStorage` | Indiquer si la visite est la première de ce navigateur, la première du mois, la première de la journée ou une autre le même jour. Conserve uniquement les moments où se terminent le jour et le mois à l’heure de Brasília, identiques pour tous les visiteurs ce jour-là ; ne vous identifie pas et ne nous est jamais envoyé | Réécrit à chaque visite qui reçoit une réponse de Pyxis ; reste jusqu’à ce que vous effaciez les données du navigateur, désactiviez la mesure sur la page ou visitiez la page avec le signal Global Privacy Control ou Do Not Track activé ; si nous désactivons le comptage, jusqu’à l’une de vos visites suivantes |
 | Page d’accueil et écran de connexion du tableau de bord | `pyxis:theme` | `localStorage` | Mémoriser le thème choisi sur cet appareil | Jusqu’à ce que vous le changiez ou effaciez les données du navigateur |
 
 La page d’accueil ne crée pas de cookies. Nous n’utilisons pas de cookies tiers, publicitaires ni de
@@ -329,8 +338,11 @@ suppression de votre inscription exige la clôture du compte (Conditions d’uti
 et les données de facturation restent conservées pendant la durée légale (point 2.2).
 
 6.5. **Visiteurs de la page d’accueil :** comme nous ne conservons ni IP, ni cookie, ni identifiant
-persistant, nous n’avons aucun moyen de retrouver vos visites anonymes. Vous pouvez désactiver la
-mesure sur la page elle-même ou activer le signal Global Privacy Control dans votre navigateur.
+persistant, nous n’avons aucun moyen de retrouver vos visites anonymes ; le comptage des visiteurs
+uniques (point 2.4) n’y change rien. Le marqueur du point 2.5 reste uniquement dans votre
+navigateur. Pour ne pas être mesuré, désactivez la mesure sur la page elle-même, ce qui supprime
+aussi le marqueur, ou activez le signal Global Privacy Control dans votre navigateur ; avec lui, rien
+n’est envoyé, et le marqueur est supprimé lors de votre prochaine visite sur la page.
 
 6.6. Vous pouvez également introduire une réclamation auprès de l’**Agência Nacional de Proteção de
 Dados (ANPD)**, sur `gov.br/anpd`, et auprès des organismes de protection du consommateur.

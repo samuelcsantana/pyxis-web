@@ -91,12 +91,20 @@ De homepage van Pyxis wordt door Pyxis zelf gemeten, met dezelfde regels die we 
 
 | Gegeven | Waarvoor | Rechtsgrond (LGPD) | Hoe lang |
 |---|---|---|---|
-| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land, staat en geschatte stad (door het netwerk van AWS afgeleid uit het IP-adres, zonder het IP-adres te bewaren; de stad vanaf {{terms.effectiveFrom}}), willekeurig nummer van het bezoek | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
+| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land, staat en geschatte stad (door het netwerk van AWS afgeleid uit het IP-adres, zonder het IP-adres te bewaren; de stad vanaf 29 oktober 2026), willekeurig nummer van het bezoek, bezoektype (het eerste van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde dag; vanaf [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
 
 De meting **gebruikt geen cookies**, **bewaart geen IP-adres** en ook niet de volledige browser, en
 **verzendt niets** als je browser vraagt niet gevolgd te worden (Global Privacy Control of Do Not
-Track). Op de pagina zelf toont het paneel "Wat deze pagina vastlegde" elk verzonden event en
-kun je daar de meting in deze browser uitschakelen. Vercel, dat de pagina host, bewaart het
+Track). **Vanaf [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA] tellen we unieke bezoekers zonder
+identificatie:** je browser bewaart in de lokale opslag van de pagina (het is geen cookie) alleen
+wanneer de dag en de maand in de tijd van Brasília eindigen, tijdstippen die op die dag voor alle
+bezoekers dezelfde zijn (punt 2.5), en elk bezoek vertelt ons alleen zijn type. Er wordt geen
+identificatie aangemaakt, en we koppelen een anoniem bezoek niet aan een ander; op een dag met
+weinig bezoeken kan het type echter, samen met het tijdstip, het apparaat en de plaats, erop wijzen
+dat twee bezoeken uit dezelfde browser kwamen. Op de pagina zelf toont het paneel "Wat deze pagina
+vastlegde" elk verzonden event en de bewaarde markering, en kun je daar de meting in deze browser
+uitschakelen, wat ook de markering verwijdert, net als het signaal Global Privacy Control of Do Not
+Track. Vercel, dat de pagina host, bewaart het
 IP-adres en de browser van wie de pagina bezoekt 1 dag in zijn technische logs.
 
 ### 2.5. Cookies en opslag in de browser
@@ -109,6 +117,7 @@ IP-adres en de browser van wie de pagina bezoekt 1 dag in zijn technische logs.
 | Dashboard | `pyxis:pending-sign-in` | `sessionStorage` (alleen in het tabblad) | Het ingetypte e-mailadres onthouden terwijl je op de code wacht, ook als je de pagina herlaadt | 10 minuten, of tot je het tabblad sluit |
 | Homepage | `pyxis:session` | `sessionStorage` (alleen in het tabblad) | Willekeurig nummer van het bezoek | Tot je het tabblad sluit of 30 minuten zonder activiteit |
 | Homepage | `pyxis:opt-out` | `localStorage` | Onthouden dat je de meting hebt uitgeschakeld | Tot je die weer inschakelt of de browsergegevens wist |
+| Homepage | `pyxis:period` | `localStorage` | Aangeven of het bezoek het eerste van deze browser is, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde dag. Bewaart alleen wanneer de dag en de maand in de tijd van Brasília eindigen, voor alle bezoekers op die dag dezelfde; identificeert je niet en wordt nooit naar ons verzonden | Herschreven bij elk bezoek dat een antwoord van Pyxis ontvangt; blijft staan tot je de browsergegevens wist, de meting op de pagina uitschakelt of de pagina bezoekt met het signaal Global Privacy Control of Do Not Track ingeschakeld; als wij de telling uitschakelen, tot een van je volgende bezoeken |
 | Homepage en inlogscherm van het dashboard | `pyxis:theme` | `localStorage` | Het op dit apparaat gekozen thema onthouden | Tot je het wijzigt of de browsergegevens wist |
 
 De homepage plaatst geen cookies. We gebruiken geen cookies van derden, van reclame of van sociale
@@ -327,8 +336,11 @@ Artikel 11.6), en blijven de factureringsgegevens gedurende de wettelijke termij
 (punt 2.2).
 
 6.5. **Bezoekers van de homepage:** omdat we geen IP-adres, cookie of blijvende identificatie
-bewaren, kunnen we je anonieme bezoeken niet terugvinden. Je kunt de meting op de pagina zelf
-uitschakelen of het signaal Global Privacy Control in je browser inschakelen.
+bewaren, kunnen we je anonieme bezoeken niet terugvinden; de telling van unieke bezoekers
+(punt 2.4) verandert daar niets aan. De markering uit punt 2.5 staat alleen in je browser. Om niet
+gemeten te worden, schakel je de meting op de pagina zelf uit, wat ook de markering verwijdert, of
+schakel je het signaal Global Privacy Control in je browser in; daarmee wordt niets verzonden, en
+wordt de markering bij je volgende bezoek aan de pagina verwijderd.
 
 6.6. Je kunt ook een verzoekschrift indienen bij de **Agência Nacional de Proteção de Dados
 (ANPD)**, op `gov.br/anpd`, en bij de consumentenbeschermingsinstanties.

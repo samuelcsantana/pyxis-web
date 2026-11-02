@@ -92,13 +92,21 @@ anbieten.
 
 | Datenfeld | Wofür | Rechtsgrundlage (LGPD) | Wie lange |
 |---|---|---|---|
-| Aufgerufene Seite (Pfad, ohne Parameter außer den Kampagnenparametern), Aktionen auf der Seite (zum Beispiel das Öffnen der Demo), Herkunftswebsite (nur die Domain), Kampagnenparameter, Gerätekategorie, Familie des Browsers und des Betriebssystems, Land, Bundesstaat und ungefähre Stadt (vom AWS-Netz aus der IP-Adresse abgeleitet, ohne die IP zu speichern; die Stadt ab {{terms.effectiveFrom}}), Zufallsnummer des Besuchs | Verstehen, wie die Seite genutzt wird, und die Präsentation von Pyxis verbessern | Berechtigtes Interesse (Art. 7 IX und Art. 10) | 13 Monate |
+| Aufgerufene Seite (Pfad, ohne Parameter außer den Kampagnenparametern), Aktionen auf der Seite (zum Beispiel das Öffnen der Demo), Herkunftswebsite (nur die Domain), Kampagnenparameter, Gerätekategorie, Familie des Browsers und des Betriebssystems, Land, Bundesstaat und ungefähre Stadt (vom AWS-Netz aus der IP-Adresse abgeleitet, ohne die IP zu speichern; die Stadt ab 29. Oktober 2026), Zufallsnummer des Besuchs, Besuchstyp (der erste dieses Browsers, der erste im Monat, der erste am Tag oder ein weiterer am selben Tag; ab [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Verstehen, wie die Seite genutzt wird, und die Präsentation von Pyxis verbessern | Berechtigtes Interesse (Art. 7 IX und Art. 10) | 13 Monate |
 
 Die Messung **verwendet keine Cookies**, **speichert weder IP** noch den vollständigen Browser und
 **sendet nichts**, wenn dein Browser verlangt, nicht verfolgt zu werden (Global Privacy Control oder
-Do Not Track). Auf der Seite selbst zeigt der Bereich „Was diese Seite erfasst hat“ jedes gesendete
-Ereignis und ermöglicht es, die Messung in diesem Browser abzuschalten. Vercel, das die Seite hostet,
-speichert die IP und den Browser der Zugreifenden 1 Tag lang in seinen technischen Protokollen.
+Do Not Track). **Ab [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA] zählen wir eindeutige Besucher
+ohne Kennung:** dein Browser speichert im lokalen Speicher der Seite (kein Cookie) nur, wann der Tag
+und der Monat in Brasília-Zeit enden, was für alle Besucher an diesem Tag gleich ist (Punkt 2.5), und
+jeder Besuch teilt uns nur seinen Typ mit. Es wird keine Kennung erzeugt, und wir verknüpfen keinen
+anonymen Besuch mit einem anderen; an einem Tag mit wenigen Besuchen kann der Typ jedoch zusammen mit
+der Uhrzeit, dem Gerät und dem Ort darauf hindeuten, dass zwei Besuche aus demselben Browser kamen.
+Auf der Seite selbst zeigt der Bereich „Was diese Seite erfasst hat“ jedes gesendete Ereignis und die
+gespeicherte Markierung und ermöglicht es, die Messung in diesem Browser abzuschalten, was auch die
+Markierung löscht, ebenso wie das Signal Global Privacy Control oder Do Not Track. Vercel, das die
+Seite hostet, speichert die IP und den Browser der Zugreifenden 1 Tag lang in seinen technischen
+Protokollen.
 
 ### 2.5. Cookies und Speicherung im Browser
 
@@ -110,6 +118,7 @@ speichert die IP und den Browser der Zugreifenden 1 Tag lang in seinen technisch
 | Dashboard | `pyxis:pending-sign-in` | `sessionStorage` (nur im Tab) | Die eingegebene E-Mail-Adresse speichern, während du auf den Code wartest, auch wenn du die Seite neu lädst | 10 Minuten oder bis zum Schließen des Tabs |
 | Startseite | `pyxis:session` | `sessionStorage` (nur im Tab) | Zufallsnummer des Besuchs | Bis zum Schließen des Tabs oder 30 Minuten ohne Aktivität |
 | Startseite | `pyxis:opt-out` | `localStorage` | Speichern, dass du die Messung abgeschaltet hast | Bis du sie wieder einschaltest oder die Browserdaten löschst |
+| Startseite | `pyxis:period` | `localStorage` | Angeben, ob der Besuch der erste dieses Browsers, der erste im Monat, der erste am Tag oder ein weiterer am selben Tag ist. Speichert nur, wann der Tag und der Monat in Brasília-Zeit enden, was für alle Besucher an diesem Tag gleich ist; identifiziert dich nicht und wird nie an uns gesendet | Bei jedem Besuch, der eine Antwort von Pyxis erhält, neu geschrieben; bleibt, bis du die Browserdaten löschst, die Messung auf der Seite abschaltest oder die Seite mit eingeschaltetem Signal Global Privacy Control oder Do Not Track besuchst; wenn wir die Zählung ausschalten, bis zu einem deiner nächsten Besuche |
 | Startseite und Anmeldebildschirm des Dashboards | `pyxis:theme` | `localStorage` | Das auf diesem Gerät gewählte Design speichern | Bis du es änderst oder die Browserdaten löschst |
 
 Die Startseite setzt keine Cookies. Wir verwenden keine Cookies von Dritten, für Werbung oder von
@@ -328,8 +337,11 @@ Registrierung die Schließung des Kontos (Nutzungsbedingungen, Klausel 11.6), un
 bleiben für die gesetzliche Frist gespeichert (Punkt 2.2).
 
 6.5. **Besucher der Startseite:** da wir weder IP noch Cookie noch dauerhafte Kennung speichern,
-können wir deine anonymen Besuche nicht auffinden. Du kannst die Messung auf der Seite selbst
-abschalten oder das Signal Global Privacy Control in deinem Browser einschalten.
+können wir deine anonymen Besuche nicht auffinden; die Zählung eindeutiger Besucher (Punkt 2.4)
+ändert daran nichts. Die Markierung aus Punkt 2.5 bleibt nur in deinem Browser. Um nicht gemessen zu
+werden, schalte die Messung auf der Seite selbst ab, was auch die Markierung löscht, oder schalte das
+Signal Global Privacy Control in deinem Browser ein; damit wird nichts gesendet, und die Markierung
+wird bei deinem nächsten Besuch der Seite gelöscht.
 
 6.6. Du kannst dich auch an die **Agência Nacional de Proteção de Dados (ANPD)** unter `gov.br/anpd`
 und an die Verbraucherschutzstellen wenden.

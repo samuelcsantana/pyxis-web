@@ -38,7 +38,8 @@ rastreador de Pyxis.
 que marcaste.
 
 2.4. **Proyecto** es la configuración de un sitio tuyo en Pyxis: nombre, direcciones (orígenes)
-autorizadas, zona horaria, evento de conversión, la opción de guardar la ciudad, claves y eventos.
+autorizadas, zona horaria, evento de conversión, las opciones de guardar la ciudad y de contar
+visitantes únicos, claves y eventos.
 
 2.5. **Suboperador** (subencargado del tratamiento) es el proveedor que contratamos y que trata, por
 cuenta nuestra, datos personales de este acuerdo.
@@ -94,9 +95,9 @@ Cláusula 7.6) y comprobar la capacidad del servicio.
 5.1. Tus instrucciones para el tratamiento son, en conjunto:
 
 1. los Términos de Uso y este acuerdo;
-2. la configuración de tus proyectos (orígenes autorizados, zona horaria, evento de conversión, la
-   opción de guardar la ciudad, claves y personas con acceso), hecha por el dueño de la cuenta en el
-   panel o, a petición, por nosotros;
+2. la configuración de tus proyectos (orígenes autorizados, zona horaria, evento de conversión, las
+   opciones de guardar la ciudad y de contar visitantes únicos, claves y personas con acceso), hecha
+   por el dueño de la cuenta en el panel o, a petición, por nosotros;
 3. lo que envía el rastreador instalado en tu sitio (qué eventos, qué propiedades y si usas la función
    `identify`);
 4. las acciones del dueño de la cuenta en el panel (por ejemplo, exportar los eventos, borrar un
@@ -162,7 +163,16 @@ a los titulares.
     necesaria para la finalidad de la medición y si encaja en la base legal del punto 1; actualizaste
     antes el aviso del punto 2, destacando el cambio; y, si el proyecto usa la función `identify`,
     sabes que pasa a registrarse la ciudad aproximada de cada visita de las personas identificadas y
-    lo informas en el aviso.
+    lo informas en el aviso;
+11. si activas el recuento de visitantes únicos en un proyecto (Términos de Uso, Cláusula 4.6),
+    evaluaste antes si es necesario para la finalidad de la medición y si encaja en la base legal del
+    punto 1, incluso en cuanto a la marca que el rastreador graba en el navegador del visitante;
+    actualizaste antes el aviso del punto 2, destacando el cambio, indicando qué guarda el navegador,
+    durante cuánto tiempo y qué informa cada visita; si el proyecto usa la función `identify`, sabes
+    que el tipo de la visita pasa a quedar también en las visitas de las personas identificadas,
+    mostrando con qué frecuencia cada una vuelve al sitio, y lo informas en el aviso; y, si tu sitio
+    pide al visitante que acepte o rechace la medición del uso, decidiste si el recuento respeta esa
+    elección y lo indicaste en el aviso.
 
 6.2. El servidor de Pyxis descarta automáticamente los valores que tengan forma de correo electrónico
 o las secuencias de 10 o más dígitos (como CPF, CNPJ —registro fiscal brasileño de personas jurídicas— y teléfono) en las propiedades de los eventos, en
@@ -263,10 +273,15 @@ Nosotros ayudamos como se describe a continuación.
 
 10.2. **Solo es posible encontrar a quien fue identificado.** Pyxis no guarda cookies, IP ni
 identificador persistente del visitante anónimo. El identificador de visita es aleatorio, queda solo en
-la pestaña del navegador y se cambia al cerrar la pestaña o después de 30 minutos sin actividad. Por
+la pestaña del navegador y se cambia al cerrar la pestaña o después de 30 minutos sin actividad. El
+recuento de visitantes únicos (Términos de Uso, Cláusula 4.6) no cambia eso: la marca que usa queda
+solo en el navegador, es la misma para todos los visitantes del sitio el mismo día y nunca llega a
+Pyxis, y el tipo de la visita no es un identificador (muchos visitantes tienen el mismo valor). Por
 eso, **no hay forma de encontrar las visitas anónimas de una persona**. Solo se pueden localizar los
 eventos de alguien a quien tu sitio identificó con la función `identify`, mediante el identificador
-interno que enviaste.
+interno que enviaste. El recuento de visitantes únicos no cambia el alcance de la eliminación: las
+visitas anónimas de la misma persona no quedan alcanzadas, aunque el tipo de una visita identificada
+indique que el navegador ya había venido ese día.
 
 10.3. **Eliminar los datos de una persona (tú mismo, mediante la API).** Llama a
 `DELETE https://api.pyxis-analytics.dev/v1/subjects/{userId}` con la clave secreta del proyecto
@@ -281,7 +296,9 @@ trae los mismos eventos que borraría la eliminación, en orden, hasta 1000 por 
 más, la respuesta indica el siguiente cursor (`next_after`), que pasas como `?after=` para obtener la
 página siguiente. Cada evento viene con nombre, fecha y hora, identificador de la visita, página,
 origen, dispositivo, país, región, ciudad (vacía en los proyectos con la opción desactivada; Términos
-de Uso, Cláusula 4.5) y propiedades.
+de Uso, Cláusula 4.5), tipo de la visita (solo en las visitas recibidas mientras el recuento de
+visitantes únicos estaba activado en el proyecto, y solo en el evento que lo trajo: con el
+rastreador, el primero de cada visita; Términos de Uso, Cláusula 4.6) y propiedades.
 
 10.5. **Límites de estas rutas.** Las dos rutas aceptan hasta 60 llamadas por minuto por clave y por
 dirección de origen. La clave secreta solo debe usarse en tu servidor, nunca en el navegador.
@@ -452,6 +469,7 @@ cliente a quienes este identifica con la función `identify`.
 | Nombre del evento | `page_view` (página vista), `api_request` (llamada a la API del sitio), `identify` o un nombre que define el cliente |
 | Fecha y hora | La del navegador, corregida por la diferencia de reloj, y la de recepción en el servidor |
 | Identificador de la visita | Número aleatorio guardado en el `sessionStorage` de la pestaña; se cambia al cerrar la pestaña o después de 30 minutos sin actividad |
+| Tipo de la visita | Solo en las visitas recibidas mientras el recuento de visitantes únicos (Términos de Uso, Cláusula 4.6; viene desactivado en todo proyecto, y solo el dueño de la cuenta lo activa) estaba activado en el proyecto, y solo en el evento que lo trajo (con el rastreador, el primero de cada visita): uno de cuatro valores, calculados en el navegador con la hora del dispositivo: `first_visit` (la primera de este navegador, o desde que se borraron sus datos), `first_this_month` (la primera del mes), `first_today` (la primera del día) o `again_today` (otra el mismo día), con el día y el mes en la zona horaria del proyecto. No es un identificador: muchos visitantes tienen el mismo valor. En los proyectos con la opción desactivada, el rastreador también envía el campo, y Pyxis lo descarta sin guardarlo |
 | Identificador de usuario | Solo si el cliente usa `identify`: el identificador interno de la cuenta en el sistema del cliente, con hasta 64 letras, números, `-` o `_` (no acepta `@`, por lo tanto no acepta un correo electrónico) |
 | Página | Solo la ruta, en forma de plantilla: los fragmentos que parecen identificadores (números, códigos largos, correos electrónicos) pasan a ser `:id`; sin dominio y sin parámetros |
 | Origen de la visita | Solo el dominio del que vino el visitante (por ejemplo, `google.com`), sin la dirección completa |
@@ -472,6 +490,17 @@ cliente a quienes este identifica con la función `identify`.
   dispositivo, la familia del navegador y la del sistema; después se descarta. Las visitas de robots
   conocidos se descartan.
 - **Cookies:** el rastreador no crea cookies en los sitios del cliente.
+- **Marca de los visitantes únicos:** solo en los proyectos con el recuento de visitantes únicos
+  activado, el rastreador guarda en el almacenamiento local del navegador del visitante
+  (`localStorage`, en la dirección del sitio del cliente) las fechas y horas en que terminan el día y
+  el mes del sitio, iguales para todos los visitantes el mismo día. Pyxis envía esas fechas y horas
+  al rastreador en la respuesta al envío de los eventos, pero nunca recibe ni guarda la marca. La
+  marca se reescribe en cada visita que recibe respuesta y queda hasta que se borren los datos del
+  navegador, por el visitante o por el propio navegador, hasta que el visitante desactive la medición
+  (`optOut`) o hasta que el navegador pida no ser rastreado (Global Privacy Control o Do Not Track);
+  en estos dos últimos casos, el rastreador borra la marca y no envía nada. Al desactivar el
+  recuento, el rastreador borra la marca la próxima vez que el navegador envíe eventos y reciba la
+  respuesta (Términos de Uso, Cláusula 4.6).
 - **Dirección completa de la página, parámetros de la dirección (salvo los de campaña), huella
   digital del navegador, código postal y coordenadas:** nunca.
 - **Ciudad:** solo en los proyectos en los que el dueño de la cuenta activó esa opción. Al
@@ -485,7 +514,8 @@ no desactivó el resumen recibe cifras agregadas de la semana: visitas, personas
 recuento), conversiones, fallos de escritura, visitas por día, páginas y eventos más frecuentes y las
 rutas con más fallos. El resumen no lleva identificadores de visitantes ni de usuarios.
 
-**7. Operaciones de tratamiento.** Recepción, validación, clasificación, almacenamiento, consulta,
+**7. Operaciones de tratamiento.** Recepción, validación, clasificación, envío al rastreador de las
+fechas y horas de la marca de visitantes únicos (punto 4), almacenamiento, consulta,
 agregación, visualización en el panel, entrega mediante la API de consulta, mediante el servidor MCP y
 a las aplicaciones conectadas, envío del resumen agregado por correo electrónico, copia (exportación),
 suspensión de la recepción (Cláusula 5.4) y eliminación.
@@ -535,13 +565,16 @@ responsabilidad.
 ## Anexo II — Medidas de seguridad vigentes
 
 Comprobadas en el código del servicio y en la configuración de la infraestructura el 14/10/2026 y el
-15/10/2026; el punto 1 (ciudad), el 29/10/2026.
+15/10/2026; el punto 1 (ciudad), el 29/10/2026; el punto 1 (visitantes únicos), el [DATA DA CONFERÊNCIA].
 
 **1. Privacidad desde el diseño.** Sin cookies en los sitios medidos; IP y navegador completo nunca
 guardados; páginas reducidas a plantillas; barrera en el servidor que descarta valores con forma de
 correo electrónico y números de 10 o más dígitos en las propiedades, en los parámetros de campaña y en
 el identificador de usuario; región del visitante, y la ciudad solo cuando el cliente activa esa
-opción en el proyecto, que viene desactivada; señales de "no rastrear" del navegador (Global Privacy
+opción en el proyecto, que viene desactivada; recuento de visitantes únicos solo cuando el cliente lo
+activa en el proyecto, que viene desactivado, sin identificador (el navegador guarda solo cuándo
+terminan el día y el mes del sitio, y Pyxis nunca recibe esa marca); señales de "no rastrear" del
+navegador (Global Privacy
 Control y Do Not Track) respetadas por el rastreador, que no envía nada cuando están activadas; opción
 de no ser medido (`optOut`) para el visitante; eventos borrados después de 13 meses.
 
@@ -667,17 +700,51 @@ No sustituye tu propio análisis.
 > qué funciones se usan. La medición **no usa cookies**, **no guarda tu dirección IP** y **no guarda
 > tu navegador completo**. Registramos la página vista (sin los parámetros de la dirección, salvo los
 > de campaña), el sitio del que viniste, el tipo de dispositivo, la familia del navegador y del
-> sistema, el país y la región (nunca la ciudad) y las acciones que marcamos en el sitio. Cada visita
+> sistema, el país y la región (nunca la ciudad) y las acciones que marcamos en el sitio.
+>
+> *(Usa solo una de las dos versiones del párrafo siguiente: la primera si el recuento de visitantes
+> únicos está desactivado en el proyecto, como viene en todo proyecto; la segunda solo si lo
+> activaste.)*
+>
+> *Sin el recuento de visitantes únicos:* Cada visita
 > recibe un número aleatorio que queda solo en la pestaña del navegador y se descarta al cerrar la
 > pestaña o después de 30 minutos sin actividad; no hay ningún identificador que te reconozca en otra
 > visita.
 >
+> *Con el recuento de visitantes únicos:* Cada visita recibe un número aleatorio que queda solo en la
+> pestaña del navegador y se descarta al cerrar la pestaña o después de 30 minutos sin actividad. Para
+> contar visitantes únicos sin identificar a nadie, tu navegador guarda en el almacenamiento local de
+> este sitio (no es una cookie) solo la fecha y la hora en que terminan el día y el mes, que son las
+> mismas para todos los visitantes ese día; esa marca se actualiza en tus visitas y queda hasta que
+> borres los datos de este sitio en el navegador. Si tu navegador envía la señal Global Privacy
+> Control o "Do Not Track", no se envía nada y la marca se borra. Cada visita informa solo si es la
+> primera de este navegador, la primera del mes, la primera del día u otra el mismo día, y esa
+> información queda con los demás datos de la visita. La marca queda solo en tu navegador y no se
+> envía a Pyxis, y no hay ningún identificador que te reconozca en otra visita.
+>
+> *(Si este aviso ya estaba publicado sin el recuento de visitantes únicos, destaca el cambio y la
+> fecha en que empieza a aplicarse. Si desactivas el recuento después, vuelve a la primera versión y
+> agrega justo después de ella: "Hasta el DD/MM/AAAA, este sitio contó visitantes únicos. Tu
+> navegador puede tener todavía la marca con la fecha y la hora en que terminaban el día y el mes; se
+> borra en una de tus próximas visitas, o cuando borres los datos de este sitio en el navegador. Las
+> visitas contadas hasta entonces conservan su tipo hasta que se borren, 13 meses después de cada
+> una.")*
+>
+> *(Si activaste el recuento de visitantes únicos y tu sitio usa la función `identify`, sustituye, en
+> el párrafo sobre esa función, "vinculamos los eventos de esa visita al número interno de tu cuenta"
+> por "vinculamos los eventos de esa visita, incluyendo si fue la primera de este navegador, la
+> primera del mes, la primera del día u otra el mismo día, al número interno de tu cuenta". Si
+> también activaste la ciudad, usa "incluyendo la ciudad aproximada y si fue la primera de este
+> navegador, la primera del mes, la primera del día u otra el mismo día".)*
+>
 > *(Si activaste la ciudad en el proyecto, sustituye "el país y la región (nunca la ciudad)" por "el
 > país, la región y la ciudad aproximada, deducidos de tu dirección IP en el momento del acceso, sin
-> guardar la IP". Si tu sitio también usa la función `identify`, sustituye, en el párrafo siguiente,
-> "vinculamos los eventos de esa visita al número interno de tu cuenta" por "vinculamos los eventos
-> de esa visita, incluida la ciudad aproximada, al número interno de tu cuenta". Si este aviso ya
-> estaba publicado sin la ciudad, destaca el cambio y la fecha en que empieza a aplicarse.)*
+> guardar la IP". Si tu sitio también usa la función `identify`, sustituye, en el párrafo sobre esa
+> función, "vinculamos los eventos de esa visita al número interno de tu cuenta" por "vinculamos los
+> eventos de esa visita, incluida la ciudad aproximada, al número interno de tu cuenta" (si también
+> activaste el recuento de visitantes únicos, usa la sustitución combinada del párrafo anterior). Si
+> este aviso ya estaba publicado sin la ciudad, destaca el cambio y la fecha en que empieza a
+> aplicarse.)*
 >
 > *(Incluye el párrafo siguiente solo si tu sitio usa la función `identify`.)* Cuando inicias sesión
 > en tu cuenta, vinculamos los eventos de esa visita al número interno de tu cuenta, nunca a tu nombre

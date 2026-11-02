@@ -97,7 +97,8 @@ par e-mail et l’accès par jetons et par applications connectées, y compris v
 envoyer des événements au service.
 
 2.3. **Projet :** la configuration d’un de vos sites dans le service (nom, adresses autorisées, fuseau
-horaire, événement de conversion, l’option de conserver la ville, clés et événements).
+horaire, événement de conversion, les options de conserver la ville et de compter les visiteurs
+uniques, clés et événements).
 
 2.4. **Événement :** chaque enregistrement envoyé par le traceur ou par votre intégration, comme une
 page vue ou une action que vous avez balisée.
@@ -185,8 +186,14 @@ fonctionnalités utilisées, échecs des appels à l’API de votre site, acquis
    paramètres, sauf ceux de campagne (`utm_source`, `utm_medium`, `utm_campaign`) ;
 6. il n’envoie rien lorsque le navigateur du visiteur demande à ne pas être suivi (Global Privacy
    Control ou Do Not Track) ;
-7. il ne reconnaît pas le visiteur anonyme lors d’une autre visite : chaque visite a un numéro
-   aléatoire qui disparaît à la fermeture de l’onglet ou après 30 minutes d’inactivité.
+7. il ne crée, ne reçoit ni ne conserve aucun identifiant qui suive le visiteur anonyme d’une visite
+   à l’autre : chaque visite a un numéro aléatoire qui disparaît à la fermeture de l’onglet ou
+   après 30 minutes d’inactivité, et le service ne relie pas une visite anonyme à une autre. Si le
+   propriétaire du compte active le comptage des visiteurs uniques dans le projet (Clause 4.6), le
+   navigateur du visiteur conserve uniquement les moments où se terminent le jour et le mois du site,
+   qui sont les mêmes pour tous les visiteurs ce jour-là, et chaque visite indique uniquement son
+   type : la première de ce navigateur, la première du mois, la première de la journée ou une autre le
+   même jour. Ce comptage est désactivé par défaut, et nous ne l’activons jamais sans sa demande.
 
 4.3. **Attention :** les chiffres du tableau de bord sont une mesure, pas un comptage exact. Les
 visites de ceux qui bloquent le traceur, de ceux qui demandent à ne pas être suivis, des robots et de
@@ -194,6 +201,24 @@ ceux qui étaient hors connexion n’apparaissent pas, et les événements envoy
 est hors ligne ou que la réception est en pause (Clauses 7.2, 15 et 18) sont perdus (le traceur
 réessaie pendant quelques secondes tant que la page est ouverte, mais pas lorsque la réception est en
 pause).
+
+Les visiteurs uniques (Clause 4.6) sont aussi une estimation : ils comptent des navigateurs, pas des
+personnes. Une même personne est comptée plus d’une fois lorsqu’elle utilise un autre appareil ou un
+autre navigateur, une fenêtre de navigation privée, ou lorsque les données du navigateur sont
+supprimées, par elle ou par le navigateur lui-même (Safari, par exemple, supprime les données
+conservées par un site après quelques jours d’utilisation sans interaction avec lui, et quiconque
+revient après cela apparaît comme nouveau) ; et des personnes qui utilisent le même navigateur
+comptent pour une seule. Quiconque quitte le site en quelques secondes, avant que le navigateur ne
+reçoive la première réponse du service, ne laisse pas le marqueur à jour, et la visite suivante est
+comptée à nouveau ; deux onglets ouverts en même temps lors de la première visite de la journée sont
+comptés deux fois ; chaque adresse du site (avec et sans `www`, ou des sous-domaines différents) est
+comptée séparément, à moins que l’une ne redirige vers l’autre ; et, sur un appareil dont l’horloge
+est erronée, la visite peut être comptée le mauvais jour. Dans les premières semaines qui suivent
+l’activation du comptage, ou sa réactivation, presque tous les visiteurs apparaissent comme
+nouveaux, car aucun navigateur n’a encore le marqueur, et les visites antérieures à l’activation ne
+sont pas prises en compte. Les visiteurs uniques de jours différents ne s’additionnent pas : deux
+jours avec 100 visiteurs uniques chacun peuvent correspondre à 100 ou à 200 navigateurs, et le
+tableau de bord le signale lorsqu’il affiche une somme.
 
 4.4. Font également partie des deux forfaits (Clause 7.1) :
 
@@ -230,6 +255,53 @@ Lorsque l’option est désactivée, la ville cesse d’être lue dans un délai
 déjà conservées dans le projet sont supprimées dans un délai de 48 heures, si l’option reste
 désactivée jusque-là, comme l’indique la Clause 12.8 de l’Accord. Le code postal, les coordonnées
 géographiques et l’adresse IP ne sont jamais conservés.
+
+4.6. **Visiteurs uniques, uniquement si vous l’activez.** Chaque projet dispose, dans ses paramètres,
+d’une option pour compter les visiteurs uniques par jour et par mois et distinguer les nouveaux
+visiteurs de ceux qui reviennent. L’option est **désactivée** par défaut dans tous les projets,
+nouveaux ou anciens, et seul le propriétaire du compte l’active ou la désactive, sur les deux
+forfaits.
+
+Lorsque l’option est activée, le traceur conserve dans le stockage local du navigateur du visiteur
+(`localStorage`, à l’adresse de votre site ; ce n’est pas un cookie) uniquement deux horaires : le
+moment où se termine le jour et celui où se termine le mois du site, dans le fuseau horaire du
+projet. Ces horaires sont les mêmes pour tous les visiteurs du site ce jour-là ; le service les
+communique au traceur dans la réponse à l’envoi des événements et ne les reçoit jamais en retour. Le
+marqueur est réécrit à chaque visite qui reçoit une réponse du service et n’a pas de durée limite :
+il reste jusqu’à ce que les données du navigateur soient supprimées, par le visiteur ou par le
+navigateur lui-même (Clause 4.3), jusqu’à ce que le visiteur désactive la mesure sur votre site
+(`optOut`), jusqu’à ce que le navigateur demande à ne pas être suivi (Global Privacy Control ou
+Do Not Track) ou jusqu’à ce que le comptage soit désactivé (dernier paragraphe de la présente clause).
+Au début de chaque visite, le traceur compare l’heure de l’appareil avec ce marqueur et envoie, avec
+le premier événement de la visite, uniquement le type de la visite : la première de ce navigateur (ou
+depuis que les données du navigateur ont été supprimées), la première du mois, la première de la
+journée ou une autre le même jour. Lorsque l’option est désactivée, le traceur envoie le même champ
+(qui, sans marqueur, est « la première de ce navigateur »), et le service l’écarte sans le conserver.
+Aucun identifiant n’est créé, conservé ou envoyé, et le service ne relie pas une visite anonyme à une
+autre. Lorsque le navigateur demande à ne pas être suivi ou lorsque le visiteur désactive la mesure
+sur votre site (`optOut`), le traceur n’envoie rien, pas même le type de la visite, et supprime le
+marqueur, s’il y en a un ; lorsque le navigateur est contrôlé par un programme, le traceur n’envoie
+rien non plus.
+
+**Attention :** le type de la visite n’identifie personne, mais, sur des sites ou des jours avec peu
+de visites, combiné à l’heure, à l’appareil et au lieu, il peut permettre de déduire que deux visites
+proviennent du même navigateur. Dans un projet qui utilise la fonction `identify`, le type est aussi
+conservé dans les visites des personnes identifiées et montre à quelle fréquence chacune revient sur
+le site depuis ce navigateur. Avant de l’activer, mettez à jour l’avis de confidentialité de votre
+site pour indiquer que le navigateur conserve ce marqueur, pendant combien de temps, et que chaque
+visite indique son type (l’Annexe IV de l’Accord de traitement des données fournit les deux versions
+du paragraphe). Il vous appartient, en tant que responsable du traitement, d’évaluer si vous avez
+besoin de ce comptage, en particulier dans un projet qui utilise `identify`, et d’en informer les
+visiteurs (Clause 6.1 de l’Accord). Les limites du comptage figurent à la Clause 4.3.
+
+Lorsque l’option est désactivée, le service cesse de conserver le type des nouvelles visites dans un
+délai d’une minute, et le traceur supprime le marqueur de chaque navigateur la prochaine fois que ce
+navigateur envoie des événements au service et reçoit la réponse ; dans un navigateur qui ne revient
+pas sur le site, le marqueur reste jusqu’à ce que les données du navigateur soient supprimées. Les
+types de visite déjà conservés restent dans les événements et suivent les règles des autres
+événements : la suppression après 13 mois (Clause 7.4), la suppression du projet et les demandes des
+personnes concernées (Clauses 10 et 12 de l’Accord). L’activation prend également effet pour les
+nouvelles visites dans un délai d’une minute.
 
 ## Clause 5 — Open source et service hébergé
 
@@ -585,7 +657,11 @@ votre permission :
    le traceur des signaux Global Privacy Control et Do Not Track et de l’option de ne pas être mesuré
    (`optOut`), ou envoyer des événements de ces personnes par un autre chemin ;
 6. utiliser le service conjointement avec des techniques d’empreinte du navigateur (fingerprinting) ou
-   d’autres moyens pour reconnaître des visiteurs anonymes ;
+   d’autres moyens pour reconnaître des visiteurs anonymes ou relier les visites anonymes d’un même
+   navigateur, y compris modifier le traceur ou le marqueur de la Clause 4.6 pour qu’ils conservent
+   ou envoient quelque chose qui permette de reconnaître le visiteur lors d’une autre visite. Utiliser
+   le comptage des visiteurs uniques tel que le service le propose (Clause 4.6) ne constitue pas un
+   abus ;
 
 *Trafic et sécurité*
 
@@ -640,7 +716,8 @@ responsabilité de ce que votre site envoie vous incombe.**
 
 1. publier sur votre site un avis de confidentialité décrivant la mesure (un modèle figure à
    l’Annexe IV de l’Accord de traitement des données) et maintenir cet avis en conformité avec ce que
-   votre site envoie et avec les options de vos projets (comme la ville, Clause 4.5) ;
+   votre site envoie et avec les options de vos projets (comme la ville et les visiteurs uniques,
+   Clauses 4.5 et 4.6) ;
 2. si votre site s’adresse à des enfants ou à des adolescents, évaluer au préalable la mesure au
    regard de l’art. 14 de la LGPD (Lei Geral de Proteção de Dados Pessoais, loi générale brésilienne
    sur la protection des données personnelles) ;

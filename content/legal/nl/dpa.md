@@ -41,7 +41,8 @@ geïnstalleerd.
 die je hebt gemarkeerd.
 
 2.4. **Project** is de configuratie van een van je websites in Pyxis: naam, toegestane adressen
-(origins), tijdzone, conversie-event, de optie om de stad te bewaren, sleutels en events.
+(origins), tijdzone, conversie-event, de opties om de stad te bewaren en om unieke bezoekers te
+tellen, sleutels en events.
 
 2.5. **Subverwerker** is de provider die wij inschakelen en die voor onze rekening persoonsgegevens
 uit deze overeenkomst verwerkt.
@@ -99,9 +100,9 @@ van de dienst te controleren.
 5.1. Je instructies voor de verwerking zijn, gezamenlijk:
 
 1. de Gebruiksvoorwaarden en deze overeenkomst;
-2. de configuratie van je projecten (toegestane origins, tijdzone, conversie-event, de optie om de
-   stad te bewaren, sleutels en personen met toegang), ingesteld door de accounteigenaar in het
-   dashboard of, op verzoek, door ons;
+2. de configuratie van je projecten (toegestane origins, tijdzone, conversie-event, de opties om de
+   stad te bewaren en om unieke bezoekers te tellen, sleutels en personen met toegang), ingesteld
+   door de accounteigenaar in het dashboard of, op verzoek, door ons;
 3. wat de op je website geïnstalleerde tracker verzendt (welke events, eigenschappen en of je de
    functie `identify` gebruikt);
 4. de handelingen van de accounteigenaar in het dashboard (bijvoorbeeld de events exporteren, een
@@ -174,7 +175,17 @@ betrokkenen.
     vooraf de verklaring van punt 2 hebt bijgewerkt en de wijziging daarin duidelijk hebt
     aangegeven; en, als het project de functie `identify` gebruikt, weet dat dan de geschatte stad
     van elk bezoek van de geïdentificeerde personen wordt vastgelegd, en dat in de verklaring
-    vermeldt.
+    vermeldt;
+11. als je de telling van unieke bezoekers in een project inschakelt (Gebruiksvoorwaarden,
+    Artikel 4.6), vooraf hebt beoordeeld of die nodig is voor het doel van de meting en past binnen
+    de rechtsgrond van punt 1, ook wat betreft de markering die de tracker in de browser van de
+    bezoeker opslaat; vooraf de verklaring van punt 2 hebt bijgewerkt en de wijziging daarin
+    duidelijk hebt aangegeven, met vermelding van wat de browser bewaart, hoe lang en wat elk bezoek
+    doorgeeft; als het project de functie `identify` gebruikt, weet dat het bezoektype dan ook bij
+    de bezoeken van de geïdentificeerde personen wordt bewaard, waaruit blijkt hoe vaak elk van hen
+    naar de website terugkeert, en dat in de verklaring vermeldt; en, als je website de bezoeker
+    vraagt de meting van het gebruik te aanvaarden of te weigeren, hebt besloten of de telling die
+    keuze respecteert en dat in de verklaring hebt vermeld.
 
 6.2. De server van Pyxis verwijdert automatisch waarden met de vorm van een e-mailadres of reeksen
 van 10 of meer cijfers (zoals CPF, CNPJ – Braziliaans fiscaal nummer van een rechtspersoon – en telefoonnummer) in de eigenschappen van de events, in de
@@ -281,9 +292,15 @@ maatregel van art. 18 van de LGPD. Wij helpen zoals hieronder beschreven.
 10.2. **Alleen wie is geïdentificeerd, kan worden gevonden.** Pyxis bewaart geen cookies, IP-adres
 of blijvende identificatie van de anonieme bezoeker. De bezoekidentificatie is willekeurig, staat
 alleen in het browsertabblad en wordt vervangen bij het sluiten van het tabblad of na 30 minuten
-zonder activiteit. Daarom **is er geen manier om de anonieme bezoeken van een persoon te vinden**.
-Alleen de events van iemand die je website met de functie `identify` heeft geïdentificeerd, kunnen
-worden gevonden, aan de hand van de interne identificatie die je hebt verzonden.
+zonder activiteit. De telling van unieke bezoekers (Gebruiksvoorwaarden, Artikel 4.6) verandert
+daar niets aan: de markering die ze gebruikt, staat alleen in de browser, is op dezelfde dag voor
+alle bezoekers van de website dezelfde en bereikt Pyxis nooit, en het bezoektype is geen
+identificatie (veel bezoekers hebben dezelfde waarde). Daarom **is er geen manier om de anonieme
+bezoeken van een persoon te vinden**. Alleen de events van iemand die je website met de functie
+`identify` heeft geïdentificeerd, kunnen worden gevonden, aan de hand van de interne identificatie
+die je hebt verzonden. De telling van unieke bezoekers verandert niets aan het bereik van de
+verwijdering: de anonieme bezoeken van dezelfde persoon vallen er niet onder, ook niet als het type
+van een geïdentificeerd bezoek aangeeft dat de browser die dag al op de website was geweest.
 
 10.3. **De gegevens van een persoon verwijderen (zelf, via de API).** Roep
 `DELETE https://api.pyxis-analytics.dev/v1/subjects/{userId}` aan met de geheime sleutel van het
@@ -299,7 +316,10 @@ antwoord bevat dezelfde events die de verwijdering zou wissen, op volgorde, tot 
 JSON. Als er meer zijn, vermeldt het antwoord de volgende cursor (`next_after`), die je als
 `?after=` meegeeft om de volgende pagina op te halen. Elk event bevat naam, datum en tijd,
 bezoekidentificatie, pagina, herkomst, apparaat, land, staat, stad (leeg in de projecten waarin de
-optie is uitgeschakeld; Gebruiksvoorwaarden, Artikel 4.5) en eigenschappen.
+optie is uitgeschakeld; Gebruiksvoorwaarden, Artikel 4.5), bezoektype (alleen bij bezoeken die zijn
+ontvangen terwijl de telling van unieke bezoekers in het project was ingeschakeld, en alleen in het
+event dat het meebracht: met de tracker, het eerste van elk bezoek; Gebruiksvoorwaarden,
+Artikel 4.6) en eigenschappen.
 
 10.5. **Limieten van deze routes.** Beide routes accepteren tot 60 aanroepen per minuut per sleutel
 en per herkomstadres. De geheime sleutel mag alleen op je server worden gebruikt, nooit in de
@@ -484,6 +504,7 @@ systeem van de klant die hij met de functie `identify` identificeert.
 | Naam van het event | `page_view` (bekeken pagina), `api_request` (aanroep naar de API van de website), `identify` of een naam die de klant bepaalt |
 | Datum en tijd | Die van de browser, gecorrigeerd voor het klokverschil, en die van ontvangst op de server |
 | Bezoekidentificatie | Willekeurig nummer bewaard in de `sessionStorage` van het tabblad; vervangen bij het sluiten van het tabblad of na 30 minuten zonder activiteit |
+| Bezoektype | Alleen bij bezoeken die zijn ontvangen terwijl de telling van unieke bezoekers (Gebruiksvoorwaarden, Artikel 4.6; standaard uitgeschakeld in elk project, en alleen de accounteigenaar schakelt die in) in het project was ingeschakeld, en alleen in het event dat het meebracht (met de tracker, het eerste van elk bezoek): een van vier waarden, in de browser berekend met de tijd van het apparaat: `first_visit` (het eerste van deze browser, of sinds de browsergegevens zijn gewist), `first_this_month` (het eerste in de maand), `first_today` (het eerste op de dag) of `again_today` (een ander bezoek op dezelfde dag), met de dag en de maand in de tijdzone van het project. Het is geen identificatie: veel bezoekers hebben dezelfde waarde. In de projecten waarin de optie is uitgeschakeld, verzendt de tracker het veld ook, en gooit Pyxis het weg zonder het te bewaren |
 | Gebruikersidentificatie | Alleen als de klant `identify` gebruikt: de interne identificatie van het account in het systeem van de klant, met tot 64 letters, cijfers, `-` of `_` (accepteert geen `@`, dus geen e-mailadres) |
 | Pagina | Alleen het pad, in de vorm van een sjabloon: delen die op identificaties lijken (nummers, lange codes, e-mailadressen) worden `:id`; zonder domein en zonder parameters |
 | Herkomst van het bezoek | Alleen het domein waar de bezoeker vandaan kwam (bijvoorbeeld `google.com`), zonder het volledige adres |
@@ -504,6 +525,18 @@ systeem van de klant die hij met de functie `identify` identificeert.
   de familie van de browser en die van het besturingssysteem te bepalen; daarna weggegooid. Bezoeken
   van bekende bots worden weggegooid.
 - **Cookies:** de tracker plaatst geen cookies op de websites van de klant.
+- **Markering van de unieke bezoekers:** alleen in de projecten waarin de telling van unieke
+  bezoekers is ingeschakeld, bewaart de tracker in de lokale opslag van de browser van de bezoeker
+  (`localStorage`, op het adres van de website van de klant) de tijdstippen waarop de dag en de
+  maand van de website eindigen, voor alle bezoekers op dezelfde dag dezelfde. Pyxis stuurt die
+  tijdstippen naar de tracker in het antwoord op het verzenden van de events, maar ontvangt of
+  bewaart de markering nooit. De markering wordt herschreven bij elk bezoek dat een antwoord
+  ontvangt en blijft staan totdat de browsergegevens worden gewist, door de bezoeker of door de
+  browser zelf, totdat de bezoeker de meting uitschakelt (`optOut`) of totdat de browser vraagt niet
+  gevolgd te worden (Global Privacy Control of Do Not Track); in die laatste twee gevallen
+  verwijdert de tracker de markering en verzendt hij niets. Na het uitschakelen van de telling
+  verwijdert de tracker de markering de volgende keer dat de browser events verzendt en het antwoord
+  ontvangt (Gebruiksvoorwaarden, Artikel 4.6).
 - **Volledig adres van de pagina, parameters van het adres (behalve die van campagnes),
   browser-fingerprint, postcode en coördinaten:** nooit.
 - **Stad:** alleen in de projecten waarin de accounteigenaar die optie heeft ingeschakeld. Na het
@@ -519,7 +552,8 @@ geïdentificeerde personen (alleen het aantal), conversies, mislukte schrijfverz
 voorkomende pagina's en events en de routes met de meeste fouten. De samenvatting bevat geen
 identificaties van bezoekers of gebruikers.
 
-**7. Verwerkingshandelingen.** Ontvangst, validatie, classificatie, opslag, raadpleging,
+**7. Verwerkingshandelingen.** Ontvangst, validatie, classificatie, verzending van de tijdstippen
+van de markering van de unieke bezoekers naar de tracker (punt 4), opslag, raadpleging,
 aggregatie, weergave in het dashboard, levering via de raadplegings-API, via de MCP-server en aan de
 gekoppelde apps, verzending van de geaggregeerde
 samenvatting per e-mail, kopie (export), opschorting van de ontvangst (Artikel 5.4) en verwijdering.
@@ -574,13 +608,17 @@ onder jouw verantwoordelijkheid.
 ## Bijlage II — Geldende beveiligingsmaatregelen
 
 Gecontroleerd in de code van de dienst en in de configuratie van de infrastructuur op 14 oktober
-2026 en 15 oktober 2026; punt 1 (stad) op 29 oktober 2026.
+2026 en 15 oktober 2026; punt 1 (stad) op 29 oktober 2026; punt 1 (unieke bezoekers)
+op [DATA DA CONFERÊNCIA].
 
 **1. Privacy by design.** Geen cookies op de gemeten websites; IP-adres en volledige browser nooit
 bewaard; pagina's gereduceerd tot sjablonen; barrière op de server die waarden met de vorm van een
 e-mailadres en getallen van 10 of meer cijfers verwijdert in de eigenschappen, in de
 campagneparameters en in de gebruikersidentificatie; staat van de bezoeker, en de stad alleen
-wanneer de klant die optie in het project inschakelt, die standaard is uitgeschakeld;
+wanneer de klant die optie in het project inschakelt, die standaard is uitgeschakeld; telling van
+unieke bezoekers alleen wanneer de klant die in het project inschakelt, die standaard is
+uitgeschakeld, zonder identificatie (de browser bewaart alleen wanneer de dag en de maand van de
+website eindigen, en Pyxis ontvangt die markering nooit);
 "niet volgen"-signalen van de browser (Global Privacy Control en Do Not Track) gerespecteerd door de
 tracker, die niets verzendt wanneer ze zijn ingeschakeld; optie om niet gemeten te worden (`optOut`)
 voor de bezoeker; events verwijderd na 13 maanden.
@@ -711,18 +749,54 @@ verzendt. Hij vervangt je eigen analyse niet.
 > cookies**, **bewaart je IP-adres niet** en **bewaart je volledige browser niet**. We registreren de
 > bekeken pagina (zonder de parameters van het adres, behalve die van campagnes), de website waar je
 > vandaan kwam, het type apparaat, de familie van de browser en van het besturingssysteem, het land
-> en de staat (nooit de stad) en de acties die we op de website hebben gemarkeerd. Elk bezoek krijgt
-> een willekeurig nummer dat alleen in het browsertabblad staat en wordt weggegooid bij het sluiten
-> van het tabblad of na 30 minuten zonder activiteit; er is geen identificatie die je bij een ander
+> en de staat (nooit de stad) en de acties die we op de website hebben gemarkeerd.
+>
+> *(Gebruik maar één van de twee versies van de alinea hieronder: de eerste als de telling van
+> unieke bezoekers in het project is uitgeschakeld, zoals standaard in elk project; de tweede alleen
+> als je die hebt ingeschakeld.)*
+>
+> *Zonder de telling van unieke bezoekers:* Elk bezoek krijgt een willekeurig nummer dat alleen in
+> het browsertabblad staat en wordt weggegooid bij het sluiten van het tabblad of na 30 minuten
+> zonder activiteit; er is geen identificatie die je bij een ander bezoek herkent.
+>
+> *Met de telling van unieke bezoekers:* Elk bezoek krijgt een willekeurig nummer dat alleen in het
+> browsertabblad staat en wordt weggegooid bij het sluiten van het tabblad of na 30 minuten zonder
+> activiteit. Om unieke bezoekers te tellen zonder iemand te identificeren, bewaart je browser in de
+> lokale opslag van deze website (het is geen cookie) alleen de datum en het tijdstip waarop de dag
+> en de maand eindigen, die op die dag voor alle bezoekers dezelfde zijn; deze markering wordt bij
+> je bezoeken bijgewerkt en blijft staan totdat je de gegevens van deze website in je browser wist.
+> Als je browser het signaal Global Privacy Control of "Do Not Track" verzendt, wordt er niets
+> verzonden en wordt de markering verwijderd. Elk bezoek geeft alleen door of het gaat om het eerste
+> van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde
+> dag, en die informatie blijft bij de overige gegevens van het bezoek. De markering staat alleen in
+> je browser en wordt niet naar Pyxis verzonden, en er is geen identificatie die je bij een ander
 > bezoek herkent.
+>
+> *(Als deze kennisgeving al zonder de telling van unieke bezoekers was gepubliceerd, breng de
+> wijziging en de datum waarop die ingaat dan duidelijk onder de aandacht. Als je de telling later
+> uitschakelt, ga dan terug naar de eerste versie en voeg direct daarna toe: "Tot DD-MM-JJJJ telde
+> deze website unieke bezoekers. Je browser kan nog de markering hebben met de datum en het tijdstip
+> waarop de dag en de maand eindigden; die wordt bij een van je volgende bezoeken verwijderd, of
+> wanneer je de gegevens van deze website in je browser wist. De bezoeken die tot dan zijn geteld,
+> behouden hun type totdat ze worden verwijderd, 13 maanden na elk bezoek.")*
+>
+> *(Als je de telling van unieke bezoekers hebt ingeschakeld en je website de functie `identify`
+> gebruikt, vervang dan in de alinea over die functie "koppelen we de events van dat bezoek aan het
+> interne nummer van je account" door "koppelen we de events van dat bezoek, ook of het ging om het
+> eerste van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op
+> dezelfde dag, aan het interne nummer van je account". Als je ook de stad hebt ingeschakeld,
+> gebruik dan "ook de geschatte stad en of het ging om het eerste van deze browser, het eerste in de
+> maand, het eerste op de dag of een ander bezoek op dezelfde dag".)*
 >
 > *(Als je de stad in het project hebt ingeschakeld, vervang dan "het land en de staat (nooit de
 > stad)" door "het land, de staat en de geschatte stad, afgeleid uit je IP-adres op het moment van
 > je bezoek, zonder het IP-adres te bewaren". Als je website ook de functie `identify` gebruikt,
-> vervang dan in de volgende alinea "koppelen we de events van dat bezoek aan het interne nummer van
-> je account" door "koppelen we de events van dat bezoek, ook de geschatte stad, aan het interne
-> nummer van je account". Als deze kennisgeving al zonder de stad was gepubliceerd, breng de
-> wijziging en de datum waarop die ingaat dan duidelijk onder de aandacht.)*
+> vervang dan in de alinea over die functie "koppelen we de events van dat bezoek aan het interne
+> nummer van je account" door "koppelen we de events van dat bezoek, ook de geschatte stad, aan het
+> interne nummer van je account" (als je ook de telling van unieke bezoekers hebt ingeschakeld,
+> gebruik dan de gecombineerde vervanging uit de vorige alinea). Als deze kennisgeving al zonder de
+> stad was gepubliceerd, breng de wijziging en de datum waarop die ingaat dan duidelijk onder de
+> aandacht.)*
 >
 > *(Neem de onderstaande alinea alleen op als je website de functie `identify` gebruikt.)* Wanneer je
 > inlogt op je account, koppelen we de events van dat bezoek aan het interne nummer van je account,

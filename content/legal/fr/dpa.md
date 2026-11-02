@@ -40,8 +40,8 @@ traceur de Pyxis est installé.
 une action que vous avez balisée.
 
 2.4. **Projet** désigne la configuration d’un de vos sites dans Pyxis : nom, adresses (origines)
-autorisées, fuseau horaire, événement de conversion, l’option de conserver la ville, clés et
-événements.
+autorisées, fuseau horaire, événement de conversion, les options de conserver la ville et de compter
+les visiteurs uniques, clés et événements.
 
 2.5. **Sous-traitant ultérieur** désigne le prestataire que nous engageons et qui traite, pour notre
 compte, des données personnelles visées par le présent accord.
@@ -103,8 +103,8 @@ Clause 7.6) et vérifier la capacité du service.
 
 1. les Conditions d’utilisation et le présent accord ;
 2. la configuration de vos projets (origines autorisées, fuseau horaire, événement de conversion,
-   l’option de conserver la ville, clés et personnes ayant accès), effectuée par le propriétaire du
-   compte sur le tableau de bord ou, sur demande, par nous ;
+   les options de conserver la ville et de compter les visiteurs uniques, clés et personnes ayant
+   accès), effectuée par le propriétaire du compte sur le tableau de bord ou, sur demande, par nous ;
 3. ce que le traceur installé sur votre site envoie (quels événements, quelles propriétés et si vous
    utilisez la fonction `identify`) ;
 4. les actions du propriétaire du compte sur le tableau de bord (par exemple, exporter les événements,
@@ -173,7 +173,17 @@ obligations de responsable du traitement envers les personnes concernées.
     préalable si elle est nécessaire à la finalité de la mesure et si elle est couverte par la base
     légale du point 1 ; avez mis à jour au préalable l’avis du point 2, en mettant le changement en
     évidence ; et, si le projet utilise la fonction `identify`, savez qu’il enregistre dès lors la
-    ville approximative de chaque visite des personnes identifiées et l’indiquez dans l’avis.
+    ville approximative de chaque visite des personnes identifiées et l’indiquez dans l’avis ;
+11. si vous activez le comptage des visiteurs uniques dans un projet (Conditions d’utilisation,
+    Clause 4.6), avez évalué au préalable s’il est nécessaire à la finalité de la mesure et s’il est
+    couvert par la base légale du point 1, y compris en ce qui concerne le marqueur que le traceur
+    enregistre dans le navigateur du visiteur ; avez mis à jour au préalable l’avis du point 2, en
+    mettant le changement en évidence et en précisant ce que le navigateur conserve, pendant combien
+    de temps et ce que chaque visite indique ; si le projet utilise la fonction `identify`, savez que
+    le type de la visite est dès lors conservé aussi dans les visites des personnes identifiées,
+    montrant à quelle fréquence chacune revient sur le site, et l’indiquez dans l’avis ; et, si votre
+    site demande au visiteur d’accepter ou de refuser la mesure d’utilisation, avez décidé si le
+    comptage respecte ce choix et l’avez indiqué dans l’avis.
 
 6.2. Le serveur de Pyxis écarte automatiquement les valeurs qui ont la forme d’un e-mail ou les
 séquences de 10 chiffres ou plus (comme le CPF, le CNPJ — numéro d’immatriculation des personnes
@@ -283,9 +293,15 @@ autre mesure de l’art. 18 de la LGPD. Nous vous aidons comme décrit ci-dessou
 10.2. **Seules les personnes identifiées peuvent être retrouvées.** Pyxis ne conserve ni cookies, ni
 IP, ni identifiant persistant du visiteur anonyme. L’identifiant de visite est aléatoire, reste
 uniquement dans l’onglet du navigateur et est remplacé à la fermeture de l’onglet ou après 30 minutes
-d’inactivité. Par conséquent, **il n’est pas possible de retrouver les visites anonymes d’une
-personne**. Seuls peuvent être localisés les événements d’une personne que votre site a identifiée
-avec la fonction `identify`, au moyen de l’identifiant interne que vous avez envoyé.
+d’inactivité. Le comptage des visiteurs uniques (Conditions d’utilisation, Clause 4.6) n’y change
+rien : le marqueur qu’il utilise reste uniquement dans le navigateur, est le même pour tous les
+visiteurs du site le même jour et ne parvient jamais à Pyxis, et le type de la visite n’est pas un
+identifiant (de nombreux visiteurs ont la même valeur). Par conséquent, **il n’est pas possible de
+retrouver les visites anonymes d’une personne**. Seuls peuvent être localisés les événements d’une
+personne que votre site a identifiée avec la fonction `identify`, au moyen de l’identifiant interne
+que vous avez envoyé. Le comptage des visiteurs uniques ne modifie pas la portée de la suppression :
+les visites anonymes de la même personne ne sont pas couvertes, même si le type d’une visite
+identifiée indique que le navigateur était déjà venu ce jour-là.
 
 10.3. **Supprimer les données d’une personne (vous-même, par l’API).** Appelez
 `DELETE https://api.pyxis-analytics.dev/v1/subjects/{userId}` avec la clé secrète du projet (en-tête
@@ -301,8 +317,10 @@ contient les mêmes événements que ceux que la suppression effacerait, dans l�
 page, en JSON. S’il y en a davantage, la réponse indique le curseur suivant (`next_after`), que vous
 passez comme `?after=` pour obtenir la page suivante. Chaque événement comporte le nom, la date et
 l’heure, l’identifiant de la visite, la page, l’origine, l’appareil, le pays, l’État, la ville (vide
-dans les projets où l’option est désactivée ; Conditions d’utilisation, Clause 4.5) et les
-propriétés.
+dans les projets où l’option est désactivée ; Conditions d’utilisation, Clause 4.5), le
+type de la visite (uniquement dans les visites reçues pendant que le comptage des visiteurs uniques
+était activé dans le projet, et uniquement dans l’événement qui l’a transmis : avec le traceur, le
+premier de chaque visite ; Conditions d’utilisation, Clause 4.6) et les propriétés.
 
 10.5. **Limites de ces routes.** Les deux routes acceptent jusqu’à 60 appels par minute par clé et par
 adresse d’origine. La clé secrète ne doit être utilisée que sur votre serveur, jamais dans le
@@ -486,6 +504,7 @@ système du client qu’il identifie avec la fonction `identify`.
 | Nom de l’événement | `page_view` (page vue), `api_request` (appel à l’API du site), `identify` ou un nom que le client définit |
 | Date et heure | Celle du navigateur, corrigée de l’écart d’horloge, et celle de réception sur le serveur |
 | Identifiant de la visite | Numéro aléatoire conservé dans le `sessionStorage` de l’onglet ; remplacé à la fermeture de l’onglet ou après 30 minutes d’inactivité |
+| Type de la visite | Uniquement dans les visites reçues pendant que le comptage des visiteurs uniques (Conditions d’utilisation, Clause 4.6 ; désactivé par défaut dans tous les projets, et seul le propriétaire du compte l’active) était activé dans le projet, et uniquement dans l’événement qui l’a transmis (avec le traceur, le premier de chaque visite) : l’une des quatre valeurs suivantes, calculées dans le navigateur avec l’heure de l’appareil : `first_visit` (la première de ce navigateur, ou depuis que ses données ont été supprimées), `first_this_month` (la première du mois), `first_today` (la première de la journée) ou `again_today` (une autre le même jour), avec le jour et le mois dans le fuseau horaire du projet. Ce n’est pas un identifiant : de nombreux visiteurs ont la même valeur. Dans les projets où l’option est désactivée, le traceur envoie aussi le champ, et Pyxis l’écarte sans le conserver |
 | Identifiant d’utilisateur | Uniquement si le client utilise `identify` : l’identifiant interne du compte dans le système du client, d’au plus 64 lettres, chiffres, `-` ou `_` (n’accepte pas `@`, donc n’accepte pas d’e-mail) |
 | Page | Uniquement le chemin, sous forme de modèle : les segments qui ressemblent à des identifiants (nombres, codes longs, e-mails) deviennent `:id` ; sans domaine et sans paramètres |
 | Origine de la visite | Uniquement le domaine d’où vient le visiteur (par exemple, `google.com`), sans l’adresse complète |
@@ -506,6 +525,18 @@ système du client qu’il identifie avec la fonction `identify`.
   famille du navigateur et celle du système ; ensuite écarté. Les visites de robots connus sont
   écartées.
 - **Cookies :** le traceur ne crée pas de cookies sur les sites du client.
+- **Marqueur des visiteurs uniques :** uniquement dans les projets où le comptage des visiteurs
+  uniques est activé, le traceur conserve dans le stockage local du navigateur du visiteur
+  (`localStorage`, à l’adresse du site du client) les horaires auxquels se terminent le jour et le
+  mois du site, identiques pour tous les visiteurs le même jour. Pyxis envoie ces horaires au traceur
+  dans la réponse à l’envoi des événements, mais ne reçoit ni ne conserve jamais le marqueur. Le
+  marqueur est réécrit à chaque visite qui reçoit une réponse et reste jusqu’à ce que les données du
+  navigateur soient supprimées, par le visiteur ou par le navigateur lui-même, jusqu’à ce que le
+  visiteur désactive la mesure (`optOut`) ou jusqu’à ce que le navigateur demande à ne pas être suivi
+  (Global Privacy Control ou Do Not Track) ; dans ces deux derniers cas, le traceur supprime le
+  marqueur et n’envoie rien. Lorsque le comptage est désactivé, le traceur supprime le marqueur la
+  prochaine fois que le navigateur envoie des événements et reçoit la réponse (Conditions
+  d’utilisation, Clause 4.6).
 - **Adresse complète de la page, paramètres de l’adresse (autres que ceux de campagne), empreinte
   du navigateur, code postal et coordonnées géographiques :** jamais.
 - **Ville :** uniquement dans les projets où le propriétaire du compte a activé cette option. Lorsque
@@ -521,7 +552,8 @@ désactivé le récapitulatif reçoit des chiffres agrégés de la semaine : vi
 les plus fréquents et routes présentant le plus d’échecs. Le récapitulatif ne contient pas d’identifiants de
 visiteurs ni d’utilisateurs.
 
-**7. Opérations de traitement.** Réception, validation, classification, stockage, consultation,
+**7. Opérations de traitement.** Réception, validation, classification, envoi au traceur des
+horaires du marqueur des visiteurs uniques (point 4), stockage, consultation,
 agrégation, affichage sur le tableau de bord, mise à disposition par l’API de consultation, par le
 serveur MCP et aux applications connectées, envoi du récapitulatif
 agrégé par e-mail, copie (exportation), suspension de la réception (Clause 5.4) et suppression.
@@ -575,13 +607,17 @@ valable 5 minutes. Une fois téléchargé, le fichier est sous votre responsabil
 ## Annexe II — Mesures de sécurité en vigueur
 
 Vérifiées dans le code du service et dans la configuration de l’infrastructure le 14/10/2026 et le
-15/10/2026 ; le point 1 (ville), le 29/10/2026.
+15/10/2026 ; le point 1 (ville), le 29/10/2026 ; le point 1 (visiteurs uniques),
+le [DATA DA CONFERÊNCIA].
 
 **1. Protection de la vie privée dès la conception.** Pas de cookies sur les sites mesurés ; IP et
 navigateur complet jamais conservés ; pages réduites à des modèles ; barrière sur le serveur qui écarte
 les valeurs ayant la forme d’un e-mail et les nombres de 10 chiffres ou plus dans les propriétés, les
 paramètres de campagne et l’identifiant d’utilisateur ; État du visiteur, et la ville uniquement
-lorsque le client active cette option dans le projet, désactivée par défaut ; signaux
+lorsque le client active cette option dans le projet, désactivée par défaut ; comptage des visiteurs
+uniques seulement lorsque le client l’active dans le projet, désactivé par défaut, sans identifiant
+(le navigateur conserve uniquement les moments où se terminent le jour et le mois du site, et Pyxis
+ne reçoit jamais ce marqueur) ; signaux
 « ne pas suivre » du navigateur (Global Privacy Control et Do Not Track) respectés par le traceur, qui
 n’envoie rien lorsqu’ils sont activés ; option de ne pas être mesuré (`optOut`) pour le visiteur ;
 événements supprimés après 13 mois.
@@ -717,17 +753,54 @@ réellement. Il ne remplace pas votre propre analyse.
 > cookies**, **ne conserve pas votre adresse IP** et **ne conserve pas votre navigateur complet**. Nous
 > enregistrons la page vue (sans les paramètres de l’adresse, sauf ceux de campagne), le site d’où vous
 > venez, le type d’appareil, la famille du navigateur et du système, le pays et l’État (jamais la
-> ville) et les actions que nous avons balisées sur le site. Chaque visite reçoit un numéro aléatoire
-> qui reste uniquement dans l’onglet du navigateur et est écarté à la fermeture de l’onglet ou après
-> 30 minutes d’inactivité ; aucun identifiant ne vous reconnaît lors d’une autre visite.
+> ville) et les actions que nous avons balisées sur le site.
+>
+> *(N’utilisez qu’une des deux versions du paragraphe ci-dessous : la première si le comptage des
+> visiteurs uniques est désactivé dans le projet, comme il l’est par défaut dans tous les projets ;
+> la seconde uniquement si vous l’avez activé.)*
+>
+> *Sans le comptage des visiteurs uniques :* Chaque visite reçoit un numéro aléatoire qui reste
+> uniquement dans l’onglet du navigateur et est écarté à la fermeture de l’onglet ou après 30 minutes
+> d’inactivité ; aucun identifiant ne vous reconnaît lors d’une autre visite.
+>
+> *Avec le comptage des visiteurs uniques :* Chaque visite reçoit un numéro aléatoire qui reste
+> uniquement dans l’onglet du navigateur et est écarté à la fermeture de l’onglet ou après 30 minutes
+> d’inactivité. Pour compter les visiteurs uniques sans identifier personne, votre navigateur conserve
+> dans le stockage local de ce site (ce n’est pas un cookie) uniquement la date et l’heure auxquelles
+> se terminent le jour et le mois, qui sont les mêmes pour tous les visiteurs ce jour-là ; ce marqueur
+> est mis à jour lors de vos visites et reste jusqu’à ce que vous effaciez les données de ce site dans
+> le navigateur. Si votre navigateur envoie le signal Global Privacy Control ou « Do Not Track », rien
+> n’est envoyé et le marqueur est supprimé. Chaque visite indique seulement s’il s’agit de la première
+> de ce navigateur, de la première du mois, de la première de la journée ou d’une autre le même jour,
+> et cette information est conservée avec les autres données de la visite. Le marqueur reste
+> uniquement dans votre navigateur et n’est pas envoyé à Pyxis, et aucun identifiant ne vous reconnaît
+> lors d’une autre visite.
+>
+> *(Si cet avis était déjà publié sans le comptage des visiteurs uniques, mettez en évidence le
+> changement et la date à laquelle il prend effet. Si vous désactivez le comptage par la suite,
+> revenez à la première version et ajoutez juste après : « Jusqu’au JJ/MM/AAAA, ce site a compté les
+> visiteurs uniques. Votre navigateur peut encore contenir le marqueur avec la date et l’heure
+> auxquelles se terminaient le jour et le mois ; il est supprimé lors de l’une de vos prochaines
+> visites, ou lorsque vous effacez les données de ce site dans le navigateur. Les visites comptées
+> jusque-là conservent leur type jusqu’à leur suppression, 13 mois après chacune d’elles. »)*
+>
+> *(Si vous avez activé le comptage des visiteurs uniques et que votre site utilise la fonction
+> `identify`, remplacez, dans le paragraphe consacré à cette fonction, « nous relions les événements
+> de cette visite au numéro interne de votre compte » par « nous relions les événements de cette
+> visite, y compris s’il s’agissait de la première de ce navigateur, de la première du mois, de la
+> première de la journée ou d’une autre le même jour, au numéro interne de votre compte ». Si vous
+> avez aussi activé la ville, utilisez « y compris la ville approximative et s’il s’agissait de la
+> première de ce navigateur, de la première du mois, de la première de la journée ou d’une autre le
+> même jour ».)*
 >
 > *(Si vous avez activé la ville dans le projet, remplacez « le pays et l’État (jamais la ville) » par
 > « le pays, l’État et la ville approximative, déduits de votre adresse IP au moment de l’accès, sans
 > conserver l’IP ». Si votre site utilise aussi la fonction `identify`, remplacez, dans le paragraphe
-> suivant, « nous relions les événements de cette visite au numéro interne de votre compte » par
-> « nous relions les événements de cette visite, y compris la ville approximative, au numéro interne
-> de votre compte ». Si cet avis était déjà publié sans la ville, mettez en évidence le changement et
-> la date à laquelle il prend effet.)*
+> consacré à cette fonction, « nous relions les événements de cette visite au numéro interne de votre
+> compte » par « nous relions les événements de cette visite, y compris la ville approximative, au
+> numéro interne de votre compte » (si vous avez aussi activé le comptage des visiteurs uniques,
+> utilisez le remplacement combiné du paragraphe précédent). Si cet avis était déjà publié sans la
+> ville, mettez en évidence le changement et la date à laquelle il prend effet.)*
 >
 > *(N’incluez le paragraphe ci-dessous que si votre site utilise la fonction `identify`.)* Lorsque vous
 > vous connectez à votre compte, nous relions les événements de cette visite au numéro interne de votre

@@ -92,7 +92,8 @@ electrónico y el acceso mediante tokens y aplicaciones conectadas, incluido el 
 enviar eventos al servicio.
 
 2.3. **Proyecto:** la configuración de un sitio tuyo en el servicio (nombre, direcciones autorizadas,
-zona horaria, evento de conversión, la opción de guardar la ciudad, claves y eventos).
+zona horaria, evento de conversión, las opciones de guardar la ciudad y de contar visitantes únicos,
+claves y eventos).
 
 2.4. **Evento:** cada registro enviado por el rastreador o por tu integración, como una página vista
 o una acción que marcaste.
@@ -176,14 +177,36 @@ de las llamadas a la API de tu sitio, adquisición, dispositivos y horarios.
    salvo los de campaña (`utm_source`, `utm_medium`, `utm_campaign`);
 6. no envía nada cuando el navegador del visitante pide no ser rastreado (Global Privacy Control o Do
    Not Track);
-7. no reconoce al visitante anónimo en otra visita: cada visita tiene un número aleatorio que
-   desaparece al cerrar la pestaña o después de 30 minutos sin actividad.
+7. no crea, no recibe ni guarda ningún identificador que acompañe al visitante anónimo de una visita
+   a otra: cada visita tiene un número aleatorio que desaparece al cerrar la pestaña o después de 30
+   minutos sin actividad, y el servicio no vincula una visita anónima con otra. Si el dueño de la
+   cuenta activa el recuento de visitantes únicos en el proyecto (Cláusula 4.6), el navegador del
+   visitante guarda solo cuándo terminan el día y el mes del sitio, que son los mismos para todos los
+   visitantes ese día, y cada visita informa solo su tipo: la primera de este navegador, la primera
+   del mes, la primera del día u otra el mismo día. Ese recuento viene desactivado, y nunca lo
+   activamos sin su petición.
 
 4.3. **Atención:** las cifras del panel son una medición, no un recuento exacto. Las visitas de quien
 bloquea el rastreador, de quien pide no ser rastreado, de robots y de quien estaba sin conexión no
 aparecen, y los eventos enviados mientras el servicio esté caído o con la recepción pausada
 (Cláusulas 7.2, 15 y 18) se pierden (el rastreador vuelve a intentarlo durante unos segundos mientras
 la página está abierta, pero no cuando la recepción está pausada).
+
+Los visitantes únicos (Cláusula 4.6) también son una estimación: cuentan navegadores, no personas. La
+misma persona cuenta más de una vez cuando usa otro dispositivo u otro navegador, una ventana de
+incógnito o cuando se borran los datos del navegador, por ella o por el propio navegador (Safari, por
+ejemplo, borra los datos guardados por un sitio después de algunos días de uso sin interacción con
+él, y quien vuelve después de eso aparece como nuevo); y las personas que usan el mismo navegador
+cuentan como una. Quien sale del sitio en pocos segundos, antes de que el navegador reciba la primera
+respuesta del servicio, no deja la marca actualizada, y la visita siguiente cuenta de nuevo; dos
+pestañas abiertas al mismo tiempo en la primera visita del día cuentan dos veces; cada dirección del
+sitio (con y sin `www`, o subdominios distintos) cuenta por separado, a menos que una redirija a la
+otra; y en un dispositivo con el reloj incorrecto la visita puede contarse en el día equivocado. En
+las primeras semanas después de activar el recuento, o de reactivarlo, casi todo visitante aparece
+como nuevo, porque ningún navegador tiene todavía la marca, y las visitas anteriores a la activación
+no entran en el recuento. Los visitantes únicos de días distintos no se suman: dos días con 100
+visitantes únicos cada uno pueden ser 100 o 200 navegadores, y el panel avisa cuando muestra una
+suma.
 
 4.4. También forman parte de los dos planes (Cláusula 7.1):
 
@@ -218,6 +241,48 @@ Al desactivarla, la ciudad deja de leerse en un plazo de hasta un minuto, y las 
 en el proyecto se borran en un plazo de hasta 48 horas, si la opción sigue desactivada hasta
 entonces, como indica la Cláusula 12.8 del Acuerdo. El código postal, las coordenadas y la dirección
 IP nunca se guardan.
+
+4.6. **Visitantes únicos, solo si lo activas.** Cada proyecto tiene, en su configuración, una opción
+para contar visitantes únicos por día y por mes y separar a los visitantes nuevos de los que vuelven.
+La opción viene **desactivada** en todo proyecto, nuevo o antiguo, y solo el dueño de la cuenta la
+activa o la desactiva, en los dos planes.
+
+Con la opción activada, el rastreador guarda en el almacenamiento local del navegador del visitante
+(`localStorage`, en la dirección de tu sitio; no es una cookie) solo dos fechas y horas: cuándo
+terminan el día y el mes del sitio, en la zona horaria del proyecto. Esas fechas y horas son las
+mismas para todos los visitantes del sitio ese día; el servicio se las informa al rastreador en la
+respuesta al envío de los eventos y nunca las recibe de vuelta. La marca se reescribe en cada visita
+que recibe respuesta del servicio y no tiene plazo: queda hasta que se borren los datos del
+navegador, por el visitante o por el propio navegador (Cláusula 4.3), hasta que el visitante
+desactive la medición en tu sitio (`optOut`), hasta que el navegador pida no ser rastreado (Global
+Privacy Control o Do Not Track) o hasta que se desactive el recuento (último párrafo de esta
+cláusula). Al comienzo de cada visita, el rastreador compara la hora del dispositivo con esa marca y
+envía, junto con el primer evento de la visita, solo el tipo de la visita: la primera de este
+navegador (o desde que se borraron los datos del navegador), la primera del mes, la primera del día
+u otra el mismo día. Con la opción desactivada, el rastreador envía el mismo campo (que, sin marca,
+es "la primera de este navegador"), y el servicio lo descarta sin guardarlo. No se crea, guarda ni
+envía ningún identificador, y el servicio no vincula una visita anónima con otra. Cuando el
+navegador pide no ser rastreado o cuando el visitante desactiva la medición en tu sitio (`optOut`),
+el rastreador no envía nada, ni siquiera el tipo de la visita, y borra la marca, si la hay; cuando el
+navegador está controlado por un programa, el rastreador tampoco envía nada.
+
+**Atención:** el tipo de la visita no identifica a nadie, pero, en sitios o días con pocas visitas,
+junto con la hora, el dispositivo y el lugar, puede permitir deducir que dos visitas vinieron del
+mismo navegador. En un proyecto que usa la función `identify`, el tipo también queda en las visitas
+de las personas identificadas y muestra con qué frecuencia cada una vuelve al sitio en ese navegador.
+Antes de activarla, actualiza el aviso de privacidad de tu sitio para indicar que el navegador guarda
+esa marca, durante cuánto tiempo, y que cada visita informa su tipo (el Anexo IV del Acuerdo de
+Tratamiento de Datos incluye las dos versiones del párrafo). Te corresponde a ti, como controlador,
+evaluar si necesitas este recuento, sobre todo en un proyecto que usa `identify`, e informar a los
+visitantes (Cláusula 6.1 del Acuerdo). Los límites del recuento están en la Cláusula 4.3.
+
+Al desactivarla, el servicio deja de guardar el tipo de las visitas nuevas en un plazo de hasta un
+minuto, y el rastreador borra la marca de cada navegador la próxima vez que ese navegador envíe
+eventos al servicio y reciba la respuesta; en un navegador que no vuelva al sitio, la marca queda
+hasta que se borren los datos del navegador. Los tipos de visita ya guardados permanecen en los
+eventos y siguen las reglas de los demás eventos: el borrado después de 13 meses (Cláusula 7.4), la
+eliminación del proyecto y las solicitudes de los titulares (Cláusulas 10 y 12 del Acuerdo).
+La activación también empieza a aplicarse a las visitas nuevas en un plazo de hasta un minuto.
 
 ## Cláusula 5 — Código abierto y servicio alojado
 
@@ -547,7 +612,10 @@ cuenta o por quien use tus claves, tokens o conexiones con tu permiso:
    señales Global Privacy Control y Do Not Track y a la opción de no ser medido (`optOut`), o enviar
    eventos de esas personas por otro camino;
 6. usar el servicio junto con técnicas de huella digital del navegador (fingerprinting) u otros medios
-   para reconocer a visitantes anónimos;
+   para reconocer a visitantes anónimos o vincular las visitas anónimas de un mismo navegador,
+   incluso alterar el rastreador o la marca de la Cláusula 4.6 para que guarden o envíen algo que
+   permita reconocer al visitante en otra visita. Usar el recuento de visitantes únicos tal como lo
+   ofrece el servicio (Cláusula 4.6) no es abuso;
 
 *Tráfico y seguridad*
 
@@ -596,7 +664,7 @@ tuya.**
 
 1. publicar en tu sitio un aviso de privacidad que describa la medición (hay un modelo en el Anexo IV
    del Acuerdo de Tratamiento de Datos) y mantener ese aviso conforme a lo que envía tu sitio y a las
-   opciones de tus proyectos (como la ciudad, Cláusula 4.5);
+   opciones de tus proyectos (como la ciudad y los visitantes únicos, Cláusulas 4.5 y 4.6);
 2. si tu sitio está dirigido a niños o adolescentes, evaluar antes la medición a la luz del art. 14 de
    la Lei Geral de Proteção de Dados Pessoais (LGPD; Ley General de Protección de Datos Personales de
    Brasil);
