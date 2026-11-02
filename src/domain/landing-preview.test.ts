@@ -10,6 +10,7 @@ import {
 } from './landing-preview';
 import type { OverviewReport } from './overview';
 import type { RequestsReport, RouteReport } from './requests';
+import { NO_UNIQUE_VISITORS } from './unique-visitors';
 
 function kpi(current: number, previous: number, daily: number[]) {
   return { current, previous, daily };
@@ -51,6 +52,7 @@ const REPORT: OverviewReport = {
     { ...PREVIOUS_DAY, visits: 80 },
     { ...PREVIOUS_DAY, visits: 200 },
   ],
+  visitors: NO_UNIQUE_VISITORS,
 };
 
 const PERIOD = { preset: '30d', from: '2026-09-14', to: '2026-10-13' } as const;

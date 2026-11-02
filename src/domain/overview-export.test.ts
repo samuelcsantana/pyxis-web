@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { OverviewReport } from './overview';
 import { overviewCsvTable } from './overview-export';
+import { NO_UNIQUE_VISITORS } from './unique-visitors';
 
 function kpi(daily: number[]) {
   return { current: 0, previous: 0, daily };
@@ -29,6 +30,7 @@ const REPORT: OverviewReport = {
   topEvents: [{ name: 'signup_completed', count: 5, visits: 4 }],
   comparison: { kind: 'whole-days' },
   previousDays: null,
+  visitors: NO_UNIQUE_VISITORS,
 };
 
 describe('overviewCsvTable', () => {

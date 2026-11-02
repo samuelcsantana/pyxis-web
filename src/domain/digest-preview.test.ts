@@ -9,6 +9,7 @@ import {
 } from './digest-preview';
 import type { OverviewReport } from './overview';
 import type { RouteReport } from './requests';
+import { NO_UNIQUE_VISITORS } from './unique-visitors';
 
 const WEEK = { from: '2026-10-12', to: '2026-10-18' } as const;
 
@@ -33,6 +34,7 @@ const OVERVIEW: OverviewReport = {
   topEvents: [],
   comparison: { kind: 'whole-days' },
   previousDays: null,
+  visitors: NO_UNIQUE_VISITORS,
 };
 
 function route(path: string, total: number, failed: number): RouteReport {

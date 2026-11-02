@@ -75,6 +75,7 @@ export interface DemoProject {
   readonly nameKey: DemoProjectNameKey;
   readonly timezone: string;
   readonly conversionEvent: string | null;
+  readonly countsUniqueVisitors: boolean;
   readonly visitsPerPageView: number;
   readonly signedInStage: number | null;
   readonly people: number;

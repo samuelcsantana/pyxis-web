@@ -22,6 +22,7 @@ export const DEMO_STORE: DemoProject = {
   nameKey: 'store',
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
+  countsUniqueVisitors: true,
   visitsPerPageView: 0.32,
   signedInStage: 4,
   people: 220,

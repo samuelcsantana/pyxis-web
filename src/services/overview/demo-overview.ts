@@ -1,6 +1,6 @@
 import { type OverviewReport, type OverviewWire } from '@/domain/overview';
 import { overviewResponseSchema } from '@/domain/overview.schema';
-import { todayIn } from '@/domain/period';
+import { addDays, todayIn } from '@/domain/period';
 import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
@@ -22,8 +22,12 @@ import {
   type DemoReportRange,
 } from '../demo/demo-scope';
 import { demoDays, previousRange } from '../demo/demo-series';
+import { type DemoVisitorKind, demoVisitorOf } from '../demo/demo-visitor-kinds';
 
 export const TOP_ITEMS = 10;
+
+const MONTH_LENGTH = 7;
+const FIRST_OF_THE_MONTH = '-01';
 
 interface Figures {
   readonly visits: number;
@@ -79,6 +83,74 @@ function comparisonCutoff(range: DateRange, timeZone: string, now: Date): string
     second: '2-digit',
     fractionalSecondDigits: 3,
   }).format(now);
+}
+
+interface VisitorCounts {
+  readonly first_visit: number;
+  readonly first_this_month: number;
+  readonly first_today: number;
+  readonly again_today: number;
+}
+
+function visitorCounts(visits: readonly DemoVisitRecord[]): VisitorCounts {
+  const kinds = visits.filter(hasPageView).map((visit) => demoVisitorOf(visit.sessionId));
+  const countOf = (kind: DemoVisitorKind) => countWhere(kinds, (each) => each === kind);
+  return {
+    first_visit: countOf('first_visit'),
+    first_this_month: countOf('first_this_month'),
+    first_today: countOf('first_today'),
+    again_today: countOf('again_today'),
+  };
+}
+
+function monthOf(date: string): string {
+  return date.slice(0, MONTH_LENGTH);
+}
+
+function visitorDays(visits: readonly DemoVisitRecord[], range: DateRange) {
+  const byDate = groupedBy(visits, visitDate);
+  return demoDays(range).map((date) => ({ date, ...visitorCounts(groupOf(byDate, date)) }));
+}
+
+function holdsTheMonth(month: string, range: DateRange, today: string): boolean {
+  const endsAfterIt = monthOf(addDays(range.to, 1)) > month;
+  return range.from <= `${month}${FIRST_OF_THE_MONTH}` && (endsAfterIt || range.to === today);
+}
+
+function visitorMonths(visits: readonly DemoVisitRecord[], scope: DemoScope, today: string) {
+  const byMonth = groupedBy(visits, (visit) => monthOf(visitDate(visit)));
+  const months = [...new Set(demoDays(scope.range).map(monthOf))];
+  return months.map((month) => {
+    const counts = visitorCounts(groupOf(byMonth, month));
+    return {
+      month,
+      first_visit: counts.first_visit,
+      first_this_month: counts.first_this_month,
+      exact: scope.until === null && holdsTheMonth(month, scope.range, today),
+    };
+  });
+}
+
+interface VisitorPeriods {
+  readonly current: DemoScope;
+  readonly previous: DemoScope;
+  readonly visits: readonly DemoVisitRecord[];
+  readonly previousVisits: readonly DemoVisitRecord[];
+  readonly today: string;
+}
+
+function demoVisitorsWire(counts: boolean, periods: VisitorPeriods) {
+  if (!counts) {
+    return { enabled: false, daily: [], months: [], previous_daily: [], previous_months: [] };
+  }
+  const { current, previous, visits, previousVisits, today } = periods;
+  return {
+    enabled: true,
+    daily: visitorDays(visits, current.range),
+    months: visitorMonths(visits, current, today),
+    previous_daily: visitorDays(previousVisits, previous.range),
+    previous_months: visitorMonths(previousVisits, previous, today),
+  };
 }
 
 function kpi(current: Figures, previous: Figures, days: readonly Figures[], key: keyof Figures) {
@@ -142,6 +214,13 @@ export function demoOverviewWire(
       converting_visits: counts ? day.convertingVisits : null,
       write_errors: writeErrors(day),
     })),
+    visitors: demoVisitorsWire(project.countsUniqueVisitors, {
+      current: currentScope,
+      previous: previousScope,
+      visits,
+      previousVisits,
+      today: todayIn(project.timezone, now),
+    }),
   };
 }
 

@@ -33,6 +33,7 @@ export function demoProjectSettingsWire(projectId: string, now: Date, name: stri
     timezone: project.timezone,
     conversion_event: project.conversionEvent,
     city_enabled: true,
+    visitors_enabled: project.countsUniqueVisitors,
     allowed_origins: project.id === DEMO_DOCS.id ? DOCS_ORIGINS : STORE_ORIGINS,
     created_at: DEMO_CREATED_AT,
     first_event_at: DEMO_FIRST_EVENT_AT,

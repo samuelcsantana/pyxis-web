@@ -100,6 +100,47 @@ describe('overviewResponseSchema', () => {
     ]);
   });
 
+  it('maps the unique visitors to the dashboard names, leaving the previous period out', () => {
+    const parsed = report({
+      ...WIRE,
+      visitors: {
+        enabled: true,
+        daily: [
+          {
+            date: '2026-10-05',
+            first_visit: 5,
+            first_this_month: 2,
+            first_today: 3,
+            again_today: 4,
+          },
+        ],
+        months: [{ month: '2026-10', first_visit: 9, first_this_month: 4, exact: true }],
+        previous_daily: [
+          {
+            date: '2026-10-04',
+            first_visit: 1,
+            first_this_month: 1,
+            first_today: 1,
+            again_today: 1,
+          },
+        ],
+        previous_months: [{ month: '2026-10', first_visit: 1, first_this_month: 1, exact: false }],
+      },
+    });
+
+    expect(parsed.visitors).toEqual({
+      enabled: true,
+      daily: [
+        { date: '2026-10-05', firstVisit: 5, firstThisMonth: 2, firstToday: 3, againToday: 4 },
+      ],
+      months: [{ month: '2026-10', firstVisit: 9, firstThisMonth: 4, exact: true }],
+    });
+  });
+
+  it('takes the unique visitors as off when the API does not send them', () => {
+    expect(report().visitors).toEqual({ enabled: false, daily: [], months: [] });
+  });
+
   it('reads the converting visits when the API counts them, and null when it does not', () => {
     const parsed = report({
       ...WIRE,
