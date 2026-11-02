@@ -1,5 +1,11 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { holdScreenRequests, sawBusyContent, watchForBusyContent } from './navigation';
+import {
+  holdScreenRequests,
+  sawBusyContent,
+  untilFullyReceived,
+  watchForBusyContent,
+  wholeScreenRead,
+} from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PHONES_HAVE_NO_HOVER = 'A phone has no pointer resting on a link.';
@@ -14,10 +20,8 @@ function readsOf(url: string, screen: string, rsc: string | undefined): boolean 
   return url.includes(`/${STORE_ID}/${screen}`) && rsc === '1';
 }
 
-function prefetchesOf(page: Page, screen: string) {
-  return page.waitForResponse((response) =>
-    readsOf(response.url(), screen, response.request().headers().rsc),
-  );
+function prefetchOf(page: Page, screen: string) {
+  return wholeScreenRead(page, `/${STORE_ID}/${screen}`);
 }
 
 async function openOverview(page: Page): Promise<void> {
@@ -46,10 +50,10 @@ test('opens a screen whose link the pointer rested on without its skeleton, the 
   test.skip(isMobile, PHONES_HAVE_NO_HOVER);
   await openOverview(page);
   const devices = screenLink(page, 'Devices');
-  const prefetched = prefetchesOf(page, 'devices');
+  const prefetched = prefetchOf(page, 'devices');
 
   await devices.hover();
-  await prefetched;
+  await untilFullyReceived(page, prefetched);
 
   await opensWithoutAskingTheServer(page, devices);
 });
@@ -58,10 +62,10 @@ test('fetches the screen of a link the keyboard focused', async ({ page, isMobil
   test.skip(isMobile, PHONES_HAVE_NO_HOVER);
   await openOverview(page);
   const devices = screenLink(page, 'Devices');
-  const prefetched = prefetchesOf(page, 'devices');
+  const prefetched = prefetchOf(page, 'devices');
 
   await devices.focus();
-  await prefetched;
+  await untilFullyReceived(page, prefetched);
 
   await opensWithoutAskingTheServer(page, devices);
 });
@@ -73,9 +77,9 @@ test('fetches a screen once, however often the pointer comes back to its link', 
   test.skip(isMobile, PHONES_HAVE_NO_HOVER);
   await openOverview(page);
   const devices = screenLink(page, 'Devices');
-  const prefetched = prefetchesOf(page, 'devices');
+  const prefetched = prefetchOf(page, 'devices');
   await devices.hover();
-  await prefetched;
+  await untilFullyReceived(page, prefetched);
   await page.waitForLoadState('networkidle');
   const again: string[] = [];
   page.on('request', (request) => {
