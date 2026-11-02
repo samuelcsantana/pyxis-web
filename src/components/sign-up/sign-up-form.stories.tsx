@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import type { BillingRedirectOutcome } from '@/domain/accounts';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
 import {
+  DEMO_BUSY_EMAIL,
   DEMO_TERMS_URL,
   DEMO_TERMS_VERSION,
   MockSignUpService,
@@ -33,6 +34,39 @@ export const TermsNotAccepted: Story = {
     await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), 'ana@example.com');
     await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
     await expect(await canvas.findByRole('alert')).toHaveTextContent('Accept the terms');
+  },
+};
+
+export const DailyLimitOfSignUpsReached: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), DEMO_BUSY_EMAIL);
+    await userEvent.click(canvas.getByRole('checkbox'));
+    await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
+    const alert = await canvas.findByRole('alert');
+    await expect(alert).toHaveTextContent('We reached today’s limit of new sign-ups.');
+    await expect(within(alert).getByRole('link')).toHaveAttribute(
+      'href',
+      'mailto:hello@pyxis-analytics.dev',
+    );
+  },
+};
+
+export const DailyLimitOfSignUpsReachedDarkTheme: Story = {
+  ...DailyLimitOfSignUpsReached,
+  globals: { theme: 'dark' },
+};
+
+export const DailyLimitOfSignUpsReachedInPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByRole('textbox', { name: 'E-mail' }), DEMO_BUSY_EMAIL);
+    await userEvent.click(canvas.getByRole('checkbox'));
+    await userEvent.click(canvas.getByRole('button', { name: 'Enviar código' }));
+    await expect(await canvas.findByRole('alert')).toHaveTextContent(
+      'Chegamos ao limite de cadastros novos de hoje.',
+    );
   },
 };
 
