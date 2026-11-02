@@ -105,6 +105,29 @@ function TabLabel({
   );
 }
 
+interface NumberedStep {
+  readonly id: string;
+  readonly content: ReactNode;
+}
+
+function NumberedSteps({ steps }: { readonly steps: readonly NumberedStep[] }) {
+  return (
+    <ol className="flex flex-col gap-2.5">
+      {steps.map((step, index) => (
+        <li key={step.id} className="grid grid-cols-[1.625rem_minmax(0,1fr)] items-start gap-2.5">
+          <span
+            aria-hidden="true"
+            className="flex size-6.5 items-center justify-center rounded-pill border border-line bg-soft text-caption font-semibold"
+          >
+            {index + 1}
+          </span>
+          <div className="flex min-w-0 flex-col gap-2 text-sm leading-relaxed">{step.content}</div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 interface StepProps {
   readonly publicKey: string;
   readonly endpoint: string;
@@ -139,21 +162,12 @@ function WithAgent({ publicKey, endpoint, origin, labels, i18n }: WithAgentProps
         labels={labels}
         wrap="words"
       />
-      <ol className="flex flex-col gap-2.5">
-        {AGENT_STEPS.map((step, index) => (
-          <li key={step} className="grid grid-cols-[1.625rem_minmax(0,1fr)] items-start gap-2.5">
-            <span
-              aria-hidden="true"
-              className="flex size-6.5 items-center justify-center rounded-pill border border-line bg-soft text-caption font-semibold"
-            >
-              {index + 1}
-            </span>
-            <span className="text-sm leading-relaxed">
-              {rich(t(`install.agent.steps.${step}`), { code: codeText })}
-            </span>
-          </li>
-        ))}
-      </ol>
+      <NumberedSteps
+        steps={AGENT_STEPS.map((step) => ({
+          id: step,
+          content: <p>{rich(t(`install.agent.steps.${step}`), { code: codeText })}</p>,
+        }))}
+      />
       <div
         role="group"
         aria-labelledby="install-agent-changes"
