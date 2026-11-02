@@ -1,5 +1,75 @@
 # Changelog
 
+## [0.46.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.45.0...v0.46.0) (2026-11-02)
+
+
+### Features
+
+* **account:** show the plan as a card and closing the account apart ([b942ad5](https://github.com/samuelcsantana/pyxis-web/commit/b942ad50ca388cfaed4d07761c78a311d806172a))
+* **design:** give the month's usage ring tones that read on the top bar ([3fb62bf](https://github.com/samuelcsantana/pyxis-web/commit/3fb62bf195bec7ec1823fbbf46861be47f8de4fd))
+* **help:** link the Google Tag Manager install from Help ([3e5e27d](https://github.com/samuelcsantana/pyxis-web/commit/3e5e27dbf8c25e82d2adc1ef4788c832cc8eab33))
+* **i18n:** say what the browser keeps when a project counts unique visitors ([fb3da9a](https://github.com/samuelcsantana/pyxis-web/commit/fb3da9af9c47fa6e3045afbd70d194fbcb0f5182))
+* **install:** add a Google Tag Manager tab to the install guide ([94d0521](https://github.com/samuelcsantana/pyxis-web/commit/94d0521cad44d4f9726f19f172b37a9e729acb01))
+* **install:** open Install as a window of its own ([d4934ae](https://github.com/samuelcsantana/pyxis-web/commit/d4934ae7f9f00ccf88c8ca9201f6dd104d9036fe))
+* **landing:** show the visit's kind and the marker this browser keeps ([d90f846](https://github.com/samuelcsantana/pyxis-web/commit/d90f84646dc4083ab5e30f54a6c5ed5c6b360488))
+* **language:** add a language field that switches only on a choice ([066d225](https://github.com/samuelcsantana/pyxis-web/commit/066d2251e2bf1f07db21057c63086aab1a59ee6c))
+* **legal:** date the unique-visitor count on the home page ([1ce8f38](https://github.com/samuelcsantana/pyxis-web/commit/1ce8f3855d5a7048b75f957626783fc0219aae06))
+* **legal:** terms 1.5, unique visitors as a per-project option ([4a2daef](https://github.com/samuelcsantana/pyxis-web/commit/4a2daef4a76b7d426af2f6ff4ec7d60e2585de88))
+* **llms:** describe the Google Tag Manager install in llms.txt ([daaea3c](https://github.com/samuelcsantana/pyxis-web/commit/daaea3cb0979cb3165611a9d4202a1822beec6f8))
+* **overview:** a unique visitors card, exact for a day or a month ([12c88eb](https://github.com/samuelcsantana/pyxis-web/commit/12c88eb2ab6b628d982ba7e59bd5bc6bf82b0560))
+* **overview:** read the unique visitors of the overview, with the demo counting them ([3aa33db](https://github.com/samuelcsantana/pyxis-web/commit/3aa33db41dd7081c19a7dd34f09189e560c1ab1f))
+* **period:** write a period as its short dates ([d25db48](https://github.com/samuelcsantana/pyxis-web/commit/d25db4837d8d4e10e2972a7dc7f9a44948376476))
+* **settings:** a switch for unique visitors, next to the city ([2584ef0](https://github.com/samuelcsantana/pyxis-web/commit/2584ef01c7d4d578f835334f96cc41fbc89d1119))
+* **settings:** open Account and billing as a part of the settings window ([33e8a5c](https://github.com/samuelcsantana/pyxis-web/commit/33e8a5cbb4e92a8b311855ab2a22c142c0bdd759))
+* **settings:** open Help and support as the last part of the window ([392fe57](https://github.com/samuelcsantana/pyxis-web/commit/392fe570db85ed1444ca7510bd4a85bef60ee675))
+* **settings:** open settings as a window with an address per part ([9c862d6](https://github.com/samuelcsantana/pyxis-web/commit/9c862d6febf61e6216f3fa18b0c4c667158dbcc3))
+* **settings:** open Theme and language as a part of the settings window ([ac77869](https://github.com/samuelcsantana/pyxis-web/commit/ac778699278cb3047264fffb83f5785ab57d6c9e))
+* **settings:** turn a project's unique visitors on and off through the API ([a79fd66](https://github.com/samuelcsantana/pyxis-web/commit/a79fd661359b41126f515b42e5f7d25d8455ab50))
+* **shell:** add the phone bar with Screens, Period, Filters and Account ([4a2fa08](https://github.com/samuelcsantana/pyxis-web/commit/4a2fa08c270207022c5db9830cc4789cdb0022fc))
+* **shell:** add the sheet that opens above the phone bar ([d5af957](https://github.com/samuelcsantana/pyxis-web/commit/d5af95714e509f04d213391cab77f18994de07f0))
+* **shell:** carry the period and the filters into the phone bar's sheets ([43053c8](https://github.com/samuelcsantana/pyxis-web/commit/43053c8a5dd2a3d705cf38d7ceea5fdfdfce7730))
+* **shell:** hand the project choices down from the project layout ([ab2fd8a](https://github.com/samuelcsantana/pyxis-web/commit/ab2fd8aeddaf45ecd5deffca2bdfd83a700509e7))
+* **shell:** keep a failing screen under its top bar ([852e9ca](https://github.com/samuelcsantana/pyxis-web/commit/852e9caa2776bfa7d8ccde4a00a247a615a7842e))
+* **shell:** offer Install Pyxis in the top bar until the first event ([697ec3c](https://github.com/samuelcsantana/pyxis-web/commit/697ec3ca066947cbfdb7fc8126bda241884ddd99))
+* **shell:** open the top bar with the project as a path ([5bcacae](https://github.com/samuelcsantana/pyxis-web/commit/5bcacaee4c36d31bc866728a603457fd4bffa6df))
+* **shell:** put the account at the end of the top bar ([5c8ba49](https://github.com/samuelcsantana/pyxis-web/commit/5c8ba493934a28036815c2c99d5102781e8c7e70))
+* **shell:** put the phone bar in place of the menu drawer ([f899203](https://github.com/samuelcsantana/pyxis-web/commit/f899203850307f66aac3d6fbe0f9be4b753a8894))
+* **shell:** read the view again when a project's first event arrives ([1ca24cb](https://github.com/samuelcsantana/pyxis-web/commit/1ca24cb56072b4f03c1ca08d77e8048fa5e97ebe))
+* **shell:** show the visits on the site now on every screen ([bca34c4](https://github.com/samuelcsantana/pyxis-web/commit/bca34c445651e361d75cb015e7bffe4796bfe85f))
+* **shell:** take the screen on view from the address, else from the layout ([45fbba2](https://github.com/samuelcsantana/pyxis-web/commit/45fbba2589460d78acc13e2203fd96de2013e767))
+* **ui:** let a disclosure scroll itself into view as it opens ([5995529](https://github.com/samuelcsantana/pyxis-web/commit/599552912177a6e2635f952276af2742f240bbdb))
+
+
+### Bug Fixes
+
+* **account:** open a new project's Install as a page ([1632272](https://github.com/samuelcsantana/pyxis-web/commit/1632272de0895989dc539d43f837990f8b2a48a7))
+* **landing:** say the tracker is under 6 KB gzipped ([1904a8e](https://github.com/samuelcsantana/pyxis-web/commit/1904a8ec56b73ba4a45bbdee7f9edbb0b432952a))
+* **legal:** name the visit kinds in English as the home page does ([9300083](https://github.com/samuelcsantana/pyxis-web/commit/93000839967d02bee42a581997f72933c0c8e841))
+* **settings:** return focus to the menu the window was opened from ([1376888](https://github.com/samuelcsantana/pyxis-web/commit/137688830f2e8bdc352f55d439227dc4c4e519d9))
+
+
+### Refactoring
+
+* **account:** move the session, token and app actions to the account ([6d77231](https://github.com/samuelcsantana/pyxis-web/commit/6d7723144def2df09bf36d1a5ce2b33d1c369046))
+* drop what the sidebar's account menu left unused ([060e0a4](https://github.com/samuelcsantana/pyxis-web/commit/060e0a483c9ab943a386b4f9c2d25ba93ae63792))
+* **install:** share the numbered steps of the install guide ([3035375](https://github.com/samuelcsantana/pyxis-web/commit/303537554f1acd93ced793eefadeb91734c0a980))
+* **settings:** one switch for a project option, the city its first ([5681719](https://github.com/samuelcsantana/pyxis-web/commit/56817190e7efffa2f03acf9e5edbd66c6b5f2d4d))
+
+
+### Documentation
+
+* describe Account and billing inside the settings window ([7811684](https://github.com/samuelcsantana/pyxis-web/commit/7811684991c732a8189b5d46df58cf5244beaee4))
+* describe Help and support inside the settings window ([01ee55b](https://github.com/samuelcsantana/pyxis-web/commit/01ee55b95e3b2a32b54320c633045c119e3f80cc))
+* describe Install as a window of its own ([42aaaff](https://github.com/samuelcsantana/pyxis-web/commit/42aaaff01140f42064dbd12796538dfdb89e8912))
+* describe the account at the end of the top bar ([83621ca](https://github.com/samuelcsantana/pyxis-web/commit/83621caaa3b6918d0be679edbc5dead8dd426592))
+* describe the Google Tag Manager install ([db34530](https://github.com/samuelcsantana/pyxis-web/commit/db3453038a682ceafd6667bdf63fe86029526ccb))
+* describe the settings window and record ADR 0016 ([dea36e6](https://github.com/samuelcsantana/pyxis-web/commit/dea36e61a5565b035a84a4dccf16fb2bbac50155))
+* describe Theme and language inside the settings window ([062e49a](https://github.com/samuelcsantana/pyxis-web/commit/062e49a8fc1745b2b825e1c4f9b2e79554492742))
+* describe unique visitors on the Overview and their switch in Settings ([2be4151](https://github.com/samuelcsantana/pyxis-web/commit/2be4151781d6d507d28f1e23b0e43d3779d6c248))
+* **features:** describe the Install Pyxis call in the top bar ([69a319b](https://github.com/samuelcsantana/pyxis-web/commit/69a319b7cdca28c4cf71ec9887cb4e0004014b79))
+* **features:** describe the path bar and the shorter sidebar ([332a985](https://github.com/samuelcsantana/pyxis-web/commit/332a985643564d1cc690105cb695f3bdb02a60de))
+* **features:** describe the phone bar and its sheets ([1f5fe17](https://github.com/samuelcsantana/pyxis-web/commit/1f5fe170ba531a53110f535dd2011e251cd68cdf))
+
 ## [0.45.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.44.0...v0.45.0) (2026-10-30)
 
 
