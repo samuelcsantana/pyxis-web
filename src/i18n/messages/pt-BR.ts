@@ -1819,9 +1819,9 @@ export const ptBR = translation({
         },
         visit: {
           label: 'Visita',
-          where: 'No navegador: sem cookie, nada que ligue duas abas',
+          where: 'No navegador: sem cookie e sem identificador que ligue duas abas',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · acaba com a aba',
+          kept: 'sessionStorage · acaba com a aba; com visitantes únicos, só o fim do dia e do mês',
         },
       },
       foot: 'Um navegador que pede para não ser rastreado (Global Privacy Control ou Do Not Track) desliga o Pyxis antes de qualquer coisa entrar na fila. Os eventos são apagados depois de 13 meses.',
@@ -2141,7 +2141,7 @@ export const ptBR = translation({
         cookies: {
           question: 'O Pyxis coloca cookie nos meus visitantes?',
           answer:
-            'Não. O identificador da visita fica no <code>sessionStorage</code> da aba e acaba quando a aba fecha. Cookies só existem no próprio painel do Pyxis, para quem o usa, nunca nos sites que ele mede.',
+            'Não. O identificador da visita fica no <code>sessionStorage</code> da aba e acaba quando a aba fecha. Se o projeto ligar a contagem de visitantes únicos, o <code>localStorage</code> do site guarda também só quando terminam o dia e o mês do site, que são os mesmos para todos os visitantes naquele dia. Cookies só existem no próprio painel do Pyxis, para quem o usa, nunca nos sites que ele mede.',
         },
         address: {
           question: 'Ele guarda endereço IP?',
@@ -2151,7 +2151,7 @@ export const ptBR = translation({
         people: {
           question: 'Ele sabe que duas visitas são da mesma pessoa?',
           answer:
-            'Só para quem entrou na conta do seu site, pelo identificador interno do próprio site, nunca um e-mail. Visitas anônimas nunca são ligadas: nem entre abas, nem entre dias.',
+            'Só para quem entrou na conta do seu site, pelo identificador interno do próprio site, nunca um e-mail. Visitas anônimas nunca são ligadas por um identificador, nem entre abas, nem entre dias. Para contar visitantes únicos, se o projeto ligar essa opção, cada visita diz apenas se é a primeira deste navegador, a primeira no mês, a primeira no dia ou outra no mesmo dia; nenhum identificador é criado, e o servidor não liga uma visita a outra.',
         },
         optOut: {
           question: 'O visitante pode pedir para não ser medido?',
@@ -2260,7 +2260,7 @@ export const ptBR = translation({
       noReferrer: 'origem: nenhuma',
       empty: 'Nada enviado ainda. O primeiro lote sai em até 5 segundos.',
       never:
-        '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página. <strong>Acrescentado pelo servidor:</strong> país, estado e cidade aproximada, a partir da requisição; depois o endereço é descartado.',
+        '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página, um identificador que acompanhe você de uma visita para outra. <strong>Acrescentado pelo servidor:</strong> país, estado e cidade aproximada, a partir da requisição; depois o endereço é descartado.',
       close: 'Fechar',
     },
     footer: {

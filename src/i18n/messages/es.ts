@@ -1827,9 +1827,9 @@ export const es = translation({
         },
         visit: {
           label: 'Visita',
-          where: 'En el navegador: sin cookies, nada que vincule dos pestañas',
+          where: 'En el navegador: sin cookies y sin identificador que vincule dos pestañas',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · termina con la pestaña',
+          kept: 'sessionStorage · termina con la pestaña; con visitantes únicos, solo el fin del día y del mes',
         },
       },
       foot: 'Un navegador que pide no ser rastreado (Global Privacy Control o Do Not Track) apaga Pyxis antes de que nada entre en la cola. Los eventos se borran después de 13 meses.',
@@ -2150,7 +2150,7 @@ export const es = translation({
         cookies: {
           question: '¿Pyxis pone cookies a mis visitantes?',
           answer:
-            'No. El id de la visita vive en el <code>sessionStorage</code> de la pestaña y desaparece cuando la pestaña se cierra. Las cookies solo existen en el propio panel de Pyxis, para las personas que lo usan, nunca en los sitios que mide.',
+            'No. El id de la visita vive en el <code>sessionStorage</code> de la pestaña y desaparece cuando la pestaña se cierra. Si el proyecto activa el recuento de visitantes únicos, el <code>localStorage</code> del sitio también guarda solo cuándo terminan el día y el mes del sitio, que son los mismos para todos los visitantes ese día. Las cookies solo existen en el propio panel de Pyxis, para las personas que lo usan, nunca en los sitios que mide.',
         },
         address: {
           question: '¿Guarda direcciones IP?',
@@ -2160,7 +2160,7 @@ export const es = translation({
         people: {
           question: '¿Puede saber que dos visitas vienen de la misma persona?',
           answer:
-            'Solo para las personas que iniciaron sesión en tu sitio, mediante tu propio id interno, nunca un correo. Las visitas anónimas nunca se vinculan: ni entre pestañas, ni entre días.',
+            'Solo para las personas que iniciaron sesión en tu sitio, mediante tu propio id interno, nunca un correo. Las visitas anónimas nunca se vinculan mediante un identificador, ni entre pestañas, ni entre días. Para contar visitantes únicos, si el proyecto activa esa opción, cada visita dice solo si es la primera de este navegador, la primera del mes, la primera del día u otra el mismo día; no se crea ningún identificador, y el servidor no vincula una visita con otra.',
         },
         optOut: {
           question: '¿Un visitante puede pedir que no lo midan?',
@@ -2269,7 +2269,7 @@ export const es = translation({
       noReferrer: 'origen: ninguno',
       empty: 'Todavía no se envió nada. El primer lote sale en menos de 5 segundos.',
       never:
-        '<strong>Nunca se envía:</strong> tu dirección IP, el nombre completo de tu navegador, una cookie, la dirección completa de la página. <strong>Lo agrega el servidor:</strong> el país, la región y la ciudad aproximada, a partir de la solicitud; luego se descarta la dirección.',
+        '<strong>Nunca se envía:</strong> tu dirección IP, el nombre completo de tu navegador, una cookie, la dirección completa de la página, un identificador que te acompañe de una visita a otra. <strong>Lo agrega el servidor:</strong> el país, la región y la ciudad aproximada, a partir de la solicitud; luego se descarta la dirección.',
       close: 'Cerrar',
     },
     footer: {

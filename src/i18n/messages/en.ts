@@ -1801,9 +1801,9 @@ export const en = {
         },
         visit: {
           label: 'Visit',
-          where: 'In the browser: no cookie, nothing that links two tabs',
+          where: 'In the browser: no cookie and no identifier that links two tabs',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · ends with the tab',
+          kept: 'sessionStorage · ends with the tab; with unique visitors, only the end of the day and of the month',
         },
       },
       foot: 'A browser that sends “do not track” (Global Privacy Control or Do Not Track) switches Pyxis off before anything is queued. Events are deleted after 13 months.',
@@ -2121,7 +2121,7 @@ export const en = {
         cookies: {
           question: 'Does Pyxis set cookies on my visitors?',
           answer:
-            'No. A visit’s id lives in the tab’s <code>sessionStorage</code> and ends when the tab closes. Cookies exist only in the Pyxis dashboard itself, for the people who use it, never on the sites it measures.',
+            'No. A visit’s id lives in the tab’s <code>sessionStorage</code> and ends when the tab closes. If the project turns on unique visitors, the site’s <code>localStorage</code> also keeps only the times when the site’s day and month end, the same for every visitor that day. Cookies exist only in the Pyxis dashboard itself, for the people who use it, never on the sites it measures.',
         },
         address: {
           question: 'Does it store IP addresses?',
@@ -2131,7 +2131,7 @@ export const en = {
         people: {
           question: 'Can it tell that two visits came from the same person?',
           answer:
-            'Only for people signed in to your site, through your own internal id, never an email. Anonymous visits are never linked: not across tabs, not across days.',
+            'Only for people signed in to your site, through your own internal id, never an email. Anonymous visits are never linked by an identifier, not across tabs, not across days. To count unique visitors, if the project turns that option on, each visit says only whether it is this browser’s first, its first this month, its first today or another one today; no identifier is created, and the server does not link one visit to another.',
         },
         optOut: {
           question: 'Can a visitor opt out?',
@@ -2240,7 +2240,7 @@ export const en = {
       noReferrer: 'referrer: none',
       empty: 'Nothing sent yet. The first batch leaves within 5 seconds.',
       never:
-        '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page. <strong>Added by the server:</strong> country, state and approximate city, from the request; then the address is dropped.',
+        '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page, an identifier that follows you from one visit to the next. <strong>Added by the server:</strong> country, state and approximate city, from the request; then the address is dropped.',
       close: 'Close',
     },
     footer: {

@@ -1860,9 +1860,9 @@ export const de = translation({
         },
         visit: {
           label: 'Besuch',
-          where: 'Im Browser: kein Cookie, nichts, was zwei Tabs verknüpft',
+          where: 'Im Browser: kein Cookie und keine Kennung, die zwei Tabs verknüpft',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · endet mit dem Tab',
+          kept: 'sessionStorage · endet mit dem Tab; bei eindeutigen Besuchern nur das Ende von Tag und Monat',
         },
       },
       foot: 'Ein Browser, der „Nicht verfolgen“ sendet (Global Privacy Control oder Do Not Track), schaltet Pyxis ab, bevor irgendetwas in die Warteschlange kommt. Ereignisse werden nach 13 Monaten gelöscht.',
@@ -2188,7 +2188,7 @@ export const de = translation({
         cookies: {
           question: 'Setzt Pyxis Cookies bei meinen Besuchern?',
           answer:
-            'Nein. Die ID eines Besuchs liegt im <code>sessionStorage</code> des Tabs und endet, wenn der Tab geschlossen wird. Cookies gibt es nur im Pyxis-Dashboard selbst, für die Menschen, die es nutzen, nie auf den Websites, die es misst.',
+            'Nein. Die ID eines Besuchs liegt im <code>sessionStorage</code> des Tabs und endet, wenn der Tab geschlossen wird. Schaltet das Projekt die Zählung eindeutiger Besucher ein, speichert der <code>localStorage</code> der Website zusätzlich nur, wann Tag und Monat der Website enden, was an diesem Tag für alle Besucher gleich ist. Cookies gibt es nur im Pyxis-Dashboard selbst, für die Menschen, die es nutzen, nie auf den Websites, die es misst.',
         },
         address: {
           question: 'Speichert es IP-Adressen?',
@@ -2198,7 +2198,7 @@ export const de = translation({
         people: {
           question: 'Kann es erkennen, dass zwei Besuche von derselben Person stammen?',
           answer:
-            'Nur bei Menschen, die auf deiner Website angemeldet sind, über deine eigene interne ID, nie über eine E-Mail-Adresse. Anonyme Besuche werden nie verknüpft: weder über Tabs noch über Tage hinweg.',
+            'Nur bei Menschen, die auf deiner Website angemeldet sind, über deine eigene interne ID, nie über eine E-Mail-Adresse. Anonyme Besuche werden nie durch eine Kennung verknüpft, weder über Tabs noch über Tage hinweg. Für die Zählung eindeutiger Besucher, wenn das Projekt diese Option einschaltet, sagt jeder Besuch nur, ob er der erste dieses Browsers, der erste im Monat, der erste am Tag oder ein weiterer am selben Tag ist; es wird keine Kennung erzeugt, und der Server verknüpft keinen Besuch mit einem anderen.',
         },
         optOut: {
           question: 'Kann ein Besucher widersprechen?',
@@ -2309,7 +2309,7 @@ export const de = translation({
       noReferrer: 'Referrer: keiner',
       empty: 'Noch nichts gesendet. Der erste Batch geht innerhalb von 5 Sekunden raus.',
       never:
-        '<strong>Nie gesendet:</strong> deine IP-Adresse, der vollständige Name deines Browsers, ein Cookie, die vollständige Adresse der Seite. <strong>Vom Server ergänzt:</strong> Land, Region und ungefähre Stadt, aus der Anfrage; danach wird die Adresse verworfen.',
+        '<strong>Nie gesendet:</strong> deine IP-Adresse, der vollständige Name deines Browsers, ein Cookie, die vollständige Adresse der Seite, eine Kennung, die dich von einem Besuch zum nächsten begleitet. <strong>Vom Server ergänzt:</strong> Land, Region und ungefähre Stadt, aus der Anfrage; danach wird die Adresse verworfen.',
       close: 'Schließen',
     },
     footer: {
