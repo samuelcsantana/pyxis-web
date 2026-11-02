@@ -68,6 +68,7 @@ const EMAIL = {
     removePerson: () => Promise.resolve({ kind: 'removed' } as const),
     requestExport: () => Promise.resolve({ kind: 'unavailable' } as const),
     setCity: (cityEnabled: boolean) => Promise.resolve({ kind: 'saved', cityEnabled } as const),
+    setVisitors: () => Promise.resolve({ kind: 'saved' } as const),
   },
   people: [
     {
@@ -293,6 +294,45 @@ describe('ProjectSettingsView', () => {
     expect(city).toHaveTextContent('Only the account owner can change it.');
     expect(within(city).queryByRole('switch')).not.toBeInTheDocument();
   });
+
+  it('gives the owner the unique visitors switch next to the city, set as the project has it', () => {
+    renderWithMessages(
+      <ProjectSettingsView
+        settings={{ ...OWNED, visitorsEnabled: true }}
+        i18n={english}
+        {...EMAIL}
+      />,
+    );
+
+    const visitors = panel('Unique visitors');
+    expect(
+      within(visitors).getByRole('switch', {
+        name: 'Count unique visitors per day and per month',
+      }),
+    ).toBeChecked();
+    expect(panel('Visitor’s city').parentElement?.nextElementSibling).toContainElement(visitors);
+  });
+
+  it.each([
+    [true, 'This project counts unique visitors.'],
+    [false, 'This project does not count unique visitors.'],
+  ])(
+    'tells a reader whether unique visitors are counted (%s), without a switch',
+    (visitorsEnabled, text) => {
+      renderWithMessages(
+        <ProjectSettingsView
+          settings={{ ...OWNED, role: 'member', visitorsEnabled }}
+          i18n={english}
+          {...EMAIL}
+        />,
+      );
+
+      const visitors = panel('Unique visitors');
+      expect(visitors).toHaveTextContent(text);
+      expect(visitors).toHaveTextContent('Only the account owner can change it.');
+      expect(within(visitors).queryByRole('switch')).not.toBeInTheDocument();
+    },
+  );
 
   it('shows someone the owner added the project as it is, without changing it', () => {
     renderWithMessages(

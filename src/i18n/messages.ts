@@ -18,6 +18,7 @@ export const CLIENT_NAMESPACES = [
   'propertySummary',
   'emailPreferences',
   'cityOption',
+  'visitorsOption',
   'connections',
   'sessions',
   'accessTokens',

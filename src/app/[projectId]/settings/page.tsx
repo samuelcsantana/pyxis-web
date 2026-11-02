@@ -28,6 +28,7 @@ import {
   revokeConnection,
   revokeProjectKey,
   setProjectCity,
+  setProjectVisitors,
   updateProject,
 } from './actions';
 
@@ -98,6 +99,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             removePerson: removeProjectPerson.bind(null, project.id),
             requestExport: requestProjectExport.bind(null, project.id),
             setCity: setProjectCity.bind(null, project.id),
+            setVisitors: setProjectVisitors.bind(null, project.id),
           }}
           people={people}
           myEmail={admin.email}

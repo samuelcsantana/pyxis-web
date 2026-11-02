@@ -767,6 +767,26 @@ export const es = translation({
     readOnlyOff:
       'Este proyecto no registra la ciudad del visitante. Solo el dueño de la cuenta puede cambiarlo.',
   },
+  visitorsOption: {
+    heading: 'Visitantes únicos',
+    label: 'Contar visitantes únicos por día y por mes',
+    note: 'Viene desactivada. El código de Pyxis guarda en el navegador del visitante solo cuándo terminan el día y el mes de tu sitio, iguales para todos los visitantes ese día, y cada visita dice si es la primera de este navegador, la primera del mes, la primera del día u otra del mismo día. Sin identificador, sin cookie. Si el proyecto usa identify, el tipo también queda en las visitas de las personas que identificas. Actívala solo después de que el aviso de privacidad de tu sitio lo diga (Acuerdo de Tratamiento de Datos, Anexo IV).',
+    on: 'Activada',
+    off: 'Desactivada',
+    confirmTitle: '¿Desactivar los visitantes únicos?',
+    confirmBody:
+      'Al desactivarla, las visitas nuevas dejan de contarse en menos de un minuto, y la marca de cada navegador se borra la próxima vez que envíe eventos y reciba la respuesta. Las visitas ya contadas conservan su tipo hasta que se borran, a los 13 meses.',
+    confirm: 'Desactivar',
+    keep: 'Seguir contando',
+    saving: 'Guardando…',
+    saved: 'Guardado',
+    failed: 'El cambio no se guardó. Inténtalo de nuevo.',
+    subscriptionRequired: 'El cambio no se guardó: la cuenta necesita un plan activo.',
+    readOnlyOn:
+      'Este proyecto cuenta visitantes únicos. Solo el dueño de la cuenta puede cambiarlo.',
+    readOnlyOff:
+      'Este proyecto no cuenta visitantes únicos. Solo el dueño de la cuenta puede cambiarlo.',
+  },
   emailPreferences: {
     heading: 'Correo electrónico',
     weeklyDigest: 'Resumen semanal',

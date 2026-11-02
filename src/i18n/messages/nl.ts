@@ -775,6 +775,26 @@ export const nl = translation({
     readOnlyOff:
       'Dit project legt de stad van de bezoeker niet vast. Alleen de accounteigenaar kan dat wijzigen.',
   },
+  visitorsOption: {
+    heading: 'Unieke bezoekers',
+    label: 'Unieke bezoekers per dag en per maand tellen',
+    note: 'Standaard uit. De Pyxis-code bewaart in de browser van de bezoeker alleen wanneer de dag en de maand van je site eindigen, voor alle bezoekers die dag gelijk, en elk bezoek zegt of het het eerste van deze browser is, het eerste deze maand, het eerste vandaag of nog een vandaag. Geen identificatiecode, geen cookie. Gebruikt het project identify, dan wordt het type ook bewaard bij de bezoeken van de mensen die je identificeert. Zet het tellen pas aan als de privacyverklaring van je site dat zegt (Verwerkersovereenkomst, Bijlage IV).',
+    on: 'Aan',
+    off: 'Uit',
+    confirmTitle: 'Unieke bezoekers uitzetten?',
+    confirmBody:
+      'Als je het tellen uitzet, worden nieuwe bezoeken binnen een minuut niet meer geteld, en de markering van elke browser wordt gewist zodra die de volgende keer events verstuurt en een antwoord krijgt. Al getelde bezoeken houden hun type tot ze na 13 maanden worden gewist.',
+    confirm: 'Uitzetten',
+    keep: 'Blijven tellen',
+    saving: 'Opslaan…',
+    saved: 'Opgeslagen',
+    failed: 'De wijziging is niet opgeslagen. Probeer het opnieuw.',
+    subscriptionRequired:
+      'De wijziging is niet opgeslagen: het account heeft een actief abonnement nodig.',
+    readOnlyOn: 'Dit project telt unieke bezoekers. Alleen de accounteigenaar kan dat wijzigen.',
+    readOnlyOff:
+      'Dit project telt geen unieke bezoekers. Alleen de accounteigenaar kan dat wijzigen.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Wekelijkse samenvatting',

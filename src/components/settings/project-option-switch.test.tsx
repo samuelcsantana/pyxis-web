@@ -1,4 +1,4 @@
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import {
@@ -149,5 +149,74 @@ describe('ProjectOptionSwitch for the city', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Desligar e apagar' })).toBeInTheDocument();
+  });
+});
+
+describe('ProjectOptionSwitch for unique visitors', () => {
+  const VISITORS = 'Count unique visitors per day and per month';
+
+  function renderVisitors(initial: boolean, save: SetProjectOption, locale: 'en' | 'pt-BR' = 'en') {
+    return renderWithMessages(
+      <ProjectOptionSwitch option="visitorsOption" initial={initial} save={save} />,
+      locale,
+    );
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('says what the browser keeps, and that no identifier is created', () => {
+    renderVisitors(false, saved);
+
+    expect(screen.getByRole('switch', { name: VISITORS })).toHaveAccessibleDescription(
+      /only when your site’s day and month end.*No identifier, no cookie\..*Annex IV/,
+    );
+  });
+
+  it('asks before turning it off, saying the counted visits stay, and erases nothing', async () => {
+    const save = vi.fn<SetProjectOption>(saved);
+    renderVisitors(true, save);
+
+    fireEvent.click(screen.getByRole('switch', { name: VISITORS }));
+
+    const confirmation = screen.getByRole('group', { name: 'Turn off unique visitors?' });
+    expect(confirmation).toHaveTextContent('each browser’s marker is deleted the next time');
+    expect(confirmation).toHaveTextContent('Visits already counted keep their kind');
+    expect(within(confirmation).queryByRole('button', { name: /erase/ })).toBeNull();
+
+    fireEvent.click(within(confirmation).getByRole('button', { name: 'Turn off' }));
+    await settle(OPTION_SAVING_MIN_BUSY_MS);
+
+    expect(save).toHaveBeenCalledWith(false);
+    expect(screen.getByRole('switch')).not.toBeChecked();
+  });
+
+  it('keeps counting when the owner says so', () => {
+    const save = vi.fn<SetProjectOption>(saved);
+    renderVisitors(true, save);
+
+    fireEvent.click(screen.getByRole('switch', { name: VISITORS }));
+    fireEvent.click(screen.getByRole('button', { name: 'Keep counting' }));
+
+    expect(screen.getByRole('switch')).toBeChecked();
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it('speaks Portuguese', () => {
+    renderVisitors(true, saved, 'pt-BR');
+
+    fireEvent.click(
+      screen.getByRole('switch', { name: 'Contar visitantes únicos por dia e por mês' }),
+    );
+
+    expect(
+      screen.getByRole('group', { name: 'Desligar os visitantes únicos?' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Continuar contando' })).toBeInTheDocument();
   });
 });
