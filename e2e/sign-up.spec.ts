@@ -14,6 +14,29 @@ for (const colorScheme of ['light', 'dark'] as const) {
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
     });
+
+    test('says the day’s limit of new sign-ups was reached, with the support address', async ({
+      page,
+    }) => {
+      await page.goto('/sign-up');
+      await page.getByRole('textbox', { name: 'E-mail' }).fill('busy@example.com');
+      await page.getByRole('checkbox', { name: /I have read and accept/ }).check();
+      await page.getByRole('button', { name: 'Send code' }).click();
+
+      const alert = page.getByRole('main').getByRole('alert');
+      await expect(alert).toHaveText(
+        'We reached today’s limit of new sign-ups. Try again in a few hours, or write to hello@pyxis-analytics.dev.',
+      );
+      await expect(alert.getByRole('link', { name: 'hello@pyxis-analytics.dev' })).toHaveAttribute(
+        'href',
+        'mailto:hello@pyxis-analytics.dev',
+      );
+      await expect(
+        page.getByRole('heading', { level: 1, name: 'Start your free trial' }),
+      ).toBeVisible();
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
+    });
   });
 }
 
