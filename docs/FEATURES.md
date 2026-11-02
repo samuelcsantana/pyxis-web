@@ -105,6 +105,27 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   busiest hour and readable as a 7 × 24 table, adding up to the Visits figure; a footnote defining visit, identified user, conversion, write
   and failure, and when a change is coloured. Every percentage sits next to the totals it comes
   from, and a division by zero shows a dash, never `NaN%`
+- Unique visitors on the Overview, for a project whose owner turns them on in Settings (off by
+  default; the API counts them without an identifier,
+  [pyxis-api ADR 0055](https://github.com/samuelcsantana/pyxis-api/blob/main/docs/adr/0055-unique-visitors-without-an-identifier.md)).
+  A card after the figures and the chart shows a headline, the new and returning visitors of the
+  same span (they add up to it), and stacked bars of new and returning visitors per day, also as a
+  table, with the values of the hovered day; a single day shows only its figures. The headline is
+  exact for one day (the day's first visits, first this month and first today) and for one
+  calendar month held whole or up to today (the month's first visits and first this month, "so
+  far" when the period ends today), and the month's card says its days do not add up to it. Any
+  other period, the default 30 days included, shows the sum of the days, labelled "Sum of daily
+  unique visitors" with "a visitor who came on two days counts twice", because no one can add up
+  the unique visitors of different days. New is a browser's first visit (or its first since its
+  data was cleared); returning is its first this month or its first today; another visit the same
+  day never counts. With the option on and no visit counted yet, the card says the count starts
+  with the next visits; with it off, the card is not there. The footnote says the count is per
+  browser, not per person (another device, a private window or cleared data count again), and adds
+  that almost everyone shows as new in the first weeks when nine in ten unique visitors or more are
+  new, since the dashboard does not know when the option was turned on. Never "people": the card
+  counts visitors and browsers. In the demo the store counts them and the docs site does not; each
+  demo visit's kind comes from the last digits of its id, counted only on visits with a page view,
+  so a day never has more unique visitors than visits
 - One word per idea across screens: "Write error rate" on the Overview and on Requests, "Failing
   only" for the failed-requests filter of Requests and of the Timeline, "Anonymous" for a visit
   without a user id, "items" for everything the Timeline lists; Overview, Visits and Requests
@@ -291,7 +312,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
   problem named under its field before anything is sent; creates a public key or a secret key
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
-  project with its name typed again. The People panel lists who opens the project; the owner
+  project with its name typed again. Two options of the project have a panel each, a switch for
+  the owner and a sentence for everyone else: the visitor's city (turning it off asks first,
+  because the cities already recorded are erased within 48 hours) and unique visitors (turning it
+  off asks first too, but erases nothing: new visits stop being counted within a minute, each
+  browser's marker is deleted the next time it sends events and gets an answer, and the visits
+  already counted keep their kind until they are erased after 13 months). The People panel lists who opens the project; the owner
   adds an address (the person gets an invitation e-mail in the language of the page, and the
   account has room for three people on the paid plan and one on the free plan, the owner
   included) and removes anyone but the owner. The
