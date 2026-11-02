@@ -4,6 +4,7 @@ import { MetricChartArea, MetricSelection } from '@/components/overview/metric-s
 import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
 import { TopEventsList } from '@/components/overview/top-events-list';
 import { TopPagesTable } from '@/components/overview/top-pages-table';
+import { UniqueVisitorsPanel } from '@/components/overview/unique-visitors-panel';
 import { VisitStartsPanel } from '@/components/overview/visit-starts-panel';
 import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
@@ -78,6 +79,7 @@ interface OverviewReportViewProps {
   readonly metric: ChartMetric;
   readonly conversionEvent: string | null;
   readonly periodLabel: string;
+  readonly endsToday: boolean;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
   readonly downloads: readonly CsvDownload[];
   readonly rowFilter: RowFilterOf;
@@ -102,6 +104,7 @@ function OverviewReportView({
   metric,
   conversionEvent,
   periodLabel,
+  endsToday,
   filteredHref,
   downloads,
   rowFilter,
@@ -131,6 +134,12 @@ function OverviewReportView({
           </MetricChartArea>
         )}
       </MetricSelection>
+      <UniqueVisitorsPanel
+        visitors={report.visitors}
+        endsToday={endsToday}
+        periodLabel={periodLabel}
+        i18n={i18n}
+      />
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">
         <TopPagesTable
           pages={report.topPages}
@@ -192,6 +201,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           metric={metric}
           conversionEvent={project.conversionEvent}
           periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+          endsToday={compared.endsToday}
           filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}
           downloads={overviewDownloads(project.id, query, i18n)}
           rowFilter={screenRowFilters(project.id, 'overview', search, filters, i18n)}

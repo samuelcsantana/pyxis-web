@@ -5,6 +5,7 @@ import type { Account } from '@/domain/accounts';
 import type { Admin } from '@/domain/admin';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import type { OverviewReport } from '@/domain/overview';
+import { NO_UNIQUE_VISITORS } from '@/domain/unique-visitors';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -377,6 +378,42 @@ describe('OverviewPage', () => {
     expect(
       within(screen.getByRole('group', { name: 'Visits' })).queryByRole('button'),
     ).not.toBeInTheDocument();
+  });
+
+  it('shows the unique visitors after the chart and before the top pages', async () => {
+    renderWithMessages(await renderOverview());
+
+    const card = screen.getByRole('region', { name: 'Unique visitors' });
+    expect(card).toHaveTextContent('New and returning visitors per day, last 7 days');
+    expect(card).toHaveTextContent('Sum of daily unique visitors');
+    expect(
+      screen.getByRole('region', { name: 'Activity per day' }).compareDocumentPosition(card) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      card.compareDocumentPosition(screen.getByRole('region', { name: 'Top pages' })) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  it('counts the unique visitors of the month so far exactly, from its first day to today', async () => {
+    renderWithMessages(await renderOverview({ from: '2026-10-01', to: '2026-10-05' }));
+
+    expect(screen.getByRole('region', { name: 'Unique visitors' })).toHaveTextContent(
+      'Unique visitors in October 2026 so far',
+    );
+  });
+
+  it('leaves the unique visitors out for a project that does not count them', async () => {
+    state.overview = async (projectId, range) => ({
+      ...(await new MockOverviewService().overview(projectId, range)),
+      visitors: NO_UNIQUE_VISITORS,
+    });
+
+    renderWithMessages(await renderOverview());
+
+    expect(screen.queryByRole('region', { name: 'Unique visitors' })).not.toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Top pages' })).toBeInTheDocument();
   });
 
   it('plots the figure the address names', async () => {

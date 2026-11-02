@@ -1110,6 +1110,34 @@ export const de = translation({
     },
     point: '{series}, {day}',
   },
+  uniqueVisitors: {
+    title: 'Eindeutige Besucher',
+    description: 'Neue und wiederkehrende Besucher pro Tag, {period}',
+    dayDescription: 'Neue und wiederkehrende Besucher, {period}',
+    headline: {
+      month: 'Eindeutige Besucher im {month}',
+      monthSoFar: 'Eindeutige Besucher im {month} bisher',
+      sumOfDays: 'Summe der eindeutigen Besucher pro Tag',
+    },
+    sumOfDays: 'Summe der Tage: Wer an zwei Tagen kam, zählt doppelt.',
+    daysInMonth:
+      'Die Tage ergeben zusammen nicht den Monat: Wer an zwei Tagen kam, zählt an beiden.',
+    newVisitors: 'Neu',
+    returning: 'Wiederkehrend',
+    day: 'Tag',
+    unique: 'Eindeutige Besucher',
+    caption: 'Eindeutige Besucher pro Tag, neu und wiederkehrend, {period}',
+    summary: {
+      bars: 'Gestapeltes Balkendiagramm über {days}, neu und wiederkehrend,',
+      range: 'zwischen {lowest} und {highest} eindeutigen Besuchern pro Tag.',
+    },
+    empty:
+      'In diesem Zeitraum wurde noch kein eindeutiger Besucher gezählt: Die Zählung beginnt mit den nächsten Besuchen.',
+    footnote:
+      'Pro Browser gezählt, nicht pro Person: Ein anderes Gerät, ein privates Fenster oder gelöschte Browserdaten (Safari löscht sie nach einigen Tagen ohne Besuch) zählen erneut.',
+    warmingUp:
+      'In den ersten Wochen nach dem Einschalten der Zählung erscheinen fast alle Besucher als neu.',
+  },
   acquisition: {
     subtitle: 'Woher die Besuche von {project} kommen',
     paidVisits: 'Bezahlte Besuche',

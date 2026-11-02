@@ -1096,6 +1096,33 @@ export const nl = translation({
     },
     point: '{series}, {day}',
   },
+  uniqueVisitors: {
+    title: 'Unieke bezoekers',
+    description: 'Nieuwe en terugkerende bezoekers per dag, {period}',
+    dayDescription: 'Nieuwe en terugkerende bezoekers, {period}',
+    headline: {
+      month: 'Unieke bezoekers in {month}',
+      monthSoFar: 'Unieke bezoekers in {month} tot nu toe',
+      sumOfDays: 'Som van de unieke bezoekers per dag',
+    },
+    sumOfDays: 'Som van de dagen: wie op twee dagen kwam, telt twee keer.',
+    daysInMonth: 'De dagen tellen niet op tot de maand: wie op twee dagen kwam, telt op allebei.',
+    newVisitors: 'Nieuw',
+    returning: 'Terugkerend',
+    day: 'Dag',
+    unique: 'Unieke bezoekers',
+    caption: 'Unieke bezoekers per dag, nieuw en terugkerend, {period}',
+    summary: {
+      bars: 'Gestapelde staafgrafiek van {days}, nieuw en terugkerend,',
+      range: 'tussen {lowest} en {highest} unieke bezoekers per dag.',
+    },
+    empty:
+      'In deze periode is nog geen unieke bezoeker geteld: het tellen begint bij de volgende bezoeken.',
+    footnote:
+      'Per browser geteld, niet per persoon: een ander apparaat, een privévenster of gewiste browsergegevens (Safari wist ze na een paar dagen zonder bezoek) tellen opnieuw.',
+    warmingUp:
+      'In de eerste weken nadat het tellen is aangezet, verschijnt bijna elke bezoeker als nieuw.',
+  },
   acquisition: {
     subtitle: 'Waar de bezoeken aan {project} vandaan komen',
     paidVisits: 'Betaalde bezoeken',

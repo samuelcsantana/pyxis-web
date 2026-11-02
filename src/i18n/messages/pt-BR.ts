@@ -1075,6 +1075,33 @@ export const ptBR = translation({
     },
     point: '{series}, {day}',
   },
+  uniqueVisitors: {
+    title: 'Visitantes únicos',
+    description: 'Visitantes novos e recorrentes por dia, {period}',
+    dayDescription: 'Visitantes novos e recorrentes, {period}',
+    headline: {
+      month: 'Visitantes únicos em {month}',
+      monthSoFar: 'Visitantes únicos em {month} até agora',
+      sumOfDays: 'Soma dos visitantes únicos de cada dia',
+    },
+    sumOfDays: 'Soma dos dias: quem veio em dois dias conta duas vezes.',
+    daysInMonth: 'Os dias não se somam no mês: quem veio em dois dias conta nos dois.',
+    newVisitors: 'Novos',
+    returning: 'Recorrentes',
+    day: 'Dia',
+    unique: 'Visitantes únicos',
+    caption: 'Visitantes únicos por dia, novos e recorrentes, {period}',
+    summary: {
+      bars: 'Gráfico de barras empilhadas de {days}, novos e recorrentes,',
+      range: 'entre {lowest} e {highest} visitantes únicos por dia.',
+    },
+    empty:
+      'Nenhum visitante único contado neste período ainda: a contagem começa nas próximas visitas.',
+    footnote:
+      'Contados por navegador, não por pessoa: outro aparelho, uma janela anônima ou os dados do navegador apagados (o Safari os apaga depois de alguns dias sem visitas) contam de novo.',
+    warmingUp:
+      'Nas primeiras semanas depois de ligar a contagem, quase todo visitante aparece como novo.',
+  },
   acquisition: {
     subtitle: 'De onde vêm as visitas de {project}',
     paidVisits: 'Visitas pagas',

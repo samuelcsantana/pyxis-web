@@ -20,6 +20,8 @@ export interface ChartPanelProps {
   readonly legend: ReactNode;
   readonly chart: ReactNode;
   readonly table: ReactNode;
+  readonly figures?: ReactNode;
+  readonly footnote?: ReactNode;
 }
 
 type ChartView = 'chart' | 'table';
@@ -28,7 +30,15 @@ const VIEWS: readonly ChartView[] = ['chart', 'table'];
 
 const VIEW_OPTION = `min-h-11 px-3 sm:min-h-8.5 ${SEGMENTED_OPTION}`;
 
-export function ChartPanel({ title, description, legend, chart, table }: ChartPanelProps) {
+export function ChartPanel({
+  title,
+  description,
+  legend,
+  chart,
+  table,
+  figures,
+  footnote,
+}: ChartPanelProps) {
   const t = useT();
   const [shown, setShown] = useState<ChartView>('chart');
   const { attach, frame, sliding } = useSlidingIndicator(shown);
@@ -69,7 +79,9 @@ export function ChartPanel({ title, description, legend, chart, table }: ChartPa
           </div>
         </div>
       </div>
+      {figures}
       <Reveal show={shown}>{shown === 'table' ? table : chart}</Reveal>
+      {footnote}
     </section>
   );
 }
