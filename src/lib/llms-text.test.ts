@@ -14,6 +14,7 @@ describe('llmsText', () => {
       '## Install the tracker',
       '## Rules an integration must follow',
       '## Install with an AI agent',
+      '## Install with Google Tag Manager',
       '## Read the numbers from an AI agent',
       '## API and dashboard',
       '## Support',
@@ -94,6 +95,21 @@ describe('llmsText', () => {
     expect(text).toContain('9. Tell the person which event means success on this site');
     expect(text).toContain('chooses it as the conversion event in the dashboard’s Settings');
     expect(text).toContain('No tool here sets it.');
+  });
+
+  it('gives a site with Google Tag Manager the template, its trigger and its consent rule', () => {
+    expect(text).toContain(
+      'add the Pyxis Analytics tag template from the Community Template Gallery',
+    );
+    expect(text).toContain('or import its `template.tpl` from the repository below');
+    expect(text).toContain('on the trigger "Initialization - All Pages"');
+    expect(text).toContain(
+      'By default the template respects Consent Mode: while\n   `analytics_storage` is denied',
+    );
+    expect(text).toContain('Configurações › Códigos externos › Google\nTag Manager.');
+    expect(text).toContain(
+      '- [pyxis-gtm-template](https://github.com/samuelcsantana/pyxis-gtm-template): the fields',
+    );
   });
 
   it('names the traps that make the first check fail', () => {
