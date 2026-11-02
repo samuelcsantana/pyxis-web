@@ -357,7 +357,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; three projects on the paid plan, one on the
   free plan). The new project
-  opens on `/[projectId]/install`. Step 1 has two keyboard tabs (`role="tablist"`, arrow keys,
+  opens on `/[projectId]/install`. Step 1 has three keyboard tabs (`role="tablist"`, arrow keys,
   Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
   the API's address, each with a copy button. "With an AI agent" holds a ready request for Claude
   Code, Cursor or another coding agent, written in the dashboard's language with the project's
@@ -365,7 +365,14 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   home page's `llms.txt` and ends by asking for the list of files changed and events created, for
   review. Under it, the four steps (open the repository, paste, review, publish) and what the
   agent will change (`package.json`, the `init`, a `track` per important action, the CSP), with
-  "it writes nothing to Pyxis". Step 2, shared by both tabs, waits for the first event, checked
+  "it writes nothing to Pyxis". "Google Tag Manager" is for a site that already loads Tag
+  Manager: five numbered steps (add the Pyxis Analytics template from the Community Template
+  Gallery, or import `template.tpl` from `pyxis-gtm-template` while the gallery does not list it;
+  a tag with the action Initialize and the project's public key, with a copy button, and the API's
+  address for its Endpoint field; the trigger "Initialization - All Pages"; optional Track event
+  tags sequenced after it; submit and publish), Tag Manager's own labels in bold, then one line on
+  Consent Mode (by default, `analytics_storage` denied loads nothing) and one for Nuvemshop's paid plans. The
+  tabs wrap to a second row on a phone. Step 2, shared by the tabs, waits for the first event, checked
   again every few seconds (the chosen tab survives each re-read); once it arrives, "Open the
   dashboard" and a ready question for Claude about the project. Step 3, optional, connects Claude
   through its connector directory or `claude mcp add` against the API's `/mcp`, read-only and
@@ -375,7 +382,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Dependabot update of the package moves the snippet with it
 - A Help and support page (`/[projectId]/help`, from the foot of the sidebar): the support address with
   a copy button, the reply time of the reader's plan (2 business days on the paid plan, 5 days on
-  the free plan, as the Terms of Use set), the installation links, the GitHub question form and
+  the free plan, as the Terms of Use set), the installation links (the install guide, the Tag
+  Manager template's instructions, the tracker's README, `llms.txt`), the GitHub question form and
   the private security report. Account and billing ends with the same address and reply time,
   and the code step of sign-in and sign-up names it for a code that does not arrive
 - An Account and billing page (`/account`, from the account menu) for the owner of a hosted
@@ -428,7 +436,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   French at `/fr`, Italian at `/it` and Dutch at `/nl`, each with its
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
-  models and coding agents what Pyxis is, how to install the tracker, the rules an
+  models and coding agents what Pyxis is, how to install the tracker (with a bundler, through a
+  coding agent or with the Google Tag Manager template), the rules an
   integration must follow and where to send a person who needs support (404 on the demo and
   the dashboard). The footer's Support column and the last FAQ answer give the support address
   and the reply times. Every address that names a
