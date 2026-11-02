@@ -405,3 +405,38 @@ test.describe('connected apps', () => {
     await expect(apps.getByRole('button', { name: 'Revogar' })).toHaveCount(2);
   });
 });
+
+test('turns unique visitors off only after saying what stays, and on again', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/settings`);
+  const panel = page.getByRole('region', { name: 'Unique visitors' });
+  const toggle = panel.getByRole('switch', { name: 'Count unique visitors per day and per month' });
+  await expect(toggle).toBeChecked();
+  await expect(toggle).toHaveAccessibleDescription(/No identifier, no cookie\./);
+
+  await toggle.click();
+
+  const confirmation = panel.getByRole('group', { name: 'Turn off unique visitors?' });
+  await expect(confirmation).toContainText('Visits already counted keep their kind');
+  expect(await axeViolations(page)).toEqual([]);
+
+  await confirmation.getByRole('button', { name: 'Turn off', exact: true }).click();
+
+  await expect(toggle).not.toBeChecked();
+  await expect(panel.getByText('Saved')).toBeVisible();
+  await expect(confirmation).toHaveCount(0);
+
+  await toggle.press('Space');
+
+  await expect(toggle).toBeChecked();
+  await expect(panel.getByRole('alert')).toHaveCount(0);
+});
+
+test('shows unique visitors off for a project that does not count them', async ({ page }) => {
+  await page.goto(`/${DOCS_ID}/settings`);
+
+  await expect(
+    page
+      .getByRole('region', { name: 'Unique visitors' })
+      .getByRole('switch', { name: 'Count unique visitors per day and per month' }),
+  ).not.toBeChecked();
+});

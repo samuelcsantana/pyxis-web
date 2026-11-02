@@ -256,3 +256,74 @@ test('shows when visits start, adding up to the Visits figure, also as a table',
   expect(await axeViolations(page)).toEqual([]);
   expect(await sidewaysOverflow(page)).toBe(0);
 });
+
+function uniqueVisitors(page: Page): Locator {
+  return page.getByRole('region', { name: 'Unique visitors' });
+}
+
+async function figureOf(card: Locator, term: string): Promise<number> {
+  return count(
+    await card
+      .locator('dt', { hasText: new RegExp(`^${term}$`) })
+      .locator('xpath=following-sibling::dd[1]')
+      .textContent(),
+  );
+}
+
+test('adds up the unique visitors of the days, new and returning, never more than the visits', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/overview?range=30d`);
+  const card = uniqueVisitors(page);
+  await expect(
+    card.getByRole('img', { name: /^Stacked bar chart of 30 days, new and returning, between / }),
+  ).toBeVisible();
+  await expect(card).toContainText('Sum of days: a visitor who came on two days counts twice.');
+  await expect(card).toContainText('Counted per browser, not per person');
+  const visits = count(
+    await page
+      .getByRole('group', { name: 'Visits', exact: true })
+      .locator('p.tabular-nums')
+      .first()
+      .textContent(),
+  );
+  const unique = await figureOf(card, 'Sum of daily unique visitors');
+
+  expect((await figureOf(card, 'New')) + (await figureOf(card, 'Returning'))).toBe(unique);
+  expect(unique).toBeGreaterThan(0);
+  expect(unique).toBeLessThan(visits);
+
+  await card.getByRole('button', { name: 'Table', exact: true }).click();
+
+  const rows = card.getByRole('table').locator('tbody tr');
+  await expect(rows).toHaveCount(30);
+  const daily = (await rows.locator('td:first-of-type').allTextContents())
+    .map(count)
+    .reduce((sum, value) => sum + value, 0);
+  expect(daily).toBe(unique);
+  expect(await axeViolations(page)).toEqual([]);
+  expect(await sidewaysOverflow(page)).toBe(0);
+});
+
+test('shows the unique visitors of a single day as figures, never a chart', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview?range=today`);
+  const figures = page.getByRole('region', { name: 'Activity of the day' });
+  const nothingYet = page.getByRole('heading', { name: 'Nothing in this period' });
+  await expect(figures.or(nothingYet)).toBeVisible();
+  test.skip(!(await figures.isVisible()), 'The demo has no visit yet at this hour of the day.');
+
+  const card = uniqueVisitors(page);
+  await expect(card).toContainText('New and returning visitors, today');
+  await expect(card.getByRole('img')).toHaveCount(0);
+  expect((await figureOf(card, 'New')) + (await figureOf(card, 'Returning'))).toBe(
+    await figureOf(card, 'Unique visitors'),
+  );
+  expect(await axeViolations(page)).toEqual([]);
+});
+
+test('leaves the unique visitors out for a project that does not count them', async ({ page }) => {
+  await page.goto(`/${DOCS_ID}/overview?range=30d`);
+
+  await expect(page.getByRole('region', { name: 'Top pages' })).toBeVisible();
+  await expect(uniqueVisitors(page)).toHaveCount(0);
+});
