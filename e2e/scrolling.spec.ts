@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
+import { untilFullyReceived, wholeScreenRead } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PHONES_KEEP_ONLY_THEIR_MENU_BAR = 'On a phone the header scrolls away under the menu bar.';
@@ -169,7 +170,9 @@ test.describe('on a phone', () => {
       await expect.poll(() => pageScroll(page)).toBe(offset);
 
       await page.getByRole('button', { name: 'Open menu' }).click();
+      const read = wholeScreenRead(page, `/${STORE_ID}/acquisition`);
       await page.getByRole('link', { name: 'Acquisition', exact: true }).click();
+      await untilFullyReceived(page, read);
 
       await expect(page.getByRole('heading', { level: 1, name: 'Acquisition' })).toBeVisible();
       await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
