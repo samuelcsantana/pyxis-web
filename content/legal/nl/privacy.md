@@ -91,11 +91,11 @@ De homepage van Pyxis wordt door Pyxis zelf gemeten, met dezelfde regels die we 
 
 | Gegeven | Waarvoor | Rechtsgrond (LGPD) | Hoe lang |
 |---|---|---|---|
-| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land, staat en geschatte stad (door het netwerk van AWS afgeleid uit het IP-adres, zonder het IP-adres te bewaren; de stad vanaf 29 oktober 2026), willekeurig nummer van het bezoek, bezoektype (het eerste van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde dag; vanaf [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
+| Bekeken pagina (pad, zonder parameters behalve die van campagnes), acties op de pagina (bijvoorbeeld de demo openen), herkomstwebsite (alleen het domein), campagneparameters, apparaatcategorie, familie van de browser en van het besturingssysteem, land, staat en geschatte stad (door het netwerk van AWS afgeleid uit het IP-adres, zonder het IP-adres te bewaren; de stad vanaf 29 oktober 2026), willekeurig nummer van het bezoek, bezoektype (het eerste van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde dag; vanaf 2 november 2026) | Begrijpen hoe de pagina wordt gebruikt en de presentatie van Pyxis verbeteren | Gerechtvaardigd belang (art. 7, IX, en art. 10) | 13 maanden |
 
 De meting **gebruikt geen cookies**, **bewaart geen IP-adres** en ook niet de volledige browser, en
 **verzendt niets** als je browser vraagt niet gevolgd te worden (Global Privacy Control of Do Not
-Track). **Vanaf [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA] tellen we unieke bezoekers zonder
+Track). **Vanaf 2 november 2026 tellen we unieke bezoekers zonder
 identificatie:** je browser bewaart in de lokale opslag van de pagina (het is geen cookie) alleen
 wanneer de dag en de maand in de tijd van Brasília eindigen, tijdstippen die op die dag voor alle
 bezoekers dezelfde zijn (punt 2.5), en elk bezoek vertelt ons alleen zijn type. Er wordt geen

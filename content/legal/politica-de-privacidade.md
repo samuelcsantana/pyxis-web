@@ -81,11 +81,11 @@ clientes.
 
 | Dado | Para quê | Base legal (LGPD) | Por quanto tempo |
 |---|---|---|---|
-| Página vista (caminho, sem parâmetros fora os de campanha), ações na página (por exemplo, abrir a demonstração), site de origem (só o domínio), parâmetros de campanha, categoria do aparelho, família do navegador e do sistema, país, estado e cidade aproximada (deduzidos do endereço IP pela rede da AWS, sem guardar o IP; a cidade a partir de 29 de outubro de 2026), número aleatório da visita, tipo da visita (a primeira deste navegador, a primeira no mês, a primeira no dia ou outra no mesmo dia; a partir de [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Entender como a página é usada e melhorar a apresentação do Pyxis | Legítimo interesse (art. 7º, IX, e art. 10) | 13 meses |
+| Página vista (caminho, sem parâmetros fora os de campanha), ações na página (por exemplo, abrir a demonstração), site de origem (só o domínio), parâmetros de campanha, categoria do aparelho, família do navegador e do sistema, país, estado e cidade aproximada (deduzidos do endereço IP pela rede da AWS, sem guardar o IP; a cidade a partir de 29 de outubro de 2026), número aleatório da visita, tipo da visita (a primeira deste navegador, a primeira no mês, a primeira no dia ou outra no mesmo dia; a partir de 2 de novembro de 2026) | Entender como a página é usada e melhorar a apresentação do Pyxis | Legítimo interesse (art. 7º, IX, e art. 10) | 13 meses |
 
 A medição **não usa cookies**, **não guarda IP** nem o navegador completo, e **não envia nada** se o
 seu navegador pedir para não ser rastreado (Global Privacy Control ou Do Not Track). **A partir de
-[DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA], contamos visitantes únicos sem identificador:** o seu
+2 de novembro de 2026, contamos visitantes únicos sem identificador:** o seu
 navegador guarda, no armazenamento local da página (não é um cookie), só quando terminam o dia e o
 mês no horário de Brasília, que são os mesmos para todos os visitantes naquele dia (item 2.5), e
 cada visita nos diz apenas o seu tipo. Nenhum identificador é criado, e não ligamos uma visita

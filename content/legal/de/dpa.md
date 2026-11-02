@@ -608,7 +608,7 @@ liegt die Datei in deiner Verantwortung.
 ## Anhang II — Geltende Sicherheitsmaßnahmen
 
 Überprüft im Code des Dienstes und in der Konfiguration der Infrastruktur am 14.10.2026 und
-am 15.10.2026; Punkt 1 (Stadt) am 29.10.2026; Punkt 1 (eindeutige Besucher) am [DATA DA CONFERÊNCIA].
+am 15.10.2026; Punkt 1 (Stadt) am 29.10.2026; Punkt 1 (eindeutige Besucher) am 02.11.2026.
 
 **1. Datenschutz durch Technikgestaltung.** Keine Cookies auf den gemessenen Websites; IP und
 vollständiger Browser nie gespeichert; Seiten auf Vorlagen reduziert; Sperre auf dem Server, die Werte

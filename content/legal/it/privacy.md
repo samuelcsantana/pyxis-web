@@ -91,11 +91,11 @@ clienti.
 
 | Dato | Per quale scopo | Base giuridica (LGPD) | Per quanto tempo |
 |---|---|---|---|
-| Pagina vista (percorso, senza parametri tranne quelli di campagna), azioni sulla pagina (per esempio, aprire la demo), sito di provenienza (solo il dominio), parametri di campagna, categoria del dispositivo, famiglia del browser e del sistema, paese, regione e città approssimativa (ricavati dalla rete di AWS a partire dall'indirizzo IP, senza conservare l'IP; la città dal 29 ottobre 2026), numero casuale della visita, tipo della visita (la prima da questo browser, la prima del mese, la prima del giorno o un'altra nello stesso giorno; dal [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Capire come viene usata la pagina e migliorare la presentazione di Pyxis | Legittimo interesse (art. 7, IX, e art. 10) | 13 mesi |
+| Pagina vista (percorso, senza parametri tranne quelli di campagna), azioni sulla pagina (per esempio, aprire la demo), sito di provenienza (solo il dominio), parametri di campagna, categoria del dispositivo, famiglia del browser e del sistema, paese, regione e città approssimativa (ricavati dalla rete di AWS a partire dall'indirizzo IP, senza conservare l'IP; la città dal 29 ottobre 2026), numero casuale della visita, tipo della visita (la prima da questo browser, la prima del mese, la prima del giorno o un'altra nello stesso giorno; dal 2 novembre 2026) | Capire come viene usata la pagina e migliorare la presentazione di Pyxis | Legittimo interesse (art. 7, IX, e art. 10) | 13 mesi |
 
 La misurazione **non usa cookie**, **non conserva l'IP** né il browser completo, e **non invia
 nulla** se il tuo browser chiede di non essere tracciato (Global Privacy Control o Do Not Track).
-**Dal [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA], contiamo i visitatori unici senza
+**Dal 2 novembre 2026, contiamo i visitatori unici senza
 identificativo:** il tuo browser conserva, nell'archiviazione locale della pagina (non è un cookie),
 solo gli orari in cui finiscono il giorno e il mese secondo l'ora di Brasília, che sono gli stessi
 per tutti i visitatori in quel giorno (punto 2.5), e ogni visita ci comunica soltanto il proprio

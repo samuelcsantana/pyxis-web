@@ -554,7 +554,7 @@ for each download, valid for 5 minutes. Once downloaded, the file is your respon
 ## Schedule II — Security measures in force
 
 Checked in the service's code and infrastructure configuration on October 14, 2026 and October 15,
-2026; item 1 (city), on October 29, 2026; item 1 (unique visitors), on [DATA DA CONFERÊNCIA].
+2026; item 1 (city), on October 29, 2026; item 1 (unique visitors), on November 2, 2026.
 
 **1. Privacy by design.** No cookies on the measured sites; IP and full browser string never stored;
 pages reduced to templates; a server-side barrier that discards values shaped like an email address

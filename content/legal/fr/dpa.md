@@ -608,7 +608,7 @@ valable 5 minutes. Une fois téléchargé, le fichier est sous votre responsabil
 
 Vérifiées dans le code du service et dans la configuration de l’infrastructure le 14/10/2026 et le
 15/10/2026 ; le point 1 (ville), le 29/10/2026 ; le point 1 (visiteurs uniques),
-le [DATA DA CONFERÊNCIA].
+le 02/11/2026.
 
 **1. Protection de la vie privée dès la conception.** Pas de cookies sur les sites mesurés ; IP et
 navigateur complet jamais conservés ; pages réduites à des modèles ; barrière sur le serveur qui écarte
