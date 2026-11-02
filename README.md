@@ -383,7 +383,7 @@ that says why:
 
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
-| Sign-in, home and not-found pages                      | 155               |
+| Sign-in, home and not-found pages                      | 156               |
 | Sign-up page                                           | 162               |
 | Dashboard screens without a chart                      | 174               |
 | Dashboard screens with a chart (Overview, Acquisition) | 171               |
@@ -433,7 +433,10 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 171.3 KiB. The "+N" marks fill slots the server draws, from the watcher's chunk
 ([ADR 0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)): Overview stayed at
 168.5 KiB, and the two tables drawn in the browser carry the slot (Requests 171.6 KiB, Visits
-171.0 KiB).
+171.0 KiB). The entry budget went from 155 to 156 KiB with `pyxis-analytics` 0.7.0, which the
+home page loads to measure itself: the unique-visitor kind, the period marker and its removal on
+opt-out and under Global Privacy Control or Do Not Track added about 0.4 KiB, and the home page
+measured 155.2 KiB.
 
 </details>
 
