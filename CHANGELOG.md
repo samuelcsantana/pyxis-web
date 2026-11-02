@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.47.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.46.0...v0.47.0) (2026-11-02)
+
+
+### Features
+
+* **sign-up:** let the demo service reach the daily cap of sign-ups ([6e54839](https://github.com/samuelcsantana/pyxis-web/commit/6e54839aeabe9b840b7970f509b0f970de6f41fc))
+* **sign-up:** say the day's limit of new sign-ups was reached ([8256a5f](https://github.com/samuelcsantana/pyxis-web/commit/8256a5f8b0a08bae5433541bb33ef4f72f1253a0))
+* **sign-up:** tell the daily cap of new sign-ups from a rate limit ([1b22969](https://github.com/samuelcsantana/pyxis-web/commit/1b229691810d7677357ae89bb2122d51f73b2a4e))
+
+
+### Documentation
+
+* **features:** describe the day's limit of new sign-ups ([7092ce2](https://github.com/samuelcsantana/pyxis-web/commit/7092ce2475c8a991a503fde54a00b67b0e864573))
+
 ## [0.46.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.45.0...v0.46.0) (2026-11-02)
 
 
