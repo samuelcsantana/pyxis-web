@@ -1800,7 +1800,7 @@ export const nl = translation({
       invented: 'Verzonnen gegevens, net als de livedemo.',
     },
     proof: {
-      size: { value: 'minder dan 5 KB', label: 'Pyxis-code, gzipped' },
+      size: { value: 'minder dan 6 KB', label: 'Pyxis-code, gzipped' },
       dependencies: { value: '0', label: 'runtime-afhankelijkheden' },
       coverage: { value: '100%', label: 'testdekking in alle vier de repository’s' },
       license: { value: 'MIT', label: 'licentie, infrastructuur inbegrepen' },
@@ -2077,7 +2077,7 @@ export const nl = translation({
         },
         trackerSize: {
           aspect: 'Grootte van de code die de site laadt, gzipped',
-          pyxis: 'Minder dan 5 KB',
+          pyxis: 'Minder dan 6 KB',
           typical: 'Meestal 30 tot 150 KB',
         },
         source: { aspect: 'Broncode', pyxis: 'MIT, op GitHub', typical: 'Verschilt' },

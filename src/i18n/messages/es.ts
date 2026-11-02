@@ -1787,7 +1787,7 @@ export const es = translation({
       invented: 'Datos inventados, como en la demo en vivo.',
     },
     proof: {
-      size: { value: 'menos de 5 KB', label: 'de código de Pyxis, con gzip' },
+      size: { value: 'menos de 6 KB', label: 'de código de Pyxis, con gzip' },
       dependencies: { value: '0', label: 'dependencias en ejecución' },
       coverage: { value: '100%', label: 'de cobertura de pruebas en los cuatro repositorios' },
       license: { value: 'Licencia MIT', label: 'código abierto, con la infraestructura' },
@@ -2062,7 +2062,7 @@ export const es = translation({
         },
         trackerSize: {
           aspect: 'Tamaño del código que carga el sitio, con gzip',
-          pyxis: 'Menos de 5 KB',
+          pyxis: 'Menos de 6 KB',
           typical: 'Por lo general, de 30 a 150 KB',
         },
         source: { aspect: 'Código fuente', pyxis: 'MIT, en GitHub', typical: 'Varía' },

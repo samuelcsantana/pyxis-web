@@ -11,7 +11,7 @@ describe('LandingProof', () => {
     expect(
       screen.getAllByRole('link').map((link) => [link.textContent, link.getAttribute('href')]),
     ).toEqual([
-      ['under 5 KB of Pyxis code, gzipped', 'https://github.com/samuelcsantana/pyxis-sdk'],
+      ['under 6 KB of Pyxis code, gzipped', 'https://github.com/samuelcsantana/pyxis-sdk'],
       [
         '0 runtime dependencies',
         'https://github.com/samuelcsantana/pyxis-sdk/blob/main/package.json',
@@ -27,8 +27,8 @@ describe('LandingProof', () => {
   it('gives the size as a ceiling that does not age, in Brazilian Portuguese too', () => {
     render(<LandingProof i18n={portuguese} />);
 
-    expect(screen.getByRole('link', { name: /menos de 5 KB/ })).toHaveAccessibleName(
-      'menos de 5 KB de código do Pyxis, com gzip',
+    expect(screen.getByRole('link', { name: /menos de 6 KB/ })).toHaveAccessibleName(
+      'menos de 6 KB de código do Pyxis, com gzip',
     );
   });
 

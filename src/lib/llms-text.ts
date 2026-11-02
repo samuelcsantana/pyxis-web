@@ -45,7 +45,7 @@ export function llmsText(offer: SignUpOffer): string {
     '## Install the tracker',
     '',
     `- [pyxis-analytics on npm](${LANDING_LINKS.npm}): \`npm install pyxis-analytics\`, zero`,
-    '  dependencies, under 5 KB gzipped, ES module with types.',
+    '  dependencies, under 6 KB gzipped, ES module with types.',
     "- Call `init({ key: 'pyxis_pk_…', endpoint })` once in the browser; every page and every",
     '  History API route change becomes a `page_view`. Without a key every function is a no-op.',
     `- The hosted endpoint is ${HOSTED_API_URL}. Its keys come with an account: sign up at`,

@@ -1780,7 +1780,7 @@ export const ptBR = translation({
       invented: 'Dados fictícios, como na demonstração.',
     },
     proof: {
-      size: { value: 'menos de 5 KB', label: 'de código do Pyxis, com gzip' },
+      size: { value: 'menos de 6 KB', label: 'de código do Pyxis, com gzip' },
       dependencies: { value: '0', label: 'dependências em execução' },
       coverage: { value: '100%', label: 'de cobertura de testes nos quatro repositórios' },
       license: { value: 'Licença MIT', label: 'código aberto, com a infraestrutura' },
@@ -2054,7 +2054,7 @@ export const ptBR = translation({
         },
         trackerSize: {
           aspect: 'Tamanho do código que o site carrega, com gzip',
-          pyxis: 'Menos de 5 KB',
+          pyxis: 'Menos de 6 KB',
           typical: 'Em geral, de 30 a 150 KB',
         },
         source: { aspect: 'Código-fonte', pyxis: 'MIT, no GitHub', typical: 'Varia' },
