@@ -1109,6 +1109,34 @@ export const fr = translation({
     },
     point: '{series}, {day}',
   },
+  uniqueVisitors: {
+    title: 'Visiteurs uniques',
+    description: 'Visiteurs nouveaux et récurrents par jour, {period}',
+    dayDescription: 'Visiteurs nouveaux et récurrents, {period}',
+    headline: {
+      month: 'Visiteurs uniques en {month}',
+      monthSoFar: 'Visiteurs uniques en {month} jusqu’ici',
+      sumOfDays: 'Somme des visiteurs uniques de chaque jour',
+    },
+    sumOfDays: 'Somme des jours : un visiteur venu deux jours compte deux fois.',
+    daysInMonth:
+      'Les jours ne s’additionnent pas dans le mois : un visiteur venu deux jours compte pour chacun.',
+    newVisitors: 'Nouveaux',
+    returning: 'Récurrents',
+    day: 'Jour',
+    unique: 'Visiteurs uniques',
+    caption: 'Visiteurs uniques par jour, nouveaux et récurrents, {period}',
+    summary: {
+      bars: 'Histogramme empilé sur {days}, nouveaux et récurrents,',
+      range: 'entre {lowest} et {highest} visiteurs uniques par jour.',
+    },
+    empty:
+      'Aucun visiteur unique compté sur cette période pour l’instant : le comptage commence avec les prochaines visites.',
+    footnote:
+      'Comptés par navigateur, pas par personne : un autre appareil, une fenêtre de navigation privée ou des données de navigateur effacées (Safari les efface après quelques jours sans visite) comptent à nouveau.',
+    warmingUp:
+      'Pendant les premières semaines après l’activation du comptage, presque tous les visiteurs apparaissent comme nouveaux.',
+  },
   acquisition: {
     subtitle: 'D’où viennent les visites de {project}',
     paidVisits: 'Visites payantes',

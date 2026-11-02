@@ -1058,6 +1058,33 @@ export const en = {
     },
     point: '{series}, {day}',
   },
+  uniqueVisitors: {
+    title: 'Unique visitors',
+    description: 'New and returning visitors per day, {period}',
+    dayDescription: 'New and returning visitors, {period}',
+    headline: {
+      month: 'Unique visitors in {month}',
+      monthSoFar: 'Unique visitors in {month} so far',
+      sumOfDays: 'Sum of daily unique visitors',
+    },
+    sumOfDays: 'Sum of days: a visitor who came on two days counts twice.',
+    daysInMonth:
+      'The days do not add up to the month: a visitor who came on two days counts on both.',
+    newVisitors: 'New',
+    returning: 'Returning',
+    day: 'Day',
+    unique: 'Unique visitors',
+    caption: 'Unique visitors per day, new and returning, {period}',
+    summary: {
+      bars: 'Stacked bar chart of {days}, new and returning,',
+      range: 'between {lowest} and {highest} unique visitors a day.',
+    },
+    empty: 'No unique visitor counted in this period yet: the count starts with the next visits.',
+    footnote:
+      'Counted per browser, not per person: another device, a private window or cleared browser data (Safari clears them after some days without visits) count again.',
+    warmingUp:
+      'For the first weeks after the count is turned on, almost every visitor shows as new.',
+  },
   acquisition: {
     subtitle: 'Where visits to {project} come from',
     paidVisits: 'Paid visits',
