@@ -2308,6 +2308,14 @@ export const fr = translation({
       empty: 'Rien d’envoyé pour l’instant. Le premier lot part dans les 5 secondes.',
       never:
         '<strong>Jamais envoyé :</strong> votre adresse IP, le nom complet de votre navigateur, un cookie, l’adresse complète de la page, un identifiant qui vous suive d’une visite à l’autre. <strong>Ajouté par le serveur :</strong> le pays, la région et la ville approximative, d’après la requête ; puis l’adresse est supprimée.',
+      kept: '<strong>Conservé dans ce navigateur :</strong> uniquement les moments où se terminent le jour ({day}) et le mois ({month}), à l’heure de Brasília, les mêmes pour tous les visiteurs aujourd’hui. Ils ne sont jamais envoyés à Pyxis.',
+      visitorKind: 'Cette visite a été envoyée comme : {kind}',
+      kinds: {
+        firstVisit: 'la première de ce navigateur',
+        firstThisMonth: 'la première du mois',
+        firstToday: 'la première de la journée',
+        againToday: 'une autre le même jour',
+      },
       close: 'Fermer',
     },
     footer: {

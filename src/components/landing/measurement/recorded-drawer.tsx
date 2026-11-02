@@ -3,8 +3,17 @@
 import { useEffect, useId, useRef, useSyncExternalStore } from 'react';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import { rich } from '@/i18n/rich';
+import { LANDING_PROJECT_TIME_ZONE } from '@/lib/landing-measurement-config';
 import { landingMeasurement, type Measurement, type RecordedEvent } from './landing-measurement';
-import { HOST_PLACEHOLDER, ID_PLACEHOLDER, type RecordedLabels } from './measurement-labels';
+import {
+  DAY_PLACEHOLDER,
+  HOST_PLACEHOLDER,
+  ID_PLACEHOLDER,
+  KIND_PLACEHOLDER,
+  MONTH_PLACEHOLDER,
+  type RecordedLabels,
+} from './measurement-labels';
+import type { VisitorPeriod } from './visitor-period';
 
 export interface RecordedDrawerProps {
   readonly labels: RecordedLabels;
@@ -23,6 +32,7 @@ const TOGGLE_TRANSITION =
 const nothingYet = () => NO_EVENTS;
 const closedOnTheServer = () => false;
 const unknownOnTheServer = () => null;
+const noMarkerOnTheServer = () => null;
 const atTheTopOnTheServer = () => false;
 
 function subscribeToScroll(onScroll: () => void): () => void {
@@ -47,6 +57,23 @@ function detailsOf(event: RecordedEvent, labels: RecordedLabels): string {
     ...referrer,
   ].join(' · ');
 }
+
+function momentOf(instant: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    hourCycle: 'h23',
+    timeZone: LANDING_PROJECT_TIME_ZONE,
+  }).format(new Date(instant));
+}
+
+function keptOf(period: VisitorPeriod, labels: RecordedLabels, locale: string): string {
+  return labels.kept
+    .replace(DAY_PLACEHOLDER, momentOf(period.dayEndsAt, locale))
+    .replace(MONTH_PLACEHOLDER, momentOf(period.monthEndsAt, locale));
+}
+
+const strong = (text: string) => <strong className="font-semibold text-ink">{text}</strong>;
 
 function timeOf(occurredAt: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -73,6 +100,11 @@ export function RecordedDrawer({
     measurement.subscribe,
     measurement.status,
     unknownOnTheServer,
+  );
+  const period = useSyncExternalStore(
+    measurement.subscribe,
+    measurement.visitorPeriod,
+    noMarkerOnTheServer,
   );
   const scrolled = useSyncExternalStore(
     subscribeToScroll,
@@ -103,6 +135,7 @@ export function RecordedDrawer({
     return null;
   }
   const visit = events.at(-1)?.sessionId.slice(0, SHOWN_ID_LENGTH);
+  const kind = events.findLast((event) => event.visitorKind !== undefined)?.visitorKind;
   const shown = scrolled || open;
   return (
     <>
@@ -151,6 +184,11 @@ export function RecordedDrawer({
               {labels.visit.replace(ID_PLACEHOLDER, visit)}
             </p>
           )}
+          {kind === undefined ? null : (
+            <p className="px-4 pt-0.5 text-xs text-muted">
+              {labels.visitorKind.replace(KIND_PLACEHOLDER, labels.kinds[kind])}
+            </p>
+          )}
           {events.length === 0 ? (
             <p className="px-4 py-3 text-sm text-muted">{labels.empty}</p>
           ) : (
@@ -172,11 +210,10 @@ export function RecordedDrawer({
               ))}
             </ol>
           )}
-          <p className="border-t border-line px-4 pt-2.5 pb-3.5 text-xs leading-relaxed text-muted">
-            {rich(labels.never, {
-              strong: (text) => <strong className="font-semibold text-ink">{text}</strong>,
-            })}
-          </p>
+          <div className="grid gap-1.5 border-t border-line px-4 pt-2.5 pb-3.5 text-xs leading-relaxed text-muted">
+            <p>{rich(labels.never, { strong })}</p>
+            {period === null ? null : <p>{rich(keptOf(period, labels, locale), { strong })}</p>}
+          </div>
         </section>
       ) : null}
     </>

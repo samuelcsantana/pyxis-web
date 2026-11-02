@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { english } from '@/test-utils/english';
-import { fakeSdk, SAMPLE_BATCH, startedMeasurement } from '@/test-utils/fake-measurement';
+import {
+  COUNTED_BATCH,
+  fakeSdk,
+  SAMPLE_BATCH,
+  SAMPLE_PERIOD,
+  startedMeasurement,
+} from '@/test-utils/fake-measurement';
 import { portuguese } from '@/test-utils/portuguese';
 import { LANDING_EVENTS, trackAttributes } from './landing-events';
 import {
@@ -55,6 +61,24 @@ describe('createMeasurement', () => {
     measurement.start('pyxis_pk_home', 'https://api.pyxis-analytics.dev');
 
     expect(sdk.calls.init[0]).not.toHaveProperty('referrer');
+  });
+
+  it('reads the unique visitors marker again whenever it tells its listeners', () => {
+    const sdk = fakeSdk();
+    const readVisitorPeriod = vi.fn<() => typeof SAMPLE_PERIOD | null>().mockReturnValue(null);
+    const measurement = startedMeasurement(sdk, readVisitorPeriod);
+
+    expect(measurement.visitorPeriod()).toBeNull();
+
+    readVisitorPeriod.mockReturnValue(SAMPLE_PERIOD);
+    measurement.setDrawerOpen(true);
+
+    expect(measurement.visitorPeriod()).toEqual(SAMPLE_PERIOD);
+
+    readVisitorPeriod.mockReturnValue(null);
+    measurement.stop();
+
+    expect(measurement.visitorPeriod()).toBeNull();
   });
 
   it('keeps every event the tracker sends, newest first', () => {
@@ -129,7 +153,15 @@ describe('recordedEventOf', () => {
         ['first', 'true'],
       ],
       referrerHost: undefined,
+      visitorKind: undefined,
     });
+  });
+
+  it('reads the kind of visit only on the event that carries it', () => {
+    expect(COUNTED_BATCH.events.map((event) => recordedEventOf(event).visitorKind)).toEqual([
+      'first_today',
+      undefined,
+    ]);
   });
 
   it('says where the visit came from only on the event that carries it', () => {
@@ -183,7 +215,15 @@ describe('measurement labels', () => {
     expect(recordedLabelsOf(portuguese)).toMatchObject({
       visit: 'Visita {id}… · só esta aba',
       referrer: 'origem: {host}',
+      visitorKind: 'Esta visita foi enviada como: {kind}',
+      kinds: {
+        first_visit: 'primeira deste navegador',
+        first_this_month: 'primeira no mês',
+        first_today: 'primeira no dia',
+        again_today: 'outra no mesmo dia',
+      },
       close: 'Fechar',
     });
+    expect(recordedLabelsOf(portuguese).kept).toContain('o dia ({day}) e o mês ({month})');
   });
 });

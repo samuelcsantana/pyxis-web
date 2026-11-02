@@ -3,7 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it } from 'vitest';
 import { english } from '@/test-utils/english';
-import { fakeSdk, SAMPLE_BATCH, startedMeasurement } from '@/test-utils/fake-measurement';
+import {
+  COUNTED_BATCH,
+  fakeSdk,
+  SAMPLE_BATCH,
+  SAMPLE_PERIOD,
+  startedMeasurement,
+} from '@/test-utils/fake-measurement';
 import { createMeasurement } from './landing-measurement';
 import { LandingMeasurementBoot } from './landing-measurement-boot';
 import { measurementLabelsOf, recordedLabelsOf } from './measurement-labels';
@@ -42,9 +48,29 @@ describe('RecordedDrawer', () => {
     expect(items[0]).toHaveTextContent('demo_opened/ · from: hero');
     expect(items[1]).toHaveTextContent('page_view/ · referrer: none');
     expect(within(panel).getByText('Never sent:').tagName).toBe('STRONG');
+    expect(panel).not.toHaveTextContent('This visit was sent as');
+    expect(panel).not.toHaveTextContent('Kept in this browser');
     expect(screen.getByRole('button', { name: /What this page recorded/ })).toHaveAttribute(
       'aria-expanded',
       'true',
+    );
+  });
+
+  it('shows the kind of visit sent and the marker kept in this browser, in Brasília time', async () => {
+    const sdk = fakeSdk();
+    const measurement = startedMeasurement(sdk, () => SAMPLE_PERIOD);
+    render(<RecordedDrawer labels={RECORDED} locale="en-US" measurement={measurement} />);
+    act(() => {
+      sdk.sendBatch(COUNTED_BATCH);
+    });
+
+    await userEvent.click(screen.getByRole('button', { name: /What this page recorded/ }));
+
+    const panel = screen.getByRole('region', { name: 'What this page recorded' });
+    expect(panel).toHaveTextContent('This visit was sent as: first today');
+    expect(within(panel).getByText('Kept in this browser:').tagName).toBe('STRONG');
+    expect(panel).toHaveTextContent(
+      'Kept in this browser: only when the day (Oct 14, 2026, 00:00) and the month (Nov 1, 2026, 00:00) end, Brasília time, the same for every visitor today. It is never sent to Pyxis.',
     );
   });
 
