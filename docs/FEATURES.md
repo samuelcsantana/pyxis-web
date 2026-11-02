@@ -352,7 +352,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the API answers, so a returning owner whose account runs goes to the dashboard, and the free
   place it answers (`free_place`): an address whose mailbox already has a free account
   (`taken_by_same_mailbox`, one free account per mailbox) goes to the dashboard to finish its
-  subscription, never to the wait for a free place
+  subscription, never to the wait for a free place. When the API's daily cap of new sign-ups
+  answers (`429 sign_up_busy`), the form says the day's limit of new sign-ups was reached, to try
+  again in a few hours, and links the support address, with no number in the text; any other 429
+  keeps "too many attempts from this address". The demo reaches the case with
+  `busy@example.com`
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
   browser's time zone, an optional conversion event; three projects on the paid plan, one on the
