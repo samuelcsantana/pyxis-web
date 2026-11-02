@@ -460,7 +460,7 @@ system whom the customer identifies with the `identify` function.
 | Event name | `page_view` (page viewed), `api_request` (call to the site's API), `identify` or a name the customer defines |
 | Date and time | The browser's, corrected for clock skew, and the time of receipt on the server |
 | Visit identifier | Random number stored in the tab's `sessionStorage`; replaced when the tab is closed or after 30 minutes of inactivity |
-| Visit type | Only on visits received while the unique visitor count (Terms of Use, Clause 4.6; it comes turned off in every project, and only the account owner turns it on) was turned on in the project, and only on the event that carried it (with the tracker, the first of each visit): one of four values, calculated in the browser from the device's time: `first_visit` (the first from this browser, or since its data was deleted), `first_this_month` (the first in the month), `first_today` (the first in the day) or `again_today` (another on the same day), with the day and the month in the project's time zone. It is not an identifier: many visitors have the same value. In projects with the option turned off, the tracker also sends the field, and Pyxis discards it without storing it |
+| Visit type | Only on visits received while the unique visitor count (Terms of Use, Clause 4.6; it comes turned off in every project, and only the account owner turns it on) was turned on in the project, and only on the event that carried it (with the tracker, the first of each visit): one of four values, calculated in the browser from the device's time: `first_visit` (this browser's first, or its first since its data was deleted), `first_this_month` (its first this month), `first_today` (its first today) or `again_today` (another one today), with the day and the month in the project's time zone. It is not an identifier: many visitors have the same value. In projects with the option turned off, the tracker also sends the field, and Pyxis discards it without storing it |
 | User identifier | Only if the customer uses `identify`: the internal identifier of the account in the customer's system, with up to 64 letters, digits, `-` or `_` (does not accept `@`, and therefore does not accept an email address) |
 | Page | Only the path, in template form: segments that look like identifiers (numbers, long codes, email addresses) become `:id`; without domain and without parameters |
 | Source of the visit | Only the domain the visitor came from (for example, `google.com`), without the full address |
@@ -703,9 +703,9 @@ not replace your own analysis.
 > cookie) only the date and time at which the day and the month end, which are the same for all
 > visitors on that day; this marker is updated on your visits and stays until you clear this site's
 > data in the browser. If your browser sends the Global Privacy Control or "Do Not Track" signal,
-> nothing is sent and the marker is deleted. Each visit reports only whether it is the first from
-> this browser, the first in the month, the first in the day or another on the same day, and this
-> information is kept with the other data of the visit. The marker stays only in your browser and is
+> nothing is sent and the marker is deleted. Each visit reports only whether it is this browser's
+> first, its first this month, its first today or another one today, and this information is kept
+> with the other data of the visit. The marker stays only in your browser and is
 > not sent to Pyxis, and there is no identifier that recognizes you on another visit.
 >
 > *(If this notice was already published without the unique visitor count, highlight the change and
@@ -717,11 +717,10 @@ not replace your own analysis.
 >
 > *(If you turned on the unique visitor count and your site uses the `identify` function, replace,
 > in the paragraph about that function, "we link the events of that visit to your account's internal
-> number" with "we link the events of that visit, including whether it was the first from this
-> browser, the first in the month, the first in the day or another on the same day, to your
-> account's internal number". If you also turned on the city, use "including the approximate city
-> and whether it was the first from this browser, the first in the month, the first in the day or
-> another on the same day".)*
+> number" with "we link the events of that visit, including whether it was this browser's first,
+> its first this month, its first today or another one today, to your account's internal number".
+> If you also turned on the city, use "including the approximate city and whether it was this
+> browser's first, its first this month, its first today or another one today".)*
 >
 > *(If you turned on the city in the project, replace "the country and the state (never the city)"
 > with "the country, the state and the approximate city, inferred from your IP address at the time
