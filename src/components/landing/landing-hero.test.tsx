@@ -103,7 +103,7 @@ describe('LandingHero', () => {
       screen.getByRole('figure', { name: 'Preview of the Overview screen' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'under 5 KB of Pyxis code, gzipped' }),
+      screen.getByRole('link', { name: 'under 6 KB of Pyxis code, gzipped' }),
     ).toBeInTheDocument();
   });
 

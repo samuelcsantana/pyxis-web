@@ -117,7 +117,7 @@ describe('ComparisonSection capabilities', () => {
       'Depends on the tool',
     ]);
     expect(cellsOf(/Size of the code the site loads/)).toEqual([
-      'Under 5 KB',
+      'Under 6 KB',
       'Usually 30 to 150 KB',
     ]);
   });

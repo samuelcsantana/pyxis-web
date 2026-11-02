@@ -1762,7 +1762,7 @@ export const en = {
       invented: 'Invented data, like the live demo.',
     },
     proof: {
-      size: { value: 'under 5 KB', label: 'of Pyxis code, gzipped' },
+      size: { value: 'under 6 KB', label: 'of Pyxis code, gzipped' },
       dependencies: { value: '0', label: 'runtime dependencies' },
       coverage: { value: '100%', label: 'test coverage in all four repositories' },
       license: { value: 'MIT', label: 'license, infrastructure included' },
@@ -2034,7 +2034,7 @@ export const en = {
         },
         trackerSize: {
           aspect: 'Size of the code the site loads, gzipped',
-          pyxis: 'Under 5 KB',
+          pyxis: 'Under 6 KB',
           typical: 'Usually 30 to 150 KB',
         },
         source: { aspect: 'Source code', pyxis: 'MIT, on GitHub', typical: 'Varies' },
