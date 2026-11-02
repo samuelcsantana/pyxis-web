@@ -1,5 +1,6 @@
 import { LANDING_LINKS } from '@/components/landing/landing-links';
 import { SUPPORT_EMAIL } from '@/domain/accounts';
+import { TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
 import { FREE_PLAN_EVENTS_PER_MONTH, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import {
   FREE_REPLY_DAYS,
@@ -111,6 +112,23 @@ export function llmsText(offer: SignUpOffer): string {
     '- After a `401` or a `403` the tracker stops for the rest of the page: fix the key or the',
     '  origin, then reload.',
     '- `init({ …, debug: {} })` says in the console why nothing is sent.',
+    '',
+    '## Install with Google Tag Manager',
+    '',
+    'A site that already loads Google Tag Manager installs the tracker with no code change:',
+    '',
+    '1. In Tag Manager, add the Pyxis Analytics tag template from the Community Template Gallery,',
+    '   or import its `template.tpl` from the repository below while the gallery does not list it.',
+    '2. Create a tag with the action Initialize, the project’s public key and the endpoint, fired',
+    '   on the trigger "Initialization - All Pages". Page views are then counted by the tracker.',
+    '3. Optionally, a tag with the action Track event per named event, sequenced after Initialize.',
+    '4. Publish the container. By default the template respects Consent Mode: while',
+    '   `analytics_storage` is denied, it loads nothing.',
+    '',
+    'Nuvemshop’s paid plans accept the container ID in Configurações › Códigos externos › Google',
+    'Tag Manager.',
+    '',
+    `- [pyxis-gtm-template](${TAG_MANAGER_TEMPLATE_URL}): the fields, consent and how to install.`,
     '',
     '## Read the numbers from an AI agent',
     '',
