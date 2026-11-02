@@ -442,6 +442,9 @@ export const en = {
     docsHeading: 'Installation and usage',
     install: 'How to install',
     installBody: 'The snippet with your key, step by step.',
+    tagManager: 'Install with Google Tag Manager',
+    tagManagerBody:
+      'For a site that already loads Tag Manager: the Pyxis Analytics template, with no code. The Install page has your key.',
     code: 'Documentation of the Pyxis code',
     codeBody: 'track, identify, trackRequest and every option.',
     agents: 'Guide for AI agents',

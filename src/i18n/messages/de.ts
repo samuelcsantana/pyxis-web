@@ -474,6 +474,9 @@ export const de = translation({
     docsHeading: 'Installation und Nutzung',
     install: 'So installierst du Pyxis',
     installBody: 'Das Snippet mit deinem Schlüssel, Schritt für Schritt.',
+    tagManager: 'Mit Google Tag Manager installieren',
+    tagManagerBody:
+      'Für eine Website, die Tag Manager schon lädt: die Vorlage Pyxis Analytics, ohne Code. Die Seite Installieren zeigt deinen Schlüssel.',
     code: 'Dokumentation des Pyxis-Codes',
     codeBody: 'track, identify, trackRequest und alle Optionen.',
     agents: 'Anleitung für KI-Agenten',

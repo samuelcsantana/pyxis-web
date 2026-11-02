@@ -5,7 +5,7 @@ import { SupportAddress } from '@/components/support/support-address';
 import { SupportReplies } from '@/components/support/support-replies';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE, SECTION_STACK } from '@/components/ui/panel-classes';
-import { AGENT_RECIPE_URL } from '@/domain/install';
+import { AGENT_RECIPE_URL, TAG_MANAGER_GUIDE_URL } from '@/domain/install';
 import {
   QUESTION_FORM_URL,
   SECURITY_REPORT_URL,
@@ -87,6 +87,11 @@ export function HelpView({ projectId, email, plan, i18n }: HelpViewProps) {
             href={installHref(projectId)}
             label={t('support.install')}
             body={t('support.installBody')}
+          />
+          <HelpLink
+            href={TAG_MANAGER_GUIDE_URL}
+            label={t('support.tagManager')}
+            body={t('support.tagManagerBody')}
           />
           <HelpLink
             href={TRACKER_DOCS_URL}
