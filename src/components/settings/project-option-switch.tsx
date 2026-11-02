@@ -10,30 +10,30 @@ import {
   CONTROL_TRANSITION,
   FOCUS_RING,
 } from '@/components/ui/control-classes';
-import type { SetCityOutcome } from '@/domain/project-management';
 import { useT } from '@/i18n/messages-provider';
 
-export type SetCity = (cityEnabled: boolean) => Promise<SetCityOutcome>;
+export type ProjectOption = 'cityOption';
 
-export interface CitySwitchProps {
+export type ProjectOptionOutcome =
+  { readonly kind: 'saved' } | { readonly kind: 'subscriptionRequired' };
+
+export type SetProjectOption = (enabled: boolean) => Promise<ProjectOptionOutcome>;
+
+export interface ProjectOptionSwitchProps {
+  readonly option: ProjectOption;
   readonly initial: boolean;
-  readonly setCity: SetCity;
+  readonly save: SetProjectOption;
 }
 
-export const CITY_SAVING_MIN_BUSY_MS = 400;
-export const CITY_SAVED_NOTICE_MS = 2500;
+export const OPTION_SAVING_MIN_BUSY_MS = 400;
+export const OPTION_SAVED_NOTICE_MS = 2500;
 
 type Refusal = 'subscriptionRequired' | 'failed';
 
-const REFUSALS = {
-  subscriptionRequired: 'cityOption.subscriptionRequired',
-  failed: 'cityOption.failed',
-} as const satisfies Record<Refusal, string>;
-
-class CityRefusedError extends Error {
+class OptionRefusedError extends Error {
   constructor() {
-    super('The API kept the city as it was: the subscription is required.');
-    this.name = 'CityRefusedError';
+    super('The API kept the option as it was: the subscription is required.');
+    this.name = 'OptionRefusedError';
   }
 }
 
@@ -45,7 +45,11 @@ const THUMB_ON = 'translate-x-[23px]';
 const THUMB_OFF = 'translate-x-[3px]';
 const DIALOG_BUTTON = `flex min-h-9 items-center rounded-input px-3 text-sm ${CONTROL_BUSY}`;
 
-export function CitySwitch({ initial, setCity }: CitySwitchProps) {
+export function ProjectOptionSwitch({
+  option,
+  initial,
+  save: saveOption,
+}: ProjectOptionSwitchProps) {
   const t = useT();
   const labelId = useId();
   const noteId = useId();
@@ -74,20 +78,19 @@ export function CitySwitch({ initial, setCity }: CitySwitchProps) {
     setRefusal(null);
     setSaved(false);
     setOn(wanted);
-    request.current = defer(() => setCity(wanted))
+    request.current = defer(() => saveOption(wanted))
       .pipe(
         tap((outcome) => {
           if (outcome.kind === 'subscriptionRequired') {
-            throw new CityRefusedError();
+            throw new OptionRefusedError();
           }
-          setOn(outcome.cityEnabled);
         }),
-        withTemporarySuccess(setSaved, CITY_SAVED_NOTICE_MS, { signal: notice.current.signal }),
+        withTemporarySuccess(setSaved, OPTION_SAVED_NOTICE_MS, { signal: notice.current.signal }),
         catchToState((failure: unknown) => {
           setOn(!wanted);
-          setRefusal(failure instanceof CityRefusedError ? 'subscriptionRequired' : 'failed');
+          setRefusal(failure instanceof OptionRefusedError ? 'subscriptionRequired' : 'failed');
         }),
-        withSmoothLoading(setBusy, CITY_SAVING_MIN_BUSY_MS),
+        withSmoothLoading(setBusy, OPTION_SAVING_MIN_BUSY_MS),
       )
       .subscribe();
   };
@@ -106,15 +109,15 @@ export function CitySwitch({ initial, setCity }: CitySwitchProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 flex-col gap-0.5">
           <span id={labelId} className="text-sm font-semibold text-ink">
-            {t('cityOption.label')}
+            {t(`${option}.label`)}
           </span>
           <span id={noteId} className="text-xs leading-[18px] text-muted">
-            {t('cityOption.note')}
+            {t(`${option}.note`)}
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-2 pt-0.5">
           <span aria-hidden="true" className="text-xs font-medium text-muted">
-            {on ? t('cityOption.on') : t('cityOption.off')}
+            {on ? t(`${option}.on`) : t(`${option}.off`)}
           </span>
           <button
             type="button"
@@ -140,9 +143,9 @@ export function CitySwitch({ initial, setCity }: CitySwitchProps) {
           className="flex flex-col gap-2 rounded-input border border-line bg-soft p-3"
         >
           <p id={`${confirmId}-title`} className="text-sm font-semibold text-ink">
-            {t('cityOption.confirmTitle')}
+            {t(`${option}.confirmTitle`)}
           </p>
-          <p className="text-xs leading-[18px] text-ink">{t('cityOption.confirmBody')}</p>
+          <p className="text-xs leading-[18px] text-ink">{t(`${option}.confirmBody`)}</p>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -151,7 +154,7 @@ export function CitySwitch({ initial, setCity }: CitySwitchProps) {
               }}
               className={`${DIALOG_BUTTON} ${BUTTON_PRIMARY}`}
             >
-              {t('cityOption.confirm')}
+              {t(`${option}.confirm`)}
             </button>
             <button
               type="button"
@@ -160,17 +163,17 @@ export function CitySwitch({ initial, setCity }: CitySwitchProps) {
               }}
               className={`${DIALOG_BUTTON} ${BUTTON_SECONDARY}`}
             >
-              {t('cityOption.keep')}
+              {t(`${option}.keep`)}
             </button>
           </div>
         </div>
       ) : null}
       <p aria-live="polite" className="min-h-[18px] text-xs leading-[18px] text-muted">
-        {busy ? t('cityOption.saving') : saved ? t('cityOption.saved') : null}
+        {busy ? t(`${option}.saving`) : saved ? t(`${option}.saved`) : null}
       </p>
       {refusal === null ? null : (
         <p role="alert" className="text-xs leading-[18px] text-bad">
-          {t(REFUSALS[refusal])}
+          {t(`${option}.${refusal}`)}
         </p>
       )}
     </div>
