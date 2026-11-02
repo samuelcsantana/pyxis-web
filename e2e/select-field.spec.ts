@@ -2,6 +2,7 @@ import { expect, type Locator, type Page, test } from '@playwright/test';
 import { untilHydrated } from './hydration';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
+const OPENED_LIST_OPACITY = '1';
 
 async function openVisitFilters(page: Page, isMobile: boolean): Promise<void> {
   await page.goto(`/${STORE_ID}/visits`);
@@ -21,6 +22,15 @@ function pickerBackgroundOf(select: Locator): Promise<string> {
   return select.evaluate(
     (element) => getComputedStyle(element, '::picker(select)').backgroundColor,
   );
+}
+
+function pickerOpacityOf(select: Locator): Promise<string> {
+  return select.evaluate((element) => getComputedStyle(element, '::picker(select)').opacity);
+}
+
+async function openTheList(select: Locator): Promise<void> {
+  await select.click();
+  await expect.poll(() => pickerOpacityOf(select)).toBe(OPENED_LIST_OPACITY);
 }
 
 function tokenColor(page: Page, token: string): Promise<string> {
@@ -48,7 +58,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
       const channel = page.getByRole('combobox', { name: 'Channel' });
       await expect(channel).toHaveCSS('appearance', 'base-select');
 
-      await channel.click();
+      await openTheList(channel);
       const paid = page.getByRole('option', { name: 'Paid' });
       await expect(paid).toBeVisible();
       await paid.hover();
@@ -64,7 +74,7 @@ test('chooses a channel from the list, which then closes', async ({ page, isMobi
   await openVisitFilters(page, isMobile);
   const channel = page.getByRole('combobox', { name: 'Channel' });
 
-  await channel.click();
+  await openTheList(channel);
   await page.getByRole('option', { name: 'Paid' }).click();
 
   await expect(channel).toHaveValue('paid');
