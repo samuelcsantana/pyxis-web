@@ -630,6 +630,7 @@ export const nl = translation({
     how: 'Zo installeer je',
     yourself: 'Zelf',
     withAgent: 'Met een AI-agent',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere coding-agent en plak dit verzoek. Het bevat al de publieke sleutel en het adres van dit project.',
       prompt:
@@ -655,6 +656,25 @@ export const nl = translation({
       },
       rules:
         'De agent volgt de regels in <code>llms.txt</code>: geen persoonsgegevens, geldige eventnamen, het adres van de API in de CSP.',
+    },
+    tagManager: {
+      lead: 'Laadt je site al Google Tag Manager? Voeg Pyxis daar dan toe, zonder de code van de site te wijzigen.',
+      steps: {
+        template:
+          'Open in Tag Manager <b>Templates</b> › <b>Tagtemplates</b> › <b>Zoeken in galerij</b> en voeg <b>Pyxis Analytics</b> toe. Staat de template nog niet in de galerij, download dan <file>template.tpl</file> en kies <b>Nieuw</b> › ⋮ › <b>Import</b>.',
+        tag: 'Maak een tag van het type <b>Pyxis Analytics</b> met de actie <b>Initialize</b> en plak de publieke sleutel van dit project:',
+        endpoint: 'In het veld <b>Endpoint</b> moet <code>{endpoint}</code> staan.',
+        trigger:
+          'Kies bij <b>Activeren</b> de trigger <b>Initialisatie - Alle pagina’s</b>. Pyxis telt dan elke paginaweergave, ook de routes van single-page-apps.',
+        events:
+          'Optioneel: voeg voor elk gewenst event een tag toe met de actie <b>Track event</b>, de naam en tot tien eigenschappen, en kies bij <b>Geavanceerde instellingen</b> › <b>Tagreeks</b> dat de Initialize-tag eerst wordt geactiveerd.',
+        publish:
+          'Publiceer de container met <b>Sturen</b> › <b>Publiceren</b>. Stap 2, hieronder, laat weten wanneer het eerste event binnenkomt.',
+      },
+      consent:
+        'Standaard respecteert de template de toestemmingsmodus: zolang <code>analytics_storage</code> geweigerd is, laadt hij niets.',
+      nuvemshop:
+        'Nuvemshop: betaalde abonnementen accepteren de container-ID bij <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
     },
     step3: '3. Controleer het met Claude (optioneel)',
     claude: {

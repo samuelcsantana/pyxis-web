@@ -601,6 +601,7 @@ export const en = {
     how: 'How to install',
     yourself: 'Yourself',
     withAgent: 'With an AI agent',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Open your site’s repository in Claude Code, Cursor or another coding agent and paste this request. It already carries this project’s public key and address.',
       prompt:
@@ -626,6 +627,25 @@ export const en = {
       },
       rules:
         'The agent follows the rules in <code>llms.txt</code>: no personal data, valid event names, the API address in the CSP.',
+    },
+    tagManager: {
+      lead: 'If your site already loads Google Tag Manager, add Pyxis there, without changing the site’s code.',
+      steps: {
+        template:
+          'In Tag Manager, open <b>Templates</b> › <b>Tag Templates</b> › <b>Search Gallery</b> and add <b>Pyxis Analytics</b>. If the gallery does not list it yet, download <file>template.tpl</file> and choose <b>New</b> › ⋮ › <b>Import</b> instead.',
+        tag: 'Create a tag of type <b>Pyxis Analytics</b> with the action <b>Initialize</b> and paste this project’s public key:',
+        endpoint: 'The <b>Endpoint</b> field must hold <code>{endpoint}</code>.',
+        trigger:
+          'In <b>Triggering</b>, choose <b>Initialization - All Pages</b>. Pyxis then counts every page view, the routes of single-page apps included.',
+        events:
+          'Optional: for each event you want, add a tag with the action <b>Track event</b>, its name and up to ten properties, and in <b>Advanced Settings</b> › <b>Tag Sequencing</b> fire the Initialize tag before it.',
+        publish:
+          'Publish the container with <b>Submit</b> › <b>Publish</b>. Step 2, below, says when the first event arrives.',
+      },
+      consent:
+        'By default the template respects Consent Mode: while <code>analytics_storage</code> is denied, it loads nothing.',
+      nuvemshop:
+        'Nuvemshop: paid plans accept the container ID in <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
     },
     step3: '3. Check with Claude (optional)',
     claude: {

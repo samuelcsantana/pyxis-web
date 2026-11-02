@@ -640,6 +640,7 @@ export const fr = translation({
     how: 'Comment installer',
     yourself: 'Vous-même',
     withAgent: 'Avec un agent IA',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent de code et collez cette demande. Elle contient déjà la clé publique et l’adresse de ce projet.',
       prompt:
@@ -666,6 +667,25 @@ export const fr = translation({
       },
       rules:
         'L’agent suit les règles de <code>llms.txt</code> : aucune donnée personnelle, des noms d’événement valides, l’adresse de l’API dans la CSP.',
+    },
+    tagManager: {
+      lead: 'Si votre site charge déjà Google Tag Manager, ajoutez-y Pyxis, sans modifier le code du site.',
+      steps: {
+        template:
+          'Dans Tag Manager, ouvrez <b>Modèles</b> › <b>Modèles de balise</b> › <b>Rechercher dans la galerie</b> et ajoutez <b>Pyxis Analytics</b>. Si la galerie ne le propose pas encore, téléchargez <file>template.tpl</file> et choisissez plutôt <b>Nouveau</b> › ⋮ › <b>Importer</b>.',
+        tag: 'Créez une balise de type <b>Pyxis Analytics</b> avec l’action <b>Initialize</b> et collez la clé publique de ce projet :',
+        endpoint: 'Le champ <b>Endpoint</b> doit contenir <code>{endpoint}</code>.',
+        trigger:
+          'Dans <b>Déclenchement</b>, choisissez <b>Initialisation - Toutes les pages</b>. Pyxis compte alors chaque page vue, y compris les routes des applications monopages.',
+        events:
+          'Facultatif : pour chaque événement souhaité, ajoutez une balise avec l’action <b>Track event</b>, son nom et jusqu’à dix propriétés, et dans <b>Paramètres avancés</b> › <b>Séquençage des balises</b>, déclenchez la balise Initialize avant elle.',
+        publish:
+          'Publiez le conteneur avec <b>Envoyer</b> › <b>Publier</b>. L’étape 2, ci-dessous, indique quand le premier événement arrive.',
+      },
+      consent:
+        'Par défaut, le modèle respecte le mode Consentement : tant que <code>analytics_storage</code> est refusé, il ne charge rien.',
+      nuvemshop:
+        'Nuvemshop : les formules payantes acceptent l’ID du conteneur dans <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
     },
     step3: '3. Vérifiez avec Claude (facultatif)',
     claude: {

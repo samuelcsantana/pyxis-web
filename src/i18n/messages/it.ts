@@ -629,6 +629,7 @@ export const it = translation({
     how: 'Come installare',
     yourself: 'Per conto tuo',
     withAgent: 'Con un agente IA',
+    withTagManager: 'Google Tag Manager',
     agent: {
       lead: 'Apri il repository del sito in Claude Code, in Cursor o in un altro agente di programmazione e incolla questa richiesta. Contiene già la chiave pubblica e l’indirizzo di questo progetto.',
       prompt:
@@ -655,6 +656,25 @@ export const it = translation({
       },
       rules:
         'L’agente segue le regole di <code>llms.txt</code>: nessun dato personale, nomi di evento validi, l’indirizzo dell’API nella CSP.',
+    },
+    tagManager: {
+      lead: 'Se il tuo sito carica già Google Tag Manager, aggiungi Pyxis lì, senza modificare il codice del sito.',
+      steps: {
+        template:
+          'In Tag Manager, apri <b>Modelli</b> › <b>Modelli di tag</b> › <b>Galleria di ricerca</b> e aggiungi <b>Pyxis Analytics</b>. Se la galleria non lo elenca ancora, scarica <file>template.tpl</file> e scegli invece <b>Nuovo</b> › ⋮ › <b>Importa</b>.',
+        tag: 'Crea un tag di tipo <b>Pyxis Analytics</b> con l’azione <b>Initialize</b> e incolla la chiave pubblica di questo progetto:',
+        endpoint: 'Il campo <b>Endpoint</b> deve contenere <code>{endpoint}</code>.',
+        trigger:
+          'In <b>Attivazione</b>, scegli <b>Inizializzazione - Tutte le pagine</b>. Pyxis conta così ogni visualizzazione di pagina, comprese le rotte delle app a pagina singola.',
+        events:
+          'Facoltativo: per ogni evento che vuoi, aggiungi un tag con l’azione <b>Track event</b>, il suo nome e fino a dieci proprietà, e in <b>Impostazioni avanzate</b> › <b>Sequenza tag</b> attiva il tag Initialize prima di esso.',
+        publish:
+          'Pubblica il contenitore con <b>Invia</b> › <b>Pubblica</b>. Il passo 2, qui sotto, ti avvisa quando arriva il primo evento.',
+      },
+      consent:
+        'Per impostazione predefinita, il modello rispetta la modalità di consenso: finché <code>analytics_storage</code> è negato, non carica nulla.',
+      nuvemshop:
+        'Nuvemshop: i piani a pagamento accettano l’ID del contenitore in <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
     },
     step3: '3. Verifica con Claude (facoltativo)',
     claude: {
