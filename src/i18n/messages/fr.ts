@@ -1856,9 +1856,9 @@ export const fr = translation({
         },
         visit: {
           label: 'Visite',
-          where: 'Dans le navigateur : aucun cookie, rien qui relie deux onglets',
+          where: 'Dans le navigateur : aucun cookie ni aucun identifiant qui relie deux onglets',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · prend fin avec l’onglet',
+          kept: 'sessionStorage · prend fin avec l’onglet ; avec les visiteurs uniques, seulement la fin du jour et du mois',
         },
       },
       foot: 'Un navigateur qui envoie « ne pas me suivre » (Global Privacy Control ou Do Not Track) désactive Pyxis avant que quoi que ce soit ne soit mis en file d’attente. Les événements sont supprimés au bout de 13 mois.',
@@ -2187,7 +2187,7 @@ export const fr = translation({
         cookies: {
           question: 'Pyxis dépose-t-il des cookies chez mes visiteurs ?',
           answer:
-            'Non. L’identifiant d’une visite vit dans le <code>sessionStorage</code> de l’onglet et disparaît à sa fermeture. Les cookies n’existent que dans le tableau de bord Pyxis lui-même, pour les personnes qui l’utilisent, jamais sur les sites qu’il mesure.',
+            'Non. L’identifiant d’une visite vit dans le <code>sessionStorage</code> de l’onglet et disparaît à sa fermeture. Si le projet active les visiteurs uniques, le <code>localStorage</code> du site conserve aussi uniquement les moments où se terminent le jour et le mois du site, les mêmes pour tous les visiteurs ce jour-là. Les cookies n’existent que dans le tableau de bord Pyxis lui-même, pour les personnes qui l’utilisent, jamais sur les sites qu’il mesure.',
         },
         address: {
           question: 'Stocke-t-il les adresses IP ?',
@@ -2197,7 +2197,7 @@ export const fr = translation({
         people: {
           question: 'Peut-il savoir que deux visites viennent de la même personne ?',
           answer:
-            'Uniquement pour les personnes connectées à votre site, grâce à votre propre identifiant interne, jamais un e-mail. Les visites anonymes ne sont jamais reliées : ni d’un onglet à l’autre, ni d’un jour à l’autre.',
+            'Uniquement pour les personnes connectées à votre site, grâce à votre propre identifiant interne, jamais un e-mail. Les visites anonymes ne sont jamais reliées par un identifiant, ni d’un onglet à l’autre, ni d’un jour à l’autre. Pour compter les visiteurs uniques, si le projet active cette option, chaque visite indique seulement s’il s’agit de la première de ce navigateur, de la première du mois, de la première de la journée ou d’une autre le même jour ; aucun identifiant n’est créé, et le serveur ne relie pas une visite à une autre.',
         },
         optOut: {
           question: 'Un visiteur peut-il refuser d’être mesuré ?',
@@ -2307,7 +2307,7 @@ export const fr = translation({
       noReferrer: 'référent : aucun',
       empty: 'Rien d’envoyé pour l’instant. Le premier lot part dans les 5 secondes.',
       never:
-        '<strong>Jamais envoyé :</strong> votre adresse IP, le nom complet de votre navigateur, un cookie, l’adresse complète de la page. <strong>Ajouté par le serveur :</strong> le pays, la région et la ville approximative, d’après la requête ; puis l’adresse est supprimée.',
+        '<strong>Jamais envoyé :</strong> votre adresse IP, le nom complet de votre navigateur, un cookie, l’adresse complète de la page, un identifiant qui vous suive d’une visite à l’autre. <strong>Ajouté par le serveur :</strong> le pays, la région et la ville approximative, d’après la requête ; puis l’adresse est supprimée.',
       close: 'Fermer',
     },
     footer: {

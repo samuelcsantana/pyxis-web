@@ -1840,9 +1840,9 @@ export const nl = translation({
         },
         visit: {
           label: 'Bezoek',
-          where: 'In de browser: geen cookie, niets wat twee tabbladen koppelt',
+          where: 'In de browser: geen cookie en geen id die twee tabbladen koppelt',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · eindigt met het tabblad',
+          kept: 'sessionStorage · eindigt met het tabblad; met unieke bezoekers alleen het einde van de dag en de maand',
         },
       },
       foot: 'Een browser die “niet volgen” verstuurt (Global Privacy Control of Do Not Track) schakelt Pyxis uit voordat er iets in de wachtrij komt. Events worden na 13 maanden verwijderd.',
@@ -2164,7 +2164,7 @@ export const nl = translation({
         cookies: {
           question: 'Plaatst Pyxis cookies bij mijn bezoekers?',
           answer:
-            'Nee. De id van een bezoek staat in de <code>sessionStorage</code> van het tabblad en verdwijnt als het tabblad sluit. Cookies bestaan alleen in het Pyxis-dashboard zelf, voor de mensen die het gebruiken, nooit op de sites die het meet.',
+            'Nee. De id van een bezoek staat in de <code>sessionStorage</code> van het tabblad en verdwijnt als het tabblad sluit. Zet het project unieke bezoekers aan, dan bewaart de <code>localStorage</code> van de site ook alleen wanneer de dag en de maand van de site eindigen: dezelfde tijdstippen voor elke bezoeker op die dag. Cookies bestaan alleen in het Pyxis-dashboard zelf, voor de mensen die het gebruiken, nooit op de sites die het meet.',
         },
         address: {
           question: 'Slaat het IP-adressen op?',
@@ -2174,7 +2174,7 @@ export const nl = translation({
         people: {
           question: 'Kan het zien dat twee bezoeken van dezelfde persoon komen?',
           answer:
-            'Alleen bij mensen die op je site zijn ingelogd, via je eigen interne id, nooit een e-mailadres. Anonieme bezoeken worden nooit gekoppeld: niet tussen tabbladen, niet tussen dagen.',
+            'Alleen bij mensen die op je site zijn ingelogd, via je eigen interne id, nooit een e-mailadres. Anonieme bezoeken worden nooit via een id gekoppeld, niet tussen tabbladen, niet tussen dagen. Om unieke bezoekers te tellen zegt elk bezoek, als het project die optie aanzet, alleen of het gaat om het eerste van deze browser, het eerste in de maand, het eerste op de dag of een ander bezoek op dezelfde dag; er wordt geen id aangemaakt, en de server koppelt een bezoek niet aan een ander.',
         },
         optOut: {
           question: 'Kan een bezoeker het meten uitzetten?',
@@ -2283,7 +2283,7 @@ export const nl = translation({
       noReferrer: 'verwijzer: geen',
       empty: 'Nog niets verstuurd. De eerste batch gaat binnen 5 seconden weg.',
       never:
-        '<strong>Nooit verstuurd:</strong> je IP-adres, de volledige naam van je browser, een cookie, het volledige adres van de pagina. <strong>Toegevoegd door de server:</strong> land, regio en geschatte stad, uit het verzoek; daarna wordt het adres weggegooid.',
+        '<strong>Nooit verstuurd:</strong> je IP-adres, de volledige naam van je browser, een cookie, het volledige adres van de pagina, een id die je van het ene bezoek naar het andere volgt. <strong>Toegevoegd door de server:</strong> land, regio en geschatte stad, uit het verzoek; daarna wordt het adres weggegooid.',
       close: 'Sluiten',
     },
     footer: {

@@ -1840,9 +1840,9 @@ export const it = translation({
         },
         visit: {
           label: 'Visita',
-          where: 'Nel browser: nessun cookie, niente che colleghi due schede',
+          where: 'Nel browser: nessun cookie e nessun identificativo che colleghi due schede',
           raw: 'cookie: visitor_id=8f2c41d0…; Max-Age=34560000',
-          kept: 'sessionStorage · finisce con la scheda',
+          kept: 'sessionStorage · finisce con la scheda; con i visitatori unici, solo la fine del giorno e del mese',
         },
       },
       foot: 'Un browser che chiede di non essere tracciato (Global Privacy Control o Do Not Track) spegne Pyxis prima che qualcosa venga messo in coda. Gli eventi vengono eliminati dopo 13 mesi.',
@@ -2168,7 +2168,7 @@ export const it = translation({
         cookies: {
           question: 'Pyxis imposta cookie sui miei visitatori?',
           answer:
-            'No. L’ID di una visita vive nel <code>sessionStorage</code> della scheda e finisce quando la scheda si chiude. I cookie esistono solo nella dashboard di Pyxis, per le persone che la usano, mai sui siti che misura.',
+            'No. L’ID di una visita vive nel <code>sessionStorage</code> della scheda e finisce quando la scheda si chiude. Se il progetto attiva i visitatori unici, il <code>localStorage</code> del sito salva inoltre soltanto gli orari in cui finiscono il giorno e il mese del sito, uguali per ogni visitatore in quel giorno. I cookie esistono solo nella dashboard di Pyxis, per le persone che la usano, mai sui siti che misura.',
         },
         address: {
           question: 'Salva gli indirizzi IP?',
@@ -2178,7 +2178,7 @@ export const it = translation({
         people: {
           question: 'Può capire che due visite vengono dalla stessa persona?',
           answer:
-            'Solo per le persone che hanno effettuato l’accesso al tuo sito, tramite il tuo ID interno, mai un’email. Le visite anonime non vengono mai collegate: né tra schede, né tra giorni diversi.',
+            'Solo per le persone che hanno effettuato l’accesso al tuo sito, tramite il tuo ID interno, mai un’email. Le visite anonime non vengono mai collegate da un identificativo, né tra schede, né tra giorni diversi. Per contare i visitatori unici, se il progetto attiva questa opzione, ogni visita dice soltanto se è la prima da questo browser, la prima del mese, la prima del giorno o un’altra nello stesso giorno; non viene creato alcun identificativo, e il server non collega una visita a un’altra.',
         },
         optOut: {
           question: 'Un visitatore può rifiutare la misurazione?',
@@ -2288,7 +2288,7 @@ export const it = translation({
       noReferrer: 'referrer: nessuno',
       empty: 'Ancora niente inviato. Il primo batch parte entro 5 secondi.',
       never:
-        '<strong>Mai inviati:</strong> il tuo indirizzo IP, il nome completo del tuo browser, un cookie, l’indirizzo completo della pagina. <strong>Aggiunti dal server:</strong> paese, regione e città approssimativa, dalla richiesta; poi l’indirizzo viene scartato.',
+        '<strong>Mai inviati:</strong> il tuo indirizzo IP, il nome completo del tuo browser, un cookie, l’indirizzo completo della pagina, un identificativo che ti segua da una visita all’altra. <strong>Aggiunti dal server:</strong> paese, regione e città approssimativa, dalla richiesta; poi l’indirizzo viene scartato.',
       close: 'Chiudi',
     },
     footer: {
