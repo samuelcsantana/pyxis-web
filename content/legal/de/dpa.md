@@ -40,7 +40,8 @@ Pyxis installiert ist.
 eine Aktion, die du markiert hast.
 
 2.4. **Projekt** ist die Konfiguration einer deiner Websites in Pyxis: Name, autorisierte Adressen
-(Origins), Zeitzone, Conversion-Ereignis, Option zum Speichern der Stadt, Schlüssel und Ereignisse.
+(Origins), Zeitzone, Conversion-Ereignis, Optionen zum Speichern der Stadt und zum Zählen
+eindeutiger Besucher, Schlüssel und Ereignisse.
 
 2.5. **Unterauftragsverarbeiter** ist der Anbieter, den wir beauftragen und der in unserem Auftrag
 personenbezogene Daten dieses Vertrags verarbeitet.
@@ -99,9 +100,9 @@ die Kapazität des Dienstes zu prüfen.
 5.1. Deine Weisungen für die Verarbeitung sind, zusammengenommen:
 
 1. die Nutzungsbedingungen und dieser Vertrag;
-2. die Konfiguration deiner Projekte (autorisierte Origins, Zeitzone, Conversion-Ereignis, Option
-   zum Speichern der Stadt, Schlüssel und Personen mit Zugriff), vorgenommen vom Kontoinhaber im
-   Dashboard oder, auf Anfrage, von uns;
+2. die Konfiguration deiner Projekte (autorisierte Origins, Zeitzone, Conversion-Ereignis, Optionen
+   zum Speichern der Stadt und zum Zählen eindeutiger Besucher, Schlüssel und Personen mit Zugriff),
+   vorgenommen vom Kontoinhaber im Dashboard oder, auf Anfrage, von uns;
 3. das, was der auf deiner Website installierte Tracker sendet (welche Ereignisse, Eigenschaften und
    ob du die Funktion `identify` verwendest);
 4. die Aktionen des Kontoinhabers im Dashboard (zum Beispiel die Ereignisse exportieren, ein Projekt
@@ -174,7 +175,17 @@ deinen Pflichten als Verantwortlicher gegenüber den betroffenen Personen.
     Rechtsgrundlage aus Punkt 1 fällt; vorher den Datenschutzhinweis aus Punkt 2 aktualisiert hast,
     mit deutlicher Hervorhebung der Änderung; und, wenn das Projekt die Funktion `identify`
     verwendet, weißt, dass dann die ungefähre Stadt jedes Besuchs der identifizierten Personen
-    erfasst wird, und dies im Hinweis angibst.
+    erfasst wird, und dies im Hinweis angibst;
+11. wenn du die Zählung eindeutiger Besucher in einem Projekt einschaltest (Nutzungsbedingungen,
+    Klausel 4.6), vorher geprüft hast, ob sie für den Zweck der Messung erforderlich ist und ob sie
+    unter die Rechtsgrundlage aus Punkt 1 fällt, auch im Hinblick auf die Markierung, die der Tracker
+    im Browser des Besuchers speichert; vorher den Datenschutzhinweis aus Punkt 2 aktualisiert hast,
+    mit deutlicher Hervorhebung der Änderung, und darin angegeben hast, was der Browser speichert, wie
+    lange und was jeder Besuch mitteilt; wenn das Projekt die Funktion `identify` verwendet, weißt,
+    dass der Besuchstyp dann auch bei den Besuchen der identifizierten Personen erhalten bleibt und
+    zeigt, wie oft jede von ihnen auf die Website zurückkehrt, und dies im Hinweis angibst; und, wenn
+    deine Website den Besucher bittet, die Messung der Nutzung zu akzeptieren oder abzulehnen,
+    entschieden hast, ob die Zählung diese Wahl beachtet, und dies im Hinweis angegeben hast.
 
 6.2. Der Server von Pyxis verwirft automatisch Werte, die die Form einer E-Mail-Adresse haben, oder
 Folgen von 10 oder mehr Ziffern (wie CPF, CNPJ – Cadastro Nacional da Pessoa Jurídica, brasilianische Steuernummer für Unternehmen – und Telefonnummern) in den Eigenschaften der
@@ -283,9 +294,15 @@ verlangen. Wir helfen wie unten beschrieben.
 10.2. **Nur wer identifiziert wurde, kann gefunden werden.** Pyxis speichert keine Cookies, keine IP
 und keine dauerhafte Kennung des anonymen Besuchers. Die Besuchskennung ist zufällig, bleibt nur im
 Tab des Browsers und wird beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität ausgetauscht.
+Die Zählung eindeutiger Besucher (Nutzungsbedingungen, Klausel 4.6) ändert daran nichts: die
+Markierung, die sie verwendet, bleibt nur im Browser, ist für alle Besucher der Website am selben Tag
+dieselbe und gelangt nie zu Pyxis, und der Besuchstyp ist keine Kennung (viele Besucher haben
+denselben Wert).
 Deshalb **ist es nicht möglich, die anonymen Besuche einer Person zu finden**. Auffindbar sind nur die
 Ereignisse einer Person, die deine Website mit der Funktion `identify` identifiziert hat, anhand der
-internen Kennung, die du gesendet hast.
+internen Kennung, die du gesendet hast. Die Zählung eindeutiger Besucher ändert nichts am Umfang der
+Löschung: die anonymen Besuche derselben Person werden davon nicht erfasst, auch wenn der Typ eines
+identifizierten Besuchs anzeigt, dass der Browser an diesem Tag schon da gewesen war.
 
 10.3. **Die Daten einer Person löschen (du selbst, über die API).** Rufe
 `DELETE https://api.pyxis-analytics.dev/v1/subjects/{userId}` mit dem geheimen Schlüssel des Projekts
@@ -301,7 +318,10 @@ Antwort enthält dieselben Ereignisse, die die Löschung entfernen würde, in Re
 pro Seite, in JSON. Gibt es mehr, gibt die Antwort den nächsten Cursor an (`next_after`), den du als
 `?after=` übergibst, um die folgende Seite abzurufen. Jedes Ereignis enthält Name, Datum und Uhrzeit,
 Besuchskennung, Seite, Herkunft, Gerät, Land, Bundesstaat, Stadt (leer in Projekten mit
-ausgeschalteter Option; Nutzungsbedingungen, Klausel 4.5) und Eigenschaften.
+ausgeschalteter Option; Nutzungsbedingungen, Klausel 4.5), Besuchstyp (nur bei den Besuchen, die
+empfangen wurden, während die Zählung eindeutiger Besucher im Projekt eingeschaltet war, und nur in
+dem Ereignis, das ihn übermittelt hat: mit dem Tracker das erste jedes Besuchs; Nutzungsbedingungen,
+Klausel 4.6) und Eigenschaften.
 
 10.5. **Grenzen dieser Routen.** Beide Routen akzeptieren bis zu 60 Aufrufe pro Minute pro Schlüssel
 und pro Herkunftsadresse. Der geheime Schlüssel darf nur auf deinem Server verwendet werden, nie im
@@ -486,6 +506,7 @@ Kunden, die er mit der Funktion `identify` identifiziert.
 | Name des Ereignisses | `page_view` (Seitenaufruf), `api_request` (Aufruf an die API der Website), `identify` oder ein vom Kunden festgelegter Name |
 | Datum und Uhrzeit | Die des Browsers, korrigiert um die Uhrabweichung, und die des Empfangs auf dem Server |
 | Besuchskennung | Im `sessionStorage` des Tabs gespeicherte Zufallsnummer; ausgetauscht beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität |
+| Besuchstyp | Nur bei den Besuchen, die empfangen wurden, während die Zählung eindeutiger Besucher (Nutzungsbedingungen, Klausel 4.6; in jedem Projekt standardmäßig ausgeschaltet, und nur der Kontoinhaber schaltet sie ein) im Projekt eingeschaltet war, und nur in dem Ereignis, das ihn übermittelt hat (mit dem Tracker das erste jedes Besuchs): einer von vier Werten, im Browser anhand der Uhrzeit des Geräts berechnet: `first_visit` (der erste dieses Browsers oder seit seine Daten gelöscht wurden), `first_this_month` (der erste im Monat), `first_today` (der erste am Tag) oder `again_today` (ein weiterer am selben Tag), mit dem Tag und dem Monat in der Zeitzone des Projekts. Er ist keine Kennung: viele Besucher haben denselben Wert. In Projekten mit ausgeschalteter Option sendet der Tracker das Feld ebenfalls, und Pyxis verwirft es, ohne es zu speichern |
 | Nutzerkennung | Nur wenn der Kunde `identify` verwendet: die interne Kennung des Kontos im System des Kunden, mit bis zu 64 Buchstaben, Ziffern, `-` oder `_` (akzeptiert kein `@`, also keine E-Mail-Adresse) |
 | Seite | Nur der Pfad, in Form einer Vorlage: Abschnitte, die wie Kennungen aussehen (Zahlen, lange Codes, E-Mail-Adressen), werden zu `:id`; ohne Domain und ohne Parameter |
 | Herkunft des Besuchs | Nur die Domain, von der der Besucher kam (zum Beispiel `google.com`), ohne die vollständige Adresse |
@@ -506,6 +527,17 @@ Kunden, die er mit der Funktion `identify` identifiziert.
   Browsers und die des Betriebssystems zu ermitteln; danach verworfen. Besuche bekannter Bots werden
   verworfen.
 - **Cookies:** der Tracker setzt keine Cookies auf den Websites des Kunden.
+- **Markierung der eindeutigen Besucher:** nur in Projekten mit eingeschalteter Zählung eindeutiger
+  Besucher speichert der Tracker im lokalen Speicher des Browsers des Besuchers (`localStorage`, unter
+  der Adresse der Website des Kunden) die Zeitpunkte, zu denen der Tag und der Monat der Website
+  enden, für alle Besucher am selben Tag gleich. Pyxis sendet diese Zeitpunkte in der Antwort auf das
+  Senden der Ereignisse an den Tracker, empfängt und speichert die Markierung aber nie. Die Markierung
+  wird bei jedem Besuch, der eine Antwort erhält, neu geschrieben und bleibt, bis die Browserdaten
+  gelöscht werden, vom Besucher oder vom Browser selbst, bis der Besucher die Messung abschaltet
+  (`optOut`) oder bis der Browser verlangt, nicht verfolgt zu werden (Global Privacy Control oder
+  Do Not Track); in diesen beiden letzten Fällen löscht der Tracker die Markierung und sendet nichts.
+  Beim Ausschalten der Zählung löscht der Tracker die Markierung, wenn der Browser das nächste Mal
+  Ereignisse sendet und die Antwort erhält (Nutzungsbedingungen, Klausel 4.6).
 - **Vollständige Adresse der Seite, Adressparameter (außer den Kampagnenparametern),
   Browser-Fingerabdruck, Postleitzahl und Koordinaten:** nie.
 - **Stadt:** nur in Projekten, in denen der Kontoinhaber diese Option eingeschaltet hat. Beim
@@ -521,7 +553,8 @@ identifizierte Personen (nur die Anzahl), Conversions, fehlgeschlagene Schreibzu
 Seiten und Ereignisse und die Routen mit den meisten Fehlern. Die Zusammenfassung enthält keine
 Kennungen von Besuchern oder Nutzern.
 
-**7. Verarbeitungsvorgänge.** Empfang, Validierung, Klassifizierung, Speicherung, Abfrage,
+**7. Verarbeitungsvorgänge.** Empfang, Validierung, Klassifizierung, Senden der Zeitpunkte der
+Markierung der eindeutigen Besucher an den Tracker (Punkt 4), Speicherung, Abfrage,
 Aggregation, Anzeige im Dashboard, Bereitstellung über die Abfrage-API, über den MCP-Server und an die
 verbundenen Apps, Versand der aggregierten
 Zusammenfassung per E-Mail, Kopie (Export), Aussetzung des Empfangs (Klausel 5.4) und Löschung.
@@ -575,13 +608,16 @@ liegt die Datei in deiner Verantwortung.
 ## Anhang II — Geltende Sicherheitsmaßnahmen
 
 Überprüft im Code des Dienstes und in der Konfiguration der Infrastruktur am 14.10.2026 und
-am 15.10.2026; Punkt 1 (Stadt) am 29.10.2026.
+am 15.10.2026; Punkt 1 (Stadt) am 29.10.2026; Punkt 1 (eindeutige Besucher) am [DATA DA CONFERÊNCIA].
 
 **1. Datenschutz durch Technikgestaltung.** Keine Cookies auf den gemessenen Websites; IP und
 vollständiger Browser nie gespeichert; Seiten auf Vorlagen reduziert; Sperre auf dem Server, die Werte
 in Form einer E-Mail-Adresse und Zahlen mit 10 oder mehr Ziffern in den Eigenschaften, in den
 Kampagnenparametern und in der Nutzerkennung verwirft; Bundesstaat des Besuchers, und die Stadt nur,
 wenn der Kunde diese Option im Projekt einschaltet, die standardmäßig ausgeschaltet ist;
+Zählung eindeutiger Besucher nur, wenn der Kunde sie im Projekt einschaltet, die standardmäßig
+ausgeschaltet ist, ohne Kennung (der Browser speichert nur, wann der Tag und der Monat der Website
+enden, und Pyxis empfängt diese Markierung nie);
 „Nicht verfolgen“-Signale des Browsers (Global Privacy Control und Do Not Track) vom Tracker
 beachtet, der nichts sendet, wenn sie eingeschaltet sind; Option, nicht gemessen zu werden
 (`optOut`), für den Besucher; Ereignisse nach 13 Monaten gelöscht.
@@ -715,17 +751,53 @@ Website tatsächlich sendet. Er ersetzt nicht deine eigene Prüfung.
 > nicht**. Wir erfassen die aufgerufene Seite (ohne die Adressparameter, außer den
 > Kampagnenparametern), die Website, von der du kamst, die Geräteart, die Familie des Browsers und des
 > Betriebssystems, das Land und den Bundesstaat (nie die Stadt) und die Aktionen, die wir auf der
-> Website markiert haben. Jeder Besuch erhält eine Zufallsnummer, die nur im Tab des Browsers bleibt
-> und beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität verworfen wird; es gibt keine
-> Kennung, die dich bei einem anderen Besuch wiedererkennt.
+> Website markiert haben.
+>
+> *(Verwende nur eine der beiden Fassungen des folgenden Absatzes: die erste, wenn die Zählung
+> eindeutiger Besucher im Projekt ausgeschaltet ist, wie standardmäßig in jedem Projekt; die zweite
+> nur, wenn du sie eingeschaltet hast.)*
+>
+> *Ohne die Zählung eindeutiger Besucher:* Jeder Besuch erhält eine Zufallsnummer, die nur im Tab des
+> Browsers bleibt und beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität verworfen wird; es
+> gibt keine Kennung, die dich bei einem anderen Besuch wiedererkennt.
+>
+> *Mit der Zählung eindeutiger Besucher:* Jeder Besuch erhält eine Zufallsnummer, die nur im Tab des
+> Browsers bleibt und beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität verworfen wird. Um
+> eindeutige Besucher zu zählen, ohne jemanden zu identifizieren, speichert dein Browser im lokalen
+> Speicher dieser Website (kein Cookie) nur das Datum und die Uhrzeit, zu denen der Tag und der Monat
+> enden, die für alle Besucher an diesem Tag dieselben sind; diese Markierung wird bei deinen Besuchen
+> aktualisiert und bleibt, bis du die Daten dieser Website im Browser löschst. Wenn dein Browser das
+> Signal Global Privacy Control oder „Do Not Track“ sendet, wird nichts gesendet und die Markierung
+> gelöscht. Jeder Besuch teilt nur mit, ob er der erste dieses Browsers, der erste im Monat, der erste
+> am Tag oder ein weiterer am selben Tag ist, und diese Angabe bleibt bei den übrigen Daten des
+> Besuchs. Die Markierung bleibt nur in deinem Browser und wird nicht an Pyxis gesendet, und es gibt
+> keine Kennung, die dich bei einem anderen Besuch wiedererkennt.
+>
+> *(War dieser Hinweis bereits ohne die Zählung eindeutiger Besucher veröffentlicht, hebe die Änderung
+> und das Datum hervor, ab dem sie gilt. Wenn du die Zählung später ausschaltest, kehre zur ersten
+> Fassung zurück und füge direkt danach hinzu: „Bis zum TT.MM.JJJJ hat diese Website eindeutige
+> Besucher gezählt. Dein Browser hat möglicherweise noch die Markierung mit dem Datum und der Uhrzeit,
+> zu denen der Tag und der Monat endeten; sie wird bei einem deiner nächsten Besuche gelöscht oder
+> wenn du die Daten dieser Website im Browser löschst. Die bis dahin gezählten Besuche behalten ihren
+> Typ, bis sie gelöscht werden, 13 Monate nach jedem einzelnen.“)*
+>
+> *(Wenn du die Zählung eindeutiger Besucher eingeschaltet hast und deine Website die Funktion
+> `identify` verwendet, ersetze im Absatz über diese Funktion „verknüpfen wir die Ereignisse dieses
+> Besuchs mit der internen Nummer deines Kontos“ durch „verknüpfen wir die Ereignisse dieses Besuchs,
+> einschließlich dessen, ob er der erste dieses Browsers, der erste im Monat, der erste am Tag oder
+> ein weiterer am selben Tag war, mit der internen Nummer deines Kontos“. Wenn du auch die Stadt
+> eingeschaltet hast, verwende „einschließlich der ungefähren Stadt und dessen, ob er der erste
+> dieses Browsers, der erste im Monat, der erste am Tag oder ein weiterer am selben Tag war“.)*
 >
 > *(Wenn du die Stadt im Projekt eingeschaltet hast, ersetze „das Land und den Bundesstaat (nie die
 > Stadt)“ durch „das Land, den Bundesstaat und die ungefähre Stadt, im Moment des Aufrufs aus deiner
 > IP-Adresse abgeleitet, ohne die IP zu speichern“. Wenn deine Website auch die Funktion `identify`
-> verwendet, ersetze im folgenden Absatz „verknüpfen wir die Ereignisse dieses Besuchs mit der
-> internen Nummer deines Kontos“ durch „verknüpfen wir die Ereignisse dieses Besuchs, einschließlich
-> der ungefähren Stadt, mit der internen Nummer deines Kontos“. War dieser Hinweis bereits ohne die
-> Stadt veröffentlicht, hebe die Änderung und das Datum hervor, ab dem sie gilt.)*
+> verwendet, ersetze im Absatz über diese Funktion „verknüpfen wir die Ereignisse dieses Besuchs mit
+> der internen Nummer deines Kontos“ durch „verknüpfen wir die Ereignisse dieses Besuchs,
+> einschließlich der ungefähren Stadt, mit der internen Nummer deines Kontos“ (wenn du auch die
+> Zählung eindeutiger Besucher eingeschaltet hast, verwende die kombinierte Ersetzung aus dem
+> vorigen Absatz). War dieser Hinweis bereits ohne die Stadt veröffentlicht, hebe die Änderung und
+> das Datum hervor, ab dem sie gilt.)*
 >
 > *(Füge den folgenden Absatz nur ein, wenn deine Website die Funktion `identify` verwendet.)* Wenn du
 > dich in dein Konto einloggst, verknüpfen wir die Ereignisse dieses Besuchs mit der internen Nummer

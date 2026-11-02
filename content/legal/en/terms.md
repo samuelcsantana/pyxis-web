@@ -91,7 +91,8 @@ access through tokens and connected apps, including through the MCP server.
 send events to the service.
 
 2.3. **Project:** the configuration of one of your sites in the service (name, authorized
-addresses, time zone, conversion event, the option to store the city, keys and events).
+addresses, time zone, conversion event, the options to store the city and to count unique visitors,
+keys and events).
 
 2.4. **Event:** each record sent by the tracker or by your integration, such as a page view or an
 action you have marked.
@@ -178,14 +179,35 @@ to your site's API, acquisition, devices and times of day.
    except the campaign ones (`utm_source`, `utm_medium`, `utm_campaign`);
 6. it sends nothing when the visitor's browser asks not to be tracked (Global Privacy Control or
    Do Not Track);
-7. it does not recognize the anonymous visitor on another visit: each visit has a random number that
-   disappears when the tab is closed or after 30 minutes of inactivity.
+7. it does not create, receive or store an identifier that follows the anonymous visitor from one
+   visit to another: each visit has a random number that disappears when the tab is closed or after
+   30 minutes of inactivity, and the service does not link one anonymous visit to another. If the
+   account owner turns on the unique visitor count in the project (Clause 4.6), the visitor's browser
+   stores only the times at which the site's day and month end, which are the same for all visitors
+   on that day, and each visit reports only its type: the first from this browser, the first in the
+   month, the first in the day or another on the same day. This count comes turned off, and we never
+   turn it on without their request.
 
 4.3. **Important:** the dashboard figures are a measurement, not an exact count. Visits from people
 who block the tracker, who ask not to be tracked, from bots and from people who were offline do not
 appear, and events sent while the service is down or while intake is paused (Clauses 7.2, 15 and
 18) are lost (the tracker retries for a few seconds while the page is open, but not when intake is
 paused).
+
+Unique visitors (Clause 4.6) are also an estimate: they count browsers, not people. The same person
+counts more than once when they use another device or another browser, a private window, or when
+the browser data is deleted, by them or by the browser itself (Safari, for example, deletes the data
+stored by a site after a few days of use without interaction with it, and whoever comes back after
+that appears as new); and people who use the same browser count as one. Whoever leaves the site
+within a few seconds, before the browser receives the first response from the service, does not
+leave the marker updated, and the next visit counts again; two tabs opened at the same time on the
+first visit of the day count twice; each address of the site (with and without `www`, or different
+subdomains) counts separately, unless one redirects to the other; and a device with the wrong clock
+may have the visit counted on the wrong day. In the first weeks after turning on the count, or
+turning it back on, almost every visitor appears as new, because no browser has the marker yet, and
+visits from before it was turned on are not included in the count. Unique visitors from different
+days do not add up: two days with 100 unique visitors each may be 100 or 200 browsers, and the
+dashboard warns when it shows a sum.
 
 4.4. Both plans also include (Clause 7.1):
 
@@ -218,6 +240,48 @@ inform the visitors (Clause 6.1 of the Agreement).
 When it is turned off, the city stops being read within one minute, and the cities already stored
 in the project are deleted within 48 hours, if the option is still off by then, as stated in
 Clause 12.8 of the Agreement. Postal codes (CEP), coordinates and the IP address are never stored.
+
+4.6. **Unique visitors, only if you turn it on.** Each project has, in its settings, an option to
+count unique visitors per day and per month and to separate new visitors from those who return. The
+option comes **turned off** in every project, new or existing, and only the account owner turns it
+on or off, on both plans.
+
+With the option turned on, the tracker stores in the local storage of the visitor's browser
+(`localStorage`, at your site's address; it is not a cookie) only two points in time: when the
+site's day and month end, in the project's time zone. These times are the same for all visitors to
+the site on that day; the service provides them to the tracker in the response to the sending of
+events and never receives them back. The marker is rewritten on each visit that receives a response
+from the service and has no time limit: it stays until the browser data is deleted, by the visitor
+or by the browser itself (Clause 4.3), until the visitor turns off the measurement on your site
+(`optOut`), until the browser asks not to be tracked (Global Privacy Control or Do Not Track) or
+until the count is turned off (last paragraph of this clause). At the start of each visit, the
+tracker compares the device's time with this marker and sends, together with the first event of the
+visit, only the visit type: the first from this browser (or since the browser data was deleted), the
+first in the month, the first in the day or another on the same day. With the option turned off, the
+tracker sends the same field (which, without a marker, is "the first from this browser"), and the
+service discards it without storing it. No identifier is created, stored or sent, and the service
+does not link one anonymous visit to another. When the browser asks not to be tracked or when the
+visitor turns off the measurement on your site (`optOut`), the tracker sends nothing, not even the
+visit type, and deletes the marker, if there is one; when the browser is controlled by a program,
+the tracker also sends nothing.
+
+**Important:** the visit type does not identify anyone, but, on sites or days with few visits,
+together with the time, the device and the location, it may make it possible to infer that two
+visits came from the same browser. In a project that uses the `identify` function, the type is also
+kept on the visits by identified people and shows how often each of them returns to the site in
+that browser. Before turning it on, update your site's privacy notice to say that the browser stores
+this marker, for how long, and that each visit reports its type (Schedule IV of the Data Processing
+Agreement provides the two versions of the paragraph). It is up to you, as controller, to assess
+whether you need this count, especially in a project that uses `identify`, and to inform the
+visitors (Clause 6.1 of the Agreement). The limits of the count are in Clause 4.3.
+
+When it is turned off, the service stops storing the type of new visits within one minute, and the
+tracker deletes the marker of each browser the next time that browser sends events to the service
+and receives the response; in a browser that does not return to the site, the marker stays until
+the browser data is deleted. The visit types already stored remain in the events and follow the
+rules of the other events: deletion after 13 months (Clause 7.4), the deletion of the project and
+data subject requests (Clauses 10 and 12 of the Agreement). Turning it on also takes effect for new
+visits within one minute.
 
 ## Clause 5 — Open source and hosted service
 
@@ -547,7 +611,10 @@ account or by anyone using your keys, tokens or connections with your permission
    tracker's respect for the Global Privacy Control and Do Not Track signals and for the option not
    to be measured (`optOut`), or sending events from those people by another route;
 6. using the service together with browser fingerprinting techniques or other means of recognizing
-   anonymous visitors;
+   anonymous visitors or linking the anonymous visits from the same browser, including altering the
+   tracker or the marker of Clause 4.6 so that they store or send something that makes it possible
+   to recognize the visitor on another visit. Using the unique visitor count as the service offers
+   it (Clause 4.6) is not abuse;
 
 *Traffic and security*
 
@@ -596,7 +663,8 @@ does not recognize names, addresses or free text. **You are responsible for what
 
 1. publish on your site a privacy notice describing the measurement (there is a template in
    Schedule IV of the Data Processing Agreement) and keep that notice in line with what your site
-   sends and with the options of your projects (such as the city, Clause 4.5);
+   sends and with the options of your projects (such as the city and unique visitors, Clauses 4.5
+   and 4.6);
 2. if your site is directed at children or adolescents, assess the measurement beforehand in light
    of art. 14 of the Lei Geral de Proteção de Dados Pessoais (LGPD; Brazilian General Data
    Protection Law);

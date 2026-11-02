@@ -85,7 +85,8 @@ acesso por tokens e por aplicativos conectados, inclusive pelo servidor MCP.
 enviar eventos ao serviço.
 
 2.3. **Projeto:** a configuração de um site seu no serviço (nome, endereços autorizados, fuso
-horário, evento de conversão, a opção de guardar a cidade, chaves e eventos).
+horário, evento de conversão, as opções de guardar a cidade e de contar visitantes únicos, chaves e
+eventos).
 
 2.4. **Evento:** cada registro enviado pelo rastreador ou pela sua integração, como uma página vista
 ou uma ação que você marcou.
@@ -167,14 +168,34 @@ chamadas à API do seu site, aquisição, aparelhos e horários.
    exceto os de campanha (`utm_source`, `utm_medium`, `utm_campaign`);
 6. não envia nada quando o navegador do visitante pede para não ser rastreado (Global Privacy
    Control ou Do Not Track);
-7. não reconhece o visitante anônimo em outra visita: cada visita tem um número aleatório que some ao
-   fechar a aba ou depois de 30 minutos sem atividade.
+7. não cria, não recebe e não guarda identificador que acompanhe o visitante anônimo de uma visita
+   para outra: cada visita tem um número aleatório que some ao fechar a aba ou depois de 30 minutos
+   sem atividade, e o serviço não liga uma visita anônima a outra. Se o dono da conta ligar a
+   contagem de visitantes únicos no projeto (Cláusula 4.6), o navegador do visitante guarda só
+   quando terminam o dia e o mês do site, que são os mesmos para todos os visitantes naquele dia, e
+   cada visita informa apenas o seu tipo: a primeira deste navegador, a primeira no mês, a primeira
+   no dia ou outra no mesmo dia. Essa contagem vem desligada, e nunca a ligamos sem o pedido dele.
 
 4.3. **Atenção:** os números do painel são uma medição, não uma contagem exata. Visitas de quem
 bloqueia o rastreador, de quem pede para não ser rastreado, de robôs e de quem estava sem conexão
 não aparecem, e eventos enviados enquanto o serviço estiver fora do ar ou com a recepção pausada
 (Cláusulas 7.2, 15 e 18) se perdem (o rastreador tenta de novo por alguns segundos enquanto a
 página está aberta, mas não quando a recepção está pausada).
+
+Os visitantes únicos (Cláusula 4.6) também são uma estimativa: contam navegadores, não pessoas. A
+mesma pessoa conta mais de uma vez quando usa outro aparelho ou outro navegador, uma janela anônima
+ou quando os dados do navegador são apagados, por ela ou pelo próprio navegador (o Safari, por
+exemplo, apaga os dados guardados por um site depois de alguns dias de uso sem interação com ele, e
+quem volta depois disso aparece como novo); e pessoas que usam o mesmo navegador contam como uma.
+Quem sai do site em poucos segundos, antes de o navegador receber a primeira resposta do serviço,
+não deixa a marca atualizada, e a visita seguinte conta de novo; duas abas abertas ao mesmo tempo
+na primeira visita do dia contam duas vezes; cada endereço do site (com e sem `www`, ou
+subdomínios diferentes) conta separado, a menos que um redirecione para o outro; e um aparelho com
+o relógio errado pode ter a visita contada no dia errado. Nas primeiras semanas depois de ligar a
+contagem, ou de religá-la, quase todo visitante aparece como novo, porque nenhum navegador tem a
+marca ainda, e as visitas de antes de ligar não entram na conta. Visitantes únicos de dias
+diferentes não se somam: dois dias com 100 visitantes únicos cada podem ser 100 ou 200 navegadores,
+e o painel avisa quando mostra uma soma.
 
 4.4. Também fazem parte dos dois planos (Cláusula 7.1):
 
@@ -207,6 +228,47 @@ identificadas. Cabe a você, como controlador, avaliar se precisa da cidade e in
 Ao desligar, a cidade deixa de ser lida em até um minuto, e as cidades já guardadas no projeto são
 apagadas em até 48 horas, se a opção continuar desligada até lá, como diz a Cláusula 12.8 do Acordo.
 CEP, coordenadas e o endereço IP nunca são guardados.
+
+4.6. **Visitantes únicos, só se você ligar.** Cada projeto tem, nas configurações, uma opção para
+contar visitantes únicos por dia e por mês e separar os visitantes novos dos que voltam. A opção vem
+**desligada** em todo projeto, novo ou antigo, e só o dono da conta a liga ou desliga, nos dois
+planos.
+
+Com a opção ligada, o rastreador guarda no armazenamento local do navegador do visitante
+(`localStorage`, no endereço do seu site; não é um cookie) só dois horários: quando terminam o dia e
+o mês do site, no fuso horário do projeto. Esses horários são os mesmos para todos os visitantes do
+site naquele dia; o serviço os informa ao rastreador na resposta ao envio dos eventos e nunca os
+recebe de volta. A marca é reescrita a cada visita que recebe resposta do serviço e não tem prazo:
+fica até os dados do navegador serem apagados, pelo visitante ou pelo próprio navegador (Cláusula
+4.3), até o visitante desligar a medição no seu site (`optOut`), até o navegador pedir para não ser
+rastreado (Global Privacy Control ou Do Not Track) ou até a contagem ser desligada (último
+parágrafo desta cláusula). No começo de cada visita, o rastreador
+compara a hora do aparelho com essa marca e manda, junto com o primeiro evento da visita, só o tipo
+da visita: a primeira deste navegador (ou desde que os dados do navegador foram apagados), a
+primeira no mês, a primeira no dia ou outra no mesmo dia. Com a opção desligada, o rastreador manda
+o mesmo campo (que, sem marca, é "a primeira deste navegador"), e o serviço o descarta sem guardar.
+Nenhum identificador é criado, guardado ou enviado, e o serviço não liga uma visita anônima a outra.
+Quando o navegador pede para não ser rastreado ou quando o visitante desliga a medição no seu site
+(`optOut`), o rastreador não envia nada, nem o tipo da visita, e apaga a marca, se houver; quando o
+navegador é controlado por um programa, o rastreador também não envia nada.
+
+**Atenção:** o tipo da visita não identifica ninguém, mas, em sites ou dias com poucas visitas,
+junto com o horário, o aparelho e o lugar, pode permitir deduzir que duas visitas vieram do mesmo
+navegador. Num projeto que usa a função `identify`, o tipo também fica nas visitas das pessoas
+identificadas e mostra com que frequência cada uma volta ao site naquele navegador. Antes de ligar,
+atualize o aviso de privacidade do seu site para dizer que o navegador guarda essa marca, por quanto
+tempo, e que cada visita informa o seu tipo (o Anexo IV do Acordo de Tratamento de Dados traz as duas
+versões do parágrafo). Cabe a você, como controlador, avaliar se precisa dessa contagem, sobretudo
+num projeto que usa `identify`, e informar os visitantes (Cláusula 6.1 do Acordo). Os limites da
+contagem estão na Cláusula 4.3.
+
+Ao desligar, o serviço deixa de guardar o tipo das visitas novas em até um minuto, e o rastreador
+apaga a marca de cada navegador na próxima vez que esse navegador enviar eventos ao serviço e
+receber a resposta; num navegador que não voltar ao site, a marca fica até os dados do navegador
+serem apagados. Os tipos de visita já guardados continuam nos eventos e seguem as regras dos
+demais eventos: o apagamento depois de 13 meses (Cláusula 7.4), a exclusão do projeto e os pedidos
+dos titulares (Cláusulas 10 e 12 do Acordo). Ligar também passa a valer para as visitas novas em
+até um minuto.
 
 ## Cláusula 5 — Código aberto e serviço hospedado
 
@@ -523,7 +585,10 @@ quem usar as suas chaves, tokens ou conexões com a sua permissão:
    aos sinais Global Privacy Control e Do Not Track e à opção de não ser medido (`optOut`), ou enviar
    eventos dessas pessoas por outro caminho;
 6. usar o serviço junto com técnicas de impressão digital do navegador (fingerprinting) ou outros
-   meios para reconhecer visitantes anônimos;
+   meios para reconhecer visitantes anônimos ou ligar as visitas anônimas de um mesmo navegador,
+   inclusive alterar o rastreador ou a marca da Cláusula 4.6 para que guardem ou enviem algo que
+   permita reconhecer o visitante em outra visita. Usar a contagem de visitantes únicos como o
+   serviço a oferece (Cláusula 4.6) não é abuso;
 
 *Tráfego e segurança*
 
@@ -571,7 +636,7 @@ nomes, endereços nem textos livres. **A responsabilidade pelo que o seu site en
 
 1. publicar no seu site um aviso de privacidade que descreva a medição (há um modelo no Anexo IV do
    Acordo de Tratamento de Dados) e manter esse aviso de acordo com o que o seu site envia e com as
-   opções dos seus projetos (como a cidade, Cláusula 4.5);
+   opções dos seus projetos (como a cidade e os visitantes únicos, Cláusulas 4.5 e 4.6);
 2. se o seu site for dirigido a crianças ou adolescentes, avaliar antes a medição à luz do art. 14
    da LGPD;
 3. manter em sigilo a chave secreta e os tokens de acesso (Cláusula 13);

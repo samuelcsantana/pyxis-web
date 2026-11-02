@@ -91,7 +91,8 @@ e-mail e l'accesso tramite token e tramite app collegate, anche attraverso il se
 inviare eventi al servizio.
 
 2.3. **Progetto:** la configurazione di un tuo sito nel servizio (nome, indirizzi autorizzati, fuso
-orario, evento di conversione, l'opzione di conservare la città, chiavi ed eventi).
+orario, evento di conversione, le opzioni di conservare la città e di contare i visitatori unici,
+chiavi ed eventi).
 
 2.4. **Evento:** ciascun record inviato dal tracker o dalla tua integrazione, come una pagina vista
 o un'azione che hai contrassegnato.
@@ -176,14 +177,38 @@ delle chiamate all'API del tuo sito, acquisizione, dispositivi e orari.
    parametri, tranne quelli di campagna (`utm_source`, `utm_medium`, `utm_campaign`);
 6. non invia nulla quando il browser del visitatore chiede di non essere tracciato (Global Privacy
    Control o Do Not Track);
-7. non riconosce il visitatore anonimo in un'altra visita: ogni visita ha un numero casuale che
-   scompare alla chiusura della scheda o dopo 30 minuti di inattività.
+7. non crea, non riceve e non conserva alcun identificativo che segua il visitatore anonimo da una
+   visita all'altra: ogni visita ha un numero casuale che scompare alla chiusura della scheda o dopo
+   30 minuti di inattività, e il servizio non collega una visita anonima a un'altra. Se il
+   proprietario dell'account attiva il conteggio dei visitatori unici nel progetto (Clausola 4.6),
+   il browser del visitatore conserva solo gli orari in cui finiscono il giorno e il mese del sito,
+   che sono gli stessi per tutti i visitatori in quel giorno, e ogni visita comunica soltanto il
+   proprio tipo: la prima da questo browser, la prima del mese, la prima del giorno o un'altra nello
+   stesso giorno. Questo conteggio è inizialmente disattivato, e non lo attiviamo mai senza una sua
+   richiesta.
 
 4.3. **Attenzione:** i numeri del pannello sono una misurazione, non un conteggio esatto. Le visite
 di chi blocca il tracker, di chi chiede di non essere tracciato, dei robot e di chi era senza
 connessione non compaiono, e gli eventi inviati mentre il servizio non è disponibile o con la
 ricezione sospesa (Clausole 7.2, 15 e 18) vanno persi (il tracker riprova per qualche secondo
 finché la pagina è aperta, ma non quando la ricezione è sospesa).
+
+Anche i visitatori unici (Clausola 4.6) sono una stima: contano i browser, non le persone. La stessa
+persona viene contata più di una volta quando usa un altro dispositivo o un altro browser, una
+finestra anonima o quando i dati del browser vengono cancellati, da lei o dal browser stesso
+(Safari, per esempio, cancella i dati conservati da un sito dopo alcuni giorni di utilizzo senza
+interazione con esso, e chi torna dopo appare come nuovo); e le persone che usano lo stesso browser
+vengono contate come una sola. Chi esce dal sito entro pochi secondi, prima che il browser riceva
+la prima risposta del servizio, non lascia il marcatore aggiornato, e la visita successiva viene
+contata di nuovo; due schede aperte contemporaneamente durante la prima visita del giorno vengono
+contate due volte; ciascun indirizzo del sito (con e senza `www`, o sottodomini diversi) viene
+contato separatamente, a meno che uno non reindirizzi all'altro; e la visita di un dispositivo con
+l'orologio sbagliato può essere contata nel giorno sbagliato. Nelle prime settimane dopo aver
+attivato il conteggio, o dopo averlo riattivato, quasi ogni visitatore appare come nuovo, perché
+nessun browser ha ancora il marcatore, e le visite precedenti all'attivazione non rientrano nel
+conteggio. I visitatori unici di giorni diversi non si sommano: due giorni con 100 visitatori unici
+ciascuno possono corrispondere a 100 o a 200 browser, e il pannello lo segnala quando mostra una
+somma.
 
 4.4. Fanno parte di entrambi i piani anche (Clausola 7.1):
 
@@ -218,6 +243,50 @@ Quando la disattivi, la città smette di essere letta entro un minuto, e le citt
 progetto vengono cancellate entro 48 ore, se l'opzione resta disattivata fino ad allora, come
 stabilisce la Clausola 12.8 dell'Accordo. Codice postale, coordinate e indirizzo IP non vengono mai
 conservati.
+
+4.6. **Visitatori unici, solo se li attivi.** Ogni progetto ha, nelle impostazioni, un'opzione per
+contare i visitatori unici per giorno e per mese e distinguere i visitatori nuovi da quelli che
+tornano. L'opzione è inizialmente **disattivata** in ogni progetto, nuovo o già esistente, e solo il
+proprietario dell'account la attiva o la disattiva, in entrambi i piani.
+
+Con l'opzione attivata, il tracker conserva nell'archiviazione locale del browser del visitatore
+(`localStorage`, all'indirizzo del tuo sito; non è un cookie) solo due orari: quando finiscono il
+giorno e il mese del sito, nel fuso orario del progetto. Questi orari sono gli stessi per tutti i
+visitatori del sito in quel giorno; il servizio li comunica al tracker nella risposta all'invio
+degli eventi e non li riceve mai indietro. Il marcatore viene riscritto a ogni visita che riceve una
+risposta del servizio e non ha scadenza: resta finché i dati del browser non vengono cancellati,
+dal visitatore o dal browser stesso (Clausola 4.3), finché il visitatore non disattiva la
+misurazione sul tuo sito (`optOut`), finché il browser non chiede di non essere tracciato (Global
+Privacy Control o Do Not Track) o finché il conteggio non viene disattivato (ultimo paragrafo di
+questa clausola). All'inizio di ogni visita, il tracker confronta l'ora del dispositivo con questo
+marcatore e invia, insieme al primo evento della visita, solo il tipo della visita: la prima da
+questo browser (o da quando i dati del browser sono stati cancellati), la prima del mese, la prima
+del giorno o un'altra nello stesso giorno. Con l'opzione disattivata, il tracker invia lo stesso
+campo (che, senza marcatore, è "la prima da questo browser"), e il servizio lo scarta senza
+conservarlo. Nessun identificativo viene creato, conservato o inviato, e il servizio non collega
+una visita anonima a un'altra. Quando il browser chiede di non essere tracciato o quando il
+visitatore disattiva la misurazione sul tuo sito (`optOut`), il tracker non invia nulla, nemmeno il
+tipo della visita, e cancella il marcatore, se presente; il tracker non invia nulla neppure quando
+il browser è controllato da un programma.
+
+**Attenzione:** il tipo della visita non identifica nessuno, ma, nei siti o nei giorni con poche
+visite, insieme all'orario, al dispositivo e al luogo, può consentire di dedurre che due visite
+provengono dallo stesso browser. In un progetto che usa la funzione `identify`, il tipo resta anche
+nelle visite delle persone identificate e mostra con quale frequenza ciascuna di esse torna sul
+sito con quel browser. Prima di attivare l'opzione, aggiorna l'informativa sulla privacy del tuo
+sito per dire che il browser conserva questo marcatore, per quanto tempo, e che ogni visita comunica
+il proprio tipo (l'Allegato IV dell'Accordo sul trattamento dei dati riporta le due versioni del
+paragrafo). Spetta a te, in qualità di titolare del trattamento, valutare se hai bisogno di questo
+conteggio, soprattutto in un progetto che usa `identify`, e informare i visitatori (Clausola 6.1
+dell'Accordo). I limiti del conteggio sono indicati nella Clausola 4.3.
+
+Quando disattivi l'opzione, il servizio smette di conservare il tipo delle nuove visite entro un
+minuto, e il tracker cancella il marcatore di ciascun browser la volta successiva in cui quel
+browser invia eventi al servizio e ne riceve la risposta; in un browser che non torna sul sito, il marcatore resta
+finché i dati del browser non vengono cancellati. I tipi di visita già conservati restano negli
+eventi e seguono le regole degli altri eventi: la cancellazione dopo 13 mesi (Clausola 7.4),
+l'eliminazione del progetto e le richieste degli interessati (Clausole 10 e 12 dell'Accordo). Anche
+l'attivazione si applica alle nuove visite entro un minuto.
 
 ## Clausola 5 — Open source e servizio ospitato
 
@@ -557,7 +626,10 @@ account o da chi usa le tue chiavi, i tuoi token o i tuoi collegamenti con il tu
    del tracker per i segnali Global Privacy Control e Do Not Track e per l'opzione di non essere
    misurati (`optOut`), oppure inviare eventi di queste persone per un'altra via;
 6. usare il servizio insieme a tecniche di impronta digitale del browser (fingerprinting) o ad altri
-   mezzi per riconoscere visitatori anonimi;
+   mezzi per riconoscere visitatori anonimi o collegare le visite anonime di uno stesso browser,
+   inclusa l'alterazione del tracker o del marcatore della Clausola 4.6 affinché conservino o
+   inviino qualcosa che consenta di riconoscere il visitatore in un'altra visita. Usare il
+   conteggio dei visitatori unici così come il servizio lo offre (Clausola 4.6) non è abuso;
 
 *Traffico e sicurezza*
 
@@ -607,7 +679,8 @@ indirizzi né testi liberi. **La responsabilità per ciò che il tuo sito invia 
 
 1. pubblicare sul tuo sito un'informativa sulla privacy che descriva la misurazione (c'è un modello
    nell'Allegato IV dell'Accordo sul trattamento dei dati) e mantenerla coerente con ciò che il tuo
-   sito invia e con le opzioni dei tuoi progetti (come la città, Clausola 4.5);
+   sito invia e con le opzioni dei tuoi progetti (come la città e i visitatori unici, Clausole 4.5
+   e 4.6);
 2. se il tuo sito è rivolto a bambini o adolescenti, valutare prima la misurazione alla luce
    dell'art. 14 della LGPD (Lei Geral de Proteção de Dados Pessoais, legge generale brasiliana sulla
    protezione dei dati personali);

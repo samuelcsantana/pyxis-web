@@ -99,7 +99,8 @@ per e-mail en de toegang via tokens en via gekoppelde apps, ook via de MCP-serve
 events naar de dienst te sturen.
 
 2.3. **Project:** de configuratie van een van je websites in de dienst (naam, toegestane adressen,
-tijdzone, conversie-event, de optie om de stad te bewaren, sleutels en events).
+tijdzone, conversie-event, de opties om de stad te bewaren en om unieke bezoekers te tellen,
+sleutels en events).
 
 2.4. **Event:** elk record dat door de tracker of door je integratie wordt verzonden, zoals een
 bekeken pagina of een actie die je hebt gemarkeerd.
@@ -188,14 +189,38 @@ functies, fouten in aanroepen naar de API van je website, acquisitie, apparaten 
    zonder parameters, behalve die van campagnes (`utm_source`, `utm_medium`, `utm_campaign`);
 6. hij verzendt niets wanneer de browser van de bezoeker vraagt niet gevolgd te worden (Global
    Privacy Control of Do Not Track);
-7. hij herkent de anonieme bezoeker niet bij een ander bezoek: elk bezoek heeft een willekeurig
-   nummer dat verdwijnt bij het sluiten van het tabblad of na 30 minuten zonder activiteit.
+7. hij maakt, ontvangt en bewaart geen identificatie die de anonieme bezoeker van het ene bezoek
+   naar het andere volgt: elk bezoek heeft een willekeurig nummer dat verdwijnt bij het sluiten van
+   het tabblad of na 30 minuten zonder activiteit, en de dienst koppelt een anoniem bezoek niet aan
+   een ander. Als de accounteigenaar de telling van unieke bezoekers in het project inschakelt
+   (Artikel 4.6), bewaart de browser van de bezoeker alleen wanneer de dag en de maand van de
+   website eindigen, tijdstippen die op die dag voor alle bezoekers dezelfde zijn, en geeft elk
+   bezoek alleen zijn type door: het eerste van deze browser, het eerste in de maand, het eerste op
+   de dag of een ander bezoek op dezelfde dag. Die telling is standaard uitgeschakeld, en we
+   schakelen die nooit in zonder zijn verzoek.
 
 4.3. **Let op:** de cijfers in het dashboard zijn een meting, geen exacte telling. Bezoeken van wie
 de tracker blokkeert, van wie vraagt niet gevolgd te worden, van bots en van wie geen verbinding had,
 verschijnen niet, en events die worden verzonden terwijl de dienst offline is of de ontvangst is
 gepauzeerd (Artikelen 7.2, 15 en 18), gaan verloren (de tracker probeert het enkele seconden opnieuw
 zolang de pagina open is, maar niet wanneer de ontvangst is gepauzeerd).
+
+De unieke bezoekers (Artikel 4.6) zijn ook een schatting: ze tellen browsers, geen personen.
+Dezelfde persoon telt meer dan eens wanneer die een ander apparaat of een andere browser gebruikt,
+een privévenster, of wanneer de browsergegevens worden gewist, door die persoon of door de browser
+zelf (Safari bijvoorbeeld wist de gegevens die een website heeft bewaard na enkele dagen gebruik
+zonder interactie met die website, en wie daarna terugkomt, verschijnt als nieuw); en personen die
+dezelfde browser gebruiken, tellen als één. Wie de website binnen enkele seconden verlaat, voordat
+de browser het eerste antwoord van de dienst ontvangt, laat de markering niet bijgewerkt achter, en
+het volgende bezoek telt opnieuw; twee tabbladen die tegelijk worden geopend bij het eerste bezoek
+van de dag, tellen twee keer; elk adres van de website (met en zonder `www`, of verschillende
+subdomeinen) telt apart, tenzij het ene naar het andere doorverwijst; en bij een apparaat waarvan
+de klok verkeerd staat, kan het bezoek op de verkeerde dag worden geteld. In de eerste weken na het
+inschakelen van de telling, of na het opnieuw inschakelen ervan, verschijnt bijna elke bezoeker als
+nieuw, omdat nog geen enkele browser de markering heeft, en de bezoeken van vóór het inschakelen
+tellen niet mee. Unieke bezoekers van verschillende dagen zijn niet bij elkaar op te tellen: twee
+dagen met elk 100 unieke bezoekers kunnen 100 of 200 browsers zijn, en het dashboard waarschuwt
+wanneer het een som toont.
 
 4.4. Ook onderdeel van beide abonnementen (Artikel 7.1) zijn:
 
@@ -230,6 +255,51 @@ Na het uitschakelen wordt de stad binnen een minuut niet meer gelezen, en worden
 project bewaarde steden binnen 48 uur verwijderd, als de optie tot dan uitgeschakeld blijft, zoals
 Artikel 12.8 van de Verwerkersovereenkomst bepaalt. Postcode, coördinaten en het IP-adres worden
 nooit bewaard.
+
+4.6. **Unieke bezoekers, alleen als je dat inschakelt.** Elk project heeft in de instellingen een
+optie om unieke bezoekers per dag en per maand te tellen en nieuwe bezoekers te onderscheiden van
+bezoekers die terugkomen. De optie is in elk project, nieuw of al bestaand, standaard
+**uitgeschakeld**, en alleen de accounteigenaar schakelt haar in of uit, bij beide abonnementen.
+
+Met de optie ingeschakeld bewaart de tracker in de lokale opslag van de browser van de bezoeker
+(`localStorage`, op het adres van je website; het is geen cookie) alleen twee tijdstippen: wanneer
+de dag en de maand van de website eindigen, in de tijdzone van het project. Die tijdstippen zijn op
+die dag voor alle bezoekers van de website dezelfde; de dienst geeft ze aan de tracker door in het
+antwoord op het verzenden van de events en ontvangt ze nooit terug. De markering wordt herschreven
+bij elk bezoek dat een antwoord van de dienst ontvangt en heeft geen tijdslimiet: ze blijft staan
+totdat de browsergegevens worden gewist, door de bezoeker of door de browser zelf (Artikel 4.3),
+totdat de bezoeker de meting op je website uitschakelt (`optOut`), totdat de browser vraagt niet
+gevolgd te worden (Global Privacy Control of Do Not Track) of totdat de telling wordt uitgeschakeld
+(laatste alinea van dit artikel). Aan het begin van elk bezoek vergelijkt de tracker de tijd van
+het apparaat met die markering en verzendt hij, samen met het eerste event van het bezoek, alleen
+het bezoektype: het eerste van deze browser (of sinds de browsergegevens zijn gewist), het eerste
+in de maand, het eerste op de dag of een ander bezoek op dezelfde dag. Met de optie uitgeschakeld
+verzendt de tracker hetzelfde veld (dat zonder markering "het eerste van deze browser" is), en
+gooit de dienst het weg zonder het te bewaren. Er wordt geen identificatie aangemaakt, bewaard of
+verzonden, en de dienst koppelt een anoniem bezoek niet aan een ander. Wanneer de browser vraagt
+niet gevolgd te worden of wanneer de bezoeker de meting op je website uitschakelt (`optOut`),
+verzendt de tracker niets, ook niet het bezoektype, en verwijdert hij de markering, als die er is;
+wanneer de browser door een programma wordt bestuurd, verzendt de tracker ook niets.
+
+**Let op:** het bezoektype identificeert niemand, maar bij websites of op dagen met weinig bezoeken
+kan het, samen met het tijdstip, het apparaat en de plaats, het mogelijk maken af te leiden dat
+twee bezoeken uit dezelfde browser kwamen. In een project dat de functie `identify` gebruikt, wordt
+het type ook bij de bezoeken van de geïdentificeerde personen bewaard en laat het zien hoe vaak elk
+van hen in die browser naar de website terugkeert. Werk, voordat je de optie inschakelt, de
+privacyverklaring van je website bij, zodat die vermeldt dat de browser deze markering bewaart, hoe
+lang, en dat elk bezoek zijn type doorgeeft (Bijlage IV van de Verwerkersovereenkomst bevat de twee
+versies van de alinea). Het is aan jou, als verwerkingsverantwoordelijke, om te beoordelen of je
+deze telling nodig hebt, vooral in een project dat `identify` gebruikt, en de bezoekers te
+informeren (Artikel 6.1 van de Verwerkersovereenkomst). De limieten van de telling staan in
+Artikel 4.3.
+
+Na het uitschakelen bewaart de dienst binnen een minuut het type van nieuwe bezoeken niet meer, en
+verwijdert de tracker de markering van elke browser de volgende keer dat die browser events naar de
+dienst verzendt en het antwoord ontvangt; in een browser die niet naar de website terugkeert,
+blijft de markering staan totdat de browsergegevens worden gewist. De al bewaarde bezoektypen
+blijven in de events en volgen de regels van de andere events: de verwijdering na 13 maanden
+(Artikel 7.4), het verwijderen van het project en de verzoeken van betrokkenen (Artikelen 10 en 12
+van de Verwerkersovereenkomst). Ook het inschakelen gaat voor nieuwe bezoeken binnen een minuut in.
 
 ## Artikel 5 — Open source en gehoste dienst
 
@@ -589,7 +659,11 @@ toestemming gebruikt:
    (`optOut`) uitschakelen, omzeilen of wijzigen, of events van die personen langs een andere weg
    verzenden;
 6. de dienst gebruiken in combinatie met technieken van browser-fingerprinting of andere middelen om
-   anonieme bezoekers te herkennen;
+   anonieme bezoekers te herkennen of de anonieme bezoeken van eenzelfde browser aan elkaar te
+   koppelen, met inbegrip van het wijzigen van de tracker of van de markering van Artikel 4.6 zodat
+   die iets bewaren of verzenden waarmee de bezoeker bij een ander bezoek kan worden herkend. De
+   telling van unieke bezoekers gebruiken zoals de dienst die aanbiedt (Artikel 4.6), is geen
+   misbruik;
 
 *Verkeer en beveiliging*
 
@@ -643,7 +717,8 @@ verzendt, ligt bij jou.**
 
 1. op je website een privacyverklaring te publiceren die de meting beschrijft (er is een model in
    Bijlage IV van de Verwerkersovereenkomst) en die verklaring in overeenstemming te houden met wat
-   je website verzendt en met de opties van je projecten (zoals de stad, Artikel 4.5);
+   je website verzendt en met de opties van je projecten (zoals de stad en de unieke bezoekers,
+   Artikelen 4.5 en 4.6);
 2. als je website gericht is op kinderen of adolescenten, de meting vooraf te beoordelen in het licht
    van art. 14 van de LGPD;
 3. de geheime sleutel en de toegangstokens geheim te houden (Artikel 13);

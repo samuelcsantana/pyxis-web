@@ -101,7 +101,8 @@ MCP-Server.
 um Ereignisse an den Dienst zu senden.
 
 2.3. **Projekt:** die Konfiguration einer deiner Websites im Dienst (Name, autorisierte Adressen,
-Zeitzone, Conversion-Ereignis, Option zum Speichern der Stadt, Schlüssel und Ereignisse).
+Zeitzone, Conversion-Ereignis, Optionen zum Speichern der Stadt und zum Zählen eindeutiger Besucher,
+Schlüssel und Ereignisse).
 
 2.4. **Ereignis:** jeder Datensatz, den der Tracker oder deine Integration sendet, etwa ein
 Seitenaufruf oder eine Aktion, die du markiert hast.
@@ -188,8 +189,15 @@ genutzte Funktionen, Fehler der Aufrufe an die API deiner Website, Akquisition, 
    Parameter, außer den Kampagnenparametern (`utm_source`, `utm_medium`, `utm_campaign`);
 6. er sendet nichts, wenn der Browser des Besuchers verlangt, nicht verfolgt zu werden (Global Privacy
    Control oder Do Not Track);
-7. er erkennt den anonymen Besucher bei einem anderen Besuch nicht wieder: jeder Besuch hat eine
-   Zufallsnummer, die beim Schließen des Tabs oder nach 30 Minuten ohne Aktivität verschwindet.
+7. er erzeugt, empfängt und speichert keine Kennung, die den anonymen Besucher von einem Besuch zum
+   anderen begleitet: jeder Besuch hat eine Zufallsnummer, die beim Schließen des Tabs oder nach
+   30 Minuten ohne Aktivität verschwindet, und der Dienst verknüpft keinen anonymen Besuch mit einem
+   anderen. Wenn der Kontoinhaber die Zählung eindeutiger Besucher im Projekt einschaltet
+   (Klausel 4.6), speichert der Browser des Besuchers nur, wann der Tag und der Monat der Website
+   enden, was für alle Besucher an diesem Tag gleich ist, und jeder Besuch teilt nur seinen Typ mit:
+   der erste dieses Browsers, der erste im Monat, der erste am Tag oder ein weiterer am selben Tag.
+   Diese Zählung ist standardmäßig ausgeschaltet, und wir schalten sie nie ein, ohne dass er es
+   verlangt.
 
 4.3. **Achtung:** die Zahlen im Dashboard sind eine Messung, keine exakte Zählung. Besuche von
 Personen, die den Tracker blockieren, die verlangen, nicht verfolgt zu werden, von Bots und von
@@ -197,6 +205,23 @@ Personen ohne Verbindung erscheinen nicht, und Ereignisse, die gesendet werden, 
 nicht erreichbar ist oder der Empfang pausiert ist (Klauseln 7.2, 15 und 18), gehen verloren (der
 Tracker versucht es einige Sekunden lang erneut, solange die Seite geöffnet ist, aber nicht, wenn der
 Empfang pausiert ist).
+
+Auch die eindeutigen Besucher (Klausel 4.6) sind eine Schätzung: gezählt werden Browser, nicht
+Personen. Dieselbe Person wird mehr als einmal gezählt, wenn sie ein anderes Gerät oder einen anderen
+Browser oder ein privates Fenster verwendet oder wenn die Browserdaten gelöscht werden, von ihr oder
+vom Browser selbst (Safari zum Beispiel löscht die von einer Website gespeicherten Daten nach einigen
+Tagen Nutzung ohne Interaktion mit ihr, und wer danach zurückkommt, erscheint als neu); und Personen,
+die denselben Browser verwenden, zählen als eine. Wer die Website nach wenigen Sekunden verlässt,
+bevor der Browser die erste Antwort des Dienstes erhält, hinterlässt keine aktualisierte Markierung,
+und der nächste Besuch wird erneut gezählt; zwei gleichzeitig geöffnete Tabs beim ersten Besuch des
+Tages werden doppelt gezählt; jede Adresse der Website (mit und ohne `www` oder verschiedene
+Subdomains) wird getrennt gezählt, es sei denn, eine leitet auf die andere weiter; und bei einem
+Gerät mit falsch eingestellter Uhr kann der Besuch am falschen Tag gezählt werden. In den ersten
+Wochen nach dem Einschalten der Zählung oder nach ihrem Wiedereinschalten erscheint fast jeder
+Besucher als neu, weil noch kein Browser die Markierung hat, und die Besuche vor dem Einschalten
+werden nicht mitgezählt. Eindeutige Besucher verschiedener Tage lassen sich nicht addieren: zwei Tage
+mit je 100 eindeutigen Besuchern können 100 oder 200 Browser sein, und das Dashboard weist darauf
+hin, wenn es eine Summe anzeigt.
 
 4.4. Ebenfalls Teil beider Tarife (Klausel 7.1) sind:
 
@@ -231,6 +256,53 @@ Beim Ausschalten wird die Stadt innerhalb einer Minute nicht mehr gelesen, und d
 Projekt gespeicherten Städte werden innerhalb von 48 Stunden gelöscht, sofern die Option bis dahin
 ausgeschaltet bleibt, wie in Klausel 12.8 des Auftragsverarbeitungsvertrags beschrieben.
 Postleitzahl, Koordinaten und die IP-Adresse werden nie gespeichert.
+
+4.6. **Eindeutige Besucher, nur wenn du sie einschaltest.** Jedes Projekt hat in den Einstellungen
+eine Option, eindeutige Besucher pro Tag und pro Monat zu zählen und neue Besucher von
+wiederkehrenden zu unterscheiden. Die Option ist in jedem Projekt, ob neu oder bestehend,
+standardmäßig **ausgeschaltet**, und nur der Kontoinhaber schaltet sie ein oder aus, in beiden
+Tarifen.
+
+Bei eingeschalteter Option speichert der Tracker im lokalen Speicher des Browsers des Besuchers
+(`localStorage`, unter der Adresse deiner Website; kein Cookie) nur zwei Zeitpunkte: wann der Tag und
+der Monat der Website enden, in der Zeitzone des Projekts. Diese Zeitpunkte sind für alle Besucher
+der Website an diesem Tag dieselben; der Dienst teilt sie dem Tracker in der Antwort auf das Senden
+der Ereignisse mit und erhält sie nie zurück. Die Markierung wird bei jedem Besuch, der eine Antwort
+des Dienstes erhält, neu geschrieben und ist nicht befristet: sie bleibt, bis die Browserdaten
+gelöscht werden, vom Besucher oder vom Browser selbst (Klausel 4.3), bis der Besucher die Messung auf
+deiner Website abschaltet (`optOut`), bis der Browser verlangt, nicht verfolgt zu werden (Global
+Privacy Control oder Do Not Track), oder bis die Zählung ausgeschaltet wird (letzter Absatz dieser
+Klausel). Zu Beginn jedes Besuchs vergleicht der Tracker die Uhrzeit des Geräts mit dieser
+Markierung und sendet zusammen mit dem ersten Ereignis des Besuchs nur den Besuchstyp: der erste
+dieses Browsers (oder seit die Browserdaten gelöscht wurden), der erste im Monat, der erste am Tag
+oder ein weiterer am selben Tag. Bei ausgeschalteter Option sendet der Tracker dasselbe Feld (das
+ohne Markierung „der erste dieses Browsers“ lautet), und der Dienst verwirft es, ohne es zu
+speichern. Es wird keine Kennung erzeugt, gespeichert oder gesendet, und der Dienst verknüpft keinen
+anonymen Besuch mit einem anderen. Wenn der Browser verlangt, nicht verfolgt zu werden, oder wenn der
+Besucher die Messung auf deiner Website abschaltet (`optOut`), sendet der Tracker nichts, auch nicht
+den Besuchstyp, und löscht die Markierung, falls vorhanden; wenn der Browser von einem Programm
+gesteuert wird, sendet der Tracker ebenfalls nichts.
+
+**Achtung:** der Besuchstyp identifiziert niemanden, kann aber bei Websites oder an Tagen mit wenigen
+Besuchen zusammen mit der Uhrzeit, dem Gerät und dem Ort den Schluss erlauben, dass zwei Besuche aus
+demselben Browser kamen. In einem Projekt, das die Funktion `identify` verwendet, bleibt der
+Besuchstyp auch bei den Besuchen der identifizierten Personen erhalten und zeigt, wie oft jede von
+ihnen in diesem Browser auf die Website zurückkehrt. Bevor du die Option einschaltest, aktualisiere
+den Datenschutzhinweis deiner Website, damit er sagt, dass der Browser diese Markierung speichert,
+wie lange, und dass jeder Besuch seinen Typ mitteilt (Anhang IV des Auftragsverarbeitungsvertrags
+enthält die beiden Fassungen des Absatzes). Es liegt bei dir als Verantwortlichem, zu prüfen, ob du
+diese Zählung brauchst, vor allem in einem Projekt, das `identify` verwendet, und die Besucher zu
+informieren (Klausel 6.1 des Auftragsverarbeitungsvertrags). Die Grenzen der Zählung stehen in
+Klausel 4.3.
+
+Beim Ausschalten speichert der Dienst innerhalb einer Minute den Typ neuer Besuche nicht mehr, und
+der Tracker löscht die Markierung jedes Browsers, wenn dieser Browser das nächste Mal Ereignisse an
+den Dienst sendet und die Antwort erhält; in einem Browser, der nicht auf die Website zurückkehrt,
+bleibt die Markierung, bis die Browserdaten gelöscht werden. Die bereits gespeicherten Besuchstypen
+bleiben in den Ereignissen und folgen den Regeln der übrigen Ereignisse: der Löschung nach 13 Monaten
+(Klausel 7.4), der Löschung des Projekts und den Anfragen betroffener Personen (Klauseln 10 und 12
+des Auftragsverarbeitungsvertrags). Auch das Einschalten gilt innerhalb einer Minute für neue
+Besuche.
 
 ## Klausel 5 — Open Source und gehosteter Dienst
 
@@ -587,7 +659,11 @@ Verbindungen mit deiner Erlaubnis nutzt:
    Control und Do Not Track und der Option, nicht gemessen zu werden (`optOut`), durch den Tracker
    abschalten, umgehen oder verändern, oder Ereignisse dieser Personen auf anderem Weg senden;
 6. den Dienst zusammen mit Techniken des Browser-Fingerprintings oder anderen
-   Mitteln nutzen, um anonyme Besucher wiederzuerkennen;
+   Mitteln nutzen, um anonyme Besucher wiederzuerkennen oder die anonymen Besuche desselben Browsers
+   zu verknüpfen, einschließlich der Veränderung des Trackers oder der Markierung aus Klausel 4.6,
+   damit sie etwas speichern oder senden, das es ermöglicht, den Besucher bei einem anderen Besuch
+   wiederzuerkennen. Die Zählung eindeutiger Besucher so zu nutzen, wie der Dienst sie anbietet
+   (Klausel 4.6), ist kein Missbrauch;
 
 *Traffic und Sicherheit*
 
@@ -643,8 +719,8 @@ Website sendet, liegt bei dir.**
 
 1. auf deiner Website einen Datenschutzhinweis zu veröffentlichen, der die Messung beschreibt (eine
    Vorlage findest du in Anhang IV des Auftragsverarbeitungsvertrags), und diesen Hinweis im Einklang
-   mit dem, was deine Website sendet, und mit den Optionen deiner Projekte (etwa der Stadt,
-   Klausel 4.5) zu halten;
+   mit dem, was deine Website sendet, und mit den Optionen deiner Projekte (etwa der Stadt und der
+   eindeutigen Besucher, Klauseln 4.5 und 4.6) zu halten;
 2. wenn deine Website sich an Kinder oder Jugendliche richtet, die Messung vorher im Lichte von
    Art. 14 der LGPD (Lei Geral de Proteção de Dados Pessoais; brasilianisches allgemeines
    Datenschutzgesetz) zu prüfen;

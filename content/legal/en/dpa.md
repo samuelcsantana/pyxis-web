@@ -37,7 +37,8 @@ installed.
 have marked.
 
 2.4. **Project** is the configuration of one of your sites in Pyxis: name, authorized addresses
-(origins), time zone, conversion event, the option to store the city, keys and events.
+(origins), time zone, conversion event, the options to store the city and to count unique visitors,
+keys and events.
 
 2.5. **Sub-processor** is the provider we engage and that processes, on our behalf, personal data
 covered by this agreement.
@@ -93,9 +94,9 @@ service.
 5.1. Your instructions for the processing are, taken together:
 
 1. the Terms of Use and this agreement;
-2. the configuration of your projects (authorized origins, time zone, conversion event, the option
-   to store the city, keys and people with access), made by the account owner in the dashboard or,
-   on request, by us;
+2. the configuration of your projects (authorized origins, time zone, conversion event, the options
+   to store the city and to count unique visitors, keys and people with access), made by the account
+   owner in the dashboard or, on request, by us;
 3. what the tracker installed on your site sends (which events and properties, and whether you use
    the `identify` function);
 4. the actions of the account owner in the dashboard (for example, exporting the events, deleting a
@@ -160,7 +161,16 @@ subjects.
     is necessary for the purpose of the measurement and whether it fits the legal basis of item 1;
     have first updated the notice of item 2, highlighting the change; and, if the project uses the
     `identify` function, know that it starts recording the approximate city of each visit by
-    identified people, and state this in the notice.
+    identified people, and state this in the notice;
+11. if you turn on the unique visitor count in a project (Terms of Use, Clause 4.6), have first
+    assessed whether it is necessary for the purpose of the measurement and whether it fits the
+    legal basis of item 1, including as regards the marker that the tracker writes to the visitor's
+    browser; have first updated the notice of item 2, highlighting the change, stating what the
+    browser stores, for how long and what each visit reports; if the project uses the `identify`
+    function, know that the visit type also starts being kept on the visits by identified people,
+    showing how often each of them returns to the site, and state this in the notice; and, if your
+    site asks the visitor to accept or refuse usage measurement, have decided whether the count
+    respects that choice and stated this in the notice.
 
 6.2. The Pyxis server automatically discards values shaped like an email address or sequences of 10
 or more digits (such as CPF and CNPJ, the Brazilian individual and company taxpayer numbers, and phone numbers) in event properties, in campaign parameters and
@@ -260,9 +270,15 @@ We help as described below.
 
 10.2. **Only those who were identified can be found.** Pyxis does not store cookies, IPs or a
 persistent identifier of the anonymous visitor. The visit identifier is random, stays only in the
-browser tab and is replaced when the tab is closed or after 30 minutes of inactivity. Therefore,
-**there is no way to find a person's anonymous visits**. It is only possible to locate the events of
-someone your site identified with the `identify` function, through the internal identifier you sent.
+browser tab and is replaced when the tab is closed or after 30 minutes of inactivity. The unique
+visitor count (Terms of Use, Clause 4.6) does not change this: the marker it uses stays only in the
+browser, is the same for all visitors to the site on the same day and never reaches Pyxis, and the
+visit type is not an identifier (many visitors have the same value). Therefore, **there is no way to
+find a person's anonymous visits**. It is only possible to locate the events of someone your site
+identified with the `identify` function, through the internal identifier you sent. The unique
+visitor count does not change the scope of the deletion: the anonymous visits of the same person are
+not covered, even if the type of an identified visit indicates that the browser had already visited
+that day.
 
 10.3. **Deleting a person's data (yourself, through the API).** Call
 `DELETE https://api.pyxis-analytics.dev/v1/subjects/{userId}` with the project's secret key
@@ -277,7 +293,9 @@ returns the same events that the deletion would delete, in order, up to 1,000 pe
 there are more, the response gives the next cursor (`next_after`), which you pass as `?after=` to
 fetch the next page. Each event comes with its name, date and time, visit identifier, page, source,
 device, country, state, city (empty in projects with the option turned off; Terms of Use,
-Clause 4.5) and properties.
+Clause 4.5), visit type (only on visits received while the unique visitor count was turned on in
+the project, and only on the event that carried it: with the tracker, the first of each visit;
+Terms of Use, Clause 4.6) and properties.
 
 10.5. **Limits on these routes.** Both routes accept up to 60 calls per minute per key and per
 source address. The secret key must only be used on your server, never in the browser.
@@ -442,6 +460,7 @@ system whom the customer identifies with the `identify` function.
 | Event name | `page_view` (page viewed), `api_request` (call to the site's API), `identify` or a name the customer defines |
 | Date and time | The browser's, corrected for clock skew, and the time of receipt on the server |
 | Visit identifier | Random number stored in the tab's `sessionStorage`; replaced when the tab is closed or after 30 minutes of inactivity |
+| Visit type | Only on visits received while the unique visitor count (Terms of Use, Clause 4.6; it comes turned off in every project, and only the account owner turns it on) was turned on in the project, and only on the event that carried it (with the tracker, the first of each visit): one of four values, calculated in the browser from the device's time: `first_visit` (the first from this browser, or since its data was deleted), `first_this_month` (the first in the month), `first_today` (the first in the day) or `again_today` (another on the same day), with the day and the month in the project's time zone. It is not an identifier: many visitors have the same value. In projects with the option turned off, the tracker also sends the field, and Pyxis discards it without storing it |
 | User identifier | Only if the customer uses `identify`: the internal identifier of the account in the customer's system, with up to 64 letters, digits, `-` or `_` (does not accept `@`, and therefore does not accept an email address) |
 | Page | Only the path, in template form: segments that look like identifiers (numbers, long codes, email addresses) become `:id`; without domain and without parameters |
 | Source of the visit | Only the domain the visitor came from (for example, `google.com`), without the full address |
@@ -462,6 +481,16 @@ system whom the customer identifies with the `identify` function.
   browser family and the operating system family; then discarded. Visits from known bots are
   discarded.
 - **Cookies:** the tracker does not create cookies on the customer's sites.
+- **Unique visitor marker:** only in projects with the unique visitor count turned on, the tracker
+  stores in the local storage of the visitor's browser (`localStorage`, at the address of the
+  customer's site) the times at which the site's day and month end, the same for all visitors on the
+  same day. Pyxis sends these times to the tracker in the response to the sending of events, but
+  never receives or stores the marker. The marker is rewritten on each visit that receives a
+  response and stays until the browser data is deleted, by the visitor or by the browser itself,
+  until the visitor turns off the measurement (`optOut`) or until the browser asks not to be tracked
+  (Global Privacy Control or Do Not Track); in these last two cases, the tracker deletes the marker
+  and sends nothing. When the count is turned off, the tracker deletes the marker the next time the
+  browser sends events and receives the response (Terms of Use, Clause 4.6).
 - **Full page address, address parameters (other than campaign ones), browser fingerprint, postal
   code (CEP) and coordinates:** never.
 - **City:** only in projects in which the account owner has turned on that option. When it is
@@ -476,7 +505,8 @@ off the digest receives aggregate figures for the week: visits, identified peopl
 conversions, failed writes, visits per day, most frequent pages and events and the routes with
 the most failures. The digest carries no visitor or user identifiers.
 
-**7. Processing operations.** Receipt, validation, classification, storage, querying, aggregation,
+**7. Processing operations.** Receipt, validation, classification, sending of the times of the
+unique visitor marker to the tracker (item 4), storage, querying, aggregation,
 display in the dashboard, delivery through the query API, through the MCP server and to connected
 apps, sending of the aggregate digest by email, copying (export), suspension of intake (Clause 5.4)
 and deletion.
@@ -524,15 +554,17 @@ for each download, valid for 5 minutes. Once downloaded, the file is your respon
 ## Schedule II — Security measures in force
 
 Checked in the service's code and infrastructure configuration on October 14, 2026 and October 15,
-2026; item 1 (city), on October 29, 2026.
+2026; item 1 (city), on October 29, 2026; item 1 (unique visitors), on [DATA DA CONFERÊNCIA].
 
 **1. Privacy by design.** No cookies on the measured sites; IP and full browser string never stored;
 pages reduced to templates; a server-side barrier that discards values shaped like an email address
 and numbers with 10 or more digits in properties, campaign parameters and the user identifier; the
 visitor's state, and the city only when the customer turns on that option in the project, which
-comes turned off; the browser's "do not track" signals (Global Privacy Control and Do Not Track)
-respected by the tracker, which sends nothing when they are on; an option not to be measured
-(`optOut`) for the visitor; events deleted after 13 months.
+comes turned off; the unique visitor count only when the customer turns it on in the project, which
+comes turned off, without an identifier (the browser stores only the times at which the site's day
+and month end, and Pyxis never receives this marker); the browser's "do not track" signals (Global
+Privacy Control and Do Not Track) respected by the tracker, which sends nothing when they are on; an
+option not to be measured (`optOut`) for the visitor; events deleted after 13 months.
 
 **2. Encryption in transit.** Browser → API: HTTPS with TLS 1.2 or higher and 2-year HSTS. Content
 delivery network → API function: HTTPS only (TLS 1.2). Function → database: TLS with verification of
@@ -656,17 +688,49 @@ not replace your own analysis.
 > address** and **does not store your full browser string**. We record the page viewed (without the
 > address parameters, except campaign ones), the site you came from, the type of device, the browser
 > and operating system family, the country and the state (never the city) and the actions we have
-> marked on the site. Each visit receives a random number that stays only in the browser tab and is
-> discarded when the tab is closed or after 30 minutes of inactivity; there is no identifier that
-> recognizes you on another visit.
+> marked on the site.
+>
+> *(Use only one of the two versions of the paragraph below: the first if the unique visitor count
+> is turned off in the project, as it comes in every project; the second only if you turned it on.)*
+>
+> *Without the unique visitor count:* Each visit receives a random number that stays only in the
+> browser tab and is discarded when the tab is closed or after 30 minutes of inactivity; there is no
+> identifier that recognizes you on another visit.
+>
+> *With the unique visitor count:* Each visit receives a random number that stays only in the browser
+> tab and is discarded when the tab is closed or after 30 minutes of inactivity. To count unique
+> visitors without identifying anyone, your browser stores in this site's local storage (it is not a
+> cookie) only the date and time at which the day and the month end, which are the same for all
+> visitors on that day; this marker is updated on your visits and stays until you clear this site's
+> data in the browser. If your browser sends the Global Privacy Control or "Do Not Track" signal,
+> nothing is sent and the marker is deleted. Each visit reports only whether it is the first from
+> this browser, the first in the month, the first in the day or another on the same day, and this
+> information is kept with the other data of the visit. The marker stays only in your browser and is
+> not sent to Pyxis, and there is no identifier that recognizes you on another visit.
+>
+> *(If this notice was already published without the unique visitor count, highlight the change and
+> the date on which it takes effect. If you turn off the count later, go back to the first version
+> and add right after it: "Until DD/MM/YYYY, this site counted unique visitors. Your browser may
+> still have the marker with the date and time at which the day and the month ended; it is deleted
+> on one of your next visits, or when you clear this site's data in the browser. The visits counted
+> until then keep their type until they are deleted, 13 months after each one.")*
+>
+> *(If you turned on the unique visitor count and your site uses the `identify` function, replace,
+> in the paragraph about that function, "we link the events of that visit to your account's internal
+> number" with "we link the events of that visit, including whether it was the first from this
+> browser, the first in the month, the first in the day or another on the same day, to your
+> account's internal number". If you also turned on the city, use "including the approximate city
+> and whether it was the first from this browser, the first in the month, the first in the day or
+> another on the same day".)*
 >
 > *(If you turned on the city in the project, replace "the country and the state (never the city)"
 > with "the country, the state and the approximate city, inferred from your IP address at the time
 > of access, without storing the IP". If your site also uses the `identify` function, replace, in
-> the next paragraph, "we link the events of that visit to your account's internal number" with "we
-> link the events of that visit, including the approximate city, to your account's internal
-> number". If this notice was already published without the city, highlight the change and the date
-> on which it takes effect.)*
+> the paragraph about that function, "we link the events of that visit to your account's internal
+> number" with "we link the events of that visit, including the approximate city, to your account's
+> internal number" (if you also turned on the unique visitor count, use the combined replacement
+> from the previous paragraph). If this notice was already published without the city, highlight
+> the change and the date on which it takes effect.)*
 >
 > *(Include the paragraph below only if your site uses the `identify` function.)* When you sign in
 > to your account, we link the events of that visit to your account's internal number, never to your

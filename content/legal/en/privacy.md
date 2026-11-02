@@ -88,13 +88,20 @@ The Pyxis home page is measured by Pyxis itself, with the same rules we offer cu
 
 | Data | Purpose | Legal basis (LGPD) | Retention |
 |---|---|---|---|
-| Page viewed (path, without parameters other than campaign ones), actions on the page (for example, opening the demo), referring site (domain only), campaign parameters, device category, browser and operating system family, country, state and approximate city (inferred from the IP address by the AWS network, without storing the IP; the city from {{terms.effectiveFrom}}), random visit number | Understand how the page is used and improve the presentation of Pyxis | Legitimate interest (art. 7, IX, and art. 10) | 13 months |
+| Page viewed (path, without parameters other than campaign ones), actions on the page (for example, opening the demo), referring site (domain only), campaign parameters, device category, browser and operating system family, country, state and approximate city (inferred from the IP address by the AWS network, without storing the IP; the city from October 29, 2026), random visit number, visit type (the first from this browser, the first in the month, the first in the day or another on the same day; from [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA]) | Understand how the page is used and improve the presentation of Pyxis | Legitimate interest (art. 7, IX, and art. 10) | 13 months |
 
 The measurement **does not use cookies**, **does not store the IP** or the full browser string, and
-**sends nothing** if your browser asks not to be tracked (Global Privacy Control or Do Not Track). On
-the page itself, the "What this page recorded" panel shows each event sent and lets you turn off the
-measurement in this browser. Vercel, which hosts the page, keeps the IP and browser of whoever
-accesses it in its technical logs for 1 day.
+**sends nothing** if your browser asks not to be tracked (Global Privacy Control or Do Not Track).
+**From [DATA EM QUE A CONTAGEM FOR LIGADA NA PÁGINA], we count unique visitors without an
+identifier:** your browser stores, in the page's local storage (it is not a cookie), only the times
+at which the day and the month end in Brasília time, which are the same for all visitors on that day
+(item 2.5), and each visit tells us only its type. No identifier is created, and we do not link one
+anonymous visit to another; on a day with few visits, however, the type, together with the time, the
+device and the location, may indicate that two visits came from the same browser. On the page
+itself, the "What this page recorded" panel shows each event sent and the stored marker, and lets
+you turn off the measurement in this browser, which also deletes the marker, as does the Global
+Privacy Control or Do Not Track signal. Vercel, which hosts the page, keeps the IP and browser of
+whoever accesses it in its technical logs for 1 day.
 
 ### 2.5. Cookies and browser storage
 
@@ -106,6 +113,7 @@ accesses it in its technical logs for 1 day.
 | Dashboard | `pyxis:pending-sign-in` | `sessionStorage` (tab only) | Remember the email entered while you wait for the code, even if you reload the page | 10 minutes, or until the tab is closed |
 | Home page | `pyxis:session` | `sessionStorage` (tab only) | Random visit number | Until the tab is closed or 30 minutes of inactivity |
 | Home page | `pyxis:opt-out` | `localStorage` | Remember that you turned off the measurement | Until you turn it back on or clear the browser data |
+| Home page | `pyxis:period` | `localStorage` | Tell whether the visit is the first from this browser, the first in the month, the first in the day or another on the same day. Stores only the times at which the day and the month end in Brasília time, the same for all visitors on that day; it does not identify you and is never sent to us | Rewritten on each visit that receives a response from Pyxis; stays until you clear the browser data, turn off the measurement on the page or visit the page with the Global Privacy Control or Do Not Track signal turned on; if we turn off the count, until one of your following visits |
 | Home page and dashboard sign-in screen | `pyxis:theme` | `localStorage` | Remember the theme chosen on this device | Until you change it or clear the browser data |
 
 The home page does not create cookies. We do not use third-party, advertising or social media
@@ -303,8 +311,11 @@ owner. If you are the account owner, deleting your registration requires closing
 of Use, Clause 11.6), and the billing data remains stored for the legal period (item 2.2).
 
 6.5. **Visitors to the home page:** since we do not store IPs, cookies or persistent identifiers, we
-have no way to locate your anonymous visits. You can turn off the measurement on the page itself or
-turn on the Global Privacy Control signal in your browser.
+have no way to locate your anonymous visits; the unique visitor count (item 2.4) does not change
+this. The marker of item 2.5 stays only in your browser. To avoid being measured, turn off the
+measurement on the page itself, which also deletes the marker, or turn on the Global Privacy Control
+signal in your browser; with it, nothing is sent, and the marker is deleted on your next visit to the
+page.
 
 6.6. You may also petition the **Agência Nacional de Proteção de Dados (ANPD)**, at `gov.br/anpd`,
 and the consumer protection bodies.
