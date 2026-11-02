@@ -156,6 +156,89 @@ describe('MockOverviewService', () => {
     }
   });
 
+  it('counts the unique visitors of the store day by day, never more than the visits of the day', async () => {
+    const sixtyDays = { from: '2026-08-07', to: '2026-10-05', filters: NO_DASHBOARD_FILTERS };
+
+    const report = await new MockOverviewService().overview(DEMO_STORE.id, sixtyDays);
+
+    expect(report.visitors.enabled).toBe(true);
+    expect(report.visitors.daily.map((day) => day.date)).toEqual(
+      report.days.map((day) => day.date),
+    );
+    report.visitors.daily.forEach((day, index) => {
+      const unique = day.firstVisit + day.firstThisMonth + day.firstToday;
+      expect(unique).toBeGreaterThan(0);
+      expect(unique + day.againToday).toBe(report.kpis.visits.daily[index]);
+    });
+    expect(report.visitors.daily.every((day) => day.againToday > 0)).toBe(true);
+  });
+
+  it('sends no unique visitor for a project that does not count them', () => {
+    const wire = demoOverviewWire(DEMO_DOCS.id, RANGE, NOW);
+
+    expect(wire.visitors).toEqual({
+      enabled: false,
+      daily: [],
+      months: [],
+      previous_daily: [],
+      previous_months: [],
+    });
+  });
+
+  it('marks a month exact only when the range holds it whole or runs from its first day to today', () => {
+    const noonOfOctober6 = new Date('2026-10-06T15:00:00.000Z');
+    const monthsOf = (from: string, to: string) => {
+      const visitors = demoOverviewWire(DEMO_STORE.id, { from, to }, noonOfOctober6).visitors;
+      return {
+        current: visitors?.months.map((month) => [month.month, month.exact]),
+        previous: visitors?.previous_months.map((month) => [month.month, month.exact]),
+      };
+    };
+
+    expect(monthsOf('2026-09-01', '2026-09-30')).toEqual({
+      current: [['2026-09', true]],
+      previous: [['2026-08', false]],
+    });
+    expect(monthsOf('2026-07-01', '2026-08-31')).toEqual({
+      current: [
+        ['2026-07', true],
+        ['2026-08', true],
+      ],
+      previous: [
+        ['2026-04', false],
+        ['2026-05', true],
+        ['2026-06', true],
+      ],
+    });
+    expect(monthsOf('2026-10-01', '2026-10-06')).toEqual({
+      current: [['2026-10', true]],
+      previous: [['2026-09', false]],
+    });
+    expect(monthsOf('2026-09-15', '2026-10-06').current).toEqual([
+      ['2026-09', false],
+      ['2026-10', true],
+    ]);
+    expect(monthsOf('2026-10-02', '2026-10-06').current).toEqual([['2026-10', false]]);
+    expect(monthsOf('2026-10-01', '2026-10-05').current).toEqual([['2026-10', false]]);
+  });
+
+  it('counts a month from its days inside the range, exact up to today in the project zone', () => {
+    const wire = demoOverviewWire(
+      DEMO_STORE.id,
+      { from: '2026-09-25', to: '2026-10-05' },
+      NOW,
+    ).visitors;
+    const october = wire?.daily.filter((day) => day.date.startsWith('2026-10')) ?? [];
+
+    expect(wire?.months[1]).toEqual({
+      month: '2026-10',
+      first_visit: october.reduce((sum, day) => sum + day.first_visit, 0),
+      first_this_month: october.reduce((sum, day) => sum + day.first_this_month, 0),
+      exact: true,
+    });
+    expect(wire?.previous_daily).toHaveLength(11);
+  });
+
   it('has no conversions for a project without a conversion event', async () => {
     const report = await new MockOverviewService().overview(DEMO_DOCS.id, RANGE);
 

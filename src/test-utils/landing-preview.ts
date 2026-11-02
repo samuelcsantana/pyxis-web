@@ -3,6 +3,7 @@ import type { FunnelStep } from '@/domain/funnel';
 import { type LandingPreviewView, landingPreviewOf } from '@/domain/landing-preview';
 import type { OverviewReport } from '@/domain/overview';
 import type { RouteReport } from '@/domain/requests';
+import { NO_UNIQUE_VISITORS } from '@/domain/unique-visitors';
 import type { I18n } from '@/i18n/i18n';
 
 const DAYS = 30;
@@ -46,6 +47,7 @@ export const SHOWCASE_OVERVIEW: OverviewReport = {
   topEvents: [],
   comparison: { kind: 'whole-days' },
   previousDays: wave(84, 0.6).map((visits) => ({ ...PREVIOUS_DAY, visits })),
+  visitors: NO_UNIQUE_VISITORS,
 };
 
 const SHOWCASE_STEPS: readonly FunnelStep[] = [

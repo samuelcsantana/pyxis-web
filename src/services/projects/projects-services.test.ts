@@ -223,6 +223,7 @@ describe('MockProjectsService', () => {
       eventRetentionMonths: 13,
     });
     expect(docs.allowedOrigins).toEqual(['https://docs.example.com']);
+    expect([store.visitorsEnabled, docs.visitorsEnabled]).toEqual([true, false]);
     expect(store.publicKeys[0]?.key).toMatch(/^pyxis_pk_[0-9a-f]{32}$/);
     expect(store.secretKeys).toEqual([
       { id: expect.any(String) as string, createdAt: '2025-02-03T10:00:00.000Z' },
