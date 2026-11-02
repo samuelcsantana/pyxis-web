@@ -2261,6 +2261,14 @@ export const ptBR = translation({
       empty: 'Nada enviado ainda. O primeiro lote sai em até 5 segundos.',
       never:
         '<strong>Nunca enviado:</strong> o seu endereço IP, o nome completo do navegador, um cookie, o endereço completo da página, um identificador que acompanhe você de uma visita para outra. <strong>Acrescentado pelo servidor:</strong> país, estado e cidade aproximada, a partir da requisição; depois o endereço é descartado.',
+      kept: '<strong>Guardado neste navegador:</strong> só quando terminam o dia ({day}) e o mês ({month}), no horário de Brasília, iguais para todos os visitantes hoje. Nunca é enviado ao Pyxis.',
+      visitorKind: 'Esta visita foi enviada como: {kind}',
+      kinds: {
+        firstVisit: 'primeira deste navegador',
+        firstThisMonth: 'primeira no mês',
+        firstToday: 'primeira no dia',
+        againToday: 'outra no mesmo dia',
+      },
       close: 'Fechar',
     },
     footer: {

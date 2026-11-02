@@ -447,7 +447,9 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   `site_opened`, `snippet_copied`, `language_switched`, `install_opened`, `pricing_opened`,
   `access_requested`, `sign_up_opened`, `larger_plan_requested`, `ask_claude_opened`,
   `claude_directory_opened`, `nudge_dismissed`), a button lists what this visit sent, live
-  (the SDK's `debug.onBatch`), and the footer says the page is measured, with a switch to stop
+  (the SDK's `debug.onBatch`), with the visit's kind when the tracker sent one and, when this
+  browser keeps the unique visitors marker (`pyxis:period` in `localStorage`), when the day and
+  the month end in Brasília time, and the footer says the page is measured, with a switch to stop
   measuring in this browser. A browser driven by automation (`navigator.webdriver`) is not
   measured, so Playwright launches Chromium with `--disable-blink-features=AutomationControlled`
   and a test checks the flag reached it. The Content Security Policy lets the home page, and no other page,

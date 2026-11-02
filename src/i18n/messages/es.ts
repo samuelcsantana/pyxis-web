@@ -2270,6 +2270,14 @@ export const es = translation({
       empty: 'Todavía no se envió nada. El primer lote sale en menos de 5 segundos.',
       never:
         '<strong>Nunca se envía:</strong> tu dirección IP, el nombre completo de tu navegador, una cookie, la dirección completa de la página, un identificador que te acompañe de una visita a otra. <strong>Lo agrega el servidor:</strong> el país, la región y la ciudad aproximada, a partir de la solicitud; luego se descarta la dirección.',
+      kept: '<strong>Se guarda en este navegador:</strong> solo cuándo terminan el día ({day}) y el mes ({month}), en el horario de Brasilia, iguales para todos los visitantes de hoy. Nunca se envía a Pyxis.',
+      visitorKind: 'Esta visita se envió como: {kind}',
+      kinds: {
+        firstVisit: 'primera de este navegador',
+        firstThisMonth: 'primera del mes',
+        firstToday: 'primera del día',
+        againToday: 'otra el mismo día',
+      },
       close: 'Cerrar',
     },
     footer: {

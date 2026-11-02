@@ -1,4 +1,5 @@
 export const PYXIS_INGESTION_URL = 'https://api.pyxis-analytics.dev';
+export const LANDING_PROJECT_TIME_ZONE = 'America/Sao_Paulo';
 
 function configured(value: string | undefined): string | undefined {
   const trimmed = value?.trim();

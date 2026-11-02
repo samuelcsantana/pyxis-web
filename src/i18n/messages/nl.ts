@@ -2284,6 +2284,14 @@ export const nl = translation({
       empty: 'Nog niets verstuurd. De eerste batch gaat binnen 5 seconden weg.',
       never:
         '<strong>Nooit verstuurd:</strong> je IP-adres, de volledige naam van je browser, een cookie, het volledige adres van de pagina, een id die je van het ene bezoek naar het andere volgt. <strong>Toegevoegd door de server:</strong> land, regio en geschatte stad, uit het verzoek; daarna wordt het adres weggegooid.',
+      kept: '<strong>Bewaard in deze browser:</strong> alleen wanneer de dag ({day}) en de maand ({month}) eindigen, in de tijd van Brasília, voor alle bezoekers van vandaag dezelfde. Dit wordt nooit naar Pyxis verstuurd.',
+      visitorKind: 'Dit bezoek is verstuurd als: {kind}',
+      kinds: {
+        firstVisit: 'het eerste van deze browser',
+        firstThisMonth: 'het eerste in de maand',
+        firstToday: 'het eerste op de dag',
+        againToday: 'een ander bezoek op dezelfde dag',
+      },
       close: 'Sluiten',
     },
     footer: {

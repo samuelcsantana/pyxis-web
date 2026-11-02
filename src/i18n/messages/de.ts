@@ -2310,6 +2310,14 @@ export const de = translation({
       empty: 'Noch nichts gesendet. Der erste Batch geht innerhalb von 5 Sekunden raus.',
       never:
         '<strong>Nie gesendet:</strong> deine IP-Adresse, der vollständige Name deines Browsers, ein Cookie, die vollständige Adresse der Seite, eine Kennung, die dich von einem Besuch zum nächsten begleitet. <strong>Vom Server ergänzt:</strong> Land, Region und ungefähre Stadt, aus der Anfrage; danach wird die Adresse verworfen.',
+      kept: '<strong>In diesem Browser gespeichert:</strong> nur, wann der Tag ({day}) und der Monat ({month}) enden, in Brasília-Zeit, heute für alle Besucher gleich. Das wird nie an Pyxis gesendet.',
+      visitorKind: 'Dieser Besuch wurde gesendet als: {kind}',
+      kinds: {
+        firstVisit: 'der erste dieses Browsers',
+        firstThisMonth: 'der erste im Monat',
+        firstToday: 'der erste am Tag',
+        againToday: 'ein weiterer am selben Tag',
+      },
       close: 'Schließen',
     },
     footer: {

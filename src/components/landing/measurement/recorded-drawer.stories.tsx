@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
 import { english } from '@/test-utils/english';
-import { fakeSdk, SAMPLE_BATCH, startedMeasurement } from '@/test-utils/fake-measurement';
+import {
+  COUNTED_BATCH,
+  fakeSdk,
+  SAMPLE_BATCH,
+  SAMPLE_PERIOD,
+  startedMeasurement,
+} from '@/test-utils/fake-measurement';
 import { recordedLabelsOf } from './measurement-labels';
 import { RecordedDrawer } from './recorded-drawer';
 
@@ -45,6 +51,23 @@ export const Open: Story = {
     await expect(
       within(canvasElement).getByRole('region', { name: 'What this page recorded' }),
     ).toBeVisible();
+  },
+};
+
+export const CountingUniqueVisitors: Story = {
+  args: {
+    measurement: (() => {
+      const sdk = fakeSdk();
+      const measurement = startedMeasurement(sdk, () => SAMPLE_PERIOD);
+      sdk.sendBatch(COUNTED_BATCH);
+      measurement.setDrawerOpen(true);
+      return measurement;
+    })(),
+  },
+  play: async ({ canvasElement }) => {
+    const panel = within(canvasElement).getByRole('region', { name: 'What this page recorded' });
+    await expect(panel).toHaveTextContent('This visit was sent as: first today');
+    await expect(within(panel).getByText('Kept in this browser:')).toBeVisible();
   },
 };
 

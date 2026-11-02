@@ -802,6 +802,26 @@ test.describe('measuring itself', () => {
     await expect(recorded).toContainText('Never sent:');
   });
 
+  test('shows the unique visitors marker this browser keeps, in Brasília time', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'pyxis:period',
+        JSON.stringify({
+          day_ends_at: '2026-10-14T03:00:00.000Z',
+          month_ends_at: '2026-11-01T03:00:00.000Z',
+        }),
+      );
+    });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'See what it recorded' }).click();
+
+    await expect(page.getByRole('region', { name: 'What this page recorded' })).toContainText(
+      'Kept in this browser: only when the day (Oct 14, 2026, 00:00) and the month (Nov 1, 2026, 00:00) end, Brasília time',
+    );
+  });
+
   test('keeps the recorder toggle off the first screen until the visitor scrolls', async ({
     page,
   }) => {

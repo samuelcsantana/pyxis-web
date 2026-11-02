@@ -10,6 +10,11 @@ import {
   type TrackingStatus,
 } from 'pyxis-analytics';
 import { bestEffortTakeCarriedReferrer } from '@/lib/carried-referrer';
+import {
+  bestEffortReadVisitorPeriod,
+  type VisitorKind,
+  type VisitorPeriod,
+} from './visitor-period';
 
 export interface RecordedEvent {
   readonly id: string;
@@ -19,6 +24,7 @@ export interface RecordedEvent {
   readonly path: string;
   readonly properties: readonly (readonly [string, string])[];
   readonly referrerHost: string | null | undefined;
+  readonly visitorKind: VisitorKind | undefined;
 }
 
 export interface PyxisSdk {
@@ -33,6 +39,7 @@ export interface Measurement {
   readonly start: (key: string, endpoint: string) => void;
   readonly events: () => readonly RecordedEvent[];
   readonly status: () => TrackingStatus | null;
+  readonly visitorPeriod: () => VisitorPeriod | null;
   readonly drawerOpen: () => boolean;
   readonly setDrawerOpen: (open: boolean) => void;
   readonly stop: () => void;
@@ -53,19 +60,23 @@ export function recordedEventOf(event: BatchEvent): RecordedEvent {
     ),
     referrerHost:
       event.attribution === undefined ? undefined : (event.attribution.referrer_host ?? null),
+    visitorKind: event.visitor,
   };
 }
 
 export function createMeasurement(
   sdk: PyxisSdk,
   takeCarriedReferrer: () => string | undefined = bestEffortTakeCarriedReferrer,
+  readVisitorPeriod: () => VisitorPeriod | null = bestEffortReadVisitorPeriod,
 ): Measurement {
   let started = false;
   let events: readonly RecordedEvent[] = [];
   let status: TrackingStatus | null = null;
+  let period: VisitorPeriod | null = null;
   let open = false;
   const listeners = new Set<() => void>();
   const notify = () => {
+    period = readVisitorPeriod();
     listeners.forEach((listener) => {
       listener();
     });
@@ -95,6 +106,7 @@ export function createMeasurement(
     },
     events: () => events,
     status: () => status,
+    visitorPeriod: () => period,
     drawerOpen: () => open,
     setDrawerOpen: (next) => {
       open = next;

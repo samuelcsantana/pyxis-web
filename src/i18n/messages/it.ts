@@ -2289,6 +2289,14 @@ export const it = translation({
       empty: 'Ancora niente inviato. Il primo batch parte entro 5 secondi.',
       never:
         '<strong>Mai inviati:</strong> il tuo indirizzo IP, il nome completo del tuo browser, un cookie, l’indirizzo completo della pagina, un identificativo che ti segua da una visita all’altra. <strong>Aggiunti dal server:</strong> paese, regione e città approssimativa, dalla richiesta; poi l’indirizzo viene scartato.',
+      kept: '<strong>Salvato in questo browser:</strong> solo quando finiscono il giorno ({day}) e il mese ({month}), ora di Brasília, uguali per tutti i visitatori di oggi. Non viene mai inviato a Pyxis.',
+      visitorKind: 'Questa visita è stata inviata come: {kind}',
+      kinds: {
+        firstVisit: 'prima da questo browser',
+        firstThisMonth: 'prima del mese',
+        firstToday: 'prima del giorno',
+        againToday: 'un’altra nello stesso giorno',
+      },
       close: 'Chiudi',
     },
     footer: {

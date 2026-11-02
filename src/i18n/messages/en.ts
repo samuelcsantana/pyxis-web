@@ -2241,6 +2241,14 @@ export const en = {
       empty: 'Nothing sent yet. The first batch leaves within 5 seconds.',
       never:
         '<strong>Never sent:</strong> your IP address, your browser’s full name, a cookie, the full address of the page, an identifier that follows you from one visit to the next. <strong>Added by the server:</strong> country, state and approximate city, from the request; then the address is dropped.',
+      kept: '<strong>Kept in this browser:</strong> only when the day ({day}) and the month ({month}) end, Brasília time, the same for every visitor today. It is never sent to Pyxis.',
+      visitorKind: 'This visit was sent as: {kind}',
+      kinds: {
+        firstVisit: 'this browser’s first',
+        firstThisMonth: 'first this month',
+        firstToday: 'first today',
+        againToday: 'another one today',
+      },
       close: 'Close',
     },
     footer: {

@@ -1,7 +1,11 @@
 import type { I18n } from '@/i18n/i18n';
+import type { VisitorKind } from './visitor-period';
 
 export const ID_PLACEHOLDER = '{id}';
 export const HOST_PLACEHOLDER = '{host}';
+export const DAY_PLACEHOLDER = '{day}';
+export const MONTH_PLACEHOLDER = '{month}';
+export const KIND_PLACEHOLDER = '{kind}';
 
 export interface MeasurementLabels {
   readonly measured: string;
@@ -21,6 +25,9 @@ export interface RecordedLabels {
   readonly noReferrer: string;
   readonly empty: string;
   readonly never: string;
+  readonly kept: string;
+  readonly visitorKind: string;
+  readonly kinds: Readonly<Record<VisitorKind, string>>;
   readonly close: string;
 }
 
@@ -45,6 +52,14 @@ export function recordedLabelsOf({ t }: I18n): RecordedLabels {
     noReferrer: t('landing.recorded.noReferrer'),
     empty: t('landing.recorded.empty'),
     never: t('landing.recorded.never'),
+    kept: t('landing.recorded.kept', { day: DAY_PLACEHOLDER, month: MONTH_PLACEHOLDER }),
+    visitorKind: t('landing.recorded.visitorKind', { kind: KIND_PLACEHOLDER }),
+    kinds: {
+      first_visit: t('landing.recorded.kinds.firstVisit'),
+      first_this_month: t('landing.recorded.kinds.firstThisMonth'),
+      first_today: t('landing.recorded.kinds.firstToday'),
+      again_today: t('landing.recorded.kinds.againToday'),
+    },
     close: t('landing.recorded.close'),
   };
 }
