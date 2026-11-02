@@ -21,6 +21,13 @@ export class RateLimitedError extends Error {
   }
 }
 
+export class SignUpBusyError extends Error {
+  constructor() {
+    super('Sign-up reached its daily limit of new accounts.');
+    this.name = 'SignUpBusyError';
+  }
+}
+
 export class ApiNotFoundError extends Error {
   constructor(readonly path: string) {
     super(`The Pyxis API knows nothing at ${path}.`);

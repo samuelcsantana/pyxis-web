@@ -4,6 +4,7 @@ import {
   InvalidCodeError,
   isAccountSuspended,
   RateLimitedError,
+  SignUpBusyError,
   UnauthenticatedError,
 } from './errors';
 
@@ -12,6 +13,7 @@ describe('domain errors', () => {
     [new UnauthenticatedError(), 'UnauthenticatedError'],
     [new InvalidCodeError(), 'InvalidCodeError'],
     [new RateLimitedError(), 'RateLimitedError'],
+    [new SignUpBusyError(), 'SignUpBusyError'],
   ])('%s is named after its class', (error, name) => {
     expect(error.name).toBe(name);
     expect(error).toBeInstanceOf(Error);

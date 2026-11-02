@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { ApiRequestError, RateLimitedError } from '@/domain/errors';
+import { ApiRequestError, RateLimitedError, SignUpBusyError } from '@/domain/errors';
 import { openSignUpOf } from '@/domain/sign-up';
 import { DEMO_SIGN_IN_CODE } from '../auth/mock-auth-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
@@ -69,12 +69,29 @@ describe('HttpSignUpService', () => {
     });
   });
 
-  it('turns too many attempts into the rate-limit error', async () => {
+  it('turns too many attempts with no body into the rate-limit error', async () => {
     answer(429);
 
     await expect(
       new HttpSignUpService(API, vi.fn()).requestCode('ana@example.com', 'en'),
     ).rejects.toBeInstanceOf(RateLimitedError);
+  });
+
+  it('turns too many attempts with another code into the rate-limit error', async () => {
+    answer(429, { error: 'rate_limited', message: 'Too many requests.' });
+
+    await expect(
+      new HttpSignUpService(API, vi.fn()).requestCode('ana@example.com', 'en'),
+    ).rejects.toBeInstanceOf(RateLimitedError);
+  });
+
+  it('turns the daily cap of new sign-ups into its own error, not the rate-limit one', async () => {
+    answer(429, { error: 'sign_up_busy', message: 'Sign-up is busy.' });
+
+    const request = new HttpSignUpService(API, vi.fn()).requestCode('ana@example.com', 'en');
+
+    await expect(request).rejects.toBeInstanceOf(SignUpBusyError);
+    await expect(request).rejects.not.toBeInstanceOf(RateLimitedError);
   });
 
   it('verifies the code with the terms version, keeps the session and names the account', async () => {

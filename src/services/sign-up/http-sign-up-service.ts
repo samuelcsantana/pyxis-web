@@ -1,4 +1,4 @@
-import { ApiRequestError, RateLimitedError } from '@/domain/errors';
+import { ApiRequestError, RateLimitedError, SignUpBusyError } from '@/domain/errors';
 import type { SignUpStatus, VerifySignUpOutcome } from '@/domain/sign-up';
 import {
   signedUpOf,
@@ -14,6 +14,7 @@ const STATUS_BAD_REQUEST = 400;
 const STATUS_NOT_FOUND = 404;
 const STATUS_TOO_MANY_REQUESTS = 429;
 const TERMS_OUTDATED = 'terms_outdated';
+const SIGN_UP_BUSY = 'sign_up_busy';
 
 async function errorCodeOf(response: Response): Promise<string | null> {
   try {
@@ -84,7 +85,9 @@ export class HttpSignUpService implements ISignUpService {
       body: JSON.stringify(body),
     });
     if (response.status === STATUS_TOO_MANY_REQUESTS) {
-      throw new RateLimitedError();
+      throw (await errorCodeOf(response)) === SIGN_UP_BUSY
+        ? new SignUpBusyError()
+        : new RateLimitedError();
     }
     if (!response.ok) {
       throw new ApiRequestError(path, response.status, await errorCodeOf(response));
