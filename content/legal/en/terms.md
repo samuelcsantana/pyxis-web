@@ -184,9 +184,9 @@ to your site's API, acquisition, devices and times of day.
    30 minutes of inactivity, and the service does not link one anonymous visit to another. If the
    account owner turns on the unique visitor count in the project (Clause 4.6), the visitor's browser
    stores only the times at which the site's day and month end, which are the same for all visitors
-   on that day, and each visit reports only its type: the first from this browser, the first in the
-   month, the first in the day or another on the same day. This count comes turned off, and we never
-   turn it on without their request.
+   on that day, and each visit reports only its type: this browser's first, its first this month,
+   its first today or another one today. This count comes turned off, and we never turn it on
+   without their request.
 
 4.3. **Important:** the dashboard figures are a measurement, not an exact count. Visits from people
 who block the tracker, who ask not to be tracked, from bots and from people who were offline do not
@@ -256,9 +256,9 @@ or by the browser itself (Clause 4.3), until the visitor turns off the measureme
 (`optOut`), until the browser asks not to be tracked (Global Privacy Control or Do Not Track) or
 until the count is turned off (last paragraph of this clause). At the start of each visit, the
 tracker compares the device's time with this marker and sends, together with the first event of the
-visit, only the visit type: the first from this browser (or since the browser data was deleted), the
-first in the month, the first in the day or another on the same day. With the option turned off, the
-tracker sends the same field (which, without a marker, is "the first from this browser"), and the
+visit, only the visit type: this browser's first (or its first since the browser data was deleted),
+its first this month, its first today or another one today. With the option turned off, the
+tracker sends the same field (which, without a marker, is "this browser's first"), and the
 service discards it without storing it. No identifier is created, stored or sent, and the service
 does not link one anonymous visit to another. When the browser asks not to be tracked or when the
 visitor turns off the measurement on your site (`optOut`), the tracker sends nothing, not even the
