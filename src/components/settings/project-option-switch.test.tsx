@@ -1,29 +1,32 @@
 import { act, fireEvent, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { SetCityOutcome } from '@/domain/project-management';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import {
-  CITY_SAVED_NOTICE_MS,
-  CITY_SAVING_MIN_BUSY_MS,
-  CitySwitch,
-  type SetCity,
-} from './city-switch';
+  OPTION_SAVED_NOTICE_MS,
+  OPTION_SAVING_MIN_BUSY_MS,
+  type ProjectOptionOutcome,
+  ProjectOptionSwitch,
+  type SetProjectOption,
+} from './project-option-switch';
 
 const LABEL = 'Record the visitor’s approximate city';
 
 function deferred() {
-  let settle: { resolve: (value: SetCityOutcome) => void; reject: (error: Error) => void } = {
+  let settle: { resolve: (value: ProjectOptionOutcome) => void; reject: (error: Error) => void } = {
     resolve: () => undefined,
     reject: () => undefined,
   };
-  const promise = new Promise<SetCityOutcome>((resolve, reject) => {
+  const promise = new Promise<ProjectOptionOutcome>((resolve, reject) => {
     settle = { resolve, reject };
   });
   return { promise, settle: () => settle };
 }
 
-function renderSwitch(initial: boolean, setCity: SetCity, locale: 'en' | 'pt-BR' = 'en') {
-  return renderWithMessages(<CitySwitch initial={initial} setCity={setCity} />, locale);
+function renderSwitch(initial: boolean, setCity: SetProjectOption, locale: 'en' | 'pt-BR' = 'en') {
+  return renderWithMessages(
+    <ProjectOptionSwitch option="cityOption" initial={initial} save={setCity} />,
+    locale,
+  );
 }
 
 async function settle(milliseconds: number) {
@@ -32,10 +35,9 @@ async function settle(milliseconds: number) {
   });
 }
 
-const saved = (cityEnabled: boolean): Promise<SetCityOutcome> =>
-  Promise.resolve({ kind: 'saved', cityEnabled });
+const saved = (): Promise<ProjectOptionOutcome> => Promise.resolve({ kind: 'saved' });
 
-describe('CitySwitch', () => {
+describe('ProjectOptionSwitch for the city', () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -55,7 +57,7 @@ describe('CitySwitch', () => {
 
   it('turns the city on at once, says it is saving, then that it saved', async () => {
     const answer = deferred();
-    const setCity = vi.fn<SetCity>(() => answer.promise);
+    const setCity = vi.fn<SetProjectOption>(() => answer.promise);
     renderSwitch(false, setCity);
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
@@ -65,18 +67,18 @@ describe('CitySwitch', () => {
     expect(screen.getByText('Saving…')).toBeInTheDocument();
 
     await act(async () => {
-      answer.settle().resolve({ kind: 'saved', cityEnabled: true });
-      await vi.advanceTimersByTimeAsync(CITY_SAVING_MIN_BUSY_MS);
+      answer.settle().resolve({ kind: 'saved' });
+      await vi.advanceTimersByTimeAsync(OPTION_SAVING_MIN_BUSY_MS);
     });
 
     expect(screen.getByText('Saved')).toBeInTheDocument();
-    await settle(CITY_SAVED_NOTICE_MS);
+    await settle(OPTION_SAVED_NOTICE_MS);
     expect(screen.queryByText('Saved')).not.toBeInTheDocument();
     expect(screen.getByRole('switch')).toBeChecked();
   });
 
   it('asks before turning it off, and saves nothing when the owner keeps it on', () => {
-    const setCity = vi.fn<SetCity>(saved);
+    const setCity = vi.fn<SetProjectOption>(saved);
     renderSwitch(true, setCity);
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
@@ -94,12 +96,12 @@ describe('CitySwitch', () => {
   });
 
   it('turns it off once the owner confirms', async () => {
-    const setCity = vi.fn<SetCity>(saved);
+    const setCity = vi.fn<SetProjectOption>(saved);
     renderSwitch(true, setCity);
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
     fireEvent.click(screen.getByRole('button', { name: 'Turn off and erase' }));
-    await settle(CITY_SAVING_MIN_BUSY_MS);
+    await settle(OPTION_SAVING_MIN_BUSY_MS);
 
     expect(setCity).toHaveBeenCalledWith(false);
     expect(screen.getByRole('switch')).not.toBeChecked();
@@ -111,7 +113,7 @@ describe('CitySwitch', () => {
     renderSwitch(false, () => Promise.reject(new Error('Pyxis API answered 503')));
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
-    await settle(CITY_SAVING_MIN_BUSY_MS);
+    await settle(OPTION_SAVING_MIN_BUSY_MS);
 
     expect(screen.getByRole('switch')).not.toBeChecked();
     expect(screen.getByRole('alert')).toHaveTextContent('The change was not saved. Try again.');
@@ -122,7 +124,7 @@ describe('CitySwitch', () => {
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
     fireEvent.click(screen.getByRole('button', { name: 'Turn off and erase' }));
-    await settle(CITY_SAVING_MIN_BUSY_MS);
+    await settle(OPTION_SAVING_MIN_BUSY_MS);
 
     expect(screen.getByRole('switch')).toBeChecked();
     expect(screen.getByRole('alert')).toHaveTextContent('the account needs an active plan');
@@ -132,7 +134,7 @@ describe('CitySwitch', () => {
     renderSwitch(true, () => Promise.resolve({ kind: 'subscriptionRequired' }));
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
     fireEvent.click(screen.getByRole('button', { name: 'Turn off and erase' }));
-    await settle(CITY_SAVING_MIN_BUSY_MS);
+    await settle(OPTION_SAVING_MIN_BUSY_MS);
 
     fireEvent.click(screen.getByRole('switch', { name: LABEL }));
 

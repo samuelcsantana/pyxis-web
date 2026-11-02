@@ -35,7 +35,7 @@ import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-
 import type { EndSession } from './end-session-button';
 import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
-import { CitySwitch, type SetCity } from './city-switch';
+import { ProjectOptionSwitch, type SetProjectOption } from './project-option-switch';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
 export interface ProjectManagement {
@@ -47,7 +47,7 @@ export interface ProjectManagement {
   readonly addPerson: AddPerson;
   readonly removePerson: RemovePerson;
   readonly requestExport: RequestExport;
-  readonly setCity: SetCity;
+  readonly setCity: SetProjectOption;
 }
 
 export interface ProjectSettingsViewProps {
@@ -388,7 +388,7 @@ interface SectionProps {
 interface CityPanelProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
-  readonly setCity: SetCity | null;
+  readonly setCity: SetProjectOption | null;
 }
 
 function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
@@ -399,7 +399,7 @@ function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
           {i18n.t(settings.cityEnabled ? 'cityOption.readOnlyOn' : 'cityOption.readOnlyOff')}
         </p>
       ) : (
-        <CitySwitch initial={settings.cityEnabled} setCity={setCity} />
+        <ProjectOptionSwitch option="cityOption" initial={settings.cityEnabled} save={setCity} />
       )}
     </SettingsPanel>
   );

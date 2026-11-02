@@ -1,32 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import type { SetCityOutcome } from '@/domain/project-management';
-import { CitySwitch } from './city-switch';
+import { type ProjectOptionOutcome, ProjectOptionSwitch } from './project-option-switch';
 
 const SLOW_SAVE_MS = 60_000;
 
-const saveRightAway = (cityEnabled: boolean): Promise<SetCityOutcome> =>
-  Promise.resolve({ kind: 'saved', cityEnabled });
+const saveRightAway = (): Promise<ProjectOptionOutcome> => Promise.resolve({ kind: 'saved' });
 
-const saveSlowly = (cityEnabled: boolean) =>
-  new Promise<SetCityOutcome>((resolve) => {
+const saveSlowly = () =>
+  new Promise<ProjectOptionOutcome>((resolve) => {
     setTimeout(() => {
-      resolve({ kind: 'saved', cityEnabled });
+      resolve({ kind: 'saved' });
     }, SLOW_SAVE_MS);
   });
 
 const failToSave = () => Promise.reject(new Error('Pyxis API answered 503'));
 
-const refuseWithoutPlan = (): Promise<SetCityOutcome> =>
+const refuseWithoutPlan = (): Promise<ProjectOptionOutcome> =>
   Promise.resolve({ kind: 'subscriptionRequired' });
 
 const meta = {
   title: 'Settings/City switch',
-  component: CitySwitch,
+  component: ProjectOptionSwitch,
   tags: ['autodocs'],
-  args: { initial: false, setCity: saveRightAway },
+  args: { option: 'cityOption', initial: false, save: saveRightAway },
   parameters: { layout: 'padded' },
-} satisfies Meta<typeof CitySwitch>;
+} satisfies Meta<typeof ProjectOptionSwitch>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -45,7 +43,7 @@ export const ConfirmingTurnOff: Story = {
 };
 
 export const Saving: Story = {
-  args: { setCity: saveSlowly },
+  args: { save: saveSlowly },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('switch'));
@@ -62,7 +60,7 @@ export const Saved: Story = {
 };
 
 export const Failed: Story = {
-  args: { setCity: failToSave },
+  args: { save: failToSave },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('switch'));
@@ -71,7 +69,7 @@ export const Failed: Story = {
 };
 
 export const RefusedWithoutAPlan: Story = {
-  args: { setCity: refuseWithoutPlan },
+  args: { save: refuseWithoutPlan },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('switch'));
