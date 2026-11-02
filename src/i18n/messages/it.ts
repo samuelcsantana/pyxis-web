@@ -729,6 +729,7 @@ export const it = translation({
       'I termini sono cambiati mentre questa pagina era aperta. Leggi la nuova versione e accettala di nuovo.',
     closed: 'Le registrazioni sono state chiuse mentre questa pagina era aperta.',
     rateLimited: 'Troppi tentativi da questo indirizzo. Aspetta qualche minuto e riprova.',
+    busy: 'Abbiamo raggiunto il limite di nuove registrazioni per oggi. Riprova tra qualche ora o scrivi a <mail>{email}</mail>.',
     unreachable: 'Impossibile raggiungere Pyxis. Riprova.',
     checkoutFailed:
       'Il tuo account è pronto, ma la pagina di pagamento non si è aperta. Completa il pagamento in Account e fatturazione.',

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, finalize, type Subscription, tap } from 'rxjs';
 import { BillingActions } from '@/components/account/billing-actions';
@@ -25,7 +25,7 @@ import {
   type BillingRedirectOutcome,
 } from '@/domain/accounts';
 import { SUPPORT_EMAIL } from '@/domain/accounts';
-import { RateLimitedError } from '@/domain/errors';
+import { RateLimitedError, SignUpBusyError } from '@/domain/errors';
 import { countdownLabel, emailProblem } from '@/domain/sign-in';
 import {
   FREE_PLAN_EVENTS_PER_MONTH,
@@ -68,6 +68,7 @@ type Failure =
   | 'termsOutdated'
   | 'closed'
   | 'rateLimited'
+  | 'busy'
   | 'unreachable'
   | 'checkoutFailed';
 
@@ -111,14 +112,25 @@ const FAILURE_TEXT = {
   rateLimited: 'signUp.rateLimited',
   unreachable: 'signUp.unreachable',
   checkoutFailed: 'signUp.checkoutFailed',
-} as const satisfies Record<Failure, string>;
+} as const satisfies Record<Exclude<Failure, 'busy'>, string>;
 
 function digitsOf(value: string): string {
   return value.replace(NOT_A_DIGIT, '').slice(0, SIGN_UP_CODE_LENGTH);
 }
 
 function failureOf(error: unknown): Failure {
+  if (error instanceof SignUpBusyError) {
+    return 'busy';
+  }
   return error instanceof RateLimitedError ? 'rateLimited' : 'unreachable';
+}
+
+function supportMailLink(text: string) {
+  return (
+    <a href={`mailto:${SUPPORT_EMAIL}`} className={TEXT_LINK}>
+      {text}
+    </a>
+  );
 }
 
 export function SignUpForm({
@@ -298,7 +310,11 @@ export function SignUpForm({
     }
   };
 
-  const errorText = failure === null ? null : t(FAILURE_TEXT[failure]);
+  const failureText = (current: Failure): ReactNode =>
+    current === 'busy'
+      ? rich(t('signUp.busy', { email: SUPPORT_EMAIL }), { mail: supportMailLink })
+      : t(FAILURE_TEXT[current]);
+  const errorText = failure === null ? null : failureText(failure);
   const freePlanEvents = new Intl.NumberFormat(displayTag(locale)).format(
     FREE_PLAN_EVENTS_PER_MONTH,
   );
@@ -542,13 +558,7 @@ export function SignUpForm({
           </div>
           {demoCode === undefined ? (
             <p className="border-t border-line pt-4 text-sm leading-5 text-muted">
-              {rich(t('signUp.noCode', { email: SUPPORT_EMAIL }), {
-                mail: (text) => (
-                  <a href={`mailto:${SUPPORT_EMAIL}`} className={TEXT_LINK}>
-                    {text}
-                  </a>
-                ),
-              })}
+              {rich(t('signUp.noCode', { email: SUPPORT_EMAIL }), { mail: supportMailLink })}
             </p>
           ) : null}
         </form>

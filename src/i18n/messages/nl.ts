@@ -729,6 +729,7 @@ export const nl = translation({
       'De voorwaarden zijn gewijzigd terwijl deze pagina openstond. Lees de nieuwe versie en ga er opnieuw mee akkoord.',
     closed: 'De registratie is gesloten terwijl deze pagina openstond.',
     rateLimited: 'Te veel pogingen vanaf dit adres. Wacht een paar minuten en probeer het opnieuw.',
+    busy: 'We hebben de limiet voor nieuwe registraties van vandaag bereikt. Probeer het over een paar uur opnieuw of mail naar <mail>{email}</mail>.',
     unreachable: 'Pyxis is niet bereikbaar. Probeer het opnieuw.',
     checkoutFailed:
       'Je account is klaar, maar de betaalpagina is niet geopend. Rond de betaling af onder Account en facturatie.',

@@ -699,6 +699,7 @@ export const en = {
       'The terms changed while this page was open. Read the new version and accept it again.',
     closed: 'Sign-up closed while this page was open.',
     rateLimited: 'Too many attempts from this address. Wait a few minutes and try again.',
+    busy: 'We reached today’s limit of new sign-ups. Try again in a few hours, or write to <mail>{email}</mail>.',
     unreachable: 'Pyxis could not be reached. Try again.',
     checkoutFailed:
       'Your account is ready, but the payment page did not open. Finish it in Account and billing.',

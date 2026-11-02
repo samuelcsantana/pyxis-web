@@ -723,6 +723,7 @@ export const es = translation({
     closed: 'El registro se cerró mientras esta página estaba abierta.',
     rateLimited:
       'Demasiados intentos desde esta dirección. Espera unos minutos e inténtalo de nuevo.',
+    busy: 'Llegamos al límite de registros nuevos de hoy. Inténtalo de nuevo en unas horas o escribe a <mail>{email}</mail>.',
     unreachable: 'No se pudo contactar con Pyxis. Inténtalo de nuevo.',
     checkoutFailed:
       'Tu cuenta está lista, pero la página de pago no se abrió. Termínalo en Cuenta y facturación.',

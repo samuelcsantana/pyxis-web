@@ -716,6 +716,7 @@ export const ptBR = translation({
       'Os termos mudaram enquanto esta página estava aberta. Leia a nova versão e aceite de novo.',
     closed: 'O cadastro foi fechado enquanto esta página estava aberta.',
     rateLimited: 'Muitas tentativas deste endereço. Espere alguns minutos e tente de novo.',
+    busy: 'Chegamos ao limite de cadastros novos de hoje. Tente de novo em algumas horas ou escreva para <mail>{email}</mail>.',
     unreachable: 'Não deu para falar com o Pyxis. Tente de novo.',
     checkoutFailed:
       'Sua conta está pronta, mas a página de pagamento não abriu. Conclua em Conta e cobrança.',
