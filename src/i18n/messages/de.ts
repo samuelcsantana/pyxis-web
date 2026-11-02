@@ -786,6 +786,26 @@ export const de = translation({
     readOnlyOff:
       'Dieses Projekt erfasst die Stadt der Besucher nicht. Nur der Kontoinhaber kann das ändern.',
   },
+  visitorsOption: {
+    heading: 'Eindeutige Besucher',
+    label: 'Eindeutige Besucher pro Tag und pro Monat zählen',
+    note: 'Standardmäßig aus. Der Pyxis-Code speichert im Browser der Besucher nur, wann Tag und Monat deiner Website enden, für alle Besucher an diesem Tag gleich, und jeder Besuch sagt, ob er der erste dieses Browsers ist, der erste in diesem Monat, der erste heute oder ein weiterer heute. Keine Kennung, kein Cookie. Nutzt das Projekt identify, wird die Art auch bei den Besuchen der Personen gespeichert, die du identifizierst. Schalte die Zählung erst ein, wenn der Datenschutzhinweis deiner Website das sagt (Auftragsverarbeitungsvertrag, Anhang IV).',
+    on: 'An',
+    off: 'Aus',
+    confirmTitle: 'Eindeutige Besucher ausschalten?',
+    confirmBody:
+      'Wenn du die Zählung ausschaltest, werden neue Besuche innerhalb einer Minute nicht mehr gezählt, und die Markierung jedes Browsers wird gelöscht, sobald er das nächste Mal Ereignisse sendet und eine Antwort bekommt. Schon gezählte Besuche behalten ihre Art, bis sie nach 13 Monaten gelöscht werden.',
+    confirm: 'Ausschalten',
+    keep: 'Weiter zählen',
+    saving: 'Wird gespeichert…',
+    saved: 'Gespeichert',
+    failed: 'Die Änderung wurde nicht gespeichert. Versuche es noch einmal.',
+    subscriptionRequired:
+      'Die Änderung wurde nicht gespeichert: Das Konto braucht einen aktiven Tarif.',
+    readOnlyOn: 'Dieses Projekt zählt eindeutige Besucher. Nur der Kontoinhaber kann das ändern.',
+    readOnlyOff:
+      'Dieses Projekt zählt keine eindeutigen Besucher. Nur der Kontoinhaber kann das ändern.',
+  },
   emailPreferences: {
     heading: 'E-Mail',
     weeklyDigest: 'Wochenbericht',

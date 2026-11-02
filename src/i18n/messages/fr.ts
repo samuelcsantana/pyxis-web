@@ -786,6 +786,27 @@ export const fr = translation({
     readOnlyOff:
       'Ce projet n’enregistre pas la ville du visiteur. Seul le propriétaire du compte peut le modifier.',
   },
+  visitorsOption: {
+    heading: 'Visiteurs uniques',
+    label: 'Compter les visiteurs uniques par jour et par mois',
+    note: 'Désactivée par défaut. Le code Pyxis conserve dans le navigateur du visiteur seulement le moment où se terminent le jour et le mois de votre site, les mêmes pour tous les visiteurs ce jour-là, et chaque visite indique si c’est la première de ce navigateur, la première du mois, la première du jour ou une autre du même jour. Aucun identifiant, aucun cookie. Si le projet utilise identify, le type est aussi conservé sur les visites des personnes que vous identifiez. Activez-la seulement une fois que l’avis de confidentialité de votre site le dit (Accord de traitement des données, Annexe IV).',
+    on: 'Activée',
+    off: 'Désactivée',
+    confirmTitle: 'Désactiver les visiteurs uniques ?',
+    confirmBody:
+      'Une fois désactivée, les nouvelles visites ne sont plus comptées dans la minute, et le marqueur de chaque navigateur est effacé la prochaine fois qu’il envoie des événements et reçoit une réponse. Les visites déjà comptées gardent leur type jusqu’à leur effacement, au bout de 13 mois.',
+    confirm: 'Désactiver',
+    keep: 'Continuer à compter',
+    saving: 'Enregistrement…',
+    saved: 'Enregistré',
+    failed: 'La modification n’a pas été enregistrée. Réessayez.',
+    subscriptionRequired:
+      'La modification n’a pas été enregistrée : le compte a besoin d’une offre active.',
+    readOnlyOn:
+      'Ce projet compte les visiteurs uniques. Seul le propriétaire du compte peut le modifier.',
+    readOnlyOff:
+      'Ce projet ne compte pas les visiteurs uniques. Seul le propriétaire du compte peut le modifier.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Récapitulatif hebdomadaire',

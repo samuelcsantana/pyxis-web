@@ -48,6 +48,7 @@ export interface ProjectManagement {
   readonly removePerson: RemovePerson;
   readonly requestExport: RequestExport;
   readonly setCity: SetProjectOption;
+  readonly setVisitors: SetProjectOption;
 }
 
 export interface ProjectSettingsViewProps {
@@ -405,6 +406,32 @@ function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
   );
 }
 
+interface VisitorsPanelProps {
+  readonly settings: ProjectSettings;
+  readonly i18n: I18n;
+  readonly setVisitors: SetProjectOption | null;
+}
+
+function VisitorsPanel({ settings, i18n, setVisitors }: VisitorsPanelProps) {
+  return (
+    <SettingsPanel id="settings-visitors" title={i18n.t('visitorsOption.heading')}>
+      {setVisitors === null ? (
+        <p className="text-sm">
+          {i18n.t(
+            settings.visitorsEnabled ? 'visitorsOption.readOnlyOn' : 'visitorsOption.readOnlyOff',
+          )}
+        </p>
+      ) : (
+        <ProjectOptionSwitch
+          option="visitorsOption"
+          initial={settings.visitorsEnabled}
+          save={setVisitors}
+        />
+      )}
+    </SettingsPanel>
+  );
+}
+
 interface EmailPanelProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
@@ -481,6 +508,9 @@ export function ProjectSettingsView({
             <CityPanel settings={settings} i18n={i18n} setCity={manage.setCity} />
           </div>
           <div className="lg:col-span-2">
+            <VisitorsPanel settings={settings} i18n={i18n} setVisitors={manage.setVisitors} />
+          </div>
+          <div className="lg:col-span-2">
             <ManagedKeysPanel {...section} manage={manage} />
           </div>
           <div className="lg:col-span-2">
@@ -507,6 +537,9 @@ export function ProjectSettingsView({
           <RetentionPanel {...section} />
           <div className="lg:col-span-2">
             <CityPanel settings={settings} i18n={i18n} setCity={null} />
+          </div>
+          <div className="lg:col-span-2">
+            <VisitorsPanel settings={settings} i18n={i18n} setVisitors={null} />
           </div>
           <div className="lg:col-span-2">
             <KeysPanel {...section} />

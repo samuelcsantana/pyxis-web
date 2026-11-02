@@ -65,6 +65,7 @@ describe('RootLayout', () => {
       'propertySummary',
       'emailPreferences',
       'cityOption',
+      'visitorsOption',
       'connections',
       'sessions',
       'accessTokens',

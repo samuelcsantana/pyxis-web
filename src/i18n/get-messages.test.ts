@@ -51,6 +51,7 @@ describe('get-messages', () => {
       'propertySummary',
       'emailPreferences',
       'cityOption',
+      'visitorsOption',
       'connections',
       'sessions',
       'accessTokens',

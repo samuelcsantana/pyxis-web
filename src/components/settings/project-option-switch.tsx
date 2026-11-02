@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
 
-export type ProjectOption = 'cityOption';
+export type ProjectOption = 'cityOption' | 'visitorsOption';
 
 export type ProjectOptionOutcome =
   { readonly kind: 'saved' } | { readonly kind: 'subscriptionRequired' };

@@ -79,6 +79,7 @@ const meta = {
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
       requestExport: () => EXPORTS.request(),
       setCity: (cityEnabled) => Promise.resolve({ kind: 'saved', cityEnabled }),
+      setVisitors: () => Promise.resolve({ kind: 'saved' }),
     },
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
     myEmail: DEMO_OWNER_EMAIL,
@@ -113,6 +114,7 @@ export const WithoutASubscription: Story = {
       removePerson: (adminUserId) => PEOPLE.remove(STORE.id, adminUserId),
       requestExport: () => Promise.resolve({ kind: 'limitReached' }),
       setCity: () => Promise.resolve({ kind: 'subscriptionRequired' }),
+      setVisitors: () => Promise.resolve({ kind: 'subscriptionRequired' }),
     },
   },
 };

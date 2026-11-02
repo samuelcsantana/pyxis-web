@@ -743,6 +743,25 @@ export const en = {
     readOnlyOff:
       'This project does not record the visitor’s city. Only the account owner can change it.',
   },
+  visitorsOption: {
+    heading: 'Unique visitors',
+    label: 'Count unique visitors per day and per month',
+    note: 'Off by default. The Pyxis code keeps in the visitor’s browser only when your site’s day and month end, the same for every visitor that day, and each visit says whether it is the browser’s first, its first this month, its first today or another one today. No identifier, no cookie. If the project uses identify, the kind is also kept on the visits of the people you identify. Turn it on only after your site’s privacy notice says so (Data Processing Agreement, Annex IV).',
+    on: 'On',
+    off: 'Off',
+    confirmTitle: 'Turn off unique visitors?',
+    confirmBody:
+      'When you turn it off, new visits stop being counted within a minute, and each browser’s marker is deleted the next time it sends events and gets an answer. Visits already counted keep their kind until they are erased after 13 months.',
+    confirm: 'Turn off',
+    keep: 'Keep counting',
+    saving: 'Saving…',
+    saved: 'Saved',
+    failed: 'The change was not saved. Try again.',
+    subscriptionRequired: 'The change was not saved: the account needs an active plan.',
+    readOnlyOn: 'This project counts unique visitors. Only the account owner can change it.',
+    readOnlyOff:
+      'This project does not count unique visitors. Only the account owner can change it.',
+  },
   emailPreferences: {
     heading: 'E-mail',
     weeklyDigest: 'Weekly digest',
