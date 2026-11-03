@@ -130,6 +130,7 @@ describe('HttpVisitsService', () => {
       source: 'google',
       campaign: 'spring_sale',
       route: 'POST /orders',
+      visitors: 'day',
       failed: 'true',
       cursor: '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
     });
