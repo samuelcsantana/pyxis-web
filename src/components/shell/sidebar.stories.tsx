@@ -89,7 +89,7 @@ export const BrazilianPortuguese: Story = {
   globals: { locale: 'pt-BR' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByText('Sem cookies, sem dados pessoais')).toBeVisible();
+    await expect(canvas.getByText('Sem cookies, sem IP guardado')).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
     await userEvent.click(canvas.getByText('Conta e preferências'));

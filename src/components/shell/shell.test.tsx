@@ -639,7 +639,7 @@ describe('Sidebar', () => {
       <Sidebar admin={ADMIN} project={store()} i18n={english} chooseLocale={chooseNothing} />,
     );
 
-    const privacy = screen.getByText('No cookies, no personal data');
+    const privacy = screen.getByText('No cookies, no stored IPs');
     expect(privacy).toHaveClass('text-nav-muted');
     expect(privacy).not.toHaveClass('bg-nav-raised');
     expect(screen.getByRole('link', { name: 'Help and support' })).toBeInTheDocument();

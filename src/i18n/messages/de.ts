@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const de = translation({
   meta: {
     description:
-      'Datenschutzfreundliche Produktanalyse: keine Cookies bei deinen Besuchern, keine personenbezogenen Daten, keine Dritten.',
+      'Datenschutzfreundliche Produktanalyse: keine Cookies bei deinen Besuchern, keine gespeicherten IPs, keine Dritten.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Live-Demo von {app}',
   },
@@ -132,7 +132,7 @@ export const de = translation({
   signInPage: {
     title: 'Anmelden',
     privacy:
-      'Datenschutzfreundliche Produktanalyse · keine Cookies bei deinen Besuchern, keine personenbezogenen Daten',
+      'Datenschutzfreundliche Produktanalyse · keine Cookies bei deinen Besuchern, keine gespeicherten IPs',
     noAccount:
       'Noch kein Konto? <plans>Sieh dir die Pläne an</plans> oder <demo>öffne die Demo</demo> mit erfundenen Daten.',
     noCode:
@@ -193,7 +193,7 @@ export const de = translation({
   },
   shell: {
     skipToContent: 'Zum Inhalt springen',
-    privacy: 'Keine Cookies, keine personenbezogenen Daten',
+    privacy: 'Keine Cookies, keine gespeicherten IPs',
   },
   language: {
     label: 'Sprache',
@@ -638,7 +638,7 @@ export const de = translation({
     copied: 'Kopiert',
     selected: 'Markiert, drück Strg+C',
     privacy:
-      'Pyxis speichert bei deinen Besuchern kein Cookie, keine IP-Adresse und keine personenbezogenen Daten. Erwähne in deiner Datenschutzerklärung, dass die Website ihre Nutzung mit Pyxis misst.',
+      'Pyxis speichert bei deinen Besuchern kein Cookie und keine IP-Adresse. Erwähne in deiner Datenschutzerklärung, dass die Website ihre Nutzung mit Pyxis misst.',
     how: 'So installierst du',
     yourself: 'Selbst',
     withAgent: 'Mit einem KI-Agenten',
@@ -1825,9 +1825,9 @@ export const de = translation({
     meta: {
       title: 'Was auf deiner Website konvertiert und was fehlschlägt, ohne Cookies · Pyxis',
       descriptionFree:
-        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies, ohne IP, ohne personenbezogene Daten. Kostenlos bis zu {events} Ereignisse im Monat.',
+        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. Kostenlos bis zu {events} Ereignisse im Monat.',
       description:
-        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies, ohne IP, ohne personenbezogene Daten. 14 Tage kostenlos.',
+        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. 14 Tage kostenlos.',
     },
     nav: {
       label: 'Hauptmenü',
@@ -1843,7 +1843,7 @@ export const de = translation({
     hero: {
       eyebrow: 'Ohne Cookies · ohne IP · Connector für Claude',
       title:
-        'Finde heraus, was auf deiner Website konvertiert und was fehlschlägt, ohne personenbezogene Daten zu erheben.',
+        'Finde heraus, was auf deiner Website konvertiert und was fehlschlägt, ohne Cookies und ohne gespeicherte IP-Adressen.',
       lead: 'Pyxis zeigt, bei welchem Schritt im Funnel Menschen aufhören und welche Anfragen deiner Website bei jedem Besuch fehlgeschlagen sind. Sieh es dir im Dashboard an oder frag Claude.',
       openDemo: 'Live-Demo öffnen',
       seePricing: 'Preise ansehen',
@@ -1994,7 +1994,7 @@ export const de = translation({
           body: 'Jede Verbindung steht unter Einstellungen → Verbundene Apps und endet in dem Moment, in dem du sie widerrufst. Nach 90 Tagen ohne Nutzung endet sie von selbst.',
         },
         personal: {
-          title: 'Nichts Persönliches zum Weitergeben',
+          title: 'Keine Cookies, keine IPs zum Weitergeben',
           body: 'Ereignisse enthalten kein Cookie, keine IP-Adresse und keinen User-Agent, also enthält auch das, was Claude liest, nichts davon.',
         },
       },
@@ -2046,7 +2046,8 @@ export const de = translation({
           'Verbinde Claude und andere KI-Agenten über das Model Context Protocol mit deinen Pyxis-Zahlen.',
         ask: 'Frag „Wie lief die letzte Woche?“, und Claude liest deine Zahlen.',
         connect: 'In einer Minute verbunden. Nur lesend, und du kannst es jederzeit widerrufen.',
-        privacy: 'Claude sieht dieselben Zahlen wie dein Dashboard und nichts Persönliches.',
+        privacy:
+          'Claude sieht dieselben Zahlen wie dein Dashboard, ohne Cookies oder IPs von irgendjemandem.',
       },
       another: 'Noch ein Tipp',
       cta: 'So verbindest du es',
@@ -2204,7 +2205,7 @@ export const de = translation({
           card: 'Ohne Karte',
         },
       },
-      lead: 'Keine Kosten pro Besucher, pro Funktion oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und es werden keine personenbezogenen Daten erhoben.',
+      lead: 'Keine Kosten pro Besucher, pro Funktion oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und ihre IP-Adresse wird nicht gespeichert.',
       period: 'Abrechnungszeitraum',
       monthly: 'Monatlich',
       monthlyLabel: 'Monatlich, R$ 39 pro Monat',

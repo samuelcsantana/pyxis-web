@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const nl = translation({
   meta: {
     description:
-      'Productanalyse die privacy vooropstelt: geen cookies bij je bezoekers, geen persoonsgegevens, geen derde partijen.',
+      'Productanalyse die privacy vooropstelt: geen cookies bij je bezoekers, geen opgeslagen IP’s, geen derde partijen.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Livedemo van {app}',
   },
@@ -128,7 +128,7 @@ export const nl = translation({
   signInPage: {
     title: 'Inloggen',
     privacy:
-      'Productanalyse die privacy vooropstelt · geen cookies bij je bezoekers, geen persoonsgegevens',
+      'Productanalyse die privacy vooropstelt · geen cookies bij je bezoekers, geen opgeslagen IP’s',
     noAccount:
       'Nog geen account? <plans>Bekijk de abonnementen</plans> of <demo>open de demo</demo>, met verzonnen gegevens.',
     noCode:
@@ -190,7 +190,7 @@ export const nl = translation({
   },
   shell: {
     skipToContent: 'Naar de inhoud',
-    privacy: 'Geen cookies, geen persoonsgegevens',
+    privacy: 'Geen cookies, geen opgeslagen IP’s',
   },
   language: {
     label: 'Taal',
@@ -629,7 +629,7 @@ export const nl = translation({
     copied: 'Gekopieerd',
     selected: 'Geselecteerd, druk op Ctrl+C',
     privacy:
-      'Pyxis plaatst geen cookie bij je bezoekers en slaat geen IP-adres of persoonsgegevens op. Vermeld in je privacybeleid dat de site het gebruik meet met Pyxis.',
+      'Pyxis plaatst geen cookie bij je bezoekers en slaat geen IP-adres op. Vermeld in je privacybeleid dat de site het gebruik meet met Pyxis.',
     how: 'Zo installeer je',
     yourself: 'Zelf',
     withAgent: 'Met een AI-agent',
@@ -1804,9 +1804,9 @@ export const nl = translation({
     meta: {
       title: 'Wat converteert en wat mislukt op je site, zonder cookies · Pyxis',
       descriptionFree:
-        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies, geen IP, geen persoonsgegevens. Gratis tot {events} events per maand.',
+        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. Gratis tot {events} events per maand.',
       description:
-        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies, geen IP, geen persoonsgegevens. 14 dagen gratis.',
+        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. 14 dagen gratis.',
     },
     nav: {
       label: 'Hoofdmenu',
@@ -1822,7 +1822,7 @@ export const nl = translation({
     hero: {
       eyebrow: 'Geen cookies · geen IP · connector voor Claude',
       title:
-        'Ontdek wat converteert en wat mislukt op je site, zonder persoonsgegevens te verzamelen.',
+        'Ontdek wat converteert en wat mislukt op je site, zonder cookies en zonder opgeslagen IP-adressen.',
       lead: 'Pyxis laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site bij elk bezoek mislukten. Bekijk het in het dashboard of vraag het aan Claude.',
       openDemo: 'Open de livedemo',
       seePricing: 'Bekijk de prijzen',
@@ -1972,7 +1972,7 @@ export const nl = translation({
           body: 'Elke koppeling staat onder Instellingen, Gekoppelde apps, en stopt zodra je die intrekt. Na 90 dagen zonder gebruik eindigt ze vanzelf.',
         },
         personal: {
-          title: 'Niets persoonlijks om af te geven',
+          title: 'Geen cookies, geen IP’s om af te geven',
           body: 'Events bevatten geen cookie, geen IP-adres en geen user agent, dus wat Claude leest ook niet.',
         },
       },
@@ -2024,7 +2024,7 @@ export const nl = translation({
           'Koppel Claude en andere AI-agents aan je Pyxis-cijfers, via het Model Context Protocol.',
         ask: 'Vraag “hoe ging vorige week?” en Claude leest je cijfers.',
         connect: 'In een minuut gekoppeld. Alleen lezen, en je trekt het in wanneer je wilt.',
-        privacy: 'Claude ziet dezelfde cijfers als je dashboard, en niets persoonlijks.',
+        privacy: 'Claude ziet dezelfde cijfers als je dashboard, zonder iemands cookie of IP.',
       },
       another: 'Nog een tip',
       cta: 'Bekijk hoe je koppelt',
@@ -2180,7 +2180,7 @@ export const nl = translation({
           card: 'Zonder kaart',
         },
       },
-      lead: 'Geen kosten per bezoeker, per functie of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en er worden geen persoonsgegevens verzameld.',
+      lead: 'Geen kosten per bezoeker, per functie of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en hun IP-adres wordt niet opgeslagen.',
       period: 'Factuurperiode',
       monthly: 'Maandelijks',
       monthlyLabel: 'Maandelijks, R$ 39 per maand',

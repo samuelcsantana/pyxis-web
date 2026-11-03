@@ -78,14 +78,14 @@ describe('AskClaudeSection', () => {
     expect(codeTextOf(CLAUDE_CODE_COMMAND)).toBe(claudeCodeCommand(HOSTED_CONNECTOR_URL));
   });
 
-  it('promises it only reads, can be revoked and hands over nothing personal', () => {
+  it('promises it only reads, can be revoked and hands over no cookie and no IP', () => {
     render(<AskClaudeSection i18n={english} />);
 
     const promises = screen.getAllByRole('heading', { level: 3 }).slice(1);
     expect(promises.map((heading) => heading.textContent)).toEqual([
       'Only reads',
       'Yours to revoke',
-      'Nothing personal to hand over',
+      'No cookies, no IPs to hand over',
     ]);
     expect(promises).toHaveLength(PROMISES.length);
   });

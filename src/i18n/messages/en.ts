@@ -119,7 +119,7 @@ export const en = {
   },
   signInPage: {
     title: 'Sign in',
-    privacy: 'Privacy-first product analytics · no cookies on your visitors, no personal data',
+    privacy: 'Privacy-first product analytics · no cookies on your visitors, no stored IPs',
     noAccount:
       'No account yet? <plans>See the plans</plans> or <demo>open the demo</demo>, with invented data.',
     noCode:
@@ -179,7 +179,7 @@ export const en = {
   },
   shell: {
     skipToContent: 'Skip to content',
-    privacy: 'No cookies, no personal data',
+    privacy: 'No cookies, no stored IPs',
   },
   language: {
     label: 'Language',
@@ -600,7 +600,7 @@ export const en = {
     copied: 'Copied',
     selected: 'Selected, press Ctrl+C',
     privacy:
-      'Pyxis stores no cookie on your visitors, no IP address and no personal data. Say in your privacy policy that the site measures its use with Pyxis.',
+      'Pyxis stores no cookie on your visitors and no IP address. Say in your privacy policy that the site measures its use with Pyxis.',
     how: 'How to install',
     yourself: 'Yourself',
     withAgent: 'With an AI agent',
@@ -1765,9 +1765,9 @@ export const en = {
     meta: {
       title: 'What converts and what fails on your site, without cookies · Pyxis',
       descriptionFree:
-        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies, no IP, no personal data. Free up to {events} events a month.',
+        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies and no stored IP addresses. Free up to {events} events a month.',
       description:
-        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies, no IP, no personal data. 14 days free.',
+        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies and no stored IP addresses. 14 days free.',
     },
     nav: {
       label: 'Main',
@@ -1783,7 +1783,7 @@ export const en = {
     hero: {
       eyebrow: 'No cookies · no IP · a connector for Claude',
       title:
-        'Find out what converts and what fails on your site, without collecting personal data.',
+        'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
       lead: 'Pyxis shows the funnel step where people stop and which of your site’s requests failed in each visit. See it on the dashboard or ask Claude.',
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
@@ -1931,7 +1931,7 @@ export const en = {
           body: 'Every connection is listed under Settings, Connected apps, and stops the moment you revoke it. Unused for 90 days, it ends on its own.',
         },
         personal: {
-          title: 'Nothing personal to hand over',
+          title: 'No cookies, no IPs to hand over',
           body: 'Events carry no cookie, no IP address and no user agent, so what Claude reads has none either.',
         },
       },
@@ -1983,7 +1983,7 @@ export const en = {
           'Connect Claude and other AI agents to your Pyxis numbers, through the Model Context Protocol.',
         ask: 'Ask “how did last week go?” and Claude reads your numbers.',
         connect: 'One minute to connect. It only reads, and you revoke it any time.',
-        privacy: 'Claude sees the same numbers as your dashboard, and nothing personal.',
+        privacy: 'Claude sees the same numbers as your dashboard, with nobody’s cookie or IP.',
       },
       another: 'Another tip',
       cta: 'See how to connect',
@@ -2136,7 +2136,7 @@ export const en = {
           card: 'No card',
         },
       },
-      lead: 'No charge per visitor, per feature or per identified person. Your visitors still get no cookie and no personal data collected.',
+      lead: 'No charge per visitor, per feature or per identified person. Your visitors still get no cookie and no stored IP address.',
       period: 'Billing period',
       monthly: 'Monthly',
       monthlyLabel: 'Monthly, R$ 39 a month',

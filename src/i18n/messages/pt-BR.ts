@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const ptBR = translation({
   meta: {
     description:
-      'Análise de produto com privacidade em primeiro lugar: sem cookies nos seus visitantes, sem dados pessoais, sem terceiros.',
+      'Análise de produto com privacidade em primeiro lugar: sem cookies nos seus visitantes, sem IP guardado, sem terceiros.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Demonstração ao vivo do {app}',
   },
@@ -131,7 +131,7 @@ export const ptBR = translation({
   signInPage: {
     title: 'Entrar',
     privacy:
-      'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem dados pessoais',
+      'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem IP guardado',
     noAccount:
       'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados fictícios.',
     noCode:
@@ -192,7 +192,7 @@ export const ptBR = translation({
   },
   shell: {
     skipToContent: 'Pular para o conteúdo',
-    privacy: 'Sem cookies, sem dados pessoais',
+    privacy: 'Sem cookies, sem IP guardado',
   },
   language: {
     label: 'Idioma',
@@ -616,7 +616,7 @@ export const ptBR = translation({
     copied: 'Copiado',
     selected: 'Selecionado, aperte Ctrl+C',
     privacy:
-      'O Pyxis não guarda cookie nos seus visitantes, nem endereço IP, nem dado pessoal. Diga na sua política de privacidade que o site mede o uso com o Pyxis.',
+      'O Pyxis não guarda cookie nos seus visitantes nem endereço IP. Diga na sua política de privacidade que o site mede o uso com o Pyxis.',
     how: 'Como instalar',
     yourself: 'Você mesmo',
     withAgent: 'Com um agente de IA',
@@ -1783,9 +1783,9 @@ export const ptBR = translation({
     meta: {
       title: 'O que converte e o que falha no seu site, sem cookie · Pyxis',
       descriptionFree:
-        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie, sem IP e sem dado pessoal. Grátis até {events} eventos por mês.',
+        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie e sem guardar IP. Grátis até {events} eventos por mês.',
       description:
-        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie, sem IP e sem dado pessoal. 14 dias grátis.',
+        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie e sem guardar IP. 14 dias grátis.',
     },
     nav: {
       label: 'Principal',
@@ -1800,7 +1800,7 @@ export const ptBR = translation({
     },
     hero: {
       eyebrow: 'Sem cookie · sem IP · conector para o Claude',
-      title: 'Descubra o que converte e o que falha no seu site, sem coletar dados pessoais.',
+      title: 'Descubra o que converte e o que falha no seu site, sem cookie e sem guardar IP.',
       lead: 'O Pyxis mostra em que passo do funil as pessoas param e quais requisições do seu site falharam em cada visita. Veja no painel ou pergunte ao Claude.',
       openDemo: 'Abrir a demonstração',
       seePricing: 'Ver preço',
@@ -1949,7 +1949,7 @@ export const ptBR = translation({
           body: 'Cada conexão aparece em Configurações, Aplicativos conectados, e para no instante em que você revoga. Sem uso por 90 dias, ela se encerra sozinha.',
         },
         personal: {
-          title: 'Nada pessoal para entregar',
+          title: 'Nem cookie, nem IP para entregar',
           body: 'Os eventos não têm cookie, endereço IP nem user agent, então o que o Claude lê também não tem.',
         },
       },
@@ -2001,7 +2001,7 @@ export const ptBR = translation({
           'Agora você pode conectar o Claude e outros agentes de IA aos números do Pyxis, via Model Context Protocol.',
         ask: 'Pergunte “como foi a semana passada?” e o Claude lê seus números.',
         connect: 'Conecta em um minuto, só lê e você revoga quando quiser.',
-        privacy: 'O Claude vê os mesmos números do seu painel, e nada pessoal.',
+        privacy: 'O Claude vê os mesmos números do seu painel, sem cookie nem IP de ninguém.',
       },
       another: 'Outra dica',
       cta: 'Ver como conectar',
@@ -2155,7 +2155,7 @@ export const ptBR = translation({
           card: 'Sem cartão',
         },
       },
-      lead: 'Sem cobrança por visitante, por funcionalidade ou por pessoa identificada. Os seus visitantes continuam sem cookie e sem dado pessoal.',
+      lead: 'Sem cobrança por visitante, por funcionalidade ou por pessoa identificada. Os seus visitantes continuam sem cookie e sem IP guardado.',
       period: 'Período de cobrança',
       monthly: 'Mensal',
       monthlyLabel: 'Mensal, R$ 39 por mês',
