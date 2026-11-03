@@ -15,6 +15,7 @@ describe('llmsText', () => {
       '## Rules an integration must follow',
       '## Install with an AI agent',
       '## Install with Google Tag Manager',
+      '## Install on a Shopify store',
       '## Read the numbers from an AI agent',
       '## API and dashboard',
       '## Support',
@@ -110,6 +111,14 @@ describe('llmsText', () => {
     expect(text).toContain(
       '- [pyxis-gtm-template](https://github.com/samuelcsantana/pyxis-gtm-template): the fields',
     );
+  });
+
+  it('installs a Shopify store through its theme and says what that leaves out', () => {
+    expect(text).toContain('open Online Store, then ⋯ › Edit code on the current theme.');
+    expect(text).toContain('In `layout/theme.liquid`, paste the `<script type="module">` snippet');
+    expect(text).toContain('`https://<store>.myshopify.com`');
+    expect(text).toContain('the checkout steps and the completed purchase\nare not measured.');
+    expect(text).toContain('iframe sends `Origin: null`, which the API refuses.');
   });
 
   it('names the traps that make the first check fail', () => {
