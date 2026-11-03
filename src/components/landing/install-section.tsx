@@ -310,7 +310,7 @@ const NO_CODE_PANEL = 'flex min-w-0 flex-col gap-4 rounded-card border border-li
 const PANEL_NOTE = 'text-sm leading-relaxed text-muted';
 
 function codeText(text: string): ReactNode {
-  return <code className="font-mono text-sm text-ink">{text}</code>;
+  return <code className="font-mono text-sm text-ink wrap-anywhere">{text}</code>;
 }
 
 const STEP_SLOTS: RichSlots = {
@@ -363,6 +363,7 @@ function WithShopify({ i18n, labels }: { readonly i18n: I18n; readonly labels: C
             id={SHOPIFY_SNIPPET_ID}
             tokens={[plain(scriptSnippet(PUBLIC_KEY_PLACEHOLDER, HOSTED_ENDPOINT))]}
             labels={labels}
+            wrap="words"
           />
         </li>
         <li>{t('landing.install.shopify.steps.allow')}</li>
