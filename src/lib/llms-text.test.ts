@@ -54,6 +54,17 @@ describe('llmsText', () => {
     expect(text).toContain('https://api.pyxis-analytics.dev');
   });
 
+  it('points, in the install summary, to the two ways that need no code', () => {
+    const summary = text.slice(
+      text.indexOf('## Install the tracker'),
+      text.indexOf('## Rules an integration must follow'),
+    );
+
+    expect(summary).toContain('Without touching the site’s code');
+    expect(summary).toContain('Google Tag Manager');
+    expect(summary).toContain('Shopify store');
+  });
+
   it.each(['free', 'freeFull'] as const)(
     'names the free plan instead of the trial once it is open (%s)',
     (offer) => {
