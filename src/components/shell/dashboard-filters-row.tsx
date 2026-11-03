@@ -53,7 +53,7 @@ export function DashboardFiltersRow({ projectId, screen, search, i18n }: Dashboa
   return (
     <div className="border-b border-line bg-bg px-4 py-2.5 sm:px-8">
       <AppliedVisitFilters
-        applied={appliedVisitFilters({ ...filters, route: null }, i18n)}
+        applied={appliedVisitFilters({ ...filters, route: null, visitors: null }, i18n)}
         removeHref={hrefWith}
         clearHref={hrefWith(NO_DASHBOARD_FILTERS)}
         label={i18n.t('dashboardFilters.label')}

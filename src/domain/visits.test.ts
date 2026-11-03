@@ -7,13 +7,21 @@ import {
   visitFilterCount,
   visitFilterParameters,
   visitFiltersOf,
+  VISITOR_SPANS,
+  type VisitorSpan,
+  visitorSpanOf,
   visitRows,
+  spanKeeps,
+  visitsTotalLabel,
+  withCountedVisitors,
   type VisitsWire,
   visitsTableText,
   isRequestRoute,
 } from './visits';
 import { visitsResponseSchema } from './visits.schema';
 import { english } from '@/test-utils/english';
+import { portuguese } from '@/test-utils/portuguese';
+import { VISIT_KINDS } from './visit-kind';
 
 const WIRE: VisitsWire = {
   visits: [
@@ -107,6 +115,7 @@ describe('visitFiltersOf', () => {
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
+        visitors: 'day',
         failed: 'true',
       },
       english,
@@ -128,6 +137,7 @@ describe('visitFiltersOf', () => {
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
+        visitors: 'day',
         failed: true,
       },
       problems: [],
@@ -289,6 +299,7 @@ describe('visitFilterParameters', () => {
         source: '(direct)',
         campaign: 'spring_sale',
         route: 'GET /plans',
+        visitors: 'day',
         failed: true,
       }),
     ).toEqual({
@@ -307,12 +318,73 @@ describe('visitFilterParameters', () => {
       source: '(direct)',
       campaign: 'spring_sale',
       route: 'GET /plans',
+      visitors: 'day',
       failed: 'true',
     });
   });
 
   it('writes nothing without filters', () => {
     expect(visitFilterParameters(NO_VISIT_FILTERS)).toEqual({});
+  });
+});
+
+describe('visitorSpanOf', () => {
+  it('reads the three spans and nothing else', () => {
+    expect(VISITOR_SPANS.map(visitorSpanOf)).toEqual(['day', 'month', 'new']);
+    expect(visitorSpanOf('week')).toBeNull();
+    expect(visitorSpanOf('')).toBeNull();
+  });
+});
+
+describe('spanKeeps', () => {
+  it('keeps the kinds that counted for each span, and every visit without a span', () => {
+    const kept = (span: VisitorSpan | null) => VISIT_KINDS.filter((kind) => spanKeeps(span, kind));
+
+    expect(kept('day')).toEqual(['first_visit', 'first_this_month', 'first_today']);
+    expect(kept('month')).toEqual(['first_visit', 'first_this_month']);
+    expect(kept('new')).toEqual(['first_visit']);
+    expect(kept(null)).toEqual(VISIT_KINDS);
+    expect(spanKeeps('day', null)).toBe(false);
+    expect(spanKeeps(null, null)).toBe(true);
+  });
+});
+
+describe('withCountedVisitors', () => {
+  const asked = { filters: { ...NO_VISIT_FILTERS, visitors: 'day' as const }, problems: [] };
+
+  it('keeps the span for a project that counts unique visitors', () => {
+    expect(withCountedVisitors(asked, true, english)).toBe(asked);
+  });
+
+  it('leaves the span out, and says why, for a project that does not count them', () => {
+    expect(withCountedVisitors(asked, false, english)).toEqual({
+      filters: NO_VISIT_FILTERS,
+      problems: ['This project does not count unique visitors: turn it on in Settings.'],
+    });
+  });
+
+  it('changes nothing when no span was asked', () => {
+    const plain = { filters: NO_VISIT_FILTERS, problems: [] };
+    expect(withCountedVisitors(plain, false, english)).toBe(plain);
+  });
+});
+
+describe('visitsTotalLabel', () => {
+  it('counts visits, matching visits, or the unique visitors of the span asked', () => {
+    const withSpan = (visitors: VisitorSpan) => ({ ...NO_VISIT_FILTERS, visitors });
+
+    expect(visitsTotalLabel(null, NO_VISIT_FILTERS, english)).toBeNull();
+    expect(visitsTotalLabel(20, NO_VISIT_FILTERS, english)).toBe('20 visits');
+    expect(visitsTotalLabel(3, { ...NO_VISIT_FILTERS, device: 'mobile' }, english)).toBe(
+      '3 matching visits',
+    );
+    expect(visitsTotalLabel(7, withSpan('day'), english)).toBe(
+      '7 visits that counted as unique visitors of their day',
+    );
+    expect(visitsTotalLabel(1, withSpan('month'), english)).toBe(
+      '1 visit that counted as a unique visitor of its month',
+    );
+    expect(visitsTotalLabel(6, withSpan('new'), portuguese)).toBe('6 visitantes novos');
   });
 });
 

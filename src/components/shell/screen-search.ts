@@ -30,6 +30,7 @@ const REQUESTS_CARRIED = [
 const VISITS_CARRIED = [
   ...DASHBOARD_FILTER_PARAMETERS,
   'route',
+  'visitors',
 ] as const satisfies readonly (keyof VisitsSearch)[];
 
 export const CARRIED_PARAMETERS: Readonly<Record<ScreenSlug, readonly string[]>> = {

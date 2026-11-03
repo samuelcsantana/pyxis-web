@@ -963,6 +963,15 @@ export const it = translation({
   counts: {
     visit: forms('{count} visita', '{count} visite'),
     matchingVisit: forms('{count} visita trovata', '{count} visite trovate'),
+    uniqueVisitOfDay: forms(
+      '{count} visita contata come visitatore unico del suo giorno',
+      '{count} visite contate come visitatori unici del loro giorno',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} visita contata come visitatore unico del suo mese',
+      '{count} visite contate come visitatori unici del loro mese',
+    ),
+    newVisitor: forms('{count} nuovo visitatore', '{count} nuovi visitatori'),
     person: forms('{count} persona', '{count} persone'),
     project: forms('{count} progetto', '{count} progetti'),
     day: forms('{count} giorno', '{count} giorni'),
@@ -1135,6 +1144,7 @@ export const it = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Vedi queste visite',
     title: 'Visitatori unici',
     description: 'Visitatori nuovi e di ritorno per giorno, {period}',
     dayDescription: 'Visitatori nuovi e di ritorno, {period}',
@@ -1543,11 +1553,14 @@ export const it = translation({
       source: 'Una sorgente ha al massimo {max} caratteri.',
       campaign: 'Una campagna ha al massimo {max} caratteri.',
       route: 'Una richiesta si indica con un metodo e una rotta, come POST /orders/:id.',
+      visitors: 'Questo progetto non conta i visitatori unici: attivali nelle Impostazioni.',
     },
     accountLink: '{user}, apri la cronologia di questo utente',
     shortAccountLink: '{shown}, apri la cronologia dell’utente {user}',
     noFailedRequest: 'Nessuna richiesta fallita',
     page: {
+      uniqueNote:
+        'Ogni browser compare una volta al giorno o al mese: con la sua prima visita. Un altro dispositivo, una finestra privata o dati cancellati contano di nuovo.',
       subtitle: 'Tutte le visite a {project} nel periodo, dalle più recenti',
       footnote:
         'In evidenza: i primi cinque eventi con nome di ogni visita, in ordine. Una richiesta fallita è una lettura o una scrittura inviata con trackRequest() che ha risposto 400 o più, oppure non ha mai risposto; Richieste elenca le scritture e le letture fallite in schede separate.',
@@ -1583,6 +1596,13 @@ export const it = translation({
       identities: {
         identified: 'Identificate',
         anonymous: 'Anonime',
+      },
+      visitors: 'Visitatori',
+      anyVisitor: 'Tutte le visite',
+      visitorSpans: {
+        day: 'Visitatori unici di ogni giorno',
+        month: 'Visitatori unici di ogni mese',
+        new: 'Solo nuovi visitatori',
       },
       country: 'Paese',
       countryHint: 'Codice di due lettere',

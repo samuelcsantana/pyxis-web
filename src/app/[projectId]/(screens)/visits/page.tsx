@@ -15,6 +15,7 @@ import {
   type VisitsSearch,
   visitsTableText,
   visitsTotalLabel,
+  withCountedVisitors,
 } from '@/domain/visits';
 import { visitsTableLabel } from '@/domain/visits-export';
 import { getI18n } from '@/i18n/get-messages';
@@ -22,6 +23,7 @@ import type { I18n } from '@/i18n/i18n';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
+import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createVisitsService } from '@/services/visits/visits-service.factory';
 import { loadOlderVisitRows } from './actions';
 import { SCREEN_WIDTH } from '@/components/shell/screen-width';
@@ -45,7 +47,12 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
-  const { filters, problems } = visitFiltersOf(search, i18n);
+  const settings = await readOrSignIn(() => createProjectsService().settings(project.id));
+  const { filters, problems } = withCountedVisitors(
+    visitFiltersOf(search, i18n),
+    settings.visitorsEnabled,
+    i18n,
+  );
   const report = await readOrSignIn(() =>
     createVisitsService().visits(project.id, { from: period.from, to: period.to }, filters, null),
   );
@@ -53,7 +60,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const kept = visitFilterParameters(filters);
   const filtered = hasVisitFilters(filters);
   const listQuery = withKeptParameters(periodQuery(period), kept);
-  const totalLabel = visitsTotalLabel(report.total, filtered, i18n);
+  const totalLabel = visitsTotalLabel(report.total, filters, i18n);
   return (
     <ScreenContent
       readAt={now.getTime()}
@@ -66,6 +73,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
         filters={filters}
         problems={problems}
         clearHref={filtered ? `${basePath}?${periodQuery(period)}` : null}
+        countsUniqueVisitors={settings.visitorsEnabled}
         i18n={i18n}
       />
       <AppliedVisitFilters
@@ -78,6 +86,9 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
       />
       {totalLabel === null ? null : (
         <p className="-mb-1 text-sm font-medium text-muted sm:-mb-2">{totalLabel}</p>
+      )}
+      {filters.visitors === null ? null : (
+        <p className="-mb-1 text-xs text-muted sm:-mb-2">{i18n.t('visits.page.uniqueNote')}</p>
       )}
       <VisitsTable
         key={`visits?${listQuery}`}

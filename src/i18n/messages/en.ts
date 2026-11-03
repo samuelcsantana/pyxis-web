@@ -930,6 +930,15 @@ export const en = {
   counts: {
     visit: { one: '{count} visit', other: '{count} visits' },
     matchingVisit: { one: '{count} matching visit', other: '{count} matching visits' },
+    uniqueVisitOfDay: {
+      one: '{count} visit that counted as a unique visitor of its day',
+      other: '{count} visits that counted as unique visitors of their day',
+    },
+    uniqueVisitOfMonth: {
+      one: '{count} visit that counted as a unique visitor of its month',
+      other: '{count} visits that counted as unique visitors of their month',
+    },
+    newVisitor: { one: '{count} new visitor', other: '{count} new visitors' },
     person: { one: '{count} person', other: '{count} people' },
     project: { one: '{count} project', other: '{count} projects' },
     day: { one: '{count} day', other: '{count} days' },
@@ -1100,6 +1109,7 @@ export const en = {
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'See these visits',
     title: 'Unique visitors',
     description: 'New and returning visitors per day, {period}',
     dayDescription: 'New and returning visitors, {period}',
@@ -1505,11 +1515,14 @@ export const en = {
       source: 'A source has at most {max} characters.',
       campaign: 'A campaign has at most {max} characters.',
       route: 'A request is a method and a route, as POST /orders/:id.',
+      visitors: 'This project does not count unique visitors: turn it on in Settings.',
     },
     accountLink: '{user}, open the timeline of this user',
     shortAccountLink: '{shown}, open the timeline of user {user}',
     noFailedRequest: 'No failed request',
     page: {
+      uniqueNote:
+        'Each browser shows once per day or per month: its first visit there. Another device, a private window or cleared data counts again.',
       subtitle: 'Every visit to {project} in the period, newest first',
       footnote:
         'Highlights are its first five named events, in order. A failed request is a read or a write sent with trackRequest() that answered 400 or above, or never answered; Requests lists the writes and the failed reads on separate tabs.',
@@ -1545,6 +1558,13 @@ export const en = {
       identities: {
         identified: 'Identified',
         anonymous: 'Anonymous',
+      },
+      visitors: 'Visitors',
+      anyVisitor: 'All visits',
+      visitorSpans: {
+        day: 'Unique visitors of each day',
+        month: 'Unique visitors of each month',
+        new: 'New visitors only',
       },
       country: 'Country',
       countryHint: 'Two-letter code',

@@ -14,6 +14,7 @@ import {
   PAGE_FILTER_PARAMETERS,
   VISIT_DEVICE_TYPES,
   VISIT_IDENTITIES,
+  VISITOR_SPANS,
   type VisitFilters,
   visitFilterCount,
   visitFilterParameters,
@@ -31,6 +32,7 @@ export interface VisitFiltersFormProps {
   readonly filters: VisitFilters;
   readonly problems: readonly string[];
   readonly clearHref: string | null;
+  readonly countsUniqueVisitors: boolean;
   readonly i18n: I18n;
 }
 
@@ -44,6 +46,7 @@ export function VisitFiltersForm({
   filters,
   problems,
   clearHref,
+  countsUniqueVisitors,
   i18n,
 }: VisitFiltersFormProps) {
   const activeCount = visitFilterCount(filters);
@@ -147,6 +150,23 @@ export function VisitFiltersForm({
               ))}
             </SelectField>
           </label>
+          {countsUniqueVisitors ? (
+            <label className={LABEL}>
+              {t('visits.filters.visitors')}
+              <SelectField
+                name="visitors"
+                defaultValue={filters.visitors ?? ''}
+                className={FIELD_CLASS}
+              >
+                <option value="">{t('visits.filters.anyVisitor')}</option>
+                {VISITOR_SPANS.map((span) => (
+                  <option key={span} value={span}>
+                    {t(`visits.filters.visitorSpans.${span}`)}
+                  </option>
+                ))}
+              </SelectField>
+            </label>
+          ) : null}
           <label className={LABEL}>
             {t('visits.filters.device')}
             <SelectField name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>

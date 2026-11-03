@@ -1,5 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
-import { type VisitKindBadge, visitKindBadge } from './visit-kind';
+import { type VisitKind, type VisitKindBadge, visitKindBadge } from './visit-kind';
 import { channelLabel } from './acquisition';
 import {
   BROWSER_FAMILIES,
@@ -51,15 +51,38 @@ const ROUTE_SEPARATOR = ' ';
 const VISIT_CURSOR_PATTERN =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z~[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
+export const VISITOR_SPANS = ['day', 'month', 'new'] as const;
+export type VisitorSpan = (typeof VISITOR_SPANS)[number];
+
 export interface VisitsSearch extends DashboardSearch {
   readonly route?: string | string[];
+  readonly visitors?: string | string[];
 }
 
 export interface VisitFilters extends DashboardFilters {
   readonly route: string | null;
+  readonly visitors: VisitorSpan | null;
 }
 
-export const NO_VISIT_FILTERS: VisitFilters = { ...NO_DASHBOARD_FILTERS, route: null };
+export const NO_VISIT_FILTERS: VisitFilters = {
+  ...NO_DASHBOARD_FILTERS,
+  route: null,
+  visitors: null,
+};
+
+const KINDS_OF_SPAN: Readonly<Record<VisitorSpan, readonly VisitKind[]>> = {
+  day: ['first_visit', 'first_this_month', 'first_today'],
+  month: ['first_visit', 'first_this_month'],
+  new: ['first_visit'],
+};
+
+export function spanKeeps(span: VisitorSpan | null, kind: VisitKind | null): boolean {
+  return span === null || (kind !== null && KINDS_OF_SPAN[span].includes(kind));
+}
+
+export function visitorSpanOf(text: string): VisitorSpan | null {
+  return VISITOR_SPANS.find((span) => span === text) ?? null;
+}
 
 export interface VisitFilterReading {
   readonly filters: VisitFilters;
@@ -94,7 +117,11 @@ export function visitFiltersOf(search: VisitsSearch, i18n: I18n): VisitFilterRea
     i18n.t('visits.problems.route'),
   );
   return {
-    filters: { ...reading.filters, route: route.value },
+    filters: {
+      ...reading.filters,
+      route: route.value,
+      visitors: visitorSpanOf(singleValue(search.visitors)),
+    },
     problems:
       route.problem === null || reading.problems.includes(route.problem)
         ? reading.problems
@@ -107,6 +134,7 @@ export function visitFilterParameters(filters: VisitFilters): Readonly<Record<st
   return {
     ...rest,
     ...(filters.route === null ? {} : { route: filters.route }),
+    ...(filters.visitors === null ? {} : { visitors: filters.visitors }),
     ...(failed === undefined ? {} : { failed }),
   };
 }
@@ -119,15 +147,40 @@ export function hasVisitFilters(filters: VisitFilters): boolean {
   return visitFilterCount(filters) > 0;
 }
 
+const SPAN_COUNTS = {
+  day: 'counts.uniqueVisitOfDay',
+  month: 'counts.uniqueVisitOfMonth',
+  new: 'counts.newVisitor',
+} as const satisfies Readonly<Record<VisitorSpan, string>>;
+
 export function visitsTotalLabel(
   total: number | null,
-  filtered: boolean,
+  filters: VisitFilters,
   i18n: I18n,
 ): string | null {
   if (total === null) {
     return null;
   }
-  return i18n.t(filtered ? 'counts.matchingVisit' : 'counts.visit', { count: total });
+  if (filters.visitors !== null) {
+    return i18n.t(SPAN_COUNTS[filters.visitors], { count: total });
+  }
+  return i18n.t(hasVisitFilters(filters) ? 'counts.matchingVisit' : 'counts.visit', {
+    count: total,
+  });
+}
+
+export function withCountedVisitors(
+  reading: VisitFilterReading,
+  countsUniqueVisitors: boolean,
+  i18n: I18n,
+): VisitFilterReading {
+  if (countsUniqueVisitors || reading.filters.visitors === null) {
+    return reading;
+  }
+  return {
+    filters: { ...reading.filters, visitors: null },
+    problems: [...reading.problems, i18n.t('visits.problems.visitors')],
+  };
 }
 
 export function isVisitCursor(text: string): boolean {

@@ -1,4 +1,4 @@
-import { type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/visits';
+import { spanKeeps, type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/visits';
 import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
@@ -79,9 +79,15 @@ function madeRequest(visit: DemoVisitRecord, route: string | null, failed: boole
   return visit.events.some((event) => isRequestTo(event, route, failed));
 }
 
-function matcherOf(filters: VisitFilters): (visit: DemoVisitRecord) => boolean {
+function matcherOf(
+  filters: VisitFilters,
+  countsUniqueVisitors: boolean,
+): (visit: DemoVisitRecord) => boolean {
   const matchesDashboard = dashboardMatcherOf({ ...filters, failed: false });
-  return (visit) => matchesDashboard(visit) && madeRequest(visit, filters.route, filters.failed);
+  return (visit) =>
+    matchesDashboard(visit) &&
+    madeRequest(visit, filters.route, filters.failed) &&
+    spanKeeps(filters.visitors, demoVisitorOfVisit(countsUniqueVisitors, visit));
 }
 
 export function demoVisitsPage(
@@ -92,7 +98,7 @@ export function demoVisitsPage(
   countsUniqueVisitors: boolean,
 ): VisitsWire {
   const matching = visits
-    .filter(matcherOf(filters))
+    .filter(matcherOf(filters, countsUniqueVisitors))
     .map((visit): Listed => ({
       visit,
       cursor: `${isoAt(startOf(visit))}${CURSOR_SEPARATOR}${visit.sessionId}`,

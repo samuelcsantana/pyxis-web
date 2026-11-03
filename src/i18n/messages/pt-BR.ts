@@ -946,6 +946,15 @@ export const ptBR = translation({
   counts: {
     visit: forms('{count} visita', '{count} visitas'),
     matchingVisit: forms('{count} visita encontrada', '{count} visitas encontradas'),
+    uniqueVisitOfDay: forms(
+      '{count} visita que contou como visitante único do dia',
+      '{count} visitas que contaram como visitantes únicos do dia',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} visita que contou como visitante único do mês',
+      '{count} visitas que contaram como visitantes únicos do mês',
+    ),
+    newVisitor: forms('{count} visitante novo', '{count} visitantes novos'),
     person: forms('{count} pessoa', '{count} pessoas'),
     project: forms('{count} projeto', '{count} projetos'),
     day: forms('{count} dia', '{count} dias'),
@@ -1117,6 +1126,7 @@ export const ptBR = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Ver essas visitas',
     title: 'Visitantes únicos',
     description: 'Visitantes novos e recorrentes por dia, {period}',
     dayDescription: 'Visitantes novos e recorrentes, {period}',
@@ -1521,11 +1531,14 @@ export const ptBR = translation({
       source: 'Uma origem tem no máximo {max} caracteres.',
       campaign: 'Uma campanha tem no máximo {max} caracteres.',
       route: 'Uma requisição é um método e uma rota, como POST /orders/:id.',
+      visitors: 'Este projeto não conta visitantes únicos: ligue em Configurações.',
     },
     accountLink: '{user}, abrir a linha do tempo deste usuário',
     shortAccountLink: '{shown}, abrir a linha do tempo do usuário {user}',
     noFailedRequest: 'Nenhuma requisição com falha',
     page: {
+      uniqueNote:
+        'Cada navegador aparece uma vez por dia ou por mês: a primeira visita dele ali. Outro aparelho, uma janela anônima ou dados apagados contam de novo.',
       subtitle: 'Todas as visitas a {project} no período, das mais recentes para as mais antigas',
       footnote:
         'Os destaques são os cinco primeiros eventos nomeados, em ordem. Uma requisição com falha é uma leitura ou escrita enviada com trackRequest() que respondeu 400 ou acima, ou nunca respondeu; Requisições lista as escritas e as leituras com falha em abas separadas.',
@@ -1561,6 +1574,13 @@ export const ptBR = translation({
       identities: {
         identified: 'Identificadas',
         anonymous: 'Anônimas',
+      },
+      visitors: 'Visitantes',
+      anyVisitor: 'Todas as visitas',
+      visitorSpans: {
+        day: 'Visitantes únicos de cada dia',
+        month: 'Visitantes únicos de cada mês',
+        new: 'Só visitantes novos',
       },
       country: 'País',
       countryHint: 'Código de duas letras',

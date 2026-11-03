@@ -27,6 +27,7 @@ export const VISIT_FILTER_FIELDS = [
   'source',
   'campaign',
   'route',
+  'visitors',
   'failed',
 ] as const;
 
@@ -145,6 +146,13 @@ export function appliedVisitFilters(
       campaign: null,
     }),
     ...shown('route', t('visits.filters.route'), filters.route, true, { ...filters, route: null }),
+    ...shown(
+      'visitors',
+      t('visits.filters.visitors'),
+      filters.visitors === null ? null : t(`visits.filters.visitorSpans.${filters.visitors}`),
+      false,
+      { ...filters, visitors: null },
+    ),
     ...flag('failed', t('visits.filters.failed'), filters.failed, { ...filters, failed: false }),
   ];
 }
@@ -171,7 +179,7 @@ export function filteredPeriodLabel(
   filters: DashboardFilters,
   i18n: I18n,
 ): string {
-  const applied = appliedVisitFilters({ ...filters, route: null }, i18n);
+  const applied = appliedVisitFilters({ ...filters, route: null, visitors: null }, i18n);
   if (applied.length === 0) {
     return periodLabel;
   }
