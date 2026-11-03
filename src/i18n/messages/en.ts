@@ -2020,13 +2020,42 @@ export const en = {
           body: 'In the dashboard, with an e-mail and a card: 14 days free. The project comes with its public key.',
         },
         install: {
-          title: 'Install it, yourself or with an AI agent',
-          body: 'One package and two lines in the site’s code, or a request to Claude Code, Cursor or another agent.',
+          title: 'Install it, with or without code',
+          body: 'The package in the site’s code, the template in Google Tag Manager, a snippet in a Shopify theme, or a request to an AI agent.',
         },
         ask: {
           title: 'Ask',
           body: 'Open the dashboard, or connect Claude and ask how the week went and where people stop.',
         },
+      },
+      platforms: {
+        label: 'Installs in',
+        anyHtml: 'Any HTML site',
+        nuvemshop: 'Nuvemshop, through Tag Manager',
+      },
+      tabs: {
+        label: 'How to install',
+        code: 'With code',
+        noCode: 'no code',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'In Tag Manager, add the <link>Pyxis Analytics template</link> under <b>Templates</b> › <b>Tag Templates</b>.',
+          tag: 'Create a <b>Pyxis Analytics</b> tag with the action <b>Initialize</b>, paste your project’s public key and fire it on <b>Initialization - All Pages</b>.',
+          events: 'Optional: one <b>Track event</b> tag for each action you want to count.',
+          publish: 'Publish the container. Page views start arriving on their own.',
+        },
+        note: 'The template respects Consent Mode: while <code>analytics_storage</code> is denied, it loads nothing. Nuvemshop’s paid plans take a Tag Manager container too.',
+      },
+      shopify: {
+        steps: {
+          edit: 'In the Shopify admin, open <b>Online Store</b>, then ⋯ › <b>Edit code</b> on the current theme.',
+          paste:
+            'In <code>layout/theme.liquid</code>, paste this snippet just before <closingBody/> and save:',
+          allow: 'In the dashboard’s Settings, allow the address where customers open the store.',
+        },
+        note: 'Every page the theme shows is measured, products and cart included. Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not.',
       },
       copy: 'Copy',
       copied: 'Copied',

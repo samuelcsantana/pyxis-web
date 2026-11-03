@@ -2061,13 +2061,43 @@ export const nl = translation({
           body: 'In het dashboard, met een e-mailadres en een kaart: 14 dagen gratis. Het project krijgt meteen zijn publieke sleutel.',
         },
         install: {
-          title: 'Installeer het, zelf of met een AI-agent',
-          body: 'Eén pakket en twee regels in de code van de site, of een verzoek aan Claude Code, Cursor of een andere agent.',
+          title: 'Installeer het, met of zonder code',
+          body: 'Het pakket in de code van de site, de template in Google Tag Manager, een fragment in een Shopify-thema of een verzoek aan een AI-agent.',
         },
         ask: {
           title: 'Vraag het',
           body: 'Open het dashboard, of koppel Claude en vraag hoe de week ging en waar mensen afhaken.',
         },
+      },
+      platforms: {
+        label: 'Te installeren in',
+        anyHtml: 'Elke HTML-site',
+        nuvemshop: 'Nuvemshop, via Tag Manager',
+      },
+      tabs: {
+        label: 'Zo installeer je het',
+        code: 'Met code',
+        noCode: 'zonder code',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'Voeg in Tag Manager de <link>template Pyxis Analytics</link> toe onder <b>Templates</b> › <b>Tagtemplates</b>.',
+          tag: 'Maak een tag <b>Pyxis Analytics</b> met de actie <b>Initialize</b>, plak de publieke sleutel van je project en activeer hem bij <b>Initialisatie - Alle pagina’s</b>.',
+          events: 'Optioneel: een tag <b>Track event</b> voor elke actie die je wilt tellen.',
+          publish: 'Publiceer de container. De paginaweergaven komen dan vanzelf binnen.',
+        },
+        note: 'De template respecteert de toestemmingsmodus: zolang <code>analytics_storage</code> geweigerd is, laadt hij niets. Ook de betaalde abonnementen van Nuvemshop accepteren een Tag Manager-container.',
+      },
+      shopify: {
+        steps: {
+          edit: 'Open in de Shopify-beheeromgeving <b>Webwinkel</b> en kies bij het huidige thema ⋯ › <b>Code bewerken</b>.',
+          paste:
+            'Plak in <code>layout/theme.liquid</code> dit fragment vlak vóór <closingBody/> en sla op:',
+          allow:
+            'Sta in de Instellingen van het dashboard het adres toe waarop klanten de winkel openen.',
+        },
+        note: 'Elke pagina die het thema toont wordt gemeten, producten en winkelwagen inbegrepen. Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
       },
       copy: 'Kopiëren',
       copied: 'Gekopieerd',
