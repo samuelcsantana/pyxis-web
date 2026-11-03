@@ -15,6 +15,7 @@ const meta = {
     filters: NO_VISIT_FILTERS,
     problems: [],
     clearHref: null,
+    countsUniqueVisitors: true,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
@@ -48,11 +49,14 @@ export const Filtered: Story = {
       source: 'google',
       campaign: 'spring_sale',
       route: 'POST /orders',
+      visitors: 'day',
       failed: true,
     },
     clearHref: '/demo/visits?range=30d',
   },
 };
+
+export const WithoutUniqueVisitors: Story = { args: { countsUniqueVisitors: false } };
 
 export const FiltersLeftOut: Story = {
   args: {

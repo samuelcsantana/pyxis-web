@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Admin } from '@/domain/admin';
+import type { ProjectSettings } from '@/domain/project-settings';
 import { UnauthenticatedError } from '@/domain/errors';
 import { shortId } from '@/domain/timeline';
 import { NO_VISIT_FILTERS, type VisitsReport } from '@/domain/visits';
@@ -11,8 +12,13 @@ import { loadOlderVisitRows } from './actions';
 import VisitsPage from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 
-const state = vi.hoisted<{ admin: unknown; visits: IVisitsService['visits'] }>(() => ({
+const state = vi.hoisted<{
+  admin: unknown;
+  visitorsEnabled: boolean;
+  visits: IVisitsService['visits'];
+}>(() => ({
   admin: undefined,
+  visitorsEnabled: false,
   visits: () => Promise.reject(new Error('visits not set')),
 }));
 
@@ -34,7 +40,11 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/services/projects/projects-service.factory', () => ({
-  createProjectsService: () => ({ currentAdmin: () => Promise.resolve(state.admin) }),
+  createProjectsService: () => ({
+    currentAdmin: () => Promise.resolve(state.admin),
+    settings: (projectId: string): Promise<ProjectSettings> =>
+      Promise.resolve({ ...SETTINGS, id: projectId, visitorsEnabled: state.visitorsEnabled }),
+  }),
 }));
 
 vi.mock('@/services/visits/visits-service.factory', () => ({
@@ -53,6 +63,24 @@ const ADMIN: Admin = {
       conversionEvent: 'signup_completed',
     },
   ],
+};
+const SETTINGS: ProjectSettings = {
+  id: 'p-store',
+  accountId: 'a1',
+  role: 'owner',
+  name: 'Demo Store',
+  timezone: 'America/Sao_Paulo',
+  conversionEvent: 'signup_completed',
+  cityEnabled: false,
+  visitorsEnabled: false,
+  allowedOrigins: ['https://store.example.com'],
+  createdAt: '2026-01-06T08:00:00.000Z',
+  firstEventAt: null,
+  lastEventAt: null,
+  eventRetentionMonths: 13,
+  publicKeys: [],
+  secretKeys: [],
+  deletionHeldAt: null,
 };
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const CURSOR = '2026-10-03T12:12:04.000Z~2a81c3d4-5e6f-4a70-8b91-0c1d2e3f4a02';
@@ -74,6 +102,7 @@ function mockVisits() {
 
 beforeEach(() => {
   state.admin = ADMIN;
+  state.visitorsEnabled = false;
   mockVisits();
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(NOW);
@@ -184,6 +213,46 @@ describe('VisitsPage', () => {
     renderWithMessages(await renderVisits({ range: '30d', channel: 'email' }));
 
     expect(screen.getByText('No visit matches these filters in this period.')).toBeInTheDocument();
+  });
+
+  it('asks for the unique visitors of each day and counts them so, when the project counts them', async () => {
+    state.visitorsEnabled = true;
+    const visits = mockVisits();
+
+    renderWithMessages(await renderVisits({ range: '30d', visitors: 'day' }));
+
+    expect(visits).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-06', to: '2026-10-05' },
+      { ...NO_VISIT_FILTERS, visitors: 'day' },
+      null,
+    );
+    expect(screen.getByRole('combobox', { name: 'Visitors' })).toHaveValue('day');
+    expect(
+      screen.getByText(/that counted as unique visitors? of (its|their) day$/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^Each browser shows once per day or per month/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Newest 1,000 visits as CSV' })).toHaveAttribute(
+      'href',
+      '/p-store/visits/export?range=30d&visitors=day',
+    );
+  });
+
+  it('leaves the unique visitors out, and says why, when the project does not count them', async () => {
+    const visits = mockVisits();
+
+    renderWithMessages(await renderVisits({ range: '7d', visitors: 'day' }));
+
+    expect(visits).toHaveBeenCalledWith(
+      'p-store',
+      { from: '2026-09-29', to: '2026-10-05' },
+      NO_VISIT_FILTERS,
+      null,
+    );
+    expect(screen.queryByRole('combobox', { name: 'Visitors' })).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'This project does not count unique visitors: turn it on in Settings.',
+    );
   });
 
   it('names the filters it left out and lists the period without them', async () => {

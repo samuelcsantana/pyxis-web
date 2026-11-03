@@ -295,10 +295,12 @@ describe('VisitFiltersForm', () => {
           source: 'google',
           campaign: 'spring_sale',
           route: 'POST /orders',
+          visitors: 'day',
           failed: true,
         }}
         problems={[]}
         clearHref="/p-store/visits?from=2026-09-01&to=2026-09-30"
+        countsUniqueVisitors
         i18n={english}
       />,
     );
@@ -320,6 +322,7 @@ describe('VisitFiltersForm', () => {
     expect(screen.getByRole('combobox', { name: 'Channel' })).toHaveValue('paid');
     expect(screen.getByRole('combobox', { name: 'Device' })).toHaveValue('mobile');
     expect(screen.getByRole('combobox', { name: 'Account' })).toHaveValue('anonymous');
+    expect(screen.getByRole('combobox', { name: 'Visitors' })).toHaveValue('day');
     expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('BR');
     expect(screen.getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
     expect(screen.getByRole('textbox', { name: /^City/ })).toHaveValue('Campinas');
@@ -340,10 +343,39 @@ describe('VisitFiltersForm', () => {
       '/p-store/visits?from=2026-09-01&to=2026-09-30',
     );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Filters · 14 active' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Filters · 15 active' })).toHaveAttribute(
       'aria-expanded',
       'true',
     );
+  });
+
+  it('offers the unique visitors only for a project that counts them', () => {
+    const form = (countsUniqueVisitors: boolean) =>
+      render(
+        <VisitFiltersForm
+          action="/p-store/visits"
+          period={{ preset: '7d', from: '2026-09-29', to: '2026-10-05' }}
+          filters={NO_VISIT_FILTERS}
+          problems={[]}
+          clearHref={null}
+          countsUniqueVisitors={countsUniqueVisitors}
+          i18n={english}
+        />,
+      );
+
+    const { unmount } = form(true);
+    const visitors = screen.getByRole('combobox', { name: 'Visitors' });
+    expect(visitors).toHaveValue('');
+    expect([...visitors.querySelectorAll('option')].map((option) => option.textContent)).toEqual([
+      'All visits',
+      'Unique visitors of each day',
+      'Unique visitors of each month',
+      'New visitors only',
+    ]);
+    unmount();
+
+    form(false);
+    expect(screen.queryByRole('combobox', { name: 'Visitors' })).not.toBeInTheDocument();
   });
 
   it('starts empty, without a clear link, and names the filters it left out', () => {
@@ -354,6 +386,7 @@ describe('VisitFiltersForm', () => {
         filters={NO_VISIT_FILTERS}
         problems={['A property filter needs an event.']}
         clearHref={null}
+        countsUniqueVisitors={false}
         i18n={english}
       />,
     );
@@ -384,6 +417,7 @@ describe('VisitFiltersForm', () => {
         filters={NO_VISIT_FILTERS}
         problems={[]}
         clearHref={null}
+        countsUniqueVisitors={false}
         i18n={english}
       />,
     );

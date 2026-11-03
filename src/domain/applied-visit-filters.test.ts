@@ -23,6 +23,7 @@ const EVERY_FILTER: VisitFilters = {
   source: 'google',
   campaign: 'spring_sale',
   route: 'POST /orders',
+  visitors: 'day',
   failed: true,
 };
 
@@ -50,6 +51,7 @@ describe('appliedVisitFilters', () => {
       { key: 'source', label: 'Source', value: 'google', code: true },
       { key: 'campaign', label: 'Campaign', value: 'spring_sale', code: true },
       { key: 'route', label: 'Made request', value: 'POST /orders', code: true },
+      { key: 'visitors', label: 'Visitors', value: 'Unique visitors of each day', code: false },
       { key: 'failed', label: 'With a failed request', value: null, code: false },
     ]);
   });
@@ -80,6 +82,7 @@ describe('appliedVisitFilters', () => {
       'source',
       'campaign',
       'route',
+      'visitors',
     ]) {
       expect(without[key]).not.toHaveProperty(key);
       expect(Object.keys(without[key] ?? {})).toHaveLength(

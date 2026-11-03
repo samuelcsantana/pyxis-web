@@ -107,6 +107,7 @@ describe('HttpVisitsService', () => {
         source: 'google',
         campaign: 'spring_sale',
         route: 'POST /orders',
+        visitors: 'day',
         failed: true,
       },
       '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
@@ -173,6 +174,21 @@ describe('MockVisitsService', () => {
     expect(new Set(starts).size).toBe(all.total);
     expect(starts).toEqual(starts.toSorted().toReversed());
     expect(totalOf({})).toBe(demoOverviewWire(STORE, RANGE, NOW).kpis.visits.current);
+  });
+
+  it('keeps each kind of unique visitor the overview counts, and none in a project that does not count them', () => {
+    const day = (demoOverviewWire(STORE, RANGE, NOW).visitors?.daily ?? []).reduce(
+      (sum, kinds) => sum + kinds.first_visit + kinds.first_this_month + kinds.first_today,
+      0,
+    );
+    const docs = (visitors: VisitFilters['visitors']) =>
+      demoVisitsWire(DEMO_DOCS.id, RANGE, { ...NO_VISIT_FILTERS, visitors }, null, NOW).total;
+
+    expect(totalOf({ visitors: 'day' })).toBe(day);
+    expect(totalOf({ visitors: 'month' })).toBeLessThan(day);
+    expect(totalOf({ visitors: 'new' })).toBeLessThan(totalOf({ visitors: 'month' }));
+    expect(docs('day')).toBe(0);
+    expect(docs(null)).toBeGreaterThan(0);
   });
 
   it('sums each visit up the way the API does', () => {

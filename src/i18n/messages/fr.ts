@@ -979,6 +979,15 @@ export const fr = translation({
   counts: {
     visit: forms('{count} visite', '{count} visites'),
     matchingVisit: forms('{count} visite correspondante', '{count} visites correspondantes'),
+    uniqueVisitOfDay: forms(
+      '{count} visite comptée comme visiteur unique de son jour',
+      '{count} visites comptées comme visiteurs uniques de leur jour',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} visite comptée comme visiteur unique de son mois',
+      '{count} visites comptées comme visiteurs uniques de leur mois',
+    ),
+    newVisitor: forms('{count} nouveau visiteur', '{count} nouveaux visiteurs'),
     person: forms('{count} personne', '{count} personnes'),
     project: forms('{count} projet', '{count} projets'),
     day: forms('{count} jour', '{count} jours'),
@@ -1151,6 +1160,7 @@ export const fr = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Voir ces visites',
     title: 'Visiteurs uniques',
     description: 'Visiteurs nouveaux et récurrents par jour, {period}',
     dayDescription: 'Visiteurs nouveaux et récurrents, {period}',
@@ -1561,11 +1571,14 @@ export const fr = translation({
       source: 'Une source compte {max} caractères au maximum.',
       campaign: 'Une campagne compte {max} caractères au maximum.',
       route: 'Une requête s’écrit avec une méthode et une route, comme POST /orders/:id.',
+      visitors: 'Ce projet ne compte pas les visiteurs uniques : activez-les dans Paramètres.',
     },
     accountLink: '{user}, ouvrir la chronologie de cet utilisateur',
     shortAccountLink: '{shown}, ouvrir la chronologie de l’utilisateur {user}',
     noFailedRequest: 'Aucune requête en échec',
     page: {
+      uniqueNote:
+        'Chaque navigateur apparaît une fois par jour ou par mois : sa première visite. Un autre appareil, une fenêtre privée ou des données effacées comptent à nouveau.',
       subtitle: 'Toutes les visites de {project} sur la période, les plus récentes d’abord',
       footnote:
         'Les temps forts sont ses cinq premiers événements nommés, dans l’ordre. Une requête en échec est une lecture ou une écriture envoyée avec trackRequest() qui a répondu 400 ou plus, ou n’a jamais répondu ; Requêtes liste les écritures et les lectures en échec dans des onglets séparés.',
@@ -1601,6 +1614,13 @@ export const fr = translation({
       identities: {
         identified: 'Identifiées',
         anonymous: 'Anonymes',
+      },
+      visitors: 'Visiteurs',
+      anyVisitor: 'Toutes les visites',
+      visitorSpans: {
+        day: 'Visiteurs uniques de chaque jour',
+        month: 'Visiteurs uniques de chaque mois',
+        new: 'Nouveaux visiteurs seulement',
       },
       country: 'Pays',
       countryHint: 'Code à deux lettres',

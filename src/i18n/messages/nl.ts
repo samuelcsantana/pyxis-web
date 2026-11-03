@@ -965,6 +965,15 @@ export const nl = translation({
   counts: {
     visit: forms('{count} bezoek', '{count} bezoeken'),
     matchingVisit: forms('{count} gevonden bezoek', '{count} gevonden bezoeken'),
+    uniqueVisitOfDay: forms(
+      '{count} bezoek dat telde als unieke bezoeker van zijn dag',
+      '{count} bezoeken die telden als unieke bezoekers van hun dag',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} bezoek dat telde als unieke bezoeker van zijn maand',
+      '{count} bezoeken die telden als unieke bezoekers van hun maand',
+    ),
+    newVisitor: forms('{count} nieuwe bezoeker', '{count} nieuwe bezoekers'),
     person: forms('{count} persoon', '{count} personen'),
     project: forms('{count} project', '{count} projecten'),
     day: forms('{count} dag', '{count} dagen'),
@@ -1138,6 +1147,7 @@ export const nl = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Deze bezoeken bekijken',
     title: 'Unieke bezoekers',
     description: 'Nieuwe en terugkerende bezoekers per dag, {period}',
     dayDescription: 'Nieuwe en terugkerende bezoekers, {period}',
@@ -1543,11 +1553,14 @@ export const nl = translation({
       source: 'Een bron heeft maximaal {max} tekens.',
       campaign: 'Een campagne heeft maximaal {max} tekens.',
       route: 'Een verzoek is een methode en een route, zoals POST /orders/:id.',
+      visitors: 'Dit project telt geen unieke bezoekers: zet het aan bij Instellingen.',
     },
     accountLink: '{user}, open de tijdlijn van deze gebruiker',
     shortAccountLink: '{shown}, open de tijdlijn van gebruiker {user}',
     noFailedRequest: 'Geen mislukt verzoek',
     page: {
+      uniqueNote:
+        'Elke browser verschijnt één keer per dag of per maand: met zijn eerste bezoek daar. Een ander apparaat, een privévenster of gewiste gegevens tellen opnieuw.',
       subtitle: 'Alle bezoeken aan {project} in de periode, nieuwste eerst',
       footnote:
         'Hoogtepunten zijn de eerste vijf benoemde events, op volgorde. Een mislukt verzoek is een lees- of schrijfverzoek dat met trackRequest() is verstuurd en met 400 of hoger antwoordde, of nooit antwoordde; Verzoeken toont de schrijfverzoeken en de mislukte leesverzoeken op aparte tabbladen.',
@@ -1583,6 +1596,13 @@ export const nl = translation({
       identities: {
         identified: 'Geïdentificeerd',
         anonymous: 'Anoniem',
+      },
+      visitors: 'Bezoekers',
+      anyVisitor: 'Alle bezoeken',
+      visitorSpans: {
+        day: 'Unieke bezoekers van elke dag',
+        month: 'Unieke bezoekers van elke maand',
+        new: 'Alleen nieuwe bezoekers',
       },
       country: 'Land',
       countryHint: 'Tweeletterige code',

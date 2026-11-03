@@ -955,6 +955,15 @@ export const es = translation({
   counts: {
     visit: forms('{count} visita', '{count} visitas'),
     matchingVisit: forms('{count} visita encontrada', '{count} visitas encontradas'),
+    uniqueVisitOfDay: forms(
+      '{count} visita que contó como visitante único del día',
+      '{count} visitas que contaron como visitantes únicos del día',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} visita que contó como visitante único del mes',
+      '{count} visitas que contaron como visitantes únicos del mes',
+    ),
+    newVisitor: forms('{count} visitante nuevo', '{count} visitantes nuevos'),
     person: forms('{count} persona', '{count} personas'),
     project: forms('{count} proyecto', '{count} proyectos'),
     day: forms('{count} día', '{count} días'),
@@ -1126,6 +1135,7 @@ export const es = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Ver estas visitas',
     title: 'Visitantes únicos',
     description: 'Visitantes nuevos y recurrentes por día, {period}',
     dayDescription: 'Visitantes nuevos y recurrentes, {period}',
@@ -1531,11 +1541,14 @@ export const es = translation({
       source: 'Una fuente tiene como máximo {max} caracteres.',
       campaign: 'Una campaña tiene como máximo {max} caracteres.',
       route: 'Una solicitud es un método y una ruta, como POST /orders/:id.',
+      visitors: 'Este proyecto no cuenta visitantes únicos: actívalo en Configuración.',
     },
     accountLink: '{user}, abrir la línea de tiempo de este usuario',
     shortAccountLink: '{shown}, abrir la línea de tiempo del usuario {user}',
     noFailedRequest: 'Ninguna solicitud fallida',
     page: {
+      uniqueNote:
+        'Cada navegador aparece una vez por día o por mes: su primera visita allí. Otro dispositivo, una ventana privada o datos borrados cuentan de nuevo.',
       subtitle: 'Todas las visitas a {project} en el periodo, de la más reciente a la más antigua',
       footnote:
         'Los destacados son los cinco primeros eventos con nombre de la visita, en orden. Una solicitud fallida es una lectura o una escritura enviada con trackRequest() que respondió 400 o más, o nunca respondió; Solicitudes muestra las escrituras y las lecturas fallidas en pestañas separadas.',
@@ -1571,6 +1584,13 @@ export const es = translation({
       identities: {
         identified: 'Identificadas',
         anonymous: 'Anónimas',
+      },
+      visitors: 'Visitantes',
+      anyVisitor: 'Todas las visitas',
+      visitorSpans: {
+        day: 'Visitantes únicos de cada día',
+        month: 'Visitantes únicos de cada mes',
+        new: 'Solo visitantes nuevos',
       },
       country: 'País',
       countryHint: 'Código de dos letras',

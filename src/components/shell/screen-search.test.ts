@@ -40,6 +40,7 @@ const EVERY_VISITS_FILTER: Required<VisitsSearch> = {
   source: '',
   campaign: '',
   route: '',
+  visitors: '',
   failed: '',
 };
 

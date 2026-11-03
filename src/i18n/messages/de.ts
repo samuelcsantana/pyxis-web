@@ -977,6 +977,15 @@ export const de = translation({
   counts: {
     visit: forms('{count} Besuch', '{count} Besuche'),
     matchingVisit: forms('{count} passender Besuch', '{count} passende Besuche'),
+    uniqueVisitOfDay: forms(
+      '{count} Besuch, der als eindeutiger Besucher seines Tages zählte',
+      '{count} Besuche, die als eindeutige Besucher ihres Tages zählten',
+    ),
+    uniqueVisitOfMonth: forms(
+      '{count} Besuch, der als eindeutiger Besucher seines Monats zählte',
+      '{count} Besuche, die als eindeutige Besucher ihres Monats zählten',
+    ),
+    newVisitor: forms('{count} neuer Besucher', '{count} neue Besucher'),
     person: forms('{count} Person', '{count} Personen'),
     project: forms('{count} Projekt', '{count} Projekte'),
     day: forms('{count} Tag', '{count} Tage'),
@@ -1152,6 +1161,7 @@ export const de = translation({
     point: '{series}, {day}',
   },
   uniqueVisitors: {
+    seeVisits: 'Diese Besuche ansehen',
     title: 'Eindeutige Besucher',
     description: 'Neue und wiederkehrende Besucher pro Tag, {period}',
     dayDescription: 'Neue und wiederkehrende Besucher, {period}',
@@ -1562,11 +1572,15 @@ export const de = translation({
       source: 'Eine Quelle hat höchstens {max} Zeichen.',
       campaign: 'Eine Kampagne hat höchstens {max} Zeichen.',
       route: 'Eine Anfrage besteht aus Methode und Route, z. B. POST /orders/:id.',
+      visitors:
+        'Dieses Projekt zählt keine eindeutigen Besucher: In den Einstellungen einschalten.',
     },
     accountLink: '{user}, Zeitleiste dieses Nutzers öffnen',
     shortAccountLink: '{shown}, Zeitleiste des Nutzers {user} öffnen',
     noFailedRequest: 'Keine fehlgeschlagene Anfrage',
     page: {
+      uniqueNote:
+        'Jeder Browser erscheint einmal pro Tag oder Monat: mit seinem ersten Besuch dort. Ein anderes Gerät, ein privates Fenster oder gelöschte Daten zählen erneut.',
       subtitle: 'Alle Besuche von {project} im Zeitraum, neueste zuerst',
       footnote:
         'Highlights sind die ersten fünf benannten Ereignisse eines Besuchs, in ihrer Reihenfolge. Eine fehlgeschlagene Anfrage ist ein mit trackRequest() gesendeter Lese- oder Schreibzugriff, der mit 400 oder höher oder gar nicht geantwortet hat; Anfragen listet die Schreibzugriffe und die fehlgeschlagenen Lesezugriffe in getrennten Tabs.',
@@ -1602,6 +1616,13 @@ export const de = translation({
       identities: {
         identified: 'Identifiziert',
         anonymous: 'Anonym',
+      },
+      visitors: 'Besucher',
+      anyVisitor: 'Alle Besuche',
+      visitorSpans: {
+        day: 'Eindeutige Besucher jedes Tages',
+        month: 'Eindeutige Besucher jedes Monats',
+        new: 'Nur neue Besucher',
       },
       country: 'Land',
       countryHint: 'Zweistelliger Code',
