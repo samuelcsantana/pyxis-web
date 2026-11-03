@@ -75,7 +75,7 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
               setSelected(index);
             }}
             onKeyDown={moveWith}
-            className={`min-h-9 gap-1.5 px-3 whitespace-nowrap ${SEGMENTED_OPTION} ${index === selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+            className={`min-h-9 gap-1.5 px-3 ${SEGMENTED_OPTION} ${index === selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
           >
             {tab.label}
           </button>
