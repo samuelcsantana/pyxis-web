@@ -305,6 +305,23 @@ test('adds up the unique visitors of the days, new and returning, never more tha
   expect(await sidewaysOverflow(page)).toBe(0);
 });
 
+test('opens the visits that counted, as many as the card adds up', async ({ page }) => {
+  await page.goto(`/${STORE_ID}/overview?range=30d`);
+  const card = uniqueVisitors(page);
+  const unique = await figureOf(card, 'Sum of daily unique visitors');
+
+  await card.getByRole('link', { name: 'See these visits' }).click();
+
+  await expect(page).toHaveURL(/\/visits\?.*visitors=day/);
+  await expect(page.getByRole('combobox', { name: 'Visitors' })).toHaveValue('day');
+  await expect(
+    page.getByText(
+      new RegExp(`^${unique.toLocaleString('en')} visits? that counted as unique visitors? of `),
+    ),
+  ).toBeVisible();
+  expect(await axeViolations(page)).toEqual([]);
+});
+
 test('shows the unique visitors of a single day as figures, never a chart', async ({ page }) => {
   await page.goto(`/${STORE_ID}/overview?range=today`);
   const figures = page.getByRole('region', { name: 'Activity of the day' });
