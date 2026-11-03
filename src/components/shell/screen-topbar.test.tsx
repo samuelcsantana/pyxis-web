@@ -4,6 +4,7 @@ import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { publishActiveVisits } from './arrival-news';
 import { ScreenTopbar } from './screen-topbar';
+import { HEADER_END_ALIGNED_WITH_SCREEN } from './screen-width';
 import { screenTopbarTexts } from './screen-topbar-texts';
 
 const navigation = vi.hoisted(() => ({ pathname: '/p1/overview', search: '' }));
@@ -94,6 +95,14 @@ describe('ScreenTopbar', () => {
     );
     expect(screen.getByRole('navigation', { name: 'Period' })).not.toContainElement(range);
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('ends its controls where the content of the screen ends on a wide window', () => {
+    renderWithMessages(topbar());
+
+    const header = screen.getByRole('banner');
+    expect(header).toHaveClass('sm:pl-8', HEADER_END_ALIGNED_WITH_SCREEN);
+    expect(header).not.toHaveClass('sm:px-8');
   });
 
   it('says which custom range it did not use, and what it shows instead', async () => {

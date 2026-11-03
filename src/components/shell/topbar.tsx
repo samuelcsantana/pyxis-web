@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { formatDayRange, type Period } from '@/domain/period';
 import type { DayFormats } from '@/i18n/day-formats';
 import { RANGE_NOTICE_ID } from './kept-parameters';
+import { HEADER_END_ALIGNED_WITH_SCREEN } from './screen-width';
 
 export interface TopbarProps {
   readonly title: string;
@@ -54,7 +55,9 @@ export function TopbarFrame({
 }: TopbarFrameProps) {
   const heading = <h1 className="text-title leading-7 font-semibold tracking-tight">{title}</h1>;
   return (
-    <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:px-8 sm:py-4.5 lg:sticky lg:top-(--demo-notice-height) lg:z-20">
+    <header
+      className={`flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line bg-card px-4 py-3 text-ink sm:gap-y-4 sm:pl-8 ${HEADER_END_ALIGNED_WITH_SCREEN} sm:py-4.5 lg:sticky lg:top-(--demo-notice-height) lg:z-20`}
+    >
       <div className="flex min-w-0 flex-1 basis-64 flex-col gap-1">
         {besideTitle === undefined ? (
           heading
