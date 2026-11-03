@@ -208,6 +208,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   visitor", "Returning, first this month", "Returning, first today", "Again today"), whose
   tooltip and accessible name say whether it counted in the day's unique visitors; nothing when
   the option is off or the visit carried no kind
+- Unique visitors in Visits: for a project that counts them, a "Visitors" choice keeps only the
+  visits that counted (unique visitors of each day, of each month, or new visitors only), so each
+  browser shows once per day or per month; the total names what it counts and equals the
+  Overview card for the same period and filters, and the card's "See these visits" opens that
+  list. Visits are never merged: the row is the browser's first visit of the day or month
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and place (city, region
   and country, or as much of them as is known), channel and account; filters for the pages it viewed (up to
