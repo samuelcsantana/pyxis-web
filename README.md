@@ -6,7 +6,7 @@
 </picture>
 
 **The dashboard of Pyxis: the overview, funnels, features, request errors, devices, acquisition and
-per-person timelines of a product, measured without cookies or personal data.**
+per-person timelines of a product, measured without cookies or stored IP addresses.**
 
 [![CI](https://github.com/samuelcsantana/pyxis-web/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/samuelcsantana/pyxis-web/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/samuelcsantana/pyxis-web/graph/badge.svg)](https://codecov.io/gh/samuelcsantana/pyxis-web)
