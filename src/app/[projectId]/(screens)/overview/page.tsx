@@ -139,6 +139,7 @@ function OverviewReportView({
         visitors={report.visitors}
         endsToday={endsToday}
         periodLabel={periodLabel}
+        visitsHref={(span) => visitsHref({ visitors: span })}
         i18n={i18n}
       />
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2">

@@ -48,7 +48,13 @@ const meta = {
   title: 'Overview/Unique visitors',
   component: UniqueVisitorsPanel,
   tags: ['autodocs'],
-  args: { visitors: THIRTY_DAYS, endsToday: true, periodLabel: 'last 30 days', i18n: english },
+  args: {
+    visitors: THIRTY_DAYS,
+    endsToday: true,
+    periodLabel: 'last 30 days',
+    visitsHref: (span) => `/demo/visits?range=30d&visitors=${span}`,
+    i18n: english,
+  },
   parameters: { layout: 'padded' },
   decorators: [
     (Story) => (

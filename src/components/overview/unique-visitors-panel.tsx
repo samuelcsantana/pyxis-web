@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { valueAxis } from '@/domain/chart-scale';
 import { formatCount } from '@/domain/metrics';
@@ -22,7 +23,7 @@ import type { I18n } from '@/i18n/i18n';
 import { ChartFrame } from '@/components/charts/chart-frame';
 import { ChartHover, type HoverDay } from '@/components/charts/chart-hover';
 import { ChartPanel } from '@/components/charts/chart-panel';
-import { FOCUS_RING } from '@/components/ui/control-classes';
+import { FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
 import { BODY_CELL, HEADER_CELL, PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 const KIND_COLORS: Readonly<
@@ -43,7 +44,31 @@ export interface UniqueVisitorsPanelProps {
   readonly visitors: UniqueVisitors;
   readonly endsToday: boolean;
   readonly periodLabel: string;
+  readonly visitsHref: (span: 'day' | 'month') => string;
   readonly i18n: I18n;
+}
+
+function spanOf(headline: VisitorsHeadline): 'day' | 'month' {
+  return headline.span === 'month' || headline.span === 'monthSoFar' ? 'month' : 'day';
+}
+
+function Figures({
+  headline,
+  href,
+  i18n,
+}: {
+  readonly headline: VisitorsHeadline;
+  readonly href: string;
+  readonly i18n: I18n;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <HeadlineFigures headline={headline} i18n={i18n} />
+      <Link href={href} className={`self-start text-caption ${TEXT_LINK}`}>
+        {i18n.t('uniqueVisitors.seeVisits')}
+      </Link>
+    </div>
+  );
 }
 
 function HeadlineFigures({
@@ -235,6 +260,7 @@ export function UniqueVisitorsPanel({
   visitors,
   endsToday,
   periodLabel,
+  visitsHref,
   i18n,
 }: UniqueVisitorsPanelProps) {
   if (!visitors.enabled) {
@@ -249,13 +275,14 @@ export function UniqueVisitorsPanel({
     );
   }
   const headline = visitorsHeadline(visitors, endsToday);
+  const href = visitsHref(spanOf(headline));
   if (headline.span === 'day') {
     return (
       <PlainPanel
         title={title}
         description={i18n.t('uniqueVisitors.dayDescription', { period: periodLabel })}
       >
-        <HeadlineFigures headline={headline} i18n={i18n} />
+        <Figures headline={headline} href={href} i18n={i18n} />
         <Footnote headline={headline} i18n={i18n} />
       </PlainPanel>
     );
@@ -266,7 +293,7 @@ export function UniqueVisitorsPanel({
       title={title}
       description={i18n.t('uniqueVisitors.description', { period: periodLabel })}
       legend={null}
-      figures={<HeadlineFigures headline={headline} i18n={i18n} />}
+      figures={<Figures headline={headline} href={href} i18n={i18n} />}
       chart={<VisitorBars rows={rows} i18n={i18n} />}
       table={<VisitorTable rows={rows} periodLabel={periodLabel} i18n={i18n} />}
       footnote={<Footnote headline={headline} i18n={i18n} />}

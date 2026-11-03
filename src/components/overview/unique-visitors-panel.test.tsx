@@ -48,6 +48,7 @@ function renderPanel(
       visitors={visitors}
       endsToday={endsToday}
       periodLabel={locale === 'en' ? 'last 3 days' : 'últimos 3 dias'}
+      visitsHref={(span) => `/p1/visits?range=3d&visitors=${span}`}
       i18n={locale === 'en' ? english : portuguese}
     />,
     locale,
@@ -88,6 +89,10 @@ describe('UniqueVisitorsPanel', () => {
     expect(
       screen.getByText('Sum of days: a visitor who came on two days counts twice.'),
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See these visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=3d&visitors=day',
+    );
   });
 
   it('stacks new on returning visitors per day, summed up in words', () => {
@@ -118,6 +123,10 @@ describe('UniqueVisitorsPanel', () => {
     renderPanel(NOVEMBER_SO_FAR, { endsToday: true });
 
     expect(figure('Unique visitors in November 2026 so far')).toBe('81');
+    expect(screen.getByRole('link', { name: 'See these visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=3d&visitors=month',
+    );
     expect(figure('New')).toBe('55');
     expect(figure('Returning')).toBe('26');
     expect(
@@ -133,6 +142,10 @@ describe('UniqueVisitorsPanel', () => {
     const card = screen.getByRole('region', { name: 'Unique visitors' });
     expect(card).toHaveTextContent('New and returning visitors, last 3 days');
     expect(figure('Unique visitors')).toBe('43');
+    expect(within(card).getByRole('link', { name: 'See these visits' })).toHaveAttribute(
+      'href',
+      '/p1/visits?range=3d&visitors=day',
+    );
     expect(within(card).queryByRole('img')).not.toBeInTheDocument();
     expect(within(card).queryByRole('button')).not.toBeInTheDocument();
     expect(card).toHaveTextContent('Counted per browser, not per person');
