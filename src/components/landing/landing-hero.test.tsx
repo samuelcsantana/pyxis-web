@@ -15,7 +15,9 @@ describe('LandingHero', () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();
-    expect(screen.getByText('No cookies · no IP · a connector for Claude')).toBeInTheDocument();
+    expect(
+      screen.getByText('Connector for Claude · Tag Manager and Shopify · no cookies · no IP'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
         /the funnel step where people stop and which of your site’s requests failed/,

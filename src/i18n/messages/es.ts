@@ -1824,7 +1824,7 @@ export const es = translation({
       signIn: 'Entrar',
     },
     hero: {
-      eyebrow: 'Sin cookies · sin IP · conector para Claude',
+      eyebrow: 'Conector para Claude · Tag Manager y Shopify · sin cookies · sin IP',
       title:
         'Descubre qué convierte y qué falla en tu sitio, sin cookies y sin guardar direcciones IP.',
       lead: 'Pyxis muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron en cada visita. Míralo en el panel o pregúntale a Claude.',
@@ -1850,6 +1850,8 @@ export const es = translation({
         title: 'Tienda o negocio en línea',
         body: 'Cuántas personas empiezan un pedido y en qué paso abandonan: carrito, envío o pago. Por móvil y escritorio, y por el origen de la visita.',
         link: 'Ver un embudo en la demo',
+        shopify:
+          'En Shopify, un fragmento en el tema mide los productos y el carrito. El checkout corre del lado de Shopify y no se mide.',
       },
       agency: {
         title: 'Desarrollador o agencia',
@@ -1862,7 +1864,7 @@ export const es = translation({
         link: 'Ver las pantallas del panel',
       },
       install:
-        '¿No programas? La instalación la puede hacer un agente de IA, quien hizo tu sitio o una agencia. <link>Cómo instalar</link>',
+        '¿No programas? Si tu sitio ya carga Google Tag Manager, o es una tienda Shopify, la instalación no pide código. En cualquier otro sitio, la puede hacer un agente de IA, quien hizo tu sitio o una agencia. <link>Cómo instalar</link>',
     },
     preview: {
       label: 'Vista previa de la pantalla Vista general',
@@ -2284,7 +2286,17 @@ export const es = translation({
         noCode: {
           question: 'No programo. ¿Puedo instalarlo?',
           answer:
-            'La instalación es un paquete y dos líneas en el código del sitio, así que alguien tiene que tocar ese código: tú con un agente de IA, quien hizo tu sitio o una agencia. Después, el panel y Claude no piden nada de código.',
+            'Sí. Si tu sitio ya carga Google Tag Manager, añade ahí la plantilla Pyxis Analytics, sin código. En una tienda Shopify, pega un fragmento en el tema. En cualquier otro sitio el paquete va en el código: tú con un agente de IA, quien hizo tu sitio o una agencia. Después, el panel y Claude no piden nada de código.',
+        },
+        shopify: {
+          question: '¿Funciona en una tienda Shopify?',
+          answer:
+            'Sí. Un fragmento en el tema mide cada página que muestra el tema, productos y carrito incluidos. Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
+        },
+        tagManager: {
+          question: '¿Puedo instalarlo con Google Tag Manager?',
+          answer:
+            'Sí, con la plantilla Pyxis Analytics: una etiqueta Initialize en todas las páginas y una etiqueta más por cada evento que quieras. De forma predeterminada respeta el modo de consentimiento: mientras <code>analytics_storage</code> esté denegado, no carga nada.',
         },
         aiInstall: {
           question: '¿Puedo pedirle a una IA que lo instale?',

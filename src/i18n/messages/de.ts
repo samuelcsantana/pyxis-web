@@ -1857,7 +1857,7 @@ export const de = translation({
       signIn: 'Anmelden',
     },
     hero: {
-      eyebrow: 'Ohne Cookies · ohne IP · Connector für Claude',
+      eyebrow: 'Connector für Claude · Tag Manager und Shopify · ohne Cookies · ohne IP',
       title:
         'Finde heraus, was auf deiner Website konvertiert und was fehlschlägt, ohne Cookies und ohne gespeicherte IP-Adressen.',
       lead: 'Pyxis zeigt, bei welchem Schritt im Funnel Menschen aufhören und welche Anfragen deiner Website bei jedem Besuch fehlgeschlagen sind. Sieh es dir im Dashboard an oder frag Claude.',
@@ -1883,6 +1883,8 @@ export const de = translation({
         title: 'Onlineshop oder Onlinegeschäft',
         body: 'Wie viele Menschen eine Bestellung beginnen und bei welchem Schritt sie aufgeben: Warenkorb, Versand oder Zahlung. Getrennt nach Smartphone und Computer und nach der Herkunft des Besuchs.',
         link: 'Einen Funnel in der Demo ansehen',
+        shopify:
+          'Auf Shopify misst ein Codeausschnitt im Theme Produkte und Warenkorb. Der Checkout läuft bei Shopify und wird nicht gemessen.',
       },
       agency: {
         title: 'Entwickler oder Agentur',
@@ -1895,7 +1897,7 @@ export const de = translation({
         link: 'Die Ansichten des Dashboards ansehen',
       },
       install:
-        'Du programmierst nicht? Die Installation kann ein KI-Agent übernehmen, wer deine Website gebaut hat oder eine Agentur. <link>So wird installiert</link>',
+        'Du programmierst nicht? Lädt deine Website schon Google Tag Manager oder ist sie ein Shopify-Shop, braucht die Installation keinen Code. Bei jeder anderen Website übernimmt sie ein KI-Agent, wer deine Website gebaut hat oder eine Agentur. <link>So wird installiert</link>',
     },
     preview: {
       label: 'Vorschau der Übersicht',
@@ -2323,7 +2325,17 @@ export const de = translation({
         noCode: {
           question: 'Ich programmiere nicht. Kann ich es installieren?',
           answer:
-            'Die Installation ist ein Paket und zwei Zeilen im Code der Website, also muss jemand diesen Code anfassen: du mit einem KI-Agenten, wer deine Website gebaut hat oder eine Agentur. Danach verlangen das Dashboard und Claude keinen Code mehr.',
+            'Ja. Lädt deine Website schon Google Tag Manager, füge dort die Vorlage Pyxis Analytics hinzu, ohne Code. In einem Shopify-Shop fügst du einen Codeausschnitt ins Theme ein. Bei jeder anderen Website kommt das Paket in den Code: du mit einem KI-Agenten, wer deine Website gebaut hat oder eine Agentur. Danach verlangen das Dashboard und Claude keinen Code mehr.',
+        },
+        shopify: {
+          question: 'Funktioniert es in einem Shopify-Shop?',
+          answer:
+            'Ja. Ein Codeausschnitt im Theme misst jede Seite, die das Theme zeigt, Produkte und Warenkorb eingeschlossen. Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
+        },
+        tagManager: {
+          question: 'Kann ich es mit Google Tag Manager installieren?',
+          answer:
+            'Ja, mit der Vorlage Pyxis Analytics: ein Initialize-Tag auf allen Seiten und ein weiteres Tag für jedes gewünschte Ereignis. Standardmäßig beachtet sie den Einwilligungsmodus: Solange <code>analytics_storage</code> abgelehnt ist, lädt sie nichts.',
         },
         aiInstall: {
           question: 'Kann ich eine KI bitten, es zu installieren?',

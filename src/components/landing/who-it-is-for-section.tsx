@@ -91,6 +91,11 @@ export function WhoItIsForSection({ i18n }: WhoItIsForSectionProps) {
               <p className="grow text-sm leading-normal text-muted">
                 {t(`landing.forWhom.${audience}.body`)}
               </p>
+              {audience === 'store' ? (
+                <p className="border-t border-dashed border-line pt-2 text-caption leading-normal text-muted">
+                  {t('landing.forWhom.store.shopify')}
+                </p>
+              ) : null}
               <span className="text-caption font-semibold text-sky-ink">
                 {t(`landing.forWhom.${audience}.link`)}
                 <span aria-hidden="true"> →</span>
