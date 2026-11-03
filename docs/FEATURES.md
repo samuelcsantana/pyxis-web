@@ -203,7 +203,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   and filters for page views, events, requests and failing requests only; older visits load on
   demand, and a failed request in the Requests screen links to its visit; a visit opened by its id
   links to every visit of the person it was identified as; an id it cannot look up stays in the
-  field, marked invalid, with an example of what that kind of id looks like
+  field, marked invalid, with an example of what that kind of id looks like; for a project that
+  counts unique visitors, each visit and each row of Visits carries a chip with its kind ("New
+  visitor", "Returning, first this month", "Returning, first today", "Again today"), whose
+  tooltip and accessible name say whether it counted in the day's unique visitors; nothing when
+  the option is off or the visit carried no kind
 - Visits: every visit of the period, newest first, with its start, length, entry page, page
   count, first named events, failed requests (reads and writes), device and place (city, region
   and country, or as much of them as is known), channel and account; filters for the pages it viewed (up to
