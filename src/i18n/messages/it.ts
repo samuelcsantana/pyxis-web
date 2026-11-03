@@ -633,6 +633,7 @@ export const it = translation({
     yourself: 'Per conto tuo',
     withAgent: 'Con un agente IA',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Apri il repository del sito in Claude Code, in Cursor o in un altro agente di programmazione e incolla questa richiesta. Contiene già la chiave pubblica e l’indirizzo di questo progetto.',
       prompt:
@@ -678,6 +679,21 @@ export const it = translation({
         'Per impostazione predefinita, il modello rispetta la modalità di consenso: finché <code>analytics_storage</code> è negato, non carica nulla.',
       nuvemshop:
         'Nuvemshop: i piani a pagamento accettano l’ID del contenitore in <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'In un negozio Shopify, incolla lo snippet nel tema. Misura ogni pagina che il tema mostra, prodotti e carrello compresi.',
+      steps: {
+        edit: 'Nell’admin di Shopify, apri <b>Negozio online</b> e, sul tema attuale, ⋯ › <b>Modifica codice</b>.',
+        paste:
+          'Apri <code>layout/theme.liquid</code>, incolla questo snippet subito prima di <closingBody/> e scegli <b>Salva</b>:',
+        origins:
+          'In <settings>Impostazioni</settings>, le origini consentite devono contenere l’indirizzo da cui i clienti aprono il negozio, come <code>https://www.iltuonegozio.it</code>. Se il negozio si apre anche su <code>https://iltuonegozio.myshopify.com</code>, aggiungi anche quello.',
+        open: 'Apri una pagina del negozio. Il passo 2, qui sotto, ti avvisa quando arriva il primo evento.',
+      },
+      checkout:
+        'Shopify non esegue codice del tema nel checkout, quindi i passaggi del checkout e l’acquisto completato non vengono misurati.',
+      themeUpdate:
+        'Aggiornare o cambiare il tema può cancellare questa modifica: controlla che lo snippet sia ancora nel nuovo tema.',
     },
     step3: '3. Verifica con Claude (facoltativo)',
     claude: {

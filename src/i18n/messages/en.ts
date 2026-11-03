@@ -605,6 +605,7 @@ export const en = {
     yourself: 'Yourself',
     withAgent: 'With an AI agent',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Open your site’s repository in Claude Code, Cursor or another coding agent and paste this request. It already carries this project’s public key and address.',
       prompt:
@@ -649,6 +650,21 @@ export const en = {
         'By default the template respects Consent Mode: while <code>analytics_storage</code> is denied, it loads nothing.',
       nuvemshop:
         'Nuvemshop: paid plans accept the container ID in <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'On a Shopify store, paste the snippet into the theme. It measures every page the theme shows, products and cart included.',
+      steps: {
+        edit: 'In the Shopify admin, open <b>Online Store</b>, then ⋯ › <b>Edit code</b> on the current theme.',
+        paste:
+          'Open <code>layout/theme.liquid</code>, paste this snippet just before <closingBody/> and choose <b>Save</b>:',
+        origins:
+          'In <settings>Settings</settings>, the allowed origins must hold the address where customers open the store, like <code>https://www.yourstore.com</code>. If the store also opens at <code>https://yourstore.myshopify.com</code>, add that one too.',
+        open: 'Open a page of the store. Step 2, below, says when the first event arrives.',
+      },
+      checkout:
+        'Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not measured.',
+      themeUpdate:
+        'Updating or switching the theme can drop this edit: check that the snippet is still in the new theme.',
     },
     step3: '3. Check with Claude (optional)',
     claude: {

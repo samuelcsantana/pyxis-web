@@ -621,6 +621,7 @@ export const ptBR = translation({
     yourself: 'Você mesmo',
     withAgent: 'Com um agente de IA',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Abra o repositório do site no Claude Code, no Cursor ou em outro agente de código e cole este pedido. Ele já traz a chave pública e o endereço deste projeto.',
       prompt:
@@ -665,6 +666,21 @@ export const ptBR = translation({
         'Por padrão, o modelo respeita o modo de consentimento: enquanto <code>analytics_storage</code> estiver negado, ele não carrega nada.',
       nuvemshop:
         'Nuvemshop: os planos pagos aceitam o ID do contêiner em <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'Numa loja Shopify, cole o trecho no tema. Ele mede todas as páginas que o tema mostra, produtos e carrinho incluídos.',
+      steps: {
+        edit: 'No admin da Shopify, abra <b>Loja virtual</b> e, no tema atual, ⋯ › <b>Editar código</b>.',
+        paste:
+          'Abra <code>layout/theme.liquid</code>, cole este trecho logo antes de <closingBody/> e escolha <b>Salvar</b>:',
+        origins:
+          'Em <settings>Configurações</settings>, as origens permitidas precisam ter o endereço em que os clientes abrem a loja, como <code>https://www.sualoja.com.br</code>. Se a loja também abre em <code>https://sualoja.myshopify.com</code>, adicione esse também.',
+        open: 'Abra uma página da loja. O passo 2, aqui embaixo, avisa quando o primeiro evento chegar.',
+      },
+      checkout:
+        'A Shopify não roda código do tema no checkout, então os passos do checkout e a compra concluída não são medidos.',
+      themeUpdate:
+        'Atualizar ou trocar o tema pode apagar essa edição: confira se o trecho continua no tema novo.',
     },
     step3: '3. Confira com o Claude (opcional)',
     claude: {

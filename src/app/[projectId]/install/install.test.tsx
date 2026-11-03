@@ -117,7 +117,7 @@ describe('InstallGuide', () => {
       within(first)
         .getAllByRole('tab')
         .map((tab) => tab.textContent),
-    ).toEqual(['Yourself', 'With an AI agent', 'Google Tag Manager']);
+    ).toEqual(['Yourself', 'With an AI agent', 'Google Tag Manager', 'Shopify']);
     expect(within(first).getByRole('tab', { name: 'Yourself' })).toHaveAttribute(
       'aria-selected',
       'true',
@@ -197,6 +197,46 @@ describe('InstallGuide', () => {
     );
     expect(tagManager).toHaveTextContent(
       'Nuvemshop: paid plans accept the container ID in Configurações › Códigos externos › Google Tag Manager.',
+    );
+  });
+
+  it('walks a Shopify store through the theme code, with the snippet and the store addresses', async () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'Shopify' }));
+
+    const shopify = screen.getByRole('tabpanel', { name: 'Shopify' });
+    expect(screen.queryByRole('tabpanel', { name: 'Google Tag Manager' })).toBeNull();
+    expect(shopify).toHaveTextContent(
+      'On a Shopify store, paste the snippet into the theme. It measures every page the theme shows, products and cart included.',
+    );
+    expect(
+      within(shopify)
+        .getAllByRole('listitem')
+        .map((item) => item.lastChild?.textContent),
+    ).toEqual([
+      'In the Shopify admin, open Online Store, then ⋯ › Edit code on the current theme.',
+      expect.stringContaining(
+        'Open layout/theme.liquid, paste this snippet just before </body> and choose Save:',
+      ),
+      'In Settings, the allowed origins must hold the address where customers open the store, like https://www.yourstore.com. If the store also opens at https://yourstore.myshopify.com, add that one too.',
+      'Open a page of the store. Step 2, below, says when the first event arrives.',
+    ]);
+    expect(within(shopify).getByText('</body>').tagName).toBe('CODE');
+    expect(within(shopify).getByText('Online Store').tagName).toBe('B');
+    expect(document.getElementById('install-shopify-script')).toHaveTextContent(
+      "init({ key: 'pyxis_pk_store', endpoint: 'https://api.example.com' });",
+    );
+    expect(within(shopify).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+    expect(within(shopify).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings',
+    );
+    expect(shopify).toHaveTextContent(
+      'Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not measured.',
+    );
+    expect(shopify).toHaveTextContent(
+      'Updating or switching the theme can drop this edit: check that the snippet is still in the new theme.',
     );
   });
 
