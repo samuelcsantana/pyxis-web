@@ -3,6 +3,7 @@ import type { ItemKind, TimelineItem, VisitView } from '@/domain/timeline';
 import { TONE_CLASSES } from '@/components/requests/status-styles';
 import { Breakable } from '@/components/ui/breakable';
 import { FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
+import { VisitKindChip } from '@/components/ui/visit-kind-chip';
 
 const ICONS: Readonly<Record<ItemKind, string>> = {
   page: 'M6 3h9l3 3v15H6z M14 3v4h4',
@@ -54,6 +55,7 @@ export function VisitCard({ visit, emptyText, focusable = false, person = null }
           {visit.heading}
         </h3>
         <p className="text-xs text-muted">{visit.meta}</p>
+        <VisitKindChip kind={visit.kind} />
         {person === null ? null : (
           <Link href={person.href} className={`text-xs ${TEXT_LINK}`}>
             {person.label}
