@@ -9,6 +9,7 @@ import { MockAuthService } from '@/services/auth/mock-auth-service';
 import { DEMO_FUNNEL_STEPS } from '@/services/funnel/demo-funnel';
 import { english } from '@/test-utils/english';
 import { NoProjectsYet } from './no-projects-yet';
+import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 const meta = {
   title: 'Pages/States',
@@ -36,7 +37,9 @@ function HomeWithoutProjects({ authService }: { readonly authService: MockAuthSe
 
 function OnAScreen({ children }: { readonly children: ReactNode }) {
   return (
-    <MainContent className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12">
+    <MainContent
+      className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
+    >
       {children}
     </MainContent>
   );

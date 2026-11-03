@@ -34,6 +34,7 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { createFeaturesService } from '@/services/features/features-service.factory';
 import { loadPropertyBreakdown, loadPropertySummary } from './actions';
+import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 export const generateMetadata = screenMetadata('features');
 
@@ -69,7 +70,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
     <ScreenContent
       readAt={now.getTime()}
       filtered={hasDashboardFilters(filters)}
-      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+      className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <FeatureTabs
