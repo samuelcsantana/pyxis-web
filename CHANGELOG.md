@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.47.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.47.0...v0.47.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **i18n:** promise no cookies and no stored IP addresses, not no personal data ([577ca7a](https://github.com/samuelcsantana/pyxis-web/commit/577ca7a51e30d270c88decf850cd876483fa5842))
+
+
+### Documentation
+
+* **readme:** describe the dashboard as measured without cookies or stored IP addresses ([632e627](https://github.com/samuelcsantana/pyxis-web/commit/632e6273c4cdb575ca8579aaaa7caddb1abd3b06))
+
 ## [0.47.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.46.0...v0.47.0) (2026-11-02)
 
 
