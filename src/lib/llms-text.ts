@@ -55,6 +55,8 @@ export function llmsText(offer: SignUpOffer): string {
     `- [SDK README](${LANDING_LINKS.sdk}#readme): \`track\`, \`identify\`, \`reset\`,`,
     '  `trackRequest`, `optOut`, `optIn`, `trackingStatus` and every option.',
     `- [Playground](${LANDING_LINKS.playground}): the real tracker in dry-run mode.`,
+    '- Without touching the site’s code: a site that loads Google Tag Manager uses the Pyxis',
+    '  Analytics template, and a Shopify store pastes one snippet into its theme (both below).',
     '',
     '## Rules an integration must follow',
     '',
