@@ -87,6 +87,10 @@ for (const path of HOME_PATHS) {
       .evaluate((heading) => parseFloat(getComputedStyle(heading).fontSize));
     expect(after).toBe(before * 2);
     await expect.poll(() => sidewaysOverflow(page)).toBe(0);
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click();
+      await expect.poll(() => sidewaysOverflow(page)).toBe(0);
+    }
   });
 }
 
