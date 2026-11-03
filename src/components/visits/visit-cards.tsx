@@ -1,5 +1,6 @@
 import type { VisitRow } from '@/domain/visits';
 import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
+import { VisitKindChip } from '@/components/ui/visit-kind-chip';
 import { AccountCell, EntryPath, FAILED_CHIP, Highlights, VisitStartLink } from './visit-cells';
 
 export interface VisitCardsProps {
@@ -37,6 +38,7 @@ function VisitCard({
         <VisitStartLink row={row} timelinePath={timelinePath} />
         <span className="text-muted">{row.duration}</span>
       </div>
+      <VisitKindChip kind={row.kind} className="w-fit" />
       <p className="font-mono text-xs wrap-anywhere">
         <EntryPath path={row.entryPath} />
       </p>

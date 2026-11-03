@@ -260,3 +260,21 @@ test('opens the timeline of the account of a visit', async ({ page }) => {
     'Login completed',
   );
 });
+
+test('marks a visit with the kind of unique visitor it was, in the list and on the visit', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/visits`);
+  const first = visitRows(page).filter({ visible: true }).first();
+  const kind = first.locator('span[title]');
+  await expect(kind).toHaveText(
+    /^(New visitor|Returning, first this month|Returning, first today|Again today)\./,
+  );
+  const label = (await kind.innerText()).split('.')[0] ?? '';
+
+  await first.getByRole('link', { name: /open visit/ }).click();
+
+  await expect(page.getByRole('region', { name: /^Visit / }).locator('span[title]')).toContainText(
+    label,
+  );
+});
