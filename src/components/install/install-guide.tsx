@@ -34,7 +34,8 @@ export interface InstallGuideProps {
 }
 
 const NOTE = 'text-xs leading-[18px] text-muted';
-const INLINE_CODE = 'rounded-chip border border-line bg-soft px-1 font-mono text-[0.85em]';
+const INLINE_CODE =
+  'rounded-chip border border-line bg-soft px-1 font-mono text-[0.85em] wrap-anywhere box-decoration-clone';
 const AGENT_STEPS = ['open', 'paste', 'review', 'publish'] as const;
 const AGENT_CHANGES = ['package', 'init', 'track', 'csp'] as const;
 const TAG_MANAGER_LAST_STEPS = ['trigger', 'events', 'publish'] as const;
@@ -391,7 +392,9 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
         <h2 id="install-step-2" className={PANEL_TITLE}>
           {t('install.step2')}
         </h2>
-        <p className="text-sm">{t('install.step2Note', { origin: firstOrigin ?? '' })}</p>
+        <p className="text-sm wrap-anywhere">
+          {t('install.step2Note', { origin: firstOrigin ?? '' })}
+        </p>
         {receiving ? (
           <div className="flex flex-col gap-3">
             <p role="status" className="text-sm font-semibold text-ok">
