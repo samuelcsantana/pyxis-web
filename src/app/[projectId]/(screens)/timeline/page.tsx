@@ -31,6 +31,7 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { demoPersonOf } from '@/services/demo/demo-projects';
 import { createTimelineService } from '@/services/timeline/timeline-service.factory';
 import { loadOlderVisits } from './actions';
+import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 export const generateMetadata = screenMetadata('timeline');
 
@@ -136,7 +137,7 @@ export default async function TimelinePage({ params, searchParams }: TimelinePag
   return (
     <ScreenContent
       readAt={readAt}
-      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+      className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
     >
       <TimelineSearch
         key={searchKey(lookup, rejected)}

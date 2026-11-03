@@ -24,6 +24,7 @@ import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { createVisitsService } from '@/services/visits/visits-service.factory';
 import { loadOlderVisitRows } from './actions';
+import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 export const generateMetadata = screenMetadata('visits');
 
@@ -56,7 +57,7 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   return (
     <ScreenContent
       readAt={now.getTime()}
-      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+      className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
     >
       <VisitFiltersForm
         key={`filters?${listQuery}`}

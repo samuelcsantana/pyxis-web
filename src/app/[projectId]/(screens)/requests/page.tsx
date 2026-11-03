@@ -40,6 +40,7 @@ import { exportHref } from '@/lib/csv-export';
 import { screenMetadata } from '@/lib/screen-metadata';
 import { readRequestsReport } from '@/services/requests/requests-report';
 import { loadRouteDays } from './actions';
+import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 export const generateMetadata = screenMetadata('requests');
 
@@ -127,7 +128,7 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
     <ScreenContent
       readAt={now.getTime()}
       filtered={hasDashboardFilters(filters)}
-      className="flex w-full max-w-310 flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12"
+      className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
     >
       <LinkTabs
         label={i18n.t('requests.page.kinds.label')}
