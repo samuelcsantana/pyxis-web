@@ -11,7 +11,7 @@ describe('LandingHero', () => {
 
     expect(
       screen.getByRole('region', {
-        name: 'Find out what converts and what fails on your site, without collecting personal data.',
+        name: 'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();

@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const es = translation({
   meta: {
     description:
-      'Analítica de producto que prioriza la privacidad: sin cookies para tus visitantes, sin datos personales, sin terceros.',
+      'Analítica de producto que prioriza la privacidad: sin cookies para tus visitantes, sin IP guardada, sin terceros.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Demo en vivo de {app}',
   },
@@ -131,7 +131,7 @@ export const es = translation({
   signInPage: {
     title: 'Iniciar sesión',
     privacy:
-      'Analítica de producto que prioriza la privacidad · sin cookies para tus visitantes, sin datos personales',
+      'Analítica de producto que prioriza la privacidad · sin cookies para tus visitantes, sin IP guardada',
     noAccount:
       '¿Aún no tienes cuenta? <plans>Mira los planes</plans> o <demo>abre la demo</demo>, con datos inventados.',
     noCode:
@@ -192,7 +192,7 @@ export const es = translation({
   },
   shell: {
     skipToContent: 'Saltar al contenido',
-    privacy: 'Sin cookies, sin datos personales',
+    privacy: 'Sin cookies, sin IP guardada',
   },
   language: {
     label: 'Idioma',
@@ -621,7 +621,7 @@ export const es = translation({
     copied: 'Copiado',
     selected: 'Seleccionado, presiona Ctrl+C',
     privacy:
-      'Pyxis no guarda cookies en tus visitantes, ni direcciones IP, ni datos personales. Indica en tu política de privacidad que el sitio mide su uso con Pyxis.',
+      'Pyxis no guarda cookies en tus visitantes ni direcciones IP. Indica en tu política de privacidad que el sitio mide su uso con Pyxis.',
     how: 'Cómo instalar',
     yourself: 'Por tu cuenta',
     withAgent: 'Con un agente de IA',
@@ -1792,9 +1792,9 @@ export const es = translation({
     meta: {
       title: 'Qué convierte y qué falla en tu sitio, sin cookies · Pyxis',
       descriptionFree:
-        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies, sin IP y sin datos personales. Gratis hasta {events} eventos al mes.',
+        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. Gratis hasta {events} eventos al mes.',
       description:
-        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies, sin IP y sin datos personales. 14 días gratis.',
+        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. 14 días gratis.',
     },
     nav: {
       label: 'Principal',
@@ -1809,7 +1809,8 @@ export const es = translation({
     },
     hero: {
       eyebrow: 'Sin cookies · sin IP · conector para Claude',
-      title: 'Descubre qué convierte y qué falla en tu sitio, sin recopilar datos personales.',
+      title:
+        'Descubre qué convierte y qué falla en tu sitio, sin cookies y sin guardar direcciones IP.',
       lead: 'Pyxis muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron en cada visita. Míralo en el panel o pregúntale a Claude.',
       openDemo: 'Abrir la demo en vivo',
       seePricing: 'Ver precio',
@@ -1959,7 +1960,7 @@ export const es = translation({
           body: 'Cada conexión aparece en Configuración, Aplicaciones conectadas, y se detiene en cuanto la revocas. Sin uso durante 90 días, termina sola.',
         },
         personal: {
-          title: 'Nada personal que entregar',
+          title: 'Ni cookies ni IP que entregar',
           body: 'Los eventos no llevan cookie, dirección IP ni user agent, así que lo que lee Claude tampoco.',
         },
       },
@@ -2011,7 +2012,7 @@ export const es = translation({
           'Ahora puedes conectar Claude y otros agentes de IA a los números de Pyxis, mediante el Model Context Protocol.',
         ask: 'Pregunta «¿cómo fue la semana pasada?» y Claude lee tus números.',
         connect: 'Se conecta en un minuto, solo lee y lo revocas cuando quieras.',
-        privacy: 'Claude ve los mismos números que tu panel, y nada personal.',
+        privacy: 'Claude ve los mismos números que tu panel, sin cookies ni IP de nadie.',
       },
       another: 'Otro consejo',
       cta: 'Ver cómo conectar',
@@ -2165,7 +2166,7 @@ export const es = translation({
           card: 'Sin tarjeta',
         },
       },
-      lead: 'Sin cobro por visitante, por funcionalidad ni por persona identificada. Tus visitantes siguen sin cookie y sin datos personales.',
+      lead: 'Sin cobro por visitante, por funcionalidad ni por persona identificada. Tus visitantes siguen sin cookie y sin dirección IP guardada.',
       period: 'Periodo de cobro',
       monthly: 'Mensual',
       monthlyLabel: 'Mensual, R$ 39 al mes',

@@ -35,7 +35,7 @@ describe('LandingStructuredData', () => {
 
     expect(data.url).toBe('https://pyxis-analytics.dev/pt-br');
     expect(data.inLanguage).toBe('pt-BR');
-    expect(data.description).toContain('sem dado pessoal');
+    expect(data.description).toContain('Sem cookie e sem guardar IP.');
   });
 
   it('describes the free plan instead of the trial once it is open', () => {

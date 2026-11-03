@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const it = translation({
   meta: {
     description:
-      'Analisi di prodotto attenta alla privacy: nessun cookie per i tuoi visitatori, nessun dato personale, nessuna terza parte.',
+      'Analisi di prodotto attenta alla privacy: nessun cookie per i tuoi visitatori, nessun IP salvato, nessuna terza parte.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Demo live di {app}',
   },
@@ -126,7 +126,7 @@ export const it = translation({
   signInPage: {
     title: 'Accedi',
     privacy:
-      'Analisi di prodotto attenta alla privacy · nessun cookie per i tuoi visitatori, nessun dato personale',
+      'Analisi di prodotto attenta alla privacy · nessun cookie per i tuoi visitatori, nessun IP salvato',
     noAccount:
       'Non hai ancora un account? <plans>Guarda i piani</plans> o <demo>apri la demo</demo>, con dati inventati.',
     noCode:
@@ -187,7 +187,7 @@ export const it = translation({
   },
   shell: {
     skipToContent: 'Vai al contenuto',
-    privacy: 'Nessun cookie, nessun dato personale',
+    privacy: 'Nessun cookie, nessun IP salvato',
   },
   language: {
     label: 'Lingua',
@@ -628,7 +628,7 @@ export const it = translation({
     copied: 'Copiato',
     selected: 'Selezionato, premi Ctrl+C',
     privacy:
-      'Pyxis non salva nessun cookie sui tuoi visitatori, nessun indirizzo IP e nessun dato personale. Scrivi nella tua informativa sulla privacy che il sito misura il proprio utilizzo con Pyxis.',
+      'Pyxis non salva nessun cookie sui tuoi visitatori e nessun indirizzo IP. Scrivi nella tua informativa sulla privacy che il sito misura il proprio utilizzo con Pyxis.',
     how: 'Come installare',
     yourself: 'Per conto tuo',
     withAgent: 'Con un agente IA',
@@ -1806,9 +1806,9 @@ export const it = translation({
     meta: {
       title: 'Cosa converte e cosa fallisce sul tuo sito, senza cookie · Pyxis',
       descriptionFree:
-        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie, senza IP, senza dati personali. Gratis fino a {events} eventi al mese.',
+        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie e senza indirizzi IP salvati. Gratis fino a {events} eventi al mese.',
       description:
-        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie, senza IP, senza dati personali. 14 giorni gratis.',
+        'Analisi di prodotto che mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite, nella dashboard o in Claude. Senza cookie e senza indirizzi IP salvati. 14 giorni gratis.',
     },
     nav: {
       label: 'Principale',
@@ -1823,7 +1823,8 @@ export const it = translation({
     },
     hero: {
       eyebrow: 'Senza cookie · senza IP · connettore per Claude',
-      title: 'Scopri cosa converte e cosa fallisce sul tuo sito, senza raccogliere dati personali.',
+      title:
+        'Scopri cosa converte e cosa fallisce sul tuo sito, senza cookie e senza indirizzi IP salvati.',
       lead: 'Pyxis mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite in ogni visita. Guardalo nella dashboard o chiedi a Claude.',
       openDemo: 'Apri la demo live',
       seePricing: 'Guarda i prezzi',
@@ -1973,7 +1974,7 @@ export const it = translation({
           body: 'Ogni collegamento è elencato in Impostazioni, App collegate, e si ferma nel momento in cui lo revochi. Se resta inutilizzato per 90 giorni, termina da solo.',
         },
         personal: {
-          title: 'Niente di personale da consegnare',
+          title: 'Né cookie né IP da consegnare',
           body: 'Gli eventi non contengono cookie, indirizzi IP né user agent, quindi nemmeno quello che legge Claude.',
         },
       },
@@ -2026,7 +2027,8 @@ export const it = translation({
           'Collega Claude e altri agenti AI ai tuoi numeri di Pyxis, tramite il Model Context Protocol.',
         ask: 'Chiedi “com’è andata la settimana scorsa?” e Claude legge i tuoi numeri.',
         connect: 'Un minuto per collegarlo. Legge soltanto, e lo revochi quando vuoi.',
-        privacy: 'Claude vede gli stessi numeri della tua dashboard, e niente di personale.',
+        privacy:
+          'Claude vede gli stessi numeri della tua dashboard, senza cookie né IP di nessuno.',
       },
       another: 'Un altro consiglio',
       cta: 'Scopri come collegarlo',
@@ -2184,7 +2186,7 @@ export const it = translation({
           card: 'Senza carta',
         },
       },
-      lead: 'Nessun costo per visitatore, per funzionalità o per persona identificata. Per i tuoi visitatori non cambia nulla: nessun cookie e nessun dato personale raccolto.',
+      lead: 'Nessun costo per visitatore, per funzionalità o per persona identificata. Per i tuoi visitatori non cambia nulla: nessun cookie e nessun indirizzo IP salvato.',
       period: 'Periodo di fatturazione',
       monthly: 'Mensile',
       monthlyLabel: 'Mensile, R$ 39 al mese',

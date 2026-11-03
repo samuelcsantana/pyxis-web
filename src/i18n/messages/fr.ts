@@ -7,7 +7,7 @@ function forms<const One extends string, const Other extends string>(one: One, o
 export const fr = translation({
   meta: {
     description:
-      'Analytique produit respectueuse de la vie privée : aucun cookie chez vos visiteurs, aucune donnée personnelle, aucun tiers.',
+      'Analytique produit respectueuse de la vie privée : aucun cookie chez vos visiteurs, aucune IP stockée, aucun tiers.',
     screenTitle: '{screen} · {project}',
     demoShareTitle: 'Démo en direct de {app}',
   },
@@ -131,7 +131,7 @@ export const fr = translation({
   signInPage: {
     title: 'Connexion',
     privacy:
-      'Analytique produit respectueuse de la vie privée · aucun cookie chez vos visiteurs, aucune donnée personnelle',
+      'Analytique produit respectueuse de la vie privée · aucun cookie chez vos visiteurs, aucune IP stockée',
     noAccount:
       'Pas encore de compte ? <plans>Voir les formules</plans> ou <demo>ouvrir la démo</demo>, avec des données inventées.',
     noCode:
@@ -193,7 +193,7 @@ export const fr = translation({
   },
   shell: {
     skipToContent: 'Aller au contenu',
-    privacy: 'Aucun cookie, aucune donnée personnelle',
+    privacy: 'Aucun cookie, aucune IP stockée',
   },
   language: {
     label: 'Langue',
@@ -639,7 +639,7 @@ export const fr = translation({
     copied: 'Copié',
     selected: 'Sélectionné, appuyez sur Ctrl+C',
     privacy:
-      'Pyxis ne dépose aucun cookie chez vos visiteurs et ne stocke ni adresse IP ni donnée personnelle. Indiquez dans votre politique de confidentialité que le site mesure son utilisation avec Pyxis.',
+      'Pyxis ne dépose aucun cookie chez vos visiteurs et ne stocke aucune adresse IP. Indiquez dans votre politique de confidentialité que le site mesure son utilisation avec Pyxis.',
     how: 'Comment installer',
     yourself: 'Vous-même',
     withAgent: 'Avec un agent IA',
@@ -1822,9 +1822,9 @@ export const fr = translation({
     meta: {
       title: 'Ce qui convertit et ce qui échoue sur votre site, sans cookies · Pyxis',
       descriptionFree:
-        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies, sans IP, sans données personnelles. Gratuit jusqu’à {events} événements par mois.',
+        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. Gratuit jusqu’à {events} événements par mois.',
       description:
-        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies, sans IP, sans données personnelles. 14 jours gratuits.',
+        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. 14 jours gratuits.',
     },
     nav: {
       label: 'Principale',
@@ -1840,7 +1840,7 @@ export const fr = translation({
     hero: {
       eyebrow: 'Sans cookies · sans IP · connecteur pour Claude',
       title:
-        'Découvrez ce qui convertit et ce qui échoue sur votre site, sans collecter de données personnelles.',
+        'Découvrez ce qui convertit et ce qui échoue sur votre site, sans cookies et sans adresses IP stockées.',
       lead: 'Pyxis montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué à chaque visite. Consultez-le sur le tableau de bord ou demandez à Claude.',
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
@@ -1993,7 +1993,7 @@ export const fr = translation({
           body: 'Chaque connexion figure dans Paramètres, Applications connectées, et s’arrête dès que vous la révoquez. Inutilisée pendant 90 jours, elle prend fin d’elle-même.',
         },
         personal: {
-          title: 'Rien de personnel à transmettre',
+          title: 'Ni cookie ni IP à transmettre',
           body: 'Les événements ne portent ni cookie, ni adresse IP, ni user agent : ce que lit Claude n’en contient donc pas non plus.',
         },
       },
@@ -2046,7 +2046,8 @@ export const fr = translation({
           'Connectez Claude et d’autres agents IA à vos chiffres Pyxis, grâce au Model Context Protocol.',
         ask: 'Demandez « comment s’est passée la semaine dernière ? » et Claude lit vos chiffres.',
         connect: 'Une minute pour connecter Pyxis. En lecture seule, et révocable à tout moment.',
-        privacy: 'Claude voit les mêmes chiffres que votre tableau de bord, et rien de personnel.',
+        privacy:
+          'Claude voit les mêmes chiffres que votre tableau de bord, sans cookie ni IP de qui que ce soit.',
       },
       another: 'Une autre astuce',
       cta: 'Voir comment connecter Pyxis',
@@ -2204,7 +2205,7 @@ export const fr = translation({
           card: 'Sans carte',
         },
       },
-      lead: 'Rien à payer par visiteur, par fonctionnalité ni par personne identifiée. Et toujours aucun cookie ni aucune donnée personnelle collectée chez vos visiteurs.',
+      lead: 'Rien à payer par visiteur, par fonctionnalité ni par personne identifiée. Et toujours aucun cookie chez vos visiteurs, ni aucune adresse IP stockée.',
       period: 'Période de facturation',
       monthly: 'Mensuelle',
       monthlyLabel: 'Mensuelle, 39 R$ par mois',

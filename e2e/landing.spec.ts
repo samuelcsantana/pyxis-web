@@ -200,7 +200,7 @@ test('serves each language at its own address, with the tags search engines read
   await expect(page).toHaveURL(/\/pt-br$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Descubra o que converte e o que falha no seu site, sem coletar dados pessoais.',
+    'Descubra o que converte e o que falha no seu site, sem cookie e sem guardar IP.',
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     'href',
@@ -213,7 +213,7 @@ test('serves each language at its own address, with the tags search engines read
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect(page).toHaveTitle('Qué convierte y qué falla en tu sitio, sin cookies · Pyxis');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Descubre qué convierte y qué falla en tu sitio, sin recopilar datos personales.',
+    'Descubre qué convierte y qué falla en tu sitio, sin cookies y sin guardar direcciones IP.',
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `${MAIN_DOMAIN}/es`);
 });
@@ -292,7 +292,7 @@ test.describe('a browser that asks for Brazilian Portuguese', () => {
 
     await expect(page).toHaveURL(/\/pt-br\?utm_source=post$/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      'Descubra o que converte e o que falha no seu site, sem coletar dados pessoais.',
+      'Descubra o que converte e o que falha no seu site, sem cookie e sem guardar IP.',
     );
   });
 
