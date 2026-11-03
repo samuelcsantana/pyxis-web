@@ -112,11 +112,15 @@ describe('ProjectLayout', () => {
     expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
     expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
       'href',
-      '/p-store/overview',
+      'https://pyxis-analytics.dev/',
     );
     expect(
       within(navigation).getByRole('link', { name: 'Overview · Demo Store', hidden: true }),
     ).toHaveAttribute('href', '/p-store/overview');
+    expect(
+      within(navigation).getByRole('link', { name: 'Exit the demo', hidden: true }),
+    ).toHaveAttribute('href', 'https://pyxis-analytics.dev/');
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toHaveClass('top-14');
     expect(screen.getByRole('note')).toHaveTextContent('Demo data');
     expect(screen.getByText('screen')).toBeInTheDocument();
   });
@@ -132,6 +136,14 @@ describe('ProjectLayout', () => {
     );
 
     expect(screen.queryByRole('note')).not.toBeInTheDocument();
+    const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
+      'href',
+      '/p-store/overview',
+    );
+    expect(
+      within(navigation).queryByRole('link', { name: 'Exit the demo', hidden: true }),
+    ).not.toBeInTheDocument();
   });
 
   it("shows the owner the month's usage of the account that holds the project", async () => {

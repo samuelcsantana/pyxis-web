@@ -6,6 +6,7 @@ import { pickCustomRange } from './range-calendar';
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
 const TOUCH_TARGET_PX = 44;
+const PHONE_BAR_LOGO_STAYS = 'The phone bar keeps its logo on the Overview, with the project name.';
 
 async function openNavigation(page: Page, isMobile: boolean) {
   if (isMobile) {
@@ -72,15 +73,27 @@ test('lists the screens in the order of the questions, then the project', async 
   ]);
 });
 
-test('takes the logo to the overview of the project on screen, on the same period', async ({
+test('takes the logo of the demo sidebar to the landing page', async ({ page, isMobile }) => {
+  test.skip(isMobile, PHONE_BAR_LOGO_STAYS);
+  await page.goto(`/${DOCS_ID}/devices?range=7d`);
+
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Main navigation' })
+      .getByRole('link', { name: 'Pyxis', exact: true }),
+  ).toHaveAttribute('href', 'https://pyxis-analytics.dev/');
+});
+
+test('takes the phone bar to the overview of the project on screen, on the same period', async ({
   page,
   isMobile,
 }) => {
+  test.skip(!isMobile, 'A computer has no phone bar.');
   await page.goto(`/${DOCS_ID}/devices?range=7d`);
 
   await page
     .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: isMobile ? 'Overview · Demo Docs' : 'Pyxis', exact: true })
+    .getByRole('link', { name: 'Overview · Demo Docs', exact: true })
     .click();
 
   await expect(page).toHaveURL(new RegExp(`/${DOCS_ID}/overview\\?range=7d$`));

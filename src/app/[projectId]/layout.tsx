@@ -28,6 +28,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
     bestEffortAccountsInView(new Date(), project),
   ]);
   const suspension = ingestionSuspensionOf(project);
+  const demo = isDemoMode();
   return (
     <NavigationPendingProvider>
       <div className="min-h-dvh lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
@@ -53,10 +54,11 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
             chooseLocale={chooseLocale}
             canCreateProject={canCreateProject}
             usage={usage}
+            demo={demo}
           />
         </MobileMenu>
         <NavigationRegion className="relative flex min-w-0 flex-col">
-          {isDemoMode() ? <DemoBanner i18n={i18n} /> : null}
+          {demo ? <DemoBanner i18n={i18n} belowPhoneBar /> : null}
           {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}
           {suspension === null ? null : (
             <IngestionSuspendedBanner suspension={suspension} i18n={i18n} />
