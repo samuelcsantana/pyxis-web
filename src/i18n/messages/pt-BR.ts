@@ -185,9 +185,10 @@ export const ptBR = translation({
   },
   demo: {
     label: 'Aviso de demonstração',
-    notice:
-      'Dados de demonstração: números fictícios para dois produtos imaginários. Nenhum visitante real aparece aqui.',
+    notice: 'Dados de demonstração, números fictícios.',
     homePage: 'O que é o Pyxis?',
+    signUp: 'Criar conta grátis',
+    exit: 'Sair da demonstração',
     projectNames: { store: 'Meu site', docs: 'Demo Docs' },
   },
   shell: {

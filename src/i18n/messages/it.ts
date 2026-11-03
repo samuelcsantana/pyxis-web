@@ -180,9 +180,10 @@ export const it = translation({
   },
   demo: {
     label: 'Avviso demo',
-    notice:
-      'Dati dimostrativi: numeri inventati per due prodotti immaginari. Qui non compare nessun visitatore reale.',
+    notice: 'Dati dimostrativi, numeri inventati.',
     homePage: 'Che cos’è Pyxis?',
+    signUp: 'Crea un account gratuito',
+    exit: 'Esci dalla demo',
     projectNames: { store: 'Il mio sito', docs: 'Demo Docs' },
   },
   shell: {
