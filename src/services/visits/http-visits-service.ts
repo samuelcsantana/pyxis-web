@@ -13,6 +13,9 @@ function visitsQuery(range: DateRange, filters: VisitFilters, cursor: string | n
   if (filters.route !== null) {
     query.set('route', filters.route);
   }
+  if (filters.visitors !== null) {
+    query.set('visitors', filters.visitors);
+  }
   if (cursor !== null) {
     query.set('cursor', cursor);
   }
