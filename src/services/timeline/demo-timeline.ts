@@ -4,6 +4,7 @@ import { timelineResponseSchema } from '@/domain/timeline.schema';
 import { demoProjectOf } from '../demo/demo-projects';
 import { type DemoVisitRecord, demoVisitRecordWire } from '../demo/demo-records';
 import { byKeys, demoScopeOf, demoVisitsIn } from '../demo/demo-scope';
+import { demoVisitorOfVisit } from '../demo/demo-visitor-kinds';
 
 export { DEMO_STORE_PERSON as DEMO_USER_ID } from '../demo/demo-store-visits';
 
@@ -20,9 +21,13 @@ function matchingVisits(projectId: string, lookup: Lookup, now: Date): readonly 
 }
 
 export function demoTimelineWire(projectId: string, lookup: Lookup, now: Date): TimelineWire {
+  const { countsUniqueVisitors } = demoProjectOf(projectId);
   return {
     visits: matchingVisits(projectId, lookup, now)
-      .map(demoVisitRecordWire)
+      .map((visit) => ({
+        ...demoVisitRecordWire(visit),
+        visitor: demoVisitorOfVisit(countsUniqueVisitors, visit),
+      }))
       .toSorted(byKeys((visit) => [-new Date(visit.started_at).getTime(), visit.session_id])),
     next_before: null,
     timezone: demoProjectOf(projectId).timezone,

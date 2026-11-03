@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CHANNELS } from './acquisition';
+import { VISIT_KINDS } from './visit-kind';
 
 export const visitsResponseSchema = z
   .object({
@@ -23,6 +24,7 @@ export const visitsResponseSchema = z
         user_id: z.string().nullable(),
         source: z.string().nullable().optional(),
         campaign: z.string().nullable().optional(),
+        visitor: z.enum(VISIT_KINDS).nullable().optional(),
       }),
     ),
     next_cursor: z.string().nullable(),
@@ -47,6 +49,7 @@ export const visitsResponseSchema = z
       city: visit.city,
       channel: visit.channel,
       userId: visit.user_id,
+      visitor: visit.visitor ?? null,
     })),
     nextCursor: body.next_cursor,
     total: body.total ?? null,

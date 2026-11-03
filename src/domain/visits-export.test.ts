@@ -20,6 +20,7 @@ const VISIT: VisitSummary = {
   city: 'Recife',
   channel: 'social',
   userId: 'user-42',
+  visitor: null,
 };
 
 describe('visitsCsvTable', () => {

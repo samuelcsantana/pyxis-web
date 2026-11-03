@@ -1126,6 +1126,14 @@ export const en = {
     warmingUp:
       'For the first weeks after the count is turned on, almost every visitor shows as new.',
   },
+  visitKind: {
+    firstVisit: 'New visitor',
+    firstThisMonth: 'Returning, first this month',
+    firstToday: 'Returning, first today',
+    againToday: 'Again today',
+    counted: 'Counted in the day’s unique visitors',
+    notCounted: 'Not counted: this browser had already come today',
+  },
   acquisition: {
     subtitle: 'Where visits to {project} come from',
     paidVisits: 'Paid visits',

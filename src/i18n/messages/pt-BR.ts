@@ -1143,6 +1143,14 @@ export const ptBR = translation({
     warmingUp:
       'Nas primeiras semanas depois de ligar a contagem, quase todo visitante aparece como novo.',
   },
+  visitKind: {
+    firstVisit: 'Visitante novo',
+    firstThisMonth: 'Recorrente, primeira no mês',
+    firstToday: 'Recorrente, primeira hoje',
+    againToday: 'De novo hoje',
+    counted: 'Contou nos visitantes únicos do dia',
+    notCounted: 'Não contou: este navegador já tinha vindo hoje',
+  },
   acquisition: {
     subtitle: 'De onde vêm as visitas de {project}',
     paidVisits: 'Visitas pagas',

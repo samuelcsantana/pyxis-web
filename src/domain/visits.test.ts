@@ -34,6 +34,7 @@ const WIRE: VisitsWire = {
       city: 'Campinas',
       channel: 'paid',
       user_id: 'u_check_visits',
+      visitor: 'first_today',
     },
     {
       session_id: '9d8e7f6a-0000-4000-8000-000000000002',
@@ -79,7 +80,9 @@ describe('visitsResponseSchema', () => {
       city: 'Campinas',
       channel: 'paid',
       userId: 'u_check_visits',
+      visitor: 'first_today',
     });
+    expect(report.visits[1]?.visitor).toBeNull();
     expect(report.nextCursor).toBe(WIRE.next_cursor);
   });
 });
@@ -382,6 +385,11 @@ describe('visitRows', () => {
         shown: 'u_check_…',
         linkName: 'u_check_…, open the timeline of user u_check_visits',
       },
+      kind: {
+        label: 'Returning, first today',
+        note: 'Counted in the day’s unique visitors',
+        counted: true,
+      },
     });
     expect(second).toMatchObject({
       started: 'Mon, Oct 5, 00:05',
@@ -394,6 +402,7 @@ describe('visitRows', () => {
       channel: null,
       channelNote: 'Channel: —',
       account: null,
+      kind: null,
     });
   });
 

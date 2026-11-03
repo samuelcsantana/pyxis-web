@@ -1164,6 +1164,14 @@ export const nl = translation({
     warmingUp:
       'In de eerste weken nadat het tellen is aangezet, verschijnt bijna elke bezoeker als nieuw.',
   },
+  visitKind: {
+    firstVisit: 'Nieuwe bezoeker',
+    firstThisMonth: 'Terugkerend, eerste deze maand',
+    firstToday: 'Terugkerend, eerste vandaag',
+    againToday: 'Opnieuw vandaag',
+    counted: 'Geteld bij de unieke bezoekers van de dag',
+    notCounted: 'Niet geteld: deze browser was vandaag al geweest',
+  },
   acquisition: {
     subtitle: 'Waar de bezoeken aan {project} vandaan komen',
     paidVisits: 'Betaalde bezoeken',

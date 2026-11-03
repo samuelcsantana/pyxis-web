@@ -1,3 +1,6 @@
+import type { DemoVisitRecord } from './demo-records';
+import { hasPageView } from './demo-scope';
+
 export type DemoVisitorKind = 'first_visit' | 'first_this_month' | 'first_today' | 'again_today';
 
 const SLOT_DIGITS = 4;
@@ -13,4 +16,11 @@ const SAME_DAY_VISITOR: DemoVisitorKind = 'again_today';
 export function demoVisitorOf(sessionId: string): DemoVisitorKind {
   const slot = Number.parseInt(sessionId.slice(-SLOT_DIGITS), HEXADECIMAL) % SLOTS;
   return SHARES.find((share) => slot < share.below)?.kind ?? SAME_DAY_VISITOR;
+}
+
+export function demoVisitorOfVisit(
+  countsUniqueVisitors: boolean,
+  visit: DemoVisitRecord,
+): DemoVisitorKind | null {
+  return countsUniqueVisitors && hasPageView(visit) ? demoVisitorOf(visit.sessionId) : null;
 }
