@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.48.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.47.1...v0.48.0) (2026-11-03)
+
+
+### Features
+
+* **demo:** keep the demo notice in view with an exit and the sign-up ([af40fd8](https://github.com/samuelcsantana/pyxis-web/commit/af40fd81e9923fd1961f4f3cdf3f6cc32c291cd2))
+* **demo:** open the landing page from the demo's logo and sidebar ([986bde7](https://github.com/samuelcsantana/pyxis-web/commit/986bde7fb7df28af08429f8a5f26633a962621f3))
+* **demo:** show the notice and the way back first on the account screens ([9f21f2f](https://github.com/samuelcsantana/pyxis-web/commit/9f21f2fba4886282bc3d4e37bb4d69499a3deff4))
+* **i18n:** add the demo's exit and sign-up texts ([9a764d1](https://github.com/samuelcsantana/pyxis-web/commit/9a764d139ea6db55c28d2158d74e695285c0174f))
+* **install:** add a Shopify tab to the install guide ([a564790](https://github.com/samuelcsantana/pyxis-web/commit/a564790b3d29e953becfc4c2269e7c0317a85956))
+* **landing:** install with Google Tag Manager or Shopify from tabs ([d834ccb](https://github.com/samuelcsantana/pyxis-web/commit/d834ccbd84fbc2d4d25540c4648e0b6fbf326015))
+* **landing:** say Tag Manager and Shopify install with no code ([14eee03](https://github.com/samuelcsantana/pyxis-web/commit/14eee03b258dc9e2934b0cd5213ed8d257ce74e7))
+* **llms:** describe the Shopify theme install in llms.txt ([66431d3](https://github.com/samuelcsantana/pyxis-web/commit/66431d3ef488b17f5267a75cde7304139c4b7f66))
+* **llms:** point the install summary to the no-code installs ([6100413](https://github.com/samuelcsantana/pyxis-web/commit/61004130f923b61ab420439a27f5a785e268d3ae))
+* **overview:** open the visits behind the unique visitors card ([3c8aeb1](https://github.com/samuelcsantana/pyxis-web/commit/3c8aeb1646640a66c56b3c5e3df833d62f7e36ca))
+* **shell:** end the screen header where the content ends ([dfd4884](https://github.com/samuelcsantana/pyxis-web/commit/dfd48845992fdbc567ce59c2d6598e9c0619842e))
+* **shell:** let the data screens grow to 1,600 px ([5e9f844](https://github.com/samuelcsantana/pyxis-web/commit/5e9f8446ea8f3ea269d225fe326845c6ee3ae65b))
+* **visits:** filter the list by the unique visitors the visits counted as ([b1eddd3](https://github.com/samuelcsantana/pyxis-web/commit/b1eddd362ed28f06c6210f8a09b1cf6837bf5d04))
+* **visits:** read each visit's visitor kind and describe it ([92d1b45](https://github.com/samuelcsantana/pyxis-web/commit/92d1b45a4ecb752ae39fd6ca8c38546be391612a))
+* **visits:** show the visitor kind on each visit and in the list ([93a0ac2](https://github.com/samuelcsantana/pyxis-web/commit/93a0ac28ae80486c658bad6e8056f2bb7b598410))
+
+
+### Bug Fixes
+
+* **install:** let the install tab labels wrap at large text sizes ([a050f4f](https://github.com/samuelcsantana/pyxis-web/commit/a050f4faf47b2968edc9c23a6c91272c735cc363))
+* **install:** wrap long addresses in the install guide at 200% text ([d772ad3](https://github.com/samuelcsantana/pyxis-web/commit/d772ad3915b005df8a461c1480a0bac9c1822c43))
+* **landing:** keep the no-code install steps inside the card at large text sizes ([5e20d83](https://github.com/samuelcsantana/pyxis-web/commit/5e20d83f432e1972628483f989238f9a7307c8df))
+
+
+### Refactoring
+
+* **shell:** share one width for the data screens ([4258d4f](https://github.com/samuelcsantana/pyxis-web/commit/4258d4f56d914ac0c6257712a44125cf821ab73f))
+
+
+### Documentation
+
+* describe the Shopify theme install ([3e07493](https://github.com/samuelcsantana/pyxis-web/commit/3e07493f3ee43fe8afe0d0439fa0328d8820bfb4))
+* **features:** describe the no-code install on the home page ([1b59a8b](https://github.com/samuelcsantana/pyxis-web/commit/1b59a8ba1edc5764fdd824755a18dbcce8dd3ea7))
+* **features:** the visitor kind on visits and the timeline ([4f863fd](https://github.com/samuelcsantana/pyxis-web/commit/4f863fd2428374c7c0451355b9585eabd6d293d3))
+* **features:** unique visitors in the visits list ([b81b669](https://github.com/samuelcsantana/pyxis-web/commit/b81b669b0c3800a36b525c0bd6c81f42d4f1c23c))
+
 ## [0.47.1](https://github.com/samuelcsantana/pyxis-web/compare/v0.47.0...v0.47.1) (2026-11-03)
 
 
