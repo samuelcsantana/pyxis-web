@@ -465,7 +465,9 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   behind a menu button between 768 and 1023px (the menu closes once a link is chosen), and a
   phone shows only the brand, the language, the theme and Sign in. Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
-  tracker (while sign-up is open, also a highlighted card with a ready request to paste into a
+  tracker (the places it installs in, by name and with no brand logo, then three tabs: with code,
+  with the Google Tag Manager template and in a Shopify theme, the last two marked as needing no
+  code and the Shopify one saying the checkout is not measured; while sign-up is open, also a highlighted card with a ready request to paste into a
   coding agent, the coding agents it works with by name, a large copy button and a second robot
   that cheers when the request is copied), the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
@@ -474,7 +476,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   language than Portuguese, an approximate price in the reader's currency under the price in reais,
   euros or US dollars by the page's language and both in Spanish, in whole units, from the European
   Central Bank's daily reference rates, read on the server, cached for a day and left out when they
-  cannot be read), a FAQ and the introduction post. Once the API says the free plan is open, the
+  cannot be read), a FAQ (including whether it works on a Shopify store and with Google Tag Manager) and the
+  introduction post. Once the API says the free plan is open, the
   same status turns the page to it: the hero leads with "Start free" and "See the paid plan",
   pricing shows a Free and a Paid card with the same rows in the same order (the paid card has no
   button: everyone starts free and subscribes in Account and billing), the FAQ answers for two
