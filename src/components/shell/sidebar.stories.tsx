@@ -578,3 +578,13 @@ export const UsageWhileReceptionIsPaused: Story = {
     ).toBeVisible();
   },
 };
+
+export const InTheDemo: Story = {
+  args: { demo: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Exit the demo' })).toBeInTheDocument();
+  },
+};
+
+export const InTheDemoDark: Story = { ...InTheDemo, globals: { theme: 'dark' } };
