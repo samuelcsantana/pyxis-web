@@ -1836,7 +1836,7 @@ export const nl = translation({
       signIn: 'Inloggen',
     },
     hero: {
-      eyebrow: 'Geen cookies · geen IP · connector voor Claude',
+      eyebrow: 'Connector voor Claude · Tag Manager en Shopify · geen cookies · geen IP',
       title:
         'Ontdek wat converteert en wat mislukt op je site, zonder cookies en zonder opgeslagen IP-adressen.',
       lead: 'Pyxis laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site bij elk bezoek mislukten. Bekijk het in het dashboard of vraag het aan Claude.',
@@ -1862,6 +1862,8 @@ export const nl = translation({
         title: 'Webshop of online bedrijf',
         body: 'Hoeveel mensen een bestelling beginnen en bij welke stap ze afhaken: winkelwagen, bezorging of betaling. Uitgesplitst naar telefoon en computer, en naar waar het bezoek vandaan kwam.',
         link: 'Bekijk een funnel in de demo',
+        shopify:
+          'Op Shopify meet een fragment in het thema de producten en de winkelwagen. De checkout draait bij Shopify en wordt niet gemeten.',
       },
       agency: {
         title: 'Developer of bureau',
@@ -1874,7 +1876,7 @@ export const nl = translation({
         link: 'Bekijk de schermen van het dashboard',
       },
       install:
-        'Programmeer je niet? De installatie kan een AI-agent doen, wie je site heeft gebouwd of een bureau. <link>Zo installeer je het</link>',
+        'Programmeer je niet? Laadt je site al Google Tag Manager, of is het een Shopify-winkel, dan vraagt de installatie geen code. Op elke andere site kan een AI-agent het doen, wie je site heeft gebouwd of een bureau. <link>Zo installeer je het</link>',
     },
     preview: {
       label: 'Voorbeeld van het scherm Overzicht',
@@ -2297,7 +2299,17 @@ export const nl = translation({
         noCode: {
           question: 'Ik programmeer niet. Kan ik het installeren?',
           answer:
-            'De installatie is een pakket en twee regels in de code van de site, dus iemand moet aan die code zitten: jij met een AI-agent, wie je site heeft gebouwd of een bureau. Daarna vragen het dashboard en Claude geen enkele code meer.',
+            'Ja. Laadt je site al Google Tag Manager, voeg daar dan de template Pyxis Analytics toe, zonder code. In een Shopify-winkel plak je een fragment in het thema. Op elke andere site gaat het pakket in de code: jij met een AI-agent, wie je site heeft gebouwd of een bureau. Daarna vragen het dashboard en Claude geen enkele code meer.',
+        },
+        shopify: {
+          question: 'Werkt het in een Shopify-winkel?',
+          answer:
+            'Ja. Een fragment in het thema meet elke pagina die het thema toont, producten en winkelwagen inbegrepen. Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
+        },
+        tagManager: {
+          question: 'Kan ik het installeren met Google Tag Manager?',
+          answer:
+            'Ja, met de template Pyxis Analytics: één Initialize-tag op alle pagina’s en nog een tag voor elk event dat je wilt. Standaard respecteert hij de toestemmingsmodus: zolang <code>analytics_storage</code> geweigerd is, laadt hij niets.',
         },
         aiInstall: {
           question: 'Kan ik een AI vragen het te installeren?',

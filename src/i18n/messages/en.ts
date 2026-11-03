@@ -1797,7 +1797,7 @@ export const en = {
       signIn: 'Sign in',
     },
     hero: {
-      eyebrow: 'No cookies · no IP · a connector for Claude',
+      eyebrow: 'Connector for Claude · Tag Manager and Shopify · no cookies · no IP',
       title:
         'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
       lead: 'Pyxis shows the funnel step where people stop and which of your site’s requests failed in each visit. See it on the dashboard or ask Claude.',
@@ -1823,6 +1823,8 @@ export const en = {
         title: 'An online shop or business',
         body: 'How many people start an order and at which step they give up: cart, delivery or payment. Split by phone and computer, and by where the visit came from.',
         link: 'See a funnel in the demo',
+        shopify:
+          'On Shopify, a snippet in the theme measures products and the cart. The checkout runs on Shopify’s side and is not measured.',
       },
       agency: {
         title: 'A developer or an agency',
@@ -1835,7 +1837,7 @@ export const en = {
         link: 'See the dashboard’s screens',
       },
       install:
-        'Don’t code? The install can be done by an AI agent, by whoever built your site or by an agency. <link>How to install</link>',
+        'Don’t code? If your site already loads Google Tag Manager, or is a Shopify store, the install needs no code. On any other site, an AI agent, whoever built your site or an agency can do it. <link>How to install</link>',
     },
     preview: {
       label: 'Preview of the Overview screen',
@@ -2253,7 +2255,17 @@ export const en = {
         noCode: {
           question: 'I don’t code. Can I install it?',
           answer:
-            'The install is a package and two lines in the site’s code, so someone has to touch that code: you with an AI agent, whoever built your site or an agency. After that, the dashboard and Claude ask for no code at all.',
+            'Yes. If your site already loads Google Tag Manager, add the Pyxis Analytics template there, with no code. On a Shopify store, paste one snippet into the theme. On any other site the package goes in the code: you with an AI agent, whoever built your site or an agency. After that, the dashboard and Claude ask for no code at all.',
+        },
+        shopify: {
+          question: 'Does it work on a Shopify store?',
+          answer:
+            'Yes. A snippet in the theme measures every page the theme shows, products and cart included. Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not measured.',
+        },
+        tagManager: {
+          question: 'Can I install it with Google Tag Manager?',
+          answer:
+            'Yes, with the Pyxis Analytics template: one Initialize tag on all pages, plus one tag for each event you want. By default it respects Consent Mode: while <code>analytics_storage</code> is denied, it loads nothing.',
         },
         aiInstall: {
           question: 'Can I ask an AI to install it?',

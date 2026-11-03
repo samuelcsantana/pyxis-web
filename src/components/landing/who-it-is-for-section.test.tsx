@@ -46,6 +46,16 @@ describe('WhoItIsForSection', () => {
     expect(store).toHaveTextContent('cart, delivery or payment');
   });
 
+  it('tells a Shopify store, on the shop card only, that its checkout is not measured', () => {
+    render(<WhoItIsForSection i18n={english} />);
+
+    const note =
+      'On Shopify, a snippet in the theme measures products and the cart. The checkout runs on Shopify’s side and is not measured.';
+    expect(cardLink('An online shop or business')).toHaveTextContent(note);
+    expect(cardLink('A developer or an agency')).not.toHaveTextContent('Shopify');
+    expect(cardLink('A product or SaaS')).not.toHaveTextContent('Shopify');
+  });
+
   it('leads the agency card to the pricing, and the product card to the dashboard’s screens', () => {
     render(<WhoItIsForSection i18n={english} />);
 
@@ -62,7 +72,9 @@ describe('WhoItIsForSection', () => {
   it('tells whoever does not code who can install it, and where', () => {
     render(<WhoItIsForSection i18n={english} />);
 
-    expect(screen.getByText(/The install can be done by an AI agent/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/If your site already loads Google Tag Manager, or is a Shopify store/),
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'How to install' })).toHaveAttribute(
       'href',
       '#install',
