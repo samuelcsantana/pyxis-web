@@ -172,9 +172,10 @@ export const en = {
   },
   demo: {
     label: 'Demo notice',
-    notice:
-      'Demo data: invented numbers for two imaginary products. No real visitor is shown here.',
+    notice: 'Demo data, invented numbers.',
     homePage: 'What is Pyxis?',
+    signUp: 'Create a free account',
+    exit: 'Exit the demo',
     projectNames: { store: 'My site', docs: 'Demo Docs' },
   },
   shell: {

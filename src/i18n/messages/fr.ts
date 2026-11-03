@@ -186,9 +186,10 @@ export const fr = translation({
   },
   demo: {
     label: 'Avertissement de démo',
-    notice:
-      'Données de démonstration : des chiffres inventés pour deux produits imaginaires. Aucun vrai visiteur n’apparaît ici.',
+    notice: 'Données de démonstration, chiffres inventés.',
     homePage: 'Qu’est-ce que Pyxis ?',
+    signUp: 'Créer un compte gratuit',
+    exit: 'Quitter la démo',
     projectNames: { store: 'Mon site', docs: 'Demo Docs' },
   },
   shell: {
