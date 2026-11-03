@@ -6,7 +6,6 @@ import {
   type WithdrawOutcome,
 } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
-import { TRIAL_DAYS } from '@/domain/sign-up';
 import { DEMO_PROJECTS } from '../demo/demo-projects';
 import { demoPeopleWire } from '../project-people/mock-project-people-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
@@ -14,6 +13,7 @@ import { DEMO_OWNER_EMAIL } from '../projects/mock-projects-service';
 import type { IAccountsService } from './accounts-service.interface';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const BILLING_PERIOD_DAYS = 30;
 const DEMO_EVENTS_THIS_MONTH = 41_230;
 const MEASURED_HOURS_AGO = 3;
 const HOUR_MS = 60 * 60 * 1000;
@@ -22,16 +22,16 @@ export const DEMO_BILLING_URL = '/account';
 export const DEMO_WELCOME_URL = `/welcome?account=${DEMO_ACCOUNT_ID}`;
 
 export function demoAccountsWire(now: Date) {
-  const trialEnd = new Date(now.getTime() + TRIAL_DAYS * DAY_MS).toISOString();
+  const periodEnd = new Date(now.getTime() + BILLING_PERIOD_DAYS * DAY_MS).toISOString();
   return {
     accounts: [
       {
         id: DEMO_ACCOUNT_ID,
         role: 'owner',
-        status: 'trialing',
+        status: 'active',
         billing_interval: 'month',
-        trial_ends_at: trialEnd,
-        current_period_ends_at: trialEnd,
+        trial_ends_at: null,
+        current_period_ends_at: periodEnd,
         access_ends_at: null,
         ingestion_paused_until: null,
         suspended_at: null,

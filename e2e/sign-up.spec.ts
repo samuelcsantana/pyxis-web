@@ -60,7 +60,7 @@ test('signs up with the demo code and lands on the welcome page', async ({ page 
 
   await expect(page).toHaveURL(/\/welcome\?account=/);
   await expect(page.getByRole('main').getByRole('status')).toContainText(
-    'Your free trial has started.',
+    'Your subscription is confirmed.',
   );
   expect(await axeViolations(page)).toEqual([]);
   await page.getByRole('link', { name: 'Create your first project' }).click();

@@ -7,9 +7,10 @@ import { BUTTON_PRIMARY, TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL } from '@/components/ui/panel-classes';
 import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
 import { FreePlanWelcome } from '@/components/welcome/free-plan-welcome';
-import { type Account, welcomeStage } from '@/domain/accounts';
+import { type Account, type WelcomeStage, welcomeStage } from '@/domain/accounts';
 import { getI18n, getTranslator } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
+import { isDemoMode } from '@/lib/api-config';
 import { readOrSignIn } from '@/lib/current-admin';
 import { isBackFromFreePlanCheckout } from '@/lib/free-plan-checkout';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
@@ -21,6 +22,10 @@ export interface WelcomePageProps {
 }
 
 const NOTE = 'text-xs leading-[18px] text-muted';
+
+function demoAwareStage(stage: WelcomeStage): WelcomeStage {
+  return isDemoMode() && stage === 'subscriptionBack' ? 'firstSubscription' : stage;
+}
 
 const PRIMARY_LINK = `flex min-h-11 items-center self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY}`;
 
@@ -99,7 +104,7 @@ export default async function WelcomePage({ searchParams }: WelcomePageProps) {
   }
   const i18n = await getI18n();
   const { t } = i18n;
-  const stage = welcomeStage(account, await isBackFromFreePlanCheckout(account.id));
+  const stage = demoAwareStage(welcomeStage(account, await isBackFromFreePlanCheckout(account.id)));
   return (
     <BrandedPage>
       <h1 className="text-2xl font-bold tracking-tight">{t('welcome.title')}</h1>
