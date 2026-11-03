@@ -116,6 +116,29 @@ describe('DemoBanner', () => {
     );
   });
 
+  it('offers a way out of the demo and the sign-up, and sticks to the top of the page', () => {
+    render(<DemoBanner i18n={english} />);
+
+    expect(screen.getByRole('link', { name: 'Exit the demo' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/',
+    );
+    expect(screen.getByRole('link', { name: 'Create a free account' })).toHaveAttribute(
+      'href',
+      'https://app.pyxis-analytics.dev/sign-up',
+    );
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toHaveClass('top-0');
+  });
+
+  it('sticks below the phone bar when the screen has one', () => {
+    render(<DemoBanner i18n={english} belowPhoneBar />);
+
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toHaveClass(
+      'top-14',
+      'lg:top-0',
+    );
+  });
+
   it('links to the Portuguese page when the demo is in Portuguese', () => {
     render(<DemoBanner i18n={portuguese} />);
 

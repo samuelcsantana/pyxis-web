@@ -209,13 +209,22 @@
 
 @layer base {
   html {
-    scroll-padding-top: --spacing(14);
+    --demo-notice-height: 0px;
+    scroll-padding-top: calc(--spacing(14) + var(--demo-notice-height));
+  }
+
+  html:has([data-demo-notice]) {
+    --demo-notice-height: --spacing(18);
   }
 
   @media (width >= --theme(--breakpoint-lg)) {
     html {
-      scroll-padding-top: --spacing(24);
+      scroll-padding-top: calc(--spacing(24) + var(--demo-notice-height));
       scrollbar-gutter: stable;
+    }
+
+    html:has([data-demo-notice]) {
+      --demo-notice-height: --spacing(11);
     }
   }
 
