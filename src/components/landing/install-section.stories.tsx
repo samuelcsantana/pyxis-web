@@ -51,6 +51,31 @@ export const SignUpOpen: Story = {
   },
 };
 
+export const WithTagManager: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('list', { name: 'Installs in' })).toBeVisible();
+    await userEvent.click(canvas.getByRole('tab', { name: /Google Tag Manager/ }));
+    await expect(canvas.getByRole('link', { name: 'Pyxis Analytics template' })).toBeVisible();
+    await expect(
+      canvas.getByText(/Nuvemshop’s paid plans take a Tag Manager container/),
+    ).toBeVisible();
+  },
+};
+
+export const WithShopify: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: /Shopify/ }));
+    await expect(canvas.getByText('layout/theme.liquid')).toBeVisible();
+    await expect(
+      canvas.getByText(/so the checkout steps and the completed purchase are not\.$/),
+    ).toBeVisible();
+  },
+};
+
 export const SignUpOpenRequestCopied: Story = {
   args: { offer: 'trial' },
   play: async ({ canvasElement }) => {

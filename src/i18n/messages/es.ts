@@ -2049,13 +2049,43 @@ export const es = translation({
           body: 'En el panel, con un correo y una tarjeta: 14 días gratis. El proyecto ya trae su clave pública.',
         },
         install: {
-          title: 'Instálalo, tú o un agente de IA',
-          body: 'Un paquete y dos líneas en el código del sitio, o un pedido a Claude Code, a Cursor o a otro agente.',
+          title: 'Instálalo, con o sin código',
+          body: 'El paquete en el código del sitio, la plantilla en Google Tag Manager, un fragmento en un tema de Shopify o un pedido a un agente de IA.',
         },
         ask: {
           title: 'Pregunta',
           body: 'Abre el panel, o conecta Claude y pregunta cómo fue la semana y dónde se detiene la gente.',
         },
+      },
+      platforms: {
+        label: 'Se instala en',
+        anyHtml: 'Cualquier sitio HTML',
+        nuvemshop: 'Nuvemshop, con Tag Manager',
+      },
+      tabs: {
+        label: 'Cómo instalar',
+        code: 'Con código',
+        noCode: 'sin código',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'En Tag Manager, añade la <link>plantilla Pyxis Analytics</link> en <b>Plantillas</b> › <b>Plantillas de etiquetas</b>.',
+          tag: 'Crea una etiqueta <b>Pyxis Analytics</b> con la acción <b>Initialize</b>, pega la clave pública de tu proyecto y actívala en <b>Inicialización: todas las páginas</b>.',
+          events: 'Opcional: una etiqueta <b>Track event</b> por cada acción que quieras contar.',
+          publish: 'Publica el contenedor. Las vistas de página empiezan a llegar solas.',
+        },
+        note: 'La plantilla respeta el modo de consentimiento: mientras <code>analytics_storage</code> esté denegado, no carga nada. Los planes de pago de Nuvemshop también aceptan un contenedor de Tag Manager.',
+      },
+      shopify: {
+        steps: {
+          edit: 'En el admin de Shopify, abre <b>Tienda online</b> y, en el tema actual, ⋯ › <b>Editar código</b>.',
+          paste:
+            'En <code>layout/theme.liquid</code>, pega este fragmento justo antes de <closingBody/> y guarda:',
+          allow:
+            'En la Configuración del panel, autoriza la dirección en la que los clientes abren la tienda.',
+        },
+        note: 'Se mide cada página que muestra el tema, productos y carrito incluidos. Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
       },
       copy: 'Copiar',
       copied: 'Copiado',

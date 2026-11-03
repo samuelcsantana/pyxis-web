@@ -1,7 +1,10 @@
+import type { ReactNode } from 'react';
+import { InstallTabs } from '@/components/install/install-tabs';
 import { TEXT_LINK } from '@/components/ui/control-classes';
+import { scriptSnippet, TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
 import { offersSignUp, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
-import { rich } from '@/i18n/rich';
+import { type RichSlots, rich } from '@/i18n/rich';
 import { CheerOnCopy } from './cheer-on-copy';
 import { type CopyCodeLabels, CopyCodeButton } from './copy-code-button';
 import { REVEAL } from './landing-classes';
@@ -243,6 +246,132 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
   );
 }
 
+const TAG_MANAGER = 'Google Tag Manager';
+const SHOPIFY = 'Shopify';
+
+export const PLATFORMS = [
+  'Next.js',
+  'React',
+  'anyHtml',
+  TAG_MANAGER,
+  SHOPIFY,
+  'nuvemshop',
+] as const;
+
+type Platform = (typeof PLATFORMS)[number];
+
+function platformLabelOf({ t }: I18n, platform: Platform): string {
+  switch (platform) {
+    case 'anyHtml':
+      return t('landing.install.platforms.anyHtml');
+    case 'nuvemshop':
+      return t('landing.install.platforms.nuvemshop');
+    default:
+      return platform;
+  }
+}
+
+function Platforms({ i18n }: { readonly i18n: I18n }) {
+  const label = i18n.t('landing.install.platforms.label');
+  return (
+    <div className={`-mt-3 mb-7 flex flex-wrap items-center gap-1.5 ${REVEAL}`}>
+      <p
+        aria-hidden="true"
+        className="mr-1.5 font-mono text-caption font-medium tracking-[0.08em] text-muted uppercase"
+      >
+        {label}
+      </p>
+      <ul aria-label={label} className="flex flex-wrap gap-1.5">
+        {PLATFORMS.map((platform) => (
+          <li key={platform} className={`${AGENT_CHIP} font-medium text-ink`}>
+            {platformLabelOf(i18n, platform)}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export const INSTALL_TAB_IDS = {
+  code: 'install-with-code',
+  tagManager: 'install-with-tag-manager',
+  shopify: 'install-with-shopify',
+} as const;
+
+export const SHOPIFY_SNIPPET_ID = 'install-shopify-snippet';
+
+const HOSTED_ENDPOINT = 'https://api.pyxis-analytics.dev';
+const PUBLIC_KEY_PLACEHOLDER = 'pyxis_pk_…';
+const CLOSING_BODY_TAG = '</body>';
+const TAG_MANAGER_STEPS = ['template', 'tag', 'events', 'publish'] as const;
+const STEP_LIST =
+  'flex list-decimal flex-col gap-2.5 pl-5 text-sm leading-relaxed text-ink marker:font-mono marker:text-muted';
+const NO_CODE_PANEL = 'flex min-w-0 flex-col gap-4 rounded-card border border-line bg-card p-5';
+const PANEL_NOTE = 'text-sm leading-relaxed text-muted';
+
+function codeText(text: string): ReactNode {
+  return <code className="font-mono text-sm text-ink">{text}</code>;
+}
+
+const STEP_SLOTS: RichSlots = {
+  b: (text) => <b className="font-semibold">{text}</b>,
+  code: codeText,
+  closingBody: () => codeText(CLOSING_BODY_TAG),
+  link: (text) => (
+    <a
+      href={TAG_MANAGER_TEMPLATE_URL}
+      className={TEXT_LINK}
+      {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'tag_manager_template' })}
+    >
+      {text}
+    </a>
+  ),
+};
+
+function NoCodeTabLabel({ name, noCode }: { readonly name: string; readonly noCode: string }) {
+  return (
+    <>
+      {name}
+      <span className="font-mono text-micro tracking-[0.06em] uppercase">{noCode}</span>
+    </>
+  );
+}
+
+function WithTagManager({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  return (
+    <div className={NO_CODE_PANEL}>
+      <ol className={STEP_LIST}>
+        {TAG_MANAGER_STEPS.map((step) => (
+          <li key={step}>{rich(t(`landing.install.tagManager.steps.${step}`), STEP_SLOTS)}</li>
+        ))}
+      </ol>
+      <p className={PANEL_NOTE}>{rich(t('landing.install.tagManager.note'), STEP_SLOTS)}</p>
+    </div>
+  );
+}
+
+function WithShopify({ i18n, labels }: { readonly i18n: I18n; readonly labels: CopyCodeLabels }) {
+  const { t } = i18n;
+  return (
+    <div className={NO_CODE_PANEL}>
+      <ol className={STEP_LIST}>
+        <li>{rich(t('landing.install.shopify.steps.edit'), STEP_SLOTS)}</li>
+        <li className="min-w-0">
+          <p className="mb-2.5">{rich(t('landing.install.shopify.steps.paste'), STEP_SLOTS)}</p>
+          <CodeBlock
+            id={SHOPIFY_SNIPPET_ID}
+            tokens={[plain(scriptSnippet(PUBLIC_KEY_PLACEHOLDER, HOSTED_ENDPOINT))]}
+            labels={labels}
+          />
+        </li>
+        <li>{t('landing.install.shopify.steps.allow')}</li>
+      </ol>
+      <p className={PANEL_NOTE}>{t('landing.install.shopify.note')}</p>
+    </div>
+  );
+}
+
 function installNote({ t }: I18n, offer: SignUpOffer): string {
   if (offersTheFreePlan(offer)) {
     return t('landing.install.noteFree');
@@ -266,49 +395,82 @@ export function InstallSection({ i18n, offer }: InstallSectionProps) {
       title={t('landing.install.title')}
       lead={t('landing.install.lead')}
     >
+      <Platforms i18n={i18n} />
       {signUpOpen ? <StartSteps i18n={i18n} free={free} /> : null}
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
-        <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
-          <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />
-          <CodeBlock id="install-first-event" tokens={FIRST_EVENT} labels={labels} />
-          <p className="text-sm leading-relaxed text-muted">
-            {rich(t('landing.install.requests'), {
-              code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
-              link: (text) => (
-                <a
-                  href={LANDING_LINKS.sdkApi}
-                  className={TEXT_LINK}
-                  {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'track_request' })}
-                >
-                  {text}
-                </a>
-              ),
-            })}
-          </p>
-        </div>
-        <p
-          className={`flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted ${REVEAL}`}
-        >
-          <svg
-            width={18}
-            height={18}
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            className="mt-0.5 shrink-0 text-ink"
-          >
-            <path
-              d={INFO_ICON}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          {installNote(i18n, offer)}
-        </p>
-      </div>
+      <InstallTabs
+        label={t('landing.install.tabs.label')}
+        tabs={[
+          {
+            id: INSTALL_TAB_IDS.code,
+            label: t('landing.install.tabs.code'),
+            panel: <WithCode i18n={i18n} offer={offer} labels={labels} />,
+          },
+          {
+            id: INSTALL_TAB_IDS.tagManager,
+            label: <NoCodeTabLabel name={TAG_MANAGER} noCode={t('landing.install.tabs.noCode')} />,
+            panel: <WithTagManager i18n={i18n} />,
+          },
+          {
+            id: INSTALL_TAB_IDS.shopify,
+            label: <NoCodeTabLabel name={SHOPIFY} noCode={t('landing.install.tabs.noCode')} />,
+            panel: <WithShopify i18n={i18n} labels={labels} />,
+          },
+        ]}
+      />
       {signUpOpen ? <AgentPrompt i18n={i18n} labels={labels} /> : null}
     </LandingSection>
+  );
+}
+
+interface WithCodeProps {
+  readonly i18n: I18n;
+  readonly offer: SignUpOffer;
+  readonly labels: CopyCodeLabels;
+}
+
+function WithCode({ i18n, offer, labels }: WithCodeProps) {
+  const { t } = i18n;
+  return (
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
+      <div className={`flex min-w-0 flex-col gap-2.5 ${REVEAL}`}>
+        <CodeBlock id="install-command" tokens={INSTALL_COMMAND} labels={labels} />
+        <CodeBlock id="install-first-event" tokens={FIRST_EVENT} labels={labels} />
+        <p className="text-sm leading-relaxed text-muted">
+          {rich(t('landing.install.requests'), {
+            code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
+            link: (text) => (
+              <a
+                href={LANDING_LINKS.sdkApi}
+                className={TEXT_LINK}
+                {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'track_request' })}
+              >
+                {text}
+              </a>
+            ),
+          })}
+        </p>
+      </div>
+      <p
+        className={`flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted ${REVEAL}`}
+      >
+        <svg
+          width={18}
+          height={18}
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="mt-0.5 shrink-0 text-ink"
+        >
+          <path
+            d={INFO_ICON}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {installNote(i18n, offer)}
+      </p>
+    </div>
   );
 }

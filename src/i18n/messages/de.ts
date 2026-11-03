@@ -2084,13 +2084,43 @@ export const de = translation({
           body: 'Im Dashboard, mit einer E-Mail und einer Karte: 14 Tage kostenlos. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
         },
         install: {
-          title: 'Installieren, selbst oder mit einem KI-Agenten',
-          body: 'Ein Paket und zwei Zeilen im Code der Website, oder eine Bitte an Claude Code, Cursor oder einen anderen Agenten.',
+          title: 'Installieren, mit oder ohne Code',
+          body: 'Das Paket im Code der Website, die Vorlage in Google Tag Manager, ein Codeausschnitt im Shopify-Theme oder eine Bitte an einen KI-Agenten.',
         },
         ask: {
           title: 'Fragen',
           body: 'Öffne das Dashboard, oder verbinde Claude und frag, wie die Woche lief und wo Menschen aufhören.',
         },
+      },
+      platforms: {
+        label: 'Installation in',
+        anyHtml: 'Jede HTML-Website',
+        nuvemshop: 'Nuvemshop, über Tag Manager',
+      },
+      tabs: {
+        label: 'So wird installiert',
+        code: 'Mit Code',
+        noCode: 'ohne Code',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'Füge in Tag Manager die <link>Vorlage Pyxis Analytics</link> unter <b>Vorlagen</b> › <b>Tag-Vorlagen</b> hinzu.',
+          tag: 'Lege ein Tag <b>Pyxis Analytics</b> mit der Aktion <b>Initialize</b> an, füge den öffentlichen Schlüssel deines Projekts ein und löse es bei <b>Initialisierung – Alle Seiten</b> aus.',
+          events: 'Optional: ein Tag <b>Track event</b> für jede Aktion, die du zählen willst.',
+          publish: 'Veröffentliche den Container. Die Seitenaufrufe kommen dann von selbst.',
+        },
+        note: 'Die Vorlage beachtet den Einwilligungsmodus: Solange <code>analytics_storage</code> abgelehnt ist, lädt sie nichts. Auch die kostenpflichtigen Tarife von Nuvemshop nehmen einen Tag-Manager-Container an.',
+      },
+      shopify: {
+        steps: {
+          edit: 'Öffne im Shopify-Adminbereich <b>Onlineshop</b> und wähle beim aktuellen Theme ⋯ › <b>Code bearbeiten</b>.',
+          paste:
+            'Füge in <code>layout/theme.liquid</code> diesen Codeausschnitt direkt vor <closingBody/> ein und speichere:',
+          allow:
+            'Erlaube in den Einstellungen des Dashboards die Adresse, unter der Kunden den Shop öffnen.',
+        },
+        note: 'Jede Seite, die das Theme zeigt, wird gemessen, Produkte und Warenkorb eingeschlossen. Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
       },
       copy: 'Kopieren',
       copied: 'Kopiert',

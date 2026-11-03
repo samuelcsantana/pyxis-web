@@ -2038,13 +2038,43 @@ export const ptBR = translation({
           body: 'No painel, com um e-mail e um cartão: 14 dias grátis. O projeto já vem com a chave pública.',
         },
         install: {
-          title: 'Instale, você ou um agente de IA',
-          body: 'Um pacote e duas linhas no código do site, ou um pedido ao Claude Code, ao Cursor ou a outro agente.',
+          title: 'Instale, com ou sem código',
+          body: 'O pacote no código do site, o modelo no Google Tag Manager, um trecho no tema da Shopify ou um pedido a um agente de IA.',
         },
         ask: {
           title: 'Pergunte',
           body: 'Abra o painel, ou conecte o Claude e pergunte como foi a semana e onde as pessoas param.',
         },
+      },
+      platforms: {
+        label: 'Instala em',
+        anyHtml: 'Qualquer site HTML',
+        nuvemshop: 'Nuvemshop, pelo Tag Manager',
+      },
+      tabs: {
+        label: 'Como instalar',
+        code: 'Com código',
+        noCode: 'sem código',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'No Tag Manager, adicione o <link>modelo Pyxis Analytics</link> em <b>Modelos</b> › <b>Modelos de tag</b>.',
+          tag: 'Crie uma tag <b>Pyxis Analytics</b> com a ação <b>Initialize</b>, cole a chave pública do seu projeto e dispare-a em <b>Inicialização – todas as páginas</b>.',
+          events: 'Opcional: uma tag <b>Track event</b> para cada ação que você quer contar.',
+          publish: 'Publique o contêiner. As visualizações de página começam a chegar sozinhas.',
+        },
+        note: 'O modelo respeita o modo de consentimento: enquanto <code>analytics_storage</code> estiver negado, ele não carrega nada. Os planos pagos da Nuvemshop também aceitam um contêiner do Tag Manager.',
+      },
+      shopify: {
+        steps: {
+          edit: 'No admin da Shopify, abra <b>Loja virtual</b> e, no tema atual, ⋯ › <b>Editar código</b>.',
+          paste:
+            'Em <code>layout/theme.liquid</code>, cole este trecho logo antes de <closingBody/> e salve:',
+          allow:
+            'Nas Configurações do painel, autorize o endereço em que os clientes abrem a loja.',
+        },
+        note: 'Toda página que o tema mostra é medida, produtos e carrinho incluídos. A Shopify não roda código do tema no checkout, então os passos do checkout e a compra concluída não são medidos.',
       },
       copy: 'Copiar',
       copied: 'Copiado',

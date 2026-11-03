@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { scriptSnippet, TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
@@ -11,7 +12,10 @@ import {
   codeTextOf,
   FIRST_EVENT,
   INSTALL_COMMAND,
+  INSTALL_TAB_IDS,
   InstallSection,
+  PLATFORMS,
+  SHOPIFY_SNIPPET_ID,
   START_STEPS,
 } from './install-section';
 import { LandingSection } from './landing-section';
@@ -139,7 +143,7 @@ describe('InstallSection', () => {
     const items = within(steps).getAllByRole('listitem');
     expect(items.map((item) => within(item).getByRole('heading').textContent)).toEqual([
       'Create the account and the project',
-      'Install it, yourself or with an AI agent',
+      'Install it, with or without code',
       'Ask',
     ]);
     expect(items).toHaveLength(START_STEPS.length);
@@ -365,6 +369,114 @@ describe('InstallSection', () => {
         "init({ key: 'pyxis_pk_…', endpoint: 'https://api.pyxis-analytics.dev' });",
         "track('signup_completed', { method: 'email_code' });",
       ].join('\n'),
+    );
+  });
+
+  it('names where it installs, in plain text with no brand logo, before the steps', () => {
+    render(<InstallSection i18n={english} offer="trial" />);
+
+    const platforms = screen.getByRole('list', { name: 'Installs in' });
+    expect(
+      within(platforms)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual([
+      'Next.js',
+      'React',
+      'Any HTML site',
+      'Google Tag Manager',
+      'Shopify',
+      'Nuvemshop, through Tag Manager',
+    ]);
+    expect(within(platforms).getAllByRole('listitem')).toHaveLength(PLATFORMS.length);
+    expect(platforms.querySelector('img, svg')).toBeNull();
+    expect(
+      platforms.compareDocumentPosition(
+        screen.getByRole('list', { name: 'How to start, in 3 steps' }),
+      ),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
+  it('names where it installs in the reader’s language', () => {
+    render(<InstallSection i18n={portuguese} offer="free" />);
+
+    const platforms = screen.getByRole('list', { name: 'Instala em' });
+    expect(platforms).toHaveTextContent('Qualquer site HTML');
+    expect(platforms).toHaveTextContent('Nuvemshop, pelo Tag Manager');
+  });
+
+  it('opens on the code, with Tag Manager and Shopify in their own tabs marked as no code', () => {
+    render(<InstallSection i18n={english} offer="byInvitation" />);
+
+    const tabs = within(screen.getByRole('tablist', { name: 'How to install' })).getAllByRole(
+      'tab',
+    );
+    expect(tabs.map((tab) => tab.textContent)).toEqual([
+      'With code',
+      'Google Tag Managerno code',
+      'Shopifyno code',
+    ]);
+    expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
+    expect(tabs[0]).toHaveAttribute('id', `${INSTALL_TAB_IDS.code}-tab`);
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('npm install pyxis-analytics');
+  });
+
+  it('walks a Tag Manager user through the template, the tag and the container', async () => {
+    const user = userEvent.setup();
+    render(<InstallSection i18n={english} offer="free" />);
+
+    await user.click(screen.getByRole('tab', { name: /Google Tag Manager/ }));
+
+    const panel = screen.getByRole('tabpanel');
+    expect(
+      within(panel)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual([
+      'In Tag Manager, add the Pyxis Analytics template under Templates › Tag Templates.',
+      'Create a Pyxis Analytics tag with the action Initialize, paste your project’s public key and fire it on Initialization - All Pages.',
+      'Optional: one Track event tag for each action you want to count.',
+      'Publish the container. Page views start arriving on their own.',
+    ]);
+    const template = within(panel).getByRole('link', { name: 'Pyxis Analytics template' });
+    expect(template).toHaveAttribute('href', TAG_MANAGER_TEMPLATE_URL);
+    expect(template).toHaveAttribute('data-track', 'docs_opened');
+    expect(template).toHaveAttribute('data-track-doc', 'tag_manager_template');
+    expect(within(panel).getByText('analytics_storage').tagName).toBe('CODE');
+    expect(panel).toHaveTextContent('Nuvemshop’s paid plans take a Tag Manager container too.');
+    expect(screen.getByText('npm install pyxis-analytics')).not.toBeVisible();
+  });
+
+  it('gives a Shopify store the snippet for its theme and says the checkout is not measured', async () => {
+    const user = userEvent.setup();
+    render(<InstallSection i18n={english} offer="free" />);
+
+    await user.click(screen.getByRole('tab', { name: /Shopify/ }));
+
+    const panel = screen.getByRole('tabpanel');
+    expect(panel.querySelector(`#${SHOPIFY_SNIPPET_ID}`)?.textContent).toBe(
+      scriptSnippet('pyxis_pk_…', 'https://api.pyxis-analytics.dev'),
+    );
+    expect(within(panel).getByText('</body>').tagName).toBe('CODE');
+    expect(within(panel).getByText('layout/theme.liquid').tagName).toBe('CODE');
+    expect(within(panel).getByRole('button', { name: 'Copy' })).toHaveAttribute(
+      'data-track-snippet',
+      SHOPIFY_SNIPPET_ID,
+    );
+    expect(panel).toHaveTextContent(
+      'Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not.',
+    );
+  });
+
+  it('writes the no-code tabs in the reader’s language', async () => {
+    const user = userEvent.setup();
+    render(<InstallSection i18n={portuguese} offer="free" />);
+
+    expect(screen.getByRole('tab', { name: 'Com código' })).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /Shopify/ }));
+
+    expect(screen.getByRole('tabpanel')).toHaveTextContent(
+      'A Shopify não roda código do tema no checkout',
     );
   });
 });

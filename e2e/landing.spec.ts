@@ -745,6 +745,23 @@ test('copies the install command', async ({ page, context, browserName }) => {
   );
 });
 
+test('copies the Shopify theme snippet from its tab', async ({ page, context, browserName }) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/');
+
+  const install = page.getByRole('region', { name: 'What a site adds' });
+  await install.getByRole('tab', { name: /Shopify/ }).click();
+  const panel = install.getByRole('tabpanel');
+  await expect(panel).toContainText('layout/theme.liquid');
+  await panel.getByRole('button', { name: 'Copy' }).click();
+
+  await expect(panel.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+    "init({ key: 'pyxis_pk_…', endpoint: 'https://api.pyxis-analytics.dev' });",
+  );
+});
+
 test.describe('with reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 

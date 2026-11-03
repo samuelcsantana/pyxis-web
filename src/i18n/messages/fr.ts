@@ -2084,13 +2084,44 @@ export const fr = translation({
           body: 'Dans le tableau de bord, avec une adresse e-mail et une carte : 14 jours gratuits. Le projet arrive avec sa clé publique.',
         },
         install: {
-          title: 'Installez-le, vous-même ou avec un agent d’IA',
-          body: 'Un paquet et deux lignes dans le code du site, ou une demande à Claude Code, à Cursor ou à un autre agent.',
+          title: 'Installez-le, avec ou sans code',
+          body: 'Le paquet dans le code du site, le modèle dans Google Tag Manager, un extrait dans un thème Shopify, ou une demande à un agent d’IA.',
         },
         ask: {
           title: 'Posez vos questions',
           body: 'Ouvrez le tableau de bord, ou connectez Claude et demandez comment s’est passée la semaine et où les gens s’arrêtent.',
         },
+      },
+      platforms: {
+        label: 'S’installe sur',
+        anyHtml: 'Tout site HTML',
+        nuvemshop: 'Nuvemshop, via Tag Manager',
+      },
+      tabs: {
+        label: 'Comment installer',
+        code: 'Avec du code',
+        noCode: 'sans code',
+      },
+      tagManager: {
+        steps: {
+          template:
+            'Dans Tag Manager, ajoutez le <link>modèle Pyxis Analytics</link> dans <b>Modèles</b> › <b>Modèles de balise</b>.',
+          tag: 'Créez une balise <b>Pyxis Analytics</b> avec l’action <b>Initialize</b>, collez la clé publique de votre projet et déclenchez-la sur <b>Initialisation - Toutes les pages</b>.',
+          events:
+            'Facultatif : une balise <b>Track event</b> pour chaque action que vous voulez compter.',
+          publish: 'Publiez le conteneur. Les pages vues commencent à arriver d’elles-mêmes.',
+        },
+        note: 'Le modèle respecte le mode Consentement : tant que <code>analytics_storage</code> est refusé, il ne charge rien. Les formules payantes de Nuvemshop acceptent aussi un conteneur Tag Manager.',
+      },
+      shopify: {
+        steps: {
+          edit: 'Dans l’admin Shopify, ouvrez <b>Boutique en ligne</b>, puis ⋯ › <b>Modifier le code</b> sur le thème actuel.',
+          paste:
+            'Dans <code>layout/theme.liquid</code>, collez cet extrait juste avant <closingBody/> et enregistrez :',
+          allow:
+            'Dans les Paramètres du tableau de bord, autorisez l’adresse où les clients ouvrent la boutique.',
+        },
+        note: 'Chaque page affichée par le thème est mesurée, produits et panier compris. Shopify n’exécute aucun code du thème pendant le paiement : les étapes du paiement et l’achat finalisé ne sont donc pas mesurés.',
       },
       copy: 'Copier',
       copied: 'Copié',
