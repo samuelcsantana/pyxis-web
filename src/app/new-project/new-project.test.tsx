@@ -53,6 +53,7 @@ vi.mock('next/navigation', () => ({
 describe('NewProjectPage', () => {
   beforeEach(() => {
     state.accounts = () => new MockAccountsService().list();
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
   });
 
   it('offers the form to the owner of a running account, with the way back', async () => {
@@ -74,6 +75,24 @@ describe('NewProjectPage', () => {
 
     expect(screen.getByText(/Only the owner of an account/)).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  });
+
+  it('in the demo, shows the notice, the logo to the landing page and the way back first', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await NewProjectPage());
+
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/',
+    );
+    expect(
+      screen
+        .getByRole('link', { name: 'Back to the dashboard' })
+        .compareDocumentPosition(screen.getByRole('heading', { level: 1 })),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getByRole('textbox', { name: 'Project name' })).toBeInTheDocument();
   });
 
   it('is titled after the page', async () => {

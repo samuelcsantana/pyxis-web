@@ -19,7 +19,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the account menu and shows the free trial with the month used', async ({
+test('opens from the account menu and shows the subscription with the month used', async ({
   page,
   isMobile,
 }) => {
@@ -32,7 +32,7 @@ test('opens from the account menu and shows the free trial with the month used',
 
   await expect(page).toHaveURL(/\/account$/);
   await expect(page).toHaveTitle('Account and billing · Pyxis');
-  await expect(page.getByText(/Free trial until/)).toBeVisible();
+  await expect(page.getByText(/^Active\. It renews on/)).toBeVisible();
   await expect(page.getByText(/41,230 of 100,000/)).toBeVisible();
   await expect(page.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
 });
@@ -40,7 +40,7 @@ test('opens from the account menu and shows the free trial with the month used',
 test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {
   await page.goto('/account');
 
-  await expect(page.getByText(/Free trial until/)).toBeVisible();
+  await expect(page.getByText(/^Active\. It renews on/)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Withdrawal' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'The paid plan' })).toHaveCount(0);
   await expect(page.getByText(/^If you cancel/)).toHaveCount(0);

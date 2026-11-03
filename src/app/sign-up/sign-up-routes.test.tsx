@@ -228,7 +228,8 @@ describe('WelcomePage', () => {
   }
 
   it('says the trial started, until when, and offers the first project', async () => {
-    state.accounts = () => demoAccount({ trialEndsAt: '2026-11-29T12:00:00.000Z' });
+    state.accounts = () =>
+      demoAccount({ status: 'trialing', trialEndsAt: '2026-11-29T12:00:00.000Z' });
 
     renderWithMessages(await welcome());
 
@@ -276,7 +277,17 @@ describe('WelcomePage', () => {
     expect(screen.getByRole('link', { name: 'Create your first project' })).toBeInTheDocument();
   });
 
+  it('welcomes in the demo an active account as a new subscription, the demo having no trial', async () => {
+    state.accounts = () => demoAccount();
+
+    renderWithMessages(await welcome());
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your subscription is confirmed.');
+    expect(screen.getByRole('link', { name: 'Create your first project' })).toBeInTheDocument();
+  });
+
   it('welcomes back an account that subscribed again, sending it to its projects', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
     state.accounts = () => demoAccount({ status: 'active', trialEndsAt: null });
 
     renderWithMessages(await welcome());

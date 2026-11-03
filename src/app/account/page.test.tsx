@@ -49,6 +49,7 @@ describe('AccountPage', () => {
   beforeEach(() => {
     state.accounts = () => new MockAccountsService().list();
     state.freePlan = 'closed';
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
   });
 
   it("shows the admin's owned account with its billing, and the way back", async () => {
@@ -58,7 +59,8 @@ describe('AccountPage', () => {
       screen.getByRole('heading', { level: 1, name: 'Account and billing' }),
     ).toBeInTheDocument();
     expect(screen.getByText('owner@example.com')).toBeInTheDocument();
-    expect(screen.getByText(/Free trial until/)).toBeInTheDocument();
+    expect(screen.getByText(/^Active\. It renews on/)).toBeInTheDocument();
+    expect(screen.queryByRole('complementary', { name: 'Demo notice' })).not.toBeInTheDocument();
     expect(screen.queryByText(/free plan/)).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Withdrawal' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
@@ -134,6 +136,24 @@ describe('AccountPage', () => {
     );
     expect(support).toHaveTextContent('Write from owner@example.com, so we know which account');
     expect(support).not.toHaveTextContent('On the free plan');
+  });
+
+  it('in the demo, shows the notice, the logo to the landing page and the way back first', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    renderWithMessages(await AccountPage());
+
+    expect(screen.getByRole('complementary', { name: 'Demo notice' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Pyxis' })).toHaveAttribute(
+      'href',
+      'https://pyxis-analytics.dev/',
+    );
+    expect(
+      screen
+        .getByRole('link', { name: 'Back to the dashboard' })
+        .compareDocumentPosition(screen.getByRole('heading', { level: 1 })),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
   });
 
   it('is titled after the page', async () => {
