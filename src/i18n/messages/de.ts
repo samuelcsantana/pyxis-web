@@ -643,6 +643,7 @@ export const de = translation({
     yourself: 'Selbst',
     withAgent: 'Mit einem KI-Agenten',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Coding-Agenten und füge diese Anfrage ein. Sie enthält schon den öffentlichen Schlüssel und die Adresse dieses Projekts.',
       prompt:
@@ -688,6 +689,21 @@ export const de = translation({
         'Standardmäßig beachtet die Vorlage den Einwilligungsmodus: Solange <code>analytics_storage</code> abgelehnt ist, lädt sie nichts.',
       nuvemshop:
         'Nuvemshop: Die kostenpflichtigen Tarife nehmen die Container-ID unter <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b> an.',
+    },
+    shopify: {
+      lead: 'Füge in einem Shopify-Shop den Codeausschnitt ins Theme ein. Er misst jede Seite, die das Theme zeigt, Produkte und Warenkorb eingeschlossen.',
+      steps: {
+        edit: 'Öffne im Shopify-Adminbereich <b>Onlineshop</b> und wähle beim aktuellen Theme ⋯ › <b>Code bearbeiten</b>.',
+        paste:
+          'Öffne <code>layout/theme.liquid</code>, füge diesen Codeausschnitt direkt vor <closingBody/> ein und wähle <b>Speichern</b>:',
+        origins:
+          'Unter <settings>Einstellungen</settings> müssen die erlaubten Origins die Adresse enthalten, unter der Kunden den Shop öffnen, etwa <code>https://www.deinshop.de</code>. Öffnet sich der Shop auch unter <code>https://deinshop.myshopify.com</code>, füge auch diese hinzu.',
+        open: 'Öffne eine Seite des Shops. Schritt 2, hier unten, zeigt an, wann das erste Ereignis ankommt.',
+      },
+      checkout:
+        'Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
+      themeUpdate:
+        'Ein Update oder Wechsel des Themes kann diese Änderung entfernen: Prüfe, ob der Codeausschnitt noch im neuen Theme steht.',
     },
     step3: '3. Mit Claude prüfen (optional)',
     claude: {

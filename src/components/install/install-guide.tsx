@@ -5,6 +5,7 @@ import {
   FIRST_SCREEN,
   screenHref,
   settingsConnectionsHref,
+  settingsHref,
   settingsKeysHref,
 } from '@/components/shell/screens';
 import { ViewKeepingLink } from '@/components/shell/view-keeping-link';
@@ -43,12 +44,16 @@ const TAB_ICON_PATHS = {
     'M12 3v4 M12 17v4 M3 12h4 M17 12h4 M6 6l2.5 2.5 M15.5 15.5 18 18 M6 18l2.5-2.5 M15.5 8.5 18 6',
   withTagManager:
     'M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z M7.5 7.5h.01',
+  withShopify: 'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z M3 6h18 M16 10a4 4 0 0 1-8 0',
 } as const;
+const SHOPIFY_LAST_STEPS = ['origins', 'open'] as const;
+const CLOSING_BODY_TAG = '</body>';
 
 export const INSTALL_TABS = {
   yourself: 'install-yourself',
   withAgent: 'install-with-agent',
   withTagManager: 'install-with-tag-manager',
+  withShopify: 'install-with-shopify',
 } as const;
 
 function codeText(text: string): ReactNode {
@@ -243,6 +248,53 @@ function WithTagManager({ publicKey, endpoint, labels, i18n }: StepProps) {
   );
 }
 
+interface WithShopifyProps extends StepProps {
+  readonly settingsLink: string;
+}
+
+function WithShopify({ publicKey, endpoint, settingsLink, labels, i18n }: WithShopifyProps) {
+  const { t } = i18n;
+  const slots = {
+    b: TAG_MANAGER_SLOTS.b,
+    code: codeText,
+    closingBody: () => codeText(CLOSING_BODY_TAG),
+    settings: (text: string) => (
+      <ViewKeepingLink href={settingsLink} className={TEXT_LINK}>
+        {text}
+      </ViewKeepingLink>
+    ),
+  };
+  return (
+    <>
+      <p className="text-sm">{t('install.shopify.lead')}</p>
+      <NumberedSteps
+        steps={[
+          { id: 'edit', content: <p>{rich(t('install.shopify.steps.edit'), slots)}</p> },
+          {
+            id: 'paste',
+            content: (
+              <>
+                <p>{rich(t('install.shopify.steps.paste'), slots)}</p>
+                <CodeBlock
+                  id="install-shopify-script"
+                  code={scriptSnippet(publicKey, endpoint)}
+                  labels={labels}
+                />
+              </>
+            ),
+          },
+          ...SHOPIFY_LAST_STEPS.map((step) => ({
+            id: step,
+            content: <p>{rich(t(`install.shopify.steps.${step}`), slots)}</p>,
+          })),
+        ]}
+      />
+      <p className={NOTE}>{t('install.shopify.checkout')}</p>
+      <p className={NOTE}>{t('install.shopify.themeUpdate')}</p>
+    </>
+  );
+}
+
 function PhoneNotice({ labels, i18n }: { readonly labels: CopyCodeLabels; readonly i18n: I18n }) {
   return (
     <div
@@ -315,6 +367,19 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
                 label: <TabLabel icon="withTagManager" text={t('install.withTagManager')} />,
                 panel: (
                   <WithTagManager publicKey={key} endpoint={endpoint} labels={labels} i18n={i18n} />
+                ),
+              },
+              {
+                id: INSTALL_TABS.withShopify,
+                label: <TabLabel icon="withShopify" text={t('install.withShopify')} />,
+                panel: (
+                  <WithShopify
+                    publicKey={key}
+                    endpoint={endpoint}
+                    settingsLink={settingsHref(settings.id)}
+                    labels={labels}
+                    i18n={i18n}
+                  />
                 ),
               },
             ]}

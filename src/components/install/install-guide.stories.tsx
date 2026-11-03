@@ -92,6 +92,43 @@ export const WithGoogleTagManagerOnAPhone: Story = {
   },
 };
 
+export const WithShopify: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Shopify' }));
+    const panel = canvas.getByRole('tabpanel', { name: 'Shopify' });
+    await expect(panel).toBeVisible();
+    await expect(within(panel).getByText('layout/theme.liquid')).toBeVisible();
+  },
+};
+
+export const WithShopifyInPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Shopify' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
+  },
+};
+
+export const WithShopifyInTheDarkTheme: Story = {
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Shopify' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
+  },
+};
+
+export const WithShopifyOnAPhone: Story = {
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'Shopify' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
+  },
+};
+
 export const OnAPhone: Story = {
   globals: { viewport: { value: 'mobile1' } },
   play: async ({ canvasElement }) => {

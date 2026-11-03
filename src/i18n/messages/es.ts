@@ -626,6 +626,7 @@ export const es = translation({
     yourself: 'Por tu cuenta',
     withAgent: 'Con un agente de IA',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Abre el repositorio del sitio en Claude Code, en Cursor o en otro agente de código y pega esta petición. Ya incluye la clave pública y la dirección de este proyecto.',
       prompt:
@@ -671,6 +672,21 @@ export const es = translation({
         'De forma predeterminada, la plantilla respeta el modo de consentimiento: mientras <code>analytics_storage</code> esté denegado, no carga nada.',
       nuvemshop:
         'Nuvemshop: los planes de pago aceptan el ID del contenedor en <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'En una tienda Shopify, pega el fragmento en el tema. Mide todas las páginas que muestra el tema, productos y carrito incluidos.',
+      steps: {
+        edit: 'En el admin de Shopify, abre <b>Tienda online</b> y, en el tema actual, ⋯ › <b>Editar código</b>.',
+        paste:
+          'Abre <code>layout/theme.liquid</code>, pega este fragmento justo antes de <closingBody/> y elige <b>Guardar</b>:',
+        origins:
+          'En <settings>Configuración</settings>, los orígenes permitidos deben incluir la dirección en la que los clientes abren la tienda, como <code>https://www.tutienda.com</code>. Si la tienda también abre en <code>https://tutienda.myshopify.com</code>, añade esa también.',
+        open: 'Abre una página de la tienda. El paso 2, aquí abajo, avisa cuando llegue el primer evento.',
+      },
+      checkout:
+        'Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
+      themeUpdate:
+        'Actualizar o cambiar el tema puede borrar esta edición: comprueba que el fragmento sigue en el tema nuevo.',
     },
     step3: '3. Compruébalo con Claude (opcional)',
     claude: {

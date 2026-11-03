@@ -644,6 +644,7 @@ export const fr = translation({
     yourself: 'Vous-même',
     withAgent: 'Avec un agent IA',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent de code et collez cette demande. Elle contient déjà la clé publique et l’adresse de ce projet.',
       prompt:
@@ -689,6 +690,21 @@ export const fr = translation({
         'Par défaut, le modèle respecte le mode Consentement : tant que <code>analytics_storage</code> est refusé, il ne charge rien.',
       nuvemshop:
         'Nuvemshop : les formules payantes acceptent l’ID du conteneur dans <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'Sur une boutique Shopify, collez l’extrait dans le thème. Il mesure chaque page que le thème affiche, produits et panier compris.',
+      steps: {
+        edit: 'Dans l’admin Shopify, ouvrez <b>Boutique en ligne</b>, puis ⋯ › <b>Modifier le code</b> sur le thème actuel.',
+        paste:
+          'Ouvrez <code>layout/theme.liquid</code>, collez cet extrait juste avant <closingBody/> et choisissez <b>Enregistrer</b> :',
+        origins:
+          'Dans <settings>Paramètres</settings>, les origines autorisées doivent contenir l’adresse où les clients ouvrent la boutique, comme <code>https://www.votreboutique.fr</code>. Si la boutique s’ouvre aussi sur <code>https://votreboutique.myshopify.com</code>, ajoutez-la aussi.',
+        open: 'Ouvrez une page de la boutique. L’étape 2, ci-dessous, indique quand le premier événement arrive.',
+      },
+      checkout:
+        'Shopify n’exécute aucun code du thème pendant le paiement : les étapes du paiement et l’achat finalisé ne sont donc pas mesurés.',
+      themeUpdate:
+        'Mettre à jour ou changer de thème peut effacer cette modification : vérifiez que l’extrait est toujours dans le nouveau thème.',
     },
     step3: '3. Vérifiez avec Claude (facultatif)',
     claude: {

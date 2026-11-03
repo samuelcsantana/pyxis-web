@@ -634,6 +634,7 @@ export const nl = translation({
     yourself: 'Zelf',
     withAgent: 'Met een AI-agent',
     withTagManager: 'Google Tag Manager',
+    withShopify: 'Shopify',
     agent: {
       lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere coding-agent en plak dit verzoek. Het bevat al de publieke sleutel en het adres van dit project.',
       prompt:
@@ -678,6 +679,21 @@ export const nl = translation({
         'Standaard respecteert de template de toestemmingsmodus: zolang <code>analytics_storage</code> geweigerd is, laadt hij niets.',
       nuvemshop:
         'Nuvemshop: betaalde abonnementen accepteren de container-ID bij <b>Configurações</b> › <b>Códigos externos</b> › <b>Google Tag Manager</b>.',
+    },
+    shopify: {
+      lead: 'Plak in een Shopify-winkel het fragment in het thema. Het meet elke pagina die het thema toont, producten en winkelwagen inbegrepen.',
+      steps: {
+        edit: 'Open in de Shopify-beheeromgeving <b>Webwinkel</b> en kies bij het huidige thema ⋯ › <b>Code bewerken</b>.',
+        paste:
+          'Open <code>layout/theme.liquid</code>, plak dit fragment vlak vóór <closingBody/> en kies <b>Opslaan</b>:',
+        origins:
+          'Onder <settings>Instellingen</settings> moeten de toegestane origins het adres bevatten waarop klanten de winkel openen, zoals <code>https://www.jouwwinkel.nl</code>. Opent de winkel ook op <code>https://jouwwinkel.myshopify.com</code>, voeg die dan ook toe.',
+        open: 'Open een pagina van de winkel. Stap 2, hieronder, laat weten wanneer het eerste event binnenkomt.',
+      },
+      checkout:
+        'Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
+      themeUpdate:
+        'Het thema bijwerken of wisselen kan deze wijziging wissen: controleer of het fragment nog in het nieuwe thema staat.',
     },
     step3: '3. Controleer het met Claude (optioneel)',
     claude: {

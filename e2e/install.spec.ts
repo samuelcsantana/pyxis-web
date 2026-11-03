@@ -30,6 +30,11 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(page.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
+
+      await page.getByRole('tab', { name: 'Shopify' }).click();
+      await expect(page.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
     });
   });
 }
@@ -75,11 +80,12 @@ test("hands the agent a request with the project's key, the API and the site", a
   );
 });
 
-test('moves between the three ways to install with the arrow keys', async ({ page }) => {
+test('moves between the four ways to install with the arrow keys', async ({ page }) => {
   await page.goto(INSTALL_PATH);
   const yourself = page.getByRole('tab', { name: 'Yourself' });
   const withAgent = page.getByRole('tab', { name: 'With an AI agent' });
   const withTagManager = page.getByRole('tab', { name: 'Google Tag Manager' });
+  const withShopify = page.getByRole('tab', { name: 'Shopify' });
 
   await yourself.focus();
   await page.keyboard.press('ArrowRight');
@@ -92,6 +98,11 @@ test('moves between the three ways to install with the arrow keys', async ({ pag
 
   await expect(withTagManager).toBeFocused();
   await expect(page.getByRole('tabpanel', { name: 'Google Tag Manager' })).toBeVisible();
+
+  await page.keyboard.press('ArrowRight');
+
+  await expect(withShopify).toBeFocused();
+  await expect(page.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
 
   await page.keyboard.press('ArrowRight');
 
@@ -124,6 +135,34 @@ test("walks a site with Google Tag Manager through the template with the project
   await tagManager.getByRole('button', { name: 'Copy' }).click();
   await expect(tagManager.getByRole('button', { name: 'Copied' })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await key.textContent());
+});
+
+test("walks a Shopify store through its theme with the project's snippet", async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto(INSTALL_PATH);
+
+  await page.getByRole('tab', { name: 'Shopify' }).click();
+
+  const shopify = page.getByRole('tabpanel', { name: 'Shopify' });
+  await expect(page.getByRole('tabpanel', { name: 'Yourself' })).toBeHidden();
+  await expect(shopify.getByRole('listitem')).toHaveCount(4);
+  await expect(shopify).toContainText('Open layout/theme.liquid, paste this snippet just before');
+  await expect(shopify.getByRole('link', { name: 'Settings' })).toHaveAttribute(
+    'href',
+    `/${STORE_ID}/settings`,
+  );
+  const snippet = page.locator('#install-shopify-script');
+  await expect(snippet).toContainText(`endpoint: '${HOSTED_API}'`);
+  await shopify.getByRole('button', { name: 'Copy' }).click();
+  await expect(shopify.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
+    /^<script type="module">\s+import \{ init \} from 'https:\/\/cdn\.jsdelivr\.net\/npm\/pyxis-analytics@[\d.]+\/dist\/index\.js';\s+init\(\{ key: 'pyxis_pk_\w+', endpoint: 'https:\/\/api\.pyxis-analytics\.dev' \}\);\s+<\/script>$/,
+  );
 });
 
 test('offers a question for Claude once the first event arrived, and the way to connect it', async ({
