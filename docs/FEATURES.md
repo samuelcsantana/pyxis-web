@@ -375,7 +375,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   a tag with the action Initialize and the project's public key, with a copy button, and the API's
   address for its Endpoint field; the trigger "Initialization - All Pages"; optional Track event
   tags sequenced after it; submit and publish), Tag Manager's own labels in bold, then one line on
-  Consent Mode (by default, `analytics_storage` denied loads nothing) and one for Nuvemshop's paid plans. The
+  Consent Mode (by default, `analytics_storage` denied loads nothing) and one for Nuvemshop's paid plans.
+  "Shopify" installs a store through its theme: four numbered steps (Online Store › ⋯ › Edit code;
+  the module snippet with the project's key pasted before `</body>` in `layout/theme.liquid`, with a
+  copy button; the store's own domain and, if it also opens there, its `myshopify.com` address
+  among the allowed origins, linked to Settings; open a page of the store), then one line saying the
+  checkout steps and the completed purchase are not measured (Shopify runs no theme code there) and
+  one that a theme update or switch can drop the edit. The
   tabs wrap to a second row on a phone. Step 2, shared by the tabs, waits for the first event, checked
   again every few seconds (the chosen tab survives each re-read); once it arrives, "Open the
   dashboard" and a ready question for Claude about the project. Step 3, optional, connects Claude
@@ -441,7 +447,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
   models and coding agents what Pyxis is, how to install the tracker (with a bundler, through a
-  coding agent or with the Google Tag Manager template), the rules an
+  coding agent, with the Google Tag Manager template or in a Shopify theme), the rules an
   integration must follow and where to send a person who needs support (404 on the demo and
   the dashboard). The footer's Support column and the last FAQ answer give the support address
   and the reply times. Every address that names a
