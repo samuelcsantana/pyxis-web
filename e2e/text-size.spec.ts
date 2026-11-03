@@ -5,6 +5,8 @@ const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DEFAULT_TEXT_PX = 16;
 const READER_TEXT_PX = 32;
 const EXPECTED_GROWTH = READER_TEXT_PX / DEFAULT_TEXT_PX;
+const INSTALL_PATH = `/${STORE_ID}/install`;
+const DASHBOARD_LOCALES = ['en', 'pt-BR', 'es', 'de', 'fr', 'it', 'nl'] as const;
 
 const ROUTES = [
   { heading: 'Overview', path: `/${STORE_ID}/overview` },
@@ -66,6 +68,31 @@ for (const width of WIDTHS) {
 
         expect(growth.filter((text) => text.growth !== EXPECTED_GROWTH)).toEqual([]);
         await expect.poll(() => sidewaysOverflow(page)).toBe(0);
+      });
+    }
+
+    for (const locale of DASHBOARD_LOCALES) {
+      test(`the install guide in ${locale} grows every text and never scrolls sideways on any tab`, async ({
+        page,
+        context,
+        baseURL,
+        isMobile,
+      }) => {
+        test.skip(isMobile !== width.onPhone, 'Each width runs once, in its own project.');
+        await context.addCookies([{ name: 'pyxis_locale', value: locale, url: baseURL ?? '' }]);
+        await page.goto(INSTALL_PATH);
+        const tabs = page.getByRole('tab');
+        await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+        await page.waitForLoadState('networkidle');
+
+        const growth = await growthAtRootSize(page, READER_TEXT_PX);
+
+        expect(growth.filter((text) => text.growth !== EXPECTED_GROWTH)).toEqual([]);
+        for (const tab of await tabs.all()) {
+          await tab.click();
+          await expect(tab).toHaveAttribute('aria-selected', 'true');
+          await expect.poll(() => sidewaysOverflow(page)).toBe(0);
+        }
       });
     }
   });
