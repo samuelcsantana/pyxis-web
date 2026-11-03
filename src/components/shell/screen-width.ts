@@ -1,1 +1,1 @@
-export const SCREEN_WIDTH = 'w-full max-w-310';
+export const SCREEN_WIDTH = 'w-full max-w-400';
