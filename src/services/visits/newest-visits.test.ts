@@ -33,6 +33,7 @@ function visit(index: number): VisitSummary {
     city: null,
     channel: 'direct',
     userId: null,
+    visitor: null,
   };
 }
 

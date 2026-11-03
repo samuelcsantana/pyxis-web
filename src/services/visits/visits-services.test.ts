@@ -7,6 +7,7 @@ import { DEMO_DOCS, DEMO_STORE } from '../demo/demo-projects';
 import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
 import { demoDevicesWire } from '../devices/demo-devices';
 import { demoOverviewWire } from '../overview/demo-overview';
+import { demoVisitorOf } from '../demo/demo-visitor-kinds';
 import { demoTimelineReport } from '../timeline/demo-timeline';
 import {
   DEMO_VISITS_PAGE_SIZE,
@@ -175,18 +176,21 @@ describe('MockVisitsService', () => {
   });
 
   it('sums each visit up the way the API does', () => {
-    const summary = demoVisitSummary({
-      ...RECORD,
-      events: [
-        event('page_view', '/', 0),
-        event('identify', '/', 1),
-        event('cta_clicked', '/', 2),
-        event('page_view', '/pricing', 3),
-        event('cta_clicked', '/pricing', 4),
-        { ...event('api_request', '/pricing', 5), properties: { status: 500 } },
-        { ...event('api_request', '/pricing', 6), properties: { status: 201 } },
-      ],
-    });
+    const summary = demoVisitSummary(
+      {
+        ...RECORD,
+        events: [
+          event('page_view', '/', 0),
+          event('identify', '/', 1),
+          event('cta_clicked', '/', 2),
+          event('page_view', '/pricing', 3),
+          event('cta_clicked', '/pricing', 4),
+          { ...event('api_request', '/pricing', 5), properties: { status: 500 } },
+          { ...event('api_request', '/pricing', 6), properties: { status: 201 } },
+        ],
+      },
+      true,
+    );
 
     expect(summary).toMatchObject({
       region: 'BR-RJ',
@@ -199,13 +203,25 @@ describe('MockVisitsService', () => {
       user_id: null,
       source: 'google',
       campaign: 'spring_sale',
+      visitor: demoVisitorOf(RECORD.sessionId),
     });
   });
 
-  it('gives a visit without a page view no entry page', () => {
-    const summary = demoVisitSummary({ ...RECORD, events: [event('cta_clicked', '/', 5)] });
+  it('gives a visit no kind when its project does not count unique visitors', () => {
+    const summary = demoVisitSummary({ ...RECORD, events: [event('page_view', '/', 0)] }, false);
 
-    expect(summary).toMatchObject({ entry_path: null, page_views: 0, highlights: ['cta_clicked'] });
+    expect(summary.visitor).toBeNull();
+  });
+
+  it('gives a visit without a page view no entry page', () => {
+    const summary = demoVisitSummary({ ...RECORD, events: [event('cta_clicked', '/', 5)] }, true);
+
+    expect(summary).toMatchObject({
+      entry_path: null,
+      page_views: 0,
+      highlights: ['cta_clicked'],
+      visitor: null,
+    });
   });
 
   it('opens every listed visit in the demo timeline, with the same start', () => {
@@ -218,6 +234,7 @@ describe('MockVisitsService', () => {
         NOW,
       );
       expect(visits[0]?.startedAt).toBe(listedVisit.startedAt);
+      expect(visits[0]?.visitor).toBe(listedVisit.visitor);
     }
   });
 

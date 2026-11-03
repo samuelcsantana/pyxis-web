@@ -1,4 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
+import { type VisitKindBadge, visitKindBadge } from './visit-kind';
 import { channelLabel } from './acquisition';
 import {
   BROWSER_FAMILIES,
@@ -155,6 +156,7 @@ export interface VisitRow {
   readonly channel: string | null;
   readonly channelNote: string;
   readonly account: VisitAccount | null;
+  readonly kind: VisitKindBadge | null;
 }
 
 function visitAccount(userId: string | null, i18n: I18n): VisitAccount | null {
@@ -219,6 +221,7 @@ export function visitRows(
       channel,
       channelNote: i18n.t('visits.table.channelNote', { channel: channel ?? NO_VALUE }),
       account: visitAccount(visit.userId, i18n),
+      kind: visitKindBadge(visit.visitor, i18n),
     };
   });
 }

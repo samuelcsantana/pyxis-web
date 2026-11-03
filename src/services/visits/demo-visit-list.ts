@@ -2,6 +2,7 @@ import { type VisitFilters, type VisitsReport, type VisitsWire } from '@/domain/
 import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
+import { demoVisitorOfVisit } from '../demo/demo-visitor-kinds';
 import { API_REQUEST, type DemoEventRecord, type DemoVisitRecord } from '../demo/demo-records';
 import {
   countWhere,
@@ -33,7 +34,10 @@ function startOf(visit: DemoVisitRecord): number {
   return Math.min(...visit.events.map((event) => event.at));
 }
 
-export function demoVisitSummary(visit: DemoVisitRecord): VisitSummaryWire {
+export function demoVisitSummary(
+  visit: DemoVisitRecord,
+  countsUniqueVisitors: boolean,
+): VisitSummaryWire {
   const times = visit.events.map((event) => event.at);
   const pageViews = visit.events.filter(isPageView);
   const named = visit.events.filter(isNamedEvent).map((event) => event.name);
@@ -56,6 +60,7 @@ export function demoVisitSummary(visit: DemoVisitRecord): VisitSummaryWire {
     user_id: visit.userId,
     source: visit.source,
     campaign: visit.campaign,
+    visitor: demoVisitorOfVisit(countsUniqueVisitors, visit),
   };
 }
 
@@ -84,6 +89,7 @@ export function demoVisitsPage(
   filters: VisitFilters,
   cursor: string | null,
   timezone: string,
+  countsUniqueVisitors: boolean,
 ): VisitsWire {
   const matching = visits
     .filter(matcherOf(filters))
@@ -96,7 +102,7 @@ export function demoVisitsPage(
   const page = listed.slice(0, DEMO_VISITS_PAGE_SIZE);
   const last = listed.length > DEMO_VISITS_PAGE_SIZE ? page.at(-1) : undefined;
   return {
-    visits: page.map(({ visit }) => demoVisitSummary(visit)),
+    visits: page.map(({ visit }) => demoVisitSummary(visit, countsUniqueVisitors)),
     next_cursor: last === undefined ? null : last.cursor,
     total: matching.length,
     timezone,
@@ -116,6 +122,7 @@ export function demoVisitsWire(
     filters,
     cursor,
     project.timezone,
+    project.countsUniqueVisitors,
   );
 }
 

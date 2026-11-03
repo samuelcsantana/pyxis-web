@@ -34,6 +34,7 @@ const WIRE: TimelineWire = {
       city: 'Feira de Santana',
       channel: 'paid',
       user_id: 'u_7f3a',
+      visitor: 'again_today',
       events: [
         {
           id: '00000000-0000-4000-8000-000000000001',
@@ -165,6 +166,12 @@ describe('items', () => {
     expect(quiet?.meta).toBe('Desktop · Chrome · macOS · 42 s');
     expect(visit?.personId).toBe('u_7f3a');
     expect(quiet?.personId).toBeNull();
+    expect(visit?.kind).toEqual({
+      label: 'Again today',
+      note: 'Not counted: this browser had already come today',
+      counted: false,
+    });
+    expect(quiet?.kind).toBeNull();
     expect(visit?.items).toEqual([
       {
         key: '00000000-0000-4000-8000-000000000001',

@@ -1,4 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
+import { type VisitKindBadge, visitKindBadge } from './visit-kind';
 import { channelLabel } from './acquisition';
 import { browserLabel, deviceTypeLabel, operatingSystemLabel, placeLabel } from './devices';
 import { eventLabel } from './metrics';
@@ -213,6 +214,7 @@ export interface VisitView {
   readonly personId: string | null;
   readonly heading: string;
   readonly meta: string;
+  readonly kind: VisitKindBadge | null;
   readonly items: readonly TimelineItem[];
 }
 
@@ -245,6 +247,7 @@ export function visitViews(
         ...(visit.channel === null ? [] : [channelLabel(visit.channel, i18n)]),
         formatVisitDuration(visit.startedAt, visit.endedAt, i18n),
       ].join(' · '),
+      kind: visitKindBadge(visit.visitor, i18n),
       items: visit.events.filter(FILTER_RULES[filter]).map((event) => ({
         key: event.id,
         time: time(new Date(event.occurredAt)),

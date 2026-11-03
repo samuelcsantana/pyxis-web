@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CHANNELS } from './acquisition';
+import { VISIT_KINDS } from './visit-kind';
 
 const propertyValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 
@@ -19,6 +20,7 @@ export const timelineResponseSchema = z
         city: z.string().nullable(),
         channel: z.enum(CHANNELS).nullable(),
         user_id: z.string().nullable().optional(),
+        visitor: z.enum(VISIT_KINDS).nullable().optional(),
         events: z.array(
           z.object({
             id: z.string(),
@@ -47,6 +49,7 @@ export const timelineResponseSchema = z
       city: visit.city,
       channel: visit.channel,
       userId: visit.user_id ?? null,
+      visitor: visit.visitor ?? null,
       events: visit.events.map((event) => ({
         id: event.id,
         occurredAt: event.occurred_at,

@@ -1178,6 +1178,14 @@ export const fr = translation({
     warmingUp:
       'Pendant les premières semaines après l’activation du comptage, presque tous les visiteurs apparaissent comme nouveaux.',
   },
+  visitKind: {
+    firstVisit: 'Nouveau visiteur',
+    firstThisMonth: 'Récurrent, première ce mois-ci',
+    firstToday: 'Récurrent, première aujourd’hui',
+    againToday: 'De nouveau aujourd’hui',
+    counted: 'Compté parmi les visiteurs uniques du jour',
+    notCounted: 'Non compté : ce navigateur était déjà venu aujourd’hui',
+  },
   acquisition: {
     subtitle: 'D’où viennent les visites de {project}',
     paidVisits: 'Visites payantes',
