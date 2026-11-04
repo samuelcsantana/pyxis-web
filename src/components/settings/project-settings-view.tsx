@@ -106,7 +106,7 @@ function Field({ term, children }: FieldProps) {
   );
 }
 
-function ProjectPanel({ settings, i18n, when }: SectionProps) {
+export function ProjectPanel({ settings, i18n, when }: SectionProps) {
   return (
     <SettingsPanel id="settings-project" title={i18n.t('settings.project.heading')}>
       <dl className="flex flex-col gap-3">
@@ -127,7 +127,7 @@ function ProjectPanel({ settings, i18n, when }: SectionProps) {
   );
 }
 
-function ActivityPanel({ settings, i18n, when }: SectionProps) {
+export function ActivityPanel({ settings, i18n, when }: SectionProps) {
   const activity = projectActivity(settings);
   return (
     <SettingsPanel id="settings-activity" title={i18n.t('settings.activity.heading')}>
@@ -146,7 +146,7 @@ function ActivityPanel({ settings, i18n, when }: SectionProps) {
   );
 }
 
-function OriginsPanel({ settings, i18n }: SectionProps) {
+export function OriginsPanel({ settings, i18n }: SectionProps) {
   return (
     <SettingsPanel id="settings-origins" title={i18n.t('settings.origins.heading')}>
       {settings.allowedOrigins.length === 0 ? (
@@ -185,7 +185,7 @@ function KeyList<Key extends ProjectKeySummary>({ keys, empty, describe }: KeyLi
   );
 }
 
-function KeysPanel({ settings, i18n, when }: SectionProps) {
+export function KeysPanel({ settings, i18n, when }: SectionProps) {
   const created = (key: ProjectKeySummary) => (
     <span className="text-xs text-muted">
       {i18n.t('settings.keys.created', { date: when(key.createdAt) })}
@@ -230,7 +230,7 @@ interface ManagedSectionProps extends SectionProps {
   readonly manage: ProjectManagement;
 }
 
-function ProjectEditPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
+export function ProjectEditPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
   return (
     <SettingsPanel id="settings-project" title={i18n.t('projectForm.heading')}>
       <p className={NOTE}>
@@ -267,7 +267,7 @@ function ManagedKeyRow({ keyId, children, action }: ManagedKeyRowProps) {
   );
 }
 
-function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
+export function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps) {
   const created = (key: ProjectKeySummary) => (
     <span className="text-xs text-muted">
       {i18n.t('settings.keys.created', { date: when(key.createdAt) })}
@@ -334,7 +334,7 @@ function ManagedKeysPanel({ settings, i18n, when, manage }: ManagedSectionProps)
   );
 }
 
-function ExportPanel({ settings, i18n, manage }: ManagedSectionProps) {
+export function ExportPanel({ settings, i18n, manage }: ManagedSectionProps) {
   return (
     <SettingsPanel id="settings-export" title={i18n.t('exportEvents.heading')}>
       <p className={NOTE}>
@@ -348,7 +348,7 @@ function ExportPanel({ settings, i18n, manage }: ManagedSectionProps) {
   );
 }
 
-function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
+export function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
   return (
     <SettingsPanel id="settings-delete" title={i18n.t('deleteProject.heading')}>
       {isProjectDeletionHeld(settings) ? (
@@ -368,7 +368,7 @@ function DeletePanel({ settings, i18n, manage }: ManagedSectionProps) {
   );
 }
 
-function RetentionPanel({ settings, i18n }: SectionProps) {
+export function RetentionPanel({ settings, i18n }: SectionProps) {
   return (
     <SettingsPanel id="settings-retention" title={i18n.t('settings.retention.heading')}>
       <p className="text-sm">
@@ -380,7 +380,7 @@ function RetentionPanel({ settings, i18n }: SectionProps) {
   );
 }
 
-interface SectionProps {
+export interface SectionProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
   readonly when: (iso: string) => string;
@@ -392,7 +392,7 @@ interface CityPanelProps {
   readonly setCity: SetProjectOption | null;
 }
 
-function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
+export function CityPanel({ settings, i18n, setCity }: CityPanelProps) {
   return (
     <SettingsPanel id="settings-city" title={i18n.t('cityOption.heading')}>
       {setCity === null ? (
@@ -412,7 +412,7 @@ interface VisitorsPanelProps {
   readonly setVisitors: SetProjectOption | null;
 }
 
-function VisitorsPanel({ settings, i18n, setVisitors }: VisitorsPanelProps) {
+export function VisitorsPanel({ settings, i18n, setVisitors }: VisitorsPanelProps) {
   return (
     <SettingsPanel id="settings-visitors" title={i18n.t('visitorsOption.heading')}>
       {setVisitors === null ? (
@@ -439,7 +439,7 @@ interface EmailPanelProps {
   readonly choose: ChooseEmailPreferences;
 }
 
-function EmailPanel({ settings, i18n, preferences, choose }: EmailPanelProps) {
+export function EmailPanel({ settings, i18n, preferences, choose }: EmailPanelProps) {
   return (
     <SettingsPanel id="settings-email" title={i18n.t('emailPreferences.heading')}>
       <WeeklyDigestSwitch initial={preferences} timezone={settings.timezone} choose={choose} />
