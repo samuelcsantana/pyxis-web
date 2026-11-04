@@ -16,8 +16,6 @@ export interface InstallTabsProps {
   readonly tabs: readonly InstallTab[];
 }
 
-export type PanelEntrance = 'still' | 'fromEnd' | 'fromStart';
-
 const TAB_LIST =
   'group/install-tabs relative flex max-w-full flex-wrap self-start gap-1 rounded-input border border-line-strong bg-card p-1 shadow-sm';
 const TAB = `relative z-[1] flex min-h-10 max-w-full flex-wrap items-center gap-x-2 gap-y-1 py-1.5 text-left rounded-control px-3.5 text-sm font-semibold ${FOCUS_RING} ${CONTROL_TRANSITION}`;
@@ -25,11 +23,7 @@ const TAB_SELECTED = 'bg-accent text-accent-ink group-data-sliding/install-tabs:
 const TAB_IDLE = 'text-ink hover:bg-soft active:bg-soft';
 const TAB_THUMB = `rounded-control bg-accent shadow-sm ${SLIDING_INDICATOR}`;
 
-const PANEL_ENTRANCES: Readonly<Record<PanelEntrance, string>> = {
-  still: '',
-  fromEnd: 'motion-safe:animate-slide-from-end',
-  fromStart: 'motion-safe:animate-slide-from-start',
-};
+const PANEL_ENTRANCE = 'motion-safe:animate-settle';
 
 export function tabAfterKey(key: string, current: number, count: number): number | undefined {
   switch (key) {
@@ -46,13 +40,6 @@ export function tabAfterKey(key: string, current: number, count: number): number
   }
 }
 
-export function entranceOf(previous: number, next: number): PanelEntrance {
-  if (next === previous) {
-    return 'still';
-  }
-  return next > previous ? 'fromEnd' : 'fromStart';
-}
-
 export function tabIdOf(id: string): string {
   return `${id}-tab`;
 }
@@ -63,12 +50,12 @@ export function panelIdOf(id: string): string {
 
 export function InstallTabs({ label, tabs }: InstallTabsProps) {
   const [selected, setSelected] = useState(0);
-  const [entrance, setEntrance] = useState<PanelEntrance>('still');
+  const [chosen, setChosen] = useState(false);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const { attach, frame, sliding } = useSlidingIndicator(String(selected));
 
   const select = (next: number) => {
-    setEntrance(entranceOf(selected, next));
+    setChosen(true);
     setSelected(next);
   };
 
@@ -122,7 +109,7 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
           id={panelIdOf(tab.id)}
           aria-labelledby={tabIdOf(tab.id)}
           hidden={index !== selected}
-          className={`flex min-w-0 flex-col gap-3 ${PANEL_ENTRANCES[entrance]}`}
+          className={`flex min-w-0 flex-col gap-3 ${chosen ? PANEL_ENTRANCE : ''}`}
         >
           {tab.panel}
         </div>
