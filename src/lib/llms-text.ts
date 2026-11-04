@@ -1,6 +1,10 @@
 import { LANDING_LINKS } from '@/components/landing/landing-links';
 import { SUPPORT_EMAIL } from '@/domain/accounts';
-import { TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
+import {
+  classicSnippet,
+  TAG_MANAGER_TEMPLATE_URL,
+  WORDPRESS_HEADER_PLUGIN_URL,
+} from '@/domain/install';
 import { FREE_PLAN_EVENTS_PER_MONTH, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import {
   FREE_REPLY_DAYS,
@@ -56,7 +60,8 @@ export function llmsText(offer: SignUpOffer): string {
     '  `trackRequest`, `optOut`, `optIn`, `trackingStatus` and every option.',
     `- [Playground](${LANDING_LINKS.playground}): the real tracker in dry-run mode.`,
     '- Without touching the site’s code: a site that loads Google Tag Manager uses the Pyxis',
-    '  Analytics template, and a Shopify store pastes one snippet into its theme (both below).',
+    '  Analytics template, a Shopify store pastes one snippet into its theme, and a WordPress site',
+    '  pastes the classic snippet into a header plugin (all three below).',
     '',
     '## Rules an integration must follow',
     '',
@@ -146,6 +151,29 @@ export function llmsText(offer: SignUpOffer): string {
     'are not measured. Shopify custom pixels (Customer events) are not supported: their sandboxed',
     'iframe sends `Origin: null`, which the API refuses. Updating or switching the theme can drop',
     'the edit.',
+    '',
+    '## Install on WordPress',
+    '',
+    'A WordPress site installs the classic build, which sets `window.pyxis`, through the free',
+    'WPCode plugin, with no change to the theme:',
+    '',
+    '1. In the WordPress admin, open Plugins › Add Plugin, then install and activate WPCode –',
+    '   Insert Headers and Footers.',
+    '2. In Code Snippets › Header & Footer, paste this in Header and choose Save Changes:',
+    '',
+    '```html',
+    ...classicSnippet('pyxis_pk_…', HOSTED_API_URL).split('\n'),
+    '```',
+    '',
+    '3. Add the site’s address (Settings › General › Site Address) to the allowed origins, and',
+    '   clear the cache of a cache plugin if the site has one.',
+    '',
+    'A site that already loads Google Tag Manager can use the template above instead. A plugin',
+    'that delays or combines JavaScript must leave both scripts out. On WordPress.com, plugins',
+    'need a plan that allows them.',
+    '',
+    `- [WPCode on wordpress.org](${WORDPRESS_HEADER_PLUGIN_URL}): free, keeps the snippet across`,
+    '  theme updates.',
     '',
     '## Read the numbers from an AI agent',
     '',

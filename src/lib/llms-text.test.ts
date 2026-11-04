@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { classicSnippet, WORDPRESS_HEADER_PLUGIN_URL } from '@/domain/install';
 import { llmsText } from './llms-text';
 
 const LINK = /\]\(([^)]+)\)/g;
@@ -16,6 +17,7 @@ describe('llmsText', () => {
       '## Install with an AI agent',
       '## Install with Google Tag Manager',
       '## Install on a Shopify store',
+      '## Install on WordPress',
       '## Read the numbers from an AI agent',
       '## API and dashboard',
       '## Support',
@@ -54,7 +56,7 @@ describe('llmsText', () => {
     expect(text).toContain('https://api.pyxis-analytics.dev');
   });
 
-  it('points, in the install summary, to the two ways that need no code', () => {
+  it('points, in the install summary, to the three ways that need no code', () => {
     const summary = text.slice(
       text.indexOf('## Install the tracker'),
       text.indexOf('## Rules an integration must follow'),
@@ -63,6 +65,7 @@ describe('llmsText', () => {
     expect(summary).toContain('Without touching the site’s code');
     expect(summary).toContain('Google Tag Manager');
     expect(summary).toContain('Shopify store');
+    expect(summary).toContain('a WordPress site');
   });
 
   it.each(['free', 'freeFull'] as const)(
@@ -130,6 +133,19 @@ describe('llmsText', () => {
     expect(text).toContain('`https://<store>.myshopify.com`');
     expect(text).toContain('the checkout steps and the completed purchase\nare not measured.');
     expect(text).toContain('iframe sends `Origin: null`, which the API refuses.');
+  });
+
+  it('installs a WordPress site with the classic snippet in a free header plugin', () => {
+    expect(text).toContain('open Plugins › Add Plugin, then install and activate WPCode –');
+    expect(text).toContain('In Code Snippets › Header & Footer, paste this in Header');
+    expect(text).toContain(
+      ['```html', classicSnippet('pyxis_pk_…', 'https://api.pyxis-analytics.dev'), '```'].join(
+        '\n',
+      ),
+    );
+    expect(text).toContain(`[WPCode on wordpress.org](${WORDPRESS_HEADER_PLUGIN_URL})`);
+    expect(text).toContain('must leave both scripts out');
+    expect(text).toContain('On WordPress.com, plugins\nneed a plan that allows them.');
   });
 
   it('names the traps that make the first check fail', () => {
