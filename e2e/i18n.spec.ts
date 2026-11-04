@@ -2,7 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
 import { languageTrigger } from './language-select';
 import { parseCount } from './locale-numbers';
-import { openTheLanguagesOfTheAccountMenu } from './navigation';
+import { accountMenu, openTheLanguagesOfTheAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const PORTUGUESE = 'pt-BR';
@@ -36,8 +36,12 @@ async function openLanguages(page: Page, isMobile: boolean, menu: string, accoun
   if (isMobile) {
     await page.getByRole('button', { name: menu }).click();
   }
-  await page.locator('summary', { hasText: account }).click();
+  await accountMenu(page, account).click();
   await openTheLanguagesOfTheAccountMenu(page);
+}
+
+function language(page: Page, name: string) {
+  return page.getByRole('dialog').getByRole('button', { name: new RegExp(`^${name}`) });
 }
 
 async function visitsFigure(page: Page, name: string): Promise<string | null> {
@@ -310,8 +314,8 @@ test('switches the language in place, keeping the address, and back', async ({
   await page.goto(`/${STORE_ID}/overview?range=7d`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 
-  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await openLanguages(page, isMobile, 'Open menu', 'Account menu');
+  await language(page, 'Português \\(Brasil\\)').click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
   await expect(page.getByRole('heading', { level: 1, name: 'Visão geral' })).toBeVisible();
@@ -320,8 +324,8 @@ test('switches the language in place, keeping the address, and back', async ({
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', PORTUGUESE);
 
-  await openLanguages(page, isMobile, 'Abrir menu', 'Conta e preferências');
-  await page.getByRole('button', { name: 'Español' }).click();
+  await openLanguages(page, isMobile, 'Abrir menu', 'Menu da conta');
+  await language(page, 'Español').click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await expect(page.getByRole('heading', { level: 1, name: 'Vista general' })).toBeVisible();
@@ -330,8 +334,8 @@ test('switches the language in place, keeping the address, and back', async ({
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 
-  await openLanguages(page, isMobile, 'Abrir el menú', 'Cuenta y preferencias');
-  await page.getByRole('button', { name: 'English' }).click();
+  await openLanguages(page, isMobile, 'Abrir el menú', 'Menú de la cuenta');
+  await language(page, 'English').click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.getByRole('heading', { level: 1, name: 'Overview' })).toBeVisible();
@@ -351,21 +355,18 @@ test('keeps a chosen language over the one the browser asks for', async ({
   await expect(page.getByRole('heading', { level: 1, name: 'Visitas' })).toBeVisible();
 });
 
-test('opens the account menu inside the window, with the languages in it', async ({
-  page,
-  isMobile,
-}) => {
+test('opens the languages from the account menu inside the window', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview`);
 
-  await openLanguages(page, isMobile, 'Open menu', 'Account and preferences');
+  await openLanguages(page, isMobile, 'Open menu', 'Account menu');
 
-  const languages = page.getByRole('group', { name: 'Language', exact: true });
+  const languages = page.getByRole('dialog', { name: 'Language' });
   await expect(languages).toBeVisible();
   const box = await languages.boundingBox();
   const width = page.viewportSize()?.width ?? 0;
   expect(box?.x).toBeGreaterThanOrEqual(0);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
-  for (const name of ['English', 'Português (Brasil)', 'Español']) {
-    await expect(languages.getByRole('button', { name })).toBeInViewport({ ratio: 1 });
+  for (const name of ['English', 'Português \\(Brasil\\)', 'Español']) {
+    await expect(language(page, name)).toBeInViewport({ ratio: 1 });
   }
 });

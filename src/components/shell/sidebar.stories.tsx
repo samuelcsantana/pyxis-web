@@ -37,7 +37,8 @@ function linesOf(node: Node): DOMRectList {
 
 const nothingIsCut: Story['play'] = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  for (const text of [LONG_VALUES.email, LONG_PROJECT.name, LONG_PROJECT.timezone]) {
+  const name = LONG_VALUES.email.split('@', 1).join('');
+  for (const text of [name, LONG_VALUES.email, LONG_PROJECT.name, LONG_PROJECT.timezone]) {
     for (const element of canvas.getAllByText(text)) {
       await expect(element.scrollWidth).toBeLessThanOrEqual(element.clientWidth);
       await expect(getComputedStyle(element).textOverflow).not.toBe('ellipsis');
@@ -91,14 +92,14 @@ export const BrazilianPortuguese: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('Sem cookies, sem IP guardado')).toBeVisible();
     await expect(canvas.getByRole('link', { name: 'Visão geral' })).toBeVisible();
-    await expect(canvas.getByRole('link', { name: 'Configurações' })).toBeVisible();
-    await userEvent.click(canvas.getByText('Conta e preferências'));
-    await userEvent.click(canvas.getByText('Idioma: Português (Brasil)'));
-    await expect(canvas.getByRole('button', { name: 'Português (Brasil)' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
-    await expect(canvas.getByRole('group', { name: 'Tema' })).toBeVisible();
+    await userEvent.click(canvas.getByText('Menu da conta'));
+    await expect(
+      canvas
+        .getAllByRole('link', { name: 'Configurações' })
+        .filter((link) => link.closest('details')),
+    ).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'Idioma' })).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Ajuda e suporte' })).toBeVisible();
   },
 };
 
@@ -106,13 +107,13 @@ const COMPACT_MENU_MAX_HEIGHT_PX = 300;
 
 const openTheAccountMenu: Play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-  await userEvent.click(canvas.getByText('Account and preferences'));
-  await expect(canvas.getByRole('link', { name: 'Account and billing' })).toBeVisible();
-  await expect(canvas.getByRole('group', { name: 'Theme' })).toBeVisible();
-  await expect(canvas.getByText('Language: English')).toBeVisible();
-  await expect(canvas.getByRole('group', { name: 'Language' })).not.toBeVisible();
-  await expect(canvas.getByRole('button', { name: 'Sign out' })).toBeVisible();
-  const panel = canvas.getByRole('group', { name: 'Theme' }).closest('details > div');
+  await userEvent.click(canvas.getByText('Account menu'));
+  const panel = canvas.getByText(DEMO_ADMIN.email).closest('details > div');
+  const menu = within(panel instanceof HTMLElement ? panel : canvasElement);
+  await expect(menu.getByRole('link', { name: 'Settings' })).toBeVisible();
+  await expect(menu.getByRole('button', { name: 'Language' })).toBeVisible();
+  await expect(menu.getByRole('link', { name: 'Help and support' })).toBeVisible();
+  await expect(menu.getByRole('button', { name: 'Sign out' })).toBeVisible();
   await expect(boxOf(panel).height).toBeLessThanOrEqual(COMPACT_MENU_MAX_HEIGHT_PX);
 };
 
@@ -122,12 +123,11 @@ export const AccountMenuOpenDark: Story = { globals: { theme: 'dark' }, play: op
 
 const openTheLanguages: Play = async (context) => {
   await openTheAccountMenu(context);
-  const canvas = within(context.canvasElement);
-  const row = canvas.getByText('Language: English').closest('details');
-  await userEvent.click(canvas.getByText('Language: English'));
-  await expect(row).toHaveAttribute('open');
-  await expect(canvas.getByRole('group', { name: 'Language' })).toBeVisible();
-  await expect(canvas.getByRole('button', { name: 'English' })).toHaveAttribute(
+  await userEvent.click(within(context.canvasElement).getByRole('button', { name: 'Language' }));
+  const dialog = await within(document.body).findByRole('dialog', { name: 'Language' });
+  await expect(dialog).toBeVisible();
+  await expect(within(dialog).getByRole('searchbox')).toHaveFocus();
+  await expect(within(dialog).getByRole('button', { name: 'English' })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -172,28 +172,25 @@ const onPageOf = (segment: string) => ({
   nextjs: { appDirectory: true, navigation: { pathname: `/${STORE.id}/${segment}` } },
 });
 
-const currentLinksOutsideTheMenus = (canvasElement: HTMLElement) =>
-  within(canvasElement)
+const opensAsSettings: Play = async ({ canvasElement }) => {
+  const current = within(canvasElement)
     .queryAllByRole('link', { current: 'page' })
     .filter((link) => link.closest('details') === null);
-
-const standsForThePage =
-  (name: string): Play =>
-  async ({ canvasElement }) => {
-    const current = currentLinksOutsideTheMenus(canvasElement);
-    await expect(current).toHaveLength(1);
-    await expect(current[0]).toHaveAccessibleName(name);
-    await expect(canvasElement.querySelector('summary[data-current]')).toBeNull();
-  };
+  await expect(current).toHaveLength(0);
+  await expect(within(canvasElement).getByRole('link', { name: 'Install' })).toHaveAttribute(
+    'href',
+    '#settings/install',
+  );
+};
 
 export const OnInstall: Story = {
   parameters: onPageOf('install'),
-  play: standsForThePage('Install'),
+  play: opensAsSettings,
 };
 
 export const OnAnExport: Story = {
   parameters: onPageOf(`exports/${DEMO_EXPORT_ID}`),
-  play: standsForThePage('Settings'),
+  play: opensAsSettings,
 };
 
 const NO_EVENTS_YET = { ...STORE, firstEventAt: null };
@@ -290,13 +287,13 @@ export const NoEventsYetNarrowedInGerman: Story = {
 
 export const OnHelp: Story = {
   parameters: onPageOf('help'),
-  play: standsForThePage('Help and support'),
+  play: opensAsSettings,
 };
 
 export const OnHelpDark: Story = {
   parameters: onPageOf('help'),
   globals: { theme: 'dark' },
-  play: standsForThePage('Help and support'),
+  play: opensAsSettings,
 };
 
 export const KeyboardFocus: Story = {
@@ -472,7 +469,7 @@ export const ShortWindow: Story = {
     await expect(window.innerHeight).toBe(SHORT_LAPTOP_WINDOW.height);
     const screens = canvas.getByText('Analytics').parentElement;
     await expect(screens?.scrollHeight).toBeGreaterThan(screens?.clientHeight ?? Infinity);
-    for (const part of ['Switch project. Current project:', 'Account and preferences']) {
+    for (const part of ['Switch project. Current project:', 'Account menu']) {
       const box = boxOf(canvas.getByText(part).closest('summary'));
       await expect(box.top).toBeGreaterThanOrEqual(0);
       await expect(box.bottom).toBeLessThanOrEqual(SHORT_LAPTOP_WINDOW.height);
@@ -543,10 +540,12 @@ const showsTheUsage =
   (share: string, tone: string): Play =>
   async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByText(`${share} of the month`)).toBeVisible();
-    await expect(canvasElement.querySelector(`summary .${tone}`)).not.toBeNull();
-    await userEvent.click(canvas.getByText('Account and preferences'));
-    await expect(canvas.getByRole('link', { name: /events this month/ })).toBeVisible();
+    await userEvent.click(canvas.getByText('Account menu'));
+    const usage = canvas.getByRole('link', { name: /events this month/ });
+    await expect(usage).toBeVisible();
+    await expect(usage).toHaveAttribute('href', '#settings/billing');
+    await expect(within(usage).getByText(share)).toBeVisible();
+    await expect(usage.querySelector(`.${tone}`)).not.toBeNull();
   };
 
 export const UsageOfTheMonth: Story = {

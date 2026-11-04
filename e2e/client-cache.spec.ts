@@ -1,5 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import {
+  accountMenu,
   openTheLanguagesOfTheAccountMenu,
   sawBusyContent,
   watchForBusyContent,
@@ -83,12 +84,14 @@ test('shows a visited screen in the language chosen since', async ({ page, isMob
   await openOverviewThenFunnel(page, isMobile);
 
   await openMenuOnAPhone(page, isMobile);
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
+  await accountMenu(page).click();
   await openTheLanguagesOfTheAccountMenu(page);
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await page
+    .getByRole('dialog', { name: 'Language' })
+    .getByRole('button', { name: /^Português/ })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
-  await page.locator('summary', { hasText: 'Conta e preferências' }).click();
   const overview = page
     .getByRole('navigation', { name: 'Navegação principal' })
     .getByRole('link', { name: 'Visão geral', exact: true });

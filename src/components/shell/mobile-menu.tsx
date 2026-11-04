@@ -18,6 +18,7 @@ export interface MobileMenuProps {
 }
 
 const MENU_ID = 'main-navigation';
+const A_LINK_TO_ANOTHER_PAGE = 'a:not([href^="#"])';
 const OPEN_ICON = 'M4 7h16 M4 12h16 M4 17h16';
 const CLOSE_ICON = 'M6 6l12 12 M18 6L6 18';
 
@@ -32,7 +33,7 @@ export function MobileMenu({ project, homeLabel, children }: MobileMenuProps) {
   const openLabel = hasNews ? t('nav.openMenuWithNews') : t('nav.openMenu');
 
   const closeAfterNavigation = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.target instanceof Element && event.target.closest('a') !== null) {
+    if (event.target instanceof Element && event.target.closest(A_LINK_TO_ANOTHER_PAGE) !== null) {
       setOpenAt(undefined);
     }
   };

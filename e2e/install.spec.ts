@@ -39,20 +39,26 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('marks its own item in the navigation, without the pending tag once events arrive', async ({
+test('opens the install guide from the navigation over the screen, without the pending tag once events arrive', async ({
   page,
   isMobile,
 }) => {
-  await page.goto(INSTALL_PATH);
+  await page.goto(`/${STORE_ID}/overview`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
+  const install = page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Install' });
+  await expect(install).not.toContainText('Pending');
 
-  const current = currentNavigationLinks(page);
-  await expect(current).toHaveCount(1);
-  await expect(current).toBeVisible();
-  await expect(current).toHaveAccessibleName('Install');
-  await expect(current).not.toContainText('Pending');
+  await install.click();
+
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/install$`));
+  await expect(
+    page.getByRole('dialog', { name: 'Settings' }).getByText('1. Install Pyxis on your site'),
+  ).toBeVisible();
+  await expect(currentNavigationLinks(page)).toHaveAccessibleName('Overview');
 });
 
 test("hands the agent a request with the project's key, the API and the site", async ({

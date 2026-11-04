@@ -104,14 +104,9 @@ export const en = {
     install: 'Install',
     installPending: 'Pending',
     usage: {
-      share: '{share} of the month',
       events: '{count} of {limit} events this month',
       resets: 'Count resets on {date}',
     },
-    settings: 'Settings',
-    account: 'Account and preferences',
-    billing: 'Account and billing',
-    help: 'Help and support',
   },
   theme: {
     switch: 'Switch theme',
@@ -240,7 +235,6 @@ export const en = {
   },
   language: {
     label: 'Language',
-    current: 'Language: {name}',
   },
   settings: {
     title: 'Settings',

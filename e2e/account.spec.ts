@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { openAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -19,22 +20,19 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the account menu and shows the subscription with the month used', async ({
+test('opens the plan and billing from the month used, over the screen', async ({
   page,
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.locator('summary', { hasText: 'Account and preferences' }).click();
-  await page.getByRole('link', { name: 'Account and billing' }).click();
+  await openAccountMenu(page, isMobile);
+  await page.getByRole('link', { name: /^Plan and billing:/ }).click();
 
-  await expect(page).toHaveURL(/\/account$/);
-  await expect(page).toHaveTitle('Account and billing · Pyxis');
-  await expect(page.getByText(/^Active\. It renews on/)).toBeVisible();
-  await expect(page.getByText(/41,230 of 100,000/)).toBeVisible();
-  await expect(page.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/billing$`));
+  const settings = page.getByRole('dialog', { name: 'Settings' });
+  await expect(settings.getByText(/^Active\. It renews on/)).toBeVisible();
+  await expect(settings.getByText(/41,230 of 100,000/)).toBeVisible();
+  await expect(settings.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
 });
 
 test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {

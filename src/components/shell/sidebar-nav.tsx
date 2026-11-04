@@ -1,26 +1,20 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useId } from 'react';
 import type { Project } from '@/domain/admin';
+import { OpenSettingsButton } from '@/components/settings-dialog/open-settings-button';
 import { PendingMark } from '@/components/ui/pending-mark';
 import { useT } from '@/i18n/messages-provider';
 import { ArrivalBadge, BADGE, BADGE_TONE } from './arrival-badge';
 import { IntentPrefetchLink } from './intent-prefetch-link';
 import { NavItemIcon, navItemClasses } from './nav-item';
 import {
-  hrefKeepingView,
-  INSTALL_ITEM,
-  installHref,
-  navigationItemOf,
   SCREENS_IN_NAVIGATION_ORDER,
   screenHref,
   screenLabelKey,
   screenParameters,
-  SETTINGS_ICON,
-  SETTINGS_ITEM,
-  settingsHref,
+  screenSlugOf,
 } from './screens';
 
 const SECTION_LABEL =
@@ -51,9 +45,7 @@ export function SidebarNav({ project }: SidebarNavProps) {
   const pathname = usePathname();
   const search = useSearchParams();
   const projectLabel = useId();
-  const current = navigationItemOf(pathname);
-  const installCurrent = current === INSTALL_ITEM;
-  const settingsCurrent = current === SETTINGS_ITEM;
+  const current = screenSlugOf(pathname);
 
   return (
     <div className={`flex flex-col gap-1 ${SCROLLS_ALONE_ON_A_DESKTOP}`}>
@@ -83,27 +75,15 @@ export function SidebarNav({ project }: SidebarNavProps) {
         </span>
         <ul aria-labelledby={projectLabel} className="flex flex-col gap-0.5">
           <li>
-            <Link
-              href={hrefKeepingView(installHref(project.id), search)}
-              aria-current={installCurrent ? 'page' : undefined}
-              className={`${navItemClasses(installCurrent)} ${ROOM_FOR_A_TAG_BELOW}`}
+            <OpenSettingsButton
+              projectId={project.id}
+              section="install"
+              className={`${navItemClasses(false)} ${ROOM_FOR_A_TAG_BELOW}`}
             >
-              <NavItemIcon path={INSTALL_ICON} current={installCurrent} />
+              <NavItemIcon path={INSTALL_ICON} current={false} />
               <span>{t('nav.install')}</span>
               {project.firstEventAt === null ? <InstallPending /> : null}
-              <PendingMark />
-            </Link>
-          </li>
-          <li>
-            <Link
-              href={hrefKeepingView(settingsHref(project.id), search)}
-              aria-current={settingsCurrent ? 'page' : undefined}
-              className={navItemClasses(settingsCurrent)}
-            >
-              <NavItemIcon path={SETTINGS_ICON} current={settingsCurrent} />
-              <span>{t('nav.settings')}</span>
-              <PendingMark />
-            </Link>
+            </OpenSettingsButton>
           </li>
         </ul>
       </div>

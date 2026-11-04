@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { currentNavigationLinks } from './navigation';
+import { currentNavigationLinks, openSettings } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const DOCS_ID = '0c9b8a7d-6e5f-4a3b-8c2d-1e0f9a8b7c6d';
@@ -20,41 +20,31 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('keeps the period of the screen on the way to the settings and back', async ({
+test('opens the settings over the screen, keeping its period and filters, and closes back to it', async ({
   page,
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/devices?range=7d&device=mobile`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.getByRole('link', { name: 'Settings' }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings\\?range=7d&device=mobile$`));
-  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
+  await openSettings(page, isMobile);
+  await expect(page).toHaveURL(
+    new RegExp(`/${STORE_ID}/devices\\?range=7d&device=mobile#settings/general$`),
+  );
 
+  await page.keyboard.press('Escape');
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/devices\\?range=7d&device=mobile$`));
   if (isMobile) {
+    await page.getByRole('button', { name: 'Close menu' }).click();
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
   await page.getByRole('link', { name: 'Funnel' }).click();
 
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/funnel\\?range=7d&device=mobile$`));
-  await expect(
-    page.getByRole('navigation', { name: 'Period' }).getByRole('link', { name: '7 days' }),
-  ).toHaveAttribute('aria-current', 'page');
 });
 
-test('keeps a custom period on the way to the settings and back', async ({ page, isMobile }) => {
+test('keeps a custom period on screen behind the settings', async ({ page, isMobile }) => {
   await page.goto(`/${STORE_ID}/overview?from=2026-08-01&to=2026-08-31`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.getByRole('link', { name: 'Settings' }).click();
-  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
-
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.getByRole('link', { name: 'Overview', exact: true }).click();
+  await openSettings(page, isMobile);
+  await page.keyboard.press('Escape');
 
   await expect(page).toHaveURL(
     new RegExp(`/${STORE_ID}/overview\\?from=2026-08-01&to=2026-08-31$`),
@@ -62,24 +52,17 @@ test('keeps a custom period on the way to the settings and back', async ({ page,
   await expect(page.getByText('Aug 1 – Aug 31, 2026', { exact: true })).toBeVisible();
 });
 
-test('opens from the navigation and marks it current', async ({ page, isMobile }) => {
+test('opens from the gear beside the account, keeping the title of the screen', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/overview`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
 
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await openSettings(page, isMobile);
 
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/settings$`));
-  await expect(page.getByRole('heading', { level: 1, name: 'Settings' })).toBeVisible();
-  await expect(page).toHaveTitle('Settings · My site · Pyxis');
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await expect(page.getByRole('link', { name: 'Settings' })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/general$`));
+  await expect(page).toHaveTitle('Overview · My site · Pyxis');
+  await expect(currentNavigationLinks(page)).toHaveAccessibleName('Overview');
 });
 
 test('shows the origins, a public key and no secret key value for each project', async ({
@@ -195,17 +178,17 @@ test('asks for an export, opens it and downloads the file', async ({ page, reque
   expect(await file.text()).toMatch(/^id,occurred_at,name,path,/);
 });
 
-test('marks Settings in the navigation as where an export is', async ({ page, isMobile }) => {
+test('marks nothing in the navigation on an export, which opens from the settings', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/exports/${DEMO_EXPORT_ID}`);
   await expect(page.getByRole('heading', { level: 1, name: 'Export' })).toBeVisible();
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
 
-  const current = currentNavigationLinks(page);
-  await expect(current).toHaveCount(1);
-  await expect(current).toBeVisible();
-  await expect(current).toHaveAccessibleName('Settings');
+  await expect(currentNavigationLinks(page)).toHaveCount(0);
 });
 
 test('turns the weekly digest off and on from the e-mail panel, saying when it saved', async ({

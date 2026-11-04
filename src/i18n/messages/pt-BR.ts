@@ -112,14 +112,9 @@ export const ptBR = translation({
     install: 'Instalação',
     installPending: 'Pendente',
     usage: {
-      share: '{share} do mês',
       events: '{count} de {limit} eventos neste mês',
       resets: 'A contagem zera em {date}',
     },
-    settings: 'Configurações',
-    account: 'Conta e preferências',
-    billing: 'Conta e cobrança',
-    help: 'Ajuda e suporte',
   },
   theme: {
     switch: 'Trocar o tema',
@@ -253,7 +248,6 @@ export const ptBR = translation({
   },
   language: {
     label: 'Idioma',
-    current: 'Idioma: {name}',
   },
   settings: {
     title: 'Configurações',
