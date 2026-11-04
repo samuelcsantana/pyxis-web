@@ -74,7 +74,7 @@ describe('llmsText', () => {
       const onTheFreePlan = llmsText(offer);
 
       expect(onTheFreePlan).toContain(
-        'https://app.pyxis-analytics.dev/sign-up (Hobby plan, free: 10,000 events a month on one site, no card; Pro plan for more).',
+        'https://app.pyxis-analytics.dev/sign-up (Hobby plan, free: 10,000 events a month on one site, no card; Pro plan: 250,000 events a month, 10 sites and 10 people, R$ 39 a month).',
       );
       expect(onTheFreePlan).not.toContain('trial');
     },
