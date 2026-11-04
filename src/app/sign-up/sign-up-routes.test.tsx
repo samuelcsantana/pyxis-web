@@ -133,7 +133,7 @@ describe('SignUpPage', () => {
   });
 
   it.each(['open', 'full'] as const)(
-    'asks an unfinished owner to subscribe, with no free trial, while the free plan is %s',
+    'asks an unfinished owner to subscribe, with no free trial, while the Hobby plan is %s',
     async (freePlan) => {
       state.token = 'session';
       state.accounts = () => demoAccount({ status: 'incomplete' });
@@ -167,7 +167,7 @@ describe('SignUpPage', () => {
     renderWithMessages(await SignUpPage());
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'The free plan is full for now' }),
+      screen.getByRole('heading', { level: 1, name: 'The Hobby plan is full for now' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Subscribe now' })).toBeInTheDocument();
   });
@@ -254,7 +254,7 @@ describe('WelcomePage', () => {
 
     renderWithMessages(await welcome());
 
-    expect(screen.getByRole('status')).toHaveTextContent('Your account is on the free plan.');
+    expect(screen.getByRole('status')).toHaveTextContent('Your account is on the Hobby plan.');
     expect(
       screen.getByText(
         'Up to 10,000 events a month, 1 project and 1 person, with every feature and no card. Measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
@@ -309,7 +309,7 @@ describe('WelcomePage', () => {
     renderWithMessages(await welcome());
 
     expect(screen.getByRole('status')).toHaveTextContent('Confirming your subscription…');
-    expect(screen.queryByText('Your account is on the free plan.')).not.toBeInTheDocument();
+    expect(screen.queryByText('Your account is on the Hobby plan.')).not.toBeInTheDocument();
   });
 
   it('confirms the subscription of an account that left the free plan, with its new limits', async () => {

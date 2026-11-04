@@ -132,7 +132,7 @@ export const FreePlanFullWaitingForAPlace: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Send code' }));
     await userEvent.click(await canvas.findByRole('button', { name: `Use ${DEMO_SIGN_IN_CODE}` }));
     await expect(
-      await canvas.findByRole('heading', { name: 'The free plan is full for now' }),
+      await canvas.findByRole('heading', { name: 'The Hobby plan is full for now' }),
     ).toBeVisible();
     await expect(canvas.getByRole('button', { name: 'Subscribe now' })).toBeVisible();
   },

@@ -85,7 +85,7 @@ describe('AccountPage', () => {
     renderWithMessages(await AccountPage());
 
     expect(
-      screen.getByText(/^If you cancel, the account goes back to the free plan/),
+      screen.getByText(/^If you cancel, the account goes back to the Hobby plan/),
     ).toBeVisible();
     expect(screen.getByRole('button', { name: 'Withdraw from the subscription' })).toBeVisible();
   });
@@ -132,10 +132,10 @@ describe('AccountPage', () => {
     expect(within(support).getByText('hello@pyxis-analytics.dev')).toBeInTheDocument();
     expect(within(support).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
     expect(support).toHaveTextContent(
-      'On the paid plan, we confirm that your message arrived and reply within 2 business days.',
+      'On the Pro plan, we confirm that your message arrived and reply within 2 business days.',
     );
     expect(support).toHaveTextContent('Write from owner@example.com, so we know which account');
-    expect(support).not.toHaveTextContent('On the free plan');
+    expect(support).not.toHaveTextContent('On the Hobby plan');
   });
 
   it('in the demo, shows the notice, the logo to the landing page and the way back first', async () => {

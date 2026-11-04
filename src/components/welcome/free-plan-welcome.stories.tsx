@@ -34,7 +34,9 @@ type Story = StoryObj<typeof meta>;
 export const OnTheFreePlan: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('status')).toHaveTextContent('Your account is on the free plan.');
+    await expect(canvas.getByRole('status')).toHaveTextContent(
+      'Your account is on the Hobby plan.',
+    );
     await expect(canvas.getByRole('link', { name: 'Create your first project' })).toBeVisible();
   },
 };

@@ -83,7 +83,7 @@ describe('HelpPage', () => {
     expect(within(write).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
     expect(write).toHaveTextContent('Write from owner@example.com, so we know which account');
     expect(write).toHaveTextContent('reply within 2 business days');
-    expect(write).not.toHaveTextContent('On the free plan');
+    expect(write).not.toHaveTextContent('On the Hobby plan');
     expect(screen.getByRole('link', { name: 'How to install' })).toHaveAttribute(
       'href',
       `/${DEMO_STORE.id}/install`,
@@ -123,7 +123,7 @@ describe('HelpPage', () => {
     renderWithMessages(await renderHelp());
 
     const write = screen.getByRole('region', { name: 'Write to support' });
-    expect(write).toHaveTextContent('On the free plan, we reply by e-mail within 5 days');
+    expect(write).toHaveTextContent('On the Hobby plan, we reply by e-mail within 5 days');
     expect(write).not.toHaveTextContent('2 business days');
   });
 

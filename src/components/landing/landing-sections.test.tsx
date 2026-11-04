@@ -155,7 +155,7 @@ describe('InstallSection', () => {
   });
 
   it.each(['free', 'freeFull'] as const)(
-    'starts the steps and the keys on the free plan, with no card nor trial (%s)',
+    'starts the steps and the keys on the Hobby plan, with no card nor trial (%s)',
     (offer) => {
       render(<InstallSection i18n={english} offer={offer} />);
 
@@ -164,7 +164,7 @@ describe('InstallSection', () => {
         screen.getByRole('list', { name: 'How to start, in 3 steps' }),
       ).getAllByRole('listitem');
       expect(account).toHaveTextContent(
-        'In the dashboard, with an e-mail and no card: the free plan takes one site.',
+        'In the dashboard, with an e-mail and no card: the Hobby plan takes one site.',
       );
       expect(section).toHaveTextContent(
         'Your keys come with your account: start free below, or run your own Pyxis.',

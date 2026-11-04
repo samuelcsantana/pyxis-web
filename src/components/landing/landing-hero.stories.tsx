@@ -53,7 +53,7 @@ export const FreePlanOpen: Story = {
   play: async ({ canvasElement }) => {
     await expect(within(canvasElement).getByRole('link', { name: 'Start free' })).toBeVisible();
     await expect(
-      within(canvasElement).getByRole('link', { name: 'See the paid plan' }),
+      within(canvasElement).getByRole('link', { name: 'See the Pro plan' }),
     ).toBeVisible();
   },
 };

@@ -67,7 +67,7 @@ describe('LandingHero', () => {
     expect(start).toHaveAttribute('data-track', 'sign_up_opened');
     expect(start).toHaveAttribute('data-track-from', 'hero');
     expect(start).toHaveAttribute('data-track-plan', 'free');
-    expect(paid).toHaveAccessibleName('See the paid plan');
+    expect(paid).toHaveAccessibleName('See the Pro plan');
     expect(paid).toHaveAttribute('href', '#pricing');
     expect(paid).toHaveAttribute('data-track', 'pricing_opened');
     expect(
@@ -83,7 +83,7 @@ describe('LandingHero', () => {
 
     expect(screen.getByRole('link', { name: 'Start free' })).toBeInTheDocument();
     expect(
-      screen.getByText(/The free plan is full for now: sign up and your account waits/),
+      screen.getByText(/The Hobby plan is full for now: sign up and your account waits/),
     ).toBeVisible();
   });
 
@@ -121,7 +121,7 @@ describe('LandingHero', () => {
     render(<LandingHero i18n={portuguese} preview={showcasePreview(portuguese)} offer="free" />);
 
     expect(screen.getByRole('link', { name: 'Começar grátis' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ver o plano pago' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ver o plano Pro' })).toBeInTheDocument();
     expect(
       screen.getByText(/Grátis até 10\.000 eventos por mês em um site, sem cartão\./),
     ).toBeVisible();

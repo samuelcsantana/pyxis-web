@@ -322,7 +322,7 @@ describe('PricingSection', () => {
       render(<PricingSection i18n={english} offer="freeFull" />);
 
       expect(screen.getByRole('link', { name: 'Start free' })).toBeInTheDocument();
-      expect(screen.getByText(/^The free plan is full for now: sign up/)).toBeInTheDocument();
+      expect(screen.getByText(/^The Hobby plan is full for now: sign up/)).toBeInTheDocument();
     });
 
     it('speaks the visitor’s language, in its numbers', () => {

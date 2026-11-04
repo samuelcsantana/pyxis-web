@@ -46,9 +46,7 @@ describe('LandingFooter', () => {
       ],
       ['Author: samuelsantana.dev', 'https://www.samuelsantana.dev'],
     ]);
-    expect(
-      screen.getByText('Replies within 2 business days on the paid plan.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Replies within 2 business days on the Pro plan.')).toBeInTheDocument();
   });
 
   it('shows the measurement note it is given beside the credits', () => {

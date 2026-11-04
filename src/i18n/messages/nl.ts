@@ -371,7 +371,7 @@ export const nl = translation({
       incompleteFree:
         'Het abonnement is niet afgerond. Kies een abonnement om af te sluiten; het wordt vanaf vandaag in rekening gebracht.',
       comped: 'Een account aangeboden door Pyxis.',
-      free: 'Gratis abonnement: maximaal {events} events per maand.',
+      free: 'Hobby-abonnement, gratis: maximaal {events} events per maand.',
       trialingUndated:
         'Gratis proefperiode. Daarna wordt het abonnement in rekening gebracht, tenzij je opzegt.',
       activeUndated: 'Actief.',
@@ -405,32 +405,32 @@ export const nl = translation({
       'Neem opnieuw een abonnement om de gegevens te behouden: het abonnement wordt vanaf vandaag in rekening gebracht, en de oude sleutels blijven ingetrokken, dus elk project heeft een nieuwe publieke sleutel nodig.',
     exempt: 'Tot {date} wordt het meten niet gepauzeerd als de maandlimiet wordt overschreden.',
     freePause:
-      'Met het gratis abonnement pauzeert het meten zodra de maand {events} events bereikt, en het gaat op de 1e weer verder.',
+      'Met het Hobby-abonnement pauzeert het meten zodra de maand {events} events bereikt, en het gaat op de 1e weer verder.',
     paidPlan: {
-      heading: 'Het betaalde abonnement',
+      heading: 'Het Pro-abonnement',
       offer:
         'Tot 100.000 events per maand, 3 projecten en 3 personen, voor R$ 39 per maand of R$ 390 per jaar. Het wordt vandaag afgerekend en verlengt tot je opzegt.',
       resumes: 'Het meten gaat binnen een minuut na het afsluiten weer verder.',
     },
     fit: {
       dueBy:
-        'Dit account bevat meer dan het gratis abonnement toestaat. Zorg dat het uiterlijk {date} past, anders eindigt het account die dag:',
-      projects: 'Verwijder {count}: het gratis abonnement staat {limit} toe.',
-      people: 'Verwijder {count}: het gratis abonnement staat {limit} toe, jij meegerekend.',
+        'Dit account bevat meer dan het Hobby-abonnement toestaat. Zorg dat het uiterlijk {date} past, anders eindigt het account die dag:',
+      projects: 'Verwijder {count}: het Hobby-abonnement staat {limit} toe.',
+      people: 'Verwijder {count}: het Hobby-abonnement staat {limit} toe, jij meegerekend.',
       where: 'Projecten en personen verwijder je in de Instellingen van elk project.',
     },
     afterCancel: {
       backToFree:
-        'Als je opzegt, gaat het account aan het einde van de periode terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+        'Als je opzegt, gaat het account aan het einde van de periode terug naar het Hobby-abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
       backToFreeOn:
-        'Op {date} gaat het account terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+        'Op {date} gaat het account terug naar het Hobby-abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
       backToFreeAtTheEnd:
-        'Aan het einde van de periode gaat het account terug naar het gratis abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
-      ends: 'Als je opzegt, eindigt het account aan het einde van de periode. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+        'Aan het einde van de periode gaat het account terug naar het Hobby-abonnement, met zijn projecten en gegevens: tot {events} events per maand, en daarboven pauzeert het meten tot de 1e.',
+      ends: 'Als je opzegt, eindigt het account aan het einde van de periode. Om het op het Hobby-abonnement te houden, zorg dat het er vóór die tijd in past:',
       endsOn:
-        'Op {date} eindigt het account. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+        'Op {date} eindigt het account. Om het op het Hobby-abonnement te houden, zorg dat het er vóór die tijd in past:',
       endsAtTheEnd:
-        'Aan het einde van de periode eindigt het account. Om het op het gratis abonnement te houden, zorg dat het er vóór die tijd in past:',
+        'Aan het einde van de periode eindigt het account. Om het op het Hobby-abonnement te houden, zorg dat het er vóór die tijd in past:',
     },
     notice: {
       suspended: 'Dit account is geschorst, dus de projecten meten niet meer.',
@@ -443,7 +443,7 @@ export const nl = translation({
       paused:
         'Het meten is gepauzeerd tot {date}: het account is over zijn maandlimiet aan events gegaan.',
       freePlanPaused:
-        'Het meten is gepauzeerd: het account heeft deze maand de {events} events van het gratis abonnement bereikt. Het gaat op {date} weer verder, of binnen een minuut na het afsluiten van een abonnement.',
+        'Het meten is gepauzeerd: het account heeft deze maand de {events} events van het Hobby-abonnement bereikt. Het gaat op {date} weer verder, of binnen een minuut na het afsluiten van een abonnement.',
       subscribe: 'Nu abonneren',
       nearQuota: 'Deze maand heeft het account {share} van zijn events gebruikt.',
       open: 'Facturatie openen',
@@ -458,9 +458,9 @@ export const nl = translation({
     writeHeading: 'De support mailen',
     fromAccount: 'Mail vanaf {email}, zodat we weten om welk account het gaat.',
     paidReply:
-      'Bij het betaalde abonnement bevestigen we dat je bericht is aangekomen en antwoorden we binnen {days} werkdagen.',
+      'Bij het Pro-abonnement bevestigen we dat je bericht is aangekomen en antwoorden we binnen {days} werkdagen.',
     freeReply:
-      'Bij het gratis abonnement antwoorden we per e-mail binnen {days} dagen over het contract, het abonnement en de limieten, facturatie, opzegging en persoonsgegevens. Vragen over installatie en gebruik lopen via GitHub.',
+      'Bij het Hobby-abonnement antwoorden we per e-mail binnen {days} dagen over het contract, het abonnement en de limieten, facturatie, opzegging en persoonsgegevens. Vragen over installatie en gebruik lopen via GitHub.',
     noPersonalData:
       'Stuur om een geval te laten zien de ID van het bezoek, nooit persoonsgegevens van je bezoekers.',
     docsHeading: 'Installatie en gebruik',
@@ -561,21 +561,21 @@ export const nl = translation({
   },
   withdrawal: {
     heading: 'Herroeping',
-    note: 'Binnen 7 dagen na de eerste betaling kun je herroepen: het abonnement wordt meteen opgezegd, die betaling wordt volledig terugbetaald en het account gaat terug naar het gratis abonnement, met zijn projecten en gegevens.',
+    note: 'Binnen 7 dagen na de eerste betaling kun je herroepen: het abonnement wordt meteen opgezegd, die betaling wordt volledig terugbetaald en het account gaat terug naar het Hobby-abonnement, met zijn projecten en gegevens.',
     start: 'Abonnement herroepen',
     question:
       'Nu herroepen? Het abonnement stopt meteen en de eerste betaling gaat terug naar je kaart.',
     confirm: 'Herroepen en terugbetaald krijgen',
     keep: 'Abonnement houden',
     withdrawing: 'Herroepen…',
-    done: 'Je hebt het abonnement herroepen. Het account is terug op het gratis abonnement.',
+    done: 'Je hebt het abonnement herroepen. Het account is terug op het Hobby-abonnement.',
     refunded: '{amount} is teruggestort op je kaart.',
     refundByHand:
       'De automatische terugbetaling is niet gelukt, dus Pyxis betaalt de eerste betaling met de hand terug.',
     fitBy:
-      'Het account bevat meer dan het gratis abonnement toestaat: zorg dat het uiterlijk {date} past, anders eindigt het die dag.',
+      'Het account bevat meer dan het Hobby-abonnement toestaat: zorg dat het uiterlijk {date} past, anders eindigt het die dag.',
     freePlanClosed:
-      'Het gratis abonnement is nu gesloten, dus er is geen abonnement om naar terug te gaan. Zeg op via Facturatie beheren om de verlenging te stoppen.',
+      'Het Hobby-abonnement is nu gesloten, dus er is geen abonnement om naar terug te gaan. Zeg op via Facturatie beheren om de verlenging te stoppen.',
     noPaidSubscription:
       'Dit account heeft geen betaald abonnement om te herroepen. Laad de pagina opnieuw.',
     windowClosed:
@@ -759,14 +759,15 @@ export const nl = translation({
     finishBody:
       'Je account wacht op een abonnement. Kies er een om de gratis proefperiode te starten.',
     freeTitle: 'Maak je gratis account aan',
-    freeIntro: 'Gratis: maximaal {events} events per maand, op één site. Zonder kaart.',
+    freeIntro:
+      'Hobby-abonnement, gratis: maximaal {events} events per maand, op één site. Zonder kaart.',
     fullTitle: 'Maak je account aan',
     fullIntro:
-      'Het gratis abonnement is op dit moment vol. Maak je account aan en het wacht op een plek, of neem direct daarna het betaalde abonnement.',
+      'Het Hobby-abonnement is op dit moment vol. Maak je account aan en het wacht op een plek, of neem direct daarna het Pro-abonnement.',
     opening: 'Je account wordt geopend…',
-    waitTitle: 'Het gratis abonnement is op dit moment vol',
+    waitTitle: 'Het Hobby-abonnement is op dit moment vol',
     waitBody:
-      'Je account is klaar en wacht op een plek in het gratis abonnement: we mailen je zodra er een vrijkomt, en het wacht maximaal {days} dagen. Je kunt ook nu het betaalde abonnement nemen.',
+      'Je account is klaar en wacht op een plek in het Hobby-abonnement: we mailen je zodra er een vrijkomt, en het wacht maximaal {days} dagen. Je kunt ook nu het Pro-abonnement nemen.',
   },
   signUpPage: {
     title: 'Registreren',
@@ -786,7 +787,7 @@ export const nl = translation({
       'Dit duurt een paar seconden en de pagina controleert vanzelf opnieuw. Duurt het langer, dan krijg je een e-mail zodra het klaar is.',
     trial: 'Je gratis proefperiode is gestart. Die loopt tot {date}.',
     active: 'Je abonnement is bevestigd.',
-    free: 'Je account staat op het gratis abonnement.',
+    free: 'Je account staat op het Hobby-abonnement.',
     freeLimits:
       'Maximaal {events} events per maand, {projects} en {people}, met alle functies en zonder kaart. Het meten pauzeert wanneer de maand {pauseAt} events bereikt en gaat op de 1e weer verder.',
     fromFreePlan:
@@ -1872,11 +1873,11 @@ export const nl = translation({
       seePricing: 'Bekijk de prijzen',
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',
       startFree: 'Gratis beginnen',
-      seePaidPlan: 'Bekijk het betaalde abonnement',
+      seePaidPlan: 'Bekijk het Pro-abonnement',
       freeNote:
         'Gratis voor maximaal {events} events per maand op één site, zonder kaart. De demo opent zonder registratie.',
       freeFullNote:
-        'Het gratis abonnement is op dit moment vol: registreer je en je account wacht op een plek, of neem het betaalde abonnement.',
+        'Het Hobby-abonnement is op dit moment vol: registreer je en je account wacht op een plek, of neem het Pro-abonnement.',
       trialNote:
         '14 dagen gratis; je kaart wordt pas op dag 15 belast. De demo opent zonder registratie.',
       claudeTag: 'In de directory van Claude',
@@ -2085,7 +2086,7 @@ export const nl = translation({
         account: {
           title: 'Maak het account en het project aan',
           bodyFree:
-            'In het dashboard, met een e-mailadres en zonder kaart: het gratis abonnement dekt één site. Het project krijgt meteen zijn publieke sleutel.',
+            'In het dashboard, met een e-mailadres en zonder kaart: het Hobby-abonnement dekt één site. Het project krijgt meteen zijn publieke sleutel.',
           body: 'In het dashboard, met een e-mailadres en een kaart: 14 dagen gratis. Het project krijgt meteen zijn publieke sleutel.',
         },
         install: {
@@ -2348,14 +2349,14 @@ export const nl = translation({
           answerOpen:
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of neem een abonnement op de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres en een kaart: 14 dagen gratis, één keer per klant, en je kunt altijd opzeggen.',
           answerFree:
-            'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of gebruik de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres, zonder kaart, op het gratis abonnement, en het betaalde abonnement nemen als de site meer nodig heeft.',
+            'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of gebruik de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres, zonder kaart, op het Hobby-abonnement, en het Pro-abonnement nemen als de site meer nodig heeft.',
         },
         agency: {
           question: 'Kan ik Pyxis gebruiken op de sites van mijn klanten?',
           answer:
             'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
           answerFree:
-            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het gratis abonnement omvat één site en alleen jou; het betaalde abonnement tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
+            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het Hobby-abonnement omvat één site en alleen jou; het Pro-abonnement tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
         },
         noCode: {
           question: 'Ik programmeer niet. Kan ik het installeren?',
@@ -2382,7 +2383,7 @@ export const nl = translation({
           answer:
             'R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart. Inbegrepen: tot 100.000 events per maand, 3 sites, 3 personen in het dashboard, 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server.',
           answerFree:
-            'Beide abonnementen hebben alle functies: 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server. Het gratis abonnement kost niets en neemt tot {events} events per maand aan, op één site, met alleen jou in het dashboard. Het betaalde abonnement kost R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart, direct afgerekend, en neemt tot 100.000 events per maand, 3 sites en 3 personen aan.',
+            'Beide abonnementen hebben alle functies: 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server. Het Hobby-abonnement kost niets en neemt tot {events} events per maand aan, op één site, met alleen jou in het dashboard. Het Pro-abonnement kost R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart, direct afgerekend, en neemt tot 100.000 events per maand, 3 sites en 3 personen aan.',
         },
         trial: {
           question: 'Hoe werkt de gratis proefperiode?',
@@ -2396,7 +2397,7 @@ export const nl = translation({
           answerOpen:
             'Altijd, op twee manieren: zeg op in het facturatieportaal, dan houd je toegang tot het einde van de betaalde periode; of hef het account op in het dashboard, dan eindigt de toegang meteen. Hef je het account op binnen 7 dagen na de eerste betaling, dan krijg je die betaling volledig terug; daarna wordt de al betaalde periode niet terugbetaald. De gegevens van het project worden 30 dagen na het einde van de toegang verwijderd. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
           answerFree:
-            'Altijd, in het facturatieportaal: het betaalde abonnement loopt tot het einde van de al betaalde periode, daarna gaat een account met één site en één persoon terug naar het gratis abonnement; een groter account eindigt, en de gegevens worden 30 dagen later verwijderd. Binnen 7 dagen na de eerste betaling kun je herroepen: de betaling wordt volledig terugbetaald en het account gaat terug naar het gratis abonnement als het erin past. Hef je het account op in het dashboard, dan eindigt alles meteen, op elk abonnement. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
+            'Altijd, in het facturatieportaal: het Pro-abonnement loopt tot het einde van de al betaalde periode, daarna gaat een account met één site en één persoon terug naar het Hobby-abonnement; een groter account eindigt, en de gegevens worden 30 dagen later verwijderd. Binnen 7 dagen na de eerste betaling kun je herroepen: de betaling wordt volledig terugbetaald en het account gaat terug naar het Hobby-abonnement als het erin past. Hef je het account op in het dashboard, dan eindigt alles meteen, op elk abonnement. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
         },
         limit: {
           question: 'Wat als ik over de 100.000 events ga?',
@@ -2404,9 +2405,9 @@ export const nl = translation({
             'Je krijgt een e-mail bij 80% en bij 100% van de events van de maand. Bij 150% neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Er wordt nooit meer in rekening gebracht dan de prijs.',
         },
         freeLimit: {
-          question: 'Wat als ik op het gratis abonnement {events} events haal?',
+          question: 'Wat als ik op het Hobby-abonnement {events} events haal?',
           answer:
-            'Op het gratis abonnement waarschuwt een e-mail bij 80% van de events van de maand. Bij {events} neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Met het betaalde abonnement is de pauze binnen een minuut voorbij.',
+            'Op het Hobby-abonnement waarschuwt een e-mail bij 80% van de events van de maand. Bij {events} neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Met het Pro-abonnement is de pauze binnen een minuut voorbij.',
         },
         payment: {
           question: 'Kan ik met Pix betalen, en krijg ik een factuur?',
@@ -2416,7 +2417,7 @@ export const nl = translation({
         support: {
           question: 'Hoe bereik ik de support?',
           answer:
-            'Per e-mail, via {email}, het liefst vanaf het e-mailadres van je account. Bij het betaalde abonnement antwoorden we binnen {paidDays} werkdagen. Bij het gratis abonnement lopen vragen over installatie en gebruik via de issues op GitHub en de documentatie; het contract, het abonnement, de limieten, facturatie en persoonsgegevens blijven per e-mail, met een antwoord binnen {freeDays} dagen. Meld een beveiligingslek vertrouwelijk via GitHub.',
+            'Per e-mail, via {email}, het liefst vanaf het e-mailadres van je account. Bij het Pro-abonnement antwoorden we binnen {paidDays} werkdagen. Bij het Hobby-abonnement lopen vragen over installatie en gebruik via de issues op GitHub en de documentatie; het contract, het abonnement, de limieten, facturatie en persoonsgegevens blijven per e-mail, met een antwoord binnen {freeDays} dagen. Meld een beveiligingslek vertrouwelijk via GitHub.',
         },
       },
     },
@@ -2460,7 +2461,7 @@ export const nl = translation({
       pricing: 'Prijzen',
       code: 'Code',
       support: 'Support',
-      supportReply: 'Antwoord binnen {days} werkdagen bij het betaalde abonnement.',
+      supportReply: 'Antwoord binnen {days} werkdagen bij het Pro-abonnement.',
       questions: 'Vragen op GitHub',
       securityReport: 'Beveiligingslek melden',
       author: 'Auteur: {site}',

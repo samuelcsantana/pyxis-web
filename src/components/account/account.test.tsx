@@ -110,7 +110,7 @@ describe('AccountOverview', () => {
     });
 
     expect(screen.getByRole('heading', { name: 'Plan' })).toBeInTheDocument();
-    expect(screen.getByText('Free plan: up to 10,000 events a month.')).toBeInTheDocument();
+    expect(screen.getByText('Hobby plan, free: up to 10,000 events a month.')).toBeInTheDocument();
     expect(screen.getByText('3,120 of 10,000')).toBeInTheDocument();
     expect(screen.getByText('Up to 1 project and 1 person, you included.')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Manage billing' })).not.toBeInTheDocument();
@@ -471,7 +471,7 @@ describe('AccountNoticeBanner', () => {
     );
 
     expect(screen.getByRole('note')).toHaveTextContent(
-      "Measuring is paused: the account reached the free plan's 10,000 events this month. It comes back on Dec 1, 2026, or within a minute of subscribing.",
+      "Measuring is paused: the account reached the Hobby plan's 10,000 events this month. It comes back on Dec 1, 2026, or within a minute of subscribing.",
     );
     expect(screen.getByRole('link', { name: 'Subscribe now' })).toHaveAttribute('href', '/account');
   });

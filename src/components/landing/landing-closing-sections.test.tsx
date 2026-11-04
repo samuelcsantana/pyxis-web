@@ -143,7 +143,7 @@ describe('FaqSection', () => {
 
     expect(screen.getByText('How do I reach support?')).toBeInTheDocument();
     const answer = screen.getByText(/^By e-mail, at hello@pyxis-analytics\.dev/);
-    expect(answer).toHaveTextContent('On the paid plan, we reply within 2 business days.');
+    expect(answer).toHaveTextContent('On the Pro plan, we reply within 2 business days.');
     expect(answer).toHaveTextContent('with a reply within 5 days');
     expect(
       screen.getByText(/write to hello@pyxis-analytics\.dev before subscribing\.$/),
@@ -240,11 +240,11 @@ describe('FaqSection', () => {
         expect(questions).not.toContain('How does the free trial work?');
         const afterPrice = questions.indexOf('How much does it cost?') + 1;
         expect(questions.slice(afterPrice, afterPrice + 2)).toEqual([
-          'What happens at 10,000 events on the free plan?',
+          'What happens at 10,000 events on the Hobby plan?',
           'How do I cancel?',
         ]);
         expect(
-          screen.getByText(/^On the free plan, an e-mail warns at 80% of the month’s events\./),
+          screen.getByText(/^On the Hobby plan, an e-mail warns at 80% of the month’s events\./),
         ).toBeInTheDocument();
         expect(screen.queryByText(/14 days|free trial|day 15/)).toBeNull();
       },
@@ -254,15 +254,15 @@ describe('FaqSection', () => {
       render(<FaqSection i18n={english} offer="free" />);
 
       expect(
-        screen.getByText(/The free plan costs nothing and takes up to 10,000 events a month/),
+        screen.getByText(/The Hobby plan costs nothing and takes up to 10,000 events a month/),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/sign up with an e-mail, with no card, on the free plan/),
+        screen.getByText(/sign up with an e-mail, with no card, on the Hobby plan/),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/The free plan has one site and only you; the paid plan/),
+        screen.getByText(/The Hobby plan has one site and only you; the Pro plan/),
       ).toBeInTheDocument();
-      const cancel = screen.getByText(/goes back to the free plan; a larger one ends/);
+      const cancel = screen.getByText(/goes back to the Hobby plan; a larger one ends/);
       expect(within(cancel).getByRole('link', { name: 'Terms of Use' })).toHaveAttribute(
         'href',
         'https://pyxis-analytics.dev/en/terms',
@@ -274,7 +274,7 @@ describe('FaqSection', () => {
       render(<FaqSection i18n={portuguese} offer="free" />);
 
       expect(
-        screen.getByText('E se eu chegar a 10.000 eventos no plano grátis?'),
+        screen.getByText('E se eu chegar a 10.000 eventos no plano Hobby?'),
       ).toBeInTheDocument();
     });
   });

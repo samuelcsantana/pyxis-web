@@ -367,7 +367,7 @@ export const ptBR = translation({
       incompleteFree:
         'A assinatura não foi concluída. Escolha um plano para assinar; a cobrança começa hoje.',
       comped: 'Uma conta de cortesia, dada pelo Pyxis.',
-      free: 'Plano grátis: até {events} eventos por mês.',
+      free: 'Plano Hobby, grátis: até {events} eventos por mês.',
       trialingUndated: 'Teste grátis. Depois, o plano é cobrado, a não ser que você cancele.',
       activeUndated: 'Ativa.',
       endingUndated: 'Cancelada. O acesso continua até o fim do período, sem nova cobrança.',
@@ -398,31 +398,31 @@ export const ptBR = translation({
       'Assine de novo para manter os dados: o plano é cobrado a partir de hoje, e as chaves antigas continuam revogadas, então cada projeto precisa de uma chave pública nova.',
     exempt: 'A medição não é pausada depois do limite do mês até {date}.',
     freePause:
-      'No plano grátis, a medição pausa quando o mês chega a {events} eventos e volta no dia 1º.',
+      'No plano Hobby, a medição pausa quando o mês chega a {events} eventos e volta no dia 1º.',
     paidPlan: {
-      heading: 'O plano pago',
+      heading: 'O plano Pro',
       offer:
         'Até 100 mil eventos por mês, 3 projetos e 3 pessoas, por R$ 39 por mês ou R$ 390 por ano. A cobrança é feita hoje e se renova até você cancelar.',
       resumes: 'A medição volta em até um minuto depois da assinatura.',
     },
     fit: {
       dueBy:
-        'Esta conta tem mais do que o plano grátis comporta. Ajuste-a até {date}, ou a conta termina nesse dia:',
-      projects: 'Apague {count}: o plano grátis comporta {limit}.',
-      people: 'Remova {count}: o plano grátis comporta {limit}, contando com você.',
+        'Esta conta tem mais do que o plano Hobby comporta. Ajuste-a até {date}, ou a conta termina nesse dia:',
+      projects: 'Apague {count}: o plano Hobby comporta {limit}.',
+      people: 'Remova {count}: o plano Hobby comporta {limit}, contando com você.',
       where: 'Projetos são apagados, e pessoas removidas, nas Configurações de cada projeto.',
     },
     afterCancel: {
       backToFree:
-        'Se você cancelar, a conta volta para o plano grátis no fim do período, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+        'Se você cancelar, a conta volta para o plano Hobby no fim do período, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
       backToFreeOn:
-        'Em {date} a conta volta para o plano grátis, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+        'Em {date} a conta volta para o plano Hobby, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
       backToFreeAtTheEnd:
-        'No fim do período a conta volta para o plano grátis, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
-      ends: 'Se você cancelar, a conta termina no fim do período. Para mantê-la no plano grátis, ajuste-a antes disso:',
-      endsOn: 'Em {date} a conta termina. Para mantê-la no plano grátis, ajuste-a antes disso:',
+        'No fim do período a conta volta para o plano Hobby, com os projetos e os dados: até {events} eventos por mês, e acima disso a medição pausa até o dia 1º.',
+      ends: 'Se você cancelar, a conta termina no fim do período. Para mantê-la no plano Hobby, ajuste-a antes disso:',
+      endsOn: 'Em {date} a conta termina. Para mantê-la no plano Hobby, ajuste-a antes disso:',
       endsAtTheEnd:
-        'No fim do período a conta termina. Para mantê-la no plano grátis, ajuste-a antes disso:',
+        'No fim do período a conta termina. Para mantê-la no plano Hobby, ajuste-a antes disso:',
     },
     notice: {
       suspended: 'Esta conta está suspensa, então os projetos dela pararam de medir.',
@@ -433,7 +433,7 @@ export const ptBR = translation({
       endedHeld: 'Sua assinatura terminou. A exclusão dos dados está em espera.',
       paused: 'A medição está pausada até {date}: a conta passou dos eventos do mês.',
       freePlanPaused:
-        'A medição está pausada: a conta chegou aos {events} eventos do plano grátis neste mês. Ela volta em {date}, ou em até um minuto depois da assinatura.',
+        'A medição está pausada: a conta chegou aos {events} eventos do plano Hobby neste mês. Ela volta em {date}, ou em até um minuto depois da assinatura.',
       subscribe: 'Assinar agora',
       nearQuota: 'Neste mês a conta já usou {share} dos eventos.',
       open: 'Abrir a cobrança',
@@ -448,9 +448,9 @@ export const ptBR = translation({
     writeHeading: 'Escrever para o suporte',
     fromAccount: 'Escreva a partir de {email}, para sabermos de qual conta se trata.',
     paidReply:
-      'No plano pago, confirmamos que a sua mensagem chegou e respondemos em até {days} dias úteis.',
+      'No plano Pro, confirmamos que a sua mensagem chegou e respondemos em até {days} dias úteis.',
     freeReply:
-      'No plano grátis, respondemos por e-mail em até {days} dias sobre o contrato, o plano e os limites, a cobrança, o cancelamento e os dados pessoais. As dúvidas de instalação e de uso vão pelo GitHub.',
+      'No plano Hobby, respondemos por e-mail em até {days} dias sobre o contrato, o plano e os limites, a cobrança, o cancelamento e os dados pessoais. As dúvidas de instalação e de uso vão pelo GitHub.',
     noPersonalData:
       'Para mostrar um caso, mande o id da visita, nunca dados pessoais dos seus visitantes.',
     docsHeading: 'Instalação e uso',
@@ -549,21 +549,21 @@ export const ptBR = translation({
   },
   withdrawal: {
     heading: 'Desistência',
-    note: 'Nos 7 dias depois do primeiro pagamento, você pode desistir: a assinatura é cancelada na hora, esse pagamento é devolvido por inteiro e a conta volta para o plano grátis, com os projetos e os dados.',
+    note: 'Nos 7 dias depois do primeiro pagamento, você pode desistir: a assinatura é cancelada na hora, esse pagamento é devolvido por inteiro e a conta volta para o plano Hobby, com os projetos e os dados.',
     start: 'Desistir da assinatura',
     question:
       'Desistir agora? A assinatura termina na hora e o primeiro pagamento volta para o seu cartão.',
     confirm: 'Desistir e receber o reembolso',
     keep: 'Manter a assinatura',
     withdrawing: 'Desistindo…',
-    done: 'Você desistiu da assinatura. A conta voltou para o plano grátis.',
+    done: 'Você desistiu da assinatura. A conta voltou para o plano Hobby.',
     refunded: '{amount} foram devolvidos ao seu cartão.',
     refundByHand:
       'O reembolso automático não deu certo, então o Pyxis devolve o primeiro pagamento manualmente.',
     fitBy:
-      'A conta tem mais do que o plano grátis comporta: ajuste-a até {date}, ou ela termina nesse dia.',
+      'A conta tem mais do que o plano Hobby comporta: ajuste-a até {date}, ou ela termina nesse dia.',
     freePlanClosed:
-      'O plano grátis está fechado agora, então não há plano para onde voltar. Para parar a renovação, cancele em Gerenciar cobrança.',
+      'O plano Hobby está fechado agora, então não há plano para onde voltar. Para parar a renovação, cancele em Gerenciar cobrança.',
     noPaidSubscription:
       'Esta conta não tem uma assinatura paga da qual desistir. Recarregue a página.',
     windowClosed:
@@ -745,14 +745,14 @@ export const ptBR = translation({
     finishTitle: 'Conclua a assinatura',
     finishBody: 'Sua conta está esperando um plano. Escolha um para começar o teste grátis.',
     freeTitle: 'Crie sua conta grátis',
-    freeIntro: 'Grátis: até {events} eventos por mês, em um site. Sem cartão.',
+    freeIntro: 'Plano Hobby, grátis: até {events} eventos por mês, em um site. Sem cartão.',
     fullTitle: 'Crie sua conta',
     fullIntro:
-      'O plano grátis está cheio por enquanto. Crie sua conta e ela espera uma vaga, ou assine o plano pago logo em seguida.',
+      'O plano Hobby está cheio por enquanto. Crie sua conta e ela espera uma vaga, ou assine o plano Pro logo em seguida.',
     opening: 'Abrindo sua conta…',
-    waitTitle: 'O plano grátis está cheio por enquanto',
+    waitTitle: 'O plano Hobby está cheio por enquanto',
     waitBody:
-      'Sua conta está pronta e espera uma vaga no plano grátis: avisamos por e-mail quando uma abrir, e ela espera até {days} dias. Você também pode assinar o plano pago agora.',
+      'Sua conta está pronta e espera uma vaga no plano Hobby: avisamos por e-mail quando uma abrir, e ela espera até {days} dias. Você também pode assinar o plano Pro agora.',
   },
   signUpPage: {
     title: 'Cadastro',
@@ -772,7 +772,7 @@ export const ptBR = translation({
       'Isso leva alguns segundos e a página confere de novo sozinha. Se demorar, você recebe um e-mail quando terminar.',
     trial: 'Seu teste grátis começou. Ele vai até {date}.',
     active: 'Sua assinatura está confirmada.',
-    free: 'Sua conta está no plano grátis.',
+    free: 'Sua conta está no plano Hobby.',
     freeLimits:
       'Até {events} eventos por mês, {projects} e {people}, com todas as funções e sem cartão. A medição pausa quando o mês chega a {pauseAt} eventos e volta no dia 1º.',
     fromFreePlan:
@@ -1851,11 +1851,11 @@ export const ptBR = translation({
       seePricing: 'Ver preço',
       note: 'Sem cadastro. Dados fictícios. Abre direto no painel.',
       startFree: 'Começar grátis',
-      seePaidPlan: 'Ver o plano pago',
+      seePaidPlan: 'Ver o plano Pro',
       freeNote:
         'Grátis até {events} eventos por mês em um site, sem cartão. A demonstração abre sem cadastro.',
       freeFullNote:
-        'O plano grátis está cheio por enquanto: cadastre-se e sua conta espera uma vaga, ou assine o plano pago.',
+        'O plano Hobby está cheio por enquanto: cadastre-se e sua conta espera uma vaga, ou assine o plano Pro.',
       trialNote:
         '14 dias grátis; o cartão só é cobrado no 15º dia. A demonstração abre sem cadastro.',
       claudeTag: 'No diretório do Claude',
@@ -2063,7 +2063,7 @@ export const ptBR = translation({
         account: {
           title: 'Crie a conta e o projeto',
           bodyFree:
-            'No painel, com um e-mail e sem cartão: o plano grátis cobre um site. O projeto já vem com a chave pública.',
+            'No painel, com um e-mail e sem cartão: o plano Hobby cobre um site. O projeto já vem com a chave pública.',
           body: 'No painel, com um e-mail e um cartão: 14 dias grátis. O projeto já vem com a chave pública.',
         },
         install: {
@@ -2323,14 +2323,14 @@ export const ptBR = translation({
           answerOpen:
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail e um cartão: 14 dias grátis, uma vez por cliente, e você cancela quando quiser.',
           answerFree:
-            'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou usando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail, sem cartão, no plano grátis, e assina o plano pago quando o site precisar de mais.',
+            'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou usando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail, sem cartão, no plano Hobby, e assina o plano Pro quando o site precisar de mais.',
         },
         agency: {
           question: 'Posso usar o Pyxis nos sites dos meus clientes?',
           answer:
             'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
           answerFree:
-            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano grátis tem um site e só você; o plano pago tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
+            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano Hobby tem um site e só você; o plano Pro tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
         },
         noCode: {
           question: 'Não programo. Consigo instalar?',
@@ -2357,7 +2357,7 @@ export const ptBR = translation({
           answer:
             'R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão. Inclui até 100 mil eventos por mês, 3 sites, 3 pessoas no painel, 13 meses de histórico, o resumo semanal e o servidor MCP.',
           answerFree:
-            'Os dois planos têm todas as funções: 13 meses de histórico, o resumo semanal e o servidor MCP. O plano grátis não custa nada e recebe até {events} eventos por mês, em um site, só com você no painel. O plano pago custa R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão, com cobrança na hora, e recebe até 100 mil eventos por mês, 3 sites e 3 pessoas.',
+            'Os dois planos têm todas as funções: 13 meses de histórico, o resumo semanal e o servidor MCP. O plano Hobby não custa nada e recebe até {events} eventos por mês, em um site, só com você no painel. O plano Pro custa R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão, com cobrança na hora, e recebe até 100 mil eventos por mês, 3 sites e 3 pessoas.',
         },
         trial: {
           question: 'Como funciona o teste grátis?',
@@ -2371,7 +2371,7 @@ export const ptBR = translation({
           answerOpen:
             'A qualquer momento, de dois jeitos: cancelando no portal da assinatura, e o acesso continua até o fim do período pago; ou encerrando a conta no painel, e o acesso termina na hora. Em até 7 dias da primeira cobrança, encerrar a conta devolve essa cobrança inteira; depois disso, o período já pago não é devolvido. Os dados do projeto são apagados 30 dias depois do fim do acesso. Os detalhes estão nos <terms>Termos de Uso</terms>.',
           answerFree:
-            'A qualquer momento, no portal da assinatura: o plano pago continua até o fim do período já pago e, depois, uma conta com um site e uma pessoa volta para o plano grátis; uma maior termina, e os dados são apagados 30 dias depois. Em até 7 dias da primeira cobrança, você pode desistir: a cobrança é devolvida inteira e a conta volta para o plano grátis quando couber nele. Encerrar a conta no painel termina tudo na hora, em qualquer plano. Os detalhes estão nos <terms>Termos de Uso</terms>.',
+            'A qualquer momento, no portal da assinatura: o plano Pro continua até o fim do período já pago e, depois, uma conta com um site e uma pessoa volta para o plano Hobby; uma maior termina, e os dados são apagados 30 dias depois. Em até 7 dias da primeira cobrança, você pode desistir: a cobrança é devolvida inteira e a conta volta para o plano Hobby quando couber nele. Encerrar a conta no painel termina tudo na hora, em qualquer plano. Os detalhes estão nos <terms>Termos de Uso</terms>.',
         },
         limit: {
           question: 'E se eu passar de 100 mil eventos?',
@@ -2379,9 +2379,9 @@ export const ptBR = translation({
             'Você recebe um e-mail a 80% e a 100% dos eventos do mês. A 150%, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Nada é cobrado além do preço.',
         },
         freeLimit: {
-          question: 'E se eu chegar a {events} eventos no plano grátis?',
+          question: 'E se eu chegar a {events} eventos no plano Hobby?',
           answer:
-            'No plano grátis, um e-mail avisa aos 80% dos eventos do mês. Aos {events}, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Assinar o plano pago tira a pausa em até um minuto.',
+            'No plano Hobby, um e-mail avisa aos 80% dos eventos do mês. Aos {events}, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Assinar o plano Pro tira a pausa em até um minuto.',
         },
         payment: {
           question: 'Tem Pix ou nota fiscal?',
@@ -2391,7 +2391,7 @@ export const ptBR = translation({
         support: {
           question: 'Como falo com o suporte?',
           answer:
-            'Por e-mail, em {email}, de preferência a partir do e-mail da sua conta. No plano pago, respondemos em até {paidDays} dias úteis. No plano grátis, as dúvidas de instalação e de uso vão pelas issues do GitHub e pela documentação; contrato, plano, limites, cobrança e dados pessoais continuam pelo e-mail, com resposta em até {freeDays} dias. Para relatar uma falha de segurança, use o relato privado do GitHub.',
+            'Por e-mail, em {email}, de preferência a partir do e-mail da sua conta. No plano Pro, respondemos em até {paidDays} dias úteis. No plano Hobby, as dúvidas de instalação e de uso vão pelas issues do GitHub e pela documentação; contrato, plano, limites, cobrança e dados pessoais continuam pelo e-mail, com resposta em até {freeDays} dias. Para relatar uma falha de segurança, use o relato privado do GitHub.',
         },
       },
     },
@@ -2435,7 +2435,7 @@ export const ptBR = translation({
       pricing: 'Preço',
       code: 'Código',
       support: 'Suporte',
-      supportReply: 'Resposta em até {days} dias úteis no plano pago.',
+      supportReply: 'Resposta em até {days} dias úteis no plano Pro.',
       questions: 'Perguntas no GitHub',
       securityReport: 'Relatar falha de segurança',
       author: 'Autor: {site}',

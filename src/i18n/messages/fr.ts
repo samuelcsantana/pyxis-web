@@ -377,7 +377,7 @@ export const fr = translation({
       incompleteFree:
         'L’abonnement n’a pas été finalisé. Choisissez une formule pour vous abonner ; elle est facturée dès aujourd’hui.',
       comped: 'Un compte offert par Pyxis.',
-      free: 'Formule gratuite : jusqu’à {events} événements par mois.',
+      free: 'Formule Hobby, gratuite : jusqu’à {events} événements par mois.',
       trialingUndated: 'Essai gratuit. Ensuite, la formule est facturée, sauf si vous résiliez.',
       activeUndated: 'Actif.',
       endingUndated:
@@ -411,33 +411,33 @@ export const fr = translation({
     exempt:
       'Jusqu’au {date}, la mesure n’est pas mise en pause en cas de dépassement de la limite mensuelle.',
     freePause:
-      'Avec la formule gratuite, la mesure se met en pause quand le mois atteint {events} événements et reprend le 1er.',
+      'Avec la formule Hobby, la mesure se met en pause quand le mois atteint {events} événements et reprend le 1er.',
     paidPlan: {
-      heading: 'La formule payante',
+      heading: 'La formule Pro',
       offer:
         'Jusqu’à 100 000 événements par mois, 3 projets et 3 personnes, pour 39 R$ par mois ou 390 R$ par an. Le paiement est débité aujourd’hui et se renouvelle jusqu’à ce que vous résiliiez.',
       resumes: 'La mesure reprend dans la minute qui suit l’abonnement.',
     },
     fit: {
       dueBy:
-        'Ce compte dépasse ce que permet la formule gratuite. Mettez-le en conformité d’ici le {date}, sinon le compte prend fin ce jour-là :',
-      projects: 'Supprimez {count} : la formule gratuite permet {limit}.',
-      people: 'Retirez {count} : la formule gratuite permet {limit}, vous compris.',
+        'Ce compte dépasse ce que permet la formule Hobby. Mettez-le en conformité d’ici le {date}, sinon le compte prend fin ce jour-là :',
+      projects: 'Supprimez {count} : la formule Hobby permet {limit}.',
+      people: 'Retirez {count} : la formule Hobby permet {limit}, vous compris.',
       where:
         'Les projets se suppriment, et les personnes se retirent, dans les Paramètres de chaque projet.',
     },
     afterCancel: {
       backToFree:
-        'Si vous résiliez, le compte revient à la formule gratuite à la fin de la période, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+        'Si vous résiliez, le compte revient à la formule Hobby à la fin de la période, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
       backToFreeOn:
-        'Le {date}, le compte revient à la formule gratuite, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+        'Le {date}, le compte revient à la formule Hobby, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
       backToFreeAtTheEnd:
-        'À la fin de la période, le compte revient à la formule gratuite, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
-      ends: 'Si vous résiliez, le compte prend fin à la fin de la période. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+        'À la fin de la période, le compte revient à la formule Hobby, avec ses projets et ses données : jusqu’à {events} événements par mois, et au-delà la mesure est en pause jusqu’au 1er.',
+      ends: 'Si vous résiliez, le compte prend fin à la fin de la période. Pour le garder sur la formule Hobby, mettez-le en conformité avant :',
       endsOn:
-        'Le {date}, le compte prend fin. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+        'Le {date}, le compte prend fin. Pour le garder sur la formule Hobby, mettez-le en conformité avant :',
       endsAtTheEnd:
-        'À la fin de la période, le compte prend fin. Pour le garder sur la formule gratuite, mettez-le en conformité avant :',
+        'À la fin de la période, le compte prend fin. Pour le garder sur la formule Hobby, mettez-le en conformité avant :',
     },
     notice: {
       suspended: 'Ce compte est suspendu, donc ses projets ne mesurent plus rien.',
@@ -450,7 +450,7 @@ export const fr = translation({
       paused:
         'La mesure est en pause jusqu’au {date} : le compte a dépassé ses événements mensuels.',
       freePlanPaused:
-        'La mesure est en pause : le compte a atteint ce mois-ci les {events} événements de la formule gratuite. Elle reprend le {date}, ou dans la minute qui suit l’abonnement.',
+        'La mesure est en pause : le compte a atteint ce mois-ci les {events} événements de la formule Hobby. Elle reprend le {date}, ou dans la minute qui suit l’abonnement.',
       subscribe: 'S’abonner maintenant',
       nearQuota: 'Ce mois-ci, le compte a utilisé {share} de ses événements.',
       open: 'Ouvrir la facturation',
@@ -466,9 +466,9 @@ export const fr = translation({
     writeHeading: 'Écrire à l’assistance',
     fromAccount: 'Écrivez depuis {email}, pour que nous sachions de quel compte il s’agit.',
     paidReply:
-      'Avec la formule payante, nous confirmons la réception de votre message et répondons sous {days} jours ouvrés.',
+      'Avec la formule Pro, nous confirmons la réception de votre message et répondons sous {days} jours ouvrés.',
     freeReply:
-      'Avec la formule gratuite, nous répondons par e-mail sous {days} jours sur le contrat, la formule et ses limites, la facturation, la résiliation et les données personnelles. Les questions d’installation et d’utilisation passent par GitHub.',
+      'Avec la formule Hobby, nous répondons par e-mail sous {days} jours sur le contrat, la formule et ses limites, la facturation, la résiliation et les données personnelles. Les questions d’installation et d’utilisation passent par GitHub.',
     noPersonalData:
       'Pour montrer un cas, envoyez l’identifiant de la visite, jamais les données personnelles de vos visiteurs.',
     docsHeading: 'Installation et utilisation',
@@ -570,21 +570,21 @@ export const fr = translation({
   },
   withdrawal: {
     heading: 'Rétractation',
-    note: 'Dans les 7 jours qui suivent le premier paiement, vous pouvez vous rétracter : l’abonnement est résilié immédiatement, ce paiement est intégralement remboursé et le compte revient à la formule gratuite, avec ses projets et ses données.',
+    note: 'Dans les 7 jours qui suivent le premier paiement, vous pouvez vous rétracter : l’abonnement est résilié immédiatement, ce paiement est intégralement remboursé et le compte revient à la formule Hobby, avec ses projets et ses données.',
     start: 'Se rétracter de l’abonnement',
     question:
       'Se rétracter maintenant ? L’abonnement prend fin immédiatement et le premier paiement revient sur votre carte.',
     confirm: 'Se rétracter et être remboursé',
     keep: 'Garder l’abonnement',
     withdrawing: 'Rétractation…',
-    done: 'Vous vous êtes rétracté de l’abonnement. Le compte est revenu à la formule gratuite.',
+    done: 'Vous vous êtes rétracté de l’abonnement. Le compte est revenu à la formule Hobby.',
     refunded: '{amount} ont été remboursés sur votre carte.',
     refundByHand:
       'Le remboursement automatique n’a pas abouti : Pyxis rembourse le premier paiement manuellement.',
     fitBy:
-      'Le compte dépasse ce que permet la formule gratuite : mettez-le en conformité d’ici le {date}, sinon il prend fin ce jour-là.',
+      'Le compte dépasse ce que permet la formule Hobby : mettez-le en conformité d’ici le {date}, sinon il prend fin ce jour-là.',
     freePlanClosed:
-      'La formule gratuite est fermée pour le moment, il n’y a donc pas de formule à laquelle revenir. Pour arrêter le renouvellement, résiliez dans Gérer la facturation.',
+      'La formule Hobby est fermée pour le moment, il n’y a donc pas de formule à laquelle revenir. Pour arrêter le renouvellement, résiliez dans Gérer la facturation.',
     noPaidSubscription:
       'Ce compte n’a pas d’abonnement payant dont se rétracter. Rechargez la page.',
     windowClosed:
@@ -770,14 +770,15 @@ export const fr = translation({
     finishTitle: 'Finalisez votre abonnement',
     finishBody: 'Votre compte attend une formule. Choisissez-en une pour démarrer l’essai gratuit.',
     freeTitle: 'Créez votre compte gratuit',
-    freeIntro: 'Gratuit : jusqu’à {events} événements par mois, sur un site. Sans carte.',
+    freeIntro:
+      'Formule Hobby, gratuite : jusqu’à {events} événements par mois, sur un site. Sans carte.',
     fullTitle: 'Créez votre compte',
     fullIntro:
-      'La formule gratuite est complète pour le moment. Créez votre compte et il attend une place, ou souscrivez à la formule payante juste après.',
+      'La formule Hobby est complète pour le moment. Créez votre compte et il attend une place, ou souscrivez à la formule Pro juste après.',
     opening: 'Ouverture de votre compte…',
-    waitTitle: 'La formule gratuite est complète pour le moment',
+    waitTitle: 'La formule Hobby est complète pour le moment',
     waitBody:
-      'Votre compte est prêt et attend une place dans la formule gratuite : nous vous écrivons dès qu’une place se libère, et il attend jusqu’à {days} jours. Vous pouvez aussi souscrire à la formule payante dès maintenant.',
+      'Votre compte est prêt et attend une place dans la formule Hobby : nous vous écrivons dès qu’une place se libère, et il attend jusqu’à {days} jours. Vous pouvez aussi souscrire à la formule Pro dès maintenant.',
   },
   signUpPage: {
     title: 'Inscription',
@@ -797,7 +798,7 @@ export const fr = translation({
       'Cela prend quelques secondes et la page se met à jour toute seule. Si c’est plus long, vous recevrez un e-mail une fois l’opération terminée.',
     trial: 'Votre essai gratuit a commencé. Il dure jusqu’au {date}.',
     active: 'Votre abonnement est confirmé.',
-    free: 'Votre compte est sur la formule gratuite.',
+    free: 'Votre compte est sur la formule Hobby.',
     freeLimits:
       'Jusqu’à {events} événements par mois, {projects} et {people}, avec toutes les fonctions et sans carte. La mesure se met en pause quand le mois atteint {pauseAt} événements et reprend le 1er.',
     fromFreePlan:
@@ -1891,11 +1892,11 @@ export const fr = translation({
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
       startFree: 'Commencer gratuitement',
-      seePaidPlan: 'Voir la formule payante',
+      seePaidPlan: 'Voir la formule Pro',
       freeNote:
         'Gratuit jusqu’à {events} événements par mois sur un site, sans carte. La démo s’ouvre sans inscription.',
       freeFullNote:
-        'La formule gratuite est complète pour le moment : inscrivez-vous et votre compte attend une place, ou souscrivez à la formule payante.',
+        'La formule Hobby est complète pour le moment : inscrivez-vous et votre compte attend une place, ou souscrivez à la formule Pro.',
       trialNote:
         '14 jours gratuits ; la carte n’est débitée qu’au 15e jour. La démo s’ouvre sans inscription.',
       claudeTag: 'Dans l’annuaire de Claude',
@@ -2109,7 +2110,7 @@ export const fr = translation({
         account: {
           title: 'Créez le compte et le projet',
           bodyFree:
-            'Dans le tableau de bord, avec une adresse e-mail et sans carte : la formule gratuite couvre un site. Le projet arrive avec sa clé publique.',
+            'Dans le tableau de bord, avec une adresse e-mail et sans carte : la formule Hobby couvre un site. Le projet arrive avec sa clé publique.',
           body: 'Dans le tableau de bord, avec une adresse e-mail et une carte : 14 jours gratuits. Le projet arrive avec sa clé publique.',
         },
         install: {
@@ -2374,14 +2375,14 @@ export const fr = translation({
           answerOpen:
             'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou abonnez-vous à la formule hébergée. Toute personne au Brésil peut s’inscrire avec un e-mail et une carte : 14 jours gratuits, une fois par client, et vous résiliez à tout moment.',
           answerFree:
-            'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou utilisez le Pyxis hébergé. Toute personne au Brésil peut s’inscrire avec un e-mail, sans carte, avec la formule gratuite, et souscrire à la formule payante quand le site en demande plus.',
+            'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou utilisez le Pyxis hébergé. Toute personne au Brésil peut s’inscrire avec un e-mail, sans carte, avec la formule Hobby, et souscrire à la formule Pro quand le site en demande plus.',
         },
         agency: {
           question: 'Puis-je utiliser Pyxis sur les sites de mes clients ?',
           answer:
             'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
           answerFree:
-            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule gratuite comprend un site et vous seul ; la formule payante, jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
+            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule Hobby comprend un site et vous seul ; la formule Pro, jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
         },
         noCode: {
           question: 'Je ne code pas. Puis-je l’installer ?',
@@ -2408,7 +2409,7 @@ export const fr = translation({
           answer:
             '39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte. Cela comprend jusqu’à 100 000 événements par mois, 3 sites, 3 personnes dans le tableau de bord, 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP.',
           answerFree:
-            'Les deux formules ont toutes les fonctions : 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP. La formule gratuite ne coûte rien et accepte jusqu’à {events} événements par mois, sur un site, avec vous seul dans le tableau de bord. La formule payante coûte 39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte, débitée aussitôt, et accepte jusqu’à 100 000 événements par mois, 3 sites et 3 personnes.',
+            'Les deux formules ont toutes les fonctions : 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP. La formule Hobby ne coûte rien et accepte jusqu’à {events} événements par mois, sur un site, avec vous seul dans le tableau de bord. La formule Pro coûte 39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte, débitée aussitôt, et accepte jusqu’à 100 000 événements par mois, 3 sites et 3 personnes.',
         },
         trial: {
           question: 'Comment fonctionne l’essai gratuit ?',
@@ -2422,7 +2423,7 @@ export const fr = translation({
           answerOpen:
             'À tout moment, de deux façons : résiliez dans le portail d’abonnement, et l’accès dure jusqu’à la fin de la période payée ; ou fermez le compte dans le tableau de bord, et l’accès prend fin immédiatement. Dans les 7 jours suivant le premier prélèvement, fermer le compte rembourse intégralement ce prélèvement ; au-delà, la période déjà payée n’est pas remboursée. Les données du projet sont supprimées 30 jours après la fin de l’accès. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
           answerFree:
-            'À tout moment, dans le portail d’abonnement : la formule payante dure jusqu’à la fin de la période déjà payée, puis un compte avec un site et une personne revient à la formule gratuite ; un compte plus grand prend fin, et ses données sont supprimées 30 jours plus tard. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter : le prélèvement est remboursé en totalité et le compte revient à la formule gratuite s’il y tient. Fermer le compte dans le tableau de bord met fin à tout immédiatement, quelle que soit la formule. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
+            'À tout moment, dans le portail d’abonnement : la formule Pro dure jusqu’à la fin de la période déjà payée, puis un compte avec un site et une personne revient à la formule Hobby ; un compte plus grand prend fin, et ses données sont supprimées 30 jours plus tard. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter : le prélèvement est remboursé en totalité et le compte revient à la formule Hobby s’il y tient. Fermer le compte dans le tableau de bord met fin à tout immédiatement, quelle que soit la formule. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
         },
         limit: {
           question: 'Et si je dépasse 100 000 événements ?',
@@ -2430,9 +2431,9 @@ export const fr = translation({
             'Vous recevez un e-mail à 80 % et à 100 % des événements du mois. À 150 %, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Rien n’est jamais facturé au-delà du prix.',
         },
         freeLimit: {
-          question: 'Et si j’atteins {events} événements avec la formule gratuite ?',
+          question: 'Et si j’atteins {events} événements avec la formule Hobby ?',
           answer:
-            'Avec la formule gratuite, un e-mail prévient à 80 % des événements du mois. À {events}, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Souscrire à la formule payante lève la pause en moins d’une minute.',
+            'Avec la formule Hobby, un e-mail prévient à 80 % des événements du mois. À {events}, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Souscrire à la formule Pro lève la pause en moins d’une minute.',
         },
         payment: {
           question: 'Puis-je payer par Pix, et y a-t-il une facture ?',
@@ -2442,7 +2443,7 @@ export const fr = translation({
         support: {
           question: 'Comment contacter l’assistance ?',
           answer:
-            'Par e-mail, à {email}, de préférence depuis l’e-mail de votre compte. Avec la formule payante, nous répondons sous {paidDays} jours ouvrés. Avec la formule gratuite, les questions d’installation et d’utilisation passent par les issues GitHub et la documentation ; le contrat, la formule, ses limites, la facturation et les données personnelles restent par e-mail, avec une réponse sous {freeDays} jours. Pour signaler une faille de sécurité, utilisez le signalement privé de GitHub.',
+            'Par e-mail, à {email}, de préférence depuis l’e-mail de votre compte. Avec la formule Pro, nous répondons sous {paidDays} jours ouvrés. Avec la formule Hobby, les questions d’installation et d’utilisation passent par les issues GitHub et la documentation ; le contrat, la formule, ses limites, la facturation et les données personnelles restent par e-mail, avec une réponse sous {freeDays} jours. Pour signaler une faille de sécurité, utilisez le signalement privé de GitHub.',
         },
       },
     },
@@ -2487,7 +2488,7 @@ export const fr = translation({
       pricing: 'Tarifs',
       code: 'Code',
       support: 'Assistance',
-      supportReply: 'Réponse sous {days} jours ouvrés avec la formule payante.',
+      supportReply: 'Réponse sous {days} jours ouvrés avec la formule Pro.',
       questions: 'Questions sur GitHub',
       securityReport: 'Signaler une faille de sécurité',
       author: 'Auteur : {site}',
