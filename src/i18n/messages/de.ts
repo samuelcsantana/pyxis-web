@@ -1869,11 +1869,11 @@ export const de = translation({
   },
   landing: {
     meta: {
-      title: 'Was auf deiner Website konvertiert und was fehlschlägt, ohne Cookies · Pyxis',
+      title: 'Was Menschen auf deiner Website tun und wie lange sie bleiben, ohne Cookies · Pyxis',
       descriptionFree:
-        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. Kostenlos bis zu {events} Ereignisse im Monat.',
+        'Produktanalyse, die zeigt, wo jeder Besuch begonnen hat, welchen Weg er genommen hat, wo er geendet hat und wie lange er gedauert hat, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. Kostenlos bis zu {events} Ereignisse im Monat.',
       description:
-        'Produktanalyse, die zeigt, bei welchem Funnel-Schritt Menschen aufhören und welche Anfragen deiner Website fehlgeschlagen sind, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. 14 Tage kostenlos.',
+        'Produktanalyse, die zeigt, wo jeder Besuch begonnen hat, welchen Weg er genommen hat, wo er geendet hat und wie lange er gedauert hat, im Dashboard oder in Claude. Ohne Cookies und ohne gespeicherte IP-Adressen. 14 Tage kostenlos.',
     },
     nav: {
       label: 'Hauptmenü',

@@ -1835,11 +1835,11 @@ export const es = translation({
   },
   landing: {
     meta: {
-      title: 'Qué convierte y qué falla en tu sitio, sin cookies · Pyxis',
+      title: 'Qué hace la gente en tu sitio y cuánto tiempo se queda, sin cookies · Pyxis',
       descriptionFree:
-        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. Gratis hasta {events} eventos al mes.',
+        'Analítica de producto que muestra por dónde entró cada visita, el camino que siguió, dónde salió y cuánto duró, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. Gratis hasta {events} eventos al mes.',
       description:
-        'Analítica de producto que muestra en qué paso del embudo se detiene la gente y qué solicitudes de tu sitio fallaron, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. 14 días gratis.',
+        'Analítica de producto que muestra por dónde entró cada visita, el camino que siguió, dónde salió y cuánto duró, en el panel o en Claude. Sin cookies y sin guardar direcciones IP. 14 días gratis.',
     },
     nav: {
       label: 'Principal',

@@ -65,9 +65,11 @@ describe('the home page on the main domain', () => {
       const metadata = await generateMetadata(atSlug('en'));
 
       expect(metadata.title).toEqual({
-        absolute: 'What converts and what fails on your site, without cookies · Pyxis',
+        absolute: 'What people do on your site and how long they stay, without cookies · Pyxis',
       });
-      expect(metadata.description).toContain('Product analytics that shows the funnel step');
+      expect(metadata.description).toContain(
+        'Product analytics that shows where each visit started',
+      );
       expect(metadata.metadataBase?.toString()).toBe('https://pyxis-analytics.dev/');
       expect(metadata.alternates).toEqual({
         canonical: '/',
@@ -97,7 +99,7 @@ describe('the home page on the main domain', () => {
       const metadata = await generateMetadata(atSlug('pt-br'));
 
       expect(metadata.title).toEqual({
-        absolute: 'O que converte e o que falha no seu site, sem cookie · Pyxis',
+        absolute: 'O que as pessoas fazem no seu site e quanto tempo ficam, sem cookie · Pyxis',
       });
       expect(metadata.alternates?.canonical).toBe('/pt-br');
       expect(metadata.openGraph).toMatchObject({
@@ -111,7 +113,7 @@ describe('the home page on the main domain', () => {
       const metadata = await generateMetadata(atSlug('es'));
 
       expect(metadata.title).toEqual({
-        absolute: 'Qué convierte y qué falla en tu sitio, sin cookies · Pyxis',
+        absolute: 'Qué hace la gente en tu sitio y cuánto tiempo se queda, sin cookies · Pyxis',
       });
       expect(metadata.alternates?.canonical).toBe('/es');
       expect(metadata.openGraph).toMatchObject({

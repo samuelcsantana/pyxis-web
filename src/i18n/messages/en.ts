@@ -1808,11 +1808,11 @@ export const en = {
   },
   landing: {
     meta: {
-      title: 'What converts and what fails on your site, without cookies · Pyxis',
+      title: 'What people do on your site and how long they stay, without cookies · Pyxis',
       descriptionFree:
-        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies and no stored IP addresses. Free up to {events} events a month.',
+        'Product analytics that shows where each visit started, the path it took, where it ended and how long it lasted, on the dashboard or in Claude. No cookies and no stored IP addresses. Free up to {events} events a month.',
       description:
-        'Product analytics that shows the funnel step where people stop and which of your site’s requests failed, on the dashboard or in Claude. No cookies and no stored IP addresses. 14 days free.',
+        'Product analytics that shows where each visit started, the path it took, where it ended and how long it lasted, on the dashboard or in Claude. No cookies and no stored IP addresses. 14 days free.',
     },
     nav: {
       label: 'Main',

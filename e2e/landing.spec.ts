@@ -178,7 +178,7 @@ test('serves each language at its own address, with the tags search engines read
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page).toHaveTitle(
-    'What converts and what fails on your site, without cookies · Pyxis',
+    'What people do on your site and how long they stay, without cookies · Pyxis',
   );
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', MAIN_DOMAIN);
   await expect(page.locator('link[rel="alternate"][hreflang="pt-BR"]')).toHaveAttribute(
@@ -215,7 +215,9 @@ test('serves each language at its own address, with the tags search engines read
 
   await expect(page).toHaveURL(/\/es$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
-  await expect(page).toHaveTitle('Qué convierte y qué falla en tu sitio, sin cookies · Pyxis');
+  await expect(page).toHaveTitle(
+    'Qué hace la gente en tu sitio y cuánto tiempo se queda, sin cookies · Pyxis',
+  );
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'Descubre qué hace la gente en tu sitio y cuánto tiempo se queda.',
   );
