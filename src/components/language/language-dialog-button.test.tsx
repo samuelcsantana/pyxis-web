@@ -127,6 +127,23 @@ describe('LanguageDialogButton', () => {
     expect(document.activeElement).toBe(screen.getByText('Account menu'));
   });
 
+  it('chooses the first match of what was typed even before the list caught up', async () => {
+    const { choose } = renderButton();
+    await open();
+    const field = search();
+    field.value = 'portu';
+
+    act(() => {
+      fireEvent.keyDown(field, { key: 'Enter' });
+    });
+
+    await waitFor(() => {
+      expect(choose).toHaveBeenCalled();
+    });
+    const form = choose.mock.calls[0] as unknown as [FormData];
+    expect(form[0].get('locale')).toBe('pt-BR');
+  });
+
   it('chooses a language that is clicked, marking it at once', async () => {
     const { choose } = renderButton();
     const dialog = await open();
