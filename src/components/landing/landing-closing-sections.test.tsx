@@ -254,6 +254,23 @@ describe('FaqSection', () => {
       },
     );
 
+    it('gives Pro its numbers and both plans the same analytics, with no "every feature"', () => {
+      const { container } = render(<FaqSection i18n={english} offer="free" />);
+
+      expect(
+        screen.getByText(
+          /^Both plans have the same analytics, 13 months of history, the weekly digest/,
+        ),
+      ).toHaveTextContent(
+        'takes up to 250,000 events a month, 10 sites and 10 people, with support by e-mail.',
+      );
+      expect(
+        screen.getByText(/the Pro plan has up to 10 sites and 10 people, you included/),
+      ).toBeInTheDocument();
+      expect(questionsOf(container)).toContain('What if I go over 250,000 events?');
+      expect(container).not.toHaveTextContent(/every feature|100,000|3 sites/);
+    });
+
     it('answers the price, the use, agencies and cancelling for two plans', () => {
       render(<FaqSection i18n={english} offer="free" />);
 

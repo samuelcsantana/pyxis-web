@@ -459,7 +459,7 @@ export const nl = translation({
     paidPlan: {
       heading: 'Het Pro-abonnement',
       offer:
-        'Tot 100.000 events per maand, 3 projecten en 3 personen, voor R$ 39 per maand of R$ 390 per jaar. Het wordt vandaag afgerekend en verlengt tot je opzegt.',
+        'Tot {proEvents} events per maand, {proSites} projecten en {proPeople} personen, voor R$ 39 per maand of R$ 390 per jaar. Het wordt vandaag afgerekend en verlengt tot je opzegt.',
       resumes: 'Het meten gaat binnen een minuut na het afsluiten weer verder.',
     },
     fit: {
@@ -875,7 +875,7 @@ export const nl = translation({
     active: 'Je abonnement is bevestigd.',
     free: 'Je account staat op het Hobby-abonnement.',
     freeLimits:
-      'Maximaal {events} events per maand, {projects} en {people}, met alle functies en zonder kaart. Het meten pauzeert wanneer de maand {pauseAt} events bereikt en gaat op de 1e weer verder.',
+      'Maximaal {events} events per maand, {projects} en {people}, met alle analysefuncties en zonder kaart. Het meten pauzeert wanneer de maand {pauseAt} events bereikt en gaat op de 1e weer verder.',
     fromFreePlan:
       'Het account neemt nu tot {events} events per maand aan, {projects} en {people}. Als het meten gepauzeerd was, gaat het binnen een minuut weer verder.',
     next: 'Maak nu een project aan voor je site en installeer Pyxis erop.',
@@ -1982,7 +1982,7 @@ export const nl = translation({
       },
       agency: {
         title: 'Developer of bureau',
-        body: 'Installeer het op de sites van je klanten en geef elke klant alleen toegang tot zijn eigen project, met inloggen via een code per e-mail. Tot 3 sites en 3 personen per account; voor meer een plan op maat.',
+        body: 'Installeer het op de sites van je klanten en geef elke klant alleen toegang tot zijn eigen project, met inloggen via een code per e-mail. Tot {proSites} sites en {proPeople} personen per account met Pro; voor meer een plan op maat.',
         link: 'Bekijk de prijzen',
       },
       product: {
@@ -2334,8 +2334,8 @@ export const nl = translation({
       titleFree: 'Twee abonnementen, in reais, allebei met alles wat de demo laat zien',
       paidName: 'Pro',
       paidAdds: 'Alles van Hobby, plus:',
-      eventsBadge: '10×',
-      eventsBadgeSpoken: '(10 keer Hobby)',
+      eventsBadge: '{times}×',
+      eventsBadgeSpoken: '({times} keer Hobby)',
       paidHow:
         'Iedereen begint op Hobby. Neem Pro onder Account en facturering, per maand of per jaar, direct afgerekend; binnen 7 dagen na die betaling kun je herroepen en krijg je alles terug.',
       free: {
@@ -2356,7 +2356,7 @@ export const nl = translation({
         terms:
           'Zonder kaart. Bij {events} events pauzeert het meten tot de 1e, en bij 80% krijg je een e-mail.',
       },
-      lead: 'Geen kosten per bezoeker, per functie of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en hun IP-adres wordt niet opgeslagen.',
+      lead: 'Geen kosten per bezoeker of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en hun IP-adres wordt niet opgeslagen.',
       period: 'Factuurperiode',
       monthly: 'Maandelijks',
       monthlyLabel: 'Maandelijks, R$ 39 per maand',
@@ -2373,9 +2373,9 @@ export const nl = translation({
       approximateYearly:
         'Prijs in reais: ongeveer {amount} per jaar. De betaalpagina toont het exacte bedrag in je eigen valuta.',
       included: {
-        events: 'Tot 100.000 events per maand',
-        sites: 'Tot 3 sites',
-        people: 'Tot 3 personen in het dashboard',
+        events: 'Tot {proEvents} events per maand',
+        sites: 'Tot {proSites} sites',
+        people: 'Tot {proPeople} personen in het dashboard',
         history: '13 maanden geschiedenis',
         digest: 'Een wekelijkse samenvatting per e-mail',
         agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
@@ -2384,7 +2384,7 @@ export const nl = translation({
       ask: 'Toegang aanvragen',
       askTitle: 'Mail naar',
       askIntro: 'Vertel in een paar regels:',
-      askSite: 'het adres van de site, of sites, tot 3;',
+      askSite: 'het adres van de site, of sites, tot {proSites};',
       askVisits: 'ongeveer hoeveel bezoeken die per maand krijgt;',
       askEmail: 'het e-mailadres van wie in het dashboard gaat inloggen.',
       askReply:
@@ -2396,8 +2396,8 @@ export const nl = translation({
         'Voorlopig is toegang alleen op uitnodiging: je vraagt het aan, krijgt de betaallink en hebt na het abonneren binnen 2 werkdagen toegang tot het dashboard.',
       moreTitle: 'Voor bureaus en developers',
       moreFree:
-        'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Pro omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
-      more: 'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
+        'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Pro omvat tot {proSites} sites en {proPeople} personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
+      more: 'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het abonnement omvat tot {proSites} sites en {proPeople} personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
       moreLink: 'Vraag naar een abonnement voor bureaus',
       moreSubject: 'Een Pyxis-abonnement voor een bureau',
       start: 'Start je gratis proefperiode',
@@ -2450,9 +2450,9 @@ export const nl = translation({
         agency: {
           question: 'Kan ik Pyxis gebruiken op de sites van mijn klanten?',
           answer:
-            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
+            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het abonnement omvat tot {proSites} sites en {proPeople} personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
           answerFree:
-            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het Hobby-abonnement omvat één site en alleen jou; het Pro-abonnement tot 3 sites en 3 personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
+            'Ja. Maak per site een project aan en voeg de klant toe aan de personen van het project: hij logt in met een code per e-mail en ziet alleen dat project. Het Hobby-abonnement omvat één site en alleen jou; het Pro-abonnement tot {proSites} sites en {proPeople} personen, jij meegerekend; voor meer, schrijf naar hello@pyxis-analytics.dev. De <terms>Gebruiksvoorwaarden</terms> regelen dit: als bureau de sites meten van klanten die daarvoor toestemming gaven, is geen doorverkoop.',
         },
         noCode: {
           question: 'Ik programmeer niet. Kan ik het installeren?',
@@ -2482,9 +2482,9 @@ export const nl = translation({
         price: {
           question: 'Wat kost het?',
           answer:
-            'R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart. Inbegrepen: tot 100.000 events per maand, 3 sites, 3 personen in het dashboard, 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server.',
+            'R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart. Inbegrepen: tot {proEvents} events per maand, {proSites} sites, {proPeople} personen in het dashboard, 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server.',
           answerFree:
-            'Beide abonnementen hebben alle functies: 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server. Het Hobby-abonnement kost niets en neemt tot {events} events per maand aan, op één site, met alleen jou in het dashboard. Het Pro-abonnement kost R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart, direct afgerekend, en neemt tot 100.000 events per maand, 3 sites en 3 personen aan.',
+            'Beide abonnementen hebben dezelfde analyse, 13 maanden geschiedenis, de wekelijkse samenvatting en de MCP-server. Het Hobby-abonnement kost niets en neemt tot {events} events per maand aan, op één site, met alleen jou in het dashboard. Het Pro-abonnement kost R$ 39 per maand of R$ 390 per jaar (twee maanden gratis), met een kaart, direct afgerekend, en neemt tot {proEvents} events per maand, {proSites} sites en {proPeople} personen aan, met support per e-mail.',
         },
         trial: {
           question: 'Hoe werkt de gratis proefperiode?',
@@ -2501,7 +2501,7 @@ export const nl = translation({
             'Altijd, in het facturatieportaal: het Pro-abonnement loopt tot het einde van de al betaalde periode, daarna gaat een account met één site en één persoon terug naar het Hobby-abonnement; een groter account eindigt, en de gegevens worden 30 dagen later verwijderd. Binnen 7 dagen na de eerste betaling kun je herroepen: de betaling wordt volledig terugbetaald en het account gaat terug naar het Hobby-abonnement als het erin past. Hef je het account op in het dashboard, dan eindigt alles meteen, op elk abonnement. De details staan in de <terms>Gebruiksvoorwaarden</terms>.',
         },
         limit: {
-          question: 'Wat als ik over de 100.000 events ga?',
+          question: 'Wat als ik over de {proEvents} events ga?',
           answer:
             'Je krijgt een e-mail bij 80% en bij 100% van de events van de maand. Bij 150% neemt het account geen events meer aan tot de 1e van de volgende maand, en events die tijdens de pauze worden verstuurd, gaan verloren. Er wordt nooit meer in rekening gebracht dan de prijs.',
         },

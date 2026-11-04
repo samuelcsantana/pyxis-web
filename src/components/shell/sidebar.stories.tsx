@@ -529,8 +529,8 @@ export const MenuButtonPressed: Story = {
 };
 
 const DEMO_USAGE: MonthUsage = {
-  events: 41_230,
-  limit: 100_000,
+  events: 103_075,
+  limit: 250_000,
   share: 0.4123,
   pausedUntil: null,
   resetsOn: '2026-11-01T00:00:00.000Z',
@@ -566,7 +566,7 @@ export const UsageNearTheQuota: Story = {
 
 export const UsageWhileReceptionIsPaused: Story = {
   args: {
-    usage: { ...DEMO_USAGE, events: 150_000, share: 1.5, pausedUntil: '2026-11-01T00:00:00.000Z' },
+    usage: { ...DEMO_USAGE, events: 375_000, share: 1.5, pausedUntil: '2026-11-01T00:00:00.000Z' },
   },
   play: async (context) => {
     await showsTheUsage('150%', 'bg-nav-bad')(context);

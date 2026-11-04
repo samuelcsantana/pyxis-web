@@ -257,7 +257,7 @@ describe('WelcomePage', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Your account is on the Hobby plan.');
     expect(
       screen.getByText(
-        'Up to 10,000 events a month, 1 project and 1 person, with every feature and no card. Measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
+        'Up to 10,000 events a month, 1 project and 1 person, with all the analytics and no card. Measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
       ),
     ).toBeInTheDocument();
     expect(screen.queryByText(/subscription/)).not.toBeInTheDocument();
@@ -321,7 +321,7 @@ describe('WelcomePage', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Your subscription is confirmed.');
     expect(
       screen.getByText(
-        'The account now takes up to 100,000 events a month, 3 projects and 3 people. If measuring was paused, it resumes within a minute.',
+        'The account now takes up to 250,000 events a month, 10 projects and 10 people. If measuring was paused, it resumes within a minute.',
       ),
     ).toBeInTheDocument();
     expect(screen.queryByText(/public key/)).not.toBeInTheDocument();

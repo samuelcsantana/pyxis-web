@@ -11,6 +11,10 @@ export const FREE_PLACES = [
 export const FREE_PLAN_EVENTS_PER_MONTH = 10_000;
 export const FREE_PLAN_PROJECTS = 1;
 export const FREE_PLAN_PEOPLE = 1;
+export const PRO_PLAN_EVENTS_PER_MONTH = 250_000;
+export const PRO_PLAN_PROJECTS = 10;
+export const PRO_PLAN_PEOPLE = 10;
+export const PRO_PLAN_EVENTS_MULTIPLE = PRO_PLAN_EVENTS_PER_MONTH / FREE_PLAN_EVENTS_PER_MONTH;
 export const FREE_PLACE_WAIT_DAYS = 60;
 
 export type FreePlanState = (typeof FREE_PLAN_STATES)[number];

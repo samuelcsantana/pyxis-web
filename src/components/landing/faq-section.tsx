@@ -1,6 +1,7 @@
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { legalDocumentOf, legalUrlOf } from '@/lib/legal-documents';
 import {
   FREE_PLAN_EVENTS_PER_MONTH,
@@ -97,8 +98,9 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
   const { t } = i18n;
   const terms = legalDocumentOf('terms', i18n.locale);
   const events = i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH);
+  const planValues = { events, ...proPlanValuesOf(i18n) };
   const answerValues = {
-    events,
+    ...planValues,
     email: CONTACT_EMAIL,
     paidDays: i18n.format.count(PAID_REPLY_BUSINESS_DAYS),
     freeDays: i18n.format.count(FREE_REPLY_DAYS),
@@ -116,7 +118,7 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
             <summary
               className={`flex cursor-pointer list-none items-center justify-between gap-3 rounded-card px-4 py-3.5 text-base font-semibold [&::-webkit-details-marker]:hidden ${FOCUS_RING}`}
             >
-              {t(`landing.faq.items.${question}.question`, { events })}
+              {t(`landing.faq.items.${question}.question`, planValues)}
               <span
                 aria-hidden="true"
                 className="font-mono text-lg font-normal text-muted transition-transform duration-300 group-open:rotate-45 motion-reduce:transition-none"

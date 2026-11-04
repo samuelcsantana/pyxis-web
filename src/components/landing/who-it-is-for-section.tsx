@@ -1,6 +1,7 @@
 import { CONTROL_TRANSITION, FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { DASHBOARD_ANSWERS_ID, demoScreenUrl } from './dashboard-answers-section';
 import { REVEAL } from './landing-classes';
 import { INSTALL_ID, PRICING_ID } from './landing-links';
@@ -89,7 +90,7 @@ export function WhoItIsForSection({ i18n }: WhoItIsForSectionProps) {
               <AudienceIcon audience={audience} />
               <h3 className="text-base font-semibold">{t(`landing.forWhom.${audience}.title`)}</h3>
               <p className="grow text-sm leading-normal text-muted">
-                {t(`landing.forWhom.${audience}.body`)}
+                {t(`landing.forWhom.${audience}.body`, proPlanValuesOf(i18n))}
               </p>
               {audience === 'store' ? (
                 <p className="border-t border-dashed border-line pt-2 text-caption leading-normal text-muted">

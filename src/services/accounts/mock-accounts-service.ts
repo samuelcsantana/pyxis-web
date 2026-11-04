@@ -6,6 +6,7 @@ import {
   type WithdrawOutcome,
 } from '@/domain/accounts';
 import { myAccountsResponseSchema } from '@/domain/accounts.schema';
+import { PRO_PLAN_EVENTS_PER_MONTH, PRO_PLAN_PEOPLE, PRO_PLAN_PROJECTS } from '@/domain/sign-up';
 import { DEMO_PROJECTS } from '../demo/demo-projects';
 import { demoPeopleWire } from '../project-people/mock-project-people-service';
 import { DEMO_ACCOUNT_ID } from '../projects/demo-project-settings';
@@ -14,7 +15,8 @@ import type { IAccountsService } from './accounts-service.interface';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const BILLING_PERIOD_DAYS = 30;
-const DEMO_EVENTS_THIS_MONTH = 41_230;
+const DEMO_EVENTS_THIS_MONTH = 103_075;
+const DEMO_PAUSE_AT_EVENTS = 375_000;
 const MEASURED_HOURS_AGO = 3;
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -47,7 +49,12 @@ export function demoAccountsWire(now: Date) {
         month: now.toISOString().slice(0, 7),
         events_this_month: DEMO_EVENTS_THIS_MONTH,
         measured_at: new Date(now.getTime() - MEASURED_HOURS_AGO * HOUR_MS).toISOString(),
-        limits: { events_per_month: 100_000, projects: 3, people: 3, pause_at_events: 150_000 },
+        limits: {
+          events_per_month: PRO_PLAN_EVENTS_PER_MONTH,
+          projects: PRO_PLAN_PROJECTS,
+          people: PRO_PLAN_PEOPLE,
+          pause_at_events: DEMO_PAUSE_AT_EVENTS,
+        },
       },
     ],
   };
