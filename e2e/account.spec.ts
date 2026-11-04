@@ -31,8 +31,8 @@ test('opens the plan and billing from the month used, over the screen', async ({
   await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/billing$`));
   const settings = page.getByRole('dialog', { name: 'Settings' });
   await expect(settings.getByText(/^Active\. It renews on/)).toBeVisible();
-  await expect(settings.getByText(/41,230 of 100,000/)).toBeVisible();
-  await expect(settings.getByText('Up to 3 projects and 3 people, you included.')).toBeVisible();
+  await expect(settings.getByText(/103,075 of 250,000/)).toBeVisible();
+  await expect(settings.getByText('Up to 10 projects and 10 people, you included.')).toBeVisible();
 });
 
 test('shows nothing of the free plan while the API keeps it closed', async ({ page }) => {

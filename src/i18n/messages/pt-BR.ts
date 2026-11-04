@@ -452,7 +452,7 @@ export const ptBR = translation({
     paidPlan: {
       heading: 'O plano Pro',
       offer:
-        'Até 100 mil eventos por mês, 3 projetos e 3 pessoas, por R$ 39 por mês ou R$ 390 por ano. A cobrança é feita hoje e se renova até você cancelar.',
+        'Até {proEvents} eventos por mês, {proSites} projetos e {proPeople} pessoas, por R$ 39 por mês ou R$ 390 por ano. A cobrança é feita hoje e se renova até você cancelar.',
       resumes: 'A medição volta em até um minuto depois da assinatura.',
     },
     fit: {
@@ -859,7 +859,7 @@ export const ptBR = translation({
     active: 'Sua assinatura está confirmada.',
     free: 'Sua conta está no plano Hobby.',
     freeLimits:
-      'Até {events} eventos por mês, {projects} e {people}, com todas as funções e sem cartão. A medição pausa quando o mês chega a {pauseAt} eventos e volta no dia 1º.',
+      'Até {events} eventos por mês, {projects} e {people}, com todas as funções de análise e sem cartão. A medição pausa quando o mês chega a {pauseAt} eventos e volta no dia 1º.',
     fromFreePlan:
       'Agora a conta recebe até {events} eventos por mês, {projects} e {people}. Se a medição estava pausada, ela volta em até um minuto.',
     next: 'Agora crie um projeto para o seu site e instale o Pyxis nele.',
@@ -1959,7 +1959,7 @@ export const ptBR = translation({
       },
       agency: {
         title: 'Dev ou agência',
-        body: 'Instale nos sites dos seus clientes e dê a cada cliente acesso só ao projeto dele, com entrada por código no e-mail. Até 3 sites e 3 pessoas por conta; para mais, um plano sob medida.',
+        body: 'Instale nos sites dos seus clientes e dê a cada cliente acesso só ao projeto dele, com entrada por código no e-mail. Até {proSites} sites e {proPeople} pessoas por conta no Pro; para mais, um plano sob medida.',
         link: 'Ver preço',
       },
       product: {
@@ -2308,8 +2308,8 @@ export const ptBR = translation({
       titleFree: 'Dois planos, em reais, com tudo o que a demonstração mostra nos dois',
       paidName: 'Pro',
       paidAdds: 'Tudo do Hobby, e:',
-      eventsBadge: '10×',
-      eventsBadgeSpoken: '(10 vezes o Hobby)',
+      eventsBadge: '{times}×',
+      eventsBadgeSpoken: '({times} vezes o Hobby)',
       paidHow:
         'Todo mundo começa no Hobby. Assine o Pro em Conta e cobrança, por mês ou por ano, com cobrança na hora; em até 7 dias dela, você pode desistir e receber tudo de volta.',
       free: {
@@ -2329,7 +2329,7 @@ export const ptBR = translation({
         terms:
           'Sem cartão. Em {events} eventos a medição pausa até o dia 1º, e avisamos por e-mail aos 80%.',
       },
-      lead: 'Sem cobrança por visitante, por funcionalidade ou por pessoa identificada. Os seus visitantes continuam sem cookie e sem IP guardado.',
+      lead: 'Sem cobrança por visitante ou por pessoa identificada. Os seus visitantes continuam sem cookie e sem IP guardado.',
       period: 'Período de cobrança',
       monthly: 'Mensal',
       monthlyLabel: 'Mensal, R$ 39 por mês',
@@ -2346,9 +2346,9 @@ export const ptBR = translation({
       approximateYearly:
         'Preço em reais: cerca de {amount} por ano. A página de pagamento mostra o valor exato na sua moeda.',
       included: {
-        events: 'Até 100 mil eventos por mês',
-        sites: 'Até 3 sites',
-        people: 'Até 3 pessoas no painel',
+        events: 'Até {proEvents} eventos por mês',
+        sites: 'Até {proSites} sites',
+        people: 'Até {proPeople} pessoas no painel',
         history: '13 meses de histórico',
         digest: 'Resumo semanal por e-mail',
         agents: 'O conector do Claude (MCP) e tokens de acesso para agentes de IA',
@@ -2357,7 +2357,7 @@ export const ptBR = translation({
       ask: 'Pedir acesso',
       askTitle: 'Escreva para',
       askIntro: 'Conte, em poucas linhas:',
-      askSite: 'o endereço do site (ou dos sites, até 3);',
+      askSite: 'o endereço do site (ou dos sites, até {proSites});',
       askVisits: 'quantas visitas por mês ele tem, por alto;',
       askEmail: 'o e-mail de quem vai entrar no painel.',
       askReply:
@@ -2369,8 +2369,8 @@ export const ptBR = translation({
         'Nesta fase, o acesso é por convite: você pede, recebe o link de pagamento e, depois de assinar, o acesso ao painel chega em até 2 dias úteis.',
       moreTitle: 'Para agências e devs',
       moreFree:
-        'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O Pro tem até 3 sites e 3 pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
-      more: 'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O plano tem até 3 sites e 3 pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
+        'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O Pro tem até {proSites} sites e {proPeople} pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
+      more: 'Meça os sites dos seus clientes: cada cliente entra com o próprio e-mail e vê só o projeto dele. O plano tem até {proSites} sites e {proPeople} pessoas, você incluído. Para mais clientes, diga quantos sites e pessoas em hello@pyxis-analytics.dev e respondemos em até 2 dias úteis com um plano sob medida.',
       moreLink: 'Falar sobre um plano para agência',
       moreSubject: 'Um plano do Pyxis para agência',
       start: 'Começar o teste grátis',
@@ -2423,9 +2423,9 @@ export const ptBR = translation({
         agency: {
           question: 'Posso usar o Pyxis nos sites dos meus clientes?',
           answer:
-            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
+            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano tem até {proSites} sites e {proPeople} pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
           answerFree:
-            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano Hobby tem um site e só você; o plano Pro tem até 3 sites e 3 pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
+            'Pode. Crie um projeto por site e adicione o cliente às pessoas do projeto: ele entra com um código no e-mail e vê só aquele projeto. O plano Hobby tem um site e só você; o plano Pro tem até {proSites} sites e {proPeople} pessoas, você incluído; para mais, escreva para hello@pyxis-analytics.dev. Os <terms>Termos de Uso</terms> tratam disso: medir, como agência, sites de clientes que autorizaram não é revenda.',
         },
         noCode: {
           question: 'Não programo. Consigo instalar?',
@@ -2455,9 +2455,9 @@ export const ptBR = translation({
         price: {
           question: 'Quanto custa?',
           answer:
-            'R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão. Inclui até 100 mil eventos por mês, 3 sites, 3 pessoas no painel, 13 meses de histórico, o resumo semanal e o servidor MCP.',
+            'R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão. Inclui até {proEvents} eventos por mês, {proSites} sites, {proPeople} pessoas no painel, 13 meses de histórico, o resumo semanal e o servidor MCP.',
           answerFree:
-            'Os dois planos têm todas as funções: 13 meses de histórico, o resumo semanal e o servidor MCP. O plano Hobby não custa nada e recebe até {events} eventos por mês, em um site, só com você no painel. O plano Pro custa R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão, com cobrança na hora, e recebe até 100 mil eventos por mês, 3 sites e 3 pessoas.',
+            'Os dois planos têm a mesma análise, 13 meses de histórico, o resumo semanal e o servidor MCP. O plano Hobby não custa nada e recebe até {events} eventos por mês, em um site, só com você no painel. O plano Pro custa R$ 39 por mês ou R$ 390 por ano (dois meses grátis), no cartão, com cobrança na hora, e recebe até {proEvents} eventos por mês, {proSites} sites e {proPeople} pessoas, com suporte por e-mail.',
         },
         trial: {
           question: 'Como funciona o teste grátis?',
@@ -2474,7 +2474,7 @@ export const ptBR = translation({
             'A qualquer momento, no portal da assinatura: o plano Pro continua até o fim do período já pago e, depois, uma conta com um site e uma pessoa volta para o plano Hobby; uma maior termina, e os dados são apagados 30 dias depois. Em até 7 dias da primeira cobrança, você pode desistir: a cobrança é devolvida inteira e a conta volta para o plano Hobby quando couber nele. Encerrar a conta no painel termina tudo na hora, em qualquer plano. Os detalhes estão nos <terms>Termos de Uso</terms>.',
         },
         limit: {
-          question: 'E se eu passar de 100 mil eventos?',
+          question: 'E se eu passar de {proEvents} eventos?',
           answer:
             'Você recebe um e-mail a 80% e a 100% dos eventos do mês. A 150%, a conta para de receber eventos até o dia 1º do mês seguinte, e os eventos enviados durante a pausa se perdem. Nada é cobrado além do preço.',
         },

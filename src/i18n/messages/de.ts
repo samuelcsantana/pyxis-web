@@ -467,7 +467,7 @@ export const de = translation({
     paidPlan: {
       heading: 'Der Pro-Plan',
       offer:
-        'Bis zu 100.000 Ereignisse pro Monat, 3 Projekte und 3 Personen, für R$ 39 pro Monat oder R$ 390 pro Jahr. Abgebucht wird heute, und das Abo verlängert sich, bis du kündigst.',
+        'Bis zu {proEvents} Ereignisse pro Monat, {proSites} Projekte und {proPeople} Personen, für R$ 39 pro Monat oder R$ 390 pro Jahr. Abgebucht wird heute, und das Abo verlängert sich, bis du kündigst.',
       resumes: 'Die Messung läuft innerhalb einer Minute nach dem Abschluss wieder an.',
     },
     fit: {
@@ -885,7 +885,7 @@ export const de = translation({
     active: 'Dein Abo ist bestätigt.',
     free: 'Dein Konto ist im Hobby-Plan.',
     freeLimits:
-      'Bis zu {events} Ereignisse im Monat, {projects} und {people}, mit allen Funktionen und ohne Karte. Die Messung pausiert, wenn der Monat {pauseAt} Ereignisse erreicht, und läuft am 1. wieder an.',
+      'Bis zu {events} Ereignisse im Monat, {projects} und {people}, mit allen Analysefunktionen und ohne Karte. Die Messung pausiert, wenn der Monat {pauseAt} Ereignisse erreicht, und läuft am 1. wieder an.',
     fromFreePlan:
       'Das Konto nimmt jetzt bis zu {events} Ereignisse im Monat an, {projects} und {people}. War die Messung pausiert, läuft sie innerhalb einer Minute wieder an.',
     next: 'Lege als Nächstes ein Projekt für deine Website an und installiere Pyxis darauf.',
@@ -2003,7 +2003,7 @@ export const de = translation({
       },
       agency: {
         title: 'Entwickler oder Agentur',
-        body: 'Installiere es auf den Websites deiner Kunden und gib jedem Kunden nur Zugriff auf sein eigenes Projekt, mit Anmeldung per Code an die E-Mail. Bis zu 3 Websites und 3 Personen pro Konto; für mehr ein Plan nach Maß.',
+        body: 'Installiere es auf den Websites deiner Kunden und gib jedem Kunden nur Zugriff auf sein eigenes Projekt, mit Anmeldung per Code an die E-Mail. Bis zu {proSites} Websites und {proPeople} Personen pro Konto mit Pro; für mehr ein Plan nach Maß.',
         link: 'Preise ansehen',
       },
       product: {
@@ -2358,8 +2358,8 @@ export const de = translation({
       titleFree: 'Zwei Pläne, in Real, beide mit allem, was die Demo zeigt',
       paidName: 'Pro',
       paidAdds: 'Alles aus Hobby, dazu:',
-      eventsBadge: '10×',
-      eventsBadgeSpoken: '(10-mal so viel wie Hobby)',
+      eventsBadge: '{times}×',
+      eventsBadgeSpoken: '({times}-mal so viel wie Hobby)',
       paidHow:
         'Alle starten mit Hobby. Pro abonnierst du unter Konto und Abrechnung, monatlich oder jährlich, sofort berechnet; innerhalb von 7 Tagen nach dieser Abbuchung kannst du widerrufen und bekommst alles zurück.',
       free: {
@@ -2380,7 +2380,7 @@ export const de = translation({
         terms:
           'Ohne Karte. Bei {events} Ereignissen pausiert die Messung bis zum 1., und bei 80\u00a0% schicken wir dir eine E-Mail.',
       },
-      lead: 'Keine Kosten pro Besucher, pro Funktion oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und ihre IP-Adresse wird nicht gespeichert.',
+      lead: 'Keine Kosten pro Besucher oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und ihre IP-Adresse wird nicht gespeichert.',
       period: 'Abrechnungszeitraum',
       monthly: 'Monatlich',
       monthlyLabel: 'Monatlich, R$ 39 pro Monat',
@@ -2397,9 +2397,9 @@ export const de = translation({
       approximateYearly:
         'Preis in Real: etwa {amount} pro Jahr. Die Zahlungsseite zeigt den genauen Betrag in deiner Währung.',
       included: {
-        events: 'Bis zu 100.000 Ereignisse pro Monat',
-        sites: 'Bis zu 3 Websites',
-        people: 'Bis zu 3 Personen im Dashboard',
+        events: 'Bis zu {proEvents} Ereignisse pro Monat',
+        sites: 'Bis zu {proSites} Websites',
+        people: 'Bis zu {proPeople} Personen im Dashboard',
         history: '13 Monate Verlauf',
         digest: 'Ein Wochenbericht per E-Mail',
         agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
@@ -2408,7 +2408,7 @@ export const de = translation({
       ask: 'Zugang anfragen',
       askTitle: 'Schreib an',
       askIntro: 'Nenne in ein paar Zeilen:',
-      askSite: 'die Adresse der Website oder Websites, bis zu 3;',
+      askSite: 'die Adresse der Website oder Websites, bis zu {proSites};',
       askVisits: 'ungefähr wie viele Besuche sie pro Monat hat;',
       askEmail: 'die E-Mail-Adresse der Person, die sich im Dashboard anmelden wird.',
       askReply:
@@ -2421,8 +2421,8 @@ export const de = translation({
         'Derzeit gibt es Zugang nur auf Einladung: Du fragst an, bekommst den Zahlungslink und, sobald du abonniert hast, innerhalb von 2 Werktagen Zugang zum Dashboard.',
       moreTitle: 'Für Agenturen und Entwickler',
       moreFree:
-        'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Pro umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
-      more: 'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
+        'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Pro umfasst bis zu {proSites} Websites und {proPeople} Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
+      more: 'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der Plan umfasst bis zu {proSites} Websites und {proPeople} Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
       moreLink: 'Nach einem Plan für Agenturen fragen',
       moreSubject: 'Ein Pyxis-Plan für eine Agentur',
       start: 'Kostenlos testen',
@@ -2475,9 +2475,9 @@ export const de = translation({
         agency: {
           question: 'Kann ich Pyxis auf den Websites meiner Kunden nutzen?',
           answer:
-            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
+            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Plan umfasst bis zu {proSites} Websites und {proPeople} Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
           answerFree:
-            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Hobby-Plan umfasst eine Website und nur dich, der Pro-Plan bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
+            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Hobby-Plan umfasst eine Website und nur dich, der Pro-Plan bis zu {proSites} Websites und {proPeople} Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
         },
         noCode: {
           question: 'Ich programmiere nicht. Kann ich es installieren?',
@@ -2507,9 +2507,9 @@ export const de = translation({
         price: {
           question: 'Was kostet es?',
           answer:
-            'R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte. Enthalten sind bis zu 100.000 Ereignisse pro Monat, 3 Websites, 3 Personen im Dashboard, 13 Monate Verlauf, der Wochenbericht und der MCP-Server.',
+            'R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte. Enthalten sind bis zu {proEvents} Ereignisse pro Monat, {proSites} Websites, {proPeople} Personen im Dashboard, 13 Monate Verlauf, der Wochenbericht und der MCP-Server.',
           answerFree:
-            'Beide Pläne haben alle Funktionen: 13 Monate Verlauf, den Wochenbericht und den MCP-Server. Der Hobby-Plan kostet nichts und nimmt bis zu {events} Ereignisse pro Monat auf einer Website an, nur mit dir im Dashboard. Der Pro-Plan kostet R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte, sofort berechnet, und nimmt bis zu 100.000 Ereignisse pro Monat, 3 Websites und 3 Personen an.',
+            'Beide Pläne haben dieselbe Analyse, 13 Monate Verlauf, den Wochenbericht und den MCP-Server. Der Hobby-Plan kostet nichts und nimmt bis zu {events} Ereignisse pro Monat auf einer Website an, nur mit dir im Dashboard. Der Pro-Plan kostet R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte, sofort berechnet, und nimmt bis zu {proEvents} Ereignisse pro Monat, {proSites} Websites und {proPeople} Personen an, mit Support per E-Mail.',
         },
         trial: {
           question: 'Wie funktioniert die kostenlose Testphase?',
@@ -2526,7 +2526,7 @@ export const de = translation({
             'Jederzeit, im Abo-Portal: Der Pro-Plan läuft bis zum Ende des bereits bezahlten Zeitraums, danach kehrt ein Konto mit einer Website und einer Person in den Hobby-Plan zurück; ein größeres endet, und seine Daten werden 30 Tage später gelöscht. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen: Die Abbuchung wird vollständig erstattet, und das Konto kehrt in den Hobby-Plan zurück, wenn es hineinpasst. Wenn du das Konto im Dashboard schließt, endet alles sofort, in jedem Plan. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
         },
         limit: {
-          question: 'Was passiert, wenn ich über 100.000 Ereignisse komme?',
+          question: 'Was passiert, wenn ich über {proEvents} Ereignisse komme?',
           answer:
             'Du bekommst eine E-Mail bei 80\u00a0% und bei 100\u00a0% der Ereignisse des Monats. Bei 150\u00a0% nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Über den Preis hinaus wird nie etwas berechnet.',
         },

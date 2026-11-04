@@ -139,7 +139,7 @@ test("shows the owner the month's usage of the project's account, and where it c
 
   await expect(account).toContainText('· Pro');
   await account.click();
-  const usage = page.getByRole('link', { name: /41,230 of 100,000 events this month/ });
+  const usage = page.getByRole('link', { name: /103,075 of 250,000 events this month/ });
   await expect(usage).toBeVisible();
   await expect(usage).toContainText('41%');
   await expect(usage).toContainText(`Count resets on ${resetsOn}`);

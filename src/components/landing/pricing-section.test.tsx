@@ -73,15 +73,26 @@ describe('PricingSection', () => {
     expect(yearly).toBeChecked();
   });
 
+  it('charges nothing per visitor or per identified person, and no longer speaks of features', () => {
+    render(<PricingSection i18n={english} offer="free" />);
+
+    expect(
+      screen.getByText(
+        'No charge per visitor or per identified person. Your visitors still get no cookie and no stored IP address.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/per feature/)).toBeNull();
+  });
+
   it('lists what the plan includes, the trial and where it is sold', () => {
     render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const included = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(included).toEqual(
       expect.arrayContaining([
-        'Up to 100,000 events a month',
-        'Up to 3 sites',
-        'Up to 3 people in the dashboard',
+        'Up to 250,000 events a month',
+        'Up to 10 sites',
+        'Up to 10 people in the dashboard',
         '13 months of history',
         'A weekly digest by e-mail',
         'The Claude connector (MCP) and access tokens for AI agents',
@@ -291,13 +302,13 @@ describe('PricingSection', () => {
       const paid = within(screen.getByTestId('paid-plan')).getByRole('list');
       const items = within(paid).getAllByRole('listitem');
       expect(items.map((item) => item.textContent)).toEqual([
-        'Up to 100,000 events a month10× (10 times Hobby)',
-        'Up to 3 sites',
-        'Up to 3 people in the dashboard',
+        'Up to 250,000 events a month25× (25 times Hobby)',
+        'Up to 10 sites',
+        'Up to 10 people in the dashboard',
         'Support by e-mail, answered within 2 business days',
       ]);
-      expect(within(paid).getByText('10×')).toHaveAttribute('aria-hidden', 'true');
-      expect(within(paid).getByText('(10 times Hobby)')).toHaveClass('sr-only');
+      expect(within(paid).getByText('25×')).toHaveAttribute('aria-hidden', 'true');
+      expect(within(paid).getByText('(25 times Hobby)')).toHaveClass('sr-only');
     });
 
     it('starts free from the free card and says how to subscribe from the paid one', () => {
@@ -315,7 +326,7 @@ describe('PricingSection', () => {
       expect(screen.queryByText(/^Sign up with an e-mail and no card/)).toBeNull();
       expect(screen.queryByText(/free trial|day 15|Request access/)).toBeNull();
       expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
-      expect(screen.getByText(/Pro has up to 3 sites and 3 people/)).toBeInTheDocument();
+      expect(screen.getByText(/Pro has up to 10 sites and 10 people/)).toBeInTheDocument();
     });
 
     it('says the free plan is full for now on its card, still leading to sign-up', () => {

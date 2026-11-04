@@ -17,6 +17,7 @@ import { canWithdraw, isFreePlanOn } from '@/domain/free-plan';
 import type { FreePlanState } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { type OpenBillingPortal, type OpenCheckout, BillingActions } from './billing-actions';
 import type { CloseAccount } from './close-account-form';
 import { CloseAccountSection } from './close-account-section';
@@ -207,7 +208,7 @@ function SubscribeFromFreePlan({
   return (
     <div className="flex flex-col gap-3 border-t border-line pt-3">
       <h3 className="text-sm font-semibold">{i18n.t('account.paidPlan.heading')}</h3>
-      <p className="text-sm">{i18n.t('account.paidPlan.offer')}</p>
+      <p className="text-sm">{i18n.t('account.paidPlan.offer', proPlanValuesOf(i18n))}</p>
       {pausedUntilOf(account, now) === null ? null : (
         <p className="text-sm font-medium">{i18n.t('account.paidPlan.resumes')}</p>
       )}

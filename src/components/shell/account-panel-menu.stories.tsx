@@ -5,8 +5,8 @@ import { english } from '@/test-utils/english';
 import { AccountPanelMenu } from './account-panel-menu';
 
 const USAGE: MonthUsage = {
-  events: 41_230,
-  limit: 100_000,
+  events: 103_075,
+  limit: 250_000,
   share: 0.4123,
   pausedUntil: null,
   resetsOn: '2026-12-01T00:00:00.000Z',

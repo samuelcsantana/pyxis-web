@@ -176,7 +176,7 @@ describe('HttpAccountsService withdraw', () => {
 });
 
 describe('MockAccountsService', () => {
-  it('lists the demo account as an active subscription with no trial, owned by the demo admin', async () => {
+  it('lists the demo account as an active Pro subscription with no trial, owned by the demo admin', async () => {
     const [account] = await new MockAccountsService(() => NOW).list();
 
     expect(account).toMatchObject({
@@ -186,8 +186,9 @@ describe('MockAccountsService', () => {
       trialEndsAt: null,
       currentPeriodEndsAt: '2026-12-20T12:00:00.000Z',
       month: '2026-11',
-      eventsThisMonth: 41_230,
+      eventsThisMonth: 103_075,
       measuredAt: '2026-11-20T09:00:00.000Z',
+      limits: { eventsPerMonth: 250_000, projects: 10, people: 10, pauseAtEvents: 375_000 },
     });
   });
 

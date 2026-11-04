@@ -8,9 +8,11 @@ import {
   FREE_PLAN_EVENTS_PER_MONTH,
   offersSignUp,
   offersTheFreePlan,
+  PRO_PLAN_EVENTS_MULTIPLE,
   type SignUpOffer,
 } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
+import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { CopyCodeButton } from './copy-code-button';
 import { LINK_PRIMARY, LINK_QUIET, REVEAL } from './landing-classes';
 import { CONTACT_EMAIL, LANDING_LINKS, PRICING_ID } from './landing-links';
@@ -120,7 +122,7 @@ function AskPanel({ i18n }: AskPanelProps) {
       </div>
       <p>{t('landing.pricing.askIntro')}</p>
       <ol className="grid list-decimal gap-1 pl-5">
-        <li>{t('landing.pricing.askSite')}</li>
+        <li>{t('landing.pricing.askSite', proPlanValuesOf(i18n))}</li>
         <li>{t('landing.pricing.askVisits')}</li>
         <li>{t('landing.pricing.askEmail')}</li>
       </ol>
@@ -289,7 +291,7 @@ function AgenciesPanel({ i18n, free }: AskPanelProps & { readonly free: boolean 
     <div className={`flex flex-col gap-2.5 rounded-card border border-line p-5 ${REVEAL}`}>
       <h3 className="text-lg font-semibold">{t('landing.pricing.moreTitle')}</h3>
       <p className="text-base leading-relaxed text-muted">
-        {t(free ? 'landing.pricing.moreFree' : 'landing.pricing.more')}
+        {t(free ? 'landing.pricing.moreFree' : 'landing.pricing.more', proPlanValuesOf(i18n))}
       </p>
       <a
         href={mailtoOf(t('landing.pricing.moreSubject'))}
@@ -319,7 +321,9 @@ function OnePlan({ i18n, offer, approximate }: PlansProps) {
           >
             <PaidPlanTerms i18n={i18n} approximate={approximate} />
             <IncludedList
-              items={INCLUDED.map((item) => ({ text: t(`landing.pricing.included.${item}`) }))}
+              items={INCLUDED.map((item) => ({
+                text: t(`landing.pricing.included.${item}`, proPlanValuesOf(i18n)),
+              }))}
             />
             {signUpOpen ? (
               <StartButtons i18n={i18n} />
@@ -413,16 +417,17 @@ function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: bool
 
 function PaidPlanAdds({ i18n }: { readonly i18n: I18n }) {
   const { t } = i18n;
+  const times = i18n.format.count(PRO_PLAN_EVENTS_MULTIPLE);
   const eventsBadge = {
-    shown: t('landing.pricing.eventsBadge'),
-    spoken: t('landing.pricing.eventsBadgeSpoken'),
+    shown: t('landing.pricing.eventsBadge', { times }),
+    spoken: t('landing.pricing.eventsBadgeSpoken', { times }),
   };
   return (
     <div className="flex flex-col gap-2.5">
       <p className="text-base font-semibold">{t('landing.pricing.paidAdds')}</p>
       <IncludedList
         items={PAID_ADDS.map((item) => ({
-          text: t(`landing.pricing.included.${item}`),
+          text: t(`landing.pricing.included.${item}`, proPlanValuesOf(i18n)),
           badge: item === 'events' ? eventsBadge : undefined,
         }))}
       />

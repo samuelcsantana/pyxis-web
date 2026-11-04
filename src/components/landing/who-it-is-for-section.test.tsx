@@ -63,7 +63,7 @@ describe('WhoItIsForSection', () => {
     expect(agency).toHaveAttribute('href', '#pricing');
     expect(agency).toHaveAttribute('data-track', 'pricing_opened');
     expect(agency).toHaveAttribute('data-track-from', 'for-whom');
-    expect(agency).toHaveTextContent('Up to 3 sites and 3 people per account');
+    expect(agency).toHaveTextContent('Up to 10 sites and 10 people per account on Pro');
     const product = cardLink('A product or SaaS');
     expect(product).toHaveAttribute('href', '#dashboard');
     expect(product).not.toHaveAttribute('data-track');

@@ -465,7 +465,7 @@ export const fr = translation({
     paidPlan: {
       heading: 'La formule Pro',
       offer:
-        'Jusqu’à 100 000 événements par mois, 3 projets et 3 personnes, pour 39 R$ par mois ou 390 R$ par an. Le paiement est débité aujourd’hui et se renouvelle jusqu’à ce que vous résiliiez.',
+        'Jusqu’à {proEvents} événements par mois, {proSites} projets et {proPeople} personnes, pour 39 R$ par mois ou 390 R$ par an. Le paiement est débité aujourd’hui et se renouvelle jusqu’à ce que vous résiliiez.',
       resumes: 'La mesure reprend dans la minute qui suit l’abonnement.',
     },
     fit: {
@@ -885,7 +885,7 @@ export const fr = translation({
     active: 'Votre abonnement est confirmé.',
     free: 'Votre compte est sur la formule Hobby.',
     freeLimits:
-      'Jusqu’à {events} événements par mois, {projects} et {people}, avec toutes les fonctions et sans carte. La mesure se met en pause quand le mois atteint {pauseAt} événements et reprend le 1er.',
+      'Jusqu’à {events} événements par mois, {projects} et {people}, avec toutes les fonctions d’analyse et sans carte. La mesure se met en pause quand le mois atteint {pauseAt} événements et reprend le 1er.',
     fromFreePlan:
       'Le compte accepte désormais jusqu’à {events} événements par mois, {projects} et {people}. Si la mesure était en pause, elle reprend dans la minute.',
     next: 'Ensuite, créez un projet pour votre site et installez-y Pyxis.',
@@ -2000,7 +2000,7 @@ export const fr = translation({
       },
       agency: {
         title: 'Développeur ou agence',
-        body: 'Installez-le sur les sites de vos clients et donnez à chaque client l’accès à son seul projet, avec un code reçu par e-mail pour se connecter. Jusqu’à 3 sites et 3 personnes par compte ; au-delà, une offre sur mesure.',
+        body: 'Installez-le sur les sites de vos clients et donnez à chaque client l’accès à son seul projet, avec un code reçu par e-mail pour se connecter. Jusqu’à {proSites} sites et {proPeople} personnes par compte avec Pro ; au-delà, une offre sur mesure.',
         link: 'Voir les tarifs',
       },
       product: {
@@ -2359,8 +2359,8 @@ export const fr = translation({
       titleFree: 'Deux formules, en reais, avec tout ce que montre la démo dans les deux',
       paidName: 'Pro',
       paidAdds: 'Tout Hobby, et en plus :',
-      eventsBadge: '10×',
-      eventsBadgeSpoken: '(10 fois Hobby)',
+      eventsBadge: '{times}×',
+      eventsBadgeSpoken: '({times} fois Hobby)',
       paidHow:
         'Tout le monde commence avec Hobby. Souscrivez à Pro dans Compte et facturation, au mois ou à l’année, débité aussitôt ; dans les 7 jours suivant ce prélèvement, vous pouvez vous rétracter et être remboursé en totalité.',
       free: {
@@ -2380,7 +2380,7 @@ export const fr = translation({
         terms:
           'Sans carte. À {events} événements, la mesure se met en pause jusqu’au 1er, et nous vous prévenons par e-mail à 80 %.',
       },
-      lead: 'Rien à payer par visiteur, par fonctionnalité ni par personne identifiée. Et toujours aucun cookie chez vos visiteurs, ni aucune adresse IP stockée.',
+      lead: 'Rien à payer par visiteur ni par personne identifiée. Et toujours aucun cookie chez vos visiteurs, ni aucune adresse IP stockée.',
       period: 'Période de facturation',
       monthly: 'Mensuelle',
       monthlyLabel: 'Mensuelle, 39 R$ par mois',
@@ -2397,9 +2397,9 @@ export const fr = translation({
       approximateYearly:
         'Prix en reais : environ {amount} par an. La page de paiement affiche le montant exact dans votre devise.',
       included: {
-        events: 'Jusqu’à 100 000 événements par mois',
-        sites: 'Jusqu’à 3 sites',
-        people: 'Jusqu’à 3 personnes dans le tableau de bord',
+        events: 'Jusqu’à {proEvents} événements par mois',
+        sites: 'Jusqu’à {proSites} sites',
+        people: 'Jusqu’à {proPeople} personnes dans le tableau de bord',
         history: '13 mois d’historique',
         digest: 'Un récapitulatif hebdomadaire par e-mail',
         agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
@@ -2408,7 +2408,7 @@ export const fr = translation({
       ask: 'Demander un accès',
       askTitle: 'Écrivez à',
       askIntro: 'En quelques lignes, indiquez :',
-      askSite: 'l’adresse du site, ou des sites, jusqu’à 3 ;',
+      askSite: 'l’adresse du site, ou des sites, jusqu’à {proSites} ;',
       askVisits: 'le nombre approximatif de visites par mois ;',
       askEmail: 'l’e-mail de la personne qui se connectera au tableau de bord.',
       askReply:
@@ -2421,8 +2421,8 @@ export const fr = translation({
         'Pour l’instant, l’accès se fait sur invitation : vous en faites la demande, recevez le lien de paiement et, une fois abonné, obtenez l’accès au tableau de bord sous 2 jours ouvrés.',
       moreTitle: 'Pour les agences et les développeurs',
       moreFree:
-        'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule Pro comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
-      more: 'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
+        'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule Pro comprend jusqu’à {proSites} sites et {proPeople} personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
+      more: 'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule comprend jusqu’à {proSites} sites et {proPeople} personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
       moreLink: 'Demander une formule pour agence',
       moreSubject: 'Une formule Pyxis pour agence',
       start: 'Démarrer votre essai gratuit',
@@ -2475,9 +2475,9 @@ export const fr = translation({
         agency: {
           question: 'Puis-je utiliser Pyxis sur les sites de mes clients ?',
           answer:
-            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
+            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule comprend jusqu’à {proSites} sites et {proPeople} personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
           answerFree:
-            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule Hobby comprend un site et vous seul ; la formule Pro, jusqu’à 3 sites et 3 personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
+            'Oui. Créez un projet par site et ajoutez le client aux personnes du projet : il se connecte avec un code reçu par e-mail et ne voit que ce projet. La formule Hobby comprend un site et vous seul ; la formule Pro, jusqu’à {proSites} sites et {proPeople} personnes, vous compris ; au-delà, écrivez à hello@pyxis-analytics.dev. Les <terms>Conditions d’utilisation</terms> le prévoient : mesurer, en tant qu’agence, les sites de clients qui l’ont autorisé n’est pas de la revente.',
         },
         noCode: {
           question: 'Je ne code pas. Puis-je l’installer ?',
@@ -2507,9 +2507,9 @@ export const fr = translation({
         price: {
           question: 'Combien ça coûte ?',
           answer:
-            '39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte. Cela comprend jusqu’à 100 000 événements par mois, 3 sites, 3 personnes dans le tableau de bord, 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP.',
+            '39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte. Cela comprend jusqu’à {proEvents} événements par mois, {proSites} sites, {proPeople} personnes dans le tableau de bord, 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP.',
           answerFree:
-            'Les deux formules ont toutes les fonctions : 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP. La formule Hobby ne coûte rien et accepte jusqu’à {events} événements par mois, sur un site, avec vous seul dans le tableau de bord. La formule Pro coûte 39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte, débitée aussitôt, et accepte jusqu’à 100 000 événements par mois, 3 sites et 3 personnes.',
+            'Les deux formules ont la même analyse, 13 mois d’historique, le récapitulatif hebdomadaire et le serveur MCP. La formule Hobby ne coûte rien et accepte jusqu’à {events} événements par mois, sur un site, avec vous seul dans le tableau de bord. La formule Pro coûte 39 R$ par mois ou 390 R$ par an (deux mois offerts), par carte, débitée aussitôt, et accepte jusqu’à {proEvents} événements par mois, {proSites} sites et {proPeople} personnes, avec une assistance par e-mail.',
         },
         trial: {
           question: 'Comment fonctionne l’essai gratuit ?',
@@ -2526,7 +2526,7 @@ export const fr = translation({
             'À tout moment, dans le portail d’abonnement : la formule Pro dure jusqu’à la fin de la période déjà payée, puis un compte avec un site et une personne revient à la formule Hobby ; un compte plus grand prend fin, et ses données sont supprimées 30 jours plus tard. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter : le prélèvement est remboursé en totalité et le compte revient à la formule Hobby s’il y tient. Fermer le compte dans le tableau de bord met fin à tout immédiatement, quelle que soit la formule. Les <terms>Conditions d’utilisation</terms> donnent tous les détails.',
         },
         limit: {
-          question: 'Et si je dépasse 100 000 événements ?',
+          question: 'Et si je dépasse {proEvents} événements ?',
           answer:
             'Vous recevez un e-mail à 80 % et à 100 % des événements du mois. À 150 %, le compte cesse d’accepter des événements jusqu’au 1er du mois suivant, et les événements envoyés pendant la pause sont perdus. Rien n’est jamais facturé au-delà du prix.',
         },

@@ -91,7 +91,7 @@ describe('AccountOverview on the free plan', () => {
     overview();
 
     expect(paidPlan()).toHaveTextContent(
-      'Up to 100,000 events a month, 3 projects and 3 people, for R$ 39 a month or R$ 390 a year. It is charged today and renews until you cancel.',
+      'Up to 250,000 events a month, 10 projects and 10 people, for R$ 39 a month or R$ 390 a year. It is charged today and renews until you cancel.',
     );
     expect(within(paidPlan()).getByRole('button', { name: 'Monthly' })).toHaveAttribute(
       'aria-pressed',
