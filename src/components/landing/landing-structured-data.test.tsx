@@ -20,7 +20,6 @@ describe('LandingStructuredData', () => {
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Web',
       license: 'https://opensource.org/licenses/MIT',
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       sameAs: [
         'https://github.com/samuelcsantana/pyxis-api',
         'https://github.com/samuelcsantana/pyxis-sdk',
@@ -28,6 +27,19 @@ describe('LandingStructuredData', () => {
         'https://www.npmjs.com/package/pyxis-analytics',
       ],
     });
+  });
+
+  it('offers only Pro, in reais, while the free plan is not offered', () => {
+    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE, 'trial').offers).toEqual([
+      { '@type': 'Offer', name: 'Pro', price: '39', priceCurrency: 'BRL' },
+    ]);
+  });
+
+  it('offers Hobby for free and Pro, in reais, once the free plan is open', () => {
+    expect(softwareApplicationOf(english, DEFAULT_LANDING_PAGE, 'free').offers).toEqual([
+      { '@type': 'Offer', name: 'Hobby', price: '0', priceCurrency: 'BRL' },
+      { '@type': 'Offer', name: 'Pro', price: '39', priceCurrency: 'BRL' },
+    ]);
   });
 
   it('describes the Portuguese page in Portuguese, at its own address', () => {
