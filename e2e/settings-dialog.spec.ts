@@ -12,6 +12,8 @@ function settings(page: Page) {
 }
 
 async function markThePage(page: Page): Promise<void> {
+  await expect(page.getByRole('main')).not.toHaveAttribute('aria-busy');
+  await page.waitForLoadState('networkidle');
   await page.evaluate(() => {
     Reflect.set(window, '__shownMain', document.querySelector('main'));
   });
@@ -26,12 +28,13 @@ test('opens the settings over the page without touching it, and gives the focus 
   isMobile,
 }) => {
   await page.goto(OVERVIEW);
+  await markThePage(page);
   if (!isMobile) {
     await page.evaluate((top) => {
       window.scrollTo(0, top);
     }, SCROLLED_PX);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(SCROLLED_PX);
   }
-  await markThePage(page);
 
   await openSettings(page, isMobile);
 
