@@ -487,7 +487,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Central Bank's daily reference rates, read on the server, cached for a day and left out when they
   cannot be read), a FAQ (including whether it works on a Shopify store and with Google Tag Manager) and the
   introduction post. Once the API says the free plan is open, the
-  same status turns the page to it: the hero leads with "Start free" and "See the paid plan",
+  same status turns the page to it: the hero leads with "Start free" and "See the Pro plan",
   pricing shows a Hobby card (what it includes, the Tag Manager and Shopify install, and under its
   button the no-card and 10,000-event pause terms) and an outlined Pro card that lists only what
   it adds ("Everything in Hobby, plus:" the events with a "10×" mark, sites, people and e-mail
@@ -495,8 +495,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Account and billing. The yearly option carries its saving ("−17%") and shows its price per
   month with the yearly charge under it. The FAQ answers for two
   plans and asks what happens at 10,000 events instead of how the trial works, and the
-  description, the structured data and `llms.txt` name the free plan; while it is full, the hero
-  and the free card say so. The address follows the section being read, and switching language opens the
+  description, the structured data and `llms.txt` name the Hobby plan; while it is full, the hero
+  and the free card say so. Every screen and e-mail names the plans Hobby and Pro. The address follows the section being read, and switching language opens the
   other page on that section, still from the copy the speculation rules fetched ahead. A robot
   points to the Claude connector section and flies off once the reader gets there or dismisses
   it. Motion is CSS (scroll-driven reveal, `::details-content`, a cross-document view transition

@@ -44,7 +44,9 @@ describe('GET /llms.txt', () => {
 
     const text = await (await GET()).text();
 
-    expect(text).toContain('(free plan: 10,000 events a month on one site, no card)');
+    expect(text).toContain(
+      '(Hobby plan, free: 10,000 events a month on one site, no card; Pro plan for more)',
+    );
     signUp.freePlan = 'closed';
   });
 
