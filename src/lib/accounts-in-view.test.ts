@@ -55,6 +55,7 @@ describe('accountsInView', () => {
       canCreateProject: true,
       hasUnfinishedSignUp: false,
       usage: null,
+      plan: null,
     });
   });
 
@@ -74,6 +75,7 @@ describe('accountsInView', () => {
       canCreateProject: false,
       hasUnfinishedSignUp: false,
       usage: null,
+      plan: null,
     });
   });
 
@@ -114,6 +116,31 @@ describe('accountsInView', () => {
     expect(view.usage?.events).toBe(10);
   });
 
+  it('names the plan of the account that holds the project on screen', () => {
+    const plans = [
+      ['free', 'free'],
+      ['trialing', 'trial'],
+      ['comped', 'comped'],
+      ['incomplete', 'incomplete'],
+      ['active', 'pro'],
+      ['past_due', 'pro'],
+      ['ending', 'pro'],
+      ['ended', 'pro'],
+    ] as const;
+    for (const [status, plan] of plans) {
+      expect(accountsInView([{ ...ENDING, status }], NOW, project('a1')).plan).toBe(plan);
+    }
+  });
+
+  it('calls a person who does not own the account of the project a member', () => {
+    expect(accountsInView([{ ...ENDING, role: 'member' }], NOW, project('a1')).plan).toBe('member');
+    expect(accountsInView([ENDING], NOW, project('a2')).plan).toBe('member');
+  });
+
+  it('names no plan without a project on screen', () => {
+    expect(accountsInView([ENDING], NOW).plan).toBeNull();
+  });
+
   it('notices a sign-up the owner did not finish, and only theirs', () => {
     const unfinished = { ...ENDING, status: 'incomplete', accessEndsAt: null } as const;
 
@@ -137,6 +164,7 @@ describe('bestEffortAccountsInView', () => {
       canCreateProject: true,
       hasUnfinishedSignUp: false,
       usage: null,
+      plan: null,
     });
   });
 
@@ -150,6 +178,7 @@ describe('bestEffortAccountsInView', () => {
       canCreateProject: false,
       hasUnfinishedSignUp: false,
       usage: null,
+      plan: null,
     });
     expect(warn).toHaveBeenCalledWith(
       'accounts in view: could not read the accounts, showing none',

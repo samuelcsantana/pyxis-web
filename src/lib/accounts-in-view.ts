@@ -1,6 +1,7 @@
 import {
   type Account,
   type AccountNotice,
+  type AccountStatus,
   canCreateProjects,
   firstNotice,
   needsCheckout,
@@ -18,11 +19,30 @@ export interface MonthUsage {
   readonly resetsOn: string;
 }
 
+export type PlanBadge = 'free' | 'pro' | 'trial' | 'comped' | 'incomplete' | 'member';
+
 export interface AccountsInView {
   readonly notice: AccountNotice | null;
   readonly canCreateProject: boolean;
   readonly hasUnfinishedSignUp: boolean;
   readonly usage: MonthUsage | null;
+  readonly plan: PlanBadge | null;
+}
+
+const BADGE_OF_STATUS: Readonly<Record<AccountStatus, PlanBadge>> = {
+  incomplete: 'incomplete',
+  trialing: 'trial',
+  active: 'pro',
+  past_due: 'pro',
+  ending: 'pro',
+  ended: 'pro',
+  comped: 'comped',
+  free: 'free',
+};
+
+function planBadgeOf(accounts: readonly Account[], project: Project): PlanBadge {
+  const account = ownedAccounts(accounts).find((owned) => owned.id === project.accountId);
+  return account === undefined ? 'member' : BADGE_OF_STATUS[account.status];
 }
 
 const NOTHING_TO_SHOW: AccountsInView = {
@@ -30,6 +50,7 @@ const NOTHING_TO_SHOW: AccountsInView = {
   canCreateProject: false,
   hasUnfinishedSignUp: false,
   usage: null,
+  plan: null,
 };
 
 function firstDayOfNextMonth(now: Date): string {
@@ -65,6 +86,7 @@ export function accountsInView(
     canCreateProject: accounts.some(canCreateProjects),
     hasUnfinishedSignUp: ownedAccounts(accounts).some(needsCheckout),
     usage: project === undefined ? null : monthUsageOf(accounts, project, now),
+    plan: project === undefined ? null : planBadgeOf(accounts, project),
   };
 }
 
