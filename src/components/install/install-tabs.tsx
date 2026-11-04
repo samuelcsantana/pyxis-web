@@ -19,8 +19,8 @@ export interface InstallTabsProps {
 export type PanelEntrance = 'still' | 'fromEnd' | 'fromStart';
 
 const TAB_LIST =
-  'group/install-tabs relative flex flex-wrap self-start gap-1 rounded-input border border-line-strong bg-card p-1 shadow-sm';
-const TAB = `relative z-[1] flex min-h-10 items-center gap-2 rounded-control px-3.5 text-sm font-semibold ${FOCUS_RING} ${CONTROL_TRANSITION}`;
+  'group/install-tabs relative flex max-w-full flex-wrap self-start gap-1 rounded-input border border-line-strong bg-card p-1 shadow-sm';
+const TAB = `relative z-[1] flex min-h-10 max-w-full flex-wrap items-center gap-x-2 gap-y-1 py-1.5 text-left rounded-control px-3.5 text-sm font-semibold ${FOCUS_RING} ${CONTROL_TRANSITION}`;
 const TAB_SELECTED = 'bg-accent text-accent-ink group-data-sliding/install-tabs:bg-transparent';
 const TAB_IDLE = 'text-ink hover:bg-soft active:bg-soft';
 const TAB_THUMB = `rounded-control bg-accent shadow-sm ${SLIDING_INDICATOR}`;

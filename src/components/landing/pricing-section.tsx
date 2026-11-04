@@ -53,9 +53,9 @@ const PERIOD_THUMB =
   'pointer-events-none absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-pill bg-card shadow-sm transition-transform duration-200 ease-out group-has-[input[value=year]:checked]/pricing:translate-x-full motion-reduce:transition-none';
 const PERIOD_OPTION = `relative z-[1] flex cursor-pointer items-center justify-center rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
 const SHOW_WHEN_MONTHLY =
-  'flex flex-col gap-1 motion-safe:animate-reveal group-has-[input[value=year]:checked]/pricing:hidden';
+  'flex flex-col gap-1 motion-safe:animate-settle group-has-[input[value=year]:checked]/pricing:hidden';
 const SHOW_WHEN_YEARLY =
-  'hidden flex-col gap-1 motion-safe:animate-reveal group-has-[input[value=year]:checked]/pricing:flex';
+  'hidden flex-col gap-1 motion-safe:animate-settle group-has-[input[value=year]:checked]/pricing:flex';
 const START_WHEN_MONTHLY = 'block group-has-[input[value=year]:checked]/pricing:hidden';
 const START_WHEN_YEARLY = 'hidden group-has-[input[value=year]:checked]/pricing:block';
 const PRICE = 'text-5xl leading-none font-semibold tracking-[-0.03em] tabular-nums';
