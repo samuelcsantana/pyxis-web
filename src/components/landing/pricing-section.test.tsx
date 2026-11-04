@@ -33,6 +33,18 @@ describe('PricingSection', () => {
     expect(screen.getByRole('radio', { name: /^Monthly/ })).not.toBeChecked();
   });
 
+  it('slides one thumb across two equal halves to the yearly side, unless motion is reduced', () => {
+    render(<PricingSection i18n={english} offer="byInvitation" />);
+
+    const period = screen.getByRole('group', { name: 'Billing period' });
+    expect(period).toHaveClass('grid-cols-2');
+    expect(within(period).getByTestId('period-thumb')).toHaveClass(
+      'w-[calc(50%-3px)]',
+      'group-has-[input[value=year]:checked]/pricing:translate-x-full',
+      'motion-reduce:transition-none',
+    );
+  });
+
   it('shows the yearly saving beside the switch, and picks the yearly plan when it is clicked', async () => {
     render(<PricingSection i18n={english} offer="byInvitation" />);
 
