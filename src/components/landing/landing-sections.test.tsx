@@ -1,7 +1,12 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { scriptSnippet, TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
+import {
+  classicSnippet,
+  scriptSnippet,
+  TAG_MANAGER_TEMPLATE_URL,
+  WORDPRESS_HEADER_PLUGIN_URL,
+} from '@/domain/install';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { DashboardAnswersSection, demoScreenUrl, SCREENS_SHOWN } from './dashboard-answers-section';
@@ -17,6 +22,7 @@ import {
   PLATFORMS,
   SHOPIFY_SNIPPET_ID,
   START_STEPS,
+  WORDPRESS_SNIPPET_ID,
 } from './install-section';
 import { LandingSection } from './landing-section';
 import { NeverStoredSection } from './never-stored-section';
@@ -386,6 +392,7 @@ describe('InstallSection', () => {
       'Any HTML site',
       'Google Tag Manager',
       'Shopify',
+      'WordPress',
       'Nuvemshop, through Tag Manager',
     ]);
     expect(within(platforms).getAllByRole('listitem')).toHaveLength(PLATFORMS.length);
@@ -393,7 +400,7 @@ describe('InstallSection', () => {
       within(platforms)
         .getAllByRole('listitem')
         .map((item) => item.querySelector('svg')?.dataset.icon),
-    ).toEqual(['nextJs', 'react', 'html', 'tagManager', 'shopify', 'cloudStore']);
+    ).toEqual(['nextJs', 'react', 'html', 'tagManager', 'shopify', 'wordPress', 'cloudStore']);
     expect(platforms.querySelector('img')).toBeNull();
     expect(
       platforms.compareDocumentPosition(
@@ -410,7 +417,7 @@ describe('InstallSection', () => {
     expect(platforms).toHaveTextContent('Nuvemshop, pelo Tag Manager');
   });
 
-  it('opens on the code, with Tag Manager and Shopify in their own tabs marked as no code', () => {
+  it('opens on the code, with Tag Manager, Shopify and WordPress in their own tabs marked as no code', () => {
     render(<InstallSection i18n={english} offer="byInvitation" />);
 
     const tabs = within(screen.getByRole('tablist', { name: 'How to install' })).getAllByRole(
@@ -420,11 +427,13 @@ describe('InstallSection', () => {
       'With code',
       'Google Tag Managerno code',
       'Shopifyno code',
+      'WordPressno code',
     ]);
     expect(tabs.map((tab) => tab.querySelector('svg')?.dataset.icon)).toEqual([
       'code',
       'tagManager',
       'shopify',
+      'wordPress',
     ]);
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
     expect(tabs[0]).toHaveAttribute('id', `${INSTALL_TAB_IDS.code}-tab`);
@@ -478,6 +487,36 @@ describe('InstallSection', () => {
     );
   });
 
+  it('gives a WordPress site the classic snippet for a free header plugin', async () => {
+    const user = userEvent.setup();
+    render(<InstallSection i18n={english} offer="free" />);
+
+    await user.click(screen.getByRole('tab', { name: /WordPress/ }));
+
+    const panel = screen.getByRole('tabpanel');
+    expect(panel.querySelector(`#${WORDPRESS_SNIPPET_ID}`)?.textContent).toBe(
+      classicSnippet('pyxis_pk_…', 'https://api.pyxis-analytics.dev'),
+    );
+    expect(
+      within(panel)
+        .getAllByRole('listitem')
+        .map((item) => (item.querySelector('p') ?? item).textContent),
+    ).toEqual([
+      'In the WordPress admin, install and activate the free WPCode plugin, under Plugins › Add Plugin.',
+      'In Code Snippets › Header & Footer, paste this snippet in Header and save:',
+      'In the dashboard’s Settings, allow the site’s address.',
+    ]);
+    const plugin = within(panel).getByRole('link', { name: 'WPCode' });
+    expect(plugin).toHaveAttribute('href', WORDPRESS_HEADER_PLUGIN_URL);
+    expect(plugin).toHaveAttribute('data-track', 'docs_opened');
+    expect(plugin).toHaveAttribute('data-track-doc', 'wordpress_plugin');
+    expect(within(panel).getByRole('button', { name: 'Copy' })).toHaveAttribute(
+      'data-track-snippet',
+      WORDPRESS_SNIPPET_ID,
+    );
+    expect(panel).toHaveTextContent('so a theme update keeps it.');
+  });
+
   it('writes the no-code tabs in the reader’s language', async () => {
     const user = userEvent.setup();
     render(<InstallSection i18n={portuguese} offer="free" />);
@@ -487,6 +526,12 @@ describe('InstallSection', () => {
 
     expect(screen.getByRole('tabpanel')).toHaveTextContent(
       'A Shopify não roda código do tema no checkout',
+    );
+
+    await user.click(screen.getByRole('tab', { name: /WordPress/ }));
+
+    expect(screen.getByRole('tabpanel')).toHaveTextContent(
+      'Em Snippets de código › Cabeçalho e rodapé, cole este trecho em Cabeçalho e salve:',
     );
   });
 });

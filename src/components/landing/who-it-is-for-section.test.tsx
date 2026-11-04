@@ -73,7 +73,9 @@ describe('WhoItIsForSection', () => {
     render(<WhoItIsForSection i18n={english} />);
 
     expect(
-      screen.getByText(/If your site already loads Google Tag Manager, or is a Shopify store/),
+      screen.getByText(
+        /If your site already loads Google Tag Manager, runs on WordPress or is a Shopify store/,
+      ),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'How to install' })).toHaveAttribute(
       'href',

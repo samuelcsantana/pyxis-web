@@ -1,7 +1,12 @@
 import type { ReactNode } from 'react';
 import { InstallTabs } from '@/components/install/install-tabs';
 import { TEXT_LINK } from '@/components/ui/control-classes';
-import { scriptSnippet, TAG_MANAGER_TEMPLATE_URL } from '@/domain/install';
+import {
+  classicSnippet,
+  scriptSnippet,
+  TAG_MANAGER_TEMPLATE_URL,
+  WORDPRESS_HEADER_PLUGIN_URL,
+} from '@/domain/install';
 import { offersSignUp, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
 import type { I18n } from '@/i18n/i18n';
 import { type RichSlots, rich } from '@/i18n/rich';
@@ -249,6 +254,7 @@ function AgentPrompt({ i18n, labels }: AgentPromptProps) {
 
 const TAG_MANAGER = 'Google Tag Manager';
 const SHOPIFY = 'Shopify';
+const WORDPRESS = 'WordPress';
 
 export const PLATFORMS = [
   'Next.js',
@@ -256,6 +262,7 @@ export const PLATFORMS = [
   'anyHtml',
   TAG_MANAGER,
   SHOPIFY,
+  WORDPRESS,
   'nuvemshop',
 ] as const;
 
@@ -267,6 +274,7 @@ const PLATFORM_ICONS: Readonly<Record<Platform, PlatformIconName>> = {
   anyHtml: 'html',
   [TAG_MANAGER]: 'tagManager',
   [SHOPIFY]: 'shopify',
+  [WORDPRESS]: 'wordPress',
   nuvemshop: 'cloudStore',
 };
 
@@ -310,9 +318,11 @@ export const INSTALL_TAB_IDS = {
   code: 'install-with-code',
   tagManager: 'install-with-tag-manager',
   shopify: 'install-with-shopify',
+  wordPress: 'install-with-wordpress',
 } as const;
 
 export const SHOPIFY_SNIPPET_ID = 'install-shopify-snippet';
+export const WORDPRESS_SNIPPET_ID = 'install-wordpress-snippet';
 
 const HOSTED_ENDPOINT = 'https://api.pyxis-analytics.dev';
 const PUBLIC_KEY_PLACEHOLDER = 'pyxis_pk_…';
@@ -336,6 +346,15 @@ const STEP_SLOTS: RichSlots = {
       href={TAG_MANAGER_TEMPLATE_URL}
       className={TEXT_LINK}
       {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'tag_manager_template' })}
+    >
+      {text}
+    </a>
+  ),
+  plugin: (text) => (
+    <a
+      href={WORDPRESS_HEADER_PLUGIN_URL}
+      className={TEXT_LINK}
+      {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'wordpress_plugin' })}
     >
       {text}
     </a>
@@ -392,6 +411,28 @@ function WithShopify({ i18n, labels }: { readonly i18n: I18n; readonly labels: C
         <li>{t('landing.install.shopify.steps.allow')}</li>
       </ol>
       <p className={PANEL_NOTE}>{t('landing.install.shopify.note')}</p>
+    </div>
+  );
+}
+
+function WithWordPress({ i18n, labels }: { readonly i18n: I18n; readonly labels: CopyCodeLabels }) {
+  const { t } = i18n;
+  return (
+    <div className={NO_CODE_PANEL}>
+      <ol className={STEP_LIST}>
+        <li>{rich(t('landing.install.wordPress.steps.plugin'), STEP_SLOTS)}</li>
+        <li className="min-w-0">
+          <p className="mb-2.5">{rich(t('landing.install.wordPress.steps.paste'), STEP_SLOTS)}</p>
+          <CodeBlock
+            id={WORDPRESS_SNIPPET_ID}
+            tokens={[plain(classicSnippet(PUBLIC_KEY_PLACEHOLDER, HOSTED_ENDPOINT))]}
+            labels={labels}
+            wrap="words"
+          />
+        </li>
+        <li>{t('landing.install.wordPress.steps.allow')}</li>
+      </ol>
+      <p className={PANEL_NOTE}>{t('landing.install.wordPress.note')}</p>
     </div>
   );
 }
@@ -455,6 +496,17 @@ export function InstallSection({ i18n, offer }: InstallSectionProps) {
               />
             ),
             panel: <WithShopify i18n={i18n} labels={labels} />,
+          },
+          {
+            id: INSTALL_TAB_IDS.wordPress,
+            label: (
+              <NoCodeTabLabel
+                icon="wordPress"
+                name={WORDPRESS}
+                noCode={t('landing.install.tabs.noCode')}
+              />
+            ),
+            panel: <WithWordPress i18n={i18n} labels={labels} />,
           },
         ]}
       />

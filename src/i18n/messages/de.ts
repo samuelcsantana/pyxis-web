@@ -1997,7 +1997,7 @@ export const de = translation({
         link: 'Die Ansichten des Dashboards ansehen',
       },
       install:
-        'Du programmierst nicht? Lädt deine Website schon Google Tag Manager oder ist sie ein Shopify-Shop, braucht die Installation keinen Code. Bei jeder anderen Website übernimmt sie ein KI-Agent, wer deine Website gebaut hat oder eine Agentur. <link>So wird installiert</link>',
+        'Du programmierst nicht? Lädt deine Website schon Google Tag Manager, läuft sie mit WordPress oder ist sie ein Shopify-Shop, braucht die Installation keinen Code. Bei jeder anderen Website übernimmt sie ein KI-Agent, wer deine Website gebaut hat oder eine Agentur. <link>So wird installiert</link>',
     },
     preview: {
       label: 'Vorschau der Übersicht',
@@ -2185,7 +2185,7 @@ export const de = translation({
         },
         install: {
           title: 'Installieren, mit oder ohne Code',
-          body: 'Das Paket im Code der Website, die Vorlage in Google Tag Manager, ein Codeausschnitt im Shopify-Theme oder eine Bitte an einen KI-Agenten.',
+          body: 'Das Paket im Code der Website, die Vorlage in Google Tag Manager, ein Codeausschnitt in einem WordPress-Plugin oder Shopify-Theme, oder eine Bitte an einen KI-Agenten.',
         },
         ask: {
           title: 'Fragen',
@@ -2221,6 +2221,16 @@ export const de = translation({
             'Erlaube in den Einstellungen des Dashboards die Adresse, unter der Kunden den Shop öffnen.',
         },
         note: 'Jede Seite, die das Theme zeigt, wird gemessen, Produkte und Warenkorb eingeschlossen. Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'Installiere und aktiviere im WordPress-Adminbereich das kostenlose Plugin <plugin>WPCode</plugin>, unter <b>Plugins</b> › <b>Plugin hinzufügen</b>.',
+          paste:
+            'Füge unter <b>Code-Snippets</b> › <b>Header und Footer</b> diesen Codeausschnitt in <b>Header</b> ein und speichere:',
+          allow: 'Erlaube in den Einstellungen des Dashboards die Adresse der Website.',
+        },
+        note: 'Der Codeausschnitt steht im Plugin, deshalb bleibt er bei einem Theme-Update erhalten. Lädt die Website schon Google Tag Manager, geht auch der Tag-Manager-Tab.',
       },
       copy: 'Kopieren',
       copied: 'Kopiert',
@@ -2457,12 +2467,17 @@ export const de = translation({
         noCode: {
           question: 'Ich programmiere nicht. Kann ich es installieren?',
           answer:
-            'Ja. Lädt deine Website schon Google Tag Manager, füge dort die Vorlage Pyxis Analytics hinzu, ohne Code. In einem Shopify-Shop fügst du einen Codeausschnitt ins Theme ein. Bei jeder anderen Website kommt das Paket in den Code: du mit einem KI-Agenten, wer deine Website gebaut hat oder eine Agentur. Danach verlangen das Dashboard und Claude keinen Code mehr.',
+            'Ja. Lädt deine Website schon Google Tag Manager, füge dort die Vorlage Pyxis Analytics hinzu, ohne Code. Bei WordPress fügst du einen Codeausschnitt in ein kostenloses Plugin ein, in einem Shopify-Shop ins Theme. Bei jeder anderen Website kommt das Paket in den Code: du mit einem KI-Agenten, wer deine Website gebaut hat oder eine Agentur. Danach verlangen das Dashboard und Claude keinen Code mehr.',
         },
         shopify: {
           question: 'Funktioniert es in einem Shopify-Shop?',
           answer:
             'Ja. Ein Codeausschnitt im Theme misst jede Seite, die das Theme zeigt, Produkte und Warenkorb eingeschlossen. Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
+        },
+        wordPress: {
+          question: 'Funktioniert es mit WordPress?',
+          answer:
+            'Ja. Füge einen Codeausschnitt in das kostenlose Plugin WPCode ein, unter Code-Snippets › Header und Footer, ohne Code im Theme; oder nutze, wenn die Website schon Google Tag Manager lädt, die Vorlage Pyxis Analytics. Es funktioniert mit WordPress auf deinem eigenen Hosting und auf WordPress.com mit einem Tarif, der Plugins erlaubt.',
         },
         tagManager: {
           question: 'Kann ich es mit Google Tag Manager installieren?',

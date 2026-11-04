@@ -1977,7 +1977,7 @@ export const it = translation({
         link: 'Vedi le schermate della dashboard',
       },
       install:
-        'Non programmi? Se il tuo sito carica già Google Tag Manager, o è un negozio Shopify, l’installazione non richiede codice. Su qualsiasi altro sito, può farla un agente di IA, chi ha creato il tuo sito o un’agenzia. <link>Come installare</link>',
+        'Non programmi? Se il tuo sito carica già Google Tag Manager, usa WordPress o è un negozio Shopify, l’installazione non richiede codice. Su qualsiasi altro sito, può farla un agente di IA, chi ha creato il tuo sito o un’agenzia. <link>Come installare</link>',
     },
     preview: {
       label: 'Anteprima della schermata Panoramica',
@@ -2165,7 +2165,7 @@ export const it = translation({
         },
         install: {
           title: 'Installalo, con o senza codice',
-          body: 'Il pacchetto nel codice del sito, il modello in Google Tag Manager, uno snippet in un tema Shopify oppure una richiesta a un agente di IA.',
+          body: 'Il pacchetto nel codice del sito, il modello in Google Tag Manager, uno snippet in un plugin WordPress o in un tema Shopify, oppure una richiesta a un agente di IA.',
         },
         ask: {
           title: 'Chiedi',
@@ -2202,6 +2202,16 @@ export const it = translation({
             'Nelle Impostazioni della dashboard, autorizza l’indirizzo da cui i clienti aprono il negozio.',
         },
         note: 'Ogni pagina mostrata dal tema viene misurata, prodotti e carrello compresi. Shopify non esegue codice del tema nel checkout, quindi i passaggi del checkout e l’acquisto completato non vengono misurati.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'Nell’admin di WordPress, installa e attiva il plugin gratuito <plugin>WPCode</plugin>, in <b>Plugin</b> › <b>Aggiungi plugin</b>.',
+          paste:
+            'In <b>Snippet di codice</b> › <b>Header & Footer</b>, incolla questo snippet in <b>Header</b> e salva:',
+          allow: 'Nelle Impostazioni della dashboard, autorizza l’indirizzo del sito.',
+        },
+        note: 'Lo snippet sta nel plugin, quindi un aggiornamento del tema lo mantiene. Se il sito carica già Google Tag Manager, va bene anche la scheda Tag Manager.',
       },
       copy: 'Copia',
       copied: 'Copiato',
@@ -2437,12 +2447,17 @@ export const it = translation({
         noCode: {
           question: 'Non programmo. Posso installarlo?',
           answer:
-            'Sì. Se il tuo sito carica già Google Tag Manager, aggiungi lì il modello Pyxis Analytics, senza codice. In un negozio Shopify, incolla uno snippet nel tema. Su qualsiasi altro sito il pacchetto va nel codice: tu con un agente di IA, chi ha creato il tuo sito o un’agenzia. Dopo, la dashboard e Claude non chiedono nessun codice.',
+            'Sì. Se il tuo sito carica già Google Tag Manager, aggiungi lì il modello Pyxis Analytics, senza codice. Su WordPress, incolla uno snippet in un plugin gratuito; in un negozio Shopify, nel tema. Su qualsiasi altro sito il pacchetto va nel codice: tu con un agente di IA, chi ha creato il tuo sito o un’agenzia. Dopo, la dashboard e Claude non chiedono nessun codice.',
         },
         shopify: {
           question: 'Funziona in un negozio Shopify?',
           answer:
             'Sì. Uno snippet nel tema misura ogni pagina mostrata dal tema, prodotti e carrello compresi. Shopify non esegue codice del tema nel checkout, quindi i passaggi del checkout e l’acquisto completato non vengono misurati.',
+        },
+        wordPress: {
+          question: 'Funziona su WordPress?',
+          answer:
+            'Sì. Incolla uno snippet nel plugin gratuito WPCode, in Snippet di codice › Header & Footer, senza codice nel tema; oppure, se il sito carica già Google Tag Manager, usa il modello Pyxis Analytics. Funziona su WordPress nel tuo hosting e su WordPress.com con un piano che consenta i plugin.',
         },
         tagManager: {
           question: 'Posso installarlo con Google Tag Manager?',

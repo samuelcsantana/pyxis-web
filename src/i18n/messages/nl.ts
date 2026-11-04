@@ -1976,7 +1976,7 @@ export const nl = translation({
         link: 'Bekijk de schermen van het dashboard',
       },
       install:
-        'Programmeer je niet? Laadt je site al Google Tag Manager, of is het een Shopify-winkel, dan vraagt de installatie geen code. Op elke andere site kan een AI-agent het doen, wie je site heeft gebouwd of een bureau. <link>Zo installeer je het</link>',
+        'Programmeer je niet? Laadt je site al Google Tag Manager, draait hij op WordPress of is het een Shopify-winkel, dan vraagt de installatie geen code. Op elke andere site kan een AI-agent het doen, wie je site heeft gebouwd of een bureau. <link>Zo installeer je het</link>',
     },
     preview: {
       label: 'Voorbeeld van het scherm Overzicht',
@@ -2162,7 +2162,7 @@ export const nl = translation({
         },
         install: {
           title: 'Installeer het, met of zonder code',
-          body: 'Het pakket in de code van de site, de template in Google Tag Manager, een fragment in een Shopify-thema of een verzoek aan een AI-agent.',
+          body: 'Het pakket in de code van de site, de template in Google Tag Manager, een fragment in een WordPress-plugin of een Shopify-thema, of een verzoek aan een AI-agent.',
         },
         ask: {
           title: 'Vraag het',
@@ -2198,6 +2198,16 @@ export const nl = translation({
             'Sta in de Instellingen van het dashboard het adres toe waarop klanten de winkel openen.',
         },
         note: 'Elke pagina die het thema toont wordt gemeten, producten en winkelwagen inbegrepen. Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'Installeer en activeer in de WordPress-beheeromgeving de gratis plugin <plugin>WPCode</plugin>, onder <b>Plugins</b> › <b>Plugin toevoegen</b>.',
+          paste:
+            'Plak onder <b>Code snippets</b> › <b>Header & footer</b> dit fragment in <b>Header</b> en sla op:',
+          allow: 'Sta in de Instellingen van het dashboard het adres van de site toe.',
+        },
+        note: 'Het fragment staat in de plugin, dus een thema-update laat het staan. Laadt de site al Google Tag Manager, dan werkt het Tag Manager-tabblad ook.',
       },
       copy: 'Kopiëren',
       copied: 'Gekopieerd',
@@ -2432,12 +2442,17 @@ export const nl = translation({
         noCode: {
           question: 'Ik programmeer niet. Kan ik het installeren?',
           answer:
-            'Ja. Laadt je site al Google Tag Manager, voeg daar dan de template Pyxis Analytics toe, zonder code. In een Shopify-winkel plak je een fragment in het thema. Op elke andere site gaat het pakket in de code: jij met een AI-agent, wie je site heeft gebouwd of een bureau. Daarna vragen het dashboard en Claude geen enkele code meer.',
+            'Ja. Laadt je site al Google Tag Manager, voeg daar dan de template Pyxis Analytics toe, zonder code. Op WordPress plak je een fragment in een gratis plugin, in een Shopify-winkel in het thema. Op elke andere site gaat het pakket in de code: jij met een AI-agent, wie je site heeft gebouwd of een bureau. Daarna vragen het dashboard en Claude geen enkele code meer.',
         },
         shopify: {
           question: 'Werkt het in een Shopify-winkel?',
           answer:
             'Ja. Een fragment in het thema meet elke pagina die het thema toont, producten en winkelwagen inbegrepen. Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
+        },
+        wordPress: {
+          question: 'Werkt het met WordPress?',
+          answer:
+            'Ja. Plak een fragment in de gratis plugin WPCode, onder Code snippets › Header & footer, zonder code in het thema; of gebruik, als de site al Google Tag Manager laadt, de template Pyxis Analytics. Het werkt met WordPress op je eigen hosting en op WordPress.com met een abonnement dat plugins toestaat.',
         },
         tagManager: {
           question: 'Kan ik het installeren met Google Tag Manager?',

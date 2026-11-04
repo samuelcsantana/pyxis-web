@@ -1936,7 +1936,7 @@ export const en = {
         link: 'See the dashboard’s screens',
       },
       install:
-        'Don’t code? If your site already loads Google Tag Manager, or is a Shopify store, the install needs no code. On any other site, an AI agent, whoever built your site or an agency can do it. <link>How to install</link>',
+        'Don’t code? If your site already loads Google Tag Manager, runs on WordPress or is a Shopify store, the install needs no code. On any other site, an AI agent, whoever built your site or an agency can do it. <link>How to install</link>',
     },
     preview: {
       label: 'Preview of the Overview screen',
@@ -2120,7 +2120,7 @@ export const en = {
         },
         install: {
           title: 'Install it, with or without code',
-          body: 'The package in the site’s code, the template in Google Tag Manager, a snippet in a Shopify theme, or a request to an AI agent.',
+          body: 'The package in the site’s code, the template in Google Tag Manager, a snippet in a WordPress plugin or a Shopify theme, or a request to an AI agent.',
         },
         ask: {
           title: 'Ask',
@@ -2155,6 +2155,16 @@ export const en = {
           allow: 'In the dashboard’s Settings, allow the address where customers open the store.',
         },
         note: 'Every page the theme shows is measured, products and cart included. Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'In the WordPress admin, install and activate the free <plugin>WPCode</plugin> plugin, under <b>Plugins</b> › <b>Add Plugin</b>.',
+          paste:
+            'In <b>Code Snippets</b> › <b>Header & Footer</b>, paste this snippet in <b>Header</b> and save:',
+          allow: 'In the dashboard’s Settings, allow the site’s address.',
+        },
+        note: 'The snippet lives in the plugin, so a theme update keeps it. If the site already loads Google Tag Manager, the Tag Manager tab works too.',
       },
       copy: 'Copy',
       copied: 'Copied',
@@ -2385,12 +2395,17 @@ export const en = {
         noCode: {
           question: 'I don’t code. Can I install it?',
           answer:
-            'Yes. If your site already loads Google Tag Manager, add the Pyxis Analytics template there, with no code. On a Shopify store, paste one snippet into the theme. On any other site the package goes in the code: you with an AI agent, whoever built your site or an agency. After that, the dashboard and Claude ask for no code at all.',
+            'Yes. If your site already loads Google Tag Manager, add the Pyxis Analytics template there, with no code. On WordPress, paste one snippet into a free plugin; on a Shopify store, into the theme. On any other site the package goes in the code: you with an AI agent, whoever built your site or an agency. After that, the dashboard and Claude ask for no code at all.',
         },
         shopify: {
           question: 'Does it work on a Shopify store?',
           answer:
             'Yes. A snippet in the theme measures every page the theme shows, products and cart included. Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not measured.',
+        },
+        wordPress: {
+          question: 'Does it work on WordPress?',
+          answer:
+            'Yes. Paste one snippet into the free WPCode plugin, under Code Snippets › Header & Footer, with no code in the theme; or, if the site already loads Google Tag Manager, use the Pyxis Analytics template. It works on WordPress on your own hosting, and on WordPress.com with a plan that allows plugins.',
         },
         tagManager: {
           question: 'Can I install it with Google Tag Manager?',

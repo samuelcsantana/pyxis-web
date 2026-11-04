@@ -771,6 +771,25 @@ test('copies the Shopify theme snippet from its tab', async ({ page, context, br
   );
 });
 
+test('copies the WordPress header snippet from its tab', async ({ page, context, browserName }) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/');
+
+  const install = page.getByRole('region', { name: 'What a site adds' });
+  await install.getByRole('tab', { name: /WordPress/ }).click();
+  const panel = install.getByRole('tabpanel');
+  await expect(panel.getByRole('link', { name: 'WPCode' })).toBeVisible();
+  await panel.getByRole('button', { name: 'Copy' }).click();
+
+  await expect(panel.getByRole('button', { name: 'Copied' })).toBeVisible();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied).toContain('/dist/pyxis.global.js"></script>');
+  expect(copied).toContain(
+    "pyxis.init({ key: 'pyxis_pk_…', endpoint: 'https://api.pyxis-analytics.dev' });",
+  );
+});
+
 test.describe('with reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 

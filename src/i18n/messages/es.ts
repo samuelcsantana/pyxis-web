@@ -1962,7 +1962,7 @@ export const es = translation({
         link: 'Ver las pantallas del panel',
       },
       install:
-        '¿No programas? Si tu sitio ya carga Google Tag Manager, o es una tienda Shopify, la instalación no pide código. En cualquier otro sitio, la puede hacer un agente de IA, quien hizo tu sitio o una agencia. <link>Cómo instalar</link>',
+        '¿No programas? Si tu sitio ya carga Google Tag Manager, usa WordPress o es una tienda Shopify, la instalación no pide código. En cualquier otro sitio, la puede hacer un agente de IA, quien hizo tu sitio o una agencia. <link>Cómo instalar</link>',
     },
     preview: {
       label: 'Vista previa de la pantalla Vista general',
@@ -2148,7 +2148,7 @@ export const es = translation({
         },
         install: {
           title: 'Instálalo, con o sin código',
-          body: 'El paquete en el código del sitio, la plantilla en Google Tag Manager, un fragmento en un tema de Shopify o un pedido a un agente de IA.',
+          body: 'El paquete en el código del sitio, la plantilla en Google Tag Manager, un fragmento en un plugin de WordPress o en un tema de Shopify, o un pedido a un agente de IA.',
         },
         ask: {
           title: 'Pregunta',
@@ -2184,6 +2184,16 @@ export const es = translation({
             'En la Configuración del panel, autoriza la dirección en la que los clientes abren la tienda.',
         },
         note: 'Se mide cada página que muestra el tema, productos y carrito incluidos. Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'En el admin de WordPress, instala y activa el plugin gratuito <plugin>WPCode</plugin>, en <b>Plugins</b> › <b>Añadir plugin</b>.',
+          paste:
+            'En <b>Fragmentos de código</b> › <b>Cabecera y pie</b>, pega este fragmento en <b>Cabecera</b> y guarda:',
+          allow: 'En la Configuración del panel, autoriza la dirección del sitio.',
+        },
+        note: 'El fragmento vive en el plugin, así que una actualización del tema no lo borra. Si el sitio ya carga Google Tag Manager, la pestaña de Tag Manager también sirve.',
       },
       copy: 'Copiar',
       copied: 'Copiado',
@@ -2416,12 +2426,17 @@ export const es = translation({
         noCode: {
           question: 'No programo. ¿Puedo instalarlo?',
           answer:
-            'Sí. Si tu sitio ya carga Google Tag Manager, añade ahí la plantilla Pyxis Analytics, sin código. En una tienda Shopify, pega un fragmento en el tema. En cualquier otro sitio el paquete va en el código: tú con un agente de IA, quien hizo tu sitio o una agencia. Después, el panel y Claude no piden nada de código.',
+            'Sí. Si tu sitio ya carga Google Tag Manager, añade ahí la plantilla Pyxis Analytics, sin código. En WordPress, pega un fragmento en un plugin gratuito; en una tienda Shopify, en el tema. En cualquier otro sitio el paquete va en el código: tú con un agente de IA, quien hizo tu sitio o una agencia. Después, el panel y Claude no piden nada de código.',
         },
         shopify: {
           question: '¿Funciona en una tienda Shopify?',
           answer:
             'Sí. Un fragmento en el tema mide cada página que muestra el tema, productos y carrito incluidos. Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
+        },
+        wordPress: {
+          question: '¿Funciona en WordPress?',
+          answer:
+            'Sí. Pega un fragmento en el plugin gratuito WPCode, en Fragmentos de código › Cabecera y pie, sin código en el tema; o, si el sitio ya carga Google Tag Manager, usa la plantilla Pyxis Analytics. Funciona en WordPress en tu propio hosting y en WordPress.com con un plan que permita plugins.',
         },
         tagManager: {
           question: '¿Puedo instalarlo con Google Tag Manager?',
