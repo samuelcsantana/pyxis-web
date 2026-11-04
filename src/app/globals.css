@@ -187,17 +187,22 @@
   --animate-fresh: fresh 5s ease-out;
   --animate-slide-from-end: slide-from-end 240ms ease-out both;
   --animate-slide-from-start: slide-from-start 240ms ease-out both;
+  --animate-settle: settle 200ms ease-out both;
+
+  @keyframes settle {
+    from {
+      translate: 0 --spacing(1.5);
+    }
+  }
 
   @keyframes slide-from-end {
     from {
-      opacity: 0;
       translate: --spacing(6) 0;
     }
   }
 
   @keyframes slide-from-start {
     from {
-      opacity: 0;
       translate: calc(--spacing(6) * -1) 0;
     }
   }
