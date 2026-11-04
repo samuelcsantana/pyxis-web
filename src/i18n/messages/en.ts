@@ -1827,9 +1827,8 @@ export const en = {
     },
     hero: {
       eyebrow: 'Connector for Claude · Tag Manager and Shopify · no cookies · no IP',
-      title:
-        'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
-      lead: 'Pyxis shows the funnel step where people stop and which of your site’s requests failed in each visit. See it on the dashboard or ask Claude.',
+      title: 'Find out what people do on your site and how long they stay.',
+      lead: 'See where each visit started, the path it took, where it ended and how long it lasted. No cookies and no stored IP addresses.',
       openDemo: 'Open the live demo',
       seePricing: 'See pricing',
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',

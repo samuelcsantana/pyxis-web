@@ -6,12 +6,12 @@ import { portuguese } from '@/test-utils/portuguese';
 import { LandingHero } from './landing-hero';
 
 describe('LandingHero', () => {
-  it('states what Pyxis finds out in the page title, over the brand backdrop', () => {
+  it('states what people do on the site and how long they stay, over the brand backdrop', () => {
     render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="trial" />);
 
     expect(
       screen.getByRole('region', {
-        name: 'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
+        name: 'Find out what people do on your site and how long they stay.',
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe('LandingHero', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        /the funnel step where people stop and which of your site’s requests failed/,
+        /where each visit started, the path it took, where it ended and how long it lasted/,
       ),
     ).toBeInTheDocument();
   });

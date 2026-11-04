@@ -1884,9 +1884,8 @@ export const fr = translation({
     },
     hero: {
       eyebrow: 'Connecteur pour Claude · Tag Manager et Shopify · sans cookies · sans IP',
-      title:
-        'Découvrez ce qui convertit et ce qui échoue sur votre site, sans cookies et sans adresses IP stockées.',
-      lead: 'Pyxis montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué à chaque visite. Consultez-le sur le tableau de bord ou demandez à Claude.',
+      title: 'Découvrez ce que les gens font sur votre site et combien de temps ils y restent.',
+      lead: 'Voyez par où chaque visite est entrée, le chemin qu’elle a suivi, où elle s’est terminée et combien de temps elle a duré. Sans cookies et sans adresses IP stockées.',
       openDemo: 'Ouvrir la démo en direct',
       seePricing: 'Voir les tarifs',
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',

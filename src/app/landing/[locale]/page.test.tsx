@@ -153,7 +153,7 @@ describe('the home page on the main domain', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: 'Find out what converts and what fails on your site, with no cookies and no stored IP addresses.',
+        name: 'Find out what people do on your site and how long they stay.',
       }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
@@ -251,7 +251,7 @@ describe('the home page on the main domain', () => {
     renderWithMessages(await LandingHome(atSlug('pt-br')), 'pt-BR');
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Descubra o que converte e o que falha no seu site, sem cookie e sem guardar IP.',
+      'Saiba o que as pessoas fazem no seu site e quanto tempo ficam nele.',
     );
     const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute(
@@ -266,7 +266,7 @@ describe('the home page on the main domain', () => {
     renderWithMessages(await LandingHome(atSlug('es')), 'es');
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Descubre qué convierte y qué falla en tu sitio, sin cookies y sin guardar direcciones IP.',
+      'Descubre qué hace la gente en tu sitio y cuánto tiempo se queda.',
     );
     const languages = screen.getByRole('list', { name: 'Idioma' });
     expect(within(languages).getByRole('link', { current: 'page' })).toHaveAttribute('href', '/es');

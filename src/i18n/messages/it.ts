@@ -1868,9 +1868,8 @@ export const it = translation({
     },
     hero: {
       eyebrow: 'Connettore per Claude · Tag Manager e Shopify · senza cookie · senza IP',
-      title:
-        'Scopri cosa converte e cosa fallisce sul tuo sito, senza cookie e senza indirizzi IP salvati.',
-      lead: 'Pyxis mostra a quale passaggio del funnel le persone si fermano e quali richieste del tuo sito sono fallite in ogni visita. Guardalo nella dashboard o chiedi a Claude.',
+      title: 'Scopri cosa fanno le persone sul tuo sito e quanto tempo ci restano.',
+      lead: 'Vedi da dove è entrata ogni visita, il percorso che ha fatto, dove è uscita e quanto è durata. Senza cookie e senza indirizzi IP salvati.',
       openDemo: 'Apri la demo live',
       seePricing: 'Guarda i prezzi',
       note: 'Nessuna registrazione. Dati inventati. Si apre direttamente sulla dashboard.',
