@@ -514,6 +514,21 @@ export const en = {
     owner: "The account's owner finds the reason, and how to contest it, in Account and billing.",
     open: 'Open Account and billing',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Available on Pro',
+    body: '{feature} is part of the Pro plan, from R$ 39 a month. The rest of the dashboard stays as it is.',
+    refused: 'Pyxis did not do it: this needs the Pro plan.',
+    subscribe: 'See the Pro plan',
+    askOwner: 'Only the account owner can subscribe, in Account and billing.',
+    features: {
+      publicShareLink: 'The public link',
+      slackAlerts: 'Sending alerts to Slack',
+      annotationsByToken: 'Creating annotations with an access token',
+      ga4Import: 'Importing the Google Analytics 4 history',
+      searchConsole: 'Reading Google Search Console',
+    },
+  },
   projectIngestion: {
     label: 'Project status',
     suspended:

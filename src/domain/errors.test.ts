@@ -3,6 +3,7 @@ import {
   ApiRequestError,
   InvalidCodeError,
   isAccountSuspended,
+  isPlanRequired,
   RateLimitedError,
   SignUpBusyError,
   UnauthenticatedError,
@@ -39,6 +40,14 @@ describe('domain errors', () => {
       isAccountSuspended(new ApiRequestError('/v1/projects/p/overview', 403, 'forbidden')),
     ).toBe(false);
     expect(isAccountSuspended(new UnauthenticatedError())).toBe(false);
+  });
+
+  it('tells a refusal for the plan from the other 403 answers', () => {
+    expect(
+      isPlanRequired(new ApiRequestError('/v1/projects/p/share-link', 403, 'plan_required')),
+    ).toBe(true);
+    expect(isPlanRequired(new ApiRequestError('/v1/batch', 403, 'quota_exceeded'))).toBe(false);
+    expect(isPlanRequired(new RateLimitedError())).toBe(false);
   });
 
   it('keeps the error code the API named', () => {

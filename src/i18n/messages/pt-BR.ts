@@ -527,6 +527,21 @@ export const ptBR = translation({
     owner: 'O dono da conta encontra o motivo, e como contestar, em Conta e cobrança.',
     open: 'Abrir Conta e cobrança',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Disponível no Pro',
+    body: '{feature} faz parte do plano Pro, a partir de R$ 39 por mês. O resto do painel continua como está.',
+    refused: 'O Pyxis não fez isso: precisa do plano Pro.',
+    subscribe: 'Ver o plano Pro',
+    askOwner: 'Só o dono da conta pode assinar, em Conta e cobrança.',
+    features: {
+      publicShareLink: 'O link público',
+      slackAlerts: 'O envio de alertas ao Slack',
+      annotationsByToken: 'A criação de anotações com um token de acesso',
+      ga4Import: 'A importação do histórico do Google Analytics 4',
+      searchConsole: 'A leitura do Google Search Console',
+    },
+  },
   projectIngestion: {
     label: 'Situação do projeto',
     suspended:
