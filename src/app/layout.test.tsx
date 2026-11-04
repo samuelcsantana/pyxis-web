@@ -55,6 +55,7 @@ describe('RootLayout', () => {
       'funnelEditor',
       'screens',
       'nav',
+      'settingsDialog',
       'theme',
       'periodSelector',
       'notFound',

@@ -41,6 +41,7 @@ describe('get-messages', () => {
       'funnelEditor',
       'screens',
       'nav',
+      'settingsDialog',
       'theme',
       'periodSelector',
       'notFound',
