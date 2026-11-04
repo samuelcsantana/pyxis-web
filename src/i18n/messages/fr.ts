@@ -696,6 +696,7 @@ export const fr = translation({
     withAgent: 'Avec un agent IA',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent de code et collez cette demande. Elle contient déjà la clé publique et l’adresse de ce projet.',
       prompt:
@@ -756,6 +757,25 @@ export const fr = translation({
         'Shopify n’exécute aucun code du thème pendant le paiement : les étapes du paiement et l’achat finalisé ne sont donc pas mesurés.',
       themeUpdate:
         'Mettre à jour ou changer de thème peut effacer cette modification : vérifiez que l’extrait est toujours dans le nouveau thème.',
+    },
+    wordPress: {
+      lead: 'Sur un site WordPress, collez l’extrait avec une extension gratuite, sans toucher au thème. Il mesure chaque page que le site affiche.',
+      steps: {
+        plugin:
+          'Dans l’admin WordPress, ouvrez <b>Extensions</b> › <b>Ajouter une extension</b>, recherchez <plugin>WPCode</plugin>, puis installez et activez <b>WPCode – Insert Headers and Footers</b>. Elle est gratuite.',
+        paste:
+          'Ouvrez <b>Extraits de code</b> › <b>En-tête et pied de page</b>, collez cet extrait dans <b>Entête</b> et choisissez <b>Enregistrer les modifications</b> :',
+        origins:
+          'Dans <settings>Paramètres</settings>, les origines autorisées doivent contenir l’adresse du site, celle que WordPress affiche dans <b>Réglages</b> › <b>Général</b> › <b>Adresse web du site (URL)</b>, comme <code>https://www.votresite.fr</code>.',
+        open: 'Si le site utilise une extension de cache, videz son cache. Ouvrez ensuite une page du site. L’étape 2, ci-dessous, indique quand le premier événement arrive.',
+      },
+      tagManager:
+        'Si le site charge déjà Google Tag Manager, l’onglet Google Tag Manager convient aussi, sans aucun extrait.',
+      optimization:
+        'Une extension qui retarde ou regroupe le JavaScript, pour accélérer le site, doit laisser de côté les deux scripts de Pyxis.',
+      themeUpdate:
+        'L’extrait est dans l’extension, pas dans le thème : mettre à jour ou changer de thème le conserve.',
+      wordPressCom: 'Sur WordPress.com, ajouter une extension demande un forfait qui les autorise.',
     },
     step3: '3. Vérifiez avec Claude (facultatif)',
     claude: {

@@ -695,6 +695,7 @@ export const de = translation({
     withAgent: 'Mit einem KI-Agenten',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Coding-Agenten und füge diese Anfrage ein. Sie enthält schon den öffentlichen Schlüssel und die Adresse dieses Projekts.',
       prompt:
@@ -755,6 +756,25 @@ export const de = translation({
         'Shopify führt im Checkout keinen Theme-Code aus, deshalb werden die Checkout-Schritte und der abgeschlossene Kauf nicht gemessen.',
       themeUpdate:
         'Ein Update oder Wechsel des Themes kann diese Änderung entfernen: Prüfe, ob der Codeausschnitt noch im neuen Theme steht.',
+    },
+    wordPress: {
+      lead: 'Füge auf einer WordPress-Website den Codeausschnitt mit einem kostenlosen Plugin ein, ohne das Theme anzufassen. Er misst jede Seite, die die Website zeigt.',
+      steps: {
+        plugin:
+          'Öffne im WordPress-Adminbereich <b>Plugins</b> › <b>Plugin hinzufügen</b>, suche nach <plugin>WPCode</plugin>, installiere und aktiviere dann <b>WPCode – Insert Headers and Footers</b>. Es ist kostenlos.',
+        paste:
+          'Öffne <b>Code-Snippets</b> › <b>Header und Footer</b>, füge diesen Codeausschnitt unter <b>Header</b> ein und wähle <b>Änderungen speichern</b>:',
+        origins:
+          'Unter <settings>Einstellungen</settings> müssen die erlaubten Origins die Adresse der Website enthalten, die WordPress unter <b>Einstellungen</b> › <b>Allgemein</b> › <b>Website-Adresse (URL)</b> zeigt, etwa <code>https://www.deinewebsite.de</code>.',
+        open: 'Nutzt die Website ein Cache-Plugin, leere seinen Cache. Öffne dann eine Seite der Website. Schritt 2, hier unten, zeigt an, wann das erste Ereignis ankommt.',
+      },
+      tagManager:
+        'Lädt die Website schon Google Tag Manager, geht auch der Tab Google Tag Manager, ganz ohne Codeausschnitt.',
+      optimization:
+        'Ein Plugin, das JavaScript verzögert oder zusammenfasst, um die Website schneller zu machen, muss die beiden Pyxis-Skripte auslassen.',
+      themeUpdate:
+        'Der Codeausschnitt steht im Plugin, nicht im Theme, deshalb bleibt er bei einem Update oder Wechsel des Themes erhalten.',
+      wordPressCom: 'Auf WordPress.com braucht ein Plugin einen Tarif, der Plugins erlaubt.',
     },
     step3: '3. Mit Claude prüfen (optional)',
     claude: {

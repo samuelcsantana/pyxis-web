@@ -658,6 +658,7 @@ export const en = {
     withAgent: 'With an AI agent',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Open your site’s repository in Claude Code, Cursor or another coding agent and paste this request. It already carries this project’s public key and address.',
       prompt:
@@ -717,6 +718,25 @@ export const en = {
         'Shopify runs no theme code in the checkout, so the checkout steps and the completed purchase are not measured.',
       themeUpdate:
         'Updating or switching the theme can drop this edit: check that the snippet is still in the new theme.',
+    },
+    wordPress: {
+      lead: 'On a WordPress site, paste the snippet with a free plugin, without touching the theme. It measures every page the site shows.',
+      steps: {
+        plugin:
+          'In the WordPress admin, open <b>Plugins</b> › <b>Add Plugin</b>, search for <plugin>WPCode</plugin>, then install and activate <b>WPCode – Insert Headers and Footers</b>. It is free.',
+        paste:
+          'Open <b>Code Snippets</b> › <b>Header & Footer</b>, paste this snippet in <b>Header</b> and choose <b>Save Changes</b>:',
+        origins:
+          'In <settings>Settings</settings>, the allowed origins must hold the site’s address, the one WordPress shows in <b>Settings</b> › <b>General</b> › <b>Site Address (URL)</b>, like <code>https://www.yoursite.com</code>.',
+        open: 'If the site uses a cache plugin, clear its cache. Then open a page of the site. Step 2, below, says when the first event arrives.',
+      },
+      tagManager:
+        'If the site already loads Google Tag Manager, the Google Tag Manager tab works too, with no snippet.',
+      optimization:
+        'A plugin that delays or combines JavaScript, to make the site faster, must leave the two Pyxis scripts out.',
+      themeUpdate:
+        'The snippet lives in the plugin, not in the theme, so updating or switching the theme keeps it.',
+      wordPressCom: 'On WordPress.com, adding a plugin needs a plan that allows plugins.',
     },
     step3: '3. Check with Claude (optional)',
     claude: {

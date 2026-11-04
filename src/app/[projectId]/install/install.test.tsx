@@ -117,7 +117,7 @@ describe('InstallGuide', () => {
       within(first)
         .getAllByRole('tab')
         .map((tab) => tab.textContent),
-    ).toEqual(['Yourself', 'With an AI agent', 'Google Tag Manager', 'Shopify']);
+    ).toEqual(['Yourself', 'With an AI agent', 'Google Tag Manager', 'Shopify', 'WordPress']);
     expect(within(first).getByRole('tab', { name: 'Yourself' })).toHaveAttribute(
       'aria-selected',
       'true',
@@ -237,6 +237,54 @@ describe('InstallGuide', () => {
     );
     expect(shopify).toHaveTextContent(
       'Updating or switching the theme can drop this edit: check that the snippet is still in the new theme.',
+    );
+  });
+
+  it('walks a WordPress site through a free header plugin, with the classic snippet', async () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    await userEvent.click(screen.getByRole('tab', { name: 'WordPress' }));
+
+    const wordPress = screen.getByRole('tabpanel', { name: 'WordPress' });
+    expect(screen.queryByRole('tabpanel', { name: 'Shopify' })).toBeNull();
+    expect(wordPress).toHaveTextContent(
+      'On a WordPress site, paste the snippet with a free plugin, without touching the theme.',
+    );
+    expect(
+      within(wordPress)
+        .getAllByRole('listitem')
+        .map((item) => item.lastChild?.textContent),
+    ).toEqual([
+      'In the WordPress admin, open Plugins › Add Plugin, search for WPCode, then install and activate WPCode – Insert Headers and Footers. It is free.',
+      expect.stringContaining(
+        'Open Code Snippets › Header & Footer, paste this snippet in Header and choose Save Changes:',
+      ),
+      'In Settings, the allowed origins must hold the site’s address, the one WordPress shows in Settings › General › Site Address (URL), like https://www.yoursite.com.',
+      'If the site uses a cache plugin, clear its cache. Then open a page of the site. Step 2, below, says when the first event arrives.',
+    ]);
+    expect(within(wordPress).getByText('Header & Footer').tagName).toBe('B');
+    expect(within(wordPress).getByRole('link', { name: 'WPCode' })).toHaveAttribute(
+      'href',
+      'https://wordpress.org/plugins/insert-headers-and-footers/',
+    );
+    const snippet = document.getElementById('install-wordpress-script');
+    expect(snippet).toHaveTextContent('/dist/pyxis.global.js"></script>');
+    expect(snippet).toHaveTextContent(
+      "pyxis.init({ key: 'pyxis_pk_store', endpoint: 'https://api.example.com' });",
+    );
+    expect(snippet).not.toHaveTextContent('type="module"');
+    expect(within(wordPress).getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+    expect(within(wordPress).getByRole('link', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/p-store/settings',
+    );
+    expect(wordPress).toHaveTextContent(
+      'If the site already loads Google Tag Manager, the Google Tag Manager tab works too, with no snippet.',
+    );
+    expect(wordPress).toHaveTextContent('must leave the two Pyxis scripts out.');
+    expect(wordPress).toHaveTextContent('updating or switching the theme keeps it.');
+    expect(wordPress).toHaveTextContent(
+      'On WordPress.com, adding a plugin needs a plan that allows plugins.',
     );
   });
 
