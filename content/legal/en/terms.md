@@ -26,8 +26,8 @@ This summary does not replace the full text, but it shows what matters most befo
    8.3). **Important: the free plan may change or end, with at least 30 days' notice by email**, and
    you can export your events beforehand (Clause 7.5).
 4. **Limits:** on the free plan, up to 10 thousand events per month, 1 site and 1 person in the
-   dashboard (only you); on the paid plan, up to 100 thousand events per month, up to 3 sites and up
-   to 3 people in the dashboard (including you). Both have 13 months of history and all features.
+   dashboard (only you); on the paid plan, up to 250 thousand events per month, up to 10 sites and up to 10 people in the dashboard (including you). Both have 13 months of history and the same analytics
+   features; some integrations are on the paid plan only, as they are launched (Clause 7.7).
    **Important: on the free plan, when the month reaches 10 thousand events, event intake pauses
    until the 1st day of the following month**: an account that reaches the limit on the 3rd receives
    nothing until the 1st. We notify you beforehand, at 80%. On the paid plan, we notify you at 80%
@@ -122,7 +122,8 @@ Clause 7.6.
 
 2.11. **Free plan and paid plan:** the two plans of the service, with the limits of Clause 7.1. The
 free plan has no price and no subscription; the paid plan is the monthly or annual subscription of
-Clause 8.
+Clause 8. On the home page and in the dashboard, the free plan is called **Hobby** and the paid plan
+is called **Pro**.
 
 ## Clause 3 — Acceptance, who may subscribe and contract documents
 
@@ -341,18 +342,19 @@ plan follows Clause 7.5.
 | Item | Free plan | Paid plan |
 |---|---|---|
 | Price | none, without a card | R$ 39.00 per month or R$ 390.00 per year (Clause 8) |
-| Events received per month, adding up all the account's projects | up to 10,000 | up to 100,000 |
-| Sites (projects) | 1 | up to 3 |
-| People with access to the dashboard | 1, only the account owner | up to 3, including the account owner |
+| Events received per month, adding up all the account's projects | up to 10,000 | up to 250,000 |
+| Sites (projects) | 1 | up to 10 |
+| People with access to the dashboard | 1, only the account owner | up to 10, including the account owner |
 | History | 13 months (older events are deleted every day) | 13 months (older events are deleted every day) |
 | Pause of intake due to the quota (Clause 7.2) | upon reaching 100% of the limit | upon reaching 150% of the limit |
 | Weekly email digest | included | included |
 | Access tokens, MCP server and Claude connector | included | included |
 | Export of a project's events | through the dashboard, up to 3 per project per day | through the dashboard, up to 3 per project per day |
+| Integrations of Clause 7.7 | not included | included, as they are launched |
 | Support | through the documentation and GitHub; email only in the cases of Clause 16.5 | by email, response within 2 business days |
 
-Both plans have all the screens and features of the service; what changes between them is the
-volume.
+Both plans have the same analytics screens and features; what changes between them is the volume,
+the support and the integrations of Clause 7.7.
 
 7.2. **Important: usage above the limit.**
 
@@ -361,10 +363,10 @@ volume.
    Brasília time begins at 9 p.m. on the last day of the previous month.
 2. The service measures usage once a day, in the early morning. The measured usage appears in
    Account and billing, in the dashboard.
-3. On the paid plan, when the daily measurement finds 80% and, later, 100% of the limit (80 thousand
-   and 100 thousand events), we notify the account owner by email, once per level each month. **Up
+3. On the paid plan, when the daily measurement finds 80% and, later, 100% of the limit (200 thousand
+   and 250 thousand events), we notify the account owner by email, once per level each month. **Up
    to 150%, nothing is cut off.**
-4. **On the paid plan, when the daily measurement finds 150% of the limit (150 thousand events),
+4. **On the paid plan, when the daily measurement finds 150% of the limit (375 thousand events),
    event intake for all of the account's projects pauses until the 1st day of the following
    month**, and we notify you by email. During the pause, the service refuses the events (response
    `403 quota_exceeded`), which **are not stored and cannot be recovered**. The dashboard keeps
@@ -413,6 +415,19 @@ an email confirming the deletion. During those 7 days, you may export the events
 nothing is deleted if the account receives any event or moves to the paid plan: paid plan accounts
 are never deleted for lack of events. After deletion, the data cannot be recovered; only the records
 that Clause 11.4 excepts remain stored.
+
+7.7. **Paid plan integrations.** The analytics features are the same on both plans: every screen
+of the dashboard, the weekly email digest, the export of events, the access tokens, the MCP server
+and the Claude connector, and also the analytics features that come later. **Some integrations with
+other people and other services are on the paid plan only:** the public, read-only link to a
+project's figures; alerts sent to Slack; annotations created with an access token; importing the
+Google Analytics 4 history; and reading Google Search Console. Each one becomes part of the service
+on the day it is launched, and the home page and the dashboard say which ones are already
+available; until then, none of them is promised. An account that leaves the paid plan loses the use
+of these integrations from that moment, **but not the data**: the public link stops opening, Slack
+stops receiving alerts and no new import starts, and what was already imported or configured stays
+in the account until the owner removes it or the account ends under Clauses 11.4 and 11.5. If the
+account comes back to the paid plan, it finds everything as it left it.
 
 ## Clause 8 — Price, subscription and billing
 
@@ -684,7 +699,7 @@ strings, and does not start storing them to investigate abuse.**
 
 ## Clause 13 — People with access, keys and tokens
 
-13.1. **People with access.** On the paid plan, the account has up to 3 people with access to the
+13.1. **People with access.** On the paid plan, the account has up to 10 people with access to the
 dashboard, including the owner; on the free plan, only the owner, who does not invite other people
 (Clause 7.1). The owner invites a person by their email, to one or more of the account's
 projects, in Settings → People. The person receives an invitation email and signs in to the

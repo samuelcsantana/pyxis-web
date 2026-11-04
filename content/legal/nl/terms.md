@@ -27,9 +27,10 @@ je de overeenkomst sluit.
    een kennisgeving per e-mail van ten minste 30 dagen van tevoren**, en je kunt je events daarvoor
    exporteren (Artikel 7.5).
 4. **Limieten:** bij het gratis abonnement tot 10.000 events per maand, 1 website en 1 persoon in het
-   dashboard (alleen jij); bij het betaalde abonnement tot 100.000 events per maand, tot 3 websites
-   en tot 3 personen in het dashboard (jijzelf meegerekend). Beide hebben 13 maanden historie en alle
-   functies. **Let op: bij het gratis abonnement wordt de ontvangst van events, wanneer de maand
+   dashboard (alleen jij); bij het betaalde abonnement tot 250.000 events per maand, tot 10 websites
+   en tot 10 personen in het dashboard (jijzelf meegerekend). Beide hebben 13 maanden historie en
+   dezelfde analysefuncties; sommige integraties zijn alleen voor het betaalde abonnement, zodra ze
+   worden gelanceerd (Artikel 7.7). **Let op: bij het gratis abonnement wordt de ontvangst van events, wanneer de maand
    10.000 events bereikt, gepauzeerd tot de 1e van de volgende maand**: een account dat de limiet op
    de 3e bereikt, ontvangt tot de 1e niets. We waarschuwen vooraf, bij 80%. Bij het betaalde
    abonnement waarschuwen we bij 80% en bij 100%, en **komt de pauze bij 150%**. De events die
@@ -131,7 +132,8 @@ alleen Artikel 7.6.
 
 2.11. **Gratis abonnement en betaald abonnement:** de twee abonnementen van de dienst, met de
 limieten van Artikel 7.1. Het gratis abonnement heeft geen prijs en hoeft niet te worden afgesloten;
-het betaalde abonnement is het maand- of jaarabonnement van Artikel 8.
+het betaalde abonnement is het maand- of jaarabonnement van Artikel 8. Op de homepage en in het
+dashboard heet het gratis abonnement **Hobby** en het betaalde abonnement **Pro**.
 
 ## Artikel 3 — Aanvaarding, wie de overeenkomst kan sluiten en contractdocumenten
 
@@ -365,18 +367,19 @@ geldt Artikel 7.5.
 | Onderdeel | Gratis abonnement | Betaald abonnement |
 |---|---|---|
 | Prijs | geen, zonder kaart | R$ 39,00 per maand of R$ 390,00 per jaar (Artikel 8) |
-| Ontvangen events per maand, opgeteld over alle projecten van het account | tot 10.000 | tot 100.000 |
-| Websites (projecten) | 1 | tot 3 |
-| Personen met toegang tot het dashboard | 1, alleen de accounteigenaar | tot 3, de accounteigenaar meegerekend |
+| Ontvangen events per maand, opgeteld over alle projecten van het account | tot 10.000 | tot 250.000 |
+| Websites (projecten) | 1 | tot 10 |
+| Personen met toegang tot het dashboard | 1, alleen de accounteigenaar | tot 10, de accounteigenaar meegerekend |
 | Historie | 13 maanden (oudere events worden dagelijks verwijderd) | 13 maanden (oudere events worden dagelijks verwijderd) |
 | Pauze van de ontvangst wegens het quotum (Artikel 7.2) | bij het bereiken van 100% van de limiet | bij het bereiken van 150% van de limiet |
 | Wekelijkse samenvatting per e-mail | inbegrepen | inbegrepen |
 | Toegangstokens, MCP-server en Claude-connector | inbegrepen | inbegrepen |
 | Export van de events van een project | via het dashboard, tot 3 per project per dag | via het dashboard, tot 3 per project per dag |
+| Integraties van Artikel 7.7 | niet inbegrepen | inbegrepen, zodra ze worden gelanceerd |
 | Support | via de documentatie en via GitHub; e-mail alleen in de gevallen van Artikel 16.5 | per e-mail, antwoord binnen 2 werkdagen |
 
-Beide abonnementen hebben alle schermen en functies van de dienst; wat tussen hen verschilt, is het
-volume.
+Beide abonnementen hebben dezelfde analyseschermen en -functies; wat tussen hen verschilt, zijn het
+volume, de support en de integraties van Artikel 7.7.
 
 7.2. **Let op: gebruik boven de limiet.**
 
@@ -387,10 +390,9 @@ volume.
 2. De dienst meet het gebruik één keer per dag, 's nachts. Het gemeten gebruik verschijnt in
    Account en facturatie, in het dashboard.
 3. Wanneer de dagelijkse meting bij het betaalde abonnement 80% en daarna 100% van de limiet
-   vaststelt (80.000 en 100.000 events), waarschuwen we de accounteigenaar per e-mail, één keer per
+   vaststelt (200.000 en 250.000 events), waarschuwen we de accounteigenaar per e-mail, één keer per
    niveau per maand. **Tot 150% wordt er niets geblokkeerd.**
-4. **Wanneer de dagelijkse meting bij het betaalde abonnement 150% van de limiet vaststelt (150.000
-   events), wordt de ontvangst van events van alle projecten van het account gepauzeerd tot de 1e
+4. **Wanneer de dagelijkse meting bij het betaalde abonnement 150% van de limiet vaststelt (375.000 events), wordt de ontvangst van events van alle projecten van het account gepauzeerd tot de 1e
    van de volgende maand**, en waarschuwen we per e-mail. Tijdens de pauze weigert de dienst de events (antwoord
    `403 quota_exceeded`), die **niet worden opgeslagen en niet kunnen worden hersteld**. Het
    dashboard blijft de al opgeslagen gegevens tonen. De ontvangst wordt aan het begin van de
@@ -441,6 +443,21 @@ wordt er niets verwijderd als het account een event ontvangt of overgaat op het 
 accounts op het betaalde abonnement worden nooit wegens het ontbreken van events verwijderd. Na de
 verwijdering is er geen manier om de gegevens te herstellen; alleen de records waarvoor Artikel 11.4
 een uitzondering maakt, blijven bewaard.
+
+7.7. **Integraties van het betaalde abonnement.** De analysefuncties zijn bij beide abonnementen
+dezelfde: alle schermen van het dashboard, de wekelijkse samenvatting per e-mail, de export van de
+events, de toegangstokens, de MCP-server en de Claude-connector, en ook de analysefuncties die later
+komen. **Sommige integraties met andere personen en andere diensten zijn alleen voor het betaalde
+abonnement:** de openbare link, alleen-lezen, naar de cijfers van een project; meldingen die naar
+Slack worden gestuurd; aantekeningen die met een toegangstoken worden gemaakt; het importeren van de
+historie uit Google Analytics 4; en het uitlezen van Google Search Console. Elk ervan wordt deel van
+de dienst op de dag dat het wordt gelanceerd, en de homepage en het dashboard laten zien welke al
+beschikbaar zijn; tot dan wordt geen ervan beloofd. Een account dat het betaalde abonnement verlaat,
+verliest vanaf dat moment het gebruik van deze integraties, **maar niet de gegevens**: de openbare
+link gaat niet meer open, Slack ontvangt geen meldingen meer en er begint geen nieuwe import, en wat
+al is geïmporteerd of ingesteld blijft in het account totdat de eigenaar het verwijdert of het
+account eindigt volgens de Artikelen 11.4 en 11.5. Keert het account terug naar het betaalde
+abonnement, dan vindt het alles terug zoals het was.
 
 ## Artikel 8 — Prijs, abonnement en facturering
 
@@ -738,7 +755,7 @@ browseridentificatie, en gaat die ook niet bewaren om misbruik te onderzoeken.**
 
 ## Artikel 13 — Personen met toegang, sleutels en tokens
 
-13.1. **Personen met toegang.** Bij het betaalde abonnement heeft het account tot 3 personen met
+13.1. **Personen met toegang.** Bij het betaalde abonnement heeft het account tot 10 personen met
 toegang tot het dashboard, de eigenaar meegerekend; bij het gratis abonnement alleen de eigenaar, die
 geen andere personen uitnodigt (Artikel 7.1). De eigenaar nodigt een persoon uit via diens e-mailadres, voor een of meer
 projecten van het account, in Instellingen → Personen. De persoon ontvangt een uitnodigingsmail en

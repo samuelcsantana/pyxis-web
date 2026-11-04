@@ -27,9 +27,10 @@ am wichtigsten ist.
    oder enden, mit einer Benachrichtigung per E-Mail mindestens 30 Tage im Voraus**, und du kannst
    deine Ereignisse vorher exportieren (Klausel 7.5).
 4. **Grenzen:** im kostenlosen Tarif bis zu 10.000 Ereignisse pro Monat, 1 Website und 1 Person im
-   Dashboard (nur du); im kostenpflichtigen Tarif bis zu 100.000 Ereignisse pro Monat, bis zu
-   3 Websites und bis zu 3 Personen im Dashboard (dich eingeschlossen). Beide haben 13 Monate Verlauf
-   und alle Funktionen. **Achtung: im kostenlosen Tarif wird der Empfang von Ereignissen
+   Dashboard (nur du); im kostenpflichtigen Tarif bis zu 250.000 Ereignisse pro Monat, bis zu
+   10 Websites und bis zu 10 Personen im Dashboard (dich eingeschlossen). Beide haben 13 Monate
+   Verlauf und dieselben Analysefunktionen; einige Integrationen gibt es nur im kostenpflichtigen
+   Tarif, sobald sie eingeführt werden (Klausel 7.7). **Achtung: im kostenlosen Tarif wird der Empfang von Ereignissen
    bis zum 1. des Folgemonats pausiert, wenn der Monat 10.000 Ereignisse erreicht**: ein Konto, das
    die Grenze am 3. erreicht, empfängt bis zum 1. nichts. Wir benachrichtigen dich vorher, bei 80 %. Im
    kostenpflichtigen Tarif benachrichtigen wir dich bei 80 % und bei 100 %, und **die Pause kommt bei
@@ -131,7 +132,8 @@ kostenlosen Tarifs ohne Ereignisse ist kein Ende des Zugriffs: sie folgt nur Kla
 
 2.11. **Kostenloser Tarif und kostenpflichtiger Tarif:** die beiden Tarife des Dienstes, mit den
 Grenzen aus Klausel 7.1. Der kostenlose Tarif hat weder einen Preis noch ein Abonnement; der
-kostenpflichtige Tarif ist das monatliche oder jährliche Abonnement aus Klausel 8.
+kostenpflichtige Tarif ist das monatliche oder jährliche Abonnement aus Klausel 8. Auf der Startseite
+und im Dashboard heißt der kostenlose Tarif **Hobby** und der kostenpflichtige Tarif **Pro**.
 
 ## Klausel 3 — Annahme, wer den Vertrag schließen kann und Vertragsdokumente
 
@@ -368,18 +370,19 @@ ihres Tarifs folgt Klausel 7.5.
 | Posten | Kostenloser Tarif | Kostenpflichtiger Tarif |
 |---|---|---|
 | Preis | keiner, ohne Karte | R$ 39,00 pro Monat oder R$ 390,00 pro Jahr (Klausel 8) |
-| Empfangene Ereignisse pro Monat, summiert über alle Projekte des Kontos | bis zu 10.000 | bis zu 100.000 |
-| Websites (Projekte) | 1 | bis zu 3 |
-| Personen mit Zugriff auf das Dashboard | 1, nur der Kontoinhaber | bis zu 3, einschließlich des Kontoinhabers |
+| Empfangene Ereignisse pro Monat, summiert über alle Projekte des Kontos | bis zu 10.000 | bis zu 250.000 |
+| Websites (Projekte) | 1 | bis zu 10 |
+| Personen mit Zugriff auf das Dashboard | 1, nur der Kontoinhaber | bis zu 10, einschließlich des Kontoinhabers |
 | Verlauf | 13 Monate (ältere Ereignisse werden täglich gelöscht) | 13 Monate (ältere Ereignisse werden täglich gelöscht) |
 | Pause des Empfangs wegen des Kontingents (Klausel 7.2) | beim Erreichen von 100 % der Grenze | beim Erreichen von 150 % der Grenze |
 | Wöchentliche Zusammenfassung per E-Mail | inbegriffen | inbegriffen |
 | Zugriffstokens, MCP-Server und Claude-Connector | inbegriffen | inbegriffen |
 | Export der Ereignisse eines Projekts | über das Dashboard, bis zu 3 pro Projekt pro Tag | über das Dashboard, bis zu 3 pro Projekt pro Tag |
+| Integrationen aus Klausel 7.7 | nicht enthalten | enthalten, sobald sie eingeführt werden |
 | Support | über die Dokumentation und über GitHub; E-Mail nur in den Fällen von Klausel 16.5 | per E-Mail, Antwort innerhalb von 2 Werktagen |
 
-Beide Tarife haben alle Bildschirme und Funktionen des Dienstes; was sich zwischen ihnen
-unterscheidet, ist das Volumen.
+Beide Tarife haben dieselben Analysebildschirme und -funktionen; was sich zwischen ihnen
+unterscheidet, sind das Volumen, der Support und die Integrationen aus Klausel 7.7.
 
 7.2. **Achtung: Nutzung über der Grenze.**
 
@@ -388,10 +391,10 @@ unterscheidet, ist das Volumen.
    Weltzeit), der in Brasília-Zeit um 21 Uhr am letzten Tag des Vormonats beginnt.
 2. Der Dienst misst die Nutzung einmal täglich, in den frühen Morgenstunden. Die gemessene Nutzung
    erscheint unter Konto und Abrechnung im Dashboard.
-3. Wenn die tägliche Messung im kostenpflichtigen Tarif 80 % und danach 100 % der Grenze (80.000 und
-   100.000 Ereignisse) feststellt, benachrichtigen wir den Kontoinhaber per E-Mail, einmal pro Stufe
+3. Wenn die tägliche Messung im kostenpflichtigen Tarif 80 % und danach 100 % der Grenze (200.000 und
+   250.000 Ereignisse) feststellt, benachrichtigen wir den Kontoinhaber per E-Mail, einmal pro Stufe
    und Monat. **Bis 150 % wird nichts abgeschaltet.**
-4. **Wenn die tägliche Messung im kostenpflichtigen Tarif 150 % der Grenze (150.000 Ereignisse)
+4. **Wenn die tägliche Messung im kostenpflichtigen Tarif 150 % der Grenze (375.000 Ereignisse)
    feststellt, wird der Empfang von Ereignissen aller Projekte des Kontos bis zum 1. des
    Folgemonats pausiert**, und wir benachrichtigen dich per E-Mail. Während der Pause lehnt der Dienst die Ereignisse ab (Antwort
    `403 quota_exceeded`); sie **werden nicht gespeichert und können nicht wiederhergestellt
@@ -444,6 +447,21 @@ gelöscht, wenn das Konto ein Ereignis empfängt oder in den kostenpflichtigen T
 Konten des kostenpflichtigen Tarifs werden nie wegen fehlender Ereignisse gelöscht. Nach der Löschung
 können die Daten nicht wiederhergestellt werden; aufbewahrt bleiben nur die Einträge, die Klausel 11.4
 ausnimmt.
+
+7.7. **Integrationen des kostenpflichtigen Tarifs.** Die Analysefunktionen sind in beiden Tarifen
+dieselben: alle Bildschirme des Dashboards, die wöchentliche Zusammenfassung per E-Mail, der Export
+der Ereignisse, die Zugriffstokens, der MCP-Server und der Claude-Connector, und auch die
+Analysefunktionen, die später hinzukommen. **Einige Integrationen mit anderen Personen und anderen
+Diensten gibt es nur im kostenpflichtigen Tarif:** der öffentliche, nur lesbare Link zu den Zahlen
+eines Projekts; an Slack gesendete Warnungen; mit einem Zugriffstoken erstellte Anmerkungen; der
+Import des Verlaufs aus Google Analytics 4; und das Auslesen der Google Search Console. Jede davon
+wird an dem Tag Teil des Dienstes, an dem sie eingeführt wird, und die Startseite und das Dashboard
+zeigen, welche schon verfügbar sind; bis dahin wird keine davon versprochen. Ein Konto, das den
+kostenpflichtigen Tarif verlässt, verliert ab diesem Moment die Nutzung dieser Integrationen,
+**aber nicht die Daten**: der öffentliche Link öffnet sich nicht mehr, Slack erhält keine
+Warnungen mehr und kein neuer Import beginnt, und was schon importiert oder eingerichtet wurde,
+bleibt im Konto, bis der Inhaber es entfernt oder das Konto nach den Klauseln 11.4 und 11.5 endet.
+Kehrt das Konto zum kostenpflichtigen Tarif zurück, findet es alles so vor, wie es war.
 
 ## Klausel 8 — Preis, Abonnement und Abrechnung
 
@@ -740,7 +758,7 @@ vollständigen Browser und beginnt auch nicht, sie zur Untersuchung von Missbrau
 
 ## Klausel 13 — Personen mit Zugriff, Schlüssel und Tokens
 
-13.1. **Personen mit Zugriff.** Im kostenpflichtigen Tarif hat das Konto bis zu 3 Personen mit
+13.1. **Personen mit Zugriff.** Im kostenpflichtigen Tarif hat das Konto bis zu 10 Personen mit
 Zugriff auf das Dashboard, einschließlich des Inhabers; im kostenlosen Tarif nur den Inhaber, der
 keine anderen Personen einlädt (Klausel 7.1). Der Inhaber lädt eine Person über ihre E-Mail-Adresse zu einem oder
 mehreren Projekten des Kontos ein, unter Einstellungen → Personen. Die Person erhält eine

@@ -1,4 +1,4 @@
-export const TERMS_VERSION = '1.5';
+export const TERMS_VERSION = '1.6';
 
 export interface Seller {
   readonly name: string;

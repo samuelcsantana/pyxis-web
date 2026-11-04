@@ -12,8 +12,8 @@ afterEach(() => {
 });
 
 describe('legal configuration', () => {
-  it('names version 1.5, the label printed on the documents and accepted at sign-up', () => {
-    expect(TERMS_VERSION).toBe('1.5');
+  it('names version 1.6, the label printed on the documents and accepted at sign-up', () => {
+    expect(TERMS_VERSION).toBe('1.6');
   });
 
   it('reads the seller and the effective date, trimmed', () => {
