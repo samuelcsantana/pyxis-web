@@ -8,6 +8,7 @@ export const CLIENT_NAMESPACES = [
   'funnelEditor',
   'screens',
   'nav',
+  'settingsDialog',
   'theme',
   'periodSelector',
   'notFound',
