@@ -1953,7 +1953,7 @@ export const ptBR = translation({
         link: 'Ver as telas do painel',
       },
       install:
-        'Não programa? Se o seu site já carrega o Google Tag Manager, ou é uma loja Shopify, a instalação não pede código. Nos outros sites, um agente de IA, quem fez o seu site ou uma agência instala. <link>Como instalar</link>',
+        'Não programa? Se o seu site já carrega o Google Tag Manager, roda em WordPress ou é uma loja Shopify, a instalação não pede código. Nos outros sites, um agente de IA, quem fez o seu site ou uma agência instala. <link>Como instalar</link>',
     },
     preview: {
       label: 'Prévia da tela Visão geral',
@@ -2138,7 +2138,7 @@ export const ptBR = translation({
         },
         install: {
           title: 'Instale, com ou sem código',
-          body: 'O pacote no código do site, o modelo no Google Tag Manager, um trecho no tema da Shopify ou um pedido a um agente de IA.',
+          body: 'O pacote no código do site, o modelo no Google Tag Manager, um trecho num plugin do WordPress ou no tema da Shopify, ou um pedido a um agente de IA.',
         },
         ask: {
           title: 'Pergunte',
@@ -2174,6 +2174,16 @@ export const ptBR = translation({
             'Nas Configurações do painel, autorize o endereço em que os clientes abrem a loja.',
         },
         note: 'Toda página que o tema mostra é medida, produtos e carrinho incluídos. A Shopify não roda código do tema no checkout, então os passos do checkout e a compra concluída não são medidos.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'No admin do WordPress, instale e ative o plugin gratuito <plugin>WPCode</plugin>, em <b>Plugins</b> › <b>Adicionar plugin</b>.',
+          paste:
+            'Em <b>Snippets de código</b> › <b>Cabeçalho e rodapé</b>, cole este trecho em <b>Cabeçalho</b> e salve:',
+          allow: 'Nas Configurações do painel, autorize o endereço do site.',
+        },
+        note: 'O trecho fica no plugin, então uma atualização do tema não o apaga. Se o site já carrega o Google Tag Manager, a aba do Tag Manager também serve.',
       },
       copy: 'Copiar',
       copied: 'Copiado',
@@ -2405,12 +2415,17 @@ export const ptBR = translation({
         noCode: {
           question: 'Não programo. Consigo instalar?',
           answer:
-            'Sim. Se o seu site já carrega o Google Tag Manager, adicione lá o modelo Pyxis Analytics, sem código. Numa loja Shopify, cole um trecho no tema. Nos outros sites o pacote vai no código: você com um agente de IA, quem fez o seu site ou uma agência. Depois disso, o painel e o Claude não pedem código nenhum.',
+            'Sim. Se o seu site já carrega o Google Tag Manager, adicione lá o modelo Pyxis Analytics, sem código. No WordPress, cole um trecho num plugin gratuito; numa loja Shopify, no tema. Nos outros sites o pacote vai no código: você com um agente de IA, quem fez o seu site ou uma agência. Depois disso, o painel e o Claude não pedem código nenhum.',
         },
         shopify: {
           question: 'Funciona numa loja Shopify?',
           answer:
             'Sim. Um trecho no tema mede toda página que o tema mostra, produtos e carrinho incluídos. A Shopify não roda código do tema no checkout, então os passos do checkout e a compra concluída não são medidos.',
+        },
+        wordPress: {
+          question: 'Funciona no WordPress?',
+          answer:
+            'Sim. Cole um trecho no plugin gratuito WPCode, em Snippets de código › Cabeçalho e rodapé, sem código no tema; ou, se o site já carrega o Google Tag Manager, use o modelo Pyxis Analytics. Funciona no WordPress na sua própria hospedagem e no WordPress.com com um plano que permita plugins.',
         },
         tagManager: {
           question: 'Dá para instalar pelo Google Tag Manager?',

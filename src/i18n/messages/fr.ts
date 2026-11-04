@@ -1994,7 +1994,7 @@ export const fr = translation({
         link: 'Voir les écrans du tableau de bord',
       },
       install:
-        'Vous ne codez pas ? Si votre site charge déjà Google Tag Manager, ou si c’est une boutique Shopify, l’installation ne demande aucun code. Sur tout autre site, un agent d’IA, la personne qui a créé votre site ou une agence peut s’en charger. <link>Comment installer</link>',
+        'Vous ne codez pas ? Si votre site charge déjà Google Tag Manager, tourne sous WordPress ou est une boutique Shopify, l’installation ne demande aucun code. Sur tout autre site, un agent d’IA, la personne qui a créé votre site ou une agence peut s’en charger. <link>Comment installer</link>',
     },
     preview: {
       label: 'Aperçu de l’écran Vue d’ensemble',
@@ -2185,7 +2185,7 @@ export const fr = translation({
         },
         install: {
           title: 'Installez-le, avec ou sans code',
-          body: 'Le paquet dans le code du site, le modèle dans Google Tag Manager, un extrait dans un thème Shopify, ou une demande à un agent d’IA.',
+          body: 'Le paquet dans le code du site, le modèle dans Google Tag Manager, un extrait dans une extension WordPress ou un thème Shopify, ou une demande à un agent d’IA.',
         },
         ask: {
           title: 'Posez vos questions',
@@ -2222,6 +2222,16 @@ export const fr = translation({
             'Dans les Paramètres du tableau de bord, autorisez l’adresse où les clients ouvrent la boutique.',
         },
         note: 'Chaque page affichée par le thème est mesurée, produits et panier compris. Shopify n’exécute aucun code du thème pendant le paiement : les étapes du paiement et l’achat finalisé ne sont donc pas mesurés.',
+      },
+      wordPress: {
+        steps: {
+          plugin:
+            'Dans l’admin WordPress, installez et activez l’extension gratuite <plugin>WPCode</plugin>, dans <b>Extensions</b> › <b>Ajouter une extension</b>.',
+          paste:
+            'Dans <b>Extraits de code</b> › <b>En-tête et pied de page</b>, collez cet extrait dans <b>Entête</b> et enregistrez :',
+          allow: 'Dans les Paramètres du tableau de bord, autorisez l’adresse du site.',
+        },
+        note: 'L’extrait est dans l’extension : une mise à jour du thème le conserve. Si le site charge déjà Google Tag Manager, l’onglet Tag Manager convient aussi.',
       },
       copy: 'Copier',
       copied: 'Copié',
@@ -2457,12 +2467,17 @@ export const fr = translation({
         noCode: {
           question: 'Je ne code pas. Puis-je l’installer ?',
           answer:
-            'Oui. Si votre site charge déjà Google Tag Manager, ajoutez-y le modèle Pyxis Analytics, sans code. Sur une boutique Shopify, collez un extrait dans le thème. Sur tout autre site, le paquet va dans le code : vous avec un agent d’IA, la personne qui a créé votre site ou une agence. Ensuite, le tableau de bord et Claude ne demandent plus aucun code.',
+            'Oui. Si votre site charge déjà Google Tag Manager, ajoutez-y le modèle Pyxis Analytics, sans code. Sur WordPress, collez un extrait dans une extension gratuite ; sur une boutique Shopify, dans le thème. Sur tout autre site, le paquet va dans le code : vous avec un agent d’IA, la personne qui a créé votre site ou une agence. Ensuite, le tableau de bord et Claude ne demandent plus aucun code.',
         },
         shopify: {
           question: 'Est-ce que ça marche sur une boutique Shopify ?',
           answer:
             'Oui. Un extrait dans le thème mesure chaque page affichée par le thème, produits et panier compris. Shopify n’exécute aucun code du thème pendant le paiement : les étapes du paiement et l’achat finalisé ne sont donc pas mesurés.',
+        },
+        wordPress: {
+          question: 'Est-ce que ça marche sur WordPress ?',
+          answer:
+            'Oui. Collez un extrait dans l’extension gratuite WPCode, dans Extraits de code › En-tête et pied de page, sans code dans le thème ; ou, si le site charge déjà Google Tag Manager, utilisez le modèle Pyxis Analytics. Ça marche sur WordPress chez votre propre hébergeur et sur WordPress.com avec un forfait qui autorise les extensions.',
         },
         tagManager: {
           question: 'Puis-je l’installer avec Google Tag Manager ?',

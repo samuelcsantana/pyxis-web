@@ -128,10 +128,10 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} offer="byInvitation" />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(18);
+    expect(items).toHaveLength(19);
     expect([...items].map((item) => item.open)).toEqual([
       true,
-      ...Array.from({ length: 17 }, () => false),
+      ...Array.from({ length: 18 }, () => false),
     ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');
@@ -159,17 +159,18 @@ describe('FaqSection', () => {
     expect(screen.getByText(/request access at hello@pyxis-analytics\.dev/)).toBeInTheDocument();
   });
 
-  it('answers agencies, people who do not code, Shopify and Tag Manager users, and AI installs', () => {
+  it('answers agencies, people who do not code, Shopify, WordPress and Tag Manager users, and AI installs', () => {
     const { container } = render(<FaqSection i18n={english} offer="byInvitation" />);
 
     const questions = [...container.querySelectorAll('summary')].map((summary) =>
       summary.textContent.replace('+', ''),
     );
     const afterUse = questions.indexOf('Can I use it on my site?') + 1;
-    expect(questions.slice(afterUse, afterUse + 5)).toEqual([
+    expect(questions.slice(afterUse, afterUse + 6)).toEqual([
       'Can I use Pyxis on my clients’ sites?',
       'I don’t code. Can I install it?',
       'Does it work on a Shopify store?',
+      'Does it work on WordPress?',
       'Can I install it with Google Tag Manager?',
       'Can I ask an AI to install it?',
     ]);
@@ -177,6 +178,9 @@ describe('FaqSection', () => {
       screen.getByText(/^Yes\. If your site already loads Google Tag Manager, add the Pyxis/),
     ).toBeInTheDocument();
     expect(screen.queryByText(/someone has to touch that code/)).toBeNull();
+    expect(
+      screen.getByText(/^Yes\. Paste one snippet into the free WPCode plugin, under Code Snippets/),
+    ).toHaveTextContent('on WordPress.com with a plan that allows plugins.');
     expect(
       screen.getByText(/so the checkout steps and the completed purchase are not measured\.$/),
     ).toBeInTheDocument();
@@ -236,7 +240,7 @@ describe('FaqSection', () => {
         const { container } = render(<FaqSection i18n={english} offer={offer} />);
 
         const questions = questionsOf(container);
-        expect(questions).toHaveLength(18);
+        expect(questions).toHaveLength(19);
         expect(questions).not.toContain('How does the free trial work?');
         const afterPrice = questions.indexOf('How much does it cost?') + 1;
         expect(questions.slice(afterPrice, afterPrice + 2)).toEqual([

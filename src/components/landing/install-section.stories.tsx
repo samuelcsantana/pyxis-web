@@ -76,6 +76,26 @@ export const WithShopify: Story = {
   },
 };
 
+export const WithWordPress: Story = {
+  args: { offer: 'free' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: /WordPress/ }));
+    await expect(canvas.getByRole('link', { name: 'WPCode' })).toBeVisible();
+    await expect(canvas.getByText(/pyxis\.global\.js/)).toBeVisible();
+  },
+};
+
+export const WithWordPressInTheDarkTheme: Story = {
+  args: { offer: 'free' },
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: /WordPress/ }));
+    await expect(canvas.getByRole('link', { name: 'WPCode' })).toBeVisible();
+  },
+};
+
 export const SignUpOpenRequestCopied: Story = {
   args: { offer: 'trial' },
   play: async ({ canvasElement }) => {
