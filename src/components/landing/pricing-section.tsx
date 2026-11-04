@@ -47,10 +47,15 @@ const MONTHLY = 'month';
 const CHECK_ICON = 'm5 12.5 4.5 4.5L19 7.5';
 const ARROW_ICON = 'M5 12h14 M13 6l6 6-6 6';
 
-const PERIOD_OPTION = `relative flex cursor-pointer items-center rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:bg-card has-checked:text-ink has-checked:shadow-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
+const PERIOD_SWITCH =
+  'relative grid max-w-full grid-cols-2 rounded-pill border border-line bg-soft p-[3px]';
+const PERIOD_THUMB =
+  'pointer-events-none absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-pill bg-card shadow-sm transition-transform duration-200 ease-out group-has-[input[value=year]:checked]/pricing:translate-x-full motion-reduce:transition-none';
+const PERIOD_OPTION = `relative z-[1] flex cursor-pointer items-center justify-center rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
 const SHOW_WHEN_MONTHLY =
-  'flex flex-col gap-1 group-has-[input[value=year]:checked]/pricing:hidden';
-const SHOW_WHEN_YEARLY = 'hidden flex-col gap-1 group-has-[input[value=year]:checked]/pricing:flex';
+  'flex flex-col gap-1 motion-safe:animate-reveal group-has-[input[value=year]:checked]/pricing:hidden';
+const SHOW_WHEN_YEARLY =
+  'hidden flex-col gap-1 motion-safe:animate-reveal group-has-[input[value=year]:checked]/pricing:flex';
 const START_WHEN_MONTHLY = 'block group-has-[input[value=year]:checked]/pricing:hidden';
 const START_WHEN_YEARLY = 'hidden group-has-[input[value=year]:checked]/pricing:block';
 const PRICE = 'text-5xl leading-none font-semibold tracking-[-0.03em] tabular-nums';
@@ -198,8 +203,9 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
   return (
     <>
       <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
-        <fieldset className="inline-flex max-w-full flex-wrap gap-0.5 rounded-pill border border-line bg-soft p-[3px]">
+        <fieldset className={PERIOD_SWITCH}>
           <legend className="sr-only">{t('landing.pricing.period')}</legend>
+          <span aria-hidden="true" data-testid="period-thumb" className={PERIOD_THUMB} />
           <label className={PERIOD_OPTION}>
             <input
               type="radio"
