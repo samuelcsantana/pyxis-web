@@ -74,9 +74,9 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   visitors per day and per month, new and returning, and says when a figure is a sum of days.
 - **What changed since the last read.** The menu counts what arrived for each screen, a screen
   offers to refresh when something new arrives, and the Overview shows the visits on the site now.
-- **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free plan or through Stripe
-  Checkout, a first project with its install guide, the Account and billing page and a Help and
-  support page.
+- **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free Hobby plan or through
+  Stripe Checkout, a first project with its install guide, the Account and billing page and a
+  Help and support page.
 - **Settings per project.** The weekly digest and the admin's sessions, and for the account's
   owner the project's name, origins, time zone, keys and people.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected

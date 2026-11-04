@@ -20,7 +20,7 @@ const FREE_PLAN_EVENTS = new Intl.NumberFormat('en-US').format(FREE_PLAN_EVENTS_
 
 function hostedPlanOf(offer: SignUpOffer): string {
   return offersTheFreePlan(offer)
-    ? `free plan: ${FREE_PLAN_EVENTS} events a month on one site, no card`
+    ? `Hobby plan, free: ${FREE_PLAN_EVENTS} events a month on one site, no card; Pro plan for more`
     : '14-day free trial';
 }
 
@@ -170,10 +170,10 @@ export function llmsText(offer: SignUpOffer): string {
     '## Support',
     '',
     `- An account, the plan, its limits or billing: e-mail ${SUPPORT_EMAIL} from the`,
-    `  account's e-mail address. Paid plan: a reply within ${String(PAID_REPLY_BUSINESS_DAYS)} business days; free plan:`,
+    `  account's e-mail address. Pro plan: a reply within ${String(PAID_REPLY_BUSINESS_DAYS)} business days; Hobby plan:`,
     `  within ${String(FREE_REPLY_DAYS)} days.`,
     `- [Ask a question on GitHub](${QUESTION_FORM_URL}): installation and usage questions on the`,
-    '  free plan. Questions are public: never paste keys or personal data.',
+    '  Hobby plan. Questions are public: never paste keys or personal data.',
     `- [Report a vulnerability privately](${SECURITY_REPORT_URL}), never in a public issue.`,
     '',
     '## Optional',

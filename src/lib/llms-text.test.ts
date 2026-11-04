@@ -25,7 +25,7 @@ describe('llmsText', () => {
 
   it('tells an agent where to send a person who needs help', () => {
     expect(text).toContain('e-mail hello@pyxis-analytics.dev from the');
-    expect(text).toContain('Paid plan: a reply within 2 business days; free plan:');
+    expect(text).toContain('Pro plan: a reply within 2 business days; Hobby plan:');
     expect(text).toContain(
       '[Ask a question on GitHub](https://github.com/samuelcsantana/pyxis-sdk/issues/new?template=question.yml)',
     );
@@ -66,12 +66,12 @@ describe('llmsText', () => {
   });
 
   it.each(['free', 'freeFull'] as const)(
-    'names the free plan instead of the trial once it is open (%s)',
+    'names the Hobby plan instead of the trial once it is open (%s)',
     (offer) => {
       const onTheFreePlan = llmsText(offer);
 
       expect(onTheFreePlan).toContain(
-        'https://app.pyxis-analytics.dev/sign-up (free plan: 10,000 events a month on one site, no card).',
+        'https://app.pyxis-analytics.dev/sign-up (Hobby plan, free: 10,000 events a month on one site, no card; Pro plan for more).',
       );
       expect(onTheFreePlan).not.toContain('trial');
     },
