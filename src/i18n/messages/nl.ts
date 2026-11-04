@@ -1866,9 +1866,8 @@ export const nl = translation({
     },
     hero: {
       eyebrow: 'Connector voor Claude · Tag Manager en Shopify · geen cookies · geen IP',
-      title:
-        'Ontdek wat converteert en wat mislukt op je site, zonder cookies en zonder opgeslagen IP-adressen.',
-      lead: 'Pyxis laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site bij elk bezoek mislukten. Bekijk het in het dashboard of vraag het aan Claude.',
+      title: 'Ontdek wat mensen op je site doen en hoe lang ze blijven.',
+      lead: 'Zie waar elk bezoek binnenkwam, welke route het volgde, waar het eindigde en hoe lang het duurde. Geen cookies en geen opgeslagen IP-adressen.',
       openDemo: 'Open de livedemo',
       seePricing: 'Bekijk de prijzen',
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',
