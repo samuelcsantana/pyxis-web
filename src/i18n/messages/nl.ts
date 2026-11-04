@@ -1847,11 +1847,11 @@ export const nl = translation({
   },
   landing: {
     meta: {
-      title: 'Wat converteert en wat mislukt op je site, zonder cookies · Pyxis',
+      title: 'Wat mensen op je site doen en hoe lang ze blijven, zonder cookies · Pyxis',
       descriptionFree:
-        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. Gratis tot {events} events per maand.',
+        'Productanalyse die laat zien waar elk bezoek binnenkwam, welke route het volgde, waar het eindigde en hoe lang het duurde, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. Gratis tot {events} events per maand.',
       description:
-        'Productanalyse die laat zien bij welke funnelstap mensen afhaken en welke verzoeken van je site mislukten, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. 14 dagen gratis.',
+        'Productanalyse die laat zien waar elk bezoek binnenkwam, welke route het volgde, waar het eindigde en hoe lang het duurde, in het dashboard of in Claude. Geen cookies en geen opgeslagen IP-adressen. 14 dagen gratis.',
     },
     nav: {
       label: 'Hoofdmenu',

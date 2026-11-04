@@ -1826,11 +1826,11 @@ export const ptBR = translation({
   },
   landing: {
     meta: {
-      title: 'O que converte e o que falha no seu site, sem cookie · Pyxis',
+      title: 'O que as pessoas fazem no seu site e quanto tempo ficam, sem cookie · Pyxis',
       descriptionFree:
-        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie e sem guardar IP. Grátis até {events} eventos por mês.',
+        'Análise de produto que mostra por onde cada visita entrou, o caminho que fez, onde saiu e quanto tempo durou, no painel ou no Claude. Sem cookie e sem guardar IP. Grátis até {events} eventos por mês.',
       description:
-        'Análise de produto que mostra em que passo do funil as pessoas param e quais requisições do seu site falharam, no painel ou no Claude. Sem cookie e sem guardar IP. 14 dias grátis.',
+        'Análise de produto que mostra por onde cada visita entrou, o caminho que fez, onde saiu e quanto tempo durou, no painel ou no Claude. Sem cookie e sem guardar IP. 14 dias grátis.',
     },
     nav: {
       label: 'Principal',

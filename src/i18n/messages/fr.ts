@@ -1865,11 +1865,12 @@ export const fr = translation({
   },
   landing: {
     meta: {
-      title: 'Ce qui convertit et ce qui échoue sur votre site, sans cookies · Pyxis',
+      title:
+        'Ce que les gens font sur votre site et combien de temps ils y restent, sans cookies · Pyxis',
       descriptionFree:
-        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. Gratuit jusqu’à {events} événements par mois.',
+        'L’analytique produit qui montre par où chaque visite est entrée, le chemin qu’elle a suivi, où elle s’est terminée et combien de temps elle a duré, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. Gratuit jusqu’à {events} événements par mois.',
       description:
-        'L’analytique produit qui montre à quelle étape de l’entonnoir les gens s’arrêtent et quelles requêtes de votre site ont échoué, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. 14 jours gratuits.',
+        'L’analytique produit qui montre par où chaque visite est entrée, le chemin qu’elle a suivi, où elle s’est terminée et combien de temps elle a duré, sur le tableau de bord ou dans Claude. Sans cookies et sans adresses IP stockées. 14 jours gratuits.',
     },
     nav: {
       label: 'Principale',
