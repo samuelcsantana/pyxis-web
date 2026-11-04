@@ -30,7 +30,8 @@ export const Yearly: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('radio', { name: /^Yearly/ }));
-    await expect(canvas.getByText('R$ 390')).toBeVisible();
+    await expect(canvas.getByText('R$ 32.50')).toBeVisible();
+    await expect(canvas.getByText('billed as R$ 390 once a year')).toBeVisible();
     await expect(canvas.getByText('R$ 39')).not.toBeVisible();
   },
 };
@@ -99,7 +100,7 @@ export const LongestWordsOnAPhone: Story = {
     );
     const tops = new Set(options.map((option) => Math.round(option.getBoundingClientRect().top)));
     await expect(tops.size).toBe(1);
-    await userEvent.click(canvas.getByText('2 maanden gratis'));
+    await userEvent.click(canvas.getByText('−17%'));
     await expect(canvas.getByRole('radio', { name: /^Jaarlijks/ })).toBeChecked();
   },
 };
@@ -142,7 +143,8 @@ export const FreePlanOpen: Story = {
   args: { offer: 'free' },
   play: async ({ canvasElement }) => {
     await showsTwoPlans(canvasElement);
-    await expect(within(canvasElement).getByRole('link', { name: 'Start free' })).toBeVisible();
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Start free' })).toBeVisible();
   },
 };
 
@@ -151,7 +153,7 @@ export const FreePlanOpenYearly: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('radio', { name: /^Yearly/ }));
-    await expect(canvas.getByText('R$ 390')).toBeVisible();
+    await expect(canvas.getByText('R$ 32.50')).toBeVisible();
   },
 };
 

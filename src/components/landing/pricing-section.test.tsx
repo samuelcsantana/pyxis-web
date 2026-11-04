@@ -18,10 +18,23 @@ describe('PricingSection', () => {
     const period = within(section).getByRole('group', { name: 'Billing period' });
     expect(within(period).getByRole('radio', { name: 'Monthly, R$ 39 a month' })).toBeChecked();
     expect(
-      within(period).getByRole('radio', { name: 'Yearly, R$ 390 a year, 2 months free' }),
+      within(period).getByRole('radio', { name: 'Yearly, R$ 390 a year, 17% less' }),
     ).not.toBeChecked();
     expect(within(section).getByText('R$ 39')).toBeInTheDocument();
-    expect(within(section).getByText('R$ 390')).toBeInTheDocument();
+    expect(within(section).getByText('or R$ 390 a year')).toBeInTheDocument();
+  });
+
+  it('shows the yearly plan as its price per month, with the yearly charge written under it', () => {
+    render(<PricingSection i18n={english} offer="byInvitation" />);
+
+    const yearlyPrice = screen.getByText('R$ 32.50');
+    const yearly = yearlyPrice.closest('div');
+    expect(yearly).toHaveClass('hidden', 'group-has-[input[value=year]:checked]/pricing:flex');
+    expect(within(yearly as HTMLElement).getByText('a month')).toBeInTheDocument();
+    expect(
+      within(yearly as HTMLElement).getByText('billed as R$ 390 once a year'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/months free/)).toBeNull();
   });
 
   it('switches the period without leaving the page', async () => {
@@ -45,17 +58,19 @@ describe('PricingSection', () => {
     );
   });
 
-  it('shows the yearly saving beside the switch, and picks the yearly plan when it is clicked', async () => {
+  it('shows the yearly saving inside the yearly option, and picks the yearly plan when it is clicked', async () => {
     render(<PricingSection i18n={english} offer="byInvitation" />);
 
     const period = screen.getByRole('group', { name: 'Billing period' });
-    const saving = screen.getByText('2 months free');
-    expect(within(period).queryByText('2 months free')).toBeNull();
-    expect(saving).toHaveAttribute('for', YEARLY_OPTION_ID);
+    const yearly = within(period).getByRole('radio', { name: /^Yearly/ });
+    expect(yearly).toHaveAttribute('id', YEARLY_OPTION_ID);
+    const saving = within(period).getByText('−17%');
+    expect(saving).toHaveAttribute('aria-hidden', 'true');
+    expect(saving.closest('label')).toContainElement(yearly);
 
     await userEvent.click(saving);
 
-    expect(within(period).getByRole('radio', { name: /^Yearly/ })).toBeChecked();
+    expect(yearly).toBeChecked();
   });
 
   it('lists what the plan includes, the trial and where it is sold', () => {
