@@ -26,8 +26,10 @@ Questa sintesi non sostituisce il testo completo, ma mostra ciò che conta di pi
    (Clausole 6 e 8.3). **Attenzione: il piano gratuito può cambiare o terminare, con un preavviso via
    e-mail di almeno 30 giorni**, e puoi esportare i tuoi eventi prima (Clausola 7.5).
 4. **Limiti:** nel piano gratuito, fino a 10.000 eventi al mese, 1 sito e 1 persona nel pannello
-   (solo tu); nel piano a pagamento, fino a 100.000 eventi al mese, fino a 3 siti e fino a 3 persone
-   nel pannello (te compreso). Entrambi hanno 13 mesi di storico e tutte le funzionalità.
+   (solo tu); nel piano a pagamento, fino a 250.000 eventi al mese, fino a 10 siti e fino a 10
+   persone nel pannello (te compreso). Entrambi hanno 13 mesi di storico e le stesse funzionalità di
+   analisi; alcune integrazioni sono solo del piano a pagamento, man mano che vengono lanciate
+   (Clausola 7.7).
    **Attenzione: nel piano gratuito, quando il mese raggiunge 10.000 eventi, la ricezione degli
    eventi si interrompe fino al giorno 1 del mese successivo**: un account che raggiunge il limite il
    giorno 3 non riceve nulla fino al giorno 1. Ti avvisiamo prima, all'80%. Nel piano a pagamento, ti
@@ -122,7 +124,8 @@ la Clausola 7.6.
 
 2.11. **Piano gratuito e piano a pagamento:** i due piani del servizio, con i limiti della Clausola
 7.1. Il piano gratuito non ha prezzo né abbonamento; il piano a pagamento è l'abbonamento mensile o
-annuale della Clausola 8.
+annuale della Clausola 8. Nella pagina iniziale e nel pannello, il piano gratuito si chiama **Hobby** e
+il piano a pagamento si chiama **Pro**.
 
 ## Clausola 3 — Accettazione, chi può sottoscrivere e documenti del contratto
 
@@ -348,18 +351,19 @@ sono già sul piano gratuito; modificare il loro piano o porvi fine segue la Cla
 | Voce | Piano gratuito | Piano a pagamento |
 |---|---|---|
 | Prezzo | nessuno, senza carta | R$ 39,00 al mese o R$ 390,00 all'anno (Clausola 8) |
-| Eventi ricevuti al mese, sommando tutti i progetti dell'account | fino a 10.000 | fino a 100.000 |
-| Siti (progetti) | 1 | fino a 3 |
-| Persone con accesso al pannello | 1, solo il proprietario dell'account | fino a 3, compreso il proprietario dell'account |
+| Eventi ricevuti al mese, sommando tutti i progetti dell'account | fino a 10.000 | fino a 250.000 |
+| Siti (progetti) | 1 | fino a 10 |
+| Persone con accesso al pannello | 1, solo il proprietario dell'account | fino a 10, compreso il proprietario dell'account |
 | Storico | 13 mesi (gli eventi più vecchi vengono cancellati ogni giorno) | 13 mesi (gli eventi più vecchi vengono cancellati ogni giorno) |
 | Interruzione della ricezione per quota (Clausola 7.2) | al raggiungimento del 100% del limite | al raggiungimento del 150% del limite |
 | Riepilogo settimanale via e-mail | incluso | incluso |
 | Token di accesso, server MCP e connettore di Claude | inclusi | inclusi |
 | Esportazione degli eventi di un progetto | dal pannello, fino a 3 per progetto al giorno | dal pannello, fino a 3 per progetto al giorno |
+| Integrazioni della Clausola 7.7 | non incluse | incluse, man mano che vengono lanciate |
 | Assistenza | tramite la documentazione e GitHub; e-mail solo nei casi della Clausola 16.5 | via e-mail, risposta entro 2 giorni lavorativi |
 
-Entrambi i piani hanno tutte le schermate e le funzionalità del servizio; ciò che cambia tra loro è
-il volume.
+Entrambi i piani hanno le stesse schermate e funzionalità di analisi; ciò che cambia tra loro è il
+volume, l'assistenza e le integrazioni della Clausola 7.7.
 
 7.2. **Attenzione: uso oltre il limite.**
 
@@ -369,10 +373,9 @@ il volume.
 2. Il servizio misura l'uso una volta al giorno, di notte. L'uso misurato compare in Account e
    fatturazione, nel pannello.
 3. Nel piano a pagamento, quando la misurazione giornaliera rileva l'80% e, poi, il 100% del limite
-   (80.000 e 100.000 eventi), avvisiamo il proprietario dell'account via e-mail, una volta per
+   (200.000 e 250.000 eventi), avvisiamo il proprietario dell'account via e-mail, una volta per
    livello in ciascun mese. **Fino al 150%, nulla viene interrotto.**
-4. **Nel piano a pagamento, quando la misurazione giornaliera rileva il 150% del limite (150.000
-   eventi), la ricezione degli eventi di tutti i progetti dell'account si interrompe fino al giorno 1
+4. **Nel piano a pagamento, quando la misurazione giornaliera rileva il 150% del limite (375.000 eventi), la ricezione degli eventi di tutti i progetti dell'account si interrompe fino al giorno 1
    del mese successivo**, e avvisiamo via e-mail. Durante l'interruzione, il servizio rifiuta gli
    eventi (risposta `403 quota_exceeded`), che **non vengono conservati e non possono essere
    recuperati**. Il pannello continua a mostrare i dati già conservati. La ricezione riprende da sola
@@ -422,6 +425,21 @@ questi 7 giorni, puoi esportare gli eventi (Clausola 11.5), e nulla viene cancel
 riceve un evento o passa al piano a pagamento: gli account del piano a pagamento non vengono mai
 cancellati per mancanza di eventi. Dopo l'eliminazione, non è possibile recuperare i dati; restano
 conservati solo i registri fatti salvi dalla Clausola 11.4.
+
+7.7. **Integrazioni del piano a pagamento.** Le funzionalità di analisi sono le stesse nei due
+piani: tutte le schermate del pannello, il riepilogo settimanale via e-mail, l'esportazione degli
+eventi, i token di accesso, il server MCP e il connettore di Claude, e anche le funzionalità di
+analisi che arriveranno dopo. **Alcune integrazioni con altre persone e con altri servizi sono solo
+del piano a pagamento:** il link pubblico, di sola lettura, ai numeri di un progetto; gli avvisi
+inviati a Slack; le annotazioni create con un token di accesso; l'importazione dello storico di
+Google Analytics 4; e la lettura di Google Search Console. Ciascuna entra a far parte del servizio
+il giorno in cui viene lanciata, e la pagina iniziale e il pannello indicano quali sono già
+disponibili; fino ad allora, nessuna di esse è promessa. Un account che lascia il piano a pagamento
+perde l'uso di queste integrazioni da quel momento, **ma non i dati**: il link pubblico smette di
+aprirsi, Slack smette di ricevere avvisi e non inizia nessuna nuova importazione, e ciò che è già
+stato importato o configurato resta nell'account finché il proprietario non lo rimuove o finché
+l'account non termina secondo le Clausole 11.4 e 11.5. Se l'account torna al piano a pagamento,
+ritrova tutto come lo aveva lasciato.
 
 ## Clausola 8 — Prezzo, abbonamento e addebito
 
@@ -701,7 +719,7 @@ indagare su un abuso.**
 
 ## Clausola 13 — Persone con accesso, chiavi e token
 
-13.1. **Persone con accesso.** Nel piano a pagamento, l'account ha fino a 3 persone con accesso al
+13.1. **Persone con accesso.** Nel piano a pagamento, l'account ha fino a 10 persone con accesso al
 pannello, compreso il proprietario; nel piano gratuito, solo il proprietario, che non invita altre
 persone (Clausola 7.1). Il proprietario invita una persona tramite la sua e-mail, per uno o più
 progetti dell'account, in Impostazioni → Persone. La persona riceve un'e-mail di invito ed entra nel

@@ -25,8 +25,9 @@ Este resumen no sustituye el texto completo, pero muestra lo más importante ant
    el plan gratis puede cambiar o terminar, con un aviso por correo electrónico de al menos 30 días**,
    y puedes exportar tus eventos antes (Cláusula 7.5).
 4. **Límites:** en el plan gratis, hasta 10.000 eventos al mes, 1 sitio y 1 persona en el panel (solo
-   tú); en el plan de pago, hasta 100.000 eventos al mes, hasta 3 sitios y hasta 3 personas en el
-   panel (contándote a ti). Los dos tienen 13 meses de historial y todas las funciones. **Atención: en
+   tú); en el plan de pago, hasta 250.000 eventos al mes, hasta 10 sitios y hasta 10 personas en el
+   panel (contándote a ti). Los dos tienen 13 meses de historial y las mismas funciones de análisis;
+   algunas integraciones son solo del plan de pago, a medida que se lancen (Cláusula 7.7). **Atención: en
    el plan gratis, cuando el mes llega a 10.000 eventos, la recepción de eventos se pausa hasta el día
    1 del mes siguiente**: una cuenta que llega al límite el día 3 no recibe nada hasta el día 1. Te
    avisamos antes, al 80 %. En el plan de pago, te avisamos al 80 % y al 100 %, y **la pausa llega al
@@ -122,7 +123,8 @@ gratis sin eventos no es un fin del acceso: sigue solo la Cláusula 7.6.
 
 2.11. **Plan gratis y plan de pago:** los dos planes del servicio, con los límites de la Cláusula 7.1.
 El plan gratis no tiene precio ni suscripción; el plan de pago es la suscripción mensual o anual de la
-Cláusula 8.
+Cláusula 8. En la página de inicio y en el panel, el plan gratis se llama **Hobby** y el plan de pago
+se llama **Pro**.
 
 ## Cláusula 3 — Aceptación, quién puede contratar y documentos del contrato
 
@@ -343,18 +345,19 @@ plan o ponerle fin sigue la Cláusula 7.5.
 | Elemento | Plan gratis | Plan de pago |
 |---|---|---|
 | Precio | ninguno, sin tarjeta | R$ 39,00 al mes o R$ 390,00 al año (Cláusula 8) |
-| Eventos recibidos al mes, sumando todos los proyectos de la cuenta | hasta 10.000 | hasta 100.000 |
-| Sitios (proyectos) | 1 | hasta 3 |
-| Personas con acceso al panel | 1, solo el dueño de la cuenta | hasta 3, contando al dueño de la cuenta |
+| Eventos recibidos al mes, sumando todos los proyectos de la cuenta | hasta 10.000 | hasta 250.000 |
+| Sitios (proyectos) | 1 | hasta 10 |
+| Personas con acceso al panel | 1, solo el dueño de la cuenta | hasta 10, contando al dueño de la cuenta |
 | Historial | 13 meses (los eventos más antiguos se borran todos los días) | 13 meses (los eventos más antiguos se borran todos los días) |
 | Pausa de la recepción por la cuota (Cláusula 7.2) | al llegar al 100 % del límite | al llegar al 150 % del límite |
 | Resumen semanal por correo electrónico | incluido | incluido |
 | Tokens de acceso, servidor MCP y conector de Claude | incluidos | incluidos |
 | Exportación de los eventos de un proyecto | desde el panel, hasta 3 por proyecto al día | desde el panel, hasta 3 por proyecto al día |
+| Integraciones de la Cláusula 7.7 | no incluidas | incluidas, a medida que se lancen |
 | Soporte | mediante la documentación y GitHub; correo electrónico solo en los casos de la Cláusula 16.5 | por correo electrónico, respuesta en un plazo de 2 días hábiles |
 
-Los dos planes tienen todas las pantallas y funciones del servicio; lo que cambia entre ellos es el
-volumen.
+Los dos planes tienen las mismas pantallas y funciones de análisis; lo que cambia entre ellos es el
+volumen, el soporte y las integraciones de la Cláusula 7.7.
 
 7.2. **Atención: uso por encima del límite.**
 
@@ -364,9 +367,9 @@ volumen.
 2. El servicio mide el uso una vez al día, de madrugada. El uso medido aparece en Cuenta y
    facturación, en el panel.
 3. En el plan de pago, cuando la medición diaria constate el 80 % y, después, el 100 % del límite
-   (80.000 y 100.000 eventos), avisamos al dueño de la cuenta por correo electrónico, una vez por
+   (200.000 y 250.000 eventos), avisamos al dueño de la cuenta por correo electrónico, una vez por
    nivel en cada mes. **Hasta el 150 %, no se corta nada.**
-4. **En el plan de pago, cuando la medición diaria constate el 150 % del límite (150.000 eventos), la
+4. **En el plan de pago, cuando la medición diaria constate el 150 % del límite (375.000 eventos), la
    recepción de eventos de todos los proyectos de la cuenta se pausa hasta el día 1 del mes
    siguiente**, y avisamos por correo electrónico. Durante la pausa, el servicio rechaza los eventos (respuesta
    `403 quota_exceeded`), que **no se guardan y no pueden recuperarse**. El panel sigue mostrando los
@@ -414,6 +417,20 @@ Anexo 1; enviamos un correo electrónico que confirma la eliminación. En esos 7
 los eventos (Cláusula 11.5), y no se borra nada si la cuenta recibe algún evento o pasa al plan de
 pago: las cuentas del plan de pago nunca se borran por falta de eventos. Después de la eliminación, no
 hay forma de recuperar los datos; solo siguen guardados los registros que exceptúa la Cláusula 11.4.
+
+7.7. **Integraciones del plan de pago.** Las funciones de análisis son las mismas en los dos planes:
+todas las pantallas del panel, el resumen semanal por correo electrónico, la exportación de los
+eventos, los tokens de acceso, el servidor MCP y el conector de Claude, y también las funciones de
+análisis que lleguen después. **Algunas integraciones con otras personas y con otros servicios son
+solo del plan de pago:** el enlace público, de solo lectura, a los números de un proyecto; las
+alertas enviadas a Slack; las anotaciones creadas con un token de acceso; la importación del
+historial de Google Analytics 4; y la lectura de Google Search Console. Cada una pasa a formar parte
+del servicio el día en que se lance, y la página de inicio y el panel dicen cuáles ya están
+disponibles; hasta entonces, ninguna de ellas está prometida. Una cuenta que deja el plan de pago
+pierde el uso de estas integraciones desde ese momento, **pero no los datos**: el enlace público deja
+de abrirse, Slack deja de recibir alertas y no empieza ninguna importación nueva, y lo que ya se
+importó o configuró sigue en la cuenta hasta que el dueño lo quite o hasta que la cuenta termine según
+las Cláusulas 11.4 y 11.5. Si la cuenta vuelve al plan de pago, lo encuentra todo como lo dejó.
 
 ## Cláusula 8 — Precio, suscripción y cobro
 
@@ -684,7 +701,7 @@ completo, y no empieza a guardarlos para investigar un abuso.**
 
 ## Cláusula 13 — Personas con acceso, claves y tokens
 
-13.1. **Personas con acceso.** En el plan de pago, la cuenta tiene hasta 3 personas con acceso al
+13.1. **Personas con acceso.** En el plan de pago, la cuenta tiene hasta 10 personas con acceso al
 panel, contando al dueño; en el plan gratis, solo el dueño, que no invita a otras personas
 (Cláusula 7.1). El dueño invita a una persona mediante su correo electrónico, a uno o más proyectos
 de la cuenta, en Configuración → Personas. La persona recibe un correo de invitación y entra en el panel

@@ -22,8 +22,9 @@ Este resumo não substitui o texto completo, mas mostra o que mais importa antes
    pode mudar ou acabar, com aviso por e-mail de pelo menos 30 dias**, e você pode exportar os seus
    eventos antes (Cláusula 7.5).
 4. **Limites:** no plano grátis, até 10 mil eventos por mês, 1 site e 1 pessoa no painel (só
-   você); no plano pago, até 100 mil eventos por mês, até 3 sites e até 3 pessoas no painel
-   (contando com você). Os dois têm 13 meses de histórico e todas as funções. **Atenção: no plano
+   você); no plano pago, até 250 mil eventos por mês, até 10 sites e até 10 pessoas no painel
+   (contando com você). Os dois têm 13 meses de histórico e as mesmas funções de análise; algumas
+   integrações são só do plano pago, à medida que forem lançadas (Cláusula 7.7). **Atenção: no plano
    grátis, quando o mês chega a 10 mil eventos, a recepção de eventos pausa até o dia 1º do mês
    seguinte**: uma conta que chega ao limite no dia 3 não recebe nada até o dia 1º. Avisamos antes,
    a 80%. No plano pago, avisamos a 80% e a 100%, e **a pausa vem a 150%**. Os eventos enviados
@@ -113,7 +114,8 @@ do acesso: segue só a Cláusula 7.6.
 
 2.11. **Plano grátis e plano pago:** os dois planos do serviço, com os limites da Cláusula 7.1. O
 plano grátis não tem preço nem assinatura; o plano pago é a assinatura mensal ou anual da
-Cláusula 8.
+Cláusula 8. Na página inicial e no painel, o plano grátis se chama **Hobby** e o plano pago se
+chama **Pro**.
 
 ## Cláusula 3 — Aceite, quem pode contratar e documentos do contrato
 
@@ -327,17 +329,19 @@ com o plano delas segue a Cláusula 7.5.
 | Item | Plano grátis | Plano pago |
 |---|---|---|
 | Preço | nenhum, sem cartão | R$ 39,00 por mês ou R$ 390,00 por ano (Cláusula 8) |
-| Eventos recebidos por mês, somando todos os projetos da conta | até 10.000 | até 100.000 |
-| Sites (projetos) | 1 | até 3 |
-| Pessoas com acesso ao painel | 1, só o dono da conta | até 3, contando com o dono da conta |
+| Eventos recebidos por mês, somando todos os projetos da conta | até 10.000 | até 250.000 |
+| Sites (projetos) | 1 | até 10 |
+| Pessoas com acesso ao painel | 1, só o dono da conta | até 10, contando com o dono da conta |
 | Histórico | 13 meses (eventos mais antigos são apagados todos os dias) | 13 meses (eventos mais antigos são apagados todos os dias) |
 | Pausa da recepção pela cota (Cláusula 7.2) | ao chegar a 100% do limite | ao chegar a 150% do limite |
 | Resumo semanal por e-mail | incluído | incluído |
 | Tokens de acesso, servidor MCP e conector do Claude | incluídos | incluídos |
 | Exportação dos eventos de um projeto | pelo painel, até 3 por projeto por dia | pelo painel, até 3 por projeto por dia |
+| Integrações da Cláusula 7.7 | não incluídas | incluídas, à medida que forem lançadas |
 | Suporte | pela documentação e pelo GitHub; e-mail só nos casos da Cláusula 16.5 | por e-mail, resposta em até 2 dias úteis |
 
-Os dois planos têm todas as telas e funções do serviço; o que muda entre eles é o volume.
+Os dois planos têm as mesmas telas e funções de análise; o que muda entre eles é o volume, o suporte
+e as integrações da Cláusula 7.7.
 
 7.2. **Atenção: uso acima do limite.**
 
@@ -346,10 +350,10 @@ Os dois planos têm todas as telas e funções do serviço; o que muda entre ele
    às 21h do último dia do mês anterior.
 2. O serviço mede o uso uma vez por dia, de madrugada. O uso medido aparece em Conta e cobrança, no
    painel.
-3. No plano pago, quando a medição diária constatar 80% e, depois, 100% do limite (80 mil e 100 mil
+3. No plano pago, quando a medição diária constatar 80% e, depois, 100% do limite (200 mil e 250 mil
    eventos), avisamos o dono da conta por e-mail, uma vez por nível em cada mês. **Até 150%, nada é
    cortado.**
-4. **No plano pago, quando a medição diária constatar 150% do limite (150 mil eventos), a recepção de
+4. **No plano pago, quando a medição diária constatar 150% do limite (375 mil eventos), a recepção de
    eventos de todos os projetos da conta pausa até o dia 1º do mês seguinte**, e avisamos por e-mail.
    Durante a pausa, o serviço recusa os eventos (resposta `403 quota_exceeded`), que **não são
    guardados e não podem ser recuperados**. O painel continua mostrando os dados já guardados. A
@@ -396,6 +400,19 @@ confirmando a exclusão. Nesses 7 dias, você pode exportar os eventos (Cláusul
 apagado se a conta receber algum evento ou passar para o plano pago: as contas do plano pago nunca
 são apagadas por falta de eventos. Depois da exclusão, não há como recuperar os dados; continuam
 guardados só os registros que a Cláusula 11.4 ressalva.
+
+7.7. **Integrações do plano pago.** As funções de análise são as mesmas nos dois planos: todas as
+telas do painel, o resumo semanal por e-mail, a exportação dos eventos, os tokens de acesso, o
+servidor MCP e o conector do Claude, e também as funções de análise que vierem depois. **Algumas
+integrações com outras pessoas e com outros serviços são só do plano pago:** o link público, só de
+leitura, para os números de um projeto; os alertas enviados ao Slack; as anotações criadas por um
+token de acesso; a importação do histórico do Google Analytics 4; e a leitura do Google Search
+Console. Cada uma passa a fazer parte do serviço no dia em que for lançada, e a página inicial e o
+painel dizem quais já estão disponíveis; até lá, nenhuma delas é prometida. Uma conta que deixa o
+plano pago perde o uso dessas integrações a partir desse momento, **mas não os dados**: o link
+público deixa de abrir, o Slack deixa de receber alertas e não começa nenhuma importação nova, e o
+que já foi importado ou configurado continua na conta até o dono tirar ou até a conta acabar pelas
+Cláusulas 11.4 e 11.5. Se a conta voltar ao plano pago, encontra tudo como deixou.
 
 ## Cláusula 8 — Preço, assinatura e cobrança
 
@@ -654,7 +671,7 @@ passa a guardá-los para investigar abuso.**
 
 ## Cláusula 13 — Pessoas com acesso, chaves e tokens
 
-13.1. **Pessoas com acesso.** No plano pago, a conta tem até 3 pessoas com acesso ao painel,
+13.1. **Pessoas com acesso.** No plano pago, a conta tem até 10 pessoas com acesso ao painel,
 contando com o dono; no plano grátis, só o dono, que não convida outras pessoas (Cláusula 7.1). O
 dono convida uma pessoa pelo e-mail dela, para um ou mais projetos da conta, em Configurações →
 Pessoas. A pessoa recebe um e-mail de convite e entra no painel com um código enviado ao e-mail

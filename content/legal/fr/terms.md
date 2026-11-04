@@ -26,9 +26,10 @@ Ce résumé ne remplace pas le texte complet, mais il montre ce qui compte le pl
    changer ou prendre fin, avec un préavis par e-mail d’au moins 30 jours**, et vous pouvez exporter
    vos événements avant (Clause 7.5).
 4. **Limites :** sur le forfait gratuit, jusqu’à 10 000 événements par mois, 1 site et 1 personne
-   sur le tableau de bord (vous seul) ; sur le forfait payant, jusqu’à 100 000 événements par mois,
-   jusqu’à 3 sites et jusqu’à 3 personnes sur le tableau de bord (vous compris). Les deux ont
-   13 mois d’historique et toutes les fonctionnalités. **Attention : sur le forfait gratuit, lorsque
+   sur le tableau de bord (vous seul) ; sur le forfait payant, jusqu’à 250 000 événements par mois,
+   jusqu’à 10 sites et jusqu’à 10 personnes sur le tableau de bord (vous compris). Les deux ont
+   13 mois d’historique et les mêmes fonctionnalités d’analyse ; certaines intégrations sont
+   réservées au forfait payant, à mesure de leur lancement (Clause 7.7). **Attention : sur le forfait gratuit, lorsque
    le mois atteint 10 000 événements, la réception des événements est mise en pause jusqu’au 1er du
    mois suivant** : un compte qui atteint la limite le 3 ne reçoit rien jusqu’au 1er. Nous vous
    prévenons avant, à 80 %. Sur le forfait payant, nous vous prévenons à 80 % et à 100 %, et **la
@@ -129,7 +130,8 @@ l’accès : elle suit uniquement la Clause 7.6.
 
 2.11. **Forfait gratuit et forfait payant :** les deux forfaits du service, avec les limites de la
 Clause 7.1. Le forfait gratuit n’a ni prix ni abonnement ; le forfait payant est l’abonnement mensuel
-ou annuel de la Clause 8.
+ou annuel de la Clause 8. Sur la page d’accueil et sur le tableau de bord, le forfait gratuit
+s’appelle **Hobby** et le forfait payant s’appelle **Pro**.
 
 ## Clause 3 — Acceptation, qui peut souscrire et documents du contrat
 
@@ -364,18 +366,19 @@ sont déjà sur le forfait gratuit ; modifier leur forfait ou y mettre fin sui
 | Élément | Forfait gratuit | Forfait payant |
 |---|---|---|
 | Prix | aucun, sans carte | R$ 39,00 par mois ou R$ 390,00 par an (Clause 8) |
-| Événements reçus par mois, tous les projets du compte confondus | jusqu’à 10 000 | jusqu’à 100 000 |
-| Sites (projets) | 1 | jusqu’à 3 |
-| Personnes ayant accès au tableau de bord | 1, uniquement le propriétaire du compte | jusqu’à 3, propriétaire du compte compris |
+| Événements reçus par mois, tous les projets du compte confondus | jusqu’à 10 000 | jusqu’à 250 000 |
+| Sites (projets) | 1 | jusqu’à 10 |
+| Personnes ayant accès au tableau de bord | 1, uniquement le propriétaire du compte | jusqu’à 10, propriétaire du compte compris |
 | Historique | 13 mois (les événements plus anciens sont supprimés chaque jour) | 13 mois (les événements plus anciens sont supprimés chaque jour) |
 | Pause de la réception liée au quota (Clause 7.2) | lorsque 100 % de la limite est atteint | lorsque 150 % de la limite est atteint |
 | Récapitulatif hebdomadaire par e-mail | inclus | inclus |
 | Jetons d’accès, serveur MCP et connecteur Claude | inclus | inclus |
 | Exportation des événements d’un projet | depuis le tableau de bord, jusqu’à 3 par projet et par jour | depuis le tableau de bord, jusqu’à 3 par projet et par jour |
+| Intégrations de la Clause 7.7 | non incluses | incluses, à mesure de leur lancement |
 | Assistance | par la documentation et par GitHub ; e-mail uniquement dans les cas de la Clause 16.5 | par e-mail, réponse sous 2 jours ouvrés au plus |
 
-Les deux forfaits disposent de tous les écrans et de toutes les fonctionnalités du service ; ce qui
-change entre eux, c’est le volume.
+Les deux forfaits disposent des mêmes écrans et des mêmes fonctionnalités d’analyse ; ce qui change
+entre eux, c’est le volume, l’assistance et les intégrations de la Clause 7.7.
 
 7.2. **Attention : utilisation au-delà de la limite.**
 
@@ -385,10 +388,10 @@ change entre eux, c’est le volume.
 2. Le service mesure l’utilisation une fois par jour, pendant la nuit. L’utilisation mesurée apparaît
    dans Compte et facturation, sur le tableau de bord.
 3. Sur le forfait payant, lorsque la mesure quotidienne constate 80 % puis 100 % de la limite
-   (80 000 et 100 000 événements), nous prévenons le propriétaire du compte par e-mail, une fois par
+   (200 000 et 250 000 événements), nous prévenons le propriétaire du compte par e-mail, une fois par
    niveau et par mois. **Jusqu’à 150 %, rien n’est coupé.**
 4. **Sur le forfait payant, lorsque la mesure quotidienne constate 150 % de la limite
-   (150 000 événements), la réception des événements de tous les projets du compte est mise en pause
+   (375 000 événements), la réception des événements de tous les projets du compte est mise en pause
    jusqu’au 1er du mois suivant**, et nous vous prévenons par e-mail. Pendant la pause, le service
    refuse les événements (réponse `403 quota_exceeded`), qui **ne sont pas conservés et ne peuvent pas être récupérés**. Le tableau
    de bord continue d’afficher les données déjà conservées. La réception reprend d’elle-même au début
@@ -439,6 +442,21 @@ vous pouvez exporter les événements (Clause 11.5), et rien n’est supprimé s
 événement ou passe au forfait payant : les comptes du forfait payant ne sont jamais supprimés faute
 d’événements. Après la suppression, il n’est plus possible de récupérer les données ; seuls restent
 conservés les enregistrements que la Clause 11.4 excepte de la suppression.
+
+7.7. **Intégrations du forfait payant.** Les fonctionnalités d’analyse sont les mêmes sur les deux
+forfaits : tous les écrans du tableau de bord, le résumé hebdomadaire par e-mail, l’exportation des
+événements, les jetons d’accès, le serveur MCP et le connecteur Claude, ainsi que les
+fonctionnalités d’analyse qui viendront ensuite. **Certaines intégrations avec d’autres personnes et
+d’autres services sont réservées au forfait payant :** le lien public, en lecture seule, vers les
+chiffres d’un projet ; les alertes envoyées à Slack ; les annotations créées avec un jeton
+d’accès ; l’importation de l’historique de Google Analytics 4 ; et la lecture de Google Search
+Console. Chacune fait partie du service à partir du jour de son lancement, et la page d’accueil et
+le tableau de bord indiquent celles qui sont déjà disponibles ; d’ici là, aucune n’est promise. Un
+compte qui quitte le forfait payant perd l’usage de ces intégrations à partir de ce moment, **mais
+pas les données** : le lien public ne s’ouvre plus, Slack ne reçoit plus d’alertes et aucune
+nouvelle importation ne commence, et ce qui a déjà été importé ou configuré reste dans le compte
+jusqu’à ce que le propriétaire le retire ou que le compte prenne fin selon les Clauses 11.4 et 11.5.
+Si le compte revient au forfait payant, il retrouve tout comme il l’a laissé.
 
 ## Clause 8 — Prix, abonnement et facturation
 
@@ -737,7 +755,7 @@ ne commence pas à les conserver pour enquêter sur un abus.**
 
 ## Clause 13 — Personnes ayant accès, clés et jetons
 
-13.1. **Personnes ayant accès.** Sur le forfait payant, le compte peut réunir jusqu’à 3 personnes ayant
+13.1. **Personnes ayant accès.** Sur le forfait payant, le compte peut réunir jusqu’à 10 personnes ayant
 accès au tableau de bord, propriétaire compris ; sur le forfait gratuit, uniquement le propriétaire, qui
 n’invite pas d’autres personnes (Clause 7.1). Le propriétaire invite une personne par son e-mail,
 pour un ou plusieurs projets du compte, dans Paramètres → Personnes. La personne reçoit un e-mail d’invitation et se connecte au
