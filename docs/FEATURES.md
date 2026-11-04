@@ -408,8 +408,16 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   copy button; the store's own domain and, if it also opens there, its `myshopify.com` address
   among the allowed origins, linked to Settings; open a page of the store), then one line saying the
   checkout steps and the completed purchase are not measured (Shopify runs no theme code there) and
-  one that a theme update or switch can drop the edit. The
-  tabs wrap to a second row on a phone. Step 2, shared by the tabs, waits for the first event, checked
+  one that a theme update or switch can drop the edit. "WordPress" installs a site through the free
+  WPCode – Insert Headers and Footers plugin: four numbered steps (Plugins › Add Plugin, search
+  WPCode, install and activate it, linked to its wordpress.org page; the classic snippet, which loads
+  `dist/pyxis.global.js` from jsDelivr and calls `pyxis.init`, pasted in Code Snippets › Header &
+  Footer › Header, with a copy button; the site's address from Settings › General among the allowed
+  origins, linked to Settings; clear a cache plugin's cache and open a page), then four lines: a
+  site with Google Tag Manager can use that tab, a plugin that delays or combines JavaScript must
+  leave both scripts out, the snippet survives a theme update, and WordPress.com needs a plan that
+  allows plugins. The plugin's and WordPress's own labels appear as their translations show them.
+  The tabs wrap to a second row on a phone. Step 2, shared by the tabs, waits for the first event, checked
   again every few seconds (the chosen tab survives each re-read); once it arrives, "Open the
   dashboard" and a ready question for Claude about the project. Step 3, optional, connects Claude
   through its connector directory or `claude mcp add` against the API's `/mcp`, read-only and
@@ -475,7 +483,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   own title, canonical address, `hreflang` alternates, share image and `SoftwareApplication`
   structured data, plus its own `robots.txt`, `sitemap.xml` and an `llms.txt` that tells language
   models and coding agents what Pyxis is, how to install the tracker (with a bundler, through a
-  coding agent, with the Google Tag Manager template or in a Shopify theme), the rules an
+  coding agent, with the Google Tag Manager template, in a Shopify theme or with a WordPress header plugin), the rules an
   integration must follow and where to send a person who needs support (404 on the demo and
   the dashboard). The footer's Support column and the last FAQ answer give the support address
   and the reply times. Every address that names a
@@ -493,9 +501,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   behind a menu button between 768 and 1023px (the menu closes once a link is chosen), and a
   phone shows only the brand, the language, the theme and Sign in. Its sections: what never gets stored, what
   the dashboard answers (each card opens that screen in the demo), how a site installs the
-  tracker (the places it installs in, by name and with no brand logo, then three tabs: with code,
-  with the Google Tag Manager template and in a Shopify theme, the last two marked as needing no
-  code and the Shopify one saying the checkout is not measured; while sign-up is open, also a highlighted card with a ready request to paste into a
+  tracker (the places it installs in, by name, WordPress among them, then four tabs: with code,
+  with the Google Tag Manager template, in a Shopify theme and with the free WPCode plugin on
+  WordPress (the classic snippet), the last three marked as needing no code and the Shopify one
+  saying the checkout is not measured; while sign-up is open, also a highlighted card with a ready request to paste into a
   coding agent, the coding agents it works with by name, a large copy button and a second robot
   that cheers when the request is copied), the sites it measures, how it is built, the architecture, a comparison, the hosted
   plan's price (monthly or yearly, a CSS-only switch, and "Start your free trial" to `/sign-up`
@@ -504,7 +513,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   language than Portuguese, an approximate price in the reader's currency under the price in reais,
   euros or US dollars by the page's language and both in Spanish, in whole units, from the European
   Central Bank's daily reference rates, read on the server, cached for a day and left out when they
-  cannot be read), a FAQ (including whether it works on a Shopify store and with Google Tag Manager) and the
+  cannot be read), a FAQ (including whether it works on a Shopify store, on WordPress and with Google Tag Manager) and the
   introduction post. Once the API says the free plan is open, the
   same status turns the page to it: the hero leads with "Start free" and "See the Pro plan",
   pricing shows a Hobby card (what it includes, the Tag Manager and Shopify install, and under its
