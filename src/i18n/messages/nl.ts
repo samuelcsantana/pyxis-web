@@ -538,6 +538,21 @@ export const nl = translation({
       'De eigenaar van het account vindt de reden, en hoe je bezwaar maakt, onder Account en facturatie.',
     open: 'Account en facturatie openen',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Beschikbaar met Pro',
+    body: '{feature} hoort bij het Pro-abonnement, vanaf R$ 39 per maand. De rest van het dashboard blijft zoals het is.',
+    refused: 'Pyxis heeft dit niet gedaan: hiervoor is het Pro-abonnement nodig.',
+    subscribe: 'Bekijk het Pro-abonnement',
+    askOwner: 'Alleen de accounteigenaar kan een abonnement nemen, in Account en facturatie.',
+    features: {
+      publicShareLink: 'De openbare link',
+      slackAlerts: 'Meldingen naar Slack sturen',
+      annotationsByToken: 'Aantekeningen maken met een toegangstoken',
+      ga4Import: 'De historie uit Google Analytics 4 importeren',
+      searchConsole: 'Google Search Console uitlezen',
+    },
+  },
   projectIngestion: {
     label: 'Projectstatus',
     suspended:

@@ -1,4 +1,5 @@
 export const ACCOUNT_SUSPENDED_CODE = 'account_suspended';
+export const PLAN_REQUIRED_CODE = 'plan_required';
 
 export class UnauthenticatedError extends Error {
   constructor() {
@@ -48,4 +49,8 @@ export class ApiRequestError extends Error {
 
 export function isAccountSuspended(error: unknown): boolean {
   return error instanceof ApiRequestError && error.code === ACCOUNT_SUSPENDED_CODE;
+}
+
+export function isPlanRequired(error: unknown): boolean {
+  return error instanceof ApiRequestError && error.code === PLAN_REQUIRED_CODE;
 }

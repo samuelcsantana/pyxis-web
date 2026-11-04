@@ -547,6 +547,21 @@ export const fr = translation({
       'Le propriétaire du compte trouve le motif, et comment le contester, dans Compte et facturation.',
     open: 'Ouvrir Compte et facturation',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Disponible avec Pro',
+    body: '{feature} fait partie de la formule Pro, à partir de 39 R$ par mois. Le reste du tableau de bord ne change pas.',
+    refused: 'Pyxis ne l’a pas fait : il faut la formule Pro.',
+    subscribe: 'Voir la formule Pro',
+    askOwner: 'Seul le propriétaire du compte peut s’abonner, dans Compte et facturation.',
+    features: {
+      publicShareLink: 'Le lien public',
+      slackAlerts: 'L’envoi d’alertes vers Slack',
+      annotationsByToken: 'La création d’annotations avec un jeton d’accès',
+      ga4Import: 'L’importation de l’historique de Google Analytics 4',
+      searchConsole: 'La lecture de Google Search Console',
+    },
+  },
   projectIngestion: {
     label: 'État du projet',
     suspended:

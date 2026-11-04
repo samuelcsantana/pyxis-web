@@ -530,6 +530,21 @@ export const es = translation({
     owner: 'El dueño de la cuenta encuentra el motivo, y cómo impugnarla, en Cuenta y facturación.',
     open: 'Abrir Cuenta y facturación',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Disponible en Pro',
+    body: '{feature} forma parte del plan Pro, desde R$ 39 al mes. El resto del panel sigue como está.',
+    refused: 'Pyxis no lo hizo: necesita el plan Pro.',
+    subscribe: 'Ver el plan Pro',
+    askOwner: 'Solo el dueño de la cuenta puede suscribirse, en Cuenta y facturación.',
+    features: {
+      publicShareLink: 'El enlace público',
+      slackAlerts: 'El envío de alertas a Slack',
+      annotationsByToken: 'La creación de anotaciones con un token de acceso',
+      ga4Import: 'La importación del historial de Google Analytics 4',
+      searchConsole: 'La lectura de Google Search Console',
+    },
+  },
   projectIngestion: {
     label: 'Estado del proyecto',
     suspended:

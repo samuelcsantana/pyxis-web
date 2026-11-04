@@ -547,6 +547,21 @@ export const de = translation({
       'Der Inhaber des Kontos findet den Grund und wie man Einspruch einlegt unter Konto und Abrechnung.',
     open: 'Konto und Abrechnung öffnen',
   },
+  availableOnPro: {
+    badge: 'Pro',
+    title: 'Im Pro-Plan verfügbar',
+    body: '{feature} gehört zum Pro-Plan, ab R$ 39 pro Monat. Der Rest des Dashboards bleibt, wie er ist.',
+    refused: 'Pyxis hat das nicht ausgeführt: Dafür braucht es den Pro-Plan.',
+    subscribe: 'Pro-Plan ansehen',
+    askOwner: 'Nur der Kontoinhaber kann abonnieren, unter Konto und Abrechnung.',
+    features: {
+      publicShareLink: 'Der öffentliche Link',
+      slackAlerts: 'Das Senden von Warnungen an Slack',
+      annotationsByToken: 'Das Erstellen von Anmerkungen mit einem Zugriffstoken',
+      ga4Import: 'Der Import des Verlaufs aus Google Analytics 4',
+      searchConsole: 'Das Auslesen der Google Search Console',
+    },
+  },
   projectIngestion: {
     label: 'Projektstatus',
     suspended:
