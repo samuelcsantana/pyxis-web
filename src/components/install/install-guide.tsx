@@ -15,11 +15,13 @@ import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
 import { claudeCodeCommand } from '@/domain/connections';
 import {
   agentPrompt,
+  classicSnippet,
   connectorUrlOf,
   installCommand,
   moduleSnippet,
   scriptSnippet,
   TAG_MANAGER_TEMPLATE_FILE_URL,
+  WORDPRESS_HEADER_PLUGIN_URL,
 } from '@/domain/install';
 import { canManageProject, projectActivity, type ProjectSettings } from '@/domain/project-settings';
 import type { I18n } from '@/i18n/i18n';
@@ -46,8 +48,11 @@ const TAB_ICON_PATHS = {
   withTagManager:
     'M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z M7.5 7.5h.01',
   withShopify: 'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z M3 6h18 M16 10a4 4 0 0 1-8 0',
+  withWordPress: 'M12 22v-5 M9 8V2 M15 8V2 M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z',
 } as const;
 const SHOPIFY_LAST_STEPS = ['origins', 'open'] as const;
+const WORDPRESS_LAST_STEPS = ['origins', 'open'] as const;
+const WORDPRESS_NOTES = ['tagManager', 'optimization', 'themeUpdate', 'wordPressCom'] as const;
 const CLOSING_BODY_TAG = '</body>';
 
 export const INSTALL_TABS = {
@@ -55,6 +60,7 @@ export const INSTALL_TABS = {
   withAgent: 'install-with-agent',
   withTagManager: 'install-with-tag-manager',
   withShopify: 'install-with-shopify',
+  withWordPress: 'install-with-wordpress',
 } as const;
 
 function codeText(text: string): ReactNode {
@@ -249,11 +255,11 @@ function WithTagManager({ publicKey, endpoint, labels, i18n }: StepProps) {
   );
 }
 
-interface WithShopifyProps extends StepProps {
+interface WithSettingsLinkProps extends StepProps {
   readonly settingsLink: string;
 }
 
-function WithShopify({ publicKey, endpoint, settingsLink, labels, i18n }: WithShopifyProps) {
+function WithShopify({ publicKey, endpoint, settingsLink, labels, i18n }: WithSettingsLinkProps) {
   const { t } = i18n;
   const slots = {
     b: TAG_MANAGER_SLOTS.b,
@@ -292,6 +298,56 @@ function WithShopify({ publicKey, endpoint, settingsLink, labels, i18n }: WithSh
       />
       <p className={NOTE}>{t('install.shopify.checkout')}</p>
       <p className={NOTE}>{t('install.shopify.themeUpdate')}</p>
+    </>
+  );
+}
+
+function WithWordPress({ publicKey, endpoint, settingsLink, labels, i18n }: WithSettingsLinkProps) {
+  const { t } = i18n;
+  const slots = {
+    b: TAG_MANAGER_SLOTS.b,
+    code: codeText,
+    plugin: (text: string) => (
+      <a href={WORDPRESS_HEADER_PLUGIN_URL} className={TEXT_LINK}>
+        {text}
+      </a>
+    ),
+    settings: (text: string) => (
+      <ViewKeepingLink href={settingsLink} className={TEXT_LINK}>
+        {text}
+      </ViewKeepingLink>
+    ),
+  };
+  return (
+    <>
+      <p className="text-sm">{t('install.wordPress.lead')}</p>
+      <NumberedSteps
+        steps={[
+          { id: 'plugin', content: <p>{rich(t('install.wordPress.steps.plugin'), slots)}</p> },
+          {
+            id: 'paste',
+            content: (
+              <>
+                <p>{rich(t('install.wordPress.steps.paste'), slots)}</p>
+                <CodeBlock
+                  id="install-wordpress-script"
+                  code={classicSnippet(publicKey, endpoint)}
+                  labels={labels}
+                />
+              </>
+            ),
+          },
+          ...WORDPRESS_LAST_STEPS.map((step) => ({
+            id: step,
+            content: <p>{rich(t(`install.wordPress.steps.${step}`), slots)}</p>,
+          })),
+        ]}
+      />
+      {WORDPRESS_NOTES.map((note) => (
+        <p key={note} className={NOTE}>
+          {t(`install.wordPress.${note}`)}
+        </p>
+      ))}
     </>
   );
 }
@@ -375,6 +431,19 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
                 label: <TabLabel icon="withShopify" text={t('install.withShopify')} />,
                 panel: (
                   <WithShopify
+                    publicKey={key}
+                    endpoint={endpoint}
+                    settingsLink={settingsHref(settings.id)}
+                    labels={labels}
+                    i18n={i18n}
+                  />
+                ),
+              },
+              {
+                id: INSTALL_TABS.withWordPress,
+                label: <TabLabel icon="withWordPress" text={t('install.withWordPress')} />,
+                panel: (
+                  <WithWordPress
                     publicKey={key}
                     endpoint={endpoint}
                     settingsLink={settingsHref(settings.id)}

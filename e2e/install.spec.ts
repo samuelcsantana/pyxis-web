@@ -35,6 +35,11 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expect(page.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
       expect(await axeViolations(page)).toEqual([]);
       expect(await sidewaysOverflow(page)).toBe(0);
+
+      await page.getByRole('tab', { name: 'WordPress' }).click();
+      await expect(page.getByRole('tabpanel', { name: 'WordPress' })).toBeVisible();
+      expect(await axeViolations(page)).toEqual([]);
+      expect(await sidewaysOverflow(page)).toBe(0);
     });
   });
 }
@@ -86,12 +91,13 @@ test("hands the agent a request with the project's key, the API and the site", a
   );
 });
 
-test('moves between the four ways to install with the arrow keys', async ({ page }) => {
+test('moves between the five ways to install with the arrow keys', async ({ page }) => {
   await page.goto(INSTALL_PATH);
   const yourself = page.getByRole('tab', { name: 'Yourself' });
   const withAgent = page.getByRole('tab', { name: 'With an AI agent' });
   const withTagManager = page.getByRole('tab', { name: 'Google Tag Manager' });
   const withShopify = page.getByRole('tab', { name: 'Shopify' });
+  const withWordPress = page.getByRole('tab', { name: 'WordPress' });
 
   await yourself.focus();
   await page.keyboard.press('ArrowRight');
@@ -109,6 +115,11 @@ test('moves between the four ways to install with the arrow keys', async ({ page
 
   await expect(withShopify).toBeFocused();
   await expect(page.getByRole('tabpanel', { name: 'Shopify' })).toBeVisible();
+
+  await page.keyboard.press('ArrowRight');
+
+  await expect(withWordPress).toBeFocused();
+  await expect(page.getByRole('tabpanel', { name: 'WordPress' })).toBeVisible();
 
   await page.keyboard.press('ArrowRight');
 
@@ -168,6 +179,35 @@ test("walks a Shopify store through its theme with the project's snippet", async
   await expect(shopify.getByRole('button', { name: 'Copied' })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
     /^<script type="module">\s+import \{ init \} from 'https:\/\/cdn\.jsdelivr\.net\/npm\/pyxis-analytics@[\d.]+\/dist\/index\.js';\s+init\(\{ key: 'pyxis_pk_\w+', endpoint: 'https:\/\/api\.pyxis-analytics\.dev' \}\);\s+<\/script>$/,
+  );
+});
+
+test("walks a WordPress site through a header plugin with the project's classic snippet", async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto(INSTALL_PATH);
+
+  await page.getByRole('tab', { name: 'WordPress' }).click();
+
+  const wordPress = page.getByRole('tabpanel', { name: 'WordPress' });
+  await expect(page.getByRole('tabpanel', { name: 'Yourself' })).toBeHidden();
+  await expect(wordPress.getByRole('listitem')).toHaveCount(4);
+  await expect(wordPress.getByRole('link', { name: 'WPCode' })).toHaveAttribute(
+    'href',
+    'https://wordpress.org/plugins/insert-headers-and-footers/',
+  );
+  await expect(wordPress.getByRole('link', { name: 'Settings' })).toHaveAttribute(
+    'href',
+    `/${STORE_ID}/settings`,
+  );
+  await wordPress.getByRole('button', { name: 'Copy' }).click();
+  await expect(wordPress.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
+    /^<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/pyxis-analytics@[\d.]+\/dist\/pyxis\.global\.js"><\/script>\s+<script>\s+pyxis\.init\(\{ key: 'pyxis_pk_\w+', endpoint: 'https:\/\/api\.pyxis-analytics\.dev' \}\);\s+<\/script>$/,
   );
 });
 

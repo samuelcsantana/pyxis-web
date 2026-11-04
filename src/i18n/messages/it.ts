@@ -685,6 +685,7 @@ export const it = translation({
     withAgent: 'Con un agente IA',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Apri il repository del sito in Claude Code, in Cursor o in un altro agente di programmazione e incolla questa richiesta. Contiene già la chiave pubblica e l’indirizzo di questo progetto.',
       prompt:
@@ -745,6 +746,26 @@ export const it = translation({
         'Shopify non esegue codice del tema nel checkout, quindi i passaggi del checkout e l’acquisto completato non vengono misurati.',
       themeUpdate:
         'Aggiornare o cambiare il tema può cancellare questa modifica: controlla che lo snippet sia ancora nel nuovo tema.',
+    },
+    wordPress: {
+      lead: 'Su un sito WordPress, incolla lo snippet con un plugin gratuito, senza toccare il tema. Misura ogni pagina che il sito mostra.',
+      steps: {
+        plugin:
+          'Nell’admin di WordPress, apri <b>Plugin</b> › <b>Aggiungi plugin</b>, cerca <plugin>WPCode</plugin>, poi installa e attiva <b>WPCode – Insert Headers and Footers</b>. È gratuito.',
+        paste:
+          'Apri <b>Snippet di codice</b> › <b>Header & Footer</b>, incolla questo snippet in <b>Header</b> e scegli <b>Salva le modifiche</b>:',
+        origins:
+          'In <settings>Impostazioni</settings>, le origini consentite devono contenere l’indirizzo del sito, quello che WordPress mostra in <b>Impostazioni</b> › <b>Generale</b> › <b>Indirizzo sito (URL)</b>, come <code>https://www.iltuosito.it</code>.',
+        open: 'Se il sito usa un plugin di cache, svuota la sua cache. Poi apri una pagina del sito. Il passo 2, qui sotto, ti avvisa quando arriva il primo evento.',
+      },
+      tagManager:
+        'Se il sito carica già Google Tag Manager, va bene anche la scheda Google Tag Manager, senza nessuno snippet.',
+      optimization:
+        'Un plugin che ritarda o unisce il JavaScript, per rendere il sito più veloce, deve lasciare fuori i due script di Pyxis.',
+      themeUpdate:
+        'Lo snippet sta nel plugin, non nel tema, quindi aggiornare o cambiare il tema lo mantiene.',
+      wordPressCom:
+        'Su WordPress.com, aggiungere un plugin richiede un piano che consenta i plugin.',
     },
     step3: '3. Verifica con Claude (facoltativo)',
     claude: {

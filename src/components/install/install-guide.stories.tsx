@@ -129,6 +129,45 @@ export const WithShopifyOnAPhone: Story = {
   },
 };
 
+export const WithWordPress: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'WordPress' }));
+    const panel = canvas.getByRole('tabpanel', { name: 'WordPress' });
+    await expect(panel).toBeVisible();
+    await expect(within(panel).getByRole('link', { name: 'WPCode' })).toBeVisible();
+    await expect(within(panel).getByText('Header & Footer')).toBeVisible();
+  },
+};
+
+export const WithWordPressInPortuguese: Story = {
+  globals: { locale: 'pt-BR' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'WordPress' }));
+    const panel = canvas.getByRole('tabpanel', { name: 'WordPress' });
+    await expect(within(panel).getByText('Cabeçalho e rodapé')).toBeVisible();
+  },
+};
+
+export const WithWordPressInTheDarkTheme: Story = {
+  globals: { theme: 'dark' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'WordPress' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'WordPress' })).toBeVisible();
+  },
+};
+
+export const WithWordPressOnAPhone: Story = {
+  globals: { viewport: { value: 'mobile1' } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('tab', { name: 'WordPress' }));
+    await expect(canvas.getByRole('tabpanel', { name: 'WordPress' })).toBeVisible();
+  },
+};
+
 export const OnAPhone: Story = {
   globals: { viewport: { value: 'mobile1' } },
   play: async ({ canvasElement }) => {

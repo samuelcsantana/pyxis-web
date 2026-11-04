@@ -673,6 +673,7 @@ export const ptBR = translation({
     withAgent: 'Com um agente de IA',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Abra o repositório do site no Claude Code, no Cursor ou em outro agente de código e cole este pedido. Ele já traz a chave pública e o endereço deste projeto.',
       prompt:
@@ -732,6 +733,25 @@ export const ptBR = translation({
         'A Shopify não roda código do tema no checkout, então os passos do checkout e a compra concluída não são medidos.',
       themeUpdate:
         'Atualizar ou trocar o tema pode apagar essa edição: confira se o trecho continua no tema novo.',
+    },
+    wordPress: {
+      lead: 'Num site WordPress, cole o trecho com um plugin gratuito, sem mexer no tema. Ele mede todas as páginas que o site mostra.',
+      steps: {
+        plugin:
+          'No admin do WordPress, abra <b>Plugins</b> › <b>Adicionar plugin</b>, pesquise <plugin>WPCode</plugin> e instale e ative o <b>WPCode – Insert Headers and Footers</b>. Ele é gratuito.',
+        paste:
+          'Abra <b>Snippets de código</b> › <b>Cabeçalho e rodapé</b>, cole este trecho em <b>Cabeçalho</b> e escolha <b>Salvar alterações</b>:',
+        origins:
+          'Em <settings>Configurações</settings>, as origens permitidas precisam ter o endereço do site, o que o WordPress mostra em <b>Configurações</b> › <b>Geral</b> › <b>Endereço do site (URL)</b>, como <code>https://www.seusite.com.br</code>.',
+        open: 'Se o site usa um plugin de cache, limpe o cache dele. Depois abra uma página do site. O passo 2, aqui embaixo, avisa quando o primeiro evento chegar.',
+      },
+      tagManager:
+        'Se o site já carrega o Google Tag Manager, a aba Google Tag Manager também serve, sem trecho nenhum.',
+      optimization:
+        'Um plugin que atrasa ou junta o JavaScript, para deixar o site mais rápido, precisa deixar os dois scripts do Pyxis de fora.',
+      themeUpdate:
+        'O trecho fica no plugin, não no tema, então atualizar ou trocar o tema não o apaga.',
+      wordPressCom: 'No WordPress.com, adicionar um plugin exige um plano que permita plugins.',
     },
     step3: '3. Confira com o Claude (opcional)',
     claude: {

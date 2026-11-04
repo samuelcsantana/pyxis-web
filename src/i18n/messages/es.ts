@@ -678,6 +678,7 @@ export const es = translation({
     withAgent: 'Con un agente de IA',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Abre el repositorio del sitio en Claude Code, en Cursor o en otro agente de código y pega esta petición. Ya incluye la clave pública y la dirección de este proyecto.',
       prompt:
@@ -738,6 +739,25 @@ export const es = translation({
         'Shopify no ejecuta código del tema en el checkout, así que los pasos del checkout y la compra completada no se miden.',
       themeUpdate:
         'Actualizar o cambiar el tema puede borrar esta edición: comprueba que el fragmento sigue en el tema nuevo.',
+    },
+    wordPress: {
+      lead: 'En un sitio WordPress, pega el fragmento con un plugin gratuito, sin tocar el tema. Mide todas las páginas que muestra el sitio.',
+      steps: {
+        plugin:
+          'En el admin de WordPress, abre <b>Plugins</b> › <b>Añadir plugin</b>, busca <plugin>WPCode</plugin> e instala y activa <b>WPCode – Insert Headers and Footers</b>. Es gratuito.',
+        paste:
+          'Abre <b>Fragmentos de código</b> › <b>Cabecera y pie</b>, pega este fragmento en <b>Cabecera</b> y elige <b>Guardar los cambios</b>:',
+        origins:
+          'En <settings>Configuración</settings>, los orígenes permitidos deben incluir la dirección del sitio, la que WordPress muestra en <b>Ajustes</b> › <b>Generales</b> › <b>Dirección del sitio (URL)</b>, como <code>https://www.tusitio.com</code>.',
+        open: 'Si el sitio usa un plugin de caché, vacía su caché. Después abre una página del sitio. El paso 2, aquí abajo, avisa cuando llegue el primer evento.',
+      },
+      tagManager:
+        'Si el sitio ya carga Google Tag Manager, la pestaña Google Tag Manager también sirve, sin ningún fragmento.',
+      optimization:
+        'Un plugin que retrasa o combina el JavaScript, para que el sitio vaya más rápido, debe dejar fuera los dos scripts de Pyxis.',
+      themeUpdate:
+        'El fragmento vive en el plugin, no en el tema, así que actualizar o cambiar el tema no lo borra.',
+      wordPressCom: 'En WordPress.com, añadir un plugin requiere un plan que permita plugins.',
     },
     step3: '3. Compruébalo con Claude (opcional)',
     claude: {

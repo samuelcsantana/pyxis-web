@@ -686,6 +686,7 @@ export const nl = translation({
     withAgent: 'Met een AI-agent',
     withTagManager: 'Google Tag Manager',
     withShopify: 'Shopify',
+    withWordPress: 'WordPress',
     agent: {
       lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere coding-agent en plak dit verzoek. Het bevat al de publieke sleutel en het adres van dit project.',
       prompt:
@@ -745,6 +746,26 @@ export const nl = translation({
         'Shopify voert in de checkout geen themacode uit, dus de checkoutstappen en de afgeronde aankoop worden niet gemeten.',
       themeUpdate:
         'Het thema bijwerken of wisselen kan deze wijziging wissen: controleer of het fragment nog in het nieuwe thema staat.',
+    },
+    wordPress: {
+      lead: 'Plak op een WordPress-site het fragment met een gratis plugin, zonder het thema aan te raken. Het meet elke pagina die de site toont.',
+      steps: {
+        plugin:
+          'Open in de WordPress-beheeromgeving <b>Plugins</b> › <b>Plugin toevoegen</b>, zoek <plugin>WPCode</plugin> en installeer en activeer <b>WPCode – Insert Headers and Footers</b>. Het is gratis.',
+        paste:
+          'Open <b>Code snippets</b> › <b>Header & footer</b>, plak dit fragment in <b>Header</b> en kies <b>Wijzigingen opslaan</b>:',
+        origins:
+          'Onder <settings>Instellingen</settings> moeten de toegestane origins het adres van de site bevatten, het adres dat WordPress toont onder <b>Instellingen</b> › <b>Algemeen</b> › <b>Site adres (URL)</b>, zoals <code>https://www.jouwsite.nl</code>.',
+        open: 'Gebruikt de site een cacheplugin, leeg dan de cache. Open daarna een pagina van de site. Stap 2, hieronder, laat weten wanneer het eerste event binnenkomt.',
+      },
+      tagManager:
+        'Laadt de site al Google Tag Manager, dan werkt het tabblad Google Tag Manager ook, zonder fragment.',
+      optimization:
+        'Een plugin die JavaScript uitstelt of samenvoegt om de site sneller te maken, moet de twee Pyxis-scripts overslaan.',
+      themeUpdate:
+        'Het fragment staat in de plugin, niet in het thema, dus het thema bijwerken of wisselen laat het staan.',
+      wordPressCom:
+        'Op WordPress.com vraagt een plugin toevoegen om een abonnement dat plugins toestaat.',
     },
     step3: '3. Controleer het met Claude (optioneel)',
     claude: {
