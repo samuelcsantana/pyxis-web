@@ -5,7 +5,14 @@ import {
   TAG_MANAGER_TEMPLATE_URL,
   WORDPRESS_HEADER_PLUGIN_URL,
 } from '@/domain/install';
-import { FREE_PLAN_EVENTS_PER_MONTH, offersTheFreePlan, type SignUpOffer } from '@/domain/sign-up';
+import {
+  FREE_PLAN_EVENTS_PER_MONTH,
+  offersTheFreePlan,
+  PRO_PLAN_EVENTS_PER_MONTH,
+  PRO_PLAN_PEOPLE,
+  PRO_PLAN_PROJECTS,
+  type SignUpOffer,
+} from '@/domain/sign-up';
 import {
   FREE_REPLY_DAYS,
   PAID_REPLY_BUSINESS_DAYS,
@@ -20,11 +27,13 @@ const HOSTED_API_URL = 'https://api.pyxis-analytics.dev';
 const INTRODUCTION_POST =
   'https://www.samuelsantana.dev/en/blog/pyxis-analytics-without-cookies-ip-or-personal-data';
 const RUNBOOK = `${LANDING_LINKS.api}/blob/main/docs/RUNBOOK.md`;
-const FREE_PLAN_EVENTS = new Intl.NumberFormat('en-US').format(FREE_PLAN_EVENTS_PER_MONTH);
+const ENGLISH_NUMBER = new Intl.NumberFormat('en-US');
+const FREE_PLAN_EVENTS = ENGLISH_NUMBER.format(FREE_PLAN_EVENTS_PER_MONTH);
+const PRO_PLAN = `${ENGLISH_NUMBER.format(PRO_PLAN_EVENTS_PER_MONTH)} events a month, ${String(PRO_PLAN_PROJECTS)} sites and ${String(PRO_PLAN_PEOPLE)} people, R$ 39 a month`;
 
 function hostedPlanOf(offer: SignUpOffer): string {
   return offersTheFreePlan(offer)
-    ? `Hobby plan, free: ${FREE_PLAN_EVENTS} events a month on one site, no card; Pro plan for more`
+    ? `Hobby plan, free: ${FREE_PLAN_EVENTS} events a month on one site, no card; Pro plan: ${PRO_PLAN}`
     : '14-day free trial';
 }
 
