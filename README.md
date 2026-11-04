@@ -385,7 +385,7 @@ that says why:
 
 | Route class                                            | Budget (KiB gzip) |
 | ------------------------------------------------------ | ----------------- |
-| Sign-in, home and not-found pages                      | 156               |
+| Sign-in, home and not-found pages                      | 157               |
 | Sign-up page                                           | 162               |
 | Dashboard screens without a chart                      | 174               |
 | Dashboard screens with a chart (Overview, Acquisition) | 171               |
@@ -438,7 +438,9 @@ loads; every one still reports its first-load JavaScript. The "new · Refresh" b
 171.0 KiB). The entry budget went from 155 to 156 KiB with `pyxis-analytics` 0.7.0, which the
 home page loads to measure itself: the unique-visitor kind, the period marker and its removal on
 opt-out and under Global Privacy Control or Do Not Track added about 0.4 KiB, and the home page
-measured 155.2 KiB.
+measured 155.2 KiB. It went to 157 KiB when the home page's install tabs took the yellow thumb that
+slides to the tab chosen: the indicator hook the dashboard's switches already share now loads on
+the home page too, 0.6 KiB more (155.9 to 156.5 KiB).
 
 </details>
 
