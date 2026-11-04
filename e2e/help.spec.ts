@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
-import { currentNavigationLinks } from './navigation';
+import { currentNavigationLinks, openAccountMenu } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 
@@ -18,60 +18,52 @@ for (const colorScheme of ['light', 'dark'] as const) {
   });
 }
 
-test('opens from the foot of the sidebar with the support address and the reply time of the plan', async ({
+test('opens from the account menu inside the settings, with the support address and the reply time', async ({
   page,
   isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Help and support' })
-    .click();
+  await openAccountMenu(page, isMobile);
+  await page.locator('details[open]').getByRole('link', { name: 'Help and support' }).click();
 
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help$`));
-  await expect(page).toHaveTitle('Help and support · My site · Pyxis');
-  const write = page.getByRole('region', { name: 'Write to support' });
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/help$`));
+  const settings = page.getByRole('dialog', { name: 'Settings' });
+  const write = settings.getByRole('region', { name: 'Write to support' });
   await expect(write.getByText('hello@pyxis-analytics.dev')).toBeVisible();
   await expect(write.getByText(/reply within 2 business days/)).toBeVisible();
 
-  await page.getByRole('link', { name: 'How to install' }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install$`));
+  await settings.getByRole('link', { name: 'How to install' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/overview#settings/install$`));
 });
 
-test('keeps the period of the screen through Help and Install', async ({ page, isMobile }) => {
+test('keeps the screen and its period behind the help and the install guide', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/acquisition?range=today`);
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page
-    .getByRole('navigation', { name: 'Main navigation' })
-    .getByRole('link', { name: 'Help and support' })
-    .click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/help\\?range=today$`));
+  await openAccountMenu(page, isMobile);
+  await page.locator('details[open]').getByRole('link', { name: 'Help and support' }).click();
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/acquisition\\?range=today#settings/help$`));
 
-  await page.getByRole('link', { name: 'How to install' }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/install\\?range=today$`));
+  await page.getByRole('dialog').getByRole('link', { name: 'How to install' }).click();
+  await expect(page).toHaveURL(
+    new RegExp(`/${STORE_ID}/acquisition\\?range=today#settings/install$`),
+  );
 
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Open menu' }).click();
-  }
-  await page.getByRole('link', { name: 'Visits' }).click();
-  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/visits\\?range=today$`));
+  await page.keyboard.press('Escape');
+  await expect(page).toHaveURL(new RegExp(`/${STORE_ID}/acquisition\\?range=today$`));
 });
 
-test('marks its own item in the foot as where you are', async ({ page, isMobile }) => {
+test('marks nothing in the navigation on the help page, which opens as settings', async ({
+  page,
+  isMobile,
+}) => {
   await page.goto(`/${STORE_ID}/help`);
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
 
-  const current = currentNavigationLinks(page);
-  await expect(current).toHaveCount(1);
-  await expect(current).toBeVisible();
-  await expect(current).toHaveAccessibleName('Help and support');
+  await expect(currentNavigationLinks(page)).toHaveCount(0);
   await expect(page.locator('summary[data-current]')).toHaveCount(0);
 });
 

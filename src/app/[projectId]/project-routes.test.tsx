@@ -109,7 +109,8 @@ describe('ProjectLayout', () => {
     expect(links[0]).toHaveAccessibleName('Skip to content');
     expect(links[0]).toHaveAttribute('href', '#content');
     const navigation = screen.getByRole('navigation', { name: 'Main navigation' });
-    expect(within(navigation).getByText('Account and preferences')).toBeInTheDocument();
+    expect(within(navigation).getByText('Account menu')).toBeInTheDocument();
+    expect(document.querySelector('dialog')).toBeNull();
     expect(within(navigation).getByRole('link', { name: 'Pyxis', hidden: true })).toHaveAttribute(
       'href',
       'https://pyxis-analytics.dev/',
@@ -187,7 +188,8 @@ describe('ProjectLayout', () => {
       }),
     );
 
-    expect(screen.getByText('41% of the month')).toBeInTheDocument();
+    expect(screen.getByText('41%')).toBeInTheDocument();
+    expect(screen.getByText('· Pro')).toBeInTheDocument();
   });
 
   it("warns about an owned account's failed payment, linking to billing", async () => {

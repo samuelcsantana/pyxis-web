@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test';
 import { axeViolations, focusedElementIsUncovered, sidewaysOverflow } from './accessibility';
-import { openAccountMenu } from './navigation';
+import { accountMenu, openAccountMenu, openSettings } from './navigation';
 import { pickCustomRange } from './range-calendar';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
@@ -69,7 +69,6 @@ test('lists the screens in the order of the questions, then the project', async 
   ]);
   await expect(navigation.getByRole('list', { name: 'Project' }).getByRole('link')).toHaveText([
     'Install',
-    'Settings',
   ]);
 });
 
@@ -136,14 +135,15 @@ test("shows the owner the month's usage of the project's account, and where it c
   }).format(new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 1)));
   await page.goto(`/${STORE_ID}/overview`);
   await openNavigation(page, isMobile);
-  const account = page.locator('summary', { hasText: 'Account and preferences' });
+  const account = accountMenu(page);
 
-  await expect(account).toContainText('41% of the month');
+  await expect(account).toContainText('· Pro');
   await account.click();
   const usage = page.getByRole('link', { name: /41,230 of 100,000 events this month/ });
   await expect(usage).toBeVisible();
+  await expect(usage).toContainText('41%');
   await expect(usage).toContainText(`Count resets on ${resetsOn}`);
-  await expect(usage).toHaveAttribute('href', '/account');
+  await expect(usage).toHaveAttribute('href', '#settings/billing');
   expect(await axeViolations(page)).toEqual([]);
 });
 
@@ -359,12 +359,12 @@ test('remembers the chosen theme across a reload, and goes back to the system on
   await page.emulateMedia({ colorScheme: 'light' });
   await page.goto(`/${STORE_ID}/overview`);
 
-  await openAccountMenu(page, isMobile);
+  await openSettings(page, isMobile);
   await page.getByRole('button', { name: 'Dark' }).click();
-  await page.reload();
+  await page.goto(`/${STORE_ID}/overview`);
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await openAccountMenu(page, isMobile);
+  await openSettings(page, isMobile);
   await expect(page.getByRole('button', { name: 'Dark' })).toHaveAttribute('aria-pressed', 'true');
 
   await page.getByRole('button', { name: 'System' }).click();

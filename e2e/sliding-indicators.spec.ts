@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { openAccountMenu, openTheLanguagesOfTheAccountMenu } from './navigation';
+import { openSettings } from './navigation';
 
 const STORE_ID = '6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d';
 const ALIGNED_WITHIN_PX = 1;
@@ -72,43 +72,25 @@ test('moves the underline to the clicked feature tab', async ({ page }) => {
   await expectIndicatorOn(tabs, tabs.getByRole('link', { name: 'Screens' }));
 });
 
-test('slides the highlight to the chosen theme in the account menu', async ({ page, isMobile }) => {
-  await open(page, 'overview');
-  await openAccountMenu(page, isMobile);
-  const themes = page.getByRole('group', { name: 'Theme' });
-
-  await themes.getByRole('button', { name: 'Dark' }).click();
-
-  await expectIndicatorOn(themes, themes.getByRole('button', { name: 'Dark' }));
-});
-
-test('shows the theme highlight in place as the account menu opens, without sliding in', async ({
+test('keeps the chosen theme pressed after the language changes in place', async ({
   page,
   isMobile,
 }) => {
   await open(page, 'overview');
-  await openAccountMenu(page, isMobile);
-  const themes = page.getByRole('group', { name: 'Theme' });
-
-  const moving = await themes
-    .getByTestId('sliding-indicator')
-    .evaluate((indicator) => indicator.getAnimations().length);
-
-  expect(moving).toBe(0);
-  await expectIndicatorOn(themes, themes.getByRole('button', { name: 'System' }));
-});
-
-test('keeps the theme highlight on the chosen theme after the language changes in place', async ({
-  page,
-  isMobile,
-}) => {
-  await open(page, 'overview');
-  await openAccountMenu(page, isMobile);
-  await openTheLanguagesOfTheAccountMenu(page);
-
-  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await openSettings(page, isMobile);
+  await page.getByRole('button', { name: 'Dark' }).click();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: /^English/ })
+    .click();
+  await page
+    .getByRole('dialog', { name: 'Language' })
+    .getByRole('button', { name: /^Português/ })
+    .click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
-  const themes = page.getByRole('group', { name: 'Tema' });
-  await expectIndicatorOn(themes, themes.getByRole('button', { name: 'Do sistema' }));
+  await expect(page.getByRole('button', { name: 'Escuro' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 });

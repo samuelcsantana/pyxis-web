@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { contrastRatio, MIN_NON_TEXT_CONTRAST, MIN_STATE_CHANGE } from './contrast';
 import { focusRing } from './focus-ring';
-import { openAccountMenu } from './navigation';
+import { accountMenu, openAccountMenu, openSettings } from './navigation';
 import { readPaint } from './paint';
 import { pointerStates } from './pointer-states';
 
@@ -61,7 +61,7 @@ const REPRESENTATIVES: readonly Representative[] = [
     control: 'a theme choice',
     screen: 'overview',
     target: (page) => page.getByRole('button', { name: 'Dark' }),
-    prepare: openAccountMenu,
+    prepare: openSettings,
   },
   {
     control: 'a feature tab',
@@ -161,7 +161,7 @@ const SIDEBAR_CONTROLS: readonly SidebarControl[] = [
   },
   {
     control: 'the account menu',
-    target: (page) => page.locator('summary', { hasText: 'Account and preferences' }),
+    target: (page) => accountMenu(page),
   },
   {
     control: 'the sign-out button',

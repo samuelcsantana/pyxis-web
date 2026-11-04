@@ -1,5 +1,4 @@
 import { DASHBOARD_FILTER_PARAMETERS } from '@/domain/dashboard-filter-parameters';
-import { EXPORTS_SEGMENT } from '@/domain/exports';
 
 export const SCREENS = [
   {
@@ -102,9 +101,6 @@ export function screenHref(projectId: string, slug: ScreenSlug, query = ''): str
 
 export const SETTINGS_SEGMENT = 'settings';
 
-export const SETTINGS_ICON =
-  'M12 9a3 3 0 1 1 0 6a3 3 0 1 1 0-6 M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z';
-
 export function settingsHref(projectId: string): string {
   return `/${encodeURIComponent(projectId)}/${SETTINGS_SEGMENT}`;
 }
@@ -165,38 +161,6 @@ export function screenSlugOf(pathname: string): ScreenSlug | undefined {
   return segments.length === SCREEN_PATH_SEGMENTS && segments[1] !== '' && isScreenSlug(slug)
     ? slug
     : undefined;
-}
-
-export const SETTINGS_ITEM = 'settings';
-export const INSTALL_ITEM = 'install';
-export const HELP_ITEM = 'help';
-
-export type NavigationItem =
-  ScreenSlug | typeof SETTINGS_ITEM | typeof INSTALL_ITEM | typeof HELP_ITEM;
-
-interface ProjectPage {
-  readonly item: NavigationItem;
-  readonly segmentsAfter: number;
-}
-
-const PROJECT_PAGES: ReadonlyMap<string, ProjectPage> = new Map<string, ProjectPage>([
-  [SETTINGS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 0 }],
-  [INSTALL_SEGMENT, { item: INSTALL_ITEM, segmentsAfter: 0 }],
-  [EXPORTS_SEGMENT, { item: SETTINGS_ITEM, segmentsAfter: 1 }],
-  [HELP_SEGMENT, { item: HELP_ITEM, segmentsAfter: 0 }],
-]);
-
-export function navigationItemOf(pathname: string): NavigationItem | undefined {
-  const screen = screenSlugOf(pathname);
-  if (screen !== undefined) {
-    return screen;
-  }
-  const [, projectId = '', segment = '', ...after] = pathname.split('/');
-  const page = PROJECT_PAGES.get(segment);
-  if (projectId === '' || after.length !== page?.segmentsAfter || after.includes('')) {
-    return undefined;
-  }
-  return page.item;
 }
 
 export function returnPathOf(value: string | null | undefined): string | undefined {

@@ -109,14 +109,9 @@ export const it = translation({
     install: 'Installazione',
     installPending: 'In attesa',
     usage: {
-      share: '{share} del mese',
       events: '{count} su {limit} eventi questo mese',
       resets: 'Il conteggio si azzera il {date}',
     },
-    settings: 'Impostazioni',
-    account: 'Account e preferenze',
-    billing: 'Account e fatturazione',
-    help: 'Aiuto e assistenza',
   },
   theme: {
     switch: 'Cambia tema',
@@ -248,7 +243,6 @@ export const it = translation({
   },
   language: {
     label: 'Lingua',
-    current: 'Lingua: {name}',
   },
   settings: {
     title: 'Impostazioni',

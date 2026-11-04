@@ -6,6 +6,7 @@ import { NavigationPendingProvider, NavigationRegion } from '@/components/shell/
 import { Sidebar } from '@/components/shell/sidebar';
 import { SkipLink } from '@/components/shell/skip-link';
 import { AccountNoticeBanner } from '@/components/account/account-notice-banner';
+import { SettingsDialogMount } from '@/components/settings-dialog/settings-dialog-mount';
 import { DemoBanner } from '@/components/states/demo-banner';
 import { IngestionSuspendedBanner } from '@/components/states/ingestion-suspended-banner';
 import { ingestionSuspensionOf } from '@/domain/admin';
@@ -14,7 +15,6 @@ import { getI18n } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { bestEffortAccountsInView } from '@/lib/accounts-in-view';
 import { projectOrNotFound } from '@/lib/current-admin';
-import { chosenTheme } from '@/lib/theme-cookie';
 
 export interface ProjectLayoutProps {
   readonly children: ReactNode;
@@ -23,7 +23,7 @@ export interface ProjectLayoutProps {
 
 export default async function ProjectLayout({ children, params }: ProjectLayoutProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [i18n, { notice, canCreateProject, usage }] = await Promise.all([
+  const [i18n, { notice, canCreateProject, usage, plan }] = await Promise.all([
     getI18n(),
     bestEffortAccountsInView(new Date(), project),
   ]);
@@ -49,14 +49,15 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
           <Sidebar
             admin={admin}
             project={project}
-            theme={await chosenTheme()}
             i18n={i18n}
             chooseLocale={chooseLocale}
             canCreateProject={canCreateProject}
             usage={usage}
             demo={demo}
+            plan={plan}
           />
         </MobileMenu>
+        <SettingsDialogMount projectId={project.id} projectName={project.name} />
         <NavigationRegion className="relative flex min-w-0 flex-col">
           {demo ? <DemoBanner i18n={i18n} belowPhoneBar /> : null}
           {notice === null ? null : <AccountNoticeBanner notice={notice} i18n={i18n} />}

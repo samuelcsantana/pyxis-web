@@ -109,14 +109,9 @@ export const nl = translation({
     install: 'Installeren',
     installPending: 'In afwachting',
     usage: {
-      share: '{share} van de maand',
       events: '{count} van {limit} events deze maand',
       resets: 'De telling begint op {date} opnieuw',
     },
-    settings: 'Instellingen',
-    account: 'Account en voorkeuren',
-    billing: 'Account en facturatie',
-    help: 'Hulp en support',
   },
   theme: {
     switch: 'Thema wisselen',
@@ -251,7 +246,6 @@ export const nl = translation({
   },
   language: {
     label: 'Taal',
-    current: 'Taal: {name}',
   },
   settings: {
     title: 'Instellingen',

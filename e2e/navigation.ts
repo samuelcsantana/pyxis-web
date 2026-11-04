@@ -69,15 +69,34 @@ export function sawBusyContent(page: Page): Promise<boolean> {
   return page.evaluate((name) => Reflect.get(window, name) === true, BUSY_MARKER);
 }
 
+export const ACCOUNT_MENU = 'Account menu';
+
+export function accountMenu(page: Page, name: string = ACCOUNT_MENU) {
+  return page.locator('summary', { hasText: name });
+}
+
 export async function openAccountMenu(page: Page, isMobile: boolean): Promise<void> {
   if (isMobile) {
     await page.getByRole('button', { name: 'Open menu' }).click();
   }
-  const account = page.locator('summary', { hasText: 'Account and preferences' });
-  await account.click();
-  await expect(page.getByRole('group', { name: 'Theme' })).toBeVisible();
+  await accountMenu(page).click();
+  await expect(
+    page.locator('details[open]').getByRole('link', { name: 'Help and support' }),
+  ).toBeVisible();
 }
 
 export async function openTheLanguagesOfTheAccountMenu(page: Page): Promise<void> {
-  await page.locator('details details > summary').click();
+  await page.locator('details[open] button[aria-haspopup="dialog"]').click();
+  await expect(page.getByRole('dialog').getByRole('searchbox')).toBeFocused();
+}
+
+export async function openSettings(page: Page, isMobile: boolean): Promise<void> {
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Open menu' }).click();
+  }
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'Settings', exact: true })
+    .click();
+  await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
 }
