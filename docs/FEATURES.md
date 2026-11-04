@@ -56,20 +56,22 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   with an ellipsis. The Pyxis logo in the sidebar, and the project in the phone's bar, open the
   Overview of the project on screen with the period and the filters of the page. The screens are listed in the order of the questions they answer
   (Overview, Acquisition, Devices, Features, Funnel, Visits, Timeline, Requests), then a labelled
-  Project block with Install, tagged "Pending" until the project's first event arrives, and
-  Settings. Help and support is an item in the foot, above the privacy note (a plain line, not a
-  box) and the account. The navigation marks where you are: the screen, Install, Settings or
-  Help; Settings also on an export, which has no item of its own. The account menu is compact,
-  under 300 px with the language list closed, before the owner's usage line: Account and billing, the three themes on one row, the language behind a
-  "Language: …" row that opens the list in place, then Sign out. To the owner of the account
-  that holds the project on screen, the account row also shows the month's usage under the
-  e-mail: a thin bar and "41% of the month" (read as "41,230 of 100,000 events this month"),
-  gold below 80%, orange from 80%, red while the reception is paused (the share is cut, never
-  rounded up past the tone); the menu then opens on those numbers and the day the count resets
-  (the 1st, in UTC), or, while paused, the day measuring comes back, linking to Account and
-  billing. A paused account is also said in words, to the eye in the menu and to a screen reader
-  on the row.
-  Members, projects outside any account and an account not yet measured show none, and so does
+  Project block with Install, tagged "Pending" until the project's first event arrives, which opens
+  the install guide inside the settings dialog. The navigation marks the screen on view; the pages
+  that open as settings (`/settings`, `/install`, `/help`, an export) mark none. The foot ends with
+  the privacy note (a plain line, not a box) and the account: a small avatar with the initial, the
+  name (the start of the e-mail, the account has no name) and the plan beside it ("· Pro",
+  "· Hobby", "· Pro trial", "· Courtesy", "· No plan", or "· Member" for someone the owner added),
+  a chevron, and a gear that opens the settings on General. Both are 44 px tall, and a long name
+  wraps instead of being cut. The account menu opens above it: the e-mail, Settings, Language
+  (a dialog with a search and the seven languages, each in its own words and in the language on
+  screen; Enter takes the first match, Escape closes only the dialog, and the focus comes back to
+  the account), Help and support, then, to the owner of the account that holds the project on
+  screen, the month's usage: "41,230 of 100,000 events this month", the share, a thin bar gold
+  below 80%, orange from 80%, red while the reception is paused, and the day the count resets
+  (the 1st, in UTC) or, while paused, the day measuring comes back; it opens Plan and billing in
+  the settings and is read as "Plan and billing: …". Then Sign out.
+  Members, projects outside any account and an account not yet measured show no usage, and so does
   an API that does not yet name each project's account. Each project in the switcher shows the
   icon of its own site (the API fetches it daily from the project's first
   allowed origin, and this dashboard serves it from its own address, so the Content Security
@@ -301,8 +303,24 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner's "What is Pyxis?" links to the home page in the demo's language
-- A Settings page per project, behind the gear next to the language button (beside the project
-  switcher in the phone menu). It opens with the admin's own weekly digest switch: the Monday
+- A settings dialog over every screen of a project, opened by the gear beside the account, the
+  account menu and Install, at `#settings/<section>` in the address: the page under it is not read
+  again, not drawn again and not scrolled, and the dialog's content is read once per opening by a
+  server action. A fixed header with "Settings" and a close button; on the left the sections in
+  three groups, Account (General, Plan and billing, Sessions, Access tokens, Connected apps),
+  Project with its name (Install, Project, Privacy, Keys, People, E-mails, and Export and delete
+  for the owner) and Support (Help and support); on the right the section, its parts one under
+  the other, separated by a line, without the section's name repeated. General holds the e-mail,
+  the appearance as three pictures (light, dark, the system's) and the language. Moving between
+  sections replaces the address, so Back closes the dialog in one step, and Forward opens it
+  again; Escape, the close button and a click outside close it too, and the focus goes back to
+  what opened it. A link inside it to one of the pages it replaces (Install, Help, the Settings
+  page and its keys or connected apps) opens that section instead. Choosing a language inside it
+  keeps it open, in the new language. On a phone it fills the screen, first as the list of
+  sections and then one section with a back arrow; in a window under 512 px tall it takes the
+  whole height
+- A Settings page per project (`/settings`, kept for the links in e-mails), with the same panels
+  as the dialog. It opens with the admin's own weekly digest switch: the Monday
   e-mail with the week that closed on Sunday, on by default, saved through a server action that
   re-checks access, moving back with an alert when the API refuses. Then the admin's sessions:
   every device where they are signed in, named by the browser and system classified at sign-in
@@ -405,7 +423,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Manager template's instructions, the tracker's README, `llms.txt`), the GitHub question form and
   the private security report. Account and billing ends with the same address and reply time,
   and the code step of sign-in and sign-up names it for a code that does not arrive
-- An Account and billing page (`/account`, from the account menu) for the owner of a hosted
+- An Account and billing page (`/account`; the same account opens as Plan and billing in the
+  settings dialog) for the owner of a hosted
   account: the plan and its state (free trial, active, payment failed, ending, ended with the
   deletion date, sign-up not finished), the events measured this month against the quota, the
   limits, and a button to Stripe: "Finish subscription" with a monthly or yearly plan, or

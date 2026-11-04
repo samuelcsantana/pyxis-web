@@ -77,8 +77,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
 - **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free Hobby plan or through
   Stripe Checkout, a first project with its install guide, the Account and billing page and a
   Help and support page.
-- **Settings per project.** The weekly digest and the admin's sessions, and for the account's
-  owner the project's name, origins, time zone, keys and people.
+- **Settings in a dialog.** A gear and the account menu open the settings over the page, at
+  `#settings/<section>`, without reading it again: the account's and the project's, and help.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
@@ -520,6 +520,7 @@ index) are in [docs/FEATURES.md](docs/FEATURES.md#privacy-and-security-in-detail
 | [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
 | [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
 | [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)             | What went up since the last read fills slots the server drew      |
+| [0016](docs/adr/0016-settings-in-a-dialog-at-a-hash.md)                    | The settings open in a dialog named by the address's hash         |
 
 ## Roadmap
 
