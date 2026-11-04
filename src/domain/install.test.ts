@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   TRACKER_VERSION,
   agentPrompt,
+  classicSnippet,
   connectorUrlOf,
   installCommand,
   moduleSnippet,
@@ -43,6 +44,26 @@ describe('install snippets', () => {
     expect(snippet).toMatch(/pyxis-analytics@\d+\.\d+\.\d+\/dist\/index\.js/);
     expect(snippet.split('\n')).toHaveLength(4);
     expect(snippet).toContain(INIT_LINE);
+  });
+});
+
+describe('classicSnippet', () => {
+  it('loads the classic build pinned to the installed version, then initializes window.pyxis', () => {
+    const snippet = classicSnippet(KEY, ENDPOINT);
+
+    expect(snippet.split('\n')).toEqual([
+      `<script src="https://cdn.jsdelivr.net/npm/pyxis-analytics@${TRACKER_VERSION}/dist/pyxis.global.js"></script>`,
+      '<script>',
+      `  pyxis.${INIT_LINE}`,
+      '</script>',
+    ]);
+  });
+
+  it('carries no module syntax, so a header field that only takes classic scripts runs it', () => {
+    const snippet = classicSnippet(KEY, ENDPOINT);
+
+    expect(snippet).not.toContain('type="module"');
+    expect(snippet).not.toContain('import ');
   });
 });
 
