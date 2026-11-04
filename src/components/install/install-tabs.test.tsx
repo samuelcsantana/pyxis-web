@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { entranceOf, InstallTabs, tabAfterKey } from './install-tabs';
+import { InstallTabs, tabAfterKey } from './install-tabs';
 
 const TABS = [
   { id: 'first', label: 'First', panel: <p>First panel</p> },
@@ -31,16 +31,6 @@ describe('tabAfterKey', () => {
 
   it('leaves every other key to the browser', () => {
     expect(tabAfterKey('Enter', 1, 3)).toBeUndefined();
-  });
-});
-
-describe('entranceOf', () => {
-  it.each([
-    [0, 2, 'fromEnd'],
-    [2, 1, 'fromStart'],
-    [1, 1, 'still'],
-  ])('slides the panel of tab %i to tab %i in %s', (previous, next, entrance) => {
-    expect(entranceOf(previous, next)).toBe(entrance);
   });
 });
 
@@ -74,15 +64,13 @@ describe('InstallTabs, measured by the browser', () => {
 });
 
 describe('InstallTabs', () => {
-  it('slides the next panel in from the side of the tab chosen', async () => {
+  it('settles a chosen panel into place, but not the one shown on arrival', async () => {
     const { tab, panel } = renderTabs();
-    expect(panel('First')).not.toHaveClass('motion-safe:animate-slide-from-end');
+    expect(panel('First')).not.toHaveClass('motion-safe:animate-settle');
 
     await userEvent.click(tab('Third'));
-    expect(panel('Third')).toHaveClass('motion-safe:animate-slide-from-end');
 
-    await userEvent.click(tab('Second'));
-    expect(panel('Second')).toHaveClass('motion-safe:animate-slide-from-start');
+    expect(panel('Third')).toHaveClass('motion-safe:animate-settle');
   });
 
   it('opens on the first tab, the only one reachable with Tab', () => {
