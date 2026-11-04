@@ -145,6 +145,7 @@ export const FreePlanOpen: Story = {
     await showsTwoPlans(canvasElement);
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('link', { name: 'Start free' })).toBeVisible();
+    await expect(canvas.getByText('Everything in Hobby, plus:')).toBeVisible();
   },
 };
 

@@ -2241,13 +2241,14 @@ export const it = translation({
       eyebrow: 'Prezzi',
       title: 'Un solo piano, in real brasiliani, con tutto ciò che mostra la demo',
       titleFree: 'Due piani, in real brasiliani, con tutto ciò che mostra la demo in entrambi',
-      paidName: 'A pagamento',
+      paidName: 'Pro',
+      paidAdds: 'Tutto di Hobby, e in più:',
+      eventsBadge: '10×',
+      eventsBadgeSpoken: '(10 volte Hobby)',
       paidHow:
-        'Tutti iniziano dal piano gratuito: abbonati in Account e fatturazione, al mese o all’anno, con addebito immediato. Entro 7 giorni dal primo addebito puoi recedere e riavere l’intero importo.',
-      freeOpenNote:
-        'Registrati con un’e-mail e senza carta: la dashboard si apre subito, sul piano gratuito.',
+        'Tutti iniziano da Hobby. Abbonati a Pro in Account e fatturazione, al mese o all’anno, con addebito immediato; entro 7 giorni da quell’addebito puoi recedere e riavere tutto.',
       free: {
-        name: 'Gratuito',
+        name: 'Hobby',
         price: 'R$ 0',
         note: 'Senza scadenza, finché il sito ci sta.',
         start: 'Inizia gratis',
@@ -2258,10 +2259,10 @@ export const it = translation({
           history: '13 mesi di storico',
           digest: 'Un riepilogo settimanale via email',
           agents: 'Il connettore per Claude (MCP) e i token di accesso per agenti AI',
-          pause:
-            'La misurazione va in pausa a {events} eventi fino al giorno 1, con un’email all’80%',
-          card: 'Senza carta',
+          install: 'Si installa senza programmare, con Google Tag Manager o nel tema Shopify',
         },
+        terms:
+          'Senza carta. A {events} eventi la misurazione va in pausa fino al giorno 1, e ti avvisiamo via email all’80%.',
       },
       lead: 'Nessun costo per visitatore, per funzionalità o per persona identificata. Per i tuoi visitatori non cambia nulla: nessun cookie e nessun indirizzo IP salvato.',
       period: 'Periodo di fatturazione',
@@ -2286,6 +2287,7 @@ export const it = translation({
         history: '13 mesi di storico',
         digest: 'Un riepilogo settimanale via email',
         agents: 'Il connettore per Claude (MCP) e i token di accesso per agenti AI',
+        support: 'Assistenza via email, con risposta entro 2 giorni lavorativi',
       },
       ask: 'Richiedi l’accesso',
       askTitle: 'Scrivi a',
@@ -2303,7 +2305,7 @@ export const it = translation({
         'Per ora l’accesso è su invito: lo richiedi, ricevi il link di pagamento e, dopo l’abbonamento, ottieni l’accesso alla dashboard entro 2 giorni lavorativi.',
       moreTitle: 'Per agenzie e sviluppatori',
       moreFree:
-        'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Il piano a pagamento comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
+        'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Pro comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
       more: 'Misura i siti dei tuoi clienti: ogni cliente entra con la propria e-mail e vede solo il suo progetto. Il piano comprende fino a 3 siti e 3 persone, tu incluso. Per più clienti, scrivici quanti siti e persone a hello@pyxis-analytics.dev e rispondiamo entro 2 giorni lavorativi con un piano su misura.',
       moreLink: 'Chiedi un piano per agenzie',
       moreSubject: 'Un piano Pyxis per agenzia',
