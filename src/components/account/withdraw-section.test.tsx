@@ -71,7 +71,7 @@ describe('WithdrawSection', () => {
 
     expect(refresh).toHaveBeenCalledOnce();
     expect(screen.getByRole('status')).toHaveTextContent(
-      'You withdrew from the subscription. The account is back on the free plan.',
+      'You withdrew from the subscription. The account is back on the Hobby plan.',
     );
     expect(screen.getByRole('status')).toHaveTextContent('R$39.00 were refunded to your card.');
     expect(
@@ -94,14 +94,14 @@ describe('WithdrawSection', () => {
       'The automatic refund did not go through, so Pyxis refunds the first payment by hand.',
     );
     expect(screen.getByRole('status')).toHaveTextContent(
-      'The account holds more than the free plan: make it fit by December 20, 2026, or it ends that day.',
+      'The account holds more than the Hobby plan: make it fit by December 20, 2026, or it ends that day.',
     );
   });
 
   it.each([
     [
       'freePlanClosed',
-      'The free plan is closed right now, so there is no plan to go back to. To stop the renewal, cancel in Manage billing.',
+      'The Hobby plan is closed right now, so there is no plan to go back to. To stop the renewal, cancel in Manage billing.',
     ],
     [
       'noPaidSubscription',

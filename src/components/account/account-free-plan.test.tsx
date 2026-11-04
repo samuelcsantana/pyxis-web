@@ -63,9 +63,9 @@ function overview(account: Partial<Account> = {}, props: Partial<AccountOverview
 }
 
 function paidPlan(): HTMLElement {
-  const section = screen.getByRole('heading', { name: 'The paid plan' }).parentElement;
+  const section = screen.getByRole('heading', { name: 'The Pro plan' }).parentElement;
   if (section === null) {
-    throw new Error('The paid plan sits in its own block.');
+    throw new Error('The Pro plan sits in its own block.');
   }
   return section;
 }
@@ -78,11 +78,11 @@ describe('AccountOverview on the free plan', () => {
   it('shows the month used against the free plan and where measuring pauses', () => {
     overview();
 
-    expect(screen.getByText('Free plan: up to 10,000 events a month.')).toBeInTheDocument();
+    expect(screen.getByText('Hobby plan, free: up to 10,000 events a month.')).toBeInTheDocument();
     expect(screen.getByText('3,120 of 10,000')).toBeInTheDocument();
     expect(
       screen.getByText(
-        'On the free plan, measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
+        'On the Hobby plan, measuring pauses when the month reaches 10,000 events and comes back on the 1st.',
       ),
     ).toBeInTheDocument();
   });
@@ -126,7 +126,7 @@ describe('AccountOverview on the free plan', () => {
         'Measuring is paused until Dec 1, 2026: the account reached 10,000 events this month.',
       ),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/On the free plan, measuring pauses/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/On the Hobby plan, measuring pauses/)).not.toBeInTheDocument();
     expect(paidPlan()).toHaveTextContent('Measuring resumes within a minute of subscribing.');
   });
 
@@ -145,8 +145,8 @@ describe('AccountOverview on the free plan', () => {
   it('offers the paid plan only to a free account', () => {
     overview({ status: 'active', billingInterval: 'month' });
 
-    expect(screen.queryByRole('heading', { name: 'The paid plan' })).not.toBeInTheDocument();
-    expect(screen.queryByText(/On the free plan, measuring pauses/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'The Pro plan' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/On the Hobby plan, measuring pauses/)).not.toBeInTheDocument();
   });
 
   it('says by when a withdrawn account has to fit, and what to delete and remove', () => {
@@ -154,13 +154,13 @@ describe('AccountOverview on the free plan', () => {
 
     expect(
       screen.getByText(
-        'This account holds more than the free plan. Make it fit by Dec 20, 2026, or the account ends that day:',
+        'This account holds more than the Hobby plan. Make it fit by Dec 20, 2026, or the account ends that day:',
       ),
     ).toBeInTheDocument();
     const items = screen.getAllByRole('listitem').map((item) => item.textContent);
     expect(items).toEqual([
-      'Delete 2 projects: the free plan holds 1 project.',
-      'Remove 1 person: the free plan holds 1 person, you included.',
+      'Delete 2 projects: the Hobby plan holds 1 project.',
+      'Remove 1 person: the Hobby plan holds 1 person, you included.',
     ]);
     expect(
       screen.getByText("Projects are deleted, and people removed, in each project's Settings."),
@@ -168,12 +168,12 @@ describe('AccountOverview on the free plan', () => {
   });
 
   it.each([
-    [{ projectCount: 2, peopleCount: 1 }, ['Delete 1 project: the free plan holds 1 project.']],
+    [{ projectCount: 2, peopleCount: 1 }, ['Delete 1 project: the Hobby plan holds 1 project.']],
     [
       { projectCount: 1, peopleCount: 3 },
-      ['Remove 2 people: the free plan holds 1 person, you included.'],
+      ['Remove 2 people: the Hobby plan holds 1 person, you included.'],
     ],
-  ])('names only what is over the free plan for %o', (counts, items) => {
+  ])('names only what is over the Hobby plan for %o', (counts, items) => {
     overview({ freePlanFitDueAt: '2026-12-20T12:00:00.000Z', ...counts });
 
     expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual(items);
@@ -200,7 +200,7 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
 
     expect(
       screen.getByText(
-        'If you cancel, the account goes back to the free plan at the end of the period, with its projects and data: up to 10,000 events a month, and above that measuring pauses until the 1st.',
+        'If you cancel, the account goes back to the Hobby plan at the end of the period, with its projects and data: up to 10,000 events a month, and above that measuring pauses until the 1st.',
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
@@ -210,7 +210,7 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
     overview({ ...PAID, status: 'ending', accessEndsAt: '2026-12-01T00:00:00.000Z' });
 
     expect(
-      screen.getByText(/^On Dec 1, 2026 the account goes back to the free plan/),
+      screen.getByText(/^On Dec 1, 2026 the account goes back to the Hobby plan/),
     ).toBeInTheDocument();
   });
 
@@ -218,7 +218,7 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
     overview({ ...PAID, status: 'ending' });
 
     expect(
-      screen.getByText(/^At the end of the period the account goes back to the free plan/),
+      screen.getByText(/^At the end of the period the account goes back to the Hobby plan/),
     ).toBeInTheDocument();
   });
 
@@ -226,7 +226,7 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
     overview({ ...PAID, boundByFreePlanTerms: false, projectCount: 3, peopleCount: 2 });
 
     expect(screen.queryByText(/^If you cancel/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/To keep it on the free plan/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/To keep it on the Hobby plan/)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Manage billing' })).toBeInTheDocument();
   });
 
@@ -235,12 +235,12 @@ describe('AccountOverview of a paid account while the free plan is on', () => {
 
     expect(
       screen.getByText(
-        'If you cancel, the account ends at the end of the period. To keep it on the free plan instead, make it fit before then:',
+        'If you cancel, the account ends at the end of the period. To keep it on the Hobby plan instead, make it fit before then:',
       ),
     ).toBeInTheDocument();
     expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
-      'Delete 2 projects: the free plan holds 1 project.',
-      'Remove 1 person: the free plan holds 1 person, you included.',
+      'Delete 2 projects: the Hobby plan holds 1 project.',
+      'Remove 1 person: the Hobby plan holds 1 person, you included.',
     ]);
   });
 

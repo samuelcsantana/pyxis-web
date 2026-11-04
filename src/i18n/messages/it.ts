@@ -369,7 +369,7 @@ export const it = translation({
       incompleteFree:
         'L’abbonamento non è stato completato. Scegli un piano per abbonarti; l’addebito parte da oggi.',
       comped: 'Un account offerto da Pyxis.',
-      free: 'Piano gratuito: fino a {events} eventi al mese.',
+      free: 'Piano Hobby, gratuito: fino a {events} eventi al mese.',
       trialingUndated: 'Prova gratuita. Poi il piano viene addebitato, a meno che tu non annulli.',
       activeUndated: 'Attivo.',
       endingUndated:
@@ -403,32 +403,32 @@ export const it = translation({
     exempt:
       'Fino al giorno {date} la misurazione non va in pausa anche se si supera il limite mensile.',
     freePause:
-      'Con il piano gratuito, la misurazione va in pausa quando il mese raggiunge {events} eventi e riprende il giorno 1.',
+      'Con il piano Hobby, la misurazione va in pausa quando il mese raggiunge {events} eventi e riprende il giorno 1.',
     paidPlan: {
-      heading: 'Il piano a pagamento',
+      heading: 'Il piano Pro',
       offer:
         'Fino a 100.000 eventi al mese, 3 progetti e 3 persone, a R$ 39 al mese o R$ 390 all’anno. L’addebito avviene oggi e si rinnova finché non annulli.',
       resumes: 'La misurazione riprende entro un minuto dall’abbonamento.',
     },
     fit: {
       dueBy:
-        'Questo account contiene più di quanto consente il piano gratuito. Adattalo entro il giorno {date}, altrimenti l’account termina quel giorno:',
-      projects: 'Elimina {count}: il piano gratuito consente {limit}.',
-      people: 'Rimuovi {count}: il piano gratuito consente {limit}, contando anche te.',
+        'Questo account contiene più di quanto consente il piano Hobby. Adattalo entro il giorno {date}, altrimenti l’account termina quel giorno:',
+      projects: 'Elimina {count}: il piano Hobby consente {limit}.',
+      people: 'Rimuovi {count}: il piano Hobby consente {limit}, contando anche te.',
       where:
         'I progetti si eliminano, e le persone si rimuovono, nelle Impostazioni di ciascun progetto.',
     },
     afterCancel: {
       backToFree:
-        'Se annulli, l’account torna al piano gratuito alla fine del periodo, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+        'Se annulli, l’account torna al piano Hobby alla fine del periodo, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
       backToFreeOn:
-        'Il giorno {date} l’account torna al piano gratuito, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+        'Il giorno {date} l’account torna al piano Hobby, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
       backToFreeAtTheEnd:
-        'Alla fine del periodo l’account torna al piano gratuito, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
-      ends: 'Se annulli, l’account termina alla fine del periodo. Per tenerlo sul piano gratuito, adattalo prima:',
-      endsOn: 'Il giorno {date} l’account termina. Per tenerlo sul piano gratuito, adattalo prima:',
+        'Alla fine del periodo l’account torna al piano Hobby, con i suoi progetti e i suoi dati: fino a {events} eventi al mese, e oltre la misurazione va in pausa fino al giorno 1.',
+      ends: 'Se annulli, l’account termina alla fine del periodo. Per tenerlo sul piano Hobby, adattalo prima:',
+      endsOn: 'Il giorno {date} l’account termina. Per tenerlo sul piano Hobby, adattalo prima:',
       endsAtTheEnd:
-        'Alla fine del periodo l’account termina. Per tenerlo sul piano gratuito, adattalo prima:',
+        'Alla fine del periodo l’account termina. Per tenerlo sul piano Hobby, adattalo prima:',
     },
     notice: {
       suspended: 'Questo account è sospeso, quindi i suoi progetti hanno smesso di misurare.',
@@ -441,7 +441,7 @@ export const it = translation({
       paused:
         'La misurazione è in pausa fino al giorno {date}: l’account ha superato i suoi eventi mensili.',
       freePlanPaused:
-        'La misurazione è in pausa: l’account ha raggiunto questo mese i {events} eventi del piano gratuito. Riprende il giorno {date}, o entro un minuto dall’abbonamento.',
+        'La misurazione è in pausa: l’account ha raggiunto questo mese i {events} eventi del piano Hobby. Riprende il giorno {date}, o entro un minuto dall’abbonamento.',
       subscribe: 'Abbonati ora',
       nearQuota: 'Eventi usati dall’account questo mese: {share}.',
       open: 'Apri la fatturazione',
@@ -456,9 +456,9 @@ export const it = translation({
     writeHeading: 'Scrivere all’assistenza',
     fromAccount: 'Scrivi da {email}, così sappiamo di quale account si tratta.',
     paidReply:
-      'Nel piano a pagamento confermiamo la ricezione del tuo messaggio e rispondiamo entro {days} giorni lavorativi.',
+      'Nel piano Pro confermiamo la ricezione del tuo messaggio e rispondiamo entro {days} giorni lavorativi.',
     freeReply:
-      'Nel piano gratuito rispondiamo via email entro {days} giorni su contratto, piano e limiti, fatturazione, disdetta e dati personali. Le domande su installazione e uso passano da GitHub.',
+      'Nel piano Hobby rispondiamo via email entro {days} giorni su contratto, piano e limiti, fatturazione, disdetta e dati personali. Le domande su installazione e uso passano da GitHub.',
     noPersonalData:
       'Per mostrare un caso, invia l’ID della visita, mai i dati personali dei tuoi visitatori.',
     docsHeading: 'Installazione e uso',
@@ -560,21 +560,21 @@ export const it = translation({
   },
   withdrawal: {
     heading: 'Recesso',
-    note: 'Entro 7 giorni dal primo pagamento puoi recedere: l’abbonamento viene annullato subito, quel pagamento viene rimborsato per intero e l’account torna al piano gratuito, con i suoi progetti e i suoi dati.',
+    note: 'Entro 7 giorni dal primo pagamento puoi recedere: l’abbonamento viene annullato subito, quel pagamento viene rimborsato per intero e l’account torna al piano Hobby, con i suoi progetti e i suoi dati.',
     start: 'Recedi dall’abbonamento',
     question:
       'Recedere ora? L’abbonamento termina subito e il primo pagamento torna sulla tua carta.',
     confirm: 'Recedi e ricevi il rimborso',
     keep: 'Mantieni l’abbonamento',
     withdrawing: 'Recesso in corso…',
-    done: 'Hai receduto dall’abbonamento. L’account è tornato al piano gratuito.',
+    done: 'Hai receduto dall’abbonamento. L’account è tornato al piano Hobby.',
     refunded: '{amount} sono stati rimborsati sulla tua carta.',
     refundByHand:
       'Il rimborso automatico non è andato a buon fine, quindi Pyxis rimborsa il primo pagamento a mano.',
     fitBy:
-      'L’account contiene più di quanto consente il piano gratuito: adattalo entro il giorno {date}, altrimenti termina quel giorno.',
+      'L’account contiene più di quanto consente il piano Hobby: adattalo entro il giorno {date}, altrimenti termina quel giorno.',
     freePlanClosed:
-      'Il piano gratuito è chiuso in questo momento, quindi non c’è un piano a cui tornare. Per fermare il rinnovo, annulla in Gestisci la fatturazione.',
+      'Il piano Hobby è chiuso in questo momento, quindi non c’è un piano a cui tornare. Per fermare il rinnovo, annulla in Gestisci la fatturazione.',
     noPaidSubscription:
       'Questo account non ha un abbonamento a pagamento da cui recedere. Ricarica la pagina.',
     windowClosed:
@@ -758,14 +758,14 @@ export const it = translation({
     finishTitle: 'Completa l’abbonamento',
     finishBody: 'Il tuo account aspetta un piano. Scegline uno per iniziare la prova gratuita.',
     freeTitle: 'Crea il tuo account gratuito',
-    freeIntro: 'Gratis: fino a {events} eventi al mese, su un sito. Senza carta.',
+    freeIntro: 'Piano Hobby, gratis: fino a {events} eventi al mese, su un sito. Senza carta.',
     fullTitle: 'Crea il tuo account',
     fullIntro:
-      'Il piano gratuito è pieno per ora. Crea il tuo account e aspetterà un posto, oppure abbonati al piano a pagamento subito dopo.',
+      'Il piano Hobby è pieno per ora. Crea il tuo account e aspetterà un posto, oppure abbonati al piano Pro subito dopo.',
     opening: 'Apertura del tuo account…',
-    waitTitle: 'Il piano gratuito è pieno per ora',
+    waitTitle: 'Il piano Hobby è pieno per ora',
     waitBody:
-      'Il tuo account è pronto e aspetta un posto nel piano gratuito: ti scriviamo quando se ne libera uno, e aspetta fino a {days} giorni. Puoi anche abbonarti al piano a pagamento adesso.',
+      'Il tuo account è pronto e aspetta un posto nel piano Hobby: ti scriviamo quando se ne libera uno, e aspetta fino a {days} giorni. Puoi anche abbonarti al piano Pro adesso.',
   },
   signUpPage: {
     title: 'Registrati',
@@ -785,7 +785,7 @@ export const it = translation({
       'Ci vuole qualche secondo e la pagina ricontrolla da sola. Se ci vuole di più, riceverai un’email quando sarà fatto.',
     trial: 'La tua prova gratuita è iniziata. Dura fino al giorno {date}.',
     active: 'Il tuo abbonamento è confermato.',
-    free: 'Il tuo account è nel piano gratuito.',
+    free: 'Il tuo account è nel piano Hobby.',
     freeLimits:
       'Fino a {events} eventi al mese, {projects} e {people}, con tutte le funzioni e senza carta. La misurazione va in pausa quando il mese arriva a {pauseAt} eventi e riprende il giorno 1.',
     fromFreePlan:
@@ -1874,11 +1874,11 @@ export const it = translation({
       seePricing: 'Guarda i prezzi',
       note: 'Nessuna registrazione. Dati inventati. Si apre direttamente sulla dashboard.',
       startFree: 'Inizia gratis',
-      seePaidPlan: 'Vedi il piano a pagamento',
+      seePaidPlan: 'Vedi il piano Pro',
       freeNote:
         'Gratis fino a {events} eventi al mese su un sito, senza carta. La demo si apre senza registrazione.',
       freeFullNote:
-        'Il piano gratuito è pieno per ora: registrati e il tuo account aspetta un posto, oppure abbonati al piano a pagamento.',
+        'Il piano Hobby è pieno per ora: registrati e il tuo account aspetta un posto, oppure abbonati al piano Pro.',
       trialNote:
         '14 giorni gratis; la carta viene addebitata solo il quindicesimo giorno. La demo si apre senza registrazione.',
       claudeTag: 'Nella directory di Claude',
@@ -2089,7 +2089,7 @@ export const it = translation({
         account: {
           title: 'Crea l’account e il progetto',
           bodyFree:
-            'Nella dashboard, con un’e-mail e senza carta: il piano gratuito copre un sito. Il progetto arriva già con la sua chiave pubblica.',
+            'Nella dashboard, con un’e-mail e senza carta: il piano Hobby copre un sito. Il progetto arriva già con la sua chiave pubblica.',
           body: 'Nella dashboard, con un’e-mail e una carta: 14 giorni gratis. Il progetto arriva già con la sua chiave pubblica.',
         },
         install: {
@@ -2354,14 +2354,14 @@ export const it = translation({
           answerOpen:
             'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure abbonati al Pyxis ospitato. Chiunque in Brasile può registrarsi con un’email e una carta: 14 giorni gratis, una volta per cliente, e annulli quando vuoi.',
           answerFree:
-            'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure usa il Pyxis ospitato. Chiunque in Brasile può registrarsi con un’email, senza carta, sul piano gratuito, e abbonarsi al piano a pagamento quando il sito ha bisogno di più.',
+            'Sì, in due modi: esegui Pyxis sulla tua infrastruttura (il codice è su GitHub con licenza MIT) oppure usa il Pyxis ospitato. Chiunque in Brasile può registrarsi con un’email, senza carta, sul piano Hobby, e abbonarsi al piano Pro quando il sito ha bisogno di più.',
         },
         agency: {
           question: 'Posso usare Pyxis sui siti dei miei clienti?',
           answer:
             'Sì. Crea un progetto per sito e aggiungi il cliente alle persone del progetto: entra con un codice via e-mail e vede solo quel progetto. Il piano comprende fino a 3 siti e 3 persone, tu incluso; per di più, scrivi a hello@pyxis-analytics.dev. I <terms>Termini di utilizzo</terms> lo prevedono: misurare, come agenzia, i siti di clienti che l’hanno autorizzato non è rivendita.',
           answerFree:
-            'Sì. Crea un progetto per sito e aggiungi il cliente alle persone del progetto: entra con un codice via e-mail e vede solo quel progetto. Il piano gratuito comprende un sito e solo te; il piano a pagamento fino a 3 siti e 3 persone, tu incluso; per di più, scrivi a hello@pyxis-analytics.dev. I <terms>Termini di utilizzo</terms> lo prevedono: misurare, come agenzia, i siti di clienti che l’hanno autorizzato non è rivendita.',
+            'Sì. Crea un progetto per sito e aggiungi il cliente alle persone del progetto: entra con un codice via e-mail e vede solo quel progetto. Il piano Hobby comprende un sito e solo te; il piano Pro fino a 3 siti e 3 persone, tu incluso; per di più, scrivi a hello@pyxis-analytics.dev. I <terms>Termini di utilizzo</terms> lo prevedono: misurare, come agenzia, i siti di clienti che l’hanno autorizzato non è rivendita.',
         },
         noCode: {
           question: 'Non programmo. Posso installarlo?',
@@ -2388,7 +2388,7 @@ export const it = translation({
           answer:
             'R$ 39 al mese o R$ 390 all’anno (due mesi gratis), con carta. Include fino a 100.000 eventi al mese, 3 siti, 3 persone nella dashboard, 13 mesi di storico, il riepilogo settimanale e il server MCP.',
           answerFree:
-            'Entrambi i piani hanno tutte le funzioni: 13 mesi di storico, il riepilogo settimanale e il server MCP. Il piano gratuito non costa nulla e accetta fino a {events} eventi al mese, su un sito, con te solo nella dashboard. Il piano a pagamento costa R$ 39 al mese o R$ 390 all’anno (due mesi gratis), con carta, con addebito immediato, e accetta fino a 100.000 eventi al mese, 3 siti e 3 persone.',
+            'Entrambi i piani hanno tutte le funzioni: 13 mesi di storico, il riepilogo settimanale e il server MCP. Il piano Hobby non costa nulla e accetta fino a {events} eventi al mese, su un sito, con te solo nella dashboard. Il piano Pro costa R$ 39 al mese o R$ 390 all’anno (due mesi gratis), con carta, con addebito immediato, e accetta fino a 100.000 eventi al mese, 3 siti e 3 persone.',
         },
         trial: {
           question: 'Come funziona la prova gratuita?',
@@ -2402,7 +2402,7 @@ export const it = translation({
           answerOpen:
             'In qualsiasi momento, in due modi: annulla nel portale dell’abbonamento, e l’accesso dura fino alla fine del periodo pagato; oppure chiudi l’account nella dashboard, e l’accesso termina subito. Entro 7 giorni dal primo addebito, chiudere l’account rimborsa quell’addebito per intero; dopo, il periodo già pagato non viene rimborsato. I dati del progetto vengono eliminati 30 giorni dopo la fine dell’accesso. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
           answerFree:
-            'In qualsiasi momento, nel portale dell’abbonamento: il piano a pagamento dura fino alla fine del periodo già pagato, poi un account con un sito e una persona torna al piano gratuito; uno più grande termina, e i suoi dati vengono eliminati 30 giorni dopo. Entro 7 giorni dal primo addebito puoi recedere: l’addebito viene rimborsato per intero e l’account torna al piano gratuito se ci sta. Chiudere l’account nella dashboard termina tutto subito, con qualsiasi piano. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
+            'In qualsiasi momento, nel portale dell’abbonamento: il piano Pro dura fino alla fine del periodo già pagato, poi un account con un sito e una persona torna al piano Hobby; uno più grande termina, e i suoi dati vengono eliminati 30 giorni dopo. Entro 7 giorni dal primo addebito puoi recedere: l’addebito viene rimborsato per intero e l’account torna al piano Hobby se ci sta. Chiudere l’account nella dashboard termina tutto subito, con qualsiasi piano. I <terms>Termini di utilizzo</terms> contengono i dettagli.',
         },
         limit: {
           question: 'E se supero i 100.000 eventi?',
@@ -2410,9 +2410,9 @@ export const it = translation({
             'Ricevi un’email all’80% e al 100% degli eventi del mese. Al 150%, l’account smette di accettare eventi fino al primo del mese successivo, e gli eventi inviati durante la pausa vanno persi. Non viene mai addebitato nulla oltre al prezzo.',
         },
         freeLimit: {
-          question: 'E se arrivo a {events} eventi sul piano gratuito?',
+          question: 'E se arrivo a {events} eventi sul piano Hobby?',
           answer:
-            'Sul piano gratuito, un’email avvisa all’80% degli eventi del mese. A {events}, l’account smette di accettare eventi fino al primo del mese successivo, e gli eventi inviati durante la pausa vanno persi. Abbonarsi al piano a pagamento toglie la pausa entro un minuto.',
+            'Sul piano Hobby, un’email avvisa all’80% degli eventi del mese. A {events}, l’account smette di accettare eventi fino al primo del mese successivo, e gli eventi inviati durante la pausa vanno persi. Abbonarsi al piano Pro toglie la pausa entro un minuto.',
         },
         payment: {
           question: 'Posso pagare con Pix, e c’è una fattura?',
@@ -2422,7 +2422,7 @@ export const it = translation({
         support: {
           question: 'Come contatto l’assistenza?',
           answer:
-            'Via email, a {email}, preferibilmente dall’email del tuo account. Nel piano a pagamento rispondiamo entro {paidDays} giorni lavorativi. Nel piano gratuito, le domande su installazione e uso passano dalle issue di GitHub e dalla documentazione; contratto, piano, limiti, fatturazione e dati personali restano via email, con risposta entro {freeDays} giorni. Per segnalare una falla di sicurezza, usa la segnalazione privata di GitHub.',
+            'Via email, a {email}, preferibilmente dall’email del tuo account. Nel piano Pro rispondiamo entro {paidDays} giorni lavorativi. Nel piano Hobby, le domande su installazione e uso passano dalle issue di GitHub e dalla documentazione; contratto, piano, limiti, fatturazione e dati personali restano via email, con risposta entro {freeDays} giorni. Per segnalare una falla di sicurezza, usa la segnalazione privata di GitHub.',
         },
       },
     },
@@ -2467,7 +2467,7 @@ export const it = translation({
       pricing: 'Prezzi',
       code: 'Codice',
       support: 'Assistenza',
-      supportReply: 'Risposta entro {days} giorni lavorativi nel piano a pagamento.',
+      supportReply: 'Risposta entro {days} giorni lavorativi nel piano Pro.',
       questions: 'Domande su GitHub',
       securityReport: 'Segnala una falla di sicurezza',
       author: 'Autore: {site}',

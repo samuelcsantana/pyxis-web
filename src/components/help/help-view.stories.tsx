@@ -30,7 +30,7 @@ export const PaidPlan: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('hello@pyxis-analytics.dev')).toBeVisible();
     await expect(canvas.getByRole('button', { name: 'Copy' })).toBeVisible();
-    await expect(canvas.queryByText(/On the free plan/)).toBeNull();
+    await expect(canvas.queryByText(/On the Hobby plan/)).toBeNull();
   },
 };
 

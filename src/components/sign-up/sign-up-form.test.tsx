@@ -163,7 +163,7 @@ describe('SignUpForm', () => {
 
     expect(screen.getByRole('heading', { name: 'Create your free account' })).toBeInTheDocument();
     expect(
-      screen.getByText('Free: up to 10,000 events a month, on one site. No card.'),
+      screen.getByText('Hobby plan, free: up to 10,000 events a month, on one site. No card.'),
     ).toBeInTheDocument();
     expect(screen.queryByText('One free trial per customer.')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Yearly' })).not.toBeInTheDocument();
@@ -188,7 +188,7 @@ describe('SignUpForm', () => {
     );
 
     expect(
-      screen.getByText('Grátis: até 10.000 eventos por mês, em um site. Sem cartão.'),
+      screen.getByText('Plano Hobby, grátis: até 10.000 eventos por mês, em um site. Sem cartão.'),
     ).toBeInTheDocument();
   });
 
@@ -206,7 +206,7 @@ describe('SignUpForm', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Create your account' })).toBeInTheDocument();
-    expect(screen.getByText(/The free plan is full for now\. Create your account/)).toBeVisible();
+    expect(screen.getByText(/The Hobby plan is full for now\. Create your account/)).toBeVisible();
     expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
     await reachTheCode();
     typeCode('123456');
@@ -214,7 +214,7 @@ describe('SignUpForm', () => {
 
     expect(openCheckout).not.toHaveBeenCalled();
     expect(
-      screen.getByRole('heading', { name: 'The free plan is full for now' }),
+      screen.getByRole('heading', { name: 'The Hobby plan is full for now' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/it waits up to 60 days/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Yearly' }));
@@ -247,7 +247,7 @@ describe('SignUpForm', () => {
 
     expect(openCheckout).not.toHaveBeenCalled();
     expect(
-      screen.queryByRole('heading', { name: 'The free plan is full for now' }),
+      screen.queryByRole('heading', { name: 'The Hobby plan is full for now' }),
     ).not.toBeInTheDocument();
     expect(navigation.router.replace).toHaveBeenCalledWith('/');
   });
@@ -461,7 +461,7 @@ describe('SignUpForm', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: 'The free plan is full for now' }),
+      screen.getByRole('heading', { name: 'The Hobby plan is full for now' }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/free trial/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Subscribe now' }));

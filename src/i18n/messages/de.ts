@@ -379,7 +379,7 @@ export const de = translation({
       incompleteFree:
         'Das Abo wurde nicht abgeschlossen. Wähle einen Plan, um es abzuschließen; abgebucht wird ab heute.',
       comped: 'Ein Konto, das Pyxis dir schenkt.',
-      free: 'Kostenloser Plan: bis zu {events} Ereignisse im Monat.',
+      free: 'Hobby-Plan, kostenlos: bis zu {events} Ereignisse im Monat.',
       trialingUndated: 'Kostenlose Testphase. Danach wird der Plan berechnet, außer du kündigst.',
       activeUndated: 'Aktiv.',
       endingUndated:
@@ -413,33 +413,33 @@ export const de = translation({
     exempt:
       'Die Messung wird bis {date} nicht pausiert, auch wenn das Monatslimit überschritten wird.',
     freePause:
-      'Im kostenlosen Plan pausiert die Messung, sobald der Monat {events} Ereignisse erreicht, und läuft am 1. wieder an.',
+      'Im Hobby-Plan pausiert die Messung, sobald der Monat {events} Ereignisse erreicht, und läuft am 1. wieder an.',
     paidPlan: {
-      heading: 'Der kostenpflichtige Plan',
+      heading: 'Der Pro-Plan',
       offer:
         'Bis zu 100.000 Ereignisse pro Monat, 3 Projekte und 3 Personen, für R$ 39 pro Monat oder R$ 390 pro Jahr. Abgebucht wird heute, und das Abo verlängert sich, bis du kündigst.',
       resumes: 'Die Messung läuft innerhalb einer Minute nach dem Abschluss wieder an.',
     },
     fit: {
       dueBy:
-        'Dieses Konto enthält mehr, als der kostenlose Plan erlaubt. Pass es bis {date} an, sonst endet das Konto an diesem Tag:',
-      projects: 'Lösche {count}: Der kostenlose Plan erlaubt {limit}.',
-      people: 'Entferne {count}: Der kostenlose Plan erlaubt {limit}, dich eingeschlossen.',
+        'Dieses Konto enthält mehr, als der Hobby-Plan erlaubt. Pass es bis {date} an, sonst endet das Konto an diesem Tag:',
+      projects: 'Lösche {count}: Der Hobby-Plan erlaubt {limit}.',
+      people: 'Entferne {count}: Der Hobby-Plan erlaubt {limit}, dich eingeschlossen.',
       where:
         'Projekte löschst und Personen entfernst du in den Einstellungen des jeweiligen Projekts.',
     },
     afterCancel: {
       backToFree:
-        'Wenn du kündigst, kehrt das Konto am Ende des Zeitraums in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+        'Wenn du kündigst, kehrt das Konto am Ende des Zeitraums in den Hobby-Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
       backToFreeOn:
-        'Am {date} kehrt das Konto in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+        'Am {date} kehrt das Konto in den Hobby-Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
       backToFreeAtTheEnd:
-        'Am Ende des Zeitraums kehrt das Konto in den kostenlosen Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
-      ends: 'Wenn du kündigst, endet das Konto am Ende des Zeitraums. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+        'Am Ende des Zeitraums kehrt das Konto in den Hobby-Plan zurück, mit seinen Projekten und Daten: bis zu {events} Ereignisse im Monat, darüber pausiert die Messung bis zum 1.',
+      ends: 'Wenn du kündigst, endet das Konto am Ende des Zeitraums. Damit es stattdessen im Hobby-Plan bleibt, pass es vorher an:',
       endsOn:
-        'Am {date} endet das Konto. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+        'Am {date} endet das Konto. Damit es stattdessen im Hobby-Plan bleibt, pass es vorher an:',
       endsAtTheEnd:
-        'Am Ende des Zeitraums endet das Konto. Damit es stattdessen im kostenlosen Plan bleibt, pass es vorher an:',
+        'Am Ende des Zeitraums endet das Konto. Damit es stattdessen im Hobby-Plan bleibt, pass es vorher an:',
     },
     notice: {
       suspended: 'Dieses Konto ist gesperrt, daher messen seine Projekte nicht mehr.',
@@ -452,7 +452,7 @@ export const de = translation({
       paused:
         'Die Messung ist bis {date} pausiert: Das Konto hat seine monatlichen Ereignisse überschritten.',
       freePlanPaused:
-        'Die Messung ist pausiert: Das Konto hat diesen Monat die {events} Ereignisse des kostenlosen Plans erreicht. Sie läuft am {date} wieder an, oder innerhalb einer Minute nach dem Abschluss eines Abos.',
+        'Die Messung ist pausiert: Das Konto hat diesen Monat die {events} Ereignisse des Hobby-Plans erreicht. Sie läuft am {date} wieder an, oder innerhalb einer Minute nach dem Abschluss eines Abos.',
       subscribe: 'Jetzt abonnieren',
       nearQuota: 'In diesem Monat hat das Konto {share} seiner Ereignisse verbraucht.',
       open: 'Abrechnung öffnen',
@@ -467,9 +467,9 @@ export const de = translation({
     writeHeading: 'An den Support schreiben',
     fromAccount: 'Schreib von {email}, damit wir wissen, um welches Konto es geht.',
     paidReply:
-      'Im kostenpflichtigen Tarif bestätigen wir den Eingang deiner Nachricht und antworten innerhalb von {days} Werktagen.',
+      'Im Pro-Plan bestätigen wir den Eingang deiner Nachricht und antworten innerhalb von {days} Werktagen.',
     freeReply:
-      'Im kostenlosen Tarif antworten wir per E-Mail innerhalb von {days} Tagen zu Vertrag, Tarif und Limits, Abrechnung, Kündigung und personenbezogenen Daten. Fragen zu Installation und Nutzung laufen über GitHub.',
+      'Im Hobby-Plan antworten wir per E-Mail innerhalb von {days} Tagen zu Vertrag, Tarif und Limits, Abrechnung, Kündigung und personenbezogenen Daten. Fragen zu Installation und Nutzung laufen über GitHub.',
     noPersonalData:
       'Um einen Fall zu zeigen, schick die ID des Besuchs, nie personenbezogene Daten deiner Besucher.',
     docsHeading: 'Installation und Nutzung',
@@ -570,21 +570,21 @@ export const de = translation({
   },
   withdrawal: {
     heading: 'Widerruf',
-    note: 'Innerhalb von 7 Tagen nach der ersten Zahlung kannst du widerrufen: Das Abo wird sofort gekündigt, diese Zahlung wird vollständig erstattet, und das Konto kehrt mit seinen Projekten und Daten in den kostenlosen Plan zurück.',
+    note: 'Innerhalb von 7 Tagen nach der ersten Zahlung kannst du widerrufen: Das Abo wird sofort gekündigt, diese Zahlung wird vollständig erstattet, und das Konto kehrt mit seinen Projekten und Daten in den Hobby-Plan zurück.',
     start: 'Abo widerrufen',
     question:
       'Jetzt widerrufen? Das Abo endet sofort, und die erste Zahlung geht zurück auf deine Karte.',
     confirm: 'Widerrufen und Erstattung erhalten',
     keep: 'Abo behalten',
     withdrawing: 'Wird widerrufen…',
-    done: 'Du hast das Abo widerrufen. Das Konto ist wieder im kostenlosen Plan.',
+    done: 'Du hast das Abo widerrufen. Das Konto ist wieder im Hobby-Plan.',
     refunded: '{amount} wurden auf deine Karte erstattet.',
     refundByHand:
       'Die automatische Erstattung hat nicht geklappt, daher erstattet Pyxis die erste Zahlung von Hand.',
     fitBy:
-      'Das Konto enthält mehr, als der kostenlose Plan erlaubt: Pass es bis {date} an, sonst endet es an diesem Tag.',
+      'Das Konto enthält mehr, als der Hobby-Plan erlaubt: Pass es bis {date} an, sonst endet es an diesem Tag.',
     freePlanClosed:
-      'Der kostenlose Plan ist gerade geschlossen, daher gibt es keinen Plan, in den das Konto zurückkehren kann. Um die Verlängerung zu stoppen, kündige unter Abrechnung verwalten.',
+      'Der Hobby-Plan ist gerade geschlossen, daher gibt es keinen Plan, in den das Konto zurückkehren kann. Um die Verlängerung zu stoppen, kündige unter Abrechnung verwalten.',
     noPaidSubscription:
       'Dieses Konto hat kein bezahltes Abo, das widerrufen werden kann. Lade die Seite neu.',
     windowClosed:
@@ -770,14 +770,15 @@ export const de = translation({
     finishBody:
       'Dein Konto wartet auf einen Plan. Wähle einen, um die kostenlose Testphase zu starten.',
     freeTitle: 'Erstelle dein kostenloses Konto',
-    freeIntro: 'Kostenlos: bis zu {events} Ereignisse im Monat, auf einer Website. Ohne Karte.',
+    freeIntro:
+      'Hobby-Plan, kostenlos: bis zu {events} Ereignisse im Monat, auf einer Website. Ohne Karte.',
     fullTitle: 'Erstelle dein Konto',
     fullIntro:
-      'Der kostenlose Plan ist gerade voll. Erstelle dein Konto, dann wartet es auf einen Platz, oder abonniere gleich danach den kostenpflichtigen Plan.',
+      'Der Hobby-Plan ist gerade voll. Erstelle dein Konto, dann wartet es auf einen Platz, oder abonniere gleich danach den Pro-Plan.',
     opening: 'Dein Konto wird geöffnet…',
-    waitTitle: 'Der kostenlose Plan ist gerade voll',
+    waitTitle: 'Der Hobby-Plan ist gerade voll',
     waitBody:
-      'Dein Konto ist bereit und wartet auf einen Platz im kostenlosen Plan: Wir schreiben dir, sobald einer frei wird, und es wartet bis zu {days} Tage. Du kannst auch jetzt den kostenpflichtigen Plan abonnieren.',
+      'Dein Konto ist bereit und wartet auf einen Platz im Hobby-Plan: Wir schreiben dir, sobald einer frei wird, und es wartet bis zu {days} Tage. Du kannst auch jetzt den Pro-Plan abonnieren.',
   },
   signUpPage: {
     title: 'Registrieren',
@@ -797,7 +798,7 @@ export const de = translation({
       'Das dauert ein paar Sekunden, und die Seite prüft von selbst erneut. Dauert es länger, bekommst du eine E-Mail, sobald es erledigt ist.',
     trial: 'Deine kostenlose Testphase hat begonnen. Sie läuft bis {date}.',
     active: 'Dein Abo ist bestätigt.',
-    free: 'Dein Konto ist im kostenlosen Plan.',
+    free: 'Dein Konto ist im Hobby-Plan.',
     freeLimits:
       'Bis zu {events} Ereignisse im Monat, {projects} und {people}, mit allen Funktionen und ohne Karte. Die Messung pausiert, wenn der Monat {pauseAt} Ereignisse erreicht, und läuft am 1. wieder an.',
     fromFreePlan:
@@ -1894,11 +1895,11 @@ export const de = translation({
       seePricing: 'Preise ansehen',
       note: 'Ohne Registrierung. Erfundene Daten. Öffnet direkt das Dashboard.',
       startFree: 'Kostenlos starten',
-      seePaidPlan: 'Kostenpflichtigen Plan ansehen',
+      seePaidPlan: 'Pro-Plan ansehen',
       freeNote:
         'Kostenlos bis zu {events} Ereignisse im Monat auf einer Website, ohne Karte. Die Demo öffnet ohne Registrierung.',
       freeFullNote:
-        'Der kostenlose Plan ist gerade voll: Registriere dich, dann wartet dein Konto auf einen Platz, oder abonniere den kostenpflichtigen Plan.',
+        'Der Hobby-Plan ist gerade voll: Registriere dich, dann wartet dein Konto auf einen Platz, oder abonniere den Pro-Plan.',
       trialNote:
         '14 Tage kostenlos; die Karte wird erst am 15. Tag belastet. Die Demo öffnet ohne Registrierung.',
       claudeTag: 'Im Verzeichnis von Claude',
@@ -2109,7 +2110,7 @@ export const de = translation({
         account: {
           title: 'Konto und Projekt anlegen',
           bodyFree:
-            'Im Dashboard, mit einer E-Mail und ohne Karte: Der kostenlose Plan umfasst eine Website. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
+            'Im Dashboard, mit einer E-Mail und ohne Karte: Der Hobby-Plan umfasst eine Website. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
           body: 'Im Dashboard, mit einer E-Mail und einer Karte: 14 Tage kostenlos. Das Projekt kommt gleich mit seinem öffentlichen Schlüssel.',
         },
         install: {
@@ -2374,14 +2375,14 @@ export const de = translation({
           answerOpen:
             'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder abonniere den gehosteten Plan. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse und einer Karte registrieren: 14 Tage kostenlos, einmal pro Kunde, und du kannst jederzeit kündigen.',
           answerFree:
-            'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder nutze das gehostete Pyxis. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse ohne Karte im kostenlosen Plan registrieren und den kostenpflichtigen Plan abonnieren, wenn die Website mehr braucht.',
+            'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder nutze das gehostete Pyxis. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse ohne Karte im Hobby-Plan registrieren und den Pro-Plan abonnieren, wenn die Website mehr braucht.',
         },
         agency: {
           question: 'Kann ich Pyxis auf den Websites meiner Kunden nutzen?',
           answer:
             'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
           answerFree:
-            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der kostenlose Plan umfasst eine Website und nur dich, der kostenpflichtige Plan bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
+            'Ja. Leg pro Website ein Projekt an und füge den Kunden zu den Personen des Projekts hinzu: Er meldet sich mit einem Code per E-Mail an und sieht nur dieses Projekt. Der Hobby-Plan umfasst eine Website und nur dich, der Pro-Plan bis zu 3 Websites und 3 Personen, dich eingeschlossen; für mehr schreib an hello@pyxis-analytics.dev. Die <terms>Nutzungsbedingungen</terms> regeln das: Als Agentur die Websites von Kunden zu messen, die zugestimmt haben, ist kein Weiterverkauf.',
         },
         noCode: {
           question: 'Ich programmiere nicht. Kann ich es installieren?',
@@ -2408,7 +2409,7 @@ export const de = translation({
           answer:
             'R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte. Enthalten sind bis zu 100.000 Ereignisse pro Monat, 3 Websites, 3 Personen im Dashboard, 13 Monate Verlauf, der Wochenbericht und der MCP-Server.',
           answerFree:
-            'Beide Pläne haben alle Funktionen: 13 Monate Verlauf, den Wochenbericht und den MCP-Server. Der kostenlose Plan kostet nichts und nimmt bis zu {events} Ereignisse pro Monat auf einer Website an, nur mit dir im Dashboard. Der kostenpflichtige Plan kostet R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte, sofort berechnet, und nimmt bis zu 100.000 Ereignisse pro Monat, 3 Websites und 3 Personen an.',
+            'Beide Pläne haben alle Funktionen: 13 Monate Verlauf, den Wochenbericht und den MCP-Server. Der Hobby-Plan kostet nichts und nimmt bis zu {events} Ereignisse pro Monat auf einer Website an, nur mit dir im Dashboard. Der Pro-Plan kostet R$ 39 pro Monat oder R$ 390 pro Jahr (zwei Monate gratis), per Karte, sofort berechnet, und nimmt bis zu 100.000 Ereignisse pro Monat, 3 Websites und 3 Personen an.',
         },
         trial: {
           question: 'Wie funktioniert die kostenlose Testphase?',
@@ -2422,7 +2423,7 @@ export const de = translation({
           answerOpen:
             'Jederzeit, auf zwei Arten: Kündige im Abo-Portal, dann bleibt der Zugang bis zum Ende des bezahlten Zeitraums; oder schließ das Konto im Dashboard, dann endet der Zugang sofort. Innerhalb von 7 Tagen nach der ersten Abbuchung wird diese beim Schließen des Kontos vollständig erstattet; danach wird der bereits bezahlte Zeitraum nicht erstattet. Die Daten des Projekts werden 30 Tage nach Ende des Zugriffs gelöscht. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
           answerFree:
-            'Jederzeit, im Abo-Portal: Der kostenpflichtige Plan läuft bis zum Ende des bereits bezahlten Zeitraums, danach kehrt ein Konto mit einer Website und einer Person in den kostenlosen Plan zurück; ein größeres endet, und seine Daten werden 30 Tage später gelöscht. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen: Die Abbuchung wird vollständig erstattet, und das Konto kehrt in den kostenlosen Plan zurück, wenn es hineinpasst. Wenn du das Konto im Dashboard schließt, endet alles sofort, in jedem Plan. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
+            'Jederzeit, im Abo-Portal: Der Pro-Plan läuft bis zum Ende des bereits bezahlten Zeitraums, danach kehrt ein Konto mit einer Website und einer Person in den Hobby-Plan zurück; ein größeres endet, und seine Daten werden 30 Tage später gelöscht. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen: Die Abbuchung wird vollständig erstattet, und das Konto kehrt in den Hobby-Plan zurück, wenn es hineinpasst. Wenn du das Konto im Dashboard schließt, endet alles sofort, in jedem Plan. Die Details stehen in den <terms>Nutzungsbedingungen</terms>.',
         },
         limit: {
           question: 'Was passiert, wenn ich über 100.000 Ereignisse komme?',
@@ -2430,9 +2431,9 @@ export const de = translation({
             'Du bekommst eine E-Mail bei 80\u00a0% und bei 100\u00a0% der Ereignisse des Monats. Bei 150\u00a0% nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Über den Preis hinaus wird nie etwas berechnet.',
         },
         freeLimit: {
-          question: 'Was passiert bei {events} Ereignissen im kostenlosen Plan?',
+          question: 'Was passiert bei {events} Ereignissen im Hobby-Plan?',
           answer:
-            'Im kostenlosen Plan warnt eine E-Mail bei 80\u00a0% der Ereignisse des Monats. Bei {events} nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Ein Abo des kostenpflichtigen Plans hebt die Pause innerhalb einer Minute auf.',
+            'Im Hobby-Plan warnt eine E-Mail bei 80\u00a0% der Ereignisse des Monats. Bei {events} nimmt das Konto bis zum 1. des nächsten Monats keine Ereignisse mehr an, und während der Pause gesendete Ereignisse gehen verloren. Ein Abo des Pro-Plans hebt die Pause innerhalb einer Minute auf.',
         },
         payment: {
           question: 'Kann ich per Pix zahlen, und gibt es eine Rechnung?',
@@ -2442,7 +2443,7 @@ export const de = translation({
         support: {
           question: 'Wie erreiche ich den Support?',
           answer:
-            'Per E-Mail an {email}, am besten von der E-Mail-Adresse deines Kontos. Im kostenpflichtigen Tarif antworten wir innerhalb von {paidDays} Werktagen. Im kostenlosen Tarif laufen Fragen zu Installation und Nutzung über die GitHub-Issues und die Dokumentation; Vertrag, Tarif, Limits, Abrechnung und personenbezogene Daten bleiben bei der E-Mail, mit einer Antwort innerhalb von {freeDays} Tagen. Eine Sicherheitslücke meldest du vertraulich über GitHub.',
+            'Per E-Mail an {email}, am besten von der E-Mail-Adresse deines Kontos. Im Pro-Plan antworten wir innerhalb von {paidDays} Werktagen. Im Hobby-Plan laufen Fragen zu Installation und Nutzung über die GitHub-Issues und die Dokumentation; Vertrag, Tarif, Limits, Abrechnung und personenbezogene Daten bleiben bei der E-Mail, mit einer Antwort innerhalb von {freeDays} Tagen. Eine Sicherheitslücke meldest du vertraulich über GitHub.',
         },
       },
     },
@@ -2488,7 +2489,7 @@ export const de = translation({
       pricing: 'Preise',
       code: 'Code',
       support: 'Support',
-      supportReply: 'Antwort innerhalb von {days} Werktagen im kostenpflichtigen Tarif.',
+      supportReply: 'Antwort innerhalb von {days} Werktagen im Pro-Plan.',
       questions: 'Fragen auf GitHub',
       securityReport: 'Sicherheitslücke melden',
       author: 'Autor: {site}',

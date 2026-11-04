@@ -87,7 +87,7 @@ export const FreePlanClosed: Story = {
   args: { withdraw: () => Promise.resolve<WithdrawOutcome>({ kind: 'freePlanClosed' }) },
   play: async ({ canvasElement }) => {
     const canvas = await withdraw(canvasElement);
-    await expect(await canvas.findByRole('alert')).toHaveTextContent('The free plan is closed');
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('The Hobby plan is closed');
   },
 };
 
