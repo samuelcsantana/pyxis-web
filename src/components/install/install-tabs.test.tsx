@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
-import { InstallTabs, tabAfterKey } from './install-tabs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { entranceOf, InstallTabs, tabAfterKey } from './install-tabs';
 
 const TABS = [
   { id: 'first', label: 'First', panel: <p>First panel</p> },
@@ -34,7 +34,57 @@ describe('tabAfterKey', () => {
   });
 });
 
+describe('entranceOf', () => {
+  it.each([
+    [0, 2, 'fromEnd'],
+    [2, 1, 'fromStart'],
+    [1, 1, 'still'],
+  ])('slides the panel of tab %i to tab %i in %s', (previous, next, entrance) => {
+    expect(entranceOf(previous, next)).toBe(entrance);
+  });
+});
+
+describe('InstallTabs, measured by the browser', () => {
+  beforeEach(() => {
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(120);
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(40);
+    vi.spyOn(HTMLElement.prototype, 'offsetLeft', 'get').mockImplementation(function left(
+      this: HTMLElement,
+    ) {
+      return Number(this.dataset.choice ?? 0) * 124;
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('lays a yellow thumb under the selected tab and slides it to the tab clicked', async () => {
+    const { tab } = renderTabs();
+
+    expect(screen.getByRole('tablist')).toHaveAttribute('data-sliding', '');
+    expect(screen.getByTestId('sliding-indicator')).toHaveClass('bg-accent');
+    expect(screen.getByTestId('sliding-indicator')).toHaveStyle({ translate: '0px 0px' });
+    expect(tab('First')).toHaveClass('group-data-sliding/install-tabs:bg-transparent');
+
+    await userEvent.click(tab('Third'));
+
+    expect(screen.getByTestId('sliding-indicator')).toHaveStyle({ translate: '248px 0px' });
+  });
+});
+
 describe('InstallTabs', () => {
+  it('slides the next panel in from the side of the tab chosen', async () => {
+    const { tab, panel } = renderTabs();
+    expect(panel('First')).not.toHaveClass('motion-safe:animate-slide-from-end');
+
+    await userEvent.click(tab('Third'));
+    expect(panel('Third')).toHaveClass('motion-safe:animate-slide-from-end');
+
+    await userEvent.click(tab('Second'));
+    expect(panel('Second')).toHaveClass('motion-safe:animate-slide-from-start');
+  });
+
   it('opens on the first tab, the only one reachable with Tab', () => {
     const { tab, panel } = renderTabs();
 

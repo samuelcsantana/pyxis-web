@@ -1,12 +1,9 @@
 'use client';
 
 import { type KeyboardEvent, type ReactNode, useRef, useState } from 'react';
-import {
-  SEGMENTED_GROUP,
-  SEGMENTED_IDLE,
-  SEGMENTED_OPTION,
-  SEGMENTED_SELECTED,
-} from '@/components/ui/control-classes';
+import { CONTROL_TRANSITION, FOCUS_RING, SLIDING_INDICATOR } from '@/components/ui/control-classes';
+import { SlidingIndicator } from '@/components/ui/sliding-indicator';
+import { choiceMark, useSlidingIndicator } from '@/components/ui/use-sliding-indicator';
 
 export interface InstallTab {
   readonly id: string;
@@ -18,6 +15,21 @@ export interface InstallTabsProps {
   readonly label: string;
   readonly tabs: readonly InstallTab[];
 }
+
+export type PanelEntrance = 'still' | 'fromEnd' | 'fromStart';
+
+const TAB_LIST =
+  'group/install-tabs relative flex flex-wrap self-start gap-1 rounded-input border border-line-strong bg-card p-1 shadow-sm';
+const TAB = `relative z-[1] flex min-h-10 items-center gap-2 rounded-control px-3.5 text-sm font-semibold ${FOCUS_RING} ${CONTROL_TRANSITION}`;
+const TAB_SELECTED = 'bg-accent text-accent-ink group-data-sliding/install-tabs:bg-transparent';
+const TAB_IDLE = 'text-ink hover:bg-soft active:bg-soft';
+const TAB_THUMB = `rounded-control bg-accent shadow-sm ${SLIDING_INDICATOR}`;
+
+const PANEL_ENTRANCES: Readonly<Record<PanelEntrance, string>> = {
+  still: '',
+  fromEnd: 'motion-safe:animate-slide-from-end',
+  fromStart: 'motion-safe:animate-slide-from-start',
+};
 
 export function tabAfterKey(key: string, current: number, count: number): number | undefined {
   switch (key) {
@@ -34,6 +46,13 @@ export function tabAfterKey(key: string, current: number, count: number): number
   }
 }
 
+export function entranceOf(previous: number, next: number): PanelEntrance {
+  if (next === previous) {
+    return 'still';
+  }
+  return next > previous ? 'fromEnd' : 'fromStart';
+}
+
 export function tabIdOf(id: string): string {
   return `${id}-tab`;
 }
@@ -44,7 +63,14 @@ export function panelIdOf(id: string): string {
 
 export function InstallTabs({ label, tabs }: InstallTabsProps) {
   const [selected, setSelected] = useState(0);
+  const [entrance, setEntrance] = useState<PanelEntrance>('still');
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const { attach, frame, sliding } = useSlidingIndicator(String(selected));
+
+  const select = (next: number) => {
+    setEntrance(entranceOf(selected, next));
+    setSelected(next);
+  };
 
   const moveWith = (event: KeyboardEvent<HTMLButtonElement>) => {
     const next = tabAfterKey(event.key, selected, tabs.length);
@@ -52,13 +78,20 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
       return;
     }
     event.preventDefault();
-    setSelected(next);
+    select(next);
     buttons.current[next]?.focus();
   };
 
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <div role="tablist" aria-label={label} className={`flex-wrap self-start ${SEGMENTED_GROUP}`}>
+      <div
+        ref={attach}
+        role="tablist"
+        aria-label={label}
+        data-sliding={sliding}
+        className={TAB_LIST}
+      >
+        <SlidingIndicator frame={frame} shape="fill" className={TAB_THUMB} />
         {tabs.map((tab, index) => (
           <button
             key={tab.id}
@@ -68,14 +101,15 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
             type="button"
             role="tab"
             id={tabIdOf(tab.id)}
+            {...choiceMark(String(index))}
             aria-controls={panelIdOf(tab.id)}
             aria-selected={index === selected}
             tabIndex={index === selected ? 0 : -1}
             onClick={() => {
-              setSelected(index);
+              select(index);
             }}
             onKeyDown={moveWith}
-            className={`min-h-9 gap-1.5 px-3 ${SEGMENTED_OPTION} ${index === selected ? SEGMENTED_SELECTED : SEGMENTED_IDLE}`}
+            className={`${TAB} ${index === selected ? TAB_SELECTED : TAB_IDLE}`}
           >
             {tab.label}
           </button>
@@ -88,7 +122,7 @@ export function InstallTabs({ label, tabs }: InstallTabsProps) {
           id={panelIdOf(tab.id)}
           aria-labelledby={tabIdOf(tab.id)}
           hidden={index !== selected}
-          className="flex min-w-0 flex-col gap-3"
+          className={`flex min-w-0 flex-col gap-3 ${PANEL_ENTRANCES[entrance]}`}
         >
           {tab.panel}
         </div>
