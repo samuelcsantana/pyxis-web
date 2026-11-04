@@ -38,9 +38,9 @@ const FREE_INCLUDED = [
   'history',
   'digest',
   'agents',
-  'pause',
-  'card',
+  'install',
 ] as const;
+const PAID_ADDS = ['events', 'sites', 'people', 'support'] as const;
 const PERIOD_FIELD = 'pricing-period';
 const YEARLY = 'year';
 const MONTHLY = 'month';
@@ -60,6 +60,8 @@ const START_WHEN_MONTHLY = 'block group-has-[input[value=year]:checked]/pricing:
 const START_WHEN_YEARLY = 'hidden group-has-[input[value=year]:checked]/pricing:block';
 const SAVING =
   'rounded-pill bg-accent px-1.5 py-px font-mono text-caption font-medium whitespace-nowrap text-accent-ink';
+const BADGE =
+  'ml-1.5 inline-block rounded-pill border border-line-strong px-1.5 font-mono text-caption font-medium whitespace-nowrap text-muted';
 const PRICE = 'text-5xl leading-none font-semibold tracking-[-0.03em] tabular-nums';
 const NOTE = 'text-sm leading-relaxed text-muted';
 
@@ -167,11 +169,21 @@ function StartButtons({ i18n }: AskPanelProps) {
   );
 }
 
-function IncludedList({ items }: { readonly items: readonly string[] }) {
+interface IncludedBadge {
+  readonly shown: string;
+  readonly spoken: string;
+}
+
+interface IncludedItem {
+  readonly text: string;
+  readonly badge?: IncludedBadge | undefined;
+}
+
+function IncludedList({ items }: { readonly items: readonly IncludedItem[] }) {
   return (
     <ul className="grid gap-2.5 text-base">
-      {items.map((item) => (
-        <li key={item} className="flex items-start gap-2.5">
+      {items.map(({ text, badge }) => (
+        <li key={text} className="flex items-start gap-2.5">
           <svg
             width={16}
             height={16}
@@ -188,7 +200,17 @@ function IncludedList({ items }: { readonly items: readonly string[] }) {
               strokeLinejoin="round"
             />
           </svg>
-          {item}
+          <span>
+            {text}
+            {badge === undefined ? null : (
+              <>
+                <span aria-hidden="true" className={BADGE}>
+                  {badge.shown}
+                </span>
+                <span className="sr-only"> {badge.spoken}</span>
+              </>
+            )}
+          </span>
         </li>
       ))}
     </ul>
@@ -257,7 +279,6 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
         }
         className={SHOW_WHEN_YEARLY}
       />
-      <IncludedList items={INCLUDED.map((item) => t(`landing.pricing.included.${item}`))} />
     </>
   );
 }
@@ -297,6 +318,9 @@ function OnePlan({ i18n, offer, approximate }: PlansProps) {
             className={`group/pricing flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}
           >
             <PaidPlanTerms i18n={i18n} approximate={approximate} />
+            <IncludedList
+              items={INCLUDED.map((item) => ({ text: t(`landing.pricing.included.${item}`) }))}
+            />
             {signUpOpen ? (
               <StartButtons i18n={i18n} />
             ) : (
@@ -360,7 +384,9 @@ function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: bool
         className="flex flex-col gap-1"
       />
       <IncludedList
-        items={FREE_INCLUDED.map((item) => t(`landing.pricing.free.included.${item}`, { events }))}
+        items={FREE_INCLUDED.map((item) => ({
+          text: t(`landing.pricing.free.included.${item}`, { events }),
+        }))}
       />
       <a
         href={LANDING_LINKS.signUp}
@@ -379,7 +405,27 @@ function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: bool
           />
         </svg>
       </a>
+      <p className={NOTE}>{t('landing.pricing.free.terms', { events })}</p>
       {full ? <p className={NOTE}>{t('landing.hero.freeFullNote')}</p> : null}
+    </div>
+  );
+}
+
+function PaidPlanAdds({ i18n }: { readonly i18n: I18n }) {
+  const { t } = i18n;
+  const eventsBadge = {
+    shown: t('landing.pricing.eventsBadge'),
+    spoken: t('landing.pricing.eventsBadgeSpoken'),
+  };
+  return (
+    <div className="flex flex-col gap-2.5">
+      <p className="text-base font-semibold">{t('landing.pricing.paidAdds')}</p>
+      <IncludedList
+        items={PAID_ADDS.map((item) => ({
+          text: t(`landing.pricing.included.${item}`),
+          badge: item === 'events' ? eventsBadge : undefined,
+        }))}
+      />
     </div>
   );
 }
@@ -396,13 +442,14 @@ function TwoPlans({ i18n, offer, approximate }: PlansProps) {
       <div className="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2 lg:items-start">
         <FreePlanCard i18n={i18n} full={offer === 'freeFull'} />
         <div
-          className={`group/pricing flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}
+          data-testid="paid-plan"
+          className={`group/pricing flex flex-col gap-5 rounded-card border border-accent bg-card p-6 ring-1 ring-accent ${REVEAL}`}
         >
           <h3 className="text-lg font-semibold">{t('landing.pricing.paidName')}</h3>
           <PaidPlanTerms i18n={i18n} approximate={approximate} />
+          <PaidPlanAdds i18n={i18n} />
           <p className={NOTE}>{t('landing.pricing.paidHow')}</p>
         </div>
-        <p className={`max-w-2xl ${NOTE} lg:col-span-2`}>{t('landing.pricing.freeOpenNote')}</p>
         <div className="lg:col-span-2">
           <AgenciesPanel i18n={i18n} free />
         </div>

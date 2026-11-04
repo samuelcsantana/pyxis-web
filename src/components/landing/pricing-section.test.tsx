@@ -244,22 +244,23 @@ describe('PricingSection', () => {
       return { section, free, paid };
     }
 
-    it('shows the free plan and the paid plan side by side, free first', () => {
+    it('shows Hobby and Pro side by side, Hobby first and Pro outlined', () => {
       render(<PricingSection i18n={english} offer="free" />);
 
       const { section, free, paid } = plans();
       expect(section).toHaveAttribute('id', PRICING_ID);
-      expect(free).toHaveTextContent('Free');
-      expect(paid).toHaveTextContent('Paid');
+      expect(free).toHaveTextContent('Hobby');
+      expect(paid).toHaveTextContent('Pro');
       expect(within(section).getByText('R$ 0')).toBeInTheDocument();
       expect(within(section).getByText('R$ 39')).toBeInTheDocument();
       expect(within(section).getByRole('group', { name: 'Billing period' })).toBeInTheDocument();
+      expect(screen.getByTestId('paid-plan')).toHaveClass('border-accent', 'ring-accent');
     });
 
-    it('lists the free plan in the same order as the paid one, with its pause and no card', () => {
+    it('lists what Hobby includes, with its card and pause terms under the button', () => {
       render(<PricingSection i18n={english} offer="free" />);
 
-      const [free, paid] = within(plans().section)
+      const [free] = within(plans().section)
         .getAllByRole('list')
         .map((list) =>
           within(list)
@@ -273,10 +274,30 @@ describe('PricingSection', () => {
         '13 months of history',
         'A weekly digest by e-mail',
         'The Claude connector (MCP) and access tokens for AI agents',
-        'Measuring pauses at 10,000 events until the 1st, with an e-mail at 80%',
-        'No card',
+        'Installs without code, through Google Tag Manager or in a Shopify theme',
       ]);
-      expect(paid?.[0]).toBe('Up to 100,000 events a month');
+      const terms = screen.getByText(
+        'No card. At 10,000 events measuring pauses until the 1st, and we e-mail you at 80%.',
+      );
+      expect(screen.getByRole('link', { name: 'Start free' }).compareDocumentPosition(terms)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+
+    it('lists only what Pro adds to Hobby, telling the events jump to sight and to screen readers', () => {
+      render(<PricingSection i18n={english} offer="free" />);
+
+      expect(screen.getByText('Everything in Hobby, plus:')).toBeInTheDocument();
+      const paid = within(screen.getByTestId('paid-plan')).getByRole('list');
+      const items = within(paid).getAllByRole('listitem');
+      expect(items.map((item) => item.textContent)).toEqual([
+        'Up to 100,000 events a month10× (10 times Hobby)',
+        'Up to 3 sites',
+        'Up to 3 people in the dashboard',
+        'Support by e-mail, answered within 2 business days',
+      ]);
+      expect(within(paid).getByText('10×')).toHaveAttribute('aria-hidden', 'true');
+      expect(within(paid).getByText('(10 times Hobby)')).toHaveClass('sr-only');
     });
 
     it('starts free from the free card and says how to subscribe from the paid one', () => {
@@ -289,16 +310,12 @@ describe('PricingSection', () => {
       expect(start).toHaveAttribute('data-track-plan', 'free');
       expect(screen.getAllByRole('link', { name: /Start/ })).toHaveLength(1);
       expect(
-        screen.getByText(/^Everyone starts on the free plan: subscribe in Account and billing/),
+        screen.getByText(/^Everyone starts on Hobby\. Subscribe to Pro in Account and billing/),
       ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'Sign up with an e-mail and no card: the dashboard opens at once, on the free plan.',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.queryByText(/^Sign up with an e-mail and no card/)).toBeNull();
       expect(screen.queryByText(/free trial|day 15|Request access/)).toBeNull();
       expect(screen.getByRole('heading', { name: 'For agencies and developers' })).toBeVisible();
-      expect(screen.getByText(/The paid plan has up to 3 sites and 3 people/)).toBeInTheDocument();
+      expect(screen.getByText(/Pro has up to 3 sites and 3 people/)).toBeInTheDocument();
     });
 
     it('says the free plan is full for now on its card, still leading to sign-up', () => {
@@ -311,9 +328,14 @@ describe('PricingSection', () => {
     it('speaks the visitor’s language, in its numbers', () => {
       render(<PricingSection i18n={portuguese} offer="free" />);
 
-      expect(screen.getByRole('heading', { name: 'Grátis' })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: 'Pago' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Hobby' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Pro' })).toBeInTheDocument();
       expect(screen.getByText('Até 10.000 eventos por mês')).toBeInTheDocument();
+      expect(screen.getByText('Tudo do Hobby, e:')).toBeInTheDocument();
+      expect(screen.getByText('R$ 32,50')).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'Anual, R$ 390 por ano, 17% a menos' }),
+      ).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Começar grátis' })).toBeInTheDocument();
     });
   });

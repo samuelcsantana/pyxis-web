@@ -2261,13 +2261,14 @@ export const fr = translation({
       eyebrow: 'Tarifs',
       title: 'Une seule formule, en reais, avec tout ce que montre la démo',
       titleFree: 'Deux formules, en reais, avec tout ce que montre la démo dans les deux',
-      paidName: 'Payante',
+      paidName: 'Pro',
+      paidAdds: 'Tout Hobby, et en plus :',
+      eventsBadge: '10×',
+      eventsBadgeSpoken: '(10 fois Hobby)',
       paidHow:
-        'Tout le monde commence avec la formule gratuite : souscrivez dans Compte et facturation, au mois ou à l’année, débité aussitôt. Dans les 7 jours suivant le premier prélèvement, vous pouvez vous rétracter et être remboursé en totalité.',
-      freeOpenNote:
-        'Inscrivez-vous avec une adresse e-mail et sans carte : le tableau de bord s’ouvre aussitôt, avec la formule gratuite.',
+        'Tout le monde commence avec Hobby. Souscrivez à Pro dans Compte et facturation, au mois ou à l’année, débité aussitôt ; dans les 7 jours suivant ce prélèvement, vous pouvez vous rétracter et être remboursé en totalité.',
       free: {
-        name: 'Gratuite',
+        name: 'Hobby',
         price: '0 R$',
         note: 'Sans date de fin, tant que le site y tient.',
         start: 'Commencer gratuitement',
@@ -2278,10 +2279,10 @@ export const fr = translation({
           history: '13 mois d’historique',
           digest: 'Un récapitulatif hebdomadaire par e-mail',
           agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
-          pause:
-            'La mesure se met en pause à {events} événements jusqu’au 1er, avec un e-mail à 80 %',
-          card: 'Sans carte',
+          install: 'S’installe sans coder, via Google Tag Manager ou dans un thème Shopify',
         },
+        terms:
+          'Sans carte. À {events} événements, la mesure se met en pause jusqu’au 1er, et nous vous prévenons par e-mail à 80 %.',
       },
       lead: 'Rien à payer par visiteur, par fonctionnalité ni par personne identifiée. Et toujours aucun cookie chez vos visiteurs, ni aucune adresse IP stockée.',
       period: 'Période de facturation',
@@ -2306,6 +2307,7 @@ export const fr = translation({
         history: '13 mois d’historique',
         digest: 'Un récapitulatif hebdomadaire par e-mail',
         agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
+        support: 'Assistance par e-mail, réponse sous 2 jours ouvrés',
       },
       ask: 'Demander un accès',
       askTitle: 'Écrivez à',
@@ -2323,7 +2325,7 @@ export const fr = translation({
         'Pour l’instant, l’accès se fait sur invitation : vous en faites la demande, recevez le lien de paiement et, une fois abonné, obtenez l’accès au tableau de bord sous 2 jours ouvrés.',
       moreTitle: 'Pour les agences et les développeurs',
       moreFree:
-        'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule payante comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
+        'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule Pro comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
       more: 'Mesurez les sites de vos clients : chaque client se connecte avec sa propre adresse e-mail et ne voit que son projet. La formule comprend jusqu’à 3 sites et 3 personnes, vous compris. Pour plus de clients, indiquez combien de sites et de personnes à hello@pyxis-analytics.dev et nous répondons sous 2 jours ouvrés avec une formule sur mesure.',
       moreLink: 'Demander une formule pour agence',
       moreSubject: 'Une formule Pyxis pour agence',

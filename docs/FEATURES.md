@@ -488,8 +488,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   cannot be read), a FAQ (including whether it works on a Shopify store and with Google Tag Manager) and the
   introduction post. Once the API says the free plan is open, the
   same status turns the page to it: the hero leads with "Start free" and "See the paid plan",
-  pricing shows a Free and a Paid card with the same rows in the same order (the paid card has no
-  button: everyone starts free and subscribes in Account and billing), the FAQ answers for two
+  pricing shows a Hobby card (what it includes, the Tag Manager and Shopify install, and under its
+  button the no-card and 10,000-event pause terms) and an outlined Pro card that lists only what
+  it adds ("Everything in Hobby, plus:" the events with a "10×" mark, sites, people and e-mail
+  support within 2 business days) and has no button: everyone starts on Hobby and subscribes in
+  Account and billing. The yearly option carries its saving ("−17%") and shows its price per
+  month with the yearly charge under it. The FAQ answers for two
   plans and asks what happens at 10,000 events instead of how the trial works, and the
   description, the structured data and `llms.txt` name the free plan; while it is full, the hero
   and the free card say so. The address follows the section being read, and switching language opens the

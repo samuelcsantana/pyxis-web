@@ -2235,13 +2235,14 @@ export const nl = translation({
       eyebrow: 'Prijzen',
       title: 'Eén abonnement, in reais, met alles wat de demo laat zien',
       titleFree: 'Twee abonnementen, in reais, allebei met alles wat de demo laat zien',
-      paidName: 'Betaald',
+      paidName: 'Pro',
+      paidAdds: 'Alles van Hobby, plus:',
+      eventsBadge: '10×',
+      eventsBadgeSpoken: '(10 keer Hobby)',
       paidHow:
-        'Iedereen begint op het gratis abonnement: neem het betaalde onder Account en facturering, per maand of per jaar, direct afgerekend. Binnen 7 dagen na de eerste betaling kun je herroepen en krijg je het volledige bedrag terug.',
-      freeOpenNote:
-        'Registreer je met een e-mailadres en zonder kaart: het dashboard opent meteen, op het gratis abonnement.',
+        'Iedereen begint op Hobby. Neem Pro onder Account en facturering, per maand of per jaar, direct afgerekend; binnen 7 dagen na die betaling kun je herroepen en krijg je alles terug.',
       free: {
-        name: 'Gratis',
+        name: 'Hobby',
         price: 'R$ 0',
         note: 'Zonder einddatum, zolang de site erin past.',
         start: 'Gratis beginnen',
@@ -2252,9 +2253,11 @@ export const nl = translation({
           history: '13 maanden geschiedenis',
           digest: 'Een wekelijkse samenvatting per e-mail',
           agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
-          pause: 'Het meten pauzeert bij {events} events tot de 1e, met een e-mail bij 80%',
-          card: 'Zonder kaart',
+          install:
+            'Installeren zonder programmeren, via Google Tag Manager of in een Shopify-thema',
         },
+        terms:
+          'Zonder kaart. Bij {events} events pauzeert het meten tot de 1e, en bij 80% krijg je een e-mail.',
       },
       lead: 'Geen kosten per bezoeker, per functie of per geïdentificeerde persoon. Je bezoekers krijgen nog steeds geen cookie, en hun IP-adres wordt niet opgeslagen.',
       period: 'Factuurperiode',
@@ -2279,6 +2282,7 @@ export const nl = translation({
         history: '13 maanden geschiedenis',
         digest: 'Een wekelijkse samenvatting per e-mail',
         agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
+        support: 'Support per e-mail, antwoord binnen 2 werkdagen',
       },
       ask: 'Toegang aanvragen',
       askTitle: 'Mail naar',
@@ -2295,7 +2299,7 @@ export const nl = translation({
         'Voorlopig is toegang alleen op uitnodiging: je vraagt het aan, krijgt de betaallink en hebt na het abonneren binnen 2 werkdagen toegang tot het dashboard.',
       moreTitle: 'Voor bureaus en developers',
       moreFree:
-        'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het betaalde abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
+        'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Pro omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
       more: 'Meet de sites van je klanten: elke klant logt in met zijn eigen e-mailadres en ziet alleen zijn project. Het abonnement omvat tot 3 sites en 3 personen, jij meegerekend. Voor meer klanten: laat via hello@pyxis-analytics.dev weten hoeveel sites en personen, en we reageren binnen 2 werkdagen met een abonnement op maat.',
       moreLink: 'Vraag naar een abonnement voor bureaus',
       moreSubject: 'Een Pyxis-abonnement voor een bureau',

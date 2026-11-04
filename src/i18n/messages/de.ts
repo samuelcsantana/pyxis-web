@@ -2260,13 +2260,14 @@ export const de = translation({
       eyebrow: 'Preise',
       title: 'Ein Plan, in Real, mit allem, was die Demo zeigt',
       titleFree: 'Zwei Pläne, in Real, beide mit allem, was die Demo zeigt',
-      paidName: 'Kostenpflichtig',
+      paidName: 'Pro',
+      paidAdds: 'Alles aus Hobby, dazu:',
+      eventsBadge: '10×',
+      eventsBadgeSpoken: '(10-mal so viel wie Hobby)',
       paidHow:
-        'Alle starten im kostenlosen Plan: Abonniere unter Konto und Abrechnung, monatlich oder jährlich, sofort berechnet. Innerhalb von 7 Tagen nach der ersten Abbuchung kannst du widerrufen und bekommst den Betrag vollständig zurück.',
-      freeOpenNote:
-        'Registriere dich mit einer E-Mail und ohne Karte: Das Dashboard öffnet sofort, im kostenlosen Plan.',
+        'Alle starten mit Hobby. Pro abonnierst du unter Konto und Abrechnung, monatlich oder jährlich, sofort berechnet; innerhalb von 7 Tagen nach dieser Abbuchung kannst du widerrufen und bekommst alles zurück.',
       free: {
-        name: 'Kostenlos',
+        name: 'Hobby',
         price: 'R$ 0',
         note: 'Ohne Enddatum, solange die Website hineinpasst.',
         start: 'Kostenlos starten',
@@ -2277,10 +2278,11 @@ export const de = translation({
           history: '13 Monate Verlauf',
           digest: 'Ein Wochenbericht per E-Mail',
           agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
-          pause:
-            'Die Messung pausiert bei {events} Ereignissen bis zum 1., mit einer E-Mail bei 80\u00a0%',
-          card: 'Ohne Karte',
+          install:
+            'Installation ohne Programmieren, über den Google Tag Manager oder im Shopify-Theme',
         },
+        terms:
+          'Ohne Karte. Bei {events} Ereignissen pausiert die Messung bis zum 1., und bei 80\u00a0% schicken wir dir eine E-Mail.',
       },
       lead: 'Keine Kosten pro Besucher, pro Funktion oder pro identifizierter Person. Deine Besucher bekommen weiterhin kein Cookie, und ihre IP-Adresse wird nicht gespeichert.',
       period: 'Abrechnungszeitraum',
@@ -2305,6 +2307,7 @@ export const de = translation({
         history: '13 Monate Verlauf',
         digest: 'Ein Wochenbericht per E-Mail',
         agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
+        support: 'Support per E-Mail, Antwort innerhalb von 2 Werktagen',
       },
       ask: 'Zugang anfragen',
       askTitle: 'Schreib an',
@@ -2322,7 +2325,7 @@ export const de = translation({
         'Derzeit gibt es Zugang nur auf Einladung: Du fragst an, bekommst den Zahlungslink und, sobald du abonniert hast, innerhalb von 2 Werktagen Zugang zum Dashboard.',
       moreTitle: 'Für Agenturen und Entwickler',
       moreFree:
-        'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der kostenpflichtige Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
+        'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Pro umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
       more: 'Miss die Websites deiner Kunden: Jeder Kunde meldet sich mit seiner eigenen E-Mail an und sieht nur sein Projekt. Der Plan umfasst bis zu 3 Websites und 3 Personen, dich eingeschlossen. Für mehr Kunden schreib uns an hello@pyxis-analytics.dev, wie viele Websites und Personen du brauchst, und wir antworten innerhalb von 2 Werktagen mit einem passenden Plan.',
       moreLink: 'Nach einem Plan für Agenturen fragen',
       moreSubject: 'Ein Pyxis-Plan für eine Agentur',
