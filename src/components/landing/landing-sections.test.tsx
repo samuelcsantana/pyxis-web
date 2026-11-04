@@ -372,7 +372,7 @@ describe('InstallSection', () => {
     );
   });
 
-  it('names where it installs, in plain text with no brand logo, before the steps', () => {
+  it('names where it installs, each beside its own icon, before the steps', () => {
     render(<InstallSection i18n={english} offer="trial" />);
 
     const platforms = screen.getByRole('list', { name: 'Installs in' });
@@ -389,7 +389,12 @@ describe('InstallSection', () => {
       'Nuvemshop, through Tag Manager',
     ]);
     expect(within(platforms).getAllByRole('listitem')).toHaveLength(PLATFORMS.length);
-    expect(platforms.querySelector('img, svg')).toBeNull();
+    expect(
+      within(platforms)
+        .getAllByRole('listitem')
+        .map((item) => item.querySelector('svg')?.dataset.icon),
+    ).toEqual(['nextJs', 'react', 'html', 'tagManager', 'shopify', 'cloudStore']);
+    expect(platforms.querySelector('img')).toBeNull();
     expect(
       platforms.compareDocumentPosition(
         screen.getByRole('list', { name: 'How to start, in 3 steps' }),
@@ -415,6 +420,11 @@ describe('InstallSection', () => {
       'With code',
       'Google Tag Managerno code',
       'Shopifyno code',
+    ]);
+    expect(tabs.map((tab) => tab.querySelector('svg')?.dataset.icon)).toEqual([
+      'code',
+      'tagManager',
+      'shopify',
     ]);
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
     expect(tabs[0]).toHaveAttribute('id', `${INSTALL_TAB_IDS.code}-tab`);

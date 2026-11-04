@@ -12,6 +12,7 @@ import { INSTALL_ID, LANDING_LINKS } from './landing-links';
 import { LandingSection } from './landing-section';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
 import { NudgeRobot } from './nudge-robot';
+import { PlatformIcon, type PlatformIconName } from './platform-icon';
 
 export interface InstallSectionProps {
   readonly i18n: I18n;
@@ -260,6 +261,15 @@ export const PLATFORMS = [
 
 type Platform = (typeof PLATFORMS)[number];
 
+const PLATFORM_ICONS: Readonly<Record<Platform, PlatformIconName>> = {
+  'Next.js': 'nextJs',
+  React: 'react',
+  anyHtml: 'html',
+  [TAG_MANAGER]: 'tagManager',
+  [SHOPIFY]: 'shopify',
+  nuvemshop: 'cloudStore',
+};
+
 function platformLabelOf({ t }: I18n, platform: Platform): string {
   switch (platform) {
     case 'anyHtml':
@@ -283,7 +293,11 @@ function Platforms({ i18n }: { readonly i18n: I18n }) {
       </p>
       <ul aria-label={label} className="flex flex-wrap gap-1.5">
         {PLATFORMS.map((platform) => (
-          <li key={platform} className={`${AGENT_CHIP} font-medium text-ink`}>
+          <li
+            key={platform}
+            className={`${AGENT_CHIP} inline-flex items-center gap-1.5 bg-card font-medium text-ink`}
+          >
+            <PlatformIcon name={PLATFORM_ICONS[platform]} />
             {platformLabelOf(i18n, platform)}
           </li>
         ))}
@@ -328,11 +342,20 @@ const STEP_SLOTS: RichSlots = {
   ),
 };
 
-function NoCodeTabLabel({ name, noCode }: { readonly name: string; readonly noCode: string }) {
+interface NoCodeTabLabelProps {
+  readonly icon: PlatformIconName;
+  readonly name: string;
+  readonly noCode: string;
+}
+
+function NoCodeTabLabel({ icon, name, noCode }: NoCodeTabLabelProps) {
   return (
     <>
+      <PlatformIcon name={icon} size={16} />
       {name}
-      <span className="font-mono text-micro tracking-[0.06em] uppercase">{noCode}</span>
+      <span className="rounded-chip border border-current/30 px-1.5 py-px font-mono text-micro tracking-[0.06em] uppercase opacity-80">
+        {noCode}
+      </span>
     </>
   );
 }
@@ -403,17 +426,34 @@ export function InstallSection({ i18n, offer }: InstallSectionProps) {
         tabs={[
           {
             id: INSTALL_TAB_IDS.code,
-            label: t('landing.install.tabs.code'),
+            label: (
+              <>
+                <PlatformIcon name="code" size={16} />
+                {t('landing.install.tabs.code')}
+              </>
+            ),
             panel: <WithCode i18n={i18n} offer={offer} labels={labels} />,
           },
           {
             id: INSTALL_TAB_IDS.tagManager,
-            label: <NoCodeTabLabel name={TAG_MANAGER} noCode={t('landing.install.tabs.noCode')} />,
+            label: (
+              <NoCodeTabLabel
+                icon="tagManager"
+                name={TAG_MANAGER}
+                noCode={t('landing.install.tabs.noCode')}
+              />
+            ),
             panel: <WithTagManager i18n={i18n} />,
           },
           {
             id: INSTALL_TAB_IDS.shopify,
-            label: <NoCodeTabLabel name={SHOPIFY} noCode={t('landing.install.tabs.noCode')} />,
+            label: (
+              <NoCodeTabLabel
+                icon="shopify"
+                name={SHOPIFY}
+                noCode={t('landing.install.tabs.noCode')}
+              />
+            ),
             panel: <WithShopify i18n={i18n} labels={labels} />,
           },
         ]}
