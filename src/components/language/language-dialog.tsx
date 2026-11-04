@@ -113,7 +113,8 @@ export function LanguageDialog({ choose, onClose }: LanguageDialogProps) {
               setQuery(event.target.value);
             }}
             onKeyDown={(event) => {
-              const first = found[0];
+              const typed = event.currentTarget.value;
+              const first = LOCALES.find((locale) => matches(locale, uiLocale, typed));
               if (event.key !== 'Enter' || first === undefined) {
                 return;
               }
