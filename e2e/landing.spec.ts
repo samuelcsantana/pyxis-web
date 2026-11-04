@@ -548,11 +548,14 @@ test('shows the yearly price once the visitor picks it', async ({ page }) => {
   });
 
   await expect(pricing.getByText('R$ 39', { exact: true })).toBeVisible();
-  await expect(pricing.getByText('R$ 390', { exact: true })).toBeHidden();
+  await expect(pricing.getByText('R$ 32,50', { exact: true })).toBeHidden();
   await pricing.locator('label').filter({ hasText: 'Anual' }).click();
 
   await expect(pricing.getByRole('radio', { name: /^Anual/ })).toBeChecked();
-  await expect(pricing.getByText('R$ 390', { exact: true })).toBeVisible();
+  await expect(pricing.getByText('R$ 32,50', { exact: true })).toBeVisible();
+  await expect(
+    pricing.getByText('cobrado R$ 390 de uma vez, por ano', { exact: true }),
+  ).toBeVisible();
   await expect(pricing.getByText('R$ 39', { exact: true })).toBeHidden();
 });
 

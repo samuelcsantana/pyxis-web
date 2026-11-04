@@ -51,13 +51,15 @@ const PERIOD_SWITCH =
   'relative grid max-w-full grid-cols-2 rounded-pill border border-line bg-soft p-[3px]';
 const PERIOD_THUMB =
   'pointer-events-none absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-pill bg-card shadow-sm transition-transform duration-200 ease-out group-has-[input[value=year]:checked]/pricing:translate-x-full motion-reduce:transition-none';
-const PERIOD_OPTION = `relative z-[1] flex cursor-pointer items-center justify-center rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
+const PERIOD_OPTION = `relative z-[1] flex cursor-pointer items-center justify-center gap-1.5 rounded-pill px-3.5 py-1.5 text-sm font-medium text-muted hover:text-ink has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${CONTROL_TRANSITION}`;
 const SHOW_WHEN_MONTHLY =
   'flex flex-col gap-1 motion-safe:animate-settle group-has-[input[value=year]:checked]/pricing:hidden';
 const SHOW_WHEN_YEARLY =
   'hidden flex-col gap-1 motion-safe:animate-settle group-has-[input[value=year]:checked]/pricing:flex';
 const START_WHEN_MONTHLY = 'block group-has-[input[value=year]:checked]/pricing:hidden';
 const START_WHEN_YEARLY = 'hidden group-has-[input[value=year]:checked]/pricing:block';
+const SAVING =
+  'rounded-pill bg-accent px-1.5 py-px font-mono text-caption font-medium whitespace-nowrap text-accent-ink';
 const PRICE = 'text-5xl leading-none font-semibold tracking-[-0.03em] tabular-nums';
 const NOTE = 'text-sm leading-relaxed text-muted';
 
@@ -215,7 +217,7 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
               aria-label={t('landing.pricing.monthlyLabel')}
               className="sr-only"
             />
-            {t('landing.pricing.monthly')}
+            <span>{t('landing.pricing.monthly')}</span>
           </label>
           <label className={PERIOD_OPTION}>
             <input
@@ -226,15 +228,12 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
               aria-label={t('landing.pricing.yearlyLabel')}
               className="sr-only"
             />
-            {t('landing.pricing.yearly')}
+            <span>{t('landing.pricing.yearly')}</span>
+            <span aria-hidden="true" className={SAVING}>
+              {t('landing.pricing.saving')}
+            </span>
           </label>
         </fieldset>
-        <label
-          htmlFor={YEARLY_OPTION_ID}
-          className="cursor-pointer rounded-pill bg-accent px-2 py-0.5 font-mono text-caption font-medium text-accent-ink"
-        >
-          {t('landing.pricing.saving')}
-        </label>
       </div>
       <Price
         amount={t('landing.pricing.monthlyPrice')}
@@ -249,7 +248,7 @@ function PaidPlanTerms({ i18n, approximate }: PaidPlanTermsProps) {
       />
       <Price
         amount={t('landing.pricing.yearlyPrice')}
-        period={t('landing.pricing.perYear')}
+        period={t('landing.pricing.perMonth')}
         note={t('landing.pricing.yearlyNote')}
         approximation={
           approximate === undefined
