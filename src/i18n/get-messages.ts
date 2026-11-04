@@ -1,28 +1,16 @@
 import { currentLocale } from './current-locale';
 import { createI18n, type I18n } from './i18n';
+import { loadMessages } from './load-messages';
 import type { Locale } from './locales';
 import {
   CLIENT_NAMESPACES,
   type ClientMessages,
-  type Messages,
   pickNamespaces,
   type SourceMessages,
 } from './messages';
 import { createTranslator, type Translator } from './translate';
 
-const LOADERS: Readonly<Record<Locale, () => Promise<Messages>>> = {
-  en: async () => (await import('./messages/en')).en,
-  'pt-BR': async () => (await import('./messages/pt-BR')).ptBR,
-  es: async () => (await import('./messages/es')).es,
-  de: async () => (await import('./messages/de')).de,
-  fr: async () => (await import('./messages/fr')).fr,
-  it: async () => (await import('./messages/it')).it,
-  nl: async () => (await import('./messages/nl')).nl,
-};
-
-export function loadMessages(locale: Locale): Promise<Messages> {
-  return LOADERS[locale]();
-}
+export { loadMessages } from './load-messages';
 
 export async function clientMessages(locale: Locale): Promise<ClientMessages> {
   return pickNamespaces(await loadMessages(locale), CLIENT_NAMESPACES);
