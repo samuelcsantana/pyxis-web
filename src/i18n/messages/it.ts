@@ -752,6 +752,14 @@ export const it = translation({
       lead: 'Invia l’importo come numero in una proprietà <code>revenue</code> dell’evento che un obiettivo conta:',
       rule: 'Un numero da 0 fino a meno di 1.000.000.000, nella valuta del progetto ({currency}). Un testo come "129,90" o un importo negativo viene scartato.',
     },
+    autoEvents: {
+      title: 'Eventi automatici (facoltativo)',
+      lead: 'Link in uscita, download di file e invii di moduli si possono registrare senza una chiamata a <code>track</code>. Con il pacchetto npm, aggiungi questo dopo <code>init</code>:',
+      events:
+        'Ogni tipo resta spento finché non lo accendi qui. <code>outbound_link_clicked</code> porta solo il dominio del link, <code>file_downloaded</code> l’estensione del file e il suo percorso come modello, <code>form_submitted</code> l’id o il nome del modulo, mai ciò che è stato digitato.',
+      where:
+        'Solo con il pacchetto npm: il modello di Tag Manager e gli snippet di Shopify e WordPress non li registrano.',
+    },
     how: 'Come installare',
     yourself: 'Per conto tuo',
     withAgent: 'Con un agente IA',
@@ -2327,6 +2335,8 @@ export const it = translation({
         'Le chiavi arrivano con il tuo account: inizia la prova gratuita qui sotto, oppure gestisci un tuo Pyxis. Tutti e quattro i repository sono con licenza MIT, infrastruttura AWS (Terraform) inclusa.',
       requests:
         'Per vedere quali chiamate alla tua API falliscono, avvolgi una volta il tuo client HTTP con <code>trackRequest()</code>. <link>Vedi l’esempio</link>',
+      autoEvents:
+        'Per contare link in uscita, download di file e invii di moduli senza una chiamata a <code>track</code>, aggiungi <code>autoEvents()</code> da <code>pyxis-analytics/auto</code>; ogni tipo resta spento finché non lo accendi. <link>Vedi le opzioni</link>',
       agent: {
         title: 'Oppure chiedilo al tuo agente di IA',
         lead: 'Apri il repository del sito in Claude Code, in Cursor o in un altro agente e incolla:',

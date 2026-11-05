@@ -754,6 +754,14 @@ export const nl = translation({
       lead: 'Stuur het bedrag als getal in een eigenschap <code>revenue</code> van het event dat een doel telt:',
       rule: 'Een getal vanaf 0 tot onder 1.000.000.000, in de valuta van het project ({currency}). Een tekst als "129,90" of een negatief bedrag wordt weggelaten.',
     },
+    autoEvents: {
+      title: 'Automatische events (optioneel)',
+      lead: 'Uitgaande links, bestandsdownloads en verzonden formulieren kun je vastleggen zonder een <code>track</code>-aanroep. Voeg met het npm-pakket dit toe na <code>init</code>:',
+      events:
+        'Elke soort blijft uit tot je hem hier aanzet. <code>outbound_link_clicked</code> bevat alleen het domein van de link, <code>file_downloaded</code> de extensie van het bestand en het pad als template, <code>form_submitted</code> de id of naam van het formulier, nooit wat er is getypt.',
+      where:
+        'Alleen met het npm-pakket: de Tag Manager-template en de fragmenten voor Shopify en WordPress leggen ze niet vast.',
+    },
     how: 'Zo installeer je',
     yourself: 'Zelf',
     withAgent: 'Met een AI-agent',
@@ -2324,6 +2332,8 @@ export const nl = translation({
         'Je sleutels horen bij je account: start hieronder de gratis proefperiode, of draai je eigen Pyxis. Alle vier de repository’s hebben een MIT-licentie, de AWS-infrastructuur (Terraform) inbegrepen.',
       requests:
         'Om te zien welke aanroepen naar je API mislukken, wikkel je je HTTP-client één keer in <code>trackRequest()</code>. <link>Bekijk het voorbeeld</link>',
+      autoEvents:
+        'Om uitgaande links, bestandsdownloads en verzonden formulieren te tellen zonder een <code>track</code>-aanroep, voeg je <code>autoEvents()</code> uit <code>pyxis-analytics/auto</code> toe; elke soort blijft uit tot je hem aanzet. <link>Bekijk de opties</link>',
       agent: {
         title: 'Of vraag het je AI-agent',
         lead: 'Open de repository van de site in Claude Code, in Cursor of in een andere agent en plak:',

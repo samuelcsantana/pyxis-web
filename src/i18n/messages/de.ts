@@ -764,6 +764,14 @@ export const de = translation({
       lead: 'Sende den Betrag als Zahl in einer Eigenschaft <code>revenue</code> des Ereignisses, das ein Ziel zählt:',
       rule: 'Eine Zahl ab 0 und unter 1.000.000.000, in der Währung des Projekts ({currency}). Ein Text wie "129,90" oder ein negativer Betrag wird verworfen.',
     },
+    autoEvents: {
+      title: 'Automatische Ereignisse (optional)',
+      lead: 'Ausgehende Links, Datei-Downloads und abgeschickte Formulare lassen sich ohne einen <code>track</code>-Aufruf erfassen. Mit dem npm-Paket füge das nach <code>init</code> hinzu:',
+      events:
+        'Jede Art bleibt aus, bis du sie hier einschaltest. <code>outbound_link_clicked</code> trägt nur die Domain des Links, <code>file_downloaded</code> die Dateiendung und den Pfad als Vorlage, <code>form_submitted</code> die id oder den Namen des Formulars, nie das Eingetippte.',
+      where:
+        'Nur mit dem npm-Paket: Die Tag-Manager-Vorlage und die Codeausschnitte für Shopify und WordPress erfassen sie nicht.',
+    },
     how: 'So installierst du',
     yourself: 'Selbst',
     withAgent: 'Mit einem KI-Agenten',
@@ -2348,6 +2356,8 @@ export const de = translation({
         'Deine Schlüssel bekommst du mit deinem Konto: Starte unten die kostenlose Testphase oder betreibe dein eigenes Pyxis. Alle vier Repositorys stehen unter MIT-Lizenz, die AWS-Infrastruktur (Terraform) eingeschlossen.',
       requests:
         'Um zu sehen, welche Aufrufe an deine API fehlschlagen, umschließe deinen HTTP-Client einmal mit <code>trackRequest()</code>. <link>Beispiel ansehen</link>',
+      autoEvents:
+        'Um ausgehende Links, Datei-Downloads und abgeschickte Formulare ohne einen <code>track</code>-Aufruf zu zählen, füge <code>autoEvents()</code> aus <code>pyxis-analytics/auto</code> hinzu; jede Art bleibt aus, bis du sie einschaltest. <link>Optionen ansehen</link>',
       agent: {
         title: 'Oder bitte deinen KI-Agenten',
         lead: 'Öffne das Repository der Website in Claude Code, in Cursor oder in einem anderen Agenten und füge ein:',

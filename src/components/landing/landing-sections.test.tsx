@@ -358,6 +358,24 @@ describe('InstallSection', () => {
     );
   });
 
+  it('points to the automatic events of the npm package, after trackRequest', () => {
+    render(<InstallSection i18n={english} offer="byInvitation" />);
+
+    const sentence = screen.getByText(
+      /To count outbound links, file downloads and form submissions/,
+    );
+    const link = within(sentence).getByRole('link', { name: 'See the options' });
+    expect(within(sentence).getByText('pyxis-analytics/auto').tagName).toBe('CODE');
+    expect(link).toHaveAttribute(
+      'href',
+      'https://github.com/samuelcsantana/pyxis-sdk#automatic-events',
+    );
+    expect(link).toHaveAttribute('data-track-doc', 'auto_events');
+    expect(
+      screen.getByText(/To see which calls to your API fail/).compareDocumentPosition(sentence),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
   it('points to trackRequest in the reader’s language', () => {
     render(<InstallSection i18n={portuguese} offer="trial" />);
 

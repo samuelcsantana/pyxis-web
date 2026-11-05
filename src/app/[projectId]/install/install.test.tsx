@@ -105,7 +105,7 @@ describe('InstallGuide', () => {
     const second = screen.getByRole('region', { name: '2. Open a page of your site' });
     expect(second).toHaveTextContent('Page views from https://store.example.com show up here');
     expect(within(second).getByRole('status')).toHaveTextContent('Waiting for the first event…');
-    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(5);
+    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(6);
     expect(screen.queryByText(/Already connected Claude/)).not.toBeInTheDocument();
   });
 
@@ -116,6 +116,20 @@ describe('InstallGuide', () => {
     expect(within(first).getByRole('heading', { name: 'Record revenue (optional)' })).toBeVisible();
     expect(first).toHaveTextContent("track('purchase', { revenue: 129.9 });");
     expect(first).toHaveTextContent('in the project’s currency (BRL · Brazilian Real)');
+  });
+
+  it('offers the automatic events from the npm package, saying what each keeps and where they are missing', () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
+    expect(
+      within(first).getByRole('heading', { name: 'Automatic events (optional)' }),
+    ).toBeVisible();
+    expect(first).toHaveTextContent("import { autoEvents } from 'pyxis-analytics/auto';");
+    expect(first).toHaveTextContent('outbound_link_clicked carries only the link’s domain');
+    expect(first).toHaveTextContent(
+      'Only with the npm package: the Tag Manager template and the Shopify and WordPress snippets do not record them.',
+    );
   });
 
   it('opens on installing it yourself, with the agent one tab away', () => {
