@@ -1,6 +1,7 @@
+import { type DateTimeStyle, dateTimeFormat } from './date-time-formats';
 import { createDayFormats, type DayFormats } from './day-formats';
 
-export type DateTimeStyle = 'clock' | 'visitStart' | 'failureTime' | 'eventTime';
+export type { DateTimeStyle } from './date-time-formats';
 export type WeekdayWidth = 'narrow' | 'short' | 'long';
 
 export interface Formats extends DayFormats {
@@ -35,19 +36,6 @@ const MILLISECONDS_PER_DAY = 86_400_000;
 const ONE_DECIMAL: Intl.NumberFormatOptions = {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
-};
-
-const HOURS_AND_MINUTES: Intl.DateTimeFormatOptions = {
-  hour: '2-digit',
-  minute: '2-digit',
-  hourCycle: 'h23',
-};
-
-const DATE_TIME_STYLES: Readonly<Record<DateTimeStyle, Intl.DateTimeFormatOptions>> = {
-  clock: { ...HOURS_AND_MINUTES, second: '2-digit' },
-  visitStart: { weekday: 'short', month: 'short', day: 'numeric', ...HOURS_AND_MINUTES },
-  failureTime: { month: 'short', day: 'numeric', ...HOURS_AND_MINUTES },
-  eventTime: { month: 'short', day: 'numeric', year: 'numeric', ...HOURS_AND_MINUTES },
 };
 
 function buildFormats(tag: string): Formats {
@@ -107,10 +95,7 @@ function buildFormats(tag: string): Formats {
     dayWithYear,
     monthWithYear: (date) => monthWithYear.format(date),
     fullDay: (date) => fullDay.format(date),
-    dateTime: (style, timeZone) => {
-      const format = new Intl.DateTimeFormat(tag, { ...DATE_TIME_STYLES[style], timeZone });
-      return (date) => format.format(date);
-    },
+    dateTime: (style, timeZone) => dateTimeFormat(tag, style, timeZone),
     country: (code) => String(countries.of(code)),
     currencyName: (code) => String(currencies.of(code)),
     list: (items) => lists.format(items),
