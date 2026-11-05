@@ -31,11 +31,15 @@ import {
 } from '@/lib/security-headers';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { THEME_COOKIE_NAME } from '@/lib/theme';
+import { SHARE_PAGE_PATH } from '@/domain/share-links';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
 export const RETURN_PARAMETER = 'next';
 
+export const ROBOTS_HEADER = 'X-Robots-Tag';
+export const NOT_INDEXED = 'noindex, nofollow';
+const SHARE_PREFIX = `${SHARE_PAGE_PATH}/`;
 const PERMANENT_REDIRECT = 308;
 const TEMPORARY_REDIRECT = 307;
 const ONE_YEAR_IN_SECONDS = 31_536_000;
@@ -110,6 +114,12 @@ function renderWith(
   return response;
 }
 
+function sharedPage(request: NextRequest): NextResponse {
+  const response = renderWith(request);
+  response.headers.set(ROBOTS_HEADER, NOT_INDEXED);
+  return response;
+}
+
 function landingOrDemo(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl;
   if (isInternalLandingPath(pathname)) {
@@ -124,6 +134,9 @@ function landingOrDemo(request: NextRequest): NextResponse {
   }
   const hostname = requestHostname(request.headers) ?? request.nextUrl.hostname;
   if (!isLandingHostname(hostname)) {
+    if (pathname.startsWith(SHARE_PREFIX)) {
+      return sharedPage(request);
+    }
     return rememberLinkPreferences(request) ?? renderWith(request);
   }
   const legal = legalDocumentAt(pathname);
@@ -161,6 +174,9 @@ export function proxy(request: NextRequest) {
     return remembered;
   }
   const { pathname, search, searchParams } = request.nextUrl;
+  if (pathname.startsWith(SHARE_PREFIX)) {
+    return sharedPage(request);
+  }
   const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
   const onSignIn = pathname === SIGN_IN_PATH;
   const onSignUp = pathname === SIGN_UP_PATH;
