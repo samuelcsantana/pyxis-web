@@ -161,6 +161,17 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   among the project's goals, named on its chip by the goal's name, and carried to every screen
   that takes the filters; an id the project no longer has is left out with a note instead of
   failing the screen
+- Revenue: a site sends it as a number in a `revenue` property of an event (from 0 up to, but not
+  including, 1,000,000,000, in the project's currency; the API drops a text or a negative
+  amount), and a goal on that event sums it. The Overview gets a Revenue card after Conversions
+  for the goal counted, against the previous period with a sparkline and the average per
+  conversion; it is a figure, not a toggle of the chart, because the API gives no revenue for the
+  days of the previous period. The card stays away for a page goal (pages carry no revenue) and
+  while the goal earned nothing in either period, so a site that never sends revenue sees no
+  empty money card. The Goals table, the Acquisition sources and campaigns get a Revenue column
+  once any row earned some (a dash for a page goal or a row that cannot earn), and each event
+  step of the Funnel says what the event that completed it brought. Amounts follow the reader's
+  language in the project's currency: exact in tables, whole (compact past 100,000) on the card
 - Devices: a Reach card first, counting the continents (the five of UN M49, named under the
   count), countries, regions and, for a project that keeps the city or a period that holds one,
   cities the visits came from, then the region with most visits and its share of them (the
@@ -353,7 +364,9 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   button; while it is closed the box is hidden, so the page never shows an address that answers
   404, and the list still shows. Below it,
   the project. The owner of its account edits it: name, up to five allowed origins (typed as
-  `shop.example.com` or a full URL, saved as origins) and time zone, each problem named under
+  `shop.example.com` or a full URL, saved as origins), time zone and currency (common ISO 4217
+  codes, the real first, named in the reader's language; changing it converts nothing), each
+  problem named under
   its field before anything is sent (the conversion event moved to the goals, so saving the
   project never touches the first goal); creates a public key or a secret key
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
