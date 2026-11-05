@@ -51,6 +51,19 @@ describe('llmsText', () => {
     expect(text).toContain('Up to 10 properties per event');
   });
 
+  it('tells an agent how to switch on automatic events, and that the classic build has none', () => {
+    expect(text).toContain(
+      '- [Automatic events](https://github.com/samuelcsantana/pyxis-sdk#automatic-events), optional',
+    );
+    expect(text).toContain(
+      '`autoEvents({ outboundLinks: true, fileDownloads: true, formSubmits: true })` from',
+    );
+    expect(text).toContain('`form_submitted` (the form’s id or name, never a typed value)');
+    expect(text).toContain(
+      'the classic `window.pyxis` build of Tag Manager and WordPress does not.',
+    );
+  });
+
   it('tells an agent how to send revenue and what is dropped', () => {
     expect(text).toContain("`track('purchase', { revenue: 129.9 })`");
     expect(text).toContain('non-negative number below 1,000,000,000 in the project’s currency');
