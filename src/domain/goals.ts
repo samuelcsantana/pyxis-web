@@ -1,7 +1,7 @@
 import type { I18n } from '@/i18n/i18n';
 import { EVENT_NAME_PATTERN, MAX_PATH_LENGTH } from './funnel';
 import { GOAL_PARAMETER } from './goal-parameters';
-import { formatCount, formatPercent } from './metrics';
+import { formatCount, formatMoney, formatPercent } from './metrics';
 
 export const MAX_GOALS = 10;
 export const MAX_GOAL_NAME_LENGTH = 64;
@@ -25,6 +25,7 @@ export interface GoalSummary extends Goal {
   readonly conversions: number;
   readonly convertingVisits: number;
   readonly conversionRate: number | null;
+  readonly revenue: number | null;
 }
 
 export interface GoalsSummary {
@@ -189,9 +190,11 @@ export interface GoalRow {
   readonly rate: string;
   readonly share: number;
   readonly reached: boolean;
+  readonly revenue: string | null;
+  readonly earned: number;
 }
 
-export function goalRows(summary: GoalsSummary, i18n: I18n): readonly GoalRow[] {
+export function goalRows(summary: GoalsSummary, currency: string, i18n: I18n): readonly GoalRow[] {
   return summary.goals.map((goal) => ({
     id: goal.id,
     name: goal.name,
@@ -202,7 +205,13 @@ export function goalRows(summary: GoalsSummary, i18n: I18n): readonly GoalRow[] 
     rate: formatPercent(goal.conversionRate, i18n),
     share: goal.conversionRate ?? 0,
     reached: goal.convertingVisits > 0,
+    revenue: goal.revenue === null ? null : formatMoney(goal.revenue, currency, i18n),
+    earned: goal.revenue ?? 0,
   }));
+}
+
+export function goalsEarned(rows: readonly GoalRow[]): boolean {
+  return rows.some((row) => row.earned > 0);
 }
 
 interface ReachedGoalReading {

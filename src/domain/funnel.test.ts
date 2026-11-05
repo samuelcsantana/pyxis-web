@@ -113,11 +113,28 @@ describe('isCountableFunnel', () => {
 });
 
 describe('funnelRows', () => {
+  it('gives an event step its revenue, and none to a page step or a step that earned nothing', () => {
+    const rows = funnelRows(
+      countedSteps([CALCULATOR, RESULT, SIGN_UP], {
+        steps: [
+          { count: 100, revenue: null },
+          { count: 60, revenue: 0 },
+          { count: 40, revenue: 1234.5 },
+        ],
+      }),
+      'BRL',
+      english,
+    );
+
+    expect(rows.map((row) => row.revenue)).toEqual([null, null, 'R$1,234.50 in revenue']);
+  });
+
   it('shows each step with its count, the share that continued and the drop-off', () => {
     const rows = funnelRows(
       countedSteps([CALCULATOR, RESULT, SIGN_UP], {
         steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }],
       }),
+      'BRL',
       english,
     );
 
@@ -133,6 +150,7 @@ describe('funnelRows', () => {
       tone: 'start',
       dropped: '',
       time: null,
+      revenue: null,
       reachedLink: null,
       droppedLink: null,
     });
@@ -147,12 +165,13 @@ describe('funnelRows', () => {
   it('shows dashes when a step had nobody, and zero for a step the API did not count', () => {
     const rows = funnelRows(
       countedSteps([CALCULATOR, RESULT, SIGN_UP], { steps: [{ count: 0 }, { count: 0 }] }),
+      'BRL',
       english,
     );
 
     expect(rows[1]).toMatchObject({ continued: '— continued', tone: 'neutral' });
     expect(rows[2]?.count).toBe('0');
-    expect(funnelRows([], english)).toEqual([]);
+    expect(funnelRows([], 'BRL', english)).toEqual([]);
   });
 });
 
@@ -160,21 +179,21 @@ describe('step times', () => {
   it('reads the median time of each step and of the whole funnel, or none from an older API', () => {
     const report = funnelResponseSchema.parse({
       steps: [
-        { count: 1940, median_seconds_from_previous: null },
-        { count: 1212, median_seconds_from_previous: 79 },
+        { count: 1940, median_seconds_from_previous: null, revenue: null },
+        { count: 1212, median_seconds_from_previous: 79, revenue: 4890.5 },
       ],
       median_seconds_overall: 79,
     });
 
     expect(report).toEqual({
       steps: [
-        { count: 1940, medianSecondsFromPrevious: null },
-        { count: 1212, medianSecondsFromPrevious: 79 },
+        { count: 1940, medianSecondsFromPrevious: null, revenue: null },
+        { count: 1212, medianSecondsFromPrevious: 79, revenue: 4890.5 },
       ],
       medianSecondsOverall: 79,
     });
     expect(funnelResponseSchema.parse({ steps: [{ count: 3 }] })).toEqual({
-      steps: [{ count: 3, medianSecondsFromPrevious: null }],
+      steps: [{ count: 3, medianSecondsFromPrevious: null, revenue: null }],
       medianSecondsOverall: null,
     });
   });
@@ -187,6 +206,7 @@ describe('step times', () => {
           { count: 1212, medianSecondsFromPrevious: 79 },
         ],
       }),
+      'BRL',
       english,
     );
 

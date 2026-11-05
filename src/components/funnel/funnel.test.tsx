@@ -37,6 +37,7 @@ describe('FunnelSteps', () => {
         i18n={english}
         rows={funnelRows(
           countedSteps(STEPS, { steps: [{ count: 1940 }, { count: 1212 }, { count: 498 }] }),
+          'BRL',
           english,
         )}
       />,
@@ -61,6 +62,7 @@ describe('FunnelSteps', () => {
               { count: 1212, medianSecondsFromPrevious: 41 },
             ],
           }),
+          'BRL',
           english,
         )}
       />,

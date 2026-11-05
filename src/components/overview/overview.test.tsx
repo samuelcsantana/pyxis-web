@@ -55,7 +55,7 @@ describe('KpiGrid', () => {
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, 'BRL', english)}
       />,
     );
 
@@ -70,9 +70,10 @@ describe('KpiGrid', () => {
       ),
     ).toBeInTheDocument();
     expect(visits.querySelectorAll('p')).toHaveLength(2);
-    expect(screen.getAllByRole('group')).toHaveLength(4);
+    expect(screen.getAllByRole('group')).toHaveLength(5);
+    expect(screen.getByRole('group', { name: 'Revenue' })).toHaveTextContent(/R\$/);
     expect(screen.queryByRole('region')).not.toBeInTheDocument();
-    expect(container.querySelectorAll('polyline')).toHaveLength(4);
+    expect(container.querySelectorAll('polyline')).toHaveLength(5);
     expect(container.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(7);
   });
 
@@ -126,7 +127,7 @@ describe('KpiGrid', () => {
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, 'BRL', english)}
       />,
     );
 
@@ -155,7 +156,7 @@ describe('KpiGrid', () => {
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, 'BRL', english)}
       />,
     );
 
@@ -164,7 +165,7 @@ describe('KpiGrid', () => {
   });
 
   it('turns each card into a toggle that plots its figure, its link kept outside the toggle', () => {
-    const kpis = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english);
+    const kpis = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, 'BRL', english);
     renderWithMessages(
       <MetricSelection available={kpis.map((figure) => figure.id)}>
         <KpiGrid i18n={english} drillDownHref={drillDownHref} kpis={kpis} selectable />
@@ -229,7 +230,7 @@ describe('KpiGrid', () => {
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
-  const found = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english).find(
+  const found = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, 'BRL', english).find(
     (candidate) => candidate.id === id,
   );
   if (found === undefined) {
@@ -398,7 +399,7 @@ describe('fresh slots on Overview', () => {
     const { container } = renderWithMessages(
       <>
         <KpiGrid
-          kpis={overviewKpis(REPORT, LAST_WEEK, null, english)}
+          kpis={overviewKpis(REPORT, LAST_WEEK, null, 'BRL', english)}
           drillDownHref={drillDownHref}
           i18n={english}
         />

@@ -34,6 +34,7 @@ const WIRE: AcquisitionWire = {
       visits: 130,
       conversions: 6,
       from_ad_click_visits: 120,
+      revenue: null,
     },
     {
       source: '(direct)',
@@ -42,6 +43,7 @@ const WIRE: AcquisitionWire = {
       visits: 30,
       conversions: 3,
       from_ad_click_visits: 0,
+      revenue: null,
     },
   ],
 };
@@ -55,6 +57,7 @@ const GOOGLE: Source = {
   conversions: 6,
   convertingVisits: null,
   fromAdClickVisits: 120,
+  revenue: null,
 };
 const SPRING_WIRE = {
   campaign: 'spring_sale',
@@ -65,6 +68,7 @@ const SPRING_WIRE = {
   conversions: 6,
   converting_visits: 4,
   from_ad_click_visits: 72,
+  revenue: null,
 } as const;
 const SPRING_SALE: Campaign = {
   campaign: 'spring_sale',
@@ -75,6 +79,7 @@ const SPRING_SALE: Campaign = {
   conversions: 6,
   convertingVisits: 4,
   fromAdClickVisits: 72,
+  revenue: null,
 };
 
 describe('acquisitionResponseSchema', () => {
@@ -103,6 +108,7 @@ describe('campaignRows', () => {
   it('gives each campaign its source, conversion rate and ad click visits', () => {
     const [spring, brand] = campaignRows(
       [SPRING_SALE, { ...SPRING_SALE, campaign: 'brand', source: '(direct)', visits: 20 }],
+      'BRL',
       english,
     );
 
@@ -119,6 +125,8 @@ describe('campaignRows', () => {
       conversionRate: '5.0%',
       barWidth: '25.0%',
       fromAdClicks: '72 from ad clicks',
+      revenue: null,
+      earned: 0,
     });
     expect(brand).toMatchObject({
       source: '(direct)',
@@ -129,9 +137,10 @@ describe('campaignRows', () => {
   });
 
   it('falls back to conversion events and leaves rates out without a conversion event', () => {
-    const [events] = campaignRows([{ ...SPRING_SALE, convertingVisits: null }], english);
+    const [events] = campaignRows([{ ...SPRING_SALE, convertingVisits: null }], 'BRL', english);
     const [none] = campaignRows(
       [{ ...SPRING_SALE, conversions: null, convertingVisits: null, fromAdClickVisits: 0 }],
+      'BRL',
       english,
     );
 
@@ -227,7 +236,7 @@ describe('topChannel', () => {
 
 describe('sourceRows', () => {
   it('gives each source its medium, conversion rate and ad click visits', () => {
-    const [google, direct] = sourceRows(REPORT.sources, english);
+    const [google, direct] = sourceRows(REPORT.sources, 'BRL', english);
 
     expect(google).toEqual({
       key: 'google|cpc|paid',
@@ -241,6 +250,8 @@ describe('sourceRows', () => {
       conversionRate: '4.6%',
       barWidth: '46.2%',
       fromAdClicks: '120 from ad clicks',
+      revenue: null,
+      earned: 0,
     });
     expect(direct).toMatchObject({
       key: '(direct)||direct',
@@ -254,13 +265,13 @@ describe('sourceRows', () => {
   });
 
   it('rates the visits that converted when the API counts them', () => {
-    const [row] = sourceRows([{ ...GOOGLE, conversions: 9, convertingVisits: 5 }], english);
+    const [row] = sourceRows([{ ...GOOGLE, conversions: 9, convertingVisits: 5 }], 'BRL', english);
 
     expect(row).toMatchObject({ conversions: '5', conversionRate: '3.8%' });
   });
 
   it('leaves conversions out when the project has no conversion event', () => {
-    const [row] = sourceRows([{ ...GOOGLE, conversions: null }], english);
+    const [row] = sourceRows([{ ...GOOGLE, conversions: null }], 'BRL', english);
 
     expect(row?.conversions).toBeNull();
     expect(row?.conversionRate).toBeNull();
@@ -268,7 +279,7 @@ describe('sourceRows', () => {
   });
 
   it('shows a dash for a source without visits', () => {
-    const [row] = sourceRows([{ ...GOOGLE, visits: 0, conversions: 0 }], english);
+    const [row] = sourceRows([{ ...GOOGLE, visits: 0, conversions: 0 }], 'BRL', english);
 
     expect(row?.conversionRate).toBe('—');
   });
@@ -285,8 +296,12 @@ describe('sourceRows', () => {
   });
 
   it('labels the sources and campaigns that came from an ad click without a source', () => {
-    const [source] = sourceRows([{ ...GOOGLE, source: '(ad click)', medium: null }], portuguese);
-    const [campaign] = campaignRows([{ ...SPRING_SALE, source: '(ad click)' }], portuguese);
+    const [source] = sourceRows(
+      [{ ...GOOGLE, source: '(ad click)', medium: null }],
+      'BRL',
+      portuguese,
+    );
+    const [campaign] = campaignRows([{ ...SPRING_SALE, source: '(ad click)' }], 'BRL', portuguese);
 
     expect(source).toMatchObject({ source: '(ad click)', label: '(clique de anúncio)' });
     expect(campaign).toMatchObject({ source: '(ad click)', sourceLabel: '(clique de anúncio)' });

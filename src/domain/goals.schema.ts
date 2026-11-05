@@ -37,6 +37,7 @@ export const goalsSummaryResponseSchema = z
         conversions: z.number().int(),
         converting_visits: z.number().int(),
         conversion_rate: z.number().nullable(),
+        revenue: z.number().nullable(),
       }),
     ),
   })
@@ -47,6 +48,7 @@ export const goalsSummaryResponseSchema = z
       conversions: goal.conversions,
       convertingVisits: goal.converting_visits,
       conversionRate: goal.conversion_rate,
+      revenue: goal.revenue,
     })),
   }));
 

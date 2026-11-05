@@ -90,6 +90,7 @@ describe('GoalsTable', () => {
           conversions: 140,
           convertingVisits: 120,
           conversionRate: 0.1,
+          revenue: 4890.5,
         },
         {
           id: PRICING,
@@ -100,9 +101,11 @@ describe('GoalsTable', () => {
           conversions: 0,
           convertingVisits: 0,
           conversionRate: 0,
+          revenue: null,
         },
       ],
     },
+    'BRL',
     english,
   );
 
@@ -134,9 +137,9 @@ describe('GoalsTable', () => {
   it('gives each goal its kind, target, visits, times reached and rate', () => {
     const [header, signUp, pricing] = within(table()).getAllByRole('row');
 
-    expect(header).toHaveTextContent('GoalVisitsTimes reachedConversion rate');
-    expect(signUp).toHaveTextContent('Sign-upEvent signup_completed12014010.0%');
-    expect(pricing).toHaveTextContent('Saw the pricingPage /pricing000.0%');
+    expect(header).toHaveTextContent('GoalVisitsTimes reachedRevenueConversion rate');
+    expect(signUp).toHaveTextContent('Sign-upEvent signup_completed120140R$4,890.5010.0%');
+    expect(pricing).toHaveTextContent('Saw the pricingPage /pricing00—0.0%');
   });
 
   it('opens the visits that reached a goal, and filters every screen by it', () => {
@@ -150,6 +153,21 @@ describe('GoalsTable', () => {
       'href',
       `/p-store/overview?reached_goal=${SIGN_UP}`,
     );
+  });
+
+  it('leaves the revenue column out while no goal earned any', () => {
+    render(
+      <GoalsTable
+        rows={rows.map((row) => ({ ...row, revenue: null, earned: 0 }))}
+        visits="1,200 visits"
+        periodLabel="last 30 days"
+        visitsHref={(goalId) => `/p-store/visits?reached_goal=${goalId}`}
+        filterOf={() => null}
+        i18n={english}
+      />,
+    );
+
+    expect(screen.queryByRole('columnheader', { name: 'Revenue' })).not.toBeInTheDocument();
   });
 
   it('links no list for a goal no visit reached', () => {

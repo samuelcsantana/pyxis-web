@@ -2,7 +2,9 @@ import type { I18n } from '@/i18n/i18n';
 import {
   countChange,
   formatCount,
+  formatMoney,
   formatPercent,
+  moneyChange,
   pointChange,
   rate,
   type Tone,
@@ -56,7 +58,7 @@ export function activityTotals(days: readonly DayActivity[]): ActivityTotals {
   );
 }
 
-export type KpiId = 'visits' | 'identified-users' | 'conversions' | 'write-errors';
+export type KpiId = 'visits' | 'identified-users' | 'conversions' | 'revenue' | 'write-errors';
 
 export interface KpiDrillDown {
   readonly label: string;
@@ -75,6 +77,7 @@ export interface KpiView {
   readonly note: string | null;
   readonly series: readonly SparklineValue[];
   readonly drillDown: KpiDrillDown | null;
+  readonly plottable: boolean;
 }
 
 interface KpiText {
@@ -111,6 +114,7 @@ function countKpi(kpi: Kpi, text: KpiText, comparison: string, i18n: I18n): KpiV
     comparison,
     series: kpi.daily,
     drillDown: kpi.current > 0 ? text.drillDown : null,
+    plottable: true,
   };
 }
 
@@ -144,6 +148,7 @@ function writeErrorsKpi(
     }),
     series: writeErrors.daily.map(failureRate),
     drillDown: writeErrors.current.failed > 0 ? failingRoutes(i18n) : null,
+    plottable: true,
   };
 }
 
@@ -263,13 +268,60 @@ function conversionsKpi(
   );
 }
 
+interface RevenueFigures {
+  readonly goal: Goal;
+  readonly revenue: Kpi;
+  readonly conversions: Kpi;
+  readonly currency: string;
+}
+
+const REVENUE_ID = 'revenue';
+
+function earnedRevenue(revenue: Kpi | null): revenue is Kpi {
+  return revenue !== null && (revenue.current > 0 || revenue.previous > 0);
+}
+
+function revenueKpi(
+  { goal, revenue, conversions, currency }: RevenueFigures,
+  comparison: string,
+  i18n: I18n,
+): KpiView {
+  const change = moneyChange(revenue.current, revenue.previous, currency, i18n);
+  const average = rate(revenue.current, conversions.current);
+  return {
+    id: REVENUE_ID,
+    label: i18n.t('overview.kpis.revenue'),
+    value: i18n.format.roundMoney(revenue.current, currency),
+    count: null,
+    change: change.text,
+    tone: toneOf(change.trend, 'up'),
+    comparison,
+    note:
+      average === null
+        ? goal.name
+        : i18n.t('overview.notes.revenue', {
+            goal: goal.name,
+            average: formatMoney(average, currency, i18n),
+          }),
+    series: revenue.daily,
+    drillDown: null,
+    plottable: false,
+  };
+}
+
+export function plottableKpis(kpis: readonly KpiView[]): readonly KpiId[] {
+  return kpis.filter((kpi) => kpi.plottable).map((kpi) => kpi.id);
+}
+
 export function overviewKpis(
   report: OverviewReport,
   period: ComparedPeriod,
   goal: Goal | null,
+  currency: string,
   i18n: I18n,
 ): readonly KpiView[] {
-  const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
+  const { visits, identifiedUsers, conversions, convertingVisits, revenue, writeErrors } =
+    report.kpis;
   const comparison = previousPeriodNote(report.comparison, period, i18n);
   const kpis = [
     countKpi(
@@ -299,6 +351,9 @@ export function overviewKpis(
     ...(conversions === null || goal === null
       ? []
       : [conversionsKpi({ goal, conversions, convertingVisits, visits }, comparison, i18n)]),
+    ...(conversions === null || goal === null || !earnedRevenue(revenue)
+      ? []
+      : [revenueKpi({ goal, revenue, conversions, currency }, comparison, i18n)]),
     writeErrorsKpi(writeErrors, comparison, i18n),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)

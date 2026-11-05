@@ -1,4 +1,4 @@
-import { type Channel, channelLabel, type SourceRow } from '@/domain/acquisition';
+import { type Channel, channelLabel, showsRevenue, type SourceRow } from '@/domain/acquisition';
 import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import type { I18n } from '@/i18n/i18n';
 import { NO_VALUE } from '@/domain/metrics';
@@ -34,6 +34,7 @@ export function SourcesTable({
   i18n,
 }: SourcesTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
+  const withRevenue = showsRevenue(rows);
   return (
     <section aria-labelledby="sources-heading" className={PANEL}>
       <div className="flex flex-col gap-1">
@@ -61,7 +62,9 @@ export function SourcesTable({
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
                   {i18n.t('acquisition.sources.visits')}
                 </th>
-                {countsConversions ? <ConversionColumns i18n={i18n} /> : null}
+                {countsConversions ? (
+                  <ConversionColumns withRevenue={withRevenue} i18n={i18n} />
+                ) : null}
               </tr>
             </thead>
             <tbody>
@@ -106,7 +109,9 @@ export function SourcesTable({
                     <FreshCount item={`source:${row.key}`} value={row.counted} className="mr-1.5" />
                     {row.visits}
                   </td>
-                  {countsConversions ? <ConversionCells row={row} i18n={i18n} /> : null}
+                  {countsConversions ? (
+                    <ConversionCells row={row} withRevenue={withRevenue} i18n={i18n} />
+                  ) : null}
                 </tr>
               ))}
             </tbody>

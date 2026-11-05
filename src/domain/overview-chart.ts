@@ -15,6 +15,7 @@ export const KPI_COLORS: Readonly<Record<KpiId, SeriesColor>> = {
   visits: 'sky',
   'identified-users': 'violet',
   conversions: 'accent',
+  revenue: 'accent',
   'write-errors': 'bad',
 };
 
@@ -226,6 +227,8 @@ function metricSource(report: OverviewReport, id: KpiId, i18n: I18n): MetricSour
       );
     case 'conversions':
       return conversionsSource(conversions, convertingVisits, i18n);
+    case 'revenue':
+      return null;
     case 'write-errors':
       return writeErrorsSource(writeErrors, i18n);
   }

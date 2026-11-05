@@ -1,4 +1,4 @@
-import type { CampaignRow } from '@/domain/acquisition';
+import { type CampaignRow, showsRevenue } from '@/domain/acquisition';
 import { FRESH_HIGHLIGHT, FreshCount } from '@/components/ui/fresh-slots';
 import { NO_VALUE } from '@/domain/metrics';
 import type { I18n } from '@/i18n/i18n';
@@ -68,6 +68,7 @@ export function CampaignsTable({
   i18n,
 }: CampaignsTableProps) {
   const countsConversions = rows.some((row) => row.conversionRate !== null);
+  const withRevenue = showsRevenue(rows);
   return (
     <section aria-labelledby="campaigns-heading" className={PANEL}>
       <div className="flex flex-col gap-1">
@@ -95,7 +96,9 @@ export function CampaignsTable({
                 <th scope="col" className={`${HEADER_CELL} text-right`}>
                   {i18n.t('acquisition.campaigns.visits')}
                 </th>
-                {countsConversions ? <ConversionColumns i18n={i18n} /> : null}
+                {countsConversions ? (
+                  <ConversionColumns withRevenue={withRevenue} i18n={i18n} />
+                ) : null}
               </tr>
             </thead>
             <tbody>
@@ -123,7 +126,9 @@ export function CampaignsTable({
                     />
                     {row.visits}
                   </td>
-                  {countsConversions ? <ConversionCells row={row} i18n={i18n} /> : null}
+                  {countsConversions ? (
+                    <ConversionCells row={row} withRevenue={withRevenue} i18n={i18n} />
+                  ) : null}
                 </tr>
               ))}
             </tbody>

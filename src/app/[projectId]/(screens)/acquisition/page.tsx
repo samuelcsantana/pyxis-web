@@ -30,6 +30,7 @@ import {
   hasDashboardFilters,
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
+import { projectCurrency } from '@/domain/currency';
 import { getI18n } from '@/i18n/get-messages';
 import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
@@ -49,6 +50,7 @@ export interface AcquisitionPageProps {
 
 interface AcquisitionReportViewProps {
   readonly report: AcquisitionReport;
+  readonly currency: string;
   readonly periodLabel: string;
   readonly downloads: readonly CsvDownload[];
   readonly channelVisitsHref: (channel: Channel) => string;
@@ -75,6 +77,7 @@ function acquisitionDownloads(
 
 function AcquisitionReportView({
   report,
+  currency,
   periodLabel,
   downloads,
   channelVisitsHref,
@@ -98,7 +101,7 @@ function AcquisitionReportView({
       </div>
       <ChannelChart days={report.days} periodLabel={periodLabel} i18n={i18n} />
       <SourcesTable
-        rows={sourceRows(report.sources, i18n)}
+        rows={sourceRows(report.sources, currency, i18n)}
         channelVisitsHref={channelVisitsHref}
         i18n={i18n}
         sourceVisitsHref={sourceVisitsHref}
@@ -106,7 +109,7 @@ function AcquisitionReportView({
         channelFilterOf={(channel) => rowFilter({ channel }, channelLabel(channel, i18n))}
       />
       <CampaignsTable
-        rows={campaignRows(report.campaigns, i18n)}
+        rows={campaignRows(report.campaigns, currency, i18n)}
         campaignVisitsHref={campaignVisitsHref}
         campaignFilterOf={(row) =>
           rowFilter({ campaign: row.campaign, source: row.source }, row.campaign)
@@ -148,6 +151,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
       {visitsTotal(report.days) > 0 ? (
         <AcquisitionReportView
           report={report}
+          currency={projectCurrency(project)}
           periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
           downloads={acquisitionDownloads(project.id, query, i18n)}
           channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}

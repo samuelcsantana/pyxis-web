@@ -240,7 +240,7 @@ describe('demoFunnelWire step times', () => {
       NOW,
     );
 
-    expect(wire.steps.at(-1)).toEqual({ count: 0, median_seconds_from_previous: null });
+    expect(wire.steps.at(-1)).toEqual({ count: 0, median_seconds_from_previous: null, revenue: 0 });
     expect(wire.steps[1]?.median_seconds_from_previous).toBeGreaterThan(0);
     expect(wire.median_seconds_overall).toBeNull();
   });

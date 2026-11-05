@@ -11,6 +11,8 @@ import { itemAt } from '../demo/demo-random';
 import {
   byKeys,
   countWhere,
+  demoRevenueSum,
+  demoRoundedRevenue,
   demoScopeOf,
   demoVisitsIn,
   groupedBy,
@@ -20,12 +22,13 @@ import {
   type DemoGoalTest,
   type DemoReportRange,
 } from '../demo/demo-scope';
-import { demoConversionTest } from '../demo/demo-goals';
+import { demoConversionTest, demoCountedGoal } from '../demo/demo-goals';
 import { demoDays } from '../demo/demo-series';
 
 type ChannelCounts = Readonly<Record<Channel, number>>;
 type SourceWire = AcquisitionWire['sources'][number];
 type CampaignWire = NonNullable<AcquisitionWire['campaigns']>[number];
+type ChannelWire = NonNullable<AcquisitionWire['channels']>[number];
 
 export const TOP_SOURCES = 20;
 export const TOP_CAMPAIGNS = 20;
@@ -34,6 +37,12 @@ const KEY_SEPARATOR = '\u0000';
 interface Entry {
   readonly visit: DemoVisitRecord;
   readonly conversions: number;
+  readonly revenue: number;
+}
+
+interface Counting {
+  readonly conversions: boolean;
+  readonly revenue: boolean;
 }
 
 function noVisits(): ChannelCounts {
@@ -43,28 +52,35 @@ function noVisits(): ChannelCounts {
 function entriesOf(visits: readonly DemoVisitRecord[], conversion: DemoGoalTest | null) {
   return visits
     .filter((visit) => visit.events.some(isPageView))
-    .map((visit): Entry => ({
-      visit,
-      conversions: conversion === null ? 0 : countWhere(visit.events, conversion),
-    }));
+    .map((visit): Entry => {
+      const converted = conversion === null ? [] : visit.events.filter(conversion);
+      return { visit, conversions: converted.length, revenue: demoRevenueSum(converted) };
+    });
 }
 
 function sourceKey({ visit }: Entry): string {
   return [visit.source, visit.medium ?? '', visit.channel].join(KEY_SEPARATOR);
 }
 
-function totals(group: readonly Entry[], countsConversions: boolean) {
+function totals(group: readonly Entry[], counting: Counting) {
   const conversions = group.reduce((total, entry) => total + entry.conversions, 0);
   const converting = countWhere(group, (entry) => entry.conversions > 0);
+  const revenue = group.reduce((total, entry) => total + entry.revenue, 0);
   return {
     visits: group.length,
-    conversions: countsConversions ? conversions : null,
-    converting_visits: countsConversions ? converting : null,
+    conversions: counting.conversions ? conversions : null,
+    converting_visits: counting.conversions ? converting : null,
     from_ad_click_visits: countWhere(group, (entry) => entry.visit.fromAdClick),
+    revenue: counting.revenue ? demoRoundedRevenue(revenue) : null,
   };
 }
 
-function sourcesOf(entries: readonly Entry[], countsConversions: boolean): SourceWire[] {
+function channelsOf(entries: readonly Entry[], counting: Counting): ChannelWire[] {
+  const byChannel = groupedBy(entries, (entry) => entry.visit.channel);
+  return CHANNELS.map((channel) => ({ channel, ...totals(groupOf(byChannel, channel), counting) }));
+}
+
+function sourcesOf(entries: readonly Entry[], counting: Counting): SourceWire[] {
   return [...groupedBy(entries, sourceKey).values()]
     .map((group) => {
       const { visit } = itemAt(group, 0);
@@ -72,14 +88,14 @@ function sourcesOf(entries: readonly Entry[], countsConversions: boolean): Sourc
         source: visit.source,
         medium: visit.medium,
         channel: visit.channel,
-        ...totals(group, countsConversions),
+        ...totals(group, counting),
       };
     })
     .toSorted(byKeys((source) => [-source.visits, source.source, source.medium ?? '']))
     .slice(0, TOP_SOURCES);
 }
 
-function campaignsOf(entries: readonly Entry[], countsConversions: boolean): CampaignWire[] {
+function campaignsOf(entries: readonly Entry[], counting: Counting): CampaignWire[] {
   const tagged = entries.filter((entry) => entry.visit.campaign !== null);
   return [
     ...groupedBy(
@@ -94,7 +110,7 @@ function campaignsOf(entries: readonly Entry[], countsConversions: boolean): Cam
         source: visit.source,
         medium: visit.medium,
         channel: visit.channel,
-        ...totals(group, countsConversions),
+        ...totals(group, counting),
       };
     })
     .toSorted(
@@ -120,7 +136,10 @@ export function demoAcquisitionWire(
     conversion,
   );
   const byDate = groupedBy(entries, (entry) => visitDate(entry.visit));
-  const countsConversions = conversion !== null;
+  const counting: Counting = {
+    conversions: conversion !== null,
+    revenue: demoCountedGoal(project, range.goal)?.kind === 'event',
+  };
   return {
     days: demoDays(range).map((date) => ({
       date,
@@ -129,8 +148,9 @@ export function demoAcquisitionWire(
         noVisits(),
       ),
     })),
-    sources: sourcesOf(entries, countsConversions),
-    campaigns: campaignsOf(entries, countsConversions),
+    sources: sourcesOf(entries, counting),
+    campaigns: campaignsOf(entries, counting),
+    channels: channelsOf(entries, counting),
   };
 }
 

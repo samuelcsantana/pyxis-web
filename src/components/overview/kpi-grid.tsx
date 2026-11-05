@@ -6,6 +6,11 @@ import { KpiCard } from './kpi-card';
 
 export const KPI_TOGGLE_HINT_ID = 'kpi-toggle-hint';
 
+const FOUR_ACROSS = 'grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4';
+const FIVE_ACROSS =
+  'grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-5 max-xl:[&>:last-child]:col-span-full';
+const FIVE_CARDS = 5;
+
 export interface KpiGridProps {
   readonly kpis: readonly KpiView[];
   readonly drillDownHref: (drillDown: KpiDrillDown) => string;
@@ -22,7 +27,7 @@ export function KpiGrid({
   i18n,
 }: KpiGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
+    <div className={kpis.length === FIVE_CARDS ? FIVE_ACROSS : FOUR_ACROSS}>
       {selectable ? (
         <p id={KPI_TOGGLE_HINT_ID} hidden>
           {i18n.t('overview.kpiToggleHint')}
@@ -38,7 +43,7 @@ export function KpiGrid({
               ? null
               : { label: kpi.drillDown.label, href: drillDownHref(kpi.drillDown) }
           }
-          toggleHint={selectable ? KPI_TOGGLE_HINT_ID : null}
+          toggleHint={selectable && kpi.plottable ? KPI_TOGGLE_HINT_ID : null}
           control={controls[kpi.id]}
           i18n={i18n}
         />

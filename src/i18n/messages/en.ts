@@ -1112,6 +1112,8 @@ export const en = {
       'An identified user is a distinct user id the site passed to identify(), usually when someone signs in; a visit without one is anonymous.',
     conversion:
       'A conversion is a visit that reached the chosen goal at least once, by sending its event or opening its page; the times reached count every event or page view that matched.',
+    revenue:
+      'Revenue is the sum of the revenue property on the events of the goal counted, in the project’s currency.',
     write: 'A write is a POST, PUT, PATCH or DELETE sent with trackRequest().',
     failure: 'A failure is a status of 400 or above, or no response at all.',
     changeTone:
@@ -1140,6 +1142,7 @@ export const en = {
       visits: 'Visits',
       identifiedUsers: 'Identified users',
       conversions: 'Conversions',
+      revenue: 'Revenue',
       writeErrorRate: 'Write error rate',
     },
     notes: {
@@ -1148,6 +1151,7 @@ export const en = {
       shareOfVisits: '{share} of {visits}',
       goalReached: '{goal} · {share}',
       goalVisits: '{share} reached {goal} · {times}',
+      revenue: '{goal} · {average} per conversion',
     },
     drillDowns: {
       visits: 'See the visits',
@@ -1190,6 +1194,7 @@ export const en = {
       goal: 'Goal',
       convertingVisits: 'Visits',
       conversions: 'Times reached',
+      revenue: 'Revenue',
       rate: 'Conversion rate',
     },
     problems: {
@@ -1336,6 +1341,8 @@ export const en = {
       conversions: 'Conversions',
       conversionRate: 'Conversion rate',
       converted: '{conversions} converted',
+      revenue: 'Revenue',
+      earned: '{revenue} in revenue',
     },
     campaigns: {
       title: 'Campaigns',
@@ -1610,6 +1617,7 @@ export const en = {
     transition: 'Step {from} → {to}',
     transitionNote: '{from} → {to} · {share} continued',
     medianTime: 'median {duration} after the step before',
+    revenue: '{revenue} in revenue',
     timeToFinish: 'Median time to finish',
     timeToFinishNote: 'from step 1 to step {last}, for those who reached it',
     page: {

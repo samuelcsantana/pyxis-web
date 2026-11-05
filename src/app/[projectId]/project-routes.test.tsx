@@ -359,7 +359,7 @@ describe('OverviewPage', () => {
     for (const name of ['Visits', 'Identified users', 'Conversions', 'Write error rate']) {
       expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
     }
-    expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(4);
+    expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(5);
     expect(screen.getByRole('group', { name: 'Conversions' })).toHaveTextContent(
       /% of [\d,]+ visits reached Sign-up · [\d,]+ times/,
     );

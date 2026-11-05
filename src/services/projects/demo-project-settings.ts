@@ -32,6 +32,7 @@ export function demoProjectSettingsWire(projectId: string, now: Date, name: stri
     name,
     timezone: project.timezone,
     conversion_event: project.conversionEvent,
+    currency: project.currency,
     city_enabled: true,
     visitors_enabled: project.countsUniqueVisitors,
     allowed_origins: project.id === DEMO_DOCS.id ? DOCS_ORIGINS : STORE_ORIGINS,

@@ -22,6 +22,7 @@ export const DEMO_STORE: DemoProject = {
   nameKey: 'store',
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
+  currency: 'BRL',
   goals: [
     {
       id: 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f701',
@@ -131,6 +132,9 @@ export const DEMO_STORE: DemoProject = {
       perDay: 26,
       visitsPerCount: 0.35,
       properties: [{ key: 'first', carriedShare: 0.14, values: [['true', 1]] }],
+      derived: [
+        { key: 'revenue', values: [18.5, 24.9, 37.5, 42, 46, 58.9, 64, 72.4, 89.9, 129.9] },
+      ],
     },
     {
       name: 'login_completed',
@@ -153,6 +157,7 @@ export const DEMO_STORE: DemoProject = {
       visitsPerCount: 1,
       after: 'signup_submitted',
       properties: [{ key: 'method', carriedShare: 1, values: signInMethods(0.58, 0.3, 0.12) }],
+      derived: [{ key: 'revenue', values: [39, 39, 39, 39, 99, 99, 390] }],
     },
     {
       name: 'product_created',

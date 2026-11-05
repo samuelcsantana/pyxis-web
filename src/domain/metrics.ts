@@ -21,6 +21,10 @@ export function formatCount(value: number, i18n: I18n): string {
   return i18n.format.count(value);
 }
 
+export function formatMoney(value: number | null, currency: string, i18n: I18n): string {
+  return value === null ? NO_VALUE : i18n.format.money(value, currency);
+}
+
 export function formatPercent(value: number | null, i18n: I18n): string {
   return value === null ? NO_VALUE : i18n.format.percent(value);
 }
@@ -98,6 +102,30 @@ export function countChange(current: number, previous: number, i18n: I18n): Chan
   return {
     text: `${formatChange(shown, i18n)} (${absolute})`,
     trend: meaningful ? trendOf(shown) : 'flat',
+  };
+}
+
+export function moneyChange(
+  current: number,
+  previous: number,
+  currency: string,
+  i18n: I18n,
+): Change {
+  const difference = current - previous;
+  if (difference === 0) {
+    return { text: i18n.t('metrics.noChange'), trend: 'flat' };
+  }
+  const absolute = signed(difference, i18n.format.roundMoney(Math.abs(difference), currency));
+  const shown = displayedChange(percentChange(current, previous));
+  if (shown === null) {
+    return { text: absolute, trend: 'flat' };
+  }
+  return {
+    text: `${formatChange(shown, i18n)} (${absolute})`,
+    trend:
+      previous >= MIN_COMPARABLE_BASE && Math.abs(shown) >= MIN_MEANINGFUL_CHANGE
+        ? trendOf(shown)
+        : 'flat',
   };
 }
 

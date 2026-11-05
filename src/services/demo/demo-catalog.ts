@@ -77,6 +77,7 @@ export interface DemoProject {
   readonly timezone: string;
   readonly conversionEvent: string | null;
   readonly goals: readonly Goal[];
+  readonly currency: string;
   readonly countsUniqueVisitors: boolean;
   readonly visitsPerPageView: number;
   readonly signedInStage: number | null;

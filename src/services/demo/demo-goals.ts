@@ -8,6 +8,7 @@ import {
   type DemoGoalTest,
   demoGoalTest,
   type DemoReportRange,
+  demoRevenueSum,
   demoScopeOf,
   demoVisitsIn,
   hasPageView,
@@ -56,6 +57,7 @@ function summaryOf(project: DemoProject, visits: readonly DemoVisitRecord[]) {
         conversions: countWhere(events, test),
         converting_visits: convertingVisits,
         conversion_rate: counted === 0 ? null : convertingVisits / counted,
+        revenue: goal.kind === 'event' ? demoRevenueSum(events.filter(test)) : null,
       };
     }),
   };

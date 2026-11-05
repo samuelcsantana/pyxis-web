@@ -27,7 +27,7 @@ const meta = {
   component: KpiGrid,
   tags: ['autodocs'],
   args: {
-    kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english),
+    kpis: overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, 'BRL', english),
     drillDownHref,
     i18n: english,
   },
@@ -48,7 +48,13 @@ export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
   args: {
-    kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, demoCountedGoal(DEMO_DOCS), english),
+    kpis: overviewKpis(
+      WITHOUT_CONVERSIONS,
+      LAST_30_DAYS,
+      demoCountedGoal(DEMO_DOCS),
+      'BRL',
+      english,
+    ),
   },
 };
 
@@ -68,6 +74,7 @@ export const BadNews: Story = {
       },
       LAST_30_DAYS,
       EVENT,
+      'BRL',
       english,
     ),
   },
@@ -83,6 +90,7 @@ export const NothingToCompare: Story = {
           identifiedUsers: { current: 0, previous: 0, daily: [0] },
           conversions: { current: 0, previous: 0, daily: [0] },
           convertingVisits: null,
+          revenue: null,
           writeErrors: {
             current: { failed: 0, total: 0 },
             previous: { failed: 0, total: 0 },
@@ -92,6 +100,7 @@ export const NothingToCompare: Story = {
       },
       { days: 1, endsToday: false },
       EVENT,
+      'BRL',
       english,
     ),
   },
@@ -107,6 +116,7 @@ export const SmallNumbers: Story = {
           identifiedUsers: { current: 1, previous: 2, daily: [0, 1] },
           conversions: { current: 1, previous: 0, daily: [0, 1] },
           convertingVisits: null,
+          revenue: null,
           writeErrors: {
             current: { failed: 1, total: 6 },
             previous: { failed: 0, total: 5 },
@@ -119,6 +129,7 @@ export const SmallNumbers: Story = {
       },
       { days: 2, endsToday: false },
       EVENT,
+      'BRL',
       english,
     ),
   },
@@ -130,6 +141,7 @@ export const TodayUntilNow: Story = {
       demoOverviewReport('demo', STORY_TODAY, TEN_IN_SAO_PAULO),
       TODAY,
       EVENT,
+      'BRL',
       english,
     ),
   },
@@ -144,6 +156,7 @@ export const TodayAgainstAllOfYesterday: Story = {
       },
       TODAY,
       EVENT,
+      'BRL',
       english,
     ),
   },
@@ -161,7 +174,7 @@ export const OnAPhone: Story = {
 
 export const DarkTheme: Story = { globals: { theme: 'dark' } };
 
-const STORY_KPIS = overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, english);
+const STORY_KPIS = overviewKpis(STORY_REPORT, LAST_30_DAYS, EVENT, 'BRL', english);
 
 export const PickingTheChart: Story = {
   args: { selectable: true },

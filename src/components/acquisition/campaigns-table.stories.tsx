@@ -19,7 +19,7 @@ const meta = {
   title: 'Acquisition/Campaigns',
   component: CampaignsTable,
   tags: ['autodocs'],
-  args: { rows: campaignRows(REPORT.campaigns, english), campaignVisitsHref, i18n: english },
+  args: { rows: campaignRows(REPORT.campaigns, 'BRL', english), campaignVisitsHref, i18n: english },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
     (Story) => (
@@ -36,7 +36,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
-  args: { rows: campaignRows(WITHOUT_CONVERSIONS.campaigns, english) },
+  args: { rows: campaignRows(WITHOUT_CONVERSIONS.campaigns, 'BRL', english) },
 };
 
 export const Empty: Story = { args: { rows: [] } };

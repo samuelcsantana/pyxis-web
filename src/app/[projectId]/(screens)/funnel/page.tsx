@@ -46,6 +46,7 @@ import {
   hasDashboardFilters,
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
+import { projectCurrency } from '@/domain/currency';
 import { getI18n } from '@/i18n/get-messages';
 import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
@@ -159,6 +160,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
           <FunnelReportView
             counted={countedSteps(steps, report)}
             secondsToFinish={report.medianSecondsOverall}
+            currency={projectCurrency(project)}
             mode={mode}
             i18n={i18n}
             drill={drill}
@@ -232,6 +234,7 @@ function newestHref(
 interface FunnelReportViewProps {
   readonly counted: ReturnType<typeof countedSteps>;
   readonly secondsToFinish: number | null;
+  readonly currency: string;
   readonly mode: FunnelMode;
   readonly editor: React.ReactNode;
   readonly subjects: React.ReactNode;
@@ -243,6 +246,7 @@ interface FunnelReportViewProps {
 function FunnelReportView({
   counted,
   secondsToFinish,
+  currency,
   mode,
   editor,
   subjects,
@@ -280,7 +284,7 @@ function FunnelReportView({
       </div>
       <FunnelSteps
         rows={withDrillLinks(
-          funnelRows(counted, i18n),
+          funnelRows(counted, currency, i18n),
           counted.map((step) => step.count),
           drill,
           drillHref,

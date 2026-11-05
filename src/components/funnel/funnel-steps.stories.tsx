@@ -14,6 +14,7 @@ const ROWS = funnelRows(
     DEMO_FUNNEL_STEPS,
     demoFunnelReport('demo', PERIOD, 'visit', DEMO_FUNNEL_STEPS, STORY_NOW),
   ),
+  'BRL',
   english,
 );
 
@@ -53,6 +54,7 @@ export const PerPerson: Story = {
         DEMO_FUNNEL_STEPS,
         demoFunnelReport('demo', PERIOD, 'user', DEMO_FUNNEL_STEPS, STORY_NOW),
       ),
+      'BRL',
       english,
     ),
   },
@@ -64,6 +66,7 @@ export const NobodyYet: Story = {
       countedSteps(DEMO_FUNNEL_STEPS.slice(0, 3), {
         steps: [{ count: 0 }, { count: 0 }, { count: 0 }],
       }),
+      'BRL',
       english,
     ),
   },

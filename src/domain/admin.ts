@@ -3,6 +3,7 @@ export interface Project {
   readonly name: string;
   readonly timezone: string;
   readonly conversionEvent: string | null;
+  readonly currency?: string;
   readonly firstEventAt?: string | null;
   readonly lastEventAt?: string | null;
   readonly iconVersion?: string | null;

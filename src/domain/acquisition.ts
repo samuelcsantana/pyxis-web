@@ -1,5 +1,5 @@
 import type { I18n } from '@/i18n/i18n';
-import { barWidth, formatCount, formatPercent, rate } from './metrics';
+import { barWidth, formatCount, formatMoney, formatPercent, rate } from './metrics';
 import type { AcquisitionReport, AcquisitionWire, ChannelVisits } from './acquisition.schema';
 
 export type { AcquisitionReport, AcquisitionWire, ChannelVisits };
@@ -140,6 +140,7 @@ interface AttributedVisits {
   readonly conversions: number | null;
   readonly convertingVisits: number | null;
   readonly fromAdClickVisits: number;
+  readonly revenue: number | null;
 }
 
 export interface ConversionFigures {
@@ -149,10 +150,13 @@ export interface ConversionFigures {
   readonly conversionRate: string | null;
   readonly barWidth: string;
   readonly fromAdClicks: string | null;
+  readonly revenue: string | null;
+  readonly earned: number;
 }
 
 function withConversionFigures<Entry extends AttributedVisits, Row>(
   entries: readonly Entry[],
+  currency: string,
   i18n: I18n,
   describe: (entry: Entry) => Row,
 ): readonly (Row & ConversionFigures)[] {
@@ -174,7 +178,13 @@ function withConversionFigures<Entry extends AttributedVisits, Row>(
         : i18n.t('acquisition.fromAdClicks', {
             visits: formatCount(entry.fromAdClickVisits, i18n),
           }),
+    revenue: entry.revenue === null ? null : formatMoney(entry.revenue, currency, i18n),
+    earned: entry.revenue ?? 0,
   }));
+}
+
+export function showsRevenue(rows: readonly ConversionFigures[]): boolean {
+  return rows.some((row) => row.earned > 0);
 }
 
 export interface SourceRow extends ConversionFigures {
@@ -185,8 +195,12 @@ export interface SourceRow extends ConversionFigures {
   readonly channel: Channel;
 }
 
-export function sourceRows(sources: readonly Source[], i18n: I18n): readonly SourceRow[] {
-  return withConversionFigures(sources, i18n, (source) => ({
+export function sourceRows(
+  sources: readonly Source[],
+  currency: string,
+  i18n: I18n,
+): readonly SourceRow[] {
+  return withConversionFigures(sources, currency, i18n, (source) => ({
     key: `${source.source}|${source.medium ?? ''}|${source.channel}`,
     source: source.source,
     label: sourceLabel(source.source, i18n),
@@ -206,8 +220,12 @@ export interface CampaignRow extends ConversionFigures {
   readonly channel: Channel;
 }
 
-export function campaignRows(campaigns: readonly Campaign[], i18n: I18n): readonly CampaignRow[] {
-  return withConversionFigures(campaigns, i18n, (campaign) => ({
+export function campaignRows(
+  campaigns: readonly Campaign[],
+  currency: string,
+  i18n: I18n,
+): readonly CampaignRow[] {
+  return withConversionFigures(campaigns, currency, i18n, (campaign) => ({
     key: `${campaign.campaign}|${campaign.source}|${campaign.medium ?? ''}|${campaign.channel}`,
     campaign: campaign.campaign,
     source: campaign.source,

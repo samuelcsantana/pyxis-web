@@ -1166,6 +1166,8 @@ export const de = translation({
       'Ein identifizierter Nutzer ist eine eindeutige Nutzer-ID, die die Website an identify() übergeben hat, meist bei der Anmeldung; ein Besuch ohne sie ist anonym.',
     conversion:
       'Eine Conversion ist ein Besuch, der das gewählte Ziel mindestens einmal erreicht hat, indem er sein Ereignis sendete oder seine Seite öffnete; „Mal erreicht“ zählt jedes passende Ereignis und jeden passenden Seitenaufruf.',
+    revenue:
+      'Umsatz ist die Summe der Eigenschaft revenue in den Ereignissen des gezählten Ziels, in der Währung des Projekts.',
     write: 'Ein Schreibzugriff ist ein POST, PUT, PATCH oder DELETE, gesendet mit trackRequest().',
     failure: 'Ein Fehler ist ein Status ab 400 oder gar keine Antwort.',
     changeTone:
@@ -1195,6 +1197,7 @@ export const de = translation({
       visits: 'Besuche',
       identifiedUsers: 'Identifizierte Nutzer',
       conversions: 'Conversions',
+      revenue: 'Umsatz',
       writeErrorRate: 'Fehlerquote bei Schreibzugriffen',
     },
     notes: {
@@ -1203,6 +1206,7 @@ export const de = translation({
       shareOfVisits: '{share} · {visits} insgesamt',
       goalReached: '{goal} · {share}',
       goalVisits: '{share} erreichten {goal} · {times}',
+      revenue: '{goal} · {average} pro Conversion',
     },
     drillDowns: {
       visits: 'Besuche ansehen',
@@ -1245,6 +1249,7 @@ export const de = translation({
       goal: 'Ziel',
       convertingVisits: 'Besuche',
       conversions: 'Mal erreicht',
+      revenue: 'Umsatz',
       rate: 'Conversion-Rate',
     },
     problems: {
@@ -1393,6 +1398,8 @@ export const de = translation({
       conversions: 'Conversions',
       conversionRate: 'Conversion-Rate',
       converted: '{conversions} konvertiert',
+      revenue: 'Umsatz',
+      earned: '{revenue} Umsatz',
     },
     campaigns: {
       title: 'Kampagnen',
@@ -1670,6 +1677,7 @@ export const de = translation({
     transition: 'Schritt {from} → {to}',
     transitionNote: '{from} → {to} · {share} machten weiter',
     medianTime: 'Median {duration} nach dem vorherigen Schritt',
+    revenue: '{revenue} Umsatz',
     timeToFinish: 'Mediane Zeit bis zum Abschluss',
     timeToFinishNote: 'von Schritt 1 bis Schritt {last}, für alle, die ihn erreicht haben',
     page: {

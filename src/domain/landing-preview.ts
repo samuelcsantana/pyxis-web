@@ -1,3 +1,4 @@
+import { DEFAULT_CURRENCY } from './currency';
 import type { Goal } from './goals';
 import type { I18n } from '@/i18n/i18n';
 import {
@@ -110,7 +111,9 @@ export function landingPreviewOf(
   const { overview } = reports;
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return {
-    kpis: overviewKpis(overview, compared, goal, i18n),
+    kpis: overviewKpis(overview, compared, goal, DEFAULT_CURRENCY, i18n).filter(
+      (kpi) => kpi.id !== 'revenue',
+    ),
     current: overview.kpis.visits.daily,
     previous: overview.previousDays?.map((day) => day.visits) ?? [],
     dropOff: dropOffOf(reports.funnelSteps, reports.funnel, i18n),

@@ -23,6 +23,7 @@ import {
   type KpiView,
   type OverviewReport,
   overviewKpis,
+  plottableKpis,
 } from '@/domain/overview';
 import { type ChartMetric, chartMetric, overviewChart } from '@/domain/overview-chart';
 import { OVERVIEW_TABLES, overviewTableLabel } from '@/domain/overview-export';
@@ -54,6 +55,7 @@ import {
   type GoalsSummary,
   withKnownReachedGoal,
 } from '@/domain/goals';
+import { projectCurrency } from '@/domain/currency';
 import { getI18n } from '@/i18n/get-messages';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
@@ -74,6 +76,7 @@ function footnote(i18n: I18n): string {
     i18n.t('glossary.visit'),
     i18n.t('glossary.identifiedUser'),
     i18n.t('glossary.conversion'),
+    i18n.t('glossary.revenue'),
     i18n.t('glossary.write'),
     i18n.t('glossary.failure'),
     changeToneRule(i18n),
@@ -99,6 +102,7 @@ interface OverviewReportViewProps {
   readonly goals: readonly Goal[];
   readonly chosen: ChosenGoal;
   readonly summary: GoalsSummary | null;
+  readonly currency: string;
   readonly periodLabel: string;
   readonly endsToday: boolean;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
@@ -154,6 +158,7 @@ function OverviewReportView({
   goals,
   chosen,
   summary,
+  currency,
   periodLabel,
   endsToday,
   filteredHref,
@@ -165,7 +170,7 @@ function OverviewReportView({
   const singleDay = report.days.length === 1;
   return (
     <>
-      <MetricSelection available={kpis.map((kpi) => kpi.id)}>
+      <MetricSelection available={plottableKpis(kpis)}>
         <KpiGrid
           kpis={kpis}
           drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
@@ -193,7 +198,7 @@ function OverviewReportView({
       </MetricSelection>
       {summary === null ? null : (
         <GoalsTable
-          rows={goalRows(summary, i18n)}
+          rows={goalRows(summary, currency, i18n)}
           visits={i18n.t('counts.visit', { count: summary.visits })}
           periodLabel={periodLabel}
           visitsHref={(goalId) => visitsHref({ reached_goal: goalId })}
@@ -256,11 +261,8 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
     endsToday: period.to === today,
     filtered,
   };
-  const kpis = overviewKpis(report, compared, chosen.goal, i18n);
-  const metric = chartMetric(
-    search.metric,
-    kpis.map((kpi) => kpi.id),
-  );
+  const kpis = overviewKpis(report, compared, chosen.goal, projectCurrency(project), i18n);
+  const metric = chartMetric(search.metric, plottableKpis(kpis));
   return (
     <ScreenContent
       readAt={now.getTime()}
@@ -277,6 +279,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           goals={goals}
           chosen={chosen}
           summary={summary}
+          currency={projectCurrency(project)}
           periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
           endsToday={compared.endsToday}
           filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}

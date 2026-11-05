@@ -1137,6 +1137,8 @@ export const es = translation({
       'Un usuario identificado es un id de usuario distinto que el sitio pasó a identify(), normalmente cuando alguien inicia sesión; una visita sin él es anónima.',
     conversion:
       'Una conversión es una visita que alcanzó el objetivo elegido al menos una vez, enviando su evento o abriendo su página; las veces alcanzado cuentan cada evento o vista de página que coincidió.',
+    revenue:
+      'Los ingresos son la suma de la propiedad revenue en los eventos del objetivo contado, en la moneda del proyecto.',
     write: 'Una escritura es un POST, PUT, PATCH o DELETE enviado con trackRequest().',
     failure: 'Un fallo es un código de estado 400 o superior, o ninguna respuesta.',
     changeTone:
@@ -1166,6 +1168,7 @@ export const es = translation({
       visits: 'Visitas',
       identifiedUsers: 'Usuarios identificados',
       conversions: 'Conversiones',
+      revenue: 'Ingresos',
       writeErrorRate: 'Tasa de error en escrituras',
     },
     notes: {
@@ -1174,6 +1177,7 @@ export const es = translation({
       shareOfVisits: '{share} de {visits}',
       goalReached: '{goal} · {share}',
       goalVisits: '{share} alcanzaron {goal} · {times}',
+      revenue: '{goal} · {average} por conversión',
     },
     drillDowns: {
       visits: 'Ver las visitas',
@@ -1216,6 +1220,7 @@ export const es = translation({
       goal: 'Objetivo',
       convertingVisits: 'Visitas',
       conversions: 'Veces alcanzado',
+      revenue: 'Ingresos',
       rate: 'Tasa de conversión',
     },
     problems: {
@@ -1363,6 +1368,8 @@ export const es = translation({
       conversions: 'Conversiones',
       conversionRate: 'Tasa de conversión',
       converted: '{conversions} convirtieron',
+      revenue: 'Ingresos',
+      earned: '{revenue} en ingresos',
     },
     campaigns: {
       title: 'Campañas',
@@ -1639,6 +1646,7 @@ export const es = translation({
     transition: 'Paso {from} → {to}',
     transitionNote: '{from} → {to} · {share} siguieron',
     medianTime: 'mediana de {duration} después del paso anterior',
+    revenue: '{revenue} en ingresos',
     timeToFinish: 'Tiempo mediano hasta completar',
     timeToFinishNote: 'del paso 1 al paso {last}, para quienes llegaron',
     page: {
