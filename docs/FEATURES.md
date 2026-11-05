@@ -336,8 +336,8 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   again, not drawn again and not scrolled, and the dialog's content is read once per opening by a
   server action. A fixed header with "Settings" and a close button; on the left the sections in
   three groups, Account (General, Plan and billing, Sessions, Access tokens, Connected apps),
-  Project with its name (Install, Project, Privacy, Keys, People, E-mails, and Export and delete
-  for the owner) and Support (Help and support); on the right the section, its parts one under
+  Project with its name (Install, Project, Goals, Public link for the owner, Privacy, Keys,
+  People, E-mails, and Export and delete for the owner) and Support (Help and support); on the right the section, its parts one under
   the other, separated by a line, without the section's name repeated. General holds the e-mail,
   the appearance as three pictures (light, dark, the system's) and the language. Moving between
   sections replaces the address, so Back closes the dialog in one step, and Forward opens it
@@ -362,7 +362,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   to connect again. While the API keeps the connector open, a box shows how to connect Claude:
   the three steps in Claude, the connector's address and the Claude Code command, each with a copy
   button; while it is closed the box is hidden, so the page never shows an address that answers
-  404, and the list still shows. Below it,
+  404, and the list still shows. For the owner, Public link: what a link opens (the summed
+  reports, never visits, the timeline or requests) and a form with who it is for and when it
+  expires (never, 7, 30, 90 days or a year), which shows the address on this dashboard once, with
+  a copy button, since only the link's fingerprint is kept; then each link with its creation and
+  expiry (an expired one marked) and a Revoke button that asks first. On Hobby the form gives way
+  to "Available on Pro", and the list and Revoke stay. Below it,
   the project. The owner of its account edits it: name, up to five allowed origins (typed as
   `shop.example.com` or a full URL, saved as origins), time zone and currency (common ISO 4217
   codes, the real first, named in the reader's language; changing it converts nothing), each
