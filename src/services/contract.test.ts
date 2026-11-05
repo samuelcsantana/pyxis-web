@@ -33,7 +33,7 @@ import { demoProjectSettingsWire } from './projects/demo-project-settings';
 import { demoTimeOfDayWire } from './overview/demo-time-of-day';
 import { demoMeResponse } from './projects/mock-projects-service';
 import { DEMO_EMAIL_PREFERENCES_WIRE } from './preferences/mock-email-preferences-service';
-import { emailPreferencesWire } from '@/domain/email-preferences';
+import { EMAIL_PREFERENCES, emailPreferenceChangesWire } from '@/domain/email-preferences';
 import { newAccessTokenWire } from '@/domain/access-tokens.schema';
 import { shareLinkRequestOf } from '@/domain/share-links';
 import { shareLinkRequestWire } from '@/domain/share-links.schema';
@@ -495,12 +495,17 @@ describe('the API contract copied from pyxis-api', () => {
     expect(contractSchema('SignedIn')(SIGNED_IN_ANSWER)).toBe(true);
   });
 
-  it('accepts the demo e-mail preferences and the body the Settings switch sends', () => {
+  it('accepts the demo e-mail preferences and the body each Settings switch sends', () => {
     const validate = contractSchema('EmailPreferences');
+    const changes = contractSchema('EmailPreferenceChanges');
 
     expect(validate(DEMO_EMAIL_PREFERENCES_WIRE), JSON.stringify(validate.errors)).toBe(true);
-    expect(validate(emailPreferencesWire({ weeklyDigest: false }))).toBe(true);
+    for (const preference of EMAIL_PREFERENCES) {
+      const body = emailPreferenceChangesWire({ preference, on: false });
+      expect(changes(body), JSON.stringify(changes.errors)).toBe(true);
+    }
     expect(validate({ weekly_digest: 'yes' })).toBe(false);
+    expect(changes({ monthly_digest: true })).toBe(false);
   });
 
   it('accepts the demo goals, their summary and the bodies the goals settings send', () => {

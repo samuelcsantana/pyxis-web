@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import type { EmailPreferenceChoice } from '@/domain/email-preferences';
 import type { ProjectSettings } from '@/domain/project-settings';
 
 vi.mock('next/navigation', () => ({
@@ -31,9 +32,17 @@ const SETTINGS: ProjectSettings = {
   deletionHeldAt: null,
 };
 
+const ALL_EMAILS_ON = {
+  weeklyDigest: true,
+  noEventsAlert: true,
+  failedWritesAlert: true,
+  conversionDropAlert: true,
+};
+
 const EMAIL = {
-  emailPreferences: { weeklyDigest: true },
-  chooseEmailPreferences: (chosen: { readonly weeklyDigest: boolean }) => Promise.resolve(chosen),
+  emailPreferences: ALL_EMAILS_ON,
+  chooseEmailPreferences: (choice: EmailPreferenceChoice) =>
+    Promise.resolve({ ...ALL_EMAILS_ON, [choice.preference]: choice.on }),
   sessions: [
     {
       id: '5d2f8c1a-6b3e-4a7f-9c0d-1e2f3a4b5c6d',

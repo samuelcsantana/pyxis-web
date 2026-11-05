@@ -3,13 +3,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import {
-  type ChooseEmailPreferences,
+  type ChooseEmailPreference,
+  EmailPreferenceSwitch,
   SAVED_NOTICE_MS,
   SAVING_MIN_BUSY_MS,
-  WeeklyDigestSwitch,
-} from './weekly-digest-switch';
+} from './email-preference-switch';
 
-const ON: EmailPreferences = { weeklyDigest: true };
+const ALL_ON: EmailPreferences = {
+  weeklyDigest: true,
+  noEventsAlert: true,
+  failedWritesAlert: true,
+  conversionDropAlert: true,
+};
+const NO_EVENTS_OFF: EmailPreferences = { ...ALL_ON, noEventsAlert: false };
+const LABEL = 'No events';
+const NOTE = 'When no event has arrived for 24 hours.';
 
 function deferred() {
   let settle: { resolve: (value: EmailPreferences) => void; reject: (error: Error) => void } = {
@@ -22,9 +30,15 @@ function deferred() {
   return { promise, settle: () => settle };
 }
 
-function renderSwitch(choose: ChooseEmailPreferences, locale: 'en' | 'pt-BR' = 'en') {
+function renderSwitch(choose: ChooseEmailPreference, locale: 'en' | 'pt-BR' = 'en') {
   return renderWithMessages(
-    <WeeklyDigestSwitch initial={ON} timezone="America/Sao_Paulo" choose={choose} />,
+    <EmailPreferenceSwitch
+      preference="noEventsAlert"
+      initial
+      label={LABEL}
+      note={NOTE}
+      choose={choose}
+    />,
     locale,
   );
 }
@@ -35,7 +49,7 @@ async function settle(milliseconds: number) {
   });
 }
 
-describe('WeeklyDigestSwitch', () => {
+describe('EmailPreferenceSwitch', () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -44,31 +58,29 @@ describe('WeeklyDigestSwitch', () => {
     vi.useRealTimers();
   });
 
-  it('shows the stored choice, what the digest holds and the time zone of its week', () => {
-    renderSwitch(() => Promise.resolve(ON));
+  it('shows the stored choice, named and described by what it sends', () => {
+    renderSwitch(() => Promise.resolve(ALL_ON));
 
-    const toggle = screen.getByRole('switch', { name: 'Weekly digest' });
+    const toggle = screen.getByRole('switch', { name: LABEL });
     expect(toggle).toBeChecked();
-    expect(toggle).toHaveAccessibleDescription(
-      'Every Monday, the week that closed on Sunday in America/Sao_Paulo: visits, conversions, failed writes, top pages and events. Each admin chooses for themselves.',
-    );
+    expect(toggle).toHaveAccessibleDescription(NOTE);
     expect(screen.getByText('On')).toBeInTheDocument();
   });
 
-  it('turns the digest off at once, says it is saving, then that it saved', async () => {
+  it('turns its own e-mail off at once, says it is saving, then that it saved', async () => {
     const answer = deferred();
-    const choose = vi.fn<ChooseEmailPreferences>(() => answer.promise);
+    const choose = vi.fn<ChooseEmailPreference>(() => answer.promise);
     renderSwitch(choose);
 
-    fireEvent.click(screen.getByRole('switch', { name: 'Weekly digest' }));
+    fireEvent.click(screen.getByRole('switch', { name: LABEL }));
 
-    expect(choose).toHaveBeenCalledWith({ weeklyDigest: false });
+    expect(choose).toHaveBeenCalledWith({ preference: 'noEventsAlert', on: false });
     expect(screen.getByRole('switch')).not.toBeChecked();
     expect(screen.getByText('Off')).toBeInTheDocument();
     expect(screen.getByRole('switch')).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByText('Saving…')).toBeInTheDocument();
 
-    answer.settle().resolve({ weeklyDigest: false });
+    answer.settle().resolve(NO_EVENTS_OFF);
     await settle(SAVING_MIN_BUSY_MS);
 
     expect(screen.getByRole('switch')).toHaveAttribute('aria-busy', 'false');
@@ -80,10 +92,19 @@ describe('WeeklyDigestSwitch', () => {
     expect(screen.getByRole('switch')).not.toBeChecked();
   });
 
+  it('shows what the API stored for its own e-mail, whatever the others hold', async () => {
+    renderSwitch(() => Promise.resolve({ ...ALL_ON, weeklyDigest: false }));
+
+    fireEvent.click(screen.getByRole('switch'));
+    await settle(SAVING_MIN_BUSY_MS);
+
+    expect(screen.getByRole('switch')).toBeChecked();
+  });
+
   it('puts the switch back and says so when the change is not saved', async () => {
     renderSwitch(() => Promise.reject(new Error('Pyxis API answered 503')));
 
-    fireEvent.click(screen.getByRole('switch', { name: 'Weekly digest' }));
+    fireEvent.click(screen.getByRole('switch', { name: LABEL }));
     await settle(SAVING_MIN_BUSY_MS);
 
     expect(screen.getByRole('switch')).toBeChecked();
@@ -93,9 +114,9 @@ describe('WeeklyDigestSwitch', () => {
 
   it('clears the failure on the next try and shows what the API stored', async () => {
     const choose = vi
-      .fn<ChooseEmailPreferences>()
+      .fn<ChooseEmailPreference>()
       .mockRejectedValueOnce(new Error('timeout'))
-      .mockResolvedValueOnce({ weeklyDigest: true });
+      .mockResolvedValueOnce(ALL_ON);
     renderSwitch(choose);
     fireEvent.click(screen.getByRole('switch'));
     await settle(SAVING_MIN_BUSY_MS);
@@ -103,7 +124,7 @@ describe('WeeklyDigestSwitch', () => {
     fireEvent.click(screen.getByRole('switch'));
     await settle(SAVING_MIN_BUSY_MS);
 
-    expect(choose).toHaveBeenNthCalledWith(2, { weeklyDigest: false });
+    expect(choose).toHaveBeenNthCalledWith(2, { preference: 'noEventsAlert', on: false });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(screen.getByRole('switch')).toBeChecked();
   });
@@ -111,14 +132,14 @@ describe('WeeklyDigestSwitch', () => {
   it('keeps only the last of two quick changes', async () => {
     const first = deferred();
     const choose = vi
-      .fn<ChooseEmailPreferences>()
+      .fn<ChooseEmailPreference>()
       .mockReturnValueOnce(first.promise)
-      .mockResolvedValueOnce({ weeklyDigest: true });
+      .mockResolvedValueOnce(ALL_ON);
     renderSwitch(choose);
 
     fireEvent.click(screen.getByRole('switch'));
     fireEvent.click(screen.getByRole('switch'));
-    first.settle().resolve({ weeklyDigest: false });
+    first.settle().resolve(NO_EVENTS_OFF);
     await settle(SAVING_MIN_BUSY_MS);
 
     expect(screen.getByRole('switch')).toBeChecked();
@@ -132,14 +153,13 @@ describe('WeeklyDigestSwitch', () => {
     view.unmount();
 
     expect(() => {
-      answer.settle().resolve({ weeklyDigest: false });
+      answer.settle().resolve(NO_EVENTS_OFF);
     }).not.toThrow();
   });
 
   it('speaks Portuguese', () => {
-    renderSwitch(() => Promise.resolve(ON), 'pt-BR');
+    renderSwitch(() => Promise.resolve(ALL_ON), 'pt-BR');
 
-    expect(screen.getByRole('switch', { name: 'Resumo semanal' })).toBeChecked();
     expect(screen.getByText('Ligado')).toBeInTheDocument();
   });
 });

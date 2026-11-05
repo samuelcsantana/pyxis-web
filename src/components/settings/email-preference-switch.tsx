@@ -4,15 +4,21 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { catchToState, withSmoothLoading, withTemporarySuccess } from 'rx-state-bridge';
 import { defer, type Subscription, tap } from 'rxjs';
 import { CONTROL_BUSY, CONTROL_TRANSITION, FOCUS_RING } from '@/components/ui/control-classes';
-import type { EmailPreferences } from '@/domain/email-preferences';
+import type {
+  EmailPreference,
+  EmailPreferenceChoice,
+  EmailPreferences,
+} from '@/domain/email-preferences';
 import { useT } from '@/i18n/messages-provider';
 
-export type ChooseEmailPreferences = (preferences: EmailPreferences) => Promise<EmailPreferences>;
+export type ChooseEmailPreference = (choice: EmailPreferenceChoice) => Promise<EmailPreferences>;
 
-export interface WeeklyDigestSwitchProps {
-  readonly initial: EmailPreferences;
-  readonly timezone: string;
-  readonly choose: ChooseEmailPreferences;
+export interface EmailPreferenceSwitchProps {
+  readonly preference: EmailPreference;
+  readonly initial: boolean;
+  readonly label: string;
+  readonly note: string;
+  readonly choose: ChooseEmailPreference;
 }
 
 export const SAVING_MIN_BUSY_MS = 400;
@@ -25,11 +31,17 @@ const THUMB = `inline-block size-4.5 rounded-pill bg-card shadow-sm transition-t
 const THUMB_ON = 'translate-x-[23px]';
 const THUMB_OFF = 'translate-x-[3px]';
 
-export function WeeklyDigestSwitch({ initial, timezone, choose }: WeeklyDigestSwitchProps) {
+export function EmailPreferenceSwitch({
+  preference,
+  initial,
+  label,
+  note,
+  choose,
+}: EmailPreferenceSwitchProps) {
   const t = useT();
   const labelId = useId();
   const noteId = useId();
-  const [on, setOn] = useState(initial.weeklyDigest);
+  const [on, setOn] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<unknown>(null);
@@ -52,10 +64,10 @@ export function WeeklyDigestSwitch({ initial, timezone, choose }: WeeklyDigestSw
     setError(null);
     setSaved(false);
     setOn(wanted);
-    request.current = defer(() => choose({ weeklyDigest: wanted }))
+    request.current = defer(() => choose({ preference, on: wanted }))
       .pipe(
         tap((chosen) => {
-          setOn(chosen.weeklyDigest);
+          setOn(chosen[preference]);
         }),
         withTemporarySuccess(setSaved, SAVED_NOTICE_MS, { signal: notice.current.signal }),
         catchToState((failure: unknown) => {
@@ -72,10 +84,10 @@ export function WeeklyDigestSwitch({ initial, timezone, choose }: WeeklyDigestSw
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 flex-col gap-0.5">
           <span id={labelId} className="text-sm font-semibold text-ink">
-            {t('emailPreferences.weeklyDigest')}
+            {label}
           </span>
           <span id={noteId} className="text-xs leading-[18px] text-muted">
-            {t('emailPreferences.weeklyDigestNote', { timezone })}
+            {note}
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-2 pt-0.5">
