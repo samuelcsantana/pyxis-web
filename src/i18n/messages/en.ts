@@ -2120,7 +2120,7 @@ export const en = {
     askClaude: {
       eyebrow: 'MCP connector',
       title: 'Ask Claude instead of digging through charts',
-      lead: 'Connect Pyxis to Claude once and ask in your own words: how last week went, where the sign-up loses people, which route started failing. Claude reads the same numbers as the dashboard, through sixteen tools that only read. It comes with the plan, at no extra cost.',
+      lead: 'Connect Pyxis to Claude once and ask in your own words: how last week went, where the sign-up loses people, which route started failing. Claude reads the same numbers as the dashboard, through seventeen tools that only read. It comes with the plan, at no extra cost.',
       connect: 'Connect in a minute',
       directory: {
         badge: 'New',
@@ -2144,7 +2144,7 @@ export const en = {
       promises: {
         reads: {
           title: 'Only reads',
-          body: 'Each of the sixteen tools is one read of the Pyxis API. Claude can never change or delete anything.',
+          body: 'Each of the seventeen tools is one read of the Pyxis API. Claude can never change or delete anything.',
         },
         revoke: {
           title: 'Yours to revoke',
