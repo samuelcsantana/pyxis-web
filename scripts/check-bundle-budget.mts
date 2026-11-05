@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
 
-export type RouteClass = 'entry' | 'signUp' | 'screen' | 'chart';
+export type RouteClass = 'entry' | 'signUp' | 'screen' | 'chart' | 'share';
 
 export interface RouteStats {
   readonly route: string;
@@ -21,6 +21,7 @@ const GZIP_LEVEL = 9;
 const STATS_FILE = '.next/diagnostics/route-bundle-stats.json';
 const PROJECT_ROUTE_PREFIX = '/[projectId]/';
 const SIGN_UP_ROUTE = '/sign-up';
+const SHARE_ROUTE_PREFIX = '/share/';
 const CHART_ROUTES: ReadonlySet<string> = new Set([
   '/[projectId]/overview',
   '/[projectId]/acquisition',
@@ -31,6 +32,7 @@ export const BUDGET_KIB: Readonly<Record<RouteClass, number>> = {
   signUp: 162,
   screen: 174,
   chart: 171,
+  share: 170,
 };
 
 export function routeClassOf(route: string): RouteClass {
@@ -39,6 +41,9 @@ export function routeClassOf(route: string): RouteClass {
   }
   if (route === SIGN_UP_ROUTE) {
     return 'signUp';
+  }
+  if (route.startsWith(SHARE_ROUTE_PREFIX)) {
+    return 'share';
   }
   return route.startsWith(PROJECT_ROUTE_PREFIX) ? 'screen' : 'entry';
 }
