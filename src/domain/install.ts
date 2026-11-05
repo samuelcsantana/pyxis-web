@@ -69,3 +69,5 @@ export function agentPrompt({ key, endpoint, origin }: AgentPromptValues, i18n: 
 export function connectorUrlOf(endpoint: string): string {
   return `${endpoint}${CONNECTOR_PATH}`;
 }
+
+export const REVENUE_EXAMPLE = "track('purchase', { revenue: 129.9 });";

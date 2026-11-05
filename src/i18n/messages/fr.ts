@@ -761,6 +761,11 @@ export const fr = translation({
     selected: 'Sélectionné, appuyez sur Ctrl+C',
     privacy:
       'Pyxis ne dépose aucun cookie chez vos visiteurs et ne stocke aucune adresse IP. Indiquez dans votre politique de confidentialité que le site mesure son utilisation avec Pyxis.',
+    revenue: {
+      title: 'Enregistrer des revenus (facultatif)',
+      lead: 'Envoyez le montant sous forme de nombre dans une propriété <code>revenue</code> de l’événement qu’un objectif compte :',
+      rule: 'Un nombre de 0 jusqu’à moins de 1 000 000 000, dans la devise du projet ({currency}). Un texte comme "129,90" ou un montant négatif est écarté.',
+    },
     how: 'Comment installer',
     yourself: 'Vous-même',
     withAgent: 'Avec un agent IA',

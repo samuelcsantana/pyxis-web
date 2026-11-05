@@ -105,8 +105,17 @@ describe('InstallGuide', () => {
     const second = screen.getByRole('region', { name: '2. Open a page of your site' });
     expect(second).toHaveTextContent('Page views from https://store.example.com show up here');
     expect(within(second).getByRole('status')).toHaveTextContent('Waiting for the first event…');
-    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(5);
     expect(screen.queryByText(/Already connected Claude/)).not.toBeInTheDocument();
+  });
+
+  it('shows how to send revenue, in the project currency', () => {
+    render(<InstallGuide settings={SETTINGS} endpoint="https://api.example.com" i18n={english} />);
+
+    const first = screen.getByRole('region', { name: '1. Install Pyxis on your site' });
+    expect(within(first).getByRole('heading', { name: 'Record revenue (optional)' })).toBeVisible();
+    expect(first).toHaveTextContent("track('purchase', { revenue: 129.9 });");
+    expect(first).toHaveTextContent('in the project’s currency (BRL · Brazilian Real)');
   });
 
   it('opens on installing it yourself, with the agent one tab away', () => {

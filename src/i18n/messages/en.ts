@@ -719,6 +719,11 @@ export const en = {
     selected: 'Selected, press Ctrl+C',
     privacy:
       'Pyxis stores no cookie on your visitors and no IP address. Say in your privacy policy that the site measures its use with Pyxis.',
+    revenue: {
+      title: 'Record revenue (optional)',
+      lead: 'Send the amount as a number in a <code>revenue</code> property of the event a goal counts:',
+      rule: 'A number from 0 up to, but not including, 1,000,000,000, in the project’s currency ({currency}). A text such as "129.90" or a negative amount is dropped.',
+    },
     how: 'How to install',
     yourself: 'Yourself',
     withAgent: 'With an AI agent',

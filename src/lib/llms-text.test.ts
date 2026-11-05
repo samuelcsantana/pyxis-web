@@ -51,6 +51,12 @@ describe('llmsText', () => {
     expect(text).toContain('Up to 10 properties per event');
   });
 
+  it('tells an agent how to send revenue and what is dropped', () => {
+    expect(text).toContain("`track('purchase', { revenue: 129.9 })`");
+    expect(text).toContain('non-negative number below 1,000,000,000 in the project’s currency');
+    expect(text).toContain('a text such as "129.90" or a negative amount is dropped');
+  });
+
   it('says where to sign up and where the hosted API is', () => {
     expect(text).toContain('https://app.pyxis-analytics.dev/sign-up (14-day free trial)');
     expect(text).toContain('https://api.pyxis-analytics.dev');
