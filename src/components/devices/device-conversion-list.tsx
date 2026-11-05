@@ -1,19 +1,14 @@
 import type { DeviceConversion } from '@/domain/devices';
 import type { I18n } from '@/i18n/i18n';
-import { rich } from '@/i18n/rich';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 
 export interface DeviceConversionListProps {
   readonly conversions: readonly DeviceConversion[];
-  readonly conversionEvent: string;
+  readonly goal: string;
   readonly i18n: I18n;
 }
 
-export function DeviceConversionList({
-  conversions,
-  conversionEvent,
-  i18n,
-}: DeviceConversionListProps) {
+export function DeviceConversionList({ conversions, goal, i18n }: DeviceConversionListProps) {
   return (
     <section aria-labelledby="device-conversion-heading" className={`${PANEL} gap-3.5`}>
       <div className="flex flex-col gap-1">
@@ -21,9 +16,7 @@ export function DeviceConversionList({
           {i18n.t('devices.conversionByDevice.title')}
         </h2>
         <p className="text-caption text-muted">
-          {rich(i18n.t('devices.conversionByDevice.description'), {
-            code: () => <code className="font-mono">{conversionEvent}</code>,
-          })}
+          {i18n.t('devices.conversionByDevice.description', { goal })}
         </p>
       </div>
       <ul className="flex flex-col gap-3.5">

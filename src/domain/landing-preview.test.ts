@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { Goal } from './goals';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import type { FunnelReport, FunnelStep } from './funnel';
@@ -100,9 +101,17 @@ const REPORTS: LandingPreviewReports = {
   ),
 };
 
+const SIGN_UP: Goal = {
+  id: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
+  name: 'Sign-up',
+  kind: 'event',
+  target: 'signup_completed',
+  position: 1,
+};
+
 describe('landingPreviewOf', () => {
   it('shows the Overview figures of the demo, as the Overview screen words them', () => {
-    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', 'signup_completed', english);
+    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', SIGN_UP, english);
 
     expect(view.kpis.map((each) => [each.label, each.value])).toEqual([
       ['Visits', '3,214'],
@@ -115,7 +124,7 @@ describe('landingPreviewOf', () => {
   });
 
   it('names the funnel step that loses the most people, as the Funnel screen counts it', () => {
-    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', 'signup_completed', english);
+    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', SIGN_UP, english);
 
     expect(view.dropOff).toEqual({
       subject: 'calculator_result_shown → /sign-up',
@@ -125,7 +134,7 @@ describe('landingPreviewOf', () => {
   });
 
   it('names the write that fails most often, by its share of failures, in the page language', () => {
-    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', 'signup_completed', portuguese);
+    const view = landingPreviewOf(REPORTS, PERIOD, '2026-10-14', SIGN_UP, portuguese);
 
     expect(view.failingWrite).toEqual({
       subject: 'POST /payouts',

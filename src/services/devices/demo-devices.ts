@@ -11,8 +11,10 @@ import {
   demoVisitsIn,
   groupedBy,
   hasPageView,
+  type DemoGoalTest,
   type DemoReportRange,
 } from '../demo/demo-scope';
+import { demoConversionTest } from '../demo/demo-goals';
 
 export const TOP_DEVICE_VALUES = 5;
 export const TOP_REGIONS = 10;
@@ -36,10 +38,10 @@ interface ValueCount {
 function counted(
   value: string,
   visits: readonly DemoVisitRecord[],
-  conversionEvent: string | null,
+  conversion: DemoGoalTest | null,
 ): ValueCount {
   const converts = (visit: DemoVisitRecord) =>
-    countWhere(visit.events, (event) => event.name === conversionEvent);
+    conversion === null ? 0 : countWhere(visit.events, conversion);
   return {
     value,
     visits: countWhere(visits, hasPageView),
@@ -63,15 +65,15 @@ function summed(value: string, counts: readonly ValueCount[]): ValueCount {
 function shares(
   visits: readonly DemoVisitRecord[],
   valueOf: (visit: DemoVisitRecord) => string,
-  conversionEvent: string | null,
+  conversion: DemoGoalTest | null,
 ): ShareWire[] {
   const ranked = [...groupedBy(visits, valueOf)]
-    .map(([value, group]) => counted(value, group, conversionEvent))
+    .map(([value, group]) => counted(value, group, conversion))
     .toSorted(byKeys((count) => [-count.visits, count.value]));
   const rest = ranked.slice(TOP_DEVICE_VALUES);
   const shown =
     rest.length === 0 ? ranked : [...ranked.slice(0, TOP_DEVICE_VALUES), summed(OTHER_VALUE, rest)];
-  const counts = conversionEvent !== null;
+  const counts = conversion !== null;
   return shown.map((share) => ({
     value: share.value,
     visits: share.visits,
@@ -97,14 +99,14 @@ function regionShare(
 
 function regionShares(
   visits: readonly DemoVisitRecord[],
-  conversionEvent: string | null,
+  conversion: DemoGoalTest | null,
 ): RegionShareWire[] {
-  const countsConversions = conversionEvent !== null;
+  const countsConversions = conversion !== null;
   const located = visits.filter((visit) => visit.region !== null);
   const ranked = [...groupedBy(located, (visit) => String(visit.region))]
     .map(([region, group]) => ({
       name: itemAt(group, 0).regionName,
-      count: counted(region, group, conversionEvent),
+      count: counted(region, group, conversion),
     }))
     .toSorted(byKeys(({ count }) => [-count.visits, count.value]));
   const rest = ranked.slice(TOP_REGIONS).map(({ count }) => count);
@@ -118,14 +120,7 @@ function regionShares(
       : [regionShare(OTHER_VALUE, null, summed(OTHER_VALUE, rest), countsConversions)]),
     ...(unlocated.length === 0
       ? []
-      : [
-          regionShare(
-            null,
-            null,
-            counted(OTHER_VALUE, unlocated, conversionEvent),
-            countsConversions,
-          ),
-        ]),
+      : [regionShare(null, null, counted(OTHER_VALUE, unlocated, conversion), countsConversions)]),
   ];
 }
 
@@ -158,13 +153,13 @@ function placeKey(visit: PlacedVisit): string {
 
 function cityShares(
   visits: readonly DemoVisitRecord[],
-  conversionEvent: string | null,
+  conversion: DemoGoalTest | null,
 ): CityShareWire[] {
-  const countsConversions = conversionEvent !== null;
+  const countsConversions = conversion !== null;
   const ranked = [...groupedBy(visits.filter(isPlaced), placeKey)]
     .map(([key, group]) => {
       const first = itemAt(group, 0);
-      return { first, count: counted(key, group, conversionEvent) };
+      return { first, count: counted(key, group, conversion) };
     })
     .toSorted(byKeys(({ first, count }) => [-count.visits, first.city, first.region]));
   const rest = ranked.slice(TOP_CITIES).map(({ count }) => count);
@@ -190,13 +185,7 @@ function cityShares(
         ]),
     ...(unplaced.length === 0
       ? []
-      : [
-          cityShare(
-            NO_CITY_PLACE,
-            counted(OTHER_VALUE, unplaced, conversionEvent),
-            countsConversions,
-          ),
-        ]),
+      : [cityShare(NO_CITY_PLACE, counted(OTHER_VALUE, unplaced, conversion), countsConversions)]),
   ];
 }
 
@@ -244,15 +233,15 @@ function reachOf(visits: readonly DemoVisitRecord[]): ReachWire {
 export function demoDevicesWire(projectId: string, range: DemoReportRange, now: Date): DevicesWire {
   const project = demoProjectOf(projectId);
   const visits = demoVisitsIn(project, demoScopeOf(range, now, range.filters));
-  const of = (valueOf: (visit: DemoVisitRecord) => string) =>
-    shares(visits, valueOf, project.conversionEvent);
+  const conversion = demoConversionTest(project, range.goal);
+  const of = (valueOf: (visit: DemoVisitRecord) => string) => shares(visits, valueOf, conversion);
   return {
     device_types: of((visit) => visit.deviceType),
     browsers: of((visit) => visit.browser),
     operating_systems: of((visit) => visit.os),
     countries: of((visit) => visit.country),
-    regions: regionShares(visits, project.conversionEvent),
-    cities: cityShares(visits, project.conversionEvent),
+    regions: regionShares(visits, conversion),
+    cities: cityShares(visits, conversion),
     reach: reachOf(visits),
   };
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { demoCountedGoal } from '@/services/demo/demo-goals';
 import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { notFound } from 'next/navigation';
 import { ArchitectureSection } from '@/components/landing/architecture-section';
@@ -113,7 +114,7 @@ async function demoPreviewOf(i18n: I18n): Promise<LandingPreviewView> {
     { overview, funnelSteps: DEMO_FUNNEL_STEPS, funnel, writes },
     period,
     todayIn(DEMO_STORE.timezone, now),
-    DEMO_STORE.conversionEvent,
+    demoCountedGoal(DEMO_STORE),
     i18n,
   );
 }

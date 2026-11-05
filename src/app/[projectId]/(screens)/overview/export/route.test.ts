@@ -75,6 +75,7 @@ describe('GET /[projectId]/overview/export', () => {
       from: '2026-09-30',
       to: '2026-10-06',
       filters: NO_DASHBOARD_FILTERS,
+      goal: null,
     });
     expect(response.headers.get('content-disposition')).toBe(
       'attachment; filename="pyxis-overview-daily-2026-09-30-2026-10-06.csv"',
@@ -85,6 +86,19 @@ describe('GET /[projectId]/overview/export', () => {
     );
     expect(rows).toHaveLength(8);
     expect(rows[1]).toMatch(/^2026-09-30,/);
+  });
+
+  it('counts the goal the address names, and ignores one that is not an id', async () => {
+    const overview = vi.fn<IOverviewService['overview']>((projectId, range) =>
+      new MockOverviewService().overview(projectId, range),
+    );
+    state.overview = overview;
+    const goal = 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703';
+
+    await download(`range=7d&goal=${goal}`);
+    await download('range=7d&goal=signup');
+
+    expect(overview.mock.calls.map(([, scope]) => scope.goal)).toEqual([goal, null]);
   });
 
   it('sends the top pages and the top events when they are named', async () => {

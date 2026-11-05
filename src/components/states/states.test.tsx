@@ -10,7 +10,8 @@ import { errorTexts } from './error-texts';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { installSnippet, NoActivityYet, PLACEHOLDER_ENDPOINT } from './no-activity-yet';
-import { NoConversionEvent } from './no-conversion-event';
+import { NoGoals } from './no-goals';
+import { renderWithMessages } from '@/test-utils/render-with-messages';
 
 describe('EmptyState', () => {
   it('shows its title and explanation', () => {
@@ -224,16 +225,16 @@ describe('EmptyPeriod', () => {
   });
 });
 
-describe('NoConversionEvent', () => {
-  it('names the command and the option that set a conversion event, as code', () => {
-    const { container } = render(<NoConversionEvent i18n={english} />);
+describe('NoGoals', () => {
+  it('says why conversions are missing and opens the goals section of the settings', () => {
+    renderWithMessages(<NoGoals projectId="p1" i18n={english} />);
 
-    expect(container).toHaveTextContent(
-      "No conversion event is set for this project, so conversions are not shown. The operator sets one with the API's project:update command and its --conversion-event option.",
+    expect(
+      screen.getByText(/This project has no goals yet, so conversions are not shown\./),
+    ).toHaveTextContent('an event your site sends, or a page the visit opens.');
+    expect(screen.getByRole('link', { name: 'Add a goal' })).toHaveAttribute(
+      'href',
+      '#settings/goals',
     );
-    expect([...container.querySelectorAll('code')].map((code) => code.textContent)).toEqual([
-      'project:update',
-      '--conversion-event',
-    ]);
   });
 });

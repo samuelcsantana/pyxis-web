@@ -11,7 +11,7 @@ import { ScreenContent } from '@/components/shell/screen-content';
 import { linkWith, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { FilteredPeriodEmpty } from '@/components/states/filtered-period-empty';
-import { NoConversionEvent } from '@/components/states/no-conversion-event';
+import { NoGoals } from '@/components/states/no-goals';
 import { CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import {
@@ -40,6 +40,8 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { type Goal, withKnownReachedGoal } from '@/domain/goals';
+import { projectGoals } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref } from '@/lib/csv-export';
@@ -65,7 +67,8 @@ export interface DevicesPageProps {
 
 interface DevicesReportViewProps {
   readonly report: DevicesReport;
-  readonly conversionEvent: string | null;
+  readonly projectId: string;
+  readonly countedGoal: Goal | null;
   readonly cityEnabled: boolean;
   readonly exportPath: string;
   readonly deviceVisitsHref: (deviceType: string) => string | null;
@@ -89,7 +92,8 @@ interface DevicesRowLinks {
 
 function DevicesReportView({
   report,
-  conversionEvent,
+  projectId,
+  countedGoal,
   cityEnabled,
   exportPath,
   deviceVisitsHref,
@@ -100,7 +104,8 @@ function DevicesReportView({
   rows,
 }: DevicesReportViewProps) {
   const conversions = deviceConversions(report.deviceTypes, i18n);
-  const showsConversions = conversionEvent !== null && conversions.length > 0;
+  const counts = countedGoal !== null;
+  const showsConversions = countedGoal !== null && conversions.length > 0;
   return (
     <>
       <ReachCard summary={reachSummary(report.reach, cityEnabled, i18n)} i18n={i18n} />
@@ -117,7 +122,7 @@ function DevicesReportView({
           id="browser"
           title={i18n.t('devices.panels.browser')}
           rows={shareRows(report.browsers, browserLabel, i18n)}
-          withConversionRate={conversionEvent !== null}
+          withConversionRate={counts}
           visitsHref={rows.browserVisitsHref}
           filterOf={rows.browserFilter}
           i18n={i18n}
@@ -126,31 +131,27 @@ function DevicesReportView({
           id="operating-system"
           title={i18n.t('devices.panels.operatingSystem')}
           rows={shareRows(report.operatingSystems, operatingSystemLabel, i18n)}
-          withConversionRate={conversionEvent !== null}
+          withConversionRate={counts}
           visitsHref={rows.osVisitsHref}
           filterOf={rows.osFilter}
           i18n={i18n}
         />
       </div>
-      {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
+      {countedGoal === null ? <NoGoals projectId={projectId} i18n={i18n} /> : null}
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-2 xl:[&>:last-child:nth-child(odd)]:col-span-full">
         {showsConversions ? (
-          <DeviceConversionList
-            conversions={conversions}
-            conversionEvent={conversionEvent}
-            i18n={i18n}
-          />
+          <DeviceConversionList conversions={conversions} goal={countedGoal.name} i18n={i18n} />
         ) : null}
         <CountriesTable
           rows={shareRows(report.countries, countryLabel, i18n)}
-          withConversionRate={conversionEvent !== null}
+          withConversionRate={counts}
           visitsHref={countryVisitsHref}
           filterOf={rows.countryFilter}
           i18n={i18n}
         />
         <RegionsTable
           rows={regionRows(report.regions, i18n)}
-          withConversionRate={conversionEvent !== null}
+          withConversionRate={counts}
           visitsHref={regionVisitsHref}
           filterOf={rows.regionFilter}
           i18n={i18n}
@@ -159,7 +160,7 @@ function DevicesReportView({
       {cityEnabled || hasNamedCity(report.cities) ? (
         <CitiesTable
           rows={cityRows(report.cities, i18n)}
-          withConversionRate={conversionEvent !== null}
+          withConversionRate={counts}
           visitsHref={cityVisitsHref}
           filterOf={rows.cityFilter}
           i18n={i18n}
@@ -180,7 +181,8 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const goals = await projectGoals(project.id);
+  const { filters } = withKnownReachedGoal(dashboardFiltersOf(search, i18n), goals, i18n);
   const [report, settings] = await Promise.all([
     readOrSignIn(() =>
       createDevicesService().devices(project.id, { from: period.from, to: period.to, filters }),
@@ -241,7 +243,8 @@ export default async function DevicesPage({ params, searchParams }: DevicesPageP
       {hasVisits(report) ? (
         <DevicesReportView
           report={report}
-          conversionEvent={project.conversionEvent}
+          projectId={project.id}
+          countedGoal={goals[0] ?? null}
           cityEnabled={settings.cityEnabled}
           exportPath={exportHref(project.id, 'devices', query)}
           deviceVisitsHref={deviceVisitsHref}

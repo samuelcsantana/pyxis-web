@@ -1,4 +1,6 @@
 import { DayActivityFigures } from '@/components/overview/day-activity-figures';
+import { GoalPicker } from '@/components/overview/goal-picker';
+import { GoalsTable } from '@/components/overview/goals-table';
 import { KpiGrid } from '@/components/overview/kpi-grid';
 import { MetricChartArea, MetricSelection } from '@/components/overview/metric-selection';
 import { OverviewChartPanel } from '@/components/overview/overview-chart-panel';
@@ -11,7 +13,7 @@ import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, type ScreenSlug, screenHref } from '@/components/shell/screens';
 import { EmptyPeriod } from '@/components/states/empty-period';
 import { FilteredPeriodEmpty } from '@/components/states/filtered-period-empty';
-import { NoConversionEvent } from '@/components/states/no-conversion-event';
+import { NoGoals } from '@/components/states/no-goals';
 import { type CsvDownload, CsvDownloads } from '@/components/ui/csv-downloads';
 import { emptyPeriodView, WIDER_PERIOD_QUERY } from '@/domain/empty-period';
 import { changeToneRule } from '@/domain/glossary';
@@ -40,8 +42,19 @@ import {
   hasDashboardFilters,
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
+import {
+  type ChosenGoal,
+  chosenGoal,
+  type Goal,
+  type GoalChoice,
+  goalChoiceOf,
+  type GoalRow,
+  goalQuery,
+  goalRows,
+  type GoalsSummary,
+  withKnownReachedGoal,
+} from '@/domain/goals';
 import { getI18n } from '@/i18n/get-messages';
-import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -50,6 +63,8 @@ import { screenMetadata } from '@/lib/screen-metadata';
 import { type RowFilterOf, screenRowFilters } from '@/lib/row-filters';
 import { eventLabel } from '@/domain/metrics';
 import { createOverviewService } from '@/services/overview/overview-service.factory';
+import { createGoalsService } from '@/services/goals/goals-service.factory';
+import { projectGoals } from '@/lib/project-goals';
 import { SCREEN_WIDTH } from '@/components/shell/screen-width';
 
 export const generateMetadata = screenMetadata('overview');
@@ -67,6 +82,7 @@ function footnote(i18n: I18n): string {
 
 export interface OverviewSearch extends PeriodSearch, DashboardSearch {
   readonly metric?: string | string[];
+  readonly goal?: string | string[];
 }
 
 export interface OverviewPageProps {
@@ -79,7 +95,10 @@ interface OverviewReportViewProps {
   readonly timeOfDay: TimeOfDayReport;
   readonly kpis: readonly KpiView[];
   readonly metric: ChartMetric;
-  readonly conversionEvent: string | null;
+  readonly projectId: string;
+  readonly goals: readonly Goal[];
+  readonly chosen: ChosenGoal;
+  readonly summary: GoalsSummary | null;
   readonly periodLabel: string;
   readonly endsToday: boolean;
   readonly filteredHref: (screen: ScreenSlug, filter: Readonly<Record<string, string>>) => string;
@@ -99,12 +118,42 @@ function overviewDownloads(projectId: string, query: string, i18n: I18n): readon
   }));
 }
 
+interface ConversionsControlProps {
+  readonly choice: Exclude<GoalChoice, { readonly kind: 'none' }>;
+  readonly i18n: I18n;
+}
+
+function ConversionsControl({ choice, i18n }: ConversionsControlProps) {
+  switch (choice.kind) {
+    case 'single':
+      return <p className="relative text-xs font-medium text-ink wrap-anywhere">{choice.name}</p>;
+    case 'picker':
+      return (
+        <GoalPicker
+          goals={choice.goals}
+          selected={choice.selected}
+          first={choice.first}
+          label={i18n.t('goals.picker')}
+        />
+      );
+  }
+}
+
+function controlsOf(choice: GoalChoice, i18n: I18n) {
+  return choice.kind === 'none'
+    ? {}
+    : { conversions: <ConversionsControl choice={choice} i18n={i18n} /> };
+}
+
 function OverviewReportView({
   report,
   timeOfDay,
   kpis,
   metric,
-  conversionEvent,
+  projectId,
+  goals,
+  chosen,
+  summary,
   periodLabel,
   endsToday,
   filteredHref,
@@ -121,9 +170,15 @@ function OverviewReportView({
           kpis={kpis}
           drillDownHref={(drillDown) => filteredHref(drillDown.screen, drillDown.filter)}
           selectable={!singleDay}
+          controls={controlsOf(goalChoiceOf(goals, chosen), i18n)}
           i18n={i18n}
         />
-        {conversionEvent === null ? <NoConversionEvent i18n={i18n} /> : null}
+        {chosen.problem === null ? null : (
+          <p role="status" className="text-caption leading-5 text-muted">
+            {chosen.problem}
+          </p>
+        )}
+        {goals.length === 0 ? <NoGoals projectId={projectId} i18n={i18n} /> : null}
         {singleDay ? (
           <DayActivityFigures days={report.days} periodLabel={periodLabel} i18n={i18n} />
         ) : (
@@ -136,6 +191,16 @@ function OverviewReportView({
           </MetricChartArea>
         )}
       </MetricSelection>
+      {summary === null ? null : (
+        <GoalsTable
+          rows={goalRows(summary, i18n)}
+          visits={i18n.t('counts.visit', { count: summary.visits })}
+          periodLabel={periodLabel}
+          visitsHref={(goalId) => visitsHref({ reached_goal: goalId })}
+          filterOf={(row: GoalRow) => rowFilter({ reachedGoal: row.id }, row.name)}
+          i18n={i18n}
+        />
+      )}
       <UniqueVisitorsPanel
         visitors={report.visitors}
         endsToday={endsToday}
@@ -171,24 +236,27 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const today = todayIn(project.timezone, now);
-  const i18n = await getI18n();
-  const {
-    reading: { filters },
-    goals,
-  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
+  const [i18n, goals] = await Promise.all([getI18n(), projectGoals(project.id)]);
+  const { filters } = withKnownReachedGoal(dashboardFiltersOf(search, i18n), goals, i18n);
+  const chosen = chosenGoal(goals, search.goal, i18n);
   const scope = { from: period.from, to: period.to, filters };
-  const [report, timeOfDay] = await readOrSignIn(() => {
+  const [report, timeOfDay, summary] = await readOrSignIn(() => {
     const service = createOverviewService();
-    return Promise.all([service.overview(project.id, scope), service.timeOfDay(project.id, scope)]);
+    return Promise.all([
+      service.overview(project.id, { ...scope, goal: chosen.askedId }),
+      service.timeOfDay(project.id, scope),
+      goals.length === 0 ? null : createGoalsService().summary(project.id, scope),
+    ]);
   });
   const filtered = hasDashboardFilters(filters);
   const query = withDashboardFilters(periodQuery(period), filters);
+  const downloadQuery = withKeptParameters(query, goalQuery(chosen));
   const compared = {
     days: daysBetween(period.from, period.to),
     endsToday: period.to === today,
     filtered,
   };
-  const kpis = overviewKpis(report, compared, project.conversionEvent, i18n);
+  const kpis = overviewKpis(report, compared, chosen.goal, i18n);
   const metric = chartMetric(
     search.metric,
     kpis.map((kpi) => kpi.id),
@@ -205,11 +273,14 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           timeOfDay={timeOfDay}
           kpis={kpis}
           metric={metric}
-          conversionEvent={project.conversionEvent}
+          projectId={project.id}
+          goals={goals}
+          chosen={chosen}
+          summary={summary}
           periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
           endsToday={compared.endsToday}
           filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}
-          downloads={overviewDownloads(project.id, query, i18n)}
+          downloads={overviewDownloads(project.id, downloadQuery, i18n)}
           rowFilter={screenRowFilters(project.id, 'overview', search, filters, i18n)}
           i18n={i18n}
         />

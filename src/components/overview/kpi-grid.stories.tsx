@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
 import { demoOverviewReport } from '@/services/overview/demo-overview';
 import { DEMO_DOCS, DEMO_STORE } from '@/services/demo/demo-projects';
+import { demoCountedGoal } from '@/services/demo/demo-goals';
 import { KpiGrid } from './kpi-grid';
 import { MetricSelection } from './metric-selection';
 import { english } from '@/test-utils/english';
@@ -15,7 +16,7 @@ const TEN_IN_SAO_PAULO = new Date('2026-10-05T13:03:00.000Z');
 const TODAY = { days: 1, endsToday: true } as const;
 
 const WITHOUT_CONVERSIONS = demoOverviewReport(DEMO_DOCS.id, STORY_PERIOD, STORY_NOW);
-const EVENT = DEMO_STORE.conversionEvent;
+const EVENT = demoCountedGoal(DEMO_STORE);
 
 function drillDownHref({ screen, filter }: KpiDrillDown): string {
   return `/demo/${screen}?${new URLSearchParams({ range: '30d', ...filter }).toString()}`;
@@ -47,7 +48,7 @@ export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
   args: {
-    kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, DEMO_DOCS.conversionEvent, english),
+    kpis: overviewKpis(WITHOUT_CONVERSIONS, LAST_30_DAYS, demoCountedGoal(DEMO_DOCS), english),
   },
 };
 

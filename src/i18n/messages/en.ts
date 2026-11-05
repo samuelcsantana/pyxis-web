@@ -210,8 +210,6 @@ export const en = {
         'Install the SDK on your site and the first page views show up here within a minute.',
       guide: "The full setup guide is in the <readme>SDK's README</readme>.",
     },
-    noConversionEvent:
-      "No conversion event is set for this project, so conversions are not shown. The operator sets one with the API's <code>project:update</code> command and its <code>--conversion-event</code> option.",
     noProjects: {
       title: 'No projects yet',
       body: '<email/> can sign in, but no project was granted to it yet. Ask the operator of this Pyxis to run <code>admin:grant</code> for your email.',
@@ -1087,7 +1085,7 @@ export const en = {
     failedRequest: { one: '{count} failed request', other: '{count} failed requests' },
     clientError: { one: '{count} client error (4xx)', other: '{count} client errors (4xx)' },
     serverError: { one: '{count} server error (5xx)', other: '{count} server errors (5xx)' },
-    conversionEvent: { one: '{count} conversion event', other: '{count} conversion events' },
+    timesReached: { one: '{count} time', other: '{count} times' },
     continent: { one: '{count} continent', other: '{count} continents' },
     country: { one: '{count} country', other: '{count} countries' },
     region: { one: '{count} region', other: '{count} regions' },
@@ -1113,7 +1111,7 @@ export const en = {
     identifiedUser:
       'An identified user is a distinct user id the site passed to identify(), usually when someone signs in; a visit without one is anonymous.',
     conversion:
-      "A conversion is a visit that sent the project's conversion event at least once; the conversion events count every time it was sent.",
+      'A conversion is a visit that reached the chosen goal at least once, by sending its event or opening its page; the times reached count every event or page view that matched.',
     write: 'A write is a POST, PUT, PATCH or DELETE sent with trackRequest().',
     failure: 'A failure is a status of 400 or above, or no response at all.',
     changeTone:
@@ -1148,8 +1146,8 @@ export const en = {
       identifiedUsers: 'signed in at least once',
       writeErrors: '{failed} of {writes} failed',
       shareOfVisits: '{share} of {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} sent {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} reached {goal} · {times}',
     },
     drillDowns: {
       visits: 'See the visits',
@@ -1180,6 +1178,20 @@ export const en = {
     },
   },
   goals: {
+    picker: 'Goal counted as conversions',
+    none: 'This project has no goals yet, so conversions are not shown. <settings>Add a goal</settings>: an event your site sends, or a page the visit opens.',
+    kinds: {
+      event: 'Event',
+      page: 'Page',
+    },
+    table: {
+      title: 'Goals',
+      description: 'Visits that reached each goal, out of {visits}, {period}',
+      goal: 'Goal',
+      convertingVisits: 'Visits',
+      conversions: 'Times reached',
+      rate: 'Conversion rate',
+    },
     problems: {
       unknownGoal: 'The goal in the address no longer exists, so the first goal is counted.',
       unknownReachedGoal: 'The goal in the filter no longer exists, so it was left out.',
@@ -1388,7 +1400,7 @@ export const en = {
     },
     conversionByDevice: {
       title: 'Conversion by device',
-      description: 'Share of visits that sent <code/>',
+      description: 'Share of visits that reached {goal}',
     },
     footnote:
       "Device, browser and system are worked out on the server from the browser's user agent, which is then thrown away. The country and the region come from the edge network, never from a stored IP address; the approximate city is recorded only for a project whose owner turned it on in Settings. Older visits have only the country.",

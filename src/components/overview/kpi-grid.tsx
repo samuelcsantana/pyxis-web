@@ -1,4 +1,5 @@
-import type { KpiDrillDown, KpiView } from '@/domain/overview';
+import type { ReactNode } from 'react';
+import type { KpiDrillDown, KpiId, KpiView } from '@/domain/overview';
 import { KPI_COLORS } from '@/domain/overview-chart';
 import type { I18n } from '@/i18n/i18n';
 import { KpiCard } from './kpi-card';
@@ -9,10 +10,17 @@ export interface KpiGridProps {
   readonly kpis: readonly KpiView[];
   readonly drillDownHref: (drillDown: KpiDrillDown) => string;
   readonly selectable?: boolean;
+  readonly controls?: Partial<Readonly<Record<KpiId, ReactNode>>>;
   readonly i18n: I18n;
 }
 
-export function KpiGrid({ kpis, drillDownHref, selectable = false, i18n }: KpiGridProps) {
+export function KpiGrid({
+  kpis,
+  drillDownHref,
+  selectable = false,
+  controls = {},
+  i18n,
+}: KpiGridProps) {
   return (
     <div className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
       {selectable ? (
@@ -31,6 +39,7 @@ export function KpiGrid({ kpis, drillDownHref, selectable = false, i18n }: KpiGr
               : { label: kpi.drillDown.label, href: drillDownHref(kpi.drillDown) }
           }
           toggleHint={selectable ? KPI_TOGGLE_HINT_ID : null}
+          control={controls[kpi.id]}
           i18n={i18n}
         />
       ))}

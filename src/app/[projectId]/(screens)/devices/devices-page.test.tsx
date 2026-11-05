@@ -45,6 +45,15 @@ vi.mock('@/services/projects/projects-service.factory', () => ({
   }),
 }));
 
+vi.mock('@/services/goals/goals-service.factory', async () => {
+  const { DEMO_STORE } = await import('@/services/demo/demo-projects');
+  return {
+    createGoalsService: () => ({
+      list: (projectId: string) => Promise.resolve(projectId === 'p-docs' ? [] : DEMO_STORE.goals),
+    }),
+  };
+});
+
 vi.mock('@/services/devices/devices-service.factory', () => ({
   createDevicesService: (): IDevicesService => ({
     devices: (projectId, range) => state.devices(projectId, range),
@@ -351,14 +360,14 @@ describe('DevicesPage', () => {
     ).toBeNull();
   });
 
-  it('leaves conversion by device out for a project without a conversion event', async () => {
+  it('leaves conversion by device out for a project without a goal', async () => {
     renderWithMessages(await renderDevices('p-docs'));
 
     expect(screen.queryByRole('columnheader', { name: 'Conversion rate' })).toBeNull();
 
     expect(screen.getByRole('table', { name: 'Device type' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
-    expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
+    expect(screen.getByText(/This project has no goals yet/)).toBeInTheDocument();
     const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
     expect(grid?.children).toHaveLength(2);
     expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));
@@ -379,7 +388,7 @@ describe('DevicesPage', () => {
     renderWithMessages(await renderDevices('p-store'));
 
     expect(screen.queryByRole('heading', { name: 'Conversion by device' })).not.toBeInTheDocument();
-    expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/This project has no goals yet/)).not.toBeInTheDocument();
     const grid = screen.getByRole('table', { name: 'Countries' }).closest('.grid');
     expect(grid?.children).toHaveLength(2);
     expect(grid).toContainElement(screen.getByRole('table', { name: 'Regions' }));

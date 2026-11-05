@@ -17,8 +17,10 @@ import {
   groupOf,
   isPageView,
   visitDate,
+  type DemoGoalTest,
   type DemoReportRange,
 } from '../demo/demo-scope';
+import { demoConversionTest } from '../demo/demo-goals';
 import { demoDays } from '../demo/demo-series';
 
 type ChannelCounts = Readonly<Record<Channel, number>>;
@@ -38,12 +40,12 @@ function noVisits(): ChannelCounts {
   return Object.fromEntries(CHANNELS.map((channel) => [channel, 0])) as Record<Channel, number>;
 }
 
-function entriesOf(visits: readonly DemoVisitRecord[], conversionEvent: string | null) {
+function entriesOf(visits: readonly DemoVisitRecord[], conversion: DemoGoalTest | null) {
   return visits
     .filter((visit) => visit.events.some(isPageView))
     .map((visit): Entry => ({
       visit,
-      conversions: countWhere(visit.events, (event) => event.name === conversionEvent),
+      conversions: conversion === null ? 0 : countWhere(visit.events, conversion),
     }));
 }
 
@@ -112,12 +114,13 @@ export function demoAcquisitionWire(
   now: Date,
 ): AcquisitionWire {
   const project = demoProjectOf(projectId);
+  const conversion = demoConversionTest(project, range.goal);
   const entries = entriesOf(
     demoVisitsIn(project, demoScopeOf(range, now, range.filters)),
-    project.conversionEvent,
+    conversion,
   );
   const byDate = groupedBy(entries, (entry) => visitDate(entry.visit));
-  const countsConversions = project.conversionEvent !== null;
+  const countsConversions = conversion !== null;
   return {
     days: demoDays(range).map((date) => ({
       date,

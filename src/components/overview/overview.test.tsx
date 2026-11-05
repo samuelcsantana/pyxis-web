@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { linePath } from '@/domain/line-chart';
 import { valueAxis } from '@/domain/chart-scale';
 import { type KpiDrillDown, overviewKpis } from '@/domain/overview';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
+import { demoCountedGoal } from '@/services/demo/demo-goals';
 import {
   ACTIVITY,
   chartDays,
@@ -45,13 +47,15 @@ function eventVisitsHref(event: string): string {
   return `/p-store/visits?${new URLSearchParams({ range: '7d', event }).toString()}`;
 }
 
+const SIGN_UP_GOAL = demoCountedGoal(DEMO_STORE);
+
 describe('KpiGrid', () => {
   it('shows each figure with its change, what it compares with, its note and sparkline', () => {
     const { container } = renderWithMessages(
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
       />,
     );
 
@@ -122,7 +126,7 @@ describe('KpiGrid', () => {
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
       />,
     );
 
@@ -137,7 +141,7 @@ describe('KpiGrid', () => {
     expect(linkIn('Conversions')).toHaveAccessibleName('See converting visits');
     expect(linkIn('Conversions')).toHaveAttribute(
       'href',
-      '/p-store/visits?range=7d&event=signup_completed',
+      `/p-store/visits?range=7d&reached_goal=${String(SIGN_UP_GOAL?.id)}`,
     );
     expect(linkIn('Write error rate')).toHaveAccessibleName('See failing routes');
     expect(linkIn('Write error rate')).toHaveAttribute(
@@ -151,7 +155,7 @@ describe('KpiGrid', () => {
       <KpiGrid
         i18n={english}
         drillDownHref={drillDownHref}
-        kpis={overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english)}
+        kpis={overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english)}
       />,
     );
 
@@ -160,7 +164,7 @@ describe('KpiGrid', () => {
   });
 
   it('turns each card into a toggle that plots its figure, its link kept outside the toggle', () => {
-    const kpis = overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english);
+    const kpis = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english);
     renderWithMessages(
       <MetricSelection available={kpis.map((figure) => figure.id)}>
         <KpiGrid i18n={english} drillDownHref={drillDownHref} kpis={kpis} selectable />
@@ -225,7 +229,7 @@ describe('KpiGrid', () => {
 });
 
 function kpi(id: 'visits' | 'identified-users' | 'write-errors') {
-  const found = overviewKpis(REPORT, LAST_WEEK, 'signup_completed', english).find(
+  const found = overviewKpis(REPORT, LAST_WEEK, SIGN_UP_GOAL, english).find(
     (candidate) => candidate.id === id,
   );
   if (found === undefined) {
