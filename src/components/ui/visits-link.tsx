@@ -4,7 +4,7 @@ import { ROW_LINK } from './panel-classes';
 import { type RowFilter, RowFilterLink } from './row-filter-link';
 
 export interface VisitsLinkProps {
-  readonly href: string;
+  readonly href: string | null;
   readonly label: string;
   readonly purpose: string;
   readonly className?: string;
@@ -18,11 +18,16 @@ export function VisitsLink({
   className = '',
   filter = null,
 }: VisitsLinkProps) {
-  const link = (
-    <Link href={href} aria-label={`${label}${purpose}`} className={`${ROW_LINK} ${className}`}>
-      <Breakable text={label} />
-    </Link>
-  );
+  const link =
+    href === null ? (
+      <span className={className}>
+        <Breakable text={label} />
+      </span>
+    ) : (
+      <Link href={href} aria-label={`${label}${purpose}`} className={`${ROW_LINK} ${className}`}>
+        <Breakable text={label} />
+      </Link>
+    );
   if (filter === null) {
     return link;
   }

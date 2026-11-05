@@ -9,7 +9,7 @@ import type { RowFilter } from '@/components/ui/row-filter-link';
 
 export interface TopEventsListProps {
   readonly events: OverviewReport['topEvents'];
-  readonly visitsHref: (name: string) => string;
+  readonly visitsHref: (name: string) => string | null;
   readonly filterOf?: (name: string) => RowFilter | null;
   readonly i18n: I18n;
 }

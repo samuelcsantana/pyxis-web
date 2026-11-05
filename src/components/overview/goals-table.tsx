@@ -18,7 +18,7 @@ export interface GoalsTableProps {
   readonly rows: readonly GoalRow[];
   readonly visits: string;
   readonly periodLabel: string;
-  readonly visitsHref: (goalId: string) => string;
+  readonly visitsHref: (goalId: string) => string | null;
   readonly filterOf: (row: GoalRow) => RowFilter | null;
   readonly i18n: I18n;
 }

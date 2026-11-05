@@ -14,7 +14,7 @@ export const FEATURE_COLUMNS = 5;
 export interface FeatureRowCellsProps {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
-  readonly visitsHref: string;
+  readonly visitsHref: string | null;
   readonly visitsPurpose: string;
   readonly filter?: RowFilter | null;
   readonly disclosure?: ReactNode;

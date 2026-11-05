@@ -44,7 +44,7 @@ export interface UniqueVisitorsPanelProps {
   readonly visitors: UniqueVisitors;
   readonly endsToday: boolean;
   readonly periodLabel: string;
-  readonly visitsHref: (span: 'day' | 'month') => string;
+  readonly visitsHref: (span: 'day' | 'month') => string | null;
   readonly i18n: I18n;
 }
 
@@ -58,15 +58,17 @@ function Figures({
   i18n,
 }: {
   readonly headline: VisitorsHeadline;
-  readonly href: string;
+  readonly href: string | null;
   readonly i18n: I18n;
 }) {
   return (
     <div className="flex flex-col gap-2">
       <HeadlineFigures headline={headline} i18n={i18n} />
-      <Link href={href} className={`self-start text-caption ${TEXT_LINK}`}>
-        {i18n.t('uniqueVisitors.seeVisits')}
-      </Link>
+      {href === null ? null : (
+        <Link href={href} className={`self-start text-caption ${TEXT_LINK}`}>
+          {i18n.t('uniqueVisitors.seeVisits')}
+        </Link>
+      )}
     </div>
   );
 }

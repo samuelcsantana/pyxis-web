@@ -16,7 +16,7 @@ import { ConversionCells, ConversionColumns } from './conversion-columns';
 
 export interface CampaignsTableProps {
   readonly rows: readonly CampaignRow[];
-  readonly campaignVisitsHref: (row: CampaignRow) => string;
+  readonly campaignVisitsHref: (row: CampaignRow) => string | null;
   readonly campaignFilterOf?: (row: CampaignRow) => RowFilter | null;
   readonly i18n: I18n;
 }
@@ -30,7 +30,7 @@ function CampaignCell({
   i18n,
 }: {
   readonly row: CampaignRow;
-  readonly href: string;
+  readonly href: string | null;
   readonly filter: RowFilter | null;
   readonly i18n: I18n;
 }) {
