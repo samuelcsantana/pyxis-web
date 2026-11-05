@@ -2,6 +2,8 @@ import { act, fireEvent, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ProjectChanges, SaveProjectOutcome } from '@/domain/project-management';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
+import { currencyOptions } from '@/domain/currency';
+import { english } from '@/test-utils/english';
 import { ProjectForm, SAVE_PROJECT_MIN_BUSY_MS } from './project-form';
 
 const navigation = vi.hoisted(() => ({ router: { refresh: vi.fn() } }));
@@ -14,8 +16,10 @@ const SAVED: ProjectChanges = {
   name: 'Shop',
   allowedOrigins: ['https://shop.example.com'],
   timezone: 'UTC',
+  currency: 'BRL',
 };
 const TIMEZONES = ['America/Sao_Paulo', 'UTC'];
+const CURRENCIES = currencyOptions('BRL', english.format.currencyName);
 
 async function settle(milliseconds = SAVE_PROJECT_MIN_BUSY_MS) {
   await act(async () => {
@@ -24,7 +28,9 @@ async function settle(milliseconds = SAVE_PROJECT_MIN_BUSY_MS) {
 }
 
 function renderForm(save: (changes: ProjectChanges) => Promise<SaveProjectOutcome>) {
-  return renderWithMessages(<ProjectForm saved={SAVED} timezones={TIMEZONES} save={save} />);
+  return renderWithMessages(
+    <ProjectForm saved={SAVED} timezones={TIMEZONES} currencies={CURRENCIES} save={save} />,
+  );
 }
 
 function field(name: string) {
@@ -67,6 +73,12 @@ describe('ProjectForm', () => {
     fireEvent.change(screen.getByRole('combobox', { name: 'Time zone' }), {
       target: { value: 'America/Sao_Paulo' },
     });
+    expect(screen.getByRole('combobox', { name: 'Currency' })).toHaveAccessibleDescription(
+      'The revenue the site sends is read in this currency. Changing it converts nothing.',
+    );
+    fireEvent.change(screen.getByRole('combobox', { name: 'Currency' }), {
+      target: { value: 'USD' },
+    });
     fireEvent.click(saveButton());
 
     expect(screen.getByRole('button', { name: 'Saving…' })).toBeDisabled();
@@ -75,6 +87,7 @@ describe('ProjectForm', () => {
       name: 'Shop BR',
       allowedOrigins: ['https://shop.example.com', 'https://www.shop.example.com'],
       timezone: 'America/Sao_Paulo',
+      currency: 'USD',
     });
     expect(screen.getByRole('status')).toHaveTextContent('Saved');
     expect(navigation.router.refresh).toHaveBeenCalledOnce();
@@ -124,6 +137,7 @@ describe('ProjectForm', () => {
       <ProjectForm
         saved={{ ...SAVED, allowedOrigins: origins }}
         timezones={TIMEZONES}
+        currencies={CURRENCIES}
         save={() => Promise.resolve({ kind: 'saved' })}
       />,
     );
@@ -141,6 +155,7 @@ describe('ProjectForm', () => {
       <ProjectForm
         saved={{ ...SAVED, timezone: 'Nowhere/Land' }}
         timezones={[...TIMEZONES, 'Nowhere/Land']}
+        currencies={CURRENCIES}
         save={() => Promise.resolve({ kind: 'saved' })}
       />,
     );

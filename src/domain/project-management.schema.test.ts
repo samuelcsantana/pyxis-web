@@ -40,11 +40,13 @@ describe('project management on the wire', () => {
         name: 'Shop',
         allowedOrigins: ['https://shop.example.com'],
         timezone: 'UTC',
+        currency: 'USD',
       }),
     ).toEqual({
       name: 'Shop',
       allowed_origins: ['https://shop.example.com'],
       timezone: 'UTC',
+      currency: 'USD',
     });
     expect(projectDeletionWire('Shop')).toEqual({ confirm_name: 'Shop' });
   });

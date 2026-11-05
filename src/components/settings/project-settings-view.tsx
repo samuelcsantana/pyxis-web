@@ -4,6 +4,7 @@ import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
 import { SUPPORT_EMAIL } from '@/domain/accounts';
+import { currencyLabel, currencyOptions } from '@/domain/currency';
 import {
   canManageProject,
   hasLivePublicKey,
@@ -116,6 +117,9 @@ export function ProjectPanel({ settings, i18n, when }: SectionProps) {
       <dl className="flex flex-col gap-3">
         <Field term={i18n.t('settings.project.name')}>{settings.name}</Field>
         <Field term={i18n.t('settings.project.timezone')}>{settings.timezone}</Field>
+        <Field term={i18n.t('settings.project.currency')}>
+          {currencyLabel(settings.currency, i18n.format.currencyName)}
+        </Field>
         <Field term={i18n.t('settings.project.created')}>{when(settings.createdAt)}</Field>
       </dl>
     </SettingsPanel>
@@ -236,8 +240,10 @@ export function ProjectEditPanel({ settings, i18n, when, manage }: ManagedSectio
           name: settings.name,
           allowedOrigins: settings.allowedOrigins,
           timezone: settings.timezone,
+          currency: settings.currency,
         }}
         timezones={manage.timezones}
+        currencies={currencyOptions(settings.currency, i18n.format.currencyName)}
         save={manage.save}
       />
     </SettingsPanel>

@@ -261,6 +261,7 @@ export const de = translation({
       heading: 'Projekt',
       name: 'Name',
       timezone: 'Zeitzone',
+      currency: 'Währung',
       created: 'Angelegt',
       createdOn: 'Angelegt am {date}',
     },
@@ -316,6 +317,9 @@ export const de = translation({
     removeOrigin: 'Origin {number} entfernen',
     timezone: 'Zeitzone',
     timezoneNote: 'Tage und Uhrzeiten in den Berichten und im Wochenbericht richten sich danach.',
+    currency: 'Währung',
+    currencyNote:
+      'Den Umsatz, den die Website sendet, liest Pyxis in dieser Währung. Ein Wechsel rechnet nichts um.',
     save: 'Änderungen speichern',
     saving: 'Wird gespeichert…',
     saved: 'Gespeichert',

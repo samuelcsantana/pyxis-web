@@ -384,6 +384,7 @@ describe('the owner managing a project', () => {
     name: 'Shop',
     allowedOrigins: ['https://shop.example.com'],
     timezone: 'UTC',
+    currency: 'BRL',
   };
 
   function management(overrides: Partial<IProjectManagementService>) {

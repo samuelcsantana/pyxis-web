@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { type SaveProjectOutcome, timeZoneChoices } from '@/domain/project-management';
+import { currencyOptions } from '@/domain/currency';
+import { english } from '@/test-utils/english';
 import { ProjectForm } from './project-form';
 
 const SAVED = {
   name: 'Demo Store',
   allowedOrigins: ['https://store.example.com', 'https://www.store.example.com'],
   timezone: 'America/Sao_Paulo',
+  currency: 'BRL',
 };
 const SLOW_SAVE_MS = 60_000;
 
@@ -17,6 +20,7 @@ const meta = {
   args: {
     saved: SAVED,
     timezones: timeZoneChoices(SAVED.timezone),
+    currencies: currencyOptions(SAVED.currency, english.format.currencyName),
     save: (): Promise<SaveProjectOutcome> => Promise.resolve({ kind: 'saved' }),
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },

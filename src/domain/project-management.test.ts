@@ -112,18 +112,23 @@ describe('projectChangesOf', () => {
       projectChangesOf({
         ...DRAFT,
         origins: ['shop.example.com', 'https://shop.example.com/', ''],
+        currency: 'USD',
       }),
     ).toEqual({
       name: 'Shop',
       allowedOrigins: ['https://shop.example.com'],
       timezone: 'America/Sao_Paulo',
+      currency: 'USD',
     });
   });
 
   it('leaves out an origin it cannot read', () => {
     expect(
-      projectChangesOf({ ...DRAFT, origins: ['ftp://shop.example.com', 'docs.example.com'] })
-        .allowedOrigins,
+      projectChangesOf({
+        ...DRAFT,
+        origins: ['ftp://shop.example.com', 'docs.example.com'],
+        currency: 'BRL',
+      }).allowedOrigins,
     ).toEqual(['https://docs.example.com']);
   });
 });
@@ -145,16 +150,20 @@ describe('projectDraftOf', () => {
         name: 'Shop',
         allowedOrigins: ['https://shop.example.com'],
         timezone: 'UTC',
+        currency: 'EUR',
       }),
     ).toEqual({
       name: 'Shop',
       origins: ['https://shop.example.com'],
       timezone: 'UTC',
+      currency: 'EUR',
     });
   });
 
   it('gives an empty origin row when there is none', () => {
-    expect(projectDraftOf({ name: 'Shop', allowedOrigins: [], timezone: 'UTC' })).toMatchObject({
+    expect(
+      projectDraftOf({ name: 'Shop', allowedOrigins: [], timezone: 'UTC', currency: 'BRL' }),
+    ).toMatchObject({
       origins: [''],
     });
   });

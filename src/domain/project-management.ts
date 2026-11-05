@@ -11,23 +11,31 @@ const WEB_PROTOCOLS: ReadonlySet<string> = new Set(['http:', 'https:']);
 
 export type ProjectKeyKind = (typeof PROJECT_KEY_KINDS)[number];
 
-export interface ProjectChanges {
+export interface ProjectBasics {
   readonly name: string;
   readonly allowedOrigins: readonly string[];
   readonly timezone: string;
 }
 
-export interface NewProjectChanges extends ProjectChanges {
+export interface ProjectChanges extends ProjectBasics {
+  readonly currency: string;
+}
+
+export interface NewProjectChanges extends ProjectBasics {
   readonly conversionEvent: string | null;
 }
 
-export interface ProjectDraft {
+export interface ProjectBasicsDraft {
   readonly name: string;
   readonly origins: readonly string[];
   readonly timezone: string;
 }
 
-export interface NewProjectDraft extends ProjectDraft {
+export interface ProjectDraft extends ProjectBasicsDraft {
+  readonly currency: string;
+}
+
+export interface NewProjectDraft extends ProjectBasicsDraft {
   readonly conversionEvent: string;
 }
 
@@ -138,7 +146,7 @@ function conversionEventProblem(conversionEvent: string): ProjectDraftProblems['
   return trimmed === '' || EVENT_NAME_PATTERN.test(trimmed) ? undefined : 'invalid';
 }
 
-export function projectDraftProblems(draft: ProjectDraft): ProjectDraftProblems {
+export function projectDraftProblems(draft: ProjectBasicsDraft): ProjectDraftProblems {
   const name = nameProblem(draft.name);
   const origins = originsProblem(draft.origins);
   return {
@@ -160,7 +168,7 @@ export function hasProblems(problems: ProjectDraftProblems): boolean {
   return Object.keys(problems).length > 0;
 }
 
-export function projectChangesOf(draft: ProjectDraft): ProjectChanges {
+function basicsOf(draft: ProjectBasicsDraft): ProjectBasics {
   return {
     name: draft.name.trim(),
     allowedOrigins: uniqueOrigins(filledOrigins(draft.origins)),
@@ -168,10 +176,14 @@ export function projectChangesOf(draft: ProjectDraft): ProjectChanges {
   };
 }
 
+export function projectChangesOf(draft: ProjectDraft): ProjectChanges {
+  return { ...basicsOf(draft), currency: draft.currency };
+}
+
 export function newProjectChangesOf(draft: NewProjectDraft): NewProjectChanges {
   const conversionEvent = draft.conversionEvent.trim();
   return {
-    ...projectChangesOf(draft),
+    ...basicsOf(draft),
     conversionEvent: conversionEvent === '' ? null : conversionEvent,
   };
 }
@@ -181,6 +193,7 @@ export function projectDraftOf(changes: ProjectChanges): ProjectDraft {
     name: changes.name,
     origins: changes.allowedOrigins.length === 0 ? [''] : changes.allowedOrigins,
     timezone: changes.timezone,
+    currency: changes.currency,
   };
 }
 

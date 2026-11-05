@@ -246,6 +246,7 @@ export const en = {
       heading: 'Project',
       name: 'Name',
       timezone: 'Time zone',
+      currency: 'Currency',
       created: 'Created',
       createdOn: 'Created {date}',
     },
@@ -298,6 +299,9 @@ export const en = {
     removeOrigin: 'Remove origin {number}',
     timezone: 'Time zone',
     timezoneNote: 'Days and hours in the reports and in the weekly digest follow it.',
+    currency: 'Currency',
+    currencyNote:
+      'The revenue the site sends is read in this currency. Changing it converts nothing.',
     save: 'Save changes',
     saving: 'Saving…',
     saved: 'Saved',

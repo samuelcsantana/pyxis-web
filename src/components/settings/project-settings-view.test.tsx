@@ -154,6 +154,7 @@ describe('ProjectSettingsView', () => {
     const project = panel('Project');
     expect(within(project).getByText('Shop')).toBeInTheDocument();
     expect(within(project).getByText('UTC')).toBeInTheDocument();
+    expect(project).toHaveTextContent('CurrencyBRL · Brazilian Real');
     expect(project).not.toHaveTextContent('signup_completed');
     expect(project).toHaveTextContent('Sep 1, 2026');
     const goals = panel('Goals');

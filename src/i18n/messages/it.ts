@@ -254,6 +254,7 @@ export const it = translation({
       heading: 'Progetto',
       name: 'Nome',
       timezone: 'Fuso orario',
+      currency: 'Valuta',
       created: 'Creato',
       createdOn: 'Creato: {date}',
     },
@@ -307,6 +308,9 @@ export const it = translation({
     removeOrigin: 'Rimuovi l’origine {number}',
     timezone: 'Fuso orario',
     timezoneNote: 'Giorni e ore nei report e nel riepilogo settimanale seguono questo fuso.',
+    currency: 'Valuta',
+    currencyNote:
+      'I ricavi che il sito invia si leggono in questa valuta. Cambiarla non converte nulla.',
     save: 'Salva le modifiche',
     saving: 'Salvataggio…',
     saved: 'Salvato',
