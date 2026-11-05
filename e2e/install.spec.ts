@@ -211,6 +211,25 @@ test("walks a WordPress site through a header plugin with the project's classic 
   );
 });
 
+test('copies the automatic events from the npm package, off until switched on', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'clipboard permissions are a Chromium feature');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto(INSTALL_PATH);
+
+  const first = page.getByRole('region', { name: '1. Install Pyxis on your site' });
+  await expect(first.getByRole('heading', { name: 'Automatic events (optional)' })).toBeVisible();
+  const snippet = first.locator('div:has(> #install-auto-events)');
+  await snippet.getByRole('button', { name: 'Copy' }).click();
+  await expect(snippet.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(
+    /^import \{ autoEvents \} from 'pyxis-analytics\/auto';\s+autoEvents\(\{ outboundLinks: true, fileDownloads: true, formSubmits: true \}\);$/,
+  );
+});
+
 test('offers a question for Claude once the first event arrived, and the way to connect it', async ({
   page,
   context,

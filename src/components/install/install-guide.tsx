@@ -15,6 +15,7 @@ import { RefreshWhilePending } from '@/components/ui/refresh-while-pending';
 import { claudeCodeCommand } from '@/domain/connections';
 import {
   agentPrompt,
+  autoEventsSnippet,
   classicSnippet,
   connectorUrlOf,
   installCommand,
@@ -458,16 +459,25 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
           />
         )}
         {key === undefined ? null : (
-          <div className="flex flex-col gap-2 border-t border-line pt-3.5">
-            <h3 className="text-sm font-semibold">{t('install.revenue.title')}</h3>
-            <p className="text-sm">{rich(t('install.revenue.lead'), { code: codeText })}</p>
-            <CodeBlock id="install-revenue" code={REVENUE_EXAMPLE} labels={labels} />
-            <p className={NOTE}>
-              {t('install.revenue.rule', {
-                currency: currencyLabel(settings.currency, i18n.format.currencyName),
-              })}
-            </p>
-          </div>
+          <>
+            <div className="flex flex-col gap-2 border-t border-line pt-3.5">
+              <h3 className="text-sm font-semibold">{t('install.revenue.title')}</h3>
+              <p className="text-sm">{rich(t('install.revenue.lead'), { code: codeText })}</p>
+              <CodeBlock id="install-revenue" code={REVENUE_EXAMPLE} labels={labels} />
+              <p className={NOTE}>
+                {t('install.revenue.rule', {
+                  currency: currencyLabel(settings.currency, i18n.format.currencyName),
+                })}
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 border-t border-line pt-3.5">
+              <h3 className="text-sm font-semibold">{t('install.autoEvents.title')}</h3>
+              <p className="text-sm">{rich(t('install.autoEvents.lead'), { code: codeText })}</p>
+              <CodeBlock id="install-auto-events" code={autoEventsSnippet()} labels={labels} />
+              <p className={NOTE}>{rich(t('install.autoEvents.events'), { code: codeText })}</p>
+              <p className={NOTE}>{t('install.autoEvents.where')}</p>
+            </div>
+          </>
         )}
         <p className={NOTE}>{t('install.privacy')}</p>
       </section>

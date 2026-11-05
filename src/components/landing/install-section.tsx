@@ -542,6 +542,20 @@ function WithCode({ i18n, offer, labels }: WithCodeProps) {
             ),
           })}
         </p>
+        <p className="text-sm leading-relaxed text-muted">
+          {rich(t('landing.install.autoEvents'), {
+            code: (text) => <code className="font-mono text-sm text-ink">{text}</code>,
+            link: (text) => (
+              <a
+                href={LANDING_LINKS.sdkAutoEvents}
+                className={TEXT_LINK}
+                {...trackAttributes(LANDING_EVENTS.docsOpened, { doc: 'auto_events' })}
+              >
+                {text}
+              </a>
+            ),
+          })}
+        </p>
       </div>
       <p
         className={`flex gap-2.5 rounded-card border border-line bg-card px-4.5 py-4 text-sm leading-relaxed text-muted ${REVEAL}`}

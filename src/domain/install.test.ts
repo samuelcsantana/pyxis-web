@@ -2,8 +2,10 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  AUTO_EVENTS_ENTRY,
   TRACKER_VERSION,
   agentPrompt,
+  autoEventsSnippet,
   classicSnippet,
   connectorUrlOf,
   installCommand,
@@ -64,6 +66,22 @@ describe('classicSnippet', () => {
 
     expect(snippet).not.toContain('type="module"');
     expect(snippet).not.toContain('import ');
+  });
+});
+
+describe('autoEventsSnippet', () => {
+  it('switches on the three automatic events from the auto entry of the installed tracker', () => {
+    const manifest = JSON.parse(readFileSync(INSTALLED_TRACKER_MANIFEST, 'utf8')) as {
+      readonly exports: Readonly<Record<string, unknown>>;
+    };
+
+    expect(autoEventsSnippet().split('\n')).toEqual([
+      "import { autoEvents } from 'pyxis-analytics/auto';",
+      '',
+      'autoEvents({ outboundLinks: true, fileDownloads: true, formSubmits: true });',
+    ]);
+    expect(AUTO_EVENTS_ENTRY).toBe('pyxis-analytics/auto');
+    expect(Object.keys(manifest.exports)).toContain('./auto');
   });
 });
 

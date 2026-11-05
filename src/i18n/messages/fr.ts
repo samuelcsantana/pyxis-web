@@ -766,6 +766,14 @@ export const fr = translation({
       lead: 'Envoyez le montant sous forme de nombre dans une propriété <code>revenue</code> de l’événement qu’un objectif compte :',
       rule: 'Un nombre de 0 jusqu’à moins de 1 000 000 000, dans la devise du projet ({currency}). Un texte comme "129,90" ou un montant négatif est écarté.',
     },
+    autoEvents: {
+      title: 'Événements automatiques (facultatif)',
+      lead: 'Les liens sortants, les téléchargements de fichiers et les envois de formulaires peuvent être enregistrés sans appel à <code>track</code>. Avec le paquet npm, ajoutez ceci après <code>init</code> :',
+      events:
+        'Chaque type reste éteint tant que vous ne l’activez pas ici. <code>outbound_link_clicked</code> ne porte que le domaine du lien, <code>file_downloaded</code> l’extension du fichier et son chemin sous forme de modèle, <code>form_submitted</code> l’id ou le nom du formulaire, jamais ce qui a été saisi.',
+      where:
+        'Seulement avec le paquet npm : le modèle Tag Manager et les extraits Shopify et WordPress ne les enregistrent pas.',
+    },
     how: 'Comment installer',
     yourself: 'Vous-même',
     withAgent: 'Avec un agent IA',
@@ -2350,6 +2358,8 @@ export const fr = translation({
         'Vos clés sont fournies avec votre compte : démarrez l’essai gratuit ci-dessous, ou hébergez votre propre Pyxis. Les quatre dépôts sont sous licence MIT, infrastructure AWS (Terraform) comprise.',
       requests:
         'Pour voir quels appels à votre API échouent, enveloppez une fois votre client HTTP avec <code>trackRequest()</code>. <link>Voir l’exemple</link>',
+      autoEvents:
+        'Pour compter les liens sortants, les téléchargements de fichiers et les envois de formulaires sans appel à <code>track</code>, ajoutez <code>autoEvents()</code> depuis <code>pyxis-analytics/auto</code> ; chaque type reste éteint tant que vous ne l’activez pas. <link>Voir les options</link>',
       agent: {
         title: 'Ou demandez à votre agent d’IA',
         lead: 'Ouvrez le dépôt du site dans Claude Code, dans Cursor ou dans un autre agent et collez :',

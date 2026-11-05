@@ -71,3 +71,13 @@ export function connectorUrlOf(endpoint: string): string {
 }
 
 export const REVENUE_EXAMPLE = "track('purchase', { revenue: 129.9 });";
+
+export const AUTO_EVENTS_ENTRY = `${TRACKER_PACKAGE}/auto`;
+
+export function autoEventsSnippet(): string {
+  return [
+    `import { autoEvents } from '${AUTO_EVENTS_ENTRY}';`,
+    '',
+    'autoEvents({ outboundLinks: true, fileDownloads: true, formSubmits: true });',
+  ].join('\n');
+}

@@ -745,6 +745,14 @@ export const es = translation({
       lead: 'Envía el importe como número en una propiedad <code>revenue</code> del evento que cuenta un objetivo:',
       rule: 'Un número desde 0 hasta menos de 1.000.000.000, en la moneda del proyecto ({currency}). Un texto como "129,90" o un importe negativo se descarta.',
     },
+    autoEvents: {
+      title: 'Eventos automáticos (opcional)',
+      lead: 'Los enlaces de salida, las descargas de archivos y los envíos de formularios se pueden registrar sin una llamada a <code>track</code>. Con el paquete de npm, añade esto después de <code>init</code>:',
+      events:
+        'Cada tipo queda apagado hasta que lo enciendes aquí. <code>outbound_link_clicked</code> lleva solo el dominio del enlace, <code>file_downloaded</code> la extensión del archivo y su ruta como plantilla, <code>form_submitted</code> el id o el nombre del formulario, nunca lo que se escribió.',
+      where:
+        'Solo con el paquete de npm: la plantilla de Tag Manager y los fragmentos de Shopify y WordPress no los registran.',
+    },
     how: 'Cómo instalar',
     yourself: 'Por tu cuenta',
     withAgent: 'Con un agente de IA',
@@ -2309,6 +2317,8 @@ export const es = translation({
         'Las claves vienen con tu cuenta: empieza la prueba gratis más abajo o ejecuta tu propio Pyxis. Los cuatro repositorios tienen licencia MIT, incluida la infraestructura en AWS (Terraform).',
       requests:
         'Para ver qué llamadas a tu API fallan, envuelve una vez tu cliente HTTP con <code>trackRequest()</code>. <link>Ver el ejemplo</link>',
+      autoEvents:
+        'Para contar enlaces de salida, descargas de archivos y envíos de formularios sin una llamada a <code>track</code>, añade <code>autoEvents()</code> de <code>pyxis-analytics/auto</code>; cada tipo queda apagado hasta que lo enciendes. <link>Ver las opciones</link>',
       agent: {
         title: 'O pídeselo a tu agente de IA',
         lead: 'Abre el repositorio del sitio en Claude Code, en Cursor o en otro agente y pega:',

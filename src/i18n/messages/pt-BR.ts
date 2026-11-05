@@ -740,6 +740,14 @@ export const ptBR = translation({
       lead: 'Envie o valor como número numa propriedade <code>revenue</code> do evento que uma meta conta:',
       rule: 'Um número de 0 até menos de 1.000.000.000, na moeda do projeto ({currency}). Um texto como "129,90" ou um valor negativo é descartado.',
     },
+    autoEvents: {
+      title: 'Eventos automáticos (opcional)',
+      lead: 'Links de saída, downloads de arquivos e envios de formulário podem ser registrados sem uma chamada <code>track</code>. Com o pacote do npm, adicione isto depois do <code>init</code>:',
+      events:
+        'Cada tipo fica desligado até ser ligado aqui. <code>outbound_link_clicked</code> leva só o domínio do link, <code>file_downloaded</code> a extensão do arquivo e o caminho dele como modelo, <code>form_submitted</code> o id ou o nome do formulário, nunca o que foi digitado.',
+      where:
+        'Só com o pacote do npm: o modelo do Tag Manager e os trechos da Shopify e do WordPress não registram esses eventos.',
+    },
     how: 'Como instalar',
     yourself: 'Você mesmo',
     withAgent: 'Com um agente de IA',
@@ -2299,6 +2307,8 @@ export const ptBR = translation({
         'As chaves vêm com a sua conta: comece o teste grátis aqui embaixo, ou rode o seu próprio Pyxis. Os quatro repositórios têm licença MIT, com a infraestrutura na AWS (Terraform) incluída.',
       requests:
         'Para ver quais chamadas à sua API falham, envolva o seu cliente HTTP uma vez com <code>trackRequest()</code>. <link>Ver o exemplo</link>',
+      autoEvents:
+        'Para contar links de saída, downloads de arquivos e envios de formulário sem uma chamada <code>track</code>, adicione <code>autoEvents()</code> de <code>pyxis-analytics/auto</code>; cada tipo fica desligado até ser ligado. <link>Ver as opções</link>',
       agent: {
         title: 'Ou peça ao seu agente de IA',
         lead: 'Abra o repositório do site no Claude Code, no Cursor ou em outro agente e cole:',

@@ -724,6 +724,14 @@ export const en = {
       lead: 'Send the amount as a number in a <code>revenue</code> property of the event a goal counts:',
       rule: 'A number from 0 up to, but not including, 1,000,000,000, in the project’s currency ({currency}). A text such as "129.90" or a negative amount is dropped.',
     },
+    autoEvents: {
+      title: 'Automatic events (optional)',
+      lead: 'Outbound links, file downloads and form submissions can be recorded without a <code>track</code> call. With the npm package, add this after <code>init</code>:',
+      events:
+        'Each kind stays off until switched on here. <code>outbound_link_clicked</code> carries only the link’s domain, <code>file_downloaded</code> the file’s extension and its path as a template, <code>form_submitted</code> the form’s id or name, never what was typed.',
+      where:
+        'Only with the npm package: the Tag Manager template and the Shopify and WordPress snippets do not record them.',
+    },
     how: 'How to install',
     yourself: 'Yourself',
     withAgent: 'With an AI agent',
@@ -2279,6 +2287,8 @@ export const en = {
         'Your keys come with your account: start the free trial below, or run your own Pyxis. All four repositories are MIT-licensed, the AWS infrastructure (Terraform) included.',
       requests:
         'To see which calls to your API fail, wrap your HTTP client once with <code>trackRequest()</code>. <link>See the example</link>',
+      autoEvents:
+        'To count outbound links, file downloads and form submissions without a <code>track</code> call, add <code>autoEvents()</code> from <code>pyxis-analytics/auto</code>; each kind stays off until switched on. <link>See the options</link>',
       agent: {
         title: 'Or ask your AI agent',
         lead: 'Open the site’s repository in Claude Code, Cursor or another agent and paste:',
