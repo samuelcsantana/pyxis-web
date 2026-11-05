@@ -1,3 +1,4 @@
+import { type SharedScreen, sharedPageHref } from '@/domain/shared-project';
 import {
   type DashboardFilters,
   type RowFilterValues,
@@ -54,6 +55,21 @@ export function screenRowFilters(
 ): RowFilterOf {
   return rowFiltersOf(
     screenHref(projectId, screen),
+    screenOwnQuery(screen, definedOf(search)),
+    filters,
+    i18n,
+  );
+}
+
+export function sharedRowFilters(
+  token: string,
+  screen: SharedScreen,
+  search: object,
+  filters: DashboardFilters,
+  i18n: I18n,
+): RowFilterOf {
+  return rowFiltersOf(
+    sharedPageHref(token, screen),
     screenOwnQuery(screen, definedOf(search)),
     filters,
     i18n,

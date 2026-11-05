@@ -88,6 +88,18 @@ describe('proxy', () => {
       ).toBe('https://pyxis.example.com/connect?request=4d0f6b8c');
     });
 
+    it('opens a shared page without a session, kept out of search engines', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+
+      const response = visit(`/share/pyxis_sh_${'A'.repeat(32)}/devices?range=7d`);
+
+      expect(response.headers.get('location')).toBeNull();
+      expect(response.headers.get('x-robots-tag')).toBe('noindex, nofollow');
+      expect(response.headers.get('content-security-policy')).toContain(
+        'https://api.pyxis.example.com',
+      );
+    });
+
     it('lets a visitor without a session reach the sign-in page', () => {
       vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
 
@@ -375,6 +387,17 @@ describe('proxy', () => {
     it('serves the logo the sign-in email loads without asking for a session', () => {
       expect(matches('/email/pyxis-logo.png')).toBe(false);
       expect(matches('/email/pyxis-logo@2x.png')).toBe(false);
+    });
+  });
+
+  describe('a shared page in the demo', () => {
+    it('opens on the demo host, kept out of search engines', () => {
+      vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+      const response = visitAt(`https://demo.pyxis-analytics.dev/share/pyxis_sh_${'A'.repeat(32)}`);
+
+      expect(response.headers.get('location')).toBeNull();
+      expect(response.headers.get('x-robots-tag')).toBe('noindex, nofollow');
     });
   });
 });
