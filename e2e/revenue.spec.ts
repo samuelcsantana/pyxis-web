@@ -24,6 +24,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
 
 test('shows the revenue of an event goal on the Overview and hides it for a page goal', async ({
   page,
+  isMobile,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=30d`);
 
@@ -31,8 +32,13 @@ test('shows the revenue of an event goal on the Overview and hides it for a page
   await expect(card).toContainText(MONEY);
   await expect(card).toContainText('per conversion');
   const goals = page.getByRole('region', { name: 'Goals' });
-  await expect(goals.getByRole('columnheader', { name: 'Revenue' })).toBeVisible();
-  await expect(goals.getByRole('row', { name: /Saw the pricing/ })).toContainText('—');
+  if (isMobile) {
+    await expect(goals.getByRole('columnheader', { name: 'Revenue' })).toBeHidden();
+    await expect(goals.getByText(/ in revenue$/).first()).toBeVisible();
+  } else {
+    await expect(goals.getByRole('columnheader', { name: 'Revenue' })).toBeVisible();
+    await expect(goals.getByRole('row', { name: /Saw the pricing/ })).toContainText('—');
+  }
 
   await page.goto(`/${STORE_ID}/overview?range=30d&goal=${PRICING_GOAL}`);
   await expect(page.getByRole('group', { name: 'Conversions' })).toContainText('Saw the pricing');
