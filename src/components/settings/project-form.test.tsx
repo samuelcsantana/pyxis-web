@@ -14,7 +14,6 @@ const SAVED: ProjectChanges = {
   name: 'Shop',
   allowedOrigins: ['https://shop.example.com'],
   timezone: 'UTC',
-  conversionEvent: null,
 };
 const TIMEZONES = ['America/Sao_Paulo', 'UTC'];
 
@@ -52,7 +51,7 @@ describe('ProjectForm', () => {
     expect(field('Name')).toHaveValue('Shop');
     expect(field('Origin 1')).toHaveValue('https://shop.example.com');
     expect(screen.getByRole('combobox', { name: 'Time zone' })).toHaveValue('UTC');
-    expect(field('Conversion event')).toHaveValue('');
+    expect(screen.queryByRole('textbox', { name: 'Conversion event' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Remove origin 1' })).not.toBeInTheDocument();
   });
 
@@ -68,7 +67,6 @@ describe('ProjectForm', () => {
     fireEvent.change(screen.getByRole('combobox', { name: 'Time zone' }), {
       target: { value: 'America/Sao_Paulo' },
     });
-    fireEvent.change(field('Conversion event'), { target: { value: 'signup_completed' } });
     fireEvent.click(saveButton());
 
     expect(screen.getByRole('button', { name: 'Saving…' })).toBeDisabled();
@@ -77,7 +75,6 @@ describe('ProjectForm', () => {
       name: 'Shop BR',
       allowedOrigins: ['https://shop.example.com', 'https://www.shop.example.com'],
       timezone: 'America/Sao_Paulo',
-      conversionEvent: 'signup_completed',
     });
     expect(screen.getByRole('status')).toHaveTextContent('Saved');
     expect(navigation.router.refresh).toHaveBeenCalledOnce();
@@ -104,7 +101,6 @@ describe('ProjectForm', () => {
 
     fireEvent.change(field('Name'), { target: { value: '  ' } });
     fireEvent.change(field('Origin 1'), { target: { value: 'ftp://shop.example.com' } });
-    fireEvent.change(field('Conversion event'), { target: { value: 'Sign Up' } });
     fireEvent.click(saveButton());
     await settle(16);
 
@@ -113,9 +109,6 @@ describe('ProjectForm', () => {
     expect(field('Name')).toHaveFocus();
     expect(screen.getByRole('group', { name: 'Allowed origins' })).toHaveAccessibleDescription(
       expect.stringContaining('Write each origin as scheme, host and port') as string,
-    );
-    expect(field('Conversion event')).toHaveAccessibleDescription(
-      expect.stringContaining('Use lower-case letters') as string,
     );
   });
 

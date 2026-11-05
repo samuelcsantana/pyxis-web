@@ -11,15 +11,15 @@ import {
   type CreateProjectOutcome,
   hasProblems,
   MAX_PROJECT_NAME_LENGTH,
-  type ProjectChanges,
-  type ProjectDraft,
+  type NewProjectChanges,
+  type NewProjectDraft,
   type ProjectDraftProblems,
-  projectChangesOf,
-  projectDraftProblems,
+  newProjectChangesOf,
+  newProjectDraftProblems,
 } from '@/domain/project-management';
 import { useT } from '@/i18n/messages-provider';
 
-export type CreateProject = (changes: ProjectChanges) => Promise<CreateProjectOutcome>;
+export type CreateProject = (changes: NewProjectChanges) => Promise<CreateProjectOutcome>;
 
 export interface NewProjectFormProps {
   readonly timezones: readonly string[];
@@ -85,7 +85,7 @@ export function NewProjectForm({
 
   const fieldId = (field: string) => `${ids}-${field}`;
   const errorId = (field: string) => `${ids}-${field}-error`;
-  const draft: ProjectDraft = { name, origins: [site], timezone, conversionEvent };
+  const draft: NewProjectDraft = { name, origins: [site], timezone, conversionEvent };
 
   const edited = () => {
     setRefusal(null);
@@ -93,7 +93,7 @@ export function NewProjectForm({
 
   const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const found = projectDraftProblems(draft);
+    const found = newProjectDraftProblems(draft);
     setProblems(found);
     if (hasProblems(found)) {
       requestAnimationFrame(() => {
@@ -103,7 +103,7 @@ export function NewProjectForm({
     }
     request.current?.unsubscribe();
     setRefusal(null);
-    request.current = defer(() => create(projectChangesOf(draft)))
+    request.current = defer(() => create(newProjectChangesOf(draft)))
       .pipe(
         tap((outcome) => {
           if (outcome.kind !== 'created') {

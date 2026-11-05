@@ -61,6 +61,7 @@ describe('get-messages', () => {
       'projectKeys',
       'deleteProject',
       'people',
+      'goalsEditor',
       'billing',
       'exportEvents',
       'closeAccount',

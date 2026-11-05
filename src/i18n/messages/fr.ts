@@ -49,6 +49,7 @@ export const fr = translation({
       apps: 'Applications connectées',
       install: 'Installation',
       project: 'Projet',
+      goals: 'Objectifs',
       privacy: 'Confidentialité',
       keys: 'Clés',
       people: 'Personnes',
@@ -262,8 +263,6 @@ export const fr = translation({
       heading: 'Projet',
       name: 'Nom',
       timezone: 'Fuseau horaire',
-      conversionEvent: 'Événement de conversion',
-      noConversionEvent: 'Aucun, donc les conversions ne sont pas affichées',
       created: 'Créé',
       createdOn: 'Créé le {date}',
     },
@@ -314,15 +313,11 @@ export const fr = translation({
       'Seules les pages de ces origines peuvent envoyer des événements avec une clé publique. Indiquez le schéma, l’hôte et le port, comme https://shop.example.com ; {max} au maximum.',
     origin: 'Origine {number}',
     originPlaceholder: 'https://shop.example.com',
-    conversionEventPlaceholder: 'signup_completed',
     addOrigin: 'Ajouter une origine',
     removeOrigin: 'Retirer l’origine {number}',
     timezone: 'Fuseau horaire',
     timezoneNote:
       'Les jours et les heures des rapports et du récapitulatif hebdomadaire le suivent.',
-    conversionEvent: 'Événement de conversion',
-    conversionEventNote:
-      'Facultatif. L’événement qui compte comme une conversion, par exemple signup_completed.',
     save: 'Enregistrer',
     saving: 'Enregistrement…',
     saved: 'Enregistré',
@@ -333,8 +328,6 @@ export const fr = translation({
       'Écrivez chaque origine sous la forme schéma, hôte et port, comme https://shop.example.com.',
     originsTooMany: 'Utilisez {max} origines au maximum.',
     timezoneInvalid: 'Choisissez un fuseau horaire dans la liste.',
-    conversionEventInvalid:
-      'Utilisez des lettres minuscules, des chiffres et des tirets bas, en commençant par une lettre.',
     invalid: 'Ces paramètres ont été refusés. Vérifiez les champs et réessayez.',
     subscriptionRequired:
       'Ce compte n’a pas d’abonnement en cours, donc ses projets ne peuvent pas être modifiés.',
@@ -403,6 +396,66 @@ export const fr = translation({
     removed: 'Retiré',
     ownerStays: 'Le propriétaire garde l’accès à tous les projets du compte.',
     removeFailed: 'Cette personne n’a pas été retirée. Réessayez.',
+  },
+  goalsEditor: {
+    heading: 'Objectifs',
+    note: 'Un objectif est ce qu’une visite peut atteindre : un événement que votre site envoie, ou une page qu’elle ouvre. Le premier objectif est celui que la Vue d’ensemble compte comme conversion, jusqu’à ce que vous en choisissiez un autre. Jusqu’à {max} par projet.',
+    noteReadOnly:
+      'Un objectif est ce qu’une visite peut atteindre : un événement que votre site envoie, ou une page qu’elle ouvre. Seul le propriétaire du compte modifie les objectifs.',
+    empty:
+      'Aucun objectif pour l’instant. Ajoutez-en un et la Vue d’ensemble affiche ses conversions.',
+    emptyReadOnly: 'Aucun objectif pour l’instant, donc les conversions ne sont pas affichées.',
+    first: 'Premier',
+    kind: 'Atteint par',
+    kindEvent: 'Un événement que votre site envoie',
+    kindPage: 'Une page que la visite ouvre',
+    targetEvent: 'Événement',
+    targetPage: 'Page',
+    name: 'Nom',
+    namePlaceholder: 'Inscription',
+    nameNote: 'Comment l’objectif apparaît dans les rapports.',
+    eventName: 'Nom de l’événement',
+    eventPlaceholder: 'signup_completed',
+    eventNote: 'Tel que votre site l’envoie avec track() : minuscules, chiffres et tirets bas.',
+    pagePath: 'Chemin de la page',
+    pagePlaceholder: '/merci',
+    pageNote:
+      'Commence par /. Un * correspond à n’importe quels caractères, comme dans /commandes/*.',
+    addGoal: 'Ajouter un objectif',
+    add: 'Ajouter l’objectif',
+    save: 'Enregistrer l’objectif',
+    saving: 'Enregistrement…',
+    cancel: 'Annuler',
+    edit: 'Modifier',
+    delete: 'Supprimer',
+    confirmDelete:
+      'Supprimer l’objectif « {name} » ? Les événements restent ; seul l’objectif disparaît, avec ses chiffres dans les rapports.',
+    confirm: 'Supprimer l’objectif',
+    deleting: 'Suppression…',
+    added: 'Objectif ajouté.',
+    saved: 'Objectif enregistré.',
+    deleted: 'Objectif supprimé.',
+    full: 'Ce projet a {max} objectifs, le maximum. Supprimez-en un pour en ajouter un autre.',
+    count: '{count} sur {max} objectifs',
+    problems: {
+      nameMissing: 'Donnez un nom à l’objectif.',
+      nameTooLong: 'Utilisez au plus {max} caractères.',
+      eventName:
+        'Utilisez des minuscules, des chiffres et des tirets bas, en commençant par une lettre.',
+      pathStart: 'Le chemin d’une page commence par /.',
+      pathLength: 'Utilisez au plus {max} caractères.',
+    },
+    refused: {
+      invalid: 'L’objectif a été refusé. Vérifiez les champs et réessayez.',
+      limitReached:
+        'Ce projet a {max} objectifs, le maximum. Supprimez-en un pour en ajouter un autre.',
+      notFound:
+        'Cet objectif n’existe plus. Fermez les paramètres et rouvrez-les pour voir les objectifs actuels.',
+      subscriptionRequired:
+        'Ce compte n’a pas d’abonnement en cours, donc ses objectifs ne peuvent pas changer.',
+      failed: 'L’objectif n’a pas été enregistré. Réessayez.',
+      deleteFailed: 'L’objectif n’a pas été supprimé. Réessayez.',
+    },
   },
   account: {
     title: 'Compte et facturation',

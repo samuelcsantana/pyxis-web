@@ -5,7 +5,7 @@ import {
   type CreateProjectOutcome,
   MAX_ALLOWED_ORIGINS,
   MAX_PROJECT_NAME_LENGTH,
-  type ProjectChanges,
+  type NewProjectChanges,
 } from '@/domain/project-management';
 import { readOrSignIn } from '@/lib/current-admin';
 import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
@@ -20,7 +20,7 @@ const newProjectSchema = z.strictObject({
 
 export async function createProject(
   accountId: string,
-  changes: ProjectChanges,
+  changes: NewProjectChanges,
 ): Promise<CreateProjectOutcome> {
   const account = accountIdSchema.safeParse(accountId);
   if (!account.success) {

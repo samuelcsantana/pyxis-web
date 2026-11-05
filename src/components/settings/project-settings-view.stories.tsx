@@ -29,6 +29,7 @@ import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { spanish } from '@/test-utils/spanish';
 import { ProjectSettingsView } from './project-settings-view';
+import { MockGoalsService } from '@/services/goals/mock-goals-service';
 
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
 
@@ -39,6 +40,7 @@ function demoSettings(projectId: string) {
 
 const STORE = demoSettings(DEMO_STORE.id);
 const MANAGEMENT = new MockProjectManagementService(() => Promise.resolve(english.t));
+const GOALS = new MockGoalsService(() => STORY_NOW);
 const PEOPLE = new MockProjectPeopleService(() => STORY_NOW);
 const EXPORTS = new MockExportsService(() => STORY_NOW);
 
@@ -83,6 +85,12 @@ const meta = {
     },
     people: projectPeopleResponseSchema.parse(demoPeopleWire()),
     myEmail: DEMO_OWNER_EMAIL,
+    goals: DEMO_STORE.goals,
+    manageGoals: {
+      create: (changes) => GOALS.create(STORE.id, changes),
+      update: (goalId, changes) => GOALS.update(STORE.id, goalId, changes),
+      remove: () => GOALS.remove(),
+    },
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
 } satisfies Meta<typeof ProjectSettingsView>;

@@ -12,6 +12,7 @@ import { InstallGuide } from '@/components/install/install-guide';
 import { HelpView } from '@/components/help/help-view';
 import { AccessTokensPanel } from '@/components/settings/access-tokens-panel';
 import { ConnectedAppsPanel } from '@/components/settings/connected-apps-panel';
+import { GoalsPanel } from '@/components/settings/goals-panel';
 import { PeoplePanel } from '@/components/settings/people-panel';
 import {
   ActivityPanel,
@@ -45,8 +46,10 @@ import type { I18n } from '@/i18n/i18n';
 import {
   addProjectPerson,
   chooseEmailPreferences,
+  createGoal,
   createAccessToken,
   createProjectKey,
+  deleteGoal,
   deleteProject,
   endSession,
   removeProjectPerson,
@@ -56,6 +59,7 @@ import {
   revokeProjectKey,
   setProjectCity,
   setProjectVisitors,
+  updateGoal,
   updateProject,
 } from '@/app/[projectId]/settings/actions';
 
@@ -202,6 +206,23 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
           <ActivityPanel {...shared} />
           <OriginsPanel {...shared} />
           <RetentionPanel {...shared} />
+        </TitledBySection>
+      );
+    case 'goals':
+      return (
+        <TitledBySection>
+          <GoalsPanel
+            goals={data.goals}
+            manage={
+              owner
+                ? {
+                    create: createGoal.bind(null, projectId),
+                    update: updateGoal.bind(null, projectId),
+                    remove: deleteGoal.bind(null, projectId),
+                  }
+                : null
+            }
+          />
         </TitledBySection>
       );
     case 'privacy':

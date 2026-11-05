@@ -15,11 +15,14 @@ import { createEmailPreferencesService } from '@/services/preferences/email-pref
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
+import { createGoalsService } from '@/services/goals/goals-service.factory';
 import {
   addProjectPerson,
   chooseEmailPreferences,
+  createGoal,
   createAccessToken,
   createProjectKey,
+  deleteGoal,
   deleteProject,
   endSession,
   removeProjectPerson,
@@ -29,6 +32,7 @@ import {
   revokeProjectKey,
   setProjectCity,
   setProjectVisitors,
+  updateGoal,
   updateProject,
 } from './actions';
 
@@ -60,7 +64,7 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people] =
+  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people, goals] =
     await Promise.all([
       readOrSignIn(() => createProjectsService().settings(project.id)),
       readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
@@ -68,6 +72,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       readOrSignIn(() => createAccessTokensService().list()),
       readOrSignIn(() => createConnectionsService().list()),
       readOrSignIn(() => createProjectPeopleService().list(project.id)),
+      readOrSignIn(() => createGoalsService().list(project.id)),
     ]);
   const i18n = await getI18n();
   return (
@@ -103,6 +108,12 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           }}
           people={people}
           myEmail={admin.email}
+          goals={goals}
+          manageGoals={{
+            create: createGoal.bind(null, project.id),
+            update: updateGoal.bind(null, project.id),
+            remove: deleteGoal.bind(null, project.id),
+          }}
         />
       </MainContent>
     </>

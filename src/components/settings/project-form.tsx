@@ -84,7 +84,6 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
   const [name, setName] = useState(initial.name);
   const [rows, setRows] = useState<readonly OriginRow[]>(rowsOf(initial.origins));
   const [timezone, setTimezone] = useState(initial.timezone);
-  const [conversionEvent, setConversionEvent] = useState(initial.conversionEvent);
   const [problems, setProblems] = useState<ProjectDraftProblems>({});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
@@ -100,7 +99,6 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
     name,
     origins: rows.map((row) => row.value),
     timezone,
-    conversionEvent,
   };
 
   const edited = () => {
@@ -254,65 +252,35 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
         )}
       </fieldset>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <label htmlFor={fieldId('timezone')} className={LABEL}>
-            {t('projectForm.timezone')}
-          </label>
-          <SelectField
-            id={fieldId('timezone')}
-            value={timezone}
-            onChange={(event) => {
-              edited();
-              setTimezone(event.target.value);
-            }}
-            aria-invalid={problems.timezone !== undefined}
-            aria-describedby={describedBy('timezone', fieldId('timezone-note'))}
-            className={INPUT}
-          >
-            {timezones.map((zone) => (
-              <option key={zone} value={zone}>
-                {zone}
-              </option>
-            ))}
-          </SelectField>
-          <p id={fieldId('timezone-note')} className={NOTE}>
-            {t('projectForm.timezoneNote')}
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <label htmlFor={fieldId('timezone')} className={LABEL}>
+          {t('projectForm.timezone')}
+        </label>
+        <SelectField
+          id={fieldId('timezone')}
+          value={timezone}
+          onChange={(event) => {
+            edited();
+            setTimezone(event.target.value);
+          }}
+          aria-invalid={problems.timezone !== undefined}
+          aria-describedby={describedBy('timezone', fieldId('timezone-note'))}
+          className={INPUT}
+        >
+          {timezones.map((zone) => (
+            <option key={zone} value={zone}>
+              {zone}
+            </option>
+          ))}
+        </SelectField>
+        <p id={fieldId('timezone-note')} className={NOTE}>
+          {t('projectForm.timezoneNote')}
+        </p>
+        {problems.timezone === undefined ? null : (
+          <p id={errorId('timezone')} role="alert" className={ERROR}>
+            {t('projectForm.timezoneInvalid')}
           </p>
-          {problems.timezone === undefined ? null : (
-            <p id={errorId('timezone')} role="alert" className={ERROR}>
-              {t('projectForm.timezoneInvalid')}
-            </p>
-          )}
-        </div>
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <label htmlFor={fieldId('conversionEvent')} className={LABEL}>
-            {t('projectForm.conversionEvent')}
-          </label>
-          <input
-            id={fieldId('conversionEvent')}
-            type="text"
-            autoComplete="off"
-            spellCheck={false}
-            value={conversionEvent}
-            placeholder={t('projectForm.conversionEventPlaceholder')}
-            onChange={(event) => {
-              edited();
-              setConversionEvent(event.target.value);
-            }}
-            aria-invalid={problems.conversionEvent !== undefined}
-            aria-describedby={describedBy('conversionEvent', fieldId('conversionEvent-note'))}
-            className={`${INPUT} font-mono`}
-          />
-          <p id={fieldId('conversionEvent-note')} className={NOTE}>
-            {t('projectForm.conversionEventNote')}
-          </p>
-          {problems.conversionEvent === undefined ? null : (
-            <p id={errorId('conversionEvent')} role="alert" className={ERROR}>
-              {t('projectForm.conversionEventInvalid')}
-            </p>
-          )}
-        </div>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-3">

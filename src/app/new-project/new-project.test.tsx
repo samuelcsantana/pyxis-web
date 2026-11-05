@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Account } from '@/domain/accounts';
 import { UnauthenticatedError } from '@/domain/errors';
-import type { ProjectChanges } from '@/domain/project-management';
+import type { NewProjectChanges } from '@/domain/project-management';
 import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
 import { DEMO_ACCOUNT_ID } from '@/services/projects/demo-project-settings';
 import type { IProjectManagementService } from '@/services/project-management/project-management-service.interface';
@@ -10,7 +10,7 @@ import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { createProject } from './actions';
 import NewProjectPage, { DASHBOARD_HOME, generateMetadata } from './page';
 
-const CHANGES: ProjectChanges = {
+const CHANGES: NewProjectChanges = {
   name: 'Shop',
   allowedOrigins: ['https://shop.example.com'],
   timezone: 'UTC',
@@ -31,7 +31,7 @@ vi.mock('@/services/accounts/accounts-service.factory', () => ({
 
 vi.mock('@/services/project-management/project-management-service.factory', () => ({
   createProjectManagementService: () => ({
-    create: (accountId: string, changes: ProjectChanges) => state.create(accountId, changes),
+    create: (accountId: string, changes: NewProjectChanges) => state.create(accountId, changes),
   }),
 }));
 

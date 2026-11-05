@@ -3,6 +3,7 @@ import {
   type CreatedProject,
   type CreatedProjectKey,
   PROJECT_KEY_KINDS,
+  type NewProjectChanges,
   type ProjectChanges,
 } from './project-management';
 
@@ -31,7 +32,6 @@ export function projectChangesWire(changes: ProjectChanges) {
     name: changes.name,
     allowed_origins: changes.allowedOrigins,
     timezone: changes.timezone,
-    conversion_event: changes.conversionEvent,
   };
 }
 
@@ -42,7 +42,7 @@ export const createdProjectResponseSchema = z
     publicKey: body.public_key.key,
   }));
 
-export function newProjectWire(changes: ProjectChanges) {
+export function newProjectWire(changes: NewProjectChanges) {
   return {
     name: changes.name,
     allowed_origins: changes.allowedOrigins,

@@ -83,7 +83,7 @@ describe('the settings of the dialog', () => {
     const content = await renderSettingsDialog(DEMO_STORE.id);
 
     expect(content.sections).toContain('data');
-    expect(content.sections).toHaveLength(13);
+    expect(content.sections).toHaveLength(14);
   });
 
   it('shows the email, the appearance and the language in General', async () => {
@@ -107,6 +107,14 @@ describe('the settings of the dialog', () => {
     expect(screen.getByRole('region', { name: 'Activity' })).toBeInTheDocument();
   });
 
+  it('lets the owner manage the goals', async () => {
+    const content = await renderSettingsDialog(DEMO_STORE.id);
+
+    show(content, 'goals');
+    expect(screen.getAllByRole('button', { name: 'Edit' })).toHaveLength(DEMO_STORE.goals.length);
+    expect(screen.getByRole('button', { name: 'Add a goal' })).toBeInTheDocument();
+  });
+
   it('gives every section its own content', async () => {
     const content = await renderSettingsDialog(DEMO_STORE.id);
     const expectations: Readonly<Record<SettingsSection, RegExp>> = {
@@ -117,6 +125,7 @@ describe('the settings of the dialog', () => {
       apps: /Connected apps/,
       install: /Install Pyxis on your site/,
       project: /Activity/,
+      goals: /Sign-upFirstEvent signup_completed/,
       privacy: /Visitor’s city/,
       keys: /New public key/,
       people: /People/,
@@ -148,6 +157,10 @@ describe('the settings of the dialog', () => {
     show(content, 'keys');
     expect(screen.queryByRole('button', { name: 'New public key' })).toBeNull();
     expect(screen.getByText(/pyxis_pk_/)).toBeInTheDocument();
+    show(content, 'keys').unmount();
+    show(content, 'goals');
+    expect(screen.getByText('Sign-up')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull();
   });
 
   it('tells someone who owns no account that the billing is with the owner', async () => {

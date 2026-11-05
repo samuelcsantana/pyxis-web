@@ -15,6 +15,9 @@ export interface ProjectChanges {
   readonly name: string;
   readonly allowedOrigins: readonly string[];
   readonly timezone: string;
+}
+
+export interface NewProjectChanges extends ProjectChanges {
   readonly conversionEvent: string | null;
 }
 
@@ -22,6 +25,9 @@ export interface ProjectDraft {
   readonly name: string;
   readonly origins: readonly string[];
   readonly timezone: string;
+}
+
+export interface NewProjectDraft extends ProjectDraft {
   readonly conversionEvent: string;
 }
 
@@ -135,11 +141,17 @@ function conversionEventProblem(conversionEvent: string): ProjectDraftProblems['
 export function projectDraftProblems(draft: ProjectDraft): ProjectDraftProblems {
   const name = nameProblem(draft.name);
   const origins = originsProblem(draft.origins);
-  const conversionEvent = conversionEventProblem(draft.conversionEvent);
   return {
     ...(name === undefined ? {} : { name }),
     ...(origins === undefined ? {} : { origins }),
     ...(isTimeZone(draft.timezone) ? {} : { timezone: 'invalid' as const }),
+  };
+}
+
+export function newProjectDraftProblems(draft: NewProjectDraft): ProjectDraftProblems {
+  const conversionEvent = conversionEventProblem(draft.conversionEvent);
+  return {
+    ...projectDraftProblems(draft),
     ...(conversionEvent === undefined ? {} : { conversionEvent }),
   };
 }
@@ -149,11 +161,17 @@ export function hasProblems(problems: ProjectDraftProblems): boolean {
 }
 
 export function projectChangesOf(draft: ProjectDraft): ProjectChanges {
-  const conversionEvent = draft.conversionEvent.trim();
   return {
     name: draft.name.trim(),
     allowedOrigins: uniqueOrigins(filledOrigins(draft.origins)),
     timezone: draft.timezone,
+  };
+}
+
+export function newProjectChangesOf(draft: NewProjectDraft): NewProjectChanges {
+  const conversionEvent = draft.conversionEvent.trim();
+  return {
+    ...projectChangesOf(draft),
     conversionEvent: conversionEvent === '' ? null : conversionEvent,
   };
 }
@@ -163,7 +181,6 @@ export function projectDraftOf(changes: ProjectChanges): ProjectDraft {
     name: changes.name,
     origins: changes.allowedOrigins.length === 0 ? [''] : changes.allowedOrigins,
     timezone: changes.timezone,
-    conversionEvent: changes.conversionEvent ?? '',
   };
 }
 

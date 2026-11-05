@@ -34,19 +34,17 @@ describe('project management on the wire', () => {
     ).toThrow();
   });
 
-  it('writes the changes and the deletion with the API field names', () => {
+  it('writes the changes and the deletion with the API field names, leaving goal 1 alone', () => {
     expect(
       projectChangesWire({
         name: 'Shop',
         allowedOrigins: ['https://shop.example.com'],
         timezone: 'UTC',
-        conversionEvent: 'signup_completed',
       }),
     ).toEqual({
       name: 'Shop',
       allowed_origins: ['https://shop.example.com'],
       timezone: 'UTC',
-      conversion_event: 'signup_completed',
     });
     expect(projectDeletionWire('Shop')).toEqual({ confirm_name: 'Shop' });
   });

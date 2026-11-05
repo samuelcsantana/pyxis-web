@@ -14,7 +14,9 @@ import {
   addProjectPerson,
   chooseEmailPreferences,
   createAccessToken,
+  createGoal,
   createProjectKey,
+  deleteGoal,
   deleteProject,
   endSession,
   removeProjectPerson,
@@ -23,8 +25,24 @@ import {
   revokeProjectKey,
   setProjectCity,
   setProjectVisitors,
+  updateGoal,
   updateProject,
 } from './actions';
+import type { IGoalsService } from '@/services/goals/goals-service.interface';
+
+const goalsState = vi.hoisted(() => ({
+  create: vi.fn<IGoalsService['create']>(),
+  update: vi.fn<IGoalsService['update']>(),
+  remove: vi.fn<IGoalsService['remove']>(),
+}));
+
+vi.mock('@/services/goals/goals-service.factory', () => ({
+  createGoalsService: (): Pick<IGoalsService, 'create' | 'update' | 'remove'> => ({
+    create: (projectId, changes) => goalsState.create(projectId, changes),
+    update: (projectId, goalId, changes) => goalsState.update(projectId, goalId, changes),
+    remove: (projectId, goalId) => goalsState.remove(projectId, goalId),
+  }),
+}));
 
 const state = vi.hoisted<{
   admin: unknown;
@@ -366,7 +384,6 @@ describe('the owner managing a project', () => {
     name: 'Shop',
     allowedOrigins: ['https://shop.example.com'],
     timezone: 'UTC',
-    conversionEvent: null,
   };
 
   function management(overrides: Partial<IProjectManagementService>) {
@@ -590,5 +607,90 @@ describe('requestProjectExport', () => {
       projectId: 'p-store',
     });
     await expect(requestProjectExport('p-other')).rejects.toThrow('not-found');
+  });
+});
+
+describe('the owner managing the goals', () => {
+  const GOAL_ID = '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b';
+  const CHANGES = { name: ' Sign-up ', kind: 'event', target: 'signup_completed' } as const;
+  const GOAL = {
+    id: GOAL_ID,
+    name: 'Sign-up',
+    kind: 'event',
+    target: 'signup_completed',
+    position: 1,
+  } as const;
+
+  beforeEach(() => {
+    revalidated.paths.length = 0;
+    goalsState.create.mockReset();
+    goalsState.update.mockReset();
+    goalsState.remove.mockReset();
+  });
+
+  it('creates, changes and deletes a goal, dropping the visited screens each time', async () => {
+    goalsState.create.mockResolvedValue({ kind: 'saved', goal: GOAL });
+    goalsState.update.mockResolvedValue({ kind: 'saved', goal: GOAL });
+    goalsState.remove.mockResolvedValue({ kind: 'deleted' });
+
+    await expect(createGoal('p-store', CHANGES)).resolves.toEqual({ kind: 'saved', goal: GOAL });
+    await expect(updateGoal('p-store', GOAL_ID, CHANGES)).resolves.toEqual({
+      kind: 'saved',
+      goal: GOAL,
+    });
+    await expect(deleteGoal('p-store', GOAL_ID)).resolves.toEqual({ kind: 'deleted' });
+    expect(goalsState.create).toHaveBeenCalledWith('p-store', {
+      name: 'Sign-up',
+      kind: 'event',
+      target: 'signup_completed',
+    });
+    expect(goalsState.update).toHaveBeenCalledWith('p-store', GOAL_ID, {
+      name: 'Sign-up',
+      kind: 'event',
+      target: 'signup_completed',
+    });
+    expect(goalsState.remove).toHaveBeenCalledWith('p-store', GOAL_ID);
+    expect(revalidated.paths).toEqual([
+      ['/[projectId]', 'layout'],
+      ['/[projectId]', 'layout'],
+      ['/[projectId]', 'layout'],
+    ]);
+  });
+
+  it('keeps the visited screens when the API refused the change', async () => {
+    goalsState.create.mockResolvedValue({ kind: 'limitReached' });
+    goalsState.update.mockResolvedValue({ kind: 'notFound' });
+    goalsState.remove.mockResolvedValue({ kind: 'subscriptionRequired' });
+
+    await expect(createGoal('p-store', CHANGES)).resolves.toEqual({ kind: 'limitReached' });
+    await expect(updateGoal('p-store', GOAL_ID, CHANGES)).resolves.toEqual({ kind: 'notFound' });
+    await expect(deleteGoal('p-store', GOAL_ID)).resolves.toEqual({
+      kind: 'subscriptionRequired',
+    });
+    expect(revalidated.paths).toEqual([]);
+  });
+
+  it('answers a malformed goal as invalid without asking the API', async () => {
+    await expect(createGoal('p-store', { ...CHANGES, name: ' ' })).resolves.toEqual({
+      kind: 'invalid',
+    });
+    await expect(updateGoal('p-store', 'not-an-id', CHANGES)).resolves.toEqual({
+      kind: 'invalid',
+    });
+    await expect(
+      updateGoal('p-store', GOAL_ID, { ...CHANGES, kind: 'click' as 'event' }),
+    ).resolves.toEqual({ kind: 'invalid' });
+    await expect(deleteGoal('p-store', 'not-an-id')).rejects.toThrow(
+      'A goal is deleted by its id.',
+    );
+    expect(goalsState.create).not.toHaveBeenCalled();
+    expect(goalsState.update).not.toHaveBeenCalled();
+    expect(goalsState.remove).not.toHaveBeenCalled();
+  });
+
+  it('sends an expired session back to sign-in', async () => {
+    goalsState.create.mockRejectedValue(new UnauthenticatedError());
+
+    await expect(createGoal('p-store', CHANGES)).rejects.toThrow(/^redirect:\/sign-in\?expired=1/);
   });
 });
