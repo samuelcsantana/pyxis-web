@@ -25,7 +25,12 @@ vi.mock('./settings-content-cache', async () => {
         owner: false,
         accounts: [],
         freePlan: 'closed',
-        emailPreferences: { weeklyDigest: true },
+        emailPreferences: {
+          weeklyDigest: true,
+          noEventsAlert: true,
+          failedWritesAlert: true,
+          conversionDropAlert: true,
+        },
         sessions: [],
         accessTokens: [],
         connectedApps: { apps: [] },

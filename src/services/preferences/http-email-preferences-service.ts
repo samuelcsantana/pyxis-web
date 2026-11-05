@@ -1,4 +1,8 @@
-import { type EmailPreferences, emailPreferencesWire } from '@/domain/email-preferences';
+import {
+  type EmailPreferenceChoice,
+  type EmailPreferences,
+  emailPreferenceChangesWire,
+} from '@/domain/email-preferences';
 import { emailPreferencesResponseSchema } from '@/domain/email-preferences.schema';
 import type { ApiReader } from '../api-reader';
 import type { ApiWriter } from '../api-writer';
@@ -18,10 +22,10 @@ export class HttpEmailPreferencesService implements IEmailPreferencesService {
     return this.reader.get(preferencesPath(projectId), emailPreferencesResponseSchema);
   }
 
-  choose(projectId: string, preferences: EmailPreferences): Promise<EmailPreferences> {
+  choose(projectId: string, choice: EmailPreferenceChoice): Promise<EmailPreferences> {
     return this.writer.put(
       preferencesPath(projectId),
-      emailPreferencesWire(preferences),
+      emailPreferenceChangesWire(choice),
       emailPreferencesResponseSchema,
     );
   }

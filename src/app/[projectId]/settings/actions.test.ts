@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NewAccessToken } from '@/domain/access-tokens';
 import type { Admin } from '@/domain/admin';
-import type { EmailPreferences } from '@/domain/email-preferences';
+import type { EmailPreferenceChoice } from '@/domain/email-preferences';
 import { UnauthenticatedError } from '@/domain/errors';
 import type { IAccessTokensService } from '@/services/access-tokens/access-tokens-service.interface';
 import type { IConnectionsService } from '@/services/connections/connections-service.interface';
@@ -171,51 +171,67 @@ const ADMIN: Admin = {
   projects: [{ id: 'p-store', name: 'Demo Store', timezone: 'UTC', conversionEvent: null }],
 };
 
+const ALL_EMAILS_ON = {
+  weeklyDigest: true,
+  noEventsAlert: true,
+  failedWritesAlert: true,
+  conversionDropAlert: true,
+};
+
 beforeEach(() => {
   state.admin = ADMIN;
-  state.choose = (_projectId, preferences) => Promise.resolve(preferences);
+  state.choose = (_projectId, choice) =>
+    Promise.resolve({ ...ALL_EMAILS_ON, [choice.preference]: choice.on });
 });
 
 describe('chooseEmailPreferences', () => {
-  it("saves the admin's choice for a project they can read and answers what was stored", async () => {
-    const choose = vi.fn<IEmailPreferencesService['choose']>(() =>
-      Promise.resolve({ weeklyDigest: false }),
-    );
+  const STORED = {
+    weeklyDigest: true,
+    noEventsAlert: false,
+    failedWritesAlert: true,
+    conversionDropAlert: true,
+  };
+
+  it("saves the person's choice of one e-mail and answers every preference stored", async () => {
+    const choose = vi.fn<IEmailPreferencesService['choose']>(() => Promise.resolve(STORED));
     state.choose = choose;
 
-    await expect(chooseEmailPreferences('p-store', { weeklyDigest: false })).resolves.toEqual({
-      weeklyDigest: false,
-    });
-    expect(choose).toHaveBeenCalledWith('p-store', { weeklyDigest: false });
+    await expect(
+      chooseEmailPreferences('p-store', { preference: 'noEventsAlert', on: false }),
+    ).resolves.toEqual(STORED);
+    expect(choose).toHaveBeenCalledWith('p-store', { preference: 'noEventsAlert', on: false });
   });
 
   it('answers not found for a project the admin cannot read, without saving', async () => {
     const choose = vi.fn<IEmailPreferencesService['choose']>();
     state.choose = choose;
 
-    await expect(chooseEmailPreferences('p-other', { weeklyDigest: false })).rejects.toThrow(
-      'not-found',
-    );
+    await expect(
+      chooseEmailPreferences('p-other', { preference: 'weeklyDigest', on: false }),
+    ).rejects.toThrow('not-found');
     expect(choose).not.toHaveBeenCalled();
   });
 
-  it('refuses a choice that is not a weekly digest on or off, since it comes from the browser', async () => {
+  it.each([
+    ['an e-mail it does not know', { preference: 'monthlyDigest', on: true }],
+    ['a switch that is not on or off', { preference: 'weeklyDigest', on: 'yes' }],
+    ['a field it does not know', { preference: 'weeklyDigest', on: true, all: true }],
+  ])('refuses %s, since the choice comes from the browser', async (_, forged) => {
     const choose = vi.fn<IEmailPreferencesService['choose']>();
     state.choose = choose;
-    const forged = { weeklyDigest: 'yes', monthly: true } as unknown as EmailPreferences;
 
-    await expect(chooseEmailPreferences('p-store', forged)).rejects.toThrow(
-      'E-mail preferences need a weekly digest choice, on or off.',
-    );
+    await expect(
+      chooseEmailPreferences('p-store', forged as unknown as EmailPreferenceChoice),
+    ).rejects.toThrow('An e-mail preference choice names one e-mail and turns it on or off.');
     expect(choose).not.toHaveBeenCalled();
   });
 
   it('sends an expired session back to sign-in', async () => {
     state.choose = () => Promise.reject(new UnauthenticatedError());
 
-    await expect(chooseEmailPreferences('p-store', { weeklyDigest: true })).rejects.toThrow(
-      /^redirect:\/sign-in\?expired=1/,
-    );
+    await expect(
+      chooseEmailPreferences('p-store', { preference: 'failedWritesAlert', on: true }),
+    ).rejects.toThrow(/^redirect:\/sign-in\?expired=1/);
   });
 });
 

@@ -36,6 +36,13 @@ import {
   MockShareLinksService,
 } from '@/services/share-links/mock-share-links-service';
 
+const ALL_EMAILS_ON = {
+  weeklyDigest: true,
+  noEventsAlert: true,
+  failedWritesAlert: true,
+  conversionDropAlert: true,
+};
+
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
 
 function demoSettings(projectId: string) {
@@ -56,8 +63,9 @@ const meta = {
   args: {
     settings: STORE,
     i18n: english,
-    emailPreferences: { weeklyDigest: true },
-    chooseEmailPreferences: (chosen) => Promise.resolve(chosen),
+    emailPreferences: ALL_EMAILS_ON,
+    chooseEmailPreferences: (choice) =>
+      Promise.resolve({ ...ALL_EMAILS_ON, [choice.preference]: choice.on }),
     sessions: sessionsResponseSchema.parse(demoSessionsWire(STORY_NOW)),
     endSession: () => Promise.resolve(),
     accessTokens: accessTokensResponseSchema.parse(demoAccessTokensWire(STORY_NOW)),

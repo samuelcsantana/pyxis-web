@@ -24,12 +24,14 @@ export function demoShareLinksWire(now: Date) {
         name: 'Agency pitch',
         created_at: at(-40),
         expires_at: at(-10),
+        password_protected: false,
       },
       {
         id: DEMO_SHARE_LINK_IDS.board,
         name: 'Monthly board report',
         created_at: at(-9),
         expires_at: null,
+        password_protected: false,
       },
     ],
   };
@@ -41,6 +43,7 @@ export function demoCreatedShareLinkWire(request: ShareLinkRequest, now: Date) {
     name: request.name,
     created_at: now.toISOString(),
     expires_at: request.expiresAt,
+    password_protected: false,
     token: DEMO_SHARE_TOKEN,
   };
 }

@@ -9,7 +9,11 @@ import {
   MAX_ACCESS_TOKEN_NAME_LENGTH,
   type NewAccessToken,
 } from '@/domain/access-tokens';
-import type { EmailPreferences } from '@/domain/email-preferences';
+import {
+  EMAIL_PREFERENCES,
+  type EmailPreferenceChoice,
+  type EmailPreferences,
+} from '@/domain/email-preferences';
 import {
   type DeleteGoalOutcome,
   GOAL_KINDS,
@@ -52,7 +56,7 @@ import { createExportsService } from '@/services/exports/exports-service.factory
 import { createGoalsService } from '@/services/goals/goals-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
-const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
+const choiceSchema = z.strictObject({ preference: z.enum(EMAIL_PREFERENCES), on: z.boolean() });
 const switchedOnSchema = z.boolean();
 const sessionIdSchema = z.uuid();
 const newAccessTokenSchema = z.strictObject({
@@ -87,12 +91,12 @@ const shareLinkIdSchema = z.uuid();
 
 export async function chooseEmailPreferences(
   projectId: string,
-  preferences: EmailPreferences,
+  choice: EmailPreferenceChoice,
 ): Promise<EmailPreferences> {
   const { project } = await projectOrNotFound(projectId);
-  const parsed = choiceSchema.safeParse(preferences);
+  const parsed = choiceSchema.safeParse(choice);
   if (!parsed.success) {
-    throw new Error('E-mail preferences need a weekly digest choice, on or off.');
+    throw new Error('An e-mail preference choice names one e-mail and turns it on or off.');
   }
   return readOrSignIn(() => createEmailPreferencesService().choose(project.id, parsed.data));
 }

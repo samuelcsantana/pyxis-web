@@ -123,6 +123,8 @@ export function settingsKeysHref(projectId: string): string {
   return `${settingsHref(projectId)}#${SETTINGS_KEYS_PANEL}-heading`;
 }
 
+export const SETTINGS_EMAIL_PANEL = 'settings-email';
+
 export const SETTINGS_CONNECTIONS_PANEL = 'settings-connections';
 
 export function settingsConnectionsHref(projectId: string): string {

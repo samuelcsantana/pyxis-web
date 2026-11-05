@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { SETTINGS_KEYS_PANEL } from '@/components/shell/screens';
+import { SETTINGS_EMAIL_PANEL, SETTINGS_KEYS_PANEL } from '@/components/shell/screens';
 import { Breakable } from '@/components/ui/breakable';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 import { PANEL, PANEL_TITLE } from '@/components/ui/panel-classes';
@@ -40,7 +40,8 @@ import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
 import { type ShareLinksManagement, ShareLinksPanel } from './share-links-panel';
 import { ProjectOptionSwitch, type SetProjectOption } from './project-option-switch';
-import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
+import type { ChooseEmailPreference } from './email-preference-switch';
+import { EmailPreferenceSwitches } from './email-preference-switches';
 
 export interface ProjectManagement {
   readonly timezones: readonly string[];
@@ -59,7 +60,7 @@ export interface ProjectSettingsViewProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
   readonly emailPreferences: EmailPreferences;
-  readonly chooseEmailPreferences: ChooseEmailPreferences;
+  readonly chooseEmailPreferences: ChooseEmailPreference;
   readonly sessions: readonly AdminSession[];
   readonly endSession: EndSession;
   readonly accessTokens: readonly AccessToken[];
@@ -438,13 +439,13 @@ interface EmailPanelProps {
   readonly settings: ProjectSettings;
   readonly i18n: I18n;
   readonly preferences: EmailPreferences;
-  readonly choose: ChooseEmailPreferences;
+  readonly choose: ChooseEmailPreference;
 }
 
 export function EmailPanel({ settings, i18n, preferences, choose }: EmailPanelProps) {
   return (
-    <SettingsPanel id="settings-email" title={i18n.t('emailPreferences.heading')}>
-      <WeeklyDigestSwitch initial={preferences} timezone={settings.timezone} choose={choose} />
+    <SettingsPanel id={SETTINGS_EMAIL_PANEL} title={i18n.t('emailPreferences.heading')}>
+      <EmailPreferenceSwitches initial={preferences} timezone={settings.timezone} choose={choose} />
     </SettingsPanel>
   );
 }
