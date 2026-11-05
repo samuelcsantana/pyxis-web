@@ -92,9 +92,11 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   it still
 - The overview: visits, identified users, conversions and the write error rate, each with its
   change, the period that change is measured against ("vs. previous 30 days") and a sparkline;
-  the Conversions card names the conversion event it counts. Each card links to the list behind
-  its figure, in the same period: the visits, the identified visits, the visits that sent the
-  conversion event, and the failing routes on Requests (no link when the figure is zero). Page views and named events per day
+  the Conversions card names the goal it counts and, for a project with more than one goal,
+  picks another (`?goal=<id>`, kept in the address and in the CSV links; the first goal leaves the
+  address bare, and a goal the project no longer has falls back to the first with a line saying
+  so). Each card links to the list behind its figure, in the same period: the visits, the
+  identified visits, the visits that reached the goal, and the failing routes on Requests (no link when the figure is zero). Page views and named events per day
   ("Activity per day") as lines or a table, with the same days of the previous period dashed
   behind them (a single day shows its two totals instead of a one-point chart). Each card is
   also a toggle that plots its own figure per day instead (`?metric=visits`,
@@ -140,10 +142,25 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   good or bad news only above 20 in the previous period and beyond 1 % (0.5 points for the error
   rate); the colour is also said in words to screen readers. A day without writes is a gap in the
   error rate line, not 0 %
-- Conversions counted as visits: a conversion rate is the share of visits that sent the
-  conversion event at least once (Overview, Devices, Acquisition), so it never passes 100 %; the
-  Overview keeps the number of conversion events beside it; without a conversion event, the
-  Overview and Devices say so in one line and how the operator sets one
+- Conversions counted as visits: a conversion rate is the share of visits that reached the goal
+  at least once, by sending its event or opening a page its path matches (Overview, Devices,
+  Acquisition), so it never passes 100 %; the Overview keeps the times it was reached beside it;
+  without a goal, the Overview and Devices say so in one line with a link to the Goals settings.
+  Devices and Acquisition count the first goal
+- Goals: up to ten per project, each a named event the site sends or a page path where `*`
+  matches any characters (the API's rules, checked before anything is sent). Under the Overview's
+  figures a Goals table gives each goal its kind and target, the visits that reached it, the
+  times it was reached and its conversion rate over the period and the active filters; each row
+  opens the visits that reached it and filters every screen by it. In Settings › Goals the owner
+  of the account adds, edits and deletes goals (deleting asks first), the first one marked as the
+  one the reports count by default, with the count against the limit and the API's refusals (the
+  limit, the plan, a goal deleted elsewhere) named in the panel; everyone else reads the list. The
+  order is the order the API keeps; a deleted goal leaves its place empty. A project's former
+  conversion event is its first goal, so nothing changed for a project that had one
+- Reached goal: a visit filter like the others (`?reached_goal=<id>`), chosen in the Visits form
+  among the project's goals, named on its chip by the goal's name, and carried to every screen
+  that takes the filters; an id the project no longer has is left out with a note instead of
+  failing the screen
 - Devices: a Reach card first, counting the continents (the five of UN M49, named under the
   count), countries, regions and, for a project that keeps the city or a period that holds one,
   cities the visits came from, then the region with most visits and its share of them (the
@@ -154,12 +171,12 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   the regions
   (a state or a province: the ten with most visits by name, the rest, and the visits the edge
   network could not place, which includes every visit from before regions were recorded); with a
-  conversion event set, each browser, system, country and region also gives its conversion rate;
+  goal, each browser, system, country and region also gives its conversion rate;
   each device type, country and region opens its visits. For a project that turned the visitor's
   city on in Settings, or a period that holds a named city, a Cities table follows: the twenty
   approximate cities with most visits, each with its region (and the country when they span
-  several), the rest, and the visits without a city, with the conversion rate under a conversion
-  event; each city opens its visits by its region and its name, since the same name exists in
+  several), the rest, and the visits without a city, with the conversion rate under a goal;
+  each city opens its visits by its region and its name, since the same name exists in
   several regions
 - Acquisition: paid visits and the top channel (the top unpaid one when Paid leads, so the two
   cards never repeat each other) with their share of every visit, visits per day
@@ -336,8 +353,9 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   button; while it is closed the box is hidden, so the page never shows an address that answers
   404, and the list still shows. Below it,
   the project. The owner of its account edits it: name, up to five allowed origins (typed as
-  `shop.example.com` or a full URL, saved as origins), time zone and conversion event, each
-  problem named under its field before anything is sent; creates a public key or a secret key
+  `shop.example.com` or a full URL, saved as origins) and time zone, each problem named under
+  its field before anything is sent (the conversion event moved to the goals, so saving the
+  project never touches the first goal); creates a public key or a secret key
   (shown once, with a copy button) and revokes any key but the only public one; and deletes the
   project with its name typed again. Two options of the project have a panel each, a switch for
   the owner and a sentence for everyone else: the visitor's city (turning it off asks first,
