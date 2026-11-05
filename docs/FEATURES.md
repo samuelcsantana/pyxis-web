@@ -361,9 +361,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   sections and then one section with a back arrow; in a window under 512 px tall it takes the
   whole height
 - A Settings page per project (`/settings`, kept for the links in e-mails), with the same panels
-  as the dialog. It opens with the admin's own weekly digest switch: the Monday
-  e-mail with the week that closed on Sunday, on by default, saved through a server action that
-  re-checks access, moving back with an alert when the API refuses. Then the admin's sessions:
+  as the dialog. It opens with the person's own e-mail switches: the weekly digest (the Monday
+  e-mail with the week that closed on Sunday) and, under "Alerts", the three e-mail alerts of the
+  daily run (no events for 24 hours, failed writes above their usual rate, a drop of the first
+  goal), each with one line saying when it fires. All four are on by default; each switch saves
+  only its own e-mail through a server action that re-checks access, moving back with an alert
+  when the API refuses. The alert e-mails link to `/settings`, and `#settings-email-heading`
+  lands on the panel. Then the admin's sessions:
   every device where they are signed in, named by the browser and system classified at sign-in
   (never the user agent), this one marked, each with a button to end it, and "Sign out
   everywhere" below the list. Then the admin's access tokens, for an AI agent or a script that
