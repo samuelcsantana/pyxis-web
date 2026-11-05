@@ -128,10 +128,10 @@ describe('FaqSection', () => {
     const { container } = render(<FaqSection i18n={english} offer="byInvitation" />);
 
     const items = container.querySelectorAll('details');
-    expect(items).toHaveLength(19);
+    expect(items).toHaveLength(20);
     expect([...items].map((item) => item.open)).toEqual([
       true,
-      ...Array.from({ length: 18 }, () => false),
+      ...Array.from({ length: 19 }, () => false),
     ]);
     expect(screen.getByText('Does Pyxis set cookies on my visitors?')).toBeInTheDocument();
     expect(items[0]?.parentElement).toHaveClass('landing-faq');
@@ -159,6 +159,16 @@ describe('FaqSection', () => {
     expect(screen.getByText(/request access at hello@pyxis-analytics\.dev/)).toBeInTheDocument();
   });
 
+  it('answers that each site counts conversions and revenue on up to 10 goals, on both plans', () => {
+    render(<FaqSection i18n={english} offer="free" />);
+
+    expect(screen.getByText('Can it count conversions and revenue?')).toBeInTheDocument();
+    const answer = screen.getByText(/^Yes\. Each site has up to 10 goals/);
+    expect(answer).toHaveTextContent('a page path with *, such as /orders/*');
+    expect(answer).toHaveTextContent('the revenue the site sends in a revenue property');
+    expect(answer).toHaveTextContent('Both plans include goals and revenue.');
+  });
+
   it('answers agencies, people who do not code, Shopify, WordPress and Tag Manager users, and AI installs', () => {
     const { container } = render(<FaqSection i18n={english} offer="byInvitation" />);
 
@@ -166,7 +176,8 @@ describe('FaqSection', () => {
       summary.textContent.replace('+', ''),
     );
     const afterUse = questions.indexOf('Can I use it on my site?') + 1;
-    expect(questions.slice(afterUse, afterUse + 6)).toEqual([
+    expect(questions.slice(afterUse, afterUse + 7)).toEqual([
+      'Can it count conversions and revenue?',
       'Can I use Pyxis on my clients’ sites?',
       'I don’t code. Can I install it?',
       'Does it work on a Shopify store?',
@@ -240,7 +251,7 @@ describe('FaqSection', () => {
         const { container } = render(<FaqSection i18n={english} offer={offer} />);
 
         const questions = questionsOf(container);
-        expect(questions).toHaveLength(19);
+        expect(questions).toHaveLength(20);
         expect(questions).not.toContain('How does the free trial work?');
         const afterPrice = questions.indexOf('How much does it cost?') + 1;
         expect(questions.slice(afterPrice, afterPrice + 2)).toEqual([

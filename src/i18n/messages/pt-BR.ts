@@ -2041,7 +2041,7 @@ export const ptBR = translation({
       lead: 'O mesmo painel, três jeitos de usar.',
       store: {
         title: 'Loja ou negócio on-line',
-        body: 'Quantas pessoas começam um pedido e em que passo desistem: carrinho, entrega ou pagamento. Separado por celular e computador, e pela origem da visita.',
+        body: 'Quantas pessoas começam um pedido e em que passo desistem: carrinho, entrega ou pagamento. Separado por celular e computador, e pela origem da visita. Envie o valor de cada pedido e o Pyxis soma a receita por meta, origem e campanha.',
         link: 'Ver um funil na demonstração',
         shopify:
           'Na Shopify, um trecho no tema mede produtos e carrinho. O checkout roda do lado da Shopify e não é medido.',
@@ -2125,7 +2125,7 @@ export const ptBR = translation({
         'Prefere perguntar? Conecte o Pyxis ao Claude e ele lê os mesmos números, só para leitura. <link>Como conectar</link>',
       questions: {
         overview:
-          'Quantas visitas, conversões e escritas com falha neste período, contra o anterior?',
+          'Quantas visitas, conversões por meta, receita e escritas com falha neste período, contra o anterior?',
         acquisition: 'Quais canais, origens e campanhas trazem visitas que convertem?',
         devices: 'De quais aparelhos, navegadores, países e estados vêm as visitas?',
         features: 'Quais eventos e telas são usados, e como uma propriedade se divide?',
@@ -2412,6 +2412,7 @@ export const ptBR = translation({
           people: 'Só você no painel',
           history: '13 meses de histórico',
           digest: 'Resumo semanal por e-mail',
+          goals: 'Até {goals} metas por site, com conversões e receita',
           agents: 'O conector do Claude (MCP) e tokens de acesso para agentes de IA',
           install: 'Instala sem programar, pelo Google Tag Manager ou no tema da Shopify',
         },
@@ -2440,6 +2441,7 @@ export const ptBR = translation({
         people: 'Até {proPeople} pessoas no painel',
         history: '13 meses de histórico',
         digest: 'Resumo semanal por e-mail',
+        goals: 'Até {goals} metas por site, com conversões e receita',
         agents: 'O conector do Claude (MCP) e tokens de acesso para agentes de IA',
         support: 'Suporte por e-mail, com resposta em até 2 dias úteis',
       },
@@ -2508,6 +2510,11 @@ export const ptBR = translation({
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou assinando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail e um cartão: 14 dias grátis, uma vez por cliente, e você cancela quando quiser.',
           answerFree:
             'Pode, de dois jeitos: rodando o Pyxis na sua própria infraestrutura (o código é MIT, no GitHub) ou usando o Pyxis hospedado. Qualquer pessoa no Brasil se cadastra com um e-mail, sem cartão, no plano Hobby, e assina o plano Pro quando o site precisar de mais.',
+        },
+        goals: {
+          question: 'Dá para contar conversões e receita?',
+          answer:
+            'Sim. Cada site tem até {goals} metas, cada uma um evento, como <code>signup_completed</code>, ou um caminho de página com <code>*</code>, como <code>/orders/*</code>. A Visão geral mostra as conversões e a taxa de cada meta e, numa meta de evento, a receita que o site envia numa propriedade <code>revenue</code>, na moeda do projeto. Os dois planos incluem metas e receita.',
         },
         agency: {
           question: 'Posso usar o Pyxis nos sites dos meus clientes?',

@@ -9,6 +9,7 @@ import {
   offersTheFreePlan,
   type SignUpOffer,
 } from '@/domain/sign-up';
+import { MAX_GOALS } from '@/domain/goals';
 import { FREE_REPLY_DAYS, PAID_REPLY_BUSINESS_DAYS } from '@/domain/support';
 import { REVEAL } from './landing-classes';
 import { CONTACT_EMAIL } from './landing-links';
@@ -29,6 +30,7 @@ const QUESTIONS = [
   'retention',
   'claude',
   'use',
+  'goals',
   'agency',
   'noCode',
   'shopify',
@@ -50,6 +52,7 @@ const FREE_PLAN_QUESTIONS = [
   'retention',
   'claude',
   'use',
+  'goals',
   'agency',
   'noCode',
   'shopify',
@@ -104,6 +107,7 @@ export function FaqSection({ i18n, offer }: FaqSectionProps) {
     email: CONTACT_EMAIL,
     paidDays: i18n.format.count(PAID_REPLY_BUSINESS_DAYS),
     freeDays: i18n.format.count(FREE_REPLY_DAYS),
+    goals: i18n.format.count(MAX_GOALS),
   };
   const questions = offersTheFreePlan(offer) ? FREE_PLAN_QUESTIONS : QUESTIONS;
   return (

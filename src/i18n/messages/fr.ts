@@ -2085,7 +2085,7 @@ export const fr = translation({
       lead: 'Le même tableau de bord, trois façons de l’utiliser.',
       store: {
         title: 'Boutique ou commerce en ligne',
-        body: 'Combien de personnes commencent une commande et à quelle étape elles abandonnent : panier, livraison ou paiement. Séparé entre mobile et ordinateur, et selon l’origine de la visite.',
+        body: 'Combien de personnes commencent une commande et à quelle étape elles abandonnent : panier, livraison ou paiement. Séparé entre mobile et ordinateur, et selon l’origine de la visite. Envoyez le montant de chaque commande et Pyxis additionne les revenus par objectif, source et campagne.',
         link: 'Voir un entonnoir dans la démo',
         shopify:
           'Sur Shopify, un extrait dans le thème mesure les produits et le panier. Le paiement se passe du côté de Shopify et n’est pas mesuré.',
@@ -2170,7 +2170,7 @@ export const fr = translation({
         'Vous préférez poser la question ? Connectez Pyxis à Claude : il lit les mêmes chiffres, en lecture seule. <link>Comment connecter Pyxis</link>',
       questions: {
         overview:
-          'Combien de visites, de conversions et d’écritures en échec sur cette période, par rapport à la précédente ?',
+          'Combien de visites, de conversions par objectif, de revenus et d’écritures en échec sur cette période, par rapport à la précédente ?',
         acquisition: 'Quels canaux, sources et campagnes apportent des visites qui convertissent ?',
         devices: 'De quels appareils, navigateurs, pays et régions viennent les visites ?',
         features:
@@ -2466,6 +2466,7 @@ export const fr = translation({
           people: 'Vous seul dans le tableau de bord',
           history: '13 mois d’historique',
           digest: 'Un récapitulatif hebdomadaire par e-mail',
+          goals: 'Jusqu’à {goals} objectifs par site, avec conversions et revenus',
           agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
           install: 'S’installe sans coder, via Google Tag Manager ou dans un thème Shopify',
         },
@@ -2494,6 +2495,7 @@ export const fr = translation({
         people: 'Jusqu’à {proPeople} personnes dans le tableau de bord',
         history: '13 mois d’historique',
         digest: 'Un récapitulatif hebdomadaire par e-mail',
+        goals: 'Jusqu’à {goals} objectifs par site, avec conversions et revenus',
         agents: 'Le connecteur Claude (MCP) et des jetons d’accès pour les agents IA',
         support: 'Assistance par e-mail, réponse sous 2 jours ouvrés',
       },
@@ -2563,6 +2565,11 @@ export const fr = translation({
             'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou abonnez-vous à la formule hébergée. Toute personne au Brésil peut s’inscrire avec un e-mail et une carte : 14 jours gratuits, une fois par client, et vous résiliez à tout moment.',
           answerFree:
             'Oui, de deux façons : hébergez Pyxis sur votre propre infrastructure (le code est sous licence MIT sur GitHub) ou utilisez le Pyxis hébergé. Toute personne au Brésil peut s’inscrire avec un e-mail, sans carte, avec la formule Hobby, et souscrire à la formule Pro quand le site en demande plus.',
+        },
+        goals: {
+          question: 'Peut-il compter les conversions et les revenus ?',
+          answer:
+            'Oui. Chaque site a jusqu’à {goals} objectifs, chacun un événement comme <code>signup_completed</code> ou un chemin de page avec <code>*</code> comme <code>/orders/*</code>. La Vue d’ensemble montre les conversions et le taux de chaque objectif et, pour un objectif d’événement, les revenus que le site envoie dans une propriété <code>revenue</code>, dans la devise du projet. Les deux formules incluent les objectifs et les revenus.',
         },
         agency: {
           question: 'Puis-je utiliser Pyxis sur les sites de mes clients ?',

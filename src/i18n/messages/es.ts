@@ -2050,7 +2050,7 @@ export const es = translation({
       lead: 'El mismo panel, tres formas de usarlo.',
       store: {
         title: 'Tienda o negocio en línea',
-        body: 'Cuántas personas empiezan un pedido y en qué paso abandonan: carrito, envío o pago. Por móvil y escritorio, y por el origen de la visita.',
+        body: 'Cuántas personas empiezan un pedido y en qué paso abandonan: carrito, envío o pago. Por móvil y escritorio, y por el origen de la visita. Envía el importe de cada pedido y Pyxis suma los ingresos por objetivo, fuente y campaña.',
         link: 'Ver un embudo en la demo',
         shopify:
           'En Shopify, un fragmento en el tema mide los productos y el carrito. El checkout corre del lado de Shopify y no se mide.',
@@ -2135,7 +2135,7 @@ export const es = translation({
         '¿Prefieres preguntar? Conecta Pyxis a Claude y Claude lee los mismos números, solo lectura. <link>Cómo conectar</link>',
       questions: {
         overview:
-          '¿Cuántas visitas, conversiones y escrituras fallidas hubo en este periodo, frente al anterior?',
+          '¿Cuántas visitas, conversiones por objetivo, ingresos y escrituras fallidas hubo en este periodo, frente al anterior?',
         acquisition: '¿Qué canales, fuentes y campañas traen visitas que convierten?',
         devices: '¿De qué dispositivos, navegadores, países y regiones vienen las visitas?',
         features: '¿Qué eventos y pantallas se usan, y cómo se reparte una propiedad?',
@@ -2422,6 +2422,7 @@ export const es = translation({
           people: 'Solo tú en el panel',
           history: '13 meses de historial',
           digest: 'Resumen semanal por correo',
+          goals: 'Hasta {goals} objetivos por sitio, con conversiones e ingresos',
           agents: 'El conector de Claude (MCP) y tokens de acceso para agentes de IA',
           install: 'Se instala sin programar, con Google Tag Manager o en el tema de Shopify',
         },
@@ -2450,6 +2451,7 @@ export const es = translation({
         people: 'Hasta {proPeople} personas en el panel',
         history: '13 meses de historial',
         digest: 'Resumen semanal por correo',
+        goals: 'Hasta {goals} objetivos por sitio, con conversiones e ingresos',
         agents: 'El conector de Claude (MCP) y tokens de acceso para agentes de IA',
         support: 'Soporte por correo, con respuesta en hasta 2 días hábiles',
       },
@@ -2519,6 +2521,11 @@ export const es = translation({
             'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o suscribiéndote al Pyxis alojado. Cualquier persona en Brasil puede registrarse con un correo y una tarjeta: 14 días gratis, una vez por cliente, y cancelas cuando quieras.',
           answerFree:
             'Sí, de dos formas: ejecutando Pyxis en tu propia infraestructura (el código es MIT, en GitHub) o usando el Pyxis alojado. Cualquier persona en Brasil puede registrarse con un correo, sin tarjeta, en el plan Hobby, y suscribirse al plan Pro cuando el sitio necesite más.',
+        },
+        goals: {
+          question: '¿Puede contar conversiones e ingresos?',
+          answer:
+            'Sí. Cada sitio tiene hasta {goals} objetivos, cada uno un evento, como <code>signup_completed</code>, o una ruta de página con <code>*</code>, como <code>/orders/*</code>. La Vista general muestra las conversiones y la tasa de cada objetivo y, en un objetivo de evento, los ingresos que el sitio envía en una propiedad <code>revenue</code>, en la moneda del proyecto. Los dos planes incluyen objetivos e ingresos.',
         },
         agency: {
           question: '¿Puedo usar Pyxis en los sitios de mis clientes?',
