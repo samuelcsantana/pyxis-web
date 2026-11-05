@@ -25,9 +25,13 @@ function goalOf(body: GoalWire): Goal {
 
 export const goalResponseSchema = goalWireSchema.transform(goalOf);
 
+export const goalListSchema = z
+  .array(goalWireSchema)
+  .transform((goals): readonly Goal[] => goals.map(goalOf));
+
 export const goalsResponseSchema = z
-  .object({ goals: z.array(goalWireSchema) })
-  .transform((body): readonly Goal[] => body.goals.map(goalOf));
+  .object({ goals: goalListSchema })
+  .transform((body): readonly Goal[] => body.goals);
 
 export const goalsSummaryResponseSchema = z
   .object({
