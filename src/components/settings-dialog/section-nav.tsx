@@ -27,6 +27,8 @@ export const SECTION_ICONS: Readonly<Record<SettingsSection, string>> = {
   apps: 'M4 4h7v7H4z M13 4h7v7h-7z M4 13h7v7H4z M13 13h7v7h-7z',
   install: 'M8 8l-4 4 4 4 M16 8l4 4-4 4 M13.5 5l-3 14',
   project: 'M4 7l8-4 8 4v10l-8 4-8-4z M4 7l8 4 8-4 M12 11v10',
+  goals:
+    'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7a5 5 0 1 1 0 10a5 5 0 1 1 0-10 M12 11a1 1 0 1 1 0 2a1 1 0 1 1 0-2',
   privacy: 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4',
   keys: 'M7 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M10 11h10 M17 11v3 M20 11v2',
   people:

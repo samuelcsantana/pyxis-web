@@ -2,6 +2,7 @@ import type { AccessToken } from '@/domain/access-tokens';
 import type { Account } from '@/domain/accounts';
 import type { ConnectedApps } from '@/domain/connections';
 import type { EmailPreferences } from '@/domain/email-preferences';
+import type { Goal } from '@/domain/goals';
 import type { ProjectPerson } from '@/domain/project-people';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import type { AdminSession } from '@/domain/sessions';
@@ -14,6 +15,7 @@ import { createAccessTokensService } from '@/services/access-tokens/access-token
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
+import { createGoalsService } from '@/services/goals/goals-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
@@ -31,6 +33,7 @@ export interface SettingsDialogData {
   readonly accessTokens: readonly AccessToken[];
   readonly connectedApps: ConnectedApps;
   readonly people: readonly ProjectPerson[];
+  readonly goals: readonly Goal[];
 }
 
 export async function readSettingsDialogData(projectId: string): Promise<SettingsDialogData> {
@@ -41,7 +44,7 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
     readOrSignIn(() => createAccountsService().list()),
     bestEffortFreePlanState(),
   ]);
-  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people] =
+  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people, goals] =
     await Promise.all([
       readOrSignIn(() => createProjectsService().settings(project.id)),
       readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
@@ -49,6 +52,7 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
       readOrSignIn(() => createAccessTokensService().list()),
       readOrSignIn(() => createConnectionsService().list()),
       readOrSignIn(() => createProjectPeopleService().list(project.id)),
+      readOrSignIn(() => createGoalsService().list(project.id)),
     ]);
   return {
     projectId: project.id,
@@ -63,5 +67,6 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
     accessTokens,
     connectedApps,
     people,
+    goals,
   };
 }

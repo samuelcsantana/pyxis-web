@@ -7,7 +7,6 @@ const SAVED = {
   name: 'Demo Store',
   allowedOrigins: ['https://store.example.com', 'https://www.store.example.com'],
   timezone: 'America/Sao_Paulo',
-  conversionEvent: 'checkout_completed',
 };
 const SLOW_SAVE_MS = 60_000;
 
@@ -85,7 +84,7 @@ export const Failed: Story = {
 };
 
 export const NothingSetYet: Story = {
-  args: { saved: { ...SAVED, allowedOrigins: [], conversionEvent: null } },
+  args: { saved: { ...SAVED, allowedOrigins: [] } },
 };
 
 export const InPortuguese: Story = { globals: { locale: 'pt-BR' } };

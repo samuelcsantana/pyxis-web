@@ -28,6 +28,7 @@ export const CLIENT_NAMESPACES = [
   'projectKeys',
   'deleteProject',
   'people',
+  'goalsEditor',
   'billing',
   'exportEvents',
   'closeAccount',

@@ -75,6 +75,7 @@ describe('RootLayout', () => {
       'projectKeys',
       'deleteProject',
       'people',
+      'goalsEditor',
       'billing',
       'exportEvents',
       'closeAccount',

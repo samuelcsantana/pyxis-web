@@ -76,7 +76,7 @@ describe('HttpProjectManagementService create', () => {
 });
 
 describe('HttpProjectManagementService update', () => {
-  it('patches the project with the API field names', async () => {
+  it('patches the project with the API field names, never its conversion event', async () => {
     const patch = vi.fn<WriteMock>(() => Promise.resolve(undefined));
 
     await expect(serviceWith({ patch }).update(PROJECT, CHANGES)).resolves.toEqual({
@@ -88,7 +88,6 @@ describe('HttpProjectManagementService update', () => {
         name: 'Shop',
         allowed_origins: ['https://shop.example.com'],
         timezone: 'America/Sao_Paulo',
-        conversion_event: null,
       },
     ]);
   });

@@ -3,6 +3,7 @@ import type {
   CreateProjectKeyOutcome,
   CreateProjectOutcome,
   DeleteProjectOutcome,
+  NewProjectChanges,
   ProjectChanges,
   ProjectKeyKind,
   RevokeProjectKeyOutcome,
@@ -45,7 +46,7 @@ function refusedWith(error: unknown, code: string): boolean {
 export class HttpProjectManagementService implements IProjectManagementService {
   constructor(private readonly writer: ApiWriter) {}
 
-  async create(accountId: string, changes: ProjectChanges): Promise<CreateProjectOutcome> {
+  async create(accountId: string, changes: NewProjectChanges): Promise<CreateProjectOutcome> {
     try {
       const project = await this.writer.post(
         `/v1/accounts/${encodeURIComponent(accountId)}/projects`,

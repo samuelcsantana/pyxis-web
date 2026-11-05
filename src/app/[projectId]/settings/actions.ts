@@ -10,6 +10,14 @@ import {
 } from '@/domain/access-tokens';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import {
+  type DeleteGoalOutcome,
+  GOAL_KINDS,
+  type GoalChanges,
+  MAX_GOAL_NAME_LENGTH,
+  MAX_GOAL_PATH_LENGTH,
+  type SaveGoalOutcome,
+} from '@/domain/goals';
+import {
   type CreateProjectKeyOutcome,
   type DeleteProjectOutcome,
   MAX_ALLOWED_ORIGINS,
@@ -32,6 +40,7 @@ import { currentLocale } from '@/i18n/current-locale';
 import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
 import type { RequestExportOutcome } from '@/domain/exports';
 import { createExportsService } from '@/services/exports/exports-service.factory';
+import { createGoalsService } from '@/services/goals/goals-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 
 const choiceSchema = z.strictObject({ weeklyDigest: z.boolean() });
@@ -47,7 +56,6 @@ const projectChangesSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_PROJECT_NAME_LENGTH),
   allowedOrigins: z.array(z.string().min(1)).min(1).max(MAX_ALLOWED_ORIGINS),
   timezone: z.string().min(1),
-  conversionEvent: z.string().min(1).nullable(),
 });
 const projectKeyKindSchema = z.enum(PROJECT_KEY_KINDS);
 const projectKeyIdSchema = z.uuid();
@@ -55,6 +63,12 @@ const confirmNameSchema = z.string().min(1).max(MAX_PROJECT_NAME_LENGTH);
 const MAX_EMAIL_LENGTH = 254;
 const personEmailSchema = z.email().max(MAX_EMAIL_LENGTH);
 const adminUserIdSchema = z.uuid();
+const goalChangesSchema = z.strictObject({
+  name: z.string().trim().min(1).max(MAX_GOAL_NAME_LENGTH),
+  kind: z.enum(GOAL_KINDS),
+  target: z.string().trim().min(1).max(MAX_GOAL_PATH_LENGTH),
+});
+const goalIdSchema = z.uuid();
 
 export async function chooseEmailPreferences(
   projectId: string,
@@ -233,4 +247,53 @@ export async function removeProjectPerson(
 export async function requestProjectExport(projectId: string): Promise<RequestExportOutcome> {
   const { project } = await projectOrNotFound(projectId);
   return readOrSignIn(() => createExportsService().request(project.id));
+}
+
+export async function createGoal(
+  projectId: string,
+  changes: GoalChanges,
+): Promise<SaveGoalOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = goalChangesSchema.safeParse(changes);
+  if (!parsed.success) {
+    return { kind: 'invalid' };
+  }
+  const outcome = await readOrSignIn(() => createGoalsService().create(project.id, parsed.data));
+  if (outcome.kind === 'saved') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
+}
+
+export async function updateGoal(
+  projectId: string,
+  goalId: string,
+  changes: GoalChanges,
+): Promise<SaveGoalOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const id = goalIdSchema.safeParse(goalId);
+  const parsed = goalChangesSchema.safeParse(changes);
+  if (!id.success || !parsed.success) {
+    return { kind: 'invalid' };
+  }
+  const outcome = await readOrSignIn(() =>
+    createGoalsService().update(project.id, id.data, parsed.data),
+  );
+  if (outcome.kind === 'saved') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
+}
+
+export async function deleteGoal(projectId: string, goalId: string): Promise<DeleteGoalOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = goalIdSchema.safeParse(goalId);
+  if (!parsed.success) {
+    throw new Error('A goal is deleted by its id.');
+  }
+  const outcome = await readOrSignIn(() => createGoalsService().remove(project.id, parsed.data));
+  if (outcome.kind === 'deleted') {
+    revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
+  }
+  return outcome;
 }

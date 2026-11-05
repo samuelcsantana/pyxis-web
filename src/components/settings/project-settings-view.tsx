@@ -15,6 +15,7 @@ import {
 import type { AccessToken } from '@/domain/access-tokens';
 import type { ConnectedApps } from '@/domain/connections';
 import { EXPORT_FILE_DAYS, MAX_EXPORTS_PER_DAY } from '@/domain/exports';
+import type { Goal } from '@/domain/goals';
 import type { ProjectPerson } from '@/domain/project-people';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { AdminSession } from '@/domain/sessions';
@@ -27,6 +28,7 @@ import { type CreateProjectKey, CreateProjectKeyButton } from './create-project-
 import type { AddPerson } from './add-person-form';
 import { type DeleteProject, DeleteProjectForm } from './delete-project-form';
 import { NoLiveKeyNotice } from './no-live-key-notice';
+import { type GoalsManagement, GoalsPanel } from './goals-panel';
 import { PeoplePanel } from './people-panel';
 import { type RequestExport, RequestExportButton } from './request-export-button';
 import { ProjectForm, type SaveProject } from './project-form';
@@ -66,6 +68,8 @@ export interface ProjectSettingsViewProps {
   readonly manage: ProjectManagement;
   readonly people: readonly ProjectPerson[];
   readonly myEmail: string;
+  readonly goals: readonly Goal[];
+  readonly manageGoals: GoalsManagement;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -112,15 +116,6 @@ export function ProjectPanel({ settings, i18n, when }: SectionProps) {
       <dl className="flex flex-col gap-3">
         <Field term={i18n.t('settings.project.name')}>{settings.name}</Field>
         <Field term={i18n.t('settings.project.timezone')}>{settings.timezone}</Field>
-        <Field term={i18n.t('settings.project.conversionEvent')}>
-          {settings.conversionEvent === null ? (
-            i18n.t('settings.project.noConversionEvent')
-          ) : (
-            <code className={CODE}>
-              <Breakable text={settings.conversionEvent} />
-            </code>
-          )}
-        </Field>
         <Field term={i18n.t('settings.project.created')}>{when(settings.createdAt)}</Field>
       </dl>
     </SettingsPanel>
@@ -241,7 +236,6 @@ export function ProjectEditPanel({ settings, i18n, when, manage }: ManagedSectio
           name: settings.name,
           allowedOrigins: settings.allowedOrigins,
           timezone: settings.timezone,
-          conversionEvent: settings.conversionEvent,
         }}
         timezones={manage.timezones}
         save={manage.save}
@@ -462,6 +456,8 @@ export function ProjectSettingsView({
   manage,
   people,
   myEmail,
+  goals,
+  manageGoals,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
@@ -502,6 +498,9 @@ export function ProjectSettingsView({
           <div className="lg:col-span-2">
             <ProjectEditPanel {...section} manage={manage} />
           </div>
+          <div className="lg:col-span-2">
+            <GoalsPanel goals={goals} manage={manageGoals} />
+          </div>
           <ActivityPanel {...section} />
           <RetentionPanel {...section} />
           <div className="lg:col-span-2">
@@ -533,6 +532,9 @@ export function ProjectSettingsView({
         <>
           <ProjectPanel {...section} />
           <ActivityPanel {...section} />
+          <div className="lg:col-span-2">
+            <GoalsPanel goals={goals} manage={null} />
+          </div>
           <OriginsPanel {...section} />
           <RetentionPanel {...section} />
           <div className="lg:col-span-2">

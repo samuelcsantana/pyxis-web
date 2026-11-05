@@ -85,6 +85,20 @@ const EMAIL = {
     },
   ] as const,
   myEmail: 'owner@shop.example.com',
+  goals: [
+    {
+      id: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
+      name: 'Sign-up',
+      kind: 'event',
+      target: 'signup_completed',
+      position: 1,
+    },
+  ] as const,
+  manageGoals: {
+    create: () => Promise.resolve({ kind: 'limitReached' } as const),
+    update: () => Promise.resolve({ kind: 'notFound' } as const),
+    remove: () => Promise.resolve({ kind: 'deleted' } as const),
+  },
 };
 
 const OWNED: ProjectSettings = {
@@ -139,8 +153,12 @@ describe('ProjectSettingsView', () => {
     const project = panel('Project');
     expect(within(project).getByText('Shop')).toBeInTheDocument();
     expect(within(project).getByText('UTC')).toBeInTheDocument();
-    expect(project).toHaveTextContent('signup_completed');
+    expect(project).not.toHaveTextContent('signup_completed');
     expect(project).toHaveTextContent('Sep 1, 2026');
+    const goals = panel('Goals');
+    expect(goals).toHaveTextContent('Sign-upFirstEvent signup_completed');
+    expect(goals).toHaveTextContent('Only the owner of its account changes the goals.');
+    expect(within(goals).queryByRole('button')).not.toBeInTheDocument();
     expect(panel('Activity')).toHaveTextContent('Oldest event keptSep 2, 2026, 10:00');
     expect(panel('Activity')).toHaveTextContent('Latest eventOct 5, 2026, 09:30');
     expect(within(panel('Allowed origins')).getAllByRole('listitem')).toHaveLength(2);
@@ -177,7 +195,6 @@ describe('ProjectSettingsView', () => {
       />,
     );
 
-    expect(panel('Project')).toHaveTextContent('None, so conversions are not shown');
     expect(panel('Activity')).toHaveTextContent('Waiting for the first event');
     expect(panel('Allowed origins')).toHaveTextContent('No origin is allowed yet');
     const keys = panel('Keys');
@@ -195,9 +212,10 @@ describe('ProjectSettingsView', () => {
     expect(within(project).getByRole('textbox', { name: 'Origin 2' })).toHaveValue(
       'https://www.shop.example.com',
     );
-    expect(within(project).getByRole('textbox', { name: 'Conversion event' })).toHaveValue(
-      'signup_completed',
-    );
+    expect(within(project).queryByRole('textbox', { name: 'Conversion event' })).toBeNull();
+    const goals = panel('Goals');
+    expect(within(goals).getByRole('button', { name: 'Edit' })).toBeInTheDocument();
+    expect(within(goals).getByRole('button', { name: 'Add a goal' })).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Allowed origins' })).not.toBeInTheDocument();
     const keys = panel('Keys');
     expect(within(keys).getAllByRole('button', { name: 'Revoke' })).toHaveLength(3);

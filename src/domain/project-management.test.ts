@@ -4,15 +4,17 @@ import {
   hasProblems,
   isTimeZone,
   MAX_PROJECT_NAME_LENGTH,
+  type NewProjectDraft,
+  newProjectChangesOf,
+  newProjectDraftProblems,
   originOf,
-  type ProjectDraft,
   projectChangesOf,
   projectDraftOf,
   projectDraftProblems,
   timeZoneChoices,
 } from './project-management';
 
-const DRAFT: ProjectDraft = {
+const DRAFT: NewProjectDraft = {
   name: ' Shop ',
   origins: ['https://shop.example.com', ''],
   timezone: 'America/Sao_Paulo',
@@ -57,8 +59,8 @@ describe('projectDraftProblems', () => {
     expect(hasProblems(problems)).toBe(false);
   });
 
-  it('names every problem at once', () => {
-    const problems = projectDraftProblems({
+  it('names every problem of a new project at once, its conversion event included', () => {
+    const problems = newProjectDraftProblems({
       name: '   ',
       origins: ['', ' '],
       timezone: 'Nowhere/Land',
@@ -72,6 +74,16 @@ describe('projectDraftProblems', () => {
       conversionEvent: 'invalid',
     });
     expect(hasProblems(problems)).toBe(true);
+  });
+
+  it('leaves the conversion event out of the problems of a saved project', () => {
+    expect(
+      projectDraftProblems({ name: 'Shop', origins: ['shop.example.com'], timezone: 'UTC' }),
+    ).toEqual({});
+  });
+
+  it('accepts a new project without a conversion event', () => {
+    expect(newProjectDraftProblems({ ...DRAFT, conversionEvent: ' ' })).toEqual({});
   });
 
   it('refuses a name over the limit and an origin it cannot read', () => {
@@ -95,18 +107,16 @@ describe('projectDraftProblems', () => {
 });
 
 describe('projectChangesOf', () => {
-  it('trims the name, reads each origin once and leaves no conversion event as null', () => {
+  it('trims the name and reads each origin once, never sending a conversion event', () => {
     expect(
       projectChangesOf({
         ...DRAFT,
         origins: ['shop.example.com', 'https://shop.example.com/', ''],
-        conversionEvent: '  ',
       }),
     ).toEqual({
       name: 'Shop',
       allowedOrigins: ['https://shop.example.com'],
       timezone: 'America/Sao_Paulo',
-      conversionEvent: null,
     });
   });
 
@@ -116,9 +126,15 @@ describe('projectChangesOf', () => {
         .allowedOrigins,
     ).toEqual(['https://docs.example.com']);
   });
+});
 
+describe('newProjectChangesOf', () => {
   it('keeps a conversion event, trimmed', () => {
-    expect(projectChangesOf(DRAFT).conversionEvent).toBe('signup_completed');
+    expect(newProjectChangesOf(DRAFT).conversionEvent).toBe('signup_completed');
+  });
+
+  it('leaves no conversion event as null', () => {
+    expect(newProjectChangesOf({ ...DRAFT, conversionEvent: '  ' }).conversionEvent).toBeNull();
   });
 });
 
@@ -129,20 +145,18 @@ describe('projectDraftOf', () => {
         name: 'Shop',
         allowedOrigins: ['https://shop.example.com'],
         timezone: 'UTC',
-        conversionEvent: 'signup_completed',
       }),
     ).toEqual({
       name: 'Shop',
       origins: ['https://shop.example.com'],
       timezone: 'UTC',
-      conversionEvent: 'signup_completed',
     });
   });
 
-  it('gives an empty origin row and an empty conversion event when there are none', () => {
-    expect(
-      projectDraftOf({ name: 'Shop', allowedOrigins: [], timezone: 'UTC', conversionEvent: null }),
-    ).toMatchObject({ origins: [''], conversionEvent: '' });
+  it('gives an empty origin row when there is none', () => {
+    expect(projectDraftOf({ name: 'Shop', allowedOrigins: [], timezone: 'UTC' })).toMatchObject({
+      origins: [''],
+    });
   });
 });
 

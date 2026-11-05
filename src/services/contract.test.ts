@@ -350,7 +350,6 @@ describe('the API contract copied from pyxis-api', () => {
       name: 'Shop',
       allowedOrigins: ['https://shop.example.com'],
       timezone: 'America/Sao_Paulo',
-      conversionEvent: null,
     });
 
     expect(changes(body), JSON.stringify(changes.errors)).toBe(true);
