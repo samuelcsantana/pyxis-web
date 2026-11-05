@@ -35,6 +35,12 @@ import { demoMeResponse } from './projects/mock-projects-service';
 import { DEMO_EMAIL_PREFERENCES_WIRE } from './preferences/mock-email-preferences-service';
 import { emailPreferencesWire } from '@/domain/email-preferences';
 import { newAccessTokenWire } from '@/domain/access-tokens.schema';
+import { shareLinkRequestOf } from '@/domain/share-links';
+import { shareLinkRequestWire } from '@/domain/share-links.schema';
+import {
+  demoCreatedShareLinkWire,
+  demoShareLinksWire,
+} from './share-links/mock-share-links-service';
 import {
   demoAccessTokensWire,
   demoCreatedAccessTokenWire,
@@ -322,6 +328,21 @@ describe('the API contract copied from pyxis-api', () => {
     expect(list(demoAccessTokensWire(NOW)), JSON.stringify(list.errors)).toBe(true);
     expect(create(newAccessTokenWire(request)), JSON.stringify(create.errors)).toBe(true);
     expect(created(demoCreatedAccessTokenWire(request, NOW)), JSON.stringify(created.errors)).toBe(
+      true,
+    );
+  });
+
+  it('accepts the demo share links, a new link and the one created', () => {
+    const list = contractSchema('ShareLinks');
+    const create = contractSchema('CreateShareLink');
+    const created = contractSchema('CreatedShareLink');
+    const forever = shareLinkRequestOf({ name: ' Board ', expiry: 'never' }, NOW);
+    const monthly = shareLinkRequestOf({ name: 'Client', expiry: 30 }, NOW);
+
+    expect(list(demoShareLinksWire(NOW)), JSON.stringify(list.errors)).toBe(true);
+    expect(create(shareLinkRequestWire(forever)), JSON.stringify(create.errors)).toBe(true);
+    expect(create(shareLinkRequestWire(monthly)), JSON.stringify(create.errors)).toBe(true);
+    expect(created(demoCreatedShareLinkWire(monthly, NOW)), JSON.stringify(created.errors)).toBe(
       true,
     );
   });
