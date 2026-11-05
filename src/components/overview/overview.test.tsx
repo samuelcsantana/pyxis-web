@@ -72,6 +72,10 @@ describe('KpiGrid', () => {
     expect(visits.querySelectorAll('p')).toHaveLength(2);
     expect(screen.getAllByRole('group')).toHaveLength(5);
     expect(screen.getByRole('group', { name: 'Revenue' })).toHaveTextContent(/R\$/);
+    expect(within(screen.getByRole('group', { name: 'Revenue' })).getByText(/^R\$/)).toHaveClass(
+      'wrap-anywhere',
+    );
+    expect(within(visits).getByText(kpi('visits').value)).not.toHaveClass('wrap-anywhere');
     expect(screen.queryByRole('region')).not.toBeInTheDocument();
     expect(container.querySelectorAll('polyline')).toHaveLength(5);
     expect(container.querySelector('polyline')?.getAttribute('points')?.split(' ')).toHaveLength(7);

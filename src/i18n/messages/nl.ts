@@ -1245,6 +1245,7 @@ export const nl = translation({
       convertingVisits: 'Bezoeken',
       conversions: 'Keer bereikt',
       revenue: 'Omzet',
+      earned: '{revenue} omzet',
       rate: 'Conversieratio',
     },
     problems: {

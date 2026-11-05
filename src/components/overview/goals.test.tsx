@@ -138,8 +138,21 @@ describe('GoalsTable', () => {
     const [header, signUp, pricing] = within(table()).getAllByRole('row');
 
     expect(header).toHaveTextContent('GoalVisitsTimes reachedRevenueConversion rate');
-    expect(signUp).toHaveTextContent('Sign-upEvent signup_completed120140R$4,890.5010.0%');
+    expect(signUp).toHaveTextContent(
+      'Sign-upEvent signup_completedR$4,890.50 in revenue120140R$4,890.5010.0%',
+    );
     expect(pricing).toHaveTextContent('Saw the pricingPage /pricing00—0.0%');
+  });
+
+  it('moves the revenue under the goal on a phone, where its column is hidden', () => {
+    const region = table();
+
+    expect(within(region).getByRole('columnheader', { name: 'Revenue' })).toHaveClass(
+      'hidden',
+      'sm:table-cell',
+    );
+    expect(within(region).getByText('R$4,890.50 in revenue')).toHaveClass('sm:hidden');
+    expect(within(region).getAllByText(/ in revenue$/)).toHaveLength(1);
   });
 
   it('opens the visits that reached a goal, and filters every screen by it', () => {
@@ -168,6 +181,7 @@ describe('GoalsTable', () => {
     );
 
     expect(screen.queryByRole('columnheader', { name: 'Revenue' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/ in revenue$/)).not.toBeInTheDocument();
   });
 
   it('links no list for a goal no visit reached', () => {
