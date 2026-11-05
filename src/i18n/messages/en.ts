@@ -1204,6 +1204,7 @@ export const en = {
       convertingVisits: 'Visits',
       conversions: 'Times reached',
       revenue: 'Revenue',
+      earned: '{revenue} in revenue',
       rate: 'Conversion rate',
     },
     problems: {

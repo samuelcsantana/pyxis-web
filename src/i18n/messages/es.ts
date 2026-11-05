@@ -1230,6 +1230,7 @@ export const es = translation({
       convertingVisits: 'Visitas',
       conversions: 'Veces alcanzado',
       revenue: 'Ingresos',
+      earned: '{revenue} en ingresos',
       rate: 'Tasa de conversión',
     },
     problems: {

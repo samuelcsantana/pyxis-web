@@ -1221,6 +1221,7 @@ export const ptBR = translation({
       convertingVisits: 'Visitas',
       conversions: 'Vezes atingida',
       revenue: 'Receita',
+      earned: '{revenue} de receita',
       rate: 'Taxa de conversão',
     },
     problems: {

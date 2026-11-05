@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { Tone } from '@/domain/metrics';
-import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
+import { type KpiId, type KpiView, spokenChange, spokenTone } from '@/domain/overview';
 import type { SeriesColor } from '@/domain/overview-chart';
 import type { I18n } from '@/i18n/i18n';
 import { TEXT_LINK } from '@/components/ui/control-classes';
@@ -25,6 +25,11 @@ const STROKE_CLASSES: Readonly<Record<KpiColor, string>> = {
 };
 
 const SPARKLINE_BOX = { width: 120, height: 36, inset: 3 } as const;
+
+const MONEY_KPIS: ReadonlySet<KpiId> = new Set(['revenue']);
+const VALUE =
+  'text-title leading-7 font-semibold tracking-tight tabular-nums sm:text-figure-lg sm:leading-9';
+const MONEY_VALUE = `${VALUE} wrap-anywhere`;
 
 export interface KpiDrillDownLink {
   readonly label: string;
@@ -66,7 +71,7 @@ export function KpiCard({ kpi, color, drillDown, toggleHint, control, i18n }: Kp
         )}
       </h2>
       {control}
-      <p className="text-title leading-7 font-semibold tracking-tight tabular-nums sm:text-figure-lg sm:leading-9">
+      <p className={MONEY_KPIS.has(kpi.id) ? MONEY_VALUE : VALUE}>
         {kpi.value}
         {kpi.count === null ? null : (
           <FreshCount item={`kpi:${kpi.id}`} value={kpi.count} className="ml-2" />

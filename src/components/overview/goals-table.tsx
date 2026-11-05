@@ -62,7 +62,7 @@ export function GoalsTable({
                 {i18n.t('goals.table.conversions')}
               </th>
               {withRevenue ? (
-                <th scope="col" className={`${HEADER_CELL} text-right`}>
+                <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
                   {i18n.t('goals.table.revenue')}
                 </th>
               ) : null}
@@ -91,6 +91,11 @@ export function GoalsTable({
                       {i18n.t(row.kind === 'event' ? 'goals.kinds.event' : 'goals.kinds.page')}{' '}
                       <code className="font-mono wrap-anywhere">{row.target}</code>
                     </span>
+                    {withRevenue && row.revenue !== null ? (
+                      <span className="text-xs text-muted sm:hidden">
+                        {i18n.t('goals.table.earned', { revenue: row.revenue })}
+                      </span>
+                    ) : null}
                   </span>
                 </th>
                 <td className={`${BODY_CELL} text-right`}>{row.convertingVisits}</td>
@@ -98,7 +103,7 @@ export function GoalsTable({
                   {row.conversions}
                 </td>
                 {withRevenue ? (
-                  <td className={`${BODY_CELL} text-right whitespace-nowrap`}>
+                  <td className={`${BODY_CELL} hidden text-right whitespace-nowrap sm:table-cell`}>
                     {row.revenue ?? NO_VALUE}
                   </td>
                 ) : null}
