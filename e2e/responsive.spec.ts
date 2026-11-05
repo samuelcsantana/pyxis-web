@@ -14,7 +14,7 @@ const FUNNEL_STEP_MAX_PX = 160;
 const PHONE_TARGET_PX = 44;
 const TIMELINE_LOOKUP_MAX_PX = 130;
 const TABLET_WIDTHS = [768, 1024] as const;
-const KPI_COUNT = 4;
+const KPI_COUNT = 5;
 const DESKTOP_FIELD_FONT_PX = 14;
 
 const PHONE_SIZES = [
@@ -487,7 +487,7 @@ for (const width of TABLET_WIDTHS) {
   test.describe(`at ${String(width)}px, the tablet grids`, () => {
     test.use({ viewport: { width, height: 900 } });
 
-    test('put the KPI cards two by two', async ({ page }) => {
+    test('put the KPI cards two by two, the odd one across the row', async ({ page }) => {
       await page.goto(`/${STORE_ID}/overview`);
       const cards = page
         .getByRole('main')
@@ -499,7 +499,7 @@ for (const width of TABLET_WIDTHS) {
         (await cards.all()).map(async (card) => (await card.boundingBox())?.y),
       );
 
-      expect(new Set(tops)).toHaveProperty('size', KPI_COUNT / 2);
+      expect(new Set(tops)).toHaveProperty('size', Math.ceil(KPI_COUNT / 2));
     });
 
     test('give the last donut the whole row', async ({ page }) => {
