@@ -1,10 +1,10 @@
 import type { Account } from './accounts';
 import { isOnProPlan } from './pro-features';
+import { SHARE_PAGE_PATH } from './share-page-path';
 
 export const MAX_SHARE_LINK_NAME_LENGTH = 64;
 export const MAX_SHARE_LINKS = 10;
 export const SHARE_LINK_LIFETIMES = [7, 30, 90, 365] as const;
-export const SHARE_PAGE_PATH = '/share';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 

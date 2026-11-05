@@ -1,6 +1,6 @@
 import type { DashboardFilters } from './dashboard-filters';
 import type { Goal } from './goals';
-import { SHARE_PAGE_PATH } from './share-links';
+import { SHARE_PAGE_PATH } from './share-page-path';
 
 export const SHARE_TOKEN_PATTERN = /^pyxis_sh_[A-Za-z0-9]{32}$/;
 export const SHARED_SCREENS = ['overview', 'acquisition', 'devices', 'features', 'funnel'] as const;
