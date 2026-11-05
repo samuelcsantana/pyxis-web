@@ -1,5 +1,70 @@
 # Changelog
 
+## [0.49.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.48.0...v0.49.0) (2026-11-05)
+
+
+### Features
+
+* **account:** an "Available on Pro" panel and the plan_required refusal ([3858604](https://github.com/samuelcsantana/pyxis-web/commit/38586046420df6232b27b62026e63567f5805b50))
+* **i18n:** add the texts of the settings dialog in seven languages ([65def8e](https://github.com/samuelcsantana/pyxis-web/commit/65def8e18d44d639bd09435d11c3229fc81c82de))
+* **i18n:** name the plans Hobby and Pro on every screen ([b3ca7be](https://github.com/samuelcsantana/pyxis-web/commit/b3ca7bef566c2bc2542fdc02802ba53a58387e0d))
+* **install:** add a WordPress tab to the Install screen ([7c0ed43](https://github.com/samuelcsantana/pyxis-web/commit/7c0ed43ddcc99d83c21693569c8debef3806d6eb))
+* **install:** add the classic snippet for header fields ([ef0f1a4](https://github.com/samuelcsantana/pyxis-web/commit/ef0f1a43b167bfcef5763924ebd73b7f71336391))
+* **install:** offer the automatic events of pyxis-analytics/auto ([8c3e048](https://github.com/samuelcsantana/pyxis-web/commit/8c3e048fc3ef3b5d526ebf1ef11edd5b4924a2a9))
+* **install:** show how to record revenue ([4f3fc95](https://github.com/samuelcsantana/pyxis-web/commit/4f3fc95c3430b82f276c33d52bce3ff6a51064b6))
+* **install:** slide a yellow thumb under the selected install tab ([2a62f47](https://github.com/samuelcsantana/pyxis-web/commit/2a62f474499d5781ffad88b56b46bb1cc66a8be4))
+* **landing:** carry the yearly saving inside its option and price it per month ([890bc31](https://github.com/samuelcsantana/pyxis-web/commit/890bc312dd6cff1630543a0dc2c554748c1fd928))
+* **landing:** match the page title and description to the new hero ([8cdb55c](https://github.com/samuelcsantana/pyxis-web/commit/8cdb55c85d6bb8d9900e701ed3b2567707fc8e49))
+* **landing:** name the plans Hobby and Pro and list only what Pro adds ([1827991](https://github.com/samuelcsantana/pyxis-web/commit/18279916b1e53d907cd718b1a4bb26097fcdc64e))
+* **landing:** raise Pro to 250,000 events, 10 sites and 10 people ([aa6dcc9](https://github.com/samuelcsantana/pyxis-web/commit/aa6dcc93ced7a5d99e8c7e34a84ae9679dc62e4b))
+* **landing:** say each site has up to 10 goals, with conversions and revenue ([4000cee](https://github.com/samuelcsantana/pyxis-web/commit/4000ceed61d9be066372e387e0c4ef367f122842))
+* **landing:** say what people do on the site and how long they stay ([14393b5](https://github.com/samuelcsantana/pyxis-web/commit/14393b5725779d0dcbacb1ddd81c2ed9db691057))
+* **landing:** show an icon beside each install platform and tab ([18617c8](https://github.com/samuelcsantana/pyxis-web/commit/18617c88bb0592cbe33e6ac957a9cc319bf376b0))
+* **landing:** show WordPress among the no-code installs ([859d59f](https://github.com/samuelcsantana/pyxis-web/commit/859d59ffa8613f59b4e260876126aaeebb4c0d8c))
+* **landing:** slide the billing period switch between its options ([5afbfaa](https://github.com/samuelcsantana/pyxis-web/commit/5afbfaabda17d8c04d020f0a5f40572282cdf35d))
+* **language:** choose the language in a dialog with a search ([2a419e5](https://github.com/samuelcsantana/pyxis-web/commit/2a419e509afdde2f1cdc283b728f30ecbd9b6718))
+* **legal:** terms 1.6, a larger Pro and the integrations kept for Pro ([e92458a](https://github.com/samuelcsantana/pyxis-web/commit/e92458ad01a545bf18b8cf756ed348fa7f1f251d))
+* **llms:** add the WordPress install to llms.txt ([beb7db0](https://github.com/samuelcsantana/pyxis-web/commit/beb7db07e2181cbff75576dddaaa8a06cbf404ea))
+* **llms:** give the Pro plan its numbers in llms.txt ([ffae95b](https://github.com/samuelcsantana/pyxis-web/commit/ffae95be6c004b0e338e19f90380e36fdc752c8f))
+* **llms:** name the plans Hobby and Pro in llms.txt ([d06d390](https://github.com/samuelcsantana/pyxis-web/commit/d06d390a5fd12c91cbf34a7701a05e55a810c63a))
+* **llms:** tell agents about goals, revenue and the goals tool ([e6a2b03](https://github.com/samuelcsantana/pyxis-web/commit/e6a2b031a839bf11052d735cb5dbd3fb80e43927))
+* **llms:** tell agents how to switch on the automatic events ([b95001d](https://github.com/samuelcsantana/pyxis-web/commit/b95001d3a1a4c49ad48093f97794d79e1bab232e))
+* **overview:** count the goal picked on the Conversions card, and table every goal ([ffa30e4](https://github.com/samuelcsantana/pyxis-web/commit/ffa30e484cb43706928283bba0f589c7b943639e))
+* **revenue:** show the revenue of goals across the dashboard ([4904783](https://github.com/samuelcsantana/pyxis-web/commit/49047837d65d2260758cb270ec530cefab5b2793))
+* **settings:** draw the settings in a dialog named by the address ([2315fe9](https://github.com/samuelcsantana/pyxis-web/commit/2315fe9d4f9a393ed212460822b03e3955e18527))
+* **settings:** let the owner choose the project currency ([48c0b3c](https://github.com/samuelcsantana/pyxis-web/commit/48c0b3cb43e53bdc6ad8bf8c80fb0ed68862d3ed))
+* **settings:** manage the goals of a project in the settings ([7fd9ea1](https://github.com/samuelcsantana/pyxis-web/commit/7fd9ea17070e424b542ab92bb111316f8e0c2415))
+* **shell:** name the plan of the account that holds the project on screen ([d6ed06a](https://github.com/samuelcsantana/pyxis-web/commit/d6ed06a2ad7630917e9a3060d6172da9b7a0539d))
+* **shell:** open the settings from the account and the install guide ([3ef246f](https://github.com/samuelcsantana/pyxis-web/commit/3ef246fbe8925bb49986084f81aae1e33ffb8832))
+* **visits:** filter every screen by a goal the visit reached ([693c798](https://github.com/samuelcsantana/pyxis-web/commit/693c79873d6633eec7f50a31efefdd986f2eba4e))
+
+
+### Bug Fixes
+
+* **install:** keep sliding panels visible and let tab labels wrap ([cb97324](https://github.com/samuelcsantana/pyxis-web/commit/cb973248627caa0582cae87a77f3ed4dd602f758))
+* **install:** settle the chosen panel into place instead of sliding it sideways ([6ea6646](https://github.com/samuelcsantana/pyxis-web/commit/6ea664609eb9e8b2d57c348efc75344f5329843b))
+* **landing:** count the seventeen tools of the Claude connector ([12fc1e8](https://github.com/samuelcsantana/pyxis-web/commit/12fc1e8335184a809ae9f93269bdd267fa18ea4c))
+* **landing:** price the structured data's offers in reais, by plan ([1986b17](https://github.com/samuelcsantana/pyxis-web/commit/1986b1736dab5ff1f942d7f63cdd4acdab74310d))
+* **language:** take the first match of what was typed when Enter comes first ([39dc2f9](https://github.com/samuelcsantana/pyxis-web/commit/39dc2f97610a25ab86e9ae8700483b38dd190825))
+* **overview:** keep the revenue inside its card and the phone screen ([a8307bc](https://github.com/samuelcsantana/pyxis-web/commit/a8307bca4705076af4d47ce11e2432e39af2675a))
+* **visits:** send the unique visitors filter to the API ([1b689a7](https://github.com/samuelcsantana/pyxis-web/commit/1b689a722088e615db4fb45999ab5536e8a9a935))
+
+
+### Refactoring
+
+* **i18n:** load the dictionaries from a module the browser can import ([38f49dd](https://github.com/samuelcsantana/pyxis-web/commit/38f49dd27086f83921124e1be18ec12e198331b1))
+* **ui:** share a stroke icon and the focus return of menus ([a42b716](https://github.com/samuelcsantana/pyxis-web/commit/a42b716b90f88cacadb90020a1ebac0389f3bc5e))
+
+
+### Documentation
+
+* describe revenue and the project currency ([c24241b](https://github.com/samuelcsantana/pyxis-web/commit/c24241bc4a2e7e651a7e9757e44d8d59d3923e7e))
+* describe the automatic events on the Install screen ([690578a](https://github.com/samuelcsantana/pyxis-web/commit/690578aa2d7d98eba5263e5958f82a1d679fd8b9))
+* describe the goals in the README and FEATURES ([23d57f9](https://github.com/samuelcsantana/pyxis-web/commit/23d57f92870eeb09692bf77376b0e3bbfb6449df))
+* describe the larger Pro plan in the README and FEATURES ([e836a20](https://github.com/samuelcsantana/pyxis-web/commit/e836a20305ce1a7192a4d7186f95cd460025528d))
+* describe the WordPress install in the README and FEATURES ([8a6b97d](https://github.com/samuelcsantana/pyxis-web/commit/8a6b97de739ecebbe678ff08de490ea2811f2314))
+* record the settings dialog in an ADR, the README and the feature list ([0f0cc3c](https://github.com/samuelcsantana/pyxis-web/commit/0f0cc3c4df0a1b42dc79c4d491b298a56c37548c))
+
 ## [0.48.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.47.1...v0.48.0) (2026-11-03)
 
 
