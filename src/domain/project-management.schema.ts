@@ -32,6 +32,7 @@ export function projectChangesWire(changes: ProjectChanges) {
     name: changes.name,
     allowed_origins: changes.allowedOrigins,
     timezone: changes.timezone,
+    currency: changes.currency,
   };
 }
 

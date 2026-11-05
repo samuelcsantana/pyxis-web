@@ -23,6 +23,7 @@ import {
   projectDraftProblems,
   type SaveProjectOutcome,
 } from '@/domain/project-management';
+import type { CurrencyOption } from '@/domain/currency';
 import { useT } from '@/i18n/messages-provider';
 
 export type SaveProject = (changes: ProjectChanges) => Promise<SaveProjectOutcome>;
@@ -30,6 +31,7 @@ export type SaveProject = (changes: ProjectChanges) => Promise<SaveProjectOutcom
 export interface ProjectFormProps {
   readonly saved: ProjectChanges;
   readonly timezones: readonly string[];
+  readonly currencies: readonly CurrencyOption[];
   readonly save: SaveProject;
 }
 
@@ -75,7 +77,7 @@ function useProblemText() {
   };
 }
 
-export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
+export function ProjectForm({ saved, timezones, currencies, save }: ProjectFormProps) {
   const t = useT();
   const router = useRouter();
   const ids = useId();
@@ -84,6 +86,7 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
   const [name, setName] = useState(initial.name);
   const [rows, setRows] = useState<readonly OriginRow[]>(rowsOf(initial.origins));
   const [timezone, setTimezone] = useState(initial.timezone);
+  const [currency, setCurrency] = useState(initial.currency);
   const [problems, setProblems] = useState<ProjectDraftProblems>({});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
@@ -99,6 +102,7 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
     name,
     origins: rows.map((row) => row.value),
     timezone,
+    currency,
   };
 
   const edited = () => {
@@ -281,6 +285,31 @@ export function ProjectForm({ saved, timezones, save }: ProjectFormProps) {
             {t('projectForm.timezoneInvalid')}
           </p>
         )}
+      </div>
+
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <label htmlFor={fieldId('currency')} className={LABEL}>
+          {t('projectForm.currency')}
+        </label>
+        <SelectField
+          id={fieldId('currency')}
+          value={currency}
+          onChange={(event) => {
+            edited();
+            setCurrency(event.target.value);
+          }}
+          aria-describedby={fieldId('currency-note')}
+          className={INPUT}
+        >
+          {currencies.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.label}
+            </option>
+          ))}
+        </SelectField>
+        <p id={fieldId('currency-note')} className={NOTE}>
+          {t('projectForm.currencyNote')}
+        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">

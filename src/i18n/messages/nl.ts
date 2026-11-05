@@ -257,6 +257,7 @@ export const nl = translation({
       heading: 'Project',
       name: 'Naam',
       timezone: 'Tijdzone',
+      currency: 'Valuta',
       created: 'Aangemaakt',
       createdOn: 'Aangemaakt op {date}',
     },
@@ -311,6 +312,9 @@ export const nl = translation({
     timezone: 'Tijdzone',
     timezoneNote:
       'De dagen en uren in de rapporten en in de wekelijkse samenvatting volgen deze tijdzone.',
+    currency: 'Valuta',
+    currencyNote:
+      'De omzet die de site verstuurt, wordt in deze valuta gelezen. Wisselen rekent niets om.',
     save: 'Wijzigingen opslaan',
     saving: 'Opslaan…',
     saved: 'Opgeslagen',

@@ -18,6 +18,7 @@ const CHANGES = {
   allowedOrigins: ['https://shop.example.com'],
   timezone: 'America/Sao_Paulo',
   conversionEvent: null,
+  currency: 'BRL',
 };
 
 function refusal(code: string, status = 409) {
@@ -88,6 +89,7 @@ describe('HttpProjectManagementService update', () => {
         name: 'Shop',
         allowed_origins: ['https://shop.example.com'],
         timezone: 'America/Sao_Paulo',
+        currency: 'BRL',
       },
     ]);
   });

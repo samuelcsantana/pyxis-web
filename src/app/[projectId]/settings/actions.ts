@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { CURRENCY_CODE_PATTERN } from '@/domain/currency';
 import { z } from 'zod';
 import {
   ACCESS_TOKEN_LIFETIMES,
@@ -56,6 +57,7 @@ const projectChangesSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_PROJECT_NAME_LENGTH),
   allowedOrigins: z.array(z.string().min(1)).min(1).max(MAX_ALLOWED_ORIGINS),
   timezone: z.string().min(1),
+  currency: z.string().regex(CURRENCY_CODE_PATTERN),
 });
 const projectKeyKindSchema = z.enum(PROJECT_KEY_KINDS);
 const projectKeyIdSchema = z.uuid();

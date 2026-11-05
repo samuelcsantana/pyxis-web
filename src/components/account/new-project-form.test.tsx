@@ -4,7 +4,7 @@ import { CLIENT_NAMESPACES, pickNamespaces } from '@/i18n/messages';
 import { en } from '@/i18n/messages/en';
 import { MessagesProvider } from '@/i18n/messages-provider';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { CreateProjectOutcome, ProjectChanges } from '@/domain/project-management';
+import type { CreateProjectOutcome, NewProjectChanges } from '@/domain/project-management';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
 import { installHref } from '@/components/shell/screens';
 import { CREATE_PROJECT_MIN_BUSY_MS, FALLBACK_TIME_ZONE, NewProjectForm } from './new-project-form';
@@ -27,7 +27,7 @@ function field(name: string) {
   return screen.getByRole('textbox', { name });
 }
 
-function renderForm(create: (changes: ProjectChanges) => Promise<CreateProjectOutcome>) {
+function renderForm(create: (changes: NewProjectChanges) => Promise<CreateProjectOutcome>) {
   return renderWithMessages(
     <NewProjectForm timezones={TIMEZONES} projectLimit={3} create={create} />,
   );
@@ -45,7 +45,7 @@ describe('NewProjectForm', () => {
   });
 
   it("starts in the browser's time zone, creates the project and goes to its installation", async () => {
-    const create = vi.fn<(changes: ProjectChanges) => Promise<CreateProjectOutcome>>(() =>
+    const create = vi.fn<(changes: NewProjectChanges) => Promise<CreateProjectOutcome>>(() =>
       Promise.resolve({ kind: 'created', project: { projectId: 'p2', publicKey: 'pyxis_pk_x' } }),
     );
     renderWithMessages(
@@ -93,7 +93,7 @@ describe('NewProjectForm', () => {
   });
 
   it('names each problem under its field and sends nothing', async () => {
-    const create = vi.fn<(changes: ProjectChanges) => Promise<CreateProjectOutcome>>();
+    const create = vi.fn<(changes: NewProjectChanges) => Promise<CreateProjectOutcome>>();
     renderForm(create);
 
     fireEvent.change(field('Conversion event (optional)'), { target: { value: 'Sign Up' } });

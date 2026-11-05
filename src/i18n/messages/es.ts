@@ -260,6 +260,7 @@ export const es = translation({
       heading: 'Proyecto',
       name: 'Nombre',
       timezone: 'Zona horaria',
+      currency: 'Moneda',
       created: 'Creado',
       createdOn: 'Creado el {date}',
     },
@@ -312,6 +313,9 @@ export const es = translation({
     removeOrigin: 'Quitar el origen {number}',
     timezone: 'Zona horaria',
     timezoneNote: 'Los días y las horas de los informes y del resumen semanal siguen esta zona.',
+    currency: 'Moneda',
+    currencyNote:
+      'Los ingresos que envía el sitio se leen en esta moneda. Cambiarla no convierte nada.',
     save: 'Guardar los cambios',
     saving: 'Guardando…',
     saved: 'Guardado',

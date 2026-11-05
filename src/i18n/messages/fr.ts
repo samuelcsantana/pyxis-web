@@ -261,6 +261,7 @@ export const fr = translation({
       heading: 'Projet',
       name: 'Nom',
       timezone: 'Fuseau horaire',
+      currency: 'Devise',
       created: 'Créé',
       createdOn: 'Créé le {date}',
     },
@@ -316,6 +317,9 @@ export const fr = translation({
     timezone: 'Fuseau horaire',
     timezoneNote:
       'Les jours et les heures des rapports et du récapitulatif hebdomadaire le suivent.',
+    currency: 'Devise',
+    currencyNote:
+      'Les revenus envoyés par le site sont lus dans cette devise. En changer ne convertit rien.',
     save: 'Enregistrer',
     saving: 'Enregistrement…',
     saved: 'Enregistré',

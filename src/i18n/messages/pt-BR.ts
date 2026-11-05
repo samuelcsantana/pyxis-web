@@ -260,6 +260,7 @@ export const ptBR = translation({
       heading: 'Projeto',
       name: 'Nome',
       timezone: 'Fuso horário',
+      currency: 'Moeda',
       created: 'Criado em',
       createdOn: 'Criado em {date}',
     },
@@ -312,6 +313,9 @@ export const ptBR = translation({
     removeOrigin: 'Remover a origem {number}',
     timezone: 'Fuso horário',
     timezoneNote: 'Os dias e horas dos relatórios e do resumo semanal seguem esse fuso.',
+    currency: 'Moeda',
+    currencyNote:
+      'A receita que o site envia é lida nesta moeda. Trocar a moeda não converte nada.',
     save: 'Salvar alterações',
     saving: 'Salvando…',
     saved: 'Salvo',
