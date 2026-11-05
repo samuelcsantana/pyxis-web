@@ -14,6 +14,7 @@ export const DASHBOARD_FILTER_PARAMETERS = [
   'city',
   'source',
   'campaign',
+  'reached_goal',
   'failed',
 ] as const;
 

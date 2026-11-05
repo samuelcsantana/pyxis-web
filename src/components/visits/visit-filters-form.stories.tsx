@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { NO_VISIT_FILTERS } from '@/domain/visits';
 import { VisitFiltersForm } from './visit-filters-form';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { english } from '@/test-utils/english';
 
 const meta = {
@@ -16,6 +17,7 @@ const meta = {
     problems: [],
     clearHref: null,
     countsUniqueVisitors: true,
+    goals: DEMO_STORE.goals,
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },
   decorators: [
@@ -50,6 +52,7 @@ export const Filtered: Story = {
       campaign: 'spring_sale',
       route: 'POST /orders',
       visitors: 'day',
+      reachedGoal: 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703',
       failed: true,
     },
     clearHref: '/demo/visits?range=30d',
@@ -57,6 +60,8 @@ export const Filtered: Story = {
 };
 
 export const WithoutUniqueVisitors: Story = { args: { countsUniqueVisitors: false } };
+
+export const WithoutGoals: Story = { args: { goals: [] } };
 
 export const FiltersLeftOut: Story = {
   args: {
@@ -96,7 +101,7 @@ export const FilteredOnAPhone: Story = {
   globals: PHONE,
   play: async ({ canvasElement }) => {
     await expect(
-      within(canvasElement).getByRole('button', { name: 'Filters · 15 active' }),
+      within(canvasElement).getByRole('button', { name: 'Filters · 16 active' }),
     ).toHaveAttribute('aria-expanded', 'true');
   },
 };

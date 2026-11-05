@@ -2,6 +2,7 @@ import { spanKeeps, type VisitFilters, type VisitsReport, type VisitsWire } from
 import { visitsResponseSchema } from '@/domain/visits.schema';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
+import type { DemoProject } from '../demo/demo-catalog';
 import { demoVisitorOfVisit } from '../demo/demo-visitor-kinds';
 import { API_REQUEST, type DemoEventRecord, type DemoVisitRecord } from '../demo/demo-records';
 import {
@@ -79,26 +80,28 @@ function madeRequest(visit: DemoVisitRecord, route: string | null, failed: boole
   return visit.events.some((event) => isRequestTo(event, route, failed));
 }
 
+type ListedProject = Pick<DemoProject, 'timezone' | 'countsUniqueVisitors' | 'goals'>;
+
 function matcherOf(
   filters: VisitFilters,
-  countsUniqueVisitors: boolean,
+  project: ListedProject,
 ): (visit: DemoVisitRecord) => boolean {
-  const matchesDashboard = dashboardMatcherOf({ ...filters, failed: false });
+  const matchesDashboard = dashboardMatcherOf({ ...filters, failed: false }, project.goals);
   return (visit) =>
     matchesDashboard(visit) &&
     madeRequest(visit, filters.route, filters.failed) &&
-    spanKeeps(filters.visitors, demoVisitorOfVisit(countsUniqueVisitors, visit));
+    spanKeeps(filters.visitors, demoVisitorOfVisit(project.countsUniqueVisitors, visit));
 }
 
 export function demoVisitsPage(
   visits: readonly DemoVisitRecord[],
   filters: VisitFilters,
   cursor: string | null,
-  timezone: string,
-  countsUniqueVisitors: boolean,
+  project: ListedProject,
 ): VisitsWire {
+  const { countsUniqueVisitors, timezone } = project;
   const matching = visits
-    .filter(matcherOf(filters, countsUniqueVisitors))
+    .filter(matcherOf(filters, project))
     .map((visit): Listed => ({
       visit,
       cursor: `${isoAt(startOf(visit))}${CURSOR_SEPARATOR}${visit.sessionId}`,
@@ -123,13 +126,7 @@ export function demoVisitsWire(
   now: Date,
 ): VisitsWire {
   const project = demoProjectOf(projectId);
-  return demoVisitsPage(
-    demoVisitsIn(project, demoScopeOf(range, now)),
-    filters,
-    cursor,
-    project.timezone,
-    project.countsUniqueVisitors,
-  );
+  return demoVisitsPage(demoVisitsIn(project, demoScopeOf(range, now)), filters, cursor, project);
 }
 
 export function demoVisitsReport(

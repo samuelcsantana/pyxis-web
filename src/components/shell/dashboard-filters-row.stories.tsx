@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { english } from '@/test-utils/english';
 import { DashboardFiltersRow } from './dashboard-filters-row';
 
@@ -10,6 +11,7 @@ const meta = {
     projectId: 'demo',
     screen: 'overview',
     search: { range: '30d', device: 'mobile' },
+    goals: DEMO_STORE.goals,
     i18n: english,
   },
   parameters: { layout: 'fullscreen', nextjs: { appDirectory: true } },
@@ -31,6 +33,7 @@ export const ManyFilters: Story = {
       browser: 'safari',
       os: 'ios',
       country: 'BR',
+      reached_goal: 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703',
       failed: 'true',
     },
   },

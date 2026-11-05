@@ -15,6 +15,7 @@ describe('DashboardFiltersRow', () => {
         projectId="p1"
         screen="overview"
         search={{ range: '7d', metric: 'visits' }}
+        goals={[]}
         i18n={english}
       />,
     );
@@ -28,6 +29,7 @@ describe('DashboardFiltersRow', () => {
         projectId="p1"
         screen="features"
         search={{ range: '7d', kind: 'events', q: 'cta', device: 'mobile', os: 'ios' }}
+        goals={[]}
         i18n={english}
       />,
     );
@@ -50,6 +52,7 @@ describe('DashboardFiltersRow', () => {
         projectId="p1"
         screen="devices"
         search={{ browser: 'edge' }}
+        goals={[]}
         i18n={english}
       />,
     );
@@ -58,6 +61,37 @@ describe('DashboardFiltersRow', () => {
       'href',
       '/p1/devices',
     );
+  });
+
+  it('names the reached goal of the project, and drops one the project no longer has', () => {
+    const goal = {
+      id: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
+      name: 'Sign-up',
+      kind: 'event',
+      target: 'signup_completed',
+      position: 1,
+    } as const;
+    const { rerender } = render(
+      <DashboardFiltersRow
+        projectId="p1"
+        screen="devices"
+        search={{ reached_goal: goal.id }}
+        goals={[goal]}
+        i18n={english}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Remove Reached goal: Sign-up' })).toBeInTheDocument();
+    rerender(
+      <DashboardFiltersRow
+        projectId="p1"
+        screen="devices"
+        search={{ reached_goal: goal.id }}
+        goals={[]}
+        i18n={english}
+      />,
+    );
+    expect(screen.queryByRole('region', { name: 'Filters' })).toBeNull();
   });
 });
 

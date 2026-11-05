@@ -108,6 +108,7 @@ describe('HttpVisitsService', () => {
         campaign: 'spring_sale',
         route: 'POST /orders',
         visitors: 'day',
+        reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
         failed: true,
       },
       '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
@@ -131,6 +132,7 @@ describe('HttpVisitsService', () => {
       campaign: 'spring_sale',
       route: 'POST /orders',
       visitors: 'day',
+      reached_goal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
       failed: 'true',
       cursor: '2026-10-05T09:30:04.000Z~506cf1d6-18b8-4b20-87a4-8ba68956bf5b',
     });

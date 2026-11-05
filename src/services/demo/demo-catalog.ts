@@ -1,5 +1,6 @@
 import type { Channel } from '@/domain/acquisition';
 import type { FunnelStep } from '@/domain/funnel';
+import type { Goal } from '@/domain/goals';
 import type { SourceMessages } from '@/i18n/messages';
 import type { DemoVisit } from './demo-visits';
 
@@ -75,6 +76,7 @@ export interface DemoProject {
   readonly nameKey: DemoProjectNameKey;
   readonly timezone: string;
   readonly conversionEvent: string | null;
+  readonly goals: readonly Goal[];
   readonly countsUniqueVisitors: boolean;
   readonly visitsPerPageView: number;
   readonly signedInStage: number | null;

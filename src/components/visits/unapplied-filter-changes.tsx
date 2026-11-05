@@ -5,7 +5,7 @@ import {
   changedVisitFilterFields,
   VISIT_FILTER_FIELDS,
   type VisitFilterField,
-} from '@/domain/applied-visit-filters';
+} from '@/domain/visit-filter-fields';
 import { TEXT_LINK } from '@/components/ui/control-classes';
 
 export interface UnappliedFilterChangesProps {

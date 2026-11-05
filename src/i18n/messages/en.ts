@@ -1130,6 +1130,12 @@ export const en = {
       previousDaysUntil: 'vs. previous {days} days, same filters, until {time}',
     },
   },
+  goals: {
+    problems: {
+      unknownGoal: 'The goal in the address no longer exists, so the first goal is counted.',
+      unknownReachedGoal: 'The goal in the filter no longer exists, so it was left out.',
+    },
+  },
   rowFilter: {
     add: 'Filter by {value}',
     title: 'Filter every screen by {value}',
@@ -1602,6 +1608,7 @@ export const en = {
       campaign: 'A campaign has at most {max} characters.',
       route: 'A request is a method and a route, as POST /orders/:id.',
       visitors: 'This project does not count unique visitors: turn it on in Settings.',
+      reachedGoal: 'A goal is chosen from the list.',
     },
     accountLink: '{user}, open the timeline of this user',
     shortAccountLink: '{shown}, open the timeline of user {user}',
@@ -1647,6 +1654,8 @@ export const en = {
       },
       visitors: 'Visitors',
       anyVisitor: 'All visits',
+      reachedGoal: 'Reached goal',
+      anyGoal: 'Any visit',
       visitorSpans: {
         day: 'Unique visitors of each day',
         month: 'Unique visitors of each month',

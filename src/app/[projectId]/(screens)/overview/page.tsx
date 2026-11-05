@@ -41,6 +41,7 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -171,7 +172,10 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
   const period = resolvePeriod(search, project.timezone, now);
   const today = todayIn(project.timezone, now);
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const {
+    reading: { filters },
+    goals,
+  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
   const scope = { from: period.from, to: period.to, filters };
   const [report, timeOfDay] = await readOrSignIn(() => {
     const service = createOverviewService();
@@ -202,7 +206,7 @@ export default async function OverviewPage({ params, searchParams }: OverviewPag
           kpis={kpis}
           metric={metric}
           conversionEvent={project.conversionEvent}
-          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
           endsToday={compared.endsToday}
           filteredHref={(screen, filter) => linkWith(screenHref(project.id, screen, query), filter)}
           downloads={overviewDownloads(project.id, query, i18n)}

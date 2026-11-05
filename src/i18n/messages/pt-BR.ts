@@ -1146,6 +1146,12 @@ export const ptBR = translation({
       previousDaysUntil: 'vs. os {days} dias anteriores, mesmos filtros, até {time}',
     },
   },
+  goals: {
+    problems: {
+      unknownGoal: 'A meta do endereço não existe mais, então a primeira meta é contada.',
+      unknownReachedGoal: 'A meta do filtro não existe mais, então ele ficou de fora.',
+    },
+  },
   rowFilter: {
     add: 'Filtrar por {value}',
     title: 'Filtrar todas as telas por {value}',
@@ -1617,6 +1623,7 @@ export const ptBR = translation({
       campaign: 'Uma campanha tem no máximo {max} caracteres.',
       route: 'Uma requisição é um método e uma rota, como POST /orders/:id.',
       visitors: 'Este projeto não conta visitantes únicos: ligue em Configurações.',
+      reachedGoal: 'A meta é escolhida da lista.',
     },
     accountLink: '{user}, abrir a linha do tempo deste usuário',
     shortAccountLink: '{shown}, abrir a linha do tempo do usuário {user}',
@@ -1662,6 +1669,8 @@ export const ptBR = translation({
       },
       visitors: 'Visitantes',
       anyVisitor: 'Todas as visitas',
+      reachedGoal: 'Atingiu a meta',
+      anyGoal: 'Qualquer visita',
       visitorSpans: {
         day: 'Visitantes únicos de cada dia',
         month: 'Visitantes únicos de cada mês',

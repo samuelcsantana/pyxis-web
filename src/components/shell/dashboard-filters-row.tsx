@@ -8,6 +8,8 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
+import { type Goal, withKnownReachedGoal } from '@/domain/goals';
 import type { I18n } from '@/i18n/i18n';
 import { AppliedVisitFilters } from '@/components/visits/applied-visit-filters';
 import { carriedParameters, type ScreenSearch } from './screen-search';
@@ -21,6 +23,7 @@ export interface DashboardFiltersRowProps {
   readonly projectId: string;
   readonly screen: ScreenSlug;
   readonly search: ScreenSearch;
+  readonly goals: readonly Goal[];
   readonly i18n: I18n;
 }
 
@@ -39,8 +42,14 @@ export function screenOwnQuery(screen: ScreenSlug, search: ScreenSearch): string
   return query.toString();
 }
 
-export function DashboardFiltersRow({ projectId, screen, search, i18n }: DashboardFiltersRowProps) {
-  const { filters } = dashboardFiltersOf(search, i18n);
+export function DashboardFiltersRow({
+  projectId,
+  screen,
+  search,
+  goals,
+  i18n,
+}: DashboardFiltersRowProps) {
+  const { filters } = withKnownReachedGoal(dashboardFiltersOf(search, i18n), goals, i18n);
   if (!hasDashboardFilters(filters)) {
     return null;
   }
@@ -53,7 +62,7 @@ export function DashboardFiltersRow({ projectId, screen, search, i18n }: Dashboa
   return (
     <div className="border-b border-line bg-bg px-4 py-2.5 sm:px-8">
       <AppliedVisitFilters
-        applied={appliedVisitFilters({ ...filters, route: null, visitors: null }, i18n)}
+        applied={appliedVisitFilters({ ...filters, route: null, visitors: null }, goals, i18n)}
         removeHref={hrefWith}
         clearHref={hrefWith(NO_DASHBOARD_FILTERS)}
         label={i18n.t('dashboardFilters.label')}
@@ -74,8 +83,19 @@ export interface FiltersSlotProps {
 export function filtersSlot(screen: ScreenSlug) {
   return async function FiltersSlot({ params, searchParams }: FiltersSlotProps) {
     const [{ projectId }, search, i18n] = await Promise.all([params, searchParams, getI18n()]);
+    const { goals } = await withGoalsWhenFiltered(
+      projectId,
+      dashboardFiltersOf(search, i18n),
+      i18n,
+    );
     return (
-      <DashboardFiltersRow projectId={projectId} screen={screen} search={search} i18n={i18n} />
+      <DashboardFiltersRow
+        projectId={projectId}
+        screen={screen}
+        search={search}
+        goals={goals}
+        i18n={i18n}
+      />
     );
   };
 }

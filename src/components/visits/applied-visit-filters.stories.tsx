@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { appliedVisitFilters } from '@/domain/applied-visit-filters';
 import { NO_VISIT_FILTERS, type VisitFilters, visitFilterParameters } from '@/domain/visits';
 import { english } from '@/test-utils/english';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { AppliedVisitFilters } from './applied-visit-filters';
 
 const FILTERS: VisitFilters = {
@@ -10,6 +11,7 @@ const FILTERS: VisitFilters = {
   event: 'signup_completed',
   channel: 'paid',
   device: 'mobile',
+  reachedGoal: 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703',
   failed: true,
 };
 
@@ -22,7 +24,7 @@ const meta = {
   component: AppliedVisitFilters,
   tags: ['autodocs'],
   args: {
-    applied: appliedVisitFilters(FILTERS, english),
+    applied: appliedVisitFilters(FILTERS, DEMO_STORE.goals, english),
     removeHref,
     clearHref: '/demo/visits?range=30d',
     i18n: english,
@@ -36,7 +38,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const OneFilter: Story = {
-  args: { applied: appliedVisitFilters({ ...NO_VISIT_FILTERS, channel: 'email' }, english) },
+  args: { applied: appliedVisitFilters({ ...NO_VISIT_FILTERS, channel: 'email' }, [], english) },
 };
 
 export const NoFilter: Story = { args: { applied: [] } };

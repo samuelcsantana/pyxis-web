@@ -34,7 +34,7 @@ describe('AppliedVisitFilters', () => {
   it('lists each applied filter with a link that removes only it, and one that clears all', () => {
     render(
       <AppliedVisitFilters
-        applied={appliedVisitFilters(APPLIED, english)}
+        applied={appliedVisitFilters(APPLIED, [], english)}
         removeHref={removeHref}
         clearHref="/p1/visits?range=7d"
         i18n={english}

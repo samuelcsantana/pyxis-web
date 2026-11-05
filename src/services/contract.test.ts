@@ -58,6 +58,8 @@ import { demoAccountsWire } from './accounts/mock-accounts-service';
 import { closeAccountWire } from '@/domain/accounts.schema';
 import { DEMO_EXPORT_FILE, demoExportWire } from './exports/mock-exports-service';
 import { LIVE_DEMO_URL } from '@/lib/site';
+import { goalChangesWire } from '@/domain/goals.schema';
+import { demoGoalsSummaryWire, demoGoalsWire, demoGoalWire } from './demo/demo-goals';
 
 const CONTRACT_FILE = 'contract/openapi.json';
 const RANGE = { from: '2026-09-06', to: '2026-10-05' };
@@ -478,6 +480,31 @@ describe('the API contract copied from pyxis-api', () => {
     expect(validate(DEMO_EMAIL_PREFERENCES_WIRE), JSON.stringify(validate.errors)).toBe(true);
     expect(validate(emailPreferencesWire({ weeklyDigest: false }))).toBe(true);
     expect(validate({ weekly_digest: 'yes' })).toBe(false);
+  });
+
+  it('accepts the demo goals, their summary and the bodies the goals settings send', () => {
+    const list = contractSchema('GoalList');
+    const summary = contractSchema('GoalsSummary');
+    const goal = contractSchema('Goal');
+    const newGoal = contractSchema('NewGoal');
+    const changes = contractSchema('GoalChanges');
+
+    for (const project of DEMO_PROJECTS) {
+      expect(list(demoGoalsWire(project.id)), JSON.stringify(list.errors)).toBe(true);
+      const answer = demoGoalsSummaryWire(project.id, { ...RANGE, filters: NO_VISIT_FILTERS }, NOW);
+      expect(summary(answer), JSON.stringify(summary.errors)).toBe(true);
+    }
+    for (const created of DEMO_STORE.goals) {
+      expect(goal(demoGoalWire(created)), JSON.stringify(goal.errors)).toBe(true);
+    }
+    for (const body of [
+      goalChangesWire({ name: 'Sign-up', kind: 'event', target: 'signup_completed' }),
+      goalChangesWire({ name: 'Thanks', kind: 'page', target: '/thank-you/*' }),
+    ]) {
+      expect(newGoal(body), JSON.stringify(newGoal.errors)).toBe(true);
+      expect(changes(body), JSON.stringify(changes.errors)).toBe(true);
+    }
+    expect(newGoal({ name: 'Both', event: 'a', path: '/a' })).toBe(false);
   });
 
   it('would catch a body that drifted from the contract', () => {
