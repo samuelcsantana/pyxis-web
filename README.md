@@ -70,6 +70,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   the URL, and each with a CSV export of what it shows.
 - **Honest numbers.** A range that ends today is compared with the previous period up to the same
   time of day, a conversion rate counts visits, and one word names one idea on every screen.
+- **Goals.** Up to ten per project, each an event or a page path with `*`: the Overview picks the
+  goal its Conversions card counts and tables every goal, and any screen filters by a reached goal.
 - **Unique visitors without an identifier.** An option per project: the Overview counts unique
   visitors per day and per month, new and returning, and says when a figure is a sum of days.
 - **What changed since the last read.** The menu counts what arrived for each screen, a screen
