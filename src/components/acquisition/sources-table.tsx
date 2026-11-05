@@ -16,9 +16,9 @@ import { ConversionCells, ConversionColumns } from './conversion-columns';
 
 export interface SourcesTableProps {
   readonly rows: readonly SourceRow[];
-  readonly channelVisitsHref: (channel: Channel) => string;
+  readonly channelVisitsHref: (channel: Channel) => string | null;
   readonly i18n: I18n;
-  readonly sourceVisitsHref: (source: string) => string;
+  readonly sourceVisitsHref: (source: string) => string | null;
   readonly sourceFilterOf?: (row: SourceRow) => RowFilter | null;
   readonly channelFilterOf?: (channel: Channel) => RowFilter | null;
 }

@@ -1,18 +1,10 @@
-import { EngagementPanels } from '@/components/features/engagement-panels';
+import { FeaturesReportView } from '@/components/features/features-report-view';
 import { screenRowFilters } from '@/lib/row-filters';
-import { eventLabel } from '@/domain/metrics';
-import { FeatureSearch } from '@/components/features/feature-search';
-import { FeatureTable } from '@/components/features/feature-table';
-import { FeatureTabs } from '@/components/features/feature-tabs';
 import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref } from '@/components/shell/screens';
-import { CsvDownloads } from '@/components/ui/csv-downloads';
 import {
-  FEATURE_KINDS,
-  type FeatureKind,
   featureKindOf,
-  featureRows,
   type FeatureSearch as FeatureSearchParameters,
   searchQueryOf,
 } from '@/domain/features';
@@ -28,8 +20,6 @@ import {
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
 import { withGoalsWhenFiltered } from '@/lib/project-goals';
-import { SECTION_STACK } from '@/components/ui/panel-classes';
-import { Reveal } from '@/components/ui/reveal';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -65,83 +55,45 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
     ]);
   });
   const filteredQuery = withDashboardFilters(periodQuery(period), filters);
-  const rowFilter = screenRowFilters(project.id, 'features', search, filters, i18n);
   const basePath = screenHref(project.id, 'features');
-  const kindHref = (target: FeatureKind) =>
-    `${basePath}?${withKeptParameters(filteredQuery, { kind: target })}`;
   const kept: Readonly<Record<string, string>> = query === '' ? { kind } : { kind, q: query };
+  const range = { from: period.from, to: period.to };
   return (
     <ScreenContent
       readAt={now.getTime()}
       filtered={hasDashboardFilters(filters)}
       className={`flex ${SCREEN_WIDTH} flex-col gap-3.5 p-4 sm:gap-5 sm:px-8 sm:pt-7 sm:pb-12`}
     >
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <FeatureTabs
-          current={kind}
-          tabs={FEATURE_KINDS.map((target) => ({
-            kind: target,
-            label: i18n.t(`features.kinds.${target}`),
-            href: kindHref(target),
-          }))}
-          i18n={i18n}
-        />
-        <FeatureSearch
-          action={basePath}
-          keep={{ ...Object.fromEntries(new URLSearchParams(filteredQuery)), kind }}
-          query={query}
-          label={i18n.t(`features.search.${kind}`)}
-          clearHref={kindHref(kind)}
-          i18n={i18n}
-        />
-      </div>
-      <Reveal show={kind} className={SECTION_STACK}>
-        <FeatureTable
-          kind={kind}
-          rows={featureRows(report.items, kind, query, i18n)}
-          query={query}
-          visitsHref={(name) =>
-            linkWith(
-              screenHref(project.id, 'visits', filteredQuery),
-              kind === 'events' ? { event: name } : { path: name },
-            )
-          }
-          filterOf={(name) =>
-            kind === 'events'
-              ? rowFilter({ event: name }, eventLabel(name))
-              : rowFilter({ path: name }, name)
-          }
-          loadProperties={
-            kind === 'events'
-              ? loadPropertyBreakdown.bind(
-                  null,
-                  project.id,
-                  { from: period.from, to: period.to },
-                  dashboardFilterParameters(filters),
-                )
-              : undefined
-          }
-          loadSummary={
-            kind === 'events'
-              ? loadPropertySummary.bind(
-                  null,
-                  project.id,
-                  { from: period.from, to: period.to },
-                  dashboardFilterParameters(filters),
-                )
-              : undefined
-          }
-          i18n={i18n}
-        />
-        {engagement === null ? null : (
-          <EngagementPanels
-            report={engagement}
-            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
-            i18n={i18n}
-          />
-        )}
-      </Reveal>
-      <CsvDownloads
+      <FeaturesReportView
+        kind={kind}
+        query={query}
+        report={report}
+        engagement={engagement}
+        basePath={basePath}
+        filteredQuery={filteredQuery}
+        periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
+        visitsHref={(name) =>
+          linkWith(
+            screenHref(project.id, 'visits', filteredQuery),
+            kind === 'events' ? { event: name } : { path: name },
+          )
+        }
+        rowFilter={screenRowFilters(project.id, 'features', search, filters, i18n)}
+        loadProperties={
+          kind === 'events'
+            ? loadPropertyBreakdown.bind(
+                null,
+                project.id,
+                range,
+                dashboardFilterParameters(filters),
+              )
+            : undefined
+        }
+        loadSummary={
+          kind === 'events'
+            ? loadPropertySummary.bind(null, project.id, range, dashboardFilterParameters(filters))
+            : undefined
+        }
         downloads={[
           {
             label: featuresTableLabel(kind, i18n),
@@ -150,7 +102,6 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         ]}
         i18n={i18n}
       />
-      <p className="text-xs leading-[18px] text-muted">{i18n.t('features.footnote')}</p>
     </ScreenContent>
   );
 }

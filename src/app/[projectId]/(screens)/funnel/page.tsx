@@ -1,36 +1,29 @@
+import { FunnelReportView } from '@/components/funnel/funnel-report-view';
 import { BuildAFunnel } from '@/components/funnel/build-a-funnel';
 import { FunnelEditor } from '@/components/funnel/funnel-editor';
 import { FunnelModes } from '@/components/funnel/funnel-modes';
 import { FunnelSegmentsPanel } from '@/components/funnel/funnel-segments-panel';
-import { FunnelSteps } from '@/components/funnel/funnel-steps';
 import { FUNNEL_SUBJECTS_ID, FunnelSubjects } from '@/components/funnel/funnel-subjects';
 import { ScreenContent } from '@/components/shell/screen-content';
 import { withKeptParameters } from '@/components/shell/kept-parameters';
 import { linkWith, screenHref } from '@/components/shell/screens';
-import { StatCard } from '@/components/ui/stat-card';
 import {
-  biggestDropOff,
   countedSteps,
   FUNNEL_MODES,
   type FunnelMode,
   funnelModeOf,
-  funnelRows,
   type FunnelSearch,
   type FunnelStep,
-  overallConversion,
   serializeSteps,
-  timeToFinish,
 } from '@/domain/funnel';
 import {
   drillHeading,
   drillParameters,
   type FunnelDrill,
   type FunnelDrillSearch,
-  type FunnelOutcome,
   type FunnelSubjectsPage,
   funnelDrillOf,
   funnelSubjectsView,
-  withDrillLinks,
 } from '@/domain/funnel-subjects';
 import { funnelStepsOf } from '@/domain/funnel.schema';
 import {
@@ -49,7 +42,6 @@ import {
 import { projectCurrency } from '@/domain/currency';
 import { getI18n } from '@/i18n/get-messages';
 import { withGoalsWhenFiltered } from '@/lib/project-goals';
-import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { screenMetadata } from '@/lib/screen-metadata';
@@ -229,71 +221,4 @@ function newestHref(
   drillHref: (parameters: Parameters) => string,
 ): string | null {
   return drill.cursor === null ? null : drillHref(drillParameters(drill.step, drill.outcome));
-}
-
-interface FunnelReportViewProps {
-  readonly counted: ReturnType<typeof countedSteps>;
-  readonly secondsToFinish: number | null;
-  readonly currency: string;
-  readonly mode: FunnelMode;
-  readonly editor: React.ReactNode;
-  readonly subjects: React.ReactNode;
-  readonly drill: FunnelDrill | null;
-  readonly drillHref: (step: number, outcome: FunnelOutcome) => string;
-  readonly i18n: I18n;
-}
-
-function FunnelReportView({
-  counted,
-  secondsToFinish,
-  currency,
-  mode,
-  editor,
-  subjects,
-  drill,
-  drillHref,
-  i18n,
-}: FunnelReportViewProps) {
-  const overall = overallConversion(counted, mode, i18n);
-  const drop = biggestDropOff(counted, i18n);
-  const finish = timeToFinish(secondsToFinish, counted.length, i18n);
-  return (
-    <>
-      {editor}
-      <div className="grid gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] sm:gap-4">
-        <StatCard
-          id="overall-conversion"
-          label={i18n.t('funnel.page.overallConversion')}
-          value={overall.value}
-          note={overall.note}
-        />
-        <StatCard
-          id="biggest-drop-off"
-          label={i18n.t('funnel.page.biggestDropOff')}
-          value={drop.value}
-          note={drop.note}
-        />
-        {finish === null ? null : (
-          <StatCard
-            id="time-to-finish"
-            label={i18n.t('funnel.timeToFinish')}
-            value={finish.value}
-            note={finish.note}
-          />
-        )}
-      </div>
-      <FunnelSteps
-        rows={withDrillLinks(
-          funnelRows(counted, currency, i18n),
-          counted.map((step) => step.count),
-          drill,
-          drillHref,
-          i18n,
-        )}
-        mode={mode}
-        i18n={i18n}
-      />
-      {subjects}
-    </>
-  );
 }

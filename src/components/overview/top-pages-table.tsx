@@ -17,7 +17,7 @@ import type { RowFilter } from '@/components/ui/row-filter-link';
 export interface TopPagesTableProps {
   readonly pages: OverviewReport['topPages'];
   readonly totalPageViews: number;
-  readonly visitsHref: (path: string) => string;
+  readonly visitsHref: (path: string) => string | null;
   readonly filterOf?: (path: string) => RowFilter | null;
   readonly i18n: I18n;
 }

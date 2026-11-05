@@ -14,7 +14,7 @@ export interface FeatureTableProps {
   readonly kind: FeatureKind;
   readonly rows: readonly FeatureRow[];
   readonly query: string;
-  readonly visitsHref: (name: string) => string;
+  readonly visitsHref: (name: string) => string | null;
   readonly filterOf?: (name: string) => RowFilter | null;
   readonly loadProperties?: LoadProperties;
   readonly loadSummary?: LoadEventSummary;
@@ -30,7 +30,7 @@ function emptyMessage(kind: FeatureKind, query: string, i18n: I18n): string {
 interface TableRowProps {
   readonly kind: FeatureKind;
   readonly row: FeatureRow;
-  readonly visitsHref: string;
+  readonly visitsHref: string | null;
   readonly visitsPurpose: string;
   readonly filter: RowFilter | null;
   readonly loadProperties: LoadProperties | undefined;
@@ -46,7 +46,7 @@ function TableRow({
   loadProperties,
   loadSummary,
 }: TableRowProps) {
-  if (kind === 'events' && loadProperties !== undefined) {
+  if (kind === 'events' && loadProperties !== undefined && visitsHref !== null) {
     return (
       <ExpandableFeatureRow
         row={row}
