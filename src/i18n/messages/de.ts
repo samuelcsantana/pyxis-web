@@ -1006,6 +1006,18 @@ export const de = translation({
     weeklyDigest: 'Wochenbericht',
     weeklyDigestNote:
       'Jeden Montag die Woche, die am Sonntag in {timezone} endete: Besuche, Conversions, fehlgeschlagene Schreibzugriffe, Top-Seiten und Ereignisse. Jeder Admin entscheidet selbst.',
+    alertsHeading: 'Hinweise',
+    alertsNote:
+      'Jeden Morgen für den Vortag geprüft. Jeder Hinweis kommt höchstens einmal am Tag, und jede Person wählt ihre eigenen.',
+    noEventsAlert: 'Keine Ereignisse',
+    noEventsAlertNote:
+      'Wenn seit 24 Stunden kein Ereignis ankam, bei einer Website mit mindestens 20 Besuchen in der Woche davor.',
+    failedWritesAlert: 'Fehlgeschlagene Schreibzugriffe',
+    failedWritesAlertNote:
+      'Wenn an einem Tag mindestens 10 Schreibzugriffe fehlschlugen, 10 % oder mehr davon, und mindestens doppelt so viele wie in der Woche davor.',
+    conversionDropAlert: 'Rückgang der Conversions',
+    conversionDropAlertNote:
+      'Wenn dein erstes Ziel höchstens halb so oft erreicht wurde wie am gleichen Wochentag eine Woche zuvor, der mindestens 10 hatte.',
     on: 'An',
     off: 'Aus',
     saving: 'Wird gespeichert…',

@@ -993,6 +993,18 @@ export const it = translation({
     weeklyDigest: 'Riepilogo settimanale',
     weeklyDigestNote:
       'Ogni lunedì, la settimana chiusa domenica nel fuso {timezone}: visite, conversioni, scritture fallite, pagine ed eventi principali. Ogni admin sceglie per sé.',
+    alertsHeading: 'Avvisi',
+    alertsNote:
+      'Valutati ogni mattina sul giorno prima. Ogni avviso arriva al massimo una volta al giorno, e ogni persona sceglie i propri.',
+    noEventsAlert: 'Nessun evento',
+    noEventsAlertNote:
+      'Quando non arriva nessun evento da 24 ore, su un sito che ha avuto almeno 20 visite nella settimana prima.',
+    failedWritesAlert: 'Scritture fallite',
+    failedWritesAlertNote:
+      'Quando in un giorno sono fallite almeno 10 scritture, il 10% o più, e almeno il doppio del tasso della settimana prima.',
+    conversionDropAlert: 'Calo delle conversioni',
+    conversionDropAlertNote:
+      'Quando il tuo primo obiettivo è stato raggiunto al massimo la metà delle volte rispetto allo stesso giorno della settimana prima, che ne aveva almeno 10.',
     on: 'Attivo',
     off: 'Disattivo',
     saving: 'Salvataggio…',

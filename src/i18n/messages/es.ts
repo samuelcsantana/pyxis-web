@@ -984,6 +984,18 @@ export const es = translation({
     weeklyDigest: 'Resumen semanal',
     weeklyDigestNote:
       'Cada lunes, la semana que cerró el domingo en {timezone}: visitas, conversiones, escrituras fallidas, páginas más vistas y eventos principales. Cada admin elige por su cuenta.',
+    alertsHeading: 'Alertas',
+    alertsNote:
+      'Se evalúan cada mañana sobre el día anterior. Cada alerta llega como mucho una vez al día, y cada persona elige las suyas.',
+    noEventsAlert: 'Ningún evento',
+    noEventsAlertNote:
+      'Cuando no llega ningún evento en 24 horas, en un sitio que tuvo al menos 20 visitas la semana anterior.',
+    failedWritesAlert: 'Escrituras fallidas',
+    failedWritesAlertNote:
+      'Cuando al menos 10 escrituras fallaron en un día, un 10 % o más de ellas, y al menos el doble de la tasa de la semana anterior.',
+    conversionDropAlert: 'Caída de conversiones',
+    conversionDropAlertNote:
+      'Cuando tu primer objetivo se alcanzó como mucho la mitad de veces que el mismo día de la semana anterior, que tuvo al menos 10.',
     on: 'Activado',
     off: 'Desactivado',
     saving: 'Guardando…',

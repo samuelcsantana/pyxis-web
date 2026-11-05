@@ -959,6 +959,18 @@ export const en = {
     weeklyDigest: 'Weekly digest',
     weeklyDigestNote:
       'Every Monday, the week that closed on Sunday in {timezone}: visits, conversions, failed writes, top pages and events. Each admin chooses for themselves.',
+    alertsHeading: 'Alerts',
+    alertsNote:
+      'Judged each morning on the day before. Each alert comes at most once a day, and each person chooses their own.',
+    noEventsAlert: 'No events',
+    noEventsAlertNote:
+      'When no event has arrived for 24 hours, on a site that had at least 20 visits in the week before.',
+    failedWritesAlert: 'Failed writes',
+    failedWritesAlertNote:
+      'When at least 10 writes failed in a day, 10% or more of them, and at least twice the rate of the week before.',
+    conversionDropAlert: 'Conversion drop',
+    conversionDropAlertNote:
+      'When your first goal was reached at most half as often as on the same weekday a week earlier, which had at least 10.',
     on: 'On',
     off: 'Off',
     saving: 'Saving…',

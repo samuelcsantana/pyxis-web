@@ -975,6 +975,18 @@ export const ptBR = translation({
     weeklyDigest: 'Resumo semanal',
     weeklyDigestNote:
       'Toda segunda-feira, a semana que terminou no domingo em {timezone}: visitas, conversões, escritas com falha, páginas mais vistas e principais eventos. Cada admin escolhe o seu.',
+    alertsHeading: 'Alertas',
+    alertsNote:
+      'Avaliados toda manhã sobre o dia anterior. Cada alerta chega no máximo uma vez por dia, e cada pessoa escolhe os seus.',
+    noEventsAlert: 'Nenhum evento',
+    noEventsAlertNote:
+      'Quando nenhum evento chega há 24 horas, num site que teve pelo menos 20 visitas na semana anterior.',
+    failedWritesAlert: 'Escritas com falha',
+    failedWritesAlertNote:
+      'Quando pelo menos 10 escritas falharam num dia, 10% ou mais delas, e pelo menos o dobro da taxa da semana anterior.',
+    conversionDropAlert: 'Queda de conversões',
+    conversionDropAlertNote:
+      'Quando a sua primeira meta foi atingida no máximo metade das vezes do mesmo dia da semana anterior, que teve pelo menos 10.',
     on: 'Ligado',
     off: 'Desligado',
     saving: 'Salvando…',

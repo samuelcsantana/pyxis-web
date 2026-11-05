@@ -995,6 +995,18 @@ export const nl = translation({
     weeklyDigest: 'Wekelijkse samenvatting',
     weeklyDigestNote:
       'Elke maandag de week die op zondag eindigde in {timezone}: bezoeken, conversies, mislukte schrijfverzoeken, toppagina’s en events. Elke beheerder kiest dit voor zichzelf.',
+    alertsHeading: 'Meldingen',
+    alertsNote:
+      'Elke ochtend beoordeeld over de dag ervoor. Elke melding komt hooguit één keer per dag, en iedereen kiest zijn eigen meldingen.',
+    noEventsAlert: 'Geen events',
+    noEventsAlertNote:
+      'Als er 24 uur geen event is binnengekomen, bij een site met minstens 20 bezoeken in de week ervoor.',
+    failedWritesAlert: 'Mislukte schrijfverzoeken',
+    failedWritesAlertNote:
+      'Als op een dag minstens 10 schrijfverzoeken mislukten, 10% of meer ervan, en minstens het dubbele van het percentage van de week ervoor.',
+    conversionDropAlert: 'Daling van conversies',
+    conversionDropAlertNote:
+      'Als je eerste doel hooguit half zo vaak werd bereikt als op dezelfde weekdag een week eerder, die er minstens 10 had.',
     on: 'Aan',
     off: 'Uit',
     saving: 'Opslaan…',
