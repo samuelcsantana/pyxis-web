@@ -40,7 +40,12 @@ const LOADING: Shown = { kind: 'loading' };
 const LOCKED: Shown = { kind: 'locked' };
 
 function asksForAPassword(card: unknown): boolean {
-  return typeof card === 'object' && card !== null && 'password_required' in card;
+  return (
+    typeof card === 'object' &&
+    card !== null &&
+    'password_required' in card &&
+    card.password_required === true
+  );
 }
 
 class SharedAnswerError extends Error {

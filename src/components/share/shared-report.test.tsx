@@ -115,6 +115,15 @@ describe('SharedReport', () => {
     expect(props.requestsAction).not.toHaveBeenCalled();
   });
 
+  it('opens a link whose card says it needs no password', async () => {
+    const card = { password_required: false, project: { name: 'Shop' } };
+    vi.stubGlobal('fetch', answering({}, card));
+    const { props } = renderReport();
+
+    expect(await screen.findByText(/Rendered/)).toBeInTheDocument();
+    expect(props.requestsAction).toHaveBeenCalledWith(expect.objectContaining({ card }));
+  });
+
   it('says the report could not be loaded when anything else fails', async () => {
     vi.stubGlobal('fetch', answering());
     renderReport({ renderAction: () => Promise.reject(new Error('the server failed')) });

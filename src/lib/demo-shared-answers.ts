@@ -74,6 +74,7 @@ export type DemoSharedAnswer =
 function demoCardWire(i18n: I18n) {
   const project = demoProjectOf(DEMO_STORE.id);
   return {
+    password_required: false,
     project: {
       name: demoProjectNameOf(project, i18n.t),
       timezone: project.timezone,
