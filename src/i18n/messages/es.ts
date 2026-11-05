@@ -1092,6 +1092,21 @@ export const es = translation({
     confirm: 'Revocar el enlace',
     cancel: 'Cancelar',
   },
+  share: {
+    metaTitle: 'Informe compartido',
+    madeWith: 'Un informe de solo lectura, hecho con <link>Pyxis</link>.',
+    subtitle: '{project} · compartido, solo lectura',
+    screensLabel: 'Informes compartidos',
+    loading: 'Cargando el informe…',
+    busy: 'Demasiadas solicitudes desde esta red. Espera un minuto y vuelve a intentarlo.',
+    failed: 'No se pudo cargar el informe.',
+    retry: 'Reintentar',
+    locked: 'Este enlace pide una contraseña, que esta página todavía no puede recibir.',
+    closedTitle: 'Este enlace no abre',
+    closedBody:
+      'Puede que lo hayan revocado o que haya caducado. Pide uno nuevo a quien lo compartió.',
+    aboutPyxis: '¿Qué es Pyxis?',
+  },
   connect: {
     title: 'Conectar una aplicación',
     heading: '¿Conectar {app} a Pyxis?',

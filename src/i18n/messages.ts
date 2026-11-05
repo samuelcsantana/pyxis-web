@@ -24,6 +24,7 @@ export const CLIENT_NAMESPACES = [
   'sessions',
   'accessTokens',
   'shareLinks',
+  'share',
   'consent',
   'projectForm',
   'projectKeys',

@@ -1067,6 +1067,21 @@ export const en = {
     confirm: 'Revoke the link',
     cancel: 'Cancel',
   },
+  share: {
+    metaTitle: 'Shared report',
+    madeWith: 'A read-only report, made with <link>Pyxis</link>.',
+    subtitle: '{project} · shared, read-only',
+    screensLabel: 'Shared reports',
+    loading: 'Loading the report…',
+    busy: 'Too many requests from this network. Wait a minute and try again.',
+    failed: 'The report could not be loaded.',
+    retry: 'Try again',
+    locked: 'This link asks for a password, which this page cannot take yet.',
+    closedTitle: 'This link does not open',
+    closedBody:
+      'It may have been revoked or may have expired. Ask whoever shared it for a new one.',
+    aboutPyxis: 'What is Pyxis?',
+  },
   connect: {
     title: 'Connect an app',
     heading: 'Connect {app} to Pyxis?',
