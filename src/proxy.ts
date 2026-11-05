@@ -31,7 +31,7 @@ import {
 } from '@/lib/security-headers';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { THEME_COOKIE_NAME } from '@/lib/theme';
-import { SHARE_PAGE_PATH } from '@/domain/share-links';
+import { SHARE_PAGE_PATH } from '@/domain/share-page-path';
 
 export const SIGN_IN_PATH = '/sign-in';
 export const SIGN_UP_PATH = '/sign-up';
