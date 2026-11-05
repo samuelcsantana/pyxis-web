@@ -1169,6 +1169,12 @@ export const nl = translation({
       previousDaysUntil: 'vs. vorige {days} dagen, dezelfde filters, tot {time}',
     },
   },
+  goals: {
+    problems: {
+      unknownGoal: 'Het doel in het adres bestaat niet meer, dus het eerste doel wordt geteld.',
+      unknownReachedGoal: 'Het doel in het filter bestaat niet meer, dus het is weggelaten.',
+    },
+  },
   rowFilter: {
     add: 'Filteren op {value}',
     title: 'Alle schermen filteren op {value}',
@@ -1641,6 +1647,7 @@ export const nl = translation({
       campaign: 'Een campagne heeft maximaal {max} tekens.',
       route: 'Een verzoek is een methode en een route, zoals POST /orders/:id.',
       visitors: 'Dit project telt geen unieke bezoekers: zet het aan bij Instellingen.',
+      reachedGoal: 'Het doel kies je uit de lijst.',
     },
     accountLink: '{user}, open de tijdlijn van deze gebruiker',
     shortAccountLink: '{shown}, open de tijdlijn van gebruiker {user}',
@@ -1686,6 +1693,8 @@ export const nl = translation({
       },
       visitors: 'Bezoekers',
       anyVisitor: 'Alle bezoeken',
+      reachedGoal: 'Doel bereikt',
+      anyGoal: 'Elk bezoek',
       visitorSpans: {
         day: 'Unieke bezoekers van elke dag',
         month: 'Unieke bezoekers van elke maand',

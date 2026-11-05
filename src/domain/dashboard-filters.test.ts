@@ -26,6 +26,7 @@ const EVERY_FILTER: DashboardFilters = {
   city: 'Sintra',
   source: 'newsletter',
   campaign: 'launch',
+  reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
   failed: true,
 };
 
@@ -48,6 +49,7 @@ describe('dashboardFiltersOf', () => {
           city: ' Sintra ',
           source: 'newsletter',
           campaign: 'launch',
+          reached_goal: ' 7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b ',
           failed: 'true',
         },
         english,
@@ -79,12 +81,14 @@ describe('dashboardFiltersOf', () => {
         city: 'z'.repeat(101),
         source: 'x'.repeat(129),
         campaign: 'y'.repeat(65),
+        reached_goal: 'signup',
       },
       english,
     );
 
     expect(reading.filters).toEqual(NO_DASHBOARD_FILTERS);
-    expect(reading.problems).toHaveLength(7);
+    expect(reading.problems).toHaveLength(8);
+    expect(reading.problems).toContain('A goal is chosen from the list.');
     expect(reading.problems).toContain('A city has at most 100 characters.');
   });
 });
@@ -108,6 +112,7 @@ describe('dashboardFilterParameters', () => {
       city: 'Sintra',
       source: 'newsletter',
       campaign: 'launch',
+      reached_goal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
       failed: 'true',
     });
     expect(Object.keys(written)).toEqual(
@@ -147,6 +152,7 @@ describe('dashboardFilterQuery', () => {
       city: 'Sintra',
       source: 'newsletter',
       campaign: 'launch',
+      reached_goal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
       failed: 'true',
     });
   });
@@ -168,6 +174,23 @@ describe('withDashboardFilters', () => {
 });
 
 describe('toggledDashboardFilters', () => {
+  it('turns the reached goal on, then off', () => {
+    const on = toggledDashboardFilters(NO_DASHBOARD_FILTERS, {
+      reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
+    });
+
+    expect(on).toEqual({
+      active: false,
+      filters: { ...NO_DASHBOARD_FILTERS, reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b' },
+    });
+    expect(
+      toggledDashboardFilters(on.filters, { reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b' }),
+    ).toEqual({
+      active: true,
+      filters: NO_DASHBOARD_FILTERS,
+    });
+  });
+
   it('turns a filter on, an event dropping the property of the one before', () => {
     expect(
       toggledDashboardFilters(

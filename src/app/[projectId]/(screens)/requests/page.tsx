@@ -32,6 +32,7 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { SECTION_STACK } from '@/components/ui/panel-classes';
@@ -112,7 +113,10 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
     screen: screenFilterOf(search),
   };
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const {
+    reading: { filters },
+    goals,
+  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
   const report = await readOrSignIn(() =>
     readRequestsReport(
       project.id,
@@ -163,7 +167,12 @@ export default async function RequestsPage({ params, searchParams }: RequestsPag
                 description={i18n.t(`requests.failureDays.description.${kind}`, {
                   period: describePeriod(period, i18n),
                 })}
-                periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+                periodLabel={filteredPeriodLabel(
+                  describePeriod(period, i18n),
+                  filters,
+                  goals,
+                  i18n,
+                )}
                 i18n={i18n}
               />
             )}

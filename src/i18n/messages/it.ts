@@ -1165,6 +1165,12 @@ export const it = translation({
       previousDaysUntil: 'rispetto ai {days} giorni precedenti, stessi filtri, fino alle {time}',
     },
   },
+  goals: {
+    problems: {
+      unknownGoal: 'L’obiettivo nell’indirizzo non esiste più, quindi viene contato il primo.',
+      unknownReachedGoal: 'L’obiettivo del filtro non esiste più, quindi è stato escluso.',
+    },
+  },
   rowFilter: {
     add: 'Filtra per {value}',
     title: 'Filtra tutte le schermate per {value}',
@@ -1640,6 +1646,7 @@ export const it = translation({
       campaign: 'Una campagna ha al massimo {max} caratteri.',
       route: 'Una richiesta si indica con un metodo e una rotta, come POST /orders/:id.',
       visitors: 'Questo progetto non conta i visitatori unici: attivali nelle Impostazioni.',
+      reachedGoal: 'L’obiettivo si sceglie dall’elenco.',
     },
     accountLink: '{user}, apri la cronologia di questo utente',
     shortAccountLink: '{shown}, apri la cronologia dell’utente {user}',
@@ -1685,6 +1692,8 @@ export const it = translation({
       },
       visitors: 'Visitatori',
       anyVisitor: 'Tutte le visite',
+      reachedGoal: 'Ha raggiunto l’obiettivo',
+      anyGoal: 'Qualsiasi visita',
       visitorSpans: {
         day: 'Visitatori unici di ogni giorno',
         month: 'Visitatori unici di ogni mese',

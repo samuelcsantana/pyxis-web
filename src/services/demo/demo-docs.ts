@@ -113,6 +113,7 @@ export const DEMO_DOCS: DemoProject = {
   nameKey: 'docs',
   timezone: 'Europe/Lisbon',
   conversionEvent: null,
+  goals: [],
   countsUniqueVisitors: false,
   visitsPerPageView: 0.38,
   signedInStage: null,

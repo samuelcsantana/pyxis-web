@@ -16,7 +16,5 @@ export function showcaseVisitsReport(
   const visits = demoShowcaseVisits(project, now).filter(
     (visit) => range.from <= visitDate(visit) && visitDate(visit) <= range.to,
   );
-  return visitsResponseSchema.parse(
-    demoVisitsPage(visits, filters, cursor, project.timezone, project.countsUniqueVisitors),
-  );
+  return visitsResponseSchema.parse(demoVisitsPage(visits, filters, cursor, project));
 }

@@ -19,6 +19,8 @@ import {
 } from '@/domain/visits';
 import { visitsTableLabel } from '@/domain/visits-export';
 import { getI18n } from '@/i18n/get-messages';
+import { withKnownReachedGoal } from '@/domain/goals';
+import { projectGoals } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { exportHref } from '@/lib/csv-export';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -47,10 +49,13 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
-  const settings = await readOrSignIn(() => createProjectsService().settings(project.id));
-  const { filters, problems } = withCountedVisitors(
-    visitFiltersOf(search, i18n),
-    settings.visitorsEnabled,
+  const [settings, goals] = await Promise.all([
+    readOrSignIn(() => createProjectsService().settings(project.id)),
+    projectGoals(project.id),
+  ]);
+  const { filters, problems } = withKnownReachedGoal(
+    withCountedVisitors(visitFiltersOf(search, i18n), settings.visitorsEnabled, i18n),
+    goals,
     i18n,
   );
   const report = await readOrSignIn(() =>
@@ -74,10 +79,11 @@ export default async function VisitsPage({ params, searchParams }: VisitsPagePro
         problems={problems}
         clearHref={filtered ? `${basePath}?${periodQuery(period)}` : null}
         countsUniqueVisitors={settings.visitorsEnabled}
+        goals={goals}
         i18n={i18n}
       />
       <AppliedVisitFilters
-        applied={appliedVisitFilters(filters, i18n)}
+        applied={appliedVisitFilters(filters, goals, i18n)}
         removeHref={(without) =>
           `${basePath}?${withKeptParameters(periodQuery(period), visitFilterParameters(without))}`
         }

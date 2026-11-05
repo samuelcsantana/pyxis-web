@@ -116,6 +116,7 @@ describe('visitFiltersOf', () => {
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
         visitors: 'day',
+        reached_goal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
         failed: 'true',
       },
       english,
@@ -138,6 +139,7 @@ describe('visitFiltersOf', () => {
         campaign: 'spring_sale',
         route: 'POST /orders/:id',
         visitors: 'day',
+        reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
         failed: true,
       },
       problems: [],
@@ -300,6 +302,7 @@ describe('visitFilterParameters', () => {
         campaign: 'spring_sale',
         route: 'GET /plans',
         visitors: 'day',
+        reachedGoal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
         failed: true,
       }),
     ).toEqual({
@@ -319,6 +322,7 @@ describe('visitFilterParameters', () => {
       campaign: 'spring_sale',
       route: 'GET /plans',
       visitors: 'day',
+      reached_goal: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
       failed: 'true',
     });
   });

@@ -6,6 +6,7 @@ import { showcaseVisitsReport } from '@/test-utils/showcase-visits';
 import { VisitFiltersForm } from './visit-filters-form';
 import { VisitsTable } from './visits-table';
 import { english } from '@/test-utils/english';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 
 const NOW = new Date('2026-10-06T02:30:00.000Z');
 const RANGE = { from: '2026-09-22', to: '2026-10-05' };
@@ -296,11 +297,13 @@ describe('VisitFiltersForm', () => {
           campaign: 'spring_sale',
           route: 'POST /orders',
           visitors: 'day',
+          reachedGoal: DEMO_STORE.goals[2]?.id ?? null,
           failed: true,
         }}
         problems={[]}
         clearHref="/p-store/visits?from=2026-09-01&to=2026-09-30"
         countsUniqueVisitors
+        goals={DEMO_STORE.goals}
         i18n={english}
       />,
     );
@@ -323,6 +326,15 @@ describe('VisitFiltersForm', () => {
     expect(screen.getByRole('combobox', { name: 'Device' })).toHaveValue('mobile');
     expect(screen.getByRole('combobox', { name: 'Account' })).toHaveValue('anonymous');
     expect(screen.getByRole('combobox', { name: 'Visitors' })).toHaveValue('day');
+    const goal = screen.getByRole('combobox', { name: 'Reached goal' });
+    expect(goal).toHaveDisplayValue('Saw the pricing');
+    expect([...goal.querySelectorAll('option')].map((option) => option.textContent)).toEqual([
+      'Any visit',
+      'Sign-up',
+      'Order created',
+      'Saw the pricing',
+      'Opened an order',
+    ]);
     expect(screen.getByRole('textbox', { name: /^Country/ })).toHaveValue('BR');
     expect(screen.getByRole('textbox', { name: /^Region/ })).toHaveValue('BR-SP');
     expect(screen.getByRole('textbox', { name: /^City/ })).toHaveValue('Campinas');
@@ -343,7 +355,7 @@ describe('VisitFiltersForm', () => {
       '/p-store/visits?from=2026-09-01&to=2026-09-30',
     );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Filters · 15 active' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Filters · 16 active' })).toHaveAttribute(
       'aria-expanded',
       'true',
     );
@@ -359,6 +371,7 @@ describe('VisitFiltersForm', () => {
           problems={[]}
           clearHref={null}
           countsUniqueVisitors={countsUniqueVisitors}
+          goals={[]}
           i18n={english}
         />,
       );
@@ -376,6 +389,7 @@ describe('VisitFiltersForm', () => {
 
     form(false);
     expect(screen.queryByRole('combobox', { name: 'Visitors' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Reached goal' })).not.toBeInTheDocument();
   });
 
   it('starts empty, without a clear link, and names the filters it left out', () => {
@@ -387,6 +401,7 @@ describe('VisitFiltersForm', () => {
         problems={['A property filter needs an event.']}
         clearHref={null}
         countsUniqueVisitors={false}
+        goals={[]}
         i18n={english}
       />,
     );
@@ -418,6 +433,7 @@ describe('VisitFiltersForm', () => {
         problems={[]}
         clearHref={null}
         countsUniqueVisitors={false}
+        goals={[]}
         i18n={english}
       />,
     );

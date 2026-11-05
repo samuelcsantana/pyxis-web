@@ -27,6 +27,7 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import { SECTION_STACK } from '@/components/ui/panel-classes';
 import { Reveal } from '@/components/ui/reveal';
 import { exportHref } from '@/lib/csv-export';
@@ -51,7 +52,10 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
   const kind = featureKindOf(search);
   const query = searchQueryOf(search);
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const {
+    reading: { filters },
+    goals,
+  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
   const scope = { from: period.from, to: period.to, filters };
   const [report, engagement] = await readOrSignIn(() => {
     const service = createFeaturesService();
@@ -132,7 +136,7 @@ export default async function FeaturesPage({ params, searchParams }: FeaturesPag
         {engagement === null ? null : (
           <EngagementPanels
             report={engagement}
-            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
             i18n={i18n}
           />
         )}

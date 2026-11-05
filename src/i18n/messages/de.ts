@@ -1182,6 +1182,12 @@ export const de = translation({
       previousDaysUntil: 'ggü. den {days} Tagen davor, gleiche Filter, jeweils bis {time}',
     },
   },
+  goals: {
+    problems: {
+      unknownGoal: 'Das Ziel in der Adresse gibt es nicht mehr, daher wird das erste Ziel gezählt.',
+      unknownReachedGoal: 'Das Ziel im Filter gibt es nicht mehr, daher wurde er weggelassen.',
+    },
+  },
   rowFilter: {
     add: 'Nach {value} filtern',
     title: 'Alle Ansichten nach {value} filtern',
@@ -1660,6 +1666,7 @@ export const de = translation({
       route: 'Eine Anfrage besteht aus Methode und Route, z. B. POST /orders/:id.',
       visitors:
         'Dieses Projekt zählt keine eindeutigen Besucher: In den Einstellungen einschalten.',
+      reachedGoal: 'Das Ziel wird aus der Liste gewählt.',
     },
     accountLink: '{user}, Zeitleiste dieses Nutzers öffnen',
     shortAccountLink: '{shown}, Zeitleiste des Nutzers {user} öffnen',
@@ -1705,6 +1712,8 @@ export const de = translation({
       },
       visitors: 'Besucher',
       anyVisitor: 'Alle Besuche',
+      reachedGoal: 'Ziel erreicht',
+      anyGoal: 'Jeder Besuch',
       visitorSpans: {
         day: 'Eindeutige Besucher jedes Tages',
         month: 'Eindeutige Besucher jedes Monats',

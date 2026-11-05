@@ -47,6 +47,7 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { isDemoMode } from '@/lib/api-config';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
@@ -100,7 +101,10 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
   const steps = addressSteps ?? (isDemoMode() ? demoExampleFunnel(project.id) : null);
   const basePath = screenHref(project.id, 'funnel');
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const {
+    reading: { filters },
+    goals,
+  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
   const filteredQuery = withDashboardFilters(periodQuery(period), filters);
   const linkTo = (parameters: Readonly<Record<string, string>>) =>
     `${basePath}?${withKeptParameters(filteredQuery, parameters)}`;
@@ -196,7 +200,7 @@ export default async function FunnelPage({ params, searchParams }: FunnelPagePro
             by={by}
             report={segments}
             stepCount={steps.length}
-            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+            periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
             hrefOf={(target) =>
               `${linkTo({ ...funnelKept, ...segmentKept(target), ...drillKept(drill) })}#funnel-segments-heading`
             }

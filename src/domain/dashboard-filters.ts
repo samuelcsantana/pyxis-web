@@ -7,6 +7,7 @@ import {
 import { type Channel, CHANNELS } from './acquisition';
 import { isRegionCode } from './devices';
 import { stepProblem } from './funnel';
+import { isGoalId } from './goal-parameters';
 import {
   isFilterableProperty,
   MAX_PROPERTY_VALUE_LENGTH,
@@ -63,6 +64,7 @@ export interface DashboardFilters {
   readonly city: string | null;
   readonly source: string | null;
   readonly campaign: string | null;
+  readonly reachedGoal: string | null;
   readonly failed: boolean;
 }
 
@@ -80,6 +82,7 @@ export const NO_DASHBOARD_FILTERS: DashboardFilters = {
   city: null,
   source: null,
   campaign: null,
+  reachedGoal: null,
   failed: false,
 };
 
@@ -167,6 +170,11 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
   const typedProperty = singleValue(search.property);
   const propertyIssue = typedProperty === '' ? null : propertyProblem(typedProperty, event, i18n);
   const { country, region, city, source, campaign } = attributionFilters(search, i18n);
+  const reachedGoal = textFilter(
+    singleValue(search.reached_goal),
+    isGoalId,
+    i18n.t('visits.problems.reachedGoal'),
+  );
   return {
     filters: {
       paths: typedPaths.filter((_path, index) => pathProblems[index] === null),
@@ -182,6 +190,7 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
       city: city.value,
       source: source.value,
       campaign: campaign.value,
+      reachedGoal: reachedGoal.value,
       failed: singleValue(search.failed) === FAILED_ONLY,
     },
     problems: [
@@ -195,6 +204,7 @@ export function dashboardFiltersOf(search: DashboardSearch, i18n: I18n): Dashboa
           city.problem,
           source.problem,
           campaign.problem,
+          reachedGoal.problem,
         ].filter((problem) => problem !== null),
       ),
     ],
@@ -226,6 +236,7 @@ export function dashboardFilterParameters(
     ...optional('city', filters.city),
     ...optional('source', filters.source),
     ...optional('campaign', filters.campaign),
+    ...optional('reached_goal', filters.reachedGoal),
     ...optional('failed', filters.failed ? FAILED_ONLY : null),
   };
 }
@@ -270,6 +281,7 @@ export const ROW_FILTER_FIELDS = [
   'city',
   'source',
   'campaign',
+  'reachedGoal',
 ] as const;
 
 export type RowFilterField = (typeof ROW_FILTER_FIELDS)[number];

@@ -2,6 +2,7 @@ import type { I18n } from '@/i18n/i18n';
 import { channelLabel } from './acquisition';
 import { browserLabel, countryLabel, deviceTypeLabel, operatingSystemLabel } from './devices';
 import type { DashboardFilters } from './dashboard-filters';
+import { type Goal, goalNameOf } from './goals';
 import { PAGE_FILTER_PARAMETERS, type VisitFilters } from './visits';
 
 export interface AppliedVisitFilter {
@@ -11,29 +12,6 @@ export interface AppliedVisitFilter {
   readonly code: boolean;
   readonly without: VisitFilters;
 }
-
-export const VISIT_FILTER_FIELDS = [
-  ...PAGE_FILTER_PARAMETERS,
-  'event',
-  'property',
-  'channel',
-  'device',
-  'browser',
-  'os',
-  'identity',
-  'country',
-  'region',
-  'city',
-  'source',
-  'campaign',
-  'route',
-  'visitors',
-  'failed',
-] as const;
-
-export type VisitFilterField = (typeof VISIT_FILTER_FIELDS)[number];
-
-const UPPERCASE_FIELDS: ReadonlySet<VisitFilterField> = new Set(['country', 'region']);
 
 function pageFilters(filters: VisitFilters, i18n: I18n): readonly AppliedVisitFilter[] {
   return PAGE_FILTER_PARAMETERS.flatMap((name, index) => {
@@ -73,6 +51,7 @@ function flag(
 
 export function appliedVisitFilters(
   filters: VisitFilters,
+  goals: readonly Goal[],
   i18n: I18n,
 ): readonly AppliedVisitFilter[] {
   const t = i18n.t;
@@ -153,22 +132,15 @@ export function appliedVisitFilters(
       false,
       { ...filters, visitors: null },
     ),
+    ...shown(
+      'reached_goal',
+      t('visits.filters.reachedGoal'),
+      filters.reachedGoal === null ? null : goalNameOf(goals, filters.reachedGoal),
+      false,
+      { ...filters, reachedGoal: null },
+    ),
     ...flag('failed', t('visits.filters.failed'), filters.failed, { ...filters, failed: false }),
   ];
-}
-
-function entered(field: VisitFilterField, value: string): string {
-  const trimmed = value.trim();
-  return UPPERCASE_FIELDS.has(field) ? trimmed.toUpperCase() : trimmed;
-}
-
-export function changedVisitFilterFields(
-  applied: Readonly<Partial<Record<string, string>>>,
-  form: Readonly<Partial<Record<VisitFilterField, string>>>,
-): readonly VisitFilterField[] {
-  return VISIT_FILTER_FIELDS.filter(
-    (field) => entered(field, form[field] ?? '') !== (applied[field] ?? ''),
-  );
 }
 
 const VALUE_TAG = '<value/>';
@@ -177,9 +149,10 @@ const LIST_SEPARATOR = ', ';
 export function filteredPeriodLabel(
   periodLabel: string,
   filters: DashboardFilters,
+  goals: readonly Goal[],
   i18n: I18n,
 ): string {
-  const applied = appliedVisitFilters({ ...filters, route: null, visitors: null }, i18n);
+  const applied = appliedVisitFilters({ ...filters, route: null, visitors: null }, goals, i18n);
   if (applied.length === 0) {
     return periodLabel;
   }

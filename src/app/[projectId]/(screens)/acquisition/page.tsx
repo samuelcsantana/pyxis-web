@@ -31,6 +31,7 @@ import {
   withDashboardFilters,
 } from '@/domain/dashboard-filters';
 import { getI18n } from '@/i18n/get-messages';
+import { withGoalsWhenFiltered } from '@/lib/project-goals';
 import type { I18n } from '@/i18n/i18n';
 import { apiBaseUrl } from '@/lib/api-config';
 import { exportHref, TABLE_PARAMETER } from '@/lib/csv-export';
@@ -124,7 +125,10 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
   const now = new Date();
   const period = resolvePeriod(search, project.timezone, now);
   const i18n = await getI18n();
-  const { filters } = dashboardFiltersOf(search, i18n);
+  const {
+    reading: { filters },
+    goals,
+  } = await withGoalsWhenFiltered(project.id, dashboardFiltersOf(search, i18n), i18n);
   const report = await readOrSignIn(() =>
     createAcquisitionService().acquisition(project.id, {
       from: period.from,
@@ -144,7 +148,7 @@ export default async function AcquisitionPage({ params, searchParams }: Acquisit
       {visitsTotal(report.days) > 0 ? (
         <AcquisitionReportView
           report={report}
-          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, i18n)}
+          periodLabel={filteredPeriodLabel(describePeriod(period, i18n), filters, goals, i18n)}
           downloads={acquisitionDownloads(project.id, query, i18n)}
           channelVisitsHref={(channel) => linkWith(visitsPath, { channel })}
           sourceVisitsHref={(source) => linkWith(visitsPath, { source })}

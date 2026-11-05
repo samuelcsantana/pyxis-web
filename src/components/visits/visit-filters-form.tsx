@@ -2,6 +2,7 @@ import Form from 'next/form';
 import Link from 'next/link';
 import { CHANNELS, channelLabel } from '@/domain/acquisition';
 import { browserLabel, deviceTypeLabel, operatingSystemLabel } from '@/domain/devices';
+import type { Goal } from '@/domain/goals';
 import { type Period, periodQuery } from '@/domain/period';
 import type { I18n } from '@/i18n/i18n';
 import {
@@ -33,6 +34,7 @@ export interface VisitFiltersFormProps {
   readonly problems: readonly string[];
   readonly clearHref: string | null;
   readonly countsUniqueVisitors: boolean;
+  readonly goals: readonly Goal[];
   readonly i18n: I18n;
 }
 
@@ -47,6 +49,7 @@ export function VisitFiltersForm({
   problems,
   clearHref,
   countsUniqueVisitors,
+  goals,
   i18n,
 }: VisitFiltersFormProps) {
   const activeCount = visitFilterCount(filters);
@@ -167,6 +170,23 @@ export function VisitFiltersForm({
               </SelectField>
             </label>
           ) : null}
+          {goals.length === 0 ? null : (
+            <label className={LABEL}>
+              {t('visits.filters.reachedGoal')}
+              <SelectField
+                name="reached_goal"
+                defaultValue={filters.reachedGoal ?? ''}
+                className={FIELD_CLASS}
+              >
+                <option value="">{t('visits.filters.anyGoal')}</option>
+                {goals.map((goal) => (
+                  <option key={goal.id} value={goal.id}>
+                    {goal.name}
+                  </option>
+                ))}
+              </SelectField>
+            </label>
+          )}
           <label className={LABEL}>
             {t('visits.filters.device')}
             <SelectField name="device" defaultValue={filters.device ?? ''} className={FIELD_CLASS}>

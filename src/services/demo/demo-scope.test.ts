@@ -26,6 +26,7 @@ import {
   roundedPercentile,
   visitDate,
 } from './demo-scope';
+import type { Goal } from '@/domain/goals';
 import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import { addDays } from '@/domain/period';
 
@@ -69,16 +70,20 @@ const VISIT: DemoVisitRecord = {
   events: [event('page_view'), event('cta_clicked')],
 };
 
+const EVENT_GOAL = '1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d';
+const PAGE_GOAL = '2b3c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e';
+const UNKNOWN_GOAL = '3c4d5e6f-7a8b-4c9d-8e1f-2a3b4c5d6e7f';
+
 describe('dashboardMatcherOf', () => {
   const failing = event('api_request', { properties: { status: 503 } });
 
   it('keeps every visit without filters', () => {
-    expect(dashboardMatcherOf(NO_DASHBOARD_FILTERS)(VISIT)).toBe(true);
+    expect(dashboardMatcherOf(NO_DASHBOARD_FILTERS, [])(VISIT)).toBe(true);
   });
 
   it('selects visits by device, browser and system', () => {
     const matches = (filters: Partial<typeof NO_DASHBOARD_FILTERS>) =>
-      dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, ...filters })(VISIT);
+      dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, ...filters }, [])(VISIT);
 
     expect(matches({ device: 'desktop', browser: 'chrome', os: 'windows' })).toBe(true);
     expect(matches({ device: 'mobile' })).toBe(false);
@@ -87,17 +92,33 @@ describe('dashboardMatcherOf', () => {
   });
 
   it('selects visits with a failed request only when asked', () => {
-    const failed = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, failed: true });
+    const failed = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, failed: true }, []);
 
     expect(failed(VISIT)).toBe(false);
     expect(failed({ ...VISIT, events: [...VISIT.events, failing] })).toBe(true);
   });
 
   it('selects identified or anonymous visits', () => {
-    const identified = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, identity: 'identified' });
+    const identified = dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, identity: 'identified' }, []);
 
     expect(identified(VISIT)).toBe(false);
     expect(identified({ ...VISIT, userId: 'u1' })).toBe(true);
+  });
+
+  it('selects the visits that reached a goal, by its event or by a page its path matches', () => {
+    const goals: readonly Goal[] = [
+      { id: EVENT_GOAL, name: 'Clicked', kind: 'event', target: 'cta_clicked', position: 1 },
+      { id: PAGE_GOAL, name: 'Orders', kind: 'page', target: '/orders/*', position: 2 },
+    ];
+    const reached = (reachedGoal: string) =>
+      dashboardMatcherOf({ ...NO_DASHBOARD_FILTERS, reachedGoal }, goals);
+    const order = { ...VISIT, events: [event('page_view', { path: '/orders/:id' })] };
+
+    expect(reached(EVENT_GOAL)(VISIT)).toBe(true);
+    expect(reached(EVENT_GOAL)(order)).toBe(false);
+    expect(reached(PAGE_GOAL)(order)).toBe(true);
+    expect(reached(PAGE_GOAL)(VISIT)).toBe(false);
+    expect(reached(UNKNOWN_GOAL)(VISIT)).toBe(false);
   });
 });
 

@@ -1,4 +1,5 @@
 import { type DashboardFilters, NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
+import { goalById, type Goal } from '@/domain/goals';
 import type { DateRange } from '../date-range';
 import { demoAttributedVisits } from './demo-attribution';
 import type { DemoProject } from './demo-catalog';
@@ -17,6 +18,7 @@ export const DEMO_FIRST_EVENT_DATE = '2025-01-06';
 
 export interface DemoReportRange extends DateRange {
   readonly filters?: DashboardFilters;
+  readonly goal?: string | null;
 }
 
 export interface DemoScope {
@@ -76,7 +78,7 @@ function withinScope(visit: DemoVisitRecord, scope: DemoScope): readonly DemoVis
 }
 
 export function demoVisitsIn(project: DemoProject, scope: DemoScope): readonly DemoVisitRecord[] {
-  const matches = dashboardMatcherOf(scope.filters);
+  const matches = dashboardMatcherOf(scope.filters, project.goals);
   return [
     ...demoShowcaseVisits(project, scope.now),
     ...demoDays(scope.range).flatMap((date) => demoVisitsOfDay(project, date)),
@@ -148,8 +150,37 @@ function ranOn(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
   );
 }
 
-export function dashboardMatcherOf(filters: DashboardFilters): (visit: DemoVisitRecord) => boolean {
+export type DemoGoalTest = (event: DemoEventRecord) => boolean;
+
+export function demoGoalTest(goal: Goal): DemoGoalTest {
+  if (goal.kind === 'event') {
+    return (event) => event.name === goal.target;
+  }
+  const page = pathPattern(goal.target);
+  return (event) => isPageView(event) && page.test(event.path);
+}
+
+function reachedGoalOf(
+  goals: readonly Goal[],
+  goalId: string | null,
+): (visit: DemoVisitRecord) => boolean {
+  if (goalId === null) {
+    return () => true;
+  }
+  const goal = goalById(goals, goalId);
+  if (goal === null) {
+    return () => false;
+  }
+  const test = demoGoalTest(goal);
+  return (visit) => visit.events.some(test);
+}
+
+export function dashboardMatcherOf(
+  filters: DashboardFilters,
+  goals: readonly Goal[],
+): (visit: DemoVisitRecord) => boolean {
   const pages = filters.paths.map(pathPattern);
+  const reachedGoal = reachedGoalOf(goals, filters.reachedGoal);
   const viewed = (visit: DemoVisitRecord, page: RegExp) =>
     visit.events.some((event) => isPageView(event) && page.test(event.path));
   return (visit) =>
@@ -159,6 +190,7 @@ export function dashboardMatcherOf(filters: DashboardFilters): (visit: DemoVisit
     ranOn(visit, filters) &&
     (filters.identity === null || (visit.userId !== null) === (filters.identity === IDENTIFIED)) &&
     cameFrom(visit, filters) &&
+    reachedGoal(visit) &&
     (!filters.failed || visit.events.some(isFailedCall));
 }
 
