@@ -1008,6 +1008,18 @@ export const fr = translation({
     weeklyDigest: 'Récapitulatif hebdomadaire',
     weeklyDigestNote:
       'Chaque lundi, la semaine close le dimanche dans le fuseau {timezone} : visites, conversions, écritures en échec, pages et événements principaux. Chaque admin choisit pour lui-même.',
+    alertsHeading: 'Alertes',
+    alertsNote:
+      'Évaluées chaque matin sur la veille. Chaque alerte arrive au plus une fois par jour, et chaque personne choisit les siennes.',
+    noEventsAlert: 'Aucun événement',
+    noEventsAlertNote:
+      'Quand aucun événement n’est arrivé depuis 24 heures, sur un site qui a eu au moins 20 visites la semaine d’avant.',
+    failedWritesAlert: 'Écritures en échec',
+    failedWritesAlertNote:
+      'Quand au moins 10 écritures ont échoué en un jour, 10 % ou plus d’entre elles, et au moins le double du taux de la semaine d’avant.',
+    conversionDropAlert: 'Baisse des conversions',
+    conversionDropAlertNote:
+      'Quand votre premier objectif a été atteint au moins deux fois moins souvent que le même jour de la semaine précédente, qui en comptait au moins 10.',
     on: 'Activé',
     off: 'Désactivé',
     saving: 'Enregistrement…',
