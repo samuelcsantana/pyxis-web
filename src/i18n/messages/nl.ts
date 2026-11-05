@@ -2164,7 +2164,7 @@ export const nl = translation({
     askClaude: {
       eyebrow: 'MCP-connector',
       title: 'Vraag het Claude in plaats van door grafieken te spitten',
-      lead: 'Koppel Pyxis één keer aan Claude en vraag in je eigen woorden: hoe vorige week ging, waar de registratie mensen verliest, welke route begon te falen. Claude leest dezelfde cijfers als het dashboard, via zestien tools die alleen lezen. Het zit bij het abonnement in, zonder extra kosten.',
+      lead: 'Koppel Pyxis één keer aan Claude en vraag in je eigen woorden: hoe vorige week ging, waar de registratie mensen verliest, welke route begon te falen. Claude leest dezelfde cijfers als het dashboard, via zeventien tools die alleen lezen. Het zit bij het abonnement in, zonder extra kosten.',
       connect: 'In een minuut koppelen',
       directory: {
         badge: 'Nieuw',
@@ -2188,7 +2188,7 @@ export const nl = translation({
       promises: {
         reads: {
           title: 'Alleen lezen',
-          body: 'Elk van de zestien tools is één leesactie op de Pyxis-API. Claude kan nooit iets wijzigen of verwijderen.',
+          body: 'Elk van de zeventien tools is één leesactie op de Pyxis-API. Claude kan nooit iets wijzigen of verwijderen.',
         },
         revoke: {
           title: 'Jij trekt het in',

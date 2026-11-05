@@ -88,6 +88,10 @@ describe('AskClaudeSection', () => {
       'No cookies, no IPs to hand over',
     ]);
     expect(promises).toHaveLength(PROMISES.length);
+    expect(
+      screen.getByText(/^Each of the seventeen tools is one read of the Pyxis API\./),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/through seventeen tools that only read/)).toBeInTheDocument();
   });
 
   it('links to the full guide and says where the data goes', () => {
