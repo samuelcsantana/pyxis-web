@@ -150,6 +150,23 @@ function ranOn(visit: DemoVisitRecord, filters: DashboardFilters): boolean {
   );
 }
 
+const REVENUE_PROPERTY = 'revenue';
+const REVENUE_CEILING = 1_000_000_000;
+const CENTS = 100;
+
+export function demoRevenueOf(event: DemoEventRecord): number {
+  const revenue = event.properties[REVENUE_PROPERTY];
+  return typeof revenue === 'number' && revenue >= 0 && revenue < REVENUE_CEILING ? revenue : 0;
+}
+
+export function demoRoundedRevenue(value: number): number {
+  return Math.round(value * CENTS) / CENTS;
+}
+
+export function demoRevenueSum(events: readonly DemoEventRecord[]): number {
+  return demoRoundedRevenue(events.reduce((sum, event) => sum + demoRevenueOf(event), 0));
+}
+
 export type DemoGoalTest = (event: DemoEventRecord) => boolean;
 
 export function demoGoalTest(goal: Goal): DemoGoalTest {

@@ -1151,6 +1151,8 @@ export const nl = translation({
       'Een geïdentificeerde gebruiker is een unieke gebruikers-id die de site aan identify() heeft doorgegeven, meestal als iemand inlogt; een bezoek zonder id is anoniem.',
     conversion:
       'Een conversie is een bezoek dat het gekozen doel minstens één keer bereikte, door het event ervan te versturen of de pagina ervan te openen; keer bereikt telt elk passend event of elke passende paginaweergave.',
+    revenue:
+      'Omzet is de som van de eigenschap revenue op de events van het getelde doel, in de valuta van het project.',
     write:
       'Een schrijfverzoek is een POST, PUT, PATCH of DELETE die met trackRequest() is verstuurd.',
     failure: 'Een fout is een status van 400 of hoger, of helemaal geen antwoord.',
@@ -1181,6 +1183,7 @@ export const nl = translation({
       visits: 'Bezoeken',
       identifiedUsers: 'Geïdentificeerde gebruikers',
       conversions: 'Conversies',
+      revenue: 'Omzet',
       writeErrorRate: 'Foutpercentage schrijfverzoeken',
     },
     notes: {
@@ -1189,6 +1192,7 @@ export const nl = translation({
       shareOfVisits: '{share} van {visits}',
       goalReached: '{goal} · {share}',
       goalVisits: '{share} bereikten {goal} · {times}',
+      revenue: '{goal} · {average} per conversie',
     },
     drillDowns: {
       visits: 'Bekijk de bezoeken',
@@ -1231,6 +1235,7 @@ export const nl = translation({
       goal: 'Doel',
       convertingVisits: 'Bezoeken',
       conversions: 'Keer bereikt',
+      revenue: 'Omzet',
       rate: 'Conversieratio',
     },
     problems: {
@@ -1378,6 +1383,8 @@ export const nl = translation({
       conversions: 'Conversies',
       conversionRate: 'Conversieratio',
       converted: '{conversions} geconverteerd',
+      revenue: 'Omzet',
+      earned: '{revenue} omzet',
     },
     campaigns: {
       title: 'Campagnes',
@@ -1654,6 +1661,7 @@ export const nl = translation({
     transition: 'Stap {from} → {to}',
     transitionNote: '{from} → {to} · {share} ging door',
     medianTime: 'mediaan {duration} na de vorige stap',
+    revenue: '{revenue} omzet',
     timeToFinish: 'Mediane tijd tot het einde',
     timeToFinishNote: 'van stap 1 tot stap {last}, voor wie die bereikte',
     page: {

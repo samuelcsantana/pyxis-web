@@ -13,6 +13,7 @@ const REPORT: OverviewReport = {
     identifiedUsers: kpi([3, 2]),
     conversions: kpi([4, 1]),
     convertingVisits: kpi([3, 1]),
+    revenue: null,
     writeErrors: {
       current: { failed: 0, total: 0 },
       previous: { failed: 0, total: 0 },

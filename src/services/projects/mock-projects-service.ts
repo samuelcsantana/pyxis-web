@@ -27,6 +27,7 @@ export function demoMeResponse(t: Translator<SourceMessages>, now: Date) {
       name: demoProjectNameOf(project, t),
       timezone: project.timezone,
       conversion_event: project.conversionEvent,
+      currency: project.currency,
       first_event_at: DEMO_FIRST_EVENT_AT,
       last_event_at: now.toISOString(),
       icon_version: null,

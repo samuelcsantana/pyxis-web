@@ -244,10 +244,23 @@ describe('goalRows', () => {
         {
           visits: 1200,
           goals: [
-            { ...SIGN_UP, conversions: 1340, convertingVisits: 1100, conversionRate: 1100 / 1200 },
-            { ...THANK_YOU, conversions: 0, convertingVisits: 0, conversionRate: null },
+            {
+              ...SIGN_UP,
+              conversions: 1340,
+              convertingVisits: 1100,
+              conversionRate: 1100 / 1200,
+              revenue: null,
+            },
+            {
+              ...THANK_YOU,
+              conversions: 0,
+              convertingVisits: 0,
+              conversionRate: null,
+              revenue: null,
+            },
           ],
         },
+        'BRL',
         english,
       ),
     ).toEqual([
@@ -261,6 +274,8 @@ describe('goalRows', () => {
         rate: '91.7%',
         share: 1100 / 1200,
         reached: true,
+        revenue: null,
+        earned: 0,
       },
       {
         id: THANK_YOU.id,
@@ -272,6 +287,8 @@ describe('goalRows', () => {
         rate: '—',
         share: 0,
         reached: false,
+        revenue: null,
+        earned: 0,
       },
     ]);
   });
@@ -317,12 +334,26 @@ describe('the goals on the wire', () => {
       goalsSummaryResponseSchema.parse({
         visits: 1200,
         goals: [
-          { ...SIGN_UP_WIRE, conversions: 40, converting_visits: 30, conversion_rate: 0.025 },
+          {
+            ...SIGN_UP_WIRE,
+            conversions: 40,
+            converting_visits: 30,
+            conversion_rate: 0.025,
+            revenue: 3600.5,
+          },
         ],
       }),
     ).toEqual({
       visits: 1200,
-      goals: [{ ...SIGN_UP, conversions: 40, convertingVisits: 30, conversionRate: 0.025 }],
+      goals: [
+        {
+          ...SIGN_UP,
+          conversions: 40,
+          convertingVisits: 30,
+          conversionRate: 0.025,
+          revenue: 3600.5,
+        },
+      ],
     });
   });
 

@@ -8,13 +8,26 @@ export interface Formats extends DayFormats {
   readonly percent: (value: number) => string;
   readonly wholePercent: (value: number) => string;
   readonly decimal: (value: number) => string;
+  readonly money: (value: number, currency: string) => string;
+  readonly roundMoney: (value: number, currency: string) => string;
   readonly monthWithYear: (date: Date) => string;
   readonly fullDay: (date: Date) => string;
   readonly dateTime: (style: DateTimeStyle, timeZone: string) => (date: Date) => string;
   readonly country: (code: string) => string;
+  readonly currencyName: (code: string) => string;
   readonly list: (items: readonly string[]) => string;
   readonly weekday: (isoWeekday: number, width: WeekdayWidth) => string;
 }
+
+type MoneyStyle = 'exact' | 'whole' | 'compact';
+
+const COMPACT_FROM = 100_000;
+
+const MONEY_STYLES: Readonly<Record<MoneyStyle, Intl.NumberFormatOptions>> = {
+  exact: {},
+  whole: { maximumFractionDigits: 0 },
+  compact: { notation: 'compact', maximumFractionDigits: 1 },
+};
 
 const A_MONDAY_IN_UTC = Date.UTC(2024, 0, 1);
 const MILLISECONDS_PER_DAY = 86_400_000;
@@ -59,7 +72,23 @@ function buildFormats(tag: string): Formats {
     year: 'numeric',
     timeZone: 'UTC',
   });
+  const moneyFormats = new Map<string, Intl.NumberFormat>();
+  const moneyIn = (currency: string, style: MoneyStyle): Intl.NumberFormat => {
+    const key = `${currency}:${style}`;
+    const known = moneyFormats.get(key);
+    if (known !== undefined) {
+      return known;
+    }
+    const built = new Intl.NumberFormat(tag, {
+      style: 'currency',
+      currency,
+      ...MONEY_STYLES[style],
+    });
+    moneyFormats.set(key, built);
+    return built;
+  };
   const countries = new Intl.DisplayNames([tag], { type: 'region', fallback: 'code' });
+  const currencies = new Intl.DisplayNames([tag], { type: 'currency', fallback: 'code' });
   const lists = new Intl.ListFormat(tag, { type: 'unit', style: 'long' });
   const weekdays: Readonly<Record<WeekdayWidth, Intl.DateTimeFormat>> = {
     narrow: new Intl.DateTimeFormat(tag, { weekday: 'narrow', timeZone: 'UTC' }),
@@ -71,6 +100,9 @@ function buildFormats(tag: string): Formats {
     percent: (value) => percent.format(value),
     wholePercent: (value) => wholePercent.format(value),
     decimal: (value) => decimal.format(value),
+    money: (value, currency) => moneyIn(currency, 'exact').format(value),
+    roundMoney: (value, currency) =>
+      moneyIn(currency, Math.abs(value) < COMPACT_FROM ? 'whole' : 'compact').format(value),
     day,
     dayWithYear,
     monthWithYear: (date) => monthWithYear.format(date),
@@ -80,6 +112,7 @@ function buildFormats(tag: string): Formats {
       return (date) => format.format(date);
     },
     country: (code) => String(countries.of(code)),
+    currencyName: (code) => String(currencies.of(code)),
     list: (items) => lists.format(items),
     weekday: (isoWeekday, width) =>
       weekdays[width].format(new Date(A_MONDAY_IN_UTC + (isoWeekday - 1) * MILLISECONDS_PER_DAY)),

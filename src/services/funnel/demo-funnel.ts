@@ -12,6 +12,8 @@ import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
 import { itemAt } from '../demo/demo-random';
 import {
   byKeys,
+  demoRevenueOf,
+  demoRoundedRevenue,
   demoScopeOf,
   demoVisitsIn,
   groupedBy,
@@ -31,6 +33,7 @@ const CURSOR_SEPARATOR = '~';
 export interface DemoFunnelSubject {
   readonly id: string;
   readonly reached: readonly number[];
+  readonly revenues: readonly number[];
 }
 
 export function demoExampleFunnel(projectId: string): readonly FunnelStep[] {
@@ -45,17 +48,17 @@ function matcherOf(step: FunnelStep): (event: DemoEventRecord) => boolean {
   return (event) => isPageView(event) && pattern.test(event.path);
 }
 
-function stepTimes(
+function stepEvents(
   events: readonly DemoEventRecord[],
   matchers: readonly ((event: DemoEventRecord) => boolean)[],
-): readonly number[] {
-  return matchers.reduce<readonly number[]>((times, matches, index) => {
-    if (times.length < index) {
-      return times;
+): readonly DemoEventRecord[] {
+  return matchers.reduce<readonly DemoEventRecord[]>((reached, matches, index) => {
+    if (reached.length < index) {
+      return reached;
     }
-    const after = times.at(-1) ?? Number.NEGATIVE_INFINITY;
-    const reached = events.find((event) => event.at >= after && matches(event));
-    return reached === undefined ? times : [...times, reached.at];
+    const after = reached.at(-1)?.at ?? Number.NEGATIVE_INFINITY;
+    const next = events.find((event) => event.at >= after && matches(event));
+    return next === undefined ? reached : [...reached, next];
   }, []);
 }
 
@@ -81,13 +84,17 @@ export function demoFunnelSubjects(
 ): readonly DemoFunnelSubject[] {
   const matchers = steps.map(matcherOf);
   const visits = demoVisitsIn(demoProjectOf(projectId), demoScopeOf(range, now, range.filters));
-  return [...subjectsOf(visits, mode)].map(([id, owned]) => ({
-    id,
-    reached: stepTimes(
+  return [...subjectsOf(visits, mode)].map(([id, owned]) => {
+    const reached = stepEvents(
       owned.flatMap((visit) => visit.events).toSorted((first, second) => first.at - second.at),
       matchers,
-    ),
-  }));
+    );
+    return {
+      id,
+      reached: reached.map((event) => event.at),
+      revenues: reached.map(demoRevenueOf),
+    };
+  });
 }
 
 function medianSeconds(gaps: readonly number[]): number | null {
@@ -114,10 +121,16 @@ export function demoFunnelWire(
 ): FunnelWire {
   const subjects = demoFunnelSubjects(projectId, range, mode, steps, now);
   return {
-    steps: steps.map((_, index) => ({
+    steps: steps.map((step, index) => ({
       count: subjects.filter((subject) => subject.reached.length > index).length,
       median_seconds_from_previous:
         index === 0 ? null : medianSeconds(gapsBetween(subjects, index, index - 1)),
+      revenue:
+        step.type === 'page'
+          ? null
+          : demoRoundedRevenue(
+              subjects.reduce((total, subject) => total + (subject.revenues[index] ?? 0), 0),
+            ),
     })),
     median_seconds_overall: medianSeconds(gapsBetween(subjects, steps.length - 1, 0)),
   };
@@ -140,7 +153,7 @@ export function demoFunnelSegmentsWire(
   const reached = [...groupedBy(visits, (visit) => visit.sessionId).values()]
     .map((owned) => ({
       segment: segmentOf(owned, by),
-      reached: stepTimes(
+      reached: stepEvents(
         owned.flatMap((visit) => visit.events).toSorted((first, second) => first.at - second.at),
         matchers,
       ),

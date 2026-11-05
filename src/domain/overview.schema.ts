@@ -77,6 +77,7 @@ export const overviewResponseSchema = z
       identified_users: kpiSchema,
       conversions: kpiSchema.nullable(),
       converting_visits: kpiSchema.nullable().optional(),
+      revenue: kpiSchema.nullable(),
       write_errors: z.object({
         current: failureCountSchema,
         previous: failureCountSchema,
@@ -96,6 +97,7 @@ export const overviewResponseSchema = z
       identifiedUsers: body.kpis.identified_users,
       conversions: body.kpis.conversions,
       convertingVisits: body.kpis.converting_visits ?? null,
+      revenue: body.kpis.revenue,
       writeErrors: body.kpis.write_errors,
     },
     days: body.days.map((day) => ({

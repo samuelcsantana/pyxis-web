@@ -1,7 +1,7 @@
 import type { I18n } from '@/i18n/i18n';
 import type { ClientSourceMessages } from '@/i18n/messages';
 import type { Translator } from '@/i18n/translate';
-import { eventLabel, formatCount, formatPercent, rate, barWidth } from './metrics';
+import { eventLabel, formatCount, formatMoney, formatPercent, rate, barWidth } from './metrics';
 import { formatSeconds } from './timeline';
 import type { FunnelStep, FunnelStepType, FunnelReport, FunnelWire } from './funnel.schema';
 
@@ -101,6 +101,7 @@ export interface FunnelRow {
   readonly tone: FunnelTone;
   readonly dropped: string;
   readonly time: string | null;
+  readonly revenue: string | null;
   readonly reachedLink: DrillLink | null;
   readonly droppedLink: DrillLink | null;
 }
@@ -109,12 +110,14 @@ interface CountedStep {
   readonly step: FunnelStep;
   readonly count: number;
   readonly secondsFromPrevious: number | null;
+  readonly revenue: number | null;
 }
 
 interface StepCounts {
   readonly steps: readonly {
     readonly count: number;
     readonly medianSecondsFromPrevious?: number | null;
+    readonly revenue?: number | null;
   }[];
 }
 
@@ -126,6 +129,7 @@ export function countedSteps(
     step,
     count: report.steps[index]?.count ?? 0,
     secondsFromPrevious: report.steps[index]?.medianSecondsFromPrevious ?? null,
+    revenue: report.steps[index]?.revenue ?? null,
   }));
 }
 
@@ -142,9 +146,19 @@ function continuationTone(continued: number | null): FunnelTone {
   return continued < CONTINUATION_WARNING ? 'bad' : 'good';
 }
 
-export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonly FunnelRow[] {
+function stepRevenue(revenue: number | null, currency: string, i18n: I18n): string | null {
+  return revenue === null || revenue === 0
+    ? null
+    : i18n.t('funnel.revenue', { revenue: formatMoney(revenue, currency, i18n) });
+}
+
+export function funnelRows(
+  counted: readonly CountedStep[],
+  currency: string,
+  i18n: I18n,
+): readonly FunnelRow[] {
   const first = counted[0]?.count ?? 0;
-  return counted.map(({ step, count, secondsFromPrevious }, index) => {
+  return counted.map(({ step, count, secondsFromPrevious, revenue }, index) => {
     const previous = counted[index - 1];
     const base = {
       key: `${String(index)}-${step.type}-${stepTarget(step)}`,
@@ -155,6 +169,7 @@ export function funnelRows(counted: readonly CountedStep[], i18n: I18n): readonl
       reached: count,
       barWidth: barWidth(count, first),
       time: medianTime(secondsFromPrevious, i18n),
+      revenue: stepRevenue(revenue, currency, i18n),
       reachedLink: null,
       droppedLink: null,
     };

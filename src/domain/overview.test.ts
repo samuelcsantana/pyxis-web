@@ -5,6 +5,7 @@ import {
   hasActivity,
   type OverviewReport,
   overviewKpis,
+  plottableKpis,
   type OverviewWire,
   previousPeriodNote,
   comparesUnfinishedDayWithWholeOne,
@@ -19,6 +20,7 @@ const WIRE: OverviewWire = {
     visits: { current: 4758, previous: 4233, daily: [2400, 2358] },
     identified_users: { current: 438, previous: 405, daily: [220, 218] },
     conversions: { current: 212, previous: 202, daily: [100, 112] },
+    revenue: null,
     write_errors: {
       current: { failed: 61, total: 2524 },
       previous: { failed: 68, total: 2518 },
@@ -295,11 +297,88 @@ const SIGN_UP_GOAL: Goal = {
 };
 
 describe('overviewKpis', () => {
+  const WITH_REVENUE: OverviewWire = {
+    ...WIRE,
+    kpis: { ...WIRE.kpis, revenue: { current: 8480, previous: 6000, daily: [4000, 4480] } },
+  };
+
+  it('adds the revenue of an event goal after the conversions, in the project currency', () => {
+    const kpis = overviewKpis(
+      report(WITH_REVENUE),
+      { ...ENDED, days: 30 },
+      SIGN_UP_GOAL,
+      'BRL',
+      english,
+    );
+    const revenue = kpis.find((kpi) => kpi.id === 'revenue');
+
+    expect(kpis.map((kpi) => kpi.id)).toEqual([
+      'visits',
+      'identified-users',
+      'conversions',
+      'revenue',
+      'write-errors',
+    ]);
+    expect(revenue).toEqual({
+      id: 'revenue',
+      label: 'Revenue',
+      value: 'R$8,480',
+      count: null,
+      change: '+41.3% (+R$2,480)',
+      tone: 'good',
+      comparison: 'vs. previous 30 days',
+      note: 'Sign-up · R$40.00 per conversion',
+      series: [4000, 4480],
+      drillDown: null,
+      plottable: false,
+    });
+    expect(plottableKpis(kpis)).toEqual([
+      'visits',
+      'identified-users',
+      'conversions',
+      'write-errors',
+    ]);
+  });
+
+  it('names only the goal when nothing converted', () => {
+    const [, , , revenue] = overviewKpis(
+      report({
+        ...WIRE,
+        kpis: {
+          ...WIRE.kpis,
+          conversions: { current: 0, previous: 3, daily: [0, 0] },
+          revenue: { current: 0, previous: 120, daily: [0, 0] },
+        },
+      }),
+      { ...ENDED, days: 30 },
+      SIGN_UP_GOAL,
+      'BRL',
+      english,
+    );
+
+    expect(revenue).toMatchObject({ id: 'revenue', note: 'Sign-up' });
+  });
+
+  it('leaves the revenue out when the goal earned none in either period, or is a page', () => {
+    const none = report({
+      ...WIRE,
+      kpis: { ...WIRE.kpis, revenue: { current: 0, previous: 0, daily: [0, 0] } },
+    });
+
+    expect(overviewKpis(none, { ...ENDED, days: 30 }, SIGN_UP_GOAL, 'BRL', english)).toHaveLength(
+      4,
+    );
+    expect(
+      overviewKpis(report(), { ...ENDED, days: 30 }, SIGN_UP_GOAL, 'BRL', english),
+    ).toHaveLength(4);
+  });
+
   it('gives the four figures with their change, tone and totals', () => {
     const [visits, users, conversions, errors] = overviewKpis(
       report(),
       { ...ENDED, days: 30 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -314,6 +393,7 @@ describe('overviewKpis', () => {
       note: null,
       series: [2400, 2358],
       drillDown: { label: 'See the visits', screen: 'visits', filter: {} },
+      plottable: true,
     });
     expect(users).toMatchObject({
       comparison: 'vs. previous 30 days',
@@ -333,6 +413,7 @@ describe('overviewKpis', () => {
       note: '61 of 2,524 writes failed',
       series: [0.025, 31 / 1324],
       drillDown: { label: 'See failing routes', screen: 'requests', filter: { show: 'failing' } },
+      plottable: true,
     });
   });
 
@@ -341,6 +422,7 @@ describe('overviewKpis', () => {
       report(),
       { ...ENDED, days: 30 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
     const [, , convertingVisits] = overviewKpis(
@@ -353,6 +435,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 30 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -380,6 +463,7 @@ describe('overviewKpis', () => {
           identified_users: none,
           conversions: { current: 4, previous: 3, daily: [4] },
           converting_visits: none,
+          revenue: null,
           write_errors: {
             current: { failed: 0, total: 12 },
             previous: { failed: 1, total: 9 },
@@ -389,6 +473,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 1 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -406,6 +491,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 30 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -423,6 +509,7 @@ describe('overviewKpis', () => {
       report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }),
       { ...ENDED, days: 7 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -430,7 +517,7 @@ describe('overviewKpis', () => {
   });
 
   it('leaves out conversions when the project has no goal', () => {
-    const kpis = overviewKpis(report(), { ...ENDED, days: 7 }, null, english);
+    const kpis = overviewKpis(report(), { ...ENDED, days: 7 }, null, 'BRL', english);
 
     expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
   });
@@ -442,6 +529,7 @@ describe('overviewKpis', () => {
         kpis: {
           ...WIRE.kpis,
           visits: { current: 90, previous: 100, daily: [90] },
+          revenue: null,
           write_errors: {
             current: { failed: 10, total: 100 },
             previous: { failed: 1, total: 100 },
@@ -451,6 +539,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 1 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -466,6 +555,7 @@ describe('overviewKpis', () => {
         kpis: {
           ...WIRE.kpis,
           visits: { current: 10001, previous: 10000, daily: [10001] },
+          revenue: null,
           write_errors: {
             current: { failed: 30001, total: 1000000 },
             previous: { failed: 30000, total: 1000000 },
@@ -475,6 +565,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 1 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -489,6 +580,7 @@ describe('overviewKpis', () => {
         kpis: {
           ...WIRE.kpis,
           visits: { current: 5, previous: 0, daily: [5] },
+          revenue: null,
           write_errors: {
             current: { failed: 0, total: 0 },
             previous: { failed: 0, total: 0 },
@@ -498,6 +590,7 @@ describe('overviewKpis', () => {
       }),
       { ...ENDED, days: 1 },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 
@@ -511,7 +604,7 @@ describe('overviewKpis', () => {
   });
 
   it('judges no change while today is compared with all of yesterday', () => {
-    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 }, SIGN_UP_GOAL, english);
+    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 }, SIGN_UP_GOAL, 'BRL', english);
 
     expect(kpis.map((kpi) => kpi.tone)).toEqual(['neutral', 'neutral', 'neutral', 'neutral']);
     expect(kpis.map((kpi) => kpi.comparison)).toEqual(
@@ -527,6 +620,7 @@ describe('overviewKpis', () => {
         days: 1,
       },
       SIGN_UP_GOAL,
+      'BRL',
       english,
     );
 

@@ -20,9 +20,10 @@ import {
   isWrite,
   visitDate,
   type DemoGoalTest,
+  demoRevenueSum,
   type DemoReportRange,
 } from '../demo/demo-scope';
-import { demoConversionTest } from '../demo/demo-goals';
+import { demoConversionTest, demoCountedGoal } from '../demo/demo-goals';
 import { demoDays, previousRange } from '../demo/demo-series';
 import { type DemoVisitorKind, demoVisitorOf } from '../demo/demo-visitor-kinds';
 
@@ -40,6 +41,7 @@ interface Figures {
   readonly failedWrites: number;
   readonly pageViews: number;
   readonly events: number;
+  readonly revenue: number;
 }
 
 interface DayFigures extends Figures {
@@ -60,6 +62,7 @@ function figuresOf(visits: readonly DemoVisitRecord[], conversion: DemoGoalTest 
     failedWrites: countWhere(events, (event) => isWrite(event) && hasFailed(event)),
     pageViews: countWhere(events, isPageView),
     events: countWhere(events, isNamedEvent),
+    revenue: demoRevenueSum(events.filter(isConversion)),
   };
 }
 
@@ -172,6 +175,7 @@ export function demoOverviewWire(
 ): OverviewWire {
   const project = demoProjectOf(projectId);
   const conversion = demoConversionTest(project, range.goal);
+  const earnsRevenue = demoCountedGoal(project, range.goal)?.kind === 'event';
   const cutoff = comparisonCutoff(range, project.timezone, now);
   const filters = range.filters ?? NO_DASHBOARD_FILTERS;
   const currentScope: DemoScope = { range, filters, now, until: null };
@@ -194,6 +198,7 @@ export function demoOverviewWire(
       identified_users: kpi(current, previous, days, 'identifiedUsers'),
       conversions: counts ? kpi(current, previous, days, 'conversions') : null,
       converting_visits: counts ? kpi(current, previous, days, 'convertingVisits') : null,
+      revenue: earnsRevenue ? kpi(current, previous, days, 'revenue') : null,
       write_errors: {
         current: writeErrors(current),
         previous: writeErrors(previous),

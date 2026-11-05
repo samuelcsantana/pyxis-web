@@ -28,6 +28,7 @@ function row(position: number): FunnelRow {
     tone: 'neutral',
     dropped: '',
     time: null,
+    revenue: null,
     reachedLink: null,
     droppedLink: null,
   };

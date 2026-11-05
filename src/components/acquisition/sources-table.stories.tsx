@@ -25,7 +25,7 @@ const meta = {
   component: SourcesTable,
   tags: ['autodocs'],
   args: {
-    rows: sourceRows(REPORT.sources, english),
+    rows: sourceRows(REPORT.sources, 'BRL', english),
     channelVisitsHref,
     sourceVisitsHref,
     i18n: english,
@@ -46,13 +46,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutConversionEvent: Story = {
-  args: { rows: sourceRows(WITHOUT_CONVERSIONS.sources, english) },
+  args: { rows: sourceRows(WITHOUT_CONVERSIONS.sources, 'BRL', english) },
 };
 
 export const Empty: Story = { args: { rows: [] } };
 
 export const InPortuguese: Story = {
-  args: { i18n: portuguese, rows: sourceRows(REPORT.sources, portuguese) },
+  args: { i18n: portuguese, rows: sourceRows(REPORT.sources, 'BRL', portuguese) },
 };
 
 export const OnAPhone: Story = {

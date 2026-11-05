@@ -248,8 +248,11 @@ describe('MockFeaturesService properties', () => {
   it('has a key only some events carry', async () => {
     const report = await new MockFeaturesService().properties('demo', RANGE, 'order_created');
 
-    expect(report.keys[0]?.key).toBe('first');
-    expect(report.keys[0]?.events).toBeLessThan(report.events);
+    const first = report.keys.find((key) => key.key === 'first');
+    expect(first?.events).toBeLessThan(report.events);
+    expect(report.keys.find((key) => key.key === 'revenue')?.events).toBeGreaterThan(
+      first?.events ?? 0,
+    );
   });
 
   it('carries a price and a category on the products created, the price a number', async () => {

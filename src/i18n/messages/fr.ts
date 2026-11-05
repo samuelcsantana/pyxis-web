@@ -1166,6 +1166,8 @@ export const fr = translation({
       'Un utilisateur identifié est un identifiant d’utilisateur distinct que le site a transmis à identify(), généralement quand quelqu’un se connecte ; une visite sans identifiant est anonyme.',
     conversion:
       'Une conversion est une visite qui a atteint l’objectif choisi au moins une fois, en envoyant son événement ou en ouvrant sa page ; les fois atteint comptent chaque événement ou page vue correspondant.',
+    revenue:
+      'Les revenus sont la somme de la propriété revenue sur les événements de l’objectif compté, dans la devise du projet.',
     write: 'Une écriture est un POST, PUT, PATCH ou DELETE envoyé avec trackRequest().',
     failure: 'Un échec est un statut supérieur ou égal à 400, ou une absence de réponse.',
     changeTone:
@@ -1195,6 +1197,7 @@ export const fr = translation({
       visits: 'Visites',
       identifiedUsers: 'Utilisateurs identifiés',
       conversions: 'Conversions',
+      revenue: 'Revenus',
       writeErrorRate: 'Taux d’erreur des écritures',
     },
     notes: {
@@ -1203,6 +1206,7 @@ export const fr = translation({
       shareOfVisits: '{share} de {visits}',
       goalReached: '{goal} · {share}',
       goalVisits: '{share} ont atteint {goal} · {times}',
+      revenue: '{goal} · {average} par conversion',
     },
     drillDowns: {
       visits: 'Voir les visites',
@@ -1245,6 +1249,7 @@ export const fr = translation({
       goal: 'Objectif',
       convertingVisits: 'Visites',
       conversions: 'Fois atteint',
+      revenue: 'Revenus',
       rate: 'Taux de conversion',
     },
     problems: {
@@ -1393,6 +1398,8 @@ export const fr = translation({
       conversions: 'Conversions',
       conversionRate: 'Taux de conversion',
       converted: '{conversions} avec conversion',
+      revenue: 'Revenus',
+      earned: '{revenue} de revenus',
     },
     campaigns: {
       title: 'Campagnes',
@@ -1670,6 +1677,7 @@ export const fr = translation({
     transition: 'Étape {from} → {to}',
     transitionNote: '{from} → {to} · {share} ont continué',
     medianTime: 'médiane de {duration} après l’étape précédente',
+    revenue: '{revenue} de revenus',
     timeToFinish: 'Durée médiane jusqu’au bout',
     timeToFinishNote: 'de l’étape 1 à l’étape {last}, pour ceux qui l’ont atteinte',
     page: {

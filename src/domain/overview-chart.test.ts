@@ -22,6 +22,7 @@ const WIRE: OverviewWire = {
     visits: { current: 4758, previous: 4233, daily: [2400, 2358] },
     identified_users: { current: 438, previous: 405, daily: [220, 218] },
     conversions: { current: 212, previous: 202, daily: [100, 112] },
+    revenue: null,
     write_errors: {
       current: { failed: 61, total: 2524 },
       previous: { failed: 68, total: 2518 },
@@ -113,6 +114,15 @@ describe('formatChartValue', () => {
 });
 
 describe('overviewChart', () => {
+  it('plots the activity for revenue, which has no previous days to compare', () => {
+    expect(
+      chartOf(
+        { ...WIRE, kpis: { ...WIRE.kpis, revenue: { current: 9, previous: 4, daily: [4, 5] } } },
+        'revenue',
+      ).metric,
+    ).toBe(ACTIVITY);
+  });
+
   it('plots page views and named events by default, with their totals', () => {
     const chart = chartOf(WIRE, ACTIVITY);
 

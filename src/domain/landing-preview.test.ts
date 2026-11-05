@@ -24,6 +24,7 @@ const PREVIOUS_DAY = {
   identifiedUsers: 1,
   conversions: 0,
   convertingVisits: 0,
+  revenue: null,
   writeErrors: { failed: 0, total: 3 },
 };
 
@@ -33,6 +34,7 @@ const REPORT: OverviewReport = {
     identifiedUsers: kpi(418, 398, [12, 14, 16]),
     conversions: kpi(96, 81, [3, 4, 5]),
     convertingVisits: kpi(90, 77, [3, 4, 5]),
+    revenue: null,
     writeErrors: {
       current: { failed: 4, total: 1000 },
       previous: { failed: 7, total: 1000 },
@@ -67,7 +69,7 @@ const STEPS: readonly FunnelStep[] = [
 
 function funnelOf(...counts: number[]): FunnelReport {
   return {
-    steps: counts.map((count) => ({ count, medianSecondsFromPrevious: null })),
+    steps: counts.map((count) => ({ count, medianSecondsFromPrevious: null, revenue: null })),
     medianSecondsOverall: null,
   };
 }

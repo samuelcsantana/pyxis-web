@@ -71,6 +71,7 @@ const SETTINGS: ProjectSettings = {
   name: 'Demo Store',
   timezone: 'America/Sao_Paulo',
   conversionEvent: 'signup_completed',
+  currency: 'BRL',
   cityEnabled: false,
   visitorsEnabled: false,
   allowedOrigins: ['https://store.example.com'],

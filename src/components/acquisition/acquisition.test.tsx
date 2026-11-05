@@ -33,6 +33,7 @@ const GOOGLE: Source = {
   conversions: 60,
   convertingVisits: null,
   fromAdClickVisits: 1100,
+  revenue: null,
 };
 
 describe('ChannelChart', () => {
@@ -114,7 +115,7 @@ describe('SourcesTable', () => {
     renderWithMessages(
       <SourcesTable
         i18n={english}
-        rows={sourceRows([GOOGLE], english)}
+        rows={sourceRows([GOOGLE], 'BRL', english)}
         channelVisitsHref={channelVisitsHref}
         sourceVisitsHref={sourceVisitsHref}
       />,
@@ -132,11 +133,49 @@ describe('SourcesTable', () => {
     );
   });
 
+  it('adds a revenue column once a source earned some, a dash for a source that cannot', () => {
+    renderWithMessages(
+      <SourcesTable
+        i18n={english}
+        rows={sourceRows(
+          [
+            { ...GOOGLE, revenue: 4890.5 },
+            { ...GOOGLE, source: 'bing', revenue: null },
+          ],
+          'BRL',
+          english,
+        )}
+        channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
+      />,
+    );
+
+    expect(screen.getByRole('columnheader', { name: 'Revenue' })).toBeInTheDocument();
+    const [, google, bing] = screen.getAllByRole('row');
+    expect(google).toHaveTextContent('R$4,890.50');
+    expect(google).toHaveTextContent('R$4,890.50 in revenue');
+    expect(bing).toHaveTextContent('—');
+    expect(bing).not.toHaveTextContent('in revenue');
+  });
+
+  it('shows no revenue column while no source earned any', () => {
+    renderWithMessages(
+      <SourcesTable
+        i18n={english}
+        rows={sourceRows([{ ...GOOGLE, revenue: 0 }], 'BRL', english)}
+        channelVisitsHref={channelVisitsHref}
+        sourceVisitsHref={sourceVisitsHref}
+      />,
+    );
+
+    expect(screen.queryByRole('columnheader', { name: 'Revenue' })).not.toBeInTheDocument();
+  });
+
   it('names an ad click without a source in the language of the page, linking by its value', () => {
     renderWithMessages(
       <SourcesTable
         i18n={portuguese}
-        rows={sourceRows([{ ...GOOGLE, source: '(ad click)', medium: null }], portuguese)}
+        rows={sourceRows([{ ...GOOGLE, source: '(ad click)', medium: null }], 'BRL', portuguese)}
         channelVisitsHref={channelVisitsHref}
         sourceVisitsHref={sourceVisitsHref}
       />,
@@ -153,7 +192,7 @@ describe('SourcesTable', () => {
     renderWithMessages(
       <SourcesTable
         i18n={english}
-        rows={sourceRows([GOOGLE], english)}
+        rows={sourceRows([GOOGLE], 'BRL', english)}
         channelVisitsHref={channelVisitsHref}
         sourceVisitsHref={sourceVisitsHref}
       />,
@@ -169,6 +208,7 @@ describe('SourcesTable', () => {
         i18n={english}
         rows={sourceRows(
           [GOOGLE, { ...GOOGLE, source: 'bing', medium: null, conversions: null }],
+          'BRL',
           english,
         )}
         channelVisitsHref={channelVisitsHref}
@@ -185,7 +225,7 @@ describe('SourcesTable', () => {
     renderWithMessages(
       <SourcesTable
         i18n={english}
-        rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], english)}
+        rows={sourceRows([{ ...GOOGLE, conversions: null, fromAdClickVisits: 0 }], 'BRL', english)}
         channelVisitsHref={channelVisitsHref}
         sourceVisitsHref={sourceVisitsHref}
       />,
@@ -218,6 +258,7 @@ const SPRING_SALE: Campaign = {
   conversions: 50,
   convertingVisits: 40,
   fromAdClickVisits: 700,
+  revenue: null,
 };
 
 function campaignVisitsHref({ campaign, source }: { campaign: string; source: string }): string {
@@ -229,7 +270,7 @@ describe('CampaignsTable', () => {
     renderWithMessages(
       <CampaignsTable
         i18n={english}
-        rows={campaignRows([SPRING_SALE], english)}
+        rows={campaignRows([SPRING_SALE], 'BRL', english)}
         campaignVisitsHref={campaignVisitsHref}
       />,
     );
@@ -250,6 +291,7 @@ describe('CampaignsTable', () => {
         i18n={english}
         rows={campaignRows(
           [{ ...SPRING_SALE, source: '(direct)', medium: null, fromAdClickVisits: 0 }],
+          'BRL',
           english,
         )}
         campaignVisitsHref={campaignVisitsHref}
@@ -268,6 +310,7 @@ describe('CampaignsTable', () => {
         i18n={english}
         rows={campaignRows(
           [{ ...SPRING_SALE, conversions: null, convertingVisits: null }],
+          'BRL',
           english,
         )}
         campaignVisitsHref={campaignVisitsHref}

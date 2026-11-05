@@ -45,7 +45,7 @@ const meta = {
     return (
       <MetricSelection available={['visits', 'conversions']}>
         <KpiGrid
-          kpis={overviewKpis(report, LAST_30_DAYS, goal, english)}
+          kpis={overviewKpis(report, LAST_30_DAYS, goal, 'BRL', english)}
           drillDownHref={drillDownHref}
           controls={{ conversions: <GoalPicker {...args} /> }}
           i18n={english}

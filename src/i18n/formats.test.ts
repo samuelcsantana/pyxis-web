@@ -26,6 +26,21 @@ describe('createFormats', () => {
     expect(portuguese.wholePercent(0.4123)).toBe('41%');
   });
 
+  it('formats money in a currency, exactly, whole or compact past a hundred thousand', () => {
+    expect(english.money(1234.5, 'BRL')).toBe('R$1,234.50');
+    expect(portuguese.money(1234.5, 'BRL')).toBe('R$ 1.234,50');
+    expect(english.roundMoney(1234.5, 'USD')).toBe('$1,235');
+    expect(english.roundMoney(-1234.5, 'USD')).toBe('-$1,235');
+    expect(english.roundMoney(250_000, 'USD')).toBe('$250K');
+    expect(portuguese.roundMoney(1_250_000, 'BRL')).toBe('R$ 1,3 mi');
+    expect(english.money(10, 'BRL')).toBe(english.money(10, 'BRL'));
+  });
+
+  it('names a currency in the language of the page', () => {
+    expect(english.currencyName('BRL')).toBe('Brazilian Real');
+    expect(portuguese.currencyName('USD')).toBe('Dólar americano');
+  });
+
   it('formats calendar days in UTC, with and without the year', () => {
     expect(english.day(SEPTEMBER_8)).toBe('Sep 8');
     expect(english.dayWithYear(SEPTEMBER_8)).toBe('Sep 8, 2026');

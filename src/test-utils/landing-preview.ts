@@ -34,6 +34,7 @@ export const SHOWCASE_OVERVIEW: OverviewReport = {
     identifiedUsers: { current: 418, previous: 398, daily: wave(12, 0.1) },
     conversions: { current: 96, previous: 81, daily: wave(3, 0.05) },
     convertingVisits: { current: 96, previous: 81, daily: wave(3, 0.05) },
+    revenue: null,
     writeErrors: {
       current: { failed: 4, total: 1000 },
       previous: { failed: 7, total: 1000 },
@@ -79,7 +80,11 @@ export function showcasePreview(i18n: I18n): LandingPreviewView {
       overview: SHOWCASE_OVERVIEW,
       funnelSteps: SHOWCASE_STEPS,
       funnel: {
-        steps: [864, 113, 42, 4].map((count) => ({ count, medianSecondsFromPrevious: null })),
+        steps: [864, 113, 42, 4].map((count) => ({
+          count,
+          medianSecondsFromPrevious: null,
+          revenue: null,
+        })),
         medianSecondsOverall: null,
       },
       writes: {

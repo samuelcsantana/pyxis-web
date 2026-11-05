@@ -10,6 +10,7 @@ const SOURCE: Source = {
   conversions: 6,
   convertingVisits: 5,
   fromAdClickVisits: 0,
+  revenue: null,
 };
 
 const REPORT: AcquisitionReport = {
@@ -38,6 +39,7 @@ const REPORT: AcquisitionReport = {
       conversions: null,
       convertingVisits: null,
       fromAdClickVisits: 7,
+      revenue: null,
     },
   ],
 };

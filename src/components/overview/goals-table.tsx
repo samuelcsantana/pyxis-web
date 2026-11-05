@@ -1,5 +1,5 @@
-import type { GoalRow } from '@/domain/goals';
-import { barWidth } from '@/domain/metrics';
+import { type GoalRow, goalsEarned } from '@/domain/goals';
+import { barWidth, NO_VALUE } from '@/domain/metrics';
 import type { I18n } from '@/i18n/i18n';
 import { FRESH_HIGHLIGHT } from '@/components/ui/fresh-slots';
 import {
@@ -34,6 +34,7 @@ export function GoalsTable({
   filterOf,
   i18n,
 }: GoalsTableProps) {
+  const withRevenue = goalsEarned(rows);
   return (
     <section aria-labelledby={HEADING_ID} className={PANEL}>
       <div className="flex flex-col gap-1">
@@ -60,6 +61,11 @@ export function GoalsTable({
               <th scope="col" className={`${HEADER_CELL} hidden text-right sm:table-cell`}>
                 {i18n.t('goals.table.conversions')}
               </th>
+              {withRevenue ? (
+                <th scope="col" className={`${HEADER_CELL} text-right`}>
+                  {i18n.t('goals.table.revenue')}
+                </th>
+              ) : null}
               <th scope="col" className={`${HEADER_CELL} w-40 pr-0 text-left`}>
                 {i18n.t('goals.table.rate')}
               </th>
@@ -91,6 +97,11 @@ export function GoalsTable({
                 <td className={`${BODY_CELL} hidden text-right text-muted sm:table-cell`}>
                   {row.conversions}
                 </td>
+                {withRevenue ? (
+                  <td className={`${BODY_CELL} text-right whitespace-nowrap`}>
+                    {row.revenue ?? NO_VALUE}
+                  </td>
+                ) : null}
                 <td className={`${BODY_CELL} pr-0`}>
                   <span className="flex items-center gap-2">
                     <span aria-hidden="true" className={`${BAR_TRACK} grow`}>

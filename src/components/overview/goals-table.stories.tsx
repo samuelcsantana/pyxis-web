@@ -48,7 +48,7 @@ const meta = {
   component: GoalsTable,
   tags: ['autodocs'],
   args: {
-    rows: goalRows(SUMMARY, english),
+    rows: goalRows(SUMMARY, 'BRL', english),
     visits: english.t('counts.visit', { count: SUMMARY.visits }),
     periodLabel: 'last 30 days',
     visitsHref,
@@ -70,7 +70,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const NoVisitReachedAGoal: Story = { args: { rows: goalRows(NOBODY_REACHED, english) } };
+export const NoVisitReachedAGoal: Story = {
+  args: { rows: goalRows(NOBODY_REACHED, 'BRL', english) },
+};
 
 export const Loading: Story = { render: () => <SkeletonRows count={4} /> };
 
@@ -90,7 +92,7 @@ export const Failed: Story = {
 
 export const InPortuguese: Story = {
   args: {
-    rows: goalRows(SUMMARY, portuguese),
+    rows: goalRows(SUMMARY, 'BRL', portuguese),
     visits: portuguese.t('counts.visit', { count: SUMMARY.visits }),
     periodLabel: 'últimos 30 dias',
     i18n: portuguese,

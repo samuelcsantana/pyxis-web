@@ -72,6 +72,9 @@ export function FunnelSteps({ rows, mode, i18n }: FunnelStepsProps) {
                 <Drillable text={row.dropped} link={row.droppedLink} />
               </span>
               {row.time === null ? null : <span className="text-muted">{row.time}</span>}
+              {row.revenue === null ? null : (
+                <span className="font-semibold text-ok">{row.revenue}</span>
+              )}
             </span>
           </li>
         ))}

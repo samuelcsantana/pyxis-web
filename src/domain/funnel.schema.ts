@@ -41,6 +41,7 @@ export const funnelResponseSchema = z
       z.object({
         count: z.number(),
         median_seconds_from_previous: z.number().nullable().optional(),
+        revenue: z.number().nullable().optional(),
       }),
     ),
     median_seconds_overall: z.number().nullable().optional(),
@@ -49,6 +50,7 @@ export const funnelResponseSchema = z
     steps: body.steps.map((step) => ({
       count: step.count,
       medianSecondsFromPrevious: step.median_seconds_from_previous ?? null,
+      revenue: step.revenue ?? null,
     })),
     medianSecondsOverall: body.median_seconds_overall ?? null,
   }));

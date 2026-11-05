@@ -6,9 +6,11 @@ import {
   formatChange,
   formatCount,
   formatPercent,
+  formatMoney,
   formatPointChange,
   formatSignedCount,
   MIN_COMPARABLE_BASE,
+  moneyChange,
   NO_VALUE,
   percentChange,
   pointChange,
@@ -67,6 +69,28 @@ describe('formatSignedCount', () => {
   it('signs a difference of counts and groups its thousands', () => {
     expect(formatSignedCount(1525, english)).toBe('+1,525');
     expect(formatSignedCount(-3, english)).toBe('−3');
+  });
+});
+
+describe('formatMoney', () => {
+  it('writes an amount in the currency, and a dash for none', () => {
+    expect(formatMoney(129.9, 'BRL', english)).toBe('R$129.90');
+    expect(formatMoney(null, 'BRL', english)).toBe(NO_VALUE);
+  });
+});
+
+describe('moneyChange', () => {
+  it('gives the change and the whole amount it moved by, judged above the base', () => {
+    expect(moneyChange(1200, 1000, 'USD', english)).toEqual({
+      text: '+20.0% (+$200)',
+      trend: 'up',
+    });
+    expect(moneyChange(10, 8, 'USD', english)).toEqual({ text: '+25.0% (+$2)', trend: 'flat' });
+  });
+
+  it('says there was no change, or only the amount when the previous period had none', () => {
+    expect(moneyChange(500, 500, 'USD', english)).toEqual({ text: 'no change', trend: 'flat' });
+    expect(moneyChange(500, 0, 'USD', english)).toEqual({ text: '+$500', trend: 'flat' });
   });
 });
 

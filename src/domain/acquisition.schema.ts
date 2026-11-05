@@ -23,6 +23,7 @@ export const acquisitionResponseSchema = z
         conversions: z.number().nullable(),
         converting_visits: z.number().nullable().optional(),
         from_ad_click_visits: z.number(),
+        revenue: z.number().nullable(),
       }),
     ),
     campaigns: z
@@ -36,6 +37,19 @@ export const acquisitionResponseSchema = z
           conversions: z.number().nullable(),
           converting_visits: z.number().nullable(),
           from_ad_click_visits: z.number(),
+          revenue: z.number().nullable(),
+        }),
+      )
+      .optional(),
+    channels: z
+      .array(
+        z.object({
+          channel: z.enum(CHANNELS),
+          visits: z.number(),
+          conversions: z.number().nullable(),
+          converting_visits: z.number().nullable(),
+          from_ad_click_visits: z.number(),
+          revenue: z.number().nullable(),
         }),
       )
       .optional(),
@@ -50,6 +64,7 @@ export const acquisitionResponseSchema = z
       conversions: source.conversions,
       convertingVisits: source.converting_visits ?? null,
       fromAdClickVisits: source.from_ad_click_visits,
+      revenue: source.revenue,
     })),
     campaigns: (body.campaigns ?? []).map((campaign) => ({
       campaign: campaign.campaign,
@@ -60,6 +75,7 @@ export const acquisitionResponseSchema = z
       conversions: campaign.conversions,
       convertingVisits: campaign.converting_visits,
       fromAdClickVisits: campaign.from_ad_click_visits,
+      revenue: campaign.revenue,
     })),
   }));
 
