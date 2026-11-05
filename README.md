@@ -85,6 +85,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   `#settings/<section>`, without reading it again: the account's and the project's, and help.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
+- **Public links (Pro).** The owner creates, copies once and revokes read-only links to a project's
+  summed reports, with an optional expiry.
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
   German, French, Italian and Dutch ([Internationalization](#internationalization)).
 - **Accessible by default.** Every Storybook story is also an axe test, text follows the reader's
