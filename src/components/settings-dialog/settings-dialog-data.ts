@@ -4,6 +4,7 @@ import type { ConnectedApps } from '@/domain/connections';
 import type { EmailPreferences } from '@/domain/email-preferences';
 import type { Goal } from '@/domain/goals';
 import type { ProjectPerson } from '@/domain/project-people';
+import type { ShareLink } from '@/domain/share-links';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import type { AdminSession } from '@/domain/sessions';
 import type { FreePlanState } from '@/domain/sign-up';
@@ -19,6 +20,7 @@ import { createGoalsService } from '@/services/goals/goals-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
+import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
 
 export interface SettingsDialogData {
   readonly projectId: string;
@@ -34,6 +36,7 @@ export interface SettingsDialogData {
   readonly connectedApps: ConnectedApps;
   readonly people: readonly ProjectPerson[];
   readonly goals: readonly Goal[];
+  readonly shareLinks: readonly ShareLink[];
 }
 
 export async function readSettingsDialogData(projectId: string): Promise<SettingsDialogData> {
@@ -54,12 +57,16 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
       readOrSignIn(() => createProjectPeopleService().list(project.id)),
       readOrSignIn(() => createGoalsService().list(project.id)),
     ]);
+  const owner = canManageProject(settings);
+  const shareLinks = owner
+    ? await readOrSignIn(() => createShareLinksService().list(project.id))
+    : [];
   return {
     projectId: project.id,
     email: admin.email,
     theme,
     settings,
-    owner: canManageProject(settings),
+    owner,
     accounts,
     freePlan,
     emailPreferences,
@@ -68,5 +75,6 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
     connectedApps,
     people,
     goals,
+    shareLinks,
   };
 }

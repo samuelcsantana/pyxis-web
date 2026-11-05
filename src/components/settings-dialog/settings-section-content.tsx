@@ -14,6 +14,7 @@ import { AccessTokensPanel } from '@/components/settings/access-tokens-panel';
 import { ConnectedAppsPanel } from '@/components/settings/connected-apps-panel';
 import { GoalsPanel } from '@/components/settings/goals-panel';
 import { PeoplePanel } from '@/components/settings/people-panel';
+import { ShareLinksPanel } from '@/components/settings/share-links-panel';
 import {
   ActivityPanel,
   CityPanel,
@@ -37,6 +38,7 @@ import { SETTINGS_SECTIONS, type SettingsSection } from './settings-sections';
 import { PANEL } from '@/components/ui/panel-classes';
 import { ownedAccounts } from '@/domain/accounts';
 import { ownsAnotherFreeAccount } from '@/domain/free-plan';
+import { sharesOnPro } from '@/domain/share-links';
 import { timeZoneChoices } from '@/domain/project-management';
 import { supportPlanOf } from '@/domain/support';
 import { chooseLocale } from '@/i18n/choose-locale';
@@ -48,6 +50,7 @@ import {
   chooseEmailPreferences,
   createGoal,
   createAccessToken,
+  createShareLink,
   createProjectKey,
   deleteGoal,
   deleteProject,
@@ -57,6 +60,7 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  revokeShareLink,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
@@ -225,6 +229,19 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
           />
         </TitledBySection>
       );
+    case 'share':
+      return (
+        <TitledBySection>
+          <ShareLinksPanel
+            links={data.shareLinks}
+            onPro={sharesOnPro(data.accounts, settings.accountId)}
+            create={createShareLink.bind(null, projectId)}
+            revoke={revokeShareLink.bind(null, projectId)}
+            timezone={settings.timezone}
+            i18n={i18n}
+          />
+        </TitledBySection>
+      );
     case 'privacy':
       return (
         <Stack>
@@ -284,7 +301,7 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
   }
 }
 
-const OWNER_ONLY: ReadonlySet<SettingsSection> = new Set(['data']);
+const OWNER_ONLY: ReadonlySet<SettingsSection> = new Set(['share', 'data']);
 
 export interface SettingsDialogContent {
   readonly sections: readonly SettingsSection[];

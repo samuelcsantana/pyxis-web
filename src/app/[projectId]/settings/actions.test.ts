@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NewAccessToken } from '@/domain/access-tokens';
 import type { Admin } from '@/domain/admin';
 import type { EmailPreferences } from '@/domain/email-preferences';
@@ -16,6 +16,7 @@ import {
   createAccessToken,
   createGoal,
   createProjectKey,
+  createShareLink,
   deleteGoal,
   deleteProject,
   endSession,
@@ -23,12 +24,27 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  revokeShareLink,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
   updateProject,
 } from './actions';
 import type { IGoalsService } from '@/services/goals/goals-service.interface';
+import type { NewShareLink } from '@/domain/share-links';
+import type { IShareLinksService } from '@/services/share-links/share-links-service.interface';
+
+const shareLinksState = vi.hoisted(() => ({
+  create: vi.fn<IShareLinksService['create']>(),
+  revoke: vi.fn<IShareLinksService['revoke']>(),
+}));
+
+vi.mock('@/services/share-links/share-links-service.factory', () => ({
+  createShareLinksService: (): Pick<IShareLinksService, 'create' | 'revoke'> => ({
+    create: (projectId, request) => shareLinksState.create(projectId, request),
+    revoke: (projectId, linkId) => shareLinksState.revoke(projectId, linkId),
+  }),
+}));
 
 const goalsState = vi.hoisted(() => ({
   create: vi.fn<IGoalsService['create']>(),
@@ -693,5 +709,95 @@ describe('the owner managing the goals', () => {
     goalsState.create.mockRejectedValue(new UnauthenticatedError());
 
     await expect(createGoal('p-store', CHANGES)).rejects.toThrow(/^redirect:\/sign-in\?expired=1/);
+  });
+});
+
+describe('createShareLink', () => {
+  const NOW = new Date('2026-11-05T12:00:00.000Z');
+  const CREATED = {
+    kind: 'created',
+    link: {
+      id: '6f2b8d0e-7a9c-4b1d-8e6f-8a0b2c4d6e7f',
+      name: 'Board',
+      createdAt: NOW.toISOString(),
+      expiresAt: '2026-12-05T12:00:00.000Z',
+      token: `pyxis_sh_${'A'.repeat(32)}`,
+    },
+  } as const;
+
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+    shareLinksState.create.mockReset();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('creates the link for the project, its name trimmed and its expiry counted from now', async () => {
+    shareLinksState.create.mockResolvedValue(CREATED);
+
+    await expect(createShareLink('p-store', { name: ' Board ', expiry: 30 })).resolves.toEqual(
+      CREATED,
+    );
+    expect(shareLinksState.create).toHaveBeenCalledWith('p-store', {
+      name: 'Board',
+      expiresAt: '2026-12-05T12:00:00.000Z',
+    });
+  });
+
+  it('passes the refusal of a project not on Pro back to the form', async () => {
+    shareLinksState.create.mockResolvedValue({ kind: 'planRequired' });
+
+    await expect(createShareLink('p-store', { name: 'Board', expiry: 'never' })).resolves.toEqual({
+      kind: 'planRequired',
+    });
+    expect(shareLinksState.create).toHaveBeenCalledWith('p-store', {
+      name: 'Board',
+      expiresAt: null,
+    });
+  });
+
+  it('answers not found for a project the admin cannot read, without creating anything', async () => {
+    await expect(createShareLink('p-other', { name: 'Board', expiry: 7 })).rejects.toThrow(
+      'not-found',
+    );
+    expect(shareLinksState.create).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [{ name: '   ', expiry: 7 }],
+    [{ name: 'x'.repeat(65), expiry: 7 }],
+    [{ name: 'Board', expiry: 14 }],
+    [{ name: 'Board', expiry: 'never', password: 'x' }],
+  ])('refuses %j, since it comes from the browser', async (forged) => {
+    await expect(createShareLink('p-store', forged as unknown as NewShareLink)).rejects.toThrow(
+      'A share link needs a name and an expiry of never, 7, 30, 90 or 365 days.',
+    );
+    expect(shareLinksState.create).not.toHaveBeenCalled();
+  });
+});
+
+describe('revokeShareLink', () => {
+  const LINK_ID = '4d0f6b8c-5e7a-4f9b-8c4d-6e8f0a2b4c5d';
+
+  beforeEach(() => {
+    shareLinksState.revoke.mockReset();
+  });
+
+  it('revokes the link of the project', async () => {
+    shareLinksState.revoke.mockResolvedValue(undefined);
+
+    await expect(revokeShareLink('p-store', LINK_ID)).resolves.toBeUndefined();
+    expect(shareLinksState.revoke).toHaveBeenCalledWith('p-store', LINK_ID);
+  });
+
+  it('refuses an id that is not a UUID, and a project the admin cannot read', async () => {
+    await expect(revokeShareLink('p-store', 'not-a-link')).rejects.toThrow(
+      'A share link is revoked by its id.',
+    );
+    await expect(revokeShareLink('p-other', LINK_ID)).rejects.toThrow('not-found');
+    expect(shareLinksState.revoke).not.toHaveBeenCalled();
   });
 });

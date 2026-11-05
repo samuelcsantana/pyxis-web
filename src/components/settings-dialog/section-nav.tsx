@@ -29,6 +29,8 @@ export const SECTION_ICONS: Readonly<Record<SettingsSection, string>> = {
   project: 'M4 7l8-4 8 4v10l-8 4-8-4z M4 7l8 4 8-4 M12 11v10',
   goals:
     'M12 3a9 9 0 1 1 0 18a9 9 0 1 1 0-18 M12 7a5 5 0 1 1 0 10a5 5 0 1 1 0-10 M12 11a1 1 0 1 1 0 2a1 1 0 1 1 0-2',
+  share:
+    'M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1 M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1',
   privacy: 'M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z M9 12l2 2 4-4',
   keys: 'M7 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M10 11h10 M17 11v3 M20 11v2',
   people:

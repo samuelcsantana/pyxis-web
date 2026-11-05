@@ -38,6 +38,7 @@ import { type RevokeProjectKey, RevokeProjectKeyButton } from './revoke-project-
 import type { EndSession } from './end-session-button';
 import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
+import { type ShareLinksManagement, ShareLinksPanel } from './share-links-panel';
 import { ProjectOptionSwitch, type SetProjectOption } from './project-option-switch';
 import { type ChooseEmailPreferences, WeeklyDigestSwitch } from './weekly-digest-switch';
 
@@ -71,6 +72,7 @@ export interface ProjectSettingsViewProps {
   readonly myEmail: string;
   readonly goals: readonly Goal[];
   readonly manageGoals: GoalsManagement;
+  readonly shareLinks: ShareLinksManagement;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -464,6 +466,7 @@ export function ProjectSettingsView({
   myEmail,
   goals,
   manageGoals,
+  shareLinks,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
@@ -506,6 +509,9 @@ export function ProjectSettingsView({
           </div>
           <div className="lg:col-span-2">
             <GoalsPanel goals={goals} manage={manageGoals} />
+          </div>
+          <div className="lg:col-span-2">
+            <ShareLinksPanel {...shareLinks} timezone={settings.timezone} i18n={i18n} />
           </div>
           <ActivityPanel {...section} />
           <RetentionPanel {...section} />

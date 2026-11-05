@@ -30,6 +30,11 @@ import { portuguese } from '@/test-utils/portuguese';
 import { spanish } from '@/test-utils/spanish';
 import { ProjectSettingsView } from './project-settings-view';
 import { MockGoalsService } from '@/services/goals/mock-goals-service';
+import { shareLinksResponseSchema } from '@/domain/share-links.schema';
+import {
+  demoShareLinksWire,
+  MockShareLinksService,
+} from '@/services/share-links/mock-share-links-service';
 
 const STORY_NOW = new Date('2026-10-06T02:30:00.000Z');
 
@@ -90,6 +95,16 @@ const meta = {
       create: (changes) => GOALS.create(STORE.id, changes),
       update: (goalId, changes) => GOALS.update(STORE.id, goalId, changes),
       remove: () => GOALS.remove(),
+    },
+    shareLinks: {
+      links: shareLinksResponseSchema.parse(demoShareLinksWire(STORY_NOW)),
+      onPro: true,
+      create: ({ name, expiry }) =>
+        new MockShareLinksService(() => STORY_NOW).create(STORE.id, {
+          name,
+          expiresAt: expiry === 'never' ? null : STORY_NOW.toISOString(),
+        }),
+      revoke: () => Promise.resolve(),
     },
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },

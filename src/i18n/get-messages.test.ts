@@ -56,6 +56,7 @@ describe('get-messages', () => {
       'connections',
       'sessions',
       'accessTokens',
+      'shareLinks',
       'consent',
       'projectForm',
       'projectKeys',

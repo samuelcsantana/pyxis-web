@@ -31,12 +31,20 @@ import {
   type SetCityOutcome,
   type SetVisitorsOutcome,
 } from '@/domain/project-management';
+import {
+  type CreateShareLinkOutcome,
+  MAX_SHARE_LINK_NAME_LENGTH,
+  type NewShareLink,
+  SHARE_LINK_LIFETIMES,
+  shareLinkRequestOf,
+} from '@/domain/share-links';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
 import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
+import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
 import { currentLocale } from '@/i18n/current-locale';
 import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
 import type { RequestExportOutcome } from '@/domain/exports';
@@ -71,6 +79,11 @@ const goalChangesSchema = z.strictObject({
   target: z.string().trim().min(1).max(MAX_GOAL_PATH_LENGTH),
 });
 const goalIdSchema = z.uuid();
+const newShareLinkSchema = z.strictObject({
+  name: z.string().trim().min(1).max(MAX_SHARE_LINK_NAME_LENGTH),
+  expiry: z.union([z.literal('never'), z.literal([...SHARE_LINK_LIFETIMES])]),
+});
+const shareLinkIdSchema = z.uuid();
 
 export async function chooseEmailPreferences(
   projectId: string,
@@ -298,4 +311,27 @@ export async function deleteGoal(projectId: string, goalId: string): Promise<Del
     revalidatePath(EVERY_PROJECT_SCREEN, 'layout');
   }
   return outcome;
+}
+
+export async function createShareLink(
+  projectId: string,
+  link: NewShareLink,
+): Promise<CreateShareLinkOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = newShareLinkSchema.safeParse(link);
+  if (!parsed.success) {
+    throw new Error('A share link needs a name and an expiry of never, 7, 30, 90 or 365 days.');
+  }
+  return readOrSignIn(() =>
+    createShareLinksService().create(project.id, shareLinkRequestOf(parsed.data, new Date())),
+  );
+}
+
+export async function revokeShareLink(projectId: string, linkId: string): Promise<void> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = shareLinkIdSchema.safeParse(linkId);
+  if (!parsed.success) {
+    throw new Error('A share link is revoked by its id.');
+  }
+  await readOrSignIn(() => createShareLinksService().revoke(project.id, parsed.data));
 }

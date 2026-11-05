@@ -100,6 +100,19 @@ const EMAIL = {
     update: () => Promise.resolve({ kind: 'notFound' } as const),
     remove: () => Promise.resolve({ kind: 'deleted' } as const),
   },
+  shareLinks: {
+    links: [
+      {
+        id: '4d0f6b8c-5e7a-4f9b-8c4d-6e8f0a2b4c5d',
+        name: 'Monthly board report',
+        createdAt: '2026-09-25T10:00:00.000Z',
+        expiresAt: null,
+      },
+    ],
+    onPro: true,
+    create: () => Promise.resolve({ kind: 'limitReached' } as const),
+    revoke: () => Promise.resolve(),
+  },
 };
 
 const OWNED: ProjectSettings = {
