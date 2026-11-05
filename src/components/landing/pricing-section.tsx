@@ -11,6 +11,7 @@ import {
   PRO_PLAN_EVENTS_MULTIPLE,
   type SignUpOffer,
 } from '@/domain/sign-up';
+import { MAX_GOALS } from '@/domain/goals';
 import type { I18n } from '@/i18n/i18n';
 import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { CopyCodeButton } from './copy-code-button';
@@ -32,13 +33,14 @@ interface AskPanelProps {
 export const CONTACT_EMAIL_ID = 'pricing-contact-email';
 export const YEARLY_OPTION_ID = 'pricing-yearly';
 
-const INCLUDED = ['events', 'sites', 'people', 'history', 'digest', 'agents'] as const;
+const INCLUDED = ['events', 'sites', 'people', 'history', 'digest', 'goals', 'agents'] as const;
 const FREE_INCLUDED = [
   'events',
   'sites',
   'people',
   'history',
   'digest',
+  'goals',
   'agents',
   'install',
 ] as const;
@@ -322,7 +324,10 @@ function OnePlan({ i18n, offer, approximate }: PlansProps) {
             <PaidPlanTerms i18n={i18n} approximate={approximate} />
             <IncludedList
               items={INCLUDED.map((item) => ({
-                text: t(`landing.pricing.included.${item}`, proPlanValuesOf(i18n)),
+                text: t(`landing.pricing.included.${item}`, {
+                  ...proPlanValuesOf(i18n),
+                  goals: i18n.format.count(MAX_GOALS),
+                }),
               }))}
             />
             {signUpOpen ? (
@@ -377,6 +382,7 @@ interface PlansProps {
 function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: boolean }) {
   const { t } = i18n;
   const events = i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH);
+  const includedValues = { events, goals: i18n.format.count(MAX_GOALS) };
   return (
     <div className={`flex flex-col gap-5 rounded-card border border-line bg-card p-6 ${REVEAL}`}>
       <h3 className="text-lg font-semibold">{t('landing.pricing.free.name')}</h3>
@@ -389,7 +395,7 @@ function FreePlanCard({ i18n, full }: { readonly i18n: I18n; readonly full: bool
       />
       <IncludedList
         items={FREE_INCLUDED.map((item) => ({
-          text: t(`landing.pricing.free.included.${item}`, { events }),
+          text: t(`landing.pricing.free.included.${item}`, includedValues),
         }))}
       />
       <a

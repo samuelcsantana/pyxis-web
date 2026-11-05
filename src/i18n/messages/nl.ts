@@ -2065,7 +2065,7 @@ export const nl = translation({
       lead: 'Hetzelfde dashboard, drie manieren om het te gebruiken.',
       store: {
         title: 'Webshop of online bedrijf',
-        body: 'Hoeveel mensen een bestelling beginnen en bij welke stap ze afhaken: winkelwagen, bezorging of betaling. Uitgesplitst naar telefoon en computer, en naar waar het bezoek vandaan kwam.',
+        body: 'Hoeveel mensen een bestelling beginnen en bij welke stap ze afhaken: winkelwagen, bezorging of betaling. Uitgesplitst naar telefoon en computer, en naar waar het bezoek vandaan kwam. Stuur het bedrag van elke bestelling mee en Pyxis telt de omzet op per doel, bron en campagne.',
         link: 'Bekijk een funnel in de demo',
         shopify:
           'Op Shopify meet een fragment in het thema de producten en de winkelwagen. De checkout draait bij Shopify en wordt niet gemeten.',
@@ -2150,7 +2150,7 @@ export const nl = translation({
         'Liever vragen? Koppel Pyxis aan Claude, dan leest Claude dezelfde cijfers, zonder iets te wijzigen. <link>Zo koppel je het</link>',
       questions: {
         overview:
-          'Hoeveel bezoeken, conversies en mislukte schrijfverzoeken deze periode, vergeleken met de vorige?',
+          'Hoeveel bezoeken, conversies per doel, omzet en mislukte schrijfverzoeken deze periode, vergeleken met de vorige?',
         acquisition: 'Welke kanalen, bronnen en campagnes brengen bezoeken die converteren?',
         devices: 'Van welke apparaten, browsers, landen en regio’s komen bezoeken?',
         features: 'Welke events en schermen worden gebruikt, en hoe is één eigenschap verdeeld?',
@@ -2439,6 +2439,7 @@ export const nl = translation({
           people: 'Alleen jij in het dashboard',
           history: '13 maanden geschiedenis',
           digest: 'Een wekelijkse samenvatting per e-mail',
+          goals: 'Tot {goals} doelen per site, met conversies en omzet',
           agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
           install:
             'Installeren zonder programmeren, via Google Tag Manager of in een Shopify-thema',
@@ -2468,6 +2469,7 @@ export const nl = translation({
         people: 'Tot {proPeople} personen in het dashboard',
         history: '13 maanden geschiedenis',
         digest: 'Een wekelijkse samenvatting per e-mail',
+        goals: 'Tot {goals} doelen per site, met conversies en omzet',
         agents: 'De Claude-connector (MCP) en toegangstokens voor AI-agents',
         support: 'Support per e-mail, antwoord binnen 2 werkdagen',
       },
@@ -2536,6 +2538,11 @@ export const nl = translation({
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of neem een abonnement op de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres en een kaart: 14 dagen gratis, één keer per klant, en je kunt altijd opzeggen.',
           answerFree:
             'Ja, op twee manieren: draai Pyxis op je eigen infrastructuur (de code staat met een MIT-licentie op GitHub) of gebruik de gehoste versie. Iedereen in Brazilië kan zich registreren met een e-mailadres, zonder kaart, op het Hobby-abonnement, en het Pro-abonnement nemen als de site meer nodig heeft.',
+        },
+        goals: {
+          question: 'Kan het conversies en omzet tellen?',
+          answer:
+            'Ja. Elke site heeft tot {goals} doelen, elk een event zoals <code>signup_completed</code> of een paginapad met <code>*</code> zoals <code>/orders/*</code>. Het Overzicht toont de conversies en de ratio van elk doel en, bij een eventdoel, de omzet die de site meestuurt in een eigenschap <code>revenue</code>, in de valuta van het project. Beide abonnementen bevatten doelen en omzet.',
         },
         agency: {
           question: 'Kan ik Pyxis gebruiken op de sites van mijn klanten?',

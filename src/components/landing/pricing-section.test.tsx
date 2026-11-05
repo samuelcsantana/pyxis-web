@@ -95,6 +95,7 @@ describe('PricingSection', () => {
         'Up to 10 people in the dashboard',
         '13 months of history',
         'A weekly digest by e-mail',
+        'Up to 10 goals per site, with conversions and revenue',
         'The Claude connector (MCP) and access tokens for AI agents',
       ]),
     );
@@ -284,6 +285,7 @@ describe('PricingSection', () => {
         'Only you in the dashboard',
         '13 months of history',
         'A weekly digest by e-mail',
+        'Up to 10 goals per site, with conversions and revenue',
         'The Claude connector (MCP) and access tokens for AI agents',
         'Installs without code, through Google Tag Manager or in a Shopify theme',
       ]);

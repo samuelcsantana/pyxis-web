@@ -2087,7 +2087,7 @@ export const de = translation({
       lead: 'Dasselbe Dashboard, drei Arten, es zu nutzen.',
       store: {
         title: 'Onlineshop oder Onlinegeschäft',
-        body: 'Wie viele Menschen eine Bestellung beginnen und bei welchem Schritt sie aufgeben: Warenkorb, Versand oder Zahlung. Getrennt nach Smartphone und Computer und nach der Herkunft des Besuchs.',
+        body: 'Wie viele Menschen eine Bestellung beginnen und bei welchem Schritt sie aufgeben: Warenkorb, Versand oder Zahlung. Getrennt nach Smartphone und Computer und nach der Herkunft des Besuchs. Sende den Betrag jeder Bestellung mit, und Pyxis summiert den Umsatz nach Ziel, Quelle und Kampagne.',
         link: 'Einen Funnel in der Demo ansehen',
         shopify:
           'Auf Shopify misst ein Codeausschnitt im Theme Produkte und Warenkorb. Der Checkout läuft bei Shopify und wird nicht gemessen.',
@@ -2172,7 +2172,7 @@ export const de = translation({
         'Lieber fragen? Verbinde Pyxis mit Claude, und Claude liest dieselben Zahlen, ohne etwas zu ändern. <link>So verbindest du es</link>',
       questions: {
         overview:
-          'Wie viele Besuche, Conversions und fehlgeschlagene Schreibzugriffe in diesem Zeitraum, verglichen mit dem vorherigen?',
+          'Wie viele Besuche, Conversions pro Ziel, Umsatz und fehlgeschlagene Schreibzugriffe in diesem Zeitraum, verglichen mit dem vorherigen?',
         acquisition: 'Welche Kanäle, Quellen und Kampagnen bringen Besuche, die konvertieren?',
         devices: 'Von welchen Geräten, Browsern, Ländern und Regionen kommen die Besuche?',
         features:
@@ -2464,6 +2464,7 @@ export const de = translation({
           people: 'Nur du im Dashboard',
           history: '13 Monate Verlauf',
           digest: 'Ein Wochenbericht per E-Mail',
+          goals: 'Bis zu {goals} Ziele pro Website, mit Conversions und Umsatz',
           agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
           install:
             'Installation ohne Programmieren, über den Google Tag Manager oder im Shopify-Theme',
@@ -2493,6 +2494,7 @@ export const de = translation({
         people: 'Bis zu {proPeople} Personen im Dashboard',
         history: '13 Monate Verlauf',
         digest: 'Ein Wochenbericht per E-Mail',
+        goals: 'Bis zu {goals} Ziele pro Website, mit Conversions und Umsatz',
         agents: 'Der Claude-Connector (MCP) und Zugriffstokens für KI-Agenten',
         support: 'Support per E-Mail, Antwort innerhalb von 2 Werktagen',
       },
@@ -2562,6 +2564,11 @@ export const de = translation({
             'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder abonniere den gehosteten Plan. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse und einer Karte registrieren: 14 Tage kostenlos, einmal pro Kunde, und du kannst jederzeit kündigen.',
           answerFree:
             'Ja, auf zwei Arten: Betreibe Pyxis auf deiner eigenen Infrastruktur (der Code steht unter MIT-Lizenz auf GitHub) oder nutze das gehostete Pyxis. Wer in Brasilien ist, kann sich mit einer E-Mail-Adresse ohne Karte im Hobby-Plan registrieren und den Pro-Plan abonnieren, wenn die Website mehr braucht.',
+        },
+        goals: {
+          question: 'Kann es Conversions und Umsatz zählen?',
+          answer:
+            'Ja. Jede Website hat bis zu {goals} Ziele, jedes ein Ereignis wie <code>signup_completed</code> oder ein Seitenpfad mit <code>*</code> wie <code>/orders/*</code>. Die Übersicht zeigt die Conversions und die Rate jedes Ziels und bei einem Ereignis-Ziel den Umsatz, den die Website in einer Eigenschaft <code>revenue</code> sendet, in der Währung des Projekts. Beide Pläne enthalten Ziele und Umsatz.',
         },
         agency: {
           question: 'Kann ich Pyxis auf den Websites meiner Kunden nutzen?',

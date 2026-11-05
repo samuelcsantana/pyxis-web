@@ -2023,7 +2023,7 @@ export const en = {
       lead: 'The same dashboard, three ways to use it.',
       store: {
         title: 'An online shop or business',
-        body: 'How many people start an order and at which step they give up: cart, delivery or payment. Split by phone and computer, and by where the visit came from.',
+        body: 'How many people start an order and at which step they give up: cart, delivery or payment. Split by phone and computer, and by where the visit came from. Send the amount of each order and Pyxis adds up the revenue by goal, source and campaign.',
         link: 'See a funnel in the demo',
         shopify:
           'On Shopify, a snippet in the theme measures products and the cart. The checkout runs on Shopify’s side and is not measured.',
@@ -2107,7 +2107,7 @@ export const en = {
         'Prefer to ask? Connect Pyxis to Claude and it reads the same numbers, only reading. <link>How to connect</link>',
       questions: {
         overview:
-          'How many visits, conversions and failed writes this period, against the one before?',
+          'How many visits, conversions per goal, revenue and failed writes this period, against the one before?',
         acquisition: 'Which channels, sources and campaigns bring visits that convert?',
         devices: 'Which devices, browsers, countries and states do visits come from?',
         features: 'Which events and screens get used, and how does one property break down?',
@@ -2391,6 +2391,7 @@ export const en = {
           people: 'Only you in the dashboard',
           history: '13 months of history',
           digest: 'A weekly digest by e-mail',
+          goals: 'Up to {goals} goals per site, with conversions and revenue',
           agents: 'The Claude connector (MCP) and access tokens for AI agents',
           install: 'Installs without code, through Google Tag Manager or in a Shopify theme',
         },
@@ -2419,6 +2420,7 @@ export const en = {
         people: 'Up to {proPeople} people in the dashboard',
         history: '13 months of history',
         digest: 'A weekly digest by e-mail',
+        goals: 'Up to {goals} goals per site, with conversions and revenue',
         agents: 'The Claude connector (MCP) and access tokens for AI agents',
         support: 'Support by e-mail, answered within 2 business days',
       },
@@ -2487,6 +2489,11 @@ export const en = {
             'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or subscribe to the hosted plan. Anyone in Brazil can sign up with an e-mail and a card: 14 days free, once per customer, and you cancel any time.',
           answerFree:
             'Yes, in two ways: run Pyxis on your own infrastructure (the code is MIT-licensed on GitHub) or use the hosted Pyxis. Anyone in Brazil can sign up with an e-mail, with no card, on the Hobby plan, and subscribe to the Pro plan when the site needs more.',
+        },
+        goals: {
+          question: 'Can it count conversions and revenue?',
+          answer:
+            'Yes. Each site has up to {goals} goals, each an event such as <code>signup_completed</code> or a page path with <code>*</code>, such as <code>/orders/*</code>. The Overview shows the conversions and the rate of each goal and, for an event goal, the revenue the site sends in a <code>revenue</code> property, in the project’s currency. Both plans include goals and revenue.',
         },
         agency: {
           question: 'Can I use Pyxis on my clients’ sites?',
