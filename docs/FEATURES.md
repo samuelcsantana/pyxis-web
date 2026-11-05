@@ -448,7 +448,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   site with Google Tag Manager can use that tab, a plugin that delays or combines JavaScript must
   leave both scripts out, the snippet survives a theme update, and WordPress.com needs a plan that
   allows plugins. The plugin's and WordPress's own labels appear as their translations show them.
-  The tabs wrap to a second row on a phone. Step 2, shared by the tabs, waits for the first event, checked
+  The tabs wrap to a second row on a phone. Under the tabs, two optional blocks: how to record
+  revenue, and "Automatic events": the npm snippet that imports `autoEvents` from
+  `pyxis-analytics/auto` and switches on outbound links, file downloads and form submissions, what
+  each event keeps (the link's domain; the file's extension and templated path; the form's id or
+  name, never a typed value), and that the Tag Manager template and the Shopify and WordPress
+  snippets do not record them. Every snippet pins the jsDelivr version to the `pyxis-analytics`
+  range this dashboard installs. Step 2, shared by the tabs, waits for the first event, checked
   again every few seconds (the chosen tab survives each re-read); once it arrives, "Open the
   dashboard" and a ready question for Claude about the project. Step 3, optional, connects Claude
   through its connector directory or `claude mcp add` against the API's `/mcp`, read-only and
