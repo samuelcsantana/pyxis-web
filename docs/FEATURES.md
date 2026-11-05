@@ -331,6 +331,19 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   Requests opens its visit, and the Funnel counts the visits or people that went through its
   steps. Today only shows what has happened by now. The Funnel opens on an example funnel, and
   the banner's "What is Pyxis?" links to the home page in the demo's language
+- A public page for a share link (`/share/<token>`), without signing in: a "Made with Pyxis"
+  strip linking to the home page, tabs for the five shared screens (Overview, Acquisition,
+  Devices, Features, Funnel) that keep the period, the period selector, the goal picker and the
+  row filters, never the identity or property filters. No account menu, no Visits, Timeline or
+  Requests, no CSV, no link to Settings, and the Funnel never lists who stopped. The viewer's
+  browser reads the card and the reports from the API (its rate limit counts each viewer), and
+  two Server Functions plan the reads and draw the answers with the dashboard's own report
+  views (ADR 0017). A closed, expired or unknown link, and an address that is not a token, show
+  the same page that never says why; too many requests ask to wait a minute; a link with a
+  password says so. Kept out of search engines by `X-Robots-Tag` and the robots meta tag. In the
+  demo, `/v1/shared/<token>` on the dashboard serves the demo store's reports for the demo
+  token, and never answers a report when an API is configured (404, or the sign-in redirect
+  without a session)
 - A settings dialog over every screen of a project, opened by the gear beside the account, the
   account menu and Install, at `#settings/<section>` in the address: the page under it is not read
   again, not drawn again and not scrolled, and the dialog's content is read once per opening by a

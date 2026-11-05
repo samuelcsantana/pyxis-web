@@ -85,8 +85,9 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   `#settings/<section>`, without reading it again: the account's and the project's, and help.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
-- **Public links (Pro).** The owner creates, copies once and revokes read-only links to a project's
-  summed reports, with an optional expiry.
+- **Public links (Pro).** The owner creates, copies once and revokes read-only links; `/share/<token>`
+  opens the summed reports to anyone holding one, read by the viewer's browser and drawn by the
+  server (ADR 0017).
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,
   German, French, Italian and Dutch ([Internationalization](#internationalization)).
 - **Accessible by default.** Every Storybook story is also an axe test, text follows the reader's
@@ -509,24 +510,25 @@ index) are in [docs/FEATURES.md](docs/FEATURES.md#privacy-and-security-in-detail
 
 ## Architecture decisions
 
-| ADR                                                                        | Decision                                                          |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [0001](docs/adr/0001-record-architecture-decisions.md)                     | Record architecture decisions                                     |
-| [0002](docs/adr/0002-server-components-and-services.md)                    | Server Components reading through service interfaces              |
-| [0003](docs/adr/0003-csp-without-nonces.md)                                | A Content Security Policy without nonces (superseded by 0009)     |
-| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md)         | Request state of Client Components with rx-state-bridge           |
-| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)             | Charts with Recharts, each with a table view (superseded by 0006) |
-| [0006](docs/adr/0006-server-rendered-svg-charts.md)                        | Charts drawn as SVG on the server, each with a table view         |
-| [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)            | Interface languages with typed dictionaries, a cookie and Intl    |
-| [0008](docs/adr/0008-host-only-session-cookie.md)                          | Keep the session in a host-only cookie set by a Server Action     |
-| [0009](docs/adr/0009-csp-with-nonces.md)                                   | A Content Security Policy with a nonce per request                |
-| [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)             | Home page language kept on the device, and the browser's at `/`   |
-| [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)             | Courtesy translations of the contract, the Portuguese prevailing  |
-| [0012](docs/adr/0012-persistent-screen-topbar.md)                          | The top bar of the eight screens stays mounted between them       |
-| [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md) | A visited screen comes back from the client cache                 |
-| [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                  | Arrivals are polled, not streamed, and counted on the device      |
-| [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)             | What went up since the last read fills slots the server drew      |
-| [0016](docs/adr/0016-settings-in-a-dialog-at-a-hash.md)                    | The settings open in a dialog named by the address's hash         |
+| ADR                                                                                    | Decision                                                                |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [0001](docs/adr/0001-record-architecture-decisions.md)                                 | Record architecture decisions                                           |
+| [0002](docs/adr/0002-server-components-and-services.md)                                | Server Components reading through service interfaces                    |
+| [0003](docs/adr/0003-csp-without-nonces.md)                                            | A Content Security Policy without nonces (superseded by 0009)           |
+| [0004](docs/adr/0004-client-request-state-with-rx-state-bridge.md)                     | Request state of Client Components with rx-state-bridge                 |
+| [0005](docs/adr/0005-charts-with-recharts-and-a-table-view.md)                         | Charts with Recharts, each with a table view (superseded by 0006)       |
+| [0006](docs/adr/0006-server-rendered-svg-charts.md)                                    | Charts drawn as SVG on the server, each with a table view               |
+| [0007](docs/adr/0007-interface-languages-typed-dictionaries.md)                        | Interface languages with typed dictionaries, a cookie and Intl          |
+| [0008](docs/adr/0008-host-only-session-cookie.md)                                      | Keep the session in a host-only cookie set by a Server Action           |
+| [0009](docs/adr/0009-csp-with-nonces.md)                                               | A Content Security Policy with a nonce per request                      |
+| [0010](docs/adr/0010-home-page-language-kept-on-the-device.md)                         | Home page language kept on the device, and the browser's at `/`         |
+| [0011](docs/adr/0011-courtesy-translations-of-the-contract.md)                         | Courtesy translations of the contract, the Portuguese prevailing        |
+| [0012](docs/adr/0012-persistent-screen-topbar.md)                                      | The top bar of the eight screens stays mounted between them             |
+| [0013](docs/adr/0013-a-visited-screen-comes-back-from-the-client-cache.md)             | A visited screen comes back from the client cache                       |
+| [0014](docs/adr/0014-arrivals-are-polled-not-streamed.md)                              | Arrivals are polled, not streamed, and counted on the device            |
+| [0015](docs/adr/0015-fresh-numbers-fill-server-drawn-slots.md)                         | What went up since the last read fills slots the server drew            |
+| [0016](docs/adr/0016-settings-in-a-dialog-at-a-hash.md)                                | The settings open in a dialog named by the address's hash               |
+| [0017](docs/adr/0017-a-shared-report-is-read-by-the-viewer-and-drawn-by-the-server.md) | A shared report is read by the viewer's browser and drawn by the server |
 
 ## Roadmap
 
