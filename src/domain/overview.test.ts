@@ -1,3 +1,4 @@
+import type { Goal } from './goals';
 import { describe, expect, it } from 'vitest';
 import {
   activityTotals,
@@ -285,14 +286,20 @@ describe('comparesUnfinishedDayWithWholeOne', () => {
   });
 });
 
-const CONVERSION_EVENT = 'signup_completed';
+const SIGN_UP_GOAL: Goal = {
+  id: '7f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b',
+  name: 'Sign-up',
+  kind: 'event',
+  target: 'signup_completed',
+  position: 1,
+};
 
 describe('overviewKpis', () => {
   it('gives the four figures with their change, tone and totals', () => {
     const [visits, users, conversions, errors] = overviewKpis(
       report(),
       { ...ENDED, days: 30 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -314,7 +321,7 @@ describe('overviewKpis', () => {
     });
     expect(conversions?.comparison).toBe('vs. previous 30 days');
     expect(conversions?.value).toBe('212');
-    expect(conversions?.note).toBe('signup_completed · 4.5% of 4,758 visits');
+    expect(conversions?.note).toBe('Sign-up · 4.5% of 4,758 visits');
     expect(errors).toEqual({
       id: 'write-errors',
       label: 'Write error rate',
@@ -333,7 +340,7 @@ describe('overviewKpis', () => {
     const [, users, conversions] = overviewKpis(
       report(),
       { ...ENDED, days: 30 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
     const [, , convertingVisits] = overviewKpis(
@@ -345,7 +352,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 30 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -357,7 +364,7 @@ describe('overviewKpis', () => {
     const converting = {
       label: 'See converting visits',
       screen: 'visits',
-      filter: { event: 'signup_completed' },
+      filter: { reached_goal: SIGN_UP_GOAL.id },
     };
     expect(conversions?.drillDown).toEqual(converting);
     expect(convertingVisits?.drillDown).toEqual(converting);
@@ -381,14 +388,14 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
     expect(kpis.map((kpi) => kpi.drillDown)).toEqual([null, null, null, null]);
   });
 
-  it('counts the visits that converted, with the conversion events beside them', () => {
+  it('counts the visits that reached the goal, with the times it was reached beside them', () => {
     const [, , conversions] = overviewKpis(
       report({
         ...WIRE,
@@ -398,7 +405,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 30 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -406,7 +413,7 @@ describe('overviewKpis', () => {
       label: 'Conversions',
       value: '200',
       change: '+5.3% (+10)',
-      note: '4.2% of 4,758 visits sent signup_completed · 212 conversion events',
+      note: '4.2% of 4,758 visits reached Sign-up · 212 times',
       series: [95, 105],
     });
   });
@@ -415,14 +422,14 @@ describe('overviewKpis', () => {
     const kpis = overviewKpis(
       report({ ...WIRE, kpis: { ...WIRE.kpis, conversions: null } }),
       { ...ENDED, days: 7 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
     expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
   });
 
-  it('leaves out conversions when the project names no conversion event', () => {
+  it('leaves out conversions when the project has no goal', () => {
     const kpis = overviewKpis(report(), { ...ENDED, days: 7 }, null, english);
 
     expect(kpis.map((kpi) => kpi.id)).toEqual(['visits', 'identified-users', 'write-errors']);
@@ -443,7 +450,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -467,7 +474,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -490,7 +497,7 @@ describe('overviewKpis', () => {
         },
       }),
       { ...ENDED, days: 1 },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 
@@ -504,7 +511,7 @@ describe('overviewKpis', () => {
   });
 
   it('judges no change while today is compared with all of yesterday', () => {
-    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 }, CONVERSION_EVENT, english);
+    const kpis = overviewKpis(report(), { ...ENDS_TODAY, days: 1 }, SIGN_UP_GOAL, english);
 
     expect(kpis.map((kpi) => kpi.tone)).toEqual(['neutral', 'neutral', 'neutral', 'neutral']);
     expect(kpis.map((kpi) => kpi.comparison)).toEqual(
@@ -519,7 +526,7 @@ describe('overviewKpis', () => {
         ...ENDS_TODAY,
         days: 1,
       },
-      CONVERSION_EVENT,
+      SIGN_UP_GOAL,
       english,
     );
 

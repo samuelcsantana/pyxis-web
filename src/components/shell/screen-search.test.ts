@@ -4,6 +4,7 @@ import type { FeatureSearch } from '@/domain/features';
 import type { FunnelSearch } from '@/domain/funnel';
 import { SEGMENT_PARAMETER } from '@/domain/funnel-segments';
 import type { FunnelDrillSearch } from '@/domain/funnel-subjects';
+import { GOAL_PARAMETER } from '@/domain/goal-parameters';
 import { METRIC_PARAMETER } from '@/domain/overview-chart';
 import type { RequestsSearch } from '@/domain/requests';
 import type { VisitsSearch } from '@/domain/visits';
@@ -13,7 +14,7 @@ function namesOf(search: object): ReadonlySet<string> {
   return new Set(Object.keys(search));
 }
 
-const EVERY_OVERVIEW_FILTER = { [METRIC_PARAMETER]: '' };
+const EVERY_OVERVIEW_FILTER = { [METRIC_PARAMETER]: '', [GOAL_PARAMETER]: '' };
 
 const EVERY_FUNNEL_FILTER_A_PERIOD_KEEPS: Required<
   FunnelSearch & Omit<FunnelDrillSearch, 'cursor'> & { readonly [SEGMENT_PARAMETER]: string }

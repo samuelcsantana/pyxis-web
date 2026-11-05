@@ -222,8 +222,6 @@ export const ptBR = translation({
         'Instale o SDK no seu site e as primeiras visualizações de página aparecem aqui em até um minuto.',
       guide: 'O guia completo de instalação está no <readme>README do SDK</readme>.',
     },
-    noConversionEvent:
-      'Nenhum evento de conversão está definido para este projeto, então as conversões não aparecem. O operador define um com o comando <code>project:update</code> da API e a opção <code>--conversion-event</code>.',
     noProjects: {
       title: 'Ainda não há projetos',
       body: '<email/> pode entrar, mas nenhum projeto foi liberado para esse e-mail ainda. Peça ao operador deste Pyxis para rodar <code>admin:grant</code> para o seu e-mail.',
@@ -1103,7 +1101,7 @@ export const ptBR = translation({
     failedRequest: forms('{count} requisição com falha', '{count} requisições com falha'),
     clientError: forms('{count} erro do cliente (4xx)', '{count} erros do cliente (4xx)'),
     serverError: forms('{count} erro do servidor (5xx)', '{count} erros do servidor (5xx)'),
-    conversionEvent: forms('{count} evento de conversão', '{count} eventos de conversão'),
+    timesReached: forms('{count} vez', '{count} vezes'),
     continent: forms('{count} continente', '{count} continentes'),
     country: forms('{count} país', '{count} países'),
     region: forms('{count} estado', '{count} estados'),
@@ -1129,7 +1127,7 @@ export const ptBR = translation({
     identifiedUser:
       'Um usuário identificado é um id de usuário distinto que o site passou para identify(), normalmente quando alguém entra; uma visita sem esse id é anônima.',
     conversion:
-      'Uma conversão é uma visita que enviou o evento de conversão do projeto pelo menos uma vez; os eventos de conversão contam cada vez que ele foi enviado.',
+      'Uma conversão é uma visita que atingiu a meta escolhida pelo menos uma vez, enviando o evento dela ou abrindo a página dela; “Vezes atingida” conta cada evento ou visualização de página que casou.',
     write: 'Uma escrita é um POST, PUT, PATCH ou DELETE enviado com trackRequest().',
     failure: 'Uma falha é um status 400 ou acima, ou nenhuma resposta.',
     changeTone:
@@ -1165,8 +1163,8 @@ export const ptBR = translation({
       identifiedUsers: 'entraram pelo menos uma vez',
       writeErrors: '{failed} de {writes} falharam',
       shareOfVisits: '{share} de {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} enviaram {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} atingiram {goal} · {times}',
     },
     drillDowns: {
       visits: 'Ver as visitas',
@@ -1197,6 +1195,20 @@ export const ptBR = translation({
     },
   },
   goals: {
+    picker: 'Meta contada como conversão',
+    none: 'Este projeto ainda não tem metas, por isso as conversões não aparecem. <settings>Adicione uma meta</settings>: um evento que o seu site envia ou uma página que a visita abre.',
+    kinds: {
+      event: 'Evento',
+      page: 'Página',
+    },
+    table: {
+      title: 'Metas',
+      description: 'Visitas que atingiram cada meta, de {visits}, {period}',
+      goal: 'Meta',
+      convertingVisits: 'Visitas',
+      conversions: 'Vezes atingida',
+      rate: 'Taxa de conversão',
+    },
     problems: {
       unknownGoal: 'A meta do endereço não existe mais, então a primeira meta é contada.',
       unknownReachedGoal: 'A meta do filtro não existe mais, então ele ficou de fora.',
@@ -1406,7 +1418,7 @@ export const ptBR = translation({
     },
     conversionByDevice: {
       title: 'Conversão por dispositivo',
-      description: 'Parcela das visitas que enviaram <code/>',
+      description: 'Parcela das visitas que atingiram {goal}',
     },
     footnote:
       'Dispositivo, navegador e sistema são deduzidos no servidor a partir do user agent do navegador, que depois é descartado. O país e o estado vêm da rede de borda, nunca de um endereço IP guardado; a cidade aproximada só é registrada num projeto cujo dono a ligou em Configurações. Visitas mais antigas têm só o país.',

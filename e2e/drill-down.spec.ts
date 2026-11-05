@@ -15,16 +15,18 @@ function filters(page: Page) {
   return page.getByRole('search', { name: 'Filter the visits' });
 }
 
-test('opens the converting visits and the failing routes from the Overview cards', async ({
+test('opens the visits that reached the goal and the failing routes from the Overview cards', async ({
   page,
 }) => {
   await page.goto(`/${STORE_ID}/overview?range=30d`);
 
   await page.getByRole('link', { name: 'See converting visits' }).click();
 
-  await expect(page).toHaveURL(/\/visits\?range=30d&event=signup_completed$/);
-  await expect(filters(page).getByRole('textbox', { name: 'Had event' })).toHaveValue(
-    'signup_completed',
+  await expect(page).toHaveURL(
+    /\/visits\?range=30d&reached_goal=b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f701$/,
+  );
+  await expect(filters(page).getByRole('combobox', { name: 'Reached goal' })).toHaveValue(
+    'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f701',
   );
   await expect(visitRows(page).first()).toBeVisible();
 

@@ -220,8 +220,6 @@ export const nl = translation({
         'Installeer de SDK op je site, dan verschijnen de eerste paginaweergaven hier binnen een minuut.',
       guide: 'De volledige installatiehandleiding staat in de <readme>README van de SDK</readme>.',
     },
-    noConversionEvent:
-      'Voor dit project is geen conversie-event ingesteld, dus conversies worden niet getoond. Wie Pyxis beheert, stelt er een in met het commando <code>project:update</code> van de API en de optie <code>--conversion-event</code>.',
     noProjects: {
       title: 'Nog geen projecten',
       body: '<email/> kan inloggen, maar heeft nog geen toegang tot een project gekregen. Vraag wie deze Pyxis beheert om <code>admin:grant</code> uit te voeren voor je e-mailadres.',
@@ -1125,7 +1123,7 @@ export const nl = translation({
     failedRequest: forms('{count} mislukt verzoek', '{count} mislukte verzoeken'),
     clientError: forms('{count} clientfout (4xx)', '{count} clientfouten (4xx)'),
     serverError: forms('{count} serverfout (5xx)', '{count} serverfouten (5xx)'),
-    conversionEvent: forms('{count} conversie-event', '{count} conversie-events'),
+    timesReached: forms('{count} keer', '{count} keer'),
     continent: forms('{count} continent', '{count} continenten'),
     country: forms('{count} land', '{count} landen'),
     region: forms('{count} regio', '{count} regio’s'),
@@ -1152,7 +1150,7 @@ export const nl = translation({
     identifiedUser:
       'Een geïdentificeerde gebruiker is een unieke gebruikers-id die de site aan identify() heeft doorgegeven, meestal als iemand inlogt; een bezoek zonder id is anoniem.',
     conversion:
-      'Een conversie is een bezoek dat het conversie-event van het project minstens één keer heeft verstuurd; de conversie-events tellen elke keer dat het werd verstuurd.',
+      'Een conversie is een bezoek dat het gekozen doel minstens één keer bereikte, door het event ervan te versturen of de pagina ervan te openen; keer bereikt telt elk passend event of elke passende paginaweergave.',
     write:
       'Een schrijfverzoek is een POST, PUT, PATCH of DELETE die met trackRequest() is verstuurd.',
     failure: 'Een fout is een status van 400 of hoger, of helemaal geen antwoord.',
@@ -1189,8 +1187,8 @@ export const nl = translation({
       identifiedUsers: 'minstens één keer ingelogd',
       writeErrors: '{failed} van {writes} mislukt',
       shareOfVisits: '{share} van {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} verstuurde {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} bereikten {goal} · {times}',
     },
     drillDowns: {
       visits: 'Bekijk de bezoeken',
@@ -1221,6 +1219,20 @@ export const nl = translation({
     },
   },
   goals: {
+    picker: 'Doel geteld als conversie',
+    none: 'Dit project heeft nog geen doelen, dus conversies worden niet getoond. <settings>Voeg een doel toe</settings>: een event dat je site verstuurt, of een pagina die het bezoek opent.',
+    kinds: {
+      event: 'Event',
+      page: 'Pagina',
+    },
+    table: {
+      title: 'Doelen',
+      description: 'Bezoeken die elk doel bereikten, van {visits}, {period}',
+      goal: 'Doel',
+      convertingVisits: 'Bezoeken',
+      conversions: 'Keer bereikt',
+      rate: 'Conversieratio',
+    },
     problems: {
       unknownGoal: 'Het doel in het adres bestaat niet meer, dus het eerste doel wordt geteld.',
       unknownReachedGoal: 'Het doel in het filter bestaat niet meer, dus het is weggelaten.',
@@ -1430,7 +1442,7 @@ export const nl = translation({
     },
     conversionByDevice: {
       title: 'Conversie per apparaat',
-      description: 'Aandeel van de bezoeken die <code/> verstuurden',
+      description: 'Aandeel bezoeken dat {goal} bereikte',
     },
     footnote:
       'Apparaat, browser en systeem worden op de server afgeleid uit de user agent van de browser, die daarna wordt weggegooid. Het land en de regio komen van het edgenetwerk, nooit van een opgeslagen IP-adres; de geschatte stad wordt alleen vastgelegd in een project waarvan de eigenaar die in de Instellingen heeft aangezet. Oudere bezoeken hebben alleen het land.',

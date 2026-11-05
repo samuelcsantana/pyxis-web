@@ -223,8 +223,6 @@ export const de = translation({
         'Installiere das SDK auf deiner Website, dann erscheinen die ersten Seitenaufrufe hier innerhalb einer Minute.',
       guide: 'Die vollständige Einrichtungsanleitung steht in der <readme>README des SDK</readme>.',
     },
-    noConversionEvent:
-      'Für dieses Projekt ist kein Conversion-Ereignis festgelegt, daher werden keine Conversions angezeigt. Der Betreiber legt eines mit dem API-Befehl <code>project:update</code> und der Option <code>--conversion-event</code> fest.',
     noProjects: {
       title: 'Noch keine Projekte',
       body: '<email/> kann sich anmelden, hat aber noch kein Projekt freigegeben bekommen. Bitte den Betreiber dieser Pyxis-Instanz, <code>admin:grant</code> für deine E-Mail-Adresse auszuführen.',
@@ -1140,7 +1138,7 @@ export const de = translation({
     failedRequest: forms('{count} fehlgeschlagene Anfrage', '{count} fehlgeschlagene Anfragen'),
     clientError: forms('{count} Client-Fehler (4xx)', '{count} Client-Fehler (4xx)'),
     serverError: forms('{count} Server-Fehler (5xx)', '{count} Server-Fehler (5xx)'),
-    conversionEvent: forms('{count} Conversion-Ereignis', '{count} Conversion-Ereignisse'),
+    timesReached: forms('{count}-mal', '{count}-mal'),
     continent: forms('{count} Kontinent', '{count} Kontinente'),
     country: forms('{count} Land', '{count} Länder'),
     region: forms('{count} Region', '{count} Regionen'),
@@ -1167,7 +1165,7 @@ export const de = translation({
     identifiedUser:
       'Ein identifizierter Nutzer ist eine eindeutige Nutzer-ID, die die Website an identify() übergeben hat, meist bei der Anmeldung; ein Besuch ohne sie ist anonym.',
     conversion:
-      'Eine Conversion ist ein Besuch, der das Conversion-Ereignis des Projekts mindestens einmal gesendet hat; bei den Conversion-Ereignissen zählt jedes Senden.',
+      'Eine Conversion ist ein Besuch, der das gewählte Ziel mindestens einmal erreicht hat, indem er sein Ereignis sendete oder seine Seite öffnete; „Mal erreicht“ zählt jedes passende Ereignis und jeden passenden Seitenaufruf.',
     write: 'Ein Schreibzugriff ist ein POST, PUT, PATCH oder DELETE, gesendet mit trackRequest().',
     failure: 'Ein Fehler ist ein Status ab 400 oder gar keine Antwort.',
     changeTone:
@@ -1203,8 +1201,8 @@ export const de = translation({
       identifiedUsers: 'mindestens einmal angemeldet',
       writeErrors: '{failed} fehlgeschlagen · {writes} insgesamt',
       shareOfVisits: '{share} · {visits} insgesamt',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} sendeten {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} erreichten {goal} · {times}',
     },
     drillDowns: {
       visits: 'Besuche ansehen',
@@ -1235,6 +1233,20 @@ export const de = translation({
     },
   },
   goals: {
+    picker: 'Als Conversion gezähltes Ziel',
+    none: 'Dieses Projekt hat noch keine Ziele, daher werden keine Conversions angezeigt. <settings>Füge ein Ziel hinzu</settings>: ein Ereignis, das deine Website sendet, oder eine Seite, die der Besuch öffnet.',
+    kinds: {
+      event: 'Ereignis',
+      page: 'Seite',
+    },
+    table: {
+      title: 'Ziele',
+      description: 'Besuche, die jedes Ziel erreicht haben, von {visits}, {period}',
+      goal: 'Ziel',
+      convertingVisits: 'Besuche',
+      conversions: 'Mal erreicht',
+      rate: 'Conversion-Rate',
+    },
     problems: {
       unknownGoal: 'Das Ziel in der Adresse gibt es nicht mehr, daher wird das erste Ziel gezählt.',
       unknownReachedGoal: 'Das Ziel im Filter gibt es nicht mehr, daher wurde er weggelassen.',
@@ -1445,7 +1457,7 @@ export const de = translation({
     },
     conversionByDevice: {
       title: 'Conversion nach Gerät',
-      description: 'Anteil der Besuche, die <code/> gesendet haben',
+      description: 'Anteil der Besuche, die {goal} erreicht haben',
     },
     footnote:
       'Gerät, Browser und System werden auf dem Server aus dem User-Agent des Browsers ermittelt, der danach verworfen wird. Land und Region stammen aus dem Edge-Netzwerk, nie aus einer gespeicherten IP-Adresse; die ungefähre Stadt wird nur in einem Projekt erfasst, dessen Inhaber sie in den Einstellungen eingeschaltet hat. Ältere Besuche haben nur das Land.',

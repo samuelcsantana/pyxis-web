@@ -15,7 +15,7 @@ const meta = {
   args: {
     i18n: english,
     conversions: deviceConversions(REPORT.deviceTypes, english),
-    conversionEvent: 'signup_completed',
+    goal: 'Sign-up',
   },
   parameters: { layout: 'padded' },
   decorators: [

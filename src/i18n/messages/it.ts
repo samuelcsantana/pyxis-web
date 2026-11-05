@@ -218,8 +218,6 @@ export const it = translation({
         'Installa l’SDK sul tuo sito e le prime visualizzazioni di pagina compaiono qui entro un minuto.',
       guide: 'La guida completa all’installazione è nel <readme>README dell’SDK</readme>.',
     },
-    noConversionEvent:
-      'Per questo progetto non è impostato nessun evento di conversione, quindi le conversioni non vengono mostrate. L’operatore ne imposta uno con il comando <code>project:update</code> dell’API e la sua opzione <code>--conversion-event</code>.',
     noProjects: {
       title: 'Ancora nessun progetto',
       body: '<email/> può accedere, ma a questo indirizzo non è stato ancora assegnato nessun progetto. Chiedi all’operatore di questo Pyxis di eseguire <code>admin:grant</code> per la tua email.',
@@ -1121,7 +1119,7 @@ export const it = translation({
     failedRequest: forms('{count} richiesta fallita', '{count} richieste fallite'),
     clientError: forms('{count} errore del client (4xx)', '{count} errori del client (4xx)'),
     serverError: forms('{count} errore del server (5xx)', '{count} errori del server (5xx)'),
-    conversionEvent: forms('{count} evento di conversione', '{count} eventi di conversione'),
+    timesReached: forms('{count} volta', '{count} volte'),
     continent: forms('{count} continente', '{count} continenti'),
     country: forms('{count} paese', '{count} paesi'),
     region: forms('{count} regione', '{count} regioni'),
@@ -1148,7 +1146,7 @@ export const it = translation({
     identifiedUser:
       'Un utente identificato è un ID utente distinto che il sito ha passato a identify(), di solito quando qualcuno accede; una visita senza ID è anonima.',
     conversion:
-      'Una conversione è una visita che ha inviato almeno una volta l’evento di conversione del progetto; gli eventi di conversione contano ogni invio.',
+      'Una conversione è una visita che ha raggiunto l’obiettivo scelto almeno una volta, inviando il suo evento o aprendo la sua pagina; le volte raggiunto contano ogni evento o visualizzazione di pagina corrispondente.',
     write: 'Una scrittura è un POST, PUT, PATCH o DELETE inviato con trackRequest().',
     failure: 'Un errore è un codice di stato 400 o superiore, oppure l’assenza di risposta.',
     changeTone:
@@ -1184,8 +1182,8 @@ export const it = translation({
       identifiedUsers: 'con almeno un accesso',
       writeErrors: 'fallite: {failed} su {writes}',
       shareOfVisits: '{share} di {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} ha inviato {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} hanno raggiunto {goal} · {times}',
     },
     drillDowns: {
       visits: 'Vedi le visite',
@@ -1216,6 +1214,20 @@ export const it = translation({
     },
   },
   goals: {
+    picker: 'Obiettivo contato come conversione',
+    none: 'Questo progetto non ha ancora obiettivi, quindi le conversioni non vengono mostrate. <settings>Aggiungi un obiettivo</settings>: un evento che il tuo sito invia, o una pagina che la visita apre.',
+    kinds: {
+      event: 'Evento',
+      page: 'Pagina',
+    },
+    table: {
+      title: 'Obiettivi',
+      description: 'Visite che hanno raggiunto ogni obiettivo, su {visits}, {period}',
+      goal: 'Obiettivo',
+      convertingVisits: 'Visite',
+      conversions: 'Volte raggiunto',
+      rate: 'Tasso di conversione',
+    },
     problems: {
       unknownGoal: 'L’obiettivo nell’indirizzo non esiste più, quindi viene contato il primo.',
       unknownReachedGoal: 'L’obiettivo del filtro non esiste più, quindi è stato escluso.',
@@ -1425,7 +1437,7 @@ export const it = translation({
     },
     conversionByDevice: {
       title: 'Conversione per dispositivo',
-      description: 'Quota di visite che hanno inviato <code/>',
+      description: 'Quota di visite che hanno raggiunto {goal}',
     },
     footnote:
       'Dispositivo, browser e sistema vengono ricavati sul server dallo user agent del browser, che poi viene scartato. Il paese e la regione arrivano dalla rete edge, mai da un indirizzo IP salvato; la città approssimativa viene registrata solo in un progetto il cui proprietario l’ha attivata nelle Impostazioni. Le visite più vecchie hanno solo il paese.',

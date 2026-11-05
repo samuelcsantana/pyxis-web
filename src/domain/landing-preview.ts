@@ -1,3 +1,4 @@
+import type { Goal } from './goals';
 import type { I18n } from '@/i18n/i18n';
 import {
   countedSteps,
@@ -103,13 +104,13 @@ export function landingPreviewOf(
   reports: LandingPreviewReports,
   period: Period,
   today: string,
-  conversionEvent: string | null,
+  goal: Goal | null,
   i18n: I18n,
 ): LandingPreviewView {
   const { overview } = reports;
   const compared = { days: daysBetween(period.from, period.to), endsToday: period.to === today };
   return {
-    kpis: overviewKpis(overview, compared, conversionEvent, i18n),
+    kpis: overviewKpis(overview, compared, goal, i18n),
     current: overview.kpis.visits.daily,
     previous: overview.previousDays?.map((day) => day.visits) ?? [],
     dropOff: dropOffOf(reports.funnelSteps, reports.funnel, i18n),

@@ -162,12 +162,12 @@ describe('DeviceConversionList', () => {
     render(
       <DeviceConversionList
         conversions={deviceConversions(DEVICE_TYPES, english)}
-        conversionEvent="signup_completed"
+        goal="Sign-up"
         i18n={english}
       />,
     );
 
-    expect(screen.getByText('signup_completed')).toBeInTheDocument();
+    expect(screen.getByText('Share of visits that reached Sign-up')).toBeInTheDocument();
     const items = screen.getAllByRole('listitem');
     expect(items[1]).toHaveTextContent('Desktop5.9% · 20 of 340 visits');
   });

@@ -5,6 +5,8 @@ import type { OverviewReport } from '@/domain/overview';
 import type { RouteReport } from '@/domain/requests';
 import { NO_UNIQUE_VISITORS } from '@/domain/unique-visitors';
 import type { I18n } from '@/i18n/i18n';
+import { demoCountedGoal } from '@/services/demo/demo-goals';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 
 const DAYS = 30;
 const PERIOD = { preset: '30d', from: '2026-09-14', to: '2026-10-13' } as const;
@@ -88,7 +90,7 @@ export function showcasePreview(i18n: I18n): LandingPreviewView {
     },
     PERIOD,
     TODAY,
-    'signup_completed',
+    demoCountedGoal(DEMO_STORE),
     i18n,
   );
 }

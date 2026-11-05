@@ -4,7 +4,7 @@ import { addDays, todayIn } from '@/domain/period';
 import { NO_DASHBOARD_FILTERS } from '@/domain/dashboard-filters';
 import type { DateRange } from '../date-range';
 import { demoProjectOf } from '../demo/demo-projects';
-import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
+import type { DemoVisitRecord } from '../demo/demo-records';
 import {
   countWhere,
   demoRanking,
@@ -19,8 +19,10 @@ import {
   isPageView,
   isWrite,
   visitDate,
+  type DemoGoalTest,
   type DemoReportRange,
 } from '../demo/demo-scope';
+import { demoConversionTest } from '../demo/demo-goals';
 import { demoDays, previousRange } from '../demo/demo-series';
 import { type DemoVisitorKind, demoVisitorOf } from '../demo/demo-visitor-kinds';
 
@@ -44,9 +46,11 @@ interface DayFigures extends Figures {
   readonly date: string;
 }
 
-function figuresOf(visits: readonly DemoVisitRecord[], conversionEvent: string | null): Figures {
+const NEVER_CONVERTS: DemoGoalTest = () => false;
+
+function figuresOf(visits: readonly DemoVisitRecord[], conversion: DemoGoalTest | null): Figures {
   const events = visits.flatMap((visit) => visit.events);
-  const isConversion = (event: DemoEventRecord) => event.name === conversionEvent;
+  const isConversion = conversion ?? NEVER_CONVERTS;
   return {
     visits: countWhere(visits, hasPageView),
     identifiedUsers: distinctCount(visits.map((visit) => visit.userId)),
@@ -62,12 +66,12 @@ function figuresOf(visits: readonly DemoVisitRecord[], conversionEvent: string |
 function dailyFigures(
   visits: readonly DemoVisitRecord[],
   range: DateRange,
-  conversionEvent: string | null,
+  conversion: DemoGoalTest | null,
 ): readonly DayFigures[] {
   const byDate = groupedBy(visits, visitDate);
   return demoDays(range).map((date) => ({
     date,
-    ...figuresOf(groupOf(byDate, date), conversionEvent),
+    ...figuresOf(groupOf(byDate, date), conversion),
   }));
 }
 
@@ -167,7 +171,7 @@ export function demoOverviewWire(
   now: Date,
 ): OverviewWire {
   const project = demoProjectOf(projectId);
-  const { conversionEvent } = project;
+  const conversion = demoConversionTest(project, range.goal);
   const cutoff = comparisonCutoff(range, project.timezone, now);
   const filters = range.filters ?? NO_DASHBOARD_FILTERS;
   const currentScope: DemoScope = { range, filters, now, until: null };
@@ -179,11 +183,11 @@ export function demoOverviewWire(
   };
   const visits = demoVisitsIn(project, currentScope);
   const previousVisits = demoVisitsIn(project, previousScope);
-  const current = figuresOf(visits, conversionEvent);
-  const previous = figuresOf(previousVisits, conversionEvent);
-  const days = dailyFigures(visits, range, conversionEvent);
-  const previousDays = dailyFigures(previousVisits, previousScope.range, conversionEvent);
-  const counts = conversionEvent !== null;
+  const current = figuresOf(visits, conversion);
+  const previous = figuresOf(previousVisits, conversion);
+  const days = dailyFigures(visits, range, conversion);
+  const previousDays = dailyFigures(previousVisits, previousScope.range, conversion);
+  const counts = conversion !== null;
   return {
     kpis: {
       visits: kpi(current, previous, days, 'visits'),

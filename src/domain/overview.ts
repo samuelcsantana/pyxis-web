@@ -8,6 +8,7 @@ import {
   type Tone,
   toneOf,
 } from './metrics';
+import type { Goal } from './goals';
 import type { OverviewReport, OverviewWire } from './overview.schema';
 import { FAILING_ONLY, type RequestsSearch } from './requests';
 import type { SparklineValue } from './sparkline';
@@ -227,7 +228,7 @@ function shareOfVisits(converted: number, visits: number, i18n: I18n): string {
 }
 
 interface ConversionFigures {
-  readonly event: string;
+  readonly goal: Goal;
   readonly conversions: Kpi;
   readonly convertingVisits: Kpi | null;
   readonly visits: Kpi;
@@ -236,22 +237,24 @@ interface ConversionFigures {
 const CONVERSIONS_ID = 'conversions';
 
 function conversionsKpi(
-  { event, conversions, convertingVisits, visits }: ConversionFigures,
+  { goal, conversions, convertingVisits, visits }: ConversionFigures,
   comparison: string,
   i18n: I18n,
 ): KpiView {
-  const drillDown = visitsDrillDown(i18n.t('overview.drillDowns.convertingVisits'), { event });
+  const drillDown = visitsDrillDown(i18n.t('overview.drillDowns.convertingVisits'), {
+    reachedGoal: goal.id,
+  });
   const label = i18n.t('overview.kpis.conversions');
   if (convertingVisits === null) {
-    const note = i18n.t('overview.notes.conversionEvents', {
-      event,
+    const note = i18n.t('overview.notes.goalReached', {
+      goal: goal.name,
       share: shareOfVisits(conversions.current, visits.current, i18n),
     });
     return countKpi(conversions, { id: CONVERSIONS_ID, label, note, drillDown }, comparison, i18n);
   }
   const share = shareOfVisits(convertingVisits.current, visits.current, i18n);
-  const events = i18n.t('counts.conversionEvent', { count: conversions.current });
-  const note = i18n.t('overview.notes.convertingVisits', { share, event, events });
+  const times = i18n.t('counts.timesReached', { count: conversions.current });
+  const note = i18n.t('overview.notes.goalVisits', { share, goal: goal.name, times });
   return countKpi(
     convertingVisits,
     { id: CONVERSIONS_ID, label, note, drillDown },
@@ -263,7 +266,7 @@ function conversionsKpi(
 export function overviewKpis(
   report: OverviewReport,
   period: ComparedPeriod,
-  conversionEvent: string | null,
+  goal: Goal | null,
   i18n: I18n,
 ): readonly KpiView[] {
   const { visits, identifiedUsers, conversions, convertingVisits, writeErrors } = report.kpis;
@@ -293,15 +296,9 @@ export function overviewKpis(
       comparison,
       i18n,
     ),
-    ...(conversions === null || conversionEvent === null
+    ...(conversions === null || goal === null
       ? []
-      : [
-          conversionsKpi(
-            { event: conversionEvent, conversions, convertingVisits, visits },
-            comparison,
-            i18n,
-          ),
-        ]),
+      : [conversionsKpi({ goal, conversions, convertingVisits, visits }, comparison, i18n)]),
     writeErrorsKpi(writeErrors, comparison, i18n),
   ];
   return comparesUnfinishedDayWithWholeOne(report.comparison, period)

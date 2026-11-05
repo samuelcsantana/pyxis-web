@@ -224,8 +224,6 @@ export const fr = translation({
         'Installez le SDK sur votre site : les premières pages vues apparaissent ici en moins d’une minute.',
       guide: 'Le guide d’installation complet se trouve dans le <readme>README du SDK</readme>.',
     },
-    noConversionEvent:
-      'Aucun événement de conversion n’est défini pour ce projet, donc les conversions ne sont pas affichées. L’opérateur en définit un avec la commande <code>project:update</code> de l’API et son option <code>--conversion-event</code>.',
     noProjects: {
       title: 'Aucun projet pour l’instant',
       body: '<email/> peut se connecter, mais aucun projet ne lui a encore été attribué. Demandez à l’opérateur de ce Pyxis d’exécuter <code>admin:grant</code> pour votre e-mail.',
@@ -1140,7 +1138,7 @@ export const fr = translation({
     failedRequest: forms('{count} requête en échec', '{count} requêtes en échec'),
     clientError: forms('{count} erreur client (4xx)', '{count} erreurs client (4xx)'),
     serverError: forms('{count} erreur serveur (5xx)', '{count} erreurs serveur (5xx)'),
-    conversionEvent: forms('{count} événement de conversion', '{count} événements de conversion'),
+    timesReached: forms('{count} fois', '{count} fois'),
     continent: forms('{count} continent', '{count} continents'),
     country: forms('{count} pays', '{count} pays'),
     region: forms('{count} région', '{count} régions'),
@@ -1167,7 +1165,7 @@ export const fr = translation({
     identifiedUser:
       'Un utilisateur identifié est un identifiant d’utilisateur distinct que le site a transmis à identify(), généralement quand quelqu’un se connecte ; une visite sans identifiant est anonyme.',
     conversion:
-      'Une conversion est une visite qui a envoyé au moins une fois l’événement de conversion du projet ; les événements de conversion comptent chaque envoi.',
+      'Une conversion est une visite qui a atteint l’objectif choisi au moins une fois, en envoyant son événement ou en ouvrant sa page ; les fois atteint comptent chaque événement ou page vue correspondant.',
     write: 'Une écriture est un POST, PUT, PATCH ou DELETE envoyé avec trackRequest().',
     failure: 'Un échec est un statut supérieur ou égal à 400, ou une absence de réponse.',
     changeTone:
@@ -1203,8 +1201,8 @@ export const fr = translation({
       identifiedUsers: 'connectés au moins une fois',
       writeErrors: '{failed} sur {writes} en échec',
       shareOfVisits: '{share} de {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} ont envoyé {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} ont atteint {goal} · {times}',
     },
     drillDowns: {
       visits: 'Voir les visites',
@@ -1235,6 +1233,20 @@ export const fr = translation({
     },
   },
   goals: {
+    picker: 'Objectif compté comme conversion',
+    none: 'Ce projet n’a pas encore d’objectif, donc les conversions ne sont pas affichées. <settings>Ajoutez un objectif</settings> : un événement que votre site envoie, ou une page que la visite ouvre.',
+    kinds: {
+      event: 'Événement',
+      page: 'Page',
+    },
+    table: {
+      title: 'Objectifs',
+      description: 'Visites qui ont atteint chaque objectif, sur {visits}, {period}',
+      goal: 'Objectif',
+      convertingVisits: 'Visites',
+      conversions: 'Fois atteint',
+      rate: 'Taux de conversion',
+    },
     problems: {
       unknownGoal: 'L’objectif de l’adresse n’existe plus, donc le premier objectif est compté.',
       unknownReachedGoal: 'L’objectif du filtre n’existe plus, donc il a été laissé de côté.',
@@ -1445,7 +1457,7 @@ export const fr = translation({
     },
     conversionByDevice: {
       title: 'Conversion par appareil',
-      description: 'Part des visites ayant envoyé <code/>',
+      description: 'Part des visites qui ont atteint {goal}',
     },
     footnote:
       'L’appareil, le navigateur et le système sont déduits côté serveur à partir du user agent du navigateur, qui est ensuite jeté. Le pays et la région viennent du réseau de périphérie, jamais d’une adresse IP stockée ; la ville approximative n’est enregistrée que dans un projet dont le propriétaire l’a activée dans les Paramètres. Les visites plus anciennes n’ont que le pays.',

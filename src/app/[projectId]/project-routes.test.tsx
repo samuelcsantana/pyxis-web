@@ -6,6 +6,9 @@ import type { Admin } from '@/domain/admin';
 import { ApiNotFoundError, ApiRequestError, UnauthenticatedError } from '@/domain/errors';
 import type { OverviewReport } from '@/domain/overview';
 import { NO_UNIQUE_VISITORS } from '@/domain/unique-visitors';
+import type { Goal } from '@/domain/goals';
+import type { ReportScope } from '@/services/date-range';
+import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { MockOverviewService } from '@/services/overview/mock-overview-service';
 import type { IOverviewService } from '@/services/overview/overview-service.interface';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -19,12 +22,25 @@ const state = vi.hoisted<{
   failure: Error | undefined;
   overview: IOverviewService['overview'];
   accounts: () => Promise<readonly Account[]>;
+  goals: readonly Goal[];
 }>(() => ({
   admin: undefined,
   failure: undefined,
   overview: () => Promise.reject(new Error('overview not set')),
   accounts: () => Promise.resolve([]),
+  goals: [],
 }));
+
+vi.mock('@/services/goals/goals-service.factory', async () => {
+  const { MockGoalsService } = await import('@/services/goals/mock-goals-service');
+  return {
+    createGoalsService: () => ({
+      list: () => Promise.resolve(state.goals),
+      summary: (projectId: string, scope: ReportScope) =>
+        new MockGoalsService().summary(projectId, scope),
+    }),
+  };
+});
 
 vi.mock('@/services/accounts/accounts-service.factory', () => ({
   createAccountsService: () => ({ list: () => state.accounts() }),
@@ -78,6 +94,7 @@ beforeEach(() => {
   state.failure = undefined;
   state.overview = (projectId, range) => new MockOverviewService().overview(projectId, range);
   state.accounts = () => Promise.resolve([]);
+  state.goals = DEMO_STORE.goals;
 });
 
 const LATE_EVENING_IN_SAO_PAULO = new Date('2026-10-06T02:30:00.000Z');
@@ -330,6 +347,7 @@ describe('OverviewPage', () => {
       from: '2026-09-29',
       to: '2026-10-05',
       filters: NO_DASHBOARD_FILTERS,
+      goal: null,
     });
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
@@ -343,7 +361,7 @@ describe('OverviewPage', () => {
     }
     expect(screen.getAllByText('vs. previous 7 days, until 23:30')).toHaveLength(4);
     expect(screen.getByRole('group', { name: 'Conversions' })).toHaveTextContent(
-      /% of [\d,]+ visits sent signup_completed · [\d,]+ conversion events/,
+      /% of [\d,]+ visits reached Sign-up · [\d,]+ times/,
     );
     expect(screen.getByRole('region', { name: 'Activity per day' })).toHaveTextContent(
       'Page views and named events, last 7 days',
@@ -352,7 +370,88 @@ describe('OverviewPage', () => {
     expect(screen.getByRole('region', { name: 'Top events' })).toHaveTextContent(
       'Calculator result shown',
     );
-    expect(screen.queryByText(/No conversion event is set/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/This project has no goals yet/)).not.toBeInTheDocument();
+  });
+
+  it('counts each goal in a Goals table, each row opening its converting visits', async () => {
+    const pricing = 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703';
+
+    renderWithMessages(await renderOverview());
+
+    const table = screen.getByRole('region', { name: 'Goals' });
+    expect(table).toHaveTextContent(
+      /Visits that reached each goal, out of [\d,]+ visits, last 7 days/,
+    );
+    expect(within(table).getAllByRole('row')).toHaveLength(DEMO_STORE.goals.length + 1);
+    expect(
+      within(table).getByRole('link', { name: 'Saw the pricing: see its visits' }),
+    ).toHaveAttribute('href', `/p-store/visits?range=7d&reached_goal=${pricing}`);
+    expect(within(table).getByRole('link', { name: 'Filter by Saw the pricing' })).toHaveAttribute(
+      'href',
+      `/p-store/overview?range=7d&reached_goal=${pricing}`,
+    );
+  });
+
+  it('counts the goal the address names, picked on the Conversions card', async () => {
+    const overview = vi.fn<IOverviewService['overview']>((projectId, range) =>
+      new MockOverviewService().overview(projectId, range),
+    );
+    state.overview = overview;
+    const pricing = 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703';
+
+    renderWithMessages(await renderOverview({ range: '7d', goal: pricing }));
+
+    expect(overview).toHaveBeenCalledWith('p-store', expect.objectContaining({ goal: pricing }));
+    const card = screen.getByRole('group', { name: 'Conversions' });
+    expect(within(card).getByRole('combobox', { name: 'Goal counted as conversions' })).toHaveValue(
+      pricing,
+    );
+    expect(card).toHaveTextContent(/visits reached Saw the pricing/);
+    const downloads = screen
+      .getAllByRole('link')
+      .map((link) => link.getAttribute('href') ?? '')
+      .filter((href) => href.includes('/export'));
+    expect(downloads.length).toBeGreaterThan(0);
+    for (const href of downloads) {
+      expect(href).toContain(`goal=${pricing}`);
+    }
+  });
+
+  it('counts the first goal and says so when the address names a goal the project lost', async () => {
+    renderWithMessages(
+      await renderOverview({ range: '7d', goal: '0f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b' }),
+    );
+
+    expect(
+      screen.getByText('The goal in the address no longer exists, so the first goal is counted.'),
+    ).toHaveAttribute('role', 'status');
+    expect(screen.getByRole('group', { name: 'Conversions' })).toHaveTextContent(/reached Sign-up/);
+  });
+
+  it('names the only goal on the card instead of offering a choice', async () => {
+    state.goals = DEMO_STORE.goals.slice(0, 1);
+
+    renderWithMessages(await renderOverview());
+
+    const card = screen.getByRole('group', { name: 'Conversions' });
+    expect(within(card).queryByRole('combobox')).not.toBeInTheDocument();
+    expect(within(card).getByText('Sign-up')).toBeInTheDocument();
+  });
+
+  it('keeps a reached goal the project has, and leaves out one it lost', async () => {
+    const overview = vi.fn<IOverviewService['overview']>((projectId, range) =>
+      new MockOverviewService().overview(projectId, range),
+    );
+    state.overview = overview;
+    const pricing = 'b1e2c3d4-5f60-4a71-8b92-a3c4d5e6f703';
+
+    await renderOverview({ range: '7d', reached_goal: pricing });
+    await renderOverview({ range: '7d', reached_goal: '0f0c2a4e-1b3d-4e5f-8a6b-9c0d1e2f3a4b' });
+
+    expect(overview.mock.calls.map(([, scope]) => scope.filters.reachedGoal)).toEqual([
+      pricing,
+      null,
+    ]);
   });
 
   it('defines its words in a footnote', async () => {
@@ -370,16 +469,14 @@ describe('OverviewPage', () => {
     }
   });
 
-  it('says why conversions are missing when the project has no conversion event', async () => {
-    state.admin = {
-      ...ADMIN,
-      projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
-    };
+  it('says why conversions are missing when the project has no goal', async () => {
+    state.goals = [];
 
     renderWithMessages(await renderOverview());
 
-    expect(screen.getByText(/No conversion event is set for this project/)).toBeInTheDocument();
-    expect(screen.queryByRole('region', { name: 'Conversions' })).not.toBeInTheDocument();
+    expect(screen.getByText(/This project has no goals yet/)).toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Conversions' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'Goals' })).not.toBeInTheDocument();
   });
 
   it('shows the figures of a single day instead of a chart of one point', async () => {
@@ -440,10 +537,7 @@ describe('OverviewPage', () => {
   });
 
   it('plots the activity for a figure without a card', async () => {
-    state.admin = {
-      ...ADMIN,
-      projects: ADMIN.projects.map((project) => ({ ...project, conversionEvent: null })),
-    };
+    state.goals = [];
 
     renderWithMessages(await renderOverview({ range: '7d', metric: 'conversions' }));
 

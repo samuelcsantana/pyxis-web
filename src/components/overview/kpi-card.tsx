@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import type { Tone } from '@/domain/metrics';
 import { type KpiView, spokenChange, spokenTone } from '@/domain/overview';
 import type { SeriesColor } from '@/domain/overview-chart';
@@ -35,6 +36,7 @@ export interface KpiCardProps {
   readonly color: KpiColor;
   readonly drillDown: KpiDrillDownLink | null;
   readonly toggleHint: string | null;
+  readonly control?: ReactNode;
   readonly i18n: I18n;
 }
 
@@ -48,7 +50,7 @@ const TOGGLE_CARD = [
   'outline-focus has-[[aria-pressed]:focus-visible]:outline-2 has-[[aria-pressed]:focus-visible]:outline-offset-2',
 ].join(' ');
 
-export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProps) {
+export function KpiCard({ kpi, color, drillDown, toggleHint, control, i18n }: KpiCardProps) {
   const labelId = `kpi-${kpi.id}`;
   return (
     <div
@@ -63,6 +65,7 @@ export function KpiCard({ kpi, color, drillDown, toggleHint, i18n }: KpiCardProp
           <MetricToggle metric={kpi.id} label={kpi.label} describedBy={toggleHint} />
         )}
       </h2>
+      {control}
       <p className="text-title leading-7 font-semibold tracking-tight tabular-nums sm:text-figure-lg sm:leading-9">
         {kpi.value}
         {kpi.count === null ? null : (

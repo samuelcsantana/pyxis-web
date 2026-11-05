@@ -5,6 +5,7 @@ import type { DemoProject } from '../demo/demo-catalog';
 import { demoProjectOf } from '../demo/demo-projects';
 import type { DemoEventRecord, DemoVisitRecord } from '../demo/demo-records';
 import { demoScopeOf, demoVisitsIn, hasFailed, isNamedEvent, isPageView } from '../demo/demo-scope';
+import { demoConversionTest } from '../demo/demo-goals';
 import type { IArrivalsService } from './arrivals-service.interface';
 
 const SECOND_MS = 1_000;
@@ -64,15 +65,12 @@ export class MockArrivalsService implements IArrivalsService {
     const scope = recentPartOf(range, todayIn(project.timezone, now));
     const visits = scope.from > scope.to ? [] : demoVisitsIn(project, demoScopeOf(scope, now));
     const events = eventsOf(visits);
-    const conversionEvent = project.conversionEvent;
+    const conversion = demoConversionTest(project);
     return Promise.resolve({
       asOf: Math.floor(now.getTime() / SECOND_MS) * SECOND_MS,
       activeVisits: activeVisitsOf(project, now),
       visits: newestFirst(entryTimes(visits, after)),
-      conversions:
-        conversionEvent === null
-          ? null
-          : newestFirst(timesWhere(events, after, (event) => event.name === conversionEvent)),
+      conversions: conversion === null ? null : newestFirst(timesWhere(events, after, conversion)),
       namedEvents: newestFirst(timesWhere(events, after, isNamedEvent)),
       failedRequests: newestFirst(timesWhere(events, after, hasFailed)),
     });

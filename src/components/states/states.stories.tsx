@@ -5,7 +5,7 @@ import { DemoBanner } from './demo-banner';
 import { EmptyState } from './empty-state';
 import { ErrorPanel } from './error-panel';
 import { errorTexts } from './error-texts';
-import { NoConversionEvent } from './no-conversion-event';
+import { NoGoals } from './no-goals';
 
 const TEXTS = errorTexts(new Error('GET /v1/me failed'), english.t);
 const WITH_DETAIL = { ...TEXTS, detail: 'GET /v1/me · 503' };
@@ -53,15 +53,15 @@ export const Demo: Story = {
 
 export const DemoDarkTheme: Story = { ...Demo, globals: { theme: 'dark' } };
 
-export const NoConversionEventSet: Story = {
-  render: () => <NoConversionEvent i18n={english} />,
+export const NoGoalsYet: Story = {
+  render: () => <NoGoals projectId="demo" i18n={english} />,
 };
 
 export const DarkTheme: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <ErrorPanel texts={WITH_DETAIL} onRetry={fn()} />
-      <NoConversionEvent i18n={english} />
+      <NoGoals projectId="demo" i18n={english} />
     </div>
   ),
   globals: { theme: 'dark' },

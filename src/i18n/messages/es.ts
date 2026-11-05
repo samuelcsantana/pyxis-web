@@ -222,8 +222,6 @@ export const es = translation({
         'Instala el SDK en tu sitio y las primeras vistas de página aparecerán aquí en menos de un minuto.',
       guide: 'La guía completa de instalación está en el <readme>README del SDK</readme>.',
     },
-    noConversionEvent:
-      'Este proyecto no tiene un evento de conversión definido, así que las conversiones no se muestran. El operador define uno con el comando <code>project:update</code> de la API y su opción <code>--conversion-event</code>.',
     noProjects: {
       title: 'Todavía no hay proyectos',
       body: '<email/> puede iniciar sesión, pero todavía no tiene ningún proyecto asignado. Pide al operador de este Pyxis que ejecute <code>admin:grant</code> para tu correo.',
@@ -1112,7 +1110,7 @@ export const es = translation({
     failedRequest: forms('{count} solicitud fallida', '{count} solicitudes fallidas'),
     clientError: forms('{count} error del cliente (4xx)', '{count} errores del cliente (4xx)'),
     serverError: forms('{count} error del servidor (5xx)', '{count} errores del servidor (5xx)'),
-    conversionEvent: forms('{count} evento de conversión', '{count} eventos de conversión'),
+    timesReached: forms('{count} vez', '{count} veces'),
     continent: forms('{count} continente', '{count} continentes'),
     country: forms('{count} país', '{count} países'),
     region: forms('{count} región', '{count} regiones'),
@@ -1138,7 +1136,7 @@ export const es = translation({
     identifiedUser:
       'Un usuario identificado es un id de usuario distinto que el sitio pasó a identify(), normalmente cuando alguien inicia sesión; una visita sin él es anónima.',
     conversion:
-      'Una conversión es una visita que envió el evento de conversión del proyecto al menos una vez; los eventos de conversión cuentan cada vez que se envió.',
+      'Una conversión es una visita que alcanzó el objetivo elegido al menos una vez, enviando su evento o abriendo su página; las veces alcanzado cuentan cada evento o vista de página que coincidió.',
     write: 'Una escritura es un POST, PUT, PATCH o DELETE enviado con trackRequest().',
     failure: 'Un fallo es un código de estado 400 o superior, o ninguna respuesta.',
     changeTone:
@@ -1174,8 +1172,8 @@ export const es = translation({
       identifiedUsers: 'iniciaron sesión al menos una vez',
       writeErrors: '{failed} de {writes} fallaron',
       shareOfVisits: '{share} de {visits}',
-      conversionEvents: '{event} · {share}',
-      convertingVisits: '{share} enviaron {event} · {events}',
+      goalReached: '{goal} · {share}',
+      goalVisits: '{share} alcanzaron {goal} · {times}',
     },
     drillDowns: {
       visits: 'Ver las visitas',
@@ -1206,6 +1204,20 @@ export const es = translation({
     },
   },
   goals: {
+    picker: 'Objetivo contado como conversión',
+    none: 'Este proyecto aún no tiene objetivos, así que las conversiones no se muestran. <settings>Añade un objetivo</settings>: un evento que tu sitio envía o una página que la visita abre.',
+    kinds: {
+      event: 'Evento',
+      page: 'Página',
+    },
+    table: {
+      title: 'Objetivos',
+      description: 'Visitas que alcanzaron cada objetivo, de {visits}, {period}',
+      goal: 'Objetivo',
+      convertingVisits: 'Visitas',
+      conversions: 'Veces alcanzado',
+      rate: 'Tasa de conversión',
+    },
     problems: {
       unknownGoal: 'El objetivo de la dirección ya no existe, así que se cuenta el primero.',
       unknownReachedGoal: 'El objetivo del filtro ya no existe, así que se dejó fuera.',
@@ -1415,7 +1427,7 @@ export const es = translation({
     },
     conversionByDevice: {
       title: 'Conversión por dispositivo',
-      description: 'Proporción de visitas que enviaron <code/>',
+      description: 'Parte de las visitas que alcanzaron {goal}',
     },
     footnote:
       'El dispositivo, el navegador y el sistema se deducen en el servidor a partir del user agent del navegador, que luego se descarta. El país y la región vienen de la red de borde, nunca de una dirección IP guardada; la ciudad aproximada solo se registra en un proyecto cuyo dueño la activó en Configuración. Las visitas más antiguas solo tienen el país.',
