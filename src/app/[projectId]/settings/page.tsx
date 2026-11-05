@@ -9,6 +9,9 @@ import { demoCanonical } from '@/lib/demo-canonical';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
 import { timeZoneChoices } from '@/domain/project-management';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
+import { sharesOnPro } from '@/domain/share-links';
+import { createAccountsService } from '@/services/accounts/accounts-service.factory';
+import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
@@ -22,6 +25,7 @@ import {
   createGoal,
   createAccessToken,
   createProjectKey,
+  createShareLink,
   deleteGoal,
   deleteProject,
   endSession,
@@ -30,6 +34,7 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  revokeShareLink,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
@@ -64,16 +69,28 @@ export async function generateMetadata({ params }: ScreenMetadataProps): Promise
 
 export default async function SettingsPage({ params }: SettingsPageProps) {
   const { admin, project } = await projectOrNotFound((await params).projectId);
-  const [settings, emailPreferences, sessions, accessTokens, connectedApps, people, goals] =
-    await Promise.all([
-      readOrSignIn(() => createProjectsService().settings(project.id)),
-      readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
-      readOrSignIn(() => createSessionsService().list()),
-      readOrSignIn(() => createAccessTokensService().list()),
-      readOrSignIn(() => createConnectionsService().list()),
-      readOrSignIn(() => createProjectPeopleService().list(project.id)),
-      readOrSignIn(() => createGoalsService().list(project.id)),
-    ]);
+  const [
+    settings,
+    emailPreferences,
+    sessions,
+    accessTokens,
+    connectedApps,
+    people,
+    goals,
+    accounts,
+  ] = await Promise.all([
+    readOrSignIn(() => createProjectsService().settings(project.id)),
+    readOrSignIn(() => createEmailPreferencesService().preferences(project.id)),
+    readOrSignIn(() => createSessionsService().list()),
+    readOrSignIn(() => createAccessTokensService().list()),
+    readOrSignIn(() => createConnectionsService().list()),
+    readOrSignIn(() => createProjectPeopleService().list(project.id)),
+    readOrSignIn(() => createGoalsService().list(project.id)),
+    readOrSignIn(() => createAccountsService().list()),
+  ]);
+  const shareLinks = canManageProject(settings)
+    ? await readOrSignIn(() => createShareLinksService().list(project.id))
+    : [];
   const i18n = await getI18n();
   return (
     <>
@@ -113,6 +130,12 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             create: createGoal.bind(null, project.id),
             update: updateGoal.bind(null, project.id),
             remove: deleteGoal.bind(null, project.id),
+          }}
+          shareLinks={{
+            links: shareLinks,
+            onPro: sharesOnPro(accounts, settings.accountId),
+            create: createShareLink.bind(null, project.id),
+            revoke: revokeShareLink.bind(null, project.id),
           }}
         />
       </MainContent>

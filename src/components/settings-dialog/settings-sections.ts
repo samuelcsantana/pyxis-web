@@ -7,6 +7,7 @@ export const SETTINGS_SECTIONS = [
   'install',
   'project',
   'goals',
+  'share',
   'privacy',
   'keys',
   'people',
@@ -21,7 +22,7 @@ export type SettingsGroup = 'account' | 'project' | 'support';
 
 export const SECTION_GROUPS: Readonly<Record<SettingsGroup, readonly SettingsSection[]>> = {
   account: ['general', 'billing', 'security', 'tokens', 'apps'],
-  project: ['install', 'project', 'goals', 'privacy', 'keys', 'people', 'email', 'data'],
+  project: ['install', 'project', 'goals', 'share', 'privacy', 'keys', 'people', 'email', 'data'],
   support: ['help'],
 };
 

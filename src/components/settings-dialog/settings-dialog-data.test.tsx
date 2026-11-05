@@ -83,7 +83,8 @@ describe('the settings of the dialog', () => {
     const content = await renderSettingsDialog(DEMO_STORE.id);
 
     expect(content.sections).toContain('data');
-    expect(content.sections).toHaveLength(14);
+    expect(content.sections).toContain('share');
+    expect(content.sections).toHaveLength(15);
   });
 
   it('shows the email, the appearance and the language in General', async () => {
@@ -126,6 +127,7 @@ describe('the settings of the dialog', () => {
       install: /Install Pyxis on your site/,
       project: /Activity/,
       goals: /Sign-upFirstEvent signup_completed/,
+      share: /Monthly board report/,
       privacy: /Visitor’s city/,
       keys: /New public key/,
       people: /People/,
@@ -147,6 +149,7 @@ describe('the settings of the dialog', () => {
     const content = await renderSettingsDialog(DEMO_STORE.id);
 
     expect(content.sections).not.toContain('data');
+    expect(content.sections).not.toContain('share');
     show(content, 'project').unmount();
     show(content, 'privacy');
     expect(screen.queryByRole('switch')).toBeNull();

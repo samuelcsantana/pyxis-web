@@ -70,6 +70,7 @@ describe('RootLayout', () => {
       'connections',
       'sessions',
       'accessTokens',
+      'shareLinks',
       'consent',
       'projectForm',
       'projectKeys',
