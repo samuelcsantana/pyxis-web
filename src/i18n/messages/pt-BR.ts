@@ -735,6 +735,11 @@ export const ptBR = translation({
     selected: 'Selecionado, aperte Ctrl+C',
     privacy:
       'O Pyxis não guarda cookie nos seus visitantes nem endereço IP. Diga na sua política de privacidade que o site mede o uso com o Pyxis.',
+    revenue: {
+      title: 'Registrar receita (opcional)',
+      lead: 'Envie o valor como número numa propriedade <code>revenue</code> do evento que uma meta conta:',
+      rule: 'Um número de 0 até menos de 1.000.000.000, na moeda do projeto ({currency}). Um texto como "129,90" ou um valor negativo é descartado.',
+    },
     how: 'Como instalar',
     yourself: 'Você mesmo',
     withAgent: 'Com um agente de IA',

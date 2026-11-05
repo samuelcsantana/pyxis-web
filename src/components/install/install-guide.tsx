@@ -19,10 +19,12 @@ import {
   connectorUrlOf,
   installCommand,
   moduleSnippet,
+  REVENUE_EXAMPLE,
   scriptSnippet,
   TAG_MANAGER_TEMPLATE_FILE_URL,
   WORDPRESS_HEADER_PLUGIN_URL,
 } from '@/domain/install';
+import { currencyLabel } from '@/domain/currency';
 import { canManageProject, projectActivity, type ProjectSettings } from '@/domain/project-settings';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
@@ -454,6 +456,18 @@ export function InstallGuide({ settings, endpoint, i18n }: InstallGuideProps) {
               },
             ]}
           />
+        )}
+        {key === undefined ? null : (
+          <div className="flex flex-col gap-2 border-t border-line pt-3.5">
+            <h3 className="text-sm font-semibold">{t('install.revenue.title')}</h3>
+            <p className="text-sm">{rich(t('install.revenue.lead'), { code: codeText })}</p>
+            <CodeBlock id="install-revenue" code={REVENUE_EXAMPLE} labels={labels} />
+            <p className={NOTE}>
+              {t('install.revenue.rule', {
+                currency: currencyLabel(settings.currency, i18n.format.currencyName),
+              })}
+            </p>
+          </div>
         )}
         <p className={NOTE}>{t('install.privacy')}</p>
       </section>

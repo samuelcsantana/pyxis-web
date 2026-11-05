@@ -747,6 +747,11 @@ export const it = translation({
     selected: 'Selezionato, premi Ctrl+C',
     privacy:
       'Pyxis non salva nessun cookie sui tuoi visitatori e nessun indirizzo IP. Scrivi nella tua informativa sulla privacy che il sito misura il proprio utilizzo con Pyxis.',
+    revenue: {
+      title: 'Registrare i ricavi (facoltativo)',
+      lead: 'Invia l’importo come numero in una proprietà <code>revenue</code> dell’evento che un obiettivo conta:',
+      rule: 'Un numero da 0 fino a meno di 1.000.000.000, nella valuta del progetto ({currency}). Un testo come "129,90" o un importo negativo viene scartato.',
+    },
     how: 'Come installare',
     yourself: 'Per conto tuo',
     withAgent: 'Con un agente IA',

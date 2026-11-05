@@ -749,6 +749,11 @@ export const nl = translation({
     selected: 'Geselecteerd, druk op Ctrl+C',
     privacy:
       'Pyxis plaatst geen cookie bij je bezoekers en slaat geen IP-adres op. Vermeld in je privacybeleid dat de site het gebruik meet met Pyxis.',
+    revenue: {
+      title: 'Omzet vastleggen (optioneel)',
+      lead: 'Stuur het bedrag als getal in een eigenschap <code>revenue</code> van het event dat een doel telt:',
+      rule: 'Een getal vanaf 0 tot onder 1.000.000.000, in de valuta van het project ({currency}). Een tekst als "129,90" of een negatief bedrag wordt weggelaten.',
+    },
     how: 'Zo installeer je',
     yourself: 'Zelf',
     withAgent: 'Met een AI-agent',

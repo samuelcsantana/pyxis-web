@@ -759,6 +759,11 @@ export const de = translation({
     selected: 'Markiert, drück Strg+C',
     privacy:
       'Pyxis speichert bei deinen Besuchern kein Cookie und keine IP-Adresse. Erwähne in deiner Datenschutzerklärung, dass die Website ihre Nutzung mit Pyxis misst.',
+    revenue: {
+      title: 'Umsatz erfassen (optional)',
+      lead: 'Sende den Betrag als Zahl in einer Eigenschaft <code>revenue</code> des Ereignisses, das ein Ziel zählt:',
+      rule: 'Eine Zahl ab 0 und unter 1.000.000.000, in der Währung des Projekts ({currency}). Ein Text wie "129,90" oder ein negativer Betrag wird verworfen.',
+    },
     how: 'So installierst du',
     yourself: 'Selbst',
     withAgent: 'Mit einem KI-Agenten',

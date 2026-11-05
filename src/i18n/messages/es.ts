@@ -740,6 +740,11 @@ export const es = translation({
     selected: 'Seleccionado, presiona Ctrl+C',
     privacy:
       'Pyxis no guarda cookies en tus visitantes ni direcciones IP. Indica en tu política de privacidad que el sitio mide su uso con Pyxis.',
+    revenue: {
+      title: 'Registrar ingresos (opcional)',
+      lead: 'Envía el importe como número en una propiedad <code>revenue</code> del evento que cuenta un objetivo:',
+      rule: 'Un número desde 0 hasta menos de 1.000.000.000, en la moneda del proyecto ({currency}). Un texto como "129,90" o un importe negativo se descarta.',
+    },
     how: 'Cómo instalar',
     yourself: 'Por tu cuenta',
     withAgent: 'Con un agente de IA',
