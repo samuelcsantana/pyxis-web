@@ -212,13 +212,37 @@ test('turns the weekly digest off and on from the e-mail panel, saying when it s
   await expect(toggle).toBeChecked();
 });
 
-test('names the switch in Portuguese', async ({ page, context, baseURL }) => {
+test('lands on the three alerts from the e-mail panel link, each on, and turns one off', async ({
+  page,
+}) => {
+  await page.goto(`/${STORE_ID}/settings#settings-email-heading`);
+  const alerts = page.getByRole('region', { name: 'Alerts' });
+
+  await expect(page.getByRole('heading', { name: 'E-mail' })).toBeInViewport();
+  for (const name of ['No events', 'Failed writes', 'Conversion drop']) {
+    await expect(alerts.getByRole('switch', { name })).toBeChecked();
+  }
+  await expect(alerts).toContainText('at least 20 visits in the week before');
+  expect(await axeViolations(page)).toEqual([]);
+
+  const failedWrites = alerts.getByRole('switch', { name: 'Failed writes' });
+  await failedWrites.click();
+
+  await expect(failedWrites).not.toBeChecked();
+  await expect(alerts.getByText('Saved')).toBeVisible();
+  await expect(alerts.getByRole('switch', { name: 'No events' })).toBeChecked();
+  await expect(page.getByRole('switch', { name: 'Weekly digest' })).toBeChecked();
+});
+
+test('names the switches in Portuguese', async ({ page, context, baseURL }) => {
   await context.addCookies([{ name: 'pyxis_locale', value: 'pt-BR', url: baseURL ?? '' }]);
 
   await page.goto(`/${STORE_ID}/settings`);
+  const email = page.getByRole('region', { name: 'E-mail' });
 
+  await expect(email.getByRole('switch', { name: 'Resumo semanal' })).toBeChecked();
   await expect(
-    page.getByRole('region', { name: 'E-mail' }).getByRole('switch', { name: 'Resumo semanal' }),
+    email.getByRole('region', { name: 'Alertas' }).getByRole('switch', { name: 'Nenhum evento' }),
   ).toBeChecked();
 });
 
