@@ -112,10 +112,17 @@ describe('llmsText', () => {
     expect(text).toContain('never a body or an error message');
   });
 
-  it('ends by having the person choose the conversion event, which no tool sets', () => {
-    expect(text).toContain('9. Tell the person which event means success on this site');
-    expect(text).toContain('chooses it as the conversion event in the dashboard’s Settings');
-    expect(text).toContain('No tool here sets it.');
+  it('ends by having the person add each success as a goal, which no tool sets', () => {
+    expect(text).toContain('9. Tell the person which events or pages mean success on this site');
+    expect(text).toContain('adds each as a goal in the dashboard’s Settings (up to 10)');
+    expect(text).toContain('No tool here sets them; `goals` lists them.');
+  });
+
+  it('says each project has up to 10 goals with their conversions and revenue, on both plans', () => {
+    expect(text).toContain('Each project has up to 10 goals, each a named event or a page path');
+    expect(text).toContain('the revenue its events carry, in the project’s currency');
+    expect(text).toContain('Both plans include\ngoals and revenue.');
+    expect(text).toContain('the seventeen tools and how to connect');
   });
 
   it('gives a site with Google Tag Manager the template, its trigger and its consent rule', () => {
