@@ -1104,6 +1104,21 @@ export const nl = translation({
     confirm: 'Link intrekken',
     cancel: 'Annuleren',
   },
+  share: {
+    metaTitle: 'Gedeeld rapport',
+    madeWith: 'Een rapport dat je alleen kunt lezen, gemaakt met <link>Pyxis</link>.',
+    subtitle: '{project} · gedeeld, alleen lezen',
+    screensLabel: 'Gedeelde rapporten',
+    loading: 'Rapport laden…',
+    busy: 'Te veel verzoeken vanaf dit netwerk. Wacht een minuut en probeer het opnieuw.',
+    failed: 'Het rapport kon niet worden geladen.',
+    retry: 'Opnieuw proberen',
+    locked: 'Deze link vraagt om een wachtwoord, dat deze pagina nog niet kan ontvangen.',
+    closedTitle: 'Deze link opent niet',
+    closedBody:
+      'Hij is misschien ingetrokken of verlopen. Vraag degene die hem deelde om een nieuwe.',
+    aboutPyxis: 'Wat is Pyxis?',
+  },
   connect: {
     title: 'Een app koppelen',
     heading: '{app} koppelen aan Pyxis?',

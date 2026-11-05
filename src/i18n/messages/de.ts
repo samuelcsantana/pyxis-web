@@ -1117,6 +1117,21 @@ export const de = translation({
     confirm: 'Link widerrufen',
     cancel: 'Abbrechen',
   },
+  share: {
+    metaTitle: 'Geteilter Bericht',
+    madeWith: 'Ein Bericht nur zum Lesen, erstellt mit <link>Pyxis</link>.',
+    subtitle: '{project} · geteilt, nur lesen',
+    screensLabel: 'Geteilte Berichte',
+    loading: 'Bericht wird geladen…',
+    busy: 'Zu viele Anfragen aus diesem Netz. Warte eine Minute und versuch es noch einmal.',
+    failed: 'Der Bericht konnte nicht geladen werden.',
+    retry: 'Noch einmal versuchen',
+    locked: 'Dieser Link verlangt ein Passwort, das diese Seite noch nicht entgegennehmen kann.',
+    closedTitle: 'Dieser Link öffnet nicht',
+    closedBody:
+      'Er wurde vielleicht widerrufen oder ist abgelaufen. Bitte die Person, die ihn geteilt hat, um einen neuen.',
+    aboutPyxis: 'Was ist Pyxis?',
+  },
   connect: {
     title: 'App verbinden',
     heading: '{app} mit Pyxis verbinden?',
