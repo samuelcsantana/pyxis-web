@@ -74,9 +74,9 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   visitors per day and per month, new and returning, and says when a figure is a sum of days.
 - **What changed since the last read.** The menu counts what arrived for each screen, a screen
   offers to refresh when something new arrives, and the Overview shows the visits on the site now.
-- **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free Hobby plan or through
-  Stripe Checkout, a first project with its install guide, the Account and billing page and a
-  Help and support page.
+- **Sign-in and sign-up.** A six-digit code by e-mail; sign-up on the free Hobby plan or Pro
+  (250,000 events, 10 sites, 10 people) through Stripe Checkout, a first project with its install
+  guide, the Account and billing page and a Help and support page.
 - **Settings in a dialog.** A gear and the account menu open the settings over the page, at
   `#settings/<section>`, without reading it again: the account's and the project's, and help.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected

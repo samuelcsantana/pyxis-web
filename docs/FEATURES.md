@@ -67,7 +67,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   (a dialog with a search and the seven languages, each in its own words and in the language on
   screen; Enter takes the first match, Escape closes only the dialog, and the focus comes back to
   the account), Help and support, then, to the owner of the account that holds the project on
-  screen, the month's usage: "41,230 of 100,000 events this month", the share, a thin bar gold
+  screen, the month's usage: "103,075 of 250,000 events this month", the share, a thin bar gold
   below 80%, orange from 80%, red while the reception is paused, and the day the count resets
   (the 1st, in UTC) or, while paused, the day measuring comes back; it opens Plan and billing in
   the settings and is read as "Plan and billing: …". Then Sign out.
@@ -346,7 +346,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   browser's marker is deleted the next time it sends events and gets an answer, and the visits
   already counted keep their kind until they are erased after 13 months). The People panel lists who opens the project; the owner
   adds an address (the person gets an invitation e-mail in the language of the page, and the
-  account has room for three people on the paid plan and one on the free plan, the owner
+  account has room for ten people on the paid plan and one on the free plan, the owner
   included) and removes anyone but the owner. The
   owner also asks for an export of every event the project keeps: the API prepares a compressed
   CSV in a few minutes and e-mails a link to the export's page
@@ -386,7 +386,7 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   `busy@example.com`
 - A first project for the owner of a hosted account: "Create your first project" on the empty
   home, or "New project" in the project switcher, opens `/new-project` (name, site address, the
-  browser's time zone, an optional conversion event; three projects on the paid plan, one on the
+  browser's time zone, an optional conversion event; ten projects on the paid plan, one on the
   free plan). The new project
   opens on `/[projectId]/install`. Step 1 has three keyboard tabs (`role="tablist"`, arrow keys,
   Home and End), opening on "Yourself": the npm and plain-HTML snippets with its public key and
@@ -518,9 +518,15 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   same status turns the page to it: the hero leads with "Start free" and "See the Pro plan",
   pricing shows a Hobby card (what it includes, the Tag Manager and Shopify install, and under its
   button the no-card and 10,000-event pause terms) and an outlined Pro card that lists only what
-  it adds ("Everything in Hobby, plus:" the events with a "10×" mark, sites, people and e-mail
-  support within 2 business days) and has no button: everyone starts on Hobby and subscribes in
-  Account and billing. The yearly option carries its saving ("−17%") and shows its price per
+  it adds ("Everything in Hobby, plus:" 250,000 events with a "25×" mark, 10 sites, 10 people and
+  e-mail support within 2 business days) and has no button: everyone starts on Hobby and subscribes
+  in Account and billing. Both plans have the same analytics; the pricing lead charges nothing per
+  visitor or per identified person, and the Pro numbers come from one set of constants beside the
+  free plan's, so the cards, the FAQ, Account and billing and `llms.txt` never disagree. The
+  integrations kept for Pro (pyxis-api ADR 0057) are listed on the Pro card only once each ships;
+  until then the "Available on Pro" panel (Storybook, `Account/Available on Pro`) waits for them:
+  it names the feature, sends the owner to Account and billing and tells an invited person that
+  only the owner subscribes, and the dashboard recognizes the API's `plan_required` refusal. The yearly option carries its saving ("−17%") and shows its price per
   month with the yearly charge under it. The FAQ answers for two
   plans and asks what happens at 10,000 events instead of how the trial works, and the
   description, the structured data and `llms.txt` name the Hobby plan; while it is full, the hero
