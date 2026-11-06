@@ -1158,7 +1158,6 @@ export const de = translation({
     busy: 'Zu viele Anfragen aus diesem Netz. Warte eine Minute und versuch es noch einmal.',
     failed: 'Der Bericht konnte nicht geladen werden.',
     retry: 'Noch einmal versuchen',
-    locked: 'Dieser Link verlangt ein Passwort, das diese Seite noch nicht entgegennehmen kann.',
     closedTitle: 'Dieser Link öffnet nicht',
     closedBody:
       'Er wurde vielleicht widerrufen oder ist abgelaufen. Bitte die Person, die ihn geteilt hat, um einen neuen.',

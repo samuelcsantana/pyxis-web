@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { forgetSharedCards, SharedReport } from './shared-report';
 
 const TOKEN = `pyxis_sh_${'S'.repeat(32)}`;
@@ -23,6 +23,32 @@ function answeringWith(status: number | null, card: unknown = { project: {} }) {
   };
 }
 
+function lockedWithUnlockAnswering(status: number, headers: Record<string, string> = {}) {
+  return () => {
+    const original = window.fetch.bind(window);
+    forgetSharedCards();
+    window.sessionStorage.clear();
+    window.fetch = (_input, init): Promise<Response> =>
+      Promise.resolve(
+        init?.method === 'POST'
+          ? new Response(JSON.stringify({ error: 'wrong_share_password' }), { status, headers })
+          : new Response(JSON.stringify({ password_required: true }), { status: OK }),
+      );
+    return () => {
+      window.fetch = original;
+      window.sessionStorage.clear();
+      forgetSharedCards();
+    };
+  };
+}
+
+async function typeAndOpen(canvasElement: HTMLElement) {
+  const canvas = within(canvasElement);
+  await userEvent.type(await canvas.findByLabelText('Password'), 'not the one');
+  await userEvent.click(canvas.getByRole('button', { name: 'Open the report' }));
+  return canvas;
+}
+
 const meta = {
   title: 'Share/Shared report',
   component: SharedReport,
@@ -31,6 +57,7 @@ const meta = {
     token: TOKEN,
     screen: 'overview',
     apiBase: 'https://api.example.com',
+    demoPassword: null,
     requestsAction: () => Promise.resolve([]),
     renderAction: () =>
       Promise.resolve(<p className="p-4 text-sm">The server drew the shared Overview here.</p>),
@@ -67,8 +94,46 @@ export const LinkClosed: Story = {
 export const PasswordRequired: Story = {
   beforeEach: answeringWith(OK, { password_required: true }),
   play: async ({ canvasElement }) => {
-    await expect(await within(canvasElement).findByText(/asks for a password/)).toBeVisible();
+    await expect(
+      await within(canvasElement).findByRole('heading', {
+        name: 'This report asks for a password',
+      }),
+    ).toBeVisible();
   },
+};
+
+export const PasswordInTheDemo: Story = {
+  args: { demoPassword: 'pyxis-demo' },
+  beforeEach: answeringWith(OK, { password_required: true }),
+  play: async ({ canvasElement }) => {
+    await expect(
+      await within(canvasElement).findByText('In this demo, the password is pyxis-demo.'),
+    ).toBeVisible();
+  },
+};
+
+export const WrongPassword: Story = {
+  beforeEach: lockedWithUnlockAnswering(401),
+  play: async ({ canvasElement }) => {
+    const canvas = await typeAndOpen(canvasElement);
+    await expect(await canvas.findByRole('alert')).toHaveTextContent('Wrong password');
+    await expect(canvas.getByLabelText('Password')).toHaveValue('not the one');
+  },
+};
+
+export const TooManyAttempts: Story = {
+  beforeEach: lockedWithUnlockAnswering(TOO_MANY_REQUESTS, { 'retry-after': '540' }),
+  play: async ({ canvasElement }) => {
+    const canvas = await typeAndOpen(canvasElement);
+    await expect(await canvas.findByRole('alert')).toHaveTextContent(
+      'Too many attempts. Try again in 9 minutes.',
+    );
+  },
+};
+
+export const PasswordDarkTheme: Story = {
+  globals: { theme: 'dark' },
+  beforeEach: answeringWith(OK, { password_required: true }),
 };
 
 export const TooManyRequests: Story = {

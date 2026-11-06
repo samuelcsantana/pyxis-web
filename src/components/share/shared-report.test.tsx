@@ -10,6 +10,7 @@ vi.mock('next/navigation', () => ({
 const TOKEN = `pyxis_sh_${'Q'.repeat(32)}`;
 const API = 'https://api.example.com';
 const CARD = { project: { name: 'Shop' } };
+const UNLOCK = `pyxis_su_${'U'.repeat(32)}`;
 const REQUESTS = [{ key: 'overview', path: `/v1/shared/${TOKEN}/overview?from=a&to=b` }];
 
 function answering(statuses: Readonly<Record<string, number>> = {}, card: unknown = CARD) {
@@ -30,6 +31,7 @@ function renderReport(overrides: Partial<SharedReportProps> = {}) {
     token: TOKEN,
     screen: 'overview',
     apiBase: API,
+    demoPassword: null,
     requestsAction: vi.fn(() => Promise.resolve(REQUESTS)),
     renderAction: vi.fn((_input, answers) =>
       Promise.resolve(<p>Rendered {JSON.stringify(answers)}</p>),
@@ -46,6 +48,7 @@ describe('SharedReport', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    window.sessionStorage.clear();
   });
 
   it('reads the card and the reports from the API in the browser, then shows what the server drew', async () => {
@@ -107,12 +110,86 @@ describe('SharedReport', () => {
     expect(await screen.findByText(/Rendered/)).toBeInTheDocument();
   });
 
-  it('says a link with a password cannot open here yet, and asks the server nothing', async () => {
+  it('asks for the password of a protected link, and asks the server nothing more', async () => {
     vi.stubGlobal('fetch', answering({}, { password_required: true }));
     const { props } = renderReport();
 
-    expect(await screen.findByText(/asks for a password/)).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: 'This report asks for a password' }),
+    ).toBeInTheDocument();
     expect(props.requestsAction).not.toHaveBeenCalled();
+  });
+
+  it('opens the reports once unlocked, sending the unlock on every read, and keeps it for the tab', async () => {
+    const reads: { url: string; authorization: string | null }[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        const authorization = new Headers(init?.headers).get('authorization');
+        reads.push({ url, authorization });
+        if (init?.method === 'POST') {
+          return Promise.resolve(Response.json({ unlock: UNLOCK, expires_at: 'later' }));
+        }
+        const locked = url.endsWith(TOKEN) && authorization === null;
+        return Promise.resolve(Response.json(locked ? { password_required: true } : CARD));
+      }),
+    );
+    renderReport();
+
+    fireEvent.change(await screen.findByLabelText('Password'), {
+      target: { value: 'open sesame' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Open the report' }));
+
+    expect(await screen.findByText(/Rendered/)).toBeInTheDocument();
+    expect(window.sessionStorage.getItem(`pyxis.share-unlock.${TOKEN}`)).toBe(UNLOCK);
+    expect(reads.slice(-2)).toEqual([
+      { url: `${API}/v1/shared/${TOKEN}`, authorization: `Bearer ${UNLOCK}` },
+      { url: `${API}${REQUESTS[0]?.path ?? ''}`, authorization: `Bearer ${UNLOCK}` },
+    ]);
+  });
+
+  it('asks for the password again when a report refuses the stored unlock', async () => {
+    window.sessionStorage.setItem(`pyxis.share-unlock.${TOKEN}`, UNLOCK);
+    vi.stubGlobal('fetch', answering({ [`${API}${REQUESTS[0]?.path ?? ''}`]: 401 }));
+    renderReport();
+
+    expect(
+      await screen.findByRole('heading', { name: 'This report asks for a password' }),
+    ).toBeInTheDocument();
+    expect(window.sessionStorage.getItem(`pyxis.share-unlock.${TOKEN}`)).toBeNull();
+  });
+
+  it('forgets a stored unlock the card no longer accepts', async () => {
+    window.sessionStorage.setItem(`pyxis.share-unlock.${TOKEN}`, UNLOCK);
+    vi.stubGlobal('fetch', answering({}, { password_required: true }));
+    renderReport();
+
+    await screen.findByRole('heading', { name: 'This report asks for a password' });
+    expect(window.sessionStorage.getItem(`pyxis.share-unlock.${TOKEN}`)).toBeNull();
+  });
+
+  it('shows the closed page when the link closes while its password is asked', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((_url: string, init?: RequestInit) =>
+        Promise.resolve(
+          init?.method === 'POST'
+            ? new Response(null, { status: 404 })
+            : Response.json({ password_required: true }),
+        ),
+      ),
+    );
+    renderReport();
+
+    fireEvent.change(await screen.findByLabelText('Password'), {
+      target: { value: 'open sesame' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Open the report' }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'This link does not open' }),
+    ).toBeInTheDocument();
   });
 
   it('opens a link whose card says it needs no password', async () => {
