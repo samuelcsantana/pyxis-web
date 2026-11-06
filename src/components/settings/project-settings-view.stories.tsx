@@ -1,4 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { slackWebhookResponseSchema } from '@/domain/slack-webhook.schema';
+import {
+  demoSlackWebhookWire,
+  MockSlackWebhookService,
+} from '@/services/slack/mock-slack-webhook-service';
 import { accessTokensResponseSchema } from '@/domain/access-tokens.schema';
 import { connectedAppsResponseSchema } from '@/domain/connections.schema';
 import { timeZoneChoices } from '@/domain/project-management';
@@ -116,6 +121,13 @@ const meta = {
       setPassword: (linkId, password) =>
         new MockShareLinksService(() => STORY_NOW).setPassword(STORE.id, linkId, password),
       revoke: () => Promise.resolve(),
+    },
+    slack: {
+      webhook: slackWebhookResponseSchema.parse(demoSlackWebhookWire(STORY_NOW)),
+      onPro: true,
+      save: (url) => new MockSlackWebhookService(() => STORY_NOW).save(STORE.id, url),
+      test: () => new MockSlackWebhookService().test(),
+      remove: () => Promise.resolve(),
     },
   },
   parameters: { layout: 'padded', nextjs: { appDirectory: true } },

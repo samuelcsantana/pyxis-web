@@ -131,7 +131,7 @@ describe('the settings of the dialog', () => {
       privacy: /Visitor’s city/,
       keys: /New public key/,
       people: /People/,
-      email: /Weekly digest/,
+      email: /Weekly digest.*Slack.*hooks\.slack\.com\/…\/9XQZ/,
       data: /Export events/,
       help: /hello@pyxis-analytics\.dev/,
     };
@@ -164,6 +164,10 @@ describe('the settings of the dialog', () => {
     show(content, 'goals');
     expect(screen.getByText('Sign-up')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Edit' })).toBeNull();
+    show(content, 'goals').unmount();
+    show(content, 'email');
+    expect(screen.getByRole('switch', { name: 'Weekly digest' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Slack' })).toBeNull();
   });
 
   it('tells someone who owns no account that the billing is with the owner', async () => {

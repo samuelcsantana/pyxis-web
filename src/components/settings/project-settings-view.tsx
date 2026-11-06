@@ -39,6 +39,7 @@ import type { EndSession } from './end-session-button';
 import type { Revoke } from './revoke-button';
 import { SessionsPanel } from './sessions-panel';
 import { type ShareLinksManagement, ShareLinksPanel } from './share-links-panel';
+import { type SlackManagement, SlackPanel } from './slack-panel';
 import { ProjectOptionSwitch, type SetProjectOption } from './project-option-switch';
 import type { ChooseEmailPreference } from './email-preference-switch';
 import { EmailPreferenceSwitches } from './email-preference-switches';
@@ -74,6 +75,7 @@ export interface ProjectSettingsViewProps {
   readonly goals: readonly Goal[];
   readonly manageGoals: GoalsManagement;
   readonly shareLinks: ShareLinksManagement;
+  readonly slack: SlackManagement | null;
 }
 
 const TERM = 'text-xs font-medium text-muted';
@@ -468,6 +470,7 @@ export function ProjectSettingsView({
   goals,
   manageGoals,
   shareLinks,
+  slack,
 }: ProjectSettingsViewProps) {
   const format = i18n.format.dateTime('eventTime', settings.timezone);
   const when = (iso: string) => format(new Date(iso));
@@ -483,6 +486,11 @@ export function ProjectSettingsView({
           choose={chooseEmailPreferences}
         />
       </div>
+      {slack === null ? null : (
+        <div className="lg:col-span-2">
+          <SlackPanel {...slack} timezone={settings.timezone} i18n={i18n} />
+        </div>
+      )}
       <div className="lg:col-span-2">
         <SessionsPanel sessions={sessions} i18n={i18n} when={when} end={endSession} />
       </div>

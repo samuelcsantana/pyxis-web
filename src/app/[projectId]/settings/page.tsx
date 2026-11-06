@@ -12,6 +12,7 @@ import { canManageProject, type ProjectSettings } from '@/domain/project-setting
 import { projectOnPro } from '@/domain/pro-features';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
+import { createSlackWebhookService } from '@/services/slack/slack-webhook-service.factory';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
 import { createConnectionsService } from '@/services/connections/connections-service.factory';
 import { createEmailPreferencesService } from '@/services/preferences/email-preferences-service.factory';
@@ -34,7 +35,10 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  removeSlackWebhook,
   revokeShareLink,
+  saveSlackWebhook,
+  testSlackWebhook,
   setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
@@ -89,9 +93,14 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
     readOrSignIn(() => createGoalsService().list(project.id)),
     readOrSignIn(() => createAccountsService().list()),
   ]);
-  const shareLinks = canManageProject(settings)
-    ? await readOrSignIn(() => createShareLinksService().list(project.id))
-    : [];
+  const owner = canManageProject(settings);
+  const [shareLinks, slackWebhook] = owner
+    ? await Promise.all([
+        readOrSignIn(() => createShareLinksService().list(project.id)),
+        readOrSignIn(() => createSlackWebhookService().webhook(project.id)),
+      ])
+    : [[], null];
+  const onPro = projectOnPro(accounts, settings.accountId);
   const i18n = await getI18n();
   return (
     <>
@@ -134,11 +143,22 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           }}
           shareLinks={{
             links: shareLinks,
-            onPro: projectOnPro(accounts, settings.accountId),
+            onPro,
             create: createShareLink.bind(null, project.id),
             setPassword: setShareLinkPassword.bind(null, project.id),
             revoke: revokeShareLink.bind(null, project.id),
           }}
+          slack={
+            owner
+              ? {
+                  webhook: slackWebhook,
+                  onPro,
+                  save: saveSlackWebhook.bind(null, project.id),
+                  test: testSlackWebhook.bind(null, project.id),
+                  remove: removeSlackWebhook.bind(null, project.id),
+                }
+              : null
+          }
         />
       </MainContent>
     </>

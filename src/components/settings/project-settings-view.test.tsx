@@ -124,6 +124,13 @@ const EMAIL = {
     setPassword: () => Promise.resolve({ kind: 'gone' } as const),
     revoke: () => Promise.resolve(),
   },
+  slack: {
+    webhook: null,
+    onPro: true,
+    save: () => Promise.resolve({ kind: 'invalid' } as const),
+    test: () => Promise.resolve({ kind: 'missing' } as const),
+    remove: () => Promise.resolve(),
+  },
 };
 
 const OWNED: ProjectSettings = {
@@ -141,7 +148,7 @@ function panel(name: string) {
 }
 
 describe('ProjectSettingsView', () => {
-  it('lists the sessions between the e-mail panel and the project, with this device marked', () => {
+  it('lists the sessions after the e-mail and Slack panels, with this device marked', () => {
     renderWithMessages(<ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} />);
 
     const sessions = panel('Sessions');
@@ -154,7 +161,16 @@ describe('ProjectSettingsView', () => {
     const headings = screen
       .getAllByRole('heading', { level: 2 })
       .map((heading) => heading.textContent);
-    expect(headings.indexOf('Sessions')).toBe(headings.indexOf('E-mail') + 1);
+    expect(headings.indexOf('Slack')).toBe(headings.indexOf('E-mail') + 1);
+    expect(headings.indexOf('Sessions')).toBe(headings.indexOf('Slack') + 1);
+  });
+
+  it('shows no Slack panel to someone who does not own the project', () => {
+    renderWithMessages(
+      <ProjectSettingsView settings={SETTINGS} i18n={english} {...EMAIL} slack={null} />,
+    );
+
+    expect(screen.queryByRole('heading', { name: 'Slack' })).not.toBeInTheDocument();
   });
 
   it('lists the access tokens right after the sessions, each with its revoke button', () => {

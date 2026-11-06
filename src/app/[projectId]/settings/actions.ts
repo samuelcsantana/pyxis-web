@@ -51,6 +51,12 @@ import { createEmailPreferencesService } from '@/services/preferences/email-pref
 import { createProjectManagementService } from '@/services/project-management/project-management-service.factory';
 import { createProjectPeopleService } from '@/services/project-people/project-people-service.factory';
 import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
+import { createSlackWebhookService } from '@/services/slack/slack-webhook-service.factory';
+import {
+  type SaveSlackWebhookOutcome,
+  slackWebhookProblem,
+  type TestSlackWebhookOutcome,
+} from '@/domain/slack-webhook';
 import { currentLocale } from '@/i18n/current-locale';
 import type { AddPersonOutcome, RemovePersonOutcome } from '@/domain/project-people';
 import type { RequestExportOutcome } from '@/domain/exports';
@@ -364,4 +370,28 @@ export async function revokeShareLink(projectId: string, linkId: string): Promis
     throw new Error('A share link is revoked by its id.');
   }
   await readOrSignIn(() => createShareLinksService().revoke(project.id, parsed.data));
+}
+
+const slackWebhookUrlSchema = z.string().refine((url) => slackWebhookProblem(url) === null);
+
+export async function saveSlackWebhook(
+  projectId: string,
+  url: string,
+): Promise<SaveSlackWebhookOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const parsed = slackWebhookUrlSchema.safeParse(url);
+  if (!parsed.success) {
+    return { kind: 'invalid' };
+  }
+  return readOrSignIn(() => createSlackWebhookService().save(project.id, parsed.data));
+}
+
+export async function testSlackWebhook(projectId: string): Promise<TestSlackWebhookOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  return readOrSignIn(() => createSlackWebhookService().test(project.id));
+}
+
+export async function removeSlackWebhook(projectId: string): Promise<void> {
+  const { project } = await projectOrNotFound(projectId);
+  await readOrSignIn(() => createSlackWebhookService().remove(project.id));
 }
