@@ -1,9 +1,13 @@
 import { screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { demoSharedAnswer } from '@/lib/demo-shared-answers';
-import { DEMO_SHARE_TOKEN } from '@/services/share-links/mock-share-links-service';
+import {
+  DEMO_PROTECTED_SHARE_TOKEN,
+  DEMO_SHARE_TOKEN,
+} from '@/services/share-links/mock-share-links-service';
 import { english } from '@/test-utils/english';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
+import { forgetSharedCards } from '@/components/share/shared-report';
 import SharedScreenPage from './[token]/[screen]/page';
 import { renderSharedAction, sharedRequestsAction } from './[token]/actions';
 import SharedLinkNotFound from './[token]/not-found';
@@ -24,7 +28,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const NOW = new Date('2026-11-05T15:00:00.000Z');
-const CARD = demoSharedAnswer(DEMO_SHARE_TOKEN, [], new URLSearchParams(), english, NOW).body;
+const CARD = demoSharedAnswer(DEMO_SHARE_TOKEN, [], new URLSearchParams(), english, NOW, null).body;
 
 function params<Value>(value: Value) {
   return { params: Promise.resolve(value) };
@@ -40,6 +44,7 @@ describe('the shared page routes', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
   });
 
   it('keeps every shared page out of search engines, under a title that names no project', async () => {
@@ -57,6 +62,28 @@ describe('the shared page routes', () => {
       'href',
       'https://pyxis-analytics.dev',
     );
+  });
+
+  it.each([
+    ['the protected demo link in the demo', DEMO_PROTECTED_SHARE_TOKEN, '', true],
+    ['the open demo link in the demo', DEMO_SHARE_TOKEN, '', false],
+    [
+      'the protected demo link with an API',
+      DEMO_PROTECTED_SHARE_TOKEN,
+      'https://api.example.com',
+      false,
+    ],
+  ])('shows the demo password only for %s', async (_, token, api, shown) => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', api);
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(Response.json({ password_required: true }))),
+    );
+    forgetSharedCards();
+    renderWithMessages(await SharedOverviewPage(params({ token })));
+
+    await screen.findByRole('heading', { name: 'This report asks for a password' });
+    expect(screen.queryByText(/In this demo, the password is/) !== null).toBe(shown);
   });
 
   it('opens another shared screen at its own address', async () => {
@@ -95,7 +122,8 @@ describe('the shared screen actions', () => {
         const report = url.pathname.split('/').slice(4);
         return [
           key,
-          demoSharedAnswer(DEMO_SHARE_TOKEN, report, url.searchParams, english, new Date()).body,
+          demoSharedAnswer(DEMO_SHARE_TOKEN, report, url.searchParams, english, new Date(), null)
+            .body,
         ];
       }),
     );

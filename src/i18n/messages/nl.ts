@@ -1145,7 +1145,6 @@ export const nl = translation({
     busy: 'Te veel verzoeken vanaf dit netwerk. Wacht een minuut en probeer het opnieuw.',
     failed: 'Het rapport kon niet worden geladen.',
     retry: 'Opnieuw proberen',
-    locked: 'Deze link vraagt om een wachtwoord, dat deze pagina nog niet kan ontvangen.',
     closedTitle: 'Deze link opent niet',
     closedBody:
       'Hij is misschien ingetrokken of verlopen. Vraag degene die hem deelde om een nieuwe.',

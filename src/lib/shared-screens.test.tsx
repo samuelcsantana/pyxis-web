@@ -21,7 +21,7 @@ const SHARE_PATH = `/share/${DEMO_SHARE_TOKEN}`;
 function answerOf(path: string): unknown {
   const url = new URL(path, 'https://api.example.com');
   const report = url.pathname.split('/').slice(4);
-  return demoSharedAnswer(DEMO_SHARE_TOKEN, report, url.searchParams, english, NOW).body;
+  return demoSharedAnswer(DEMO_SHARE_TOKEN, report, url.searchParams, english, NOW, null).body;
 }
 
 const CARD = answerOf(`/v1/shared/${DEMO_SHARE_TOKEN}`);

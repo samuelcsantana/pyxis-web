@@ -1133,7 +1133,6 @@ export const es = translation({
     busy: 'Demasiadas solicitudes desde esta red. Espera un minuto y vuelve a intentarlo.',
     failed: 'No se pudo cargar el informe.',
     retry: 'Reintentar',
-    locked: 'Este enlace pide una contraseña, que esta página todavía no puede recibir.',
     closedTitle: 'Este enlace no abre',
     closedBody:
       'Puede que lo hayan revocado o que haya caducado. Pide uno nuevo a quien lo compartió.',

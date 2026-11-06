@@ -1124,7 +1124,6 @@ export const ptBR = translation({
     busy: 'Muitas requisições desta rede. Espere um minuto e tente de novo.',
     failed: 'Não foi possível carregar o relatório.',
     retry: 'Tentar de novo',
-    locked: 'Este link pede uma senha, que esta página ainda não sabe receber.',
     closedTitle: 'Este link não abre',
     closedBody: 'Ele pode ter sido revogado ou vencido. Peça um novo a quem compartilhou.',
     aboutPyxis: 'O que é o Pyxis?',

@@ -6,7 +6,9 @@ import type { SharedRequest } from '@/domain/shared-project';
 import { type ScreenSearch, screenSearchOf } from '@/components/shell/screen-search';
 import { BUTTON_SECONDARY } from '@/components/ui/control-classes';
 import { useT } from '@/i18n/messages-provider';
+import { forgetUnlock, storedUnlock } from './share-unlock';
 import { SharedLinkClosed } from './shared-link-closed';
+import { SharedPasswordForm } from './shared-password-form';
 
 export interface SharedReportInput {
   readonly token: string;
@@ -19,6 +21,7 @@ export interface SharedReportProps {
   readonly token: string;
   readonly screen: string;
   readonly apiBase: string;
+  readonly demoPassword: string | null;
   readonly requestsAction: (input: SharedReportInput) => Promise<readonly SharedRequest[]>;
   readonly renderAction: (
     input: SharedReportInput,
@@ -34,10 +37,12 @@ type Shown =
   | { readonly kind: 'failed' }
   | { readonly kind: 'ready'; readonly content: ReactNode };
 
+const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const TOO_MANY_REQUESTS = 429;
 const LOADING: Shown = { kind: 'loading' };
 const LOCKED: Shown = { kind: 'locked' };
+const CLOSED: Shown = { kind: 'closed' };
 
 function asksForAPassword(card: unknown): boolean {
   return (
@@ -57,23 +62,29 @@ class SharedAnswerError extends Error {
 
 const cards = new Map<string, Promise<unknown>>();
 
-async function readJson(url: string): Promise<unknown> {
-  const response = await fetch(url, { credentials: 'omit', cache: 'no-store' });
+function readOptions(unlock: string | null): RequestInit {
+  const options: RequestInit = { credentials: 'omit', cache: 'no-store' };
+  return unlock === null ? options : { ...options, headers: { authorization: `Bearer ${unlock}` } };
+}
+
+async function readJson(url: string, unlock: string | null): Promise<unknown> {
+  const response = await fetch(url, readOptions(unlock));
   if (!response.ok) {
     throw new SharedAnswerError(response.status);
   }
   return response.json();
 }
 
-function cardOf(apiBase: string, token: string): Promise<unknown> {
-  const known = cards.get(token);
+function cardOf(apiBase: string, token: string, unlock: string | null): Promise<unknown> {
+  const key = `${token} ${unlock ?? ''}`;
+  const known = cards.get(key);
   if (known !== undefined) {
     return known;
   }
-  const card = readJson(`${apiBase}/v1/shared/${encodeURIComponent(token)}`);
-  cards.set(token, card);
+  const card = readJson(`${apiBase}/v1/shared/${encodeURIComponent(token)}`, unlock);
+  cards.set(key, card);
   card.catch(() => {
-    cards.delete(token);
+    cards.delete(key);
   });
   return card;
 }
@@ -82,9 +93,13 @@ export function forgetSharedCards(): void {
   cards.clear();
 }
 
-function shownAfter(error: unknown): Shown {
+function shownAfter(error: unknown, token: string): Shown {
+  if (error instanceof SharedAnswerError && error.status === UNAUTHORIZED) {
+    forgetUnlock(token);
+    return LOCKED;
+  }
   if (error instanceof SharedAnswerError && error.status === NOT_FOUND) {
-    return { kind: 'closed' };
+    return CLOSED;
   }
   if (error instanceof SharedAnswerError && error.status === TOO_MANY_REQUESTS) {
     return { kind: 'busy' };
@@ -96,6 +111,7 @@ export function SharedReport({
   token,
   screen,
   apiBase,
+  demoPassword,
   requestsAction,
   renderAction,
 }: SharedReportProps) {
@@ -113,14 +129,18 @@ export function SharedReport({
       }
     };
     const load = async (): Promise<Shown> => {
-      const card = await cardOf(apiBase, token);
+      const unlock = storedUnlock(token);
+      const card = await cardOf(apiBase, token, unlock);
       if (asksForAPassword(card)) {
+        forgetUnlock(token);
         return LOCKED;
       }
       const input = { token, screen, card, search: screenSearchOf(new URLSearchParams(query)) };
       const requests = await requestsAction(input);
       const answers = await Promise.all(
-        requests.map(async ({ key, path }) => [key, await readJson(`${apiBase}${path}`)] as const),
+        requests.map(
+          async ({ key, path }) => [key, await readJson(`${apiBase}${path}`, unlock)] as const,
+        ),
       );
       return { kind: 'ready', content: await renderAction(input, Object.fromEntries(answers)) };
     };
@@ -129,7 +149,7 @@ export function SharedReport({
         show(next);
       },
       (error: unknown) => {
-        show(shownAfter(error));
+        show(shownAfter(error, token));
       },
     );
     return () => {
@@ -153,9 +173,15 @@ export function SharedReport({
       return <SharedLinkClosed />;
     case 'locked':
       return (
-        <p role="status" className="p-4 text-sm sm:px-8">
-          {t('share.locked')}
-        </p>
+        <SharedPasswordForm
+          token={token}
+          apiBase={apiBase}
+          demoPassword={demoPassword}
+          onUnlocked={retry}
+          onClosed={() => {
+            setShown(CLOSED);
+          }}
+        />
       );
     case 'busy':
     case 'failed':
