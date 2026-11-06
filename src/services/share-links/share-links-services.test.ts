@@ -18,7 +18,16 @@ const CREATED = {
   name: 'Board',
   createdAt: NOW.toISOString(),
   expiresAt: null,
+  passwordProtected: false,
   token: DEMO_SHARE_TOKEN,
+};
+const LINK_PATH = `${LINKS_PATH}/4d0f%2Fodd`;
+const CHANGED = {
+  id: '4d0f/odd',
+  name: 'Board',
+  createdAt: NOW.toISOString(),
+  expiresAt: null,
+  passwordProtected: true,
 };
 
 function serviceWith(writer: Partial<ApiWriter>, reader: Partial<ApiReader> = {}) {
@@ -43,12 +52,13 @@ describe('HttpShareLinksService', () => {
     const outcome = await serviceWith({ post } as Partial<ApiWriter>).create(PROJECT, {
       name: 'Board',
       expiresAt: '2026-12-05T12:00:00.000Z',
+      password: 'open sesame',
     });
 
     expect(outcome).toEqual({ kind: 'created', link: CREATED });
     expect(post.mock.calls[0]?.slice(0, 2)).toEqual([
       LINKS_PATH,
-      { name: 'Board', expires_at: '2026-12-05T12:00:00.000Z' },
+      { name: 'Board', expires_at: '2026-12-05T12:00:00.000Z', password: 'open sesame' },
     ]);
   });
 
@@ -59,7 +69,7 @@ describe('HttpShareLinksService', () => {
     const post = vi.fn(() => Promise.reject(new ApiRequestError(LINKS_PATH, status, code)));
 
     await expect(
-      serviceWith({ post }).create(PROJECT, { name: 'Board', expiresAt: null }),
+      serviceWith({ post }).create(PROJECT, { name: 'Board', expiresAt: null, password: null }),
     ).resolves.toEqual({ kind });
   });
 
@@ -70,8 +80,50 @@ describe('HttpShareLinksService', () => {
     const post = vi.fn(() => Promise.reject(failure));
 
     await expect(
-      serviceWith({ post }).create(PROJECT, { name: 'x', expiresAt: null }),
+      serviceWith({ post }).create(PROJECT, { name: 'x', expiresAt: null, password: null }),
     ).rejects.toBe(failure);
+  });
+
+  it.each([
+    ['sets', 'open sesame'],
+    ['removes', null],
+  ])('%s the password of a link with a PATCH, its id escaped in the path', async (_, password) => {
+    const patch = vi.fn<(path: string, body: unknown, schema: unknown) => Promise<unknown>>(() =>
+      Promise.resolve<unknown>(CHANGED),
+    );
+
+    const outcome = await serviceWith({ patch } as Partial<ApiWriter>).setPassword(
+      PROJECT,
+      '4d0f/odd',
+      password,
+    );
+
+    expect(outcome).toEqual({ kind: 'changed', link: CHANGED });
+    expect(patch.mock.calls[0]?.slice(0, 2)).toEqual([LINK_PATH, { password }]);
+  });
+
+  it.each([
+    ['planRequired', new ApiRequestError(LINK_PATH, 403, SHARE_LINK_ERROR_CODES.planRequired)],
+    [
+      'planRequired',
+      new ApiRequestError(LINK_PATH, 409, SHARE_LINK_ERROR_CODES.subscriptionRequired),
+    ],
+    ['gone', new ApiNotFoundError(LINK_PATH)],
+  ] as const)('answers %s when the API refuses the password change', async (kind, failure) => {
+    const patch = vi.fn(() => Promise.reject(failure));
+
+    await expect(serviceWith({ patch }).setPassword(PROJECT, '4d0f/odd', null)).resolves.toEqual({
+      kind,
+    });
+  });
+
+  it('lets any other failure of a password change through', async () => {
+    const failure = new ApiRequestError(LINK_PATH, 400, 'invalid_share_link');
+    const patch = vi.fn(() => Promise.reject(failure));
+
+    await expect(serviceWith({ patch }).setPassword(PROJECT, '4d0f/odd', 'x')).rejects.toBe(
+      failure,
+    );
   });
 
   it('revokes a link by deleting it, with its id escaped in the path', async () => {
@@ -96,9 +148,10 @@ describe('MockShareLinksService', () => {
   it('lists an expired invented link and one that never expires', async () => {
     const links = await new MockShareLinksService(() => NOW).list();
 
-    expect(links.map((link) => [link.name, link.expiresAt])).toEqual([
-      ['Agency pitch', '2026-10-26T12:00:00.000Z'],
-      ['Monthly board report', null],
+    expect(links.map((link) => [link.name, link.expiresAt, link.passwordProtected])).toEqual([
+      ['Agency pitch', '2026-10-26T12:00:00.000Z', false],
+      ['Monthly board report', null, false],
+      ['Investor update', '2026-12-02T12:00:00.000Z', true],
     ]);
   });
 
@@ -106,9 +159,34 @@ describe('MockShareLinksService', () => {
     const outcome = await new MockShareLinksService(() => NOW).create(PROJECT, {
       name: 'Board',
       expiresAt: null,
+      password: null,
     });
 
     expect(outcome).toEqual({ kind: 'created', link: CREATED });
+  });
+
+  it('creates a protected link when given a password', async () => {
+    const outcome = await new MockShareLinksService(() => NOW).create(PROJECT, {
+      name: 'Board',
+      expiresAt: null,
+      password: 'open sesame',
+    });
+
+    expect(outcome).toEqual({ kind: 'created', link: { ...CREATED, passwordProtected: true } });
+  });
+
+  it('sets or removes the password of an invented link, and finds no other', async () => {
+    const service = new MockShareLinksService(() => NOW);
+
+    await expect(
+      service.setPassword(PROJECT, DEMO_SHARE_LINK_IDS.board, 'open sesame'),
+    ).resolves.toMatchObject({ kind: 'changed', link: { passwordProtected: true } });
+    await expect(
+      service.setPassword(PROJECT, DEMO_SHARE_LINK_IDS.investors, null),
+    ).resolves.toMatchObject({ kind: 'changed', link: { passwordProtected: false } });
+    await expect(service.setPassword(PROJECT, 'unknown', null)).resolves.toEqual({
+      kind: 'gone',
+    });
   });
 
   it('revokes nothing, and does not mind', async () => {

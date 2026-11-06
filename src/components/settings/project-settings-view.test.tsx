@@ -116,10 +116,12 @@ const EMAIL = {
         name: 'Monthly board report',
         createdAt: '2026-09-25T10:00:00.000Z',
         expiresAt: null,
+        passwordProtected: false,
       },
     ],
     onPro: true,
     create: () => Promise.resolve({ kind: 'limitReached' } as const),
+    setPassword: () => Promise.resolve({ kind: 'gone' } as const),
     revoke: () => Promise.resolve(),
   },
 };

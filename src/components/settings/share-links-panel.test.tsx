@@ -15,18 +15,21 @@ const FOREVER: ShareLink = {
   name: 'Monthly board report',
   createdAt: '2026-10-27T12:00:00.000Z',
   expiresAt: null,
+  passwordProtected: false,
 };
 const OPEN: ShareLink = {
   id: '5e1a7c9d-6f8b-4a0c-9d5e-7f9a1b3c5d6e',
   name: 'Client review',
   createdAt: '2026-11-01T12:00:00.000Z',
   expiresAt: '2026-12-01T12:00:00.000Z',
+  passwordProtected: true,
 };
 const EXPIRED: ShareLink = {
   id: '6f2b8d0e-7a9c-4b1d-8e6f-8a0b2c4d6e7f',
   name: 'Agency pitch',
   createdAt: '2026-09-26T12:00:00.000Z',
   expiresAt: '2026-10-26T12:00:00.000Z',
+  passwordProtected: false,
 };
 
 const CREATED: CreateShareLinkOutcome = {
@@ -36,6 +39,7 @@ const CREATED: CreateShareLinkOutcome = {
     name: 'Investors',
     createdAt: '2026-11-05T12:00:00.000Z',
     expiresAt: null,
+    passwordProtected: false,
     token: `pyxis_sh_${'Q'.repeat(32)}`,
   },
 };
@@ -50,6 +54,7 @@ function renderPanel(
       links={links}
       onPro={onPro}
       create={create}
+      setPassword={() => Promise.resolve({ kind: 'gone' })}
       revoke={() => Promise.resolve()}
       timezone="UTC"
       i18n={english}
@@ -86,6 +91,55 @@ describe('ShareLinksPanel', () => {
     expect(within(panel).getAllByRole('button', { name: 'Revoke' })).toHaveLength(3);
   });
 
+  it('marks the links that ask for a password and offers to set, change or remove one', () => {
+    renderPanel([FOREVER, OPEN]);
+
+    const [forever, open] = screen.getAllByRole('listitem');
+    if (open === undefined || forever === undefined) {
+      throw new Error('Two rows were expected.');
+    }
+    expect(within(open).getByText('Password')).toBeInTheDocument();
+    expect(within(forever).queryByText('Password')).not.toBeInTheDocument();
+    expect(within(forever).getByRole('button', { name: 'Set password' })).toBeInTheDocument();
+    expect(within(open).getByRole('button', { name: 'Change password' })).toBeInTheDocument();
+    expect(within(open).getByRole('button', { name: 'Remove password' })).toBeInTheDocument();
+  });
+
+  it('marks a link as protected as soon as its password is saved', async () => {
+    renderWithMessages(
+      <ShareLinksPanel
+        links={[FOREVER, EXPIRED]}
+        onPro
+        create={() => Promise.resolve({ kind: 'limitReached' })}
+        setPassword={(linkId) =>
+          Promise.resolve({
+            kind: 'changed',
+            link: { ...FOREVER, id: linkId, passwordProtected: true },
+          })
+        }
+        revoke={() => Promise.resolve()}
+        timezone="UTC"
+        i18n={english}
+      />,
+    );
+    const [forever] = screen.getAllByRole('listitem');
+    if (forever === undefined) {
+      throw new Error('A row was expected.');
+    }
+
+    fireEvent.click(within(forever).getByRole('button', { name: 'Set password' }));
+    fireEvent.change(within(forever).getByLabelText('New password'), {
+      target: { value: 'open sesame' },
+    });
+    fireEvent.click(within(forever).getByRole('button', { name: 'Save password' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1_000);
+    });
+
+    expect(within(forever).getByText('Password')).toBeInTheDocument();
+    expect(within(forever).getByRole('button', { name: 'Change password' })).toBeInTheDocument();
+  });
+
   it('says there is none yet', () => {
     renderPanel([]);
 
@@ -98,6 +152,7 @@ describe('ShareLinksPanel', () => {
     expect(screen.queryByRole('textbox', { name: 'Who it is for' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Available on Pro' })).toHaveTextContent('public');
     expect(screen.getByRole('button', { name: 'Revoke' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Set password' })).not.toBeInTheDocument();
   });
 
   it('adds a new link to the list as soon as it is created', async () => {

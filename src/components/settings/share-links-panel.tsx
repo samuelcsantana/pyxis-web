@@ -4,12 +4,14 @@ import type { ShareLink } from '@/domain/share-links';
 import type { I18n } from '@/i18n/i18n';
 import type { CreateShareLink } from './create-share-link-form';
 import type { RevokeShareLink } from './revoke-share-link-button';
+import type { SetShareLinkPassword } from './share-link-password-control';
 import { ShareLinksManager } from './share-links-manager';
 
 export interface ShareLinksManagement {
   readonly links: readonly ShareLink[];
   readonly onPro: boolean;
   readonly create: CreateShareLink;
+  readonly setPassword: SetShareLinkPassword;
   readonly revoke: RevokeShareLink;
 }
 
@@ -24,6 +26,7 @@ export function ShareLinksPanel({
   links,
   onPro,
   create,
+  setPassword,
   revoke,
   timezone,
   i18n,
@@ -38,6 +41,7 @@ export function ShareLinksPanel({
         links={links}
         onPro={onPro}
         create={create}
+        setPassword={setPassword}
         revoke={revoke}
         timezone={timezone}
         proOffer={<AvailableOnPro i18n={i18n} feature="public_share_link" viewer="owner" />}

@@ -18,9 +18,12 @@ import {
   type ShareLinkExpiry,
   type ShareLinkNameProblem,
   shareLinkNameProblem,
+  type SharePasswordProblem,
+  sharePasswordProblem,
 } from '@/domain/share-links';
 import { useT } from '@/i18n/messages-provider';
 import { NewShareLinkReveal } from './new-share-link-reveal';
+import { SharePasswordField } from './share-password-field';
 
 export type CreateShareLink = (link: NewShareLink) => Promise<CreateShareLinkOutcome>;
 
@@ -37,6 +40,7 @@ export const CREATE_SHARE_LINK_MIN_BUSY_MS = 400;
 const NAME_ID = 'share-link-name';
 const NAME_ERROR_ID = 'share-link-name-error';
 const EXPIRY_ID = 'share-link-expiry';
+const PASSWORD_ID = 'share-link-password';
 const LABEL = 'text-caption font-medium';
 const INPUT = `min-h-11 w-full rounded-input px-3 text-base placeholder:text-muted sm:text-sm ${FIELD}`;
 const EXPIRY_CHOICES: readonly ShareLinkExpiry[] = ['never', ...SHARE_LINK_LIFETIMES];
@@ -58,7 +62,10 @@ export function CreateShareLinkForm({ create, limitReached, onCreated }: CreateS
   const t = useT();
   const router = useRouter();
   const nameField = useRef<HTMLInputElement>(null);
+  const passwordField = useRef<HTMLInputElement>(null);
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordProblem, setPasswordProblem] = useState<SharePasswordProblem | null>(null);
   const [expiry, setExpiry] = useState<ShareLinkExpiry>(DEFAULT_SHARE_LINK_EXPIRY);
   const [nameProblem, setNameProblem] = useState<ShareLinkNameProblem | null>(null);
   const [busy, setBusy] = useState(false);
@@ -91,14 +98,21 @@ export function CreateShareLinkForm({ create, limitReached, onCreated }: CreateS
   const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const problem = shareLinkNameProblem(name);
+    const chosenPassword = password === '' ? null : password;
+    const weakPassword = chosenPassword === null ? null : sharePasswordProblem(chosenPassword);
     setNameProblem(problem);
+    setPasswordProblem(weakPassword);
     if (problem !== null) {
       nameField.current?.focus();
       return;
     }
+    if (weakPassword !== null) {
+      passwordField.current?.focus();
+      return;
+    }
     request.current?.unsubscribe();
     setFailure(null);
-    request.current = defer(() => create({ name: name.trim(), expiry }))
+    request.current = defer(() => create({ name: name.trim(), expiry, password: chosenPassword }))
       .pipe(
         tap((outcome) => {
           if (outcome.kind !== 'created') {
@@ -106,6 +120,7 @@ export function CreateShareLinkForm({ create, limitReached, onCreated }: CreateS
             return;
           }
           setName('');
+          setPassword('');
           setCreated(outcome.link);
           onCreated(outcome.link);
           router.refresh();
@@ -119,7 +134,7 @@ export function CreateShareLinkForm({ create, limitReached, onCreated }: CreateS
   };
 
   return (
-    <form noValidate onSubmit={submit} className="flex flex-col gap-2">
+    <form noValidate onSubmit={submit} className="flex flex-col gap-3">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <label htmlFor={NAME_ID} className={LABEL}>
@@ -162,20 +177,30 @@ export function CreateShareLinkForm({ create, limitReached, onCreated }: CreateS
             ))}
           </SelectField>
         </div>
-        <button
-          type="submit"
-          disabled={busy}
-          aria-busy={busy}
-          className={`min-h-11 shrink-0 rounded-input px-4 text-sm ${BUTTON_PRIMARY} ${CONTROL_BUSY}`}
-        >
-          {busy ? t('shareLinks.creating') : t('shareLinks.create')}
-        </button>
       </div>
       {nameProblem === null ? null : (
         <p id={NAME_ERROR_ID} role="alert" className="text-caption font-medium text-bad">
           {nameProblemText(nameProblem, t)}
         </p>
       )}
+      <div className="sm:max-w-sm">
+        <SharePasswordField
+          id={PASSWORD_ID}
+          label={t('shareLinks.password')}
+          value={password}
+          problem={passwordProblem}
+          onChange={setPassword}
+          fieldRef={passwordField}
+        />
+      </div>
+      <button
+        type="submit"
+        disabled={busy}
+        aria-busy={busy}
+        className={`min-h-11 self-start rounded-input px-4 text-sm ${BUTTON_PRIMARY} ${CONTROL_BUSY}`}
+      >
+        {busy ? t('shareLinks.creating') : t('shareLinks.create')}
+      </button>
       {failure === 'limitReached' ? tooMany : null}
       {failure === 'planRequired' ? (
         <p role="alert" className="text-caption font-medium text-bad">

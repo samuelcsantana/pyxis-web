@@ -107,11 +107,14 @@ const meta = {
     shareLinks: {
       links: shareLinksResponseSchema.parse(demoShareLinksWire(STORY_NOW)),
       onPro: true,
-      create: ({ name, expiry }) =>
+      create: ({ name, expiry, password }) =>
         new MockShareLinksService(() => STORY_NOW).create(STORE.id, {
           name,
           expiresAt: expiry === 'never' ? null : STORY_NOW.toISOString(),
+          password,
         }),
+      setPassword: (linkId, password) =>
+        new MockShareLinksService(() => STORY_NOW).setPassword(STORE.id, linkId, password),
       revoke: () => Promise.resolve(),
     },
   },

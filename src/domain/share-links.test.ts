@@ -12,10 +12,13 @@ import {
   shareLinkUrl,
   shareLinkValidity,
   sharesOnPro,
+  sharePasswordProblem,
 } from './share-links';
 import {
   createdShareLinkResponseSchema,
+  shareLinkPasswordWire,
   shareLinkRequestWire,
+  shareLinkResponseSchema,
   shareLinksResponseSchema,
 } from './share-links.schema';
 
@@ -25,6 +28,7 @@ const LINK: ShareLink = {
   name: 'Monthly board report',
   createdAt: '2026-10-27T12:00:00.000Z',
   expiresAt: null,
+  passwordProtected: false,
 };
 
 const [DEMO_ACCOUNT] = myAccountsResponseSchema.parse(demoAccountsWire(NOW));
@@ -66,14 +70,24 @@ describe('canCreateShareLink', () => {
 
 describe('shareLinkRequestOf', () => {
   it('trims the name and turns the chosen days into an expiry from now', () => {
-    expect(shareLinkRequestOf({ name: '  Board ', expiry: 30 }, NOW)).toEqual({
+    expect(shareLinkRequestOf({ name: '  Board ', expiry: 30, password: null }, NOW)).toEqual({
       name: 'Board',
       expiresAt: '2026-12-05T12:00:00.000Z',
+      password: null,
     });
   });
 
   it('sends no expiry for a link that never expires', () => {
-    expect(shareLinkRequestOf({ name: 'Board', expiry: 'never' }, NOW).expiresAt).toBeNull();
+    expect(
+      shareLinkRequestOf({ name: 'Board', expiry: 'never', password: null }, NOW).expiresAt,
+    ).toBeNull();
+  });
+
+  it('keeps the password exactly as typed, spaces included', () => {
+    expect(
+      shareLinkRequestOf({ name: 'Board', expiry: 'never', password: ' open sesame ' }, NOW)
+        .password,
+    ).toBe(' open sesame ');
   });
 });
 
@@ -111,11 +125,31 @@ describe('sharesOnPro', () => {
   });
 });
 
+function linkWire(passwordProtected: boolean) {
+  return {
+    id: LINK.id,
+    name: LINK.name,
+    created_at: LINK.createdAt,
+    expires_at: null,
+    password_protected: passwordProtected,
+  };
+}
+
+describe('sharePasswordProblem', () => {
+  it('takes 8 to 128 characters, counting each emoji as one', () => {
+    expect(sharePasswordProblem('1234567')).toBe('tooShort');
+    expect(sharePasswordProblem('12345678')).toBeNull();
+    expect(sharePasswordProblem('🔒'.repeat(8))).toBeNull();
+    expect(sharePasswordProblem('x'.repeat(128))).toBeNull();
+    expect(sharePasswordProblem('x'.repeat(129))).toBe('tooLong');
+  });
+});
+
 describe('the share link schemas', () => {
   it('read the list and the created link, and write the API body', () => {
     expect(
       shareLinksResponseSchema.parse({
-        links: [{ id: LINK.id, name: LINK.name, created_at: LINK.createdAt, expires_at: null }],
+        links: [linkWire(false)],
       }),
     ).toEqual([LINK]);
     expect(
@@ -124,12 +158,19 @@ describe('the share link schemas', () => {
         name: LINK.name,
         created_at: LINK.createdAt,
         expires_at: '2026-12-05T12:00:00.000Z',
+        password_protected: false,
         token: 'pyxis_sh_abc',
       }),
     ).toEqual({ ...LINK, expiresAt: '2026-12-05T12:00:00.000Z', token: 'pyxis_sh_abc' });
-    expect(shareLinkRequestWire({ name: 'Board', expiresAt: null })).toEqual({
+    expect(shareLinkRequestWire({ name: 'Board', expiresAt: null, password: null })).toEqual({
       name: 'Board',
       expires_at: null,
+      password: null,
+    });
+    expect(shareLinkPasswordWire('open sesame')).toEqual({ password: 'open sesame' });
+    expect(shareLinkResponseSchema.parse(linkWire(true))).toEqual({
+      ...LINK,
+      passwordProtected: true,
     });
   });
 });
