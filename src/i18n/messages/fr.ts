@@ -1131,6 +1131,27 @@ export const fr = translation({
       'Révoquer « {name} » ? Toute personne qui l’a cesse aussitôt de voir les rapports.',
     confirm: 'Révoquer le lien',
     cancel: 'Annuler',
+    password: 'Mot de passe (facultatif)',
+    passwordHint:
+      'De {min} à {max} caractères. La personne qui ouvre le lien le saisit avant de voir les rapports ; Pyxis ne l’affiche plus jamais.',
+    passwordTooShort: 'Un mot de passe a au moins {min} caractères.',
+    passwordTooLong: 'Un mot de passe a au plus {max} caractères.',
+    protected: 'Mot de passe',
+    setPassword: 'Définir un mot de passe',
+    changePassword: 'Changer le mot de passe',
+    removePassword: 'Retirer le mot de passe',
+    newPassword: 'Nouveau mot de passe',
+    savePassword: 'Enregistrer le mot de passe',
+    savingPassword: 'Enregistrement…',
+    changeNote:
+      'Les personnes qui ont ouvert le lien avec l’ancien mot de passe devront saisir le nouveau.',
+    confirmRemovePassword:
+      'Retirer le mot de passe de « {name} » ? Toute personne qui a le lien ouvre à nouveau les rapports sans rien saisir.',
+    removingPassword: 'Retrait…',
+    passwordSaved: 'Mot de passe enregistré.',
+    passwordRemoved: 'Mot de passe retiré.',
+    passwordFailed: 'Le mot de passe n’a pas été modifié. Réessayez.',
+    linkGone: 'Ce lien n’existe plus. Rechargez la page.',
   },
   share: {
     metaTitle: 'Rapport partagé',
@@ -1146,6 +1167,17 @@ export const fr = translation({
     closedBody:
       'Il a peut-être été révoqué ou a expiré. Demandez-en un nouveau à la personne qui l’a partagé.',
     aboutPyxis: 'Qu’est-ce que Pyxis ?',
+    passwordTitle: 'Ce rapport demande un mot de passe',
+    passwordBody: 'Saisissez le mot de passe reçu avec le lien.',
+    passwordLabel: 'Mot de passe',
+    open: 'Ouvrir le rapport',
+    opening: 'Ouverture…',
+    wrongPassword: 'Mot de passe incorrect. Vérifiez-le et réessayez.',
+    tooManyAttempts: forms(
+      'Trop de tentatives. Réessayez dans {count} minute.',
+      'Trop de tentatives. Réessayez dans {count} minutes.',
+    ),
+    demoPassword: 'Dans cette démo, le mot de passe est {password}.',
   },
   connect: {
     title: 'Connecter une application',
