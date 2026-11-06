@@ -372,7 +372,18 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   goal), each with one line saying when it fires. All four are on by default; each switch saves
   only its own e-mail through a server action that re-checks access, moving back with an alert
   when the API refuses. The alert e-mails link to `/settings`, and `#settings-email-heading`
-  lands on the panel. Then the admin's sessions:
+  lands on the panel. For the project's owner, a Slack panel follows: the three alerts posted to
+  one channel through a Slack Incoming Webhook. With none connected, three steps (create an app
+  in Slack's own guide "Sending messages using incoming webhooks", linked; turn on Incoming
+  Webhooks and pick the channel; paste the address) and a field whose address is checked
+  against the API's pattern (`https://hooks.slack.com/services/…`, at most 256 characters)
+  before Save. Once saved the page shows only the masked address (`hooks.slack.com/…/` and its
+  last four characters), when it was connected, or that it broke and what Slack answered; "Send
+  test" says plainly whether Slack accepted it, said the webhook is gone (marking it broken) or
+  could not be reached, and too many tests ask to wait a few minutes; Replace opens the form
+  again and Remove asks first. On Hobby the form gives way to "Available on Pro", and a stored
+  webhook still shows with Remove. Other people see no Slack panel; the demo shows an invented
+  connected webhook. Then the admin's sessions:
   every device where they are signed in, named by the browser and system classified at sign-in
   (never the user agent), this one marked, each with a button to end it, and "Sign out
   everywhere" below the list. Then the admin's access tokens, for an AI agent or a script that
