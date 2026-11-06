@@ -58,6 +58,7 @@ describe('get-messages', () => {
       'accessTokens',
       'shareLinks',
       'share',
+      'slack',
       'consent',
       'projectForm',
       'projectKeys',
