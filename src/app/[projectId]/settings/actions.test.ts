@@ -24,7 +24,10 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  removeSlackWebhook,
   revokeShareLink,
+  saveSlackWebhook,
+  testSlackWebhook,
   setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
@@ -34,11 +37,26 @@ import {
 import type { IGoalsService } from '@/services/goals/goals-service.interface';
 import type { NewShareLink } from '@/domain/share-links';
 import type { IShareLinksService } from '@/services/share-links/share-links-service.interface';
+import type { ISlackWebhookService } from '@/services/slack/slack-webhook-service.interface';
 
 const shareLinksState = vi.hoisted(() => ({
   create: vi.fn<IShareLinksService['create']>(),
   setPassword: vi.fn<IShareLinksService['setPassword']>(),
   revoke: vi.fn<IShareLinksService['revoke']>(),
+}));
+
+const slackState = vi.hoisted(() => ({
+  save: vi.fn<ISlackWebhookService['save']>(),
+  test: vi.fn<ISlackWebhookService['test']>(),
+  remove: vi.fn<ISlackWebhookService['remove']>(),
+}));
+
+vi.mock('@/services/slack/slack-webhook-service.factory', () => ({
+  createSlackWebhookService: (): Pick<ISlackWebhookService, 'save' | 'test' | 'remove'> => ({
+    save: (projectId, url) => slackState.save(projectId, url),
+    test: (projectId) => slackState.test(projectId),
+    remove: (projectId) => slackState.remove(projectId),
+  }),
 }));
 
 vi.mock('@/services/share-links/share-links-service.factory', () => ({
@@ -873,5 +891,63 @@ describe('revokeShareLink', () => {
     );
     await expect(revokeShareLink('p-other', LINK_ID)).rejects.toThrow('not-found');
     expect(shareLinksState.revoke).not.toHaveBeenCalled();
+  });
+});
+
+describe('the Slack webhook actions', () => {
+  const WEBHOOK_URL = 'https://hooks.slack.com/services/T0001/B0002/abcdefghijklWXYZ';
+  const SAVED = {
+    kind: 'saved',
+    webhook: {
+      maskedUrl: 'hooks.slack.com/…/WXYZ',
+      connectedAt: '2026-11-06T12:00:00.000Z',
+      brokenAt: null,
+      brokenReason: null,
+    },
+  } as const;
+
+  beforeEach(() => {
+    slackState.save.mockReset();
+    slackState.test.mockReset();
+    slackState.remove.mockReset();
+  });
+
+  it('saves a Slack Incoming Webhook address for the project', async () => {
+    slackState.save.mockResolvedValue(SAVED);
+
+    await expect(saveSlackWebhook('p-store', WEBHOOK_URL)).resolves.toEqual(SAVED);
+    expect(slackState.save).toHaveBeenCalledWith('p-store', WEBHOOK_URL);
+  });
+
+  it.each([
+    ['another address', 'https://example.com/hook'],
+    ['something that is not text', 42],
+  ])(
+    'answers invalid to %s without calling the API, since it comes from the browser',
+    async (_, url) => {
+      await expect(saveSlackWebhook('p-store', url as unknown as string)).resolves.toEqual({
+        kind: 'invalid',
+      });
+      expect(slackState.save).not.toHaveBeenCalled();
+    },
+  );
+
+  it('tests and removes the webhook of the project', async () => {
+    slackState.test.mockResolvedValue({ kind: 'tested', result: 'sent' });
+    slackState.remove.mockResolvedValue(undefined);
+
+    await expect(testSlackWebhook('p-store')).resolves.toEqual({ kind: 'tested', result: 'sent' });
+    await expect(removeSlackWebhook('p-store')).resolves.toBeUndefined();
+    expect(slackState.test).toHaveBeenCalledWith('p-store');
+    expect(slackState.remove).toHaveBeenCalledWith('p-store');
+  });
+
+  it('answers not found for a project the admin cannot read, calling nothing', async () => {
+    await expect(saveSlackWebhook('p-other', WEBHOOK_URL)).rejects.toThrow('not-found');
+    await expect(testSlackWebhook('p-other')).rejects.toThrow('not-found');
+    await expect(removeSlackWebhook('p-other')).rejects.toThrow('not-found');
+    expect(slackState.save).not.toHaveBeenCalled();
+    expect(slackState.test).not.toHaveBeenCalled();
+    expect(slackState.remove).not.toHaveBeenCalled();
   });
 });

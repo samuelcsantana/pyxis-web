@@ -5,6 +5,7 @@ import type { EmailPreferences } from '@/domain/email-preferences';
 import type { Goal } from '@/domain/goals';
 import type { ProjectPerson } from '@/domain/project-people';
 import type { ShareLink } from '@/domain/share-links';
+import type { SlackWebhook } from '@/domain/slack-webhook';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
 import type { AdminSession } from '@/domain/sessions';
 import type { FreePlanState } from '@/domain/sign-up';
@@ -21,6 +22,7 @@ import { createProjectPeopleService } from '@/services/project-people/project-pe
 import { createProjectsService } from '@/services/projects/projects-service.factory';
 import { createSessionsService } from '@/services/sessions/sessions-service.factory';
 import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
+import { createSlackWebhookService } from '@/services/slack/slack-webhook-service.factory';
 
 export interface SettingsDialogData {
   readonly projectId: string;
@@ -37,6 +39,7 @@ export interface SettingsDialogData {
   readonly people: readonly ProjectPerson[];
   readonly goals: readonly Goal[];
   readonly shareLinks: readonly ShareLink[];
+  readonly slackWebhook: SlackWebhook | null;
 }
 
 export async function readSettingsDialogData(projectId: string): Promise<SettingsDialogData> {
@@ -58,9 +61,12 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
       readOrSignIn(() => createGoalsService().list(project.id)),
     ]);
   const owner = canManageProject(settings);
-  const shareLinks = owner
-    ? await readOrSignIn(() => createShareLinksService().list(project.id))
-    : [];
+  const [shareLinks, slackWebhook] = owner
+    ? await Promise.all([
+        readOrSignIn(() => createShareLinksService().list(project.id)),
+        readOrSignIn(() => createSlackWebhookService().webhook(project.id)),
+      ])
+    : [[], null];
   return {
     projectId: project.id,
     email: admin.email,
@@ -76,5 +82,6 @@ export async function readSettingsDialogData(projectId: string): Promise<Setting
     people,
     goals,
     shareLinks,
+    slackWebhook,
   };
 }

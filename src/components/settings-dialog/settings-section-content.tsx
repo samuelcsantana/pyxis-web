@@ -15,6 +15,7 @@ import { ConnectedAppsPanel } from '@/components/settings/connected-apps-panel';
 import { GoalsPanel } from '@/components/settings/goals-panel';
 import { PeoplePanel } from '@/components/settings/people-panel';
 import { ShareLinksPanel } from '@/components/settings/share-links-panel';
+import { SlackPanel } from '@/components/settings/slack-panel';
 import {
   ActivityPanel,
   CityPanel,
@@ -60,7 +61,10 @@ import {
   revokeAccessToken,
   revokeConnection,
   revokeProjectKey,
+  removeSlackWebhook,
   revokeShareLink,
+  saveSlackWebhook,
+  testSlackWebhook,
   setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
@@ -282,6 +286,17 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
             preferences={data.emailPreferences}
             choose={chooseEmailPreferences.bind(null, projectId)}
           />
+          {owner ? (
+            <SlackPanel
+              webhook={data.slackWebhook}
+              onPro={projectOnPro(data.accounts, settings.accountId)}
+              save={saveSlackWebhook.bind(null, projectId)}
+              test={testSlackWebhook.bind(null, projectId)}
+              remove={removeSlackWebhook.bind(null, projectId)}
+              timezone={settings.timezone}
+              i18n={i18n}
+            />
+          ) : null}
         </TitledBySection>
       );
     case 'data':
