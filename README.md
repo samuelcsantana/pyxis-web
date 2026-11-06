@@ -83,8 +83,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   guide, the Account and billing page and a Help and support page.
 - **Settings in a dialog.** A gear and the account menu open the settings over the page, at
   `#settings/<section>`, without reading it again: the account's and the project's, and help.
-- **E-mail alerts.** Each person turns the weekly digest and the three daily alerts (no events,
-  failed writes, conversion drop) on or off for themselves, in Settings › E-mail.
+- **Alerts.** Each person turns the weekly digest and the three daily alerts (no events, failed
+  writes, conversion drop) on or off for themselves; on Pro the owner also sends them to Slack.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
 - **Public links (Pro).** The owner creates, copies once, protects with a password and revokes
