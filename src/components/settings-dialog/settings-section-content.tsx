@@ -38,7 +38,7 @@ import { SETTINGS_SECTIONS, type SettingsSection } from './settings-sections';
 import { PANEL } from '@/components/ui/panel-classes';
 import { ownedAccounts } from '@/domain/accounts';
 import { ownsAnotherFreeAccount } from '@/domain/free-plan';
-import { sharesOnPro } from '@/domain/share-links';
+import { projectOnPro } from '@/domain/pro-features';
 import { timeZoneChoices } from '@/domain/project-management';
 import { supportPlanOf } from '@/domain/support';
 import { chooseLocale } from '@/i18n/choose-locale';
@@ -235,7 +235,7 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
         <TitledBySection>
           <ShareLinksPanel
             links={data.shareLinks}
-            onPro={sharesOnPro(data.accounts, settings.accountId)}
+            onPro={projectOnPro(data.accounts, settings.accountId)}
             create={createShareLink.bind(null, projectId)}
             setPassword={setShareLinkPassword.bind(null, projectId)}
             revoke={revokeShareLink.bind(null, projectId)}

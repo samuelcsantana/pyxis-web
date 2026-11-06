@@ -1,7 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { demoAccountsWire } from '@/services/accounts/mock-accounts-service';
-import type { Account } from './accounts';
-import { myAccountsResponseSchema } from './accounts.schema';
 import {
   canCreateShareLink,
   MAX_SHARE_LINKS,
@@ -11,7 +8,6 @@ import {
   shareLinkRequestOf,
   shareLinkUrl,
   shareLinkValidity,
-  sharesOnPro,
   sharePasswordProblem,
 } from './share-links';
 import {
@@ -30,15 +26,6 @@ const LINK: ShareLink = {
   expiresAt: null,
   passwordProtected: false,
 };
-
-const [DEMO_ACCOUNT] = myAccountsResponseSchema.parse(demoAccountsWire(NOW));
-
-function account(id: string, status: Account['status']): Account {
-  if (DEMO_ACCOUNT === undefined) {
-    throw new Error('The demo has an account.');
-  }
-  return { ...DEMO_ACCOUNT, id, status };
-}
 
 describe('parseShareLinkExpiry', () => {
   it('reads never and each offered number of days', () => {
@@ -110,18 +97,6 @@ describe('shareLinkUrl', () => {
     expect(shareLinkUrl('https://app.pyxis-analytics.dev', 'pyxis_sh_abc')).toBe(
       'https://app.pyxis-analytics.dev/share/pyxis_sh_abc',
     );
-  });
-});
-
-describe('sharesOnPro', () => {
-  it('lets the projects of an account on Pro share, and those outside any account', () => {
-    expect(sharesOnPro([account('a1', 'active')], 'a1')).toBe(true);
-    expect(sharesOnPro([], null)).toBe(true);
-  });
-
-  it('keeps sharing to Pro: an account on Hobby, or one it cannot read, does not', () => {
-    expect(sharesOnPro([account('a1', 'free')], 'a1')).toBe(false);
-    expect(sharesOnPro([account('a2', 'active')], 'a1')).toBe(false);
   });
 });
 
