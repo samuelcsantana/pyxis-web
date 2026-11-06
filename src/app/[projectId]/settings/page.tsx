@@ -9,7 +9,7 @@ import { demoCanonical } from '@/lib/demo-canonical';
 import type { ScreenMetadataProps } from '@/lib/screen-metadata';
 import { timeZoneChoices } from '@/domain/project-management';
 import { canManageProject, type ProjectSettings } from '@/domain/project-settings';
-import { sharesOnPro } from '@/domain/share-links';
+import { projectOnPro } from '@/domain/pro-features';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
 import { createShareLinksService } from '@/services/share-links/share-links-service.factory';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
@@ -134,7 +134,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           }}
           shareLinks={{
             links: shareLinks,
-            onPro: sharesOnPro(accounts, settings.accountId),
+            onPro: projectOnPro(accounts, settings.accountId),
             create: createShareLink.bind(null, project.id),
             setPassword: setShareLinkPassword.bind(null, project.id),
             revoke: revokeShareLink.bind(null, project.id),

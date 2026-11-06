@@ -1,5 +1,3 @@
-import type { Account } from './accounts';
-import { isOnProPlan } from './pro-features';
 import { SHARE_PAGE_PATH } from './share-page-path';
 
 export const MAX_SHARE_LINK_NAME_LENGTH = 64;
@@ -104,12 +102,4 @@ export function shareLinkValidity(link: ShareLink, now: Date): ShareLinkValidity
 
 export function shareLinkUrl(origin: string, token: string): string {
   return `${origin}${SHARE_PAGE_PATH}/${encodeURIComponent(token)}`;
-}
-
-export function sharesOnPro(accounts: readonly Account[], accountId: string | null): boolean {
-  if (accountId === null) {
-    return true;
-  }
-  const account = accounts.find((candidate) => candidate.id === accountId);
-  return account !== undefined && isOnProPlan(account.status);
 }

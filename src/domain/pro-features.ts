@@ -1,4 +1,4 @@
-import type { AccountStatus } from './accounts';
+import type { Account, AccountStatus } from './accounts';
 
 export const PRO_FEATURES = [
   'public_share_link',
@@ -20,4 +20,12 @@ const STATUSES_ON_PRO: ReadonlySet<AccountStatus> = new Set([
 
 export function isOnProPlan(status: AccountStatus): boolean {
   return STATUSES_ON_PRO.has(status);
+}
+
+export function projectOnPro(accounts: readonly Account[], accountId: string | null): boolean {
+  if (accountId === null) {
+    return true;
+  }
+  const account = accounts.find((candidate) => candidate.id === accountId);
+  return account !== undefined && isOnProPlan(account.status);
 }
