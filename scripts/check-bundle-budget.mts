@@ -30,7 +30,7 @@ const CHART_ROUTES: ReadonlySet<string> = new Set([
 export const BUDGET_KIB: Readonly<Record<RouteClass, number>> = {
   entry: 157,
   signUp: 162,
-  screen: 176,
+  screen: 177,
   chart: 171,
   share: 170,
 };
