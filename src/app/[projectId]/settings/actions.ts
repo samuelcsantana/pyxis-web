@@ -39,8 +39,10 @@ import {
   type CreateShareLinkOutcome,
   MAX_SHARE_LINK_NAME_LENGTH,
   type NewShareLink,
+  type SetShareLinkPasswordOutcome,
   SHARE_LINK_LIFETIMES,
   shareLinkRequestOf,
+  sharePasswordProblem,
 } from '@/domain/share-links';
 import { projectOrNotFound, readOrSignIn } from '@/lib/current-admin';
 import { createAccessTokensService } from '@/services/access-tokens/access-tokens-service.factory';
@@ -83,9 +85,14 @@ const goalChangesSchema = z.strictObject({
   target: z.string().trim().min(1).max(MAX_GOAL_PATH_LENGTH),
 });
 const goalIdSchema = z.uuid();
+const sharePasswordSchema = z
+  .string()
+  .refine((password) => sharePasswordProblem(password) === null)
+  .nullable();
 const newShareLinkSchema = z.strictObject({
   name: z.string().trim().min(1).max(MAX_SHARE_LINK_NAME_LENGTH),
   expiry: z.union([z.literal('never'), z.literal([...SHARE_LINK_LIFETIMES])]),
+  password: sharePasswordSchema,
 });
 const shareLinkIdSchema = z.uuid();
 
@@ -324,10 +331,29 @@ export async function createShareLink(
   const { project } = await projectOrNotFound(projectId);
   const parsed = newShareLinkSchema.safeParse(link);
   if (!parsed.success) {
-    throw new Error('A share link needs a name and an expiry of never, 7, 30, 90 or 365 days.');
+    throw new Error(
+      'A share link needs a name, an expiry of never, 7, 30, 90 or 365 days, ' +
+        'and no password or one of 8 to 128 characters.',
+    );
   }
   return readOrSignIn(() =>
     createShareLinksService().create(project.id, shareLinkRequestOf(parsed.data, new Date())),
+  );
+}
+
+export async function setShareLinkPassword(
+  projectId: string,
+  linkId: string,
+  password: string | null,
+): Promise<SetShareLinkPasswordOutcome> {
+  const { project } = await projectOrNotFound(projectId);
+  const id = shareLinkIdSchema.safeParse(linkId);
+  const chosen = sharePasswordSchema.safeParse(password);
+  if (!id.success || !chosen.success) {
+    throw new Error('A share link password is set by the link id, to 8 to 128 characters or none.');
+  }
+  return readOrSignIn(() =>
+    createShareLinksService().setPassword(project.id, id.data, chosen.data),
   );
 }
 

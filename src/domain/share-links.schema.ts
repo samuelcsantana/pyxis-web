@@ -6,6 +6,7 @@ const shareLinkWireSchema = z.object({
   name: z.string(),
   created_at: z.string(),
   expires_at: z.string().nullable(),
+  password_protected: z.boolean(),
 });
 
 function fromWire(body: z.infer<typeof shareLinkWireSchema>): ShareLink {
@@ -14,6 +15,7 @@ function fromWire(body: z.infer<typeof shareLinkWireSchema>): ShareLink {
     name: body.name,
     createdAt: body.created_at,
     expiresAt: body.expires_at,
+    passwordProtected: body.password_protected,
   };
 }
 
@@ -21,10 +23,16 @@ export const shareLinksResponseSchema = z
   .object({ links: z.array(shareLinkWireSchema) })
   .transform((body): readonly ShareLink[] => body.links.map(fromWire));
 
+export const shareLinkResponseSchema = shareLinkWireSchema.transform(fromWire);
+
 export const createdShareLinkResponseSchema = shareLinkWireSchema
   .extend({ token: z.string() })
   .transform((body): CreatedShareLink => ({ ...fromWire(body), token: body.token }));
 
 export function shareLinkRequestWire(request: ShareLinkRequest) {
-  return { name: request.name, expires_at: request.expiresAt };
+  return { name: request.name, expires_at: request.expiresAt, password: request.password };
+}
+
+export function shareLinkPasswordWire(password: string | null) {
+  return { password };
 }

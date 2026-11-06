@@ -13,11 +13,13 @@ import { displayTag } from '@/i18n/display-tag';
 import { useLocale, useT } from '@/i18n/messages-provider';
 import { type CreateShareLink, CreateShareLinkForm } from './create-share-link-form';
 import { type RevokeShareLink, RevokeShareLinkButton } from './revoke-share-link-button';
+import { type SetShareLinkPassword, ShareLinkPasswordControl } from './share-link-password-control';
 
 export interface ShareLinksManagerProps {
   readonly links: readonly ShareLink[];
   readonly onPro: boolean;
   readonly create: CreateShareLink;
+  readonly setPassword: SetShareLinkPassword;
   readonly revoke: RevokeShareLink;
   readonly timezone: string;
   readonly proOffer: ReactNode;
@@ -25,6 +27,8 @@ export interface ShareLinksManagerProps {
 
 const ROW = 'flex flex-wrap items-start justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0';
 const DETAIL = 'text-xs leading-[18px] text-muted';
+const BADGE =
+  'w-fit rounded-pill border border-line bg-soft px-2 py-0.5 text-caption font-medium text-ink';
 
 export function shareLinkNameId(linkId: string): string {
   return `share-link-name-${linkId}`;
@@ -34,6 +38,7 @@ export function ShareLinksManager({
   links: initial,
   onPro,
   create,
+  setPassword,
   revoke,
   timezone,
   proOffer,
@@ -82,6 +87,9 @@ export function ShareLinksManager({
                   <span id={nameId} className="text-sm font-semibold text-ink">
                     <Breakable text={link.name} />
                   </span>
+                  {link.passwordProtected ? (
+                    <span className={BADGE}>{t('shareLinks.protected')}</span>
+                  ) : null}
                   <p className={DETAIL}>
                     {t('shareLinks.createdOn', { when: when(link.createdAt) })}
                     {' · '}
@@ -92,12 +100,28 @@ export function ShareLinksManager({
                     </span>
                   </p>
                 </div>
-                <RevokeShareLinkButton
-                  linkId={link.id}
-                  name={link.name}
-                  describedBy={nameId}
-                  revoke={revoke}
-                />
+                <div className="flex flex-wrap items-start gap-2">
+                  {onPro ? (
+                    <ShareLinkPasswordControl
+                      link={link}
+                      describedBy={nameId}
+                      setPassword={setPassword}
+                      onChanged={(changed) => {
+                        setLinks((current) =>
+                          current.map((candidate) =>
+                            candidate.id === changed.id ? changed : candidate,
+                          ),
+                        );
+                      }}
+                    />
+                  ) : null}
+                  <RevokeShareLinkButton
+                    linkId={link.id}
+                    name={link.name}
+                    describedBy={nameId}
+                    revoke={revoke}
+                  />
+                </div>
               </li>
             );
           })}

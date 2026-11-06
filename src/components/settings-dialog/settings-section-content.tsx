@@ -61,6 +61,7 @@ import {
   revokeConnection,
   revokeProjectKey,
   revokeShareLink,
+  setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
@@ -236,6 +237,7 @@ export function SettingsSectionContent({ section, data, i18n }: SettingsSectionC
             links={data.shareLinks}
             onPro={sharesOnPro(data.accounts, settings.accountId)}
             create={createShareLink.bind(null, projectId)}
+            setPassword={setShareLinkPassword.bind(null, projectId)}
             revoke={revokeShareLink.bind(null, projectId)}
             timezone={settings.timezone}
             i18n={i18n}

@@ -336,8 +336,11 @@ describe('the API contract copied from pyxis-api', () => {
     const list = contractSchema('ShareLinks');
     const create = contractSchema('CreateShareLink');
     const created = contractSchema('CreatedShareLink');
-    const forever = shareLinkRequestOf({ name: ' Board ', expiry: 'never' }, NOW);
-    const monthly = shareLinkRequestOf({ name: 'Client', expiry: 30 }, NOW);
+    const forever = shareLinkRequestOf({ name: ' Board ', expiry: 'never', password: null }, NOW);
+    const monthly = shareLinkRequestOf(
+      { name: 'Client', expiry: 30, password: 'twelve chars' },
+      NOW,
+    );
 
     expect(list(demoShareLinksWire(NOW)), JSON.stringify(list.errors)).toBe(true);
     expect(create(shareLinkRequestWire(forever)), JSON.stringify(create.errors)).toBe(true);

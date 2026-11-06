@@ -35,6 +35,7 @@ import {
   revokeConnection,
   revokeProjectKey,
   revokeShareLink,
+  setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
@@ -135,6 +136,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             links: shareLinks,
             onPro: sharesOnPro(accounts, settings.accountId),
             create: createShareLink.bind(null, project.id),
+            setPassword: setShareLinkPassword.bind(null, project.id),
             revoke: revokeShareLink.bind(null, project.id),
           }}
         />

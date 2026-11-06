@@ -25,6 +25,7 @@ import {
   revokeConnection,
   revokeProjectKey,
   revokeShareLink,
+  setShareLinkPassword,
   setProjectCity,
   setProjectVisitors,
   updateGoal,
@@ -36,12 +37,15 @@ import type { IShareLinksService } from '@/services/share-links/share-links-serv
 
 const shareLinksState = vi.hoisted(() => ({
   create: vi.fn<IShareLinksService['create']>(),
+  setPassword: vi.fn<IShareLinksService['setPassword']>(),
   revoke: vi.fn<IShareLinksService['revoke']>(),
 }));
 
 vi.mock('@/services/share-links/share-links-service.factory', () => ({
-  createShareLinksService: (): Pick<IShareLinksService, 'create' | 'revoke'> => ({
+  createShareLinksService: (): Pick<IShareLinksService, 'create' | 'setPassword' | 'revoke'> => ({
     create: (projectId, request) => shareLinksState.create(projectId, request),
+    setPassword: (projectId, linkId, password) =>
+      shareLinksState.setPassword(projectId, linkId, password),
     revoke: (projectId, linkId) => shareLinksState.revoke(projectId, linkId),
   }),
 }));
@@ -737,6 +741,7 @@ describe('createShareLink', () => {
       name: 'Board',
       createdAt: NOW.toISOString(),
       expiresAt: '2026-12-05T12:00:00.000Z',
+      passwordProtected: true,
       token: `pyxis_sh_${'A'.repeat(32)}`,
     },
   } as const;
@@ -754,44 +759,97 @@ describe('createShareLink', () => {
   it('creates the link for the project, its name trimmed and its expiry counted from now', async () => {
     shareLinksState.create.mockResolvedValue(CREATED);
 
-    await expect(createShareLink('p-store', { name: ' Board ', expiry: 30 })).resolves.toEqual(
-      CREATED,
-    );
+    await expect(
+      createShareLink('p-store', { name: ' Board ', expiry: 30, password: ' open sesame ' }),
+    ).resolves.toEqual(CREATED);
     expect(shareLinksState.create).toHaveBeenCalledWith('p-store', {
       name: 'Board',
       expiresAt: '2026-12-05T12:00:00.000Z',
+      password: ' open sesame ',
     });
   });
 
   it('passes the refusal of a project not on Pro back to the form', async () => {
     shareLinksState.create.mockResolvedValue({ kind: 'planRequired' });
 
-    await expect(createShareLink('p-store', { name: 'Board', expiry: 'never' })).resolves.toEqual({
-      kind: 'planRequired',
-    });
+    await expect(
+      createShareLink('p-store', { name: 'Board', expiry: 'never', password: null }),
+    ).resolves.toEqual({ kind: 'planRequired' });
     expect(shareLinksState.create).toHaveBeenCalledWith('p-store', {
       name: 'Board',
       expiresAt: null,
+      password: null,
     });
   });
 
   it('answers not found for a project the admin cannot read, without creating anything', async () => {
-    await expect(createShareLink('p-other', { name: 'Board', expiry: 7 })).rejects.toThrow(
-      'not-found',
-    );
+    await expect(
+      createShareLink('p-other', { name: 'Board', expiry: 7, password: null }),
+    ).rejects.toThrow('not-found');
     expect(shareLinksState.create).not.toHaveBeenCalled();
   });
 
   it.each([
-    [{ name: '   ', expiry: 7 }],
-    [{ name: 'x'.repeat(65), expiry: 7 }],
-    [{ name: 'Board', expiry: 14 }],
-    [{ name: 'Board', expiry: 'never', password: 'x' }],
+    [{ name: '   ', expiry: 7, password: null }],
+    [{ name: 'x'.repeat(65), expiry: 7, password: null }],
+    [{ name: 'Board', expiry: 14, password: null }],
+    [{ name: 'Board', expiry: 'never', password: 'short' }],
+    [{ name: 'Board', expiry: 'never', password: 'x'.repeat(129) }],
+    [{ name: 'Board', expiry: 'never' }],
+    [{ name: 'Board', expiry: 'never', password: null, admin: true }],
   ])('refuses %j, since it comes from the browser', async (forged) => {
     await expect(createShareLink('p-store', forged as unknown as NewShareLink)).rejects.toThrow(
-      'A share link needs a name and an expiry of never, 7, 30, 90 or 365 days.',
+      'A share link needs a name, an expiry of never, 7, 30, 90 or 365 days, ' +
+        'and no password or one of 8 to 128 characters.',
     );
     expect(shareLinksState.create).not.toHaveBeenCalled();
+  });
+});
+
+describe('setShareLinkPassword', () => {
+  const LINK_ID = '4d0f6b8c-5e7a-4f9b-8c4d-6e8f0a2b4c5d';
+  const CHANGED = {
+    kind: 'changed',
+    link: {
+      id: LINK_ID,
+      name: 'Board',
+      createdAt: '2026-11-05T12:00:00.000Z',
+      expiresAt: null,
+      passwordProtected: true,
+    },
+  } as const;
+
+  beforeEach(() => {
+    shareLinksState.setPassword.mockReset();
+  });
+
+  it.each([
+    ['sets a password, kept exactly as typed', ' open sesame '],
+    ['removes the password', null],
+  ])('%s', async (_, password) => {
+    shareLinksState.setPassword.mockResolvedValue(CHANGED);
+
+    await expect(setShareLinkPassword('p-store', LINK_ID, password)).resolves.toEqual(CHANGED);
+    expect(shareLinksState.setPassword).toHaveBeenCalledWith('p-store', LINK_ID, password);
+  });
+
+  it.each([
+    ['an id that is not a UUID', 'not-a-link', 'open sesame'],
+    ['a password under 8 characters', LINK_ID, 'short'],
+    ['a password over 128 characters', LINK_ID, 'x'.repeat(129)],
+    ['a password that is not text', LINK_ID, 42],
+  ])('refuses %s, since it comes from the browser', async (_, linkId, password) => {
+    await expect(
+      setShareLinkPassword('p-store', linkId, password as unknown as string),
+    ).rejects.toThrow(
+      'A share link password is set by the link id, to 8 to 128 characters or none.',
+    );
+    expect(shareLinksState.setPassword).not.toHaveBeenCalled();
+  });
+
+  it('answers not found for a project the admin cannot read', async () => {
+    await expect(setShareLinkPassword('p-other', LINK_ID, null)).rejects.toThrow('not-found');
+    expect(shareLinksState.setPassword).not.toHaveBeenCalled();
   });
 });
 

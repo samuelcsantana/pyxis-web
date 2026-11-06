@@ -12,7 +12,10 @@ const createRightAway = (link: NewShareLink): Promise<CreateShareLinkOutcome> =>
   Promise.resolve({
     kind: 'created',
     link: createdShareLinkResponseSchema.parse(
-      demoCreatedShareLinkWire({ name: link.name, expiresAt: null }, STORY_NOW),
+      demoCreatedShareLinkWire(
+        { name: link.name, expiresAt: null, password: link.password },
+        STORY_NOW,
+      ),
     ),
   });
 

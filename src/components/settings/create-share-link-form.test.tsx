@@ -22,6 +22,7 @@ function createdOutcome(link: NewShareLink): CreateShareLinkOutcome {
       name: link.name,
       createdAt: '2026-11-05T12:00:00.000Z',
       expiresAt: null,
+      passwordProtected: link.password !== null,
       token: TOKEN,
     },
   };
@@ -37,6 +38,10 @@ function nameField() {
   return screen.getByRole('textbox', { name: 'Who it is for' });
 }
 
+function passwordField() {
+  return screen.getByLabelText('Password (optional)');
+}
+
 function submit() {
   fireEvent.click(screen.getByRole('button', { name: 'Create link' }));
 }
@@ -50,6 +55,48 @@ describe('CreateShareLinkForm', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it('creates a protected link with the password exactly as typed, then clears it', async () => {
+    const create = vi.fn((link: NewShareLink) => Promise.resolve(createdOutcome(link)));
+    renderWithMessages(
+      <CreateShareLinkForm create={create} limitReached={false} onCreated={onCreated} />,
+    );
+    expect(passwordField()).toHaveAttribute('type', 'password');
+    expect(passwordField()).toHaveAccessibleDescription(
+      '8 to 128 characters. Whoever opens the link types it before the reports show; Pyxis never shows it again.',
+    );
+
+    fireEvent.change(nameField(), { target: { value: 'Board' } });
+    fireEvent.change(passwordField(), { target: { value: ' open sesame ' } });
+    submit();
+    await settle(CREATE_SHARE_LINK_MIN_BUSY_MS);
+
+    expect(create).toHaveBeenCalledWith({
+      name: 'Board',
+      expiry: 'never',
+      password: ' open sesame ',
+    });
+    expect(onCreated).toHaveBeenCalledWith(expect.objectContaining({ passwordProtected: true }));
+  });
+
+  it.each([
+    ['short', 'A password has at least 8 characters.'],
+    ['x'.repeat(129), 'A password has at most 128 characters.'],
+  ])('names the password rule before creating with %s', (password, text) => {
+    const create = vi.fn();
+    renderWithMessages(
+      <CreateShareLinkForm create={create} limitReached={false} onCreated={onCreated} />,
+    );
+
+    fireEvent.change(nameField(), { target: { value: 'Board' } });
+    fireEvent.change(passwordField(), { target: { value: password } });
+    submit();
+
+    expect(screen.getByRole('alert')).toHaveTextContent(text);
+    expect(passwordField()).toHaveFocus();
+    expect(passwordField()).toHaveAttribute('aria-invalid', 'true');
+    expect(create).not.toHaveBeenCalled();
   });
 
   it('creates a link with the trimmed name and the chosen expiry, then shows its address once', async () => {
@@ -68,7 +115,7 @@ describe('CreateShareLinkForm', () => {
 
     expect(screen.getByRole('button', { name: 'Creating…' })).toBeDisabled();
     await settle(CREATE_SHARE_LINK_MIN_BUSY_MS);
-    expect(create).toHaveBeenCalledWith({ name: 'Board', expiry: 90 });
+    expect(create).toHaveBeenCalledWith({ name: 'Board', expiry: 90, password: null });
     expect(onCreated).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Board', token: TOKEN }),
     );

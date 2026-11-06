@@ -5,6 +5,8 @@ import { SHARE_PAGE_PATH } from './share-page-path';
 export const MAX_SHARE_LINK_NAME_LENGTH = 64;
 export const MAX_SHARE_LINKS = 10;
 export const SHARE_LINK_LIFETIMES = [7, 30, 90, 365] as const;
+export const MIN_SHARE_PASSWORD_LENGTH = 8;
+export const MAX_SHARE_PASSWORD_LENGTH = 128;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -17,6 +19,7 @@ export interface ShareLink {
   readonly name: string;
   readonly createdAt: string;
   readonly expiresAt: string | null;
+  readonly passwordProtected: boolean;
 }
 
 export interface CreatedShareLink extends ShareLink {
@@ -26,11 +29,13 @@ export interface CreatedShareLink extends ShareLink {
 export interface NewShareLink {
   readonly name: string;
   readonly expiry: ShareLinkExpiry;
+  readonly password: string | null;
 }
 
 export interface ShareLinkRequest {
   readonly name: string;
   readonly expiresAt: string | null;
+  readonly password: string | null;
 }
 
 export type CreateShareLinkOutcome =
@@ -38,7 +43,14 @@ export type CreateShareLinkOutcome =
   | { readonly kind: 'planRequired' }
   | { readonly kind: 'limitReached' };
 
+export type SetShareLinkPasswordOutcome =
+  | { readonly kind: 'changed'; readonly link: ShareLink }
+  | { readonly kind: 'planRequired' }
+  | { readonly kind: 'gone' };
+
 export type ShareLinkNameProblem = 'missing' | 'tooLong';
+
+export type SharePasswordProblem = 'tooShort' | 'tooLong';
 
 export type ShareLinkValidity =
   | { readonly kind: 'forever' }
@@ -60,6 +72,14 @@ export function shareLinkNameProblem(name: string): ShareLinkNameProblem | null 
   return trimmed.length > MAX_SHARE_LINK_NAME_LENGTH ? 'tooLong' : null;
 }
 
+export function sharePasswordProblem(password: string): SharePasswordProblem | null {
+  const length = Array.from(password).length;
+  if (length < MIN_SHARE_PASSWORD_LENGTH) {
+    return 'tooShort';
+  }
+  return length > MAX_SHARE_PASSWORD_LENGTH ? 'tooLong' : null;
+}
+
 export function canCreateShareLink(links: readonly ShareLink[]): boolean {
   return links.length < MAX_SHARE_LINKS;
 }
@@ -69,6 +89,7 @@ export function shareLinkRequestOf(link: NewShareLink, now: Date): ShareLinkRequ
     name: link.name.trim(),
     expiresAt:
       link.expiry === 'never' ? null : new Date(now.getTime() + link.expiry * DAY_MS).toISOString(),
+    password: link.password,
   };
 }
 
