@@ -32,18 +32,59 @@ for (const colorScheme of ['light', 'dark'] as const) {
       ).toBeFocused();
       expect(await axeViolations(page)).toEqual([]);
     });
+
+    test('the password form and its remove question have no WCAG 2.2 A or AA violation', async ({
+      page,
+    }) => {
+      await openShareSettings(page);
+      const section = shareSettings(page);
+
+      await section.getByRole('button', { name: 'Set password' }).first().click();
+      await expect(section.getByLabel('New password')).toBeFocused();
+      expect(await axeViolations(page)).toEqual([]);
+
+      await section.getByRole('button', { name: 'Cancel' }).click();
+      await section.getByRole('button', { name: 'Remove password' }).click();
+      expect(await axeViolations(page)).toEqual([]);
+    });
   });
 }
 
-test('lists the demo links with their dates, the expired one marked', async ({ page }) => {
+test('lists the demo links with their dates, the expired one and the protected one marked', async ({
+  page,
+}) => {
   await openShareSettings(page);
   const rows = shareSettings(page).getByRole('listitem');
 
-  await expect(rows).toHaveCount(2);
-  await expect(rows.first()).toContainText('Agency pitch');
-  await expect(rows.first()).toContainText('Expired');
-  await expect(rows.last()).toContainText('Monthly board report');
-  await expect(rows.last()).toContainText('Never expires');
+  await expect(rows).toHaveCount(3);
+  await expect(rows.nth(0)).toContainText('Agency pitch');
+  await expect(rows.nth(0)).toContainText('Expired');
+  await expect(rows.nth(1)).toContainText('Monthly board report');
+  await expect(rows.nth(1)).toContainText('Never expires');
+  await expect(rows.nth(2)).toContainText('Investor update');
+  await expect(rows.nth(2).getByText('Password', { exact: true })).toBeVisible();
+});
+
+test('sets a password on a link, checking its length first, and removes it after confirming', async ({
+  page,
+}) => {
+  await openShareSettings(page);
+  const board = shareSettings(page).getByRole('listitem').nth(1);
+
+  await board.getByRole('button', { name: 'Set password' }).click();
+  await board.getByLabel('New password').fill('short');
+  await board.getByRole('button', { name: 'Save password' }).click();
+  await expect(board.getByRole('alert')).toHaveText('A password has at least 8 characters.');
+
+  await board.getByLabel('New password').fill('open sesame');
+  await board.getByRole('button', { name: 'Save password' }).click();
+  await expect(board.getByRole('status')).toHaveText('Password saved.');
+  await expect(board.getByText('Password', { exact: true })).toBeVisible();
+
+  await board.getByRole('button', { name: 'Remove password' }).click();
+  await board.getByRole('group').getByRole('button', { name: 'Remove password' }).click();
+  await expect(board.getByRole('status')).toHaveText('Password removed.');
+  await expect(board.getByRole('button', { name: 'Set password' })).toBeVisible();
 });
 
 test('creates a link and shows its address once, to copy', async ({
@@ -77,7 +118,7 @@ test('revokes a link only after the owner confirms', async ({ page }) => {
 
   await section.getByRole('button', { name: 'Revoke' }).last().click();
   await section.getByRole('button', { name: 'Cancel' }).click();
-  await expect(section.getByRole('button', { name: 'Revoke' })).toHaveCount(2);
+  await expect(section.getByRole('button', { name: 'Revoke' })).toHaveCount(3);
 
   await section.getByRole('button', { name: 'Revoke' }).last().click();
   await section.getByRole('button', { name: 'Revoke the link' }).click();
