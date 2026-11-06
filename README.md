@@ -87,7 +87,8 @@ author's blog, also in [Portuguese][post-pt] and [Spanish][post-es].
   failed writes, conversion drop) on or off for themselves, in Settings › E-mail.
 - **Agents.** Read-only access tokens for agents and scripts, and the consent page and connected
   apps of the Claude connector.
-- **Public links (Pro).** The owner creates, copies once and revokes read-only links; `/share/<token>`
+- **Public links (Pro).** The owner creates, copies once, protects with a password and revokes
+  read-only links; `/share/<token>`
   opens the summed reports to anyone holding one, read by the viewer's browser and drawn by the
   server (ADR 0017).
 - **Seven languages.** The interface and the home page in English, Brazilian Portuguese, Spanish,

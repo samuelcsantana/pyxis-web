@@ -339,8 +339,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   browser reads the card and the reports from the API (its rate limit counts each viewer), and
   two Server Functions plan the reads and draw the answers with the dashboard's own report
   views (ADR 0017). A closed, expired or unknown link, and an address that is not a token, show
-  the same page that never says why; too many requests ask to wait a minute; a link with a
-  password says so. Kept out of search engines by `X-Robots-Tag` and the robots meta tag. In the
+  the same page that never says why; too many requests ask to wait a minute. A link with a
+  password shows only a password form, without the project's name: the password goes to
+  `/v1/shared/<token>/unlock`, the unlock it answers is kept in the tab's `sessionStorage` (never
+  a cookie or `localStorage`) and sent as a Bearer on every read; a wrong password keeps what was
+  typed and says so, too many attempts say how many minutes to wait (from `Retry-After`), and an
+  unlock the API stops accepting (expired, or the password changed) brings the form back. The
+  demo has one invented protected link whose password the form itself shows. Kept out of search engines by `X-Robots-Tag` and the robots meta tag. In the
   demo, `/v1/shared/<token>` on the dashboard serves the demo store's reports for the demo
   token, and never answers a report when an API is configured (404, or the sign-in redirect
   without a session)
@@ -381,10 +386,13 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   button; while it is closed the box is hidden, so the page never shows an address that answers
   404, and the list still shows. For the owner, Public link: what a link opens (the summed
   reports, never visits, the timeline or requests) and a form with who it is for and when it
-  expires (never, 7, 30, 90 days or a year), which shows the address on this dashboard once, with
+  expires (never, 7, 30, 90 days or a year) and an optional password (8 to 128 characters, kept
+  as typed, checked before sending), which shows the address on this dashboard once, with
   a copy button, since only the link's fingerprint is kept; then each link with its creation and
-  expiry (an expired one marked) and a Revoke button that asks first. On Hobby the form gives way
-  to "Available on Pro", and the list and Revoke stay. Below it,
+  expiry (an expired one marked), a "Password" badge when it has one, "Set password" or "Change
+  password" and "Remove password" (which asks first), and a Revoke button that asks first. On
+  Hobby the form and the password buttons give way to "Available on Pro", and the list and Revoke
+  stay. Below it,
   the project. The owner of its account edits it: name, up to five allowed origins (typed as
   `shop.example.com` or a full URL, saved as origins), time zone and currency (common ISO 4217
   codes, the real first, named in the reader's language; changing it converts nothing), each
