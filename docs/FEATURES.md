@@ -321,7 +321,10 @@ with its states is in the [Storybook](https://samuelcsantana.github.io/pyxis-web
   page, titled as such, for an unknown address or project, which keeps the project's navigation
   around an unknown screen of a known project
 - A demo mode with invented data and a visible banner when no API is configured, published as
-  the [live demo](https://demo.pyxis-analytics.dev): no sign-in and no real API. It holds
+  the [live demo](https://demo.pyxis-analytics.dev): no sign-in and no real API. One switch,
+  `liveDemoIsOpen()` in `src/lib/live-demo.ts`, hides every link to it (the home page header,
+  footer, hero and cards, the sign-in and sign-up pages, `llms.txt`) while the demo is offline;
+  the eight screen cards of the home page then show as plain cards. It holds
   two imaginary products, a store and a documentation site. A seeded generator draws every
   visit of each day from the product's catalog (about 90 a day, with devices, sources and
   campaigns, a journey through the pages, events, writes and failed requests), the same visits
