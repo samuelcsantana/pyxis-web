@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { english } from '@/test-utils/english';
 import { showcasePreview } from '@/test-utils/landing-preview';
 import { LandingHero } from './landing-hero';
@@ -30,8 +31,8 @@ export const English: Story = {
       within(canvasElement).getByRole('link', { name: 'Start your free trial' }),
     ).toBeVisible();
     await expect(
-      within(canvasElement).getByRole('link', { name: 'Open the live demo' }),
-    ).toBeVisible();
+      within(canvasElement).queryAllByRole('link', { name: 'Open the live demo' }),
+    ).toHaveLength(liveDemoIsOpen() ? 1 : 0);
   },
 };
 
