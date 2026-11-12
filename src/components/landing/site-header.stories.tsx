@@ -3,6 +3,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { LanguageFormSelect } from '@/components/language/language-form-select';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { DEFAULT_LANDING_PAGE, landingPageOfLocale } from '@/lib/landing-pages';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { english } from '@/test-utils/english';
 import { LandingLanguageSelect } from './landing-language-select';
 import { SiteHeader } from './site-header';
@@ -67,6 +68,9 @@ export const OnTheSignInPage: Story = {
 
 export const OnAPhone: Story = { globals: { viewport: { value: 'mobile1' } } };
 
+const LINKS_WITH_THE_DEMO = 5;
+const LINKS_WITHOUT_THE_DEMO = 4;
+
 export const OnATablet: Story = {
   globals: { viewport: { value: 'tablet' } },
   play: async ({ canvasElement }) => {
@@ -74,7 +78,7 @@ export const OnATablet: Story = {
     await userEvent.click(canvas.getByText('Menu'));
     await expect(
       within(canvas.getByRole('navigation', { name: 'Main' })).getAllByRole('link'),
-    ).toHaveLength(5);
+    ).toHaveLength(liveDemoIsOpen() ? LINKS_WITH_THE_DEMO : LINKS_WITHOUT_THE_DEMO);
   },
 };
 
