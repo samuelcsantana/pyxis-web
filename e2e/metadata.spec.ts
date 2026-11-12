@@ -57,7 +57,10 @@ test('offers no install of the demo, and serves the favicon and a robots file th
 
   const robots = await request.get('/robots.txt');
   expect(robots.status()).toBe(200);
-  expect(await robots.text()).toMatch(/User-Agent: \*\nAllow: \//);
+  const rules = await robots.text();
+  expect(rules).toMatch(/User-Agent: \*\nAllow: \//);
+  expect(rules).toContain('Disallow: /*?');
+  expect(rules).toContain('Disallow: /*/export');
 });
 
 test('gives the demo a link preview card with an image that loads', async ({ page, request }) => {
