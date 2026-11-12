@@ -2188,12 +2188,11 @@ export const it = translation({
       note: 'Nessuna registrazione. Dati inventati. Si apre direttamente sulla dashboard.',
       startFree: 'Inizia gratis',
       seePaidPlan: 'Vedi il piano Pro',
-      freeNote:
-        'Gratis fino a {events} eventi al mese su un sito, senza carta. La demo si apre senza registrazione.',
+      freeNote: 'Gratis fino a {events} eventi al mese su un sito, senza carta.',
       freeFullNote:
         'Il piano Hobby è pieno per ora: registrati e il tuo account aspetta un posto, oppure abbonati al piano Pro.',
-      trialNote:
-        '14 giorni gratis; la carta viene addebitata solo il quindicesimo giorno. La demo si apre senza registrazione.',
+      trialNote: '14 giorni gratis; la carta viene addebitata solo il quindicesimo giorno.',
+      demoOpensNote: 'La demo si apre senza registrazione.',
       claudeTag: 'Nella directory di Claude',
       claude: 'Chiedi a Claude dei tuoi numeri',
     },

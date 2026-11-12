@@ -2172,12 +2172,11 @@ export const es = translation({
       note: 'Sin registro. Datos inventados. Se abre directamente en el panel.',
       startFree: 'Empezar gratis',
       seePaidPlan: 'Ver el plan Pro',
-      freeNote:
-        'Gratis hasta {events} eventos al mes en un sitio, sin tarjeta. La demo se abre sin registro.',
+      freeNote: 'Gratis hasta {events} eventos al mes en un sitio, sin tarjeta.',
       freeFullNote:
         'El plan Hobby está lleno por ahora: regístrate y tu cuenta espera una plaza, o suscríbete al plan Pro.',
-      trialNote:
-        '14 días gratis; la tarjeta solo se cobra el día 15. La demo se abre sin registro.',
+      trialNote: '14 días gratis; la tarjeta solo se cobra el día 15.',
+      demoOpensNote: 'La demo se abre sin registro.',
       claudeTag: 'En el directorio de Claude',
       claude: 'Pregunta a Claude por tus números',
     },

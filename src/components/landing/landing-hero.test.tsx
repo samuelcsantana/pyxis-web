@@ -57,6 +57,7 @@ describe('LandingHero', () => {
     const hero = within(screen.getByRole('region'));
     expect(hero.getAllByRole('link')[0]).toHaveAccessibleName('Start your free trial');
     expect(hero.queryByRole('link', { name: 'Open the live demo' })).not.toBeInTheDocument();
+    expect(hero.getByText('14 days free; the card is only charged on day 15.')).toBeVisible();
   });
 
   it('leads to the pricing alone, as the main action, while sign-up and the live demo are closed', () => {
@@ -69,6 +70,7 @@ describe('LandingHero', () => {
     expect(pricing).toHaveAccessibleName('See pricing');
     expect(pricing).toHaveAttribute('href', '#pricing');
     expect(hero.queryByRole('link', { name: 'Open the live demo' })).not.toBeInTheDocument();
+    expect(hero.queryByText(/No sign-up\. Invented data\./)).not.toBeInTheDocument();
   });
 
   it('leads to the live demo first and to the pricing second while sign-up is closed', () => {
@@ -84,6 +86,17 @@ describe('LandingHero', () => {
     expect(pricing).toHaveAttribute('data-track-from', 'hero');
     expect(screen.getByText(/No sign-up\. Invented data\./)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Start your free trial' })).not.toBeInTheDocument();
+  });
+
+  it('says nothing about the demo under the free plan while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="free" />);
+
+    expect(
+      screen.getByText('Free up to 10,000 events a month on one site, with no card.'),
+    ).toBeVisible();
+    expect(screen.queryByText(/The demo opens/)).not.toBeInTheDocument();
   });
 
   it('leads to starting free first and to the paid plan second, while the free plan is open', () => {
