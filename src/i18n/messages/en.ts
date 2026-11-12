@@ -175,6 +175,7 @@ export const en = {
     privacy: 'Privacy-first product analytics · no cookies on your visitors, no stored IPs',
     noAccount:
       'No account yet? <plans>See the plans</plans> or <demo>open the demo</demo>, with invented data.',
+    noAccountDemoClosed: 'No account yet? <plans>See the plans</plans>.',
     noCode:
       '<strong>Nothing after a few minutes?</strong> Check your spam folder. This e-mail may not have a Pyxis account yet.',
     noCodeSupport:
@@ -2238,6 +2239,7 @@ export const en = {
       eyebrow: 'Dashboard',
       title: 'What the dashboard answers',
       lead: 'Eight screens, each built around one question. Every card opens that screen in the live demo.',
+      leadDemoClosed: 'Eight screens, each built around one question.',
       open: 'Open in the demo',
       agent:
         'Prefer to ask? Connect Pyxis to Claude and it reads the same numbers, only reading. <link>How to connect</link>',

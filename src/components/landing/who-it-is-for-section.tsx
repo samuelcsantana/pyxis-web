@@ -1,6 +1,7 @@
 import { CONTROL_TRANSITION, FOCUS_RING, TEXT_LINK } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { proPlanValuesOf } from '@/lib/pro-plan-values';
 import { DASHBOARD_ANSWERS_ID, demoScreenUrl } from './dashboard-answers-section';
 import { REVEAL } from './landing-classes';
@@ -21,18 +22,37 @@ type Audience = (typeof AUDIENCES)[number];
 interface AudienceLink {
   readonly href: string;
   readonly track: Readonly<Record<string, string>>;
+  readonly label: `landing.forWhom.${Audience}.link`;
 }
 
 const FROM = { from: WHO_IT_IS_FOR_ID } as const;
 
-const LINKS: Readonly<Record<Audience, AudienceLink>> = {
-  store: {
-    href: demoScreenUrl('funnel'),
-    track: trackAttributes(LANDING_EVENTS.demoOpened, { ...FROM, screen: 'funnel' }),
-  },
-  agency: { href: `#${PRICING_ID}`, track: trackAttributes(LANDING_EVENTS.pricingOpened, FROM) },
-  product: { href: `#${DASHBOARD_ANSWERS_ID}`, track: {} },
+const TO_THE_SCREENS: AudienceLink = {
+  href: `#${DASHBOARD_ANSWERS_ID}`,
+  track: {},
+  label: 'landing.forWhom.product.link',
 };
+
+function linkOf(audience: Audience): AudienceLink {
+  switch (audience) {
+    case 'store':
+      return liveDemoIsOpen()
+        ? {
+            href: demoScreenUrl('funnel'),
+            track: trackAttributes(LANDING_EVENTS.demoOpened, { ...FROM, screen: 'funnel' }),
+            label: 'landing.forWhom.store.link',
+          }
+        : TO_THE_SCREENS;
+    case 'agency':
+      return {
+        href: `#${PRICING_ID}`,
+        track: trackAttributes(LANDING_EVENTS.pricingOpened, FROM),
+        label: 'landing.forWhom.agency.link',
+      };
+    case 'product':
+      return TO_THE_SCREENS;
+  }
+}
 
 const ICONS: Readonly<Record<Audience, readonly string[]>> = {
   store: [
@@ -80,30 +100,34 @@ export function WhoItIsForSection({ i18n }: WhoItIsForSectionProps) {
       lead={t('landing.forWhom.lead')}
     >
       <ul className="grid gap-3 md:grid-cols-3">
-        {AUDIENCES.map((audience) => (
-          <li key={audience} className={`flex ${REVEAL}`}>
-            <a
-              href={LINKS[audience].href}
-              {...LINKS[audience].track}
-              className={`flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-            >
-              <AudienceIcon audience={audience} />
-              <h3 className="text-base font-semibold">{t(`landing.forWhom.${audience}.title`)}</h3>
-              <p className="grow text-sm leading-normal text-muted">
-                {t(`landing.forWhom.${audience}.body`, proPlanValuesOf(i18n))}
-              </p>
-              {audience === 'store' ? (
-                <p className="border-t border-dashed border-line pt-2 text-caption leading-normal text-muted">
-                  {t('landing.forWhom.store.shopify')}
+        {AUDIENCES.map((audience) => ({ audience, link: linkOf(audience) })).map(
+          ({ audience, link }) => (
+            <li key={audience} className={`flex ${REVEAL}`}>
+              <a
+                href={link.href}
+                {...link.track}
+                className={`flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+              >
+                <AudienceIcon audience={audience} />
+                <h3 className="text-base font-semibold">
+                  {t(`landing.forWhom.${audience}.title`)}
+                </h3>
+                <p className="grow text-sm leading-normal text-muted">
+                  {t(`landing.forWhom.${audience}.body`, proPlanValuesOf(i18n))}
                 </p>
-              ) : null}
-              <span className="text-caption font-semibold text-sky-ink">
-                {t(`landing.forWhom.${audience}.link`)}
-                <span aria-hidden="true"> →</span>
-              </span>
-            </a>
-          </li>
-        ))}
+                {audience === 'store' ? (
+                  <p className="border-t border-dashed border-line pt-2 text-caption leading-normal text-muted">
+                    {t('landing.forWhom.store.shopify')}
+                  </p>
+                ) : null}
+                <span className="text-caption font-semibold text-sky-ink">
+                  {t(link.label)}
+                  <span aria-hidden="true"> →</span>
+                </span>
+              </a>
+            </li>
+          ),
+        )}
       </ul>
       <p className={`mt-5 text-sm leading-relaxed text-muted ${REVEAL}`}>
         {rich(t('landing.forWhom.install'), {

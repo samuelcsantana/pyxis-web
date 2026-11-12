@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import {
   classicSnippet,
   scriptSnippet,
@@ -27,6 +28,12 @@ import {
 import { LandingSection } from './landing-section';
 import { NeverStoredSection } from './never-stored-section';
 import { ScreenGlyph } from './screen-glyph';
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('LandingSection', () => {
   it('names itself by its title, with an eyebrow and an optional lead', () => {
@@ -91,6 +98,22 @@ describe('ScreenGlyph', () => {
 });
 
 describe('DashboardAnswersSection', () => {
+  it('shows the eight screens as plain cards, with no link, while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<DashboardAnswersSection i18n={english} />);
+
+    const region = screen.getByRole('region', { name: 'What the dashboard answers' });
+    const cards = within(region).getByRole('list');
+    expect(within(cards).getAllByRole('listitem')).toHaveLength(SCREENS_SHOWN.length);
+    expect(within(cards).queryByRole('link')).not.toBeInTheDocument();
+    expect(within(cards).queryByText(/Open in the demo/)).not.toBeInTheDocument();
+    expect(
+      within(region).getByText('Eight screens, each built around one question.'),
+    ).toBeVisible();
+    expect(screen.getByRole('heading', { level: 3, name: 'Funnel' })).toBeInTheDocument();
+  });
+
   it('opens each of the eight screens of the demo store from a card with its question', () => {
     render(<DashboardAnswersSection i18n={english} />);
 

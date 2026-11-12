@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import type { FreePlanState } from '@/domain/sign-up';
 import SignInPage, { generateMetadata } from './page';
 import { renderWithMessages } from '@/test-utils/render-with-messages';
@@ -47,6 +48,12 @@ async function signInWithTheDemoCode() {
   await userEvent.click(screen.getByRole('button', { name: 'Send code' }));
   await userEvent.type(await screen.findByLabelText('6-digit code'), '000000');
 }
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('SignInPage', () => {
   it('names itself in the title', async () => {
@@ -97,6 +104,17 @@ describe('SignInPage', () => {
 
     expect(screen.getByTestId('brand-backdrop')).toBeInTheDocument();
     expect(screen.getByRole('main')).toHaveClass('[&>section]:shadow-raised');
+  });
+
+  it('offers only the plans to a visitor without an account while the live demo is closed', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', 'https://api.pyxis.example.com');
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    renderWithMessages(await SignInPage({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByText(/No account yet\?/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'See the plans' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'open the demo' })).not.toBeInTheDocument();
   });
 
   it('offers the plans and the live demo to a visitor without an account', async () => {

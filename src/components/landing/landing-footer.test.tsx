@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { LandingFooter } from './landing-footer';
@@ -16,6 +17,12 @@ const SELLER = {
   taxId: '000.000.000-00',
   address: 'Rua das Flores, 10, Cidade/UF',
 };
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('LandingFooter', () => {
   it('lists the product, the code and the support, each with its address', () => {
@@ -53,6 +60,15 @@ describe('LandingFooter', () => {
     render(<LandingFooter i18n={english} note={<p>Measured by Pyxis</p>} />);
 
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Measured by Pyxis');
+  });
+
+  it('lists the product without the demo while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<LandingFooter i18n={english} />);
+
+    expect(screen.queryByRole('link', { name: 'Live demo' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Pricing' })).toHaveAttribute('href', '#pricing');
   });
 
   it('tags the demo and code links for the page measurement', () => {

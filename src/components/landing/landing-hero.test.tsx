@@ -1,9 +1,16 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { english } from '@/test-utils/english';
 import { showcasePreview } from '@/test-utils/landing-preview';
 import { portuguese } from '@/test-utils/portuguese';
 import { LandingHero } from './landing-hero';
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('LandingHero', () => {
   it('states what people do on the site and how long they stay, over the brand backdrop', () => {
@@ -40,6 +47,28 @@ describe('LandingHero', () => {
     expect(demo).toHaveAttribute('data-track-from', 'hero');
     expect(screen.getByText(/the card is only charged on day 15\. The demo opens/)).toBeVisible();
     expect(screen.queryByRole('link', { name: 'See pricing' })).not.toBeInTheDocument();
+  });
+
+  it('leads to the free trial alone while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="trial" />);
+
+    const hero = within(screen.getByRole('region'));
+    expect(hero.getAllByRole('link')[0]).toHaveAccessibleName('Start your free trial');
+    expect(hero.queryByRole('link', { name: 'Open the live demo' })).not.toBeInTheDocument();
+  });
+
+  it('leads to the pricing alone, as the main action, while sign-up and the live demo are closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<LandingHero i18n={english} preview={showcasePreview(english)} offer="byInvitation" />);
+
+    const hero = within(screen.getByRole('region'));
+    const pricing = hero.getAllByRole('link')[0];
+    expect(pricing).toHaveAccessibleName('See pricing');
+    expect(pricing).toHaveAttribute('href', '#pricing');
+    expect(hero.queryByRole('link', { name: 'Open the live demo' })).not.toBeInTheDocument();
   });
 
   it('leads to the live demo first and to the pricing second while sign-up is closed', () => {

@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import type { FreePlanState } from '@/domain/sign-up';
 import { carriedSectionScript } from '@/lib/carried-section';
 import { landingBootScript } from '@/lib/landing-boot';
@@ -57,6 +58,12 @@ vi.mock('next/navigation', () => ({
 }));
 
 const atSlug = (locale: string) => ({ params: Promise.resolve({ locale }) });
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('the home page on the main domain', () => {
   describe('metadata', () => {

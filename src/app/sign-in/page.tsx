@@ -12,6 +12,7 @@ import { rich } from '@/i18n/rich';
 import { isDemoMode } from '@/lib/api-config';
 import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
 import { bestEffortOpenSignUp } from '@/lib/landing-sign-up';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { DEMO_SIGN_IN_CODE } from '@/services/auth/mock-auth-service';
@@ -49,18 +50,21 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         noAccountHelp={
           demo ? undefined : (
             <p className="border-t border-line pt-4 text-sm leading-5 text-muted">
-              {rich(t('signInPage.noAccount'), {
-                plans: (text) => (
-                  <a href={plansHref} className={TEXT_LINK}>
-                    {text}
-                  </a>
-                ),
-                demo: (text) => (
-                  <a href={LIVE_DEMO_URL} className={TEXT_LINK}>
-                    {text}
-                  </a>
-                ),
-              })}
+              {rich(
+                t(liveDemoIsOpen() ? 'signInPage.noAccount' : 'signInPage.noAccountDemoClosed'),
+                {
+                  plans: (text) => (
+                    <a href={plansHref} className={TEXT_LINK}>
+                      {text}
+                    </a>
+                  ),
+                  demo: (text) => (
+                    <a href={LIVE_DEMO_URL} className={TEXT_LINK}>
+                      {text}
+                    </a>
+                  ),
+                },
+              )}
             </p>
           )
         }

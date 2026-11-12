@@ -184,6 +184,7 @@ export const nl = translation({
       'Productanalyse die privacy vooropstelt · geen cookies bij je bezoekers, geen opgeslagen IP’s',
     noAccount:
       'Nog geen account? <plans>Bekijk de abonnementen</plans> of <demo>open de demo</demo>, met verzonnen gegevens.',
+    noAccountDemoClosed: 'Nog geen account? <plans>Bekijk de abonnementen</plans>.',
     noCode:
       '<strong>Na een paar minuten nog niets?</strong> Kijk in je spammap. Misschien heeft dit e-mailadres nog geen Pyxis-account.',
     noCodeSupport:
@@ -2280,6 +2281,7 @@ export const nl = translation({
       eyebrow: 'Dashboard',
       title: 'Waar het dashboard antwoord op geeft',
       lead: 'Acht schermen, elk rond één vraag. Elke kaart opent dat scherm in de livedemo.',
+      leadDemoClosed: 'Acht schermen, elk rond één vraag.',
       open: 'Openen in de demo',
       agent:
         'Liever vragen? Koppel Pyxis aan Claude, dan leest Claude dezelfde cijfers, zonder iets te wijzigen. <link>Zo koppel je het</link>',

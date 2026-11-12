@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { english } from '@/test-utils/english';
 import { portuguese } from '@/test-utils/portuguese';
 import { AUDIENCES, WHO_IT_IS_FOR_ID, WhoItIsForSection } from './who-it-is-for-section';
@@ -11,6 +12,12 @@ function cardLink(name: string): HTMLElement {
   }
   return card;
 }
+
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
 
 describe('WhoItIsForSection', () => {
   it('names itself by its title, under the for-whom anchor, with one card per audience', () => {
@@ -30,6 +37,17 @@ describe('WhoItIsForSection', () => {
       'A product or SaaS',
     ]);
     expect(titles).toHaveLength(AUDIENCES.length);
+  });
+
+  it('leads the shop card to the dashboard’s screens while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    render(<WhoItIsForSection i18n={english} />);
+
+    const store = cardLink('An online shop or business');
+    expect(store).toHaveAttribute('href', '#dashboard');
+    expect(store).not.toHaveAttribute('data-track');
+    expect(store).toHaveTextContent('See the dashboard’s screens');
   });
 
   it('opens the demo’s funnel from the shop card', () => {

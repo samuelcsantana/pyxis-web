@@ -187,6 +187,7 @@ export const ptBR = translation({
       'Análise de produto com privacidade em primeiro lugar · sem cookies nos seus visitantes, sem IP guardado',
     noAccount:
       'Ainda não tem conta? <plans>Veja os planos</plans> ou <demo>abra a demonstração</demo>, com dados fictícios.',
+    noAccountDemoClosed: 'Ainda não tem conta? <plans>Veja os planos</plans>.',
     noCode:
       '<strong>Não chegou nada em alguns minutos?</strong> Confira a caixa de spam. Talvez este e-mail ainda não tenha conta no Pyxis.',
     noCodeSupport:
@@ -2255,6 +2256,7 @@ export const ptBR = translation({
       eyebrow: 'Painel',
       title: 'O que o painel responde',
       lead: 'Oito telas, cada uma feita em torno de uma pergunta. Cada cartão abre essa tela na demonstração.',
+      leadDemoClosed: 'Oito telas, cada uma feita em torno de uma pergunta.',
       open: 'Abrir na demonstração',
       agent:
         'Prefere perguntar? Conecte o Pyxis ao Claude e ele lê os mesmos números, só para leitura. <link>Como conectar</link>',

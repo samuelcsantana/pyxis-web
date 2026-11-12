@@ -3,6 +3,7 @@ import { CONTROL_TRANSITION, FOCUS_RING, TEXT_LINK } from '@/components/ui/contr
 import type { I18n } from '@/i18n/i18n';
 import { rich } from '@/i18n/rich';
 import { liveDemoUrlOf } from '@/lib/demo-canonical';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { DEMO_STORE } from '@/services/demo/demo-projects';
 import { REVEAL } from './landing-classes';
 import { LandingSection } from './landing-section';
@@ -31,6 +32,49 @@ export function demoScreenUrl(screen: ScreenSlug): string {
   return liveDemoUrlOf(screenHref(DEMO_STORE.id, screen));
 }
 
+const CARD = 'flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4';
+
+interface ScreenCardProps {
+  readonly i18n: I18n;
+  readonly screen: ScreenSlug;
+}
+
+function ScreenAnswer({ i18n, screen }: ScreenCardProps) {
+  const { t } = i18n;
+  return (
+    <>
+      <ScreenGlyph screen={screen} />
+      <h3 className="text-base font-semibold">{t(screenLabelKey(screen))}</h3>
+      <p className="grow text-sm leading-normal text-muted">
+        {t(`landing.answers.questions.${screen}`)}
+      </p>
+    </>
+  );
+}
+
+function ScreenCard({ i18n, screen }: ScreenCardProps) {
+  if (!liveDemoIsOpen()) {
+    return (
+      <div className={CARD}>
+        <ScreenAnswer i18n={i18n} screen={screen} />
+      </div>
+    );
+  }
+  return (
+    <a
+      href={demoScreenUrl(screen)}
+      {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'screens', screen })}
+      className={`${CARD} hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
+    >
+      <ScreenAnswer i18n={i18n} screen={screen} />
+      <span className="text-caption font-semibold text-sky-ink">
+        {i18n.t('landing.answers.open')}
+        <span aria-hidden="true"> →</span>
+      </span>
+    </a>
+  );
+}
+
 export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) {
   const { t } = i18n;
   return (
@@ -38,26 +82,12 @@ export function DashboardAnswersSection({ i18n }: DashboardAnswersSectionProps) 
       id={DASHBOARD_ANSWERS_ID}
       eyebrow={t('landing.answers.eyebrow')}
       title={t('landing.answers.title')}
-      lead={t('landing.answers.lead')}
+      lead={liveDemoIsOpen() ? t('landing.answers.lead') : t('landing.answers.leadDemoClosed')}
     >
       <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {SCREENS_SHOWN.map((screen) => (
           <li key={screen} className={`flex ${REVEAL}`}>
-            <a
-              href={demoScreenUrl(screen)}
-              {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'screens', screen })}
-              className={`flex grow flex-col gap-2.5 rounded-card border border-line bg-card p-4 hover:border-muted active:bg-soft ${FOCUS_RING} ${CONTROL_TRANSITION}`}
-            >
-              <ScreenGlyph screen={screen} />
-              <h3 className="text-base font-semibold">{t(screenLabelKey(screen))}</h3>
-              <p className="grow text-sm leading-normal text-muted">
-                {t(`landing.answers.questions.${screen}`)}
-              </p>
-              <span className="text-caption font-semibold text-sky-ink">
-                {t('landing.answers.open')}
-                <span aria-hidden="true"> →</span>
-              </span>
-            </a>
+            <ScreenCard i18n={i18n} screen={screen} />
           </li>
         ))}
       </ul>

@@ -6,6 +6,7 @@ import { PAID_REPLY_BUSINESS_DAYS, QUESTION_FORM_URL, SECURITY_REPORT_URL } from
 import type { I18n } from '@/i18n/i18n';
 import type { Seller } from '@/lib/legal-config';
 import { CONTRACT_LANGUAGE, legalDocumentsIn } from '@/lib/legal-documents';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { APP_NAME } from '@/lib/site';
 import { LANDING_WIDTH, LINK_LIST } from './landing-classes';
 import { CONTACT_EMAIL, LANDING_LINKS, PRICING_ID, PROPER_NAMES } from './landing-links';
@@ -67,6 +68,15 @@ function contractLinks(i18n: I18n): readonly FooterLink[] {
 
 export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
   const { t } = i18n;
+  const demoLinks: readonly FooterLink[] = liveDemoIsOpen()
+    ? [
+        {
+          href: LANDING_LINKS.demo,
+          label: t('landing.footer.demo'),
+          track: trackAttributes(LANDING_EVENTS.demoOpened, { from: 'footer' }),
+        },
+      ]
+    : [];
   return (
     <footer className="border-t border-line">
       <div
@@ -82,11 +92,7 @@ export function LandingFooter({ i18n, note, seller }: LandingFooterProps) {
         <FooterColumn
           title={t('landing.footer.product')}
           links={[
-            {
-              href: LANDING_LINKS.demo,
-              label: t('landing.footer.demo'),
-              track: trackAttributes(LANDING_EVENTS.demoOpened, { from: 'footer' }),
-            },
+            ...demoLinks,
             {
               href: `#${PRICING_ID}`,
               label: t('landing.footer.pricing'),
