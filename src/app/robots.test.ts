@@ -12,13 +12,21 @@ describe('robots', () => {
     request.host = 'demo.pyxis-analytics.dev';
   });
 
-  it('lets crawlers into the live demo and points them at its sitemap', async () => {
+  it('lets crawlers into the screens of the live demo and points them at its sitemap', async () => {
     vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
 
-    await expect(robots()).resolves.toEqual({
-      rules: { userAgent: '*', allow: '/' },
-      sitemap: 'https://demo.pyxis-analytics.dev/sitemap.xml',
-    });
+    const { rules, sitemap } = await robots();
+
+    expect(rules).toMatchObject({ userAgent: '*', allow: '/' });
+    expect(sitemap).toBe('https://demo.pyxis-analytics.dev/sitemap.xml');
+  });
+
+  it('keeps crawlers of the live demo away from filtered addresses and CSV exports', async () => {
+    vi.stubEnv('NEXT_PUBLIC_PYXIS_API_URL', '');
+
+    const { rules } = await robots();
+
+    expect(rules).toMatchObject({ disallow: ['/*?', '/*/export'] });
   });
 
   it('points crawlers of the main domain at the home page sitemap', async () => {
