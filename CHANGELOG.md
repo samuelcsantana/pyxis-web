@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.50.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.49.0...v0.50.0) (2026-11-12)
+
+
+### Features
+
+* **domain:** describe a shared project and the paths of its reports ([02509cf](https://github.com/samuelcsantana/pyxis-web/commit/02509cfbd794245ca57684e54e188479a186215c))
+* **i18n:** add the strings of the e-mail alert switches ([7444b36](https://github.com/samuelcsantana/pyxis-web/commit/7444b3655ffad35784b7a5a9f17b5f9eb7f8a393))
+* **i18n:** add the strings of the public share page ([1857746](https://github.com/samuelcsantana/pyxis-web/commit/1857746018e3cd1ae1057b44291fbf3b5036b894))
+* **i18n:** add the strings of the share link password ([898f298](https://github.com/samuelcsantana/pyxis-web/commit/898f298fdbfdb7cbd3b8a727c875e5b10fd98749))
+* **i18n:** add the strings of the Slack alerts panel ([f756985](https://github.com/samuelcsantana/pyxis-web/commit/f7569857ca79a3c5dd354de007b3d99a5f79dcaa))
+* **landing:** hide every link to the live demo while it is offline ([dd386f5](https://github.com/samuelcsantana/pyxis-web/commit/dd386f532a0197d32737dc53a413acf139a763b3))
+* **settings:** let the owner create, copy and revoke public links ([4e60b3a](https://github.com/samuelcsantana/pyxis-web/commit/4e60b3aa5437572e7a0965f4634ae76c03c3dc2d))
+* **settings:** protect a public link with a password ([62644ff](https://github.com/samuelcsantana/pyxis-web/commit/62644ff2808183e916b9dccd87cda473e298827e))
+* **settings:** send the daily alerts to Slack, for the project's owner ([b593af7](https://github.com/samuelcsantana/pyxis-web/commit/b593af7e3e3a43c69f1041f780013311e3e94ac9))
+* **settings:** switch each e-mail alert on or off in Settings › E-mail ([50078e5](https://github.com/samuelcsantana/pyxis-web/commit/50078e5b8cdb51fbcc44dd51ea6f639ab550f4f7))
+* **share-links:** read and write the public links of a project ([7f62a3e](https://github.com/samuelcsantana/pyxis-web/commit/7f62a3eb6481d449f262089e3dbf88dc8eeb0fdb))
+* **share:** ask for the password of a protected link on its public page ([8c4e4ad](https://github.com/samuelcsantana/pyxis-web/commit/8c4e4ad26f4f825bcf45f6f3b51f5b557d2258a4))
+* **share:** open a project's shared reports at /share/&lt;token&gt; ([896a67f](https://github.com/samuelcsantana/pyxis-web/commit/896a67f2b3d110f8669ef78fd02540fa66eb6199))
+
+
+### Bug Fixes
+
+* **demo:** keep crawlers off filtered addresses and CSV exports ([adcfba6](https://github.com/samuelcsantana/pyxis-web/commit/adcfba6dd11d08f771bf3e4f9c9e22754e892d69))
+* **landing:** drop the demo sentence from the hero note while the demo is closed ([3e2f70f](https://github.com/samuelcsantana/pyxis-web/commit/3e2f70f3f6ed112d421006a6d01605083ccb28b7))
+* **share:** open a link whose card says it needs no password ([69b94a2](https://github.com/samuelcsantana/pyxis-web/commit/69b94a217ff38c9fe7c1c64f8721da0b774a626f))
+
+
+### Refactoring
+
+* **domain:** keep the share page path in a module of its own ([a6a52ad](https://github.com/samuelcsantana/pyxis-web/commit/a6a52ad3721bebe36a8c82282a45c16f0bbe00f7))
+* **domain:** name the Pro check of a project's account projectOnPro ([761aaef](https://github.com/samuelcsantana/pyxis-web/commit/761aaef7cc38b73bd7eae9a29af2f3a12ead6bb7))
+* draw each report screen from a view shared with any reader ([571d860](https://github.com/samuelcsantana/pyxis-web/commit/571d860c2913a26951ce72cc676c5d39785003dd))
+* **i18n:** format dates and times in a module of their own ([a0603a5](https://github.com/samuelcsantana/pyxis-web/commit/a0603a5b804669bb84b3f0eca28f09a46f798bb9))
+
+
+### Documentation
+
+* describe the e-mail alert switches ([b486b80](https://github.com/samuelcsantana/pyxis-web/commit/b486b8058906fe40e8c8fb5394d88c486e8532e2))
+* describe the public link settings ([2009adf](https://github.com/samuelcsantana/pyxis-web/commit/2009adf925792b9b5985534adde28810b9f9b7fc))
+* describe the share link password ([46397f3](https://github.com/samuelcsantana/pyxis-web/commit/46397f3acbca1b1164180a643890a9ed7fa84778))
+* describe the Slack alerts in Settings ([b9223fb](https://github.com/samuelcsantana/pyxis-web/commit/b9223fb5a29568572a28534d869f4ef006ccb92e))
+* **features:** describe the switch that hides the live demo links ([ffd53c5](https://github.com/samuelcsantana/pyxis-web/commit/ffd53c5ee9d2e431659d1fb2dccf8e640c5a8614))
+* record how the public share page reads and draws its reports ([d82bb73](https://github.com/samuelcsantana/pyxis-web/commit/d82bb73972028f6d89294628a8ab7498dc2708ca))
+
 ## [0.49.0](https://github.com/samuelcsantana/pyxis-web/compare/v0.48.0...v0.49.0) (2026-11-05)
 
 
