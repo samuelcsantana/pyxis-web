@@ -1,12 +1,17 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 import { axeViolations, sidewaysOverflow } from './accessibility';
+import { liveDemoIsOpen } from '../src/lib/live-demo';
 import { chooseLanguage } from './language-select';
 
 const ONE_ROW_HEADER_PX = 72;
 const SMALL_LAPTOP = { width: 1024, height: 768 };
 const TABLET = { width: 768, height: 1024 };
 const TABLET_WIDTHS = [768, 820, 1023];
-const HEADER_LINKS = 5;
+const DEMO_IS_OPEN = liveDemoIsOpen();
+const DEMO_IS_CLOSED = 'the live demo is closed';
+const DEMO_IS_LINKED = 'the live demo is open';
+const LINKS_TO_THE_DEMO = 'a[href^="https://demo.pyxis-analytics.dev"]';
+const HEADER_LINKS = DEMO_IS_OPEN ? 5 : 4;
 const NARROW_PHONE_WIDTHS = [320, 360, 390];
 const PHONE_HEIGHT = 844;
 const MAIN_DOMAIN = 'https://pyxis-analytics.dev';
@@ -410,22 +415,34 @@ test('keeps the chosen theme in both languages without setting a cookie', async 
   expect(await context.cookies()).toEqual([]);
 });
 
-test('leads to the live demo and the dashboard sign-in', async ({ page }) => {
+test('leads to the dashboard sign-in', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
-    'href',
-    'https://demo.pyxis-analytics.dev/?lang=en',
-  );
   await expect(page.getByRole('link', { name: 'Sign in' })).toHaveAttribute(
     'href',
     'https://app.pyxis-analytics.dev/sign-in?lang=en',
   );
 });
 
-test('carries the language and the chosen theme to the dashboard and the demo', async ({
-  page,
-}) => {
+test('leads to the live demo', async ({ page }) => {
+  test.skip(!DEMO_IS_OPEN, DEMO_IS_CLOSED);
+  await page.goto('/');
+
+  await expect(page.getByRole('link', { name: 'Open the live demo' })).toHaveAttribute(
+    'href',
+    'https://demo.pyxis-analytics.dev/?lang=en',
+  );
+});
+
+test('has no link to the live demo anywhere on the page while it is closed', async ({ page }) => {
+  test.skip(DEMO_IS_OPEN, DEMO_IS_LINKED);
+  await page.goto('/');
+
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.locator(LINKS_TO_THE_DEMO)).toHaveCount(0);
+});
+
+test('carries the language and the chosen theme to the dashboard', async ({ page }) => {
   await page.goto('/pt-br');
   await page.getByRole('button', { name: /tema/i }).click();
   const theme = await page.locator('html').getAttribute('data-theme');
@@ -434,6 +451,14 @@ test('carries the language and the chosen theme to the dashboard and the demo', 
     'href',
     `https://app.pyxis-analytics.dev/sign-in?lang=pt-BR&theme=${theme ?? ''}`,
   );
+});
+
+test('carries the language and the chosen theme to the demo', async ({ page }) => {
+  test.skip(!DEMO_IS_OPEN, DEMO_IS_CLOSED);
+  await page.goto('/pt-br');
+  await page.getByRole('button', { name: /tema/i }).click();
+  const theme = await page.locator('html').getAttribute('data-theme');
+
   await expect(page.getByRole('link', { name: 'Abrir a demonstração' })).toHaveAttribute(
     'href',
     `https://demo.pyxis-analytics.dev/?lang=pt-BR&theme=${theme ?? ''}`,
@@ -473,17 +498,42 @@ test('shows the sections in order', async ({ page }) => {
 });
 
 test('leads a shop from who it is for to the demo’s funnel', async ({ page }) => {
+  test.skip(!DEMO_IS_OPEN, DEMO_IS_CLOSED);
   await page.goto('/');
 
   const section = page.getByRole('region', {
     name: 'For anyone who needs to know where people stop',
   });
   await section.scrollIntoViewIfNeeded();
-  const shop = section.getByRole('link', { name: /An online shop or business/ });
-  await expect(shop).toHaveAttribute(
+  await expect(section.getByRole('link', { name: /An online shop or business/ })).toHaveAttribute(
     'href',
     'https://demo.pyxis-analytics.dev/6f1d3c2a-8b4e-4f7a-9c1d-2e3f4a5b6c7d/funnel?lang=en',
   );
+});
+
+test('leads a shop from who it is for to the dashboard’s screens while the demo is closed', async ({
+  page,
+}) => {
+  test.skip(DEMO_IS_OPEN, DEMO_IS_LINKED);
+  await page.goto('/');
+
+  const section = page.getByRole('region', {
+    name: 'For anyone who needs to know where people stop',
+  });
+  await section.scrollIntoViewIfNeeded();
+  await expect(section.getByRole('link', { name: /An online shop or business/ })).toHaveAttribute(
+    'href',
+    '#dashboard',
+  );
+});
+
+test('leads from who it is for to the install guide', async ({ page }) => {
+  await page.goto('/');
+
+  const section = page.getByRole('region', {
+    name: 'For anyone who needs to know where people stop',
+  });
+  await section.scrollIntoViewIfNeeded();
   await section.getByRole('link', { name: 'How to install' }).click();
   await expect(page).toHaveURL(/#install$/);
 });
@@ -576,7 +626,24 @@ test('opens the request for access with the address to write to', async ({ page 
   );
 });
 
+test('shows the eight dashboard screens as plain cards while the demo is closed', async ({
+  page,
+}) => {
+  test.skip(DEMO_IS_OPEN, DEMO_IS_LINKED);
+  await page.goto('/');
+
+  const section = page.getByRole('region', { name: 'What the dashboard answers' });
+  const cards = section.getByRole('list');
+  await expect(cards.getByRole('listitem')).toHaveCount(8);
+  await expect(cards.getByRole('link')).toHaveCount(0);
+  await expect(section.getByRole('link', { name: 'How to connect' })).toHaveAttribute(
+    'href',
+    '#ask-claude',
+  );
+});
+
 test('opens each dashboard screen of the demo store from its card', async ({ page }) => {
+  test.skip(!DEMO_IS_OPEN, DEMO_IS_CLOSED);
   await page.goto('/');
 
   const section = page.getByRole('region', { name: 'What the dashboard answers' });

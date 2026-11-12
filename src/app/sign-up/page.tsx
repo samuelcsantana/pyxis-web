@@ -16,6 +16,7 @@ import { getI18n, getTranslator } from '@/i18n/get-messages';
 import { isDemoMode } from '@/lib/api-config';
 import { readOrSignIn } from '@/lib/current-admin';
 import { landingPageOfLocale, landingUrlOf } from '@/lib/landing-pages';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { LIVE_DEMO_URL } from '@/lib/site';
 import { chosenTheme } from '@/lib/theme-cookie';
 import { createAccountsService } from '@/services/accounts/accounts-service.factory';
@@ -69,9 +70,11 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps = {})
         <section className={CARD}>
           <h1 className="text-title font-semibold">{t('signUpPage.closedTitle')}</h1>
           <p className="text-sm text-muted">{t('signUpPage.closedBody')}</p>
-          <a href={LIVE_DEMO_URL} className={`self-start text-sm ${TEXT_LINK}`}>
-            {t('signUpPage.demo')}
-          </a>
+          {liveDemoIsOpen() ? (
+            <a href={LIVE_DEMO_URL} className={`self-start text-sm ${TEXT_LINK}`}>
+              {t('signUpPage.demo')}
+            </a>
+          ) : null}
           <Link
             href={landingUrlOf(landingPageOfLocale(i18n.locale))}
             className={`self-start text-sm ${TEXT_LINK}`}

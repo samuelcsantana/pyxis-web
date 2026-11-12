@@ -1,11 +1,26 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { classicSnippet, WORDPRESS_HEADER_PLUGIN_URL } from '@/domain/install';
 import { llmsText } from './llms-text';
 
 const LINK = /\]\(([^)]+)\)/g;
 
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
+
 describe('llmsText', () => {
   const text = llmsText('trial');
+
+  it('points at the live demo only while it is open', () => {
+    expect(llmsText('trial')).toContain('- [Live demo](https://demo.pyxis-analytics.dev)');
+
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    expect(llmsText('trial')).not.toContain('Live demo');
+  });
 
   it('follows the llms.txt shape: a title, a quoted summary, then sections of links', () => {
     const lines = text.split('\n');

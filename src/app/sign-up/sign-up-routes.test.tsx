@@ -1,5 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import type { Account } from '@/domain/accounts';
 import type { SignUpStatus } from '@/domain/sign-up';
 import { MockAccountsService } from '@/services/accounts/mock-accounts-service';
@@ -68,6 +69,12 @@ async function demoAccount(overrides: Partial<Account> = {}): Promise<readonly A
   return [{ ...account, ...overrides }];
 }
 
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
+
 describe('SignUpPage', () => {
   beforeEach(() => {
     state.token = undefined;
@@ -104,6 +111,17 @@ describe('SignUpPage', () => {
 
     expect(screen.getByRole('button', { name: 'Send code' })).toBeInTheDocument();
     vi.unstubAllEnvs();
+  });
+
+  it('says sign-up is not open yet with the home page alone while the live demo is closed', async () => {
+    state.status = () =>
+      Promise.resolve({ open: false, termsVersion: null, termsUrl: null, freePlan: 'closed' });
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    renderWithMessages(await SignUpPage());
+
+    expect(screen.queryByRole('link', { name: 'Open the live demo' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to the home page' })).toBeInTheDocument();
   });
 
   it('says sign-up is not open yet, with the demo and the home page', async () => {

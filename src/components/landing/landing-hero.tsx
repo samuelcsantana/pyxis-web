@@ -3,6 +3,7 @@ import type { LandingPreviewView } from '@/domain/landing-preview';
 import { FREE_PLAN_EVENTS_PER_MONTH, type SignUpOffer } from '@/domain/sign-up';
 import { FOCUS_RING, CONTROL_TRANSITION } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { LANDING_WIDTH, LINK_PRIMARY, LINK_SECONDARY } from './landing-classes';
 import { ASK_CLAUDE_ID, LANDING_LINKS, PRICING_ID } from './landing-links';
 import { LANDING_EVENTS, trackAttributes } from './measurement/landing-events';
@@ -47,13 +48,15 @@ function TrialFirst({ i18n }: { readonly i18n: I18n }) {
           {t('landing.pricing.start')}
           <ArrowIcon />
         </a>
-        <a
-          href={LANDING_LINKS.demo}
-          className={LINK_SECONDARY}
-          {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
-        >
-          {t('landing.hero.openDemo')}
-        </a>
+        {liveDemoIsOpen() ? (
+          <a
+            href={LANDING_LINKS.demo}
+            className={LINK_SECONDARY}
+            {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
+          >
+            {t('landing.hero.openDemo')}
+          </a>
+        ) : null}
       </div>
       <p className="text-caption text-muted">{t('landing.hero.trialNote')}</p>
     </>
@@ -108,17 +111,19 @@ function DemoFirst({ i18n }: { readonly i18n: I18n }) {
   return (
     <>
       <div className="mt-1 flex flex-wrap gap-2.5">
-        <a
-          href={LANDING_LINKS.demo}
-          className={LINK_PRIMARY}
-          {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
-        >
-          {t('landing.hero.openDemo')}
-          <ArrowIcon />
-        </a>
+        {liveDemoIsOpen() ? (
+          <a
+            href={LANDING_LINKS.demo}
+            className={LINK_PRIMARY}
+            {...trackAttributes(LANDING_EVENTS.demoOpened, { from: 'hero' })}
+          >
+            {t('landing.hero.openDemo')}
+            <ArrowIcon />
+          </a>
+        ) : null}
         <a
           href={`#${PRICING_ID}`}
-          className={LINK_SECONDARY}
+          className={liveDemoIsOpen() ? LINK_SECONDARY : LINK_PRIMARY}
           {...trackAttributes(LANDING_EVENTS.pricingOpened, { from: 'hero' })}
         >
           {t('landing.hero.seePricing')}

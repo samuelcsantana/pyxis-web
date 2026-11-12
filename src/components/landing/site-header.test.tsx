@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { DEFAULT_LANDING_PAGE } from '@/lib/landing-pages';
 import { english } from '@/test-utils/english';
@@ -59,10 +60,27 @@ function expectTheHomeLinksIn(navigation: HTMLElement) {
   ]);
 }
 
+vi.mock('@/lib/live-demo', () => ({ liveDemoIsOpen: vi.fn(() => true) }));
+
+beforeEach(() => {
+  vi.mocked(liveDemoIsOpen).mockReturnValue(true);
+});
+
 describe('SiteHeader', () => {
   afterEach(() => {
     delete document.documentElement.dataset.theme;
     window.localStorage.clear();
+  });
+
+  it('leaves the demo out of the row and of the menu while the live demo is closed', () => {
+    vi.mocked(liveDemoIsOpen).mockReturnValue(false);
+
+    renderWithMessages(homeHeader());
+
+    const { row, menu } = headerNavigations();
+    expect(within(row).queryByRole('link', { name: 'Live demo' })).not.toBeInTheDocument();
+    expect(within(menu).queryByRole('link', { name: 'Live demo' })).not.toBeInTheDocument();
+    expect(within(row).getByRole('link', { name: 'Pricing' })).toBeInTheDocument();
   });
 
   it('links the brand home, the demo, and the sections of the home page in place, in the row and in the menu', () => {

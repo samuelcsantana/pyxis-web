@@ -182,6 +182,7 @@ export const it = translation({
       'Analisi di prodotto attenta alla privacy · nessun cookie per i tuoi visitatori, nessun IP salvato',
     noAccount:
       'Non hai ancora un account? <plans>Guarda i piani</plans> o <demo>apri la demo</demo>, con dati inventati.',
+    noAccountDemoClosed: 'Non hai ancora un account? <plans>Guarda i piani</plans>.',
     noCode:
       '<strong>Niente dopo qualche minuto?</strong> Controlla la cartella dello spam. Forse a questo indirizzo non è ancora associato un account Pyxis.',
     noCodeSupport:
@@ -2282,6 +2283,7 @@ export const it = translation({
       eyebrow: 'Dashboard',
       title: 'A cosa risponde la dashboard',
       lead: 'Otto schermate, ognuna costruita intorno a una domanda. Ogni scheda apre quella schermata nella demo live.',
+      leadDemoClosed: 'Otto schermate, ognuna costruita intorno a una domanda.',
       open: 'Apri nella demo',
       agent:
         'Preferisci chiedere? Collega Pyxis a Claude e leggerà gli stessi numeri, in sola lettura. <link>Come collegarlo</link>',

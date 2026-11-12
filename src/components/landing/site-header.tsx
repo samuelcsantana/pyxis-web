@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { LogoMark } from '@/components/brand/logo-mark';
 import { FOCUS_RING } from '@/components/ui/control-classes';
 import type { I18n } from '@/i18n/i18n';
+import { liveDemoIsOpen } from '@/lib/live-demo';
 import { APP_NAME } from '@/lib/site';
 import { HeaderMenu } from './header-menu';
 import { LANDING_WIDTH, LINK_MENU, LINK_QUIET, LINK_SMALL } from './landing-classes';
@@ -38,12 +39,17 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const { t } = i18n;
   const sectionHref = (id: string): string => `${onHomePage ? '' : homeHref}#${id}`;
+  const demoLinks: readonly HeaderLink[] = liveDemoIsOpen()
+    ? [
+        {
+          href: LANDING_LINKS.demo,
+          label: t('landing.nav.demo'),
+          tracking: trackAttributes(LANDING_EVENTS.demoOpened, FROM_THE_HEADER),
+        },
+      ]
+    : [];
   const links: readonly HeaderLink[] = [
-    {
-      href: LANDING_LINKS.demo,
-      label: t('landing.nav.demo'),
-      tracking: trackAttributes(LANDING_EVENTS.demoOpened, FROM_THE_HEADER),
-    },
+    ...demoLinks,
     { href: sectionHref(NEVER_STORED_ID), label: t('landing.nav.privacy'), tracking: {} },
     {
       href: sectionHref(ASK_CLAUDE_ID),

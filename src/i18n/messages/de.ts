@@ -188,6 +188,7 @@ export const de = translation({
       'Datenschutzfreundliche Produktanalyse · keine Cookies bei deinen Besuchern, keine gespeicherten IPs',
     noAccount:
       'Noch kein Konto? <plans>Sieh dir die Pläne an</plans> oder <demo>öffne die Demo</demo> mit erfundenen Daten.',
+    noAccountDemoClosed: 'Noch kein Konto? <plans>Sieh dir die Pläne an</plans>.',
     noCode:
       '<strong>Nach ein paar Minuten noch nichts da?</strong> Sieh im Spam-Ordner nach. Vielleicht gibt es für diese E-Mail-Adresse noch kein Pyxis-Konto.',
     noCodeSupport:
@@ -2305,6 +2306,7 @@ export const de = translation({
       eyebrow: 'Dashboard',
       title: 'Was das Dashboard beantwortet',
       lead: 'Acht Ansichten, jede rund um eine Frage. Jede Karte öffnet diese Ansicht in der Live-Demo.',
+      leadDemoClosed: 'Acht Ansichten, jede rund um eine Frage.',
       open: 'In der Demo öffnen',
       agent:
         'Lieber fragen? Verbinde Pyxis mit Claude, und Claude liest dieselben Zahlen, ohne etwas zu ändern. <link>So verbindest du es</link>',

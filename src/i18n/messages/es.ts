@@ -187,6 +187,7 @@ export const es = translation({
       'Analítica de producto que prioriza la privacidad · sin cookies para tus visitantes, sin IP guardada',
     noAccount:
       '¿Aún no tienes cuenta? <plans>Mira los planes</plans> o <demo>abre la demo</demo>, con datos inventados.',
+    noAccountDemoClosed: '¿Aún no tienes cuenta? <plans>Mira los planes</plans>.',
     noCode:
       '<strong>¿No llegó nada en unos minutos?</strong> Revisa la carpeta de spam. Puede que este correo aún no tenga cuenta en Pyxis.',
     noCodeSupport:
@@ -2266,6 +2267,7 @@ export const es = translation({
       eyebrow: 'Panel',
       title: 'Lo que responde el panel',
       lead: 'Ocho pantallas, cada una construida en torno a una pregunta. Cada tarjeta abre esa pantalla en la demo en vivo.',
+      leadDemoClosed: 'Ocho pantallas, cada una construida en torno a una pregunta.',
       open: 'Abrir en la demo',
       agent:
         '¿Prefieres preguntar? Conecta Pyxis a Claude y Claude lee los mismos números, solo lectura. <link>Cómo conectar</link>',

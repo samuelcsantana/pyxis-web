@@ -20,6 +20,7 @@ import {
   QUESTION_FORM_URL,
   SECURITY_REPORT_URL,
 } from '@/domain/support';
+import { liveDemoIsOpen } from './live-demo';
 import { LANDING_ORIGIN } from './site';
 
 export const LLMS_TEXT_CONTENT_TYPE = 'text/plain; charset=utf-8';
@@ -36,6 +37,12 @@ function hostedPlanOf(offer: SignUpOffer): string {
   return offersTheFreePlan(offer)
     ? `Hobby plan, free: ${FREE_PLAN_EVENTS} events a month on one site, no card; Pro plan: ${PRO_PLAN}`
     : '14-day free trial';
+}
+
+function liveDemoLines(): readonly string[] {
+  return liveDemoIsOpen()
+    ? [`- [Live demo](${LANDING_LINKS.demo}): the dashboard with invented data, no sign-in.`]
+    : [];
 }
 
 export function llmsText(offer: SignUpOffer): string {
@@ -218,7 +225,7 @@ export function llmsText(offer: SignUpOffer): string {
     `- [pyxis-api](${LANDING_LINKS.api}): NestJS on AWS Lambda behind CloudFront, PostgreSQL,`,
     '  Terraform.',
     `- [pyxis-web](${LANDING_LINKS.web}): the dashboard, Next.js.`,
-    `- [Live demo](${LANDING_LINKS.demo}): the dashboard with invented data, no sign-in.`,
+    ...liveDemoLines(),
     '',
     '## Support',
     '',

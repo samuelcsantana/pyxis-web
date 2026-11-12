@@ -187,6 +187,7 @@ export const fr = translation({
       'Analytique produit respectueuse de la vie privée · aucun cookie chez vos visiteurs, aucune IP stockée',
     noAccount:
       'Pas encore de compte ? <plans>Voir les formules</plans> ou <demo>ouvrir la démo</demo>, avec des données inventées.',
+    noAccountDemoClosed: 'Pas encore de compte ? <plans>Voir les formules</plans>.',
     noCode:
       '<strong>Rien après quelques minutes ?</strong> Vérifiez vos courriers indésirables. Cette adresse n’a peut-être pas encore de compte Pyxis.',
     noCodeSupport:
@@ -2303,6 +2304,7 @@ export const fr = translation({
       eyebrow: 'Tableau de bord',
       title: 'Les questions auxquelles répond le tableau de bord',
       lead: 'Huit écrans, chacun construit autour d’une question. Chaque carte ouvre cet écran dans la démo en direct.',
+      leadDemoClosed: 'Huit écrans, chacun construit autour d’une question.',
       open: 'Ouvrir dans la démo',
       agent:
         'Vous préférez poser la question ? Connectez Pyxis à Claude : il lit les mêmes chiffres, en lecture seule. <link>Comment connecter Pyxis</link>',
