@@ -2186,12 +2186,11 @@ export const nl = translation({
       note: 'Zonder registratie. Verzonnen gegevens. Opent direct in het dashboard.',
       startFree: 'Gratis beginnen',
       seePaidPlan: 'Bekijk het Pro-abonnement',
-      freeNote:
-        'Gratis voor maximaal {events} events per maand op één site, zonder kaart. De demo opent zonder registratie.',
+      freeNote: 'Gratis voor maximaal {events} events per maand op één site, zonder kaart.',
       freeFullNote:
         'Het Hobby-abonnement is op dit moment vol: registreer je en je account wacht op een plek, of neem het Pro-abonnement.',
-      trialNote:
-        '14 dagen gratis; je kaart wordt pas op dag 15 belast. De demo opent zonder registratie.',
+      trialNote: '14 dagen gratis; je kaart wordt pas op dag 15 belast.',
+      demoOpensNote: 'De demo opent zonder registratie.',
       claudeTag: 'In de directory van Claude',
       claude: 'Vraag Claude naar je cijfers',
     },

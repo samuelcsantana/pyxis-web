@@ -2162,12 +2162,11 @@ export const ptBR = translation({
       note: 'Sem cadastro. Dados fictícios. Abre direto no painel.',
       startFree: 'Começar grátis',
       seePaidPlan: 'Ver o plano Pro',
-      freeNote:
-        'Grátis até {events} eventos por mês em um site, sem cartão. A demonstração abre sem cadastro.',
+      freeNote: 'Grátis até {events} eventos por mês em um site, sem cartão.',
       freeFullNote:
         'O plano Hobby está cheio por enquanto: cadastre-se e sua conta espera uma vaga, ou assine o plano Pro.',
-      trialNote:
-        '14 dias grátis; o cartão só é cobrado no 15º dia. A demonstração abre sem cadastro.',
+      trialNote: '14 dias grátis; o cartão só é cobrado no 15º dia.',
+      demoOpensNote: 'A demonstração abre sem cadastro.',
       claudeTag: 'No diretório do Claude',
       claude: 'Pergunte ao Claude sobre seus números',
     },

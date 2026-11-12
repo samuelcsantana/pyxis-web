@@ -2209,12 +2209,11 @@ export const fr = translation({
       note: 'Sans inscription. Données inventées. Elle s’ouvre directement sur le tableau de bord.',
       startFree: 'Commencer gratuitement',
       seePaidPlan: 'Voir la formule Pro',
-      freeNote:
-        'Gratuit jusqu’à {events} événements par mois sur un site, sans carte. La démo s’ouvre sans inscription.',
+      freeNote: 'Gratuit jusqu’à {events} événements par mois sur un site, sans carte.',
       freeFullNote:
         'La formule Hobby est complète pour le moment : inscrivez-vous et votre compte attend une place, ou souscrivez à la formule Pro.',
-      trialNote:
-        '14 jours gratuits ; la carte n’est débitée qu’au 15e jour. La démo s’ouvre sans inscription.',
+      trialNote: '14 jours gratuits ; la carte n’est débitée qu’au 15e jour.',
+      demoOpensNote: 'La démo s’ouvre sans inscription.',
       claudeTag: 'Dans l’annuaire de Claude',
       claude: 'Interrogez Claude sur vos chiffres',
     },

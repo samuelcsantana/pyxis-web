@@ -2211,12 +2211,11 @@ export const de = translation({
       note: 'Ohne Registrierung. Erfundene Daten. Öffnet direkt das Dashboard.',
       startFree: 'Kostenlos starten',
       seePaidPlan: 'Pro-Plan ansehen',
-      freeNote:
-        'Kostenlos bis zu {events} Ereignisse im Monat auf einer Website, ohne Karte. Die Demo öffnet ohne Registrierung.',
+      freeNote: 'Kostenlos bis zu {events} Ereignisse im Monat auf einer Website, ohne Karte.',
       freeFullNote:
         'Der Hobby-Plan ist gerade voll: Registriere dich, dann wartet dein Konto auf einen Platz, oder abonniere den Pro-Plan.',
-      trialNote:
-        '14 Tage kostenlos; die Karte wird erst am 15. Tag belastet. Die Demo öffnet ohne Registrierung.',
+      trialNote: '14 Tage kostenlos; die Karte wird erst am 15. Tag belastet.',
+      demoOpensNote: 'Die Demo öffnet ohne Registrierung.',
       claudeTag: 'Im Verzeichnis von Claude',
       claude: 'Frag Claude nach deinen Zahlen',
     },

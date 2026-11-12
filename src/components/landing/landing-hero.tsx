@@ -35,6 +35,10 @@ function ArrowIcon() {
   );
 }
 
+function withTheDemoNote(i18n: I18n, note: string): string {
+  return liveDemoIsOpen() ? `${note} ${i18n.t('landing.hero.demoOpensNote')}` : note;
+}
+
 function TrialFirst({ i18n }: { readonly i18n: I18n }) {
   const { t } = i18n;
   return (
@@ -58,7 +62,9 @@ function TrialFirst({ i18n }: { readonly i18n: I18n }) {
           </a>
         ) : null}
       </div>
-      <p className="text-caption text-muted">{t('landing.hero.trialNote')}</p>
+      <p className="text-caption text-muted">
+        {withTheDemoNote(i18n, t('landing.hero.trialNote'))}
+      </p>
     </>
   );
 }
@@ -87,7 +93,12 @@ function FreeFirst({ i18n, full }: { readonly i18n: I18n; readonly full: boolean
       <p className="text-caption text-muted">
         {full
           ? t('landing.hero.freeFullNote')
-          : t('landing.hero.freeNote', { events: i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH) })}
+          : withTheDemoNote(
+              i18n,
+              t('landing.hero.freeNote', {
+                events: i18n.format.count(FREE_PLAN_EVENTS_PER_MONTH),
+              }),
+            )}
       </p>
     </>
   );
@@ -129,7 +140,9 @@ function DemoFirst({ i18n }: { readonly i18n: I18n }) {
           {t('landing.hero.seePricing')}
         </a>
       </div>
-      <p className="text-caption text-muted">{t('landing.hero.note')}</p>
+      {liveDemoIsOpen() ? (
+        <p className="text-caption text-muted">{t('landing.hero.note')}</p>
+      ) : null}
     </>
   );
 }

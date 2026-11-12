@@ -2145,12 +2145,11 @@ export const en = {
       note: 'No sign-up. Invented data. It opens straight on the dashboard.',
       startFree: 'Start free',
       seePaidPlan: 'See the Pro plan',
-      freeNote:
-        'Free up to {events} events a month on one site, with no card. The demo opens without signing up.',
+      freeNote: 'Free up to {events} events a month on one site, with no card.',
       freeFullNote:
         'The Hobby plan is full for now: sign up and your account waits for a place, or subscribe to the Pro plan.',
-      trialNote:
-        '14 days free; the card is only charged on day 15. The demo opens without signing up.',
+      trialNote: '14 days free; the card is only charged on day 15.',
+      demoOpensNote: 'The demo opens without signing up.',
       claudeTag: 'In Claude’s directory',
       claude: 'Ask Claude about your numbers',
     },
